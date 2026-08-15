@@ -1,7 +1,9 @@
 """Season simulation — path-coherent team W/L paths with week samples.
 
 Uses Layers 1–4 (roster / QB / position groups / team projection) via the
-composed strength book. Schedule is densified approximate (not official FBS).
+composed strength book. Full-season paths read the official ESPN slate when
+``slate_complete``; otherwise win tables stay incomplete / not final.
+Research only — used_in_spread stays false. CFP/natty stay stub.
 """
 
 from __future__ import annotations
@@ -13,6 +15,7 @@ from typing import Any, Dict, List, Optional, Sequence
 
 from src.services.cfb_season_engine import priors as P
 from src.services.cfb_season_engine.conferences import conference_for
+from src.services.cfb_season_engine.fbs_universe import is_official_fbs
 from src.services.cfb_season_engine.team_projection import (
     copy_strength_book,
     evolve_after_game,
@@ -83,7 +86,7 @@ def _simulate_one_path(
                     "winner": winner,
                     "loser": loser,
                     "neutral_site": game.neutral_site,
-                    "early_season": 1 <= game.week <= P.EARLY_SEASON_LAST_WEEK,
+                    "early_season": 0 <= game.week <= P.EARLY_SEASON_LAST_WEEK,
                 }
             )
 
@@ -190,6 +193,11 @@ def simulate_full_season(
     mean_wins_sum = sum(v["mean"] for v in team_wins.values())
     teams_with_wins = sum(1 for v in team_wins.values() if v["mean"] > 0.05)
     early = {str(w): P.early_season_uncertainty(w) for w in range(1, 5)}
+    slate_complete = str(universe.notes.get("slate_complete", "")).lower() == "true"
+    official_schedule = str(universe.notes.get("official_schedule", "")).lower() == "true"
+    win_tables_status = (
+        "research_limited" if slate_complete else "incomplete_slate_not_final"
+    )
 
     return SeasonSimResult(
         season=universe.season,
@@ -209,12 +217,25 @@ def simulate_full_season(
             ),
             "fidelity": "approximate",
             "schedule_fidelity": universe.notes.get("schedule_fidelity", "approximate"),
+            "win_tables_status": win_tables_status,
+            "win_tables_final": "false",
+            "used_in_spread": "false",
         },
         diagnostics={
             "mean_wins_sum": round(mean_wins_sum, 4),
             "expected_wins_sum": float(len(schedule)),
             "teams_with_positive_mean_wins": teams_with_wins,
             "team_count": len(universe.team_codes),
+            "official_fbs_in_ranking": sum(
+                1 for row in ranking if is_official_fbs(str(row["team"]))
+            ),
+            "slate_complete": slate_complete,
+            "official_schedule": official_schedule,
+            "win_tables_status": win_tables_status,
+            "win_tables_final": False,
+            "used_in_spread": False,
+            "cfp_make": None,
+            "natty": None,
             "early_season_uncertainty": early,
             "early_season_narrowing": P.early_season_narrowing_schedule(),
             "week_5_plus": P.early_season_uncertainty(5),
@@ -256,6 +277,12 @@ def season_sim_to_dict(result: SeasonSimResult) -> Dict[str, Any]:
         "sample_path_game_count": result.sample_path_game_count,
         "notes": result.notes,
         "diagnostics": result.diagnostics,
+        "slate_complete": bool(result.diagnostics.get("slate_complete")),
+        "win_tables_status": result.diagnostics.get("win_tables_status"),
+        "win_tables_final": False,
+        "used_in_spread": False,
+        "cfp_make": None,
+        "natty": None,
     }
 
 
@@ -266,9 +293,10 @@ def documentation() -> Dict[str, Any]:
         "module": "src.services.cfb_season_engine.season_sim",
         "status": "season_paths",
         "real_vs_approximate": (
-            "Path coherence structure is REAL. Densified schedule, win totals, "
-            "strength evolution, and conference standings are APPROXIMATE — not "
-            "an official FBS slate or calibrated ranking."
+            "Path coherence structure is REAL. Official ESPN slate is used when "
+            "packaged. Win totals / strength evolution / conference standings "
+            "remain APPROXIMATE research (used_in_spread=false). Incomplete "
+            "slate refuses final win tables. CFP/natty stay stub."
         ),
         "outputs": [
             "per-team wins distribution (mean/std/p10/p50/p90)",
@@ -278,9 +306,9 @@ def documentation() -> Dict[str, Any]:
             "early-season uncertainty narrowing schedule",
         ],
         "deferred": [
-            "official full FBS schedule feed",
-            "CFP / playoff bracket",
+            "CFP / playoff bracket (P4 stub)",
             "player season totals",
             "injury / portal mid-season shocks",
+            "used_in_spread / KEI",
         ],
     }

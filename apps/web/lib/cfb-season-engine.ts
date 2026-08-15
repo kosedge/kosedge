@@ -8,12 +8,78 @@ import {
   type CfbPowerLadderRow,
 } from "@/lib/cfb-season-engine-format";
 
+export type CfbWeekBoardGame = {
+  week: number;
+  game_id?: string;
+  home: string;
+  away: string;
+  kickoff?: string;
+  neutral_site?: boolean;
+  fcs_home?: boolean;
+  fcs_away?: boolean;
+  fbs_vs_fbs?: boolean;
+  conference_game?: boolean;
+};
+
+export type CfbTeamDnaRow = {
+  team: string;
+  conference?: string;
+  offense_index?: number | null;
+  defense_index?: number | null;
+  power_index?: number | null;
+  early_season_uncertainty?: number | null;
+  qb_class?: string | null;
+  qb_name?: string | null;
+  open_qb?: boolean;
+  efficiency_source?: string | null;
+  efficiency_fill?: string | null;
+  off_eff?: number | null;
+  def_eff?: number | null;
+  next?: {
+    week?: number;
+    opponent?: string;
+    home?: boolean;
+    neutral_site?: boolean;
+  } | null;
+};
+
+export type CfbProductDesk = {
+  used_in_spread?: boolean;
+  kei?: boolean;
+  research_only?: boolean;
+  week_board?: {
+    season?: number;
+    weeks?: number[];
+    n_games?: number;
+    n_fbs_vs_fbs?: number;
+    slate_complete?: boolean;
+    official?: boolean;
+    source?: string;
+    used_in_spread?: boolean;
+    games?: CfbWeekBoardGame[];
+  };
+  team_dna?: {
+    n?: number;
+    official_fbs?: number;
+    used_in_spread?: boolean;
+    teams?: CfbTeamDnaRow[];
+  };
+};
+
 export type CfbSeasonEngineStatus = {
   engine_version: string;
   mode?: string;
   scope?: string;
   schedule_source?: string;
+  schedule_as_of?: string;
   schedule_game_count?: number;
+  n_games?: number;
+  slate_complete?: boolean;
+  used_in_spread?: boolean;
+  power_version?: string;
+  power_as_of?: string;
+  n_teams?: number;
+  projection_artifact_id?: string;
   team_count?: number;
   roster_source?: string;
   depth_source?: string;
@@ -21,6 +87,9 @@ export type CfbSeasonEngineStatus = {
   returning_source?: string;
   roster_as_of?: string;
   as_of?: string;
+  backbone_version?: string;
+  n_filled?: number;
+  n_thin?: number;
   roster_coverage?: Record<string, unknown>;
   team_codes?: string[];
   team_fidelity_counts?: Record<string, number>;
@@ -33,6 +102,14 @@ export type CfbSeasonEngineStatus = {
   power_style_ladder?: { top?: CfbPowerLadderRow[]; note?: string };
   roster_strength_ladder?: unknown;
   early_season_narrowing?: unknown;
+  season_futures?: {
+    research_only?: boolean;
+    cfp_make?: unknown;
+    natty?: unknown;
+    win_tables_final?: boolean;
+    note?: string;
+  };
+  desk?: CfbProductDesk;
   data_sources?: Record<string, unknown>;
   entry_points?: Record<string, string>;
   does_not_modify?: string[];
@@ -63,6 +140,8 @@ export type CfbProjectGameResponse = {
   away_layers?: Record<string, unknown>;
   notes?: Record<string, string>;
   fidelity?: string;
+  research_prior?: Record<string, unknown>;
+  used_in_spread?: boolean;
   error?: string;
   hint?: string;
 };
@@ -75,6 +154,11 @@ export type CfbSimulateResponse = {
   ranking?: Array<Record<string, unknown>>;
   top_teams_by_wins?: Array<Record<string, unknown>>;
   diagnostics?: Record<string, unknown>;
+  used_in_spread?: boolean;
+  win_tables_final?: boolean;
+  cfp_make?: unknown;
+  natty?: unknown;
+  slate_complete?: boolean;
   error?: string;
 };
 
@@ -179,9 +263,41 @@ export async function fetchCfbSeasonEngineStatus(input?: {
         typeof payload.schedule_source === "string"
           ? payload.schedule_source
           : undefined,
+      schedule_as_of:
+        typeof payload.schedule_as_of === "string"
+          ? payload.schedule_as_of
+          : undefined,
       schedule_game_count:
         typeof payload.schedule_game_count === "number"
           ? payload.schedule_game_count
+          : undefined,
+      n_games:
+        typeof payload.n_games === "number"
+          ? payload.n_games
+          : typeof payload.schedule_game_count === "number"
+            ? payload.schedule_game_count
+            : undefined,
+      slate_complete:
+        typeof payload.slate_complete === "boolean"
+          ? payload.slate_complete
+          : undefined,
+      used_in_spread:
+        typeof payload.used_in_spread === "boolean"
+          ? payload.used_in_spread
+          : false,
+      power_version:
+        typeof payload.power_version === "string"
+          ? payload.power_version
+          : undefined,
+      power_as_of:
+        typeof payload.power_as_of === "string"
+          ? payload.power_as_of
+          : undefined,
+      n_teams:
+        typeof payload.n_teams === "number" ? payload.n_teams : undefined,
+      projection_artifact_id:
+        typeof payload.projection_artifact_id === "string"
+          ? payload.projection_artifact_id
           : undefined,
       team_count:
         typeof payload.team_count === "number" ? payload.team_count : undefined,
@@ -237,6 +353,21 @@ export async function fetchCfbSeasonEngineStatus(input?: {
           : undefined,
       roster_strength_ladder: payload.roster_strength_ladder,
       early_season_narrowing: payload.early_season_narrowing,
+      backbone_version:
+        typeof payload.backbone_version === "string"
+          ? payload.backbone_version
+          : undefined,
+      n_filled:
+        typeof payload.n_filled === "number" ? payload.n_filled : undefined,
+      n_thin: typeof payload.n_thin === "number" ? payload.n_thin : undefined,
+      season_futures:
+        payload.season_futures && typeof payload.season_futures === "object"
+          ? (payload.season_futures as CfbSeasonEngineStatus["season_futures"])
+          : undefined,
+      desk:
+        payload.desk && typeof payload.desk === "object"
+          ? (payload.desk as CfbProductDesk)
+          : undefined,
       data_sources:
         payload.data_sources && typeof payload.data_sources === "object"
           ? (payload.data_sources as Record<string, unknown>)
@@ -407,7 +538,7 @@ export async function fetchCfbSimulate(input?: {
       method: "POST",
       headers: modelHeaders(),
       body: JSON.stringify(body),
-      timeoutMs: UPSTREAM_TIMEOUT_MS.heavy,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
       cache: "no-store",
     });
     const payload = await readJson(res);

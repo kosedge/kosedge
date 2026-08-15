@@ -1,0 +1,33 @@
+{
+  "ok": true,
+  "baseline": {
+    "slice": "w0_1",
+    "ats": 0.477,
+    "mae": 8.36,
+    "n": 439,
+    "source": "data/ops/cfb-p0-audit-20260813.md",
+    "used_in_spread": false
+  },
+  "after_w0_1": {
+    "ats": 0.4771,
+    "mae": 8.362,
+    "ats_n": 415,
+    "n_close": 439,
+    "ats_ci95": [0.4295, 0.5252]
+  },
+  "after_overall": {
+    "ats": 0.5027,
+    "mae": 7.48,
+    "ats_n": 3921,
+    "n_close": 4157
+  },
+  "hd_ran": true,
+  "delta_w0_1": {
+    "ats": 0.0001,
+    "mae": 0.002,
+    "read": "flat — no in-sample retune; 2026 roster/QB not applied to historical games"
+  },
+  "diagnosis": "2026 roster/QB/coaching DNA is not applied to 2020-25 walk-forward (that would leak a future overlay). Valid W0-1 test remains the program-prior (opponent-adj EPA, seasons < Y). P2 does not retune era weights in-sample. used_in_spread stays false.",
+  "used_in_spread": false,
+  "kei": false
+}

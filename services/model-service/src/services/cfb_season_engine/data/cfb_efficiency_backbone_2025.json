@@ -1,0 +1,1037 @@
+{
+  "as_of": "2026-08-14",
+  "version": "cfb-efficiency-backbone-v0.14-20260814",
+  "used_in_spread": false,
+  "teams": {
+    "AFA": {
+      "off_eff": 52.72,
+      "def_eff": 37.07,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "AKR": {
+      "off_eff": 25.17,
+      "def_eff": 43.15,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ALA": {
+      "off_eff": 62.99,
+      "def_eff": 75.27,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "APP": {
+      "off_eff": 39.45,
+      "def_eff": 28.32,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ARI": {
+      "off_eff": 66.74,
+      "def_eff": 68.21,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ARK": {
+      "off_eff": 71.75,
+      "def_eff": 38.05,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ARMY": {
+      "off_eff": 43.95,
+      "def_eff": 55.32,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ARST": {
+      "off_eff": 34.6,
+      "def_eff": 40.82,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 13,
+      "prior_year": 2025
+    },
+    "ASU": {
+      "off_eff": 53.22,
+      "def_eff": 59.45,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "AUB": {
+      "off_eff": 52.97,
+      "def_eff": 72.1,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BALL": {
+      "off_eff": 15.4,
+      "def_eff": 30.51,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BAY": {
+      "off_eff": 64.49,
+      "def_eff": 33.42,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BC": {
+      "off_eff": 40.2,
+      "def_eff": 33.42,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BGSU": {
+      "off_eff": 20.66,
+      "def_eff": 44.13,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BOISE": {
+      "off_eff": 54.72,
+      "def_eff": 53.13,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BUFF": {
+      "off_eff": 27.42,
+      "def_eff": 47.78,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "BYU": {
+      "off_eff": 67.24,
+      "def_eff": 68.7,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CAL": {
+      "off_eff": 46.21,
+      "def_eff": 45.83,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CCU": {
+      "off_eff": 40.45,
+      "def_eff": 23.94,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CHAR": {
+      "off_eff": 18.66,
+      "def_eff": 17.13,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CIN": {
+      "off_eff": 60.98,
+      "def_eff": 52.16,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CLEM": {
+      "off_eff": 50.96,
+      "def_eff": 67.97,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CMU": {
+      "off_eff": 25.92,
+      "def_eff": 51.67,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "COLO": {
+      "off_eff": 38.69,
+      "def_eff": 42.91,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CONN": {
+      "off_eff": 61.98,
+      "def_eff": 45.1,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "CSU": {
+      "off_eff": 41.87,
+      "def_eff": 35.52,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 12,
+      "prior_year": 2025
+    },
+    "DEL": {
+      "off_eff": 47.71,
+      "def_eff": 25.88,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "DUKE": {
+      "off_eff": 69.0,
+      "def_eff": 42.67,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ECU": {
+      "off_eff": 53.76,
+      "def_eff": 59.6,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 13,
+      "prior_year": 2025
+    },
+    "EMU": {
+      "off_eff": 30.18,
+      "def_eff": 31.24,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "FAU": {
+      "off_eff": 51.72,
+      "def_eff": 21.26,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "FIU": {
+      "off_eff": 47.46,
+      "def_eff": 27.1,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "FRES": {
+      "off_eff": 39.45,
+      "def_eff": 62.86,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "FSU": {
+      "off_eff": 55.22,
+      "def_eff": 62.37,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "GASO": {
+      "off_eff": 52.72,
+      "def_eff": 22.23,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "GAST": {
+      "off_eff": 28.43,
+      "def_eff": 13.96,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "GT": {
+      "off_eff": 63.49,
+      "def_eff": 53.37,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "HAW": {
+      "off_eff": 50.21,
+      "def_eff": 47.78,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "HOU": {
+      "off_eff": 60.98,
+      "def_eff": 58.72,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ILL": {
+      "off_eff": 64.99,
+      "def_eff": 61.89,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "IOWA": {
+      "off_eff": 62.23,
+      "def_eff": 80.37,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ISU": {
+      "off_eff": 52.72,
+      "def_eff": 66.99,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "IU": {
+      "off_eff": 83.02,
+      "def_eff": 92.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "JMU": {
+      "off_eff": 69.25,
+      "def_eff": 62.13,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "JVST": {
+      "off_eff": 34.09,
+      "def_eff": 41.87,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 14,
+      "prior_year": 2025
+    },
+    "KENNESAW": {
+      "off_eff": 48.21,
+      "def_eff": 40.72,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "KENT": {
+      "off_eff": 24.67,
+      "def_eff": 29.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "KSU": {
+      "off_eff": 60.48,
+      "def_eff": 53.86,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "KU": {
+      "off_eff": 59.48,
+      "def_eff": 45.1,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "LIB": {
+      "off_eff": 43.45,
+      "def_eff": 34.4,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "LOU": {
+      "off_eff": 61.23,
+      "def_eff": 65.78,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "LSU": {
+      "off_eff": 46.71,
+      "def_eff": 75.27,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "LT": {
+      "off_eff": 46.21,
+      "def_eff": 48.51,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "M-OH": {
+      "off_eff": 34.1,
+      "def_eff": 47.8,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 14,
+      "prior_year": 2025
+    },
+    "MASS": {
+      "off_eff": 5.0,
+      "def_eff": 10.07,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MD": {
+      "off_eff": 42.7,
+      "def_eff": 54.34,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MEM": {
+      "off_eff": 68.24,
+      "def_eff": 45.1,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MIA": {
+      "off_eff": 68.49,
+      "def_eff": 81.35,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MICH": {
+      "off_eff": 58.73,
+      "def_eff": 73.32,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MINN": {
+      "off_eff": 41.2,
+      "def_eff": 64.08,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MISS": {
+      "off_eff": 84.02,
+      "def_eff": 71.86,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MIZZ": {
+      "off_eff": 55.42,
+      "def_eff": 71.63,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 13,
+      "prior_year": 2025
+    },
+    "MOST": {
+      "off_eff": 45.96,
+      "def_eff": 29.53,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MRSH": {
+      "off_eff": 55.72,
+      "def_eff": 29.53,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MSST": {
+      "off_eff": 60.48,
+      "def_eff": 45.83,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MSU": {
+      "off_eff": 48.21,
+      "def_eff": 44.61,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "MTSU": {
+      "off_eff": 33.18,
+      "def_eff": 24.18,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "NAVY": {
+      "off_eff": 64.24,
+      "def_eff": 43.88,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "NCSU": {
+      "off_eff": 60.73,
+      "def_eff": 51.91,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ND": {
+      "off_eff": 82.02,
+      "def_eff": 74.78,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "NEB": {
+      "off_eff": 53.72,
+      "def_eff": 59.7,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "NEV": {
+      "off_eff": 23.07,
+      "def_eff": 46.56,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 12,
+      "prior_year": 2025
+    },
+    "NIU": {
+      "off_eff": 12.15,
+      "def_eff": 45.83,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "NMSU": {
+      "off_eff": 31.18,
+      "def_eff": 29.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "NW": {
+      "off_eff": 42.7,
+      "def_eff": 66.02,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ODU": {
+      "off_eff": 48.44,
+      "def_eff": 74.89,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 13,
+      "prior_year": 2025
+    },
+    "OHIO": {
+      "off_eff": 39.95,
+      "def_eff": 52.89,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "OKST": {
+      "off_eff": 20.66,
+      "def_eff": 37.8,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ORE": {
+      "off_eff": 81.02,
+      "def_eff": 85.97,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ORST": {
+      "off_eff": 24.42,
+      "def_eff": 39.75,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "OSU": {
+      "off_eff": 76.01,
+      "def_eff": 95.0,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "OU": {
+      "off_eff": 57.48,
+      "def_eff": 83.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "PITT": {
+      "off_eff": 61.23,
+      "def_eff": 56.78,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "PSU": {
+      "off_eff": 69.75,
+      "def_eff": 68.94,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "PUR": {
+      "off_eff": 36.44,
+      "def_eff": 41.94,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "RICE": {
+      "off_eff": 27.68,
+      "def_eff": 34.15,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "RUT": {
+      "off_eff": 60.73,
+      "def_eff": 39.99,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "SCAR": {
+      "off_eff": 43.7,
+      "def_eff": 65.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "SDSU": {
+      "off_eff": 43.2,
+      "def_eff": 66.75,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "SHSU": {
+      "off_eff": 20.16,
+      "def_eff": 12.5,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "SJSU": {
+      "off_eff": 35.94,
+      "def_eff": 30.51,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "SMU": {
+      "off_eff": 68.75,
+      "def_eff": 65.53,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "STAN": {
+      "off_eff": 28.18,
+      "def_eff": 44.37,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "SYR": {
+      "off_eff": 28.93,
+      "def_eff": 33.67,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TAMU": {
+      "off_eff": 77.51,
+      "def_eff": 74.54,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TCU": {
+      "off_eff": 64.74,
+      "def_eff": 56.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TEM": {
+      "off_eff": 49.96,
+      "def_eff": 33.18,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TENN": {
+      "off_eff": 80.52,
+      "def_eff": 52.64,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TEX": {
+      "off_eff": 64.49,
+      "def_eff": 70.89,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TLSA": {
+      "off_eff": 36.44,
+      "def_eff": 33.42,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TOL": {
+      "off_eff": 47.3,
+      "def_eff": 73.46,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 13,
+      "prior_year": 2025
+    },
+    "TROY": {
+      "off_eff": 40.7,
+      "def_eff": 43.4,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TTU": {
+      "off_eff": 80.77,
+      "def_eff": 84.75,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TULN": {
+      "off_eff": 63.24,
+      "def_eff": 46.8,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "TXST": {
+      "off_eff": 72.25,
+      "def_eff": 27.59,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UAB": {
+      "off_eff": 50.64,
+      "def_eff": 27.37,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 12,
+      "prior_year": 2025
+    },
+    "UCF": {
+      "off_eff": 40.2,
+      "def_eff": 56.05,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UCLA": {
+      "off_eff": 35.94,
+      "def_eff": 40.48,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UF": {
+      "off_eff": 43.7,
+      "def_eff": 59.45,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UGA": {
+      "off_eff": 74.76,
+      "def_eff": 78.43,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UK": {
+      "off_eff": 45.71,
+      "def_eff": 57.02,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UL": {
+      "off_eff": 45.21,
+      "def_eff": 31.24,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "ULM": {
+      "off_eff": 21.92,
+      "def_eff": 27.34,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UNC": {
+      "off_eff": 24.92,
+      "def_eff": 53.13,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UNLV": {
+      "off_eff": 66.74,
+      "def_eff": 41.7,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UNM": {
+      "off_eff": 50.57,
+      "def_eff": 47.68,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 12,
+      "prior_year": 2025
+    },
+    "UNT": {
+      "off_eff": 80.49,
+      "def_eff": 37.87,
+      "source": "warehouse_pbp_epa_adj_2025",
+      "n_games": 14,
+      "prior_year": 2025
+    },
+    "USA": {
+      "off_eff": 45.21,
+      "def_eff": 26.37,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "USC": {
+      "off_eff": 79.01,
+      "def_eff": 63.59,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "USF": {
+      "off_eff": 76.51,
+      "def_eff": 52.4,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "USM": {
+      "off_eff": 49.46,
+      "def_eff": 34.4,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UTAH": {
+      "off_eff": 81.52,
+      "def_eff": 71.86,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UTAHST": {
+      "off_eff": 55.72,
+      "def_eff": 38.29,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UTEP": {
+      "off_eff": 32.68,
+      "def_eff": 25.88,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UTSA": {
+      "off_eff": 65.49,
+      "def_eff": 40.97,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "UVA": {
+      "off_eff": 53.97,
+      "def_eff": 69.91,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "VAN": {
+      "off_eff": 82.02,
+      "def_eff": 62.37,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "VT": {
+      "off_eff": 35.69,
+      "def_eff": 39.02,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WAKE": {
+      "off_eff": 45.21,
+      "def_eff": 64.32,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WASH": {
+      "off_eff": 68.24,
+      "def_eff": 77.7,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WIS": {
+      "off_eff": 25.42,
+      "def_eff": 63.83,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WKU": {
+      "off_eff": 53.97,
+      "def_eff": 44.61,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WMU": {
+      "off_eff": 36.19,
+      "def_eff": 61.16,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WSU": {
+      "off_eff": 43.45,
+      "def_eff": 64.56,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WVU": {
+      "off_eff": 39.19,
+      "def_eff": 41.7,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    },
+    "WYO": {
+      "off_eff": 20.16,
+      "def_eff": 54.1,
+      "source": "packaged_sp_plus_final_2025",
+      "n_games": null,
+      "prior_year": 2025
+    }
+  },
+  "n_sp_plus": 124,
+  "n_warehouse_fill": 12,
+  "n_thin": 0,
+  "thin": [],
+  "filled": {
+    "ARST": {
+      "season": 2025,
+      "n_games": 13,
+      "off_eff": 34.6,
+      "def_eff": 40.82
+    },
+    "CSU": {
+      "season": 2025,
+      "n_games": 12,
+      "off_eff": 41.87,
+      "def_eff": 35.52
+    },
+    "ECU": {
+      "season": 2025,
+      "n_games": 13,
+      "off_eff": 53.76,
+      "def_eff": 59.6
+    },
+    "JVST": {
+      "season": 2025,
+      "n_games": 14,
+      "off_eff": 34.09,
+      "def_eff": 41.87
+    },
+    "M-OH": {
+      "season": 2025,
+      "n_games": 14,
+      "off_eff": 34.1,
+      "def_eff": 47.8
+    },
+    "MIZZ": {
+      "season": 2025,
+      "n_games": 13,
+      "off_eff": 55.42,
+      "def_eff": 71.63
+    },
+    "NEV": {
+      "season": 2025,
+      "n_games": 12,
+      "off_eff": 23.07,
+      "def_eff": 46.56
+    },
+    "ODU": {
+      "season": 2025,
+      "n_games": 13,
+      "off_eff": 48.44,
+      "def_eff": 74.89
+    },
+    "TOL": {
+      "season": 2025,
+      "n_games": 13,
+      "off_eff": 47.3,
+      "def_eff": 73.46
+    },
+    "UAB": {
+      "season": 2025,
+      "n_games": 12,
+      "off_eff": 50.64,
+      "def_eff": 27.37
+    },
+    "UNM": {
+      "season": 2025,
+      "n_games": 12,
+      "off_eff": 50.57,
+      "def_eff": 47.68
+    },
+    "UNT": {
+      "season": 2025,
+      "n_games": 14,
+      "off_eff": 80.49,
+      "def_eff": 37.87
+    }
+  }
+}
