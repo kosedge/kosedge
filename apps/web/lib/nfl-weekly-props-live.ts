@@ -7,9 +7,8 @@
  */
 export const NFL_WEEKLY_PROPS_LIVE = false;
 
-export const NFL_WEEKLY_PROPS_PATH_COHERENT = NFL_WEEKLY_PROPS_LIVE
-  ? "yes"
-  : "gated";
+export const NFL_WEEKLY_PROPS_PATH_COHERENT: "yes" | "gated" =
+  NFL_WEEKLY_PROPS_LIVE ? "yes" : "gated";
 
 export const NFL_WEEKLY_PROPS_GATE_TITLE =
   "Weekly player props not live — season desk only";
