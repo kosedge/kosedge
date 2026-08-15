@@ -1,0 +1,344 @@
+{
+  "diagnostic_id": "cfb-live-open-diagnostic-v0.15.1-20260815",
+  "season": 2026,
+  "status": "ok",
+  "n_opens": 55,
+  "n_closes": 0,
+  "n_matched": 55,
+  "match_rate": 1.0,
+  "book_rule": "open = first pre-kick snap; prefer draftkings, fanduel; then any other book. Not consensus. Not lock.",
+  "bias": "cold",
+  "bias_one_liner": "Bias persists vs 2026 open: cold / short-favorite (mean +6.35, MAE 9.402). Same sign as hist. Not KEI.",
+  "overall": {
+    "n": 55,
+    "thin": false,
+    "used_in_spread": false,
+    "kei": false,
+    "vs_open": {
+      "n": 55,
+      "mean": 6.353,
+      "mae": 9.402,
+      "median_ae": 8.18
+    },
+    "model_more_favorite": {
+      "n": 55,
+      "hits": 10,
+      "rate": 0.1818,
+      "ci95": [
+        0.1019,
+        0.3033
+      ]
+    },
+    "short_favorite": {
+      "n": 55,
+      "hits": 45,
+      "rate": 0.8182,
+      "ci95": [
+        0.6967,
+        0.8981
+      ]
+    },
+    "n_home_fav_open": 47,
+    "n_home_dog_open": 8,
+    "vs_open_total": {
+      "n": 55,
+      "mean": 3.764,
+      "mae": 4.967,
+      "median_ae": 4.59
+    }
+  },
+  "by_week": {
+    "w0": {
+      "n": 6,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=6 < 15) \u2014 listed, not a prior input"
+    },
+    "w1": {
+      "n": 43,
+      "thin": false,
+      "used_in_spread": false,
+      "kei": false,
+      "vs_open": {
+        "n": 43,
+        "mean": 6.996,
+        "mae": 9.769,
+        "median_ae": 8.52
+      },
+      "model_more_favorite": {
+        "n": 43,
+        "hits": 8,
+        "rate": 0.186,
+        "ci95": [
+          0.0974,
+          0.3262
+        ]
+      },
+      "short_favorite": {
+        "n": 43,
+        "hits": 35,
+        "rate": 0.814,
+        "ci95": [
+          0.6738,
+          0.9026
+        ]
+      },
+      "n_home_fav_open": 37,
+      "n_home_dog_open": 6,
+      "vs_open_total": {
+        "n": 43,
+        "mean": 3.271,
+        "mae": 4.711,
+        "median_ae": 3.56
+      }
+    },
+    "w2_plus": {
+      "n": 6,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=6 < 15) \u2014 listed, not a prior input"
+    }
+  },
+  "by_open_abs_bucket": {
+    "blowout_14plus": {
+      "n": 29,
+      "thin": false,
+      "used_in_spread": false,
+      "kei": false,
+      "vs_open": {
+        "n": 29,
+        "mean": 11.87,
+        "mae": 13.645,
+        "median_ae": 15.13
+      },
+      "model_more_favorite": {
+        "n": 29,
+        "hits": 0,
+        "rate": 0.0,
+        "ci95": [
+          0.0,
+          0.117
+        ]
+      },
+      "short_favorite": {
+        "n": 29,
+        "hits": 29,
+        "rate": 1.0,
+        "ci95": [
+          0.883,
+          1.0
+        ]
+      },
+      "n_home_fav_open": 26,
+      "n_home_dog_open": 3,
+      "vs_open_total": {
+        "n": 29,
+        "mean": 3.141,
+        "mae": 5.056,
+        "median_ae": 5.66
+      }
+    },
+    "large_7_14": {
+      "n": 12,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=12 < 15) \u2014 listed, not a prior input"
+    },
+    "mid_3_7": {
+      "n": 8,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=8 < 15) \u2014 listed, not a prior input"
+    },
+    "pickem_lt3": {
+      "n": 6,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=6 < 15) \u2014 listed, not a prior input"
+    }
+  },
+  "by_favorite_home": {
+    "home_dog": {
+      "n": 8,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=8 < 15) \u2014 listed, not a prior input"
+    },
+    "home_fav": {
+      "n": 47,
+      "thin": false,
+      "used_in_spread": false,
+      "kei": false,
+      "vs_open": {
+        "n": 47,
+        "mean": 8.399,
+        "mae": 9.834,
+        "median_ae": 8.18
+      },
+      "model_more_favorite": {
+        "n": 47,
+        "hits": 8,
+        "rate": 0.1702,
+        "ci95": [
+          0.0889,
+          0.3014
+        ]
+      },
+      "short_favorite": {
+        "n": 47,
+        "hits": 39,
+        "rate": 0.8298,
+        "ci95": [
+          0.6986,
+          0.9111
+        ]
+      },
+      "n_home_fav_open": 47,
+      "n_home_dog_open": 0,
+      "vs_open_total": {
+        "n": 47,
+        "mean": 4.311,
+        "mae": 5.106,
+        "median_ae": 4.72
+      }
+    }
+  },
+  "by_conference_tier": {
+    "g5_g5": {
+      "n": 6,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=6 < 15) \u2014 listed, not a prior input"
+    },
+    "indep_mix": {
+      "n": 10,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=10 < 15) \u2014 listed, not a prior input"
+    },
+    "other": {
+      "n": 2,
+      "thin": true,
+      "used_in_spread": false,
+      "kei": false,
+      "note": "thin (n=2 < 15) \u2014 listed, not a prior input"
+    },
+    "p4_g5": {
+      "n": 22,
+      "thin": false,
+      "used_in_spread": false,
+      "kei": false,
+      "vs_open": {
+        "n": 22,
+        "mean": 12.497,
+        "mae": 14.115,
+        "median_ae": 15.41
+      },
+      "model_more_favorite": {
+        "n": 22,
+        "hits": 1,
+        "rate": 0.0455,
+        "ci95": [
+          0.0081,
+          0.218
+        ]
+      },
+      "short_favorite": {
+        "n": 22,
+        "hits": 21,
+        "rate": 0.9545,
+        "ci95": [
+          0.782,
+          0.9919
+        ]
+      },
+      "n_home_fav_open": 21,
+      "n_home_dog_open": 1,
+      "vs_open_total": {
+        "n": 22,
+        "mean": 3.075,
+        "mae": 5.345,
+        "median_ae": 5.77
+      }
+    },
+    "p4_p4": {
+      "n": 15,
+      "thin": false,
+      "used_in_spread": false,
+      "kei": false,
+      "vs_open": {
+        "n": 15,
+        "mean": -1.249,
+        "mae": 5.444,
+        "median_ae": 4.95
+      },
+      "model_more_favorite": {
+        "n": 15,
+        "hits": 6,
+        "rate": 0.4,
+        "ci95": [
+          0.1982,
+          0.6425
+        ]
+      },
+      "short_favorite": {
+        "n": 15,
+        "hits": 9,
+        "rate": 0.6,
+        "ci95": [
+          0.3575,
+          0.8018
+        ]
+      },
+      "n_home_fav_open": 11,
+      "n_home_dog_open": 4,
+      "vs_open_total": {
+        "n": 15,
+        "mean": 5.212,
+        "mae": 5.624,
+        "median_ae": 4.59
+      }
+    }
+  },
+  "hist_compare": {
+    "hist_w0_1_mean_vs_close": 4.13,
+    "hist_overall_mean_vs_close": 2.04,
+    "live_mean_vs_open": 6.353,
+    "same_sign_as_hist_cold": true,
+    "note": "Hist is vs close on 2020\u201325 program-prior walk-forward. Live is v0.15 project-game vs 2026 opens. Same sign \u2260 same engine."
+  },
+  "gate": {
+    "ready_for_kei_design_brief": false,
+    "ready_to_sketch_open_line_prior": false,
+    "recommendation": "hold_through_week_3",
+    "reasons": [
+      "n_closes=0 \u2014 no held-out close / CLV",
+      "Week 3+ hold still in force (scaffold checklist)",
+      "not a release gate"
+    ],
+    "used_in_spread": false,
+    "kei": false
+  },
+  "used_in_spread": false,
+  "kei": false,
+  "blend": false,
+  "read_only": true,
+  "not_a_release_gate": true,
+  "cli": "scripts/cfb/cfb live-open",
+  "ops": "data/ops/cfb-live-open-diagnostic-20260815.md",
+  "n_lake_mapped_rows": 5654,
+  "n_slate_games_with_snaps": 55,
+  "weeks": [
+    0,
+    1,
+    2
+  ]
+}

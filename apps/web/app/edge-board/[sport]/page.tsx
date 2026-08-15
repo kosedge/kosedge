@@ -180,7 +180,11 @@ export default async function EdgeBoardSportPage({
               {sportName} Overview
             </Link>
             <Link
-              href={`/pro/${sportKey}/slate/today`}
+              href={
+                sportKey === "cfb"
+                  ? "/pro/cfb/slate"
+                  : `/pro/${sportKey}/slate/today`
+              }
               className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold inline-flex items-center"
             >
               {slateLabel}

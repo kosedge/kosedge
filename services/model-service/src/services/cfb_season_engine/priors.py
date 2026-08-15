@@ -38,8 +38,10 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.9-inseason"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
+ENGINE_VERSION = "cfb-season-engine-v0.15-power-sot"
+CALIBRATION_TAG = "cfb-season-engine-priors-v0.13-calibration-scale"
+CALIBRATION_AS_OF = "2026-08-14"
+BACKBONE_VERSION = "cfb-efficiency-backbone-v0.14-20260814"
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)
@@ -101,6 +103,10 @@ MATCHUP_RESPONSE = 1.40
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
 MATCHUP_RATIO_CLAMP = (0.52, 1.45)
 MATCHUP_RATIO_EXCESS_RETAIN = 0.42
+# v0.13/v0.14: shrink O/D index toward 1.0 when efficiency is a labeled
+# thin-sample / leftover league-average fill. Official FBS with warehouse
+# or SP+ history does not hit this path.
+LEAGUE_REG_PLACEHOLDER = 0.28
 
 # Path evolution (mild; not backtested). Early weeks add extra noise.
 STRENGTH_UPDATE_RATE = 0.028
@@ -257,6 +263,8 @@ def early_season_factor(
     default: float = 1.0,
 ) -> float:
     w = int(week or 0)
+    if w == 0:
+        w = 1  # Week 0 uses the Week 1 early-season posture
     if w < 1 or w > EARLY_SEASON_LAST_WEEK:
         return float(default)
     return float(table.get(w, default))
@@ -265,7 +273,7 @@ def early_season_factor(
 def early_season_uncertainty(week: int) -> Dict[str, Any]:
     """Inspectable early-season uncertainty posture (CFB-wider than NFL)."""
     w = int(week or 0)
-    active = 1 <= w <= EARLY_SEASON_LAST_WEEK
+    active = 0 <= w <= EARLY_SEASON_LAST_WEEK
     score_mult = early_season_factor(w, EARLY_SEASON_SCORE_NOISE_MULT)
     margin_mult = early_season_factor(w, EARLY_SEASON_MARGIN_SD_MULT)
     soften = early_season_factor(w, EARLY_SEASON_SEPARATION_SOFTEN)
@@ -339,6 +347,7 @@ def documentation() -> Dict[str, Any]:
     return {
         "engine_version": ENGINE_VERSION,
         "calibration_tag": CALIBRATION_TAG,
+        "calibration_as_of": CALIBRATION_AS_OF,
         "fidelity": "approximate",
         "assumptions": [
             "Historical team ratings alone are insufficient for CFB 2026.",
@@ -372,7 +381,18 @@ def documentation() -> Dict[str, Any]:
             "Early-season (W1–W4) uncertainty is intentionally wider than NFL.",
             "HFA is variable by bucket (baseline ~1.7 pts); not a flat 3-pt blanket.",
             "Coaching continuity: new HC/OC/DC penalties decay after W1–W4.",
-            "Season sim uses densified approximate schedule paths (not official FBS slate).",
+            "v0.13: FBS-FBS margin = TAU*tanh(SCALE*raw/TAU) after the strength "
+            "path (SCALE=0.80, TAU=26). Placeholder-SP+ teams regress 28% to "
+            "league index. Totals stay on the separate pace path. σ not shrunk.",
+            "v0.14: warehouse opponent-adj EPA overlay replaces silent "
+            "league_average_fill for official FBS with ≥8 prior-season games. "
+            "Remaining missing codes are thin_sample_labeled (wider σ). "
+            "tanh constants unchanged. used_in_spread stays false.",
+            "v0.15: one Power SoT pack feeds DNA, project-game indices, and "
+            "frozen-SoT season projections (N=10k artifact). No parallel "
+            "rating. CFP/natty stay stub. used_in_spread stays false.",
+            "Season sim uses official ESPN 2026 slate when packaged; densified "
+            "seed is never labeled official. Win tables stay research-only.",
             "FBS focus; FCS opponents treated as external when scheduled.",
         ],
         "league_env": {
@@ -387,6 +407,7 @@ def documentation() -> Dict[str, Any]:
             "strength_clamp": list(STRENGTH_CLAMP),
             "qb_situation_index_clamp": list(QB_SITUATION_INDEX_CLAMP),
             "score_to_index_divisor": SCORE_TO_INDEX_DIVISOR,
+            "league_reg_placeholder": LEAGUE_REG_PLACEHOLDER,
             "player_yards_per_point": PLAYER_YARDS_PER_POINT,
             "player_pass_residual": PLAYER_PASS_RESIDUAL,
             "player_rush_residual": PLAYER_RUSH_RESIDUAL,

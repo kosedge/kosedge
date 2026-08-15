@@ -49,6 +49,9 @@ export default async function SlatePage({
   if (sportKey === "nfl") {
     redirect(`/pro/nfl/slate/${date || "today"}`);
   }
+  if (sportKey === "cfb") {
+    redirect("/pro/cfb/slate");
+  }
 
   const base = `/pro/${sportKey || "nfl"}`;
   const sportName = sportDisplayLabel(sportKey);
