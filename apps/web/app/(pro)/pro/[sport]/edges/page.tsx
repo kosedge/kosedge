@@ -18,6 +18,7 @@ export default async function SportEdgesPage({
   const sportKey = resolveSportKey(resolved?.sport);
   if (sportKey === "nfl") redirect("/pro/nfl/edges");
   if (sportKey === "mlb") redirect("/pro/mlb/edges");
+  if (sportKey === "cfb") redirect("/pro/cfb/model");
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey}`;

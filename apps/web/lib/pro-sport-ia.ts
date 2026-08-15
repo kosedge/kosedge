@@ -583,15 +583,19 @@ function marketLinksForSport({
       premium: true,
       status: "active",
     },
-    {
-      href: `/pro/kei-lines/${sportKey}`,
-      label: "KEI projections",
-      hint: sportIsMarketsOnlyEdgeBoard(sportKey)
-        ? "No KEI fair lines yet — markets-only until a handicap model ships."
-        : "Projected spread and total table by matchup.",
-      premium: true,
-      status: "active",
-    },
+    ...(sportKey === "cfb"
+      ? []
+      : [
+          {
+            href: `/pro/kei-lines/${sportKey}`,
+            label: "KEI projections",
+            hint: sportIsMarketsOnlyEdgeBoard(sportKey)
+              ? "No KEI fair lines yet — markets-only until a handicap model ships."
+              : "Projected spread and total table by matchup.",
+            premium: true,
+            status: "active",
+          },
+        ]),
     {
       href: `${base}/execution`,
       label: "Execution monitor",

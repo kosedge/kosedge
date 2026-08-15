@@ -152,8 +152,6 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     tools: [
       { href: "/odds/cfb", label: "Compare Odds" },
       { href: "/pro/cfb/tempo", label: "Tempo" },
-      { href: "/pro/kei-lines/cfb", label: "KEI (not shipped)" },
-      { href: "/pro/cfb/fair-lines", label: "Fair Lines" },
       { href: "/pro/power-ratings/cfb", label: "Power Ratings" },
       { href: "/pro/model-transparency", label: "Model Health" },
     ],

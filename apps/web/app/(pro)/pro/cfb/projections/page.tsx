@@ -31,10 +31,10 @@ export default async function CfbSeasonProjectionsPage() {
       <section className="mt-4 rounded-2xl border border-amber-400/25 bg-amber-400/8 px-4 py-3 text-sm text-kos-text/80">
         <p className="font-semibold text-amber-100">Research only</p>
         <p className="mt-1 text-xs leading-relaxed text-kos-text/70">
-          Pure model win totals — not a wagering instruction, not CLV, not KEI.
-          Hist walk-forward is cold vs market (Week 0–1 ATS 47.7% / MAE 8.36).
-          used_in_spread stays false. CFP / natty omitted. win_tables_final=false.
-          Frozen-SoT Monte Carlo on the official slate (in-path evolution off).
+          Pure model win totals from a frozen Power SoT — not a wagering
+          instruction and not a published handicap. CFP / natty omitted.
+          used_in_spread stays false. win_tables_final=false. In-path
+          strength evolution is off so the table stays on one snapshot.
         </p>
       </section>
 

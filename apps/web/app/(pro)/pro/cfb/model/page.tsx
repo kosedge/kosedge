@@ -59,7 +59,7 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="Research desk only. Model → (future KEI when earned) → Edge. CFB is Model research today — used_in_spread stays false. Edge Board is live books only; no KEI, no Edge Tag, no PLAY/LEAN."
+      summary="Research only. Power, matchup fairs, and season projections for a paying desk that understands Model vs Edge. CFB Edge stays off until a post–Week 3 gate. used_in_spread is false. Edge Board is live books only."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
@@ -322,7 +322,7 @@ export default async function CfbSeasonModelHubPage() {
             {(deferred.length > 0
               ? deferred
               : [
-                  "2026 opens + held-out KEI (post–Week 3)",
+                  "CFB Edge / published handicap (post–Week 3 gate)",
                   "CFP / natty product truth",
                   "Player box production path",
                 ]

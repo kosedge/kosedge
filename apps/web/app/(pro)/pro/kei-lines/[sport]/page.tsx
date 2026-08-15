@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import SportProShell from "@/components/pro/SportProShell";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
@@ -16,6 +17,7 @@ export default async function KeiLinesSportPage({
 }) {
   const resolved = await params;
   const sportKey = resolveSportKey(resolved?.sport);
+  if (sportKey === "cfb") redirect("/pro/cfb/model");
   const sportName = sportDisplayLabel(sportKey);
   const keiCode = getKeiCode(sportKey);
   const games = getKeiLines(sportKey);

@@ -125,7 +125,9 @@ describe("sport-pro-nav", () => {
     expect(cfbPrimary).toContain("Projections");
     expect(cfbPrimary).toContain("Teams");
     expect(cfbPrimary).not.toContain("KEI Lines");
-    expect(cfbTools).toContain("KEI (not shipped)");
+    expect(cfbTools).not.toContain("KEI (not shipped)");
+    expect(cfbTools).not.toContain("KEI Lines");
+    expect(cfbTools).not.toContain("Fair Lines");
     expect(cfbTools).toContain("Tempo");
     expect(cfbTools).not.toContain("KEI Projections");
     expect(cfbPrimary).not.toContain("Survivor");

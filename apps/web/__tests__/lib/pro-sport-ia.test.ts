@@ -230,12 +230,17 @@ describe("pro sport IA", () => {
 
   it("does not advertise invented KEI on the CFB hub footer", () => {
     const desk = getSportDeskConfig("cfb");
+    expect(desk.pathLabel).toBe("Model → Project Game → Slate");
+    expect(desk.cards.map((c) => c.title)).toEqual([
+      "Season Model",
+      "Project Game",
+      "Official slate",
+    ]);
     const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
     expect(edge?.description.toLowerCase()).toContain("no cfb kei");
     expect(edge?.description.toLowerCase()).not.toContain("directional edge tags");
-    const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
-    expect(kei?.description.toLowerCase()).toContain("honest empty");
-    expect(kei?.description.toLowerCase()).not.toContain("projected spread/total baselines");
+    expect(desk.footerCards.find((c) => c.title === "KEI Lines")).toBeUndefined();
+    expect(desk.footerCards.some((c) => c.title === "Project Game")).toBe(true);
   });
 
   it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {

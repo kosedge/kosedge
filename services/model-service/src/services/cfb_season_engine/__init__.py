@@ -686,6 +686,7 @@ def engine_status_payload(
             "cfb_diagnostic_2026": "scripts/cfb/cfb diagnostic 2026",
             "cfb_live_open": "scripts/cfb/cfb live-open",
             "ops_live_open_diagnostic": "data/ops/cfb-live-open-diagnostic-20260815.md",
+            "ops_subscription_ready": "data/ops/cfb-subscription-ready-20260815.md",
             "build_efficiency_prior": "scripts/cfb/build_efficiency_preseason_prior.py",
             "web_hub": "/pro/cfb/model",
             "web_project_game": "/pro/cfb/project-game",

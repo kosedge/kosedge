@@ -47,6 +47,7 @@ describe("cfb truth-label wiring", () => {
       expect(src).toContain("cfb-truth-state");
       expect(src).toContain("cfbModelDeskHonestyNote");
       expect(src).not.toContain("Coming soon");
+      expect(src).not.toContain("future KEI when earned");
     }
   });
 
