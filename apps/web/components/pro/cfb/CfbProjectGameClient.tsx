@@ -297,18 +297,20 @@ export default function CfbProjectGameClient({
   defaultHome = "OSU",
   defaultAway = "MICH",
   defaultWeek = 1,
+  defaultNeutral = false,
   engineVersion,
 }: {
   teams: CfbTeamOption[];
   defaultHome?: string;
   defaultAway?: string;
   defaultWeek?: number;
+  defaultNeutral?: boolean;
   engineVersion?: string;
 }) {
   const [homeTeam, setHomeTeam] = useState(defaultHome);
   const [awayTeam, setAwayTeam] = useState(defaultAway);
   const [week, setWeek] = useState(defaultWeek);
-  const [neutralSite, setNeutralSite] = useState(false);
+  const [neutralSite, setNeutralSite] = useState(defaultNeutral);
   const [nightGame, setNightGame] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -459,7 +461,7 @@ export default function CfbProjectGameClient({
               value={week}
               onChange={(e) => setWeek(Number(e.target.value))}
             >
-              {Array.from({ length: 15 }, (_, i) => i + 1).map((w) => (
+              {Array.from({ length: 16 }, (_, i) => i).map((w) => (
                 <option key={w} value={w}>
                   Week {w}
                 </option>
