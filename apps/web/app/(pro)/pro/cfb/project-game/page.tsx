@@ -2,17 +2,55 @@ import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
 import CfbProjectGameClient from "@/components/pro/cfb/CfbProjectGameClient";
 import { fetchCfbSeasonEngineStatus } from "@/lib/cfb-season-engine";
-import { teamOptionsFromCodes } from "@/lib/cfb-season-engine-format";
+import {
+  normalizeTeamCode,
+  teamOptionsFromCodes,
+} from "@/lib/cfb-season-engine-format";
 import {
   cfbModelDeskHonestyNote,
   cfbModelDeskTruthStates,
 } from "@/lib/cfb-truth-label";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 20;
 
-export default async function CfbProjectGamePage() {
+type SearchValue = string | string[] | undefined;
+
+function firstValue(value: SearchValue): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  return value;
+}
+
+export default async function CfbProjectGamePage({
+  searchParams,
+}: {
+  searchParams?:
+    | Promise<Record<string, SearchValue>>
+    | Record<string, SearchValue>;
+}) {
+  const sp =
+    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+      ? await (searchParams as Promise<Record<string, SearchValue>>)
+      : ((searchParams as Record<string, SearchValue>) ?? {});
+
   const status = await fetchCfbSeasonEngineStatus();
-  const teams = teamOptionsFromCodes(status.team_codes);
+  const home = normalizeTeamCode(firstValue(sp.home) ?? "");
+  const away = normalizeTeamCode(firstValue(sp.away) ?? "");
+  const weekRaw = Number(firstValue(sp.week) ?? 1);
+  const week = Number.isFinite(weekRaw) ? Math.max(0, Math.min(20, weekRaw)) : 1;
+  const neutral =
+    firstValue(sp.neutral) === "1" || firstValue(sp.neutral) === "true";
+  const codes = [
+    ...(status.team_codes ?? []),
+    ...(home ? [home] : []),
+    ...(away ? [away] : []),
+    "TCU",
+    "UNC",
+    "USC",
+    "UGA",
+    "OSU",
+  ];
+  const teams = teamOptionsFromCodes(codes);
 
   return (
     <SportHubShell
@@ -20,39 +58,44 @@ export default async function CfbProjectGamePage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Project Game"
-      summary="Market-style team projection — projected score, favorite spread, total, and win% with American moneyline, approximate QB / skill player hooks, plus scannable roster / unit / HFA / coaching drivers and early-season uncertainty."
+      summary="Research fair — projected score, favorite spread, total, win%, and drivers. Not a wagering instruction. Edge Board stays markets-only; this desk never blends into KEI."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
-      primaryHref="/pro/cfb/model"
-      primaryLabel="Season Model hub"
+      primaryHref="/pro/cfb/slate"
+      primaryLabel="Official slate"
       secondaryHref="/edge-board/cfb"
-      secondaryLabel="Edge Board"
+      secondaryLabel="Edge Board (markets)"
     >
       <div className="mt-2 mb-4 flex flex-wrap gap-3 text-xs">
         <Link
           href="/pro/cfb/model"
           className="min-h-11 inline-flex items-center font-medium text-kos-gold/90 hover:text-kos-gold sm:min-h-0"
         >
-          ← Season Model
+          ← Model hub
         </Link>
         <Link
-          href="/pro/cfb/tempo"
+          href="/pro/cfb/slate"
           className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
         >
-          Tempo →
+          Slate →
         </Link>
       </div>
 
       {status.error ? (
-        <p className="mb-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/65">
-          Status probe failed ({status.error}). Team list may be incomplete —
-          project-game still attempts Railway via BFF.
+        <p className="mb-4 rounded-lg border border-amber-400/25 bg-amber-400/8 px-3 py-2 text-xs text-kos-text/70">
+          Model unreachable ({status.error}). Form still runs through the BFF —
+          if Railway is down you will see an honest project-game error, not a
+          black frame.
         </p>
       ) : null}
 
       <CfbProjectGameClient
         teams={teams}
+        defaultHome={home || "TCU"}
+        defaultAway={away || "UNC"}
+        defaultWeek={week}
+        defaultNeutral={neutral}
         engineVersion={status.engine_version || undefined}
       />
     </SportHubShell>

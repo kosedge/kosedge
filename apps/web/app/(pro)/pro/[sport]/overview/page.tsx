@@ -20,6 +20,8 @@ import {
   SPORT_TAGLINE,
 } from "@/lib/sport-pro-nav";
 
+const tonightGamesEmpty: Awaited<ReturnType<typeof getTonightGames>> = [];
+
 function deskTitleClass(accent: "gold" | "green" | "neutral"): string {
   if (accent === "gold") return "text-lg font-semibold text-kos-gold";
   if (accent === "green") return "text-lg font-semibold text-edge-green";
@@ -45,7 +47,12 @@ export default async function SportOverviewPage({
   const content = buildSportOverviewContent(sportKey, sportName);
   const desk = getSportDeskConfig(sportKey);
   const glance = getSportGlance(sportKey);
-  const tonightGames = await getTonightGames(sportKey);
+  const tonightGames = await Promise.race([
+    getTonightGames(sportKey),
+    new Promise<typeof tonightGamesEmpty>((resolve) =>
+      setTimeout(() => resolve(tonightGamesEmpty), 8_000),
+    ),
+  ]);
 
   const isWeekly = sportKey === "cfb" || sportKey === "nfl";
   const slateLabel = isWeekly ? "Weekly Slate" : "Daily Slate";

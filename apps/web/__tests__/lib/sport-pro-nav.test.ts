@@ -101,8 +101,11 @@ describe("sport-pro-nav", () => {
     const cfbPrimary = getSportPrimaryNav("cfb").map((i) => i.label);
     expect(cfbTools).not.toContain("Season Model");
     expect(cfbTools).not.toContain("Project Game");
-    expect(cfbPrimary).toContain("Season Model");
+    expect(cfbPrimary).toContain("Model");
     expect(cfbPrimary).toContain("Project Game");
+    expect(cfbPrimary).toContain("Slate");
+    expect(cfbPrimary).toContain("Projections");
+    expect(cfbPrimary).toContain("Teams");
     expect(cfbPrimary).toContain("Fair Lines");
     expect(cfbPrimary).not.toContain("KEI Lines");
     expect(cfbTools).toContain("KEI (not shipped)");
@@ -114,10 +117,8 @@ describe("sport-pro-nav", () => {
 
   it("uses Tempo for college and Goalie Desk for NHL", () => {
     expect(getSportPrimaryNav("ncaam").map((i) => i.label)).toContain("Tempo");
-    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain("Tempo");
-    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain(
-      "Season Model",
-    );
+    expect(getSportToolNav("cfb").map((i) => i.label)).toContain("Tempo");
+    expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain("Model");
     expect(getSportPrimaryNav("nhl").map((i) => i.label)).toContain(
       "Goalie Desk",
     );

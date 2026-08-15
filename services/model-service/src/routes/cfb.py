@@ -14,10 +14,10 @@ router = APIRouter(prefix="/cfb", tags=["cfb-model"])
 
 
 class ProjectGameBody(BaseModel):
-    home_team: str = Field(..., min_length=2, max_length=8)
-    away_team: str = Field(..., min_length=2, max_length=8)
+    home_team: str = Field(..., min_length=2, max_length=12)
+    away_team: str = Field(..., min_length=2, max_length=12)
     season: int = Field(2026, ge=2010, le=2100)
-    week: int = Field(1, ge=1, le=20)
+    week: int = Field(0, ge=0, le=20)
     neutral_site: bool = False
     night_game: bool = False
     demo: bool = True
@@ -31,7 +31,7 @@ class SimulateBody(BaseModel):
     n_sims: int = Field(15, ge=1, le=200)
     seed: int = 2026
     demo: bool = True
-    as_of_week: int = Field(1, ge=1, le=20)
+    as_of_week: int = Field(0, ge=0, le=20)
 
 
 class LogProjectionBody(BaseModel):
@@ -40,7 +40,7 @@ class LogProjectionBody(BaseModel):
     home_team: str = Field(..., min_length=2, max_length=8)
     away_team: str = Field(..., min_length=2, max_length=8)
     season: int = Field(2026, ge=2010, le=2100)
-    week: int = Field(1, ge=1, le=20)
+    week: int = Field(0, ge=0, le=20)
     engine_version: Optional[str] = None
     spread_home: Optional[float] = None
     model_spread_home: Optional[float] = None
@@ -94,13 +94,49 @@ class InSeasonResetBody(BaseModel):
 @router.get("/season-engine/status")
 def cfb_season_engine_status(
     season: int = Query(2026, ge=2010, le=2100),
-    as_of_week: int = Query(1, ge=1, le=20),
+    as_of_week: int = Query(0, ge=0, le=20),
     demo: bool = Query(True, description="Packaged universe probe (default)"),
 ) -> Dict[str, Any]:
     """Describe CFB hierarchical engine layers, data sources, solid vs approximate."""
-    from src.services.cfb_season_engine import engine_status_payload
+    version = "cfb-season-engine-v0.9-inseason"
+    payload: Dict[str, Any]
+    try:
+        from src.services.cfb_season_engine import (
+            DEFAULT_SEASON_ENGINE_VERSION,
+            engine_status_payload,
+        )
 
-    return engine_status_payload(season=season, as_of_week=as_of_week, demo=demo)
+        version = DEFAULT_SEASON_ENGINE_VERSION
+        payload = engine_status_payload(
+            season=season, as_of_week=max(as_of_week, 1), demo=demo
+        )
+    except Exception as exc:  # pragma: no cover — never 500 a version probe
+        log.exception("cfb season-engine status failed")
+        payload = {
+            "ok": False,
+            "engine_version": version,
+            "used_in_spread": False,
+            "error": str(exc),
+            "note": (
+                "Status degraded; version string is still authoritative. "
+                "Research prior only — no KEI."
+            ),
+        }
+    payload.setdefault("engine_version", version)
+    payload.setdefault("used_in_spread", False)
+    payload.setdefault("ok", "error" not in payload)
+    try:
+        from src.services.cfb_season_engine.product_desk import product_desk_payload
+
+        if not isinstance(payload.get("desk"), dict):
+            payload["desk"] = product_desk_payload(weeks=(0, 1))
+        payload["slate_complete"] = bool(
+            payload.get("slate_complete")
+            or payload["desk"].get("week_board", {}).get("slate_complete")
+        )
+    except Exception as exc:  # pragma: no cover
+        log.warning("cfb product desk attach skipped: %s", exc)
+    return payload
 
 
 @router.post("/season-engine/project-game")
@@ -116,7 +152,7 @@ def cfb_season_engine_project_game(
 
     universe, meta = resolve_season_universe(
         season=body.season,
-        as_of_week=body.week,
+        as_of_week=max(int(body.week), 1),
         demo=body.demo,
         session=None,
     )
@@ -140,6 +176,7 @@ def cfb_season_engine_project_game(
     payload = project_game_to_dict(proj)
     payload["ok"] = True
     payload["mode"] = meta.get("mode")
+    payload["used_in_spread"] = False
     # Best-effort tracking — never slows / fails the projection path.
     try:
         from src.services.cfb_season_engine.performance_tracking import (

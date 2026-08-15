@@ -12,8 +12,17 @@ export async function GET(req: Request) {
       ? url.searchParams.get("demo") === "true"
       : true,
   });
-  if (status.error) {
-    return NextResponse.json(status, { status: 502 });
+  if (status.error && !status.engine_version) {
+    return NextResponse.json(
+      {
+        ...status,
+        used_in_spread: false,
+        error: status.error.startsWith("model unreachable")
+          ? status.error
+          : `model unreachable: ${status.error}`,
+      },
+      { status: 200 },
+    );
   }
-  return NextResponse.json(status);
+  return NextResponse.json({ ...status, used_in_spread: false });
 }
