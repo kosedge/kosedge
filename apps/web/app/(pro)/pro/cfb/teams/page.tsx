@@ -183,6 +183,7 @@ export default async function CfbTeamDnaPage({
           .
         </p>
       ) : (
+        <>
         <ul className="mt-4 grid gap-2 md:hidden">
           {rows.map((row) => {
             const nextHref = projectNext(row);
@@ -300,6 +301,7 @@ export default async function CfbTeamDnaPage({
             </tbody>
           </table>
         </div>
+        </>
       )}
     </SportHubShell>
   );

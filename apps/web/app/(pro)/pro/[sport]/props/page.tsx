@@ -29,10 +29,8 @@ export default async function PropsPage({
   const resolved = await params;
   const sportKey = resolveSportKey(resolved?.sport);
   if (sportKey === "nfl") redirect("/pro/nfl/props");
-  // College sports: no props desk — send researchers to Tempo / Fair Lines.
-  if (sportKey === "ncaam" || sportKey === "cfb") {
-    redirect(`/pro/${sportKey}/tempo`);
-  }
+  if (sportKey === "ncaam") redirect("/pro/ncaam/tempo");
+  if (sportKey === "cfb") redirect("/pro/cfb/project-game");
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey || "nfl"}`;

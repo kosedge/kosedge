@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
@@ -15,7 +15,8 @@ export default async function SportTempoPage({
 }) {
   const resolved = await params;
   const sportKey = resolveSportKey(resolved?.sport);
-  if (sportKey !== "ncaam" && sportKey !== "cfb") notFound();
+  if (sportKey === "cfb") redirect("/pro/cfb/project-game");
+  if (sportKey !== "ncaam") notFound();
 
   const sportName = sportDisplayLabel(sportKey);
   const isCfb = sportKey === "cfb";

@@ -49,6 +49,9 @@ export default async function SportOverviewPage({
 
   const isWeekly = sportKey === "cfb" || sportKey === "nfl";
   const slateLabel = isWeekly ? "Weekly Slate" : "Daily Slate";
+  const slateHref =
+    sportKey === "cfb" ? "/pro/cfb/slate" : `${base}/slate/today`;
+  const deskHeading = content.sectionTitles.market;
 
   // Elevate slate above; drop empty props walls for college sports.
   const gridSections = buildSportOverviewSections({
@@ -99,7 +102,7 @@ export default async function SportOverviewPage({
               Open Live Edgeboard
             </Link>
             <Link
-              href={`${base}/slate/today`}
+              href={slateHref}
               className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
             >
               Open {slateLabel}
@@ -150,7 +153,7 @@ export default async function SportOverviewPage({
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
-              href={`${base}/slate/today`}
+              href={slateHref}
               className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55 inline-flex items-center"
             >
               Open {slateLabel} →
@@ -176,11 +179,11 @@ export default async function SportOverviewPage({
         )}
       </section>
 
-      {/* Betting Desk */}
+      {/* Sport desk path */}
       <section className="mt-6">
         <div className="mb-3">
           <h2 className="text-xl font-semibold tracking-tight text-kos-text">
-            Betting Desk
+            {deskHeading}
           </h2>
           <p className="mt-1 text-sm text-kos-text/70">
             {desk.pathLabel} — research surfaces, not pick sheets.

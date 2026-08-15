@@ -128,7 +128,8 @@ describe("sport-pro-nav", () => {
     expect(cfbTools).not.toContain("KEI (not shipped)");
     expect(cfbTools).not.toContain("KEI Lines");
     expect(cfbTools).not.toContain("Fair Lines");
-    expect(cfbTools).toContain("Tempo");
+    expect(cfbTools).not.toContain("Tempo");
+    expect(cfbTools).toContain("Power Ratings");
     expect(cfbTools).not.toContain("KEI Projections");
     expect(cfbPrimary).not.toContain("Survivor");
     expect(cfbPrimary).not.toContain("Game Boxes");
@@ -137,7 +138,7 @@ describe("sport-pro-nav", () => {
 
   it("uses Tempo for college and Goalie Desk for NHL", () => {
     expect(getSportPrimaryNav("ncaam").map((i) => i.label)).toContain("Tempo");
-    expect(getSportToolNav("cfb").map((i) => i.label)).toContain("Tempo");
+    expect(getSportToolNav("cfb").map((i) => i.label)).not.toContain("Tempo");
     expect(getSportPrimaryNav("cfb").map((i) => i.label)).toContain("Model");
     expect(getSportPrimaryNav("nhl").map((i) => i.label)).toContain(
       "Goalie Desk",

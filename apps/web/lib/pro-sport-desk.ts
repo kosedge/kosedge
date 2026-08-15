@@ -30,10 +30,15 @@ export type SportDeskConfig = {
 
 const SHARED_FOOTER = (sportKey: string): HubFooterCard[] => [
   {
-    href: `/pro/power-ratings/${sportKey}`,
+    href:
+      sportKey === "cfb"
+        ? "/pro/cfb/teams"
+        : `/pro/power-ratings/${sportKey}`,
     title: "Power Ratings",
     description:
-      "Team strength, tiering, and historical movement with slate context.",
+      sportKey === "cfb"
+        ? "Single 136-row Power SoT — power, OFF/DEF, uncertainty, fill labels."
+        : "Team strength, tiering, and historical movement with slate context.",
     cta: "View ratings →",
     accent: "gold",
   },

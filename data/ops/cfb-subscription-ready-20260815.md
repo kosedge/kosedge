@@ -21,7 +21,7 @@
 Power: `cfb-power-sot-v0.15-20260814` · as_of **2026-08-14** · n=136  
 Projections: `cfb-season-projections-v0.15-n10000-20260814` · **N=10,000** · as_of **2026-08-14**
 
-Overview path: **Model → Project Game → Slate**. Dead KEI / Fair Lines / Edges CTAs redirect to the research desk.
+Overview path: **Model → Project Game → Slate**. Dead KEI / Fair Lines / Edges / Tempo / Props / generic Power Ratings CTAs redirect to the research desk. Single Power SoT lives on `/pro/cfb/teams`.
 
 ---
 
@@ -70,6 +70,10 @@ Until then: research desk only.
 | `/pro/cfb/fair-lines` | 200 (old shell) | **redirect → project-game** |
 | `/pro/cfb/edges` | 200 (old shell) | **redirect → model** |
 | `/pro/kei-lines/cfb` | 200 (empty KEI) | **redirect → model** |
+| `/pro/cfb/tempo` | 200 (KEI theater) | **redirect → project-game** |
+| `/pro/cfb/props` | 200 or tempo | **redirect → project-game** |
+| `/pro/power-ratings/cfb` | 200 (other table) | **redirect → teams (SoT)** |
+| `/pro/cfb/slate/today` | old betting slate | **redirect → /pro/cfb/slate** |
 
 **P0 until merge:** paying users hitting Slate / Projections in the new IA get 404. Merge #241 → #242 → #243 → this PR onto `deploy-vercel`.
 
