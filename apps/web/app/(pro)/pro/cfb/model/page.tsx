@@ -59,7 +59,7 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="Research only. Power, matchup fairs, and season projections for a paying desk that understands Model vs Edge. CFB Edge stays off until a post–Week 3 gate. used_in_spread is false. Edge Board is live books only."
+      summary="Research only. Power, matchup fairs, and season projections for a paying desk that understands Model vs Edge. CFB Edge stays off until a post–Week 3 gate. These numbers are not a published handicap. Edge Board is live books only."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
@@ -117,10 +117,10 @@ export default async function CfbSeasonModelHubPage() {
           </div>
           <div>
             <div className="text-kos-text/45 uppercase tracking-[0.1em]">
-              used_in_spread
+              Published handicap
             </div>
             <div className="mt-0.5 text-kos-text">
-              {String(status.used_in_spread ?? false)}
+              Off — research fair only
             </div>
           </div>
           <div>

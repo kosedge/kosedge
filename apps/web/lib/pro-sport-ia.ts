@@ -75,7 +75,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
     articleToneBadge: "CFB analyst desk",
     sectionTitles: {
       market: "Research Desk",
-      props: "Props & Fantasy (Data Pending)",
+      props: "Props (not on this desk)",
       intel: "League Intel",
     },
   },

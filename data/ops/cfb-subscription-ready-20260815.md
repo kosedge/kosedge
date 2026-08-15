@@ -56,26 +56,26 @@ Until then: research desk only.
 
 ## Smoke table
 
-**Production 2026-08-15 (before this stack merges):** `deploy-vercel` still has the old CFB betting-desk nav (Fair Lines / Edges). Slate + projections pages are **not on prod**.
+**Production HTTP 2026-08-15:** all primary CFB Pro routes returned **200** (auth wall may wrap the HTML). Slate + projections are no longer 404. Leftover KEI/Fair Lines **shells** still 200 until this PR merges (then they redirect).
 
-| Route | Prod now | After this stack |
+| Route | Prod HTTP | After this stack |
 | --- | --- | --- |
-| `/pro/cfb/model` | 200 | 200 · research contract |
+| `/pro/cfb/model` | 200 | 200 · research contract, no `used_in_spread` jargon |
 | `/pro/cfb/project-game` | 200 | 200 |
+| `/pro/cfb/slate` | 200 | 200 · official W0/W1 |
+| `/pro/cfb/projections` | 200 | 200 · N=10,000 artifact |
 | `/pro/cfb/teams` | 200 | 200 · 136 + mobile cards |
 | `/pro/cfb/overview` | 200 | 200 · Model → Project Game → Slate |
 | `/edge-board/cfb` | 200 | 200 · markets only |
-| `/pro/cfb/slate` | **404** | 200 · official W0/W1 |
-| `/pro/cfb/projections` | **404** | 200 · N=10,000 |
 | `/pro/cfb/fair-lines` | 200 (old shell) | **redirect → project-game** |
 | `/pro/cfb/edges` | 200 (old shell) | **redirect → model** |
 | `/pro/kei-lines/cfb` | 200 (empty KEI) | **redirect → model** |
-| `/pro/cfb/tempo` | 200 (KEI theater) | **redirect → project-game** |
-| `/pro/cfb/props` | 200 or tempo | **redirect → project-game** |
-| `/pro/power-ratings/cfb` | 200 (other table) | **redirect → teams (SoT)** |
-| `/pro/cfb/slate/today` | old betting slate | **redirect → /pro/cfb/slate** |
+| `/pro/cfb/tempo` | 200 | **redirect → project-game** |
+| `/pro/cfb/props` | 200 | **redirect → project-game** |
+| `/pro/power-ratings/cfb` | 200 | **redirect → teams (SoT)** |
+| `/pro/cfb/slate/today` | 200 | **redirect → /pro/cfb/slate** |
 
-**P0 until merge:** paying users hitting Slate / Projections in the new IA get 404. Merge #241 → #242 → #243 → this PR onto `deploy-vercel`.
+**P0 remaining:** merge this stack onto `deploy-vercel` so dead KEI/Fair Lines CTAs stop rendering. No invented lines.
 
 ---
 

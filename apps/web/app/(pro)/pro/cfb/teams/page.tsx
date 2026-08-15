@@ -183,51 +183,51 @@ export default async function CfbTeamDnaPage({
           .
         </p>
       ) : (
-        <>
-        <ul className="mt-4 grid gap-2 md:hidden">
-          {rows.map((row) => {
-            const nextHref = projectNext(row);
-            const fill = row.efficiency_fill ?? "";
-            return (
-              <li
-                key={row.team}
-                className="rounded-xl border border-white/10 bg-black/30 px-3 py-3"
-              >
-                <div className="flex items-baseline justify-between gap-2">
-                  <span className="font-semibold text-kos-text">{row.team}</span>
-                  <span className="tabular-nums text-sm text-kos-gold">
-                    {formatIndex(row.power_index, 3)}
-                  </span>
-                </div>
-                <p className="mt-1 text-xs text-kos-text/60">
-                  {row.conference ?? "—"} · O {formatIndex(row.offense_index, 2)}{" "}
-                  / D {formatIndex(row.defense_index, 2)} · σ{" "}
-                  {formatIndex(row.early_season_uncertainty, 2)}
-                </p>
-                <p className="mt-1 text-xs text-kos-text/55">
-                  {formatQbClassLabel(row.qb_class)}
-                  {row.open_qb ? (
-                    <span className="ml-1 text-amber-200/80">open</span>
+        <div>
+          <ul className="mt-4 grid gap-2 md:hidden">
+            {rows.map((row) => {
+              const nextHref = projectNext(row);
+              const fill = row.efficiency_fill ?? "";
+              return (
+                <li
+                  key={row.team}
+                  className="rounded-xl border border-white/10 bg-black/30 px-3 py-3"
+                >
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="font-semibold text-kos-text">{row.team}</span>
+                    <span className="tabular-nums text-sm text-kos-gold">
+                      {formatIndex(row.power_index, 3)}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-xs text-kos-text/60">
+                    {row.conference ?? "—"} · O {formatIndex(row.offense_index, 2)}{" "}
+                    / D {formatIndex(row.defense_index, 2)} · σ{" "}
+                    {formatIndex(row.early_season_uncertainty, 2)}
+                  </p>
+                  <p className="mt-1 text-xs text-kos-text/55">
+                    {formatQbClassLabel(row.qb_class)}
+                    {row.open_qb ? (
+                      <span className="ml-1 text-amber-200/80">open</span>
+                    ) : null}
+                    {fill === "warehouse" ? (
+                      <span className="ml-2 text-sky-300/90">warehouse fill</span>
+                    ) : fill === "thin" ? (
+                      <span className="ml-2 text-amber-200/80">thin sample</span>
+                    ) : null}
+                  </p>
+                  {nextHref && row.next ? (
+                    <Link
+                      href={nextHref}
+                      className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-kos-gold"
+                    >
+                      Next W{row.next.week} {row.next.opponent} →
+                    </Link>
                   ) : null}
-                  {fill === "warehouse" ? (
-                    <span className="ml-2 text-sky-300/90">warehouse fill</span>
-                  ) : fill === "thin" ? (
-                    <span className="ml-2 text-amber-200/80">thin sample</span>
-                  ) : null}
-                </p>
-                {nextHref && row.next ? (
-                  <Link
-                    href={nextHref}
-                    className="mt-2 inline-flex min-h-11 items-center text-sm font-semibold text-kos-gold"
-                  >
-                    Next W{row.next.week} {row.next.opponent} →
-                  </Link>
-                ) : null}
-              </li>
-            );
-          })}
-        </ul>
-        <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-white/10 bg-black/30 md:block">
+                </li>
+              );
+            })}
+          </ul>
+          <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-white/10 bg-black/30 md:block">
           <table className="w-full min-w-[44rem] text-left text-sm text-kos-text/80">
             <thead>
               <tr className="border-b border-white/10 text-[11px] uppercase tracking-[0.1em] text-kos-text/45">
@@ -300,8 +300,8 @@ export default async function CfbTeamDnaPage({
               })}
             </tbody>
           </table>
+          </div>
         </div>
-        </>
       )}
     </SportHubShell>
   );
