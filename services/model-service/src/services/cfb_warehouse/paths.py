@@ -50,6 +50,11 @@ def odds_lake_dir(*, prefer_hd: bool = True) -> Path:
     return REPO_ODDS_CFB
 
 
+def live_odds_dir(*, prefer_hd: bool = True) -> Path:
+    """2026 game-odds snapshots (opens/closes). Not Railway Postgres."""
+    return odds_lake_dir(prefer_hd=prefer_hd) / "live"
+
+
 def predictions_dir(*, prefer_hd: bool = True, root: Path | None = None) -> Path:
     """Immutable research-fair snapshots (JSON / JSONL / parquet)."""
     if root is not None:

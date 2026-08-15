@@ -20,6 +20,7 @@ from src.services.cfb_warehouse.walkforward import (
 
 USED_IN_SPREAD = False
 DIAGNOSTIC_ID = "cfb-market-diagnostic-v0.14.1-20260814"
+INSUFFICIENT_MARKET_ROWS = "insufficient_market_rows"
 MOVE_EPS = 0.25
 P4 = frozenset({"SEC", "Big Ten", "ACC", "Big 12"})
 G5 = frozenset(
@@ -207,13 +208,89 @@ def diagnose(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def diagnose_live_2026(
+    rows: Optional[Sequence[Mapping[str, Any]]] = None,
+    *,
+    n_opens: Optional[int] = None,
+    n_closes: Optional[int] = None,
+    extra: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    """2026 join. Empty market → ``insufficient_market_rows``, not invented metrics.
+
+    Does not write KEI. Does not flip ``used_in_spread``.
+    """
+    joined = list(rows or [])
+    opens = n_opens if n_opens is not None else sum(
+        1 for r in joined if r.get("open_spread_home") is not None
+    )
+    closes = n_closes if n_closes is not None else sum(
+        1 for r in joined if r.get("close_spread_home") is not None
+    )
+    base = {
+        "diagnostic_id": DIAGNOSTIC_ID,
+        "season": 2026,
+        "n_opens": int(opens),
+        "n_closes": int(closes),
+        "n_joined": len(joined),
+        "used_in_spread": USED_IN_SPREAD,
+        "kei": False,
+        "blend": False,
+        "read_only": True,
+    }
+    if extra:
+        base.update(dict(extra))
+    if opens == 0 and closes == 0:
+        base.update(
+            {
+                "status": INSUFFICIENT_MARKET_ROWS,
+                "note": (
+                    "No 2026 open/close rows to join. Not a crash. "
+                    "Not invented ATS/MAE. Pull opens, then re-run."
+                ),
+            }
+        )
+        return base
+    pack = diagnose(joined)
+    pack.update(base)
+    pack["status"] = "ok"
+    pack["note"] = (
+        "Research only. Model fair vs owned 2026 open/close when present. "
+        "No blend. No KEI. used_in_spread stays false."
+    )
+    return pack
+
+
 def documentation() -> Dict[str, Any]:
+    ingest: Dict[str, Any] = {}
+    try:
+        from src.services.cfb_warehouse.open_ingest import latest_inventory
+
+        ingest = latest_inventory() or {}
+    except Exception:
+        ingest = {}
     return {
         "id": DIAGNOSTIC_ID,
         "used_in_spread": USED_IN_SPREAD,
         "kei": False,
         "blend": False,
         "ops": "data/ops/cfb-market-diagnostic-20260814.md",
+        "ops_open_ingest": "data/ops/cfb-open-ingest-scaffold-20260814.md",
         "script": "scripts/cfb/run_market_diagnostic.py",
+        "cli": "scripts/cfb/cfb diagnostic 2026",
         "read_only": True,
+        "n_opens": int(ingest.get("n_opens") or 0),
+        "n_closes": int(ingest.get("n_closes") or 0),
+        "as_of": ingest.get("as_of"),
+        "sources": ingest.get("sources") or ["the-odds-api"],
+        "open_ingest": {
+            "n_opens": int(ingest.get("n_opens") or 0),
+            "n_closes": int(ingest.get("n_closes") or 0),
+            "as_of": ingest.get("as_of"),
+            "sources": ingest.get("sources") or ["the-odds-api"],
+            "sport_key": ingest.get("sport_key") or "americanfootball_ncaaf",
+            "status": ingest.get("status") or "no_attempt",
+            "match_rate": ingest.get("match_rate"),
+            "used_in_spread": USED_IN_SPREAD,
+            "kei": False,
+        },
     }

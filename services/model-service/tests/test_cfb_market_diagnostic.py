@@ -9,11 +9,13 @@ os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/tes
 from src.services.cfb_season_engine import engine_status_payload
 from src.services.cfb_warehouse.market_diagnostic import (
     DIAGNOSTIC_ID,
+    INSUFFICIENT_MARKET_ROWS,
     USED_IN_SPREAD,
     annotate_row,
     close_abs_bucket,
     clv_side_hit,
     diagnose,
+    diagnose_live_2026,
     diagnostic_week_band,
     documentation,
     slice_report,
@@ -114,3 +116,46 @@ def test_status_exposes_read_only_diagnostic() -> None:
     assert block.get("used_in_spread") is False
     assert block.get("kei") is False
     assert block.get("blend") is False
+    assert "n_opens" in block
+    assert "n_closes" in block
+    ingest = block.get("open_ingest") or {}
+    assert ingest.get("used_in_spread") is False
+    assert ingest.get("kei") is False
+
+
+def test_diagnose_2026_empty_is_insufficient_not_crash() -> None:
+    out = diagnose_live_2026([])
+    assert out["status"] == INSUFFICIENT_MARKET_ROWS
+    assert out["n_opens"] == 0
+    assert out["n_closes"] == 0
+    assert out["used_in_spread"] is False
+    assert out["kei"] is False
+    assert out["blend"] is False
+    assert "overall" not in out
+    assert "ats_rate" not in out
+
+
+def test_diagnose_2026_with_rows_stays_research() -> None:
+    rows = [
+        {
+            "model_fair_present": True,
+            "model_spread_home": -3.0,
+            "open_spread_home": -6.0,
+            "close_spread_home": -7.0,
+            "spread_error": 4.0,
+            "ats_hit": False,
+            "favorite_home": True,
+            "week": 1,
+            "home_team_id": "BALL",
+            "away_team_id": "OSU",
+            "fair_status": "ok",
+        }
+    ]
+    out = diagnose_live_2026(rows)
+    assert out["status"] == "ok"
+    assert out["n_opens"] == 1
+    assert out["n_closes"] == 1
+    assert out["used_in_spread"] is False
+    assert out["kei"] is False
+    assert out["blend"] is False
+    assert "by_diag_week_band" in out

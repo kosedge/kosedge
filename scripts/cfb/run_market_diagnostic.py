@@ -4,8 +4,11 @@
 Usage:
   python scripts/cfb/run_market_diagnostic.py
   python scripts/cfb/run_market_diagnostic.py --seasons 2020-2025
+  python scripts/cfb/run_market_diagnostic.py --season 2026
+  python scripts/cfb/cfb diagnostic 2026
 
 Does not blend market into fair. Does not write KEI / Edge / used_in_spread.
+2026 with n=0 returns ``insufficient_market_rows`` (exit 0), not a crash.
 """
 
 from __future__ import annotations
@@ -24,7 +27,13 @@ from src.services.cfb_warehouse.market_diagnostic import (  # noqa: E402
     DIAGNOSTIC_ID,
     USED_IN_SPREAD,
     diagnose,
+    diagnose_live_2026,
     documentation,
+)
+from src.services.cfb_warehouse.open_ingest import (  # noqa: E402
+    load_mapped,
+    load_official_slate_games,
+    reduce_mapped_games,
 )
 from src.services.cfb_warehouse.paths import clean_dir, odds_lake_dir  # noqa: E402
 from src.services.cfb_warehouse.walkforward import (  # noqa: E402
@@ -177,12 +186,72 @@ def _live_2026_table(closes: List[Dict[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def _attach_2026_fairs(reduced: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Join research-fair project-game onto reduced open/close rows. No KEI."""
+    import os
+
+    os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+    from src.services.cfb_season_engine import (
+        build_packaged_universe,
+        project_game_preview,
+        project_game_to_dict,
+    )
+
+    universe = build_packaged_universe(2026)
+    out: List[Dict[str, Any]] = []
+    for row in reduced:
+        home = str(row.get("home_team_id") or "")
+        away = str(row.get("away_team_id") or "")
+        week = int(row.get("week") or 0)
+        if not home or not away:
+            continue
+        proj = project_game_preview(
+            universe,
+            home_team=home,
+            away_team=away,
+            week=week,
+            n_sims=80,
+            seed=7,
+        )
+        payload = project_game_to_dict(proj)
+        joined = dict(row)
+        joined["model_spread_home"] = round(float(proj.spread_home), 2)
+        joined["model_fair_present"] = True
+        joined["used_in_spread"] = False
+        joined["kei"] = False
+        assert payload["used_in_spread"] is False
+        out.append(joined)
+    return out
+
+
+def _run_2026(*, prefer_hd: bool) -> Dict[str, Any]:
+    mapped = load_mapped(prefer_hd=prefer_hd)
+    reduced = reduce_mapped_games(mapped, weeks=(0, 1, 2))
+    n_opens = sum(1 for r in reduced if r.get("open_spread_home") is not None)
+    n_closes = sum(1 for r in reduced if r.get("close_spread_home") is not None)
+    extra = {
+        "n_mapped_rows": len(mapped),
+        "n_slate_games_with_snaps": len(reduced),
+        "weeks": [0, 1, 2],
+        "cli": "scripts/cfb/cfb diagnostic 2026",
+    }
+    if n_opens == 0 and n_closes == 0:
+        return diagnose_live_2026([], n_opens=0, n_closes=0, extra=extra)
+    joined = _attach_2026_fairs(reduced)
+    return diagnose_live_2026(joined, n_opens=n_opens, n_closes=n_closes, extra=extra)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--seasons", default="2020-2025")
+    parser.add_argument("--season", default="", help="If 2026, run live join only (n=0 is OK)")
     parser.add_argument("--repo-fallback", action="store_true")
     args = parser.parse_args(argv)
     prefer_hd = not args.repo_fallback
+    if str(args.season).strip() == "2026":
+        live = _run_2026(prefer_hd=prefer_hd)
+        print(json.dumps(live, indent=2, default=str))
+        return 0
     clean = clean_dir(prefer_hd=prefer_hd)
     games_path = clean / "games.parquet"
     closes_path = clean / "closing_lines.parquet"

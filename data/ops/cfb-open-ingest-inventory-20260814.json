@@ -1,0 +1,34 @@
+{
+  "ingest_id": "cfb-open-ingest-v0.15.1-20260814",
+  "as_of": "2026-08-15T12:23:47Z",
+  "pulled_at_live": "2026-08-15T12:23:47Z",
+  "source": "the-odds-api",
+  "sport_key": "americanfootball_ncaaf",
+  "markets": "h2h,spreads,totals",
+  "n_events": 111,
+  "n_matched_events": 62,
+  "n_unmatched_events": 49,
+  "match_rate": 0.5586,
+  "n_opens": 55,
+  "n_closes": 0,
+  "by_week": {"0": 6, "1": 43, "2": 6},
+  "unmatched_reasons": {
+    "unresolved_team": "FCS / non-FBS names — logged, not forced"
+  },
+  "diagnostic_2026": {
+    "status": "ok",
+    "n_opens": 55,
+    "n_closes": 0,
+    "vs_open_n": 55,
+    "vs_open_mean": 6.353,
+    "vs_open_mae": 9.402,
+    "vs_close_n": 0,
+    "used_in_spread": false,
+    "kei": false,
+    "blend": false
+  },
+  "used_in_spread": false,
+  "kei": false,
+  "blend": false,
+  "note": "One live pull 2026-08-15. Upcoming lines count as opens. Closes stay 0 until kickoff. Unmatched are almost all FCS. Not a KEI publish."
+}
