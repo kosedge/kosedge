@@ -95,4 +95,12 @@ describe("team-research sport config", () => {
     expect(teamResearchHref("nfl", "buf")).toBe("/pro/nfl/teams/BUF/overview");
     expect(teamResearchHref("mlb", "nyy")).toBe("/pro/mlb/teams/nyy");
   });
+
+  it("does not advertise KEI lines on CFB team research", () => {
+    const labels =
+      getTeamResearchSportConfig("cfb")?.marketLinks.map((l) => l.label) ?? [];
+    expect(labels).not.toContain("KEI lines");
+    expect(labels).toContain("Project Game");
+    expect(labels).toContain("Team DNA");
+  });
 });

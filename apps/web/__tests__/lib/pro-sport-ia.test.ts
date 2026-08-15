@@ -230,12 +230,36 @@ describe("pro sport IA", () => {
 
   it("does not advertise invented KEI on the CFB hub footer", () => {
     const desk = getSportDeskConfig("cfb");
+    expect(desk.pathLabel).toBe("Model → Project Game → Slate");
+    expect(desk.cards.map((c) => c.title)).toEqual([
+      "Season Model",
+      "Project Game",
+      "Official slate",
+    ]);
     const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
     expect(edge?.description.toLowerCase()).toContain("no cfb kei");
     expect(edge?.description.toLowerCase()).not.toContain("directional edge tags");
-    const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
-    expect(kei?.description.toLowerCase()).toContain("honest empty");
-    expect(kei?.description.toLowerCase()).not.toContain("projected spread/total baselines");
+    expect(desk.footerCards.find((c) => c.title === "KEI Lines")).toBeUndefined();
+    expect(desk.footerCards.some((c) => c.title === "Project Game")).toBe(true);
+    expect(
+      desk.footerCards.find((c) => c.title === "Power Ratings")?.href,
+    ).toBe("/pro/cfb/teams");
+
+    const content = buildSportOverviewContent("cfb", "CFB");
+    const sections = buildSportOverviewSections({
+      sportKey: "cfb",
+      base: "/pro/cfb",
+      edgeBoardHref: "/edge-board/cfb",
+      content,
+    });
+    const labels = sections.flatMap((s) => s.links.map((l) => l.label));
+    expect(labels).not.toContain("KEI projections");
+    expect(labels).not.toContain("KEI Lines");
+    expect(content.sectionTitles.market).toBe("Research Desk");
+    const slate = sections
+      .flatMap((s) => s.links)
+      .find((l) => l.label === "Weekly slate board");
+    expect(slate?.href).toBe("/pro/cfb/slate");
   });
 
   it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {
@@ -274,7 +298,9 @@ describe("pro sport IA", () => {
         edgeBoardHref: `/edge-board/${sport.key}`,
         content,
       });
-      expect(content.sectionTitles.market).toBe("Betting Desk");
+      expect(content.sectionTitles.market).toBe(
+        sport.key === "cfb" ? "Research Desk" : "Betting Desk",
+      );
       expect(sections.some((section) => section.title === "Team Intel")).toBe(
         false,
       );

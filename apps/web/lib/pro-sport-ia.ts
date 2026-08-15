@@ -68,13 +68,13 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
     },
   },
   cfb: {
-    heroBadge: "Pro CFB intelligence hub",
+    heroBadge: "Pro CFB research hub",
     heroSummary:
-      "College football workflow for the hierarchical season model, tempo/havoc context, market edge translation, and disciplined execution windows.",
+      "College football research desk: Power SoT, matchup fairs, official slate, and season win totals. Edge stays off until a post–Week 3 gate.",
     slateCta: "Open weekly slate",
     articleToneBadge: "CFB analyst desk",
     sectionTitles: {
-      market: "Betting Desk",
+      market: "Research Desk",
       props: "Props & Fantasy (Data Pending)",
       intel: "League Intel",
     },
@@ -523,11 +523,59 @@ function genericIntelLinks(
   ];
 }
 
+function cfbIntelLinks(base: string): OverviewSectionLink[] {
+  return [
+    {
+      href: "/pro/cfb/model",
+      label: "Season Model",
+      hint: "Research contract, engine/power/N/as_of, and the official Power SoT.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/pro/cfb/project-game",
+      label: "Project Game",
+      hint: "Research-fair spread, total, WP, σ, and drivers.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/odds/cfb",
+      label: "Compare odds",
+      hint: "Side-by-side sportsbook prices when books post.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/edge-board/cfb",
+      label: "Public edge board",
+      hint: "Markets-only CFB board — no invented KEI fair lines.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: `${base}/teams`,
+      label: "Team DNA",
+      hint: "136 official FBS rows from the single Power SoT.",
+      premium: true,
+      status: "active",
+    },
+    {
+      href: "/pro/cfb/projections",
+      label: "Season projections",
+      hint: "Frozen-SoT expected wins. CFP / natty omitted.",
+      premium: true,
+      status: "active",
+    },
+  ];
+}
+
 function intelLinksForSport(
   sportKey: string,
   base: string,
 ): OverviewSectionLink[] {
   if (sportKey === "mlb") return mlbIntelLinks(base);
+  if (sportKey === "cfb") return cfbIntelLinks(base);
   return genericIntelLinks(sportKey, base);
 }
 
@@ -583,15 +631,19 @@ function marketLinksForSport({
       premium: true,
       status: "active",
     },
-    {
-      href: `/pro/kei-lines/${sportKey}`,
-      label: "KEI projections",
-      hint: sportIsMarketsOnlyEdgeBoard(sportKey)
-        ? "No KEI fair lines yet — markets-only until a handicap model ships."
-        : "Projected spread and total table by matchup.",
-      premium: true,
-      status: "active",
-    },
+    ...(sportKey === "cfb"
+      ? []
+      : [
+          {
+            href: `/pro/kei-lines/${sportKey}`,
+            label: "KEI projections",
+            hint: sportIsMarketsOnlyEdgeBoard(sportKey)
+              ? "No KEI fair lines yet — markets-only until a handicap model ships."
+              : "Projected spread and total table by matchup.",
+            premium: true,
+            status: "active",
+          },
+        ]),
     {
       href: `${base}/execution`,
       label: "Execution monitor",
@@ -636,7 +688,7 @@ export function buildSportOverviewSections({
         "Move from macro board context into matchup-level detail and team baselines.",
       links: [
         {
-          href: `${base}/slate/today`,
+          href: sportKey === "cfb" ? "/pro/cfb/slate" : `${base}/slate/today`,
           label: slateLabel,
           hint: "Collapsed matchup cards with model reference context. Times in ET.",
           premium: true,

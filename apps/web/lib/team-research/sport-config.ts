@@ -32,6 +32,16 @@ function marketLinks(
       { href: `${base}/overview`, label: "MLB hub" },
     ];
   }
+  if (sportKey === "cfb") {
+    return [
+      { href: "/edge-board/cfb", label: "Edge board" },
+      { href: "/pro/cfb/project-game", label: "Project Game" },
+      { href: "/pro/cfb/slate", label: "Official slate" },
+      { href: "/odds/cfb", label: "Compare odds" },
+      { href: "/pro/cfb/teams", label: "Team DNA" },
+      { href: "/pro/cfb/overview", label: "Sport hub" },
+    ];
+  }
   const links = [
     { href: `/edge-board/${sportKey}`, label: "Edge board" },
     { href: `${base}/fair-lines`, label: "KEI lines" },

@@ -59,6 +59,7 @@ export default async function FairLinesPage({
   if (sportKey === "mlb") redirect("/pro/mlb/fair-lines");
   if (sportKey === "nba") redirect("/pro/nba/fair-lines");
   if (sportKey === "wnba") redirect("/pro/wnba/fair-lines");
+  if (sportKey === "cfb") redirect("/pro/cfb/project-game");
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey || "nfl"}`;

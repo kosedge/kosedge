@@ -79,6 +79,8 @@ ESPN_CODE_ALIASES: Dict[str, str] = {
     "HAWAII": "HAW",
     "UCONN": "CONN",
     "UMASS": "MASS",
+    "MIZZ": "MIZ",
+    "JVST": "JXST",
     "APST": "APP",
     "GSU": "GAST",
     "SOMISS": "USM",

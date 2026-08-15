@@ -1,0 +1,44 @@
+{
+  "as_of": "2026-08-14",
+  "engine_version": "cfb-season-engine-v0.13-calibration-scale",
+  "calibration_id": "cfb-margin-scale-v0.13-20260814",
+  "used_in_spread": false,
+  "kei": false,
+  "hist_w0_2_fbs_fbs_2022_25": {
+    "n": 550,
+    "mean_abs": 12.07,
+    "p50": 8.5,
+    "gt20": 0.202,
+    "gt28": 0.105,
+    "gt35": 0.056
+  },
+  "model_w0_2_fbs_fbs_2026": {
+    "before": {
+      "n": 96,
+      "mean_abs": 13.3,
+      "p50": 12.0,
+      "gt20": 0.198,
+      "gt28": 0.073,
+      "gt35": 0.031,
+      "max": 38.3
+    },
+    "after": {
+      "n": 96,
+      "mean_abs": 10.5,
+      "p50": 10.2,
+      "gt20": 0.083,
+      "gt28": 0.0,
+      "gt35": 0.0,
+      "max": 24.5
+    }
+  },
+  "walkforward_w0_1": {
+    "ats": 0.4771,
+    "mae": 8.362,
+    "median_ae": 6.531,
+    "n": 415,
+    "delta_vs_baseline": "flat",
+    "note": "program-prior harness unchanged; 2026 roster not applied to 2020-25"
+  },
+  "p4_research_win_totals": "not_yet"
+}

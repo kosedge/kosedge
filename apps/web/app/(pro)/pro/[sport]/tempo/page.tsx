@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
@@ -15,7 +15,8 @@ export default async function SportTempoPage({
 }) {
   const resolved = await params;
   const sportKey = resolveSportKey(resolved?.sport);
-  if (sportKey !== "ncaam" && sportKey !== "cfb") notFound();
+  if (sportKey === "cfb") redirect("/pro/cfb/project-game");
+  if (sportKey !== "ncaam") notFound();
 
   const sportName = sportDisplayLabel(sportKey);
   const isCfb = sportKey === "cfb";
@@ -35,8 +36,8 @@ export default async function SportTempoPage({
       }
       primaryHref={`/edge-board/${sportKey}`}
       primaryLabel="Edge board →"
-      secondaryHref={`/pro/${sportKey}/fair-lines`}
-      secondaryLabel="KEI Lines →"
+      secondaryHref={isCfb ? "/pro/cfb/project-game" : `/pro/${sportKey}/fair-lines`}
+      secondaryLabel={isCfb ? "Project Game →" : "KEI Lines →"}
     >
       <section className="grid gap-3 sm:grid-cols-3">
         {[
@@ -54,7 +55,9 @@ export default async function SportTempoPage({
           },
           {
             title: "Market translation",
-            body: "Use these signals beside KEI Lines and Edge Board — never as standalone picks.",
+            body: isCfb
+              ? "Use these signals beside Project Game and the markets-only Edge Board — never as standalone picks."
+              : "Use these signals beside KEI Lines and Edge Board — never as standalone picks.",
           },
         ].map((card) => (
           <div

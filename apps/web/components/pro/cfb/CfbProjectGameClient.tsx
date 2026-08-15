@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
   americanOddsFromWinProb,
@@ -48,7 +48,13 @@ type ProjectPayload = {
   expected_away_score?: number;
   expected_total?: number;
   spread_home?: number;
+  fair_spread?: number;
+  fair_total?: number;
+  team_total_home?: number;
+  team_total_away?: number;
   margin_sd?: number;
+  n_sims?: number;
+  distributions?: Record<string, unknown>;
   fidelity?: string;
   uncertainty?: Record<string, unknown>;
   early_season_uncertainty?: Record<string, unknown>;
@@ -58,6 +64,14 @@ type ProjectPayload = {
   player_projections?: PlayerProjectionRow[];
   players?: PlayerProjectionRow[];
   notes?: Record<string, string>;
+  research_prior?: {
+    used_in_spread?: boolean;
+    prior_version?: string;
+    note?: string;
+    home?: Record<string, unknown> | null;
+    away?: Record<string, unknown> | null;
+  };
+  used_in_spread?: boolean;
   error?: string;
   hint?: string;
 };
@@ -297,18 +311,22 @@ export default function CfbProjectGameClient({
   defaultHome = "OSU",
   defaultAway = "MICH",
   defaultWeek = 1,
+  defaultNeutral = false,
+  autoRun = false,
   engineVersion,
 }: {
   teams: CfbTeamOption[];
   defaultHome?: string;
   defaultAway?: string;
   defaultWeek?: number;
+  defaultNeutral?: boolean;
+  autoRun?: boolean;
   engineVersion?: string;
 }) {
   const [homeTeam, setHomeTeam] = useState(defaultHome);
   const [awayTeam, setAwayTeam] = useState(defaultAway);
   const [week, setWeek] = useState(defaultWeek);
-  const [neutralSite, setNeutralSite] = useState(false);
+  const [neutralSite, setNeutralSite] = useState(defaultNeutral);
   const [nightGame, setNightGame] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -345,6 +363,12 @@ export default function CfbProjectGameClient({
       }
     });
   }
+
+  useEffect(() => {
+    if (autoRun) run();
+    // Deep-link from slate / DNA — run once on mount.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoRun]);
 
   const uncertainty = result?.uncertainty ?? result?.early_season_uncertainty ?? {};
   const earlyActive = uncertainty.active === true;
@@ -410,9 +434,10 @@ export default function CfbProjectGameClient({
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
-          Pick two FBS teams and project a market-style line — spread, total,
-          win probability with American moneyline — plus approximate QB /
-          skill player hooks and the roster / unit / HFA / coaching drivers.
+          Pick two FBS teams and project a research line — spread, a
+          separate total path (not spread×hack), win probability, team
+          totals, and sim σ. Not a published handicap. Edge Board stays
+          markets-only. used_in_spread is false.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
@@ -459,7 +484,7 @@ export default function CfbProjectGameClient({
               value={week}
               onChange={(e) => setWeek(Number(e.target.value))}
             >
-              {Array.from({ length: 15 }, (_, i) => i + 1).map((w) => (
+              {Array.from({ length: 16 }, (_, i) => i).map((w) => (
                 <option key={w} value={w}>
                   Week {w}
                 </option>
@@ -549,9 +574,14 @@ export default function CfbProjectGameClient({
                   {result.mode ? ` · ${result.mode}` : ""}
                 </p>
               </div>
-              <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-text/55">
-                {result.fidelity ?? "approximate"}
-              </span>
+              <div className="flex flex-wrap gap-2">
+                <span className="rounded-md border border-kos-gold/30 bg-kos-gold/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-gold">
+                  Research fair
+                </span>
+                <span className="rounded-md border border-white/10 px-2 py-1 text-[11px] uppercase tracking-[0.12em] text-kos-text/55">
+                  {result.fidelity ?? "approximate"}
+                </span>
+              </div>
             </div>
 
             <div className="mt-5 flex flex-wrap items-end justify-between gap-3 border-b border-white/10 pb-4">
@@ -584,8 +614,8 @@ export default function CfbProjectGameClient({
               />
               <MarketCell
                 label="Total"
-                primary={formatScore(result.expected_total)}
-                secondary={`${formatScore(result.expected_away_score)} + ${formatScore(result.expected_home_score)}`}
+                primary={formatScore(result.fair_total ?? result.expected_total)}
+                secondary={`separate total path · ${formatScore(result.team_total_away ?? result.expected_away_score)} + ${formatScore(result.team_total_home ?? result.expected_home_score)}`}
               />
               <MarketCell
                 label="Moneyline"
@@ -611,6 +641,21 @@ export default function CfbProjectGameClient({
                 <span className="font-semibold tabular-nums text-kos-text">
                   {formatIndex(marginSd, 1)}
                 </span>
+                {num(uncertainty.effective_total_sd) != null ? (
+                  <>
+                    {" "}
+                    · total σ{" "}
+                    <span className="font-semibold tabular-nums text-kos-text">
+                      {formatIndex(num(uncertainty.effective_total_sd), 1)}
+                    </span>
+                  </>
+                ) : null}
+                {result.n_sims ? (
+                  <span className="text-kos-text/55">
+                    {" "}
+                    · Sim N {result.n_sims}
+                  </span>
+                ) : null}
                 {earlyActive ? (
                   <span className="text-amber-100/75">
                     {" "}
@@ -642,6 +687,59 @@ export default function CfbProjectGameClient({
                   "Wide early priors; not a claim of known identity."}
               </p>
             </div>
+
+            {result.research_prior ? (
+              <div className="mt-4 rounded-xl border border-white/10 bg-black/20 px-3 py-3">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/45">
+                  Research prior (mean ± σ)
+                </p>
+                <p className="mt-1 text-[11px] text-kos-text/50">
+                  {result.research_prior.prior_version ?? "preseason prior"} ·
+                  used_in_spread=
+                  {String(result.research_prior.used_in_spread ?? false)} ·
+                  not KEI
+                </p>
+                <div className="mt-2 grid gap-2 sm:grid-cols-2">
+                  {(["away", "home"] as const).map((side) => {
+                    const row = result.research_prior?.[side];
+                    const team = side === "away" ? away : home;
+                    const mean =
+                      num(row?.rating_mean) ?? num(row?.mean_points);
+                    const sigma =
+                      num(row?.rating_sigma) ?? num(row?.sigma_points);
+                    const qb = str(row?.qb_class) ?? "—";
+                    return (
+                      <div
+                        key={side}
+                        className="rounded-lg border border-white/10 px-2.5 py-2"
+                      >
+                        <p className="text-[11px] uppercase tracking-[0.1em] text-kos-text/45">
+                          {team}
+                        </p>
+                        <p className="mt-0.5 text-sm tabular-nums text-kos-text">
+                          {mean == null
+                            ? "—"
+                            : `${mean >= 0 ? "+" : ""}${mean.toFixed(1)}`}
+                          {sigma != null ? (
+                            <span className="text-kos-text/55">
+                              {" "}
+                              ± {sigma.toFixed(1)}
+                            </span>
+                          ) : null}
+                        </p>
+                        <p className="text-[11px] text-kos-text/50">
+                          QB {qb}
+                        </p>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-[11px] leading-relaxed text-kos-text/45">
+                  {result.research_prior.note ??
+                    "Neutral-field points vs average FBS. Does not change the spread above."}
+                </p>
+              </div>
+            ) : null}
           </div>
 
           {(() => {

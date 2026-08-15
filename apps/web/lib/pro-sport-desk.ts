@@ -30,14 +30,28 @@ export type SportDeskConfig = {
 
 const SHARED_FOOTER = (sportKey: string): HubFooterCard[] => [
   {
-    href: `/pro/power-ratings/${sportKey}`,
+    href:
+      sportKey === "cfb"
+        ? "/pro/cfb/teams"
+        : `/pro/power-ratings/${sportKey}`,
     title: "Power Ratings",
     description:
-      "Team strength, tiering, and historical movement with slate context.",
+      sportKey === "cfb"
+        ? "Single 136-row Power SoT — power, OFF/DEF, uncertainty, fill labels."
+        : "Team strength, tiering, and historical movement with slate context.",
     cta: "View ratings →",
     accent: "gold",
   },
-  sportKey === "cfb" || sportKey === "nhl"
+  sportKey === "cfb"
+    ? {
+        href: "/pro/cfb/project-game",
+        title: "Project Game",
+        description:
+          "Research-fair spread, total, WP, and drivers. Not a published handicap.",
+        cta: "Open Project Game →",
+        accent: "neutral",
+      }
+    : sportKey === "nhl"
     ? {
         href: `/pro/kei-lines/${sportKey}`,
         title: "KEI Lines",
@@ -348,21 +362,37 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     ],
   },
   cfb: {
-    pathLabel: "Fair Lines → Edges → Tempo",
+    pathLabel: "Model → Project Game → Slate",
     pathSubtitle:
-      "CFB desk path: Fair Lines → Edges → Tempo signals, then key-number execution.",
+      "CFB research desk: Model hub, Project Game fairs, official slate, then win totals and Team DNA. Edge Board is live books only — no KEI.",
     cards: [
-      stubFairLines("cfb", "spread / total"),
-      stubEdges(
-        "cfb",
-        "Weekly game edges once the CFB model board is connected.",
-      ),
-      stubThirdCard(
-        "cfb",
-        "Tempo Signals",
-        "Pace and havoc context for key-number market translation.",
-        "/pro/cfb/tempo",
-      ),
+      {
+        href: "/pro/cfb/model",
+        title: "Season Model",
+        description:
+          "Power SoT, official slate coverage, and the research-only contract.",
+        cta: "Open Model hub →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/cfb/project-game",
+        title: "Project Game",
+        description:
+          "Research-fair spread, total, WP, σ, and drivers for any FBS matchup.",
+        cta: "Open Project Game →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/cfb/slate",
+        title: "Official slate",
+        description:
+          "Week 0 / Week 1 ESPN board — open a row to auto-run Project Game.",
+        cta: "Open slate →",
+        accent: "green",
+        status: "active",
+      },
     ],
     footerCards: [
       ...SHARED_FOOTER("cfb"),

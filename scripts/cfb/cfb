@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""CFB research CLI — ingest + diagnostic. No KEI.
+
+Usage:
+  python scripts/cfb/cfb pull-opens [--weeks 0-2]
+  python scripts/cfb/cfb diagnostic 2026
+  python scripts/cfb/cfb live-open
+  python scripts/cfb/cfb inventory
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT / "services" / "model-service"))
+sys.path.insert(0, str(ROOT / "scripts" / "cfb"))
+
+
+def _cmd_pull(args: argparse.Namespace) -> int:
+    from pull_cfb_game_odds import main as pull_main
+
+    argv = ["--weeks", args.weeks]
+    if args.repo_fallback:
+        argv.append("--repo-fallback")
+    if args.dry_run:
+        argv.append("--dry-run")
+    return pull_main(argv)
+
+
+def _cmd_diagnostic(args: argparse.Namespace) -> int:
+    from run_market_diagnostic import main as diag_main
+
+    season = str(args.season)
+    argv = ["--season", season]
+    if args.repo_fallback:
+        argv.append("--repo-fallback")
+    return diag_main(argv)
+
+
+def _cmd_live_open(args: argparse.Namespace) -> int:
+    from run_live_open_diagnostic import main as live_main
+
+    argv: list[str] = []
+    if args.repo_fallback:
+        argv.append("--repo-fallback")
+    return live_main(argv)
+
+
+def _cmd_inventory(args: argparse.Namespace) -> int:
+    os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+    from src.services.cfb_warehouse.open_ingest import latest_inventory
+
+    inv = latest_inventory(prefer_hd=not args.repo_fallback)
+    print(json.dumps(inv, indent=2, default=str))
+    return 0
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    pull = sub.add_parser("pull-opens", help="Pull Odds API NCAAF game markets")
+    pull.add_argument("--weeks", default="0-2")
+    pull.add_argument("--repo-fallback", action="store_true")
+    pull.add_argument("--dry-run", action="store_true")
+    pull.set_defaults(func=_cmd_pull)
+
+    diag = sub.add_parser("diagnostic", help="Join model fair ↔ open ↔ close")
+    diag.add_argument("season", nargs="?", default="2026")
+    diag.add_argument("--repo-fallback", action="store_true")
+    diag.set_defaults(func=_cmd_diagnostic)
+
+    live = sub.add_parser("live-open", help="2026 fair vs opens (read-only)")
+    live.add_argument("--repo-fallback", action="store_true")
+    live.set_defaults(func=_cmd_live_open)
+
+    inv = sub.add_parser("inventory", help="Latest n_opens / n_closes")
+    inv.add_argument("--repo-fallback", action="store_true")
+    inv.set_defaults(func=_cmd_inventory)
+
+    args = parser.parse_args(argv)
+    return int(args.func(args))
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
