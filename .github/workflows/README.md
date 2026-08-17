@@ -20,7 +20,9 @@ Runs after every push to `deploy-vercel`. Retries `/api/ping`, CFB desk routes, 
 
 ### `ci.yml` - Continuous Integration
 
-Runs on every push to `main` / `develop`, and on pull requests to `main`, `develop`, and `deploy-vercel`.
+Runs on every push and pull request to `main` and `develop`. Do not hang
+`deploy-vercel` on this workflow — it still carries historical lint/test debt.
+The ship bar on `deploy-vercel` is **Production Gate**.
 
 **Jobs:**
 
