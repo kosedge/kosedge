@@ -9,6 +9,8 @@ on:
   pull_request:
     types: [opened, synchronize, reopened]
   push:
+    branches:
+      - "**"
 
 jobs:
   skip-on-push:
@@ -114,37 +116,36 @@ jobs:
               repo: context.repo.repo,
               issue_number: context.issue.number,
             });
-
-            const botComment = comments.find(comment => 
-              comment.user.type === 'Bot' && comment.body.includes('## PR Checks')
-            );
-
-            const jobStatus = '${{ job.status }}';
-            const success = jobStatus === 'success';
-            const status = success ? '✅' : '❌';
-            const body = `## PR Checks
-
-${status} **${success ? 'All checks passed!' : 'Some checks failed.'}**
-
-- ✅ Formatting check
-- ✅ Linting
-- ✅ Type checking
-- ✅ Tests
-
-${success ? 'Ready for review!' : 'Please fix the failing checks before merging.'}`;
-
+            const botComment = comments.find(function (comment) {
+              return comment.user.type === "Bot" && comment.body.includes("## PR Checks");
+            });
+            const jobStatus = "${{ job.status }}";
+            const success = jobStatus === "success";
+            const mark = success ? "passed" : "failed";
+            const body = [
+              "## PR Checks",
+              "",
+              success ? "All checks passed." : "Some checks failed.",
+              "",
+              "- Formatting check",
+              "- Linting",
+              "- Type checking",
+              "- Tests",
+              "",
+              success ? "Ready for review." : "Please fix the failing checks before merging. (" + mark + ")",
+            ].join("\n");
             if (botComment) {
               await github.rest.issues.updateComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 comment_id: botComment.id,
-                body: body
+                body: body,
               });
             } else {
               await github.rest.issues.createComment({
                 owner: context.repo.owner,
                 repo: context.repo.repo,
                 issue_number: context.issue.number,
-                body: body
+                body: body,
               });
             }
