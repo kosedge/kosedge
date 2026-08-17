@@ -67,6 +67,8 @@ export type CfbFuturesPack = {
   cfp_field?: number;
   method?: string;
   assumptions?: Record<string, unknown>;
+  used_in_spread?: boolean;
+  kei?: boolean;
   teams?: CfbFuturesTeam[];
   conference_titles?: Record<
     string,
