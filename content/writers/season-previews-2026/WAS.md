@@ -2,6 +2,7 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Leap priced; sustainability is the bet — nine wins is the ask  
+**Date:** August 17, 2026
 **Sources (beat desk):** John Keim (ESPN) [@john_keim](https://x.com/john_keim); Ben Standig (The Athletic) [@BenStandig](https://x.com/BenStandig)  
 **Market (primary late July 2026):** Win total **8.5** (shop juice live)  
 **Kos Edge / KEINFL (2026-07-29):** 6.94 expected wins · ~14% playoff · ~6% division  
@@ -49,6 +50,14 @@ NFC East chaos helps a healthy Daniels steal weeks. It also produces negative-EP
 
 Linear continuation — treating 2024 as the true talent line and 2025 as pure injury noise, then hanging 8.5 as if nine is the new floor. Injury noise was real. Talent lines still have to clear a division that includes a contender-priced Eagles roster and a Cowboys offense that can trade punches. Our Under lean is not a fade to five wins. It is an admission that nine requires a clean health file and a defensive climb the market has already prepaid.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Mariota’s right MCL ends his preseason; Daniels remains the starter with a thinner backup room. Pass on manufacturing a lean from backup math alone.
+
+**What matters most.** Whether the club adds an arm; Daniels’ snap plan for the remaining exhibitions.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 8.5:** Lean **Under** if juice is roughly even or better on the Under. Model ~6.9 / research ~7.5–8.1 both sit under. **Pass** if Under past −130.  

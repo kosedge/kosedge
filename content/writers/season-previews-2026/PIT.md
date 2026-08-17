@@ -2,6 +2,7 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk
 **Angle:** Steelers football as a totals market first — pace, possession, and QB durability — with starter certainty that still isn’t season certainty
+**Date:** August 17, 2026
 **Sources (beat desk):** Brooke Pryor (ESPN) @bepryor; Mark Kaboly (The Athletic / Pat McAfee) @MarkKaboly; Dale Lolley (Steelers.com / DK) @dlolley_pgh
 
 Pittsburgh won the AFC North at 10-7 last season and the 2026 win total came back at **8.5**. Late July DraftKings / RotoWire price that number roughly **Over +100 / Under -120**. Division champions are not supposed to open a win and a half below what they just did unless the market thinks the wins were rented. Our desk agrees with the direction of that skepticism — and we start from totals logic, not from nostalgia about black-and-gold floor narratives.
@@ -40,6 +41,14 @@ A full win of model edge usually clears threshold. Juice at -120 is payable if y
 
 Over reopen conditions: Porter and Ramsey back for Week 1; Rudolph never needed; offensive line keeps Rodgers clean; Pittsburgh steals the same one-score diet. Until those stack, the Under is the side that matches both the sim and the age curve.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Rodgers remains locked QB1 after the Packers exhibition. Totals/pace identity still the sharper frame than sides. Pass on thin edges.
+
+**What matters most.** Rodgers snap volume before Week 1; OL health.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** Lean **Under 8.5** at -120 or better. If Under moves to -140, shrink to Pass — same thesis, worse price.

@@ -2,6 +2,7 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Contender priced — prove it in the trenches  
+**Date:** August 17, 2026
 **Sources (beat desk):** Tim McManus (ESPN) [@Tim_Mc_Manus](https://x.com/Tim_Mc_Manus) / [@Tim_McManus](https://x.com/Tim_McManus); Jeff McLane (Philadelphia Inquirer) [@Jeff_McLane](https://x.com/Jeff_McLane); Brooks Kubena (The Athletic) [@BKubena](https://x.com/BKubena)  
 **Market (mid/late July consensus):** Win total **10.5** (Under often juiced ~−125 to −145). NFC East favorite (~+110 range). Still a top-shelf Super Bowl price relative to the East.
 
@@ -39,6 +40,14 @@ Paper is not October. Public injury-adjusted analyses have noted Philadelphia’
 
 If you need a futures outlet, division prices near a coin-flip favorite are closer to model equity (~65% division) than the win-total Over is to a clear edge. Even there, juice and uncertainty argue for patience over steam.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Rookie RT Markel Bell flashed in the Ravens exhibition — OL succession watch, not a Hurts lean. Contender price still asks trench proof. Pass/shop juice carefully.
+
+**What matters most.** Bell snap share; Hurts starter snap plan.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 10.5:** **Pass**. Model ~10.6 vs market 10.5 with Under juice fails the threshold test. Do not call it a “soft Under.”

@@ -41,12 +41,23 @@ Default to news break / camp notebook during July–early September unless the a
 |------|-----|
 | `WebSearch` | Fresh headlines before every piece |
 | `WebFetch` | Read full beat articles / camp notebooks |
-| Beat registry | `data/writers/nfl-beat-writers.json` / `.md` |
+| **Trusted X contact index** | `data/writers/nfl-beat-writers.json` / `.md` — **primary** fast-update source for Camp Desk + Monday preview refresh |
 | Beat lookup script | `scripts/writers/beat-lookup.py --team XYZ` |
 | X / Twitter | Handles in registry; use if available in environment — never invent tweets |
-| League breakers | `@AdamSchefter`, `@RapSheet` — supplement only |
+| League breakers | `@AdamSchefter`, `@RapSheet`, `@TomPelissero`, `@MikeGarafolo` — supplement only |
+| Also ok | Team official, credible local beat, RotoWire / VSiN-class when relevant |
 
-If X tooling is unavailable, WebSearch + WebFetch of Athletic/ESPN/local URLs is sufficient — still cite the writer and outlet.
+### Camp / Monday refresh — source doctrine (locked)
+
+**Camp/Monday refresh uses the trusted X list + multi-source.**
+
+1. Start with the team’s trusted X handles in `nfl-beat-writers.json` (primary + local + team_site).
+2. Corroborate with at least one second source (official, Athletic/local, AP, club site).
+3. ESPN may be *one* input. Never brand the desk as an ESPN wire mirror. Never invent quotes.
+4. Attribute generically when a quote is not on hand (“camp reports”, “team depth chart”, “coach availability notes”).
+5. Team previews refresh **every Monday** in camp/season (`**Date:**` + Bottom line / What matters most at minimum).
+
+If X tooling is unavailable, WebSearch + WebFetch of Athletic/local/official URLs is sufficient — still cite the writer and outlet, and still avoid ESPN-only branding.
 
 ## News-break output template
 

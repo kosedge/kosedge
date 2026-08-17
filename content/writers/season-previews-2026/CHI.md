@@ -2,6 +2,7 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk
 **Angle:** Market misprice — Year-2 Caleb efficiency vs NFC North physicality
+**Date:** August 17, 2026
 **Sources (beat desk):** Courtney Cronin (ESPN) @CourtneyRCronin; Kevin Fishbain (The Athletic) @kfishbain; Adam Jahns (The Athletic) @adamjahns; Brad Biggs (Chicago Tribune) @BradBiggs
 
 The number on the board is 9.5. That is the whole conversation.
@@ -50,6 +51,14 @@ Kos Edge threshold discipline is simple here: **Pass**. Do not dress a tenth-of-
 
 Division futures around +300 to win the North are a different market. A 10–7 division title is plausible in a four-team race without requiring a historic leap. That is a futures conversation, not a reason to force 9.5.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Year-2 Caleb efficiency vs NFC North physicality still owns 9.5. Exhibition win over Cleveland is not a ticket — Pass on thin edges.
+
+**What matters most.** Williams ones share; trench DNPs.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 9.5:** Pass at current juice. Revisit only if camp completion trends and pass-rush metrics both move the same direction for two-plus weeks.

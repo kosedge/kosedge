@@ -2,6 +2,7 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Mayfield floor as ceiling constraint  
+**Date:** August 17, 2026
 **Sources (beat desk):** Jenna Laine (ESPN) [@JennaLaineESPN](https://x.com/JennaLaineESPN); Greg Auman (FOX Sports) [@gregauman](https://x.com/gregauman); Rick Stroud (Tampa Bay Times) [@NFLSTROUD](https://x.com/NFLSTROUD)  
 **Camp / market refs:** [NBC / Stroud-Auman contract close](https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/baker-mayfield-to-play-2026-season-without-new-contract-with-bucs); [ESPN Mayfield plays out deal](https://www.espn.co.uk/nfl/story/_/id/49469946/sources-no-real-progress-mayfield-buccaneers-contract-talks); [ESPN camp intel / Vea](https://www.espn.com/nfl/story/_/id/49419613/tampa-bay-buccaneers-training-camp-2026-intel-updates); DK/RotoWire late July 2026 win total 8.5 (−125 / +105)
 
@@ -44,6 +45,14 @@ Mayfield will keep the floor visible on Sunday ticket. Robinson may restore some
 
 Until those settle, futures money belongs in the account, not on −125. If the Over drifts to even money or the number drops to 7.5, re-open the file. Tonight’s board is not that board.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Mayfield floor still constrains the ceiling; UDFA CB flash vs Jets is depth only. Pass on manufacturing a lean.
+
+**What matters most.** Corner ones mix; Mayfield practice volume.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** **Pass** at 8.5 (−125 / +105). If forced to a side in a notebook, Under is the cleaner opinion — still below play threshold at current juice.

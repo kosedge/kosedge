@@ -2,6 +2,7 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Contender pricing meets the hardest division — at 9.5, not 10.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Eric Woodyard @E_Woodyard (ESPN); Colton Pouncy @colton_pouncy (The Athletic); Dave Birkett @davebirkett (Detroit Free Press)
 
 Detroit’s primary win total sits at **9.5** (near-even juice depending on shop, late July 2026). That is still contender pricing for a team that finished 9–8, last in the NFC North, and missed the playoffs — but it is a ten-win ask, not an eleven-win tax. Older boards that hung **10.5** were a different ticket. Soft non-division spots do not erase six games against physical North opponents. The schedule can help you clear 9.5. The division can still take three wins off the board before October is over.
@@ -40,6 +41,14 @@ Research-adjusted fair currently sits around **9.8–10.3** — above market 9.5
 
 Watch August for three decision points: Gibbs’ participation and chemistry with Petzing; Joseph/Branch practice ramps; right-tackle stability in joint work. If all three break cleanly and Over sits near even, the lean firms. If two break ugly, Pass becomes mandatory — still not a forced Under into a soft schedule narrative.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Quiet Monday after Cincinnati exhibition. Contender prior unchanged — Pass on thin edges.
+
+**What matters most.** Any trench DNP that sticks.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 9.5:** Lean **Over** only if juice is roughly even or better (−115 or shorter). Fair ~9.8–10.3 clears ~half a win; confidence 2/5. **Pass** if Over is −130 or worse.

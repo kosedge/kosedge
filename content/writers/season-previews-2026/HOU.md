@@ -2,6 +2,7 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** Stroud year-three tax already in the number  
+**Date:** August 17, 2026
 **Market (DK/RotoWire, late July 2026):** Win total 9.5 (−125 / +105)  
 **Sources (beat desk):** DJ Bien-Aime (ESPN) [@djbienaime](https://x.com/djbienaime); Jonathan M. Alexander (Houston Chronicle) [@jonmalexander](https://x.com/jonmalexander); Aaron Wilson (KPRC) [@AaronWilson_NFL](https://x.com/AaronWilson_NFL)
 
@@ -42,6 +43,14 @@ Kos Edge / KEICMB team-level allocation is not being used here as a forced fair 
 
 Neither case clears a full win of edge at −125 / +105.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Mertz season-ending ACL IR; Rypien signed as emergency QB3. Stroud/Mills path unchanged — depth note, not a starter rewrite. Pass.
+
+**What matters most.** Healthy Stroud/Mills practice weeks; any further QB-room churn.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 9.5 (−125 / +105):** Pass. Fair ≈ 9.4. The Stroud tax is already collected; laying −125 to “buy the regression already priced” is not threshold work.

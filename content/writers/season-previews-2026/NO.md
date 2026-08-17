@@ -2,6 +2,7 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Saints football in the margins — scheme, coaching, competitive window  
+**Date:** August 17, 2026
 **Sources (beat desk):** Katherine Terrell (ESPN) [@Kat_Terrell](https://x.com/Kat_Terrell); Mike Triplett (NewOrleans.football) [@MikeTriplett](https://x.com/MikeTriplett); Nick Underhill (Advocate) [@nick_underhill](https://x.com/nick_underhill)  
 **Camp / market refs:** [ESPN Saints camp preview](https://www.espn.com/nfl/story/_/id/49083978/2026-new-orleans-saints-nfl-training-camp-preview); [Saints.com camp storylines](https://www.neworleanssaints.com/news/what-to-watch-for-at-new-orleans-saints-training-camp-2026); [Advocate / Loomis injury lists](https://www.theadvertiser.com/story/sports/nfl/saints/2026/07/28/saints-training-camp-injury-report-jordyn-tyson-zxavian-harris-nfl/91081486007/); primary late-July win total **6.5**
 
@@ -41,6 +42,14 @@ Dome Unders remain opponent-driven, not brand-driven. Prefer Saints as home dogs
 
 Week-to-week, treat Olave’s contract status and Bresee’s confirmation tests as separate levers: receiver availability moves team totals up; interior absence moves opponent rushing success and Saints game scripts toward longer, uglier drives. That profile still cashes Unders in shootout markets and Overs in grind spots — the weekly card is sharper than the season total.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Quiet Monday after Jacksonville exhibition. Short Pass.
+
+**What matters most.** Practice cleanliness heading into next script.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** Lean **Over 6.5** at prices no worse than −120. Model ~8.1 / research ~7.3–7.8 both clear. **Pass** if Over juice past −130.  

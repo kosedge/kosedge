@@ -2,6 +2,7 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** Stafford–McVay steal weeks; 9.5 no longer prices excellence — Over discipline  
+**Date:** August 17, 2026
 **Sources (beat desk):** Sarah Barshop (ESPN) [@sarahbarshop](https://x.com/sarahbarshop); Jourdan Rodrigue (The Athletic) [@JourdanRodrigue](https://x.com/JourdanRodrigue); Gary Klein (Los Angeles Times) [@LATimesklein](https://x.com/LATimesklein)  
 **Market (primary late July 2026):** Win total **9.5** (shop juice live)  
 **Research timestamp:** 2026-07-30 ET
@@ -49,6 +50,14 @@ Public money also treats Super Bowl price as a win-total receipt. It is not. A t
 
 Model and research agree: this is a high-10s / low-11s team priced at mid-9s on the primary board. No material conflict that invents a Pass. Lean **Over 9.5**. Do not sell soft Under because excellence narratives feel expensive — the expensive number was 11.5.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Stafford path unchanged after a Chiefs win featuring rookies. Pass on exhibition efficiency.
+
+**What matters most.** Stafford snap plan; OL starter confirmation.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 9.5:** Lean **Over** at prices no worse than −120. Fair ~10.5–11.2 clears threshold. **Pass** if Over juice worsens past −135.  

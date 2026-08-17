@@ -2,6 +2,7 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Defensive respect is not an offense — QB room and scheme decide 5.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Rich Cimini (ESPN) @RichCimini; Zack Rosenblatt (The Athletic) @ZackBlatt; Brian Costello (New York Post) @BrianCoz
 
 Florham Park’s real competition is not at starter. Geno Smith is back with the franchise that drafted him, acquired from Las Vegas on a late-round swap, and installed as the clear QB1 for Aaron Glenn’s Year 2. The fight that will shape both the depth chart and the season-long number sits behind him: Bailey Zappe, Brady Cook, and fourth-round rookie Cade Klubnik for QB2 — a battle Rich Cimini has framed as closer to Zappe vs. Klubnik, with the fan base desperate for the Clemson pick to win it. Zack Rosenblatt’s Athletic reporting has Smith locked atop the depth chart while the backups audition through camp and preseason. Defensive respect can sell a narrative. It cannot complete third-and-seven.
@@ -28,6 +29,14 @@ Fitzpatrick and Davis raise the floor of the back seven. Bailey and the edge roo
 
 Sauce Gardner and Quinnen Williams are no longer the identity anchors they were in prior cycles; the new group has to earn the respect the brand still tries to spend. That gap — respect prepaid vs. production delivered — is where public overs on Jets sides will go to die in September.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Geno sat Friday (ankle precaution); Klubnik’s short starter sample is QB2 math. Hall groin is a usage flag. Pass on win-total tickets from one night.
+
+**What matters most.** Geno’s next full practice; Hall participation language this week.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total (5.5):** Pass. Fair overlaps the number; do not force Over because the defense “looks better on paper.”

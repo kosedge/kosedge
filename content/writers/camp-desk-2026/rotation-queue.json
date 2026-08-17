@@ -1,5 +1,16 @@
 {
-  "updated": "2026-08-12",
-  "rule": "Every day: league wrap + every team with real news. Quiet clubs get a short pulse 3–4 times per week via this queue — never a filler essay.",
-  "next_pulse": ["ARI", "BUF", "KC", "SEA", "PHI", "LAC", "SF", "BAL", "DET", "HOU"]
+  "updated": "2026-08-17",
+  "rule": "Every Monday in camp/season: full 32 pulse + league wrap. Midweek: every team with real news; quiet clubs rotate 3\u20134\u00d7/week. Prefer trusted X contact index + multi-source beats \u2014 never ESPN-only branding.",
+  "next_pulse": [
+    "SF",
+    "LAR",
+    "SEA",
+    "NO",
+    "DET",
+    "MIA",
+    "LV",
+    "JAX",
+    "TEN",
+    "CAR"
+  ]
 }

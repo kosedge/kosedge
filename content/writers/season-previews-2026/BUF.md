@@ -2,6 +2,7 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Ceiling through Josh Allen — thinner margin for error  
+**Date:** August 17, 2026
 **Sources (beat desk):** Alaina Getzenberg (ESPN) @agetzenberg; Joe Buscaglia (The Athletic) @JoeBuscaglia; Matt Parrino (Syracuse.com) @MattParrino
 
 Start with the calendar, not the MVP résumé. Buffalo’s 2026 board opens on the road at Houston, brings Detroit into the new Highmark Stadium in Week 2, and stacks early tests against the Chargers, Patriots, and a Monday night trip to the Rams. ESPN’s betting desk has already framed that stretch as part of an eighth-hardest schedule by prior-season opponent win percentage. When the market hangs a perennial contender at 10.5 with the over juiced, the first question is not “Can Josh Allen still be elite?” It is whether eleven wins still clear a gauntlet that no longer softens in September.
@@ -32,6 +33,14 @@ The AFC East is no longer a one-team story. New England enters as defending conf
 
 Watch September sides more closely than the futures ticket. Road favorites coming off a coaching change often produce the season’s softest prices before the market recalibrates to actual Brady/Leonhard tape. That is where process edges show up first — not in July juice on 10.5.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Allen path locked after Carolina exhibition. Thinner margin for error still the board story — Pass on forcing 10.5 tickets from camp tempo alone.
+
+**What matters most.** Allen snap plan; OL/skill depth cleanliness.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total (10.5):** Pass. Fair sits too close to the number; over juice makes the popular side worse, not better.

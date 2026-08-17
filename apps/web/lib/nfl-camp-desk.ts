@@ -17,6 +17,7 @@ import {
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
 import campDesk20260812 from "../../../content/writers/camp-desk-2026/2026-08-12.json";
+import campDesk20260817 from "../../../content/writers/camp-desk-2026/2026-08-17.json";
 import campRotationQueue from "../../../content/writers/camp-desk-2026/rotation-queue.json";
 import beatWritersJson from "../../../data/writers/nfl-beat-writers.json";
 
@@ -139,7 +140,10 @@ const ESPN_TEAM_CAMP_HUBS: Record<string, string> = {
 };
 
 function loadCampDeskDayFiles(): CampDeskDayFile[] {
-  const bundled = [campDesk20260812 as CampDeskDayFile];
+  const bundled = [
+    campDesk20260817 as CampDeskDayFile,
+    campDesk20260812 as CampDeskDayFile,
+  ];
   return bundled
     .filter(
       (raw) =>
@@ -215,8 +219,7 @@ export async function buildNflCampDesk(opts?: {
   return {
     generatedAt: now.toISOString(),
     eraLabel: registry?.era ?? "training-camp",
-    hubHref:
-      "https://www.espn.com/nfl/story/_/id/49368181/training-camp-2026-latest-news-intel-updates-buzz-all-32-teams",
+    hubHref: "/pro/nfl/camp",
     kosedgeCards,
     sotFlags: collectSotFlags(kosedgeCards),
     previewDelta: collectPreviewDeltas(dayFiles),
@@ -228,7 +231,8 @@ export async function buildNflCampDesk(opts?: {
     beats,
     writers: WRITER_COVERAGE,
     notes: [
-      "Camp Desk hero is KosEdge-dated notes. ESPN / beats live in Sources and a collapsed Wire — they are citations, not the product.",
+      "Camp Desk hero is KosEdge-dated notes. Trusted X contact index + beat/official/multi-source live in Sources — citations, not the product.",
+      "Camp/Monday refresh prefers data/writers/nfl-beat-writers.json (trusted X) over any single outlet. ESPN may be one input, never the branded wire.",
       "During camp, notes older than 72 hours are buried unless pinned. Empty team days stay empty — no filler essays.",
       "Material depth flags queue the existing SoT job. Prose does not publish a new active_run.",
       "Market mentions stay Pass unless a KEI path already supports a tag.",

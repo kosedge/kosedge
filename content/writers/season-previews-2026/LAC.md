@@ -2,6 +2,7 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Herbert’s arm vs availability math  
+**Date:** August 17, 2026
 **Sources (beat desk):** Kris Rhim (ESPN) @krisrhim1; Daniel Popper (The Athletic) @danielrpopper  
 **Market (DK/RotoWire, late July 2026):** Season wins 9.5 (−130 / +110)
 
@@ -43,6 +44,14 @@ Rest deficit reporting around this roster has been extreme — the kind of struc
 
 Pricing peak Herbert for a full slate while hanging −130 on Over 9.5. The arm justifies contender talk. The price on the Over does not justify a bet. The opposite mistake — hammering every Chargers Under because of brand fatigue — ignores what this roster did last year *without* its tackles. Respect the talent; refuse the juice.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Rookie LG Jake Slaughter graded clean vs Houston. Herbert path unchanged — Pass.
+
+**What matters most.** Slaughter ones share; Mesidor pressure rate.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 9.5 (−130/+110):** Pass. Fair ~9.0–9.4 vs 9.5 is below a clean half-win hammer; do **not** pay −130 Over. Under at +110 is the only ticket worth watching if August OL participation stays clean but not bulletproof — still not a forced lean.  

@@ -2,6 +2,7 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** Excellence priced; injuries rewrite the board weekly  
+**Date:** August 17, 2026
 **Sources (beat desk):** Nick Wagoner (ESPN) [@nwagoner](https://x.com/nwagoner); Vic Tafur (The Athletic) [@VicTafur](https://x.com/VicTafur); Eric Branch (San Francisco Chronicle) [@Eric_Branch](https://x.com/Eric_Branch)  
 **Market (primary late July 2026):** Win total **9.5** — some shops still hang **10.5** with Under juice; shop live  
 **Research timestamp:** 2026-07-30 ET
@@ -50,6 +51,14 @@ Travel and short weeks have historically taxed this roster more than most. When 
 
 What the market gets right at 9.5: Purdy is a settled starter, the scheme is still elite, and ten wins is a believable median if health mean-reverts even partially.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Availability remains the scheme. Preseason loss at Tennessee does not settle the fair number — Pass until the sheet stabilizes.
+
+**What matters most.** Practice participation for the skill/OL chain.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 9.5 (primary):** **Pass.** Fair ~9.4; |edge| below half a win.  

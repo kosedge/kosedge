@@ -2,6 +2,7 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** Bridge-QB ceiling vs desert inconsistency / basement total  
+**Date:** August 17, 2026
 **Sources (beat desk):** Josh Weinfuss (ESPN) [@joshweinfuss](https://x.com/joshweinfuss); Bo Brack (PHNX Sports) [@BoBrack](https://x.com/BoBrack); Darren Urban (AZCardinals.com) [@Cardschatter](https://x.com/Cardschatter)  
 **Market (DK / RotoWire, late July 2026):** **4.5** (some books have hung **3.5**)
 
@@ -37,6 +38,14 @@ Six games against LAR / SEA / SF are the silent Under. Arizona can win the “ot
 
 Weekly sides can still be sharp when Arizona is a home dog against a middling offense and Harrison is the clear WR1. That does not automatically make the season total a buy. Futures boards often conflate “this team will be frisky in spots” with “this team clears four-and-a-half.” Those are different questions — and threshold discipline only cares about the second one when the juice is honest.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Bridge-QB ceiling vs NFC West schedule still owns 4.5. Preseason win over LV is depth tape — Pass on forcing Overs.
+
+**What matters most.** Bridge QB ones share; OL health.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** **Pass** at juiced prices on **4.5**. Prefer **Over 4.5** only at −110 or better / plus money after Brissett–Harrison timing looks functional in pads. At **3.5**, Over is the shop side — re-price; do not import this Pass.  

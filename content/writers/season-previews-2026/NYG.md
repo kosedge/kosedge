@@ -2,6 +2,7 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Young QB hope ≠ win-total Over alone — but 5.5 is floor pricing  
+**Date:** August 17, 2026
 **Sources (beat desk):** Jordan Raanan (ESPN) [@JordanRaanan](https://x.com/JordanRaanan); Dan Duggan (The Athletic) [@DDuggan21](https://x.com/DDuggan21); Paul Schwartz (New York Post) [@NYPost_Schwartz](https://x.com/NYPost_Schwartz)  
 **Market (primary late July 2026):** Win total **5.5** (shop juice live)  
 **Kos Edge / KEINFL (2026-07-29):** 7.75 expected wins · ~24% playoff · ~11% division  
@@ -46,6 +47,14 @@ Multiple outlets grade the Giants’ 2026 slate among the harder third of the le
 
 Overweighting one good camp stretch into a 9-win spike narrative — that was the trap when books hung 7.5. Underrating how hard it is for a Harbaugh/Nagy operation with Nabers and a young dual-threat QB to finish under six when the board already assumes failure. Coaching upgrades are not a deposit into every number. They are more than enough to discuss six.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Dart took a concussion check vs Minnesota and returned. Process noise in a new offense — Pass on early Dart leans.
+
+**What matters most.** Clean midweek practices without tent checks; first-team script clarity.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 5.5:** Lean **Over** at prices no worse than −120. Model ~7.75 / research ~6.8–7.4 both clear. **Pass** if Over juice past −135.  

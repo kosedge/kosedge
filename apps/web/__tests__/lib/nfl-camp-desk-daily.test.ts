@@ -84,33 +84,34 @@ describe("camp desk daily freshness", () => {
   });
 });
 
-describe("Aug 12 live Camp Desk day", () => {
+describe("Aug 17 live Camp Desk day", () => {
   const live = JSON.parse(
     readFileSync(
       path.join(
         __dirname,
-        "../../../../content/writers/camp-desk-2026/2026-08-12.json",
+        "../../../../content/writers/camp-desk-2026/2026-08-17.json",
       ),
       "utf8",
     ),
   ) as CampDeskDayFile;
 
-  it("is a KosEdge-dated league wrap with sourced team notes and no vibe tags", () => {
-    expect(live.desk_date).toBe("2026-08-12");
+  it("is a KosEdge-dated league wrap with all-32 notes and no vibe tags", () => {
+    expect(live.desk_date).toBe("2026-08-17");
     expect(live.source_type).toBe("kosedge-desk");
-    expect(live.league_wrap.title).toBe("Camp Desk — Wednesday, Aug 12");
+    expect(live.league_wrap.title).toBe("Camp Desk — Monday, Aug 17");
     expect(live.league_wrap.storylines.length).toBeGreaterThanOrEqual(5);
     expect(live.league_wrap.storylines.length).toBeLessThanOrEqual(8);
-    expect(live.team_notes.length).toBeGreaterThanOrEqual(4);
+    expect(live.team_notes.length).toBe(32);
     expect(live.league_wrap.bottom_line.toLowerCase()).toContain("pass");
     const blob = JSON.stringify(live);
     expect(blob).not.toMatch(/\bPLAY\b/);
     expect(blob).not.toMatch(/\bLEAN\b/);
+    expect(blob.toLowerCase()).not.toContain("wire espn");
     expect(live.team_notes.some((note) => note.is_material_depth)).toBe(true);
     expect(live.preview_delta?.some((row) => row.team_id === "MIN")).toBe(true);
   });
 
-  it("Camp Desk page heroes KosEdge cards, not ESPN titles", () => {
+  it("Camp Desk page heroes KosEdge cards and kills wire-ESPN branding", () => {
     const src = readFileSync(
       path.join(__dirname, "../../app/(pro)/pro/nfl/camp/page.tsx"),
       "utf8",
@@ -118,7 +119,9 @@ describe("Aug 12 live Camp Desk day", () => {
     expect(src).toContain("KosEdge daily desk");
     expect(src).toContain("camp-desk-wrap");
     expect(src).toContain("PRESEASON");
-    expect(src).toContain("Wire · ESPN headlines (not the desk)");
+    expect(src).toContain("Citation headlines (not the desk)");
+    expect(src).toContain("Trusted X · beat map");
+    expect(src).not.toContain("Wire · ESPN headlines");
     expect(src).not.toContain("Latest camp headlines");
     expect(src).not.toContain("formatArticleAttribution");
   });

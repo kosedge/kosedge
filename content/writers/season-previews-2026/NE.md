@@ -2,6 +2,7 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Elevated win total after the coaching/roster reset worked — scrutinize the 9.5 (and leftover 10.5 juice)  
+**Date:** August 17, 2026
 **Sources (beat desk):** Mike Reiss (ESPN) [@MikeReiss](https://www.espn.com/nfl/story/_/id/49427703/new-england-patriots-training-camp-2026-intel-updates); Phil Perry (NBC Sports Boston) [@PhilAPerry](https://www.nbcsportsboston.com); Evan Lazar [@ezlazar](https://www.patriots.com)  
 **Market (primary):** 9.5  
 **Book variance:** Some shops still nearer **10.5** with Under heavily juiced — shop before you lean
@@ -34,6 +35,14 @@ Overreaction to Super Bowl LX as proof of a 12-win floor on the high boards. Und
 
 If you find New England at **9.5** with Over juice no worse than about −120, the Over is a 2/5 look. If Over is juiced past −135, stay flat. On posted **10.5** shops, stay Pass.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Jam Miller flashed as RB3 after Jennings IR. Depth usage only — Pass on manufacturing a lean.
+
+**What matters most.** Miller touches next script; OT starter language.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season win total 9.5 (primary):** Lean Over at −120 or better; **Pass** if Over juice stretches past −135 without positive Maye-Brown camp progress.

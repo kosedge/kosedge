@@ -1,14 +1,15 @@
 # Minnesota Vikings 2026 Season Preview: Win Total 7.5
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
-**Angle:** The QB competition is the entire fair number — Pass until camp names a starter  
+**Angle:** Murray named starter Aug. 11 — re-price 7.5 carefully; Pass on one-series certainty
+**Date:** August 17, 2026
 **Sources (beat desk):** Kevin Seifert @SeifertESPN (ESPN); Alec Lewis @alec_lewis (The Athletic); Ben Goessling @BenGoessling (Star Tribune)
 
-Until Kevin O’Connell names a starter, Minnesota’s win total is not a roster number. It is a quarterback number.
+Kevin O’Connell named Kyler Murray the starter on Aug. 11. Minnesota’s win total is still a quarterback number — but the open-battle fog is gone.
 
 The market has Minnesota at **7.5** (−110 / −110 neighborhood, DraftKings via RotoWire, late July 2026). That is not an accident. Justin Jefferson is still Justin Jefferson. The defense was strong enough in 2025 to help produce nine wins while the quarterback room led the league in the wrong direction. The board is not ignoring the skill talent. It is refusing to pay full freight until someone owns the job — and at 7.5 it is pricing eight wins, not nine. Older **8.5** boards were a different ask.
 
-Kyler Murray and J.J. McCarthy are competing in camp. Everything else in this preview is downstream of that sentence.
+Murray owns the job; McCarthy is QB2. Everything else in this preview is downstream of how clean the ones-only install looks before Week 1.
 
 ## The competition is the product
 
@@ -46,6 +47,14 @@ That is the same discipline applied in the late-July Pass revise on this desk: a
 
 Player markets can be cleaner than the team total. Jefferson receiving yards in the low-to-mid 1,100s have been the more coherent expression of “Minnesota’s skill talent is fine” while the QB job is unresolved. Quarterback season props remain a Pass until the depth chart stops being a press conference topic.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Murray is the named starter after Aug. 11 and a one-drive preseason debut. Re-price 7.5 only with juice-friendly Over interest — Pass on manufacturing certainty from one series.
+
+**What matters most.** Ones-only cleanliness vs Ravens joints; McCarthy’s backup role staying clean; any availability language on either QB.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 7.5:** **Pass** until a starter is named and given a clear runway. Do not bet a tenth-of-a-win research lean into an unresolved depth chart.
