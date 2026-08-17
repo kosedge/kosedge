@@ -41,9 +41,7 @@ describe("seasonEnginePackagedNotice", () => {
         schedule_source: "packaged_wall_chart_2026",
         depth_source: "packaged_nflverse_depth_2026",
       }),
-    ).toBe(
-      "2026 depth/coaching SoT (packaged). Named skill starters — not a live weekly injury feed.",
-    );
+    ).toMatch(/Depth as_of packaged — not live injury feed/);
   });
 
   it("returns null when sources are not packaged", () => {
@@ -70,6 +68,6 @@ describe("seasonEnginePackagedNotice", () => {
         depth_source: "packaged_nflverse_depth_2026",
         depth_as_of: "2026-08-13",
       }),
-    ).toContain("as_of 2026-08-13");
+    ).toMatch(/Depth as_of 2026-08-13 — not live injury feed/);
   });
 });

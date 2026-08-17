@@ -62,6 +62,12 @@ INDOOR_TEAMS = frozenset(
     {"ATL", "DET", "NO", "MIN", "DAL", "HOU", "ARI", "LV", "IND"}
 )
 
+# Week 1 international / neutral — label only. No invented long-haul tax.
+# Teams use _norm_team (LAR → LA).
+_W1_INTERNATIONAL = {
+    frozenset({"SF", "LA"}): "Melbourne",
+}
+
 OUT_STATUSES = frozenset({"out", "ir", "pup", "suspended", "inactive"})
 UNRESOLVED_STATUSES = frozenset({"limited", "questionable", "doubtful"})
 SKILL_POSITIONS = frozenset({"RB", "WR", "TE", "HB", "FB"})
@@ -608,6 +614,22 @@ def _rest_travel_factors(
                 reason="Mon on slate; W1 MNF is not a short-week rest tax — not applied",
             )
         )
+
+    home_n = _norm_team(home)
+    away_n = _norm_team(away)
+    intl = _W1_INTERNATIONAL.get(frozenset({home_n, away_n}))
+    if intl:
+        out.append(
+            _entry(
+                factor="travel",
+                applied=False,
+                reason=(
+                    f"international travel not in stack ({intl}) "
+                    "— no invented long-haul tax"
+                ),
+            )
+        )
+        return out
 
     home_tz = _tz_hours_west_of_et(home)
     away_tz = _tz_hours_west_of_et(away)

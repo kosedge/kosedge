@@ -23,6 +23,8 @@ import {
   SPORTS,
 } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
+import { nflDepthPackagedBanner } from "@/lib/nfl-week1-current-path";
+import { fetchSeasonEngineStatus } from "@/lib/nfl-season-engine";
 
 export const dynamic = "force-dynamic";
 
@@ -112,6 +114,10 @@ export default async function EdgeBoardSportPage({
   const isNfl = sportKey === "nfl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
   const nflLineage = isNfl ? resolveActiveNflLineage() : null;
+  const nflStatus = isNfl ? await fetchSeasonEngineStatus() : null;
+  const depthBanner = isNfl
+    ? nflDepthPackagedBanner(nflStatus?.depth_as_of || nflStatus?.roster_as_of)
+    : null;
 
   const slateLabel =
     sportKey === "nfl" || sportKey === "cfb" ? "Weekly Slate" : "Daily Slate";
@@ -247,9 +253,9 @@ export default async function EdgeBoardSportPage({
               title="We bet prices, not teams. Tag = KEI vs current best market (not Model alone). Edge pts and Confidence stay separate. PLAY/LEAN require play-to still available. Week 1–2 uses tighter bands."
             >
               {slate === "week1" ? "Week 1" : nflWeekLabel} · Tag = KEI vs
-              market · KEI = model + desk factors · weather/rest honest
+              market · KEI = model + desk factors · weather/rest/QB/ref honest
               not-applied when not in stack · REG Week 1 lines when books post
-              ·{" "}
+              · {depthBanner} ·{" "}
               <Link
                 href="/pro/nfl/launch-notes"
                 className="text-kos-gold/80 hover:text-kos-gold hover:underline"

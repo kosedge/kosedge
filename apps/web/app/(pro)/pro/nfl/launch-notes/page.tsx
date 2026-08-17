@@ -46,7 +46,9 @@ export default function NflLaunchNotesPage() {
       <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
         How to read the NFL desk
       </h1>
-      <p className="mt-2 text-sm text-kos-text/65">Date: August 13, 2026</p>
+      <p className="mt-2 text-sm text-kos-text/65">
+        Date: August 17, 2026 · Depth as_of 2026-08-13 — not live injury feed
+      </p>
 
       <div className="mt-6 flex flex-wrap gap-2">
         <Link
@@ -125,6 +127,33 @@ export default function NflLaunchNotesPage() {
       <hr className="my-8 border-white/12" />
 
       <section>
+        <h2 className="text-xl font-semibold text-kos-gold">
+          Injury → current (manual v1)
+        </h2>
+        <p className="mt-3 text-base leading-7 text-kos-text/80">
+          Depth is packaged as_of 2026-08-13. There is no live injury API.
+          Boards must say that. Model stays research-fair. KEI may reprice
+          when a starter is out — never a Model gut-edit.
+        </p>
+        <ul className="mt-3 list-disc space-y-2 pl-5 text-base leading-7 text-kos-text/80">
+          <li>
+            Midweek report — beat + desk notes into pack injury_status /
+            ol_roles
+          </li>
+          <li>
+            Friday final — lock named Week 1 starters; if a QB1/skill1 is OUT,
+            add injury_paths[] and republish
+          </li>
+          <li>
+            Gameday inactives — apply to current depth; KEI reprices (injury_net
+            / QB backup drop-off)
+          </li>
+        </ul>
+      </section>
+
+      <hr className="my-8 border-white/12" />
+
+      <section>
         <h2 className="text-xl font-semibold text-kos-gold">Week 1–2</h2>
         <p className="mt-3 text-base leading-7 text-kos-text/80">
           Tighter tag thresholds (need more edge to PLAY). Early season
@@ -138,6 +167,16 @@ export default function NflLaunchNotesPage() {
         <h2 className="text-xl font-semibold text-kos-gold">Edge Board</h2>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-base leading-7 text-kos-text/80">
           <li>Week 1 tab = all 16 REG Week 1 games</li>
+          <li>
+            <code className="text-kos-text/70">/pro/nfl/weekly-slate</code>{" "}
+            aliases to{" "}
+            <Link
+              href="/pro/nfl/slate/today"
+              className="font-semibold text-kos-gold hover:underline"
+            >
+              Weekly Slate
+            </Link>
+          </li>
           <li>Full slate = multi-week board; PRE filtered out</li>
           <li>Neutral sites labeled (e.g. Melbourne)</li>
           <li>Stat Drop includes Power</li>
@@ -163,7 +202,10 @@ export default function NflLaunchNotesPage() {
       <section>
         <h2 className="text-xl font-semibold text-kos-gold">Fantasy</h2>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-base leading-7 text-kos-text/80">
-          <li>Preseason skill board (QB/RB/WR/TE) vs FantasyPros ADP</li>
+          <li>
+            Preseason skill board (QB/RB/WR/TE) vs FantasyPros ADP — same
+            depth SoT as the engine (MIN QB1 Murray, ARI QB1 Brissett)
+          </li>
           <li>
             K/DST may be unavailable until rankings include them — grades
             don&apos;t punish missing K/DST

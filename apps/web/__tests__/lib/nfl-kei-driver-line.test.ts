@@ -28,6 +28,20 @@ describe("keiRepriceDriverLine honesty", () => {
     expect(line).not.toContain("duplicate");
   });
 
+  it("labels QB / ref when considered and not applied", () => {
+    const line = keiRepriceDriverLine({
+      appliedFactors: [],
+      consideredNotApplied: [
+        { factor: "qb_confirmation", reason: "QB1 confirmed Kyler Murray (named_starter)" },
+        { factor: "ref", reason: "ref not applied (no Week 1 crew assignment)" },
+        { factor: "inactives", reason: "inactives not in stack (packaged depth)" },
+      ],
+    });
+    expect(line).toContain("QB1 confirmed Kyler Murray");
+    expect(line).toContain("ref not applied");
+    expect(line).toContain("inactives not in stack");
+  });
+
   it("returns null when skipped or empty", () => {
     expect(keiRepriceDriverLine(null)).toBeNull();
     expect(

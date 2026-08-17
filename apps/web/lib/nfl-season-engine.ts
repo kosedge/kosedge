@@ -267,7 +267,7 @@ export function seasonEnginePackagedNotice(
   if (!sources.some((s) => s.startsWith("packaged"))) return null;
   const asOf = status.depth_as_of || status.roster_as_of;
   const asOfBit = asOf ? ` as_of ${asOf}` : "";
-  return `2026 depth/coaching SoT (packaged${asOfBit}). Named skill starters — not a live weekly injury feed.`;
+  return `Depth as_of ${asOf || "packaged"} — not live injury feed. 2026 depth/coaching SoT (packaged${asOfBit}). Named skill starters.`;
 }
 
 export async function fetchSeasonEngineStatus(): Promise<SeasonEngineStatus> {

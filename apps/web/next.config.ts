@@ -111,6 +111,11 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
+        source: "/pro/nfl/weekly-slate",
+        destination: "/pro/nfl/slate/today",
+        permanent: false,
+      },
+      {
         source: "/pro/power-ratings/cfb",
         destination: "/pro/cfb/teams",
         permanent: false,

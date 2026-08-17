@@ -259,6 +259,15 @@ def test_cross_country_travel_away_weaker() -> None:
     assert "travels 3 TZ" in reasons
 
 
+def test_melbourne_international_travel_labeled_not_invented() -> None:
+    new_h, log = _apply(home_abbr="LAR", away_abbr="SF")
+    assert new_h["spread_home"] == -3.0
+    assert log["spread_delta"] == 0.0
+    skipped = " ".join(e["reason"] for e in log["considered_not_applied"])
+    assert "international travel not in stack (Melbourne)" in skipped
+    assert "same-coast" not in skipped
+
+
 def test_same_coast_travel_not_applied() -> None:
     new_h, log = _apply(home_abbr="LAC", away_abbr="ARI")
     assert log["spread_delta"] == 0.0
