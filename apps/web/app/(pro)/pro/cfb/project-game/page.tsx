@@ -7,6 +7,10 @@ import {
   teamOptionsFromCodes,
 } from "@/lib/cfb-season-engine-format";
 import {
+  matchupLabel,
+  packagedOfficialWeekBoard,
+} from "@/lib/cfb-official-slate";
+import {
   cfbModelDeskHonestyNote,
   cfbModelDeskTruthStates,
 } from "@/lib/cfb-truth-label";
@@ -51,6 +55,15 @@ export default async function CfbProjectGamePage({
     "OSU",
   ];
   const teams = teamOptionsFromCodes(codes);
+  const slateRows = (packagedOfficialWeekBoard().games ?? []).map((g) => ({
+    key: g.game_id || `${g.away}@${g.home}-${g.week}`,
+    label: `W${g.week} · ${g.away} @ ${g.home}`,
+    home: g.home.replace(/^fcs:/i, ""),
+    away: g.away.replace(/^fcs:/i, ""),
+    week: g.week,
+    neutral: Boolean(g.neutral_site),
+    title: matchupLabel(g),
+  }));
 
   return (
     <SportHubShell
@@ -97,6 +110,7 @@ export default async function CfbProjectGamePage({
         defaultWeek={week}
         defaultNeutral={neutral}
         engineVersion={status.engine_version || undefined}
+        slateRows={slateRows}
       />
     </SportHubShell>
   );
