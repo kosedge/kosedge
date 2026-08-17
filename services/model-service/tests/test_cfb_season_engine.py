@@ -1068,7 +1068,9 @@ def test_status_contract() -> None:
     payload = engine_status_payload(season=2026, demo=True)
     assert payload["engine_version"] == DEFAULT_SEASON_ENGINE_VERSION
     assert payload["additive"] is True
-    assert "edge_board_cfb_markets_only" in payload["does_not_modify"]
+    assert "model_used_in_spread_false" in payload["does_not_modify"]
+    assert "kei_is_separate_published_line" in payload["does_not_modify"]
+    assert "edge_board_cfb_markets_only" not in payload["does_not_modify"]
     assert len(payload["layers"]) >= 7
     assert "solid" in payload["solid_vs_approximate"]
     assert "Roster strength formula" in " ".join(payload["solid_vs_approximate"]["solid"])

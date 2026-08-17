@@ -512,7 +512,8 @@ def engine_status_payload(
         },
         "additive": True,
         "does_not_modify": [
-            "edge_board_cfb_markets_only",
+            "model_used_in_spread_false",
+            "kei_is_separate_published_line",
             "nfl_season_engine",
             "nfl_edge_board",
             "model_vs_kei_#70",
