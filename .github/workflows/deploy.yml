@@ -1,4 +1,7 @@
 # .github/workflows/deploy.yml
+# NOTE: Live www.kosedge.com is the Vercel Git integration on deploy-vercel
+# (project kosedge). This workflow still targets `main` / version tags only.
+# Do not point it at deploy-vercel — that would double-deploy and race Vercel.
 name: Deploy
 
 on:

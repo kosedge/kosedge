@@ -1,0 +1,31 @@
+# Post-ship smoke for the subscription site.
+# Runs after every push to deploy-vercel (Vercel + Railway both listen there).
+# Retries while Vercel finishes building so a slow deploy is not a false red.
+
+name: Production Smoke
+
+on:
+  push:
+    branches: [deploy-vercel]
+  workflow_dispatch:
+
+concurrency:
+  group: production-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: www + Railway
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Wait for Vercel Git deploy to start
+        run: sleep 45
+
+      - name: Smoke production URLs
+        run: bash scripts/ci/production-smoke.sh
+        env:
+          ATTEMPTS: "15"
+          SLEEP_SECS: "20"

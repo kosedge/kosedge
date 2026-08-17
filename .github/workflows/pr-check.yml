@@ -1,16 +1,33 @@
 # .github/workflows/pr-check.yml
 name: PR Checks
 
+# GitHub still opens a "PR Checks" run on push (merge to deploy-vercel, feature
+# pushes). The file is pull_request-only, so those runs used to fail in 0s and
+# look like a broken deploy. Push is an explicit no-op; real work stays on PRs.
+# Production typecheck/build lives in production-gate.yml.
 on:
   pull_request:
     types: [opened, synchronize, reopened]
+  push:
 
 jobs:
+  skip-on-push:
+    name: Push is not a PR check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Explain
+        run: |
+          echo "PR Checks is pull_request-only."
+          echo "Production bar: Production Gate + Production Smoke on deploy-vercel."
+
   pr-checks:
     name: PR Quality Checks
+    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     timeout-minutes: 15
     permissions:
+      contents: read
       pull-requests: write
       issues: write
 
