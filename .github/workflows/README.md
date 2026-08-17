@@ -4,9 +4,24 @@ This directory contains GitHub Actions workflows for automated testing, building
 
 ## Workflows
 
+### `production-gate.yml` — subscription ship bar
+
+Runs on pull requests and pushes to **`deploy-vercel`**.
+
+1. **Web typecheck**
+2. **Web Next build** — same `apps/web` `pnpm run build` Vercel runs
+
+If this is red, www did not ship. Do not merge.
+
+### `production-smoke.yml` — live www + Railway
+
+Runs after every push to `deploy-vercel`. Retries `/api/ping`, CFB desk routes, Railway `/health`, and CFB engine status until they 200 (or the window expires).
+
 ### `ci.yml` - Continuous Integration
 
-Runs on every push and pull request to `main` and `develop` branches.
+Runs on every push and pull request to `main` and `develop`. Do not hang
+`deploy-vercel` on this workflow — it still carries historical lint/test debt.
+The ship bar on `deploy-vercel` is **Production Gate**.
 
 **Jobs:**
 
@@ -30,13 +45,14 @@ Runs on pushes to `main` branch and version tags (`v*`).
 
 ### `pr-check.yml` - Pull Request Checks
 
-Runs on pull request events (opened, synchronized, reopened).
+Runs on pull request events (opened, synchronized, reopened). Push events are an
+explicit no-op so GitHub does not paint a 0s red X on every merge to `deploy-vercel`.
 
 **Features:**
 
-- Runs all quality checks
+- Runs all quality checks on the PR
 - Comments on PR with results
-- Updates comment on subsequent pushes
+- Updates comment on subsequent PR pushes
 
 ### `codeql.yml` - Security Analysis
 

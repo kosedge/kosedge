@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 export default function CfbProError({
   error,
   reset,
@@ -36,18 +38,18 @@ export default function CfbProError({
         >
           Retry
         </button>
-        <a
+        <Link
           href="/pro/cfb/slate"
           className="min-h-11 inline-flex items-center rounded-xl border border-white/15 px-4 text-sm font-semibold text-kos-text"
         >
           Official slate
-        </a>
-        <a
+        </Link>
+        <Link
           href="/edge-board/cfb"
           className="min-h-11 inline-flex items-center rounded-xl border border-white/15 px-4 text-sm font-semibold text-kos-text"
         >
           Edge Board (markets)
-        </a>
+        </Link>
       </div>
     </main>
   );

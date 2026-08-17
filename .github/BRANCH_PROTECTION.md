@@ -1,8 +1,29 @@
 # Branch Protection Guidelines
 
-## Recommended Branch Protection Rules
+## Production branch (`deploy-vercel`) — do this first
 
-Configure these in GitHub Settings → Branches → Branch protection rules
+This is the subscription site. Configure GitHub → Settings → Branches (or Rulesets)
+for **`deploy-vercel`**:
+
+**Required status checks:**
+
+- Production Gate / Web typecheck
+- Production Gate / Web Next build (Vercel-identical)
+
+Do not require the full model-service pytest suite on this branch — it still
+carries historical NFL assertion drift. Railway path deploys stay on
+`deploy-railway.yml`.
+
+**Restrictions:**
+
+- Do not allow force pushes
+- Do not allow deletions
+- Require a pull request before merging (no direct pushes if the team can live with that)
+
+Do **not** require the old “PR Checks” push run — that was a 0s false failure.
+
+Optional after merge: watch **Production Smoke**. It is post-deploy (Vercel is async)
+so it should not block the merge; it should page if www or Railway did not come up.
 
 ### Main Branch Protection
 

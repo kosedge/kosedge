@@ -1,8 +1,10 @@
 # Deployment Guide
 
-> **Production web branch:** Vercel project `kosedge` deploys production from **`deploy-vercel`**.
-> Do **not** point the Vercel Production Branch at `restore-working-ui` — that branch is a thinner UI
-> shell (missing Pro hubs / NFL boards). Railway model-service may still track `restore-working-ui`.
+> **Production branch for Vercel + Railway:** **`deploy-vercel`**.
+> Vercel project `kosedge` (www.kosedge.com) and Railway model-service (`deploy-railway.yml`)
+> both ship from that branch. Do **not** point Vercel Production at `restore-working-ui` —
+> that branch is a thinner UI shell (missing Pro hubs / NFL boards).
+> Merge only when **Production Gate** is green. After merge, **Production Smoke** must pass.
 
 ## Prerequisites
 

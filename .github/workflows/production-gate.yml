@@ -1,0 +1,73 @@
+# Production gate — same bar Vercel uses before www.kosedge.com can move.
+#
+# Why this exists:
+# CI used to run only on main/develop. PRs merged to deploy-vercel with no
+# typecheck/build, then Vercel failed after merge and production stayed on
+# an old SHA (CFB desk 404 / hang, Aug 2026).
+#
+# This workflow is the www contract: if web typecheck or Next build is red,
+# do not merge. Full model-service pytest is historical debt — not the ship bar.
+
+name: Production Gate
+
+on:
+  pull_request:
+    branches: [deploy-vercel]
+  push:
+    branches: [deploy-vercel]
+  workflow_dispatch:
+
+concurrency:
+  group: production-gate-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  web-typecheck:
+    name: Web typecheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck web
+        run: pnpm --filter @kosedge/web typecheck
+
+  web-build:
+    name: Web Next build (Vercel-identical)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.29.2
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Next build
+        working-directory: apps/web
+        run: pnpm run build
+        env:
+          NODE_ENV: production
+          DATABASE_URL: postgresql://ci:ci@localhost:5432/kosedge
+          AUTH_SECRET: ci-build-auth-secret-32-chars-minimum
+          MODEL_SERVICE_URL: http://localhost:8000
