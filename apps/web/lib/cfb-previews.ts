@@ -61,7 +61,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "Sayin injury or a multi-week offensive-index collapse; a warehouse-fill swap (this row is packaged, not filled); or a slate revision that adds/removes a Power-4 home game.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "ore",
@@ -86,7 +86,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "Moore not starting; a large Week 1 offensive miss vs Boise; or Big Ten slate changes that add another top-15 road game.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "miss",
@@ -111,7 +111,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "Chambliss not starting; Week 1 injury; or a slate add that inserts another top-10 SEC road game.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "mia",
@@ -136,7 +136,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "Mensah not starting; ACC slate adding a second top-15 road week; or a large Week 1 miss at Stanford that updates the offensive index.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "nd",
@@ -161,7 +161,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "Carr injury; a slate revision that adds two Power-4 road games; or the Independent mapping cleanup changing who else shares this bucket (does not change ND’s power index).",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "utah",
@@ -186,7 +186,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "Dampier not starting; a Big 12 slate add opposite Texas Tech / Arizona in the same month; or a large Week 2+ offensive miss.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "usf",
@@ -211,7 +211,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "A Power-4 home-and-home landing on the official slate; Cooper injury; or a defensive-index update that pulls power out of the 40s.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "boise",
@@ -232,11 +232,11 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     scheduleNotes:
       "ORE @ home for Oregon / road for Boise is an official Week 1 FBS row — Project Game deep-link is live. Remaining MWC path is why 7.2 E[wins] can still be a bowl prior.",
     bettingAngles:
-      "Track the Oregon opener as research-fair vs books. Do not invent a Boise season win-total lean from 7.20. Edge Board is markets only.",
+      "Track the Oregon opener as research-fair vs books. Do not invent a Boise season win-total lean from 7.20. KEI is the published Edge Board line when the game is on the slate.",
     whatWouldChange:
       "Madsen not starting; Oregon Week 1 injury on either side; or MWC slate adding another Power-4 road game.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "jmu",
@@ -261,7 +261,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     whatWouldChange:
       "A named starter for 3+ weeks; Maiden not the guy; or a Power-4 road add on the official slate.",
     modelNote:
-      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI.",
+      "KosEdge CFB Model · engine cfb-season-engine-v0.15-power-sot · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
 ];
 
@@ -282,7 +282,7 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     researchAngles:
       "Use power order for talent, E[wins] for path. A 9-win SEC prior is rarer than a 9-win ACC/Independent prior on this board. Track Project Game on the official openers; Edge Board for books only.",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "big-ten",
@@ -300,7 +300,7 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     researchAngles:
       "IU at power #5 will look loud if you only remember 2023. The SoT is 2025-efficiency + roster/QB. Flag it; do not silently rerank. Win totals are not inverted vs consensus talent once you separate path from power.",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "acc",
@@ -316,9 +316,9 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     scheduleNotes:
       "Week 1: Miami at Stanford, SMU at Florida State, Clemson at LSU. Those three openers are the first live checks; LSU/FSU are not ACC games.",
     researchAngles:
-      "If an ACC win total sits at 10+, compare it to the 7–11 bands on Miami / SMU before treating it as a research conflict. Edge Board remains markets-only.",
+      "If an ACC win total sits at 10+, compare it to the 7–11 bands on Miami / SMU before treating it as a research conflict. Edge Board is KEI vs market.",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "big-12",
@@ -336,7 +336,7 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     researchAngles:
       "Utah’s 9.01 E[wins] is a path number. Power 1.48 is the talent number. Track TCU/UNC in Project Game this week; skip inventing lines on FCS openers.",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "independent",
@@ -354,7 +354,7 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     researchAngles:
       "Use the Independent conference page for the ND note, not as a 14-team standings race. Overlay is documented in data/ops and on the Teams filter.",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "aac",
@@ -372,7 +372,7 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     researchAngles:
       "Any board that ranks USF / UTSA / USF-class teams above Power-4 in power is wrong. This board does not. E[wins] is allowed to look loud; the page banners it.",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
   {
     slug: "mountain-west",
@@ -390,7 +390,7 @@ export const CFB_CONFERENCE_PREVIEWS: CfbConferencePreview[] = [
     researchAngles:
       "Use Boise/Oregon as the research-fair Project Game. Do not promote Hawai'i into a top-20 talent conversation because of E[wins].",
     modelNote:
-      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · no KEI · CFP omitted.",
+      "KosEdge CFB Model · N=10,000 · as_of 2026-08-14 · used_in_spread=false · KEI is a separate published line.",
   },
 ];
 

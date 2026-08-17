@@ -177,6 +177,13 @@ def cfb_season_engine_project_game(
     payload["ok"] = True
     payload["mode"] = meta.get("mode")
     payload["used_in_spread"] = False
+    try:
+        from src.services.cfb_season_engine.cfb_kei import apply_cfb_kei
+
+        payload["kei"] = apply_cfb_kei(payload, fbs_vs_fbs=True)
+        payload["kei_used_in_spread"] = True
+    except Exception as exc:  # pragma: no cover
+        log.debug("cfb kei attach skipped: %s", exc)
     # Best-effort tracking — never slows / fails the projection path.
     try:
         from src.services.cfb_season_engine.performance_tracking import (

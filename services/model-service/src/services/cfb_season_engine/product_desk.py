@@ -1,6 +1,6 @@
-"""Compact CFB research-desk payloads (W0/W1 slate + optional team DNA).
+"""Compact CFB desk payloads (W0/W1 slate + optional team DNA + KEI attach).
 
-Read-only. used_in_spread stays false. No KEI.
+Model research stays used_in_spread=false. KEI board is used_in_spread=true.
 """
 
 from __future__ import annotations
@@ -10,9 +10,11 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
 
 USED_IN_SPREAD = False
+KEI_USED_IN_SPREAD = True
 DATA_DIR = Path(__file__).resolve().parent / "data"
 OFFICIAL_SCHEDULE_PATH = DATA_DIR / "cfb_official_schedule_2026.json"
 FBS_UNIVERSE_PATH = DATA_DIR / "cfb_fbs_universe_2026.json"
+KEI_BOARD_PATH = DATA_DIR / "cfb_kei_w0_w1_2026.json"
 
 
 def _load_json(path: Path) -> Dict[str, Any]:
@@ -69,7 +71,7 @@ def official_week_board(
                 "conference_game": bool(raw.get("conference_game")),
             }
         )
-    return {
+    board = {
         "season": season,
         "weeks": sorted(wanted),
         "n_games": len(rows),
@@ -81,6 +83,33 @@ def official_week_board(
         "kei": False,
         "games": rows,
     }
+    return _attach_kei(board)
+
+
+def _attach_kei(board: Dict[str, Any]) -> Dict[str, Any]:
+    pack = _load_json(KEI_BOARD_PATH)
+    by_id = {
+        str(g.get("game_id")): g
+        for g in (pack.get("games") or [])
+        if isinstance(g, dict) and g.get("game_id")
+    }
+    n = 0
+    for row in board.get("games") or []:
+        hit = by_id.get(str(row.get("game_id")))
+        if not hit:
+            continue
+        kei = hit.get("kei") if isinstance(hit.get("kei"), dict) else {}
+        if kei.get("kei_spread_home") is None:
+            continue
+        row["model_spread_home"] = hit.get("model_spread_home")
+        row["kei"] = kei
+        n += 1
+    if n:
+        board["kei"] = True
+        board["kei_used_in_spread"] = KEI_USED_IN_SPREAD
+        board["kei_version"] = pack.get("kei_version")
+        board["n_kei_games"] = n
+    return board
 
 
 def _next_opponent(
@@ -175,7 +204,8 @@ def product_desk_payload(
     dna = team_dna_table(universe, board=board)
     return {
         "used_in_spread": USED_IN_SPREAD,
-        "kei": False,
+        "kei": bool(board.get("kei")),
+        "kei_used_in_spread": bool(board.get("kei_used_in_spread")),
         "research_only": True,
         "week_board": board,
         "team_dna": dna,

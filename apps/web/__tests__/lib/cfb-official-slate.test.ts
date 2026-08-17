@@ -43,7 +43,7 @@ describe("cfb official slate fallback", () => {
 
   it("registers the missing production routes", () => {
     const root = path.join(__dirname, "../../app/(pro)/pro/cfb");
-    for (const page of ["slate", "projections", "teams"]) {
+    for (const page of ["slate", "projections", "teams", "futures"]) {
       const src = readFileSync(path.join(root, page, "page.tsx"), "utf8");
       expect(src).toContain("used_in_spread");
       expect(src.toLowerCase()).not.toContain("play tag");

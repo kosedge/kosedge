@@ -215,6 +215,7 @@ export function ensureAllKeiGamesOnBoard(
       time,
       commenceTime: g.commenceTime,
       market: lineMarket,
+      week: g.week ?? undefined,
     });
     seeded.push({
       id: `${idBase}-total`,
@@ -222,6 +223,7 @@ export function ensureAllKeiGamesOnBoard(
       time,
       commenceTime: g.commenceTime,
       market: "Total",
+      week: g.week ?? undefined,
     });
     for (const key of keys) covered.add(key);
   }

@@ -152,7 +152,7 @@ export default async function CfbTeamsPowerPage({
         {raw.length} / 136 official FBS · showing {rows.length}
         {conf !== "all" ? ` · ${conf}` : ""} · warehouse fills {warehouse} ·
         affiliation overlay {overlayCount} · {version.power_version} · as_of{" "}
-        {version.as_of} · used_in_spread=false
+        {version.as_of} · used_in_spread=false on research · KEI is the published line
       </p>
 
       <form className="mt-3 flex flex-wrap items-end gap-2" method="get">

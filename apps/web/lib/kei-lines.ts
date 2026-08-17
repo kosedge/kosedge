@@ -20,6 +20,7 @@ export type KeiLineGame = {
   homeAbbr?: string | null;
   awayAbbr?: string | null;
   commenceTime?: string;
+  week?: number | null;
   /** @deprecated Use handicapSpreadHome — migration alias of KEI handicap. */
   projSpreadHome: number | null;
   /** @deprecated Use handicapTotal — migration alias of KEI handicap. */

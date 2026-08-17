@@ -1,0 +1,4902 @@
+{
+  "ok": true,
+  "kei_version": "cfb-kei-v1.0-2026w0",
+  "engine_version": "cfb-season-engine-v0.9-inseason",
+  "as_of": "2026-08-17",
+  "generated_at": "2026-08-17T10:43:38Z",
+  "weeks": [
+    0,
+    1
+  ],
+  "n_games": 97,
+  "n_fbs_with_kei": 41,
+  "n_w0_fbs_with_kei": 6,
+  "used_in_spread": true,
+  "model_used_in_spread": false,
+  "bias_guard": {
+    "version": "cfb-bias-guard-v1-histcal-20260805",
+    "n": 8,
+    "band": [
+      1.0,
+      7.5
+    ],
+    "mean_abs_model": 4.0,
+    "mean_abs_kei": 4.815,
+    "mean_abs_move": 0.815,
+    "max_abs_move": 1.2,
+    "signs_preserved": true,
+    "capped": true,
+    "raw_play_vs_3pt_book": 8,
+    "kei_play_vs_3pt_book": 1,
+    "improved": true,
+    "note": "Favorite-side correction is a capped hist-cal slice, not the close. Early PLAY stays at 4 pts, so a 3-pt book disagreement does not fire. Not a long-run ATS profit claim."
+  },
+  "games": [
+    {
+      "game_id": "401856766",
+      "week": 0,
+      "home": "TCU",
+      "away": "UNC",
+      "home_name": "TCU Horned Frogs",
+      "away_name": "North Carolina Tar Heels",
+      "kickoff": "2026-08-29T16:00Z",
+      "neutral_site": true,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -19.19,
+      "model_total": 54.15,
+      "model_home_win_prob": 0.8793,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -19.19,
+        "model_total": 54.15,
+        "model_home_win_prob": 0.8793,
+        "model_sigma": 16.383,
+        "kei_spread_home": -20.39,
+        "kei_total": 54.15,
+        "kei_home_win_prob": 0.8934,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.9203) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 61.79, away OL 59.75) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401864494",
+      "week": 0,
+      "home": "USC",
+      "away": "SJSU",
+      "home_name": "USC Trojans",
+      "away_name": "San Jos\u00e9 State Spartans",
+      "kickoff": "2026-08-29T19:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -33.04,
+      "model_total": 69.7,
+      "model_home_win_prob": 0.9789,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -33.04,
+        "model_total": 69.7,
+        "model_home_win_prob": 0.9789,
+        "model_sigma": 16.26,
+        "kei_spread_home": -34.24,
+        "kei_total": 69.7,
+        "kei_home_win_prob": 0.98,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1554) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 66.67, away OL 54.05) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': 'LA Coliseum', 'env_score': 62.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858202",
+      "week": 0,
+      "home": "UVA",
+      "away": "NCSU",
+      "home_name": "Virginia Cavaliers",
+      "away_name": "NC State Wolfpack",
+      "kickoff": "2026-08-29T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -4.82,
+      "model_total": 60.58,
+      "model_home_win_prob": 0.6171,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -4.82,
+        "model_total": 60.58,
+        "model_home_win_prob": 0.6171,
+        "model_sigma": 16.182,
+        "kei_spread_home": -5.3,
+        "kei_total": 60.58,
+        "kei_home_win_prob": 0.6284,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2438, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 67.76, away OL 66.23) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.7224,
+            "reason": "short-favorite shrink 0.72 toward pick'em (|KEI| 6.0 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401864577",
+      "week": 0,
+      "home": "FCS:NDSU",
+      "away": "JVST",
+      "home_name": "North Dakota State Bison",
+      "away_name": "Jacksonville State Gamecocks",
+      "kickoff": "2026-08-29T21:30Z",
+      "neutral_site": false,
+      "fcs_home": true,
+      "fcs_away": false,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401866408",
+      "week": 0,
+      "home": "EMU",
+      "away": "FCS:SAC",
+      "home_name": "Eastern Michigan Eagles",
+      "away_name": "Sacramento State Hornets",
+      "kickoff": "2026-08-29T22:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858201",
+      "week": 0,
+      "home": "STAN",
+      "away": "HAW",
+      "home_name": "Stanford Cardinal",
+      "away_name": "Hawai'i Rainbow Warriors",
+      "kickoff": "2026-08-29T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": 9.9,
+      "model_total": 53.72,
+      "model_home_win_prob": 0.2727,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": 9.9,
+        "model_total": 53.72,
+        "model_home_win_prob": 0.2727,
+        "model_sigma": 16.372,
+        "kei_spread_home": 10.9,
+        "kei_total": 53.72,
+        "kei_home_win_prob": 0.2528,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.8996, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 63.16, away OL 54.01) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_dog",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 1.0,
+            "reason": "home-dog correction +1.00 (hist-cal home dogs too bullish; capped slice, not market copy)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401864570",
+      "week": 0,
+      "home": "FSU",
+      "away": "NMSU",
+      "home_name": "Florida State Seminoles",
+      "away_name": "New Mexico State Aggies",
+      "kickoff": "2026-08-29T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -14.86,
+      "model_total": 61.62,
+      "model_home_win_prob": 0.8174,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -14.86,
+        "model_total": 61.62,
+        "model_home_win_prob": 0.8174,
+        "model_sigma": 16.41,
+        "kei_spread_home": -16.06,
+        "kei_total": 61.62,
+        "kei_home_win_prob": 0.8361,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.1892, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 64.97, away OL 57.56) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': True, 'continuity_score': 50.0, 'uncertainty_boost': 0.22, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'Doak Campbell', 'env_score': 70.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401862693",
+      "week": 0,
+      "home": "UNLV",
+      "away": "MEM",
+      "home_name": "UNLV Rebels",
+      "away_name": "Memphis Tigers",
+      "kickoff": "2026-08-30T02:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -4.09,
+      "model_total": 67.77,
+      "model_home_win_prob": 0.5975,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -4.09,
+        "model_total": 67.77,
+        "model_home_win_prob": 0.5975,
+        "model_sigma": 16.571,
+        "kei_spread_home": -4.66,
+        "kei_total": 67.77,
+        "kei_home_win_prob": 0.6107,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.1471, away idx 0.8597) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 57.69, away OL 64.57) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 58.8, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.6348,
+            "reason": "short-favorite shrink 0.63 toward pick'em (|KEI| 5.3 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858423",
+      "week": 1,
+      "home": "RUT",
+      "away": "MASS",
+      "home_name": "Rutgers Scarlet Knights",
+      "away_name": "Massachusetts Minutemen",
+      "kickoff": "2026-09-03T22:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -26.22,
+      "model_total": 65.72,
+      "model_home_win_prob": 0.8793,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -26.22,
+        "model_total": 65.72,
+        "model_home_win_prob": 0.8793,
+        "model_sigma": 22.382,
+        "kei_spread_home": -27.42,
+        "kei_total": 65.72,
+        "kei_home_win_prob": 0.8897,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2514, away idx 1.2631) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 66.68, away OL 58.42) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 62.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856767",
+      "week": 1,
+      "home": "UCF",
+      "away": "FCS:BCU",
+      "home_name": "UCF Knights",
+      "away_name": "Bethune-Cookman Wildcats",
+      "kickoff": "2026-09-03T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858204",
+      "week": 1,
+      "home": "WAKE",
+      "away": "AKR",
+      "home_name": "Wake Forest Demon Deacons",
+      "away_name": "Akron Zips",
+      "kickoff": "2026-09-03T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -10.73,
+      "model_total": 51.77,
+      "model_home_win_prob": 0.6816,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -10.73,
+        "model_total": 51.77,
+        "model_home_win_prob": 0.6816,
+        "model_sigma": 22.728,
+        "kei_spread_home": -11.93,
+        "kei_total": 51.77,
+        "kei_home_win_prob": 0.7002,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2067, away idx 1.305) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 61.0, away OL 59.51) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.05, 'baseline': 1.7, 'bucket': 'weak', 'bucket_points': 1.05, 'bucket_delta': -0.65, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 40.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401864424",
+      "week": 1,
+      "home": "DEL",
+      "away": "FCS:MRMK",
+      "home_name": "Delaware Blue Hens",
+      "away_name": "Merrimack Warriors",
+      "kickoff": "2026-09-03T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401864425",
+      "week": 1,
+      "home": "KENNESAW",
+      "away": "FCS:WES",
+      "home_name": "Kennesaw State Owls",
+      "away_name": "West Georgia Wolves",
+      "kickoff": "2026-09-03T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401866409",
+      "week": 1,
+      "home": "BUFF",
+      "away": "FCS:ALB",
+      "home_name": "Buffalo Bulls",
+      "away_name": "UAlbany Great Danes",
+      "kickoff": "2026-09-03T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856663",
+      "week": 1,
+      "home": "MIZZ",
+      "away": "FCS:UAPB",
+      "home_name": "Missouri Tigers",
+      "away_name": "Arkansas-Pine Bluff Golden Lions",
+      "kickoff": "2026-09-04T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856776",
+      "week": 1,
+      "home": "GT",
+      "away": "COLO",
+      "home_name": "Georgia Tech Yellow Jackets",
+      "away_name": "Colorado Buffaloes",
+      "kickoff": "2026-09-04T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -4.78,
+      "model_total": 56.12,
+      "model_home_win_prob": 0.5855,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -4.78,
+        "model_total": 56.12,
+        "model_home_win_prob": 0.5855,
+        "model_sigma": 22.128,
+        "kei_spread_home": -5.26,
+        "kei_total": 56.12,
+        "kei_home_win_prob": 0.5939,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.1859, away idx 1.1906) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 62.1, away OL 74.45) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': False, 'continuity_score': 80.0, 'uncertainty_boost': 0.08, 'fidelity': 'approximate'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.8, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.7176,
+            "reason": "short-favorite shrink 0.72 toward pick'em (|KEI| 6.0 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858422",
+      "week": 1,
+      "home": "MINN",
+      "away": "FCS:EIU",
+      "home_name": "Minnesota Golden Gophers",
+      "away_name": "Eastern Illinois Panthers",
+      "kickoff": "2026-09-04T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856768",
+      "week": 1,
+      "home": "UTAH",
+      "away": "FCS:IDHO",
+      "home_name": "Utah Utes",
+      "away_name": "Idaho Vandals",
+      "kickoff": "2026-09-04T01:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858424",
+      "week": 1,
+      "home": "ILL",
+      "away": "UAB",
+      "home_name": "Illinois Fighting Illini",
+      "away_name": "UAB Blazers",
+      "kickoff": "2026-09-04T01:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401864495",
+      "week": 1,
+      "home": "EMU",
+      "away": "SJSU",
+      "home_name": "Eastern Michigan Eagles",
+      "away_name": "San Jos\u00e9 State Spartans",
+      "kickoff": "2026-09-04T22:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -4.95,
+      "model_total": 57.41,
+      "model_home_win_prob": 0.5873,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -4.95,
+        "model_total": 57.41,
+        "model_home_win_prob": 0.5873,
+        "model_sigma": 22.449,
+        "kei_spread_home": -5.41,
+        "kei_total": 57.41,
+        "kei_home_win_prob": 0.5952,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.3339, away idx 1.1554) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 59.99, away OL 54.05) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.55, 'baseline': 1.7, 'bucket': 'poor', 'bucket_points': 0.55, 'bucket_delta': -1.15, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 26.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.738,
+            "reason": "short-favorite shrink 0.74 toward pick'em (|KEI| 6.2 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858435",
+      "week": 1,
+      "home": "PUR",
+      "away": "FCS:INST",
+      "home_name": "Purdue Boilermakers",
+      "away_name": "Indiana State Sycamores",
+      "kickoff": "2026-09-04T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401866623",
+      "week": 1,
+      "home": "GAST",
+      "away": "FCS:NCAT",
+      "home_name": "Georgia State Panthers",
+      "away_name": "North Carolina A&T Aggies",
+      "kickoff": "2026-09-04T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856664",
+      "week": 1,
+      "home": "OU",
+      "away": "UTEP",
+      "home_name": "Oklahoma Sooners",
+      "away_name": "UTEP Miners",
+      "kickoff": "2026-09-05T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -32.41,
+      "model_total": 65.07,
+      "model_home_win_prob": 0.9233,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -32.41,
+        "model_total": 65.07,
+        "model_home_win_prob": 0.9233,
+        "model_sigma": 22.698,
+        "kei_spread_home": -33.61,
+        "kei_total": 65.07,
+        "kei_home_win_prob": 0.9307,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.3512, away idx 1.2428) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 69.33, away OL 51.91) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Gaylord Family', 'env_score': 83.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856769",
+      "week": 1,
+      "home": "KU",
+      "away": "FCS:LIU",
+      "home_name": "Kansas Jayhawks",
+      "away_name": "Long Island University Sharks",
+      "kickoff": "2026-09-05T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858429",
+      "week": 1,
+      "home": "MSU",
+      "away": "TOL",
+      "home_name": "Michigan State Spartans",
+      "away_name": "Toledo Rockets",
+      "kickoff": "2026-09-05T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858206",
+      "week": 1,
+      "home": "STAN",
+      "away": "MIA",
+      "home_name": "Stanford Cardinal",
+      "away_name": "Miami Hurricanes",
+      "kickoff": "2026-09-05T01:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": 26.95,
+      "model_total": 57.85,
+      "model_home_win_prob": 0.1186,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": 26.95,
+        "model_total": 57.85,
+        "model_home_win_prob": 0.1186,
+        "model_sigma": 22.803,
+        "kei_spread_home": 27.95,
+        "kei_total": 57.85,
+        "kei_home_win_prob": 0.1102,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.8996, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 63.16, away OL 68.74) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_dog",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 1.0,
+            "reason": "home-dog correction +1.00 (hist-cal home dogs too bullish; capped slice, not market copy)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858436",
+      "week": 1,
+      "home": "USC",
+      "away": "FRES",
+      "home_name": "USC Trojans",
+      "away_name": "Fresno State Bulldogs",
+      "kickoff": "2026-09-05T01:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -28.56,
+      "model_total": 60.34,
+      "model_home_win_prob": 0.894,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -28.56,
+        "model_total": 60.34,
+        "model_home_win_prob": 0.894,
+        "model_sigma": 22.879,
+        "kei_spread_home": -29.76,
+        "kei_total": 60.34,
+        "kei_home_win_prob": 0.9033,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.8753) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 66.67, away OL 52.8) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': 'LA Coliseum', 'env_score': 62.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856634",
+      "week": 1,
+      "home": "ALA",
+      "away": "ECU",
+      "home_name": "Alabama Crimson Tide",
+      "away_name": "East Carolina Pirates",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856778",
+      "week": 1,
+      "home": "HOU",
+      "away": "ORST",
+      "home_name": "Houston Cougars",
+      "away_name": "Oregon State Beavers",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -6.05,
+      "model_total": 50.43,
+      "model_home_win_prob": 0.6051,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -6.05,
+        "model_total": 50.43,
+        "model_home_win_prob": 0.6051,
+        "model_sigma": 22.691,
+        "kei_spread_home": -6.38,
+        "kei_total": 50.43,
+        "kei_home_win_prob": 0.6107,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.7664, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 60.68, away OL 53.37) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.87,
+            "reason": "short-favorite shrink 0.87 toward pick'em (|KEI| 7.2 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856780",
+      "week": 1,
+      "home": "WVU",
+      "away": "CCU",
+      "home_name": "West Virginia Mountaineers",
+      "away_name": "Coastal Carolina Chanticleers",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -16.35,
+      "model_total": 56.19,
+      "model_home_win_prob": 0.7646,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -16.35,
+        "model_total": 56.19,
+        "model_home_win_prob": 0.7646,
+        "model_sigma": 22.673,
+        "kei_spread_home": -17.55,
+        "kei_total": 56.19,
+        "kei_home_win_prob": 0.7805,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2504, away idx 0.8312) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 61.22, away OL 55.85) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858208",
+      "week": 1,
+      "home": "SYR",
+      "away": "FCS:UNH",
+      "home_name": "Syracuse Orange",
+      "away_name": "New Hampshire Wildcats",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858425",
+      "week": 1,
+      "home": "IU",
+      "away": "UNT",
+      "home_name": "Indiana Hoosiers",
+      "away_name": "North Texas Mean Green",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858430",
+      "week": 1,
+      "home": "NEB",
+      "away": "OHIO",
+      "home_name": "Nebraska Cornhuskers",
+      "away_name": "Ohio Bobcats",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -9.81,
+      "model_total": 62.13,
+      "model_home_win_prob": 0.6679,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -9.81,
+        "model_total": 62.13,
+        "model_home_win_prob": 0.6679,
+        "model_sigma": 22.598,
+        "kei_spread_home": -11.01,
+        "kei_total": 62.13,
+        "kei_home_win_prob": 0.6869,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 67.95, away OL 53.29) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 2.3, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': True, 'continuity_score': 10.0, 'uncertainty_boost': 0.4, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.4, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401861962",
+      "week": 1,
+      "home": "CONN",
+      "away": "FCS:LAF",
+      "home_name": "UConn Huskies",
+      "away_name": "Lafayette Leopards",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862701",
+      "week": 1,
+      "home": "ARMY",
+      "away": "FCS:BRY",
+      "home_name": "Army Black Knights",
+      "away_name": "Bryant Bulldogs",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401866410",
+      "week": 1,
+      "home": "BGSU",
+      "away": "FCS:TAR",
+      "home_name": "Bowling Green Falcons",
+      "away_name": "Tarleton State Texans",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401869960",
+      "week": 1,
+      "home": "JMU",
+      "away": "LIB",
+      "home_name": "James Madison Dukes",
+      "away_name": "Liberty Flames",
+      "kickoff": "2026-09-05T16:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -7.93,
+      "model_total": 57.57,
+      "model_home_win_prob": 0.6355,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -7.93,
+        "model_total": 57.57,
+        "model_home_win_prob": 0.6355,
+        "model_sigma": 22.886,
+        "kei_spread_home": -9.13,
+        "kei_total": 57.57,
+        "kei_home_win_prob": 0.655,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.8712, away idx 1.2081) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 56.85, away OL 55.08) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 59.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858207",
+      "week": 1,
+      "home": "PITT",
+      "away": "M-OH",
+      "home_name": "Pittsburgh Panthers",
+      "away_name": "Miami (OH) RedHawks",
+      "kickoff": "2026-09-05T16:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -18.09,
+      "model_total": 65.91,
+      "model_home_win_prob": 0.7912,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -18.09,
+        "model_total": 65.91,
+        "model_home_win_prob": 0.7912,
+        "model_sigma": 22.32,
+        "kei_spread_home": -19.29,
+        "kei_total": 65.91,
+        "kei_home_win_prob": 0.8063,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1388) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 61.35, away OL 53.36) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.1, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858432",
+      "week": 1,
+      "home": "OSU",
+      "away": "BALL",
+      "home_name": "Ohio State Buckeyes",
+      "away_name": "Ball State Cardinals",
+      "kickoff": "2026-09-05T16:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -41.0,
+      "model_total": 62.36,
+      "model_home_win_prob": 0.9652,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -41.0,
+        "model_total": 62.36,
+        "model_home_win_prob": 0.9652,
+        "model_sigma": 22.59,
+        "kei_spread_home": -42.2,
+        "kei_total": 62.36,
+        "kei_home_win_prob": 0.9691,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.8672) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 70.98, away OL 52.27) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Ohio Stadium', 'env_score': 80.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856665",
+      "week": 1,
+      "home": "SCAR",
+      "away": "KENT",
+      "home_name": "South Carolina Gamecocks",
+      "away_name": "Kent State Golden Flashes",
+      "kickoff": "2026-09-05T16:45Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -25.82,
+      "model_total": 62.7,
+      "model_home_win_prob": 0.8775,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -25.82,
+        "model_total": 62.7,
+        "model_home_win_prob": 0.8775,
+        "model_sigma": 22.207,
+        "kei_spread_home": -27.02,
+        "kei_total": 62.7,
+        "kei_home_win_prob": 0.8881,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.3403) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 67.76, away OL 50.64) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 65.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856659",
+      "week": 1,
+      "home": "UK",
+      "away": "FCS:YSU",
+      "home_name": "Kentucky Wildcats",
+      "away_name": "Youngstown State Penguins",
+      "kickoff": "2026-09-05T17:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856779",
+      "week": 1,
+      "home": "ISU",
+      "away": "FCS:SEMO",
+      "home_name": "Iowa State Cyclones",
+      "away_name": "Southeast Missouri State Redhawks",
+      "kickoff": "2026-09-05T17:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401864496",
+      "week": 1,
+      "home": "AFA",
+      "away": "FCS:DUQ",
+      "home_name": "Air Force Falcons",
+      "away_name": "Duquesne Dukes",
+      "kickoff": "2026-09-05T17:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862698",
+      "week": 1,
+      "home": "TEM",
+      "away": "FCS:URI",
+      "home_name": "Temple Owls",
+      "away_name": "Rhode Island Rams",
+      "kickoff": "2026-09-05T18:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856658",
+      "week": 1,
+      "home": "UGA",
+      "away": "FCS:TNST",
+      "home_name": "Georgia Bulldogs",
+      "away_name": "Tennessee State Tigers",
+      "kickoff": "2026-09-05T19:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856636",
+      "week": 1,
+      "home": "AUB",
+      "away": "BAY",
+      "home_name": "Auburn Tigers",
+      "away_name": "Baylor Bears",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": true,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -9.17,
+      "model_total": 66.51,
+      "model_home_win_prob": 0.6613,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -9.17,
+        "model_total": 66.51,
+        "model_home_win_prob": 0.6613,
+        "model_sigma": 22.043,
+        "kei_spread_home": -10.37,
+        "kei_total": 66.51,
+        "kei_home_win_prob": 0.681,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 70.02, away OL 68.84) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856666",
+      "week": 1,
+      "home": "TENN",
+      "away": "FCS:FUR",
+      "home_name": "Tennessee Volunteers",
+      "away_name": "Furman Paladins",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856667",
+      "week": 1,
+      "home": "TEX",
+      "away": "TXST",
+      "home_name": "Texas Longhorns",
+      "away_name": "Texas State Bobcats",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -23.95,
+      "model_total": 78.05,
+      "model_home_win_prob": 0.8602,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -23.95,
+        "model_total": 78.05,
+        "model_home_win_prob": 0.8602,
+        "model_sigma": 22.153,
+        "kei_spread_home": -25.15,
+        "kei_total": 78.05,
+        "kei_home_win_prob": 0.8719,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 72.36, away OL 55.88) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'DKR', 'env_score': 74.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856777",
+      "week": 1,
+      "home": "CIN",
+      "away": "BC",
+      "home_name": "Cincinnati Bearcats",
+      "away_name": "Boston College Eagles",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -21.96,
+      "model_total": 63.26,
+      "model_home_win_prob": 0.8344,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -21.96,
+        "model_total": 63.26,
+        "model_home_win_prob": 0.8344,
+        "model_sigma": 22.598,
+        "kei_spread_home": -23.16,
+        "kei_total": 63.26,
+        "kei_home_win_prob": 0.8473,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.9072) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 61.11, away OL 59.14) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858209",
+      "week": 1,
+      "home": "DUKE",
+      "away": "TULN",
+      "home_name": "Duke Blue Devils",
+      "away_name": "Tulane Green Wave",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -15.09,
+      "model_total": 71.53,
+      "model_home_win_prob": 0.7477,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -15.09,
+        "model_total": 71.53,
+        "model_home_win_prob": 0.7477,
+        "model_sigma": 22.619,
+        "kei_spread_home": -16.29,
+        "kei_total": 71.53,
+        "kei_home_win_prob": 0.7643,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.897) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 61.55, away OL 57.78) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858433",
+      "week": 1,
+      "home": "ORE",
+      "away": "BOISE",
+      "home_name": "Oregon Ducks",
+      "away_name": "Boise State Broncos",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -22.77,
+      "model_total": 70.23,
+      "model_home_win_prob": 0.8448,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -22.77,
+        "model_total": 70.23,
+        "model_home_win_prob": 0.8448,
+        "model_sigma": 22.444,
+        "kei_spread_home": -23.97,
+        "kei_total": 70.23,
+        "kei_home_win_prob": 0.8572,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 68.29, away OL 60.28) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Autzen Stadium', 'env_score': 90.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858434",
+      "week": 1,
+      "home": "PSU",
+      "away": "MRSH",
+      "home_name": "Penn State Nittany Lions",
+      "away_name": "Marshall Thundering Herd",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -19.36,
+      "model_total": 74.66,
+      "model_home_win_prob": 0.804,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -19.36,
+        "model_total": 74.66,
+        "model_home_win_prob": 0.804,
+        "model_sigma": 22.613,
+        "kei_spread_home": -20.56,
+        "kei_total": 74.66,
+        "kei_home_win_prob": 0.8184,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.2337) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 67.57, away OL 52.12) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 2.3, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': True, 'continuity_score': 10.0, 'uncertainty_boost': 0.4, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Beaver Stadium', 'env_score': 88.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401862694",
+      "week": 1,
+      "home": "CHAR",
+      "away": "FCS:CIT",
+      "home_name": "Charlotte 49ers",
+      "away_name": "The Citadel Bulldogs",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862696",
+      "week": 1,
+      "home": "NAVY",
+      "away": "FCS:TOW",
+      "home_name": "Navy Midshipmen",
+      "away_name": "Towson Tigers",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862700",
+      "week": 1,
+      "home": "UTSA",
+      "away": "FCS:RGV",
+      "home_name": "UTSA Roadrunners",
+      "away_name": "UT Rio Grande Valley Vaqueros",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401866627",
+      "week": 1,
+      "home": "APP",
+      "away": "FCS:ME",
+      "home_name": "App State Mountaineers",
+      "away_name": "Maine Black Bears",
+      "kickoff": "2026-09-05T19:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856772",
+      "week": 1,
+      "home": "TLSA",
+      "away": "OKST",
+      "home_name": "Tulsa Golden Hurricane",
+      "away_name": "Oklahoma State Cowboys",
+      "kickoff": "2026-09-05T19:45Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -0.02,
+      "model_total": 56.48,
+      "model_home_win_prob": 0.5004,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -0.02,
+        "model_total": 56.48,
+        "model_home_win_prob": 0.5004,
+        "model_sigma": 22.478,
+        "kei_spread_home": -1.07,
+        "kei_total": 56.48,
+        "kei_home_win_prob": 0.519,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2386, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 54.61, away OL 55.2) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.1464,
+            "reason": "short-favorite shrink 0.15 toward pick'em (|KEI| 1.2 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856635",
+      "week": 1,
+      "home": "ARK",
+      "away": "FCS:UNA",
+      "home_name": "Arkansas Razorbacks",
+      "away_name": "North Alabama Lions",
+      "kickoff": "2026-09-05T20:15Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858426",
+      "week": 1,
+      "home": "IOWA",
+      "away": "NIU",
+      "home_name": "Iowa Hawkeyes",
+      "away_name": "Northern Illinois Huskies",
+      "kickoff": "2026-09-05T20:15Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -20.48,
+      "model_total": 50.96,
+      "model_home_win_prob": 0.8175,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -20.48,
+        "model_total": 50.96,
+        "model_home_win_prob": 0.8175,
+        "model_sigma": 22.607,
+        "kei_spread_home": -21.68,
+        "kei_total": 50.96,
+        "kei_home_win_prob": 0.8312,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.9145, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 67.19, away OL 49.67) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401868356",
+      "week": 1,
+      "home": "USM",
+      "away": "FCS:ALCN",
+      "home_name": "Southern Miss Golden Eagles",
+      "away_name": "Alcorn State Braves",
+      "kickoff": "2026-09-05T21:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401860878",
+      "week": 1,
+      "home": "CSU",
+      "away": "WYO",
+      "home_name": "Colorado State Rams",
+      "away_name": "Wyoming Cowboys",
+      "kickoff": "2026-09-05T22:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401867973",
+      "week": 1,
+      "home": "ODU",
+      "away": "FCS:NORF",
+      "home_name": "Old Dominion Monarchs",
+      "away_name": "Norfolk State Spartans",
+      "kickoff": "2026-09-05T22:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856668",
+      "week": 1,
+      "home": "TAMU",
+      "away": "MOST",
+      "home_name": "Texas A&M Aggies",
+      "away_name": "Missouri State Bears",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -31.05,
+      "model_total": 69.71,
+      "model_home_win_prob": 0.9168,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -31.05,
+        "model_total": 69.71,
+        "model_home_win_prob": 0.9168,
+        "model_sigma": 22.436,
+        "kei_spread_home": -32.25,
+        "kei_total": 69.71,
+        "kei_home_win_prob": 0.9247,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1721) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 67.0, away OL 54.41) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 74.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856669",
+      "week": 1,
+      "home": "VAN",
+      "away": "FCS:APSU",
+      "home_name": "Vanderbilt Commodores",
+      "away_name": "Austin Peay Governors",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856770",
+      "week": 1,
+      "home": "TTU",
+      "away": "FCS:ACU",
+      "home_name": "Texas Tech Red Raiders",
+      "away_name": "Abilene Christian Wildcats",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856771",
+      "week": 1,
+      "home": "KSU",
+      "away": "FCS:NICH",
+      "home_name": "Kansas State Wildcats",
+      "away_name": "Nicholls Colonels",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401860880",
+      "week": 1,
+      "home": "UTAHST",
+      "away": "FCS:IDST",
+      "home_name": "Utah State Aggies",
+      "away_name": "Idaho State Bengals",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862695",
+      "week": 1,
+      "home": "MEM",
+      "away": "ARST",
+      "home_name": "Memphis Tigers",
+      "away_name": "Arkansas State Red Wolves",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862697",
+      "week": 1,
+      "home": "RICE",
+      "away": "FCS:HCU",
+      "home_name": "Rice Owls",
+      "away_name": "Houston Christian Huskies",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401862699",
+      "week": 1,
+      "home": "USF",
+      "away": "FIU",
+      "home_name": "South Florida Bulls",
+      "away_name": "Florida International Panthers",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -18.54,
+      "model_total": 74.7,
+      "model_home_win_prob": 0.7952,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -18.54,
+        "model_total": 74.7,
+        "model_home_win_prob": 0.7952,
+        "model_sigma": 22.482,
+        "kei_spread_home": -19.74,
+        "kei_total": 74.7,
+        "kei_home_win_prob": 0.81,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.3119, away idx 1.17) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 55.62, away OL 55.24) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401867866",
+      "week": 1,
+      "home": "MTSU",
+      "away": "FCS:MUR",
+      "home_name": "Middle Tennessee Blue Raiders",
+      "away_name": "Murray State Racers",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401868140",
+      "week": 1,
+      "home": "JVST",
+      "away": "FCS:EKU",
+      "home_name": "Jacksonville State Gamecocks",
+      "away_name": "Eastern Kentucky Colonels",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401868170",
+      "week": 1,
+      "home": "GASO",
+      "away": "FCS:CHSO",
+      "home_name": "Georgia Southern Eagles",
+      "away_name": "Charleston Southern Buccaneers",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401868316",
+      "week": 1,
+      "home": "USA",
+      "away": "FCS:SELA",
+      "home_name": "South Alabama Jaguars",
+      "away_name": "SE Louisiana Lions",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401870763",
+      "week": 1,
+      "home": "TROY",
+      "away": "SHSU",
+      "home_name": "Troy Trojans",
+      "away_name": "Sam Houston Bearkats",
+      "kickoff": "2026-09-05T23:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -16.47,
+      "model_total": 60.75,
+      "model_home_win_prob": 0.7719,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -16.47,
+        "model_total": 60.75,
+        "model_home_win_prob": 0.7719,
+        "model_sigma": 22.107,
+        "kei_spread_home": -17.67,
+        "kei_total": 60.75,
+        "kei_home_win_prob": 0.7879,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2906, away idx 1.1816) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 60.45, away OL 60.25) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856660",
+      "week": 1,
+      "home": "LSU",
+      "away": "CLEM",
+      "home_name": "LSU Tigers",
+      "away_name": "Clemson Tigers",
+      "kickoff": "2026-09-05T23:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -1.31,
+      "model_total": 49.23,
+      "model_home_win_prob": 0.5233,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -1.31,
+        "model_total": 49.23,
+        "model_home_win_prob": 0.5233,
+        "model_sigma": 22.443,
+        "kei_spread_home": -2.21,
+        "kei_total": 49.23,
+        "kei_home_win_prob": 0.5392,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.1706, away idx 1.1703) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 71.0, away OL 74.83) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Tiger Stadium', 'env_score': 92.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.30119999999999997,
+            "reason": "short-favorite shrink 0.30 toward pick'em (|KEI| 2.5 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856662",
+      "week": 1,
+      "home": "MSST",
+      "away": "ULM",
+      "home_name": "Mississippi State Bulldogs",
+      "away_name": "UL Monroe Warhawks",
+      "kickoff": "2026-09-05T23:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -12.22,
+      "model_total": 61.18,
+      "model_home_win_prob": 0.7074,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -12.22,
+        "model_total": 61.18,
+        "model_home_win_prob": 0.7074,
+        "model_sigma": 22.395,
+        "kei_spread_home": -13.42,
+        "kei_total": 61.18,
+        "kei_home_win_prob": 0.7255,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.1813, away idx 1.3282) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 62.05, away OL 64.0) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.2, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858211",
+      "week": 1,
+      "home": "VT",
+      "away": "FCS:VMI",
+      "home_name": "Virginia Tech Hokies",
+      "away_name": "VMI Keydets",
+      "kickoff": "2026-09-05T23:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858428",
+      "week": 1,
+      "home": "MICH",
+      "away": "WMU",
+      "home_name": "Michigan Wolverines",
+      "away_name": "Western Michigan Broncos",
+      "kickoff": "2026-09-05T23:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -12.12,
+      "model_total": 48.76,
+      "model_home_win_prob": 0.702,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -12.12,
+        "model_total": 48.76,
+        "model_home_win_prob": 0.702,
+        "model_sigma": 22.866,
+        "kei_spread_home": -13.32,
+        "kei_total": 48.76,
+        "kei_home_win_prob": 0.7199,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.9497, away idx 1.185) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 71.64, away OL 50.66) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': True, 'continuity_score': 70.0, 'uncertainty_boost': 0.14, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Michigan Stadium', 'env_score': 76.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401869129",
+      "week": 1,
+      "home": "LT",
+      "away": "FCS:NWST",
+      "home_name": "Louisiana Tech Bulldogs",
+      "away_name": "Northwestern State Demons",
+      "kickoff": "2026-09-05T23:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856637",
+      "week": 1,
+      "home": "UF",
+      "away": "FAU",
+      "home_name": "Florida Gators",
+      "away_name": "Florida Atlantic Owls",
+      "kickoff": "2026-09-05T23:45Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -11.47,
+      "model_total": 54.89,
+      "model_home_win_prob": 0.6946,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -11.47,
+        "model_total": 54.89,
+        "model_home_win_prob": 0.6946,
+        "model_sigma": 22.541,
+        "kei_spread_home": -12.67,
+        "kei_total": 54.89,
+        "kei_home_win_prob": 0.713,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.9087, away idx 1.0797) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 65.38, away OL 58.1) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Ben Hill Griffin', 'env_score': 86.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856775",
+      "week": 1,
+      "home": "BYU",
+      "away": "FCS:UTU",
+      "home_name": "BYU Cougars",
+      "away_name": "Utah Tech Trailblazers",
+      "kickoff": "2026-09-06T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858427",
+      "week": 1,
+      "home": "MD",
+      "away": "FCS:HAMP",
+      "home_name": "Maryland Terrapins",
+      "away_name": "Hampton Pirates",
+      "kickoff": "2026-09-06T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858431",
+      "week": 1,
+      "home": "NW",
+      "away": "FCS:SDST",
+      "home_name": "Northwestern Wildcats",
+      "away_name": "South Dakota State Jackrabbits",
+      "kickoff": "2026-09-06T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401869142",
+      "week": 1,
+      "home": "UL",
+      "away": "FCS:LAM",
+      "home_name": "Louisiana Ragin' Cajuns",
+      "away_name": "Lamar Cardinals",
+      "kickoff": "2026-09-06T00:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856774",
+      "week": 1,
+      "home": "ASU",
+      "away": "FCS:MORG",
+      "home_name": "Arizona State Sun Devils",
+      "away_name": "Morgan State Bears",
+      "kickoff": "2026-09-06T01:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401870790",
+      "week": 1,
+      "home": "NMSU",
+      "away": "FCS:MERC",
+      "home_name": "New Mexico State Aggies",
+      "away_name": "Mercyhurst Lakers",
+      "kickoff": "2026-09-06T01:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401856773",
+      "week": 1,
+      "home": "ARI",
+      "away": "FCS:NAU",
+      "home_name": "Arizona Wildcats",
+      "away_name": "Northern Arizona Lumberjacks",
+      "kickoff": "2026-09-06T01:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401860879",
+      "week": 1,
+      "home": "SDSU",
+      "away": "FCS:PRST",
+      "home_name": "San Diego State Aztecs",
+      "away_name": "Portland State Vikings",
+      "kickoff": "2026-09-06T01:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": true,
+      "fbs_vs_fbs": false,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401864497",
+      "week": 1,
+      "home": "HAW",
+      "away": "UNLV",
+      "home_name": "Hawai'i Rainbow Warriors",
+      "away_name": "UNLV Rebels",
+      "kickoff": "2026-09-06T02:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -1.62,
+      "model_total": 70.18,
+      "model_home_win_prob": 0.5287,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -1.62,
+        "model_total": 70.18,
+        "model_home_win_prob": 0.5287,
+        "model_sigma": 22.471,
+        "kei_spread_home": -2.48,
+        "kei_total": 70.18,
+        "kei_home_win_prob": 0.5439,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1471) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 54.01, away OL 57.69) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.33840000000000003,
+            "reason": "short-favorite shrink 0.34 toward pick'em (|KEI| 2.8 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401864498",
+      "week": 1,
+      "home": "UNM",
+      "away": "CMU",
+      "home_name": "New Mexico Lobos",
+      "away_name": "Central Michigan Chippewas",
+      "kickoff": "2026-09-06T02:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858210",
+      "week": 1,
+      "home": "CAL",
+      "away": "UCLA",
+      "home_name": "California Golden Bears",
+      "away_name": "UCLA Bruins",
+      "kickoff": "2026-09-06T02:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -11.63,
+      "model_total": 57.83,
+      "model_home_win_prob": 0.6974,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -11.63,
+        "model_total": 57.83,
+        "model_home_win_prob": 0.6974,
+        "model_sigma": 22.499,
+        "kei_spread_home": -12.83,
+        "kei_total": 57.83,
+        "kei_home_win_prob": 0.7157,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.265) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 60.6, away OL 65.72) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 1.1, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': False, 'continuity_score': 40.0, 'uncertainty_boost': 0.26, 'fidelity': 'approximate'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.4, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401864432",
+      "week": 1,
+      "home": "NEV",
+      "away": "WKU",
+      "home_name": "Nevada Wolf Pack",
+      "away_name": "Western Kentucky Hilltoppers",
+      "kickoff": "2026-09-06T02:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "used_in_spread": false,
+        "fcs_opener": true,
+        "tag": "PASS",
+        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+      }
+    },
+    {
+      "game_id": "401858437",
+      "week": 1,
+      "home": "WASH",
+      "away": "WSU",
+      "home_name": "Washington Huskies",
+      "away_name": "Washington State Cougars",
+      "kickoff": "2026-09-06T20:00Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -17.42,
+      "model_total": 61.52,
+      "model_home_win_prob": 0.7837,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -17.42,
+        "model_total": 61.52,
+        "model_home_win_prob": 0.7837,
+        "model_sigma": 22.198,
+        "kei_spread_home": -18.62,
+        "kei_total": 61.52,
+        "kei_home_win_prob": 0.7992,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 64.94, away OL 53.61) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 67.1, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401856661",
+      "week": 1,
+      "home": "MISS",
+      "away": "LOU",
+      "home_name": "Ole Miss Rebels",
+      "away_name": "Louisville Cardinals",
+      "kickoff": "2026-09-06T23:30Z",
+      "neutral_site": true,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -10.33,
+      "model_total": 66.73,
+      "model_home_win_prob": 0.6779,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -10.33,
+        "model_total": 66.73,
+        "model_home_win_prob": 0.6779,
+        "model_sigma": 22.368,
+        "kei_spread_home": -11.53,
+        "kei_total": 66.73,
+        "kei_home_win_prob": 0.6969,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.356) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 70.52, away OL 65.95) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858438",
+      "week": 1,
+      "home": "ND",
+      "away": "WIS",
+      "home_name": "Notre Dame Fighting Irish",
+      "away_name": "Wisconsin Badgers",
+      "kickoff": "2026-09-06T23:30Z",
+      "neutral_site": true,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": -15.47,
+      "model_total": 57.09,
+      "model_home_win_prob": 0.7574,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -15.47,
+        "model_total": 57.09,
+        "model_home_win_prob": 0.7574,
+        "model_sigma": 22.164,
+        "kei_spread_home": -16.67,
+        "kei_total": 57.09,
+        "kei_home_win_prob": 0.774,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 65.31, away OL 61.91) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    },
+    {
+      "game_id": "401858212",
+      "week": 1,
+      "home": "FSU",
+      "away": "SMU",
+      "home_name": "Florida State Seminoles",
+      "away_name": "SMU Mustangs",
+      "kickoff": "2026-09-07T23:30Z",
+      "neutral_site": false,
+      "fcs_home": false,
+      "fcs_away": false,
+      "fbs_vs_fbs": true,
+      "model_spread_home": 7.35,
+      "model_total": 61.29,
+      "model_home_win_prob": 0.3728,
+      "kei": {
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": 7.35,
+        "model_total": 61.29,
+        "model_home_win_prob": 0.3728,
+        "model_sigma": 22.649,
+        "kei_spread_home": 8.35,
+        "kei_total": 61.29,
+        "kei_home_win_prob": 0.3562,
+        "market_spread_home": null,
+        "edge_pts": null,
+        "tag": "PASS",
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.1892, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 64.97, away OL 64.18) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': True, 'continuity_score': 50.0, 'uncertainty_boost': 0.22, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'Doak Campbell', 'env_score': 70.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_dog",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 1.0,
+            "reason": "home-dog correction +1.00 (hist-cal home dogs too bullish; capped slice, not market copy)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
+      }
+    }
+  ]
+}

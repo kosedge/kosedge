@@ -14,6 +14,7 @@ import {
   formatWinProb,
   type CfbTeamOption,
 } from "@/lib/cfb-season-engine-format";
+import { findCfbKeiGame } from "@/lib/cfb-kei-artifacts";
 import { cfbModelDeskTruthStates } from "@/lib/cfb-truth-label";
 
 type PlayerProjectionRow = {
@@ -504,7 +505,7 @@ export default function CfbProjectGameClient({
             {engineVersion
               ? `Engine ${engineVersion}`
               : "Season engine via model-service"}{" "}
-            · approximate calibration · Edge Board markets-only unchanged
+            · approximate calibration · KEI is the published Edge Board line
           </p>
         </div>
       </section>
@@ -595,6 +596,21 @@ export default function CfbProjectGameClient({
                 secondary={`${away} ${awayMl} · from WP (no vig)`}
               />
             </div>
+            {(() => {
+              const published = findCfbKeiGame(
+                String(result.home_team || home),
+                String(result.away_team || away),
+              );
+              const kei = published?.kei?.kei_spread_home;
+              if (kei == null) return null;
+              return (
+                <p className="mt-3 text-xs text-kos-text/70">
+                  Published KEI {formatSpread(kei)} · Model{" "}
+                  {formatSpread(result.spread_home)} · Tag{" "}
+                  {published?.kei?.tag ?? "PASS"} · used_in_spread on KEI only
+                </p>
+              );
+            })()}
 
             <div
               className={`mt-4 rounded-xl border px-3 py-3 text-xs leading-relaxed ${
@@ -719,7 +735,7 @@ export default function CfbProjectGameClient({
             Drivers are inspectable layer inputs — not calibrated market
             attribution. ML is converted from model win probability (no vig).
             Fidelity: {result.fidelity ?? "approximate"}. MODEL research — not a
-            published handicap. Edge Board CFB stays live books only; no KEI.
+            published handicap. KEI on the Edge Board is the action line.
           </p>
         </section>
       ) : null}

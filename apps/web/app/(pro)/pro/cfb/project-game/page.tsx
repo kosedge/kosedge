@@ -58,14 +58,14 @@ export default async function CfbProjectGamePage({
       sportName="CFB"
       base="/pro/cfb"
       title="Project Game"
-      summary="Research fair — projected score, favorite spread, total, win%, and drivers. Not a wagering instruction. Edge Board stays markets-only; this desk never blends into KEI."
+      summary="Model is research-fair. When the matchup is on the W0/W1 slate, KEI is the published line. Edge / Tag lives on the Edge Board."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
       primaryHref="/pro/cfb/slate"
       primaryLabel="Official slate"
       secondaryHref="/edge-board/cfb"
-      secondaryLabel="Edge Board (markets)"
+      secondaryLabel="Edge Board"
     >
       <div className="mt-2 mb-4 flex flex-wrap gap-3 text-xs">
         <Link

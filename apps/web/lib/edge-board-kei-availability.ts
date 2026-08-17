@@ -1,7 +1,7 @@
 /**
  * Which Edge Board sports currently have a KEI (handicap) projection source.
  *
- * Markets-only sports (NHL, CFB today): Odds / fallback snapshots only.
+ * Markets-only sports (NHL today): Odds / fallback snapshots only.
  * Do NOT invent KEI numbers or a fake model vs handicap split until a real
  * fair-lines / kei_lines path exists for that sport.
  *
@@ -14,6 +14,7 @@ const KEI_SOURCE_SPORTS = new Set([
   "nba",
   "wnba",
   "ncaam",
+  "cfb",
 ]);
 
 /** Sports with published KEI from fair-lines or kei_lines_*.json. */
@@ -26,7 +27,7 @@ export function sportHasKeiSource(sportKey: string | null | undefined): boolean 
 
 /**
  * Markets-only board: show books, leave KEI / edge / tags empty and honest.
- * NHL + CFB until models ship — do not invent KEI.
+ * NHL until a model ships — do not invent KEI.
  */
 export function sportIsMarketsOnlyEdgeBoard(
   sportKey: string | null | undefined,
@@ -34,5 +35,5 @@ export function sportIsMarketsOnlyEdgeBoard(
   const sport = String(sportKey ?? "")
     .trim()
     .toLowerCase();
-  return sport === "nhl" || sport === "cfb";
+  return sport === "nhl";
 }
