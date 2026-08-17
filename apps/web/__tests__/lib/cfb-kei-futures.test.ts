@@ -9,6 +9,7 @@ import {
   loadCfbKeiPack,
 } from "@/lib/cfb-kei-artifacts";
 import { sportHasKeiSource } from "@/lib/edge-board-kei-availability";
+import { getKeiLines } from "@/lib/kei-lines";
 
 const W0_FBS = [
   ["TCU", "UNC"],
@@ -36,6 +37,14 @@ describe("cfb KEI + futures artifacts", () => {
       expect(row?.kei?.used_in_spread).toBe(true);
       expect(row?.kei?.kei_spread_home).not.toBe(row?.model_spread_home);
     }
+
+    const lines = getKeiLines("cfb");
+    expect(lines.length).toBeGreaterThanOrEqual(6);
+    const tcu = lines.find((g) => g.homeAbbr === "TCU" && g.awayAbbr === "UNC");
+    expect(tcu?.handicapSpreadHome).toBe(-20.39);
+    expect(tcu?.modelSpreadHome).toBe(-19.19);
+    expect(tcu?.homeTeam).toBe("TCU Horned Frogs");
+    expect(tcu?.awayTeam).toBe("North Carolina Tar Heels");
   });
 
   it("ships sim-derived futures for 136 teams with documented N", () => {
