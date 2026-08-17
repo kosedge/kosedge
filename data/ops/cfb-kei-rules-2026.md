@@ -9,9 +9,27 @@ Date: 2026-08-17
 - **Model** = research fair. Never gut-edited. `used_in_spread=false`.
 - **KEI** = published line = model + versioned menu + measured bias guard. `used_in_spread=true`.
 - **Market** = information only. Never auto-author of KEI.
-- **Edge / Tag** = KEI vs best market only.
+- **Edge / Tag** = KEI vs **trusted** market only.
 - Early season (calendar weeks 0–2): PLAY at **4.0** pts, LEAN at **2.5**, PASS default.
 - No volume targets. Honest PASS is success.
+- Junk / single-book / wrong-game numbers cannot PLAY.
+
+## Trusted market (outlier guard)
+
+Applied on the CFB Edge Board before Tag. Documented in `apps/web/lib/cfb-trusted-market.ts`.
+
+| Gate | Rule |
+|------|------|
+| Outlier vs open | If \|best − open\| ≥ **3.5**, drop best; try open |
+| Absurd vs KEI | If \|market − KEI\| ≥ **12**, untrusted — Tag PASS, market shown as untrusted |
+| Single book | If only one book and \|market − KEI\| ≥ **8**, untrusted |
+| No trusted market | Tag = PASS. Do not invent PLAY |
+
+Example: TCU KEI −20.4 vs Hard Rock +8.5 / open +7.5 → absurd vs KEI → **PASS** (not PLAY).
+
+## Name match
+
+Odds names are folded (José/Jose, Hawai'i/Hawaii) plus abbr keys so every published KEI row stays on the Week 0/1 tab. See `apps/web/lib/cfb-match-keys.ts`.
 
 ## Handicap menu (order)
 

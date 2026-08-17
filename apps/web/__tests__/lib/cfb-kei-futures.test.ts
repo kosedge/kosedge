@@ -26,6 +26,7 @@ describe("cfb KEI + futures artifacts", () => {
     expect(pack.used_in_spread).toBe(true);
     expect(pack.model_used_in_spread).toBe(false);
     expect(pack.n_w0_fbs_with_kei).toBe(6);
+    expect((pack.n_fbs_with_kei ?? 0) >= 49).toBe(true);
     expect(sportHasKeiSource("cfb")).toBe(true);
 
     const w0 = cfbKeiGames(0).filter((g) => g.fbs_vs_fbs);

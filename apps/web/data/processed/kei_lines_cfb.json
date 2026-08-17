@@ -166,6 +166,24 @@
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
+      "id": "401858424",
+      "homeTeam": "Illinois Fighting Illini",
+      "awayTeam": "UAB Blazers",
+      "homeAbbr": "ILL",
+      "awayAbbr": "UAB",
+      "commenceTime": "2026-09-04T01:00Z",
+      "week": 1,
+      "handicapSpreadHome": -24.02,
+      "handicapTotal": 71.44,
+      "handicapHomeWinProb": 0.8575,
+      "projSpreadHome": -24.02,
+      "projTotal": 71.44,
+      "modelSpreadHome": -22.82,
+      "modelTotal": 71.44,
+      "modelHomeWinProb": 0.8452,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
       "id": "401864495",
       "homeTeam": "Eastern Michigan Eagles",
       "awayTeam": "San Jos\u00e9 State Spartans",
@@ -199,6 +217,24 @@
       "modelSpreadHome": -32.41,
       "modelTotal": 65.07,
       "modelHomeWinProb": 0.9233,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
+      "id": "401858429",
+      "homeTeam": "Michigan State Spartans",
+      "awayTeam": "Toledo Rockets",
+      "homeAbbr": "MSU",
+      "awayAbbr": "TOL",
+      "commenceTime": "2026-09-05T00:00Z",
+      "week": 1,
+      "handicapSpreadHome": -4.51,
+      "handicapTotal": 53.16,
+      "handicapHomeWinProb": 0.5806,
+      "projSpreadHome": -4.51,
+      "projTotal": 53.16,
+      "modelSpreadHome": -3.92,
+      "modelTotal": 53.16,
+      "modelHomeWinProb": 0.5701,
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
@@ -238,6 +274,24 @@
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
+      "id": "401856634",
+      "homeTeam": "Alabama Crimson Tide",
+      "awayTeam": "East Carolina Pirates",
+      "homeAbbr": "ALA",
+      "awayAbbr": "ECU",
+      "commenceTime": "2026-09-05T16:00Z",
+      "week": 1,
+      "handicapSpreadHome": -17.44,
+      "handicapTotal": 49.9,
+      "handicapHomeWinProb": 0.7769,
+      "projSpreadHome": -17.44,
+      "projTotal": 49.9,
+      "modelSpreadHome": -16.24,
+      "modelTotal": 49.9,
+      "modelHomeWinProb": 0.761,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
       "id": "401856778",
       "homeTeam": "Houston Cougars",
       "awayTeam": "Oregon State Beavers",
@@ -271,6 +325,24 @@
       "modelSpreadHome": -16.35,
       "modelTotal": 56.19,
       "modelHomeWinProb": 0.7646,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
+      "id": "401858425",
+      "homeTeam": "Indiana Hoosiers",
+      "awayTeam": "North Texas Mean Green",
+      "homeAbbr": "IU",
+      "awayAbbr": "UNT",
+      "commenceTime": "2026-09-05T16:00Z",
+      "week": 1,
+      "handicapSpreadHome": -20.57,
+      "handicapTotal": 73.89,
+      "handicapHomeWinProb": 0.8206,
+      "projSpreadHome": -20.57,
+      "projTotal": 73.89,
+      "modelSpreadHome": -19.37,
+      "modelTotal": 73.89,
+      "modelHomeWinProb": 0.8063,
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
@@ -508,6 +580,24 @@
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
+      "id": "401860878",
+      "homeTeam": "Colorado State Rams",
+      "awayTeam": "Wyoming Cowboys",
+      "homeAbbr": "CSU",
+      "awayAbbr": "WYO",
+      "commenceTime": "2026-09-05T22:00Z",
+      "week": 1,
+      "handicapSpreadHome": 5.61,
+      "handicapTotal": 50.05,
+      "handicapHomeWinProb": 0.4025,
+      "projSpreadHome": 5.61,
+      "projTotal": 50.05,
+      "modelSpreadHome": 5.37,
+      "modelTotal": 50.05,
+      "modelHomeWinProb": 0.4066,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
       "id": "401856668",
       "homeTeam": "Texas A&M Aggies",
       "awayTeam": "Missouri State Bears",
@@ -523,6 +613,24 @@
       "modelSpreadHome": -31.05,
       "modelTotal": 69.71,
       "modelHomeWinProb": 0.9168,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
+      "id": "401862695",
+      "homeTeam": "Memphis Tigers",
+      "awayTeam": "Arkansas State Red Wolves",
+      "homeAbbr": "MEM",
+      "awayAbbr": "ARST",
+      "commenceTime": "2026-09-05T23:00Z",
+      "week": 1,
+      "handicapSpreadHome": -12.53,
+      "handicapTotal": 53.75,
+      "handicapHomeWinProb": 0.7072,
+      "projSpreadHome": -12.53,
+      "projTotal": 53.75,
+      "modelSpreadHome": -11.33,
+      "modelTotal": 53.75,
+      "modelHomeWinProb": 0.689,
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
@@ -652,6 +760,24 @@
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {
+      "id": "401864498",
+      "homeTeam": "New Mexico Lobos",
+      "awayTeam": "Central Michigan Chippewas",
+      "homeAbbr": "UNM",
+      "awayAbbr": "CMU",
+      "commenceTime": "2026-09-06T02:00Z",
+      "week": 1,
+      "handicapSpreadHome": -15.18,
+      "handicapTotal": 50.22,
+      "handicapHomeWinProb": 0.7464,
+      "projSpreadHome": -15.18,
+      "projTotal": 50.22,
+      "modelSpreadHome": -13.98,
+      "modelTotal": 50.22,
+      "modelHomeWinProb": 0.7293,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
       "id": "401858210",
       "homeTeam": "California Golden Bears",
       "awayTeam": "UCLA Bruins",
@@ -667,6 +793,24 @@
       "modelSpreadHome": -11.63,
       "modelTotal": 57.83,
       "modelHomeWinProb": 0.6974,
+      "kei_version": "cfb-kei-v1.0-2026w0"
+    },
+    {
+      "id": "401864432",
+      "homeTeam": "Nevada Wolf Pack",
+      "awayTeam": "Western Kentucky Hilltoppers",
+      "homeAbbr": "NEV",
+      "awayAbbr": "WKU",
+      "commenceTime": "2026-09-06T02:30Z",
+      "week": 1,
+      "handicapSpreadHome": 10.0,
+      "handicapTotal": 59.68,
+      "handicapHomeWinProb": 0.3264,
+      "projSpreadHome": 10.0,
+      "projTotal": 59.68,
+      "modelSpreadHome": 9.0,
+      "modelTotal": 59.68,
+      "modelHomeWinProb": 0.3428,
       "kei_version": "cfb-kei-v1.0-2026w0"
     },
     {

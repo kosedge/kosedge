@@ -408,7 +408,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/edge-board/cfb",
         title: "Public Edge Board",
         description:
-          "Sportsbook Open/Best when posted. No CFB KEI — columns stay blank.",
+          "KEI vs trusted market. Outlier books cannot PLAY. Model stays research-fair.",
         cta: "Open edge board →",
         accent: "green",
       },
@@ -431,7 +431,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/kei-lines/cfb",
         title: "KEI Lines",
         description:
-          "No handicap model on this sport yet — honest empty, not invented KEI. Week 3 gate.",
+          "Published CFB KEI (W0/W1). Aligns with Edge Board. Model column stays research.",
         cta: "View KEI status →",
         accent: "neutral",
       },

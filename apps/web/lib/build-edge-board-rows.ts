@@ -37,6 +37,7 @@ import {
 } from "@/lib/nfl-edge-board-week";
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import { applyCfbTrustedMarketToRows } from "@/lib/cfb-trusted-market";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
 import {
   keiGamesFromNflFairLines,
@@ -211,5 +212,6 @@ export async function assembleEdgeBoardRows(
   const odds = withFallback(sport, oddsRows);
   const keiGames = await resolveKeiGames(sport);
   const seeded = ensureAllKeiGamesOnBoard(odds, sport, keiGames);
-  return mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);
+  const merged = mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);
+  return sport === "cfb" ? applyCfbTrustedMarketToRows(merged) : merged;
 }

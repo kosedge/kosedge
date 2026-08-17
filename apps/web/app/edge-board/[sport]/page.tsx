@@ -175,7 +175,9 @@ export default async function EdgeBoardSportPage({
                   ? sportKey === "cfb"
                     ? `Live sportsbook Open/Best when available. ${keiCode} handicap is not shipped — KEI columns stay blank (books ≠ KEI). Project Game numbers are MODEL research and are not copied here as edge. Research board, not picks.`
                     : `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
-                  : `KEI (handicap) vs market. Open + Current when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
+                  : sportKey === "cfb"
+                    ? `KEI vs trusted market only. Outlier / single-book junk cannot PLAY. Model is research-fair. Early PLAY bar 4 pts · PASS default.`
+                    : `KEI (handicap) vs market. Open + Current when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
               </p>
             ) : null}
           </div>
@@ -247,8 +249,9 @@ export default async function EdgeBoardSportPage({
               </Link>
             </div>
             <p className="text-[11px] text-gray-500">
-              Week {cfbWeek} · Tag = KEI vs market · Model is research-only ·
-              early PLAY bar 4 pts · PASS default ·{" "}
+              Week {cfbWeek} · Tag = KEI vs trusted market · Model is
+              research-only · early PLAY bar 4 pts · PASS default · junk /
+              outlier books cannot PLAY ·{" "}
               <Link
                 href="/pro/cfb/overview"
                 className="text-kos-gold/80 hover:text-kos-gold hover:underline"

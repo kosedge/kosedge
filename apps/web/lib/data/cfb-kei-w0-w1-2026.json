@@ -3,13 +3,13 @@
   "kei_version": "cfb-kei-v1.0-2026w0",
   "engine_version": "cfb-season-engine-v0.9-inseason",
   "as_of": "2026-08-17",
-  "generated_at": "2026-08-17T10:43:38Z",
+  "generated_at": "2026-08-17T11:54:36Z",
   "weeks": [
     0,
     1
   ],
   "n_games": 97,
-  "n_fbs_with_kei": 41,
+  "n_fbs_with_kei": 49,
   "n_w0_fbs_with_kei": 6,
   "used_in_spread": true,
   "model_used_in_spread": false,
@@ -1055,12 +1055,82 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": -22.82,
+      "model_total": 71.44,
+      "model_home_win_prob": 0.8452,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -22.82,
+        "model_total": 71.44,
+        "model_home_win_prob": 0.8452,
+        "model_sigma": 22.462,
+        "kei_spread_home": -24.02,
+        "kei_total": 71.44,
+        "kei_home_win_prob": 0.8575,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.3661, away idx None) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 60.32, away OL None) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -1322,12 +1392,89 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": -3.92,
+      "model_total": 53.16,
+      "model_home_win_prob": 0.5701,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -3.92,
+        "model_total": 53.16,
+        "model_home_win_prob": 0.5701,
+        "model_sigma": 22.181,
+        "kei_spread_home": -4.51,
+        "kei_total": 53.16,
+        "kei_home_win_prob": 0.5806,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.2692, away idx None) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 62.81, away OL None) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 62.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 0.6144,
+            "reason": "short-favorite shrink 0.61 toward pick'em (|KEI| 5.1 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -1522,12 +1669,82 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": -16.24,
+      "model_total": 49.9,
+      "model_home_win_prob": 0.761,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -16.24,
+        "model_total": 49.9,
+        "model_home_win_prob": 0.761,
+        "model_sigma": 22.89,
+        "kei_spread_home": -17.44,
+        "kei_total": 49.9,
+        "kei_home_win_prob": 0.7769,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.9469, away idx None) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 76.26, away OL None) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Bryant-Denny', 'env_score': 77.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -1749,12 +1966,82 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": -19.37,
+      "model_total": 73.89,
+      "model_home_win_prob": 0.8063,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -19.37,
+        "model_total": 73.89,
+        "model_home_win_prob": 0.8063,
+        "model_sigma": 22.413,
+        "kei_spread_home": -20.57,
+        "kei_total": 73.89,
+        "kei_home_win_prob": 0.8206,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 1.38, away idx None) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 60.17, away OL None) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 65.2, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -3246,12 +3533,89 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": 5.37,
+      "model_total": 50.05,
+      "model_home_win_prob": 0.4066,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": 5.37,
+        "model_total": 50.05,
+        "model_home_win_prob": 0.4066,
+        "model_sigma": 22.717,
+        "kei_spread_home": 5.61,
+        "kei_total": 50.05,
+        "kei_home_win_prob": 0.4025,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx None, away idx 1.38) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL None, away OL 52.64) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_dog",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 1.0,
+            "reason": "home-dog correction +1.00 (hist-cal home dogs too bullish; capped slice, not market copy)"
+          },
+          {
+            "factor": "short_favorite_shrink",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -0.7644,
+            "reason": "short-favorite shrink 0.76 toward pick'em (|KEI| 6.4 in 1.0-7.5) \u2014 do not fire thin favs"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -3456,12 +3820,82 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": -11.33,
+      "model_total": 53.75,
+      "model_home_win_prob": 0.689,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -11.33,
+        "model_total": 53.75,
+        "model_home_win_prob": 0.689,
+        "model_sigma": 22.977,
+        "kei_spread_home": -12.53,
+        "kei_total": 53.75,
+        "kei_home_win_prob": 0.7072,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx 0.8597, away idx None) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL 64.57, away OL None) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.9, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -4420,12 +4854,82 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": -13.98,
+      "model_total": 50.22,
+      "model_home_win_prob": 0.7293,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": -13.98,
+        "model_total": 50.22,
+        "model_home_win_prob": 0.7293,
+        "model_sigma": 22.889,
+        "kei_spread_home": -15.18,
+        "kei_total": 50.22,
+        "kei_home_win_prob": 0.7464,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx None, away idx 0.9188) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL None, away OL 52.92) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_fav",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": -1.2,
+            "reason": "home-favorite correction -1.20 (hist-cal residual ~+6.8 vs close; cfb-bias-guard-v1-histcal-20260805 takes a capped slice, not the close)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {
@@ -4530,12 +5034,82 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
+      "model_spread_home": 9.0,
+      "model_total": 59.68,
+      "model_home_win_prob": 0.3428,
       "kei": {
         "kei_version": "cfb-kei-v1.0-2026w0",
-        "used_in_spread": false,
-        "fcs_opener": true,
+        "bias_guard_version": "cfb-bias-guard-v1-histcal-20260805",
+        "used_in_spread": true,
+        "model_used_in_spread": false,
+        "model_spread_home": 9.0,
+        "model_total": 59.68,
+        "model_home_win_prob": 0.3428,
+        "model_sigma": 22.225,
+        "kei_spread_home": 10.0,
+        "kei_total": 59.68,
+        "kei_home_win_prob": 0.3264,
+        "market_spread_home": null,
+        "edge_pts": null,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "investigate": false,
+        "early_season": true,
+        "fbs_vs_fbs": true,
+        "fcs_opener": false,
+        "play_threshold": 4.0,
+        "lean_threshold": 2.5,
+        "drivers": [
+          {
+            "factor": "qb_situation",
+            "applied": false,
+            "in_model": true,
+            "reason": "QB situation in model compose (home idx None, away idx 1.2672) \u2014 not restacked"
+          },
+          {
+            "factor": "trench_ol",
+            "applied": false,
+            "in_model": true,
+            "reason": "OL / trench proxy in model units (home OL None, away OL 54.72) \u2014 not restacked"
+          },
+          {
+            "factor": "returning_production",
+            "applied": false,
+            "in_model": true,
+            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+          },
+          {
+            "factor": "coaching",
+            "applied": false,
+            "in_model": true,
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+          },
+          {
+            "factor": "hfa",
+            "applied": false,
+            "in_model": true,
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) \u2014 not restacked"
+          },
+          {
+            "factor": "rest_travel",
+            "applied": false,
+            "in_model": false,
+            "reason": "rest / travel not in stack (no current-path fact)"
+          },
+          {
+            "factor": "injury_current",
+            "applied": false,
+            "in_model": false,
+            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+          },
+          {
+            "factor": "bias_guard_home_dog",
+            "applied": true,
+            "version": "cfb-bias-guard-v1-histcal-20260805",
+            "spread_pts": 1.0,
+            "reason": "home-dog correction +1.00 (hist-cal home dogs too bullish; capped slice, not market copy)"
+          }
+        ],
+        "rules_doc": "data/ops/cfb-kei-rules-2026.md"
       }
     },
     {

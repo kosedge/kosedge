@@ -21,6 +21,7 @@ from src.services.cfb_season_engine import (  # noqa: E402
     project_game_to_dict,
     resolve_season_universe,
 )
+from src.services.cfb_season_engine.types import TeamProjectionState  # noqa: E402
 from src.services.cfb_season_engine.cfb_futures import (  # noqa: E402
     FUTURES_VERSION,
     accumulate_path,
@@ -39,6 +40,28 @@ from src.services.cfb_season_engine import priors as P  # noqa: E402
 AS_OF = "2026-08-17"
 N_FUTURES = 2500
 SEED = 20260817
+
+
+def hydrate_missing_from_power_sot(universe) -> int:
+    """Fill official FBS codes that the packaged roster universe omitted."""
+    path = MS / "src/services/cfb_season_engine/data/cfb_power_sot_2026.json"
+    pack = json.loads(path.read_text(encoding="utf-8"))
+    added = 0
+    for row in pack.get("teams") or []:
+        code = str(row.get("team") or "").upper()
+        if not code or code in universe.teams:
+            continue
+        universe.teams[code] = TeamProjectionState(
+            team=code,
+            offense_index=float(row.get("offense_index") or 1.0),
+            defense_index=float(row.get("defense_index") or 1.0),
+            early_season_uncertainty=float(row.get("early_season_uncertainty") or 0.35),
+            source="power_sot_v0.15_fill",
+            fidelity="approximate",
+            notes={"fill": "power_sot_identity_gap"},
+        )
+        added += 1
+    return added
 
 
 def _load_official() -> Dict[str, Any]:
@@ -259,19 +282,23 @@ def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def main() -> None:
+    kei_only = "--kei-only" in sys.argv
     universe, meta = resolve_season_universe(season=2026, as_of_week=1, demo=True, session=None)
-    print("universe", meta.get("mode"), "teams", len(universe.teams))
+    filled = hydrate_missing_from_power_sot(universe)
+    print("universe", meta.get("mode"), "teams", len(universe.teams), "power_sot_fill", filled)
     official = _load_official()
     board = build_kei_board(universe, official)
     print("KEI W0 FBS", board["n_w0_fbs_with_kei"], "all FBS", board["n_fbs_with_kei"])
-    futures = build_futures(universe, official)
-    print("futures N", futures["n_sims"], "top natty", [t["team"] for t in futures["top_natty"][:5]])
 
     _write(MS / "src/services/cfb_season_engine/data/cfb_kei_w0_w1_2026.json", board)
-    _write(MS / "src/services/cfb_season_engine/data/cfb_futures_2026.json", futures)
     _write(ROOT / "apps/web/lib/data/cfb-kei-w0-w1-2026.json", board)
-    _write(ROOT / "apps/web/lib/data/cfb-futures-2026.json", futures)
     _write(ROOT / "apps/web/data/processed/kei_lines_cfb.json", kei_lines_file(board))
+    if kei_only:
+        return
+    futures = build_futures(universe, official)
+    print("futures N", futures["n_sims"], "top natty", [t["team"] for t in futures["top_natty"][:5]])
+    _write(MS / "src/services/cfb_season_engine/data/cfb_futures_2026.json", futures)
+    _write(ROOT / "apps/web/lib/data/cfb-futures-2026.json", futures)
 
 
 if __name__ == "__main__":

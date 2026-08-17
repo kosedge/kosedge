@@ -3,6 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import SportsbookBadge from "@/components/SportsbookBadge";
+import { trustCfbMarket } from "@/lib/cfb-trusted-market";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
@@ -583,6 +584,11 @@ function edgeToTag(
     return pub.tag;
   }
   if (edgeNum == null) return undefined;
+  if (sport === "cfb") {
+    if (edgeNum >= 4.0) return "PLAY";
+    if (edgeNum >= 2.5) return "LEAN";
+    return "PASS";
+  }
   if (sport === "mlb" && market === "line") {
     if (edgeNum >= 3.0) return "PLAY";
     if (edgeNum >= 1.5) return "LEAN";
@@ -944,8 +950,18 @@ export function flatRowsToLegacy(
       // Negative => model likes Home more; positive => Away.
       const bestSpreadNum = parseSpread(bestLine.bottom.label);
       const keiSpreadNum = parseSpread(keiLine.bottom.label);
+      const cfbTrusted =
+        String(sportKey).toLowerCase() !== "cfb" ||
+        trustCfbMarket({
+          kei: lineRow?.kei ?? keiSpreadNum,
+          best: lineRow?.best ?? bestSpreadNum,
+          open: lineRow?.open,
+        }).trusted;
       signedLineEdge =
-        hasSportsbookLine && bestSpreadNum != null && keiSpreadNum != null
+        hasSportsbookLine &&
+        cfbTrusted &&
+        bestSpreadNum != null &&
+        keiSpreadNum != null
           ? keiSpreadNum - bestSpreadNum
           : null;
       edgeLineNum =

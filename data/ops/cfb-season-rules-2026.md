@@ -10,7 +10,7 @@ Companions: `cfb-kei-rules-2026.md` · engine `cfb-season-engine-v0.15-power-sot
 | Model | Research fair. Power / project-game / win totals. Never gut-edited. |
 | KEI | Our published line. Model + menu + bias guard. |
 | Market | Information. Never silent chase. |
-| Edge / Tag | KEI vs best book only. |
+| Edge / Tag | KEI vs **trusted** market only. Junk / outlier books cannot PLAY. |
 
 ## Early-season thresholds
 
@@ -39,4 +39,4 @@ Manual v1. KEI may reprice. Model does not. Boards say packaged as_of when there
 
 ## Residual honesty
 
-8 W1 FBS rows lack KEI until roster identity exists (UAB, TOL, ECU, UNT, CSU, ARST, UNM, NEV). W0 FBS-FBS is complete (6/6).
+W0 FBS–FBS KEI is complete (6/6). W1 FBS–FBS KEI is complete (43/43) via power-SoT fill for roster-identity gaps (UAB, TOL, ECU, UNT, CSU, ARST, UNM, NEV). Those eight still lack packaged roster/QB depth — strength is power SoT, labeled approximate. No live injury feed.

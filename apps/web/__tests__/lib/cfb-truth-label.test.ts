@@ -52,7 +52,7 @@ describe("cfb truth-label wiring", () => {
       "utf8",
     );
     expect(board).toContain("stampCfbEdgeBoardWeek");
-    expect(board).toContain("Tag = KEI vs market");
+    expect(board).toContain("Tag = KEI vs trusted market");
     expect(board).toContain("/edge-board/cfb?week=0");
   });
 });
