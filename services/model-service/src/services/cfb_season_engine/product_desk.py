@@ -13,6 +13,7 @@ USED_IN_SPREAD = False
 KEI_USED_IN_SPREAD = True
 DATA_DIR = Path(__file__).resolve().parent / "data"
 OFFICIAL_SCHEDULE_PATH = DATA_DIR / "cfb_official_schedule_2026.json"
+OFFICIAL_SLATE_PATH = DATA_DIR / "cfb_official_slate_2026.json"
 FBS_UNIVERSE_PATH = DATA_DIR / "cfb_fbs_universe_2026.json"
 KEI_BOARD_PATH = DATA_DIR / "cfb_kei_w0_w1_2026.json"
 
@@ -39,8 +40,13 @@ def official_week_board(
     *,
     season: int = 2026,
 ) -> Dict[str, Any]:
-    blob = _load_json(OFFICIAL_SCHEDULE_PATH)
+    slate = _load_json(OFFICIAL_SLATE_PATH)
+    season_blob = _load_json(OFFICIAL_SCHEDULE_PATH)
     wanted = {int(w) for w in weeks}
+    slate_weeks = {
+        int(w) for w in (slate.get("weeks") or []) if str(w).isdigit() or isinstance(w, int)
+    }
+    blob = slate if slate.get("games") and wanted.issubset(slate_weeks or wanted) else season_blob
     rows: List[Dict[str, Any]] = []
     for raw in blob.get("games") or []:
         if not isinstance(raw, dict):
@@ -79,6 +85,10 @@ def official_week_board(
         "slate_complete": bool(blob.get("slate_complete", True) and rows),
         "official": bool(blob.get("official", True) and rows),
         "source": blob.get("source") or "packaged_official",
+        "slate_version": blob.get("slate_version"),
+        "primary_source": blob.get("primary_source"),
+        "factcheck_source": blob.get("factcheck_source"),
+        "as_of": blob.get("as_of"),
         "used_in_spread": USED_IN_SPREAD,
         "kei": False,
         "games": rows,

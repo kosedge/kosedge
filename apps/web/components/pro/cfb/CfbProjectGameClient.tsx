@@ -293,6 +293,15 @@ function PlayerHooksTable({
   );
 }
 
+export type CfbSlateRowOption = {
+  key: string;
+  label: string;
+  home: string;
+  away: string;
+  week: number;
+  neutral: boolean;
+};
+
 export default function CfbProjectGameClient({
   teams,
   defaultHome = "OSU",
@@ -300,6 +309,7 @@ export default function CfbProjectGameClient({
   defaultWeek = 1,
   defaultNeutral = false,
   engineVersion,
+  slateRows = [],
 }: {
   teams: CfbTeamOption[];
   defaultHome?: string;
@@ -307,6 +317,7 @@ export default function CfbProjectGameClient({
   defaultWeek?: number;
   defaultNeutral?: boolean;
   engineVersion?: string;
+  slateRows?: CfbSlateRowOption[];
 }) {
   const [homeTeam, setHomeTeam] = useState(defaultHome);
   const [awayTeam, setAwayTeam] = useState(defaultAway);
@@ -413,10 +424,37 @@ export default function CfbProjectGameClient({
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
-          Pick two FBS teams and project a market-style line — spread, total,
-          win probability with American moneyline — plus approximate QB /
-          skill player hooks and the roster / unit / HFA / coaching drivers.
+          Pick two FBS teams or load a KosEdge official-slate row. Model is
+          research-fair. Week alignment follows the same W0/W1 artifact as the
+          model page and Edge Board.
         </p>
+        {slateRows.length ? (
+          <div className="mb-4">
+            <label className={labelClass} htmlFor="cfb-slate-row">
+              Official slate
+            </label>
+            <select
+              id="cfb-slate-row"
+              className={selectClass}
+              defaultValue=""
+              onChange={(e) => {
+                const row = slateRows.find((r) => r.key === e.target.value);
+                if (!row) return;
+                setHomeTeam(row.home);
+                setAwayTeam(row.away);
+                setWeek(row.week);
+                setNeutralSite(row.neutral);
+              }}
+            >
+              <option value="">Load W0/W1 slate row…</option>
+              {slateRows.map((row) => (
+                <option key={row.key} value={row.key}>
+                  {row.label}
+                </option>
+              ))}
+            </select>
+          </div>
+        ) : null}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div>
             <label className={labelClass} htmlFor="cfb-away">

@@ -1,5 +1,7 @@
 import Link from "next/link";
+import CfbOfficialSlatePanel from "@/components/pro/cfb/CfbOfficialSlatePanel";
 import SportHubShell from "@/components/pro/SportHubShell";
+import { parseOfficialSlateWeek } from "@/lib/cfb-official-slate";
 import {
   fetchCfbPerformance,
   fetchCfbSeasonEngineStatus,
@@ -22,7 +24,7 @@ const TOOLS = [
   {
     href: "/pro/cfb/slate",
     title: "Official slate",
-    body: "Week 0 / Week 1 boards from the official 2026 ESPN schedule. Open a row in Project Game.",
+    body: "KosEdge W0/W1 artifact — ESPN primary, Odds API fact-check. Open a row in Project Game.",
   },
   {
     href: "/pro/cfb/projections",
@@ -46,7 +48,26 @@ const TOOLS = [
   },
 ] as const;
 
-export default async function CfbSeasonModelHubPage() {
+type SearchValue = string | string[] | undefined;
+
+function firstValue(value: SearchValue): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  return value;
+}
+
+export default async function CfbSeasonModelHubPage({
+  searchParams,
+}: {
+  searchParams?:
+    | Promise<Record<string, SearchValue>>
+    | Record<string, SearchValue>;
+}) {
+  const sp =
+    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+      ? await (searchParams as Promise<Record<string, SearchValue>>)
+      : ((searchParams as Record<string, SearchValue>) ?? {});
+  const week = parseOfficialSlateWeek(firstValue(sp.week));
+
   const [status, performance] = await Promise.all([
     fetchCfbSeasonEngineStatus(),
     fetchCfbPerformance({ limit: 100 }),
@@ -89,13 +110,21 @@ export default async function CfbSeasonModelHubPage() {
         <div className="rounded-xl border border-white/10 bg-black/35 px-4 py-4">
           <h2 className="text-sm font-semibold text-kos-gold">Fidelity</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
-            Official 2026 ESPN slate + 136/136 roster overlay. Named ESPN QBs:{" "}
+            KosEdge official slate (ESPN + Odds API fact-check) + 136/136 roster
+            overlay. Named ESPN QBs:{" "}
             {fidelity?.espn_named_qb ?? "—"} · warehouse fills labeled on Team
             DNA (not silent 50/50). Returning snap% and portal-out still
             proxies; coaching / HFA curated.
           </p>
         </div>
       </section>
+
+      <CfbOfficialSlatePanel
+        week={week}
+        hrefForWeek={(w) =>
+          w === 0 ? "/pro/cfb/model" : `/pro/cfb/model?week=${w}`
+        }
+      />
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 px-4 py-4 text-sm text-kos-text/70">
         <p>

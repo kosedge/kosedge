@@ -356,7 +356,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/cfb/slate",
         title: "Official Slate",
         description:
-          "Week 0 + Week 1 ESPN board. Open any FBS row in Project Game.",
+          "KosEdge W0/W1 slate (ESPN + Odds API fact-check). Open any FBS row in Project Game.",
         cta: "Open slate →",
         accent: "gold",
         status: "active",
