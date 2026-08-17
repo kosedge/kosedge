@@ -119,7 +119,7 @@ def cfb_season_engine_status(
             "error": str(exc),
             "note": (
                 "Status degraded; version string is still authoritative. "
-                "Research prior only — no KEI."
+                "Model stays research-fair. KEI is the published line when attached."
             ),
         }
     payload.setdefault("engine_version", version)

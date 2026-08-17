@@ -10,6 +10,7 @@
  */
 
 import { existsSync, readFileSync } from "node:fs";
+import { loadCfbKeiPack } from "@/lib/cfb-kei-artifacts";
 import { getSport } from "@/lib/sports";
 import { getKeiLinesPath } from "@/lib/data-paths";
 
@@ -119,8 +120,38 @@ export function applyHandicapIdentity(game: KeiLineGame): KeiLineGame {
   return game;
 }
 
+function cfbKeiLinesFromBundledPack(): KeiLineGame[] {
+  return (loadCfbKeiPack().games ?? [])
+    .filter((g) => g.kei?.kei_spread_home != null)
+    .map((g) =>
+      applyHandicapIdentity({
+        id: String(g.game_id || `${g.away}-${g.home}`),
+        homeTeam: String(g.home_name || g.home || ""),
+        awayTeam: String(g.away_name || g.away || ""),
+        homeAbbr: g.home,
+        awayAbbr: g.away,
+        commenceTime: g.kickoff,
+        week: g.week,
+        handicapSpreadHome: g.kei?.kei_spread_home ?? null,
+        handicapTotal: g.kei?.kei_total ?? g.model_total ?? null,
+        handicapHomeWinProb: g.kei?.kei_home_win_prob ?? null,
+        projSpreadHome: g.kei?.kei_spread_home ?? null,
+        projTotal: g.kei?.kei_total ?? g.model_total ?? null,
+        homeWinProb: g.kei?.kei_home_win_prob ?? null,
+        modelSpreadHome: g.model_spread_home ?? g.kei?.model_spread_home ?? null,
+        modelTotal: g.model_total ?? null,
+        modelHomeWinProb: g.model_home_win_prob ?? null,
+      }),
+    );
+}
+
 export function getKeiLines(sportKey: string): KeiLineGame[] {
   if (!getSport(sportKey)) return [];
+
+  // Bundled import — Vercel NFT excludes apps/web/data/processed/kei_lines_*.json.
+  if (sportKey.toLowerCase() === "cfb") {
+    return cfbKeiLinesFromBundledPack();
+  }
 
   const p = getKeiLinesPath(sportKey);
   if (!existsSync(p)) return [];
