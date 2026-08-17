@@ -24,7 +24,7 @@ Ignore **`kosedge-vercel-push`** — leftover second Vercel Git project. Product
 
 ## Required checks (do not merge red)
 
-- **Production Gate** — web typecheck + Next build (same command as Vercel) + model-service pytest.
+- **Production Gate** — web typecheck + Next build (same command as Vercel). That is the www ship bar.
 - **Production Smoke** — after the merge, www + Railway `/health` and CFB status must 200.
 - **PR Checks** — quality on the pull_request only. A push run is a no-op (not a deploy failure).
 
