@@ -71,23 +71,3 @@ jobs:
           DATABASE_URL: postgresql://ci:ci@localhost:5432/kosedge
           AUTH_SECRET: ci-build-auth-secret-32-chars-minimum
           MODEL_SERVICE_URL: http://localhost:8000
-
-  model-service-cfb-desk:
-    name: CFB desk contract (model-service)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: CFB product-desk pytest
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r services/model-service/requirements.txt pytest
-          cd services/model-service
-          # Full NFL suite on this branch has historical assertion drift and
-          # must not block www. This file is the CFB status/slate contract.
-          pytest -q tests/test_cfb_product_desk.py

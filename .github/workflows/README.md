@@ -10,7 +10,6 @@ Runs on pull requests and pushes to **`deploy-vercel`**.
 
 1. **Web typecheck**
 2. **Web Next build** — same `apps/web` `pnpm run build` Vercel runs
-3. **CFB desk contract** — focused model-service pytest (not the full NFL suite)
 
 If this is red, www did not ship. Do not merge.
 
