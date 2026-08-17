@@ -2,6 +2,7 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk
 **Angle:** A defense searching for a new identity while the offense searches for a script — QB fog sits on top of both
+**Date:** August 17, 2026
 **Sources (beat desk):** Daniel Oyefusi (ESPN) @DanielOyefusi; Mary Kay Cabot (Cleveland.com) @MaryKayCabot; Zac Jackson (The Athletic) @AkronJackson
 
 Cleveland’s 2026 season is not priced like a contender, and it should not be. Late July DraftKings / RotoWire hang the Browns at **6.5** with Over **+105** / Under **-120**. That is a rebuild number with a mild lean that the floor still has a trapdoor. Kos Edge / KEICMB (2026-07-29) projects **6.64 expected wins** — effectively on the number. Half-win threshold math says **Pass** unless camp or scheme news creates a clearer distribution shift. The handicapping job here is not forcing a ticket. It is mapping which identity shows up first: Mike Rutenberg’s defense without Myles Garrett, or Todd Monken’s offense without a settled quarterback.
@@ -36,6 +37,14 @@ KEICMB’s mean at **6.64** against **6.5 (+105/-120)** is the definition of a P
 - **Under reopen:** Starter still undecided into Week 1; early-down offense stalls; secondary/edge injuries compound the Garrett gap.
 - **Side market:** Prefer opponents laying points against Cleveland in September until the QB is named and the script has a three-game sample. Fade Browns road favorites entirely in limbo.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Watson/Sanders both mixed vs Chicago; competition still open with Sanders starting Aug. 22. Pass on crowning QB1 from one exhibition split.
+
+**What matters most.** Joint practice command vs Buffalo and who owns the ones after Saturday.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** **Pass** at 6.5. Model is on the number; research Under shade is too thin against -120.

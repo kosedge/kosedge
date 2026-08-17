@@ -2,6 +2,7 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Bo Nix leap narrative vs AFC West reality  
+**Date:** August 17, 2026
 **Sources (beat desk):** Jeff Legwold (ESPN) @Jeff_Legwold; Mike Klis (9NEWS) @mikeklis; Troy Renck (Denver7) @TroyRenck  
 **Market (DK/RotoWire, late July 2026):** Season wins 9.5 (−115 / −105)
 
@@ -43,6 +44,14 @@ Public will overweight “Year-3 leap + Waddle” and underweight how much of 20
 
 Neither error clears a betting threshold at 9.5 with nearly even juice. The fair number currently sits near **9.5–9.8** after research adjustment for ankle status (camp constructive) and first-place schedule. Against **9.5 (−115/−105)**, you are arguing about tenths. That is a Pass.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Quiet Monday after Atlanta exhibition. Short Pass — no invented drama.
+
+**What matters most.** Any trench DNP that sticks two days.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 9.5:** Pass. Model ~9.69 and research band ~9.5–9.8 do not clear half a win either way; −115 Over juice is not a gift.  

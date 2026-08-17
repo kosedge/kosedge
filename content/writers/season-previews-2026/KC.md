@@ -2,6 +2,7 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Still the Chiefs — priced like it; juice decides  
+**Date:** August 17, 2026
 **Sources (beat desk):** Nate Taylor (ESPN) @ByNateTaylor; Matt Derrick (Chiefs Digest) @mattderrick; Jesse Newell (The Athletic / local) @jessenewell  
 **Market (DK/RotoWire, late July 2026):** Season wins 10.5 (+115 / −140)
 
@@ -52,6 +53,14 @@ Week 1 vs. Denver and Week 2 vs. Indianapolis in prime time are brand theater. T
 
 No material conflict that flips the side. Beat reporting is more optimistic on availability than a cold ACL timeline; that lifts fair from the mid-9s toward 10, not above 10.5. Do not average a model Under and a brand Over into a soft Pass that pretends the number is even. The number is not even. The **price** on the Under is the problem.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Rookie flashes in a Rams loss are depth notes. Mahomes path intact — Pass on inventing a lean from exhibition scoring.
+
+**What matters most.** Rookie usage next script; OL starter language.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 10.5:** Juice-aware Under lean only if you can get **−120 or better**. At −140, **Pass**. Do not buy the Over at +115 just because the helmet looks like January.  

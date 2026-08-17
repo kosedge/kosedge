@@ -2,6 +2,7 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** Talent flashes, consistency doesn’t — and 7.5 already shaved the banner  
+**Date:** August 17, 2026
 **Sources (beat desk):** Michael DiRocco (ESPN) @ESPNdirocco; Demetrius Harvey (Florida Times-Union) @Demetrius82; John Shipley (Jaguars on SI) @_John_Shipley
 
 Jacksonville’s problem for bettors is not a shortage of talent. It is a surplus of variance dressed up as a finished product — now hanging at a number that finally admits it.
@@ -36,6 +37,14 @@ Treating 13-4 as a new baseline was the old mistake. Cutting through 9.5 and 8.5
 
 If Kos Edge / KEICMB loves Jacksonville’s offense while beat notes show Hunter snap ambiguity and early LB attrition (camp already produced injury noise, including Jack Kiser’s knee MRI after Day 1), do not average into a soft Under. Prefer Over at shoppable juice, or Pass if the tax eats the edge.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Preseason win at New Orleans was depth theater. Starter path unchanged on this desk — Pass.
+
+**What matters most.** OL/skill participation midweek.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total (7.5):** Lean Over; prefer −125 or better. If Over is juiced past −140 without positive Lawrence/Thomas camp news, **Pass**. Conditional Under interest only if Lawrence or Hunter availability turns into a multi-week problem — not because “13-4 can’t repeat.”

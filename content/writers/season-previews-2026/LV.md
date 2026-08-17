@@ -2,6 +2,7 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Reset year — noise ≠ edge  
+**Date:** August 17, 2026
 **Sources (beat desk):** Ryan McFadden (ESPN) @ryanmcfadden_; Tashan Reed (The Athletic) @tashanreed; Vincent Bonsignore (Las Vegas Review-Journal) @VinnyBonsignore  
 **Market (DK/RotoWire, late July 2026):** Season wins 5.5 (−146 / +120)
 
@@ -55,6 +56,14 @@ If Mendoza overtakes Cousins in October, variance explodes both ways — rookies
 
 Any national “they’re back” piece that skips the division tax and the −146. The market may also be slightly slow if Cousins plus Kubiak plus Crosby produces a clean 7–8 win climb — but that thesis wants a better number or plus-money Over, not chalk on 5.5. Under at +120 is only interesting if camp shows Crosby setbacks *and* the OL looks like 2025 again. That is not the current evidence.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Quiet Monday after Arizona exhibition. Short Pass.
+
+**What matters most.** OL/QB participation midweek.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 5.5:** Pass. Fair ≈ market; Over juice (−146) is a hard no; Under at +120 needs fresh injury/regression evidence.  

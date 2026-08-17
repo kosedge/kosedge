@@ -2,6 +2,7 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Stars sell tickets; OL and defense cash them — desk board 8.5, shop noise at 9.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Todd Archer (ESPN) [@toddarcher](https://x.com/toddarcher); Clarence Hill Jr. (Fort Worth Star-Telegram) [@ClarenceHillJr](https://x.com/ClarenceHillJr); David Moore (Dallas Morning News) [@DavidMooreDMN](https://x.com/DavidMooreDMN)  
 **Market (Kos Edge desk board):** Win total **8.5**  
 **Live shop note (late July 2026):** Many books hang **9.5** as the main (Under often −125 to −140 / Over +105 to +115); **8.5** also posts as a juiced alternate (~−150 Over at some shops). Price the fence, not the logo.
@@ -49,6 +50,14 @@ Kos Edge fair (~8.4) sits on top of the desk **8.5**. Research-adjusted, if Oxna
 
 If model fair and research-adjusted fair disagree by a wide margin after two weeks of pads, default **Pass** until they reconcile. Do not average them into a fake lean.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** UDFA WR Camden Brown made a loud roster push; Lamb/Pickens hierarchy unchanged. Pass on trench/defense questions that still own 8.5/9.5.
+
+**What matters most.** Brown’s next-script snaps; OL starter confirmation.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Desk win total 8.5:** **Pass** at standard juice. Model ~8.4 vs market 8.5 is inside half a win. Do not invent an Over from brand optimism; do not invent an Under from last year’s defensive embarrassment alone.

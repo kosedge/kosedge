@@ -2,6 +2,7 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Lamar’s ceiling is already in the number — supporting-cast and injury variance is where the price still leaks  
+**Date:** August 17, 2026
 **Sources (beat desk):** Jamison Hensley (ESPN) [@jamisonhensley](https://www.espn.com/nfl/story/_/id/49434567/baltimore-ravens-training-camp-2026-intel-updates); Jeff Zrebiec (The Athletic) [@jeffzrebiec](https://www.nytimes.com/athletic/); Jonas Shaffer (Baltimore Banner) [@jonas_shaffer](https://www.thebanner.com/sports/ravens-nfl/ravens-training-camp-lamar-jackson-declan-doyle-22OVQN3I6BDWNAKMTCLMRKUTMI/)
 
 The board is not asking whether Lamar Jackson can still bend a Sunday. It already answered that. Late-July pricing hangs Baltimore at **10.5** — a contender number that prices bounce-back without demanding twelve wins on the nose. That split is the whole preview: ceiling on the brand, transition risk in the fine print. Kos Edge / KEICMB (July 29 preseason sim) lands at **11.12** expected wins — a little more than a half-win over the market on model alone. The bet, if there is one, is not “Lamar regresses.” It is whether supporting-cast and first-year coaching variance can keep a healthy-Jackson team from clearing eleven, or whether **10.5** already collected the tax.
@@ -34,6 +35,14 @@ Public Super Bowl tickets will keep selling the brand. Win totals are colder. If
 
 KEICMB **11.12** vs market **10.5** clears a half-win on raw model edge. Research adjustment for coaching transition, center competition, and Madubuike binary pulls fair closer to **10.6–10.9**. That is Pass territory once vig hits — not enough to staple the Over, not enough to invent an Under. If Madubuike is full-go by Labor Day and Pocic/Ioane stabilize in joint practices, the Over becomes a 2/5 look only at soft juice. If the interior stays messy, stay flat. Do not average model and vibes into a fake lean.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Rookie WR Ja’Kobi Lane flashed vs Philadelphia. Lamar path unchanged — supporting-cast variance still owns the price. Pass on thin Overs.
+
+**What matters most.** Lane ones share; interior OL participation.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** **Pass** on **10.5** at current juice. Model Over is real; research tax and year-one staff noise erase the stake. Revisit Over only if Madubuike is full-go and Over stays near even or better; if Under is plus money after negative OL news, still prefer Pass over a thin fade.

@@ -2,6 +2,7 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Speed travels; durability and OL do not — basement total at 4.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Marcel Louis-Jacques (ESPN) [@Marcel_LJ](https://x.com/Marcel_LJ); David Furones (Sun Sentinel) [@DavidFurones_](https://x.com/DavidFurones_); Joe Schad (Palm Beach Post) [@schadjoe](https://x.com/schadjoe)  
 **Market (DK / RotoWire / Fox Sports, late July 2026):** **4.5** — shop juice (pick’em −110/−110 at some shops; Under juiced near −146 / Over +122 at others)
 
@@ -39,6 +40,14 @@ The market may be too eager to treat Miami’s brand collapse as a free Under at
 
 Watch Louis-Jacques’ practice participation notes on Achane and Austin Jackson, Furones on the receiver pecking order, and Schad on whether Proctor and the interior settle before the preseason games. Those three threads decide whether **4.5** is merely a floor or a trap for juiced Unders.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Quiet Monday after a backups loss at Washington. No new starter crown — short Pass.
+
+**What matters most.** Injury-report cleanliness midweek.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** **Pass** as default at juiced Under prices. Prefer **Over 4.5** only at plus money or true pick’em (−110 or better) after Achane’s early-camp workload looks clean.  

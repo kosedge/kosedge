@@ -1,0 +1,724 @@
+{
+  "desk_date": "2026-08-17",
+  "pinned": false,
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk \u2014 Monday, Aug 17",
+    "bottom_line": "Preseason Week 1 is in the books. Named starters and injury IR moves matter; exhibition scorelines do not. Thin camp info stays Pass.",
+    "storylines": [
+      "Falcons: Penix still barred from 11-on-11 this week (Stefanski Monday). Availability fog continues \u2014 Pass on crowning Week 1.",
+      "Browns: Watson/Sanders mixed vs Chicago; Sanders starts Aug. 22 and both share ones in Bills joints. QB1 still unset.",
+      "Vikings: Murray remains named starter after a one-drive debut; McCarthy handled most of the first half vs Giants.",
+      "Commanders: Mariota right MCL \u2014 out rest of preseason; Quinn optimistic for regular season. Backup math thins.",
+      "Texans: Mertz season-ending ACL IR; Rypien signed as emergency QB3 behind Stroud/Mills.",
+      "Jets: Geno held (ankle precaution); Klubnik\u2019s short starter sample aids QB2 case only. Hall groin is a usage flag.",
+      "Packers: Bullard boot off but still not practicing \u2014 slot/corner mix remains fluid.",
+      "League: rookies flashed (Bell, Lane, Slaughter, Garnes, Brown) \u2014 depth/usage notes, not win-total tickets."
+    ],
+    "what_to_watch": "This week\u2019s joints and second preseason scripts \u2014 especially CLE/BUF and ATL/IND \u2014 are evaluation tape, not market permission.",
+    "sources": [
+      {
+        "label": "NBC \u2014 Penix no 11s (Aug 17)",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/michael-penix-wont-do-11-on-11-work-this-week"
+      },
+      {
+        "label": "AP \u2014 Mariota MCL",
+        "href": "https://apnews.com/article/marcus-mariota-injury-b1e77d6d738f8623b741562f94b4d954"
+      },
+      {
+        "label": "HoustonTexans.com \u2014 Mertz IR / Rypien",
+        "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-15-2026"
+      },
+      {
+        "label": "NFL.com \u2014 Preseason W1 learnings",
+        "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+      },
+      {
+        "label": "ClevelandBrowns.com \u2014 QB split vs Bears",
+        "href": "https://www.clevelandbrowns.com/news/browns-quarterbacks-continue-competition-in-preseason-loss-to-the-bears-3-big-takeaways"
+      },
+      {
+        "label": "Vikings.com \u2014 Murray debut",
+        "href": "https://www.vikings.com/news/jj-mccarthy-kyler-murray-preseason-debut-giants-2026"
+      },
+      {
+        "label": "Multi-source beat desk / trusted X index",
+        "href": "https://github.com/kosedge/kosedge/blob/deploy-vercel/data/writers/nfl-beat-writers.json"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "MIN",
+      "title": "Vikings camp \u2014 Aug 17",
+      "bottom_line": "Murray remains the named starter after a short preseason debut. Pass on inventing a new win-total lean from one series.",
+      "key_points": [
+        "O\u2019Connell named Murray starter Aug. 11; Saturday vs Giants he played the opening series (2-of-3, 10 yards) before McCarthy took most of the first half.",
+        "McCarthy is still the clear QB2 path in preseason scripts \u2014 not a buried prospect, not a dual-starter story.",
+        "Joint practices with Baltimore this week are the next meaningful eval window, not Saturday\u2019s snap count alone."
+      ],
+      "what_to_watch": "Clean ones-only install vs Ravens joints; any change in McCarthy\u2019s first-team share.",
+      "is_material_depth": true,
+      "sot_flag": "Named QB1 still holds. Preview Bottom line must stop reading as an open battle.",
+      "sources": [
+        {
+          "label": "Vikings.com \u2014 Murray / McCarthy preseason debut",
+          "href": "https://www.vikings.com/news/jj-mccarthy-kyler-murray-preseason-debut-giants-2026"
+        },
+        {
+          "label": "Andrew Krammer, Star Tribune (naming)",
+          "href": "https://www.startribune.com/minnesota-vikings-kyler-murray-jj-mccarthy-qb-battle-nfl-training-camp-2026-kevin-oconnell-offense/601877581"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons camp \u2014 Aug 17",
+      "bottom_line": "Penix still blocked from 11-on-11 this week. Week 1 starter lean stays Pass \u2014 availability, not a grass derby.",
+      "key_points": [
+        "Stefanski said Monday Penix stays on the same ACL rehab plan: individuals, 7-on-7, no 11-on-11 this week (NBC / ESPN).",
+        "Joint work with Indianapolis includes 7-on-7 vs an opposing defense \u2014 still not a starter crown.",
+        "Cooper Rush / Jack Strand remain camp arms for the second preseason script; do not mint a futures ticket from that."
+      ],
+      "what_to_watch": "First cleared 11-on-11 sample from Penix \u2014 or multi-day full-team work from Tagovailoa.",
+      "is_material_depth": true,
+      "sot_flag": "Dual-QB availability unresolved. Do not crown Week 1 from rehab language.",
+      "sources": [
+        {
+          "label": "NBC Sports \u2014 Penix no 11s this week",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/michael-penix-wont-do-11-on-11-work-this-week"
+        },
+        {
+          "label": "CBS \u2014 Penix limited to 7-on-7",
+          "href": "https://www.cbssports.com/fantasy/football/news/falcons-michael-penix-remaining-limited-to-7-on-7-drills-this-week/"
+        }
+      ]
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns camp \u2014 Aug 17",
+      "bottom_line": "QB1 still open after the Bears tape. One mixed preseason split is not a crown. Pass.",
+      "key_points": [
+        "Watson started vs Chicago (11-of-15, 126 yards, strip-sack fumble); Sanders followed (6-of-11, 79, INT).",
+        "Monken\u2019s plan: Sanders starts Aug. 22 vs Buffalo; both share ones in Thursday\u2019s joint practice (club / NFL.com).",
+        "Spencer Fano stays LT1 context \u2014 OL SoT input, separate from QB naming."
+      ],
+      "what_to_watch": "Joint practice command + who owns the ones after Buffalo.",
+      "is_material_depth": true,
+      "sot_flag": "QB1 unset after game 1. Fano LT1 remains the only clean depth flag.",
+      "sources": [
+        {
+          "label": "ClevelandBrowns.com \u2014 QB takeaways vs Bears",
+          "href": "https://www.clevelandbrowns.com/news/browns-quarterbacks-continue-competition-in-preseason-loss-to-the-bears-3-big-takeaways"
+        },
+        {
+          "label": "NFL.com \u2014 mixed results Watson/Sanders",
+          "href": "https://www.nfl.com/news/mixed-results-for-deshaun-watson-shedeur-sanders-in-browns-preseason-loss"
+        }
+      ]
+    },
+    {
+      "team_id": "WAS",
+      "title": "Commanders camp \u2014 Aug 17",
+      "bottom_line": "Mariota\u2019s right MCL sprain ends his preseason. Daniels\u2019 snaps and backup math are the story. Pass on manufacturing a lean.",
+      "key_points": [
+        "Quinn confirmed Mariota out rest of preseason after Friday\u2019s Miami game; optimistic for regular-season readiness (AP).",
+        "Room behind Daniels is thin (Hartman, Kaliakmanis). Club not adding a QB yet per Quinn.",
+        "Starter snap plan for remaining preseason may shift because the backup is gone \u2014 watch volume, not invented drama."
+      ],
+      "what_to_watch": "Whether Washington adds an arm; how many snaps Daniels takes next exhibition.",
+      "is_material_depth": true,
+      "sot_flag": "Backup QB availability changed. Flag depth SoT; starter identity unchanged.",
+      "sources": [
+        {
+          "label": "AP \u2014 Mariota sprained right MCL",
+          "href": "https://apnews.com/article/marcus-mariota-injury-b1e77d6d738f8623b741562f94b4d954"
+        },
+        {
+          "label": "USA Today \u2014 return timeline",
+          "href": "https://www.usatoday.com/story/sports/nfl/2026/08/16/marcus-mariota-injury-update-return-timeline/91328907007/"
+        }
+      ]
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans camp \u2014 Aug 17",
+      "bottom_line": "Mertz is season-ending IR (ACL). Rypien is emergency QB3 behind Stroud/Mills. Pass \u2014 depth, not a starter rewrite.",
+      "key_points": [
+        "Graham Mertz tore his right ACL in the Chargers preseason loss; placed on IR with RB Joshua Pitsenberger (club).",
+        "Houston signed Brett Rypien as the third arm for practice/preseason load.",
+        "Stroud remains QB1; Mills QB2. This is roster continuity insurance, not a KEI identity change."
+      ],
+      "what_to_watch": "Healthy Stroud/Mills practice weeks; any further QB room churn.",
+      "is_material_depth": true,
+      "sot_flag": "QB3 IR + signing. Depth SoT only \u2014 do not touch Stroud starter path.",
+      "sources": [
+        {
+          "label": "HoustonTexans.com \u2014 transactions 8/15",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-15-2026"
+        },
+        {
+          "label": "NBC \u2014 Rypien signed / Mertz IR",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/texans-sign-qb-brett-rypien-place-qb-graham-mertz-on-ir"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets camp \u2014 Aug 17",
+      "bottom_line": "Geno sat Friday (ankle precaution). Klubnik\u2019s short starter sample helps QB2 math only. Hall groin is a usage flag. Pass.",
+      "key_points": [
+        "Cade Klubnik started vs Tampa after Geno Smith was held out; two series (5-of-7, 56) with two third-down hits to Garrett Wilson (beat / ESPN).",
+        "Breece Hall is managing a groin strain \u2014 monitor Week 1 workload language, not a fantasy crown from one report.",
+        "Corner mix (Stephens / Wright / Thomas) remains a camp story; one preseason game does not rewrite the chart."
+      ],
+      "what_to_watch": "Geno\u2019s next full practice; Hall\u2019s practice participation this week.",
+      "is_material_depth": true,
+      "sot_flag": "QB1 Geno unchanged. Hall availability + Klubnik QB2 push are the live flags.",
+      "sources": [
+        {
+          "label": "ESPN \u2014 preseason W1 takeaways (Jets)",
+          "href": "https://www.espn.com/nfl/story/_/id/49600984/2026-nfl-preseason-week-1-takeaways-analysis"
+        },
+        {
+          "label": "SI \u2014 Jets opener learnings",
+          "href": "https://www.si.com/nfl/jets/onsi/what-we-learned-from-jets-preseason-opener-vs-buccaneers-01m00jh7e6c2"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants camp \u2014 Aug 17",
+      "bottom_line": "Dart took a concussion check vs Minnesota and returned. Process noise, not a benching. Pass.",
+      "key_points": [
+        "Dart went to the blue tent after a Jay Ward hit, cleared, and later threw a TD on the run (preseason coverage).",
+        "Harbaugh / Nagy under-center install is still midstream; one exhibition does not settle Year-2 efficiency.",
+        "Availability language matters more than highlight throws for early-season variance."
+      ],
+      "what_to_watch": "Clean midweek practices without tent checks; first-team script vs next opponent.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "USA Today \u2014 Giants-Vikings context",
+          "href": "https://www.usatoday.com/story/sports/nfl/2026/08/15/giants-vikings-where-to-watch-channel-time-nfl-schedule/91264111007/"
+        }
+      ]
+    },
+    {
+      "team_id": "GB",
+      "title": "Packers camp \u2014 Aug 17",
+      "bottom_line": "Bullard shed the boot but is still not practicing. Slot/corner mix stays fluid. Pass.",
+      "key_points": [
+        "Javon Bullard (bone bruise, right foot) has removed the walking boot; still held out of practice as of Aug. 16 (RotoWire / club).",
+        "He has publicly targeted Week 1 availability \u2014 treat as optimistic player language until he stacks practices.",
+        "Corner rotation (Nixon / Cisse / St-Juste) remains unsettled while Bullard sits."
+      ],
+      "what_to_watch": "First full practice back for Bullard; who owns slot with the ones.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "CBS/RotoWire \u2014 Bullard sheds boot",
+          "href": "https://www.cbssports.com/fantasy/football/news/packers-javon-bullard-sheds-walking-boot/"
+        },
+        {
+          "label": "PackersNews \u2014 Week 1 expectation",
+          "href": "https://www.greenbaypressgazette.com/story/sports/nfl/packers/2026/08/10/packers-javon-bullard-says-bone-bruise-wont-keep-him-out-for-week-1/91241268007/"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys camp \u2014 Aug 17",
+      "bottom_line": "UDFA WR Camden Brown made a loud roster push vs Seattle. Depth story, not a Lamb/Pickens rewrite. Pass.",
+      "key_points": [
+        "Brown: two TDs (contested deep + one-hand fade) plus a 21-yard catch in the preseason win (NFL.com).",
+        "Locks at WR remain Lamb / Pickens / Flournoy / Turpin \u2014 Brown is fighting for WR5/PS priority.",
+        "Backup QB/OL evaluation continues; do not invent a starter lean from exhibition scoring."
+      ],
+      "what_to_watch": "Whether Brown sticks with ones in the next script or slides to PS track.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "NFL.com \u2014 Cowboys-Seahawks learnings",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "PHI",
+      "title": "Eagles camp \u2014 Aug 17",
+      "bottom_line": "Rookie RT Markel Bell started and flashed vs Baltimore. OL succession watch, not a Hurts lean. Pass.",
+      "key_points": [
+        "Bell (3rd-round, Miami) started at right tackle and showed power/poise in limited run work (ESPN W1 takeaways).",
+        "Lane Johnson\u2019s age/injury context makes Bell a real development story \u2014 still not a Week 1 identity flip.",
+        "Ravens 24\u20137 loss is exhibition noise; trench snaps are the only durable takeaway."
+      ],
+      "what_to_watch": "Bell\u2019s snap share next week; any starter snap plan for Hurts.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "ESPN \u2014 Ravens/Eagles takeaways",
+          "href": "https://www.espn.com/nfl/story/_/id/49600984/2026-nfl-preseason-week-1-takeaways-analysis"
+        }
+      ]
+    },
+    {
+      "team_id": "KC",
+      "title": "Chiefs camp \u2014 Aug 17",
+      "bottom_line": "Rookie flashes (Emmett Johnson, R Mason Thomas, Cyrus Allen) in a Rams loss. Depth/usage notes only. Pass.",
+      "key_points": [
+        "Johnson led Chiefs rush looks; Allen had a leaping 13-yard grab; Thomas generated edge pressure (beat notes).",
+        "Starter identity on offense unchanged \u2014 Mahomes path intact.",
+        "Preseason scoreline is not a win-total input."
+      ],
+      "what_to_watch": "Rookie snap share in joint/preseason No. 2; any OL starter language.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "ESPN \u2014 Rams/Chiefs takeaways",
+          "href": "https://www.espn.com/nfl/story/_/id/49600984/2026-nfl-preseason-week-1-takeaways-analysis"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers camp \u2014 Aug 17",
+      "bottom_line": "Rookie LG Jake Slaughter graded clean in the Texans win. OL depth progress, not a Herbert lean. Pass.",
+      "key_points": [
+        "Slaughter handled a stunt and looked comfortable under pressure in debut notes.",
+        "First-round edge Akheem Mesidor quiet (eight snaps); UDFA Nadame Tucker led OLB pressures.",
+        "Herbert starter path unchanged."
+      ],
+      "what_to_watch": "Slaughter\u2019s ones share midweek; Mesidor pressure rate next script.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "ESPN \u2014 Chargers/Texans takeaways",
+          "href": "https://www.espn.com/nfl/story/_/id/49600984/2026-nfl-preseason-week-1-takeaways-analysis"
+        }
+      ]
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers camp \u2014 Aug 17",
+      "bottom_line": "Rodgers remains locked QB1 after the Packers exhibition. Backup/OL evaluation continues. Pass.",
+      "key_points": [
+        "Preseason win vs Green Bay was mostly depth evaluation \u2014 do not rewrite the Rodgers path.",
+        "Mason Rudolph still the primary QB2 frame from camp SoT.",
+        "Any starter snap volume this week is process, not a market signal."
+      ],
+      "what_to_watch": "How many Rodgers snaps McCarthy wants before Week 1.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "NFL.com \u2014 preseason W1 Saturday slate",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "CIN",
+      "title": "Bengals camp \u2014 Aug 17",
+      "bottom_line": "Burrow health still the priority. WR3 (Iosivas vs Young) remains a usage battle. Pass.",
+      "key_points": [
+        "Exhibition vs Detroit was depth theater \u2014 Chase/Higgins hierarchy unchanged.",
+        "WR3 three-receiver personnel is still the camp battle worth tracking.",
+        "No invented lean from one healthy Burrow practice week."
+      ],
+      "what_to_watch": "Who aligns as Z/slot with ones in the next script.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports \u2014 Bengals WR3 battle",
+          "href": "https://www.espn.com/nfl/story/_/id/49513914/2026-nfl-training-camp-position-battles-afc-nfc"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens camp \u2014 Aug 17",
+      "bottom_line": "Rookie WR Ja\u2019Kobi Lane scored in the Eagles win. Depth/TE-adjacent usage, not a Lamar rewrite. Pass.",
+      "key_points": [
+        "Lane (3rd-round) caught all three targets for 38 yards including a 16-yard TD (preseason notes).",
+        "Lamar Jackson starter path unchanged under Declan Doyle.",
+        "Interior OL and supporting-cast variance remain the season-total story \u2014 not one exhibition catch."
+      ],
+      "what_to_watch": "Lane\u2019s ones share; any Andrews/Likely snap language.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "NFL.com / Sportsnet \u2014 Lane flash",
+          "href": "https://www.sportsnet.ca/nfl/article/what-we-learned-from-week-1-of-nfl-pre-season-rookie-quarterbacks-impress-early/"
+        }
+      ]
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills camp \u2014 Aug 17",
+      "bottom_line": "Preseason win over Carolina was depth evaluation. Allen path locked. Pass.",
+      "key_points": [
+        "Brady-era camp tempo remains the process story \u2014 not a market rewrite from exhibition scoring.",
+        "Watch OL/skill depth snaps; starter identity is not in doubt.",
+        "Thin edges stay Pass."
+      ],
+      "what_to_watch": "Any starter snap plan for Allen before Week 1.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss at Washington was backups. Quiet Monday on starter identity. Short honest pulse.",
+      "key_points": [
+        "No new starter/OL crown from Friday\u2019s script.",
+        "Track practice participation language midweek.",
+        "Pass on manufacturing drama from a quiet desk day."
+      ],
+      "what_to_watch": "Injury report cleanliness heading into next exhibition.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots camp \u2014 Aug 17",
+      "bottom_line": "Jam Miller flashed as RB3 after Jennings hit IR. Depth usage only. Pass.",
+      "key_points": [
+        "Seventh-round RB Jam Miller started and ran for 55 yards on 14 carries in the Colts draw (beat notes).",
+        "Terrell Jennings to IR reshaped the RB3 competition before kickoff.",
+        "Caleb Lomu started at RT \u2014 OL evaluation continues."
+      ],
+      "what_to_watch": "Miller\u2019s next-script touches; OT1/RT1 language.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "ESPN \u2014 Patriots/Colts takeaways",
+          "href": "https://www.espn.com/nfl/story/_/id/49600984/2026-nfl-preseason-week-1-takeaways-analysis"
+        }
+      ]
+    },
+    {
+      "team_id": "IND",
+      "title": "Colts camp \u2014 Aug 17",
+      "bottom_line": "Joint week with Atlanta is the next sample. No invented QB crown from a preseason draw. Pass.",
+      "key_points": [
+        "Daniel Jones / Anthony Richardson rotation language from camp still needs multi-day ones clarity.",
+        "Exhibition vs New England was mostly depth.",
+        "Pass until a named Week 1 path is public and sticky."
+      ],
+      "what_to_watch": "Who takes the ones vs Falcons joints; any naming language.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "JAX",
+      "title": "Jaguars camp \u2014 Aug 17",
+      "bottom_line": "Preseason win at New Orleans was depth theater. Starter path unchanged on this desk. Pass.",
+      "key_points": [
+        "No material Week 1 identity flip from Saturday\u2019s script.",
+        "Watch OL/skill participation midweek.",
+        "Quiet clubs stay short \u2014 no filler essay."
+      ],
+      "what_to_watch": "Practice participation + any OL starter confirmation.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans camp \u2014 Aug 17",
+      "bottom_line": "Preseason win over San Francisco was evaluation tape. Ward Year-2 path unchanged. Pass.",
+      "key_points": [
+        "Saleh rebuild timeline still dominates the fair number \u2014 not one exhibition.",
+        "Depth snaps only from Titans\u201349ers.",
+        "Pass on thin Over narratives."
+      ],
+      "what_to_watch": "Ward ones share midweek; OL health.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "DEN",
+      "title": "Broncos camp \u2014 Aug 17",
+      "bottom_line": "Preseason win at Atlanta was backups. Quiet on starter identity. Short pulse.",
+      "key_points": [
+        "No new material depth crown from Friday.",
+        "Track injury report cleanliness.",
+        "Pass."
+      ],
+      "what_to_watch": "Any OL/skill DNP that sticks two days.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss to Arizona was depth evaluation. Short honest pulse. Pass.",
+      "key_points": [
+        "No starter rewrite from Thursday\u2019s script.",
+        "Watch practice participation.",
+        "Quiet desk days stay short."
+      ],
+      "what_to_watch": "OL/QB participation midweek.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "ARI",
+      "title": "Cardinals camp \u2014 Aug 17",
+      "bottom_line": "Preseason win over Las Vegas was depth. Bridge-QB path unchanged. Pass.",
+      "key_points": [
+        "No material Week 1 identity flip from Thursday.",
+        "Desert schedule tax still owns the win-total story.",
+        "Pass on manufacturing camp drama."
+      ],
+      "what_to_watch": "Bridge QB ones share; OL health.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams camp \u2014 Aug 17",
+      "bottom_line": "Preseason win over Kansas City featured rookie QB flashes. Depth tape, not a starter rewrite. Pass.",
+      "key_points": [
+        "Rookie QB work (Allar/Simpson notes in league wrapups) was evaluation \u2014 starter path remains Stafford unless club says otherwise.",
+        "Do not invent a lean from exhibition efficiency.",
+        "Pass."
+      ],
+      "what_to_watch": "Stafford snap plan; any OL starter confirmation.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss at Tennessee keeps availability as the scheme. Pass.",
+      "key_points": [
+        "Camp injury/availability sheet still drives the fair number more than exhibition scoring.",
+        "Pearsall/CMC participation language remains the watch item from prior desk notes.",
+        "Pass until the availability sheet stabilizes."
+      ],
+      "what_to_watch": "Practice participation for skill/OL chain pieces.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss to Dallas was mostly backups. Defense-first identity unchanged. Pass.",
+      "key_points": [
+        "No starter rewrite from Saturday\u2019s script.",
+        "Macdonald defense remains the prior; QB process still the variance.",
+        "Pass."
+      ],
+      "what_to_watch": "QB ones share midweek; any injury DNPs.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers camp \u2014 Aug 17",
+      "bottom_line": "Preseason win over Jets featured UDFA CB Ayden Garnes pick-six. Depth flash. Pass.",
+      "key_points": [
+        "Garnes returned an INT 47 yards for a TD; Walker generated pressures in return from ACL year (beat notes).",
+        "Mayfield contract/Vea noise from earlier camp still not a Monday market ticket.",
+        "Pass."
+      ],
+      "what_to_watch": "Corner ones mix; Mayfield practice volume.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "ESPN \u2014 Bucs/Jets takeaways",
+          "href": "https://www.espn.com/nfl/story/_/id/49600984/2026-nfl-preseason-week-1-takeaways-analysis"
+        }
+      ]
+    },
+    {
+      "team_id": "CAR",
+      "title": "Panthers camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss at Buffalo was depth evaluation. Young path unchanged. Pass.",
+      "key_points": [
+        "No material starter flip from Saturday.",
+        "Scourton ACL context from earlier camp stays a defensive depth flag \u2014 not reinvented today.",
+        "Pass."
+      ],
+      "what_to_watch": "Young ones share; any new injury language.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "NO",
+      "title": "Saints camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss to Jacksonville was evaluation tape. Short pulse. Pass.",
+      "key_points": [
+        "No invented starter lean from Saturday.",
+        "Watch OL/QB participation midweek.",
+        "Quiet notes stay short."
+      ],
+      "what_to_watch": "Practice cleanliness heading into next script.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears camp \u2014 Aug 17",
+      "bottom_line": "Preseason win over Cleveland was depth theater. Caleb Year-2 path unchanged. Pass.",
+      "key_points": [
+        "Starter identity not rewritten by exhibition scoreline.",
+        "Watch OL/skill participation midweek.",
+        "Pass on thin edges."
+      ],
+      "what_to_watch": "Williams ones share; any new injury DNPs.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions camp \u2014 Aug 17",
+      "bottom_line": "Preseason loss to Cincinnati was backups. Short honest pulse. Pass.",
+      "key_points": [
+        "No material Week 1 identity change from Friday.",
+        "Track practice participation.",
+        "Pass."
+      ],
+      "what_to_watch": "Any trench DNP that sticks.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Camp reports / beat desk",
+          "href": "https://www.nfl.com/news/2026-nfl-preseason-week-1-what-we-learned-from-saturday-s-games"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "MIN",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Murray named + debuted. Preview must leave open-battle framing.",
+      "status": "touched"
+    },
+    {
+      "team_id": "ATL",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Penix still no 11s Monday. Keep Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "CLE",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Post-Bears competition still open; Sanders starts next.",
+      "status": "touched"
+    },
+    {
+      "team_id": "WAS",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Mariota MCL ends preseason backup plan.",
+      "status": "touched"
+    },
+    {
+      "team_id": "HOU",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Mertz IR / Rypien signed \u2014 depth only.",
+      "status": "touched"
+    },
+    {
+      "team_id": "NYJ",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Geno ankle precaution + Hall groin + Klubnik sample.",
+      "status": "touched"
+    }
+  ]
+}

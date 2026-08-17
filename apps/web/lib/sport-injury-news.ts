@@ -16,7 +16,7 @@ const SPORT_INJURY_CONFIG: Record<string, SportInjuryNewsConfig> = {
     sportLabel: "NFL",
     useNflFeed: true,
     sourceSummary:
-      "Aggregated from ESPN, RotoWire, Rotoworld, and VSiN beat feeds.",
+      "Multi-source desk: trusted beats, RotoWire, Rotoworld, VSiN, and public feeds.",
     emptyHint:
       "No injury headlines in the current multi-source pull. Check Camp Desk beats for club-specific hubs.",
     campHref: "/pro/nfl/camp",

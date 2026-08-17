@@ -2,6 +2,7 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** Rebuild math vs a hopeful-looking 5.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Turron Davenport (ESPN) @TDavenport_NFL; Jim Wyatt (Titans.com) @jwyattsports; Terry McCormick (TitanInsider) @terrymc13
 
 Lead with the calendar and the clock. Tennessee’s 2026 board is not asking whether Cam Ward can become a franchise quarterback someday. It is asking whether a Year-2 leap, a brand-new staff, and a last-place schedule can manufacture six wins before the rebuild is actually finished.
@@ -36,6 +37,14 @@ Translating draft capital and coaching pedigree into eight wins too quickly was 
 
 If Kos Edge / KEICMB projects a soft-schedule bounce into the 6s while Davenport/Wyatt/McCormick camp notes show OL protection stress and early defensive installation penalties, flag the conflict. Prefer Pass over averaging a soft Over into a fake staple.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Ward Year-2 upside is still not a promise against rebuild math. Preseason win over SF does not rewrite 5.5 — Pass on thin Overs.
+
+**What matters most.** Ward ones share; OL health.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total (5.5):** Lean Over at even money or better; **Pass** if Over is juiced past −130 without clean Ward/OL camp signals. Rebuild math can still win an Under argument in a disaster season, but **5.5** already prices a lot of that disaster. Reassess toward Under only if camp clearly shows Ward/OL dysfunction stacked with early defensive communication issues.

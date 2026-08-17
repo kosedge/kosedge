@@ -2,6 +2,7 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** QB clarity is the whole card — and 8.5 already prices the hopeful ending  
+**Date:** August 17, 2026
 **Sources (beat desk):** Stephen Holder (ESPN) @HolderStephen; Mike Chappell (FOX59) @mchappell51; George Bremer (CNHI / Herald Bulletin) @GMbremer  
 **Research window:** late July 2026 (camp open at Grand Park)
 
@@ -37,6 +38,14 @@ Kos Edge / KEINFL preseason sim (2026-07-29 UTC bundle) has Indianapolis around 
 
 Books already priced Achilles risk into the conversation. Public still wants to buy the Steichen/Taylor half-season as if **8.5** were a bargain. The quieter miss is pricing coaching pedigree and dome offense as if they create wins independent of QB EPA. They do not. Clarity is binary for this card: Jones holds the job and looks like 2025’s first-half version, or the season becomes a survival exercise with Richardson/Leonard variance that weekly bettors can exploit and futures bettors cannot.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Joint week with Atlanta is the next sample. No invented QB crown from a preseason draw — Pass until a sticky Week 1 path is public.
+
+**What matters most.** Who takes the ones vs Falcons joints.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total (8.5 primary):** **Pass** into camp. Model ~8.4 vs market 8.5 is sub-threshold; research-adjusted mid-7s vs 8.5 conflicts — do not invent an Under staple from medical fog alone. Reassess after two weeks of full padded work and the first joint-practice look — not after one clean 7-on-7 day. At leftover 7.5 with heavy Over juice, still Pass.

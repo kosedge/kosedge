@@ -2,6 +2,7 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Young core, hard board — patience priced without the hope tax  
+**Date:** August 17, 2026
 **Sources (beat desk):** Joseph Person (The Athletic) [@josephperson](https://x.com/josephperson); Sheena Quick (FOX / local) [@Sheena_Marie3](https://x.com/Sheena_Marie3); Darin Gantt (Panthers.com / local) [@daringantt](https://x.com/daringantt) — *ESPN Nation seat open post–David Newton; treat Athletic/locals as primary*  
 **Camp / market refs:** [AP Scourton ACL](https://apnews.com/article/panthers-scourton-carted-off-4f6111b60ede9f6ca77e6cd9acd004d4); [Panthers.com IR / Moton notes](https://www.panthers.com/news/nic-scourton-placed-on-injured-reserve-among-other-moves-cam-gill); [Panthers Wire schedule/step-back](https://pantherswire.usatoday.com/story/sports/nfl/panthers/2026/07/25/nfl-analyst-projections-win-total-panthers/91035085007/); primary late-July win total **6.5**
 
@@ -39,6 +40,14 @@ NFC South variance remains real. Three teams at 8-9 last year means one soft Sep
 
 July 5 Kos Edge / KEINFL preseason files show corrupted/unscaled expected wins for Carolina. We are not averaging that into a fake fair. Research-adjusted fair stays in the high-6s to low-7s until Weeks 1–3 confirm whether the offense’s camp rhythm survives live bullets. Against **6.5** at roughly even juice, that is a thin Over lean. If a shop still hangs **7.5** with Under juice, Pass or lean Under only after re-pricing — do not import the 6.5 Over lean onto the higher board.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Young core vs hard board still the story after Buffalo exhibition. Pass on hope-tax Overs.
+
+**What matters most.** Young ones share; any new injury language.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 6.5 (primary):** Lean **Over** at prices no worse than −120 (fair ~6.9–7.3). **Pass** if juice worsens or early Young EPA stalls.  

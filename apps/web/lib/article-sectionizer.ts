@@ -277,8 +277,8 @@ export function extractInlineSources(markdown: string): string | null {
   return match?.[1]?.trim() ?? null;
 }
 
-/** Default publish date for 2026 season-preview pack when markdown omits Published. */
-export const DEFAULT_ARTICLE_DATE = "July 29, 2026";
+/** Default publish date for 2026 season-preview pack when markdown omits Date/Published. */
+export const DEFAULT_ARTICLE_DATE = "August 17, 2026";
 
 const LONG_DATE: Intl.DateTimeFormatOptions = {
   month: "long",

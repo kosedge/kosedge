@@ -2,6 +2,7 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Penix era vs camp QB fog — shop 6.5 vs 7.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Marc Raimondi (ESPN) [@marcraimondi](https://x.com/marcraimondi); D. Orlando Ledbetter (AJC) [@DOrlandoAJC](https://x.com/DOrlandoAJC); Tori McElhaney (AtlantaFalcons.com) [@Tori_McElhaney](https://x.com/Tori_McElhaney)  
 **Market (DK / RotoWire, late July 2026):** **6.5** (some books hang **7.5**)
 
@@ -45,6 +46,14 @@ Joint practices and the first two preseason games are the information dump that 
 
 Model and research agree Over versus **6.5**. We do **not** average a bleaker camp path with a healthy-Penix spike into a fake lean at **7.5**. If a shop hangs **7.5**, that is a different ticket — Pass until juice and starter clarity improve.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Penix still barred from 11-on-11 this week (Stefanski Monday). Availability fog continues — Week 1 starter lean stays Pass.
+
+**What matters most.** First cleared 11-on-11 from Penix or multi-day full-team work from Tagovailoa before inventing a lean.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** Lean **Over 6.5** at prices no worse than −120. **Pass** if Over juice past −140. At **7.5**, Pass (or re-price).  

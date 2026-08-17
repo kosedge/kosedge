@@ -17,7 +17,7 @@ export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
   title: "NFL Camp Desk",
   description:
-    "KosEdge daily camp desk — league wrap and team notes. ESPN and beats are sources, not the product.",
+    "KosEdge daily camp desk — league wrap and team notes. Trusted X + multi-source beats are citations, not the product.",
 };
 
 function formatPublished(value: string | null): string {
@@ -157,13 +157,15 @@ export default async function NflCampDeskPage({
             KosEdge daily desk
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            League wrap and short team notes when there is real news. ESPN and
-            beat reporters are sources. Thin camp info stays Pass — we do not
-            invent a lean from one good practice. {truth.period_line}.
+            League wrap and short team notes when there is real news. Writers
+            pull from the trusted X contact index plus beat, official, and
+            sharp-capable desks — multi-source, never a single-outlet mirror.
+            Thin camp info stays Pass — we do not invent a lean from one good
+            practice. {truth.period_line}.
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
             {desk.diagnostics.kosedgeCardCount} KosEdge cards ·{" "}
-            {desk.diagnostics.wireCount} wire items (72h) ·{" "}
+            {desk.diagnostics.wireCount} citation headlines (72h) ·{" "}
             {desk.diagnostics.beatCount} team beats
           </p>
         </div>
@@ -254,15 +256,16 @@ export default async function NflCampDeskPage({
 
       <details className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4">
         <summary className="cursor-pointer text-sm font-semibold text-kos-text">
-          Wire · ESPN headlines (not the desk)
+          Citation headlines (not the desk)
         </summary>
         <p className="mt-2 text-xs text-kos-text/55">
-          Public headlines from the last 72 hours. Citations only — KosEdge
-          judgment lives in the cards above.
+          Public headlines from the last 72 hours for research. Citations only —
+          KosEdge judgment lives in the cards above. Prefer the trusted X /
+          beat map below for fast updates.
         </p>
         {desk.wire.length === 0 && desk.injuryNews.length === 0 ? (
           <p className="mt-3 text-sm text-kos-text/60">
-            No camp-tagged ESPN items inside the freshness window.
+            No camp-tagged citation headlines inside the freshness window.
           </p>
         ) : (
           <ul className="mt-3 space-y-2">
@@ -275,7 +278,7 @@ export default async function NflCampDeskPage({
                   className="block rounded-xl border border-white/10 bg-black/30 px-3 py-2 text-sm hover:border-white/20"
                 >
                   <span className="text-[10px] font-semibold uppercase tracking-wide text-kos-text/45">
-                    ESPN
+                    Public feed
                     {item.published ? ` · ${formatPublished(item.published)}` : ""}
                   </span>
                   <span className="mt-0.5 block text-kos-text/85">
@@ -291,11 +294,12 @@ export default async function NflCampDeskPage({
       <section className="mt-10">
         <div className="mb-4">
           <h2 className="text-xl font-semibold text-kos-text">
-            Beat map · all 32
+            Trusted X · beat map · all 32
           </h2>
           <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-            Primary beat reporters. Jump to the season preview or public camp
-            hub — those links are research, not today&apos;s desk.
+            KosEdge trusted X contact index plus primary beats. Jump to the
+            season preview or desk filter — research links, not today&apos;s
+            hero cards.
           </p>
         </div>
         <div className="space-y-6">
@@ -322,6 +326,9 @@ export default async function NflCampDeskPage({
                         {beat.primaryWriter
                           ? `${beat.primaryWriter}${beat.primaryOutlet ? ` · ${beat.primaryOutlet}` : ""}`
                           : "Beat listing pending registry refresh"}
+                        {beat.primaryHandle
+                          ? ` · ${beat.primaryHandle}`
+                          : ""}
                       </p>
                       <div className="mt-3 flex flex-wrap gap-2 text-sm">
                         <Link
@@ -336,6 +343,16 @@ export default async function NflCampDeskPage({
                         >
                           Desk notes
                         </Link>
+                        {beat.primaryHandle ? (
+                          <a
+                            href={`https://x.com/${beat.primaryHandle.replace(/^@/, "")}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="min-h-11 inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"
+                          >
+                            Trusted X
+                          </a>
+                        ) : null}
                         <Link
                           href={`/pro/nfl/teams/${beat.team}/overview`}
                           className="min-h-11 inline-flex items-center rounded-lg border border-white/10 bg-white/5 px-3 py-1.5 hover:border-kos-gold/35"

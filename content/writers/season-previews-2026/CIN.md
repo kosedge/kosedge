@@ -2,6 +2,7 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk
 **Angle:** Burrow’s health rewrites the board — and the market already priced the rewrite; juice is where edges go to die
+**Date:** August 17, 2026
 **Sources (beat desk):** Ben Baby (ESPN) @Ben_Baby; Paul Dehner Jr. (The Athletic) @pauldehnerjr; Kelsey Conway (Cincinnati Enquirer) @KelseyLConway
 
 Cincinnati’s win total has been a story about price, not number. Late July DraftKings / RotoWire still show **9.5** with the Over at **-140** and the Under at **+115**. The number has barely moved since winter. The Over tax has. That is the Bengals market in one sentence: everyone agrees Joe Burrow changes everything, so the books stopped moving the line and started charging rent.
@@ -44,6 +45,14 @@ Secondary markets are cleaner thinking spaces. If Burrow’s preseason snap plan
 4. Whether Lawrence/Allen actually change opponent early-down success in joint practices and preseason, not just quote sheets.
 5. Chase Brown involvement if Burrow’s public advocacy turns into target share — prop market first, win total second.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Burrow health remains the agenda; WR3 battle continues. Market already priced the rewrite — juice is where thin edges die. Pass unless juice is friendly.
+
+**What matters most.** Who aligns as WR3 with ones; Burrow practice cleanliness.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** **Pass** at 9.5 with Over -140 / Under +115. Juice kills the Over; model/research conflict blocks a clean Under.

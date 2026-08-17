@@ -2,6 +2,7 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** Defensive structure + QB questions — 8.5 is a different bet than 10.5  
+**Date:** August 17, 2026
 **Sources (beat desk):** Brady Henderson (ESPN) [@BradyHenderson](https://x.com/BradyHenderson); Bob Condotta (Seattle Times) [@bcondotta](https://x.com/bcondotta); Gregg Bell (Tacoma News Tribune) [@gbellseattle](https://x.com/gbellseattle)  
 **Market (primary late July 2026):** Win total **8.5** (shop juice live)  
 **Research timestamp:** 2026-07-30 ET
@@ -43,6 +44,14 @@ Sporting News / CBS-style Under arguments (run-game regression, tougher division
 
 Rams added Garrett and McDuffie. 49ers remain a weekly problem when healthy. Arizona is the division’s win bank — and even those are no longer automatic freebies if LaFleur’s offense spikes for a month. Seattle’s path to nine still exists through home dominance and defensive floor. The path to seven exists through a quarter of negative offensive scripts and a couple of lost one-scores. Championship hangover is a cliché until you look at how many defending titles regress a win or two while remaining good. The market already cut Seattle from a 14-win season to **8.5**. Paying even money-ish to say they still get to nine is closer to buying the structure than buying the logo.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Defense-first prior intact after a Dallas exhibition loss. QB process still the variance at 8.5 — Pass on thin tickets.
+
+**What matters most.** QB ones share; injury DNPs.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total 8.5:** Lean **Over** at roughly even to −120. Model ~11.1 / research-adjusted ~9.5–10.5 both clear. **Pass** if Over juice worsens past −135.  

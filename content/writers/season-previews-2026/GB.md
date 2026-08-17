@@ -2,6 +2,7 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk
 **Angle:** Love’s supporting cast and scheme continuity decide the number
+**Date:** August 17, 2026
 **Sources (beat desk):** Rob Demovsky (ESPN) @RobDemovsky; Matt Schneidman (The Athletic) @mattschneidman; Tom Silverstein (PackersNews) @TomSilverstein
 
 Matt LaFleur still calls the offense. Jordan Love still throws it. That continuity is the bull case in Green Bay — and it is also why the win-total market cannot agree with itself.
@@ -40,6 +41,14 @@ Threshold discipline forbids inventing a lean inside half a win, and this market
 
 Playoff pricing near a coin flip is more honest than either win-total extreme. Green Bay is a team that can make January and still miss 10.5, or clear 9.5 and still look ordinary in December. Bet the cast around Love, not the logo.
 
+
+## Monday desk refresh (2026-08-17)
+
+**Bottom line.** Bullard shed the boot but is still not practicing. Corner/slot mix remains fluid — Pass.
+
+**What matters most.** First full practice back for Bullard; who owns slot with the ones.
+
+**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins:** Pass while books disagree at 9.5 vs 10.5. Prefer no position until Parsons/Kraft timelines and OL starters stabilize after joint practices.
