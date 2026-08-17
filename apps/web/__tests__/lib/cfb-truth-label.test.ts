@@ -17,7 +17,7 @@ describe("cfb-truth-label", () => {
     expect(cfbModelDeskTruthStates(AUG_2026)).toEqual(["PRESEASON", "MODEL"]);
     expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/PRESEASON/);
     expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/MODEL research/);
-    expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/no KEI/);
+    expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/KEI is the published line/);
     expect(cfbModelDeskTruthStates(AUG_2026)).not.toContain("LIVE");
   });
 
@@ -46,14 +46,13 @@ describe("cfb truth-label wiring", () => {
     }
   });
 
-  it("CFB Edge Board stays LIVE markets and refuses fake KEI", () => {
+  it("CFB Edge Board publishes KEI vs market with Week 0/1 tabs", () => {
     const board = readFileSync(
       path.join(__dirname, "../../app/edge-board/[sport]/page.tsx"),
       "utf8",
     );
-    expect(board).toContain('states={["LIVE"]}');
-    expect(board).toContain("books ≠ KEI");
-    expect(board).toContain("MODEL research");
-    expect(board).not.toContain("kei_lines_cfb");
+    expect(board).toContain("stampCfbEdgeBoardWeek");
+    expect(board).toContain("Tag = KEI vs market");
+    expect(board).toContain("/edge-board/cfb?week=0");
   });
 });

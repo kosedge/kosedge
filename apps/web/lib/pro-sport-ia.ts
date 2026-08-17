@@ -577,7 +577,7 @@ function marketLinksForSport({
       label: "Public edge board",
       hint:
         sportKey === "cfb"
-          ? "Markets-only CFB board — no invented KEI fair lines."
+          ? "KEI vs market on Week 0/1. Model is the research column."
           : "Open vs best prices, KEI, and directional edge tags.",
       premium: true,
       status: "active",

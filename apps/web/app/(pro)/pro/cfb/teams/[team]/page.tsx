@@ -8,6 +8,7 @@ import {
   displayCfbConference,
 } from "@/lib/cfb-conferences";
 import { findCfbTeamPreview } from "@/lib/cfb-previews";
+import { findCfbFutures } from "@/lib/cfb-kei-artifacts";
 import {
   cfbPowerTeams,
   cfbResearchVersionStrip,
@@ -50,6 +51,7 @@ export default async function CfbTeamDetailPage({
   }
   if (!power) notFound();
   const proj = findCfbProjectionTeam(code);
+  const futures = findCfbFutures(code);
   const preview = findCfbTeamPreview(code);
   const version = cfbResearchVersionStrip();
   const displayConf = displayCfbConference(power.team, power.conference);
@@ -78,7 +80,7 @@ export default async function CfbTeamDetailPage({
     >
       <p className="mt-3 text-xs text-kos-text/55">
         {version.engine_version} · N={version.n_sims} · as_of {version.as_of} ·
-        used_in_spread=false
+        used_in_spread=false on research · KEI is the published line
       </p>
 
       <section className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -129,6 +131,26 @@ export default async function CfbTeamDetailPage({
           </p>
         </div>
       </section>
+
+      {futures ? (
+        <section className="mt-4 rounded-xl border border-kos-gold/20 bg-black/35 px-4 py-3">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+            Futures slice
+          </p>
+          <p className="mt-2 text-sm text-kos-text/80">
+            Natty {futures.natty_pct ?? "—"}% · CFP {futures.cfp_make_pct ?? "—"}%
+            {futures.conf_title_pct != null
+              ? ` · Conf title ${futures.conf_title_pct}%`
+              : ""}
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">
+            Sim-derived from our paths — not book prices.{" "}
+            <Link href="/pro/cfb/futures" className="font-semibold text-kos-gold">
+              Full futures desk →
+            </Link>
+          </p>
+        </section>
+      ) : null}
 
       <section className="mt-4 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-sm text-kos-text/75">
         <p>

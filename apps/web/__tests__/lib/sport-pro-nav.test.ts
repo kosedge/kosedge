@@ -118,11 +118,13 @@ describe("sport-pro-nav", () => {
     expect(cfbPrimary).toContain("Projections");
     expect(cfbPrimary).toContain("Teams");
     expect(cfbPrimary).toContain("Previews");
+    expect(cfbPrimary).toContain("Futures");
     expect(cfbPrimary).not.toContain("Fair Lines");
     expect(cfbPrimary).not.toContain("Edges");
     expect(cfbPrimary).not.toContain("KEI Lines");
-    expect(cfbTools).toContain("KEI (not shipped)");
+    expect(cfbTools).toContain("KEI Lines");
     expect(cfbTools).toContain("Conferences");
+    expect(cfbTools).not.toContain("KEI (not shipped)");
     expect(cfbTools).not.toContain("KEI Projections");
     expect(cfbPrimary).not.toContain("Survivor");
     expect(cfbPrimary).not.toContain("Game Boxes");

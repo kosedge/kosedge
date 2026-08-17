@@ -9,7 +9,7 @@
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
  * NBA/WNBA: fair-lines → KEI handicap (model_* identity until pre_blend exists).
  * NCAAM: Odds + kei_lines_ncaam.json.
- * NHL / CFB: **markets-only** until a KEI model ships — Odds/fallback only;
+ * NHL: **markets-only** until a KEI model ships — Odds/fallback only;
  *   resolveKeiGames returns [] (do not invent KEI). UI banners via
  *   sportIsMarketsOnlyEdgeBoard.
  * Never invents sportsbook or KEI prices; empty offseason boards stay empty honestly.

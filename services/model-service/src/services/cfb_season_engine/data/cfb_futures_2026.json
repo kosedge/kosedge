@@ -1,0 +1,2663 @@
+{
+  "ok": true,
+  "futures_version": "cfb-futures-v1-cfp12-2026",
+  "engine_version": "cfb-season-engine-v0.9-inseason",
+  "as_of": "2026-08-17",
+  "n_sims": 2500,
+  "cfp_field": 12,
+  "auto_bids": 5,
+  "at_large": 7,
+  "bye_seeds": 4,
+  "method": "Path-level ranking (wins, power_index) \u2192 12-team CFP (5 conference champs + 7 at-large) \u2192 neutral-site playoff WP from power gap. Sim-derived. Not book prices. Not an ESPN bracket copy.",
+  "assumptions": {
+    "cfp_field": 12,
+    "auto_bids": 5,
+    "independents": "at-large only",
+    "g5": "G5 champ can take an auto bid if among the top-5 conference champs by rank",
+    "playoff_wp": "logistic of power_index gap, neutral",
+    "precision": "1 decimal when N>=1000 else integer percent"
+  },
+  "used_in_spread": false,
+  "kei": false,
+  "research_only": true,
+  "teams": [
+    {
+      "team": "OSU",
+      "conference": "Big Ten",
+      "power_index": 1.6168,
+      "cfp_make_pct": 90.7,
+      "natty_pct": 17.0,
+      "conf_title_pct": 41.9,
+      "cfp_hits": 2268,
+      "natty_hits": 425,
+      "conf_title_hits": 1048,
+      "g5": false,
+      "power4": true,
+      "rank": 1
+    },
+    {
+      "team": "ND",
+      "conference": "Independent",
+      "power_index": 1.5016,
+      "cfp_make_pct": 95.4,
+      "natty_pct": 11.6,
+      "conf_title_pct": null,
+      "cfp_hits": 2385,
+      "natty_hits": 291,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 2
+    },
+    {
+      "team": "MIA",
+      "conference": "ACC",
+      "power_index": 1.5309,
+      "cfp_make_pct": 86.3,
+      "natty_pct": 10.3,
+      "conf_title_pct": 51.6,
+      "cfp_hits": 2157,
+      "natty_hits": 257,
+      "conf_title_hits": 1289,
+      "g5": false,
+      "power4": true,
+      "rank": 3
+    },
+    {
+      "team": "ORE",
+      "conference": "Big Ten",
+      "power_index": 1.5625,
+      "cfp_make_pct": 80.0,
+      "natty_pct": 9.9,
+      "conf_title_pct": 24.6,
+      "cfp_hits": 1999,
+      "natty_hits": 248,
+      "conf_title_hits": 614,
+      "g5": false,
+      "power4": true,
+      "rank": 4
+    },
+    {
+      "team": "UTAH",
+      "conference": "Big 12",
+      "power_index": 1.4841,
+      "cfp_make_pct": 73.2,
+      "natty_pct": 6.6,
+      "conf_title_pct": 52.4,
+      "cfp_hits": 1830,
+      "natty_hits": 164,
+      "conf_title_hits": 1309,
+      "g5": false,
+      "power4": true,
+      "rank": 5
+    },
+    {
+      "team": "MISS",
+      "conference": "SEC",
+      "power_index": 1.5479,
+      "cfp_make_pct": 43.7,
+      "natty_pct": 4.8,
+      "conf_title_pct": 25.6,
+      "cfp_hits": 1092,
+      "natty_hits": 121,
+      "conf_title_hits": 641,
+      "g5": false,
+      "power4": true,
+      "rank": 6
+    },
+    {
+      "team": "USC",
+      "conference": "Big Ten",
+      "power_index": 1.4624,
+      "cfp_make_pct": 53.5,
+      "natty_pct": 4.2,
+      "conf_title_pct": 7.2,
+      "cfp_hits": 1338,
+      "natty_hits": 105,
+      "conf_title_hits": 181,
+      "g5": false,
+      "power4": true,
+      "rank": 7
+    },
+    {
+      "team": "SMU",
+      "conference": "ACC",
+      "power_index": 1.4071,
+      "cfp_make_pct": 49.7,
+      "natty_pct": 3.8,
+      "conf_title_pct": 16.6,
+      "cfp_hits": 1243,
+      "natty_hits": 96,
+      "conf_title_hits": 415,
+      "g5": false,
+      "power4": true,
+      "rank": 8
+    },
+    {
+      "team": "TEX",
+      "conference": "SEC",
+      "power_index": 1.4907,
+      "cfp_make_pct": 36.5,
+      "natty_pct": 3.4,
+      "conf_title_pct": 15.5,
+      "cfp_hits": 913,
+      "natty_hits": 84,
+      "conf_title_hits": 387,
+      "g5": false,
+      "power4": true,
+      "rank": 9
+    },
+    {
+      "team": "IU",
+      "conference": "Big Ten",
+      "power_index": 1.5232,
+      "cfp_make_pct": 40.6,
+      "natty_pct": 3.2,
+      "conf_title_pct": 12.3,
+      "cfp_hits": 1016,
+      "natty_hits": 81,
+      "conf_title_hits": 307,
+      "g5": false,
+      "power4": true,
+      "rank": 10
+    },
+    {
+      "team": "PSU",
+      "conference": "Big Ten",
+      "power_index": 1.3735,
+      "cfp_make_pct": 49.0,
+      "natty_pct": 3.1,
+      "conf_title_pct": 7.3,
+      "cfp_hits": 1224,
+      "natty_hits": 77,
+      "conf_title_hits": 182,
+      "g5": false,
+      "power4": true,
+      "rank": 11
+    },
+    {
+      "team": "TAMU",
+      "conference": "SEC",
+      "power_index": 1.519,
+      "cfp_make_pct": 30.9,
+      "natty_pct": 2.9,
+      "conf_title_pct": 15.7,
+      "cfp_hits": 773,
+      "natty_hits": 72,
+      "conf_title_hits": 393,
+      "g5": false,
+      "power4": true,
+      "rank": 12
+    },
+    {
+      "team": "TTU",
+      "conference": "Big 12",
+      "power_index": 1.3899,
+      "cfp_make_pct": 39.7,
+      "natty_pct": 2.1,
+      "conf_title_pct": 17.6,
+      "cfp_hits": 993,
+      "natty_hits": 52,
+      "conf_title_hits": 439,
+      "g5": false,
+      "power4": true,
+      "rank": 13
+    },
+    {
+      "team": "UVA",
+      "conference": "ACC",
+      "power_index": 1.3679,
+      "cfp_make_pct": 37.3,
+      "natty_pct": 2.0,
+      "conf_title_pct": 9.9,
+      "cfp_hits": 932,
+      "natty_hits": 51,
+      "conf_title_hits": 248,
+      "g5": false,
+      "power4": true,
+      "rank": 14
+    },
+    {
+      "team": "CLEM",
+      "conference": "ACC",
+      "power_index": 1.3823,
+      "cfp_make_pct": 33.7,
+      "natty_pct": 2.0,
+      "conf_title_pct": 5.5,
+      "cfp_hits": 842,
+      "natty_hits": 51,
+      "conf_title_hits": 138,
+      "g5": false,
+      "power4": true,
+      "rank": 15
+    },
+    {
+      "team": "WASH",
+      "conference": "Big Ten",
+      "power_index": 1.4455,
+      "cfp_make_pct": 27.3,
+      "natty_pct": 1.8,
+      "conf_title_pct": 3.8,
+      "cfp_hits": 682,
+      "natty_hits": 46,
+      "conf_title_hits": 95,
+      "g5": false,
+      "power4": true,
+      "rank": 16
+    },
+    {
+      "team": "OU",
+      "conference": "SEC",
+      "power_index": 1.4729,
+      "cfp_make_pct": 18.8,
+      "natty_pct": 1.6,
+      "conf_title_pct": 9.3,
+      "cfp_hits": 470,
+      "natty_hits": 39,
+      "conf_title_hits": 233,
+      "g5": false,
+      "power4": true,
+      "rank": 17
+    },
+    {
+      "team": "AUB",
+      "conference": "SEC",
+      "power_index": 1.4263,
+      "cfp_make_pct": 24.2,
+      "natty_pct": 1.4,
+      "conf_title_pct": 14.0,
+      "cfp_hits": 605,
+      "natty_hits": 36,
+      "conf_title_hits": 349,
+      "g5": false,
+      "power4": true,
+      "rank": 18
+    },
+    {
+      "team": "ARI",
+      "conference": "Big 12",
+      "power_index": 1.3931,
+      "cfp_make_pct": 24.7,
+      "natty_pct": 1.1,
+      "conf_title_pct": 10.8,
+      "cfp_hits": 618,
+      "natty_hits": 27,
+      "conf_title_hits": 269,
+      "g5": false,
+      "power4": true,
+      "rank": 19
+    },
+    {
+      "team": "LOU",
+      "conference": "ACC",
+      "power_index": 1.3724,
+      "cfp_make_pct": 24.8,
+      "natty_pct": 1.0,
+      "conf_title_pct": 8.6,
+      "cfp_hits": 621,
+      "natty_hits": 26,
+      "conf_title_hits": 214,
+      "g5": false,
+      "power4": true,
+      "rank": 20
+    },
+    {
+      "team": "NCSU",
+      "conference": "ACC",
+      "power_index": 1.3285,
+      "cfp_make_pct": 23.8,
+      "natty_pct": 0.9,
+      "conf_title_pct": 5.1,
+      "cfp_hits": 595,
+      "natty_hits": 22,
+      "conf_title_hits": 127,
+      "g5": false,
+      "power4": true,
+      "rank": 21
+    },
+    {
+      "team": "JMU",
+      "conference": "Sun Belt",
+      "power_index": 1.1492,
+      "cfp_make_pct": 24.8,
+      "natty_pct": 0.7,
+      "conf_title_pct": 54.8,
+      "cfp_hits": 619,
+      "natty_hits": 17,
+      "conf_title_hits": 1371,
+      "g5": true,
+      "power4": false,
+      "rank": 22
+    },
+    {
+      "team": "PITT",
+      "conference": "ACC",
+      "power_index": 1.2958,
+      "cfp_make_pct": 12.0,
+      "natty_pct": 0.4,
+      "conf_title_pct": 1.8,
+      "cfp_hits": 299,
+      "natty_hits": 11,
+      "conf_title_hits": 44,
+      "g5": false,
+      "power4": true,
+      "rank": 23
+    },
+    {
+      "team": "ISU",
+      "conference": "Big 12",
+      "power_index": 1.3098,
+      "cfp_make_pct": 6.4,
+      "natty_pct": 0.3,
+      "conf_title_pct": 3.1,
+      "cfp_hits": 159,
+      "natty_hits": 7,
+      "conf_title_hits": 78,
+      "g5": false,
+      "power4": true,
+      "rank": 24
+    },
+    {
+      "team": "CIN",
+      "conference": "Big 12",
+      "power_index": 1.2831,
+      "cfp_make_pct": 3.6,
+      "natty_pct": 0.3,
+      "conf_title_pct": 1.4,
+      "cfp_hits": 90,
+      "natty_hits": 8,
+      "conf_title_hits": 35,
+      "g5": false,
+      "power4": true,
+      "rank": 25
+    },
+    {
+      "team": "USF",
+      "conference": "AAC",
+      "power_index": 1.2601,
+      "cfp_make_pct": 24.8,
+      "natty_pct": 0.2,
+      "conf_title_pct": 37.5,
+      "cfp_hits": 620,
+      "natty_hits": 6,
+      "conf_title_hits": 938,
+      "g5": true,
+      "power4": false,
+      "rank": 26
+    },
+    {
+      "team": "LIB",
+      "conference": "CUSA",
+      "power_index": 1.0546,
+      "cfp_make_pct": 8.6,
+      "natty_pct": 0.2,
+      "conf_title_pct": 25.2,
+      "cfp_hits": 214,
+      "natty_hits": 5,
+      "conf_title_hits": 630,
+      "g5": true,
+      "power4": false,
+      "rank": 27
+    },
+    {
+      "team": "KSU",
+      "conference": "Big 12",
+      "power_index": 1.2896,
+      "cfp_make_pct": 7.4,
+      "natty_pct": 0.2,
+      "conf_title_pct": 2.7,
+      "cfp_hits": 184,
+      "natty_hits": 6,
+      "conf_title_hits": 68,
+      "g5": false,
+      "power4": true,
+      "rank": 28
+    },
+    {
+      "team": "ALA",
+      "conference": "SEC",
+      "power_index": 1.3929,
+      "cfp_make_pct": 7.1,
+      "natty_pct": 0.2,
+      "conf_title_pct": 6.7,
+      "cfp_hits": 177,
+      "natty_hits": 6,
+      "conf_title_hits": 167,
+      "g5": false,
+      "power4": true,
+      "rank": 29
+    },
+    {
+      "team": "TENN",
+      "conference": "SEC",
+      "power_index": 1.3548,
+      "cfp_make_pct": 6.5,
+      "natty_pct": 0.2,
+      "conf_title_pct": 4.4,
+      "cfp_hits": 162,
+      "natty_hits": 5,
+      "conf_title_hits": 110,
+      "g5": false,
+      "power4": true,
+      "rank": 30
+    },
+    {
+      "team": "ASU",
+      "conference": "Big 12",
+      "power_index": 1.3081,
+      "cfp_make_pct": 6.5,
+      "natty_pct": 0.2,
+      "conf_title_pct": 2.9,
+      "cfp_hits": 162,
+      "natty_hits": 6,
+      "conf_title_hits": 73,
+      "g5": false,
+      "power4": true,
+      "rank": 31
+    },
+    {
+      "team": "GT",
+      "conference": "ACC",
+      "power_index": 1.2591,
+      "cfp_make_pct": 4.1,
+      "natty_pct": 0.2,
+      "conf_title_pct": 0.4,
+      "cfp_hits": 102,
+      "natty_hits": 5,
+      "conf_title_hits": 9,
+      "g5": false,
+      "power4": true,
+      "rank": 32
+    },
+    {
+      "team": "BYU",
+      "conference": "Big 12",
+      "power_index": 1.3512,
+      "cfp_make_pct": 2.9,
+      "natty_pct": 0.2,
+      "conf_title_pct": 2.6,
+      "cfp_hits": 72,
+      "natty_hits": 5,
+      "conf_title_hits": 65,
+      "g5": false,
+      "power4": true,
+      "rank": 33
+    },
+    {
+      "team": "DUKE",
+      "conference": "ACC",
+      "power_index": 1.2805,
+      "cfp_make_pct": 2.9,
+      "natty_pct": 0.2,
+      "conf_title_pct": 0.4,
+      "cfp_hits": 72,
+      "natty_hits": 4,
+      "conf_title_hits": 10,
+      "g5": false,
+      "power4": true,
+      "rank": 34
+    },
+    {
+      "team": "TCU",
+      "conference": "Big 12",
+      "power_index": 1.3176,
+      "cfp_make_pct": 2.2,
+      "natty_pct": 0.2,
+      "conf_title_pct": 1.6,
+      "cfp_hits": 56,
+      "natty_hits": 5,
+      "conf_title_hits": 41,
+      "g5": false,
+      "power4": true,
+      "rank": 35
+    },
+    {
+      "team": "M-OH",
+      "conference": "MAC",
+      "power_index": 1.0594,
+      "cfp_make_pct": 7.1,
+      "natty_pct": 0.1,
+      "conf_title_pct": 32.6,
+      "cfp_hits": 177,
+      "natty_hits": 3,
+      "conf_title_hits": 815,
+      "g5": true,
+      "power4": false,
+      "rank": 36
+    },
+    {
+      "team": "MICH",
+      "conference": "Big Ten",
+      "power_index": 1.3062,
+      "cfp_make_pct": 6.2,
+      "natty_pct": 0.1,
+      "conf_title_pct": 0.6,
+      "cfp_hits": 156,
+      "natty_hits": 3,
+      "conf_title_hits": 15,
+      "g5": false,
+      "power4": true,
+      "rank": 37
+    },
+    {
+      "team": "WMU",
+      "conference": "MAC",
+      "power_index": 1.0924,
+      "cfp_make_pct": 5.6,
+      "natty_pct": 0.1,
+      "conf_title_pct": 26.4,
+      "cfp_hits": 141,
+      "natty_hits": 3,
+      "conf_title_hits": 661,
+      "g5": true,
+      "power4": false,
+      "rank": 38
+    },
+    {
+      "team": "TROY",
+      "conference": "Sun Belt",
+      "power_index": 1.1321,
+      "cfp_make_pct": 5.2,
+      "natty_pct": 0.1,
+      "conf_title_pct": 14.9,
+      "cfp_hits": 131,
+      "natty_hits": 3,
+      "conf_title_hits": 373,
+      "g5": true,
+      "power4": false,
+      "rank": 39
+    },
+    {
+      "team": "IOWA",
+      "conference": "Big Ten",
+      "power_index": 1.3028,
+      "cfp_make_pct": 5.0,
+      "natty_pct": 0.1,
+      "conf_title_pct": 0.9,
+      "cfp_hits": 124,
+      "natty_hits": 2,
+      "conf_title_hits": 22,
+      "g5": false,
+      "power4": true,
+      "rank": 40
+    },
+    {
+      "team": "BAY",
+      "conference": "Big 12",
+      "power_index": 1.2965,
+      "cfp_make_pct": 3.8,
+      "natty_pct": 0.1,
+      "conf_title_pct": 1.8,
+      "cfp_hits": 94,
+      "natty_hits": 2,
+      "conf_title_hits": 44,
+      "g5": false,
+      "power4": true,
+      "rank": 41
+    },
+    {
+      "team": "UGA",
+      "conference": "SEC",
+      "power_index": 1.377,
+      "cfp_make_pct": 3.7,
+      "natty_pct": 0.1,
+      "conf_title_pct": 2.1,
+      "cfp_hits": 93,
+      "natty_hits": 2,
+      "conf_title_hits": 52,
+      "g5": false,
+      "power4": true,
+      "rank": 42
+    },
+    {
+      "team": "VAN",
+      "conference": "SEC",
+      "power_index": 1.3103,
+      "cfp_make_pct": 3.4,
+      "natty_pct": 0.1,
+      "conf_title_pct": 2.2,
+      "cfp_hits": 86,
+      "natty_hits": 3,
+      "conf_title_hits": 56,
+      "g5": false,
+      "power4": true,
+      "rank": 43
+    },
+    {
+      "team": "MRSH",
+      "conference": "Sun Belt",
+      "power_index": 1.0759,
+      "cfp_make_pct": 5.6,
+      "natty_pct": 0.0,
+      "conf_title_pct": 20.2,
+      "cfp_hits": 139,
+      "natty_hits": 0,
+      "conf_title_hits": 505,
+      "g5": true,
+      "power4": false,
+      "rank": 44
+    },
+    {
+      "team": "UCF",
+      "conference": "Big 12",
+      "power_index": 1.2436,
+      "cfp_make_pct": 5.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.9,
+      "cfp_hits": 125,
+      "natty_hits": 1,
+      "conf_title_hits": 48,
+      "g5": false,
+      "power4": true,
+      "rank": 45
+    },
+    {
+      "team": "BOISE",
+      "conference": "Mountain West",
+      "power_index": 1.2386,
+      "cfp_make_pct": 4.9,
+      "natty_pct": 0.0,
+      "conf_title_pct": 25.3,
+      "cfp_hits": 123,
+      "natty_hits": 1,
+      "conf_title_hits": 633,
+      "g5": true,
+      "power4": false,
+      "rank": 46
+    },
+    {
+      "team": "AKR",
+      "conference": "MAC",
+      "power_index": 1.04,
+      "cfp_make_pct": 4.7,
+      "natty_pct": 0.0,
+      "conf_title_pct": 21.8,
+      "cfp_hits": 118,
+      "natty_hits": 0,
+      "conf_title_hits": 544,
+      "g5": true,
+      "power4": false,
+      "rank": 47
+    },
+    {
+      "team": "LSU",
+      "conference": "SEC",
+      "power_index": 1.3498,
+      "cfp_make_pct": 3.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.5,
+      "cfp_hits": 95,
+      "natty_hits": 1,
+      "conf_title_hits": 63,
+      "g5": false,
+      "power4": true,
+      "rank": 48
+    },
+    {
+      "team": "TULN",
+      "conference": "AAC",
+      "power_index": 1.0867,
+      "cfp_make_pct": 2.9,
+      "natty_pct": 0.0,
+      "conf_title_pct": 11.8,
+      "cfp_hits": 73,
+      "natty_hits": 0,
+      "conf_title_hits": 294,
+      "g5": true,
+      "power4": false,
+      "rank": 49
+    },
+    {
+      "team": "SCAR",
+      "conference": "SEC",
+      "power_index": 1.3048,
+      "cfp_make_pct": 2.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.8,
+      "cfp_hits": 71,
+      "natty_hits": 1,
+      "conf_title_hits": 46,
+      "g5": false,
+      "power4": true,
+      "rank": 50
+    },
+    {
+      "team": "RUT",
+      "conference": "Big Ten",
+      "power_index": 1.2472,
+      "cfp_make_pct": 2.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 49,
+      "natty_hits": 1,
+      "conf_title_hits": 1,
+      "g5": false,
+      "power4": true,
+      "rank": 51
+    },
+    {
+      "team": "ILL",
+      "conference": "Big Ten",
+      "power_index": 1.3321,
+      "cfp_make_pct": 1.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.0,
+      "cfp_hits": 44,
+      "natty_hits": 0,
+      "conf_title_hits": 24,
+      "g5": false,
+      "power4": true,
+      "rank": 52
+    },
+    {
+      "team": "CAL",
+      "conference": "ACC",
+      "power_index": 1.2107,
+      "cfp_make_pct": 1.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.2,
+      "cfp_hits": 45,
+      "natty_hits": 1,
+      "conf_title_hits": 5,
+      "g5": false,
+      "power4": true,
+      "rank": 53
+    },
+    {
+      "team": "COLO",
+      "conference": "Big 12",
+      "power_index": 1.2142,
+      "cfp_make_pct": 1.7,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.0,
+      "cfp_hits": 43,
+      "natty_hits": 0,
+      "conf_title_hits": 25,
+      "g5": false,
+      "power4": true,
+      "rank": 54
+    },
+    {
+      "team": "UNLV",
+      "conference": "Mountain West",
+      "power_index": 1.1637,
+      "cfp_make_pct": 1.7,
+      "natty_pct": 0.0,
+      "conf_title_pct": 30.2,
+      "cfp_hits": 42,
+      "natty_hits": 0,
+      "conf_title_hits": 754,
+      "g5": true,
+      "power4": false,
+      "rank": 55
+    },
+    {
+      "team": "WKU",
+      "conference": "CUSA",
+      "power_index": 1.1336,
+      "cfp_make_pct": 1.7,
+      "natty_pct": 0.0,
+      "conf_title_pct": 29.2,
+      "cfp_hits": 43,
+      "natty_hits": 1,
+      "conf_title_hits": 729,
+      "g5": true,
+      "power4": false,
+      "rank": 56
+    },
+    {
+      "team": "UTSA",
+      "conference": "AAC",
+      "power_index": 1.2015,
+      "cfp_make_pct": 1.6,
+      "natty_pct": 0.0,
+      "conf_title_pct": 36.3,
+      "cfp_hits": 39,
+      "natty_hits": 1,
+      "conf_title_hits": 907,
+      "g5": true,
+      "power4": false,
+      "rank": 57
+    },
+    {
+      "team": "HAW",
+      "conference": "Mountain West",
+      "power_index": 1.1637,
+      "cfp_make_pct": 1.6,
+      "natty_pct": 0.0,
+      "conf_title_pct": 14.6,
+      "cfp_hits": 41,
+      "natty_hits": 0,
+      "conf_title_hits": 364,
+      "g5": true,
+      "power4": false,
+      "rank": 58
+    },
+    {
+      "team": "DEL",
+      "conference": "CUSA",
+      "power_index": 1.0903,
+      "cfp_make_pct": 1.5,
+      "natty_pct": 0.0,
+      "conf_title_pct": 16.5,
+      "cfp_hits": 38,
+      "natty_hits": 0,
+      "conf_title_hits": 413,
+      "g5": true,
+      "power4": false,
+      "rank": 59
+    },
+    {
+      "team": "AFA",
+      "conference": "Mountain West",
+      "power_index": 1.1121,
+      "cfp_make_pct": 1.3,
+      "natty_pct": 0.0,
+      "conf_title_pct": 10.6,
+      "cfp_hits": 33,
+      "natty_hits": 0,
+      "conf_title_hits": 265,
+      "g5": true,
+      "power4": false,
+      "rank": 60
+    },
+    {
+      "team": "FSU",
+      "conference": "ACC",
+      "power_index": 1.2604,
+      "cfp_make_pct": 0.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 21,
+      "natty_hits": 1,
+      "conf_title_hits": 1,
+      "g5": false,
+      "power4": true,
+      "rank": 61
+    },
+    {
+      "team": "MD",
+      "conference": "Big Ten",
+      "power_index": 1.2285,
+      "cfp_make_pct": 0.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.2,
+      "cfp_hits": 19,
+      "natty_hits": 1,
+      "conf_title_hits": 4,
+      "g5": false,
+      "power4": true,
+      "rank": 62
+    },
+    {
+      "team": "WSU",
+      "conference": "Pac-12",
+      "power_index": 1.1888,
+      "cfp_make_pct": 0.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 68.2,
+      "cfp_hits": 21,
+      "natty_hits": 0,
+      "conf_title_hits": 1704,
+      "g5": true,
+      "power4": false,
+      "rank": 63
+    },
+    {
+      "team": "USA",
+      "conference": "Sun Belt",
+      "power_index": 1.0432,
+      "cfp_make_pct": 0.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.9,
+      "cfp_hits": 20,
+      "natty_hits": 0,
+      "conf_title_hits": 72,
+      "g5": true,
+      "power4": false,
+      "rank": 64
+    },
+    {
+      "team": "FIU",
+      "conference": "CUSA",
+      "power_index": 1.0095,
+      "cfp_make_pct": 0.8,
+      "natty_pct": 0.0,
+      "conf_title_pct": 5.2,
+      "cfp_hits": 19,
+      "natty_hits": 0,
+      "conf_title_hits": 130,
+      "g5": true,
+      "power4": false,
+      "rank": 65
+    },
+    {
+      "team": "MINN",
+      "conference": "Big Ten",
+      "power_index": 1.2258,
+      "cfp_make_pct": 0.6,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 14,
+      "natty_hits": 1,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 66
+    },
+    {
+      "team": "WIS",
+      "conference": "Big Ten",
+      "power_index": 1.2022,
+      "cfp_make_pct": 0.6,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.2,
+      "cfp_hits": 14,
+      "natty_hits": 1,
+      "conf_title_hits": 4,
+      "g5": false,
+      "power4": true,
+      "rank": 67
+    },
+    {
+      "team": "OHIO",
+      "conference": "MAC",
+      "power_index": 1.1044,
+      "cfp_make_pct": 0.6,
+      "natty_pct": 0.0,
+      "conf_title_pct": 11.4,
+      "cfp_hits": 14,
+      "natty_hits": 0,
+      "conf_title_hits": 285,
+      "g5": true,
+      "power4": false,
+      "rank": 68
+    },
+    {
+      "team": "NEB",
+      "conference": "Big Ten",
+      "power_index": 1.2746,
+      "cfp_make_pct": 0.4,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.1,
+      "cfp_hits": 10,
+      "natty_hits": 0,
+      "conf_title_hits": 3,
+      "g5": false,
+      "power4": true,
+      "rank": 69
+    },
+    {
+      "team": "WAKE",
+      "conference": "ACC",
+      "power_index": 1.2074,
+      "cfp_make_pct": 0.4,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 11,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 70
+    },
+    {
+      "team": "ARMY",
+      "conference": "Independent",
+      "power_index": 1.042,
+      "cfp_make_pct": 0.4,
+      "natty_pct": 0.0,
+      "conf_title_pct": null,
+      "cfp_hits": 11,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 71
+    },
+    {
+      "team": "ULM",
+      "conference": "Sun Belt",
+      "power_index": 1.0392,
+      "cfp_make_pct": 0.4,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.9,
+      "cfp_hits": 9,
+      "natty_hits": 0,
+      "conf_title_hits": 72,
+      "g5": true,
+      "power4": false,
+      "rank": 72
+    },
+    {
+      "team": "NMSU",
+      "conference": "CUSA",
+      "power_index": 1.0632,
+      "cfp_make_pct": 0.3,
+      "natty_pct": 0.0,
+      "conf_title_pct": 10.7,
+      "cfp_hits": 7,
+      "natty_hits": 0,
+      "conf_title_hits": 268,
+      "g5": true,
+      "power4": false,
+      "rank": 73
+    },
+    {
+      "team": "KENNESAW",
+      "conference": "CUSA",
+      "power_index": 1.0538,
+      "cfp_make_pct": 0.3,
+      "natty_pct": 0.0,
+      "conf_title_pct": 8.7,
+      "cfp_hits": 7,
+      "natty_hits": 0,
+      "conf_title_hits": 217,
+      "g5": true,
+      "power4": false,
+      "rank": 74
+    },
+    {
+      "team": "TLSA",
+      "conference": "AAC",
+      "power_index": 1.009,
+      "cfp_make_pct": 0.3,
+      "natty_pct": 0.0,
+      "conf_title_pct": 5.3,
+      "cfp_hits": 8,
+      "natty_hits": 0,
+      "conf_title_hits": 133,
+      "g5": true,
+      "power4": false,
+      "rank": 75
+    },
+    {
+      "team": "SDSU",
+      "conference": "Mountain West",
+      "power_index": 1.1378,
+      "cfp_make_pct": 0.2,
+      "natty_pct": 0.0,
+      "conf_title_pct": 3.6,
+      "cfp_hits": 6,
+      "natty_hits": 0,
+      "conf_title_hits": 90,
+      "g5": true,
+      "power4": false,
+      "rank": 76
+    },
+    {
+      "team": "MEM",
+      "conference": "AAC",
+      "power_index": 1.1227,
+      "cfp_make_pct": 0.2,
+      "natty_pct": 0.0,
+      "conf_title_pct": 5.2,
+      "cfp_hits": 6,
+      "natty_hits": 0,
+      "conf_title_hits": 129,
+      "g5": true,
+      "power4": false,
+      "rank": 77
+    },
+    {
+      "team": "HOU",
+      "conference": "Big 12",
+      "power_index": 1.1088,
+      "cfp_make_pct": 0.2,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.1,
+      "cfp_hits": 4,
+      "natty_hits": 0,
+      "conf_title_hits": 3,
+      "g5": false,
+      "power4": true,
+      "rank": 78
+    },
+    {
+      "team": "USM",
+      "conference": "Sun Belt",
+      "power_index": 1.0537,
+      "cfp_make_pct": 0.2,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.4,
+      "cfp_hits": 5,
+      "natty_hits": 0,
+      "conf_title_hits": 36,
+      "g5": true,
+      "power4": false,
+      "rank": 79
+    },
+    {
+      "team": "EMU",
+      "conference": "MAC",
+      "power_index": 1.037,
+      "cfp_make_pct": 0.2,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.5,
+      "cfp_hits": 4,
+      "natty_hits": 0,
+      "conf_title_hits": 63,
+      "g5": true,
+      "power4": false,
+      "rank": 80
+    },
+    {
+      "team": "KU",
+      "conference": "Big 12",
+      "power_index": 1.1969,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.1,
+      "cfp_hits": 2,
+      "natty_hits": 0,
+      "conf_title_hits": 2,
+      "g5": false,
+      "power4": true,
+      "rank": 81
+    },
+    {
+      "team": "MSU",
+      "conference": "Big Ten",
+      "power_index": 1.1886,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 3,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 82
+    },
+    {
+      "team": "WVU",
+      "conference": "Big 12",
+      "power_index": 1.118,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 2,
+      "natty_hits": 0,
+      "conf_title_hits": 1,
+      "g5": false,
+      "power4": true,
+      "rank": 83
+    },
+    {
+      "team": "WYO",
+      "conference": "Mountain West",
+      "power_index": 1.0551,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 7.2,
+      "cfp_hits": 3,
+      "natty_hits": 0,
+      "conf_title_hits": 180,
+      "g5": true,
+      "power4": false,
+      "rank": 84
+    },
+    {
+      "team": "FAU",
+      "conference": "AAC",
+      "power_index": 1.034,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.1,
+      "cfp_hits": 3,
+      "natty_hits": 0,
+      "conf_title_hits": 52,
+      "g5": true,
+      "power4": false,
+      "rank": 85
+    },
+    {
+      "team": "MOST",
+      "conference": "CUSA",
+      "power_index": 1.0197,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.9,
+      "cfp_hits": 2,
+      "natty_hits": 0,
+      "conf_title_hits": 73,
+      "g5": true,
+      "power4": false,
+      "rank": 86
+    },
+    {
+      "team": "GASO",
+      "conference": "Sun Belt",
+      "power_index": 1.0107,
+      "cfp_make_pct": 0.1,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.6,
+      "cfp_hits": 3,
+      "natty_hits": 0,
+      "conf_title_hits": 41,
+      "g5": true,
+      "power4": false,
+      "rank": 87
+    },
+    {
+      "team": "ARK",
+      "conference": "SEC",
+      "power_index": 1.2483,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 88
+    },
+    {
+      "team": "ACU",
+      "conference": "Independent",
+      "power_index": 1.2078,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": null,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 89
+    },
+    {
+      "team": "MSST",
+      "conference": "SEC",
+      "power_index": 1.2024,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 90
+    },
+    {
+      "team": "UK",
+      "conference": "SEC",
+      "power_index": 1.1892,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.1,
+      "cfp_hits": 1,
+      "natty_hits": 0,
+      "conf_title_hits": 2,
+      "g5": false,
+      "power4": true,
+      "rank": 91
+    },
+    {
+      "team": "TXST",
+      "conference": "Sun Belt",
+      "power_index": 1.1788,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 92
+    },
+    {
+      "team": "UF",
+      "conference": "SEC",
+      "power_index": 1.1671,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 1,
+      "g5": false,
+      "power4": true,
+      "rank": 93
+    },
+    {
+      "team": "PUR",
+      "conference": "Big Ten",
+      "power_index": 1.1515,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 94
+    },
+    {
+      "team": "NW",
+      "conference": "Big Ten",
+      "power_index": 1.1448,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 95
+    },
+    {
+      "team": "UTAHST",
+      "conference": "Mountain West",
+      "power_index": 1.126,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.5,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 38,
+      "g5": true,
+      "power4": false,
+      "rank": 96
+    },
+    {
+      "team": "CHAT",
+      "conference": "Independent",
+      "power_index": 1.0981,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": null,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 97
+    },
+    {
+      "team": "UCLA",
+      "conference": "Big Ten",
+      "power_index": 1.0968,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 98
+    },
+    {
+      "team": "VT",
+      "conference": "ACC",
+      "power_index": 1.0964,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 99
+    },
+    {
+      "team": "LT",
+      "conference": "CUSA",
+      "power_index": 1.0661,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 1,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 100
+    },
+    {
+      "team": "SYR",
+      "conference": "ACC",
+      "power_index": 1.0564,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 101
+    },
+    {
+      "team": "ORST",
+      "conference": "Pac-12",
+      "power_index": 1.0366,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 31.8,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 796,
+      "g5": true,
+      "power4": false,
+      "rank": 102
+    },
+    {
+      "team": "OKST",
+      "conference": "Big 12",
+      "power_index": 1.0284,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 103
+    },
+    {
+      "team": "UNC",
+      "conference": "ACC",
+      "power_index": 1.012,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 104
+    },
+    {
+      "team": "FRES",
+      "conference": "Mountain West",
+      "power_index": 1.0006,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.7,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 42,
+      "g5": true,
+      "power4": false,
+      "rank": 105
+    },
+    {
+      "team": "CONN",
+      "conference": "Independent",
+      "power_index": 0.9929,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": null,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 106
+    },
+    {
+      "team": "NAVY",
+      "conference": "AAC",
+      "power_index": 0.9915,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.3,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 33,
+      "g5": true,
+      "power4": false,
+      "rank": 107
+    },
+    {
+      "team": "FAY",
+      "conference": "Independent",
+      "power_index": 0.9906,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": null,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 108
+    },
+    {
+      "team": "SOUTH",
+      "conference": "Sun Belt",
+      "power_index": 0.9906,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 109
+    },
+    {
+      "team": "TEM",
+      "conference": "AAC",
+      "power_index": 0.9879,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.4,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 11,
+      "g5": true,
+      "power4": false,
+      "rank": 110
+    },
+    {
+      "team": "STAN",
+      "conference": "ACC",
+      "power_index": 0.9827,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 111
+    },
+    {
+      "team": "SJSU",
+      "conference": "Mountain West",
+      "power_index": 0.9766,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 5.4,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 134,
+      "g5": true,
+      "power4": false,
+      "rank": 112
+    },
+    {
+      "team": "BC",
+      "conference": "ACC",
+      "power_index": 0.9733,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": true,
+      "rank": 113
+    },
+    {
+      "team": "NIU",
+      "conference": "MAC",
+      "power_index": 0.9686,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 114
+    },
+    {
+      "team": "MTSU",
+      "conference": "CUSA",
+      "power_index": 0.961,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.2,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 30,
+      "g5": true,
+      "power4": false,
+      "rank": 115
+    },
+    {
+      "team": "UTEP",
+      "conference": "CUSA",
+      "power_index": 0.96,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 116
+    },
+    {
+      "team": "UL",
+      "conference": "Sun Belt",
+      "power_index": 0.956,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.2,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 5,
+      "g5": true,
+      "power4": false,
+      "rank": 117
+    },
+    {
+      "team": "KENT",
+      "conference": "MAC",
+      "power_index": 0.947,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.1,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 27,
+      "g5": true,
+      "power4": false,
+      "rank": 118
+    },
+    {
+      "team": "IDHO",
+      "conference": "Independent",
+      "power_index": 0.9405,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": null,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 119
+    },
+    {
+      "team": "BUFF",
+      "conference": "MAC",
+      "power_index": 0.9389,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 2.5,
+      "cfp_hits": 1,
+      "natty_hits": 0,
+      "conf_title_hits": 62,
+      "g5": true,
+      "power4": false,
+      "rank": 120
+    },
+    {
+      "team": "CMU",
+      "conference": "MAC",
+      "power_index": 0.9342,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 1.2,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 29,
+      "g5": true,
+      "power4": false,
+      "rank": 121
+    },
+    {
+      "team": "BGSU",
+      "conference": "MAC",
+      "power_index": 0.9302,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.5,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 13,
+      "g5": true,
+      "power4": false,
+      "rank": 122
+    },
+    {
+      "team": "SHSU",
+      "conference": "CUSA",
+      "power_index": 0.9233,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.4,
+      "cfp_hits": 1,
+      "natty_hits": 0,
+      "conf_title_hits": 10,
+      "g5": true,
+      "power4": false,
+      "rank": 123
+    },
+    {
+      "team": "GAST",
+      "conference": "Sun Belt",
+      "power_index": 0.9133,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.3,
+      "cfp_hits": 1,
+      "natty_hits": 0,
+      "conf_title_hits": 8,
+      "g5": true,
+      "power4": false,
+      "rank": 124
+    },
+    {
+      "team": "CCU",
+      "conference": "Sun Belt",
+      "power_index": 0.9009,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.3,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 7,
+      "g5": true,
+      "power4": false,
+      "rank": 125
+    },
+    {
+      "team": "APP",
+      "conference": "Sun Belt",
+      "power_index": 0.8886,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.4,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 10,
+      "g5": true,
+      "power4": false,
+      "rank": 126
+    },
+    {
+      "team": "CHAR",
+      "conference": "AAC",
+      "power_index": 0.8799,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.1,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 3,
+      "g5": true,
+      "power4": false,
+      "rank": 127
+    },
+    {
+      "team": "MASS",
+      "conference": "MAC",
+      "power_index": 0.8733,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 1,
+      "g5": true,
+      "power4": false,
+      "rank": 128
+    },
+    {
+      "team": "RICE",
+      "conference": "AAC",
+      "power_index": 0.8373,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 129
+    },
+    {
+      "team": "BALL",
+      "conference": "MAC",
+      "power_index": 0.8219,
+      "cfp_make_pct": 0.0,
+      "natty_pct": 0.0,
+      "conf_title_pct": 0.0,
+      "cfp_hits": 0,
+      "natty_hits": 0,
+      "conf_title_hits": 0,
+      "g5": true,
+      "power4": false,
+      "rank": 130
+    }
+  ],
+  "conference_titles": {
+    "Big Ten": [
+      {
+        "team": "OSU",
+        "conf_title_pct": 41.9,
+        "cfp_make_pct": 90.7
+      },
+      {
+        "team": "ORE",
+        "conf_title_pct": 24.6,
+        "cfp_make_pct": 80.0
+      },
+      {
+        "team": "IU",
+        "conf_title_pct": 12.3,
+        "cfp_make_pct": 40.6
+      },
+      {
+        "team": "PSU",
+        "conf_title_pct": 7.3,
+        "cfp_make_pct": 49.0
+      },
+      {
+        "team": "USC",
+        "conf_title_pct": 7.2,
+        "cfp_make_pct": 53.5
+      },
+      {
+        "team": "WASH",
+        "conf_title_pct": 3.8,
+        "cfp_make_pct": 27.3
+      },
+      {
+        "team": "ILL",
+        "conf_title_pct": 1.0,
+        "cfp_make_pct": 1.8
+      },
+      {
+        "team": "IOWA",
+        "conf_title_pct": 0.9,
+        "cfp_make_pct": 5.0
+      },
+      {
+        "team": "MICH",
+        "conf_title_pct": 0.6,
+        "cfp_make_pct": 6.2
+      },
+      {
+        "team": "MD",
+        "conf_title_pct": 0.2,
+        "cfp_make_pct": 0.8
+      },
+      {
+        "team": "WIS",
+        "conf_title_pct": 0.2,
+        "cfp_make_pct": 0.6
+      },
+      {
+        "team": "NEB",
+        "conf_title_pct": 0.1,
+        "cfp_make_pct": 0.4
+      },
+      {
+        "team": "RUT",
+        "conf_title_pct": 0.0,
+        "cfp_make_pct": 2.0
+      }
+    ],
+    "ACC": [
+      {
+        "team": "MIA",
+        "conf_title_pct": 51.6,
+        "cfp_make_pct": 86.3
+      },
+      {
+        "team": "SMU",
+        "conf_title_pct": 16.6,
+        "cfp_make_pct": 49.7
+      },
+      {
+        "team": "UVA",
+        "conf_title_pct": 9.9,
+        "cfp_make_pct": 37.3
+      },
+      {
+        "team": "LOU",
+        "conf_title_pct": 8.6,
+        "cfp_make_pct": 24.8
+      },
+      {
+        "team": "CLEM",
+        "conf_title_pct": 5.5,
+        "cfp_make_pct": 33.7
+      },
+      {
+        "team": "NCSU",
+        "conf_title_pct": 5.1,
+        "cfp_make_pct": 23.8
+      },
+      {
+        "team": "PITT",
+        "conf_title_pct": 1.8,
+        "cfp_make_pct": 12.0
+      },
+      {
+        "team": "GT",
+        "conf_title_pct": 0.4,
+        "cfp_make_pct": 4.1
+      },
+      {
+        "team": "DUKE",
+        "conf_title_pct": 0.4,
+        "cfp_make_pct": 2.9
+      },
+      {
+        "team": "CAL",
+        "conf_title_pct": 0.2,
+        "cfp_make_pct": 1.8
+      },
+      {
+        "team": "FSU",
+        "conf_title_pct": 0.0,
+        "cfp_make_pct": 0.8
+      }
+    ],
+    "Big 12": [
+      {
+        "team": "UTAH",
+        "conf_title_pct": 52.4,
+        "cfp_make_pct": 73.2
+      },
+      {
+        "team": "TTU",
+        "conf_title_pct": 17.6,
+        "cfp_make_pct": 39.7
+      },
+      {
+        "team": "ARI",
+        "conf_title_pct": 10.8,
+        "cfp_make_pct": 24.7
+      },
+      {
+        "team": "ISU",
+        "conf_title_pct": 3.1,
+        "cfp_make_pct": 6.4
+      },
+      {
+        "team": "ASU",
+        "conf_title_pct": 2.9,
+        "cfp_make_pct": 6.5
+      },
+      {
+        "team": "KSU",
+        "conf_title_pct": 2.7,
+        "cfp_make_pct": 7.4
+      },
+      {
+        "team": "BYU",
+        "conf_title_pct": 2.6,
+        "cfp_make_pct": 2.9
+      },
+      {
+        "team": "UCF",
+        "conf_title_pct": 1.9,
+        "cfp_make_pct": 5.0
+      },
+      {
+        "team": "BAY",
+        "conf_title_pct": 1.8,
+        "cfp_make_pct": 3.8
+      },
+      {
+        "team": "TCU",
+        "conf_title_pct": 1.6,
+        "cfp_make_pct": 2.2
+      },
+      {
+        "team": "CIN",
+        "conf_title_pct": 1.4,
+        "cfp_make_pct": 3.6
+      },
+      {
+        "team": "COLO",
+        "conf_title_pct": 1.0,
+        "cfp_make_pct": 1.7
+      },
+      {
+        "team": "HOU",
+        "conf_title_pct": 0.1,
+        "cfp_make_pct": 0.2
+      },
+      {
+        "team": "KU",
+        "conf_title_pct": 0.1,
+        "cfp_make_pct": 0.1
+      },
+      {
+        "team": "WVU",
+        "conf_title_pct": 0.0,
+        "cfp_make_pct": 0.1
+      }
+    ],
+    "SEC": [
+      {
+        "team": "MISS",
+        "conf_title_pct": 25.6,
+        "cfp_make_pct": 43.7
+      },
+      {
+        "team": "TAMU",
+        "conf_title_pct": 15.7,
+        "cfp_make_pct": 30.9
+      },
+      {
+        "team": "TEX",
+        "conf_title_pct": 15.5,
+        "cfp_make_pct": 36.5
+      },
+      {
+        "team": "AUB",
+        "conf_title_pct": 14.0,
+        "cfp_make_pct": 24.2
+      },
+      {
+        "team": "OU",
+        "conf_title_pct": 9.3,
+        "cfp_make_pct": 18.8
+      },
+      {
+        "team": "ALA",
+        "conf_title_pct": 6.7,
+        "cfp_make_pct": 7.1
+      },
+      {
+        "team": "TENN",
+        "conf_title_pct": 4.4,
+        "cfp_make_pct": 6.5
+      },
+      {
+        "team": "LSU",
+        "conf_title_pct": 2.5,
+        "cfp_make_pct": 3.8
+      },
+      {
+        "team": "VAN",
+        "conf_title_pct": 2.2,
+        "cfp_make_pct": 3.4
+      },
+      {
+        "team": "UGA",
+        "conf_title_pct": 2.1,
+        "cfp_make_pct": 3.7
+      },
+      {
+        "team": "SCAR",
+        "conf_title_pct": 1.8,
+        "cfp_make_pct": 2.8
+      },
+      {
+        "team": "UK",
+        "conf_title_pct": 0.1,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "UF",
+        "conf_title_pct": 0.0,
+        "cfp_make_pct": 0.0
+      }
+    ],
+    "Sun Belt": [
+      {
+        "team": "JMU",
+        "conf_title_pct": 54.8,
+        "cfp_make_pct": 24.8
+      },
+      {
+        "team": "MRSH",
+        "conf_title_pct": 20.2,
+        "cfp_make_pct": 5.6
+      },
+      {
+        "team": "TROY",
+        "conf_title_pct": 14.9,
+        "cfp_make_pct": 5.2
+      },
+      {
+        "team": "USA",
+        "conf_title_pct": 2.9,
+        "cfp_make_pct": 0.8
+      },
+      {
+        "team": "ULM",
+        "conf_title_pct": 2.9,
+        "cfp_make_pct": 0.4
+      },
+      {
+        "team": "GASO",
+        "conf_title_pct": 1.6,
+        "cfp_make_pct": 0.1
+      },
+      {
+        "team": "USM",
+        "conf_title_pct": 1.4,
+        "cfp_make_pct": 0.2
+      },
+      {
+        "team": "APP",
+        "conf_title_pct": 0.4,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "GAST",
+        "conf_title_pct": 0.3,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "CCU",
+        "conf_title_pct": 0.3,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "UL",
+        "conf_title_pct": 0.2,
+        "cfp_make_pct": 0.0
+      }
+    ],
+    "AAC": [
+      {
+        "team": "USF",
+        "conf_title_pct": 37.5,
+        "cfp_make_pct": 24.8
+      },
+      {
+        "team": "UTSA",
+        "conf_title_pct": 36.3,
+        "cfp_make_pct": 1.6
+      },
+      {
+        "team": "TULN",
+        "conf_title_pct": 11.8,
+        "cfp_make_pct": 2.9
+      },
+      {
+        "team": "TLSA",
+        "conf_title_pct": 5.3,
+        "cfp_make_pct": 0.3
+      },
+      {
+        "team": "MEM",
+        "conf_title_pct": 5.2,
+        "cfp_make_pct": 0.2
+      },
+      {
+        "team": "FAU",
+        "conf_title_pct": 2.1,
+        "cfp_make_pct": 0.1
+      },
+      {
+        "team": "NAVY",
+        "conf_title_pct": 1.3,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "TEM",
+        "conf_title_pct": 0.4,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "CHAR",
+        "conf_title_pct": 0.1,
+        "cfp_make_pct": 0.0
+      }
+    ],
+    "CUSA": [
+      {
+        "team": "WKU",
+        "conf_title_pct": 29.2,
+        "cfp_make_pct": 1.7
+      },
+      {
+        "team": "LIB",
+        "conf_title_pct": 25.2,
+        "cfp_make_pct": 8.6
+      },
+      {
+        "team": "DEL",
+        "conf_title_pct": 16.5,
+        "cfp_make_pct": 1.5
+      },
+      {
+        "team": "NMSU",
+        "conf_title_pct": 10.7,
+        "cfp_make_pct": 0.3
+      },
+      {
+        "team": "KENNESAW",
+        "conf_title_pct": 8.7,
+        "cfp_make_pct": 0.3
+      },
+      {
+        "team": "FIU",
+        "conf_title_pct": 5.2,
+        "cfp_make_pct": 0.8
+      },
+      {
+        "team": "MOST",
+        "conf_title_pct": 2.9,
+        "cfp_make_pct": 0.1
+      },
+      {
+        "team": "MTSU",
+        "conf_title_pct": 1.2,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "SHSU",
+        "conf_title_pct": 0.4,
+        "cfp_make_pct": 0.0
+      }
+    ],
+    "MAC": [
+      {
+        "team": "M-OH",
+        "conf_title_pct": 32.6,
+        "cfp_make_pct": 7.1
+      },
+      {
+        "team": "WMU",
+        "conf_title_pct": 26.4,
+        "cfp_make_pct": 5.6
+      },
+      {
+        "team": "AKR",
+        "conf_title_pct": 21.8,
+        "cfp_make_pct": 4.7
+      },
+      {
+        "team": "OHIO",
+        "conf_title_pct": 11.4,
+        "cfp_make_pct": 0.6
+      },
+      {
+        "team": "EMU",
+        "conf_title_pct": 2.5,
+        "cfp_make_pct": 0.2
+      },
+      {
+        "team": "BUFF",
+        "conf_title_pct": 2.5,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "CMU",
+        "conf_title_pct": 1.2,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "KENT",
+        "conf_title_pct": 1.1,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "BGSU",
+        "conf_title_pct": 0.5,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "MASS",
+        "conf_title_pct": 0.0,
+        "cfp_make_pct": 0.0
+      }
+    ],
+    "Mountain West": [
+      {
+        "team": "UNLV",
+        "conf_title_pct": 30.2,
+        "cfp_make_pct": 1.7
+      },
+      {
+        "team": "BOISE",
+        "conf_title_pct": 25.3,
+        "cfp_make_pct": 4.9
+      },
+      {
+        "team": "HAW",
+        "conf_title_pct": 14.6,
+        "cfp_make_pct": 1.6
+      },
+      {
+        "team": "AFA",
+        "conf_title_pct": 10.6,
+        "cfp_make_pct": 1.3
+      },
+      {
+        "team": "WYO",
+        "conf_title_pct": 7.2,
+        "cfp_make_pct": 0.1
+      },
+      {
+        "team": "SJSU",
+        "conf_title_pct": 5.4,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "SDSU",
+        "conf_title_pct": 3.6,
+        "cfp_make_pct": 0.2
+      },
+      {
+        "team": "FRES",
+        "conf_title_pct": 1.7,
+        "cfp_make_pct": 0.0
+      },
+      {
+        "team": "UTAHST",
+        "conf_title_pct": 1.5,
+        "cfp_make_pct": 0.0
+      }
+    ],
+    "Pac-12": [
+      {
+        "team": "WSU",
+        "conf_title_pct": 68.2,
+        "cfp_make_pct": 0.8
+      },
+      {
+        "team": "ORST",
+        "conf_title_pct": 31.8,
+        "cfp_make_pct": 0.0
+      }
+    ]
+  },
+  "top_natty": [
+    {
+      "team": "OSU",
+      "conference": "Big Ten",
+      "power_index": 1.6168,
+      "cfp_make_pct": 90.7,
+      "natty_pct": 17.0,
+      "conf_title_pct": 41.9,
+      "cfp_hits": 2268,
+      "natty_hits": 425,
+      "conf_title_hits": 1048,
+      "g5": false,
+      "power4": true,
+      "rank": 1
+    },
+    {
+      "team": "ND",
+      "conference": "Independent",
+      "power_index": 1.5016,
+      "cfp_make_pct": 95.4,
+      "natty_pct": 11.6,
+      "conf_title_pct": null,
+      "cfp_hits": 2385,
+      "natty_hits": 291,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 2
+    },
+    {
+      "team": "MIA",
+      "conference": "ACC",
+      "power_index": 1.5309,
+      "cfp_make_pct": 86.3,
+      "natty_pct": 10.3,
+      "conf_title_pct": 51.6,
+      "cfp_hits": 2157,
+      "natty_hits": 257,
+      "conf_title_hits": 1289,
+      "g5": false,
+      "power4": true,
+      "rank": 3
+    },
+    {
+      "team": "ORE",
+      "conference": "Big Ten",
+      "power_index": 1.5625,
+      "cfp_make_pct": 80.0,
+      "natty_pct": 9.9,
+      "conf_title_pct": 24.6,
+      "cfp_hits": 1999,
+      "natty_hits": 248,
+      "conf_title_hits": 614,
+      "g5": false,
+      "power4": true,
+      "rank": 4
+    },
+    {
+      "team": "UTAH",
+      "conference": "Big 12",
+      "power_index": 1.4841,
+      "cfp_make_pct": 73.2,
+      "natty_pct": 6.6,
+      "conf_title_pct": 52.4,
+      "cfp_hits": 1830,
+      "natty_hits": 164,
+      "conf_title_hits": 1309,
+      "g5": false,
+      "power4": true,
+      "rank": 5
+    },
+    {
+      "team": "MISS",
+      "conference": "SEC",
+      "power_index": 1.5479,
+      "cfp_make_pct": 43.7,
+      "natty_pct": 4.8,
+      "conf_title_pct": 25.6,
+      "cfp_hits": 1092,
+      "natty_hits": 121,
+      "conf_title_hits": 641,
+      "g5": false,
+      "power4": true,
+      "rank": 6
+    },
+    {
+      "team": "USC",
+      "conference": "Big Ten",
+      "power_index": 1.4624,
+      "cfp_make_pct": 53.5,
+      "natty_pct": 4.2,
+      "conf_title_pct": 7.2,
+      "cfp_hits": 1338,
+      "natty_hits": 105,
+      "conf_title_hits": 181,
+      "g5": false,
+      "power4": true,
+      "rank": 7
+    },
+    {
+      "team": "SMU",
+      "conference": "ACC",
+      "power_index": 1.4071,
+      "cfp_make_pct": 49.7,
+      "natty_pct": 3.8,
+      "conf_title_pct": 16.6,
+      "cfp_hits": 1243,
+      "natty_hits": 96,
+      "conf_title_hits": 415,
+      "g5": false,
+      "power4": true,
+      "rank": 8
+    },
+    {
+      "team": "TEX",
+      "conference": "SEC",
+      "power_index": 1.4907,
+      "cfp_make_pct": 36.5,
+      "natty_pct": 3.4,
+      "conf_title_pct": 15.5,
+      "cfp_hits": 913,
+      "natty_hits": 84,
+      "conf_title_hits": 387,
+      "g5": false,
+      "power4": true,
+      "rank": 9
+    },
+    {
+      "team": "IU",
+      "conference": "Big Ten",
+      "power_index": 1.5232,
+      "cfp_make_pct": 40.6,
+      "natty_pct": 3.2,
+      "conf_title_pct": 12.3,
+      "cfp_hits": 1016,
+      "natty_hits": 81,
+      "conf_title_hits": 307,
+      "g5": false,
+      "power4": true,
+      "rank": 10
+    }
+  ],
+  "top_cfp": [
+    {
+      "team": "ND",
+      "conference": "Independent",
+      "power_index": 1.5016,
+      "cfp_make_pct": 95.4,
+      "natty_pct": 11.6,
+      "conf_title_pct": null,
+      "cfp_hits": 2385,
+      "natty_hits": 291,
+      "conf_title_hits": 0,
+      "g5": false,
+      "power4": false,
+      "rank": 2
+    },
+    {
+      "team": "OSU",
+      "conference": "Big Ten",
+      "power_index": 1.6168,
+      "cfp_make_pct": 90.7,
+      "natty_pct": 17.0,
+      "conf_title_pct": 41.9,
+      "cfp_hits": 2268,
+      "natty_hits": 425,
+      "conf_title_hits": 1048,
+      "g5": false,
+      "power4": true,
+      "rank": 1
+    },
+    {
+      "team": "MIA",
+      "conference": "ACC",
+      "power_index": 1.5309,
+      "cfp_make_pct": 86.3,
+      "natty_pct": 10.3,
+      "conf_title_pct": 51.6,
+      "cfp_hits": 2157,
+      "natty_hits": 257,
+      "conf_title_hits": 1289,
+      "g5": false,
+      "power4": true,
+      "rank": 3
+    },
+    {
+      "team": "ORE",
+      "conference": "Big Ten",
+      "power_index": 1.5625,
+      "cfp_make_pct": 80.0,
+      "natty_pct": 9.9,
+      "conf_title_pct": 24.6,
+      "cfp_hits": 1999,
+      "natty_hits": 248,
+      "conf_title_hits": 614,
+      "g5": false,
+      "power4": true,
+      "rank": 4
+    },
+    {
+      "team": "UTAH",
+      "conference": "Big 12",
+      "power_index": 1.4841,
+      "cfp_make_pct": 73.2,
+      "natty_pct": 6.6,
+      "conf_title_pct": 52.4,
+      "cfp_hits": 1830,
+      "natty_hits": 164,
+      "conf_title_hits": 1309,
+      "g5": false,
+      "power4": true,
+      "rank": 5
+    },
+    {
+      "team": "USC",
+      "conference": "Big Ten",
+      "power_index": 1.4624,
+      "cfp_make_pct": 53.5,
+      "natty_pct": 4.2,
+      "conf_title_pct": 7.2,
+      "cfp_hits": 1338,
+      "natty_hits": 105,
+      "conf_title_hits": 181,
+      "g5": false,
+      "power4": true,
+      "rank": 7
+    },
+    {
+      "team": "SMU",
+      "conference": "ACC",
+      "power_index": 1.4071,
+      "cfp_make_pct": 49.7,
+      "natty_pct": 3.8,
+      "conf_title_pct": 16.6,
+      "cfp_hits": 1243,
+      "natty_hits": 96,
+      "conf_title_hits": 415,
+      "g5": false,
+      "power4": true,
+      "rank": 8
+    },
+    {
+      "team": "PSU",
+      "conference": "Big Ten",
+      "power_index": 1.3735,
+      "cfp_make_pct": 49.0,
+      "natty_pct": 3.1,
+      "conf_title_pct": 7.3,
+      "cfp_hits": 1224,
+      "natty_hits": 77,
+      "conf_title_hits": 182,
+      "g5": false,
+      "power4": true,
+      "rank": 11
+    },
+    {
+      "team": "MISS",
+      "conference": "SEC",
+      "power_index": 1.5479,
+      "cfp_make_pct": 43.7,
+      "natty_pct": 4.8,
+      "conf_title_pct": 25.6,
+      "cfp_hits": 1092,
+      "natty_hits": 121,
+      "conf_title_hits": 641,
+      "g5": false,
+      "power4": true,
+      "rank": 6
+    },
+    {
+      "team": "IU",
+      "conference": "Big Ten",
+      "power_index": 1.5232,
+      "cfp_make_pct": 40.6,
+      "natty_pct": 3.2,
+      "conf_title_pct": 12.3,
+      "cfp_hits": 1016,
+      "natty_hits": 81,
+      "conf_title_hits": 307,
+      "g5": false,
+      "power4": true,
+      "rank": 10
+    }
+  ],
+  "n_games_scored": 628,
+  "generated_at": "2026-08-17T10:43:59Z"
+}

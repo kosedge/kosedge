@@ -23,7 +23,7 @@ export default function CfbProError({
       </h1>
       <p className="mt-3 text-sm leading-relaxed text-kos-text/70">
         {modelDown
-          ? "The CFB season engine did not return in time. This is a research desk, not a black frame — retry or use Edge Board (markets only)."
+          ? "The CFB season engine did not return in time. This is a research desk, not a black frame — retry or use Edge Board (KEI vs market)."
           : "The CFB Pro desk hit an unexpected error. Retry, or open a known-good surface."}
       </p>
       <p className="mt-3 rounded-lg border border-white/10 bg-black/35 px-3 py-2 text-xs text-kos-text/60">
@@ -48,7 +48,7 @@ export default function CfbProError({
           href="/edge-board/cfb"
           className="min-h-11 inline-flex items-center rounded-xl border border-white/15 px-4 text-sm font-semibold text-kos-text"
         >
-          Edge Board (markets)
+          Edge Board
         </Link>
       </div>
     </main>

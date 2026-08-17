@@ -348,9 +348,9 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     ],
   },
   cfb: {
-    pathLabel: "Slate → Project Game → Projections → Teams → Edge Board",
+    pathLabel: "Edge Board → Project Game → Projections → Futures → Teams",
     pathSubtitle:
-      "CFB research path: Slate → Project Game → Projections → Teams/Power. Edge Board is live books only until the Week 3 KEI gate.",
+      "CFB path: Edge Board (KEI vs market) → Project Game → Projections → Futures → Teams/Power.",
     cards: [
       {
         href: "/pro/cfb/slate",
@@ -365,7 +365,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/cfb/project-game",
         title: "Project Game",
         description:
-          "Research-fair spread, total, WP, and drivers. used_in_spread=false.",
+          "Model research-fair. KEI is the published line on the W0/W1 slate.",
         cta: "Open project game →",
         accent: "gold",
         status: "active",
@@ -374,7 +374,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/cfb/projections",
         title: "Projections",
         description:
-          "Frozen N=10,000 expected wins. CFP omitted. E[wins] is not power.",
+          "Frozen N=10,000 expected wins. E[wins] is not power. Futures separate.",
         cta: "Open projections →",
         accent: "neutral",
         status: "active",

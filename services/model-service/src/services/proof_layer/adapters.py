@@ -35,6 +35,12 @@ def payload_from_cfb_project_game(payload: Mapping[str, Any]) -> Dict[str, Any]:
         "expected_home_score": payload.get("expected_home_score"),
         "expected_away_score": payload.get("expected_away_score"),
         "drivers": payload.get("drivers") or {},
+        "kei_spread_home": (payload.get("kei") or {}).get("kei_spread_home")
+        if isinstance(payload.get("kei"), Mapping)
+        else payload.get("kei_spread_home"),
+        "kei_version": (payload.get("kei") or {}).get("kei_version")
+        if isinstance(payload.get("kei"), Mapping)
+        else payload.get("kei_version"),
         "projection": {
             "game_id": payload.get("game_id"),
             "margin_sd": payload.get("margin_sd"),
@@ -42,6 +48,7 @@ def payload_from_cfb_project_game(payload: Mapping[str, Any]) -> Dict[str, Any]:
             "mode": payload.get("mode"),
             "notes": payload.get("notes"),
             "source": payload.get("source") or "cfb/season-engine/project-game",
+            "kei": payload.get("kei"),
         },
     }
 

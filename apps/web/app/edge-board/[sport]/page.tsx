@@ -23,6 +23,7 @@ import {
   SPORTS,
 } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
+import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 
 export const dynamic = "force-dynamic";
 
@@ -69,6 +70,8 @@ export default async function EdgeBoardSportPage({
   const slateRaw = Array.isArray(sp.slate) ? sp.slate[0] : sp.slate;
   const slate =
     sportKey === "nfl" ? normalizeNflEdgeBoardSlate(slateRaw) : "week1";
+  const cfbWeekRaw = Array.isArray(sp.week) ? sp.week[0] : sp.week;
+  const cfbWeek = sportKey === "cfb" && cfbWeekRaw === "1" ? 1 : 0;
 
   // NFL: one full assemble, then derive Week 1 (counts stay cheap; no double pull).
   let rows: EdgeBoardRow[] = [];
@@ -86,6 +89,11 @@ export default async function EdgeBoardSportPage({
     week1Count = gameCount(week1Rows);
     fullCount = gameCount(fullRows);
     rows = slate === "full" ? fullRows : week1Rows;
+  } else if (sportKey === "cfb") {
+    const all = stampCfbEdgeBoardWeek(await getRows("cfb", "week1"));
+    week1Count = gameCount(all.filter((r) => r.week === 0));
+    fullCount = gameCount(all.filter((r) => r.week === 1));
+    rows = all.filter((r) => r.week === cfbWeek);
   } else {
     rows = await getRows(sportKey, "week1");
   }
@@ -209,6 +217,47 @@ export default async function EdgeBoardSportPage({
             </Link>
           ))}
         </div>
+
+        {sportKey === "cfb" ? (
+          <div className="mt-3 space-y-1.5">
+            <div className="flex flex-wrap gap-2" role="tablist" aria-label="CFB week">
+              <Link
+                href="/edge-board/cfb?week=0"
+                role="tab"
+                aria-selected={cfbWeek === 0}
+                className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                  cfbWeek === 0
+                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
+                    : "bg-black/30 border border-white/12 text-gray-300"
+                }`}
+              >
+                Week 0{week1Count ? ` (${week1Count})` : ""}
+              </Link>
+              <Link
+                href="/edge-board/cfb?week=1"
+                role="tab"
+                aria-selected={cfbWeek === 1}
+                className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                  cfbWeek === 1
+                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
+                    : "bg-black/30 border border-white/12 text-gray-300"
+                }`}
+              >
+                Week 1{fullCount ? ` (${fullCount})` : ""}
+              </Link>
+            </div>
+            <p className="text-[11px] text-gray-500">
+              Week {cfbWeek} · Tag = KEI vs market · Model is research-only ·
+              early PLAY bar 4 pts · PASS default ·{" "}
+              <Link
+                href="/pro/cfb/overview"
+                className="text-kos-gold/80 hover:text-kos-gold hover:underline"
+              >
+                How to read the desk
+              </Link>
+            </p>
+          </div>
+        ) : null}
 
         {sportKey === "nfl" ? (
           <div className="mt-3 space-y-1.5">

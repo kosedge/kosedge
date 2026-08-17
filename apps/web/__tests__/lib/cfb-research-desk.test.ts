@@ -36,13 +36,11 @@ describe("cfb research artifacts", () => {
     expect(g5OverP4).toHaveLength(0);
   });
 
-  it("documents frozen N>=2000 win totals and omits CFP", () => {
+  it("documents frozen N>=2000 win totals; futures live on a separate pack", () => {
     const pack = loadCfbSeasonProjections();
     const version = cfbResearchVersionStrip();
     expect(pack.used_in_spread).toBe(false);
     expect(pack.kei).toBe(false);
-    expect(pack.cfp_make).toBeNull();
-    expect(pack.natty).toBeNull();
     expect(version.n_sims).toBeGreaterThanOrEqual(2000);
     expect(version.used_in_spread).toBe(false);
     expect(cfbProjectionTeams().length).toBe(136);
@@ -95,7 +93,7 @@ describe("cfb previews", () => {
     );
     for (const p of teams) {
       expect(p.modelNote).toMatch(/used_in_spread=false/);
-      expect(p.modelNote).toMatch(/no KEI/i);
+      expect(p.modelNote).toMatch(/KEI is a separate published line/i);
       expect(p.bettingAngles.toLowerCase()).not.toContain("play tag");
       expect(p.bettingAngles.toLowerCase()).not.toContain("this is a play");
     }

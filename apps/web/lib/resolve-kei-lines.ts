@@ -13,8 +13,8 @@
  *   Missing model_* → identity via applyHandicapIdentity. Never invent stub deltas.
  * - NBA / WNBA: published fair lines → handicap; model_* identity until API exposes split.
  * - NCAAM: kei_lines_ncaam.json → handicap (identity).
- * - NHL / CFB: **markets-only** — no fair-lines / kei_lines source yet. resolveKeiGames
- *   returns []. UI must not invent KEI or show “Coming soon”; see sportIsMarketsOnlyEdgeBoard.
+ * - CFB: kei_lines_cfb.json — handicap = published KEI; model_* = research fair.
+ * - NHL: **markets-only** — resolveKeiGames returns [].
  */
 
 import "server-only";
@@ -90,9 +90,8 @@ export async function resolveKeiGames(
 ): Promise<KeiLineGame[]> {
   const sport = sportKey.toLowerCase();
 
-  // Markets-only sports: no KEI source yet (NHL / CFB). Empty → EdgeBoard
-  // shows Open/Best only; never fabricate handicap lines.
-  if (sport === "nhl" || sport === "cfb") {
+  // Markets-only: NHL has no KEI source yet.
+  if (sport === "nhl") {
     return [];
   }
 

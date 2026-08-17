@@ -29,7 +29,7 @@ export default function CfbSeasonProjectionsPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season projections"
-      summary="Frozen research expected wins on the official 2026 ESPN slate. N is the artifact path count — not a live 20-path web sim. CFP and national-title percentages are omitted."
+      summary="Frozen research expected wins on the official 2026 ESPN slate. N is the artifact path count. CFP / natty live on Futures — not invented here as book prices."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
@@ -45,7 +45,11 @@ export default function CfbSeasonProjectionsPage() {
           <strong>N={version.n_sims}</strong> independent Bernoulli paths ·{" "}
           {pack.n_games_scored ?? 889} games scored · win_tables_final=
           {String(pack.win_tables_final ?? false)}. E[wins] is schedule-adjusted.
-          Power rank is talent. used_in_spread=false. No KEI. CFP / natty stub.
+          Power rank is talent. Win totals are research (used_in_spread=false).
+          KEI is the published game line.{" "}
+          <Link href="/pro/cfb/futures" className="font-semibold text-kos-gold">
+            Futures →
+          </Link>
         </p>
       </section>
 

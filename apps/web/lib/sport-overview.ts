@@ -43,17 +43,17 @@ const GLANCE: Record<string, GlanceItem[]> = {
     {
       href: "/pro/cfb/project-game",
       title: "2. Project Game",
-      body: "Research-fair spread, total, WP, and drivers. No KEI.",
+      body: "Model research-fair. KEI when the game is on the W0/W1 slate.",
     },
     {
       href: "/pro/cfb/projections",
       title: "3. Projections",
-      body: "Frozen N=10,000 win totals. CFP omitted. used_in_spread=false.",
+      body: "Frozen N=10,000 win totals. Futures on a separate desk.",
     },
     {
-      href: "/pro/cfb/teams",
-      title: "4. Teams / Power",
-      body: "136 FBS rows, conference filter, then Edge Board (markets only).",
+      href: "/pro/cfb/futures",
+      title: "4. Futures",
+      body: "Natty · CFP · conference titles from our paths.",
     },
   ],
   nba: [

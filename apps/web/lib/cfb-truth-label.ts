@@ -1,7 +1,7 @@
 /**
  * CFB research-surface labeling.
  * Season Model / Project Game are MODEL desks. August must not read as a
- * live betting board. Edge Board CFB is live books only — never KEI.
+ * live betting board. Edge Board CFB publishes KEI vs market; Model stays research.
  */
 
 import type { TruthUiState } from "@/lib/truth-ui-state";
@@ -53,5 +53,5 @@ export function cfbModelDeskHonestyNote(
   const head = pre
     ? "PRESEASON · MODEL research"
     : "MODEL research";
-  return `${head} — not a published handicap. Edge Board is live books only; no KEI.`;
+  return `${head} — Model is not the published handicap. KEI is the published line; Edge / Tag = KEI vs market.`;
 }

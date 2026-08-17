@@ -64,7 +64,7 @@ export default async function CfbSeasonModelHubPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season Model"
-      summary="Research desk only. Model → (future KEI when earned) → Edge. CFB is Model research today — used_in_spread stays false. Edge Board is live books only; no KEI, no Edge Tag, no PLAY/LEAN."
+      summary="Model is research-fair (used_in_spread=false). KEI is the published line on Edge Board. Tag = KEI vs market."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
@@ -133,7 +133,7 @@ export default async function CfbSeasonModelHubPage() {
               Contract
             </div>
             <div className="mt-0.5 text-kos-text">
-              Research fair only · no KEI
+              Research fair · KEI is the published line
             </div>
           </div>
           <div>

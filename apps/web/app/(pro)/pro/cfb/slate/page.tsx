@@ -105,7 +105,7 @@ export default async function CfbOfficialSlatePage({
       <p className="mt-3 text-xs text-kos-text/55">
         Official {board.official ? "yes" : "no"} · slate_complete{" "}
         {status.slate_complete || board.slate_complete ? "true" : "false"} ·{" "}
-        {games.length} Week {week} games ({fbs} FBS–FBS) · used_in_spread=false
+        {games.length} Week {week} games ({fbs} FBS–FBS) · model used_in_spread=false · KEI on Edge Board
         {usedPackaged ? " · packaged ESPN slate (model status unreachable)" : ""}
         {status.schedule_as_of || board.as_of
           ? ` · as_of ${status.schedule_as_of || board.as_of}`
@@ -115,7 +115,7 @@ export default async function CfbOfficialSlatePage({
       {status.error ? (
         <p className="mt-4 rounded-lg border border-amber-400/25 bg-amber-400/8 px-3 py-2 text-xs text-kos-text/70">
           Model unreachable ({status.error}). Showing packaged official slate —
-          research only, used_in_spread=false.
+          research slate only. KEI lives on Edge Board when the model is up.
         </p>
       ) : null}
 

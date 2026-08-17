@@ -7,6 +7,7 @@ import {
   getCfbConferencePreviews,
   getCfbTeamPreviews,
 } from "@/lib/cfb-previews";
+import { cfbKeiVersionStrip } from "@/lib/cfb-kei-artifacts";
 import {
   cfbResearchVersionStrip,
   loadCfbPowerSot,
@@ -18,33 +19,33 @@ export const dynamic = "force-dynamic";
 const START_HERE = [
   {
     step: "1",
-    href: "/pro/cfb/slate",
-    title: "Slate",
-    body: "Official Week 0 + Week 1 ESPN board. Open any FBS row in Project Game.",
+    href: "/edge-board/cfb",
+    title: "Edge Board",
+    body: "Week 0/1 KEI vs market. Model is the research column. PASS default.",
   },
   {
     step: "2",
     href: "/pro/cfb/project-game",
     title: "Project Game",
-    body: "Research-fair spread, total, WP, σ, and drivers. Not a published handicap.",
+    body: "Model + KEI when the game is on the slate. Drivers stay inspectable.",
   },
   {
     step: "3",
     href: "/pro/cfb/projections",
     title: "Projections",
-    body: "Frozen N=10,000 expected wins. CFP omitted. E[wins] ≠ power.",
+    body: "Frozen N=10,000 expected wins. E[wins] ≠ power.",
   },
   {
     step: "4",
-    href: "/pro/cfb/teams",
-    title: "Teams / Power",
-    body: "136 FBS rows, conference filter, next opponent → Project Game.",
+    href: "/pro/cfb/futures",
+    title: "Futures",
+    body: "Natty · CFP · conference titles from our paths. Not book prices.",
   },
   {
     step: "5",
-    href: "/edge-board/cfb",
-    title: "Edge Board",
-    body: "Live books only. No KEI, no Edge tags, no PLAY/LEAN on CFB.",
+    href: "/pro/cfb/teams",
+    title: "Teams / Power",
+    body: "136 FBS rows, conference filter, next opponent → Project Game.",
   },
 ] as const;
 
@@ -64,19 +65,18 @@ export default function CfbOverviewPage() {
         <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[28px_28px] opacity-40" />
         <div className="relative">
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-            Pro research desk · CFB Model only
+            Pro desk · CFB Model + KEI
           </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
             College Football Overview
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-            Research fair only. Same model tools as the NFL desk — slate,
-            project-game, projections, power, team DNA, previews — without
-            invented edges. {cfbModelDeskHonestyNote()}
+            Independent lines are live. Model stays research-fair. KEI is the
+            published line. Edge / Tag = KEI vs market. {cfbModelDeskHonestyNote()}
           </p>
           <p className="mt-3 text-xs text-kos-text/55">
             Engine {version.engine_version} · N={version.n_sims} · as_of{" "}
-            {version.as_of} · used_in_spread=false
+            {version.as_of} · KEI {cfbKeiVersionStrip().kei_version}
           </p>
         </div>
       </section>
@@ -89,8 +89,8 @@ export default function CfbOverviewPage() {
           One-screen contract
         </h2>
         <p className="mt-2 max-w-3xl text-sm text-kos-text/70">
-          Model = research fair. used_in_spread stays false. Edge tags wait for
-          the Week 3 KEI gate — we do not invent lines to look done.
+          Model = research fair. KEI = published line (used_in_spread). Tag =
+          KEI vs market. Early weeks: 4-pt PLAY bar, PASS default.
         </p>
         <ol className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           {START_HERE.map((item) => (
