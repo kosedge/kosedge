@@ -110,6 +110,21 @@ const nextConfig: NextConfig = {
         destination: "/pro/nfl/player-previews",
         permanent: false,
       },
+      {
+        source: "/pro/power-ratings/cfb",
+        destination: "/pro/cfb/teams",
+        permanent: false,
+      },
+      {
+        source: "/pro/cfb/slate/today",
+        destination: "/pro/cfb/slate",
+        permanent: false,
+      },
+      {
+        source: "/pro/cfb/slate/:date",
+        destination: "/pro/cfb/slate",
+        permanent: false,
+      },
       // NOTE: Do NOT add a /Brand → /brand redirect. Next/Vercel matchers are
       // case-insensitive, so that redirect infinite-loops and breaks next/image.
       // Both `public/brand` and `public/Brand` are shipped instead.
