@@ -96,7 +96,7 @@ export function applyCfbTrustedMarketToRows<
     if (verdict.trusted) return row;
     return {
       ...row,
-      best: undefined,
+      best: "",
       book: verdict.reason === "no_market" ? row.book : "untrusted",
       bookKey: verdict.reason === "no_market" ? row.bookKey : "",
     };

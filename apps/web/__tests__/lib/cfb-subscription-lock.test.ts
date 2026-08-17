@@ -30,7 +30,7 @@ describe("cfb trusted market", () => {
         bookKey: "hardrockbet",
       },
     ]);
-    expect(rows[0]?.best).toBeUndefined();
+    expect(rows[0]?.best).toBe("");
     expect(rows[0]?.book).toBe("untrusted");
   });
 
