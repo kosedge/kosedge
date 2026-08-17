@@ -116,15 +116,15 @@ def cfb_season_engine_status(
             "ok": False,
             "engine_version": version,
             "used_in_spread": False,
-            "error": str(exc),
+            "engine_status_warning": str(exc),
             "note": (
-                "Status degraded; version string is still authoritative. "
-                "Model stays research-fair. KEI is the published line when attached."
+                "Model research-fair. KEI is the published line when attached. "
+                "Edge vs trusted market only."
             ),
         }
     payload.setdefault("engine_version", version)
     payload.setdefault("used_in_spread", False)
-    payload.setdefault("ok", "error" not in payload)
+    payload.setdefault("ok", "engine_status_warning" not in payload)
     try:
         from src.services.cfb_season_engine.product_desk import product_desk_payload
 
@@ -134,6 +134,17 @@ def cfb_season_engine_status(
             payload.get("slate_complete")
             or payload["desk"].get("week_board", {}).get("slate_complete")
         )
+        desk = payload.get("desk") or {}
+        kei_ok = bool(desk.get("kei")) and any(
+            ((g.get("kei") or {}).get("kei_spread_home") is not None)
+            for g in ((desk.get("week_board") or {}).get("games") or [])
+        )
+        if kei_ok:
+            payload["ok"] = True
+            payload.pop("error", None)
+            payload["note"] = (
+                "Model research-fair. KEI published. Edge vs trusted market."
+            )
     except Exception as exc:  # pragma: no cover
         log.warning("cfb product desk attach skipped: %s", exc)
     return payload

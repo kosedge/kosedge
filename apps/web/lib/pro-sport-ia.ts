@@ -70,7 +70,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   cfb: {
     heroBadge: "Pro CFB research desk",
     heroSummary:
-      "CFB Model only today — slate, project-game, projections, power, and previews. Research fair. No KEI until the Week 3 gate.",
+      "Independent KEI lines are live. Model is research-fair. Edge is KEI vs trusted market. Early PLAY bar 4 pts · PASS default.",
     slateCta: "Open official slate",
     articleToneBadge: "CFB research desk",
     sectionTitles: {

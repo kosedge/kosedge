@@ -320,8 +320,7 @@ export default async function CfbSeasonModelHubPage() {
             {(deferred.length > 0
               ? deferred
               : [
-                  "2026 opens + held-out KEI (post–Week 3)",
-                  "CFP / natty product truth",
+                  "Live injury feed (packaged depth as_of only)",
                   "Player box production path",
                 ]
             ).map((item) => (

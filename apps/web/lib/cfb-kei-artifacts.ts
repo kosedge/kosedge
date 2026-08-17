@@ -5,6 +5,7 @@
 
 import keiPack from "@/lib/data/cfb-kei-w0-w1-2026.json";
 import futuresPack from "@/lib/data/cfb-futures-2026.json";
+import { cfbGameMatchKeys } from "@/lib/cfb-match-keys";
 
 export type CfbKeiGame = {
   game_id?: string;
@@ -118,19 +119,20 @@ export function findCfbFutures(team: string): CfbFuturesTeam | undefined {
 export function stampCfbEdgeBoardWeek<T extends { game?: string; week?: number }>(
   rows: T[],
 ): T[] {
-  const byName = new Map<string, number>();
+  const byKey = new Map<string, number>();
   for (const g of KEI.games ?? []) {
     if (g.week == null) continue;
-    const key = `${String(g.away_name || g.away || "").toLowerCase()} @ ${String(g.home_name || g.home || "").toLowerCase()}`;
-    byName.set(key, g.week);
+    const label = `${g.away_name || g.away || ""} @ ${g.home_name || g.home || ""}`;
+    const abbr = `${g.away || ""} @ ${g.home || ""}`;
+    for (const key of [...cfbGameMatchKeys(label), ...cfbGameMatchKeys(abbr)]) {
+      byKey.set(key, g.week);
+    }
   }
   return rows.map((row) => {
     if (typeof row.week === "number") return row;
-    const key = String(row.game || "")
-      .toLowerCase()
-      .replace(/\s+/g, " ")
-      .trim();
-    const week = byName.get(key);
+    const week = cfbGameMatchKeys(String(row.game || "")).reduce<
+      number | undefined
+    >((found, key) => found ?? byKey.get(key), undefined);
     return week == null ? row : { ...row, week };
   });
 }

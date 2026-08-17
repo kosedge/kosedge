@@ -5,6 +5,7 @@
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
+import { cfbGameMatchKeys } from "@/lib/cfb-match-keys";
 import {
   getKeiLines,
   resolveHandicapFields,
@@ -134,7 +135,12 @@ function registerGame(
   const keys =
     sportKey.toLowerCase() === "nfl"
       ? nflGameKeys(g.awayTeam, g.homeTeam)
-      : gameKeys(`${g.awayTeam} @ ${g.homeTeam}`);
+      : sportKey.toLowerCase() === "cfb"
+        ? [
+            ...cfbGameMatchKeys(`${g.awayTeam} @ ${g.homeTeam}`),
+            ...cfbGameMatchKeys(`${g.awayAbbr ?? ""} @ ${g.homeAbbr ?? ""}`),
+          ]
+        : gameKeys(`${g.awayTeam} @ ${g.homeTeam}`);
 
   // Also register explicit abbr fields when present on NFL exports.
   if (sportKey.toLowerCase() === "nfl" && g.awayAbbr && g.homeAbbr) {
@@ -170,6 +176,9 @@ function rowMatchKeys(sportKey: string, game: string): string[] {
   const parts = game.split(/\s*@\s*/);
   if (sportKey.toLowerCase() === "nfl" && parts.length === 2) {
     return nflGameKeys(parts[0]!, parts[1]!);
+  }
+  if (sportKey.toLowerCase() === "cfb") {
+    return cfbGameMatchKeys(game);
   }
   return gameKeys(game);
 }
@@ -254,17 +263,26 @@ export function mergeKeiIntoEdgeBoardRows(
   for (const row of rows) {
     const game = row?.game;
     if (!game) continue;
-    const parts = game.split(/\s*@\s*/);
-    const keys =
-      sportKey.toLowerCase() === "nfl" && parts.length === 2
-        ? nflGameKeys(parts[0]!, parts[1]!)
-        : gameKeys(game);
+    const keys = rowMatchKeys(sportKey, game);
     let proj: KeiProjection | undefined;
     for (const key of keys) {
       proj = byGame.get(key);
       if (proj) break;
     }
     if (!proj) continue;
+    if (
+      sportKey.toLowerCase() === "cfb" &&
+      typeof (row as { week?: number }).week !== "number"
+    ) {
+      const week = games.find((g) =>
+        rowMatchKeys(sportKey, `${g.awayTeam} @ ${g.homeTeam}`).some((k) =>
+          keys.includes(k),
+        ),
+      )?.week;
+      if (typeof week === "number") {
+        (row as { week?: number }).week = week;
+      }
+    }
 
     const mutable = row as EdgeBoardRow & {
       kei?: string;
