@@ -9,7 +9,19 @@ type KeiDriverLog = {
   consideredNotApplied: KeiDriverFactor[];
 };
 
-const HONEST_FACTORS = new Set(["weather", "short_week", "rest", "travel", "ref"]);
+const HONEST_FACTORS = new Set([
+  "weather",
+  "short_week",
+  "rest",
+  "travel",
+  "ref",
+  "qb",
+  "qb_confirmed",
+  "qb_confirmation",
+  "qb_backup_dropoff",
+  "injury",
+  "inactives",
+]);
 
 function honestChip(factor: KeiDriverFactor): string {
   const reason = (factor.reason || "").trim();

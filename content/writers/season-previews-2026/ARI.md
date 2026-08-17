@@ -11,7 +11,7 @@ DraftKings / RotoWire late July hang the Cardinals at **4.5**. Older or alternat
 
 ## The bridge is the product
 
-The Cardinals released Kyler Murray after a 3-14 season that ended Jonathan Gannon’s tenure. What remains is a first-year Mike LaFleur offense, a bridge quarterback (Jacoby Brissett is the beat-desk starter frame entering camp), and a regenerating skill group that still includes Marvin Harrison Jr. Josh Weinfuss’ ESPN camp lane and Bo Brack’s PHNX notes are the right thermometer for whether Brissett’s timing with Harrison looks like “functional NFL offense” or “survival football.”
+The Cardinals released Kyler Murray after a 3-14 season that ended Jonathan Gannon’s tenure. Murray is Minnesota’s named Week 1 starter (O’Connell, Aug 11) — he is not on this depth chart. What remains is a first-year Mike LaFleur offense, Jacoby Brissett as ARI QB1 on the Aug 13 SoT pack, and a regenerating skill group that still includes Marvin Harrison Jr. Josh Weinfuss’ ESPN camp lane and Bo Brack’s PHNX notes are the right thermometer for whether Brissett’s timing with Harrison looks like “functional NFL offense” or “survival football.”
 
 Bridge quarterbacks can steal weeks. They do not invent eight-win seasons against the Rams, Seahawks, and 49ers six times a year. The market question at **4.5** is whether situational football and Harrison volume can clear five. That is a colder ask than last decade’s desert hype cycles — and a fairer board than hopeful midsummer numbers that briefly priced Arizona like a finished product.
 

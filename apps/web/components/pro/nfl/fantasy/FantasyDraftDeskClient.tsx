@@ -28,6 +28,7 @@ import {
   FANTASY_SCORING_PROFILES,
   type FantasyScoringProfile,
 } from "@/lib/nfl-fantasy-draft-shared";
+import { nflDepthPackagedBanner } from "@/lib/nfl-week1-current-path";
 
 const POSITION_TABS = ["ALL", ...FANTASY_DRAFT_POSITIONS] as const;
 const ROSTER_STORAGE_KEY = "kosedge.fantasy.draftDesk.roster.v1";
@@ -260,7 +261,7 @@ export function FantasyDraftDeskClient({
             uses the season-engine preseason sim for skill positions (QB / RB /
             WR / TE). Market ADP is still FantasyPros; unmatched names show ADP
             as —. That is camp-season honesty, not an unfinished page. Start
-            Mock still works on this board.
+            Mock still works on this board. {nflDepthPackagedBanner()}.
           </p>
         </HonestStatusBanner>
       ) : null}

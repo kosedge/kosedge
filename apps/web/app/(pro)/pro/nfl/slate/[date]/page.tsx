@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
+import { nflDepthPackagedBanner } from "@/lib/nfl-week1-current-path";
 import { buildNflWeeklySlate } from "@/lib/nfl-slate";
 
 export const dynamic = "force-dynamic";
@@ -41,7 +42,8 @@ export default async function NflWeeklySlatePage({
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
             Slate snapshot and matchup cards for KosEdge briefs. Model lines and
-            market context when joined — research desk, not a picks feed.
+            market context when joined — research desk, not a picks feed.{" "}
+            {nflDepthPackagedBanner()}.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

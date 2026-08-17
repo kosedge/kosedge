@@ -3,6 +3,8 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 const MUST: Array<{ name: string; team: string }> = [
+  { name: "Kyler Murray", team: "MIN" },
+  { name: "Jacoby Brissett", team: "ARI" },
   { name: "A.J. Brown", team: "NE" },
   { name: "Mike Evans", team: "SF" },
   { name: "Emeka Egbuka", team: "TB" },
