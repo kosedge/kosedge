@@ -68,14 +68,13 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
     },
   },
   cfb: {
-    heroBadge: "Pro CFB intelligence hub",
+    heroBadge: "Pro CFB research desk",
     heroSummary:
-      "College football workflow for the hierarchical season model, tempo/havoc context, market edge translation, and disciplined execution windows.",
-    slateCta: "Open weekly slate",
-    articleToneBadge: "CFB analyst desk",
+      "CFB Model only today — slate, project-game, projections, power, and previews. Research fair. No KEI until the Week 3 gate.",
+    slateCta: "Open official slate",
+    articleToneBadge: "CFB research desk",
     sectionTitles: {
       market: "Betting Desk",
-      props: "Props & Fantasy (Data Pending)",
       intel: "League Intel",
     },
   },

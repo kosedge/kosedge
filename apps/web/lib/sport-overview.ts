@@ -36,24 +36,24 @@ const GLANCE: Record<string, GlanceItem[]> = {
   ],
   cfb: [
     {
-      href: "/pro/cfb/model",
-      title: "Model hub",
-      body: "Engine version, official slate coverage, and the research-only contract.",
+      href: "/pro/cfb/slate",
+      title: "1. Official slate",
+      body: "Week 0 / Week 1 ESPN board — open any FBS row in Project Game.",
     },
     {
       href: "/pro/cfb/project-game",
-      title: "Project Game",
-      body: "Research fair spread, total, WP, and drivers. No KEI.",
-    },
-    {
-      href: "/pro/cfb/slate",
-      title: "Week 0 / Week 1 slate",
-      body: "Official ESPN 2026 board — open any row in Project Game.",
+      title: "2. Project Game",
+      body: "Research-fair spread, total, WP, and drivers. No KEI.",
     },
     {
       href: "/pro/cfb/projections",
-      title: "Season projections",
-      body: "Research win totals. CFP omitted. used_in_spread stays false.",
+      title: "3. Projections",
+      body: "Frozen N=10,000 win totals. CFP omitted. used_in_spread=false.",
+    },
+    {
+      href: "/pro/cfb/teams",
+      title: "4. Teams / Power",
+      body: "136 FBS rows, conference filter, then Edge Board (markets only).",
     },
   ],
   nba: [

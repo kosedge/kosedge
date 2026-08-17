@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import {
   enrichNflPowerRatingsWithIntel,
@@ -136,6 +137,9 @@ export default async function PowerRatingsSportPage({
 }) {
   const resolved = await params;
   const sportKey = resolveSportKey(resolved?.sport);
+  if (sportKey === "cfb") {
+    redirect("/pro/cfb/teams");
+  }
   const sportName = sportDisplayLabel(sportKey);
   const sp = searchParams ? await searchParams : {};
   const bundleRaw = Array.isArray(sp.bundle) ? sp.bundle[0] : sp.bundle;
