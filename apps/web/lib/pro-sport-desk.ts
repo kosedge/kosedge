@@ -348,24 +348,70 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     ],
   },
   cfb: {
-    pathLabel: "Fair Lines → Edges → Tempo",
+    pathLabel: "Slate → Project Game → Projections → Teams → Edge Board",
     pathSubtitle:
-      "CFB desk path: Fair Lines → Edges → Tempo signals, then key-number execution.",
+      "CFB research path: Slate → Project Game → Projections → Teams/Power. Edge Board is live books only until the Week 3 KEI gate.",
     cards: [
-      stubFairLines("cfb", "spread / total"),
-      stubEdges(
-        "cfb",
-        "Weekly game edges once the CFB model board is connected.",
-      ),
-      stubThirdCard(
-        "cfb",
-        "Tempo Signals",
-        "Pace and havoc context for key-number market translation.",
-        "/pro/cfb/tempo",
-      ),
+      {
+        href: "/pro/cfb/slate",
+        title: "Official Slate",
+        description:
+          "Week 0 + Week 1 ESPN board. Open any FBS row in Project Game.",
+        cta: "Open slate →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/cfb/project-game",
+        title: "Project Game",
+        description:
+          "Research-fair spread, total, WP, and drivers. used_in_spread=false.",
+        cta: "Open project game →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/cfb/projections",
+        title: "Projections",
+        description:
+          "Frozen N=10,000 expected wins. CFP omitted. E[wins] is not power.",
+        cta: "Open projections →",
+        accent: "neutral",
+        status: "active",
+      },
     ],
     footerCards: [
-      ...SHARED_FOOTER("cfb"),
+      {
+        href: "/pro/cfb/teams",
+        title: "Power + Teams",
+        description:
+          "136 FBS rows, conference filter, next opponent → Project Game.",
+        cta: "Open power →",
+        accent: "gold",
+      },
+      {
+        href: "/pro/cfb/previews",
+        title: "Team Previews",
+        description:
+          "KosEdge house-format previews — research language, no byline.",
+        cta: "Read previews →",
+        accent: "gold",
+      },
+      {
+        href: "/pro/cfb/conferences",
+        title: "Conference Previews",
+        description: "Power 4 + Notre Dame note + AAC and Mountain West.",
+        cta: "Open conferences →",
+        accent: "neutral",
+      },
+      {
+        href: "/edge-board/cfb",
+        title: "Public Edge Board",
+        description:
+          "Sportsbook Open/Best when posted. No CFB KEI — columns stay blank.",
+        cta: "Open edge board →",
+        accent: "green",
+      },
       {
         href: "/odds/cfb",
         title: "Compare Odds",
@@ -375,12 +421,19 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "gold",
       },
       {
-        href: "/edge-board/cfb",
-        title: "Public Edge Board",
-        description:
-          "Sportsbook Open/Best when posted. No CFB KEI handicap yet — columns stay blank.",
-        cta: "Open edge board →",
+        href: "/pro/model-transparency",
+        title: "Model Health",
+        description: "Transparency and the CFB research-only contract.",
+        cta: "Open model health →",
         accent: "green",
+      },
+      {
+        href: "/pro/kei-lines/cfb",
+        title: "KEI Lines",
+        description:
+          "No handicap model on this sport yet — honest empty, not invented KEI. Week 3 gate.",
+        cta: "View KEI status →",
+        accent: "neutral",
       },
     ],
   },

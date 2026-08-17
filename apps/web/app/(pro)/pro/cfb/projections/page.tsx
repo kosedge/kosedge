@@ -1,9 +1,11 @@
 import Link from "next/link";
 import SportHubShell from "@/components/pro/SportHubShell";
+import { cfbTeamDisplayName } from "@/lib/cfb-conferences";
 import {
-  fetchCfbSeasonEngineStatus,
-  fetchCfbSimulate,
-} from "@/lib/cfb-season-engine";
+  cfbProjectionTeams,
+  cfbResearchVersionStrip,
+  loadCfbSeasonProjections,
+} from "@/lib/cfb-research-artifacts";
 import { formatIndex } from "@/lib/cfb-season-engine-format";
 import {
   cfbModelDeskHonestyNote,
@@ -11,19 +13,15 @@ import {
 } from "@/lib/cfb-truth-label";
 
 export const dynamic = "force-dynamic";
-export const maxDuration = 25;
 
-function num(v: unknown): number | null {
-  return typeof v === "number" && Number.isFinite(v) ? v : null;
-}
-
-export default async function CfbSeasonProjectionsPage() {
-  const [status, sim] = await Promise.all([
-    fetchCfbSeasonEngineStatus(),
-    fetchCfbSimulate({ nSims: 20, asOfWeek: 1, seed: 2026 }),
-  ]);
-  const ranking = Array.isArray(sim.ranking) ? sim.ranking : [];
-  const nGames = status.n_games ?? status.schedule_game_count;
+export default function CfbSeasonProjectionsPage() {
+  const pack = loadCfbSeasonProjections();
+  const ranking = cfbProjectionTeams();
+  const version = cfbResearchVersionStrip();
+  const scheduleLoud = ranking.filter(
+    (row) =>
+      (row.power_rank ?? 999) >= 35 && (row.rank ?? 999) <= 20,
+  );
 
   return (
     <SportHubShell
@@ -31,96 +29,110 @@ export default async function CfbSeasonProjectionsPage() {
       sportName="CFB"
       base="/pro/cfb"
       title="Season projections"
-      summary="Research expected wins on the official 2026 ESPN slate. Limited P4 sample. Not graded. CFP and national-title percentages are omitted — ESPN postseason is empty and we do not invent them."
+      summary="Frozen research expected wins on the official 2026 ESPN slate. N is the artifact path count — not a live 20-path web sim. CFP and national-title percentages are omitted."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
       primaryHref="/pro/cfb/teams"
-      primaryLabel="Team DNA"
+      primaryLabel="Power / Teams"
       secondaryHref="/pro/cfb/model"
       secondaryLabel="Model hub"
     >
       <section className="mt-4 rounded-2xl border border-amber-400/25 bg-amber-400/8 px-4 py-3 text-sm text-kos-text/80">
-        <p className="font-semibold text-amber-100">Research only</p>
+        <p className="font-semibold text-amber-100">Research only · N documented</p>
         <p className="mt-1 text-xs leading-relaxed text-kos-text/70">
-          Pure model win totals — not a wagering instruction, not CLV, not KEI.
-          Hist walk-forward is cold vs market (Week 0–1 ATS 47.7% / MAE 8.36).
-          used_in_spread stays false. CFP / natty stub.{" "}
-          {sim.win_tables_final === false ||
-          status.season_futures?.win_tables_final === false
-            ? "win_tables_final=false (research, not product truth)."
-            : null}{" "}
-          Web run is capped at 20 paths on the official {nGames ?? 889}-game
-          slate — distribution width is approximate.
+          Precomputed artifact {pack.artifact_id ?? "cfb-season-projections"} ·{" "}
+          <strong>N={version.n_sims}</strong> independent Bernoulli paths ·{" "}
+          {pack.n_games_scored ?? 889} games scored · win_tables_final=
+          {String(pack.win_tables_final ?? false)}. E[wins] is schedule-adjusted.
+          Power rank is talent. used_in_spread=false. No KEI. CFP / natty stub.
         </p>
       </section>
 
       <p className="mt-3 text-xs text-kos-text/55">
-        Engine {sim.engine_version || status.engine_version || "—"} · n_sims{" "}
-        {sim.n_sims ?? "—"} · slate_complete{" "}
-        {String(status.slate_complete ?? sim.slate_complete ?? false)} ·
-        used_in_spread={String(sim.used_in_spread ?? status.used_in_spread ?? false)}
+        Engine {version.engine_version} · N={version.n_sims} · as_of{" "}
+        {version.as_of} · power {version.power_version} · used_in_spread=false
       </p>
 
-      {sim.error ? (
-        <p className="mt-4 rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm text-kos-text/70">
-          Season sim unavailable ({sim.error}). Hub and project-game still work.
-        </p>
-      ) : ranking.length === 0 ? (
-        <p className="mt-4 text-sm text-kos-text/65">No ranking rows returned.</p>
+      {scheduleLoud.length > 0 ? (
+        <section className="mt-4 rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-xs text-kos-text/70">
+          <p className="font-semibold text-kos-text">
+            E[wins] ≠ power — schedule cluster
+          </p>
+          <p className="mt-1">
+            These rows sit in the top 20 of expected wins with power rank 35 or
+            worse. That is a soft path, not a talent inversion (USF-class).
+          </p>
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {scheduleLoud.map((row) => (
+              <li key={row.team}>
+                <Link
+                  href={`/pro/cfb/teams/${row.team.toLowerCase()}`}
+                  className="rounded-md border border-white/10 px-2 py-1 text-kos-text/80 hover:border-kos-gold/35"
+                >
+                  {row.team} E#{row.rank} / P#{row.power_rank}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+
+      {ranking.length === 0 ? (
+        <p className="mt-4 text-sm text-kos-text/65">No ranking rows in artifact.</p>
       ) : (
         <div className="mt-4 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
-          <table className="w-full min-w-[32rem] text-left text-sm text-kos-text/80">
+          <table className="w-full min-w-[36rem] text-left text-sm text-kos-text/80">
             <thead>
               <tr className="border-b border-white/10 text-[11px] uppercase tracking-[0.1em] text-kos-text/45">
-                <th className="px-3 py-2">#</th>
+                <th className="px-3 py-2">E#</th>
                 <th className="px-3 py-2">Team</th>
                 <th className="px-3 py-2">Conf</th>
                 <th className="px-3 py-2">E[wins]</th>
                 <th className="px-3 py-2">p10–p90</th>
                 <th className="px-3 py-2">σ</th>
+                <th className="px-3 py-2">Power #</th>
               </tr>
             </thead>
             <tbody>
-              {ranking.map((row, i) => {
-                const team = String(row.team ?? "");
-                const mean = num(row.mean);
-                const p10 = num(row.p10);
-                const p90 = num(row.p90);
-                const std = num(row.std);
-                return (
-                  <tr
-                    key={team || i}
-                    className="border-b border-white/5 last:border-0"
-                  >
-                    <td className="px-3 py-1.5 text-kos-text/45">
-                      {num(row.rank) ?? i + 1}
-                    </td>
-                    <td className="px-3 py-1.5 font-medium text-kos-text">
-                      <Link
-                        href={`/pro/cfb/teams?q=${encodeURIComponent(team)}`}
-                        className="hover:text-kos-gold"
-                      >
-                        {team}
-                      </Link>
-                    </td>
-                    <td className="px-3 py-1.5 text-xs">
-                      {String(row.conference ?? "—")}
-                    </td>
-                    <td className="px-3 py-1.5 tabular-nums">
-                      {formatIndex(mean, 1)}
-                    </td>
-                    <td className="px-3 py-1.5 tabular-nums text-xs text-kos-text/70">
-                      {p10 != null && p90 != null
-                        ? `${p10.toFixed(0)}–${p90.toFixed(0)}`
-                        : "—"}
-                    </td>
-                    <td className="px-3 py-1.5 tabular-nums text-xs">
-                      {formatIndex(std, 1)}
-                    </td>
-                  </tr>
-                );
-              })}
+              {ranking.map((row, i) => (
+                <tr
+                  key={row.team || i}
+                  className="border-b border-white/5 last:border-0"
+                >
+                  <td className="px-3 py-1.5 text-kos-text/45">
+                    {row.rank ?? i + 1}
+                  </td>
+                  <td className="px-3 py-1.5 font-medium text-kos-text">
+                    <Link
+                      href={`/pro/cfb/teams/${row.team.toLowerCase()}`}
+                      className="hover:text-kos-gold"
+                    >
+                      {row.team}
+                    </Link>
+                    <span className="ml-2 hidden text-[11px] text-kos-text/40 sm:inline">
+                      {cfbTeamDisplayName(row.team)}
+                    </span>
+                  </td>
+                  <td className="px-3 py-1.5 text-xs">
+                    {row.conference ?? "—"}
+                  </td>
+                  <td className="px-3 py-1.5 tabular-nums">
+                    {formatIndex(row.mean, 2)}
+                  </td>
+                  <td className="px-3 py-1.5 tabular-nums text-xs text-kos-text/70">
+                    {row.p10 != null && row.p90 != null
+                      ? `${row.p10.toFixed(0)}–${row.p90.toFixed(0)}`
+                      : "—"}
+                  </td>
+                  <td className="px-3 py-1.5 tabular-nums text-xs">
+                    {formatIndex(row.std, 2)}
+                  </td>
+                  <td className="px-3 py-1.5 tabular-nums text-xs text-kos-text/60">
+                    {row.power_rank ?? "—"}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

@@ -31,8 +31,18 @@ const TOOLS = [
   },
   {
     href: "/pro/cfb/teams",
-    title: "Team DNA",
+    title: "Power + Teams",
     body: "136 official FBS rows — power, OFF/DEF, QB class, warehouse-fill labels.",
+  },
+  {
+    href: "/pro/cfb/previews",
+    title: "Team previews",
+    body: "KosEdge house format. Research language. No writer byline.",
+  },
+  {
+    href: "/pro/cfb/conferences",
+    title: "Conference previews",
+    body: "Power 4 + Notre Dame / Independent note + AAC and Mountain West.",
   },
 ] as const;
 
