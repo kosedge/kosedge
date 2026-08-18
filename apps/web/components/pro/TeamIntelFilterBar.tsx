@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { TeamIntelFilters } from "@/lib/nfl-team-intel";
 import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
 import {
@@ -37,6 +37,37 @@ export default function TeamIntelFilterBar({
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
+  const mobileBarRef = useRef<HTMLDivElement>(null);
+  const [mobileBarHeight, setMobileBarHeight] = useState(72);
+  const [mobileBarTop, setMobileBarTop] = useState(108);
+
+  // body { overflow-x: hidden } breaks position:sticky — pin with fixed instead.
+  useEffect(() => {
+    const header = document.querySelector("header");
+    const update = () => {
+      const top = header
+        ? Math.round(header.getBoundingClientRect().bottom)
+        : 108;
+      setMobileBarTop(top);
+      if (mobileBarRef.current) {
+        setMobileBarHeight(Math.round(mobileBarRef.current.offsetHeight));
+      }
+    };
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, { passive: true });
+    const ro =
+      typeof ResizeObserver !== "undefined"
+        ? new ResizeObserver(update)
+        : null;
+    if (header && ro) ro.observe(header);
+    if (mobileBarRef.current && ro) ro.observe(mobileBarRef.current);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update);
+      ro?.disconnect();
+    };
+  }, []);
 
   const season = filters.season ? String(filters.season) : "";
   const week = filters.week ? String(filters.week) : "";
@@ -96,9 +127,20 @@ export default function TeamIntelFilterBar({
 
   return (
     <>
-      {/* Mobile: sticky team dropdown only — no scrolling research filter stack */}
-      <div className="sticky top-[var(--kos-pro-header-h,6.75rem)] z-30 -mx-4 mb-4 border-b border-white/10 bg-kos-black/95 px-4 py-2.5 backdrop-blur-xl sm:hidden">
-        <label className="flex flex-col gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+      {/* Mobile spacer — fixed bar is taken out of flow */}
+      <div
+        className="mb-4 sm:hidden"
+        style={{ height: mobileBarHeight }}
+        aria-hidden
+      />
+      {/* Mobile: fixed team dropdown only (sticky fails under body overflow-x) */}
+      <div
+        ref={mobileBarRef}
+        data-testid="team-intel-mobile-filter"
+        className="fixed inset-x-0 z-30 border-b border-white/10 bg-kos-black/95 px-4 py-2.5 backdrop-blur-xl sm:hidden"
+        style={{ top: mobileBarTop }}
+      >
+        <label className="mx-auto flex max-w-7xl flex-col gap-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
           Team
           <select
             name="team-mobile"
