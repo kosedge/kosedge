@@ -3,6 +3,8 @@
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Speed travels; durability and OL do not — basement total at 4.5  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
 **Sources (beat desk):** Marcel Louis-Jacques (ESPN) [@Marcel_LJ](https://x.com/Marcel_LJ); David Furones (Sun Sentinel) [@DavidFurones_](https://x.com/DavidFurones_); Joe Schad (Palm Beach Post) [@schadjoe](https://x.com/schadjoe)  
 **Market (DK / RotoWire / Fox Sports, late July 2026):** **4.5** — shop juice (pick’em −110/−110 at some shops; Under juiced near −146 / Over +122 at others)
 

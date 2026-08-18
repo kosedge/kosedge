@@ -1,13 +1,16 @@
-# San Francisco 49ers 2026 Season Preview: Win Total 9.5
+# San Francisco 49ers 2026 Season Preview: Win Total 10.5
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
-**Angle:** Excellence priced; injuries rewrite the board weekly  
+**Angle:** Availability is the scheme — board 10.5; Model ~8.5 conflict → Pass
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (+125 / -145)
 **Sources (beat desk):** Nick Wagoner (ESPN) [@nwagoner](https://x.com/nwagoner); Vic Tafur (The Athletic) [@VicTafur](https://x.com/VicTafur); Eric Branch (San Francisco Chronicle) [@Eric_Branch](https://x.com/Eric_Branch)  
-**Market (primary late July 2026):** Win total **9.5** — some shops still hang **10.5** with Under juice; shop live  
+**Market (primary late July 2026):** Win total **10.5** — some shops still hang **10.5** with Under juice; shop live  
 **Research timestamp:** 2026-07-30 ET
 
-San Francisco still builds like a top NFC roster when the availability sheet is clean. The market question at **9.5** is whether you are buying a competent 49ers season for seventeen games or buying a team that has already taught the league how expensive its injury tax is — without paying the old eleven-win excellence tax.
+San Francisco still builds like a top NFC roster when the availability sheet is clean. The market question at **10.5** is whether you are buying a competent 49ers season for seventeen games or buying a team that has already taught the league how expensive its injury tax is — without paying the old eleven-win excellence tax.
 
 Paper does not play. Participation does. This desk’s primary input is not “Mike Evans signed” or “Purdy is fine.” It is the weekly ledger Nick Wagoner and Vic Tafur update from Santa Clara.
 
@@ -30,7 +33,7 @@ Eric Branch’s Chronicle lane and Albert Breer’s camp notebook land on the sa
 
 ## Why 9.5 is the primary number — and what 10.5 still means
 
-Primary board: **9.5**. Kos Edge / KEINFL (2026-07-29 UTC) lands San Francisco at **9.37 expected wins**, with playoff odds in the low-50s and thin Super Bowl equity. Fair ~9.4 versus market 9.5 is roughly a **tenth of a win**. That is Pass territory under Edge Threshold Discipline before juice even enters.
+Primary board: **9.5**. Kos Edge / KEINFL (2026-07-29 UTC) lands San Francisco at **8.53 expected wins**, with playoff odds in the low-50s and thin Super Bowl equity. Fair ~9.4 versus market 9.5 is roughly a **tenth of a win**. That is Pass territory under Edge Threshold Discipline before juice even enters.
 
 **Shop variance:** Some books still hang **10.5** with Under juiced (older midsummer boards showed Over +125 / Under −145). At 10.5, fair ~9.4 is roughly a one-win Under edge — the lean that lived earlier in the summer. At 9.5, that edge is mostly gone. Do not chase Under after the number collapses. Do not invent an Over at 9.5 because the logo is still excellent. Do not treat **10.5** as the primary board for this piece.
 
@@ -54,9 +57,9 @@ What the market gets right at 9.5: Purdy is a settled starter, the scheme is sti
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Availability remains the scheme. Preseason loss at Tennessee does not settle the fair number — Pass until the sheet stabilizes.
+**Bottom line.** Live DK market is **10.5**, not 9.5. Model 8.53 vs 10.5 is a material conflict — **Pass**; present both.
 
-**What matters most.** Practice participation for the skill/OL chain.
+**What matters most.** Participation sheet for the skill/OL chain; Under juice (−145 DK).
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
@@ -69,10 +72,10 @@ What the market gets right at 9.5: Purdy is a settled starter, the scheme is sti
 - **Futures:** NFC West around +300 is interesting as a long-shot structural bet only if you believe health mean-reverts hard; secondary to shopping the correct win-total number.
 
 **Handicapper’s Note**  
-Fair number: **~9.4** (KEINFL 9.37; research ~8.8–9.6)  
-Market number: **9.5** (primary); watch **10.5** books  
-Lean: **Pass at 9.5** / **Under at 10.5** if available  
-Confidence: **2/5**  
-Key risk: A healthy two-month stretch with Bosa/CMC/Evans all producing makes eleven wins look inevitable and turns a correct process Pass/Under into a results loss.
+Fair number: **8.53** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **10.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
+Confidence: 2/5  
+Key risk: Material Model↔market conflict (Model 8.53 vs 10.5). Present both; Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

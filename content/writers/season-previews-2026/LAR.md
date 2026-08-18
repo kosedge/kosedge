@@ -1,23 +1,25 @@
-# Los Angeles Rams 2026 Season Preview: Win Total 9.5
+# Los Angeles Rams 2026 Season Preview: Win Total 11.5
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
-**Angle:** Stafford–McVay steal weeks; 9.5 no longer prices excellence — Over discipline  
+**Angle:** Stafford–McVay steal weeks — at 11.5 the ask is twelve; Model ~11.1 → Pass
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (-125 / +105)
 **Sources (beat desk):** Sarah Barshop (ESPN) [@sarahbarshop](https://x.com/sarahbarshop); Jourdan Rodrigue (The Athletic) [@JourdanRodrigue](https://x.com/JourdanRodrigue); Gary Klein (Los Angeles Times) [@LATimesklein](https://x.com/LATimesklein)  
-**Market (primary late July 2026):** Win total **9.5** (shop juice live)  
 **Research timestamp:** 2026-07-30 ET
 
-The Rams are a Super Bowl roster on paper and a spot-betting team on this desk. Those statements do not conflict. Sean McVay and Matthew Stafford still manufacture steal weeks — early-down design, scripted explosives, opponent-specific leverage. Season win totals at **9.5** ask whether excellence clears ten Sundays. That is a smaller question than the midsummer **11.5** boards that asked for twelve.
+The Rams are a Super Bowl roster on paper and a spot-betting team on this desk. Those statements do not conflict. Sean McVay and Matthew Stafford still manufacture steal weeks — early-down design, scripted explosives, opponent-specific leverage. Season win totals at **11.5** ask whether excellence clears **twelve** Sundays. That is the live DK board (Editor fact-check Aug 17) — not the stale 9.5 copy that briefly leaked into this preview.
 
-They are good. The primary number no longer pretends they are finished.
+They are good. The primary number already prices finished.
 
-## Opening frame: what 9.5 actually requires
+## Opening frame: what 11.5 actually requires
 
-Ten wins means beating a competent bar for a team that already lives in the 10–12 range. Los Angeles has cleared 10+ wins in five of the last six seasons. That history is why older boards hung 11.5 with Over juice. On the **9.5** primary this desk is arguing, history is why Over becomes process — not because the Rams are a lock, but because the ask no longer requires peak excellence for seventeen weeks.
+Twelve wins means beating a peak bar for a team that already lives in the 10–12 range. Los Angeles has cleared 10+ wins in five of the last six seasons. That history is why DK hangs **11.5** with Over juice (−125). On this board, history does **not** mint a free Over — it explains why the market refuses to hang 9.5 on a Super Bowl favorite.
 
-Kos Edge / KEINFL (2026-07-29 UTC) sits at **11.12 expected wins**. Fair ≈ 11.1 versus market 9.5 is about a win and a half Over. Research-adjusted fair after hard SOS and Stafford age tax still sits near **~10.5–11.2**. Both clear **9.5**. Threshold discipline says lean **Over**. Keep confidence at **2/5** because NFC West road environments, primetime density, and any multi-week Stafford limitation can still pin a good team at nine — and because Over juice can turn a clean gap into a Pass.
+Kos Edge Model SoT (100k lock, 2026-08-13) sits at **11.08 expected wins**. Fair ≈ 11.1 versus market **11.5** is thin (~0.4 wins). Research-adjusted fair after hard SOS and Stafford age tax still sits near **~10.5–11.2**. Threshold discipline says **Pass** — not Over. Over juice (−125) makes a forced buy worse process. Keep confidence at **2/5** because NFC West road environments, primetime density, and any multi-week Stafford limitation can still pin a good team at ten or eleven.
 
-If a shop still hangs **11.5**, that is a different ticket: Pass or thin Under preference, not this Over lean. Do not import numbers across boards.
+If a shop still hangs **9.5** or **10.5**, that is a different ticket: re-price; do not import an 11.5 Pass onto a softer board without a fresh juice check.
 
 ## Camp structure: managed MVP, loaded front seven
 
@@ -29,48 +31,48 @@ Myles Garrett (June trade) and Trent McDuffie (March trade, then extension) are 
 
 ## Steal weeks vs season-long grind
 
-Stafford–McVay steal weeks are real: scripted openers against slow-starting defenses, home favorites where early-down success forces opponents off schedule, and division games where Rams design usually wins the first 15 plays. Those weeks pad ATS and short-term sides. At 11.5 they did not automatically pad an Over. At **9.5** they do more work: ten wins require surviving a hard SOS and Stafford age variance, not inventing a 12-win median.
+Stafford–McVay steal weeks are real: scripted openers against slow-starting defenses, home favorites where early-down success forces opponents off schedule, and division games where Rams design usually wins the first 15 plays. Those weeks pad ATS and short-term sides. At **11.5** they do **not** automatically pad an Over: twelve wins require surviving a hard SOS and Stafford age variance, not inventing a 13-win median.
 
-The 2025 Rams went 12–5 and still lost the conference title path to Seattle. Offseason aggression (Garrett, McDuffie) was the correct win-now move. Markets that cut the total to 9.5 while still selling Super Bowl favorites (~+550 range) are leaving the win-total side as the cleaner structural expression — if juice stays honest.
+The 2025 Rams went 12–5 and still lost the conference title path to Seattle. Offseason aggression (Garrett, McDuffie) was the correct win-now move. Markets that hang **11.5** while selling Super Bowl favorites (~+550 range) are coherent — logo futures and win totals are different products, and neither is a free square.
 
 ## Where the public overpays
 
-Public money still buys names: MVP Stafford, Nacua volume, Adams touchdowns, Garrett as DPOY favorite. Process money asks how many games this team is a true 60% favorite versus how many are coin-flip. McVay teams historically beat soft Unders when healthy — and still give back games in ugly fashion when the OL or explosive rate dips for two weeks. At 9.5, prop heat is less likely to drag you into a juiced Over that assumes twelve. Still shop juice. Still refuse to treat logo equity as a 3/5 hammer.
+Public money still buys names: MVP Stafford, Nacua volume, Adams touchdowns, Garrett as DPOY favorite. Process money asks how many games this team is a true 60% favorite versus how many are coin-flip. McVay teams historically beat soft Unders when healthy — and still give back games in ugly fashion when the OL or explosive rate dips for two weeks. At **11.5** with Over juice, prop heat is exactly how you get dragged into a taxed Over that assumes twelve. Still shop juice. Still refuse to treat logo equity as a 3/5 hammer.
 
-Public money also treats Super Bowl price as a win-total receipt. It is not. A team can be correctly priced as a January contender and still be an Over at 9.5 because the season-win ask is ten, not twelve. Those are different products. This desk prefers the win-total Over to logo futures unless a specific futures number implies material mispricing versus ~11-win equity.
+Public money also treats Super Bowl price as a win-total receipt. It is not. A team can be correctly priced as a January contender and still be a **Pass** at 11.5 because Model fair (~11.1) does not clear the half-win threshold after juice. Those are different products. This desk prefers sides/props with real process edges to a juiced win-total Over.
 
 ## Model conflict check
 
 | Input | Number |
 |--------|--------|
-| KEINFL expected wins (2026-07-29) | **11.12** |
-| Market (primary late July) | **9.5** |
+| Model expected wins (100k lock 2026-08-13) | **11.08** |
+| Market (DK / RotoWire Aug 2026) | **11.5** (−125 / +105) |
 | Research-adjusted fair | **~10.5–11.2** (hard SOS, Stafford age tax) |
-| Alt / older boards | **11.5** (different ticket) |
+| Stale wrong preview number (removed) | **9.5** |
 
-Model and research agree: this is a high-10s / low-11s team priced at mid-9s on the primary board. No material conflict that invents a Pass. Lean **Over 9.5**. Do not sell soft Under because excellence narratives feel expensive — the expensive number was 11.5.
+Model and research agree this is a high-10s / low-11s team. Against **11.5**, the gap is thin. Threshold discipline: **Pass**. Do not revive the Over-9.5 lean — that board is not the live primary.
 
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Stafford path unchanged after a Chiefs win featuring rookies. Pass on exhibition efficiency.
+**Bottom line.** Live DK market is **11.5**, not 9.5. Model E[wins] 11.08 vs 11.5 is thin — **Pass**. Do not import the old Over-9.5 lean.
 
-**What matters most.** Stafford snap plan; OL starter confirmation.
+**What matters most.** Juice on 11.5 Over (−125 DK); any Stafford availability language; NFC West road density.
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Win total 9.5:** Lean **Over** at prices no worse than −120. Fair ~10.5–11.2 clears threshold. **Pass** if Over juice worsens past −135.  
-- **If a shop still hangs 11.5:** Pass (or re-price as a separate Under conversation); do not import the 9.5 Over lean.  
+- **Win total 11.5:** **Pass** at current DK juice (−125 Over). Fair ~11.1 does not clear threshold after juice.  
+- **If a shop hangs 9.5 / 10.5:** Re-price as a separate ticket; do not import this 11.5 Pass blindly onto a softer board.  
 - **Sides:** Attack Rams as large road favorites in lookahead spots; prefer them as home dogs or short road dogs when McVay’s script edge is live. Steal weeks > blind fade.  
 - **Props:** Nacua reception/yardage overs when role is full. Garrett sack markets are narrative-heavy — price shop, don’t chase. Pass Stafford season TD overs that assume 17 healthy games of MVP rate.  
-- **Futures:** Super Bowl / NFC prices are brand tickets. Prefer the win-total Over to logo futures unless you have a specific misprice.
+- **Futures:** Super Bowl / NFC prices are brand tickets. Do not treat logo price as a win-total receipt.
 
 **Handicapper’s Note**  
-Fair number: **~11.1** (KEINFL 11.12; research ~10.5–11.2)  
-Market number: **9.5**  
-Lean: **Over 9.5**  
-Confidence: **2/5**  
-Key risk: Stafford limitation or an ugly OL stretch pins Los Angeles at eight or nine even with Garrett/McDuffie — thin Overs die when excellence is real but incomplete for seventeen weeks.
+Fair number: **11.08** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **11.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
+Confidence: 2/5  
+Key risk: Thin |Model 11.08 − market 11.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

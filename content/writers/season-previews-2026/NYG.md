@@ -1,22 +1,25 @@
-# New York Giants 2026 Season Preview: Win Total 5.5
+# New York Giants 2026 Season Preview: Win Total 7.5
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
-**Angle:** Young QB hope ≠ win-total Over alone — but 5.5 is floor pricing  
+**Angle:** Dart Year 2 on a 7.5 board — Model ~7.0 → Pass
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-115 / -105)
 **Sources (beat desk):** Jordan Raanan (ESPN) [@JordanRaanan](https://x.com/JordanRaanan); Dan Duggan (The Athletic) [@DDuggan21](https://x.com/DDuggan21); Paul Schwartz (New York Post) [@NYPost_Schwartz](https://x.com/NYPost_Schwartz)  
-**Market (primary late July 2026):** Win total **5.5** (shop juice live)  
-**Kos Edge / KEINFL (2026-07-29):** 7.75 expected wins · ~24% playoff · ~11% division  
+**Market (primary late July 2026):** Win total **7.5** (shop juice live)  
+**Kos Edge / KEINFL (2026-07-29):** 7.02 expected wins · ~24% playoff · ~11% division  
 **Research timestamp:** 2026-07-30 ET
 
 Jaxson Dart’s Year 2 will be the most watchable story in East Rutherford. It is not, by itself, a reason to invent eight wins.
 
-That distinction still matters. What changed is the board. New York finished 4-13 in 2025, last in the NFC East, and enters 2026 with John Harbaugh, a Matt Nagy offense, and a sophomore quarterback who flashed dual-threat juice as a rookie. The public still hears “Harbaugh + Dart + Nabers” and reaches for a soft improvement total. The primary number this desk is arguing is **5.5**. That is a floor — six wins as the ask — not a hope hang. Young-QB optimism is still not an automatic Over. At 5.5, optimism is no longer required to clear threshold. Older **7.5** boards are a different ticket if they still exist — Pass there; do not import this Over lean.
+That distinction still matters. What changed is the board. New York finished 4-13 in 2025, last in the NFC East, and enters 2026 with John Harbaugh, a Matt Nagy offense, and a sophomore quarterback who flashed dual-threat juice as a rookie. The public still hears “Harbaugh + Dart + Nabers” and reaches for a soft improvement total. The primary number this desk is arguing is **7.5**. That is a floor — six wins as the ask — not a hope hang. Young-QB optimism is still not an automatic Over. At 5.5, optimism is no longer required to clear threshold. Older **7.5** boards are a different ticket if they still exist — Pass there; do not import this Over lean.
 
 ## Greenbrier first: process before projection
 
 Camp opened at The Greenbrier in White Sulphur Springs while facility renovations and the MetLife World Cup calendar pushed the Giants on the road. Raanan’s ESPN camp hub and Day-1 notes tracked a no-pads open: Dart roughly 17-of-24 in one team-period sample, Malik Nabers back for individual work but not yet living in team drills, Braxton Berrios early standout reps, Odell Beckham Jr. competing for a crowded receiver room. Schwartz’s Post notebook and the official practice report treated Nabers’ gradual return as an availability story — not a green light to juice a higher board.
 
-Duggan’s Athletic lane on Harbaugh’s camp philosophy matters more for process than for a futures ticket: harder practices than the Daboll years, more accountability, sports-science guardrails rather than nostalgia toughness. Discipline can shave penalty yards. Against **5.5**, process improvement plus ordinary skill availability is enough to discuss Over without needing Harbaugh’s Baltimore résumé to transfer one-for-one into eight wins.
+Duggan’s Athletic lane on Harbaugh’s camp philosophy matters more for process than for a futures ticket: harder practices than the Daboll years, more accountability, sports-science guardrails rather than nostalgia toughness. Discipline can shave penalty yards. Against **7.5**, process improvement plus ordinary skill availability is enough to discuss Over without needing Harbaugh’s Baltimore résumé to transfer one-for-one into eight wins.
 
 ## QB development is the lede — not the whole ticket
 
@@ -26,11 +29,11 @@ Weapons exist when healthy. Nabers is a difference-maker. Cam Skattebo’s rooki
 
 Defensively, Dexter Lawrence, Brian Burns, and Abdul Carter are real. The supporting cast is thinner than national optimism admits. A unit that cratered late in 2025 can improve and still leave New York in negative-EPA weeks against Philadelphia and Dallas. That is an Under argument at 7.5. At 5.5 it is a variance note: division losses are already in the number; soft non-division spots are where Overs cash for regenerating clubs.
 
-## Market math at 5.5
+## Market math at 7.5
 
 | Input | Number |
 |--------|--------|
-| Primary win total | **5.5** |
+| Primary win total | **7.5** |
 | KEINFL expected wins | **7.75** |
 | Research-adjusted fair | **~6.8–7.4** (availability + NFC East tax) |
 | Gap vs 5.5 | **~1.3–2.2 wins Over** |
@@ -50,14 +53,14 @@ Overweighting one good camp stretch into a 9-win spike narrative — that was th
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Dart took a concussion check vs Minnesota and returned. Process noise in a new offense — Pass on early Dart leans.
+**Bottom line.** Live DK market is **7.5**, not 5.5. Model 7.02 vs 7.5 is thin — **Pass**. Old 5.5 Over thesis is dead.
 
-**What matters most.** Clean midweek practices without tent checks; first-team script clarity.
+**What matters most.** Dart availability after tent checks; public Over handle at 7.5.
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Win total 5.5:** Lean **Over** at prices no worse than −120. Model ~7.75 / research ~6.8–7.4 both clear. **Pass** if Over juice past −135.  
+- **Win total 7.5:** **Pass** at the live DK board until Model gap + juice clear threshold. Old 5.5 Over thesis is retired.
 - **If a shop hangs 7.5:** **Pass** — different market.  
 - **NFC East (+600 range):** Pass. Long shots need cleaner paths than “Dart jumps.”  
 - **Sides:** Prefer Giants as home dogs against the public until early-down success shows. Avoid as road favorites off narrative.  
@@ -65,10 +68,10 @@ Overweighting one good camp stretch into a 9-win spike narrative — that was th
 - **Camp watch:** Nabers’ team-drill progression (Raanan), Dart’s under-center efficiency, OL pressure allowed (Duggan / Schwartz).
 
 **Handicapper’s Note**  
-Fair number: ~7.0–7.5 (KEINFL ~7.75; research-adjusted ~6.8–7.4)  
-Market number: **5.5**  
-Lean: **Over 5.5**  
+Fair number: **7.02** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **7.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Dart and Nabers miss significant time, Nagy’s install stalls, and a 4–5 win season punishes anyone who treated a floor number like free money — which is why juice and health still cap confidence.
+Key risk: Thin |Model 7.02 − market 7.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

@@ -1,16 +1,19 @@
-# Washington Commanders 2026 Season Preview: Win Total 8.5
+# Washington Commanders 2026 Season Preview: Win Total 7.5
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
-**Angle:** Leap priced; sustainability is the bet — nine wins is the ask  
+**Angle:** Sustainability priced at 7.5 — Model ~6.3 → Pass / thin Under
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-120 / +100)
 **Sources (beat desk):** John Keim (ESPN) [@john_keim](https://x.com/john_keim); Ben Standig (The Athletic) [@BenStandig](https://x.com/BenStandig)  
-**Market (primary late July 2026):** Win total **8.5** (shop juice live)  
-**Kos Edge / KEINFL (2026-07-29):** 6.94 expected wins · ~14% playoff · ~6% division  
+**Market (primary late July 2026):** Win total **7.5** (shop juice live)  
+**Kos Edge / KEINFL (2026-07-29):** 6.32 expected wins · ~14% playoff · ~6% division  
 **Research timestamp:** 2026-07-30 ET
 
-The market already wrote the bounce-back script. At **8.5**, it wrote nine wins into it.
+The market already wrote the bounce-back script. At **7.5**, it wrote nine wins into it.
 
-Two seasons ago, Jayden Daniels dragged this franchise to 12-5 and an NFC Championship Game. Last season he played seven games through knee, hamstring, and elbow issues, Terry McLaurin missed significant time, the defense finished near the bottom of the league in yards allowed, and Washington closed **5-12**. The board answered with an **8.5** total. That is not a sleeping-giant bargain. It is a recovery number that asks for nine before camp has proven sustainability. Older **7.5** boards are a different ticket if they still exist — re-price; do not import this Under lean onto a lower number.
+Two seasons ago, Jayden Daniels dragged this franchise to 12-5 and an NFC Championship Game. Last season he played seven games through knee, hamstring, and elbow issues, Terry McLaurin missed significant time, the defense finished near the bottom of the league in yards allowed, and Washington closed **5-12**. The board answered with an **7.5** total. That is not a sleeping-giant bargain. It is a recovery number that asks for nine before camp has proven sustainability. Older **7.5** boards are a different ticket if they still exist — re-price; do not import this Under lean onto a lower number.
 
 Sustainability — of Daniels’ availability, of efficiency under David Blough, of a rebuilt defense climbing from last year’s mess — is the actual bet. The leap is the narrative. Narratives are usually expensive.
 
@@ -31,7 +34,7 @@ Fail any pillar for a meaningful stretch and 8.5 becomes a grind. Nail all three
 
 | Input | Number |
 |--------|--------|
-| Primary win total | **8.5** |
+| Primary win total | **7.5** |
 | KEINFL expected wins | **6.94** |
 | Research-adjusted fair | **~7.5–8.1** (if Daniels holds + defense average) |
 | Gap vs 8.5 | **~0.4–1.5 wins Under** |
@@ -53,14 +56,14 @@ Linear continuation — treating 2024 as the true talent line and 2025 as pure i
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Mariota’s right MCL ends his preseason; Daniels remains the starter with a thinner backup room. Pass on manufacturing a lean from backup math alone.
+**Bottom line.** Live DK market is **7.5**, not 8.5. Model 6.32 vs 7.5 — **Pass** (thin Under scrutiny with friendly juice). Mariota MCL is backup math, not a starter rewrite.
 
-**What matters most.** Whether the club adds an arm; Daniels’ snap plan for the remaining exhibitions.
+**What matters most.** Daniels availability; Over juice (−120) is public — do not chase.
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Win total 8.5:** Lean **Under** if juice is roughly even or better on the Under. Model ~6.9 / research ~7.5–8.1 both sit under. **Pass** if Under past −130.  
+- **Win total 7.5:** Lean **Under** if juice is roughly even or better on the Under. Model ~6.9 / research ~7.5–8.1 both sit under. **Pass** if Under past −130.  
 - **If a shop hangs 7.5:** re-price — different ticket; do not import this Under lean blindly.  
 - **NFC East (~+460 to +500):** Pass. Too much variance after the leap narrative.  
 - **Sides:** Prefer Washington as a home dog with Daniels confirmed active. Fade as a road favorite in September if OL/skill availability looks thin.  
@@ -68,10 +71,10 @@ Linear continuation — treating 2024 as the true talent line and 2025 as pure i
 - **Camp watch:** Daniels’ full participation (Keim), McLaurin’s workload, Oweh’s pressure rate (Standig), Blough’s under-center hit rate on the QB.
 
 **Handicapper’s Note**  
-Fair number: ~6.9 (Kos Edge model) / ~7.5–8.1 research-adjusted if Daniels holds  
-Market number: **8.5**  
-Lean: **Under 8.5** (Pass if Under juice past −130)  
+Fair number: **6.32** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **7.5** (DK / RotoWire Aug 2026)  
+Lean: **Under 7.5**  
 Confidence: 2/5  
-Key risk: Daniels plays 16 games, the defense is merely average, and a 10-win rebound makes every Under look timid — still correct process when the board asks for nine after a five-win injury year.
+Key risk: Model 6.32 sits 1.18 under 7.5; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

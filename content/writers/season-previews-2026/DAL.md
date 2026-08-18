@@ -1,19 +1,22 @@
-# Dallas Cowboys 2026 Season Preview
+# Dallas Cowboys 2026 Season Preview: Win Total 9.5
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
-**Angle:** Stars sell tickets; OL and defense cash them — desk board 8.5, shop noise at 9.5  
+**Angle:** Stars sell tickets; board is 9.5 — Model sits lower → Pass / conflict
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (+115 / -140)
 **Sources (beat desk):** Todd Archer (ESPN) [@toddarcher](https://x.com/toddarcher); Clarence Hill Jr. (Fort Worth Star-Telegram) [@ClarenceHillJr](https://x.com/ClarenceHillJr); David Moore (Dallas Morning News) [@DavidMooreDMN](https://x.com/DavidMooreDMN)  
-**Market (Kos Edge desk board):** Win total **8.5**  
-**Live shop note (late July 2026):** Many books hang **9.5** as the main (Under often −125 to −140 / Over +105 to +115); **8.5** also posts as a juiced alternate (~−150 Over at some shops). Price the fence, not the logo.
+**Market (Kos Edge desk board):** Win total **9.5**  
+**Live shop note (late July 2026):** Many books hang **9.5** as the main (Under often −125 to −140 / Over +105 to +115); **9.5** also posts as a juiced alternate (~−150 Over at some shops). Price the fence, not the logo.
 
 Dallas will own the summer conversation. The fair number does not. Start at the trenches and the points-allowed column — not at the highlight package.
 
 ## Lead with the desk number
 
-Kos Edge prices Dallas at **8.5**. That is a nine-win ask after a 7-9-1 season defined by a top-tier offense and a league-worst defense. Live consensus often sits a full win higher at **9.5** with the Under shaded. Those are two different tickets a win apart — not one number you buy a point off.
+Kos Edge prices Dallas at **9.5**. That is a nine-win ask after a 7-9-1 season defined by a top-tier offense and a league-worst defense. Live consensus often sits a full win higher at **9.5** with the Under shaded. Those are two different tickets a win apart — not one number you buy a point off.
 
-Kos Edge / KEINFL preseason sim (2026-07-29 UTC, 100k MC) lands Dallas at **8.43 expected wins**, ~18% division, ~36% playoff. Against desk **8.5**, the model gap is tenths — below the half-win threshold before juice. Against live **9.5**, the model gap is about a win Under. Edge Threshold Discipline: half a win or less at standard juice is a **Pass**, not a dressed-up lean. A full-win Under at 9.5 is a different conversation.
+Kos Edge / KEINFL preseason sim (2026-07-29 UTC, 100k MC) lands Dallas at **7.10 expected wins**, ~18% division, ~36% playoff. Against desk **8.5**, the model gap is tenths — below the half-win threshold before juice. Against live **9.5**, the model gap is about a win Under. Edge Threshold Discipline: half a win or less at standard juice is a **Pass**, not a dressed-up lean. A full-win Under at 9.5 is a different conversation.
 
 The public story sells Dak Prescott, CeeDee Lamb, and George Pickens. The ticket that cashes asks whether Christian Parker’s rebuilt defense can stop being a weekly tax — and whether the offensive line keeps the front five in the spots Brian Schottenheimer wants them.
 
@@ -53,14 +56,14 @@ If model fair and research-adjusted fair disagree by a wide margin after two wee
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** UDFA WR Camden Brown made a loud roster push; Lamb/Pickens hierarchy unchanged. Pass on trench/defense questions that still own 8.5/9.5.
+**Bottom line.** Live DK market is **9.5**, not desk 8.5. Model E[wins] 7.10 vs 9.5 is a material conflict — **Pass**; present both.
 
-**What matters most.** Brown’s next-script snaps; OL starter confirmation.
+**What matters most.** OL/defense process vs public Over handle; juice on Under (−140 DK).
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Desk win total 8.5:** **Pass** at standard juice. Model ~8.4 vs market 8.5 is inside half a win. Do not invent an Over from brand optimism; do not invent an Under from last year’s defensive embarrassment alone.
+- **Desk win total 9.5:** **Pass** at standard juice. Model ~8.4 vs market 8.5 is inside half a win. Do not invent an Over from brand optimism; do not invent an Under from last year’s defensive embarrassment alone.
 - **Live win total 9.5:** Lean **Under** when Under is no worse than about −140 and camp notes do not show a sudden top-12 defense. Confidence stays modest — Parker install risk cuts both ways.
 - **Juiced Over 8.5 (~−150):** **Pass**. Buying nine wins at a tax after a 7-9-1 defense is not threshold process.
 - **NFC East futures:** **Pass** at Dallas’s second-choice price (~+220/+235). Division equity is real; the price is not a gift.
@@ -68,10 +71,10 @@ If model fair and research-adjusted fair disagree by a wide margin after two wee
 - **Props theme:** Prescott / Lamb volume can still clear even if the team sits Under 9.5. Team wins and skill yards are not the same bet.
 
 **Handicapper’s Note**  
-Fair number: ~8.4 (Kos Edge / KEINFL 2026-07-29); research-adjusted band ~8.6–9.0 if Parker install is clean  
-Market number: **8.5** (Kos Edge desk board); live main often **9.5** (Under juiced); 8.5 also posts as juiced alternate  
-Lean: **Pass** on desk 8.5; **Under 9.5** when available at −140 or better  
+Fair number: **7.10** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Defensive overhaul hits faster than expected and turns a structural Under at 9.5 into a coin-flip — or turns a Pass at 8.5 into a missed Over if you forced a fade.
+Key risk: Material Model↔market conflict (Model 7.10 vs 9.5). Present both; Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

@@ -3,6 +3,9 @@
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Bo Nix leap narrative vs AFC West reality  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-115 / -105)
 **Sources (beat desk):** Jeff Legwold (ESPN) @Jeff_Legwold; Mike Klis (9NEWS) @mikeklis; Troy Renck (Denver7) @TroyRenck  
 **Market (DK/RotoWire, late July 2026):** Season wins 9.5 (−115 / −105)
 
@@ -14,7 +17,7 @@ The Broncos tied an NFL single-season mark with eleven one-possession wins in 20
 
 A clean read on a 14-3 roster would hang closer to 11. Books hung 9.5 instead. Close-game luck does not repeat on command, and a first-place schedule raises the non-division floor. Over 9.5 still only needs 10 wins — four full games worse than last year — and the Over sits only mildly juiced around −115. That is the board saying the roster is good and the 14-win ledger was soft.
 
-Kos Edge / KEINFL preseason sim (2026-07-29 UTC bundle) lands Denver at **9.69 expected wins**, ~34.6% to win the division, ~64.5% playoff. Model fair and the posted 9.5 are already inside half a win. That alone argues Pass before you layer camp.
+Kos Edge / KEINFL preseason sim (2026-07-29 UTC bundle) lands Denver at **10.51 expected wins**, ~34.6% to win the division, ~64.5% playoff. Model fair and the posted 9.5 are already inside half a win. That alone argues Pass before you layer camp.
 
 ## Camp signal that actually moves the fair
 
@@ -61,10 +64,10 @@ Neither error clears a betting threshold at 9.5 with nearly even juice. The fair
 - **Camp revisit:** Only reopen the Over if Nix’s movement looks full through joint practices *and* the defense’s pressure profile holds; reopen the Under if ankle management becomes weekly news.
 
 **Handicapper’s Note**  
-Fair number: ~9.6 (research band 9.5–9.8; Kos Edge sim 9.69)  
-Market number: 9.5 (−115 / −105)  
-Lean: Pass  
+Fair number: **10.51** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Over 9.5**  
 Confidence: 2/5  
-Key risk: A fully healthy, mobile Nix plus Waddle chemistry can cash Overs quickly — and still would not create a large edge until division results confirm the close-game regression is priced correctly.
+Key risk: Model 10.51 clears 9.5 by 1.01; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

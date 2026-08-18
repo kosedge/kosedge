@@ -3,6 +3,9 @@
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Herbert’s arm vs availability math  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-130 / +110)
 **Sources (beat desk):** Kris Rhim (ESPN) @krisrhim1; Daniel Popper (The Athletic) @danielrpopper  
 **Market (DK/RotoWire, late July 2026):** Season wins 9.5 (−130 / +110)
 
@@ -14,7 +17,7 @@ The Chargers are hanging at **9.5** on the DraftKings/RotoWire late-July board w
 
 Jim Harbaugh has won exactly eleven games in each of his first two seasons in Los Angeles. In 2025 the Chargers did it while both starting tackles missed most of the year and Herbert absorbed a league-worst pressure diet (54 sacks, 263 pressures per team reporting). Books still make you lay −130 to clear 9.5. That juice is the tell: the board’s true expectation sits near ten wins, and it wants payment to say they get there.
 
-Kos Edge / KEINFL preseason sim (2026-07-29 UTC) lands LAC at **9.23 expected wins**, ~25.6% division, ~55.7% playoff. Model fair vs 9.5 is a thin Under lean — inside or near half a win depending on how you round. Research adjustment for rest deficit and OL ramp-up keeps fair near **9.0–9.4**. That is not a hammer. It is enough to refuse −130 on the Over.
+Kos Edge / KEINFL preseason sim (2026-07-29 UTC) lands LAC at **8.50 expected wins**, ~25.6% division, ~55.7% playoff. Model fair vs 9.5 is a thin Under lean — inside or near half a win depending on how you round. Research adjustment for rest deficit and OL ramp-up keeps fair near **9.0–9.4**. That is not a hammer. It is enough to refuse −130 on the Over.
 
 (Some books still post 10.5 with the Under juiced. Same ~10-win team, different fence. Shop the number before you shop the side.)
 
@@ -61,10 +64,10 @@ Pricing peak Herbert for a full slate while hanging −130 on Over 9.5. The arm 
 - **Camp revisit:** Over only becomes interesting if Alt/Slater handle padded work without management weeks *and* Herbert’s new footwork looks automatic in joint practices. Under strengthens if either tackle becomes a snap-count story by mid-August.
 
 **Handicapper’s Note**  
-Fair number: ~9.2 (research band 9.0–9.4; Kos Edge sim 9.23)  
-Market number: 9.5 (Over −130 / Under +110)  
-Lean: Pass  
+Fair number: **8.50** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Under 9.5**  
 Confidence: 2/5  
-Key risk: A healthy Alt/Slater season plus McDaniel efficiency can push this roster to 11 again — that outcome smashes Unders and still would not have justified buying −130 in July.
+Key risk: Model 8.50 sits 1.00 under 9.5; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

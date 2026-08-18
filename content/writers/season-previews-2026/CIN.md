@@ -3,6 +3,9 @@
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk
 **Angle:** Burrow’s health rewrites the board — and the market already priced the rewrite; juice is where edges go to die
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-140 / +115)
 **Sources (beat desk):** Ben Baby (ESPN) @Ben_Baby; Paul Dehner Jr. (The Athletic) @pauldehnerjr; Kelsey Conway (Cincinnati Enquirer) @KelseyLConway
 
 Cincinnati’s win total has been a story about price, not number. Late July DraftKings / RotoWire still show **9.5** with the Over at **-140** and the Under at **+115**. The number has barely moved since winter. The Over tax has. That is the Bengals market in one sentence: everyone agrees Joe Burrow changes everything, so the books stopped moving the line and started charging rent.
@@ -61,10 +64,10 @@ Secondary markets are cleaner thinking spaces. If Burrow’s preseason snap plan
 - **Props:** Ja’Marr Chase volume remains the stabler skill exposure than team wins; Burrow pass-yard Overs need schedule + protection confirmation, not just “he’s healthy” headlines.
 
 **Handicapper’s Note**  
-Fair number: ~9.4 research-adjusted (KEICMB mean 8.51 — flagged conflict)  
-Market number: 9.5 (O -140 / U +115)  
-Lean: Pass  
+Fair number: **7.21** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Forcing Under from the model while Burrow is full-go turns a sim allocation into a fade of the best player on the field.
+Key risk: Material Model↔market conflict (Model 7.21 vs 9.5). Present both; Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

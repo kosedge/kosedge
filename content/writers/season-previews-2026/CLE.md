@@ -3,6 +3,9 @@
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk
 **Angle:** A defense searching for a new identity while the offense searches for a script — QB fog sits on top of both
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **6.5** (+105 / -120)
 **Sources (beat desk):** Daniel Oyefusi (ESPN) @DanielOyefusi; Mary Kay Cabot (Cleveland.com) @MaryKayCabot; Zac Jackson (The Athletic) @AkronJackson
 
 Cleveland’s 2026 season is not priced like a contender, and it should not be. Late July DraftKings / RotoWire hang the Browns at **6.5** with Over **+105** / Under **-120**. That is a rebuild number with a mild lean that the floor still has a trapdoor. Kos Edge / KEICMB (2026-07-29) projects **6.64 expected wins** — effectively on the number. Half-win threshold math says **Pass** unless camp or scheme news creates a clearer distribution shift. The handicapping job here is not forcing a ticket. It is mapping which identity shows up first: Mike Rutenberg’s defense without Myles Garrett, or Todd Monken’s offense without a settled quarterback.
@@ -53,10 +56,10 @@ KEICMB’s mean at **6.64** against **6.5 (+105/-120)** is the definition of a P
 - **Props:** Prefer proven skill pieces with role clarity over QB season yards until Monken’s depth chart stops rotating. Ward/secondary props are defense-identity bets, not offense-script bets.
 
 **Handicapper’s Note**  
-Fair number: ~6.2 research-adjusted (KEICMB mean 6.64)  
-Market number: 6.5 (O +105 / U -120)  
-Lean: Pass  
+Fair number: **8.61** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **6.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: A decisive Sanders (or Watson) separation plus Verse chaos turns the “soft schedule” Over from theory into a 7–8 win climb the July board never priced.
+Key risk: Material Model↔market conflict (Model 8.61 vs 6.5). Present both; Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

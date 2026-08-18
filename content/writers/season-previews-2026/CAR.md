@@ -1,16 +1,19 @@
-# Carolina Panthers 2026 Season Preview: Win Total 6.5
+# Carolina Panthers 2026 Season Preview: Win Total 7.5
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
-**Angle:** Young core, hard board — patience priced without the hope tax  
+**Angle:** Young core on a 7.5 board — Model ~6.5 → Pass / thin Under
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (+110 / -130)
 **Sources (beat desk):** Joseph Person (The Athletic) [@josephperson](https://x.com/josephperson); Sheena Quick (FOX / local) [@Sheena_Marie3](https://x.com/Sheena_Marie3); Darin Gantt (Panthers.com / local) [@daringantt](https://x.com/daringantt) — *ESPN Nation seat open post–David Newton; treat Athletic/locals as primary*  
-**Camp / market refs:** [AP Scourton ACL](https://apnews.com/article/panthers-scourton-carted-off-4f6111b60ede9f6ca77e6cd9acd004d4); [Panthers.com IR / Moton notes](https://www.panthers.com/news/nic-scourton-placed-on-injured-reserve-among-other-moves-cam-gill); [Panthers Wire schedule/step-back](https://pantherswire.usatoday.com/story/sports/nfl/panthers/2026/07/25/nfl-analyst-projections-win-total-panthers/91035085007/); primary late-July win total **6.5**
+**Camp / market refs:** [AP Scourton ACL](https://apnews.com/article/panthers-scourton-carted-off-4f6111b60ede9f6ca77e6cd9acd004d4); [Panthers.com IR / Moton notes](https://www.panthers.com/news/nic-scourton-placed-on-injured-reserve-among-other-moves-cam-gill); [Panthers Wire schedule/step-back](https://pantherswire.usatoday.com/story/sports/nfl/panthers/2026/07/25/nfl-analyst-projections-win-total-panthers/91035085007/); primary late-July win total **7.5**
 
-Carolina won the NFC South at 8-9. The market sometimes heard “champions” and moved numbers up. The primary board this desk is arguing sits at **6.5**. That is closer to reconstruction math than to last year’s tiebreaker banner priced as eight wins. Patience for Bryce Young and a young skill core is still the narrative — but at 6.5 the hope tax is mostly off the sheet. If a shop still hangs **7.5** with Under juice, that is a different ticket — re-price; do not treat it as the primary.
+Carolina won the NFC South at 8-9. The market sometimes heard “champions” and moved numbers up. The primary board this desk is arguing sits at **7.5**. That is closer to reconstruction math than to last year’s tiebreaker banner priced as eight wins. Patience for Bryce Young and a young skill core is still the narrative — but at 7.5 the hope tax is mostly off the sheet. If a shop still hangs **7.5** with Under juice, that is a different ticket — re-price; do not treat it as the primary.
 
 ## Last year’s ticket was not a power ranking
 
-Start with the ugly math the record hid. Carolina finished **8-9 with a −69 scoring differential** and took the division on a three-way tiebreaker. That is a playoff berth, not a foundation. Pythagorean-style reads lived closer to six-and-a-half than eight. When a first-place schedule arrives and the edge room loses a rising starter on Day 1 of camp (Nic Scourton ACL / IR per AP and Panthers.com), regression is not a take — it is the baseline. At **6.5**, the board has already priced some of that. Over cases that need eight were the summer trap at higher numbers. At 6.5, the Over is a smaller claim: Young takes a real step, the defense’s new names are merely competent, and Carolina converts enough South spots to clear seven.
+Start with the ugly math the record hid. Carolina finished **8-9 with a −69 scoring differential** and took the division on a three-way tiebreaker. That is a playoff berth, not a foundation. Pythagorean-style reads lived closer to six-and-a-half than eight. When a first-place schedule arrives and the edge room loses a rising starter on Day 1 of camp (Nic Scourton ACL / IR per AP and Panthers.com), regression is not a take — it is the baseline. At **7.5**, the board has already priced some of that. Over cases that need eight were the summer trap at higher numbers. At 6.5, the Over is a smaller claim: Young takes a real step, the defense’s new names are merely competent, and Carolina converts enough South spots to clear seven.
 
 Research-adjusted fair near **6.9–7.3** against 6.5 is a thin Over lean — half a win-ish, juice-dependent — not a hammer. Confidence **2/5**. Pass if Over juice worsens past −125.
 
@@ -22,13 +25,13 @@ Person’s late-July notes from Bank of America Stadium have been loud on Young:
 
 The counter sits on the calendar. Public schedule models have Carolina facing one of the league’s harder opponent win-total slates. Division title defense with a bottom-tier scoring offense and a harder slate is exactly how eight-win teams become six-win teams. Young can take a real step and Carolina can still miss 6.5 if September scripts look like 2025’s punter-heavy weeks — but that failure path has to be uglier than the old 7.5 Under thesis required.
 
-Injury tax arrived early: Person reported rookie WR Chris Brazzell with a moderate LCL tear expected to cost up to eight weeks. Depth at receiver was already a development project; losing a drafted deep-ball piece into September is quiet variance, not a panic button at 6.5. Scourton’s ACL is a larger defensive hit — it removes a rising edge piece from the early-season plan and is why this desk refuses to dress defense free agency as automatic Over equity.
+Injury tax arrived early: Person reported rookie WR Chris Brazzell with a moderate LCL tear expected to cost up to eight weeks. Depth at receiver was already a development project; losing a drafted deep-ball piece into September is quiet variance, not a panic button at 7.5. Scourton’s ACL is a larger defensive hit — it removes a rising edge piece from the early-season plan and is why this desk refuses to dress defense free agency as automatic Over equity.
 
 ## Offense still decides whether patience is earned
 
 Young eclipsed 3,000 yards and 20 touchdowns in 2025 — progress — and still managed games with low attempt totals in half his starts. Year 4 is the franchise-QB audit. The Panthers picked up his fifth-year option; extension talk can wait for tape. For handicappers, the relevant questions are early-down success, third-down conversion without hero ball, and whether McMillan becomes a true WR1 volume spine rather than a highlight reel.
 
-Chuba Hubbard / Jonathon Brooks backfield health and OL draft investment matter because Young’s best path is structure, not chaos. If camp pads show clean pockets and Canales’ concepts hit on schedule, the Over case at 6.5 wakes up cleanly. If September looks like 2025’s grind against a harder slate, even 6.5 can fail — but forced Unders into a floor number are usually bad process until the tape proves collapse.
+Chuba Hubbard / Jonathon Brooks backfield health and OL draft investment matter because Young’s best path is structure, not chaos. If camp pads show clean pockets and Canales’ concepts hit on schedule, the Over case at 7.5 wakes up cleanly. If September looks like 2025’s grind against a harder slate, even 6.5 can fail — but forced Unders into a floor number are usually bad process until the tape proves collapse.
 
 ## Defense spend vs. regression risk
 
@@ -43,25 +46,25 @@ July 5 Kos Edge / KEINFL preseason files show corrupted/unscaled expected wins f
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Young core vs hard board still the story after Buffalo exhibition. Pass on hope-tax Overs.
+**Bottom line.** Live DK market is **7.5**, not 6.5. Model 6.47 vs 7.5 — **Pass** (thin Under scrutiny only with friendly juice).
 
-**What matters most.** Young ones share; any new injury language.
+**What matters most.** Young efficiency vs hard board; Over juice (+110) is public hope — do not chase.
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Win total 6.5 (primary):** Lean **Over** at prices no worse than −120 (fair ~6.9–7.3). **Pass** if juice worsens or early Young EPA stalls.  
-- **If a shop hangs 7.5:** Pass or re-price; do not import the 6.5 Over lean.  
+- **Win total 7.5 (primary):** **Pass** at the live DK board (Model ~6.5). Old 6.5 Over thesis is retired; thin Under only with friendly juice.  
+- **If a shop hangs 7.5:** Pass or re-price; do not import a soft-board lean onto 7.5.  
 - **Sides:** Prefer Panthers as home dogs; fade as road favorites until scoring EPA shows a real step.  
 - **Props:** McMillan reception/yardage markets if camp target share holds; Young passing yards Overs need attempt volume, not just efficiency headlines.  
 - **Futures:** NFC South at plus money is a variance ticket in a four-team muddle — size small or Pass.  
 - **Camp watch:** Young’s move-the-ball command (Person), Phillips/Lloyd pressure without coverage leakage (Quick), Brazzell/Scourton timelines as depth only.
 
 **Handicapper’s Note**  
-Fair number: ~6.9–7.3 (research-adjusted; KEICMB July 5 NFC South wins unusable — flagged)  
-Market number: **6.5**  
-Lean: Over 6.5  
+Fair number: **6.47** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **7.5** (DK / RotoWire Aug 2026)  
+Lean: **Under 7.5**  
 Confidence: 2/5  
-Key risk: Hard schedule plus unfinished offense pins Carolina at five or six even with defensive improvement — thin Overs die when September scripts look like 2025.
+Key risk: Model 6.47 sits 1.03 under 7.5; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

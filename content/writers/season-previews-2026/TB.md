@@ -3,6 +3,9 @@
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Mayfield floor as ceiling constraint  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (-125 / +105)
 **Sources (beat desk):** Jenna Laine (ESPN) [@JennaLaineESPN](https://x.com/JennaLaineESPN); Greg Auman (FOX Sports) [@gregauman](https://x.com/gregauman); Rick Stroud (Tampa Bay Times) [@NFLSTROUD](https://x.com/NFLSTROUD)  
 **Camp / market refs:** [NBC / Stroud-Auman contract close](https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/baker-mayfield-to-play-2026-season-without-new-contract-with-bucs); [ESPN Mayfield plays out deal](https://www.espn.co.uk/nfl/story/_/id/49469946/sources-no-real-progress-mayfield-buccaneers-contract-talks); [ESPN camp intel / Vea](https://www.espn.com/nfl/story/_/id/49419613/tampa-bay-buccaneers-training-camp-2026-intel-updates); DK/RotoWire late July 2026 win total 8.5 (−125 / +105)
 
@@ -22,7 +25,7 @@ Mike Evans is in San Francisco. Chris Godwin Jr. steps into a louder leadership 
 
 Mayfield’s 2025 was a survival season: injuries (PCL and more), receivers in and out, still roughly a mid-QB1 fantasy finish on pure will. Health regression to the mean helps. Losing the franchise’s all-time scoring wideout taxes the deep-shot and red-zone identity that used to turn close games into 10-win years. Bucky Irving’s presence keeps the offense functional. Functional is how you land on eight. Functional is how you miss nine when the juice asks for nine.
 
-Kos Edge / KEINFL (2026-07-29) lands almost on the number: **8.52 expected wins**, ~37.5% division, ~45.7% playoff. That is a textbook Pass before juice. Research-adjusted, shaving a bit for Evans’ departure and Vea friction, sits nearer **8.1–8.3**. Against **8.5 (−125)** on the Over, you are paying to climb a wall the model already called a coin flip. Threshold = **Pass**. Under at +105 is the more interesting side intellectually and still not a full lean until camp clarifies Vea and Wirfs (also dinged in conditioning tests per local reports).
+Kos Edge / KEINFL (2026-07-29) lands almost on the number: **8.36 expected wins**, ~37.5% division, ~45.7% playoff. That is a textbook Pass before juice. Research-adjusted, shaving a bit for Evans’ departure and Vea friction, sits nearer **8.1–8.3**. Against **8.5 (−125)** on the Over, you are paying to climb a wall the model already called a coin flip. Threshold = **Pass**. Under at +105 is the more interesting side intellectually and still not a full lean until camp clarifies Vea and Wirfs (also dinged in conditioning tests per local reports).
 
 ## Division favorite ≠ win-total value
 
@@ -61,10 +64,10 @@ Until those settle, futures money belongs in the account, not on −125. If the 
 - **Sides:** Bucs as small home favorites are usable; laying big road numbers assumes a ceiling this roster has not earned post-Evans.
 
 **Handicapper’s Note**  
-Fair number: ~8.2 (research-adjusted; Kos Edge model 8.52)  
-Market number: 8.5 (−125 / +105)  
-Lean: Pass  
+Fair number: **8.36** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **8.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Full health + Robinson click recreates a 10-win Mayfield year and punishes anyone who treated the floor as a hard Under.
+Key risk: Thin |Model 8.36 − market 8.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

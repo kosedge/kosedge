@@ -3,6 +3,8 @@
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** Bridge-QB ceiling vs desert inconsistency / basement total  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
 **Sources (beat desk):** Josh Weinfuss (ESPN) [@joshweinfuss](https://x.com/joshweinfuss); Bo Brack (PHNX Sports) [@BoBrack](https://x.com/BoBrack); Darren Urban (AZCardinals.com) [@Cardschatter](https://x.com/Cardschatter)  
 **Market (DK / RotoWire, late July 2026):** **4.5** (some books have hung **3.5**)
 
