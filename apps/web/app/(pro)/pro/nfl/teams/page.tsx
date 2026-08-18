@@ -91,7 +91,7 @@ export default async function NflTeamsIndexPage({
         subtitle="Premium team intelligence index with fast lookup controls for week, conference, and division."
         basePath="/pro/nfl/teams"
         filters={filters}
-        teamOptions={filteredDirectory.map((team) => ({
+        teamOptions={NFL_TEAM_DIRECTORY.map((team) => ({
           code: team.code,
           name: team.name,
         }))}
