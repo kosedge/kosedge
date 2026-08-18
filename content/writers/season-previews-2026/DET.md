@@ -1,19 +1,22 @@
-# Detroit Lions 2026 Season Preview: Win Total 9.5
+# Detroit Lions 2026 Season Preview: Win Total 10.5
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
-**Angle:** Contender pricing meets the hardest division — at 9.5, not 10.5  
+**Angle:** Contender board at 10.5 — Model ~10.7 is thin; Pass on forced Overs
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (-110 / -112)
 **Sources (beat desk):** Eric Woodyard @E_Woodyard (ESPN); Colton Pouncy @colton_pouncy (The Athletic); Dave Birkett @davebirkett (Detroit Free Press)
 
-Detroit’s primary win total sits at **9.5** (near-even juice depending on shop, late July 2026). That is still contender pricing for a team that finished 9–8, last in the NFC North, and missed the playoffs — but it is a ten-win ask, not an eleven-win tax. Older boards that hung **10.5** were a different ticket. Soft non-division spots do not erase six games against physical North opponents. The schedule can help you clear 9.5. The division can still take three wins off the board before October is over.
+Detroit’s primary win total sits at **10.5** (near-even juice depending on shop, late July 2026). That is still contender pricing for a team that finished 9–8, last in the NFC North, and missed the playoffs — but it is a ten-win ask, not an eleven-win tax. Older boards that hung **10.5** were a different ticket. Soft non-division spots do not erase six games against physical North opponents. The schedule can help you clear 9.5. The division can still take three wins off the board before October is over.
 
 Eric Woodyard’s Allen Park updates, Colton Pouncy’s roster texture, and Dave Birkett’s camp storylines all point to the same tension: Detroit still has star talent, and Detroit still has unresolved timelines. Contender markets price the first. Win totals should respect the second.
 
 ## Contender number, not contender certainty
 
-Dan Campbell graded himself a “freaking F” after 2025 — public, blunt, and accurate enough for futures work. Detroit still ran a top-five offense by season’s end, but efficiency slipped, the run/play-action synergy frayed, and December erased the margin for error. Brad Holmes and Campbell both owned it. That ownership does not automatically create 11 wins. At **9.5**, it creates a roster with a chip and a board that asks for ten in a knife-fight division.
+Dan Campbell graded himself a “freaking F” after 2025 — public, blunt, and accurate enough for futures work. Detroit still ran a top-five offense by season’s end, but efficiency slipped, the run/play-action synergy frayed, and December erased the margin for error. Brad Holmes and Campbell both owned it. That ownership does not automatically create 11 wins. At **10.5**, it creates a roster with a chip and a board that asks for ten in a knife-fight division.
 
-Chicago under Ben Johnson is not a soft rival. Green Bay’s skill group is intact even if the trenches are not. Minnesota’s quarterback situation is messy, but the defense still travels. Pricing Detroit at 9.5 is a statement. Statements need trenches and health to cash — they just need one fewer win than 10.5 demanded.
+Chicago under Ben Johnson is not a soft rival. Green Bay’s skill group is intact even if the trenches are not. Minnesota’s quarterback situation is messy, but the defense still travels. Pricing Detroit at 10.5 is a statement. Statements need trenches and health to cash — they just need one fewer win than 10.5 demanded.
 
 ## Secondary clocks before Week 1
 
@@ -21,7 +24,7 @@ Woodyard’s late-July camp file was blunt on the back end. Campbell does not an
 
 That is not noise. Detroit’s defensive ceiling in recent seasons ran through Joseph and Branch. Opening without either — or with one on a pitch count — changes how opponents script early. Corner depth after Terrion Arnold’s release is already a camp battle (D.J. Reed as a known quantity; Rock Ya-Sin, Roger McCreary, Ennis Rakestraw and others fighting for the other boundary). Birkett’s pre-camp storyline package treated secondary health and trench competitions as primary, not secondary. Agree.
 
-If Joseph/Branch both miss meaningful September football, 9.5 gets heavier. If both return near full by midseason and the rush holds, the Over path is about second-half math, not Week 1 aesthetics — and it is cleaner at 9.5 than it was at 10.5.
+If Joseph/Branch both miss meaningful September football, 9.5 gets heavier. If both return near full by midseason and the rush holds, the Over path is about second-half math, not Week 1 aesthetics — and it is cleaner at 10.5 than it was at 10.5.
 
 ## Petzing, Goff, and a third language in three years
 
@@ -44,25 +47,25 @@ Watch August for three decision points: Gibbs’ participation and chemistry wit
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Quiet Monday after Cincinnati exhibition. Contender prior unchanged — Pass on thin edges.
+**Bottom line.** Live DK market is **10.5**, not 9.5. Model 10.71 vs 10.5 is thin — **Pass**.
 
-**What matters most.** Any trench DNP that sticks.
+**What matters most.** Health regression from 2025; NFC North density; shop juice near −110.
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Season wins 9.5:** Lean **Over** only if juice is roughly even or better (−115 or shorter). Fair ~9.8–10.3 clears ~half a win; confidence 2/5. **Pass** if Over is −130 or worse.
-- **If a shop still hangs 10.5:** Pass or re-price — do not import the 9.5 Over lean.
+- **If a shop still hangs 10.5:** Pass or re-price — do not import a soft-board lean onto 10.5.
 - **Division / futures:** North favorites near +180 are priced for bounce-back; better as a small futures sprinkle than as a reason to ignore juice on the win total.
 - **Sides early:** Respect Detroit at home with Goff and St. Brown; be slower to trust short road favorites if Joseph/Branch are out and the RT spot is rotating.
 - **Props:** St. Brown volume remains the cleanest skill prop until Gibbs’ role and Petzing’s early-down dial are confirmed; pass rush props tied to Hutchinson are more stable than secondary takeaway props in September.
 - **Camp watch:** Joseph/Branch ramps (Woodyard), Gibbs participation, RT stability in joint work (Birkett / Pouncy).
 
 **Handicapper’s Note**  
-Fair number: ~10.0 (research band 9.8–10.3)  
-Market number: **9.5** (near even; Over sometimes juiced)  
-Lean: Over 9.5 if juice ≤ −115; else Pass  
+Fair number: **10.71** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **10.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Secondary PUP timelines and OL re-install pin Detroit at eight or nine even with soft non-division wins — thin Overs die when September looks unfinished.
+Key risk: Thin |Model 10.71 − market 10.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

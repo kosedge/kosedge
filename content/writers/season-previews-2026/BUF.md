@@ -3,6 +3,9 @@
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Ceiling through Josh Allen — thinner margin for error  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (-120 / +100)
 **Sources (beat desk):** Alaina Getzenberg (ESPN) @agetzenberg; Joe Buscaglia (The Athletic) @JoeBuscaglia; Matt Parrino (Syracuse.com) @MattParrino
 
 Start with the calendar, not the MVP résumé. Buffalo’s 2026 board opens on the road at Houston, brings Detroit into the new Highmark Stadium in Week 2, and stacks early tests against the Chargers, Patriots, and a Monday night trip to the Rams. ESPN’s betting desk has already framed that stretch as part of an eighth-hardest schedule by prior-season opponent win percentage. When the market hangs a perennial contender at 10.5 with the over juiced, the first question is not “Can Josh Allen still be elite?” It is whether eleven wins still clear a gauntlet that no longer softens in September.
@@ -49,10 +52,10 @@ Watch September sides more closely than the futures ticket. Road favorites comin
 - **Futures:** Super Bowl tickets are entertainment unless your model shows a clear price vs. field; they are not a substitute for a win-total edge that is not there.
 
 **Handicapper’s Note**  
-Fair number: 10.5–10.7  
-Market number: 10.5 (over typically juiced)  
-Lean: Pass  
+Fair number: **10.24** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **10.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Allen’s weekly variance can manufacture three wins that make a July Under look foolish — and an early 1–3 start can make a juiced Over look just as bad.
+Key risk: Thin |Model 10.24 − market 10.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

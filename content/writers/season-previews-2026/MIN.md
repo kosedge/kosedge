@@ -1,13 +1,16 @@
-# Minnesota Vikings 2026 Season Preview: Win Total 7.5
+# Minnesota Vikings 2026 Season Preview: Win Total 8.5
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
-**Angle:** Murray named starter Aug. 11 — re-price 7.5 carefully; Pass on one-series certainty
+**Angle:** Murray named starter — board 8.5; Model ~8.4 → Pass
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (-110 / -110)
 **Sources (beat desk):** Kevin Seifert @SeifertESPN (ESPN); Alec Lewis @alec_lewis (The Athletic); Ben Goessling @BenGoessling (Star Tribune)
 
 Kevin O’Connell named Kyler Murray the starter on Aug. 11. Minnesota’s win total is still a quarterback number — but the open-battle fog is gone.
 
-The market has Minnesota at **7.5** (−110 / −110 neighborhood, DraftKings via RotoWire, late July 2026). That is not an accident. Justin Jefferson is still Justin Jefferson. The defense was strong enough in 2025 to help produce nine wins while the quarterback room led the league in the wrong direction. The board is not ignoring the skill talent. It is refusing to pay full freight until someone owns the job — and at 7.5 it is pricing eight wins, not nine. Older **8.5** boards were a different ask.
+The market has Minnesota at **8.5** (−110 / −110 neighborhood, DraftKings via RotoWire, late July 2026). That is not an accident. Justin Jefferson is still Justin Jefferson. The defense was strong enough in 2025 to help produce nine wins while the quarterback room led the league in the wrong direction. The board is not ignoring the skill talent. It is refusing to pay full freight until someone owns the job — and at 8.5 it is pricing eight wins, not nine. Older **8.5** boards were a different ask.
 
 Murray owns the job; McCarthy is QB2. Everything else in this preview is downstream of how clean the ones-only install looks before Week 1.
 
@@ -21,7 +24,7 @@ Carson Wentz and Max Brosmer are in the room. They are not the market. Murray vs
 
 ## Why 7.5 is coherent — and still hard to bet blindly
 
-Minnesota won nine games in 2025 with ugly quarterback efficiency and a late surge that arrived too late for the playoffs. A defense that finished among the stingier units in yards allowed can keep a 7.5 in play even when the offense is average — and can clear it if the offense is merely competent. Add Jefferson, Jordan Addison, and offseason addition Jauan Jennings, and the Over case writes itself if Murray wins the job and plays on-schedule football. That case is cleaner at 7.5 than it was when books asked for nine.
+Minnesota won nine games in 2025 with ugly quarterback efficiency and a late surge that arrived too late for the playoffs. A defense that finished among the stingier units in yards allowed can keep a 7.5 in play even when the offense is average — and can clear it if the offense is merely competent. Add Jefferson, Jordan Addison, and offseason addition Jauan Jennings, and the Over case writes itself if Murray wins the job and plays on-schedule football. That case is cleaner at 8.5 than it was when books asked for nine.
 
 The Under case is equally simple, just narrower. NFC North weeks punish hesitation. Chicago and Detroit will not wait for a quarterback to finish learning the operation. Green Bay opens the season against Minnesota on the schedule’s front end of the decision window. If the competition leaks into mid-August and the starter is still translating O’Connell’s timing offense at full speed, early losses can pin a 7.5 before the skill talent ever gets a clean sample — but the pin has to be uglier than the old 8.5 Under thesis required.
 
@@ -34,7 +37,7 @@ This is where threshold discipline matters.
 - **Murray-secured path:** research-adjusted fair can climb toward **8.3–9.0** if he is clearly the guy with enough runway before Week 1 and the defense holds its 2025 form.
 - **McCarthy-or-mud path:** fair sinks toward **6.8–7.6** if the job stays unsettled, availability bites again, or interceptions return as a feature.
 
-A single board number of **7.5** sits nearer the mud path than the old 8.5 did — which is why Over becomes more interesting once a starter is named, and why Pass remains correct while the job is a press conference. Kos Edge / model allocations that still overweight McCarthy volume while the beat points at a real competition are a conflict flag, not a license to average two stories into a fake lean. When model fair and research-adjusted fair disagree materially, the correct season-win ticket is **Pass**.
+A single board number of **8.5** sits nearer the mud path than the old 8.5 did — which is why Over becomes more interesting once a starter is named, and why Pass remains correct while the job is a press conference. Kos Edge / model allocations that still overweight McCarthy volume while the beat points at a real competition are a conflict flag, not a license to average two stories into a fake lean. When model fair and research-adjusted fair disagree materially, the correct season-win ticket is **Pass**.
 
 That is the same discipline applied in the late-July Pass revise on this desk: a tenth of a win at −110 is not an Over. Calling it “soft” does not make it actionable — even at a lower board.
 
@@ -50,9 +53,9 @@ Player markets can be cleaner than the team total. Jefferson receiving yards in 
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Murray is the named starter after Aug. 11 and a one-drive preseason debut. Re-price 7.5 only with juice-friendly Over interest — Pass on manufacturing certainty from one series.
+**Bottom line.** Live DK market is **8.5**, not 7.5. Model 8.38 vs 8.5 is thin — **Pass**. Naming removes open-battle fog; it does not mint a free Over.
 
-**What matters most.** Ones-only cleanliness vs Ravens joints; McCarthy’s backup role staying clean; any availability language on either QB.
+**What matters most.** Ones-only install vs Ravens joints; juice at even (−110/−110).
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
@@ -65,10 +68,10 @@ Player markets can be cleaner than the team total. Jefferson receiving yards in 
 - **Camp watch:** Decision timing vs Ravens joints (Lewis / Goessling), on-time Jefferson targets, availability language on both QBs (Seifert).
 
 **Handicapper’s Note**  
-Fair number: N/A as a single point (path-dependent ~6.8–9.0); research midpoint useless without starter  
-Market number: **7.5** (−110 / −110 typical)  
-Lean: Pass  
+Fair number: **8.38** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **8.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Murray wins the job early, hits script fast, and a 7.5 Under becomes the classic “defense plus elite WR” trap — which is why you wait for the depth chart, not vibes. The lower board makes forced Unders even worse process.
+Key risk: Thin |Model 8.38 − market 8.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

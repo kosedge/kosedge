@@ -3,6 +3,9 @@
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Defensive respect is not an offense — QB room and scheme decide 5.5  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **5.5** (-120 / +100)
 **Sources (beat desk):** Rich Cimini (ESPN) @RichCimini; Zack Rosenblatt (The Athletic) @ZackBlatt; Brian Costello (New York Post) @BrianCoz
 
 Florham Park’s real competition is not at starter. Geno Smith is back with the franchise that drafted him, acquired from Las Vegas on a late-round swap, and installed as the clear QB1 for Aaron Glenn’s Year 2. The fight that will shape both the depth chart and the season-long number sits behind him: Bailey Zappe, Brady Cook, and fourth-round rookie Cade Klubnik for QB2 — a battle Rich Cimini has framed as closer to Zappe vs. Klubnik, with the fan base desperate for the Clemson pick to win it. Zack Rosenblatt’s Athletic reporting has Smith locked atop the depth chart while the backups audition through camp and preseason. Defensive respect can sell a narrative. It cannot complete third-and-seven.
@@ -45,10 +48,10 @@ Sauce Gardner and Quinnen Williams are no longer the identity anchors they were 
 - **Team totals:** Often a cleaner expression of “defense travels, offense does not” than the win total.
 
 **Handicapper’s Note**  
-Fair number: 5.4–5.8  
-Market number: 5.5  
-Lean: Pass  
+Fair number: **4.72** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **5.5** (DK / RotoWire Aug 2026)  
+Lean: **Under 5.5**  
 Confidence: 2/5  
-Key risk: A short stretch of forced turnovers and two soft home wins can make 5.5 Overs look obvious in hindsight — process still says the July edge is not there.
+Key risk: Model 4.72 sits 0.78 under 5.5; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

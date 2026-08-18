@@ -3,6 +3,9 @@
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk
 **Angle:** Steelers football as a totals market first — pace, possession, and QB durability — with starter certainty that still isn’t season certainty
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (+100 / -120)
 **Sources (beat desk):** Brooke Pryor (ESPN) @bepryor; Mark Kaboly (The Athletic / Pat McAfee) @MarkKaboly; Dale Lolley (Steelers.com / DK) @dlolley_pgh
 
 Pittsburgh won the AFC North at 10-7 last season and the 2026 win total came back at **8.5**. Late July DraftKings / RotoWire price that number roughly **Over +100 / Under -120**. Division champions are not supposed to open a win and a half below what they just did unless the market thinks the wins were rented. Our desk agrees with the direction of that skepticism — and we start from totals logic, not from nostalgia about black-and-gold floor narratives.
@@ -57,10 +60,10 @@ Over reopen conditions: Porter and Ramsey back for Week 1; Rudolph never needed;
 - **Props:** Metcalf/Pittman receiving is healthier exposure than Rodgers season pass yards until the rep-count philosophy and preseason snap plan clarify. Avoid blind Overs on Steelers team totals in September.
 
 **Handicapper’s Note**  
-Fair number: ~7.6 (aligned with KEICMB 7.57; research does not upgrade)  
-Market number: 8.5 (O +100 / U -120)  
-Lean: Under  
-Confidence: 3/5  
-Key risk: Pittsburgh’s one-score DNA plus a healthy secondary activation turns 8–9 wins into the median again and punishes anyone who treated 10-7 as pure mirage.
+Fair number: **8.17** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **8.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
+Confidence: 2/5  
+Key risk: Thin |Model 8.17 − market 8.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

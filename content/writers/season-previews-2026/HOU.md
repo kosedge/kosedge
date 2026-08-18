@@ -3,6 +3,9 @@
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** Stroud year-three tax already in the number  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-125 / +105)
 **Market (DK/RotoWire, late July 2026):** Win total 9.5 (−125 / +105)  
 **Sources (beat desk):** DJ Bien-Aime (ESPN) [@djbienaime](https://x.com/djbienaime); Jonathan M. Alexander (Houston Chronicle) [@jonmalexander](https://x.com/jonmalexander); Aaron Wilson (KPRC) [@AaronWilson_NFL](https://x.com/AaronWilson_NFL)
 
@@ -60,10 +63,10 @@ Neither case clears a full win of edge at −125 / +105.
 - **Camp watch (through Aug. 13):** Center starter; Montgomery snap share vs committee; Dell practice participation; any secondary attrition that would actually threaten the defensive floor.
 
 **Handicapper’s Note**  
-Fair number: 9.4  
-Market number: 9.5 (−125 / +105)  
-Lean: Pass  
+Fair number: **10.35** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Over 9.5**  
 Confidence: 2/5  
-Key risk: One-score regression and a cold December slate can erase a soft Over even if the defense stays elite.
+Key risk: Model 10.35 clears 9.5 by 0.85; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

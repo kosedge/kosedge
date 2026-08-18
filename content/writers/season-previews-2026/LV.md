@@ -3,6 +3,9 @@
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Reset year — noise ≠ edge  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **5.5** (-146 / +120)
 **Sources (beat desk):** Ryan McFadden (ESPN) @ryanmcfadden_; Tashan Reed (The Athletic) @tashanreed; Vincent Bonsignore (Las Vegas Review-Journal) @VinnyBonsignore  
 **Market (DK/RotoWire, late July 2026):** Season wins 5.5 (−146 / +120)
 
@@ -36,7 +39,7 @@ Ashton Jeanty and Brock Bowers remain the skill pieces that make a Cousins-led d
 
 ## Model check — no conflict, no bet
 
-Kos Edge / KEINFL preseason sim (2026-07-29 UTC) has Las Vegas at **5.59 expected wins**, ~1.2% division, ~4.7% playoff. That sits on top of the 5.5 number. Research-adjusted fair after Cousins-as-QB1 and Crosby participation still lives near **5.3–5.8**.
+Kos Edge / KEINFL preseason sim (2026-07-29 UTC) has Las Vegas at **6.06 expected wins**, ~1.2% division, ~4.7% playoff. That sits on top of the 5.5 number. Research-adjusted fair after Cousins-as-QB1 and Crosby participation still lives near **5.3–5.8**.
 
 | Source | Number |
 | --- | --- |
@@ -74,10 +77,10 @@ Any national “they’re back” piece that skips the division tax and the −1
 - **Camp revisit:** Only reopen Over if you can find 5.5 at even money or better *and* Cousins/Crosby participation looks clean through joint practices. Reopen Under if Crosby’s knee or the OL protection rates lag badly into late August.
 
 **Handicapper’s Note**  
-Fair number: ~5.5 (research band 5.3–5.8; Kos Edge sim 5.59)  
-Market number: 5.5 (Over −146 / Under +120)  
-Lean: Pass  
+Fair number: **6.06** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **5.5** (DK / RotoWire Aug 2026)  
+Lean: **Over 5.5**  
 Confidence: 2/5  
-Key risk: A clean Cousins stretch plus Crosby availability can climb to 7 wins and make −146 look clever in hindsight — that is variance, not a July edge.
+Key risk: Model 6.06 clears 5.5 by 0.56; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

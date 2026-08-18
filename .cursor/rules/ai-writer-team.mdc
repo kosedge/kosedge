@@ -42,10 +42,24 @@ No hype. No locks. No chasing. Process over results. Threshold discipline only.
 | Jordan Vale | NFL – NFC East | MLB NL East overflow, NHL Metropolitan | `jordan-vale.md` |
 | Drew Kessler | NFL – AFC South | NBA Southwest overflow | `drew-kessler.md` |
 | Sam Ortiz | NFL – AFC West | MLB AL West overflow | `sam-ortiz.md` |
+| **Riley Nash** | **Editor (all sports)** | Weekly market / Model fact-check of previews & articles | `riley-nash.md` |
 
-**Conflict rule:** Primary owner has final authority on their home base.
+**Conflict rule:** Primary owner has final authority on their home base. **Editor has final authority on published market numbers** — wrong win totals are bugs, not style.
 
 Coverage matrix updates require an explicit product ask (as in the 2026 season-preview desk expansion).
+
+## Editor weekly fact-check (mandatory)
+
+After every Camp Desk / Monday preview refresh — and at least weekly in season — assign **Riley Nash**:
+
+1. Live-scan sportsbook win totals (DK / RotoWire consensus).
+2. Diff vs preview primary markets + KosEdge Model `expected_wins` (`nfl-web-launch-bundle.json`).
+3. **Report mistakes to the desk owner** (table: stated vs live vs Model).
+4. Fix mismatches; thin edges / Model↔market conflicts → **Pass**.
+5. Write `data/ops/nfl-preview-factcheck-YYYYMMDD.md`.
+
+SOP: `docs/writers/EDITOR_WEEKLY_FACTCHECK.md`  
+Script: `python scripts/writers/preview-market-factcheck.py --as-of YYYY-MM-DD --write-ops`
 
 ## Mandatory research (all five writers)
 

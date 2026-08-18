@@ -1,8 +1,11 @@
-# Chicago Bears 2026 Season Preview
+# Chicago Bears 2026 Season Preview: Win Total 9.5
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk
 **Angle:** Market misprice — Year-2 Caleb efficiency vs NFC North physicality
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (+100 / -120)
 **Sources (beat desk):** Courtney Cronin (ESPN) @CourtneyRCronin; Kevin Fishbain (The Athletic) @kfishbain; Adam Jahns (The Athletic) @adamjahns; Brad Biggs (Chicago Tribune) @BradBiggs
 
 The number on the board is 9.5. That is the whole conversation.
@@ -67,10 +70,10 @@ Division futures around +300 to win the North are a different market. A 10–7 d
 - **Futures:** NFC North tickets are a cleaner expression of “this team can win 10” than Over 9.5 into −120 juice — still not a forced play.
 
 **Handicapper’s Note**  
-Fair number: ~9.5 (research band 9.4–9.7)  
-Market number: ~9.5 (Under often −120 to −125; books disagree on shade)  
-Lean: Pass  
+Fair number: **8.35** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Under 9.5**  
 Confidence: 2/5  
-Key risk: A real completion-rate leap plus pass-rush Year-2 gains would make the Under juice look like a trap — and still would not create a large Over edge without schedule confirmation.
+Key risk: Model 8.35 sits 1.15 under 9.5; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

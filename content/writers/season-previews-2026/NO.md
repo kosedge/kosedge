@@ -1,14 +1,17 @@
 # New Orleans Saints 2026 Season Preview
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
-**Angle:** Saints football in the margins — scheme, coaching, competitive window  
+**Angle:** Board at 7.5 — Model ~9.0 clears for soft Over if juice OK
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-120 / +100)
 **Sources (beat desk):** Katherine Terrell (ESPN) [@Kat_Terrell](https://x.com/Kat_Terrell); Mike Triplett (NewOrleans.football) [@MikeTriplett](https://x.com/MikeTriplett); Nick Underhill (Advocate) [@nick_underhill](https://x.com/nick_underhill)  
-**Camp / market refs:** [ESPN Saints camp preview](https://www.espn.com/nfl/story/_/id/49083978/2026-new-orleans-saints-nfl-training-camp-preview); [Saints.com camp storylines](https://www.neworleanssaints.com/news/what-to-watch-for-at-new-orleans-saints-training-camp-2026); [Advocate / Loomis injury lists](https://www.theadvertiser.com/story/sports/nfl/saints/2026/07/28/saints-training-camp-injury-report-jordyn-tyson-zxavian-harris-nfl/91081486007/); primary late-July win total **6.5**
+**Camp / market refs:** [ESPN Saints camp preview](https://www.espn.com/nfl/story/_/id/49083978/2026-new-orleans-saints-nfl-training-camp-preview); [Saints.com camp storylines](https://www.neworleanssaints.com/news/what-to-watch-for-at-new-orleans-saints-training-camp-2026); [Advocate / Loomis injury lists](https://www.theadvertiser.com/story/sports/nfl/saints/2026/07/28/saints-training-camp-injury-report-jordyn-tyson-zxavian-harris-nfl/91081486007/); primary late-July win total **7.5**
 
 New Orleans does not need to look like a contender to cash a win total. That has always been the Saints’ edge — and their trap.
 
-The board has them at **6.5**. That asks whether margins football still clears seven when the window’s veterans are on their last tours and the quarterback’s sample is nine starts. Midsummer boards that hung **7.5** with Over juice priced the December surge as a full-season median. At 6.5, the aging tax is partly in the number — and Over becomes a process conversation again.
+The board has them at **7.5**. That asks whether margins football still clears seven when the window’s veterans are on their last tours and the quarterback’s sample is nine starts. Midsummer boards that hung **7.5** with Over juice priced the December surge as a full-season median. At 6.5, the aging tax is partly in the number — and Over becomes a process conversation again.
 
 ## The late spike is not a 17-game sample
 
@@ -24,13 +27,13 @@ Mickey Loomis opened camp with Mason Tipton and Keeshawn Silver on PUP, Zxavian 
 
 ## Camp shock: Bresee and the interior tax
 
-The first-week board already moved for reasons that do not show up in April futures decks. Bryan Bresee is feared to have torn his ACL in the opening practice, per NFL Network’s Ian Rapoport and Mike Garafolo (@RapSheet / @MikeGarafolo), with Terrell’s ESPN desk amplifying the testing timeline. A season-ending hit on a 2023 first-round interior starter is not a “depth chart footnote” for a team priced at **6.5** — it is a run-stuff and pressure-lane tax that makes soft September schedules harder and December margins thinner.
+The first-week board already moved for reasons that do not show up in April futures decks. Bryan Bresee is feared to have torn his ACL in the opening practice, per NFL Network’s Ian Rapoport and Mike Garafolo (@RapSheet / @MikeGarafolo), with Terrell’s ESPN desk amplifying the testing timeline. A season-ending hit on a 2023 first-round interior starter is not a “depth chart footnote” for a team priced at **7.5** — it is a run-stuff and pressure-lane tax that makes soft September schedules harder and December margins thinner.
 
-That is the aging-window problem in miniature: New Orleans can still win with Jordan and Young winning edges, but Staley’s Year-2 defense was counting on Bresee’s interior presence to keep early downs clean. If the ACL fear confirms, research-adjusted fair slides toward the bottom of the **~7.3–7.8** band — closer to **~7.0–7.2** until the next man up proves he can hold the A-gap. Threshold discipline still prefers Over at **6.5** with even money or slight juice; it does **not** prefer Over if the market has already clipped to **7.5** on Olave news alone while ignoring the D-line hit.
+That is the aging-window problem in miniature: New Orleans can still win with Jordan and Young winning edges, but Staley’s Year-2 defense was counting on Bresee’s interior presence to keep early downs clean. If the ACL fear confirms, research-adjusted fair slides toward the bottom of the **~7.3–7.8** band — closer to **~7.0–7.2** until the next man up proves he can hold the A-gap. Threshold discipline still prefers Over at **7.5** with even money or slight juice; it does **not** prefer Over if the market has already clipped to **7.5** on Olave news alone while ignoring the D-line hit.
 
 Joint practices against the Rams and Cowboys in California (camp itinerary via ESPN’s Terrell preview) are the next information dump — not for win-total fireworks, but for whether Shough’s pocket holds against real rush packages and whether the interior rotation looks playable without Bresee. Weight those notes over OTA vibes.
 
-## Why Over at 6.5 clears — and why juice still matters
+## Why Over at 7.5 clears — and why juice still matters
 
 Model expected wins: **8.08**, with ~37% playoff and ~29% division — above market **6.5** by about a win and a half. Research pulls some of that back for aging-window failure modes, Shough’s soft-schedule sample, and now Bresee downside. Research-adjusted fair still sits near **~7.0–7.6** after the camp injury shock. Model and research still agree on direction versus **6.5**: Over. Lean **Over 6.5**. Confidence **2/5** because sudden veteran downside is real, Over juice past −130 erases a half-win cushion, and interior D-line variance is now live.
 
@@ -45,24 +48,24 @@ Week-to-week, treat Olave’s contract status and Bresee’s confirmation tests 
 
 ## Monday desk refresh (2026-08-17)
 
-**Bottom line.** Quiet Monday after Jacksonville exhibition. Short Pass.
+**Bottom line.** Live DK market is **7.5**, not 6.5. Model 8.96 vs 7.5 supports soft **Over** with friendly juice; confidence ≤2.
 
-**What matters most.** Practice cleanliness heading into next script.
+**What matters most.** QB/OL participation; Over juice (−120) — Pass if worse.
 
 **Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
 - **Win total:** Lean **Over 6.5** at prices no worse than −120. Model ~8.1 / research ~7.3–7.8 both clear. **Pass** if Over juice past −130.  
-- **If a shop hangs 7.5:** Pass or re-price; do not import the 6.5 Over lean.  
+- **If a shop hangs 7.5:** Pass or re-price; do not import a soft-board lean onto 7.5.  
 - **Weekly sides:** Lean Saints home dogs more than road favorites.  
 - **Props:** Olave volume over Kamara rushing Overs — age and committee risk. Watch Tyson snap share before season-long WR props.  
 - **Division:** Pass in a four-team muddle.
 
 **Handicapper’s Note**  
-Fair number: ~7.3–7.8 (research-adjusted; model 8.08)  
-Market number: **6.5**  
-Lean: **Over 6.5**  
+Fair number: **8.96** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **7.5** (DK / RotoWire Aug 2026)  
+Lean: **Over 7.5**  
 Confidence: 2/5  
-Key risk: Aging-window collapse plus Shough regression pins New Orleans at five or six — thin Overs die when margins football stops finishing.
+Key risk: Model 8.96 clears 7.5 by 1.46; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

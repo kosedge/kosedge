@@ -3,6 +3,9 @@
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Contender priced — prove it in the trenches  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (+105 / -125)
 **Sources (beat desk):** Tim McManus (ESPN) [@Tim_Mc_Manus](https://x.com/Tim_Mc_Manus) / [@Tim_McManus](https://x.com/Tim_McManus); Jeff McLane (Philadelphia Inquirer) [@Jeff_McLane](https://x.com/Jeff_McLane); Brooks Kubena (The Athletic) [@BKubena](https://x.com/BKubena)  
 **Market (mid/late July consensus):** Win total **10.5** (Under often juiced ~−125 to −145). NFC East favorite (~+110 range). Still a top-shelf Super Bowl price relative to the East.
 
@@ -14,7 +17,7 @@ The board has Philadelphia first in the NFC East, Dallas second, Washington and 
 
 Some schedule grades float Philadelphia toward the softer third of the league by opponent win totals; others warn the unique-opponent set and defensive attrition risk cut the other way. Do not build a season bet on SOS headlines alone. Build it on whether the Eagles can control games up front when Dallas is healthy, when Washington’s quarterback is upright, and when the Giants’ pass rush wins early downs.
 
-Kos Edge / KEINFL (2026-07-29 UTC, 100k MC): **10.58 expected wins**, ~65% division, ~79% playoff, ~7% Super Bowl. Versus 10.5, that is noise inside the half-win band — especially with Under juice. **Pass** the season total until price or roster information creates a real gap.
+Kos Edge / KEINFL (2026-07-29 UTC, 100k MC): **10.32 expected wins**, ~65% division, ~79% playoff, ~7% Super Bowl. Versus 10.5, that is noise inside the half-win band — especially with Under juice. **Pass** the season total until price or roster information creates a real gap.
 
 ## Contender roster, trench questions
 
@@ -58,10 +61,10 @@ If you need a futures outlet, division prices near a coin-flip favorite are clos
 - **Week 1 vs Washington:** Respect Daniels’ health binary and Philadelphia’s install noise — do not invent a division coronation from opening week.
 
 **Handicapper’s Note**  
-Fair number: ~10.6 (Kos Edge / KEINFL 2026-07-29); research-adjusted ~10.0–10.8 depending on OL health and Mannion timing  
-Market number: 10.5 (Under often −125 to −145)  
-Lean: Pass  
+Fair number: **10.32** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **10.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: OL returns clean, Mannion’s under-center package clicks by Week 4, and a soft unique-opponent stretch turns a Pass into a missed Over — or the opposite injury cascade turns a Pass into a missed Under.
+Key risk: Thin |Model 10.32 − market 10.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

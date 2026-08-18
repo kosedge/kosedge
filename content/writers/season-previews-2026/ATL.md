@@ -3,6 +3,8 @@
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Penix era vs camp QB fog — shop 6.5 vs 7.5  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
 **Sources (beat desk):** Marc Raimondi (ESPN) [@marcraimondi](https://x.com/marcraimondi); D. Orlando Ledbetter (AJC) [@DOrlandoAJC](https://x.com/DOrlandoAJC); Tori McElhaney (AtlantaFalcons.com) [@Tori_McElhaney](https://x.com/Tori_McElhaney)  
 **Market (DK / RotoWire, late July 2026):** **6.5** (some books hang **7.5**)
 

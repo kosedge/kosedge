@@ -1,8 +1,11 @@
-# Green Bay Packers 2026 Season Preview
+# Green Bay Packers 2026 Season Preview: Win Total 9.5
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk
 **Angle:** Love’s supporting cast and scheme continuity decide the number
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-140 / +115)
 **Sources (beat desk):** Rob Demovsky (ESPN) @RobDemovsky; Matt Schneidman (The Athletic) @mattschneidman; Tom Silverstein (PackersNews) @TomSilverstein
 
 Matt LaFleur still calls the offense. Jordan Love still throws it. That continuity is the bull case in Green Bay — and it is also why the win-total market cannot agree with itself.
@@ -57,10 +60,10 @@ Playoff pricing near a coin flip is more honest than either win-total extreme. G
 - **Props:** Watson/Reed reception markets over deep-only props early; pass-rush props tied to Parsons season totals are a timing trap until activation is clear.
 
 **Handicapper’s Note**  
-Fair number: ~9.9 (research band 9.7–10.1)  
-Market number: ~9.5–10.5 (books disagree; juice flips)  
-Lean: Pass  
+Fair number: **9.32** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **9.5** (DK / RotoWire Aug 2026)  
+Lean: **Pass**  
 Confidence: 2/5  
-Key risk: Kraft healthy plus an earlier-than-expected Parsons ramp would make any Under at 9.5 look foolish — and still might not justify Over 10.5 in this division.
+Key risk: Thin |Model 9.32 − market 9.5| → Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

@@ -3,6 +3,9 @@
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** Still the Chiefs — priced like it; juice decides  
 **Date:** August 17, 2026
+**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (+115 / -140)
 **Sources (beat desk):** Nate Taylor (ESPN) @ByNateTaylor; Matt Derrick (Chiefs Digest) @mattderrick; Jesse Newell (The Athletic / local) @jessenewell  
 **Market (DK/RotoWire, late July 2026):** Season wins 10.5 (+115 / −140)
 
@@ -17,7 +20,7 @@ Dynasty brand gets you a high number. Rehab uncertainty and a remade secondary a
 | Over 10.5 | +115 | 11+ wins |
 | Under 10.5 | −140 | 10 or fewer |
 
-Kos Edge / KEINFL preseason sim (2026-07-29 UTC) puts the Chiefs at **9.87 expected wins**, ~38.6% division, ~68.2% playoff. That is a clear model lean Under versus 10.5 — about six-tenths of a win. Threshold discipline says that *size* of gap can support a lean. Juice discipline says −140 is how books tax the obvious side.
+Kos Edge / KEINFL preseason sim (2026-07-29 UTC) puts the Chiefs at **9.32 expected wins**, ~38.6% division, ~68.2% playoff. That is a clear model lean Under versus 10.5 — about six-tenths of a win. Threshold discipline says that *size* of gap can support a lean. Juice discipline says −140 is how books tax the obvious side.
 
 Research-adjusted fair currently sits near **9.8–10.2**: model baseline plus Week 1 optimism on Mahomes, minus secondary churn and early-season sharpness risk. Against 10.5, Under is the correct side of the number. At −140, it is often the wrong ticket. Shop first. Pass if you cannot improve the price.
 
@@ -70,10 +73,10 @@ No material conflict that flips the side. Beat reporting is more optimistic on a
 - **Camp revisit:** If Mahomes is managed out of Week 1 or clearly limited through joint practices, Under becomes cleaner even at worse juice. If he looks full and Walker/Bieniemy click by mid-August, the Pass holds — you still need 11 for the Over.
 
 **Handicapper’s Note**  
-Fair number: ~10.0 (research band 9.8–10.2; Kos Edge sim 9.87)  
-Market number: 10.5 (Over +115 / Under −140)  
-Lean: Pass at −140; juice-aware Under if Under ≤ −120  
+Fair number: **9.32** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Market number: **10.5** (DK / RotoWire Aug 2026)  
+Lean: **Under 10.5**  
 Confidence: 2/5  
-Key risk: Full Mahomes from Week 1 plus mean reversion from 1-9 one-score football can cash Overs — the brand is real; the −140 tax is also real.
+Key risk: Model 9.32 sits 1.18 under 10.5; shop juice; confidence capped.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
