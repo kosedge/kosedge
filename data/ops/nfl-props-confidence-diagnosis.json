@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-19T22:21:42.644766+00:00",
+  "as_of": "2026-08-19T22:55:47.241778+00:00",
   "product": false,
   "part1_shipped": {
     "pr": "https://github.com/kosedge/kosedge/pull/263",
@@ -42,42 +42,42 @@
     "pass_yds": {
       "holdout_n": 431,
       "frozen_intercept": -8.5,
-      "candidate_intercept": -12.0,
+      "candidate_intercept": -1.4294,
       "raw_vs_close": {
         "n": 431,
-        "mae": 43.9574,
-        "mean_residual": -7.2862,
-        "under_rate": 0.3991
+        "mae": 41.1899,
+        "mean_residual": -14.3993,
+        "under_rate": 0.5081
       },
       "frozen_vs_close": {
         "n": 431,
-        "mae": 19.1754,
-        "mean_residual": -4.4524,
-        "under_rate": 0.5104
+        "mae": 19.0581,
+        "mean_residual": -8.0043,
+        "under_rate": 0.6288
       },
       "candidate_vs_close": {
         "n": 431,
-        "mae": 19.3121,
-        "mean_residual": -6.1225,
-        "under_rate": 0.5568
+        "mae": 18.5653,
+        "mean_residual": -4.5116,
+        "under_rate": 0.5174
       },
       "raw_vs_actual": {
         "n": 431,
-        "mae": 62.3345,
-        "mean_residual": -4.2572,
-        "under_rate": 0.4756
+        "mae": 61.5665,
+        "mean_residual": -11.3703,
+        "under_rate": 0.5081
       },
       "frozen_vs_actual": {
         "n": 431,
-        "mae": 51.8294,
-        "mean_residual": -1.4234,
-        "under_rate": 0.5058
+        "mae": 51.9332,
+        "mean_residual": -4.9753,
+        "under_rate": 0.522
       },
       "candidate_vs_actual": {
         "n": 431,
-        "mae": 51.7911,
-        "mean_residual": -3.0935,
-        "under_rate": 0.5128
+        "mae": 51.8342,
+        "mean_residual": -1.4826,
+        "under_rate": 0.5058
       }
     },
     "rush_yds": {
@@ -124,83 +124,83 @@
     "rec_yds": {
       "holdout_n": 2663,
       "frozen_intercept": 1.6,
-      "candidate_intercept": -3.4183,
+      "candidate_intercept": -2.9592,
       "raw_vs_close": {
         "n": 2663,
-        "mae": 15.361,
-        "mean_residual": 7.9987,
-        "under_rate": 0.3275
+        "mae": 15.1371,
+        "mean_residual": 7.6471,
+        "under_rate": 0.3312
       },
       "frozen_vs_close": {
         "n": 2663,
-        "mae": 12.3305,
-        "mean_residual": 7.1588,
-        "under_rate": 0.288
+        "mae": 12.1896,
+        "mean_residual": 6.9221,
+        "under_rate": 0.2933
       },
       "candidate_vs_close": {
         "n": 2663,
-        "mae": 11.3751,
-        "mean_residual": 3.3165,
-        "under_rate": 0.4262
+        "mae": 11.3051,
+        "mean_residual": 3.4244,
+        "under_rate": 0.4213
       },
       "raw_vs_actual": {
         "n": 2663,
-        "mae": 16.6094,
-        "mean_residual": 4.2812,
-        "under_rate": 0.3267
+        "mae": 16.4888,
+        "mean_residual": 3.9297,
+        "under_rate": 0.3331
       },
       "frozen_vs_actual": {
         "n": 2663,
-        "mae": 16.6472,
-        "mean_residual": 3.4414,
-        "under_rate": 0.3327
+        "mae": 16.5711,
+        "mean_residual": 3.2047,
+        "under_rate": 0.3346
       },
       "candidate_vs_actual": {
         "n": 2663,
-        "mae": 15.5164,
-        "mean_residual": -0.4009,
-        "under_rate": 0.4251
+        "mae": 15.5368,
+        "mean_residual": -0.293,
+        "under_rate": 0.4191
       }
     },
     "receptions": {
       "holdout_n": 2595,
       "frozen_intercept": 0.12,
-      "candidate_intercept": -0.2363,
+      "candidate_intercept": -0.1948,
       "raw_vs_close": {
         "n": 2595,
-        "mae": 1.287,
-        "mean_residual": 0.3732,
-        "under_rate": 0.4459
+        "mae": 1.2724,
+        "mean_residual": 0.3421,
+        "under_rate": 0.4532
       },
       "frozen_vs_close": {
         "n": 2595,
-        "mae": 1.1469,
-        "mean_residual": 0.434,
-        "under_rate": 0.4139
+        "mae": 1.1325,
+        "mean_residual": 0.4067,
+        "under_rate": 0.4212
       },
       "candidate_vs_close": {
         "n": 2595,
-        "mae": 1.1217,
-        "mean_residual": 0.1205,
-        "under_rate": 0.5013
+        "mae": 1.1112,
+        "mean_residual": 0.1297,
+        "under_rate": 0.4979
       },
       "raw_vs_actual": {
         "n": 2595,
-        "mae": 1.0064,
-        "mean_residual": 0.3145,
-        "under_rate": 0.3487
+        "mae": 0.9962,
+        "mean_residual": 0.2834,
+        "under_rate": 0.3634
       },
       "frozen_vs_actual": {
         "n": 2595,
-        "mae": 1.0282,
-        "mean_residual": 0.3753,
-        "under_rate": 0.3225
+        "mae": 1.0191,
+        "mean_residual": 0.3479,
+        "under_rate": 0.3303
       },
       "candidate_vs_actual": {
         "n": 2595,
-        "mae": 0.9545,
-        "mean_residual": 0.0617,
-        "under_rate": 0.4432
+        "mae": 0.955,
+        "mean_residual": 0.0709,
+        "under_rate": 0.4382
       }
     }
   },
@@ -208,60 +208,60 @@
     "0-224": {
       "frozen_vs_close": {
         "n": 249,
-        "mae": 19.9244,
-        "mean_residual": -3.1199,
-        "under_rate": 0.4578
+        "mae": 19.2684,
+        "mean_residual": -6.1216,
+        "under_rate": 0.5743
       },
       "frozen_vs_actual": {
         "n": 249,
-        "mae": 51.7534,
-        "mean_residual": 0.3079,
-        "under_rate": 0.4819
+        "mae": 51.6269,
+        "mean_residual": -2.6939,
+        "under_rate": 0.4859
       },
       "candidate_vs_actual": {
         "n": 249,
-        "mae": 51.591,
-        "mean_residual": -1.3107,
-        "under_rate": 0.49
+        "mae": 51.8412,
+        "mean_residual": 0.795,
+        "under_rate": 0.4739
       }
     },
     "225-274": {
       "frozen_vs_close": {
         "n": 180,
-        "mae": 18.1839,
-        "mean_residual": -6.5137,
-        "under_rate": 0.5889
+        "mae": 18.8805,
+        "mean_residual": -10.7604,
+        "under_rate": 0.7056
       },
       "frozen_vs_actual": {
         "n": 180,
-        "mae": 51.8244,
-        "mean_residual": -3.6248,
-        "under_rate": 0.5389
+        "mae": 52.2522,
+        "mean_residual": -7.8715,
+        "under_rate": 0.5722
       },
       "candidate_vs_actual": {
         "n": 180,
-        "mae": 51.9573,
-        "mean_residual": -5.3584,
-        "under_rate": 0.5444
+        "mae": 51.7186,
+        "mean_residual": -4.3883,
+        "under_rate": 0.55
       }
     },
     "275+": {
       "frozen_vs_close": {
         "n": 2,
-        "mae": 15.1619,
-        "mean_residual": 15.1619,
-        "under_rate": 0.0
+        "mae": 8.8593,
+        "mean_residual": 5.6539,
+        "under_rate": 0.5
       },
       "frozen_vs_actual": {
         "n": 2,
-        "mae": 61.7439,
-        "mean_residual": -18.8381,
+        "mae": 61.3593,
+        "mean_residual": -28.3461,
         "under_rate": 0.5
       },
       "candidate_vs_actual": {
         "n": 2,
-        "mae": 61.7439,
-        "mean_residual": -21.2181,
+        "mae": 61.3593,
+        "mean_residual": -23.5382,
         "under_rate": 0.5
       }
     }
@@ -332,61 +332,61 @@
     "tier1_8plus_tgt": {
       "frozen_vs_close": {
         "n": 434,
-        "mae": 22.8223,
-        "mean_residual": 19.8789,
+        "mae": 22.5089,
+        "mean_residual": 19.5195,
         "under_rate": 0.0945
       },
       "frozen_vs_actual": {
         "n": 434,
-        "mae": 26.9906,
-        "mean_residual": -4.2202,
+        "mae": 26.9738,
+        "mean_residual": -4.5796,
         "under_rate": 0.5184
       },
       "candidate_vs_actual": {
         "n": 434,
-        "mae": 27.0148,
-        "mean_residual": -6.7743,
-        "under_rate": 0.5507
+        "mae": 27.0052,
+        "mean_residual": -6.9173,
+        "under_rate": 0.5553
       }
     },
     "tier2_5to7_tgt": {
       "frozen_vs_close": {
         "n": 661,
-        "mae": 14.8056,
-        "mean_residual": 10.8341,
-        "under_rate": 0.1952
+        "mae": 14.5851,
+        "mean_residual": 10.4935,
+        "under_rate": 0.2088
       },
       "frozen_vs_actual": {
         "n": 661,
-        "mae": 18.7073,
-        "mean_residual": 3.0345,
-        "under_rate": 0.3949
+        "mae": 18.5978,
+        "mean_residual": 2.6939,
+        "under_rate": 0.3979
       },
       "candidate_vs_actual": {
         "n": 661,
-        "mae": 18.0081,
-        "mean_residual": -0.6707,
-        "under_rate": 0.4569
+        "mae": 17.9782,
+        "mean_residual": -0.6865,
+        "under_rate": 0.4599
       }
     },
     "tier3_under5_tgt": {
       "frozen_vs_close": {
         "n": 1568,
-        "mae": 8.3831,
-        "mean_residual": 2.0887,
-        "under_rate": 0.3807
+        "mae": 8.3234,
+        "mean_residual": 1.9298,
+        "under_rate": 0.3839
       },
       "frozen_vs_actual": {
         "n": 1568,
-        "mae": 12.9158,
-        "mean_residual": 5.7335,
-        "under_rate": 0.2551
+        "mae": 12.8374,
+        "mean_residual": 5.5746,
+        "under_rate": 0.257
       },
       "candidate_vs_actual": {
         "n": 1568,
-        "mae": 11.2835,
-        "mean_residual": 1.4768,
-        "under_rate": 0.3769
+        "mae": 11.3334,
+        "mean_residual": 1.7064,
+        "under_rate": 0.3642
       }
     },
     "unknown": {
@@ -412,48 +412,48 @@
   },
   "season_pool_from_baselines": {
     "season": 2025,
-    "source": "sum(nfl_player_projection_baselines.pass_yards_mean) by QB",
+    "source": "sum(nfl_player_projection_baselines.pass_yards_mean) by QB cap17",
     "qb_n": 78,
     "qb_pass_yards": {
-      "median": 1191.5,
-      "p90": 4048.1,
-      "max": 4842.8,
-      "n_ge_4000": 9,
+      "median": 1157.8,
+      "p90": 3694.6,
+      "max": 4591.1,
+      "n_ge_4000": 5,
       "n_ge_5000": 0,
       "top5": [
         {
-          "player": "M.Stafford",
-          "team": "LA",
-          "pass_yards": 4842.8,
-          "games": 20
-        },
-        {
           "player": "D.Prescott",
           "team": "DAL",
-          "pass_yards": 4790.1,
+          "pass_yards": 4591.1,
           "games": 17
         },
         {
           "player": "J.Goff",
           "team": "DET",
-          "pass_yards": 4534.7,
+          "pass_yards": 4360.3,
+          "games": 17
+        },
+        {
+          "player": "M.Stafford",
+          "team": "LA",
+          "pass_yards": 4295.3,
+          "games": 17
+        },
+        {
+          "player": "T.Lawrence",
+          "team": "JAX",
+          "pass_yards": 4018.1,
           "games": 17
         },
         {
           "player": "C.Williams",
           "team": "CHI",
-          "pass_yards": 4389.7,
-          "games": 19
-        },
-        {
-          "player": "D.Maye",
-          "team": "NE",
-          "pass_yards": 4302.9,
-          "games": 21
+          "pass_yards": 4014.9,
+          "games": 17
         }
       ]
     },
-    "team_pass_vs_rec_abs_rel_gap_mean": 0.1274,
+    "team_pass_vs_rec_abs_rel_gap_mean": 0.1649,
     "note": "Fantasy draft season totals SUM weekly baselines (raw, no prop cal). Weekly props board blends box-sim then applies frozen prop-cal-v1. That is the primary spine drift."
   },
   "root_layer_read": {
@@ -467,7 +467,7 @@
     "residual_only_candidate_ready": false,
     "structural_fix_first": true,
     "rush_frozen_regresses_vs_actual": false,
-    "pass_bias_moves_toward_zero_with_candidate": false,
+    "pass_bias_moves_toward_zero_with_candidate": true,
     "rush_candidate_actual_mae": 17.975,
     "rush_frozen_actual_mae": 18.6907,
     "rush_raw_actual_mae": 19.5676
