@@ -1,0 +1,43 @@
+{
+  "as_of": "2026-08-19T22:02:59.397594+00:00",
+  "label": "phase3_step1_pool_current_2025",
+  "qb_n": 78,
+  "qb_pass": {
+    "max": 4842.779,
+    "n_ge_4000": 9,
+    "top5": [
+      {
+        "player": "M.Stafford",
+        "team": "LA",
+        "pass_yards": 4842.8,
+        "games": 20
+      },
+      {
+        "player": "D.Prescott",
+        "team": "DAL",
+        "pass_yards": 4790.1,
+        "games": 17
+      },
+      {
+        "player": "J.Goff",
+        "team": "DET",
+        "pass_yards": 4534.7,
+        "games": 17
+      },
+      {
+        "player": "C.Williams",
+        "team": "CHI",
+        "pass_yards": 4389.7,
+        "games": 19
+      },
+      {
+        "player": "D.Maye",
+        "team": "NE",
+        "pass_yards": 4302.9,
+        "games": 21
+      }
+    ]
+  },
+  "team_pass_vs_rec_abs_rel_gap_mean": 0.1274,
+  "features_2024": null
+}

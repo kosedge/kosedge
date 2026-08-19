@@ -1,0 +1,169 @@
+{
+  "generated_at": "2026-08-19T22:20:36.783359+00:00",
+  "train_seasons": [
+    2023,
+    2024
+  ],
+  "holdout_season": 2025,
+  "weeks": "4-17",
+  "pred_source": "nfl_player_projection_baselines structure rematerialize",
+  "markets": {
+    "pass_yds": {
+      "structure_only_vs_actual": {
+        "n": 317,
+        "mae": 57.5344,
+        "mean_residual": 1.253
+      },
+      "frozen_vs_actual": {
+        "n": 317,
+        "mae": 50.9481,
+        "mean_residual": -0.1925
+      },
+      "structure_cal_vs_actual": {
+        "n": 317,
+        "mae": 50.9163,
+        "mean_residual": -1.8798
+      },
+      "structure_only_vs_close": {
+        "n": 317,
+        "mae": 39.4821,
+        "mean_residual": -1.0925
+      },
+      "frozen_vs_close": {
+        "n": 317,
+        "mae": 17.9553,
+        "mean_residual": -2.5379
+      },
+      "structure_cal_vs_close": {
+        "n": 317,
+        "mae": 18.0379,
+        "mean_residual": -4.2253
+      },
+      "frozen_intercept": -8.5,
+      "structure_intercept": -12.0,
+      "structure_std_multiplier": 1.0,
+      "structure_sample_size": 348,
+      "structure_source": "walk_forward"
+    },
+    "rush_yds": {
+      "structure_only_vs_actual": {
+        "n": 967,
+        "mae": 19.8592,
+        "mean_residual": 2.1706
+      },
+      "frozen_vs_actual": {
+        "n": 967,
+        "mae": 18.8776,
+        "mean_residual": 2.9159
+      },
+      "structure_cal_vs_actual": {
+        "n": 967,
+        "mae": 18.1668,
+        "mean_residual": -1.4268
+      },
+      "structure_only_vs_close": {
+        "n": 967,
+        "mae": 15.6837,
+        "mean_residual": 6.1649
+      },
+      "frozen_vs_close": {
+        "n": 967,
+        "mae": 12.7138,
+        "mean_residual": 6.9102
+      },
+      "structure_cal_vs_close": {
+        "n": 967,
+        "mae": 11.695,
+        "mean_residual": 2.5675
+      },
+      "frozen_intercept": 3.6,
+      "structure_intercept": -2.087,
+      "structure_std_multiplier": 1.0,
+      "structure_sample_size": 1007,
+      "structure_source": "walk_forward"
+    },
+    "rec_yds": {
+      "structure_only_vs_actual": {
+        "n": 2000,
+        "mae": 16.2057,
+        "mean_residual": 5.3981
+      },
+      "frozen_vs_actual": {
+        "n": 2000,
+        "mae": 16.4024,
+        "mean_residual": 4.2363
+      },
+      "structure_cal_vs_actual": {
+        "n": 2000,
+        "mae": 14.9907,
+        "mean_residual": -0.3968
+      },
+      "structure_only_vs_close": {
+        "n": 2000,
+        "mae": 15.3448,
+        "mean_residual": 9.3576
+      },
+      "frozen_vs_close": {
+        "n": 2000,
+        "mae": 12.4153,
+        "mean_residual": 8.1958
+      },
+      "structure_cal_vs_close": {
+        "n": 2000,
+        "mae": 11.1295,
+        "mean_residual": 3.5627
+      },
+      "frozen_intercept": 1.6,
+      "structure_intercept": -4.4305,
+      "structure_std_multiplier": 1.0,
+      "structure_sample_size": 2045,
+      "structure_source": "walk_forward"
+    },
+    "receptions": {
+      "structure_only_vs_actual": {
+        "n": 1952,
+        "mae": 0.9671,
+        "mean_residual": 0.4268
+      },
+      "frozen_vs_actual": {
+        "n": 1952,
+        "mae": 0.9981,
+        "mean_residual": 0.4767
+      },
+      "structure_cal_vs_actual": {
+        "n": 1952,
+        "mae": 0.8961,
+        "mean_residual": 0.0699
+      },
+      "structure_only_vs_close": {
+        "n": 1952,
+        "mae": 1.2759,
+        "mean_residual": 0.4642
+      },
+      "frozen_vs_close": {
+        "n": 1952,
+        "mae": 1.1414,
+        "mean_residual": 0.5141
+      },
+      "structure_cal_vs_close": {
+        "n": 1952,
+        "mae": 1.1014,
+        "mean_residual": 0.1073
+      },
+      "frozen_intercept": 0.12,
+      "structure_intercept": -0.3422,
+      "structure_std_multiplier": 1.0,
+      "structure_sample_size": 1915,
+      "structure_source": "walk_forward"
+    }
+  },
+  "decision": {
+    "activate_structure_cal": true,
+    "ACTIVE_PROP_CAL_SOURCE": "structure",
+    "beats_frozen_actual": true,
+    "close_ok": true,
+    "rush_ok": true,
+    "reasons": [],
+    "NFL_WEEKLY_PROPS_LIVE": false
+  }
+}

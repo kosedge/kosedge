@@ -567,6 +567,8 @@ def simulate_full_season(
         games_per_season=sample_games,
         engine_version=engine_version,
         team_wins=team_wins,
+        # Phase 3: MC player counting stats are research — not desk SoT.
+        # Fantasy/futures SoT = SUM of weekly spine baselines (cap 17).
         player_season_totals=player_rows,
         sample_path_game_count=sample_games,
         notes=notes,

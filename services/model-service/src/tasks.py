@@ -16604,54 +16604,73 @@ _SEASON_FANTASY_ELIGIBLE_POSITIONS = ("QB", "RB", "WR", "TE")
 def _fetch_season_player_totals(
     session: Any, *, season: int, model_version: str
 ) -> List[Dict[str, Any]]:
-    """One row per (team, player_id) with real-week counting-stat totals
-    summed directly in SQL across every week that player's team has a real
-    scheduled game (`game_id` non-empty -- bye weeks leave it blank, same
-    convention as data_platform_nfl.player_season_totals). Only QB/RB/WR/TE
-    are returned since those are the only positions this model projects
-    meaningful passing/rushing/receiving counting stats for -- K/DST have no
-    real projected stat coverage here.
+    """Season totals = SUM of weekly spine baselines (Phase 3 SoT).
 
-    Two players can share a display name on the same team (verified against
-    real 2026 roster data -- e.g. two different "B.Robinson" entries on the
-    same roster), so grouping is keyed by the real `(team, player_id)` pair,
-    never by name, to avoid silently merging two distinct players' stats.
+    Cap at 17 real game-rows per (team, player_id) ordered by week so extra
+    rows cannot invent 20-game season yards. No QB-lock / D5 overlay here —
+    fantasy draft and awards inherit the same weekly means as props.
     """
     rows = session.execute(
         text(
             """
+            WITH ranked AS (
+              SELECT
+                b.player_id,
+                b.player_uid,
+                b.player_name,
+                b.team,
+                b.position,
+                b.week,
+                b.pass_yards_mean,
+                b.rush_yards_mean,
+                b.receiving_yards_mean,
+                b.receptions_mean,
+                b.pass_tds_mean,
+                b.rush_tds_mean,
+                b.rec_tds_mean,
+                b.floor_outcome,
+                b.ceiling_outcome,
+                r.rookie_year,
+                r.draft_number,
+                ROW_NUMBER() OVER (
+                  PARTITION BY b.player_id, b.team
+                  ORDER BY b.week ASC
+                ) AS rn
+              FROM nfl_player_projection_baselines b
+              LEFT JOIN nfl_dp_rosters r
+                ON r.season = b.season AND r.team = b.team AND r.player_id = b.player_id
+              WHERE b.season = :season
+                AND b.model_version = :model_version
+                AND b.game_id IS NOT NULL AND b.game_id <> ''
+                AND b.position = ANY(:positions)
+            )
             SELECT
-              b.player_id,
-              MAX(b.player_uid::text) AS player_uid,
-              MAX(b.player_name) AS player_name,
-              b.team,
-              MAX(b.position) AS position,
+              player_id,
+              MAX(player_uid::text) AS player_uid,
+              MAX(player_name) AS player_name,
+              team,
+              MAX(position) AS position,
               COUNT(*) AS games_projected,
-              SUM(COALESCE(b.pass_yards_mean, 0.0)) AS pass_yards_total,
-              SUM(COALESCE(b.rush_yards_mean, 0.0)) AS rush_yards_total,
-              SUM(COALESCE(b.receiving_yards_mean, 0.0)) AS receiving_yards_total,
-              SUM(COALESCE(b.receptions_mean, 0.0)) AS receptions_total,
-              SUM(COALESCE(b.pass_tds_mean, 0.0)) AS pass_tds_total,
-              SUM(COALESCE(b.rush_tds_mean, 0.0)) AS rush_tds_total,
-              SUM(COALESCE(b.rec_tds_mean, 0.0)) AS rec_tds_total,
-              SUM(COALESCE((b.floor_outcome->>'pass_yards')::numeric, b.pass_yards_mean * 0.75, 0.0)) AS pass_yards_floor,
-              SUM(COALESCE((b.floor_outcome->>'rush_yards')::numeric, b.rush_yards_mean * 0.70, 0.0)) AS rush_yards_floor,
-              SUM(COALESCE((b.floor_outcome->>'receiving_yards')::numeric, b.receiving_yards_mean * 0.70, 0.0)) AS receiving_yards_floor,
-              SUM(COALESCE((b.floor_outcome->>'receptions')::numeric, b.receptions_mean * 0.70, 0.0)) AS receptions_floor,
-              SUM(COALESCE((b.ceiling_outcome->>'pass_yards')::numeric, b.pass_yards_mean * 1.25, 0.0)) AS pass_yards_ceiling,
-              SUM(COALESCE((b.ceiling_outcome->>'rush_yards')::numeric, b.rush_yards_mean * 1.30, 0.0)) AS rush_yards_ceiling,
-              SUM(COALESCE((b.ceiling_outcome->>'receiving_yards')::numeric, b.receiving_yards_mean * 1.30, 0.0)) AS receiving_yards_ceiling,
-              SUM(COALESCE((b.ceiling_outcome->>'receptions')::numeric, b.receptions_mean * 1.30, 0.0)) AS receptions_ceiling,
-              MAX(r.rookie_year) AS rookie_year,
-              MAX(r.draft_number) AS draft_number
-            FROM nfl_player_projection_baselines b
-            LEFT JOIN nfl_dp_rosters r
-              ON r.season = b.season AND r.team = b.team AND r.player_id = b.player_id
-            WHERE b.season = :season
-              AND b.model_version = :model_version
-              AND b.game_id IS NOT NULL AND b.game_id <> ''
-              AND b.position = ANY(:positions)
-            GROUP BY b.player_id, b.team
+              SUM(COALESCE(pass_yards_mean, 0.0)) AS pass_yards_total,
+              SUM(COALESCE(rush_yards_mean, 0.0)) AS rush_yards_total,
+              SUM(COALESCE(receiving_yards_mean, 0.0)) AS receiving_yards_total,
+              SUM(COALESCE(receptions_mean, 0.0)) AS receptions_total,
+              SUM(COALESCE(pass_tds_mean, 0.0)) AS pass_tds_total,
+              SUM(COALESCE(rush_tds_mean, 0.0)) AS rush_tds_total,
+              SUM(COALESCE(rec_tds_mean, 0.0)) AS rec_tds_total,
+              SUM(COALESCE((floor_outcome->>'pass_yards')::numeric, pass_yards_mean * 0.75, 0.0)) AS pass_yards_floor,
+              SUM(COALESCE((floor_outcome->>'rush_yards')::numeric, rush_yards_mean * 0.70, 0.0)) AS rush_yards_floor,
+              SUM(COALESCE((floor_outcome->>'receiving_yards')::numeric, receiving_yards_mean * 0.70, 0.0)) AS receiving_yards_floor,
+              SUM(COALESCE((floor_outcome->>'receptions')::numeric, receptions_mean * 0.70, 0.0)) AS receptions_floor,
+              SUM(COALESCE((ceiling_outcome->>'pass_yards')::numeric, pass_yards_mean * 1.25, 0.0)) AS pass_yards_ceiling,
+              SUM(COALESCE((ceiling_outcome->>'rush_yards')::numeric, rush_yards_mean * 1.30, 0.0)) AS rush_yards_ceiling,
+              SUM(COALESCE((ceiling_outcome->>'receiving_yards')::numeric, receiving_yards_mean * 1.30, 0.0)) AS receiving_yards_ceiling,
+              SUM(COALESCE((ceiling_outcome->>'receptions')::numeric, receptions_mean * 1.30, 0.0)) AS receptions_ceiling,
+              MAX(rookie_year) AS rookie_year,
+              MAX(draft_number) AS draft_number
+            FROM ranked
+            WHERE rn <= 17
+            GROUP BY player_id, team
             """
         ),
         {"season": int(season), "model_version": model_version, "positions": list(_SEASON_FANTASY_ELIGIBLE_POSITIONS)},
