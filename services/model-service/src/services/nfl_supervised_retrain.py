@@ -22,6 +22,7 @@ import pickle
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 import numpy as np
+from src.services.nfl_warehouse.path_features import FEATURE_KEYS_PATH_EXPERIMENTAL
 from sklearn.ensemble import HistGradientBoostingClassifier, HistGradientBoostingRegressor
 from sklearn.inspection import permutation_importance
 from sqlalchemy import text
@@ -81,6 +82,10 @@ FEATURE_KEYS_ST_EXPERIMENTAL: Tuple[str, ...] = (
     "away_st_kav_net_5g",
     "diff_st_kav_net_5g",
 )
+
+# Line-path keys (schema v5 candidate). NOT in default FEATURE_KEYS.
+# Opt-in only via scripts/nfl/retrain_supervised_path_v5.py (auto-rollback).
+FEATURE_KEYS_PATH_V5 = tuple(FEATURE_KEYS) + tuple(FEATURE_KEYS_PATH_EXPERIMENTAL)
 
 
 def _to_float(value: Any, default: float = 0.0) -> float:

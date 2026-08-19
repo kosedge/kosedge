@@ -20,14 +20,15 @@ NFL_CLV_DEFINITION = (
 
 NFL_CLV_POPULATION = (
     "Rows are +EV vs the open snapshot only (moneyline: model win probability "
-    "exceeds open implied probability on that side; total: |model − open| ≥ 1.0). "
-    "Not PLAY-only. Not graded-only. Spread is not in this pipeline."
+    "exceeds open implied probability on that side; total: |model − open| ≥ 1.0; "
+    "spread: |model − open| ≥ 1.0 home-spread points). "
+    "Not PLAY-only. Not graded-only."
 )
 
 NFL_CLV_TIMESTAMPS = (
-    "Open = MIN(captured_at) and close = MAX(captured_at) on "
-    "nfl_market_history_snapshots for that game and market — not tag/publish "
-    "time vs a true closing book."
+    "Open = first legal snapshot (prefer snapshot_kind=open) and close = last "
+    "snapshot strictly before kickoff (prefer snapshot_kind=close) on "
+    "nfl_market_history_snapshots. Post-kickoff rows are not close."
 )
 
 # Inclusive last calendar day treated as preseason. Matches web nfl-truth-label
@@ -60,6 +61,16 @@ def total_clv(*, side: str, open_total: float, close_total: float) -> float:
     if token == "under":
         return open_total - close_total
     raise ValueError(f"total side must be over or under, got {side!r}")
+
+
+def spread_clv(*, side: str, open_spread_home: float, close_spread_home: float) -> float:
+    """Odds API: more negative = home more favored. Home: open − close. Away: close − open."""
+    token = side.strip().lower()
+    if token == "home":
+        return open_spread_home - close_spread_home
+    if token == "away":
+        return close_spread_home - open_spread_home
+    raise ValueError(f"spread side must be home or away, got {side!r}")
 
 
 def classify_clv(value: float, eps: float = PUSH_EPS) -> str:

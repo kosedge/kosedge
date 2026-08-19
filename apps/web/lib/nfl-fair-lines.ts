@@ -108,9 +108,9 @@ export type NflFairLineRow = {
   openTotal: number | null;
   /** Latest odds snapshot timestamp (ISO) for as-of / stale hints. */
   oddsCapturedAt: string | null;
-  /** Best home spread number across books (pairs with best away). */
+  /** Best home spread number across books (pairs with best away). Shop column only. */
   bestSpreadHome: number | null;
-  /** Best total number across books (Over-favorable). */
+  /** Best total number across books (Over-favorable). Shop column only. */
   bestTotal: number | null;
   bestSpreadBook: string | null;
   bestTotalBook: string | null;
@@ -118,6 +118,16 @@ export type NflFairLineRow = {
   bestSpreadHomeJuice: number | null;
   bestTotalOverJuice: number | null;
   bestTotalUnderJuice: number | null;
+  /** DraftKings home spread (Odds API sign). PLAY grades this before FanDuel. */
+  dkSpreadHome: number | null;
+  fdSpreadHome: number | null;
+  /** DK → FD → consensus. Never best-of-books. */
+  stakeSpreadHome: number | null;
+  stakeSpreadBook: string | null;
+  dkTotal: number | null;
+  fdTotal: number | null;
+  stakeTotal: number | null;
+  stakeTotalBook: string | null;
   marketHomeProbNoVig: number | null;
   mlEdgeProb: number | null;
   totalEdge: number | null;
@@ -473,6 +483,20 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     bestSpreadHomeJuice: toNumberOrNull(raw.best_spread_home_juice),
     bestTotalOverJuice: toNumberOrNull(raw.best_total_over_juice),
     bestTotalUnderJuice: toNumberOrNull(raw.best_total_under_juice),
+    dkSpreadHome: toNumberOrNull(raw.dk_spread_home),
+    fdSpreadHome: toNumberOrNull(raw.fd_spread_home),
+    stakeSpreadHome: toNumberOrNull(raw.stake_spread_home),
+    stakeSpreadBook:
+      typeof raw.stake_spread_book === "string" && raw.stake_spread_book.trim()
+        ? raw.stake_spread_book.trim().toLowerCase()
+        : null,
+    dkTotal: toNumberOrNull(raw.dk_total),
+    fdTotal: toNumberOrNull(raw.fd_total),
+    stakeTotal: toNumberOrNull(raw.stake_total),
+    stakeTotalBook:
+      typeof raw.stake_total_book === "string" && raw.stake_total_book.trim()
+        ? raw.stake_total_book.trim().toLowerCase()
+        : null,
     marketHomeProbNoVig: toNumberOrNull(raw.market_home_prob_no_vig),
     mlEdgeProb: toNumberOrNull(raw.ml_edge_prob),
     totalEdge: toNumberOrNull(raw.total_edge),

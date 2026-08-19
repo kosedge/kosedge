@@ -182,13 +182,18 @@ export function fairLinesToEdgeBoardRows(
     const publishTagSpread = line.publishTagSpread ?? undefined;
     const publishTagTotal = line.publishTagTotal ?? undefined;
 
-    // Tag policy: prefer server decision (KEI vs best market); else compute locally.
+    // Tag policy: prefer server decision (KEI vs DK/FD stake close); else compute locally.
     const decisionBundle =
       line.decision ??
       (() => {
         const compareSpread =
-          line.bestSpreadHome ?? line.marketSpreadHome ?? null;
-        const compareTotal = line.bestTotal ?? line.marketTotal ?? null;
+          line.stakeSpreadHome ??
+          line.dkSpreadHome ??
+          line.fdSpreadHome ??
+          line.marketSpreadHome ??
+          null;
+        const compareTotal =
+          line.stakeTotal ?? line.dkTotal ?? line.fdTotal ?? line.marketTotal ?? null;
         const local = decideGame({
           week: line.week,
           // Fair for tags = KEI (Model is research-only).
@@ -238,9 +243,14 @@ export function fairLinesToEdgeBoardRows(
       awayWinProb: line.awayWinProb ?? undefined,
       keiSpreadHome: handicapSpread ?? undefined,
       marketSpreadHome:
-        line.bestSpreadHome ?? line.marketSpreadHome ?? undefined,
+        line.stakeSpreadHome ??
+        line.dkSpreadHome ??
+        line.fdSpreadHome ??
+        line.marketSpreadHome ??
+        undefined,
       keiTotal: handicapTotal ?? undefined,
-      marketTotal: line.bestTotal ?? line.marketTotal ?? undefined,
+      marketTotal:
+        line.stakeTotal ?? line.dkTotal ?? line.fdTotal ?? line.marketTotal ?? undefined,
       gamesPlayedAway: week === 1 ? 0 : undefined,
       gamesPlayedHome: week === 1 ? 0 : undefined,
     };

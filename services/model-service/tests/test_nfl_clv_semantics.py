@@ -6,6 +6,7 @@ from src.services.nfl_clv_semantics import (
     classify_clv,
     market_summary_from_counts,
     moneyline_clv,
+    spread_clv,
     summarize_clv_values,
     total_clv,
 )
@@ -58,6 +59,12 @@ def test_total_over_line_falling_is_lose() -> None:
 def test_total_under_line_falling_is_beat() -> None:
     clv = total_clv(side="under", open_total=44.5, close_total=43.0)
     assert clv == 1.5
+    assert classify_clv(clv) == "beat"
+
+
+def test_spread_home_getting_heavier_is_beat() -> None:
+    clv = spread_clv(side="home", open_spread_home=-3.0, close_spread_home=-6.5)
+    assert clv == 3.5
     assert classify_clv(clv) == "beat"
 
 

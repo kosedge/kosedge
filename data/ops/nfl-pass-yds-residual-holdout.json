@@ -1,0 +1,214 @@
+{
+  "as_of": "2026-08-19T18:08:43.606048+00:00",
+  "product": false,
+  "market": "pass_yds",
+  "coverage": {
+    "unique_closes": 1265,
+    "joined": 934,
+    "train_n": 503,
+    "holdout_n": 431
+  },
+  "frozen_intercept": -8.5,
+  "candidate_intercept": 6.1021,
+  "candidate_source": "walk_forward",
+  "holdout": {
+    "raw_vs_close": {
+      "n": 431,
+      "mae": 50.9753,
+      "mean_residual": -34.0937,
+      "under_rate": 0.6984
+    },
+    "frozen_vs_close": {
+      "n": 431,
+      "mae": 22.5158,
+      "mean_residual": -15.3959,
+      "under_rate": 0.7726
+    },
+    "candidate_vs_close": {
+      "n": 431,
+      "mae": 20.5681,
+      "mean_residual": -9.6318,
+      "under_rate": 0.6659
+    },
+    "raw_vs_actual": {
+      "n": 431,
+      "mae": 65.5012,
+      "mean_residual": -31.0647,
+      "under_rate": 0.6381
+    },
+    "frozen_vs_actual": {
+      "n": 431,
+      "mae": 53.4916,
+      "mean_residual": -12.3669,
+      "under_rate": 0.587
+    },
+    "candidate_vs_actual": {
+      "n": 431,
+      "mae": 52.9076,
+      "mean_residual": -6.6028,
+      "under_rate": 0.5452
+    }
+  },
+  "holdout_by_close_bucket": {
+    "0-224": {
+      "raw_vs_close": {
+        "n": 249,
+        "mae": 43.7807,
+        "mean_residual": -19.1447,
+        "under_rate": 0.5904
+      },
+      "frozen_vs_close": {
+        "n": 249,
+        "mae": 20.0223,
+        "mean_residual": -9.6176,
+        "under_rate": 0.6867
+      },
+      "candidate_vs_close": {
+        "n": 249,
+        "mae": 18.3403,
+        "mean_residual": -3.1376,
+        "under_rate": 0.5582
+      },
+      "raw_vs_actual": {
+        "n": 249,
+        "mae": 60.448,
+        "mean_residual": -15.717,
+        "under_rate": 0.5743
+      },
+      "frozen_vs_actual": {
+        "n": 249,
+        "mae": 51.9004,
+        "mean_residual": -6.1899,
+        "under_rate": 0.5422
+      },
+      "candidate_vs_actual": {
+        "n": 249,
+        "mae": 52.0776,
+        "mean_residual": 0.2901,
+        "under_rate": 0.49
+      }
+    },
+    "225-274": {
+      "raw_vs_close": {
+        "n": 180,
+        "mae": 61.0686,
+        "mean_residual": -54.9096,
+        "under_rate": 0.85
+      },
+      "frozen_vs_close": {
+        "n": 180,
+        "mae": 26.0631,
+        "mean_residual": -23.4685,
+        "under_rate": 0.8944
+      },
+      "candidate_vs_close": {
+        "n": 180,
+        "mae": 23.6594,
+        "mean_residual": -18.674,
+        "under_rate": 0.8167
+      },
+      "raw_vs_actual": {
+        "n": 180,
+        "mae": 72.5991,
+        "mean_residual": -52.0208,
+        "under_rate": 0.7222
+      },
+      "frozen_vs_actual": {
+        "n": 180,
+        "mae": 55.8176,
+        "mean_residual": -20.5797,
+        "under_rate": 0.6444
+      },
+      "candidate_vs_actual": {
+        "n": 180,
+        "mae": 54.2175,
+        "mean_residual": -15.7851,
+        "under_rate": 0.6167
+      }
+    },
+    "275-324": {
+      "raw_vs_close": {
+        "n": 2,
+        "mae": 38.3025,
+        "mean_residual": -21.8215,
+        "under_rate": 0.5
+      },
+      "frozen_vs_close": {
+        "n": 2,
+        "mae": 13.6934,
+        "mean_residual": -8.2663,
+        "under_rate": 0.5
+      },
+      "candidate_vs_close": {
+        "n": 2,
+        "mae": 19.7089,
+        "mean_residual": -4.3525,
+        "under_rate": 0.5
+      },
+      "raw_vs_actual": {
+        "n": 2,
+        "mae": 55.8215,
+        "mean_residual": -55.8215,
+        "under_rate": 1.0
+      },
+      "frozen_vs_actual": {
+        "n": 2,
+        "mae": 42.2663,
+        "mean_residual": -42.2663,
+        "under_rate": 1.0
+      },
+      "candidate_vs_actual": {
+        "n": 2,
+        "mae": 38.3525,
+        "mean_residual": -38.3525,
+        "under_rate": 1.0
+      }
+    },
+    "325+": {
+      "raw_vs_close": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "frozen_vs_close": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "candidate_vs_close": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "raw_vs_actual": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "frozen_vs_actual": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "candidate_vs_actual": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      }
+    }
+  },
+  "gates": {
+    "ungate_weekly_props": false,
+    "replace_frozen_intercepts": false,
+    "replace_pass_yds_intercept_only": false,
+    "candidate_beats_frozen_pass_only": true,
+    "NFL_WEEKLY_PROPS_LIVE": false
+  },
+  "note": "Pass-only residual study. Frozen cal-v1 stays live. Do not ungate weekly props or swap intercepts: rush already failed vs actual, and the live calibration is one shared frozen dict."
+}

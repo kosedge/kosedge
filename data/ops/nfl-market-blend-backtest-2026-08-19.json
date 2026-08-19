@@ -1,0 +1,145 @@
+{
+  "generated_at": "2026-08-19",
+  "start_season": 2013,
+  "end_season": 2025,
+  "sample_size": 3562,
+  "simulations_per_game": 1200,
+  "source": "compare",
+  "close_label": "true_close_jsonl_plus_nflverse",
+  "nflverse": {
+    "baseline": {
+      "model_spread_mae": 9.6349,
+      "market_spread_mae": 9.918,
+      "model_total_mae": 10.2128,
+      "market_total_mae": 10.5053
+    },
+    "weight_sweep": [
+      {
+        "weight": 0.0,
+        "spread_mae": 9.6349,
+        "total_mae": 10.2128
+      },
+      {
+        "weight": 0.1,
+        "spread_mae": 9.5959,
+        "total_mae": 10.2049
+      },
+      {
+        "weight": 0.2,
+        "spread_mae": 9.5712,
+        "total_mae": 10.2069
+      },
+      {
+        "weight": 0.3,
+        "spread_mae": 9.5591,
+        "total_mae": 10.2165
+      },
+      {
+        "weight": 0.35,
+        "spread_mae": 9.5585,
+        "total_mae": 10.2248
+      },
+      {
+        "weight": 0.4,
+        "spread_mae": 9.5635,
+        "total_mae": 10.2356
+      },
+      {
+        "weight": 0.5,
+        "spread_mae": 9.5872,
+        "total_mae": 10.2618
+      },
+      {
+        "weight": 0.6,
+        "spread_mae": 9.6247,
+        "total_mae": 10.2937
+      },
+      {
+        "weight": 0.75,
+        "spread_mae": 9.7074,
+        "total_mae": 10.3592
+      },
+      {
+        "weight": 1.0,
+        "spread_mae": 9.918,
+        "total_mae": 10.5053
+      }
+    ],
+    "recommended_spread_weight": 0.35,
+    "recommended_total_weight": 0.1,
+    "keep_0_30_defaults": false
+  },
+  "gate": {
+    "current_defaults": {
+      "spread": 0.3,
+      "total": 0.3
+    },
+    "tolerance": 0.05,
+    "note": "Do not change NFL_MARKET_BLEND_* unless owned keep_0_30_defaults is false.",
+    "keep_0_30_defaults": false
+  },
+  "owned": {
+    "baseline": {
+      "model_spread_mae": 9.6349,
+      "market_spread_mae": 9.9222,
+      "model_total_mae": 10.2128,
+      "market_total_mae": 10.5211
+    },
+    "weight_sweep": [
+      {
+        "weight": 0.0,
+        "spread_mae": 9.6349,
+        "total_mae": 10.2128
+      },
+      {
+        "weight": 0.1,
+        "spread_mae": 9.5986,
+        "total_mae": 10.2059
+      },
+      {
+        "weight": 0.2,
+        "spread_mae": 9.5767,
+        "total_mae": 10.2091
+      },
+      {
+        "weight": 0.3,
+        "spread_mae": 9.5676,
+        "total_mae": 10.2202
+      },
+      {
+        "weight": 0.35,
+        "spread_mae": 9.5676,
+        "total_mae": 10.2287
+      },
+      {
+        "weight": 0.4,
+        "spread_mae": 9.5729,
+        "total_mae": 10.24
+      },
+      {
+        "weight": 0.5,
+        "spread_mae": 9.5979,
+        "total_mae": 10.2677
+      },
+      {
+        "weight": 0.6,
+        "spread_mae": 9.6353,
+        "total_mae": 10.3018
+      },
+      {
+        "weight": 0.75,
+        "spread_mae": 9.7168,
+        "total_mae": 10.3705
+      },
+      {
+        "weight": 1.0,
+        "spread_mae": 9.9222,
+        "total_mae": 10.5211
+      }
+    ],
+    "recommended_spread_weight": 0.3,
+    "recommended_total_weight": 0.1,
+    "keep_0_30_defaults": false
+  },
+  "owned_overlay_n": 1690
+}

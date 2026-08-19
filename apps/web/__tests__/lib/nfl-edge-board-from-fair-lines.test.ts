@@ -58,6 +58,14 @@ function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
     bestSpreadHomeJuice: null,
     bestTotalOverJuice: null,
     bestTotalUnderJuice: null,
+    dkSpreadHome: null,
+    fdSpreadHome: null,
+    stakeSpreadHome: null,
+    stakeSpreadBook: null,
+    dkTotal: null,
+    fdTotal: null,
+    stakeTotal: null,
+    stakeTotalBook: null,
     marketHomeProbNoVig: null,
     mlEdgeProb: null,
     totalEdge: null,
@@ -91,6 +99,27 @@ describe("nfl-edge-board-from-fair-lines", () => {
     );
     expect((spread as { playToNotes?: string }).playToNotes).toBeTruthy();
     expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(4);
+  });
+
+  it("tags PLAY against DK/FD stake close, not the shop best", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 8,
+        modelSpreadHome: -7,
+        spreadHome: -7,
+        handicapSpreadHome: -7,
+        marketSpreadHome: -6.5,
+        bestSpreadHome: -3,
+        dkSpreadHome: -6.5,
+        stakeSpreadHome: -6.5,
+        stakeSpreadBook: "draftkings",
+        decision: null,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(0.5);
+    expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
+    expect(spread.best).toBe("+3");
   });
 
   it("fills KEINFL + current market; open only from first-capture fields", () => {

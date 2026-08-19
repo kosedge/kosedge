@@ -1,0 +1,17 @@
+---
+description: NFL historical odds warehouse — zero-leakage, lake primary, no re-pull
+globs: "**/nfl_warehouse/**,**/scripts/nfl/*odds*,**/scripts/nfl/*warehouse*,**/scripts/nfl/*path_v5*"
+alwaysApply: false
+---
+
+# NFL warehouse leakage
+
+Predicting game G may only use odds with `available_at` / `snapshot_ts` **strictly before kickoff**. Same-timestamp-as-kickoff is not available. Unprovable timestamps are not available.
+
+Close = last owned snap strictly before kickoff (prefer `snapshot_kind=close`). Open = first legal snap (prefer `snapshot_kind=open`). Path points `pre7d` / `pre3d` / `pre1d` are features, never labels.
+
+Join key: `(game_date, home_name, away_name)` with ±1 calendar-day fallback. Odds API `spread_home` is negative when home is favored; nflverse `spread_line` is the opposite sign.
+
+Do not re-pull owned 2020–2026 open/close. Do not live-query the 13GB SQLite from request handlers — export to the parquet lake first.
+
+Promote blend weights, supervised path-v5, or prop calibration only after chronological holdout. Default product path stays schema v3 / frozen prop-cal-v1 / `NFL_WEEKLY_PROPS_LIVE=false` until a gate says otherwise.

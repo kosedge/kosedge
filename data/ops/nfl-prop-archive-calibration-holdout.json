@@ -1,0 +1,76 @@
+{
+  "as_of": "2026-08-19T17:23:17.002674+00:00",
+  "product": false,
+  "coverage": {
+    "unique_closes": 20885,
+    "name_joined": 15560,
+    "pred_joined": 14718,
+    "train_n": 7738,
+    "holdout_n": 6980
+  },
+  "frozen": {
+    "pass_yds": -8.5,
+    "rush_yds": 3.6,
+    "rec_yds": 1.6,
+    "receptions": 0.12,
+    "anytime_td": 0.0
+  },
+  "by_market": {
+    "pass_yds": {
+      "holdout_n": 431,
+      "raw_mae_vs_close": 50.9753,
+      "frozen_mae_vs_close": 22.5158,
+      "candidate_mae_vs_close": 20.5681,
+      "raw_mae_vs_actual": 65.5012,
+      "frozen_mae_vs_actual": 53.4916,
+      "candidate_mae_vs_actual": 52.9076,
+      "candidate_intercept": 6.1021,
+      "frozen_intercept": -8.5,
+      "candidate_source": "walk_forward"
+    },
+    "rush_yds": {
+      "holdout_n": 1291,
+      "raw_mae_vs_close": 11.513,
+      "frozen_mae_vs_close": 9.9006,
+      "candidate_mae_vs_close": 9.6525,
+      "raw_mae_vs_actual": 16.2697,
+      "frozen_mae_vs_actual": 16.4843,
+      "candidate_mae_vs_actual": 16.1819,
+      "candidate_intercept": 0.2119,
+      "frozen_intercept": 3.6,
+      "candidate_source": "walk_forward"
+    },
+    "rec_yds": {
+      "holdout_n": 2663,
+      "raw_mae_vs_close": 13.2548,
+      "frozen_mae_vs_close": 10.2582,
+      "candidate_mae_vs_close": 10.6295,
+      "raw_mae_vs_actual": 17.2336,
+      "frozen_mae_vs_actual": 16.4947,
+      "candidate_mae_vs_actual": 16.6414,
+      "candidate_intercept": -0.2746,
+      "frozen_intercept": 1.6,
+      "candidate_source": "walk_forward"
+    },
+    "receptions": {
+      "holdout_n": 2595,
+      "raw_mae_vs_close": 1.2896,
+      "frozen_mae_vs_close": 1.1014,
+      "candidate_mae_vs_close": 1.1411,
+      "raw_mae_vs_actual": 1.1427,
+      "frozen_mae_vs_actual": 1.0949,
+      "candidate_mae_vs_actual": 1.1172,
+      "candidate_intercept": -0.0204,
+      "frozen_intercept": 0.12,
+      "candidate_source": "walk_forward"
+    }
+  },
+  "gates": {
+    "ungate_weekly_props": false,
+    "replace_frozen_intercepts": false,
+    "frozen_beats_raw_vs_close": true,
+    "frozen_does_not_worsen_actual": false,
+    "NFL_WEEKLY_PROPS_LIVE": false
+  },
+  "note": "Weekly props stay gated. Replace frozen intercepts only if holdout MAE vs close and vs actual both improve with n>=80 per core market."
+}

@@ -1,0 +1,95 @@
+{
+  "generated_at": "2026-08-19",
+  "product": false,
+  "close_label": "true_close_jsonl_plus_nflverse",
+  "lake": {
+    "games": 3987,
+    "matched": 2115,
+    "matched_with_close_spread": 2115,
+    "lookup_keys": 1785
+  },
+  "sample": {
+    "schedule_2020_2025": 1693,
+    "owned_join": 1690,
+    "steam_pre7d": 2,
+    "steam_open_to_close": 1688,
+    "holdout_seasons": [
+      2024,
+      2025
+    ],
+    "confirm_seasons": [
+      2020,
+      2021,
+      2022,
+      2023
+    ]
+  },
+  "play_band": {
+    "abs_edge_min": 2.5,
+    "abs_edge_max": 7.0,
+    "min_steam_pts": 1.0
+  },
+  "holdout_2024_2025": {
+    "play_all": {
+      "n": 274,
+      "ats": 0.6387,
+      "roi": 0.2193,
+      "units": 60.091,
+      "mean_abs_edge": 4.376
+    },
+    "play_agree_steam_7d": {
+      "n": 55,
+      "ats": 0.6909,
+      "roi": 0.319,
+      "units": 17.545,
+      "mean_abs_edge": 4.101
+    },
+    "play_fade_steam_7d": {
+      "n": 157,
+      "ats": 0.5987,
+      "roi": 0.143,
+      "units": 22.455,
+      "mean_abs_edge": 4.458
+    },
+    "play_agree_steam_1d": {
+      "n": 0,
+      "ats": null,
+      "roi": null,
+      "units": 0.0,
+      "mean_abs_edge": null
+    },
+    "ats_lift_agree_vs_play": 0.0522,
+    "clv_vs_open_n": 276,
+    "clv_vs_open_avg": -2.0471,
+    "clv_positive_rate": 0.2391
+  },
+  "confirm_2020_2023": {
+    "play_all": {
+      "n": 514,
+      "ats": 0.6245,
+      "roi": 0.1923,
+      "units": 98.818,
+      "mean_abs_edge": 4.488
+    },
+    "play_agree_steam_7d": {
+      "n": 53,
+      "ats": 0.6981,
+      "roi": 0.3328,
+      "units": 17.636,
+      "mean_abs_edge": 4.081
+    }
+  },
+  "residual": {
+    "corr_steam7_vs_model_error_confirm": 0.1354,
+    "corr_steam7_vs_model_error_holdout": 0.2908,
+    "n_confirm": 1120,
+    "n_holdout": 570
+  },
+  "gates": {
+    "promote_steam_agree_filter": false,
+    "fit_supervised_path_v5": true,
+    "change_blend_weights": false,
+    "ungate_weekly_props": false,
+    "note": "Filter promote needs holdout n>=80, +2pp ATS vs PLAY, ROI>0. v5 fit needs |corr|>=0.08 on 2020-23 and same sign on 2024-25."
+  }
+}
