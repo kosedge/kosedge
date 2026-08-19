@@ -1,0 +1,623 @@
+{
+  "generated_at": "2026-08-19T21:33:21.769313+00:00",
+  "phase": 1,
+  "spine_version": "player-production-v2-phase2",
+  "season": 2025,
+  "week": 1,
+  "model_version": "nfl-player-v1",
+  "row_source": "database",
+  "min_players": 20,
+  "exit_ok": true,
+  "n": 40,
+  "n_equal": 40,
+  "n_mismatch": 0,
+  "samples": [
+    {
+      "player_id": "00-0035228",
+      "player_name": "K.Murray",
+      "team": "ARI",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 234.153,
+        "rush_yds": 32.179,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 21.234,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039917",
+      "player_name": "M.Penix",
+      "team": "ATL",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 292.428,
+        "rush_yds": 23.287,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 24.9358,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0034796",
+      "player_name": "L.Jackson",
+      "team": "BAL",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 236.577,
+        "rush_yds": 32.172,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 23.5783,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0034857",
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 331.192,
+        "rush_yds": 49.665,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 33.7042,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039150",
+      "player_name": "B.Young",
+      "team": "CAR",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 222.705,
+        "rush_yds": 15.14,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 16.5422,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039918",
+      "player_name": "C.Williams",
+      "team": "CHI",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 224.419,
+        "rush_yds": 24.665,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 24.0973,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036442",
+      "player_name": "J.Burrow",
+      "team": "CIN",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 214.323,
+        "rush_yds": 9.008,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 15.3617,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0033077",
+      "player_name": "D.Prescott",
+      "team": "DAL",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 267.17,
+        "rush_yds": 6.465,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 18.6733,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039732",
+      "player_name": "B.Nix",
+      "team": "DEN",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 223.057,
+        "rush_yds": 20.771,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 19.7254,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0033106",
+      "player_name": "J.Goff",
+      "team": "DET",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 278.204,
+        "rush_yds": 1.073,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 18.8795,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036264",
+      "player_name": "J.Love",
+      "team": "GB",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 243.113,
+        "rush_yds": 13.175,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 18.826,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039163",
+      "player_name": "C.Stroud",
+      "team": "HOU",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 223.67,
+        "rush_yds": 17.92,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 20.8408,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0035710",
+      "player_name": "D.Jones",
+      "team": "IND",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 210.494,
+        "rush_yds": 27.489,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 20.9367,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036971",
+      "player_name": "T.Lawrence",
+      "team": "JAX",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 229.043,
+        "rush_yds": 10.198,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 16.9955,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0033873",
+      "player_name": "P.Mahomes",
+      "team": "KC",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 279.033,
+        "rush_yds": 48.211,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 26.7764,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0026498",
+      "player_name": "M.Stafford",
+      "team": "LA",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 236.529,
+        "rush_yds": 10.261,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 17.8573,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036355",
+      "player_name": "J.Herbert",
+      "team": "LAC",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 325.911,
+        "rush_yds": 28.389,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 24.8313,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0030565",
+      "player_name": "G.Smith",
+      "team": "LV",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 279.682,
+        "rush_yds": 6.659,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 19.5372,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036212",
+      "player_name": "T.Tagovailoa",
+      "team": "MIA",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 254.713,
+        "rush_yds": 7.279,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 17.4964,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0037013",
+      "player_name": "Z.Wilson",
+      "team": "MIA",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 8.388,
+        "rush_yds": 0.423,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 0.4098,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039923",
+      "player_name": "J.McCarthy",
+      "team": "MIN",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 184.678,
+        "rush_yds": 7.625,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 13.9276,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039851",
+      "player_name": "D.Maye",
+      "team": "NE",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 234.784,
+        "rush_yds": 23.058,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 18.1492,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039376",
+      "player_name": "S.Rattler",
+      "team": "NO",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 284.431,
+        "rush_yds": 20.282,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 22.9314,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0029263",
+      "player_name": "R.Wilson",
+      "team": "NYG",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 259.311,
+        "rush_yds": 29.381,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 26.0565,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036945",
+      "player_name": "J.Fields",
+      "team": "NYJ",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 163.745,
+        "rush_yds": 42.267,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 23.0825,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0036389",
+      "player_name": "J.Hurts",
+      "team": "PHI",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 186.486,
+        "rush_yds": 42.785,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 25.2979,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0023459",
+      "player_name": "A.Rodgers",
+      "team": "PIT",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 261.302,
+        "rush_yds": 1.378,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 17.7699,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0040673",
+      "player_name": "J.Milroe",
+      "team": "SEA",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 6.048,
+        "rush_yds": 0.229,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 0.2968,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0034869",
+      "player_name": "S.Darnold",
+      "team": "SEA",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 175.884,
+        "rush_yds": 7.041,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 12.2835,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0037834",
+      "player_name": "B.Purdy",
+      "team": "SF",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 243.128,
+        "rush_yds": 12.266,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 18.3937,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0034855",
+      "player_name": "B.Mayfield",
+      "team": "TB",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 282.846,
+        "rush_yds": 24.192,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 21.505,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0040676",
+      "player_name": "C.Ward",
+      "team": "TEN",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 213.121,
+        "rush_yds": 0.793,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 14.4601,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039910",
+      "player_name": "J.Daniels",
+      "team": "WAS",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 234.858,
+        "rush_yds": 39.094,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "fantasy_ppr": 22.3297,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0033553",
+      "player_name": "J.Conner",
+      "team": "ARI",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 81.739,
+        "rec_yds": 29.196,
+        "receptions": 3.675
+      },
+      "fantasy_ppr": 18.4225,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039921",
+      "player_name": "T.Benson",
+      "team": "ARI",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 30.133,
+        "rec_yds": 8.853,
+        "receptions": 1.171
+      },
+      "fantasy_ppr": 5.9876,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0038542",
+      "player_name": "B.Robinson",
+      "team": "ATL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 106.87,
+        "rec_yds": 49.817,
+        "receptions": 6.002
+      },
+      "fantasy_ppr": 27.6527,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0037263",
+      "player_name": "T.Allgeier",
+      "team": "ATL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 39.711,
+        "rec_yds": 2.856,
+        "receptions": 0.373
+      },
+      "fantasy_ppr": 5.6017,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0032764",
+      "player_name": "D.Henry",
+      "team": "BAL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 105.616,
+        "rec_yds": 12.119,
+        "receptions": 1.287
+      },
+      "fantasy_ppr": 13.0605,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0034975",
+      "player_name": "J.Hill",
+      "team": "BAL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 38.376,
+        "rec_yds": 20.625,
+        "receptions": 2.137
+      },
+      "fantasy_ppr": 9.3331,
+      "spine_version": "player-production-v2-phase2"
+    },
+    {
+      "player_id": "00-0039796",
+      "player_name": "R.Ali",
+      "team": "BAL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 22.902,
+        "rec_yds": 3.348,
+        "receptions": 0.365
+      },
+      "fantasy_ppr": 3.644,
+      "spine_version": "player-production-v2-phase2"
+    }
+  ],
+  "mismatches": [],
+  "constraints": {
+    "NFL_WEEKLY_PROPS_LIVE": false,
+    "no_residual_refit": true,
+    "no_pass_only_intercept_swap": true,
+    "frozen_cal_edge_math_only": true
+  }
+}

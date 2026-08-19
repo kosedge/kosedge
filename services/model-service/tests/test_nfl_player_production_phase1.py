@@ -40,8 +40,8 @@ def _sample_baseline(**overrides):
     return row
 
 
-def test_production_version_is_phase1() -> None:
-    assert PRODUCTION_VERSION == "player-production-v1-phase1"
+def test_production_version_is_phase2() -> None:
+    assert PRODUCTION_VERSION == "player-production-v2-phase2"
     assert PRODUCTION_SOURCE == "nfl_player_projection_baselines"
 
 

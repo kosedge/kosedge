@@ -14,7 +14,7 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Mapping, Optional
 
-PRODUCTION_VERSION = "player-production-v1-phase1"
+PRODUCTION_VERSION = "player-production-v2-phase2"
 PRODUCTION_SOURCE = "nfl_player_projection_baselines"
 # Surfaces that must share this vector for weekly player numbers.
 WEEKLY_SPINE_SURFACES = ("fantasy_weekly", "props_board")

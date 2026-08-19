@@ -164,18 +164,21 @@ def _allocate_winner_take_most(ranked_keys: list[str]) -> Dict[str, float]:
     return out
 
 
-# RB rooms are not QB rooms: true committees exist. Winner-take-most is the
-# default for a clear bell cow, but trailing rush usage + offense snaps can
-# soften the split team-by-team when the data says the backfield is shared.
-_RB_BELL_COW_PRIMARY = 0.70
-_RB_BELL_COW_SECONDARY = 0.22
+# Phase 2 (2026-08-19): fresh rematerialize already overshoots RB1 (~+11 resid).
+# Soften bell-cow primary slightly so RB1 does not eat unreal committee volume.
+_RB_BELL_COW_PRIMARY = 0.68
+_RB_BELL_COW_SECONDARY = 0.24
 _RB_BELL_COW_TERTIARY = 0.08
-_RB_SOFT_PRIMARY = 0.60
-_RB_SOFT_SECONDARY = 0.28
+_RB_SOFT_PRIMARY = 0.58
+_RB_SOFT_SECONDARY = 0.30
 _RB_SOFT_TERTIARY = 0.12
 _RB_COMMITTEE_PRIMARY = 0.52
 _RB_COMMITTEE_SECONDARY = 0.36
 _RB_COMMITTEE_TERTIARY = 0.12
+
+# Phase 2: keep team pass base near league (64×0.55). Do not lift — fresh
+# rematerialize already overshoots QB season totals; WR 8+ is near-flat.
+TEAM_PASS_ATTEMPTS_BASE = 35.2
 
 
 def _rb_depth_score(depth_order: float | None) -> float:
@@ -235,8 +238,8 @@ def compute_rb_rush_shares(
 
     Ranking uses prior carries + depth + trailing rush share + offense snaps.
     Room shape adapts to usage:
-      - bell cow when #1 clearly leads (≈0.70 / 0.22 / 0.08)
-      - soft split when leadership is moderate (≈0.60 / 0.28 / 0.12)
+      - bell cow when #1 clearly leads (≈0.68 / 0.24 / 0.08)
+      - soft split when leadership is moderate (≈0.58 / 0.30 / 0.12)
       - committee when #1/#2 are close on usage (≈0.52 / 0.36 / 0.12)
     Final shares blend the ranked template with live usage so mid-season
     committees and hot hands move the board as more data arrives.
@@ -607,7 +610,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     # cascading into unrealistically low receptions/receiving yards for
     # the entire receiving corps league-wide -- confirmed via a live
     # production spot-check, see docs/NFL_PROPS_FANTASY_FOUNDATION.md).
-    team_pass_attempts_estimate = pace_factor * pass_factor * 35.2
+    team_pass_attempts_estimate = pace_factor * pass_factor * TEAM_PASS_ATTEMPTS_BASE
 
     attempts_mean = 0.0
     carries_mean = 0.0
@@ -646,19 +649,13 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         opp_ypa_factor = _clamp(1.0 + (0.40 * (opp_pass_factor - 1.0)), 0.88, 1.12)
         qb_starter_share_factor = _clamp(inputs.qb_starter_share, 0.0, 1.0)
         talent_factor = _clamp(float(inputs.qb_talent_factor or 1.0), 0.85, 1.22)
-        # Pace already lifts team_pass_attempts_estimate for skill positions;
-        # full multiplicative pace here pushed high-pace starters (e.g. Prescott
-        # with pace_factor at the 1.25 clamp) ~50-70 yards over books.
-        qb_pace = _clamp(0.55 + (0.45 * pace_factor), 0.85, 1.12)
-        # Enterprise retune: primary starters should land in a true NFL
-        # distribution (~230-290 yd/g → ~3.9k-4.9k / 17) with talent_factor
-        # separating elites from bridge QBs. Winner-take-most starter share
-        # keeps room totals physical; talent_factor restores hierarchy that
-        # the compressed 18.5+31 book retune had flattened (Brissett-class
-        # "league leads" at ~3.1k).
-        attempts_mean = (19.5 + (33.5 * qb_volume_signal * pass_factor * qb_pace)) * qb_starter_share_factor
+        # Phase 2: compress attempt schedule — fresh rematerialize flipped
+        # pass residual positive (~+9.5 raw vs actual) and inflated ≥4k season
+        # sums. Prefer fewer attempts over YPA hacks; qb_pace damping restored.
+        qb_pace = _clamp(0.52 + (0.42 * pace_factor), 0.84, 1.10)
+        attempts_mean = (18.6 + (31.8 * qb_volume_signal * pass_factor * qb_pace)) * qb_starter_share_factor
         attempts_mean *= talent_factor
-        attempts_mean = min(attempts_mean, 43.0)
+        attempts_mean = min(attempts_mean, 41.5)
         # Low-scoring games compress pass volume (CLE/PIT 35.5). Dogs in
         # blowouts still throw — don't crush them by raw implied points alone.
         if inputs.implied_team_total and inputs.implied_team_total > 0:
@@ -742,13 +739,16 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         skill_talent = _clamp(float(inputs.skill_talent_factor or 1.0), 0.88, 1.26)
         # Enterprise rush retune: bell cows clear ~90-110 rush yd/g (~1500-1900
         # /17); old 4+24*share flattened leaders near ~60-70 yd/g.
-        carries_mean = _clamp(5.0 + (27.5 * inputs.rush_share * pace_factor), 0.0, 34.0)
+        # Phase 2: compress carry schedule — fresh rematerialize overshoots
+        # rush actual (~+12 resid; RB1 ~+11). v3 half-step still left ~+7;
+        # tighten further while keeping committee shares physical.
+        carries_mean = _clamp(4.0 + (22.5 * inputs.rush_share * pace_factor), 0.0, 30.0)
         carries_mean *= skill_talent
         targets_mean = _clamp(0.5 + (inputs.target_proxy * team_pass_attempts_estimate), 0.0, 11.0)
         rush_yards_mean = carries_mean * _clamp(
-            (4.25 + (1.25 * volume_signal)) * opp_rush_factor * (0.96 + (0.04 * skill_talent)),
+            (4.05 + (1.15 * volume_signal)) * opp_rush_factor * (0.96 + (0.04 * skill_talent)),
             2.8,
-            8.2,
+            7.8,
         )
         # Real bug found while auditing residual receiving-yards undercount
         # after the targets_mean fix (prop Vegas benchmark, CURRENT arm still

@@ -101,7 +101,7 @@ def _load_db() -> Tuple[Dict[Tuple[str, str, str], Tuple[int, int]], Dict[Any, D
                 SELECT season, week, team, player_name,
                        pass_yards_mean, rush_yards_mean, receiving_yards_mean, receptions_mean
                 FROM nfl_player_projection_baselines
-                WHERE model_version = 'nfl-player-v1' AND season = 2025
+                WHERE model_version = 'nfl-player-v1' AND season BETWEEN 2024 AND 2025
                 """
             )
         ):

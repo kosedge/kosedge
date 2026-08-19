@@ -507,7 +507,9 @@ def test_elite_rb_season_rush_scale() -> None:
             role_confidence=0.88, skill_talent_factor=1.15,
         )
     )
-    assert bell["rush_yards_mean"] * 17 > 1400.0
+    # Phase 2 compresses carry/YPC vs the prior ~1500+ band; still clears a
+    # true workhorse season floor without restoring the +11 RB1 residual.
+    assert bell["rush_yards_mean"] * 17 > 1300.0
     assert skill_talent_factor_from_prior_ypg(95.0, position="RB") > 1.10
 
 
