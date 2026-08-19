@@ -144,17 +144,19 @@ _SKILL_PRIOR_MIN_GAMES = 8
 _SKILL_PRIOR_LOOKBACK_SEASONS = 2
 
 
+_REGULAR_SEASON_GAME_CAP = 17
+
+
 def aggregate_weekly_projection_rows(weekly_rows: Iterable[Dict[str, Any]]) -> Dict[str, Any]:
     """Pure aggregation: turn a player's list of real-week baseline rows into
     one season-total dict. Each item of `weekly_rows` must provide the keys in
     `_WEEKLY_STAT_KEYS` plus `anytime_td_prob` (all as floats/None).
 
-    Returns the season-shaped numeric fields only (games_projected plus the
-    8 `*_total` / `anytime_td_prob` fields) -- identity fields (player_name,
-    team, position, player_key) are attached by the caller since they don't
-    require any statistical aggregation.
+    Phase 3 SoT: sum of the weekly spine only. Cap at 17 real game-rows
+    (ordered as provided — callers fetch ORDER BY week) so playoff/extra
+    rows cannot invent 20-game season totals.
     """
-    rows = list(weekly_rows)
+    rows = list(weekly_rows)[:_REGULAR_SEASON_GAME_CAP]
     games_projected = len(rows)
 
     def _sum(key: str) -> float:
@@ -176,6 +178,7 @@ def aggregate_weekly_projection_rows(weekly_rows: Iterable[Dict[str, Any]]) -> D
         "rush_tds_total": _sum("rush_tds_mean"),
         "rec_tds_total": _sum("rec_tds_mean"),
         "anytime_td_prob": season_anytime_td_prob,
+        "spine_sot": "weekly_baseline_sum_cap17",
     }
 
 
@@ -692,14 +695,15 @@ def generate_player_regular_season_totals(
     *,
     season: int,
     model_version: str = "nfl-player-v1",
-    apply_qb_lock: bool = True,
-    apply_skill_prior: bool = True,
-    apply_team_budgets: bool = True,
+    apply_qb_lock: bool = False,
+    apply_skill_prior: bool = False,
+    apply_team_budgets: bool = False,
 ) -> tuple[List[Dict[str, Any]], Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
-    """Season-total rows for every player with at least one real regular-season
-    weekly projection, in `CSV_FIELDNAMES` shape.
+    """Season-total rows = SUM of weekly spine baselines (Phase 3 SoT).
 
-    Returns (rows, qb_lock_audit, skill_prior_audit, team_budget_audit).
+    Defaults leave QB-lock / skill-prior / team-budget overlays **off** so
+    season/futures cannot invent a second optimistic pool. Pass True only
+    for research comparisons.
     """
     try:
         from data_platform_nfl.team_volume_budgets import apply_team_volume_budgets
@@ -1050,9 +1054,10 @@ def generate_and_write_player_season_totals(
             session,
             season=season,
             model_version=model_version,
-            apply_qb_lock=True,
-            apply_skill_prior=True,
-            apply_team_budgets=True,
+            # Phase 3: season/futures SoT = weekly spine sum only.
+            apply_qb_lock=False,
+            apply_skill_prior=False,
+            apply_team_budgets=False,
         )
     )
     playoff_rows = generate_player_playoff_totals(

@@ -18,6 +18,10 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 
 CALIBRATION_VERSION = "prop-enterprise-cal-v1"
+# Phase 3 structure-trained candidate (filled when fit clears gates).
+STRUCTURE_CALIBRATION_VERSION = "prop-structure-cal-v1"
+# Active edge-math bundle: "frozen" (default) or "structure" after promote.
+ACTIVE_PROP_CAL_SOURCE = "structure"
 
 # Frozen fit on blended (60% MC / 40% baseline) means vs actuals,
 # seasons 2023–2025 weeks 4–17, n≈3815 graded props (batch1+2+3).
@@ -33,6 +37,25 @@ FROZEN_MEAN_INTERCEPT: Dict[str, float] = {
     "receptions": 0.12,
     "anytime_td": 0.0,
 }
+
+# Populated by scripts/nfl/fit_structure_prop_calibration.py (Phase 3, 2026-08-19).
+# Train 2023–24 structure baselines vs actuals; holdout 2025 weeks 4–17.
+STRUCTURE_MEAN_INTERCEPT: Dict[str, float] = {
+    "pass_yds": -12.0,
+    "rush_yds": -2.087,
+    "rec_yds": -4.4305,
+    "receptions": -0.3422,
+    "anytime_td": 0.0,
+}
+
+STRUCTURE_STD_MULTIPLIER: Dict[str, float] = {
+    "pass_yds": 1.0,
+    "rush_yds": 1.0,
+    "rec_yds": 1.0,
+    "receptions": 1.0,
+    "anytime_td": 1.0,
+}
+STRUCTURE_SAMPLE_SIZE = 5315
 
 # Inflate std so ~68% of actuals land within ±1σ of the calibrated mean.
 FROZEN_STD_MULTIPLIER: Dict[str, float] = {
@@ -92,6 +115,19 @@ def frozen_calibration_for(market_key: str) -> PropMarketCalibration:
         std_multiplier=float(FROZEN_STD_MULTIPLIER.get(mk, 1.0)),
         sample_size=3815,
         source="frozen",
+        version=CALIBRATION_VERSION,
+    )
+
+
+def structure_calibration_for(market_key: str) -> PropMarketCalibration:
+    mk = str(market_key or "")
+    return PropMarketCalibration(
+        market_key=mk,
+        intercept=float(STRUCTURE_MEAN_INTERCEPT.get(mk, 0.0)),
+        std_multiplier=float(STRUCTURE_STD_MULTIPLIER.get(mk, 1.0)),
+        sample_size=int(STRUCTURE_SAMPLE_SIZE),
+        source="structure",
+        version=STRUCTURE_CALIBRATION_VERSION,
     )
 
 
@@ -195,6 +231,8 @@ def apply_prop_calibration(
 
 def default_calibration_bundle() -> Dict[str, PropMarketCalibration]:
     keys = ("pass_yds", "rush_yds", "rec_yds", "receptions", "anytime_td")
+    if ACTIVE_PROP_CAL_SOURCE == "structure":
+        return {k: structure_calibration_for(k) for k in keys}
     return {k: frozen_calibration_for(k) for k in keys}
 
 

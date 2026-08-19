@@ -17,7 +17,9 @@ Fantasy, weekly props, and player futures are **one** production model.
 
 Until gates pass: `NFL_WEEKLY_PROPS_LIVE = false`. Same numbers everywhere, research framing, no PLAY tags on props. Do not ungate on close-MAE alone. Rush must not regress vs actual.
 
-**Phase 2 (2026-08-19):** structure knobs live in `nfl_player_projection_engine.py` + WR1 depth prior in `tasks.py`. Rematerialize baselines after pulling. Frozen prop-cal-v1 stays until a **structure-trained** shared cal clears gates. See `data/ops/nfl-spine-phase2-structure-20260819.md`.
+**Phase 2 (2026-08-19):** structure knobs live in `nfl_player_projection_engine.py` + WR1 depth prior in `tasks.py`. Rematerialize baselines after pulling. See `data/ops/nfl-spine-phase2-structure-20260819.md`.
+
+**Phase 3 (2026-08-19):** season/futures SoT = SUM of weekly spine (cap 17); no QB-lock/budget overlay on season CSVs. Edge cal may be `prop-structure-cal-v1` (`ACTIVE_PROP_CAL_SOURCE`). `NFL_WEEKLY_PROPS_LIVE` stays false until promote table + pool clear. See `data/ops/nfl-spine-phase3-season-cal-20260819.md`.
 
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept

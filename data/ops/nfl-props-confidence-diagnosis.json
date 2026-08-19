@@ -1,5 +1,5 @@
 {
-  "as_of": "2026-08-19T21:32:20.086668+00:00",
+  "as_of": "2026-08-19T22:21:42.644766+00:00",
   "product": false,
   "part1_shipped": {
     "pr": "https://github.com/kosedge/kosedge/pull/263",
@@ -42,7 +42,7 @@
     "pass_yds": {
       "holdout_n": 431,
       "frozen_intercept": -8.5,
-      "candidate_intercept": 6.1021,
+      "candidate_intercept": -12.0,
       "raw_vs_close": {
         "n": 431,
         "mae": 43.9574,
@@ -57,9 +57,9 @@
       },
       "candidate_vs_close": {
         "n": 431,
-        "mae": 19.9449,
-        "mean_residual": 2.4023,
-        "under_rate": 0.3411
+        "mae": 19.3121,
+        "mean_residual": -6.1225,
+        "under_rate": 0.5568
       },
       "raw_vs_actual": {
         "n": 431,
@@ -75,15 +75,15 @@
       },
       "candidate_vs_actual": {
         "n": 431,
-        "mae": 52.3518,
-        "mean_residual": 5.4313,
-        "under_rate": 0.4548
+        "mae": 51.7911,
+        "mean_residual": -3.0935,
+        "under_rate": 0.5128
       }
     },
     "rush_yds": {
       "holdout_n": 1291,
       "frozen_intercept": 3.6,
-      "candidate_intercept": 0.2119,
+      "candidate_intercept": -1.265,
       "raw_vs_close": {
         "n": 1291,
         "mae": 15.136,
@@ -98,9 +98,9 @@
       },
       "candidate_vs_close": {
         "n": 1291,
-        "mae": 11.5782,
-        "mean_residual": 3.7858,
-        "under_rate": 0.4036
+        "mae": 11.4521,
+        "mean_residual": 2.6543,
+        "under_rate": 0.4477
       },
       "raw_vs_actual": {
         "n": 1291,
@@ -116,15 +116,15 @@
       },
       "candidate_vs_actual": {
         "n": 1291,
-        "mae": 18.0933,
-        "mean_residual": 0.7296,
-        "under_rate": 0.4121
+        "mae": 17.975,
+        "mean_residual": -0.4019,
+        "under_rate": 0.4694
       }
     },
     "rec_yds": {
       "holdout_n": 2663,
       "frozen_intercept": 1.6,
-      "candidate_intercept": -0.2746,
+      "candidate_intercept": -3.4183,
       "raw_vs_close": {
         "n": 2663,
         "mae": 15.361,
@@ -139,9 +139,9 @@
       },
       "candidate_vs_close": {
         "n": 2663,
-        "mae": 11.8529,
-        "mean_residual": 5.7325,
-        "under_rate": 0.3335
+        "mae": 11.3751,
+        "mean_residual": 3.3165,
+        "under_rate": 0.4262
       },
       "raw_vs_actual": {
         "n": 2663,
@@ -157,15 +157,15 @@
       },
       "candidate_vs_actual": {
         "n": 2663,
-        "mae": 16.1416,
-        "mean_residual": 2.0151,
-        "under_rate": 0.3597
+        "mae": 15.5164,
+        "mean_residual": -0.4009,
+        "under_rate": 0.4251
       }
     },
     "receptions": {
       "holdout_n": 2595,
       "frozen_intercept": 0.12,
-      "candidate_intercept": -0.0204,
+      "candidate_intercept": -0.2363,
       "raw_vs_close": {
         "n": 2595,
         "mae": 1.287,
@@ -180,9 +180,9 @@
       },
       "candidate_vs_close": {
         "n": 2595,
-        "mae": 1.1307,
-        "mean_residual": 0.3105,
-        "under_rate": 0.4513
+        "mae": 1.1217,
+        "mean_residual": 0.1205,
+        "under_rate": 0.5013
       },
       "raw_vs_actual": {
         "n": 2595,
@@ -198,9 +198,9 @@
       },
       "candidate_vs_actual": {
         "n": 2595,
-        "mae": 0.9897,
-        "mean_residual": 0.2517,
-        "under_rate": 0.3676
+        "mae": 0.9545,
+        "mean_residual": 0.0617,
+        "under_rate": 0.4432
       }
     }
   },
@@ -220,9 +220,9 @@
       },
       "candidate_vs_actual": {
         "n": 249,
-        "mae": 52.9143,
-        "mean_residual": 6.8069,
-        "under_rate": 0.4297
+        "mae": 51.591,
+        "mean_residual": -1.3107,
+        "under_rate": 0.49
       }
     },
     "225-274": {
@@ -240,9 +240,9 @@
       },
       "candidate_vs_actual": {
         "n": 180,
-        "mae": 51.5211,
-        "mean_residual": 3.7393,
-        "under_rate": 0.4889
+        "mae": 51.9573,
+        "mean_residual": -5.3584,
+        "under_rate": 0.5444
       }
     },
     "275+": {
@@ -260,8 +260,8 @@
       },
       "candidate_vs_actual": {
         "n": 2,
-        "mae": 57.0938,
-        "mean_residual": -13.5587,
+        "mae": 61.7439,
+        "mean_residual": -21.2181,
         "under_rate": 0.5
       }
     }
@@ -282,9 +282,9 @@
       },
       "candidate_vs_actual": {
         "n": 424,
-        "mae": 27.6723,
-        "mean_residual": -2.4933,
-        "under_rate": 0.4811
+        "mae": 27.6499,
+        "mean_residual": -3.4803,
+        "under_rate": 0.4976
       }
     },
     "committee_or_rb2plus": {
@@ -302,9 +302,9 @@
       },
       "candidate_vs_actual": {
         "n": 770,
-        "mae": 14.7072,
-        "mean_residual": 2.2055,
-        "under_rate": 0.426
+        "mae": 14.5925,
+        "mean_residual": 1.0096,
+        "under_rate": 0.4558
       }
     },
     "unknown": {
@@ -322,9 +322,9 @@
       },
       "candidate_vs_actual": {
         "n": 97,
-        "mae": 3.1018,
-        "mean_residual": 3.1018,
-        "under_rate": 0.0
+        "mae": 2.536,
+        "mean_residual": 1.8495,
+        "under_rate": 0.4536
       }
     }
   },
@@ -344,9 +344,9 @@
       },
       "candidate_vs_actual": {
         "n": 434,
-        "mae": 26.9993,
-        "mean_residual": -5.1508,
-        "under_rate": 0.523
+        "mae": 27.0148,
+        "mean_residual": -6.7743,
+        "under_rate": 0.5507
       }
     },
     "tier2_5to7_tgt": {
@@ -364,9 +364,9 @@
       },
       "candidate_vs_actual": {
         "n": 661,
-        "mae": 18.3891,
-        "mean_residual": 1.6758,
-        "under_rate": 0.4145
+        "mae": 18.0081,
+        "mean_residual": -0.6707,
+        "under_rate": 0.4569
       }
     },
     "tier3_under5_tgt": {
@@ -384,9 +384,9 @@
       },
       "candidate_vs_actual": {
         "n": 1568,
-        "mae": 12.1889,
-        "mean_residual": 4.1415,
-        "under_rate": 0.2915
+        "mae": 11.2835,
+        "mean_residual": 1.4768,
+        "under_rate": 0.3769
       }
     },
     "unknown": {
@@ -468,7 +468,7 @@
     "structural_fix_first": true,
     "rush_frozen_regresses_vs_actual": false,
     "pass_bias_moves_toward_zero_with_candidate": false,
-    "rush_candidate_actual_mae": 18.0933,
+    "rush_candidate_actual_mae": 17.975,
     "rush_frozen_actual_mae": 18.6907,
     "rush_raw_actual_mae": 19.5676
   },
