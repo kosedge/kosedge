@@ -127,16 +127,24 @@ def _season_pool(season: int = 2025) -> Dict[str, Any]:
             conn.execute(
                 text(
                     """
+                    WITH ranked AS (
+                      SELECT player_id, player_name, team, week, pass_yards_mean,
+                             ROW_NUMBER() OVER (
+                               PARTITION BY player_id ORDER BY week ASC
+                             ) AS rn
+                      FROM nfl_player_projection_baselines
+                      WHERE season = :season
+                        AND model_version = 'nfl-player-v1'
+                        AND position = 'QB'
+                        AND game_id IS NOT NULL AND game_id <> ''
+                        AND pass_yards_mean > 0
+                    )
                     SELECT player_name, team,
                            SUM(pass_yards_mean)::float AS pass_yards_total,
                            COUNT(*)::int AS games
-                    FROM nfl_player_projection_baselines
-                    WHERE season = :season
-                      AND model_version = 'nfl-player-v1'
-                      AND position = 'QB'
-                      AND game_id IS NOT NULL AND game_id <> ''
+                    FROM ranked
+                    WHERE rn <= 17
                     GROUP BY player_id, player_name, team
-                    HAVING SUM(pass_yards_mean) > 0
                     ORDER BY SUM(pass_yards_mean) DESC
                     """
                 ),
@@ -147,13 +155,23 @@ def _season_pool(season: int = 2025) -> Dict[str, Any]:
             conn.execute(
                 text(
                     """
+                    WITH ranked AS (
+                      SELECT player_id, team, position, week,
+                             pass_yards_mean, receiving_yards_mean,
+                             ROW_NUMBER() OVER (
+                               PARTITION BY player_id ORDER BY week ASC
+                             ) AS rn
+                      FROM nfl_player_projection_baselines
+                      WHERE season = :season
+                        AND model_version = 'nfl-player-v1'
+                        AND game_id IS NOT NULL AND game_id <> ''
+                    )
                     SELECT team,
-                           SUM(CASE WHEN position = 'QB' THEN pass_yards_mean ELSE 0 END)::float AS qb_pass,
-                           SUM(CASE WHEN position IN ('WR','TE','RB') THEN receiving_yards_mean ELSE 0 END)::float AS skill_rec
-                    FROM nfl_player_projection_baselines
-                    WHERE season = :season
-                      AND model_version = 'nfl-player-v1'
-                      AND game_id IS NOT NULL AND game_id <> ''
+                           SUM(CASE WHEN position = 'QB' AND rn <= 17
+                                    THEN pass_yards_mean ELSE 0 END)::float AS qb_pass,
+                           SUM(CASE WHEN position IN ('WR','TE','RB') AND rn <= 17
+                                    THEN receiving_yards_mean ELSE 0 END)::float AS skill_rec
+                    FROM ranked
                     GROUP BY team
                     """
                 ),
@@ -179,7 +197,7 @@ def _season_pool(season: int = 2025) -> Dict[str, Any]:
             gaps.append(abs(qb_p - rec) / qb_p)
     return {
         "season": season,
-        "source": "sum(nfl_player_projection_baselines.pass_yards_mean) by QB",
+        "source": "sum(nfl_player_projection_baselines.pass_yards_mean) by QB cap17",
         "qb_n": len(qb_totals),
         "qb_pass_yards": {
             "median": _pct(sorted_qb, 0.5),

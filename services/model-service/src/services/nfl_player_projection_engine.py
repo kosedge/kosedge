@@ -178,7 +178,8 @@ _RB_COMMITTEE_TERTIARY = 0.12
 
 # Phase 2: keep team pass base near league (64×0.55). Do not lift — fresh
 # rematerialize already overshoots QB season totals; WR 8+ is near-flat.
-TEAM_PASS_ATTEMPTS_BASE = 35.2
+# Phase 3B: nudge down for season-pool coherence (cap-17 still had 7 QBs ≥4k).
+TEAM_PASS_ATTEMPTS_BASE = 34.8
 
 
 def _rb_depth_score(depth_order: float | None) -> float:
@@ -652,10 +653,14 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # Phase 2: compress attempt schedule — fresh rematerialize flipped
         # pass residual positive (~+9.5 raw vs actual) and inflated ≥4k season
         # sums. Prefer fewer attempts over YPA hacks; qb_pace damping restored.
+        # Phase 3B: further upper-tail compression on attempts (not YPA / not
+        # per-QB overrides) so cap-17 season sums lose the ≥4k cluster.
         qb_pace = _clamp(0.52 + (0.42 * pace_factor), 0.84, 1.10)
-        attempts_mean = (18.6 + (31.8 * qb_volume_signal * pass_factor * qb_pace)) * qb_starter_share_factor
+        attempts_mean = (18.2 + (30.8 * qb_volume_signal * pass_factor * qb_pace)) * qb_starter_share_factor
         attempts_mean *= talent_factor
-        attempts_mean = min(attempts_mean, 41.5)
+        attempts_mean = min(attempts_mean, 40.2)
+        if attempts_mean > 35.5:
+            attempts_mean = 35.5 + (attempts_mean - 35.5) * 0.88
         # Low-scoring games compress pass volume (CLE/PIT 35.5). Dogs in
         # blowouts still throw — don't crush them by raw implied points alone.
         if inputs.implied_team_total and inputs.implied_team_total > 0:

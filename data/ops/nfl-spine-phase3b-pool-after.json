@@ -1,0 +1,18 @@
+{
+  "as_of": "2026-08-19T23:00:00+00:00",
+  "label": "phase3b_dialback_final",
+  "source": "sum(nfl_player_projection_baselines.pass_yards_mean) by QB cap17",
+  "qb_n": 78,
+  "qb_pass": {
+    "max": 4591.1,
+    "n_ge_4000": 5,
+    "top5": [
+      {"player": "D.Prescott", "team": "DAL", "pass_yards": 4591.1, "games": 17},
+      {"player": "J.Goff", "team": "DET", "pass_yards": 4360.3, "games": 17},
+      {"player": "M.Stafford", "team": "LA", "pass_yards": 4295.3, "games": 17},
+      {"player": "T.Lawrence", "team": "JAX", "pass_yards": 4018.1, "games": 17},
+      {"player": "C.Williams", "team": "CHI", "pass_yards": 4014.9, "games": 17}
+    ]
+  },
+  "team_pass_vs_rec_abs_rel_gap_mean": 0.172
+}

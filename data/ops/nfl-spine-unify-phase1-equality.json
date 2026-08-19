@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-08-19T20:13:58.463991+00:00",
+  "generated_at": "2026-08-19T22:47:04.388220+00:00",
   "phase": 1,
-  "spine_version": "player-production-v1-phase1",
+  "spine_version": "player-production-v3-phase3b",
   "season": 2025,
   "week": 1,
   "model_version": "nfl-player-v1",
@@ -19,13 +19,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 126.864,
-        "rush_yds": 8.17,
+        "pass_yds": 222.912,
+        "rush_yds": 32.179,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.3496,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 20.4724,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039917",
@@ -34,13 +34,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 127.064,
-        "rush_yds": 6.961,
+        "pass_yds": 272.522,
+        "rush_yds": 23.287,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.4347,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 23.5916,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0034796",
@@ -49,13 +49,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 113.477,
-        "rush_yds": 7.259,
+        "pass_yds": 227.803,
+        "rush_yds": 32.172,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.733,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 22.9873,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0034857",
@@ -64,13 +64,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 140.39,
-        "rush_yds": 9.913,
+        "pass_yds": 308.647,
+        "rush_yds": 49.665,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 10.8629,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 32.1824,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039150",
@@ -79,13 +79,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 122.073,
-        "rush_yds": 6.681,
+        "pass_yds": 213.751,
+        "rush_yds": 15.14,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.607,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 15.936,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039918",
@@ -94,13 +94,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 125.591,
-        "rush_yds": 7.627,
+        "pass_yds": 214.36,
+        "rush_yds": 24.665,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.8303,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 23.4189,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036442",
@@ -109,13 +109,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 108.998,
-        "rush_yds": 5.226,
+        "pass_yds": 203.029,
+        "rush_yds": 9.008,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 7.6105,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 14.602,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0033077",
@@ -124,13 +124,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 114.152,
-        "rush_yds": 4.895,
+        "pass_yds": 248.983,
+        "rush_yds": 6.465,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 7.9156,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 17.4458,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039732",
@@ -139,13 +139,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 126.788,
-        "rush_yds": 7.344,
+        "pass_yds": 210.71,
+        "rush_yds": 20.771,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.3619,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 18.8915,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0033106",
@@ -154,13 +154,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 120.605,
-        "rush_yds": 4.311,
+        "pass_yds": 259.266,
+        "rush_yds": 1.073,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.2753,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 17.6019,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036264",
@@ -169,13 +169,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 113.058,
-        "rush_yds": 5.586,
+        "pass_yds": 233.996,
+        "rush_yds": 13.175,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.2309,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 18.2093,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039163",
@@ -184,13 +184,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 116.756,
-        "rush_yds": 6.766,
+        "pass_yds": 213.322,
+        "rush_yds": 17.92,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.8888,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 20.1389,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0035710",
@@ -199,13 +199,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 117.519,
-        "rush_yds": 6.869,
+        "pass_yds": 202.601,
+        "rush_yds": 27.489,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.9817,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 20.4049,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036971",
@@ -214,13 +214,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 114.944,
-        "rush_yds": 5.319,
+        "pass_yds": 220.355,
+        "rush_yds": 10.198,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.1917,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 16.412,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0033873",
@@ -229,13 +229,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 130.965,
-        "rush_yds": 9.17,
+        "pass_yds": 260.039,
+        "rush_yds": 48.211,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.7696,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 25.4927,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0026498",
@@ -244,13 +244,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 115.2,
-        "rush_yds": 5.441,
+        "pass_yds": 223.008,
+        "rush_yds": 10.261,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.2821,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 16.9444,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036355",
@@ -259,13 +259,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 124.686,
-        "rush_yds": 6.941,
+        "pass_yds": 303.726,
+        "rush_yds": 28.389,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.8055,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 23.3319,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0030565",
@@ -274,13 +274,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 118.698,
-        "rush_yds": 4.903,
+        "pass_yds": 260.643,
+        "rush_yds": 6.659,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.2102,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 18.2556,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036212",
@@ -289,13 +289,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 116.307,
-        "rush_yds": 5.485,
+        "pass_yds": 237.374,
+        "rush_yds": 7.279,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.1128,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 16.3549,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0037013",
@@ -304,13 +304,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 102.087,
-        "rush_yds": 5.175,
+        "pass_yds": 8.075,
+        "rush_yds": 0.423,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 7.157,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 0.3973,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039923",
@@ -319,13 +319,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 112.146,
-        "rush_yds": 5.385,
+        "pass_yds": 177.732,
+        "rush_yds": 7.625,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.0463,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 13.4578,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039851",
@@ -334,13 +334,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 132.654,
-        "rush_yds": 7.176,
+        "pass_yds": 218.802,
+        "rush_yds": 23.058,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.3478,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 17.0699,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039376",
@@ -349,13 +349,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 129.899,
-        "rush_yds": 6.919,
+        "pass_yds": 267.771,
+        "rush_yds": 20.282,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.4319,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 21.805,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0029263",
@@ -364,13 +364,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 130.46,
-        "rush_yds": 9.066,
+        "pass_yds": 244.175,
+        "rush_yds": 29.381,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.993,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 25.0351,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036945",
@@ -379,13 +379,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 116.842,
-        "rush_yds": 8.321,
+        "pass_yds": 157.687,
+        "rush_yds": 42.267,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.2838,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 22.6722,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0036389",
@@ -394,13 +394,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 118.165,
-        "rush_yds": 8.704,
+        "pass_yds": 179.568,
+        "rush_yds": 42.785,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.491,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 24.8332,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0023459",
@@ -409,13 +409,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 115.218,
-        "rush_yds": 4.265,
+        "pass_yds": 244.994,
+        "rush_yds": 1.378,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 7.9192,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 16.6696,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0040673",
@@ -424,13 +424,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 98.895,
-        "rush_yds": 4.758,
+        "pass_yds": 5.837,
+        "rush_yds": 0.229,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 6.9076,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 0.2884,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0034869",
@@ -439,13 +439,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 111.641,
-        "rush_yds": 5.446,
+        "pass_yds": 169.333,
+        "rush_yds": 7.041,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 7.8062,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 11.8494,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0037834",
@@ -454,13 +454,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 116.566,
-        "rush_yds": 5.469,
+        "pass_yds": 230.142,
+        "rush_yds": 12.266,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.3435,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 17.5183,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0034855",
@@ -469,13 +469,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 121.215,
-        "rush_yds": 6.897,
+        "pass_yds": 263.592,
+        "rush_yds": 24.192,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 8.5743,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 20.2069,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0040676",
@@ -484,13 +484,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 107.242,
-        "rush_yds": 3.792,
+        "pass_yds": 200.733,
+        "rush_yds": 0.793,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 7.3529,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 13.6246,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039910",
@@ -499,13 +499,13 @@
       "position": "QB",
       "equal": true,
       "means": {
-        "pass_yds": 124.523,
-        "rush_yds": 8.297,
+        "pass_yds": 225.204,
+        "rush_yds": 39.094,
         "rec_yds": 0.0,
         "receptions": 0.0
       },
-      "fantasy_ppr": 9.2386,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 21.6796,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0033553",
@@ -515,12 +515,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 33.44,
-        "rec_yds": 6.194,
-        "receptions": 0.972
+        "rush_yds": 81.739,
+        "rec_yds": 28.75,
+        "receptions": 3.619
       },
-      "fantasy_ppr": 7.5334,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 18.3159,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039921",
@@ -530,12 +530,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 23.745,
-        "rec_yds": 3.344,
-        "receptions": 0.549
+        "rush_yds": 30.133,
+        "rec_yds": 8.75,
+        "receptions": 1.157
       },
-      "fantasy_ppr": 4.5119,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 5.9633,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0038542",
@@ -545,12 +545,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 37.687,
-        "rec_yds": 7.546,
-        "receptions": 1.169
+        "rush_yds": 106.87,
+        "rec_yds": 49.023,
+        "receptions": 5.906
       },
-      "fantasy_ppr": 9.2443,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 27.4593,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0037263",
@@ -560,12 +560,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 30.829,
-        "rec_yds": 2.471,
-        "receptions": 0.412
+        "rush_yds": 39.711,
+        "rec_yds": 2.856,
+        "receptions": 0.373
       },
-      "fantasy_ppr": 5.2,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 5.6017,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0032764",
@@ -575,12 +575,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 38.056,
-        "rec_yds": 3.584,
-        "receptions": 0.584
+        "rush_yds": 105.616,
+        "rec_yds": 11.974,
+        "receptions": 1.272
       },
-      "fantasy_ppr": 4.748,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 13.031,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0034975",
@@ -590,12 +590,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 9.56,
-        "rec_yds": 4.52,
-        "receptions": 0.72
+        "rush_yds": 38.376,
+        "rec_yds": 20.335,
+        "receptions": 2.107
       },
-      "fantasy_ppr": 2.818,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 9.2741,
+      "spine_version": "player-production-v3-phase3b"
     },
     {
       "player_id": "00-0039796",
@@ -605,12 +605,12 @@
       "equal": true,
       "means": {
         "pass_yds": 0.0,
-        "rush_yds": 7.765,
-        "rec_yds": 2.471,
-        "receptions": 0.412
+        "rush_yds": 22.902,
+        "rec_yds": 3.348,
+        "receptions": 0.365
       },
-      "fantasy_ppr": 1.9876,
-      "spine_version": "player-production-v1-phase1"
+      "fantasy_ppr": 3.644,
+      "spine_version": "player-production-v3-phase3b"
     }
   ],
   "mismatches": [],
