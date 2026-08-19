@@ -163,7 +163,10 @@ from .services.nfl_clv_semantics import (
 from .services.nfl_player_prop_calibration import (
     apply_prop_calibration,
     default_calibration_bundle,
-    load_walk_forward_prop_calibration,
+)
+from .services.nfl_player_production import (
+    PRODUCTION_VERSION as NFL_PLAYER_PRODUCTION_VERSION,
+    production_from_baseline_row,
 )
 from .services.nfl_player_box_score_simulator import (
     DEFAULT_BOX_SCORE_MODEL_VERSION,
@@ -15595,28 +15598,25 @@ def materialize_nfl_player_props_edges(
     model_version: str = "nfl-player-v1",
     box_score_model_version: str = DEFAULT_BOX_SCORE_MODEL_VERSION,
 ) -> Dict[str, Any]:
-    """Materialize prop edges, preferring box-score MC distributions when present.
+    """Materialize prop edges from the shared weekly player-production spine.
 
-    Vegas benchmarks rank NEW (box MC) ahead of flat baselines. Live edges
-    historically used baselines only — this wires the better distribution into
-    the board while keeping baseline fallback for players/weeks without sims.
-    Applies enterprise mean/std calibration + sparse PLAY/WATCH tags.
+    Phase 1 SoT: ``nfl_player_projection_baselines`` via
+    ``production_from_baseline_row`` (same vector fantasy weekly scores).
+    Box-score MC is research-only in diagnostics — not the published mean.
+    Frozen prop-cal-v1 applies to *edge math only* (no walk-forward re-fit).
+    ``NFL_WEEKLY_PROPS_LIVE`` stays false until production gates pass.
     """
     session = SessionLocal()
     target_week = None
     upserted = 0
-    box_sourced = 0
-    baseline_sourced = 0
+    box_research_rows = 0
+    spine_sourced = 0
     play_tagged = 0
     watch_tagged = 0
     try:
         target_week = _resolve_nfl_week(session, season=season, week=week)
-        try:
-            prop_cal_bundle = load_walk_forward_prop_calibration(
-                session, season=int(season), week=int(target_week)
-            )
-        except Exception:
-            prop_cal_bundle = default_calibration_bundle()
+        # Phase 1: frozen cal only — do not walk-forward re-fit intercepts.
+        prop_cal_bundle = default_calibration_bundle()
         role_rows = session.execute(
             text(
                 """
@@ -15845,99 +15845,45 @@ def materialize_nfl_player_props_edges(
                     if box is not None:
                         break
 
-            # Prefer box-score MC moments (benchmark-winning NEW arm).
-            pass_mean, pass_std, pass_p50 = (
-                _box_dist_moments(box.pass_yards_dist) if box is not None else (None, None, None)
-            )
-            rush_mean, rush_std, rush_p50 = (
-                _box_dist_moments(box.rush_yards_dist) if box is not None else (None, None, None)
-            )
-            rec_mean, rec_std, rec_p50 = (
-                _box_dist_moments(box.receiving_yards_dist) if box is not None else (None, None, None)
-            )
-            receptions_mean, receptions_std, receptions_p50 = (
-                _box_dist_moments(box.receptions_dist) if box is not None else (None, None, None)
-            )
-            total_tds_mean = _to_float_like(getattr(box, "total_tds_mean", None)) if box is not None else None
-            if total_tds_mean is None and box is not None:
-                total_tds_mean, _, _ = _box_dist_moments(box.total_tds_dist)
+            # Phase 1 spine: published means = raw baselines (shared with fantasy).
+            # Box MC stays research-only — never the published model_mean.
+            prod = production_from_baseline_row(row)
+            spine_sourced += 1
+            pass_mean = rush_mean = rec_mean = receptions_mean = None
+            pass_std = rush_std = rec_std = receptions_std = None
+            pass_p50 = rush_p50 = rec_p50 = receptions_p50 = None
+            box_total_tds = None
+            if box is not None:
+                box_research_rows += 1
+                pass_mean, pass_std, pass_p50 = _box_dist_moments(box.pass_yards_dist)
+                rush_mean, rush_std, rush_p50 = _box_dist_moments(box.rush_yards_dist)
+                rec_mean, rec_std, rec_p50 = _box_dist_moments(box.receiving_yards_dist)
+                receptions_mean, receptions_std, receptions_p50 = _box_dist_moments(box.receptions_dist)
+                box_total_tds = _to_float_like(getattr(box, "total_tds_mean", None))
+                if box_total_tds is None:
+                    box_total_tds, _, _ = _box_dist_moments(box.total_tds_dist)
 
-            if box is not None and any(v is not None for v in (pass_mean, rush_mean, rec_mean)):
-                projection_source = "box_score"
-                box_sourced += 1
-            else:
-                projection_source = "baseline"
-                baseline_sourced += 1
-
-            atd_mean = (
-                anytime_td_prob_from_td_mean(total_tds_mean)
-                if total_tds_mean is not None
-                else float(row.anytime_td_prob or 0.0)
-            )
+            projection_source = NFL_PLAYER_PRODUCTION_VERSION
+            atd_mean = anytime_td_prob_from_td_mean(prod.total_tds)
             atd_std = max(0.08, math.sqrt(max(atd_mean * (1.0 - atd_mean), 1e-4)))
 
-            # Soft-blend MC with baseline so box under-shoots (e.g. QB volume)
-            # cannot invent huge Unders vs sharp books while still preferring MC.
-            box_w = 0.60
             role_conf, avail_conf = role_by_player.get(
                 (str(row.player_id), str(row.team)),
                 (0.65, 0.75),
             )
-            # Clear QB starters: if MC crushed pass volume vs a healthy baseline,
-            # prefer baseline more (winner-take-all dilution / missing snaps).
-            pass_box_w = box_w
-            base_pass = float(row.pass_yards_mean or 0.0)
-            if (
-                str(position or "").upper() == "QB"
-                and pass_mean is not None
-                and base_pass >= 180.0
-                and float(pass_mean) < base_pass * 0.78
-            ):
-                pass_box_w = 0.35
-
-            def _blend_mean(box_v: Optional[float], base_v: float, weight: float = box_w) -> float:
-                if box_v is None:
-                    return float(base_v)
-                return float(weight * float(box_v) + (1.0 - weight) * float(base_v))
-
-            def _blend_std(box_v: Optional[float], base_v: float, weight: float = box_w) -> float:
-                if box_v is None:
-                    return float(base_v)
-                # Independence pool — avoids understating uncertainty when MC/base disagree.
-                return float(math.sqrt((weight * float(box_v)) ** 2 + ((1.0 - weight) * float(base_v)) ** 2))
 
             markets = [
-                (
-                    "pass_yds",
-                    _blend_mean(pass_mean, base_pass, pass_box_w),
-                    _blend_std(pass_std, float(row.pass_yards_std or 4.0), pass_box_w),
-                    pass_p50,
-                ),
-                (
-                    "rush_yds",
-                    _blend_mean(rush_mean, float(row.rush_yards_mean or 0.0)),
-                    _blend_std(rush_std, float(row.rush_yards_std or 4.0)),
-                    rush_p50,
-                ),
-                (
-                    "rec_yds",
-                    _blend_mean(rec_mean, float(row.receiving_yards_mean or 0.0)),
-                    _blend_std(rec_std, float(row.receiving_yards_std or 4.0)),
-                    rec_p50,
-                ),
-                (
-                    "receptions",
-                    _blend_mean(receptions_mean, float(row.receptions_mean or 0.0)),
-                    _blend_std(receptions_std, float(row.receptions_std or 1.0)),
-                    receptions_p50,
-                ),
+                ("pass_yds", prod.pass_yards, prod.pass_yards_std, prod.pass_yards),
+                ("rush_yds", prod.rush_yards, prod.rush_yards_std, prod.rush_yards),
+                ("rec_yds", prod.receiving_yards, prod.receiving_yards_std, prod.receiving_yards),
+                ("receptions", prod.receptions, prod.receptions_std, prod.receptions),
                 ("anytime_td", float(atd_mean), float(atd_std), atd_mean),
             ]
-            for market_key, raw_mean, raw_std, model_p50 in markets:
+            for market_key, spine_mean, spine_std, model_p50 in markets:
                 if not is_investable_prop(
                     market_key=market_key,
                     position=position,
-                    model_mean=float(raw_mean) if raw_mean is not None else None,
+                    model_mean=float(spine_mean) if spine_mean is not None else None,
                     role_confidence=role_conf,
                 ):
                     continue
@@ -15959,23 +15905,26 @@ def materialize_nfl_player_props_edges(
                     line = None
                 over_price = int(market.over_price) if (market is not None and market.over_price is not None) else None
                 under_price = int(market.under_price) if (market is not None and market.under_price is not None) else None
+                # Frozen cal once for edge math only — published mean stays spine.
                 cal = apply_prop_calibration(
-                    model_mean=float(raw_mean),
-                    model_std=float(raw_std),
+                    model_mean=float(spine_mean),
+                    model_std=float(spine_std),
                     market_key=market_key,
                     calibration=prop_cal_bundle.get(market_key),
                     market_line=float(line) if line is not None and market is not None else None,
                     role_confidence=role_conf,
                 )
-                model_mean = float(cal["model_mean"])
-                model_std = float(cal["model_std"])
+                calibrated_mean = float(cal["model_mean"])
+                calibrated_std = float(cal["model_std"])
+                model_mean = float(spine_mean)
+                model_std = float(spine_std)
                 if market_key == "anytime_td":
                     model_floor = max(0.0, model_mean * 0.55)
                     model_median = float(model_p50 if model_p50 is not None else model_mean)
                     model_ceiling = min(0.95, model_mean * 1.55 + 0.03)
                     edge = evaluate_prop_edge(
-                        model_mean=model_mean,
-                        model_std=max(0.08, model_std),
+                        model_mean=calibrated_mean,
+                        model_std=max(0.08, calibrated_std),
                         line=0.5,
                         market_over_price=over_price,
                         market_under_price=under_price,
@@ -15983,7 +15932,7 @@ def materialize_nfl_player_props_edges(
                         position=position,
                         role_confidence=role_conf,
                         availability_confidence=avail_conf,
-                        raw_model_mean=float(raw_mean),
+                        raw_model_mean=float(spine_mean),
                     )
                 else:
                     model_floor = max(0.0, model_mean - (1.0 * model_std))
@@ -15991,8 +15940,8 @@ def materialize_nfl_player_props_edges(
                     model_ceiling = model_mean + (1.1 * model_std)
                     edge_line = float(line) if line is not None else float(model_mean)
                     edge = evaluate_prop_edge(
-                        model_mean=model_mean,
-                        model_std=max(0.6, model_std),
+                        model_mean=calibrated_mean,
+                        model_std=max(0.6, calibrated_std),
                         line=edge_line,
                         market_over_price=over_price,
                         market_under_price=under_price,
@@ -16000,7 +15949,7 @@ def materialize_nfl_player_props_edges(
                         position=position,
                         role_confidence=role_conf,
                         availability_confidence=avail_conf,
-                        raw_model_mean=float(raw_mean),
+                        raw_model_mean=float(spine_mean),
                     )
                     if line is None:
                         # Projection-only row: no book to beat.
@@ -16085,13 +16034,27 @@ def materialize_nfl_player_props_edges(
                                 "market_snapshot_id": str(market.id) if market is not None else None,
                                 "fallback_used": market is None,
                                 "projection_source": projection_source,
-                                "box_score_model_version": box_score_model_version
-                                if projection_source == "box_score"
-                                else None,
+                                "spine_version": NFL_PLAYER_PRODUCTION_VERSION,
+                                "production_mean": round(float(spine_mean), 4),
+                                "calibrated_mean": round(float(calibrated_mean), 4),
+                                "calibrated_std": round(float(calibrated_std), 4),
+                                "box_research": {
+                                    "present": box is not None,
+                                    "pass_yards_mean": round(float(pass_mean), 4) if pass_mean is not None else None,
+                                    "rush_yards_mean": round(float(rush_mean), 4) if rush_mean is not None else None,
+                                    "receiving_yards_mean": round(float(rec_mean), 4) if rec_mean is not None else None,
+                                    "receptions_mean": round(float(receptions_mean), 4)
+                                    if receptions_mean is not None
+                                    else None,
+                                    "total_tds_mean": round(float(box_total_tds), 4)
+                                    if box_total_tds is not None
+                                    else None,
+                                },
+                                "box_score_model_version": box_score_model_version if box is not None else None,
                                 "created_from_baseline_model_version": model_version,
-                                "worker_build_id": "props-under-bias-20260731c-baselines-box-rebuild",
-                                "raw_model_mean": round(float(raw_mean), 4),
-                                "raw_model_std": round(float(raw_std), 4),
+                                "worker_build_id": "player-production-v1-phase1",
+                                "raw_model_mean": round(float(spine_mean), 4),
+                                "raw_model_std": round(float(spine_std), 4),
                                 "z_over": edge.get("z_over"),
                                 "tag": edge.get("tag"),
                                 "tag_side": edge.get("tag_side"),
@@ -16136,15 +16099,15 @@ def materialize_nfl_player_props_edges(
                         "market_rows": len(market_rows),
                         "baseline_rows": len(baselines),
                         "box_score_rows": len(box_rows),
-                        "box_sourced_players": box_sourced,
-                        "baseline_sourced_players": baseline_sourced,
+                        "spine_sourced_players": spine_sourced,
+                        "box_research_players": box_research_rows,
                     }
                 ),
                 "freshness": json.dumps({"latest_market_snapshot": str(max([r.captured_at for r in market_rows], default=None))}),
                 "calibration_flags": json.dumps(
                     {
                         "calibrated": True,
-                        "distribution": "box-score-mc-preferred",
+                        "distribution": "player-production-v1-phase1-baselines",
                         "devig": "multiplicative",
                         "tags": "PLAY/WATCH/PASS",
                         "prop_calibration": {
@@ -16164,8 +16127,8 @@ def materialize_nfl_player_props_edges(
                         "prop_edges_upserted": upserted,
                         "play_tagged": play_tagged,
                         "watch_tagged": watch_tagged,
-                        "box_sourced_players": box_sourced,
-                        "baseline_sourced_players": baseline_sourced,
+                        "spine_sourced_players": spine_sourced,
+                        "box_research_players": box_research_rows,
                     }
                 ),
             },
@@ -16178,8 +16141,8 @@ def materialize_nfl_player_props_edges(
             "prop_edges_upserted": upserted,
             "play_tagged": play_tagged,
             "watch_tagged": watch_tagged,
-            "box_sourced_players": box_sourced,
-            "baseline_sourced_players": baseline_sourced,
+            "spine_sourced_players": spine_sourced,
+            "box_research_players": box_research_rows,
             "box_score_rows": len(box_rows),
         }
     except Exception:
@@ -16457,6 +16420,8 @@ def materialize_nfl_fantasy_projections(
         profiles = ["standard", "half_ppr", "ppr"]
         rank_inputs: Dict[str, List[Dict[str, Any]]] = {profile: [] for profile in profiles}
         for row in baselines:
+            # Phase 1: same player-game means as props board (shared spine).
+            prod = production_from_baseline_row(row)
             resolved_player_uid = str(row.player_uid) if row.player_uid is not None else None
             if resolved_player_uid is None:
                 identity = resolve_and_persist_player_identity(
@@ -16475,33 +16440,35 @@ def materialize_nfl_fantasy_projections(
             for profile in profiles:
                 expected = fantasy_points_from_projection(
                     scoring_profile=profile,
-                    pass_yards=float(row.pass_yards_mean or 0.0),
-                    pass_tds=float(row.pass_tds_mean or 0.0),
-                    rush_yards=float(row.rush_yards_mean or 0.0),
-                    rush_tds=float(row.rush_tds_mean or 0.0),
-                    receiving_yards=float(row.receiving_yards_mean or 0.0),
-                    receptions=float(row.receptions_mean or 0.0),
-                    rec_tds=float(row.rec_tds_mean or 0.0),
+                    pass_yards=prod.pass_yards,
+                    pass_tds=prod.pass_tds,
+                    rush_yards=prod.rush_yards,
+                    rush_tds=prod.rush_tds,
+                    receiving_yards=prod.receiving_yards,
+                    receptions=prod.receptions,
+                    rec_tds=prod.rec_tds,
                 )
                 floor = fantasy_points_from_projection(
                     scoring_profile=profile,
                     pass_yards=float((row.floor_outcome or {}).get("pass_yards", 0.0)),
-                    pass_tds=float(row.pass_tds_mean or 0.0) * 0.60,
+                    pass_tds=prod.pass_tds * 0.60,
                     rush_yards=float((row.floor_outcome or {}).get("rush_yards", 0.0)),
-                    rush_tds=float(row.rush_tds_mean or 0.0) * 0.60,
+                    rush_tds=prod.rush_tds * 0.60,
                     receiving_yards=float((row.floor_outcome or {}).get("receiving_yards", 0.0)),
                     receptions=float((row.floor_outcome or {}).get("receptions", 0.0)),
-                    rec_tds=float(row.rec_tds_mean or 0.0) * 0.60,
+                    rec_tds=prod.rec_tds * 0.60,
                 )
                 ceiling = fantasy_points_from_projection(
                     scoring_profile=profile,
-                    pass_yards=float((row.ceiling_outcome or {}).get("pass_yards", row.pass_yards_mean or 0.0)),
-                    pass_tds=float(row.pass_tds_mean or 0.0) * 1.35,
-                    rush_yards=float((row.ceiling_outcome or {}).get("rush_yards", row.rush_yards_mean or 0.0)),
-                    rush_tds=float(row.rush_tds_mean or 0.0) * 1.35,
-                    receiving_yards=float((row.ceiling_outcome or {}).get("receiving_yards", row.receiving_yards_mean or 0.0)),
-                    receptions=float((row.ceiling_outcome or {}).get("receptions", row.receptions_mean or 0.0)),
-                    rec_tds=float(row.rec_tds_mean or 0.0) * 1.35,
+                    pass_yards=float((row.ceiling_outcome or {}).get("pass_yards", prod.pass_yards)),
+                    pass_tds=prod.pass_tds * 1.35,
+                    rush_yards=float((row.ceiling_outcome or {}).get("rush_yards", prod.rush_yards)),
+                    rush_tds=prod.rush_tds * 1.35,
+                    receiving_yards=float(
+                        (row.ceiling_outcome or {}).get("receiving_yards", prod.receiving_yards)
+                    ),
+                    receptions=float((row.ceiling_outcome or {}).get("receptions", prod.receptions)),
+                    rec_tds=prod.rec_tds * 1.35,
                 )
                 rank_inputs[profile].append(
                     {
@@ -16514,6 +16481,7 @@ def materialize_nfl_fantasy_projections(
                         "floor": floor,
                         "median": expected,
                         "ceiling": ceiling,
+                        "production": prod.as_diagnostics(),
                     }
                 )
 
@@ -16575,7 +16543,14 @@ def materialize_nfl_fantasy_projections(
                         "rank_overall": idx,
                         "rank_position": pos_rank_map.get((str(player["player_id"]), position), idx),
                         "tier": tier,
-                        "projection_payload": json.dumps({"derived_from": "nfl_player_projection_baselines", "profile": profile}),
+                        "projection_payload": json.dumps(
+                            {
+                                "derived_from": "nfl_player_projection_baselines",
+                                "spine_version": NFL_PLAYER_PRODUCTION_VERSION,
+                                "profile": profile,
+                                "production": player.get("production") or {},
+                            }
+                        ),
                     },
                 )
                 upserted += 1

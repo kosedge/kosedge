@@ -1,0 +1,23 @@
+---
+description: NFL fantasy, weekly props, and player futures share one production spine
+globs: "**/nfl*prop*,**/nfl*fantas*,**/nfl*player*,**/nfl*usage*,**/nfl*baseline*,**/scripts/nfl/*prop*,**/scripts/nfl/*fantas*"
+alwaysApply: true
+---
+
+# ADDENDUM — Single production spine (mandatory)
+
+Fantasy, weekly props, and player futures are **one** production model.
+
+- Team script / budgets → usage → yards / recs / TDs → game props **and** fantasy **and** player futures
+- No separate fantasy projection engine
+- No separate props model that can drift from fantasy
+- Season totals = sum/distribution of the same player production
+- Any cal fix applies to the shared means; all surfaces inherit
+- Promote **player production vN** (close + actual + pool shape), not “props page” vs “fantasy page”
+
+Until gates pass: `NFL_WEEKLY_PROPS_LIVE = false`. Same numbers everywhere, research framing, no PLAY tags on props. Do not ungate on close-MAE alone. Rush must not regress vs actual.
+
+```text
+❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept
+✅ GOOD: one player-game mean; fantasy points = scoring of that mean; futures = season sum + uncertainty
+```
