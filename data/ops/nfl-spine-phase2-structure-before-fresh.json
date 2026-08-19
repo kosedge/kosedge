@@ -1,0 +1,434 @@
+{
+  "as_of": "2026-08-19T21:20:52.757909+00:00",
+  "label": "phase2_step1_before_fresh_rematerialize_stock_knobs",
+  "note": "Fresh rematerialize with deploy-vercel knobs. Differs from stored-baseline Step1 snapshot \u2014 use THIS as structural A/B base.",
+  "holdout_2025": {
+    "pass_yds": {
+      "holdout_n": 431,
+      "frozen_intercept": -8.5,
+      "candidate_intercept": 6.1021,
+      "raw_vs_close": {
+        "n": 431,
+        "mae": 51.2361,
+        "mean_residual": 6.507,
+        "under_rate": 0.2668
+      },
+      "frozen_vs_close": {
+        "n": 431,
+        "mae": 20.6332,
+        "mean_residual": 2.2227,
+        "under_rate": 0.3387
+      },
+      "candidate_vs_close": {
+        "n": 431,
+        "mae": 22.649,
+        "mean_residual": 8.0883,
+        "under_rate": 0.2367
+      },
+      "raw_vs_actual": {
+        "n": 431,
+        "mae": 67.2933,
+        "mean_residual": 9.536,
+        "under_rate": 0.3596
+      },
+      "frozen_vs_actual": {
+        "n": 431,
+        "mae": 52.846,
+        "mean_residual": 5.2517,
+        "under_rate": 0.4571
+      },
+      "candidate_vs_actual": {
+        "n": 431,
+        "mae": 54.0527,
+        "mean_residual": 11.1173,
+        "under_rate": 0.4084
+      }
+    },
+    "rush_yds": {
+      "holdout_n": 1291,
+      "frozen_intercept": 3.6,
+      "candidate_intercept": 0.2119,
+      "raw_vs_close": {
+        "n": 1291,
+        "mae": 22.1637,
+        "mean_residual": 14.9638,
+        "under_rate": 0.3331
+      },
+      "frozen_vs_close": {
+        "n": 1291,
+        "mae": 16.2131,
+        "mean_residual": 11.8674,
+        "under_rate": 0.2355
+      },
+      "candidate_vs_close": {
+        "n": 1291,
+        "mae": 15.3201,
+        "mean_residual": 9.4567,
+        "under_rate": 0.3269
+      },
+      "raw_vs_actual": {
+        "n": 1291,
+        "mae": 24.4774,
+        "mean_residual": 11.9076,
+        "under_rate": 0.3354
+      },
+      "frozen_vs_actual": {
+        "n": 1291,
+        "mae": 21.0016,
+        "mean_residual": 8.8113,
+        "under_rate": 0.3075
+      },
+      "candidate_vs_actual": {
+        "n": 1291,
+        "mae": 20.2726,
+        "mean_residual": 6.4005,
+        "under_rate": 0.3555
+      }
+    },
+    "rec_yds": {
+      "holdout_n": 2663,
+      "frozen_intercept": 1.6,
+      "candidate_intercept": -0.2746,
+      "raw_vs_close": {
+        "n": 2663,
+        "mae": 15.2774,
+        "mean_residual": 7.8662,
+        "under_rate": 0.3278
+      },
+      "frozen_vs_close": {
+        "n": 2663,
+        "mae": 12.2874,
+        "mean_residual": 7.0795,
+        "under_rate": 0.2899
+      },
+      "candidate_vs_close": {
+        "n": 2663,
+        "mae": 11.8123,
+        "mean_residual": 5.6518,
+        "under_rate": 0.3365
+      },
+      "raw_vs_actual": {
+        "n": 2663,
+        "mae": 16.5541,
+        "mean_residual": 4.1488,
+        "under_rate": 0.3297
+      },
+      "frozen_vs_actual": {
+        "n": 2663,
+        "mae": 16.6168,
+        "mean_residual": 3.362,
+        "under_rate": 0.3327
+      },
+      "candidate_vs_actual": {
+        "n": 2663,
+        "mae": 16.1115,
+        "mean_residual": 1.9344,
+        "under_rate": 0.3601
+      }
+    },
+    "receptions": {
+      "holdout_n": 2595,
+      "frozen_intercept": 0.12,
+      "candidate_intercept": -0.0204,
+      "raw_vs_close": {
+        "n": 2595,
+        "mae": 1.2827,
+        "mean_residual": 0.363,
+        "under_rate": 0.4486
+      },
+      "frozen_vs_close": {
+        "n": 2595,
+        "mae": 1.1423,
+        "mean_residual": 0.425,
+        "under_rate": 0.417
+      },
+      "candidate_vs_close": {
+        "n": 2595,
+        "mae": 1.127,
+        "mean_residual": 0.3015,
+        "under_rate": 0.4528
+      },
+      "raw_vs_actual": {
+        "n": 2595,
+        "mae": 0.9999,
+        "mean_residual": 0.3042,
+        "under_rate": 0.3518
+      },
+      "frozen_vs_actual": {
+        "n": 2595,
+        "mae": 1.0228,
+        "mean_residual": 0.3663,
+        "under_rate": 0.3252
+      },
+      "candidate_vs_actual": {
+        "n": 2595,
+        "mae": 0.9845,
+        "mean_residual": 0.2427,
+        "under_rate": 0.3688
+      }
+    }
+  },
+  "pass_yds_by_close_bucket": {
+    "0-224": {
+      "frozen_vs_close": {
+        "n": 249,
+        "mae": 21.9593,
+        "mean_residual": 3.1374,
+        "under_rate": 0.3133
+      },
+      "frozen_vs_actual": {
+        "n": 249,
+        "mae": 53.2954,
+        "mean_residual": 6.5651,
+        "under_rate": 0.4297
+      },
+      "candidate_vs_actual": {
+        "n": 249,
+        "mae": 55.3439,
+        "mean_residual": 12.2067,
+        "under_rate": 0.3775
+      }
+    },
+    "225-274": {
+      "frozen_vs_close": {
+        "n": 180,
+        "mae": 18.8123,
+        "mean_residual": 0.7664,
+        "under_rate": 0.3778
+      },
+      "frozen_vs_actual": {
+        "n": 180,
+        "mae": 52.1598,
+        "mean_residual": 3.6552,
+        "under_rate": 0.4944
+      },
+      "candidate_vs_actual": {
+        "n": 180,
+        "mae": 52.2992,
+        "mean_residual": 9.8691,
+        "under_rate": 0.45
+      }
+    },
+    "275+": {
+      "frozen_vs_close": {
+        "n": 2,
+        "mae": 19.4138,
+        "mean_residual": 19.4138,
+        "under_rate": 0.0
+      },
+      "frozen_vs_actual": {
+        "n": 2,
+        "mae": 58.6545,
+        "mean_residual": -14.5862,
+        "under_rate": 0.5
+      },
+      "candidate_vs_actual": {
+        "n": 2,
+        "mae": 51.1242,
+        "mean_residual": -12.1871,
+        "under_rate": 0.5
+      }
+    }
+  },
+  "rush_yds_by_role": {
+    "rb1": {
+      "frozen_vs_close": {
+        "n": 424,
+        "mae": 23.477,
+        "mean_residual": 18.3859,
+        "under_rate": 0.1887
+      },
+      "frozen_vs_actual": {
+        "n": 424,
+        "mae": 31.1075,
+        "mean_residual": 10.7515,
+        "under_rate": 0.3561
+      },
+      "candidate_vs_actual": {
+        "n": 424,
+        "mae": 30.7524,
+        "mean_residual": 8.8026,
+        "under_rate": 0.3726
+      }
+    },
+    "committee_or_rb2plus": {
+      "frozen_vs_close": {
+        "n": 770,
+        "mae": 13.546,
+        "mean_residual": 9.705,
+        "under_rate": 0.2455
+      },
+      "frozen_vs_actual": {
+        "n": 770,
+        "mae": 17.2735,
+        "mean_residual": 8.0439,
+        "under_rate": 0.3195
+      },
+      "candidate_vs_actual": {
+        "n": 770,
+        "mae": 16.6155,
+        "mean_residual": 5.4439,
+        "under_rate": 0.3909
+      }
+    },
+    "unknown": {
+      "frozen_vs_close": {
+        "n": 97,
+        "mae": 5.6334,
+        "mean_residual": 0.5398,
+        "under_rate": 0.3608
+      },
+      "frozen_vs_actual": {
+        "n": 97,
+        "mae": 6.4212,
+        "mean_residual": 6.4212,
+        "under_rate": 0.0
+      },
+      "candidate_vs_actual": {
+        "n": 97,
+        "mae": 3.4952,
+        "mean_residual": 3.4952,
+        "under_rate": 0.0
+      }
+    }
+  },
+  "rec_yds_by_target_tier": {
+    "tier1_8plus_tgt": {
+      "frozen_vs_close": {
+        "n": 434,
+        "mae": 22.6644,
+        "mean_residual": 19.6875,
+        "under_rate": 0.0945
+      },
+      "frozen_vs_actual": {
+        "n": 434,
+        "mae": 26.9657,
+        "mean_residual": -4.4116,
+        "under_rate": 0.5161
+      },
+      "candidate_vs_actual": {
+        "n": 434,
+        "mae": 26.9641,
+        "mean_residual": -5.3458,
+        "under_rate": 0.5253
+      }
+    },
+    "tier2_5to7_tgt": {
+      "frozen_vs_close": {
+        "n": 661,
+        "mae": 14.7222,
+        "mean_residual": 10.6757,
+        "under_rate": 0.1997
+      },
+      "frozen_vs_actual": {
+        "n": 661,
+        "mae": 18.6231,
+        "mean_residual": 2.8762,
+        "under_rate": 0.3964
+      },
+      "candidate_vs_actual": {
+        "n": 661,
+        "mae": 18.3149,
+        "mean_residual": 1.5142,
+        "under_rate": 0.4145
+      }
+    },
+    "tier3_under5_tgt": {
+      "frozen_vs_close": {
+        "n": 1568,
+        "mae": 8.3889,
+        "mean_residual": 2.0737,
+        "under_rate": 0.382
+      },
+      "frozen_vs_actual": {
+        "n": 1568,
+        "mae": 12.9066,
+        "mean_residual": 5.7185,
+        "under_rate": 0.2551
+      },
+      "candidate_vs_actual": {
+        "n": 1568,
+        "mae": 12.1787,
+        "mean_residual": 4.1265,
+        "under_rate": 0.2915
+      }
+    },
+    "unknown": {
+      "frozen_vs_close": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "frozen_vs_actual": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      },
+      "candidate_vs_actual": {
+        "n": 0,
+        "mae": null,
+        "mean_residual": null,
+        "under_rate": null
+      }
+    }
+  },
+  "season_pool_from_baselines": {
+    "season": 2025,
+    "source": "sum(nfl_player_projection_baselines.pass_yards_mean) by QB",
+    "qb_n": 78,
+    "qb_pass_yards": {
+      "median": 1293.1,
+      "p90": 4318.0,
+      "max": 5065.1,
+      "n_ge_4000": 10,
+      "n_ge_5000": 2,
+      "top5": [
+        {
+          "player": "M.Stafford",
+          "team": "LA",
+          "pass_yards": 5065.1,
+          "games": 20
+        },
+        {
+          "player": "D.Prescott",
+          "team": "DAL",
+          "pass_yards": 5026.4,
+          "games": 17
+        },
+        {
+          "player": "J.Goff",
+          "team": "DET",
+          "pass_yards": 4782.7,
+          "games": 17
+        },
+        {
+          "player": "C.Williams",
+          "team": "CHI",
+          "pass_yards": 4721.8,
+          "games": 19
+        },
+        {
+          "player": "D.Maye",
+          "team": "NE",
+          "pass_yards": 4596.0,
+          "games": 21
+        }
+      ]
+    },
+    "team_pass_vs_rec_abs_rel_gap_mean": 0.0763,
+    "note": "Fantasy draft season totals SUM weekly baselines (raw, no prop cal). Weekly props board blends box-sim then applies frozen prop-cal-v1. That is the primary spine drift."
+  },
+  "gates": {
+    "NFL_WEEKLY_PROPS_LIVE": false,
+    "replace_frozen_intercepts": false,
+    "residual_only_candidate_ready": false,
+    "structural_fix_first": true,
+    "rush_frozen_regresses_vs_actual": false,
+    "pass_bias_moves_toward_zero_with_candidate": false,
+    "rush_candidate_actual_mae": 20.2726,
+    "rush_frozen_actual_mae": 21.0016,
+    "rush_raw_actual_mae": 24.4774
+  }
+}

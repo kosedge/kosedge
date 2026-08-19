@@ -14099,7 +14099,7 @@ def _rb_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[st
     return out
 
 
-_WR_DEPTH_TARGET_PRIOR = {1: 0.30, 2: 0.18, 3: 0.11, 4: 0.06}
+_WR_DEPTH_TARGET_PRIOR = {1: 0.32, 2: 0.17, 3: 0.11, 4: 0.06}
 _TE_DEPTH_TARGET_PRIOR = {1: 0.22, 2: 0.10, 3: 0.05}
 
 
@@ -14238,7 +14238,12 @@ def _apply_wr_te_depth_target_prior(
     target_proxy: float,
     depth_by_team: Dict[str, Dict[str, float]],
 ) -> float:
-    """Blend trailing target share with depth-chart prior (Jameson-class miss)."""
+    """Blend trailing target share with depth-chart prior (Jameson-class miss).
+
+    Phase 2: modest WR1 prior/floor lift — fresh rematerialize already moved
+    8+ target residual near −4; close the remaining undercount without
+    inflating sub-5 target roles.
+    """
     pos = str(position or "").upper()
     if pos not in {"WR", "TE"}:
         return float(target_proxy)
@@ -14248,9 +14253,13 @@ def _apply_wr_te_depth_target_prior(
     prior_map = _WR_DEPTH_TARGET_PRIOR if pos == "WR" else _TE_DEPTH_TARGET_PRIOR
     prior = float(prior_map.get(int(depth), 0.04))
     usage = max(0.0, float(target_proxy or 0.0))
+    if int(depth) == 1 and pos == "WR":
+        blended = (0.50 * usage) + (0.50 * prior)
+        blended = max(blended, 0.26)
+        return max(0.0, min(0.50, blended))
     blended = (0.55 * usage) + (0.45 * prior)
     if int(depth) == 1:
-        blended = max(blended, 0.24 if pos == "WR" else 0.16)
+        blended = max(blended, 0.16)
     return max(0.0, min(0.48, blended))
 
 

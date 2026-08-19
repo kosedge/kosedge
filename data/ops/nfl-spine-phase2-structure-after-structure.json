@@ -1,43 +1,6 @@
 {
   "as_of": "2026-08-19T21:32:20.086668+00:00",
-  "product": false,
-  "part1_shipped": {
-    "pr": "https://github.com/kosedge/kosedge/pull/263",
-    "play_vs": "draftkings\u2192fanduel\u2192consensus",
-    "weekly_props_live": false
-  },
-  "spine_drift": [
-    {
-      "id": "D1",
-      "severity": "Weekly props board",
-      "path": "baseline \u2295 box-score MC blend \u2192 apply_prop_calibration(frozen cal-v1) \u2192 edges",
-      "applies_frozen_cal": true
-    },
-    {
-      "id": "D2",
-      "severity": "Fantasy weekly",
-      "path": "raw nfl_player_projection_baselines \u2192 fantasy_points_from_projection",
-      "applies_frozen_cal": false
-    },
-    {
-      "id": "D3",
-      "surface": "Fantasy season / draft",
-      "path": "SUM(weekly baselines) per player (no cal, no box blend)",
-      "applies_frozen_cal": false
-    },
-    {
-      "id": "D4",
-      "surface": "Player season box-score sims / award-ish season",
-      "path": "aggregate game box sims \u2192 nfl_player_season_box_score_sims",
-      "applies_frozen_cal": false
-    },
-    {
-      "id": "D5",
-      "surface": "Season engine / conservation",
-      "path": "nfl_season_engine budgets + offensive_production_stack (separate from weekly baselines)",
-      "applies_frozen_cal": false
-    }
-  ],
+  "label": "phase2_structure_v4_plus_structure_cal_train_2024",
   "holdout_2025": {
     "pass_yds": {
       "holdout_n": 431,
@@ -456,11 +419,6 @@
     "team_pass_vs_rec_abs_rel_gap_mean": 0.1274,
     "note": "Fantasy draft season totals SUM weekly baselines (raw, no prop cal). Weekly props board blends box-sim then applies frozen prop-cal-v1. That is the primary spine drift."
   },
-  "root_layer_read": {
-    "pass": "Frozen still undershoots actuals (mean residual ~\u221212). Bias is worse on 225\u2013275 closes. Candidate (+6.1) helps but is residual-only; team pass budget / QB volume likely the right layer before swapping intercepts.",
-    "rush": "Frozen improves close MAE but worsens actual MAE vs raw (prior failure). Do not replace shared frozen dict for rush. Check RB1 vs committee separately.",
-    "rec": "Frozen helps close and slightly helps actual overall; candidate can worsen close. Prefer structure (target shares) over intercept churn."
-  },
   "gates": {
     "NFL_WEEKLY_PROPS_LIVE": false,
     "replace_frozen_intercepts": false,
@@ -472,5 +430,12 @@
     "rush_frozen_actual_mae": 18.6907,
     "rush_raw_actual_mae": 19.5676
   },
-  "recommendation": "NO residual-only promote. Fix team pass/rush budgets + usage shares so fantasy and props inherit the same means; then re-fit shared cal once. Weekly props stay gated."
+  "cal_decision": {
+    "replace_frozen": false,
+    "reasons": [
+      "pass_yds cand actual worse than frozen",
+      "pass_yds cand close worse than frozen"
+    ],
+    "NFL_WEEKLY_PROPS_LIVE": false
+  }
 }

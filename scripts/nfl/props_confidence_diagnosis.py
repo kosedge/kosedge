@@ -243,7 +243,7 @@ def main() -> int:
         }[mk]
         if base and base.get(pred_field) is not None:
             pred = float(base[pred_field])
-            src = "baseline_2025"
+            src = "baseline"
         else:
             pred = _lag_pred(usage_row, by_player, mk)
             src = "lag3_usage" if pred is not None else None
