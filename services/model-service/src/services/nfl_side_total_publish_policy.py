@@ -37,6 +37,9 @@ BREAKEVEN_ATS = 0.5238
 SPREAD_PLAY_MIN = 2.5
 SPREAD_PLAY_MAX = 7.0  # half-open upper bound; |edge| ≥ 7.0 → PASS (size-down research)
 POLICY_VERSION = "spread_play_v2_cap7"
+# Locked by 2024–25 true-close holdout (nfl-path-steam-edge-holdout.json):
+# PLAY ATS 63.9% / +21.9% ROI vs kickoff-safe DK/FD close. Do not loosen the
+# cap, add steam, or retune blend. Prior ~72% was last-path-snap, not close.
 
 # Research registrations (publish path still uses SPREAD_PLAY_* above).
 # Selected on 2023 CLV+; confirmed once on 2024–25. Do not swap product without GREEN n_clv≥200.

@@ -62,6 +62,7 @@ from src.services.nfl_decision_engine import (
     assess_confidence as nfl_assess_confidence,
     decide_game as nfl_decide_game,
 )
+from src.services.nfl_market_close import stake_close_spread
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
 log = logging.getLogger(__name__)
@@ -540,6 +541,10 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
     best_total_over_juice: Optional[int] = None
     best_total_under_juice: Optional[int] = None
     best_total_book: Optional[str] = None
+    dk_spread_home: Optional[float] = None
+    fd_spread_home: Optional[float] = None
+    dk_total: Optional[float] = None
+    fd_total: Optional[float] = None
 
     for book in event.get("bookmakers") or []:
         book_key = str(book.get("key") or "").strip().lower() or None
@@ -613,11 +618,35 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
                 best_total_under_juice = under_price
                 best_total_book = book_key
 
+        stake_spread_point = home_spread_point
+        if stake_spread_point is None and away_spread_point is not None:
+            stake_spread_point = round(-away_spread_point, 3)
+        if stake_spread_point is not None and book_key == "draftkings":
+            dk_spread_home = stake_spread_point
+        elif stake_spread_point is not None and book_key == "fanduel":
+            fd_spread_home = stake_spread_point
+        if over_point is not None and book_key == "draftkings":
+            dk_total = over_point
+        elif over_point is not None and book_key == "fanduel":
+            fd_total = over_point
+
     market_home_ml = int(round(sum(home_prices) / len(home_prices))) if home_prices else None
     market_away_ml = int(round(sum(away_prices) / len(away_prices))) if away_prices else None
     market_total = round(sum(totals) / len(totals), 2) if totals else None
     market_spread_home = round(sum(spreads) / len(spreads), 2) if spreads else None
     market_depth = len(home_prices) + len(totals) + len(spreads)
+    stake_spread, stake_spread_book = stake_close_spread(
+        draftkings=dk_spread_home,
+        fanduel=fd_spread_home,
+        consensus=market_spread_home,
+        best=best_spread_home,
+    )
+    stake_total, stake_total_book = stake_close_spread(
+        draftkings=dk_total,
+        fanduel=fd_total,
+        consensus=market_total,
+        best=best_total_point,
+    )
     return {
         "market_home_ml": market_home_ml,
         "market_away_ml": market_away_ml,
@@ -632,6 +661,14 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
         "best_spread_home_juice": best_spread_home_juice,
         "best_total_over_juice": best_total_over_juice,
         "best_total_under_juice": best_total_under_juice,
+        "dk_spread_home": round(dk_spread_home, 2) if dk_spread_home is not None else None,
+        "fd_spread_home": round(fd_spread_home, 2) if fd_spread_home is not None else None,
+        "stake_spread_home": round(stake_spread, 2) if stake_spread is not None else None,
+        "stake_spread_book": stake_spread_book or None,
+        "dk_total": round(dk_total, 2) if dk_total is not None else None,
+        "fd_total": round(fd_total, 2) if fd_total is not None else None,
+        "stake_total": round(stake_total, 2) if stake_total is not None else None,
+        "stake_total_book": stake_total_book or None,
     }
 
 
@@ -3469,6 +3506,14 @@ def nfl_fair_lines(
         best_total = market.get("best_total")
         best_spread_book = market.get("best_spread_book")
         best_total_book = market.get("best_total_book")
+        dk_spread_home = market.get("dk_spread_home")
+        fd_spread_home = market.get("fd_spread_home")
+        stake_spread_home = market.get("stake_spread_home")
+        stake_spread_book = market.get("stake_spread_book")
+        dk_total = market.get("dk_total")
+        fd_total = market.get("fd_total")
+        stake_total = market.get("stake_total")
+        stake_total_book = market.get("stake_total_book")
         has_market = any(v is not None for v in (market_home_ml, market_away_ml, market_total, market_spread_home))
         if has_market:
             market_joined_count += 1
@@ -3529,9 +3574,27 @@ def nfl_fair_lines(
             if market_home_prob is not None and market_away_prob is not None and (market_home_prob + market_away_prob) > 0:
                 market_home_prob_no_vig = market_home_prob / (market_home_prob + market_away_prob)
                 ml_edge_prob = round(home_win_prob - market_home_prob_no_vig, 4)
-        # Edge vs best available book number when present; else consensus.
-        compare_total = best_total if best_total is not None else market_total
-        compare_spread_home = best_spread_home if best_spread_home is not None else market_spread_home
+        # PLAY vs DK/FD stake close (not best-of-books). Best stays a shop column.
+        compare_spread_home, compare_spread_book = stake_close_spread(
+            draftkings=dk_spread_home,
+            fanduel=fd_spread_home,
+            consensus=stake_spread_home if stake_spread_home is not None else market_spread_home,
+            best=best_spread_home,
+        )
+        compare_total, compare_total_book = stake_close_spread(
+            draftkings=dk_total,
+            fanduel=fd_total,
+            consensus=stake_total if stake_total is not None else market_total,
+            best=best_total,
+        )
+        if not stake_spread_book:
+            stake_spread_book = compare_spread_book or None
+        if not stake_total_book:
+            stake_total_book = compare_total_book or None
+        if stake_spread_home is None:
+            stake_spread_home = compare_spread_home
+        if stake_total is None:
+            stake_total = compare_total
         if compare_total is not None and total_mean is not None:
             total_edge = round(total_mean - float(compare_total), 3)
         if compare_spread_home is not None and spread_home is not None:
@@ -3589,7 +3652,7 @@ def nfl_fair_lines(
         model_home_wp = _to_float(mh.get("model_home_win_prob"))
         model_away_wp = _to_float(mh.get("model_away_win_prob"))
 
-        # Tag Policy: KEI vs best available market (not Model alone).
+        # Tag Policy: KEI vs DK/FD stake close (not Model alone, not best-of-books).
         # Model remains research-only on the row; publish_tag_* may coexist.
         _week_int = int(week_val) if week_val is not None else None
         _decision_market_spread = (
@@ -3702,6 +3765,16 @@ def nfl_fair_lines(
                 "best_total": best_total,
                 "best_spread_book": best_spread_book,
                 "best_total_book": best_total_book,
+                "dk_spread_home": dk_spread_home,
+                "fd_spread_home": fd_spread_home,
+                "stake_spread_home": (
+                    round(float(stake_spread_home), 2) if stake_spread_home is not None else None
+                ),
+                "stake_spread_book": stake_spread_book,
+                "dk_total": dk_total,
+                "fd_total": fd_total,
+                "stake_total": round(float(stake_total), 2) if stake_total is not None else None,
+                "stake_total_book": stake_total_book,
                 "best_spread_away_juice": market.get("best_spread_away_juice"),
                 "best_spread_home_juice": market.get("best_spread_home_juice"),
                 "best_total_over_juice": market.get("best_total_over_juice"),
