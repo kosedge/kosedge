@@ -4,6 +4,12 @@ import math
 from dataclasses import dataclass
 from typing import Any, Dict, Iterable, Mapping
 
+from .nfl_playing_time import (
+    allocate_qb_role_shares,
+    apply_hard_share_caps,
+    rank_keys_by_depth_sot,
+)
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
@@ -78,9 +84,9 @@ class PlayerFeatureInputs:
     unconditional `22.0` base still guaranteed real volume to anyone tagged
     QB. This field is the caller-supplied fix: once the caller has full
     team context (which this function deliberately does not have on its
-    own), it computes each QB's real team-relative share of "who is the
-    starter" via `compute_qb_starter_shares` (prior-season attempts + depth
-    chart + snaps, winner-take-most) and passes it through here. 1.0 (the
+    own), it     computes each QB's real team-relative share of "who is the
+    starter" via `compute_qb_starter_shares` (SoT depth role caps first;
+    snaps only when depth is missing) and passes it through here. 1.0 (the
     default, and always correct for a team with only one rostered QB, or
     for any caller not yet wired for team context) means "fully
     independent, could be the starter" -- the original, unscaled behavior.
@@ -119,49 +125,13 @@ VETERAN_EXPERIENCE_CONFIDENCE = 1.0
 MAX_VARIANCE_WIDENING = 2.0
 
 
-# Winner-take-most allocation for a resolved primary QB room. Residual
-# volume is the structural injury/spot-start expectation for QB2/QB3 — not
-# a committee split. Empirically, healthy NFL rooms put ~90-95% of pass
-# attempts on the starter; dual ~2.5k-yard season totals were the failure
-# mode this replaces.
-_QB_PRIMARY_SHARE = 0.92
-_QB_SECONDARY_SHARE = 0.06
-_QB_TERTIARY_SHARE = 0.02
-
-
-def _qb_depth_score(depth_order: float | None) -> float:
-    if depth_order is None:
-        return 0.15
-    d = float(depth_order)
-    if d <= 1.0:
-        return 1.0
-    if d <= 2.0:
-        return 0.35
-    if d <= 3.0:
-        return 0.12
-    return 0.04
+# Healthy-room QB shares live in nfl_playing_time (QB1 0.94 / QB2 0.06 /
+# QB3+ ≈ 0). Residual backup volume is injury/spot-start on QB2 only.
 
 
 def _allocate_winner_take_most(ranked_keys: list[str]) -> Dict[str, float]:
-    """Assign primary/secondary/tertiary shares by rank order."""
-    out: Dict[str, float] = {key: 0.0 for key in ranked_keys}
-    if not ranked_keys:
-        return out
-    out[ranked_keys[0]] = _QB_PRIMARY_SHARE
-    if len(ranked_keys) == 1:
-        out[ranked_keys[0]] = 1.0
-        return out
-    out[ranked_keys[1]] = _QB_SECONDARY_SHARE
-    if len(ranked_keys) == 2:
-        # Fold tertiary residual onto primary so the room still sums to 1.0.
-        out[ranked_keys[0]] = _QB_PRIMARY_SHARE + _QB_TERTIARY_SHARE
-        return out
-    residual = _QB_TERTIARY_SHARE
-    others = ranked_keys[2:]
-    each = residual / len(others)
-    for key in others:
-        out[key] = each
-    return out
+    """Assign QB1 / QB2 / QB3+ shares. QB3+ is ≈ 0 (playing-time layer)."""
+    return allocate_qb_role_shares(ranked_keys)
 
 
 # Phase 2 (2026-08-19): fresh rematerialize already overshoots RB1 (~+11 resid).
@@ -346,7 +316,13 @@ def compute_rb_rush_shares(
         + (usage_weight * float(usage_norm.get(k) or 0.0))
         for k in keys
     }
-    return _normalize_share_map(blended)
+    committee = lead_ratio <= 1.20 and second_usage >= 0.22
+    return apply_hard_share_caps(
+        _normalize_share_map(blended),
+        depths,
+        position="RB",
+        committee=committee,
+    )
 
 
 def compute_qb_starter_shares(
@@ -356,27 +332,18 @@ def compute_qb_starter_shares(
     prior_attempts: Dict[str, float] | None = None,
     power: float = 1.75,
 ) -> Dict[str, float]:
-    """Pure: given {player_key: team_snap_share} for every rostered QB on
-    ONE team for one week, returns {player_key: qb_starter_share}.
+    """Pure: {player_key: team_snap_share} for one team's QBs → starter shares.
 
-    Enterprise starter resolution (in priority order of signal richness):
+    Playing-time doctrine (Phase 1): **depth SoT is authoritative**. Last
+    year's passer who is now QB3 cannot take 0.92 of team attempts just
+    because team-scoped priors still point at him (O'Connell / Cook class).
 
-    1. When prior-season pass attempts and/or depth chart are available,
-       rank by composite score:
-         0.50 * prior_attempt_share + 0.30 * depth_score + 0.20 * snap_share
-       then allocate winner-take-most (≈0.92 / 0.06 / 0.02). This fixes
-       production failures where stale depth charts (Huntley over Lamar,
-       Milton over Dak) or injury-year snap shares (Flacco over Burrow)
-       crowned the wrong QB1, and where power-law snap splits still gave
-       QB2 ~half a starter's season.
-
-    2. When only snaps exist (legacy / mid-season clear separation), keep
-       the sharpened power-law: top snap share → 1.0, others
-       (own/starter)**power.
-
-    3. All-zero snaps + depth → depth winner-take-most.
-    4. All-zero snaps, no depth → leave everyone at 1.0 (callers should
-       supply depth/prior; inventing an order is worse).
+    1. Depth present → rank by depth_order, allocate QB1 0.94 / QB2 0.06 /
+       QB3+ ≈ 0. Priors are ignored for ranking (injury shocks reallocate
+       when the SoT starter is out).
+    2. No depth, snaps exist → power-law on snap share, then hard caps.
+    3. No depth, no snaps → leave everyone at 1.0 (caller should supply
+       depth; inventing an order is worse).
     """
     if not team_snap_shares:
         return {}
@@ -386,50 +353,24 @@ def compute_qb_starter_shares(
     keys = list(team_snap_shares.keys())
     snaps = {k: float(team_snap_shares.get(k) or 0.0) for k in keys}
     depths = depth_orders or {}
-    priors = prior_attempts or {}
-
-    has_prior = any(float(priors.get(k) or 0.0) > 0.0 for k in keys)
     has_depth = any(k in depths for k in keys)
-    snap_total = sum(snaps.values())
-    prior_total = sum(float(priors.get(k) or 0.0) for k in keys)
 
-    if has_prior or has_depth:
-        scores: Dict[str, float] = {}
-        for k in keys:
-            prior_share = (
-                float(priors.get(k) or 0.0) / prior_total if prior_total > 0.0 else 0.0
-            )
-            snap_share = snaps[k] / snap_total if snap_total > 0.0 else 0.0
-            depth_score = _qb_depth_score(depths.get(k) if k in depths else None)
-            # If we lack priors entirely, lean harder on depth + snaps so a
-            # clean depth chart still produces a decisive primary.
-            if has_prior:
-                # Prior production outranks stale depth charts (Huntley/Milton
-                # as QB1) and injury-year snap shares (Flacco over Burrow).
-                # Depth still breaks near-ties and cold-start rooms.
-                scores[k] = (0.55 * prior_share) + (0.25 * depth_score) + (0.20 * snap_share)
-            else:
-                scores[k] = (0.65 * depth_score) + (0.35 * snap_share)
-        # Clear same-room volume leader (e.g. McCarthy over Wentz on MIN
-        # despite a stale depth_order=2): if one QB threw ≥1.2× the next
-        # and ≥120 attempts, boost them past a depth-chart-only edge.
-        if has_prior and prior_total > 0.0:
-            ordered_priors = sorted(
-                ((float(priors.get(k) or 0.0), k) for k in keys), reverse=True
-            )
-            top_att, top_key = ordered_priors[0]
-            second_att = ordered_priors[1][0] if len(ordered_priors) > 1 else 0.0
-            if top_att >= 120.0 and top_att >= (1.2 * max(second_att, 1.0)):
-                scores[top_key] = scores.get(top_key, 0.0) + 0.22
-        ranked = sorted(keys, key=lambda k: (-scores[k], float(depths.get(k, 99.0) or 99.0), str(k)))
-        return _allocate_winner_take_most(ranked)
+    if has_depth:
+        ranked = rank_keys_by_depth_sot(keys, depths, snaps=snaps)
+        return apply_hard_share_caps(
+            _allocate_winner_take_most(ranked),
+            depths,
+            position="QB",
+        )
 
+    # Depth missing: snaps only. Do not let prior attempts invent a QB1.
+    _ = prior_attempts  # kept on the signature for callers; unused for ranking
     starter_key = max(keys, key=lambda k: snaps[k])
     starter_share = snaps[starter_key]
     if starter_share <= 0.0:
         return {key: 1.0 for key in keys}
     p = max(1.0, float(power))
-    return {
+    raw = {
         key: (
             1.0
             if key == starter_key
@@ -437,6 +378,16 @@ def compute_qb_starter_shares(
         )
         for key in keys
     }
+    # Without depth, treat snap rank as a synthetic depth so QB3-class
+    # residuals still get clipped.
+    snap_depth = {
+        k: float(i)
+        for i, k in enumerate(
+            sorted(keys, key=lambda x: (-snaps[x], str(x))),
+            start=1,
+        )
+    }
+    return apply_hard_share_caps(raw, snap_depth, position="QB")
 
 
 def qb_talent_factor_from_prior_ypg(prior_yards_per_startish_game: float | None) -> float:

@@ -24,6 +24,52 @@ export const TE_REC_TD_SOFT_CAP = 8;
 export const TE_ELITE_POS_RANK_MAX = 5;
 
 /**
+ * Expert "value" rows need material season volume AND a draft-relevant ADP.
+ * Kills QB3-vs-ADP-435 / Cook-vs-297 ghosts even before remat.
+ */
+export const EXPERT_VALUE_ADP_MAX = 250;
+export const EXPERT_VALUE_MIN_PASS_YARDS = 1800;
+export const EXPERT_VALUE_MIN_SKILL_YARDS = 400;
+export const EXPERT_VALUE_MIN_RB_TOUCH_YARDS = 500;
+export const EXPERT_VALUE_MIN_RECEPTIONS = 35;
+
+export function hasMaterialProjectedVolume(row: {
+  position: string;
+  passYardsTotal?: number | null;
+  rushYardsTotal?: number | null;
+  receivingYardsTotal?: number | null;
+  receptionsTotal?: number | null;
+}): boolean {
+  const pos = (row.position || "").toUpperCase();
+  const passY = Number(row.passYardsTotal) || 0;
+  const rushY = Number(row.rushYardsTotal) || 0;
+  const recY = Number(row.receivingYardsTotal) || 0;
+  const recs = Number(row.receptionsTotal) || 0;
+  if (pos === "QB") {
+    return passY >= EXPERT_VALUE_MIN_PASS_YARDS || rushY >= 400;
+  }
+  if (pos === "RB") {
+    return rushY + recY >= EXPERT_VALUE_MIN_RB_TOUCH_YARDS;
+  }
+  if (pos === "WR" || pos === "TE") {
+    return recY >= EXPERT_VALUE_MIN_SKILL_YARDS || recs >= EXPERT_VALUE_MIN_RECEPTIONS;
+  }
+  return false;
+}
+
+export function isDraftRelevantExpertValue(row: {
+  adp: number | null;
+  valueDelta: number | null;
+  adpMatchConfidence?: "high" | "cross_format" | null;
+}): boolean {
+  if (row.adp == null || row.valueDelta == null || !Number.isFinite(row.adp)) {
+    return false;
+  }
+  if (row.adpMatchConfidence === "cross_format") return false;
+  return row.adp <= EXPERT_VALUE_ADP_MAX;
+}
+
+/**
  * ADP gaps at/above this threshold get soft framing unless the model
  * rank is early-round credible.
  */
@@ -273,8 +319,8 @@ export function notableValueNotes(rows: FantasyDeskRow[], limit = 3): string[] {
     .filter(
       (r) =>
         !["K", "DST"].includes(r.position.toUpperCase()) &&
-        r.adp != null &&
-        r.valueDelta != null,
+        isDraftRelevantExpertValue(r) &&
+        hasMaterialProjectedVolume(r),
     )
     .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0))
     .slice(0, limit)

@@ -280,12 +280,11 @@ def test_compute_qb_starter_shares_ranks_by_team_snap_share() -> None:
     shares = compute_qb_starter_shares(
         {"lamar": 0.397, "huntley": 0.086, "thompson": 0.052, "fagnano": 0.017, "pavia": 0.017}
     )
-    assert shares["lamar"] == 1.0
-    assert shares["huntley"] < 0.3
-    assert shares["thompson"] < shares["huntley"]
-    assert shares["fagnano"] < shares["thompson"]
-    assert shares["pavia"] == shares["fagnano"]
-    # Monotonic and bounded.
+    assert shares["lamar"] >= 0.90
+    assert shares["huntley"] <= 0.08
+    assert shares["thompson"] <= 0.01
+    assert shares["fagnano"] <= 0.01
+    assert abs(sum(shares.values()) - 1.0) < 1e-6
     assert all(0.0 <= v <= 1.0 for v in shares.values())
 
 
@@ -306,11 +305,28 @@ def test_compute_qb_starter_shares_uses_depth_when_snaps_missing() -> None:
     assert shares["backup"] <= 0.08
 
 
-def test_compute_qb_starter_shares_prior_beats_stale_depth_and_injury_snaps() -> None:
-    # Production failure modes: Flacco > Burrow on 2025 injury snaps,
-    # Huntley depth_order=1 over Lamar, Milton depth_order=1 over Dak.
-    # Prior attempts must crown the real franchise QB1; winner-take-most
-    # must crush the backup below a second full starter season.
+def test_compute_qb_starter_shares_depth_sot_beats_stale_same_team_priors() -> None:
+    # Playing-time Phase 1: SoT depth is authoritative. Last year's LV passer
+    # (O'Connell) cannot keep 0.92 of attempts when Cousins is QB1.
+    lv = compute_qb_starter_shares(
+        {"cousins": 0.12, "mendoza": 0.08, "oconnell": 0.40},
+        depth_orders={"cousins": 1.0, "mendoza": 2.0, "oconnell": 3.0},
+        prior_attempts={"oconnell": 612.0, "cousins": 0.0, "mendoza": 0.0},
+    )
+    assert lv["cousins"] >= 0.90
+    assert lv["mendoza"] <= 0.08
+    assert lv["oconnell"] <= 0.01
+    assert abs(sum(lv.values()) - 1.0) < 1e-6
+
+    nyj = compute_qb_starter_shares(
+        {"geno": 0.10, "klubnik": 0.08, "cook": 0.35},
+        depth_orders={"geno": 1.0, "klubnik": 2.0, "cook": 3.0},
+        prior_attempts={"cook": 180.0, "geno": 0.0, "klubnik": 0.0},
+    )
+    assert nyj["geno"] >= 0.90
+    assert nyj["cook"] <= 0.01
+
+    # Injury-year snaps still cannot crown QB2 when SoT lists Burrow QB1.
     cin = compute_qb_starter_shares(
         {"burrow": 0.28, "flacco": 0.43, "johnson": 0.07},
         depth_orders={"burrow": 1.0, "flacco": 2.0, "johnson": 3.0},
@@ -318,35 +334,20 @@ def test_compute_qb_starter_shares_prior_beats_stale_depth_and_injury_snaps() ->
     )
     assert cin["burrow"] >= 0.90
     assert cin["flacco"] <= 0.08
-    assert cin["johnson"] <= 0.03
-
-    bal = compute_qb_starter_shares(
-        {"lamar": 0.40, "huntley": 0.09},
-        depth_orders={"huntley": 1.0, "lamar": 2.0},
-        prior_attempts={"lamar": 882.0, "huntley": 74.0},
-    )
-    assert bal["lamar"] >= 0.90
-    assert bal["huntley"] <= 0.08
-
-    dal = compute_qb_starter_shares(
-        {"dak": 0.35, "milton": 0.05},
-        depth_orders={"milton": 1.0, "dak": 2.0},
-        prior_attempts={"dak": 937.0, "milton": 24.0},
-    )
-    assert dal["dak"] >= 0.90
-    assert dal["milton"] <= 0.08
+    assert cin["johnson"] <= 0.01
 
 
-def test_compute_qb_starter_shares_volume_leader_beats_stale_depth2() -> None:
-    # MIN-class room: franchise QB threw more last year but depth chart
-    # still lists a bridge veteran as QB1.
+def test_compute_qb_starter_shares_sot_qb1_not_overthrown_by_volume_leader() -> None:
+    # Priors may prefer McCarthy; SoT QB1 (Wentz in this fixture) still owns
+    # the room. Injury shocks, not priors, move volume when the starter is out.
     shares = compute_qb_starter_shares(
         {"mccarthy": 0.32, "wentz": 0.21, "brosmer": 0.09},
         depth_orders={"wentz": 1.0, "mccarthy": 2.0, "brosmer": 3.0},
         prior_attempts={"mccarthy": 273.0, "wentz": 188.0, "brosmer": 85.0},
     )
-    assert shares["mccarthy"] >= 0.90
-    assert shares["wentz"] <= 0.08
+    assert shares["wentz"] >= 0.90
+    assert shares["mccarthy"] <= 0.08
+    assert shares["brosmer"] <= 0.01
 
 
 def test_qb_talent_factor_separates_elite_from_bridge() -> None:
@@ -403,7 +404,7 @@ def test_compute_rb_rush_shares_bell_cow_winner_take_most() -> None:
     assert abs(sum(shares.values()) - 1.0) < 1e-6
     assert shares["rb1"] >= 0.60
     assert shares["rb2"] < shares["rb1"]
-    assert shares["rb3"] < shares["rb2"]
+    assert shares["rb3"] <= 0.05
 
 
 def test_compute_rb_rush_shares_committee_softens_when_usage_close() -> None:
@@ -415,8 +416,10 @@ def test_compute_rb_rush_shares_committee_softens_when_usage_close() -> None:
     )
     assert abs(sum(shares.values()) - 1.0) < 1e-6
     # True committees must keep RB2 alive — not crush to QB-style residuals.
+    # RB3+ is still near-zero; leftover flows to RB1/RB2.
     assert shares["rb2"] >= 0.28
-    assert shares["rb1"] < 0.62
+    assert shares["rb1"] < 0.72
+    assert shares["rb3"] <= 0.05
 
 
 def test_compute_rb_rush_shares_single_back_full_share() -> None:

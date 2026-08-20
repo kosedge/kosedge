@@ -10,6 +10,7 @@ describe("NFL weekly props path", () => {
     expect(NFL_WEEKLY_PROPS_LIVE).toBe(true);
     expect(NFL_WEEKLY_PROPS_PATH_COHERENT).toBe("yes");
     expect(NFL_WEEKLY_PROPS_METHODS.join(" ")).toMatch(/cap 17/i);
+    expect(NFL_WEEKLY_PROPS_METHODS.join(" ")).toMatch(/depth chart/i);
     expect(NFL_WEEKLY_PROPS_METHODS.join(" ")).toMatch(/2026 preseason/i);
     expect(NFL_WEEKLY_PROPS_METHODS.join(" ")).toMatch(/No PLAY \/ LEAN stake tags/);
   });

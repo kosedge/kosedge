@@ -138,6 +138,7 @@ from .services.nfl_supervised_retrain import (
     detect_real_rolling_features,
     fit_nfl_supervised_models,
 )
+from .services.nfl_playing_time import depth_target_prior
 from .services.nfl_player_projection_engine import (
     ROOKIE_EXPERIENCE_CONFIDENCE,
     VETERAN_EXPERIENCE_CONFIDENCE,
@@ -14103,8 +14104,7 @@ def _rb_depth_orders_by_team(session: Any, *, season: int, week: int) -> Dict[st
     return out
 
 
-_WR_DEPTH_TARGET_PRIOR = {1: 0.32, 2: 0.17, 3: 0.11, 4: 0.06}
-_TE_DEPTH_TARGET_PRIOR = {1: 0.22, 2: 0.10, 3: 0.05}
+# WR/TE depth target priors live in nfl_playing_time (WR4+ / TE2+ near-zero).
 
 
 def _rb_prior_carries_by_team_player(
@@ -14254,16 +14254,23 @@ def _apply_wr_te_depth_target_prior(
     depth = depth_by_team.get(str(team), {}).get(str(player_id))
     if depth is None:
         return float(target_proxy)
-    prior_map = _WR_DEPTH_TARGET_PRIOR if pos == "WR" else _TE_DEPTH_TARGET_PRIOR
-    prior = float(prior_map.get(int(depth), 0.04))
+    prior = depth_target_prior(pos, depth)
     usage = max(0.0, float(target_proxy or 0.0))
-    if int(depth) == 1 and pos == "WR":
+    depth_i = int(depth)
+    if depth_i == 1 and pos == "WR":
         blended = (0.50 * usage) + (0.50 * prior)
         blended = max(blended, 0.26)
         return max(0.0, min(0.50, blended))
     blended = (0.55 * usage) + (0.45 * prior)
-    if int(depth) == 1:
+    if depth_i == 1:
         blended = max(blended, 0.16)
+    # WR4+ / TE2+ cannot inherit inflated hydrate intercepts.
+    if pos == "WR" and depth_i >= 4:
+        blended = min(blended, 0.02)
+    if pos == "TE" and depth_i >= 2:
+        blended = min(blended, 0.14)
+    if pos == "TE" and depth_i >= 3:
+        blended = min(blended, 0.04)
     return max(0.0, min(0.48, blended))
 
 

@@ -29,6 +29,8 @@ Until a stake policy is separately approved: numbers only, no “play this” ch
 
 **Worker hygiene (2026-08-20):** Bare `season=` rebuilds must not resolve to week 22 or sit on Celery `default`. Safe entrypoint is `/nfl/ops/rebuild-props-layers` with weeks 1–18 (default). See `data/ops/nfl-spine-safe-rematerialize.md`.
 
+**Playing time (2026-08-20):** Depth SoT is authoritative for **who gets volume**. QB3 / WR4+ / RB3+ cannot take starter shares from last-year priors. Caps in `nfl_playing_time.py`; remat after Railway. Expert values require material volume + ADP ≤ 250. See `data/ops/nfl-playing-time-role-caps-20260820.md`.
+
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept
 ✅ GOOD: one player-game mean; fantasy points = scoring of that mean; futures = season sum + uncertainty
