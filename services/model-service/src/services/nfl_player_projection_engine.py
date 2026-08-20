@@ -180,6 +180,11 @@ _RB_COMMITTEE_TERTIARY = 0.12
 # rematerialize already overshoots QB season totals; WR 8+ is near-flat.
 # Phase 3B: nudge down for season-pool coherence (cap-17 still had 7 QBs ≥4k).
 TEAM_PASS_ATTEMPTS_BASE = 34.8
+# Phase 3C: targets/rec share the compressed pass budget. 3B QB attempt
+# soft-tail pulled elite pass means down faster than skill receiving (gap
+# ~0.17). Dampen the team-attempts denom used for WR/RB/TE targets only —
+# do not re-expand QB attempts / n≥4000.
+TEAM_PASS_ATTEMPTS_TARGET_SCALE = 0.92
 
 
 def _rb_depth_score(depth_order: float | None) -> float:
@@ -611,7 +616,9 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
     # cascading into unrealistically low receptions/receiving yards for
     # the entire receiving corps league-wide -- confirmed via a live
     # production spot-check, see docs/NFL_PROPS_FANTASY_FOUNDATION.md).
-    team_pass_attempts_estimate = pace_factor * pass_factor * TEAM_PASS_ATTEMPTS_BASE
+    team_pass_attempts_estimate = (
+        pace_factor * pass_factor * TEAM_PASS_ATTEMPTS_BASE * TEAM_PASS_ATTEMPTS_TARGET_SCALE
+    )
 
     attempts_mean = 0.0
     carries_mean = 0.0

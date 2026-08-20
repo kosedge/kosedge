@@ -23,6 +23,8 @@ Until gates pass: `NFL_WEEKLY_PROPS_LIVE = false`. Same numbers everywhere, rese
 
 **Phase 3B (2026-08-19):** QB upper-tail attempt compression (`TEAM_PASS_ATTEMPTS_BASE=34.8`, cap 40.2, soft tail >35.5 att). Rematerialize 2023–25 baselines on worker DB post-merge. Pool cap-17: 7→5 QBs ≥4k; LIVE still false. See `data/ops/nfl-spine-phase3b-prod-pool-20260819.md`.
 
+**Phase 3C (2026-08-20):** `TEAM_PASS_ATTEMPTS_TARGET_SCALE=0.92` recouples WR/RB/TE targets to the compressed pass budget (gap 0.17→0.10) without raising n≥4000. LIVE still false. See `data/ops/nfl-spine-phase3c-recouple-20260819.md`.
+
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept
 ✅ GOOD: one player-game mean; fantasy points = scoring of that mean; futures = season sum + uncertainty
