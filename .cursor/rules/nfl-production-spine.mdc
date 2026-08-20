@@ -15,17 +15,19 @@ Fantasy, weekly props, and player futures are **one** production model.
 - Any cal fix applies to the shared means; all surfaces inherit
 - Promote **player production vN** (close + actual + pool shape), not “props page” vs “fantasy page”
 
-Until gates pass: `NFL_WEEKLY_PROPS_LIVE = false`. Same numbers everywhere, research framing, no PLAY tags on props. Do not ungate on close-MAE alone. Rush must not regress vs actual.
+**LIVE (2026-08-20):** `NFL_WEEKLY_PROPS_LIVE = true` — research→fire for weekly means/bands + edge vs market when a book is joined. **No prop PLAY / LEAN stake tags.** Spine `player-production-v3-phase3c`. Season = SUM weekly cap 17. **2026 caveat:** receiving totals elevated vs pass (roster-width grain, gap ~0.42); 2025 control remains ~3C (max 4590 / n=4 / gap ~0.10). Rollback: set the flag false. See `data/ops/nfl-weekly-props-live-on-20260820.md`.
+
+Until a stake policy is separately approved: numbers only, no “play this” chrome. Do not ungate stake tags on close-MAE alone. Rush must not regress vs actual.
 
 **Phase 2 (2026-08-19):** structure knobs live in `nfl_player_projection_engine.py` + WR1 depth prior in `tasks.py`. Rematerialize baselines after pulling. See `data/ops/nfl-spine-phase2-structure-20260819.md`.
 
-**Phase 3 (2026-08-19):** season/futures SoT = SUM of weekly spine (cap 17); no QB-lock/budget overlay on season CSVs. Edge cal may be `prop-structure-cal-v1` (`ACTIVE_PROP_CAL_SOURCE`). `NFL_WEEKLY_PROPS_LIVE` stays false until promote table + pool clear. See `data/ops/nfl-spine-phase3-season-cal-20260819.md`.
+**Phase 3 (2026-08-19):** season/futures SoT = SUM of weekly spine (cap 17); no QB-lock/budget overlay on season CSVs. Edge cal may be `prop-structure-cal-v1` (`ACTIVE_PROP_CAL_SOURCE`). See `data/ops/nfl-spine-phase3-season-cal-20260819.md`.
 
-**Phase 3B (2026-08-19):** QB upper-tail attempt compression (`TEAM_PASS_ATTEMPTS_BASE=34.8`, cap 40.2, soft tail >35.5 att). Rematerialize 2023–25 baselines on worker DB post-merge. Pool cap-17: 7→5 QBs ≥4k; LIVE still false. See `data/ops/nfl-spine-phase3b-prod-pool-20260819.md`.
+**Phase 3B (2026-08-19):** QB upper-tail attempt compression (`TEAM_PASS_ATTEMPTS_BASE=34.8`, cap 40.2, soft tail >35.5 att). Rematerialize 2023–25 baselines on worker DB post-merge. Pool cap-17: 7→5 QBs ≥4k. See `data/ops/nfl-spine-phase3b-prod-pool-20260819.md`.
 
-**Phase 3C (2026-08-20):** `TEAM_PASS_ATTEMPTS_TARGET_SCALE=0.92` recouples WR/RB/TE targets to the compressed pass budget (gap 0.17→0.10) without raising n≥4000. LIVE still false. See `data/ops/nfl-spine-phase3c-recouple-20260819.md`.
+**Phase 3C (2026-08-20):** `TEAM_PASS_ATTEMPTS_TARGET_SCALE=0.92` recouples WR/RB/TE targets to the compressed pass budget (gap 0.17→0.10) without raising n≥4000. See `data/ops/nfl-spine-phase3c-recouple-20260819.md`.
 
-**Worker hygiene (2026-08-20):** Bare `season=` rebuilds must not resolve to week 22 or sit on Celery `default`. Safe entrypoint is `/nfl/ops/rebuild-props-layers` with weeks 1–18 (default). See `data/ops/nfl-spine-safe-rematerialize.md`. LIVE still false.
+**Worker hygiene (2026-08-20):** Bare `season=` rebuilds must not resolve to week 22 or sit on Celery `default`. Safe entrypoint is `/nfl/ops/rebuild-props-layers` with weeks 1–18 (default). See `data/ops/nfl-spine-safe-rematerialize.md`.
 
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept

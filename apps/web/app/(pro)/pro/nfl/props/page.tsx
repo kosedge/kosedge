@@ -13,6 +13,7 @@ import {
   NFL_WEEKLY_PROPS_GATE_BODY,
   NFL_WEEKLY_PROPS_GATE_TITLE,
   NFL_WEEKLY_PROPS_LIVE,
+  NFL_WEEKLY_PROPS_METHODS,
 } from "@/lib/nfl-weekly-props-live";
 import {
   PRIMARY_BOARD_MARKETS,
@@ -28,7 +29,6 @@ import { formatNflWeekLabel } from "@/lib/nfl-truth-label";
 const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
 const MARKET_TABS = ["ALL", ...PRIMARY_BOARD_MARKETS] as const;
-const TAG_TABS = ["PLAY", "WATCH", "ALL"] as const;
 const LIMIT_OPTIONS = [100, 250, 500] as const;
 const KOSEDGE_DATE = "August 11, 2026";
 
@@ -83,10 +83,6 @@ export default async function NflPropsBoardPage({
       ? weekRaw
       : DEFAULT_WEEK;
   const market = (firstValue(search.market) ?? "ALL").toLowerCase();
-  const tagRaw = (firstValue(search.tag) ?? "ALL").toUpperCase();
-  const tag = TAG_TABS.includes(tagRaw as (typeof TAG_TABS)[number])
-    ? tagRaw
-    : "ALL";
   const team = (firstValue(search.team) ?? "").toUpperCase();
   const limitRaw = Number(firstValue(search.limit));
   const limit = LIMIT_OPTIONS.includes(
@@ -100,7 +96,6 @@ export default async function NflPropsBoardPage({
     week,
     marketKey: market === "all" ? undefined : market,
     team: team || undefined,
-    tag: tag === "ALL" ? undefined : tag,
     limit,
   });
 
@@ -112,9 +107,8 @@ export default async function NflPropsBoardPage({
   const activeQuery = {
     season: String(season),
     week: String(week),
-    market: market === "all" ? undefined : market,
-    tag: tag === "ALL" ? undefined : tag,
-    team: team || undefined,
+            market: market === "all" ? undefined : market,
+            team: team || undefined,
     limit: String(limit),
   };
 
@@ -130,8 +124,8 @@ export default async function NflPropsBoardPage({
               Props
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              Investable player props — skill positions with involvement floors.
-              Research rows, not bet recommendations.
+              Weekly player means from the production spine, with bands and
+              market edge when a book is joined. Research rows — not a bet card.
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
@@ -251,27 +245,6 @@ export default async function NflPropsBoardPage({
 
           <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <nav className="flex flex-wrap gap-2" aria-label="Tag filter">
-                {TAG_TABS.map((tab) => {
-                  const isActive = tag === tab;
-                  return (
-                    <Link
-                      key={tab}
-                      href={buildHref({
-                        ...activeQuery,
-                        tag: tab === "ALL" ? undefined : tab,
-                      })}
-                      className={`min-h-10 rounded-lg px-3 py-2 text-sm font-semibold transition ${
-                        isActive
-                          ? "border border-edge-green/45 bg-edge-green/15 text-edge-green"
-                          : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-edge-green/25 hover:text-kos-text"
-                      }`}
-                    >
-                      {tab}
-                    </Link>
-                  );
-                })}
-              </nav>
               <nav className="flex flex-wrap gap-2" aria-label="Market filter">
                 {MARKET_TABS.map((tab) => {
                   const key = tab.toLowerCase();
@@ -346,7 +319,8 @@ export default async function NflPropsBoardPage({
                     <th className="px-3 py-2 font-semibold">Market</th>
                     <th className="px-3 py-2 font-semibold">Line</th>
                     <th className="px-3 py-2 font-semibold">Model mean</th>
-                    <th className="px-3 py-2 font-semibold">Tag</th>
+                    <th className="px-3 py-2 font-semibold">Floor</th>
+                    <th className="px-3 py-2 font-semibold">Ceiling</th>
                     <th className="px-3 py-2 font-semibold">Fair over</th>
                     <th className="px-3 py-2 font-semibold">Fair under</th>
                     <th className="px-3 py-2 font-semibold">Edge over</th>
@@ -368,7 +342,8 @@ export default async function NflPropsBoardPage({
             )}
 
             <p className="mt-4 text-xs text-kos-text/50">
-              {PROPS_ELIGIBILITY_NOTE} For matchup depth, open{" "}
+              {PROPS_ELIGIBILITY_NOTE}{" "}
+              {NFL_WEEKLY_PROPS_METHODS.join(" ")} For matchup depth, open{" "}
               <Link
                 href="/pro/nfl/game-boxes"
                 className="font-semibold text-kos-gold hover:underline"
@@ -391,13 +366,11 @@ export default async function NflPropsBoardPage({
   );
 }
 
-function displayTag(row: NflPropBoardRow): string | null {
-  if (!row.tag) return null;
-  return row.tag === "LEAN" ? "WATCH" : row.tag;
+function formatBand(value: number | null): string {
+  return formatPropNumber(value);
 }
 
 function PropCard({ row }: { row: NflPropBoardRow }) {
-  const tag = displayTag(row);
   return (
     <li className="rounded-xl border border-white/10 bg-white/3 p-3">
       <div className="flex items-start justify-between gap-2">
@@ -421,12 +394,14 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
           </span>
         </span>
         <span>
+          Band: {formatBand(row.modelFloor)}–{formatBand(row.modelCeiling)}
+        </span>
+        <span>
           Conf:{" "}
           <span className="text-edge-green">
             {formatConfidence(row.confidence)}
           </span>
         </span>
-        <span>Tag: {tag ?? "—"}</span>
         <span>
           Edge O/U:{" "}
           {row.marketJoined
@@ -439,13 +414,6 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
 }
 
 function PropRow({ row }: { row: NflPropBoardRow }) {
-  const tag = displayTag(row);
-  const tagClass =
-    tag === "PLAY"
-      ? "text-edge-green"
-      : tag === "WATCH"
-        ? "text-kos-gold"
-        : "text-kos-text/45";
   return (
     <tr className="border-b border-white/5 transition hover:bg-white/5">
       <td className="px-3 py-3">
@@ -467,13 +435,11 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
       <td className="px-3 py-3 font-semibold text-kos-gold">
         {formatPropNumber(row.modelMean)}
       </td>
-      <td className={`px-3 py-3 font-semibold ${tagClass}`}>
-        {tag ?? "—"}
-        {row.tagSide ? (
-          <div className="text-xs font-normal text-kos-text/55">
-            {row.tagSide}
-          </div>
-        ) : null}
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatBand(row.modelFloor)}
+      </td>
+      <td className="px-3 py-3 text-kos-text/80">
+        {formatBand(row.modelCeiling)}
       </td>
       <td className="px-3 py-3 text-kos-text/90">
         {formatAmericanOdds(row.fairOverPrice)}

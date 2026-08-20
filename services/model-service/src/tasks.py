@@ -15614,7 +15614,7 @@ def materialize_nfl_player_props_edges(
     ``production_from_baseline_row`` (same vector fantasy weekly scores).
     Box-score MC is research-only in diagnostics — not the published mean.
     Frozen prop-cal-v1 applies to *edge math only* (no walk-forward re-fit).
-    ``NFL_WEEKLY_PROPS_LIVE`` stays false until production gates pass.
+    ``NFL_WEEKLY_PROPS_LIVE`` is the web research→fire flag. PLAY stake tags stay off.
     """
     session = SessionLocal()
     target_week = None

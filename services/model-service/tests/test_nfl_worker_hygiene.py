@@ -155,7 +155,8 @@ def test_weekly_fantasy_rankings_empty_on_sql_error(monkeypatch) -> None:
     assert body["rows"] == []
 
 
-def test_live_flag_stays_false() -> None:
+def test_live_flag_is_true_with_honesty_copy() -> None:
     web = Path(__file__).resolve().parents[3] / "apps" / "web" / "lib" / "nfl-weekly-props-live.ts"
     text = web.read_text(encoding="utf-8")
-    assert "export const NFL_WEEKLY_PROPS_LIVE = false" in text
+    assert "export const NFL_WEEKLY_PROPS_LIVE = true" in text
+    assert "2026 preseason" in text

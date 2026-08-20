@@ -103,15 +103,6 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     raw.diagnostics && typeof raw.diagnostics === "object"
       ? (raw.diagnostics as Record<string, unknown>)
       : {};
-  const tagRaw =
-    typeof diagnostics.tag === "string" ? diagnostics.tag.toUpperCase() : null;
-  const tag =
-    tagRaw === "PLAY" ||
-    tagRaw === "WATCH" ||
-    tagRaw === "LEAN" ||
-    tagRaw === "PASS"
-      ? tagRaw
-      : null;
   const sourceRaw =
     typeof diagnostics.projection_source === "string"
       ? diagnostics.projection_source
@@ -143,15 +134,13 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     confidence: toNumberOrNull(raw.confidence),
     updatedAt: toIsoOrNull(raw.updated_at),
     marketJoined: marketOver !== null || marketUnder !== null,
-    tag,
-    tagSide:
-      typeof diagnostics.tag_side === "string" ? diagnostics.tag_side : null,
-    tagAction:
-      typeof diagnostics.tag_action === "string"
-        ? diagnostics.tag_action
-        : null,
+    // LIVE ships means/bands/edge only. PLAY_STAKE_ELIGIBLE stays false
+    // server-side; never promote API research tags as board chrome.
+    tag: null,
+    tagSide: null,
+    tagAction: null,
     sizeDown: Boolean(diagnostics.size_down),
-    stakeEligible: Boolean(diagnostics.stake_eligible ?? tagRaw === "PLAY"),
+    stakeEligible: false,
     projectionSource:
       sourceRaw === "box_score" || sourceRaw === "baseline" ? sourceRaw : null,
     zOver: toNumberOrNull(diagnostics.z_over),
@@ -171,7 +160,6 @@ export async function fetchNflPropsBoard(params: {
   modelVersion?: string;
   marketKey?: string;
   team?: string;
-  tag?: string;
   minConfidence?: number;
   minAbsEdge?: number;
   limit?: number;
@@ -212,7 +200,6 @@ export async function fetchNflPropsBoard(params: {
   url.searchParams.set("limit", String(params.limit ?? 250));
   if (params.marketKey) url.searchParams.set("market_key", params.marketKey);
   if (params.team) url.searchParams.set("team", params.team.toUpperCase());
-  if (params.tag) url.searchParams.set("tag", params.tag.toUpperCase());
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 10000);
