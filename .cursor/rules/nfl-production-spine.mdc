@@ -25,6 +25,8 @@ Until gates pass: `NFL_WEEKLY_PROPS_LIVE = false`. Same numbers everywhere, rese
 
 **Phase 3C (2026-08-20):** `TEAM_PASS_ATTEMPTS_TARGET_SCALE=0.92` recouples WR/RB/TE targets to the compressed pass budget (gap 0.17→0.10) without raising n≥4000. LIVE still false. See `data/ops/nfl-spine-phase3c-recouple-20260819.md`.
 
+**LIVE smoke (2026-08-20):** Prod 2025 pool is 3C (max 4590 / n=4 / gap 0.097); equality green at `player-production-v3-phase3c`. **`NFL_WEEKLY_PROPS_LIVE` stays false** — worker not draining (Celery backlog + pending bare rematerialize) and 2026 season desk is preseason-bundle fallback, not SUM spine. See `data/ops/nfl-spine-live-smoke-20260820.md`.
+
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept
 ✅ GOOD: one player-game mean; fantasy points = scoring of that mean; futures = season sum + uncertainty
