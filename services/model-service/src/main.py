@@ -11,8 +11,9 @@ from fastapi.responses import PlainTextResponse
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from src.celery_app import celery_app, celery_healthcheck
+from src.celery_app import QUEUE_MODELS, celery_app, celery_healthcheck
 from src.db import engine
+from src.nfl_remat_policy import resolve_remat_weeks
 from src.routes import (
     cfb_router,
     edge_board_router,
@@ -1464,10 +1465,16 @@ def job_run_nfl_player_baselines(
     week: Optional[int] = Query(None, ge=1, le=25),
     model_version: str = Query("nfl-player-v1"),
 ) -> Dict[str, str]:
+    if week is None:
+        raise HTTPException(
+            status_code=400,
+            detail="week is required; season-only remat uses /api/jobs/run-nfl-props-layer-rebuild (weeks default 1–18)",
+        )
     try:
         async_result = celery_app.send_task(
             TASK_NFL_PLAYER_BASELINES,
             kwargs={"season": season, "week": week, "model_version": model_version},
+            queue=QUEUE_MODELS,
         )
         return {"task_id": async_result.id, "task_name": TASK_NFL_PLAYER_BASELINES}
     except Exception as e:
@@ -1521,23 +1528,26 @@ def job_run_nfl_props_layer_rebuild(
         week_list = None
         if weeks:
             week_list = sorted({int(part.strip()) for part in weeks.split(",") if part.strip()})
+        resolved_weeks = resolve_remat_weeks(week=week, weeks=week_list)
         async_result = celery_app.send_task(
             TASK_NFL_PROPS_LAYER_REBUILD,
             kwargs={
                 "season": season,
-                "week": week,
-                "weeks": week_list,
+                "week": None,
+                "weeks": resolved_weeks,
                 "model_version": model_version,
                 "replace_features": replace_features,
                 "rematerialize_season_features": rematerialize_season_features,
             },
+            queue=QUEUE_MODELS,
         )
         return {
             "task_id": async_result.id,
             "task_name": TASK_NFL_PROPS_LAYER_REBUILD,
             "season": season,
             "week": week,
-            "weeks": week_list,
+            "weeks": resolved_weeks,
+            "queue": QUEUE_MODELS,
         }
     except Exception as e:
         log.exception("Failed to enqueue run-nfl-props-layer-rebuild")

@@ -236,6 +236,26 @@ export async function loadFantasyDraftDesk(params: {
     } else {
       source = "empty";
     }
+  } else {
+    limitations = [
+      ...LIMITATIONS_BASE,
+      "Season ranks = SUM of weekly spine means, cap 17 games (Phase 3 contract). Not the preseason launch bundle.",
+    ];
+    if (season === 2026) {
+      limitations.push(
+        "2026 preseason gap is elevated (team receiving ≫ QB pass, ~0.42 vs ~0.10 on 2025 3C). Rankings are honest SUM spine, not a 3C-tight receiving board.",
+      );
+    }
+    const games = enrichable.map((row) => Number(row.gamesProjected) || 0);
+    const medianGames =
+      games.length === 0
+        ? 0
+        : [...games].sort((a, b) => a - b)[Math.floor(games.length / 2)];
+    if (medianGames > 0 && medianGames < 14) {
+      limitations.push(
+        `Research limit: 2026 schedule/depth still thin — median games projected ${medianGames} (full season is 17).`,
+      );
+    }
   }
 
   const adpMatch = matchAdpToDeskRows(

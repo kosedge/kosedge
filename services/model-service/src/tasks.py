@@ -17,6 +17,7 @@ from sqlalchemy import text
 
 from .celery_app import celery_app
 from .db import SessionLocal
+from .nfl_remat_policy import resolve_remat_weeks
 from .services.mlb_data import (
     apply_bullpen_role_quality_mode,
     apply_starter_quality_mode,
@@ -14036,12 +14037,15 @@ def run_mlb_totals_park_wind_ablation(
 def _resolve_nfl_week(session: Any, season: int, week: Optional[int]) -> int:
     if week is not None:
         return int(week)
+    # Default to the latest *regular-season* week. MAX(week) on historical
+    # usage includes 19–22 (SB) and was the week-22-only remat wipe path.
     row = session.execute(
         text(
             """
             SELECT COALESCE(MAX(week), 1)::int AS week
             FROM nfl_dp_player_usage_weekly
             WHERE season = :season
+              AND week BETWEEN 1 AND 18
             """
         ),
         {"season": int(season)},
@@ -14447,15 +14451,12 @@ def run_nfl_props_layer_rebuild(
     Use when baselines report `feature_rows=0` / `baseline_rows_upserted=0`,
     or when depth-floor fixes need a clean projection rematerialize (not a
     market nudge).
+
+    Safe entrypoint: omit week/weeks to remat regular season 1–18. Never
+    enqueue this task with bare ``season=`` on old workers (week-22 wipe).
     """
-    session = SessionLocal()
-    try:
-        if weeks:
-            target_weeks = sorted({int(w) for w in weeks})
-        else:
-            target_weeks = [int(_resolve_nfl_week(session, season=season, week=week))]
-    finally:
-        session.close()
+    # Season-only (no week/weeks) → 1–18, never MAX(week)=22.
+    target_weeks = resolve_remat_weeks(week=week, weeks=weeks)
 
     # Coverage probe before features rematerialize (usage must exist).
     session = SessionLocal()

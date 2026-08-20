@@ -15,8 +15,13 @@ from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError, ProgrammingError, SQLAlchemyError
 
-from src.celery_app import celery_app
+from src.celery_app import QUEUE_MODELS, celery_app
 from src.db import SessionLocal
+from src.nfl_remat_policy import (
+    decode_celery_message,
+    is_poison_remat,
+    resolve_remat_weeks,
+)
 from src.services.nfl_canonical_teams import canonicalize_team
 from src.services.odds_api import fetch_odds
 from src.services.nfl_injury_nowcast import fetch_nfl_injury_nowcast
@@ -263,6 +268,33 @@ def _intel_storage_team(team: Optional[str]) -> Optional[str]:
     if canon == "LAR":
         return "LA"
     return canon
+
+
+def _enqueue_models(task_name: str, kwargs: Dict[str, Any]):
+    return celery_app.send_task(task_name, kwargs=kwargs, queue=QUEUE_MODELS)
+
+
+def _jsonable_mapping(mapping: Any) -> Dict[str, Any]:
+    out: Dict[str, Any] = {}
+    for key, value in dict(mapping).items():
+        if isinstance(value, Decimal):
+            out[key] = float(value)
+        elif isinstance(value, datetime):
+            out[key] = value.isoformat()
+        elif isinstance(value, date):
+            out[key] = value.isoformat()
+        else:
+            out[key] = value
+    return out
+
+
+def _require_nfl_week(week: Optional[int]) -> int:
+    if week is None:
+        raise HTTPException(
+            status_code=400,
+            detail="week is required; season-only remat uses /ops/rebuild-props-layers (weeks default 1–18)",
+        )
+    return int(week)
 
 
 def _serialize_intel_rows(rows: List[Any]) -> List[Dict[str, Any]]:
@@ -4483,8 +4515,8 @@ def nfl_fantasy_rankings(
                   AND week = :week
                   AND scoring_profile = :scoring_profile
                   AND model_version = :model_version
-                  AND (:position IS NULL OR position = :position)
-                  AND (:tier_max IS NULL OR tier <= :tier_max)
+                  AND (CAST(:position AS text) IS NULL OR position = CAST(:position AS text))
+                  AND (CAST(:tier_max AS int) IS NULL OR tier <= CAST(:tier_max AS int))
                 ORDER BY rank_overall
                 LIMIT :limit
                 """
@@ -4499,7 +4531,14 @@ def nfl_fantasy_rankings(
                 "limit": limit,
             },
         ).fetchall()
-        return {"count": len(rows), "rows": [dict(r._mapping) for r in rows]}
+        return {
+            "count": len(rows),
+            "rows": [_jsonable_mapping(r._mapping) for r in rows],
+            "status": "ok" if rows else "empty",
+        }
+    except (ProgrammingError, SQLAlchemyError, OperationalError) as exc:
+        log.exception("nfl_fantasy_rankings failed: %s", exc)
+        return {"count": 0, "rows": [], "status": "empty", "error": "query_failed"}
     finally:
         session.close()
 
@@ -4744,7 +4783,7 @@ def nfl_player_layer_coverage(
                   UNION
                   SELECT DISTINCT week FROM nfl_player_projection_baselines WHERE season = :season
                 ) w
-                WHERE (:week IS NULL OR week = :week)
+                WHERE (CAST(:week AS int) IS NULL OR week = CAST(:week AS int))
                 ORDER BY week
                 """
             ),
@@ -4770,6 +4809,17 @@ def nfl_player_layer_coverage(
                 else "ok"
             ),
         }
+    except (ProgrammingError, SQLAlchemyError, OperationalError) as exc:
+        log.exception("nfl_player_layer_coverage failed: %s", exc)
+        return {
+            "season": int(season),
+            "week": int(week) if week is not None else None,
+            "totals": {},
+            "by_week": [],
+            "diagnosis": "empty",
+            "status": "empty",
+            "error": "query_failed",
+        }
     finally:
         session.close()
 
@@ -4780,13 +4830,10 @@ def nfl_trigger_player_feature_materialization(
     week: Optional[int] = Query(None, ge=1, le=25),
     replace_existing: bool = Query(True),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    target_week = _require_nfl_week(week)
+    task = _enqueue_models(
         TASK_NFL_PLAYER_FEATURES,
-        kwargs={
-            "season": int(season),
-            "week": int(week) if week is not None else None,
-            "replace_existing": bool(replace_existing),
-        },
+        {"season": int(season), "week": target_week, "replace_existing": bool(replace_existing)},
     )
     return {
         "task_id": task.id,
@@ -4802,15 +4849,16 @@ def nfl_trigger_player_box_sim_materialization(
     season: int = Query(..., ge=2010, le=2100),
     week: Optional[int] = Query(None, ge=1, le=25),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    target_week = _require_nfl_week(week)
+    task = _enqueue_models(
         TASK_NFL_PLAYER_BOX_SIMS,
-        kwargs={"season": int(season), "week": int(week) if week is not None else None},
+        {"season": int(season), "week": target_week},
     )
     return {
         "task_id": task.id,
         "task_name": TASK_NFL_PLAYER_BOX_SIMS,
         "season": season,
-        "week": week,
+        "week": target_week,
     }
 
 
@@ -4820,7 +4868,7 @@ def nfl_trigger_props_layer_rebuild(
     week: Optional[int] = Query(None, ge=1, le=25),
     weeks: Optional[str] = Query(
         None,
-        description="Comma-separated weeks (e.g. 14,15,16,17). Overrides week when set.",
+        description="Comma-separated weeks (e.g. 14,15,16,17). Overrides week when set. Omit both for regular season 1–18.",
     ),
     model_version: str = Query("nfl-player-v1"),
     replace_features: bool = Query(True),
@@ -4829,12 +4877,13 @@ def nfl_trigger_props_layer_rebuild(
     week_list: Optional[List[int]] = None
     if weeks:
         week_list = sorted({int(part.strip()) for part in weeks.split(",") if part.strip()})
-    task = celery_app.send_task(
+    resolved_weeks = resolve_remat_weeks(week=week, weeks=week_list)
+    task = _enqueue_models(
         TASK_NFL_PROPS_LAYER_REBUILD,
-        kwargs={
+        {
             "season": int(season),
-            "week": int(week) if week is not None else None,
-            "weeks": week_list,
+            "week": None,
+            "weeks": resolved_weeks,
             "model_version": model_version,
             "replace_features": bool(replace_features),
             "rematerialize_season_features": bool(rematerialize_season_features),
@@ -4845,10 +4894,11 @@ def nfl_trigger_props_layer_rebuild(
         "task_name": TASK_NFL_PROPS_LAYER_REBUILD,
         "season": season,
         "week": week,
-        "weeks": week_list,
+        "weeks": resolved_weeks,
         "model_version": model_version,
         "replace_features": replace_features,
         "rematerialize_season_features": rematerialize_season_features,
+        "queue": QUEUE_MODELS,
     }
 
 
@@ -4858,11 +4908,18 @@ def nfl_trigger_player_baseline_materialization(
     week: Optional[int] = Query(None, ge=1, le=25),
     model_version: str = Query("nfl-player-v1"),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    target_week = _require_nfl_week(week)
+    task = _enqueue_models(
         TASK_NFL_PLAYER_BASELINES,
-        kwargs={"season": int(season), "week": int(week) if week is not None else None, "model_version": model_version},
+        {"season": int(season), "week": target_week, "model_version": model_version},
     )
-    return {"task_id": task.id, "task_name": TASK_NFL_PLAYER_BASELINES, "season": season, "week": week, "model_version": model_version}
+    return {
+        "task_id": task.id,
+        "task_name": TASK_NFL_PLAYER_BASELINES,
+        "season": season,
+        "week": target_week,
+        "model_version": model_version,
+    }
 
 
 @router.post("/ops/materialize-player-props")
@@ -4871,11 +4928,18 @@ def nfl_trigger_player_props_materialization(
     week: Optional[int] = Query(None, ge=1, le=25),
     model_version: str = Query("nfl-player-v1"),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    target_week = _require_nfl_week(week)
+    task = _enqueue_models(
         TASK_NFL_PLAYER_PROPS,
-        kwargs={"season": int(season), "week": int(week) if week is not None else None, "model_version": model_version},
+        {"season": int(season), "week": target_week, "model_version": model_version},
     )
-    return {"task_id": task.id, "task_name": TASK_NFL_PLAYER_PROPS, "season": season, "week": week, "model_version": model_version}
+    return {
+        "task_id": task.id,
+        "task_name": TASK_NFL_PLAYER_PROPS,
+        "season": season,
+        "week": target_week,
+        "model_version": model_version,
+    }
 
 
 @router.post("/ops/materialize-fantasy")
@@ -4884,11 +4948,18 @@ def nfl_trigger_fantasy_materialization(
     week: Optional[int] = Query(None, ge=1, le=25),
     model_version: str = Query("nfl-player-v1"),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    target_week = _require_nfl_week(week)
+    task = _enqueue_models(
         TASK_NFL_FANTASY,
-        kwargs={"season": int(season), "week": int(week) if week is not None else None, "model_version": model_version},
+        {"season": int(season), "week": target_week, "model_version": model_version},
     )
-    return {"task_id": task.id, "task_name": TASK_NFL_FANTASY, "season": season, "week": week, "model_version": model_version}
+    return {
+        "task_id": task.id,
+        "task_name": TASK_NFL_FANTASY,
+        "season": season,
+        "week": target_week,
+        "model_version": model_version,
+    }
 
 
 @router.post("/ops/materialize-fantasy-draft-rankings")
@@ -4896,9 +4967,9 @@ def nfl_trigger_fantasy_draft_rankings_materialization(
     season: int = Query(..., ge=2010, le=2100),
     model_version: str = Query("nfl-player-v1"),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    task = _enqueue_models(
         TASK_NFL_FANTASY_DRAFT_RANKINGS,
-        kwargs={"season": int(season), "model_version": model_version},
+        {"season": int(season), "model_version": model_version},
     )
     return {"task_id": task.id, "task_name": TASK_NFL_FANTASY_DRAFT_RANKINGS, "season": season, "model_version": model_version}
 
@@ -4922,11 +4993,148 @@ def nfl_trigger_player_cycle(
     week: Optional[int] = Query(None, ge=1, le=25),
     model_version: str = Query("nfl-player-v1"),
 ) -> Dict[str, Any]:
-    task = celery_app.send_task(
+    task = _enqueue_models(
         TASK_NFL_PLAYER_CYCLE,
-        kwargs={"season": int(season), "week": int(week) if week is not None else None, "model_version": model_version},
+        {
+            "season": int(season),
+            "week": int(week) if week is not None else None,
+            "model_version": model_version,
+        },
     )
     return {"task_id": task.id, "task_name": TASK_NFL_PLAYER_CYCLE, "season": season, "week": week, "model_version": model_version}
+
+
+def _celery_broker_client():
+    import redis as redis_lib
+
+    from src.celery_app import BROKER_URL
+
+    return redis_lib.from_url(BROKER_URL, socket_timeout=15, decode_responses=False)
+
+
+def _queue_inventory(r: Any, name: str, sample: int = 40) -> Dict[str, Any]:
+    from collections import Counter
+
+    n = int(r.llen(name) or 0)
+    raw_items = r.lrange(name, 0, max(-1, min(sample, n) - 1)) if n else []
+    hist: Counter[str] = Counter()
+    poison: List[Dict[str, Any]] = []
+    sample_out: List[Dict[str, Any]] = []
+    for raw in raw_items:
+        info = decode_celery_message(raw)
+        task = str(info.get("task") or "?")
+        hist[task] += 1
+        compact = {
+            "task": task,
+            "id": info.get("id"),
+            "kwargs": info.get("kwargs") or {},
+        }
+        sample_out.append(compact)
+        if is_poison_remat(info):
+            poison.append(compact)
+    return {
+        "llen": n,
+        "sampled": len(raw_items),
+        "task_histogram": dict(hist.most_common(20)),
+        "poison_in_sample": poison,
+        "sample": sample_out[:25],
+    }
+
+
+@router.get("/ops/celery-queues")
+def nfl_celery_queue_inventory() -> Dict[str, Any]:
+    """Inventory default/models/odds. Does not mutate the broker."""
+    from src.celery_app import QUEUE_DEFAULT, QUEUE_MODELS, QUEUE_ODDS
+
+    try:
+        r = _celery_broker_client()
+        r.ping()
+    except Exception as exc:  # noqa: BLE001
+        log.exception("celery queue inventory failed")
+        return {"status": "error", "error": type(exc).__name__}
+    inspect = celery_app.control.inspect(timeout=2.0)
+    active = {}
+    try:
+        active = inspect.active() or {}
+    except Exception:  # noqa: BLE001
+        active = {}
+    return {
+        "status": "ok",
+        "queues": {
+            "default": _queue_inventory(r, QUEUE_DEFAULT, sample=200),
+            "models": _queue_inventory(r, QUEUE_MODELS, sample=80),
+            "odds": _queue_inventory(r, QUEUE_ODDS, sample=40),
+        },
+        "active_workers": sorted(active.keys()),
+        "active_count": sum(len(v or []) for v in active.values()),
+    }
+
+
+@router.post("/ops/celery-drain-poison-remats")
+def nfl_celery_drain_poison_remats(
+    confirm: bool = Query(False),
+    trim_mlb_nowcast: bool = Query(False),
+) -> Dict[str, Any]:
+    """Revoke/remove bare NFL remats from ``default`` (week-22 wipe class).
+
+    Set confirm=true. Optionally drop queued MLB nowcast jobs so a controlled
+    NFL remat is not buried. Does not bounce the worker.
+    """
+    from src.celery_app import QUEUE_DEFAULT, QUEUE_MODELS
+
+    if not confirm:
+        return {"status": "dry_run", "hint": "pass confirm=true to mutate queues"}
+    try:
+        r = _celery_broker_client()
+        r.ping()
+    except Exception as exc:  # noqa: BLE001
+        raise HTTPException(status_code=503, detail=f"broker_unavailable: {type(exc).__name__}") from exc
+
+    def _drain_list(queue: str, predicate) -> List[Dict[str, Any]]:
+        removed: List[Dict[str, Any]] = []
+        items = r.lrange(queue, 0, -1) or []
+        keep: List[Any] = []
+        for raw in items:
+            info = decode_celery_message(raw)
+            if predicate(info):
+                removed.append(
+                    {
+                        "task": info.get("task"),
+                        "id": info.get("id"),
+                        "kwargs": info.get("kwargs") or {},
+                    }
+                )
+                task_id = info.get("id")
+                if task_id:
+                    try:
+                        celery_app.control.revoke(str(task_id), terminate=False)
+                    except Exception:  # noqa: BLE001
+                        pass
+            else:
+                keep.append(raw)
+        pipe = r.pipeline()
+        pipe.delete(queue)
+        if keep:
+            pipe.rpush(queue, *keep)
+        pipe.execute()
+        return removed
+
+    poison = _drain_list(QUEUE_DEFAULT, is_poison_remat)
+    poison += _drain_list(QUEUE_MODELS, is_poison_remat)
+    nowcast: List[Dict[str, Any]] = []
+    if trim_mlb_nowcast:
+        nowcast = _drain_list(
+            QUEUE_MODELS,
+            lambda info: str(info.get("task") or "") == "src.tasks.run_mlb_lineup_nowcast_repricing",
+        )
+    return {
+        "status": "ok",
+        "poison_removed": poison,
+        "poison_count": len(poison),
+        "nowcast_removed": len(nowcast),
+        "default_llen": int(r.llen(QUEUE_DEFAULT) or 0),
+        "models_llen": int(r.llen(QUEUE_MODELS) or 0),
+    }
 
 
 @router.get("/identity/queue")

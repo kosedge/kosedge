@@ -25,6 +25,8 @@ Until gates pass: `NFL_WEEKLY_PROPS_LIVE = false`. Same numbers everywhere, rese
 
 **Phase 3C (2026-08-20):** `TEAM_PASS_ATTEMPTS_TARGET_SCALE=0.92` recouples WR/RB/TE targets to the compressed pass budget (gap 0.17→0.10) without raising n≥4000. LIVE still false. See `data/ops/nfl-spine-phase3c-recouple-20260819.md`.
 
+**Worker hygiene (2026-08-20):** Bare `season=` rebuilds must not resolve to week 22 or sit on Celery `default`. Safe entrypoint is `/nfl/ops/rebuild-props-layers` with weeks 1–18 (default). See `data/ops/nfl-spine-safe-rematerialize.md`. LIVE still false.
+
 ```text
 ❌ BAD: fantasy season sheet with its own QB yard totals; props board uses a different intercept
 ✅ GOOD: one player-game mean; fantasy points = scoring of that mean; futures = season sum + uncertainty

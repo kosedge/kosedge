@@ -13,6 +13,8 @@ from typing import Any, Dict
 
 from celery.schedules import crontab
 
+from src.nfl_remat_policy import cycle_week_from_env
+
 TASK_PULL_ODDS_SNAPSHOT = os.getenv("TASK_PULL_ODDS_SNAPSHOT", "src.tasks.pull_odds_snapshot")
 TASK_PULL_NFL_CONTEXT = os.getenv("TASK_PULL_NFL_CONTEXT", "src.tasks.pull_nfl_context_snapshot")
 TASK_RUN_NFL_SIMULATIONS = os.getenv("TASK_RUN_NFL_SIMULATIONS", "src.tasks.run_nfl_market_simulations")
@@ -30,10 +32,14 @@ TASK_EVAL_NFL_PROMOTION = os.getenv("TASK_EVAL_NFL_PROMOTION", "src.tasks.evalua
 TASK_RUN_NFL_SUPERVISED_RETRAIN = os.getenv(
     "TASK_RUN_NFL_SUPERVISED_RETRAIN", "src.tasks.run_nfl_supervised_retrain"
 )
+# Intentionally unused in beat_schedule. Never schedule bare
+# materialize_nfl_player_baseline_projections / run_nfl_props_layer_rebuild —
+# season-only kwargs resolve to week 22 on historical usage tables.
 TASK_NFL_PLAYER_BASELINES = os.getenv(
     "TASK_NFL_PLAYER_BASELINES",
     "src.tasks.materialize_nfl_player_baseline_projections",
 )
+NFL_PLAYER_CYCLE_WEEK = cycle_week_from_env()
 TASK_NFL_PLAYER_PROPS = os.getenv(
     "TASK_NFL_PLAYER_PROPS",
     "src.tasks.materialize_nfl_player_props_edges",
@@ -380,7 +386,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "schedule": crontab(minute="8", hour="7", day_of_week=os.getenv("NFL_PLAYER_CYCLE_DAY_OF_WEEK", "thu")),
         "kwargs": {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
-            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "week": NFL_PLAYER_CYCLE_WEEK,
             "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
         },
         "options": {"queue": MODELS_QUEUE},
@@ -390,7 +396,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "schedule": crontab(minute="13"),
         "kwargs": {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
-            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "week": NFL_PLAYER_CYCLE_WEEK,
             "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
         },
         "options": {"queue": MODELS_QUEUE},
@@ -400,7 +406,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "schedule": crontab(minute="42", hour="6,11"),
         "kwargs": {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
-            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "week": NFL_PLAYER_CYCLE_WEEK,
             "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
         },
         "options": {"queue": MODELS_QUEUE},
@@ -410,7 +416,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "schedule": crontab(minute="22", hour="5", day_of_week=os.getenv("NFL_IDENTITY_REFRESH_DAY_OF_WEEK", "tue")),
         "kwargs": {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
-            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "week": NFL_PLAYER_CYCLE_WEEK,
             "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
         },
         "options": {"queue": MODELS_QUEUE},
@@ -429,7 +435,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "schedule": crontab(minute="48", hour="5", day_of_week=os.getenv("NFL_IDENTITY_REFRESH_DAY_OF_WEEK", "tue")),
         "kwargs": {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
-            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "week": NFL_PLAYER_CYCLE_WEEK,
             "source_system": None,
         },
         "options": {"queue": MODELS_QUEUE},
@@ -467,7 +473,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         ),
         "kwargs": {
             "season": int(os.getenv("NFL_PLAYER_CYCLE_SEASON", "2026")),
-            "week": int(os.getenv("NFL_PLAYER_CYCLE_WEEK", "1")),
+            "week": NFL_PLAYER_CYCLE_WEEK,
             "model_version": os.getenv("NFL_PLAYER_MODEL_VERSION", "nfl-player-v1"),
             "skip_ingest": os.getenv("NFL_ENTERPRISE_WEEKLY_SKIP_INGEST", "false")
             .strip()
@@ -579,7 +585,12 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         },
         "options": {"queue": MODELS_QUEUE},
     },
-    "run-mlb-lineup-nowcast-repricing": {
+}
+
+# 10-minute nowcast floods `models` and buries NFL remats. Default on; disable
+# with MLB_NOWCAST_ENABLED=false during controlled rematerialize windows.
+if os.getenv("MLB_NOWCAST_ENABLED", "true").strip().lower() in {"1", "true", "yes", "y", "on"}:
+    beat_schedule["run-mlb-lineup-nowcast-repricing"] = {
         "task": TASK_MLB_NOWCAST_REPRICING,
         "schedule": crontab(minute="*/10", hour="8-23"),
         "kwargs": {
@@ -587,38 +598,46 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
             "simulations": int(os.getenv("MLB_NOWCAST_SIM_COUNT", "2500")),
             "base_model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
             "challenger_model_version": os.getenv("MLB_CHALLENGER_MODEL_VERSION", "mlb-v2-pitch-sim"),
-            "run_challenger": os.getenv("MLB_RUN_CHALLENGER", "true").strip().lower() in {"1", "true", "yes", "y", "on"},
+            "run_challenger": os.getenv("MLB_RUN_CHALLENGER", "true").strip().lower()
+            in {"1", "true", "yes", "y", "on"},
         },
         "options": {"queue": MODELS_QUEUE},
-    },
-    "run-mlb-determinism-check-midday": {
-        "task": TASK_MLB_DETERMINISM_CHECK,
-        "schedule": crontab(minute="5", hour="12"),
-        "kwargs": {
-            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
-            "simulations": int(os.getenv("MLB_DETERMINISM_SIM_COUNT", "800")),
+    }
+
+beat_schedule.update(
+    {
+        "run-mlb-determinism-check-midday": {
+            "task": TASK_MLB_DETERMINISM_CHECK,
+            "schedule": crontab(minute="5", hour="12"),
+            "kwargs": {
+                "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+                "simulations": int(os.getenv("MLB_DETERMINISM_SIM_COUNT", "800")),
+            },
+            "options": {"queue": MODELS_QUEUE},
         },
-        "options": {"queue": MODELS_QUEUE},
-    },
-    "run-mlb-feature-ablation-weekly": {
-        "task": TASK_MLB_FEATURE_ABLATION,
-        "schedule": crontab(minute="20", hour="7", day_of_week="mon"),
-        "kwargs": {
-            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
-            "simulations": int(os.getenv("MLB_ABLATION_SIM_COUNT", "1500")),
+        "run-mlb-feature-ablation-weekly": {
+            "task": TASK_MLB_FEATURE_ABLATION,
+            "schedule": crontab(minute="20", hour="7", day_of_week="mon"),
+            "kwargs": {
+                "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+                "simulations": int(os.getenv("MLB_ABLATION_SIM_COUNT", "1500")),
+            },
+            "options": {"queue": MODELS_QUEUE},
         },
-        "options": {"queue": MODELS_QUEUE},
-    },
-    "run-mlb-walkforward-backtest-weekly": {
-        "task": TASK_MLB_WALKFORWARD_BACKTEST,
-        "schedule": crontab(minute="35", hour="7", day_of_week="mon"),
-        "kwargs": {
-            "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
-            "lookback_days": int(os.getenv("MLB_BACKTEST_LOOKBACK_DAYS", "180")),
-            "training_days": int(os.getenv("MLB_BACKTEST_TRAINING_DAYS", "45")),
-            "step_days": int(os.getenv("MLB_BACKTEST_STEP_DAYS", "7")),
-            "apply_calibration": os.getenv("MLB_BACKTEST_APPLY_CALIBRATION", "true").strip().lower() in {"1", "true", "yes", "y", "on"},
+        "run-mlb-walkforward-backtest-weekly": {
+            "task": TASK_MLB_WALKFORWARD_BACKTEST,
+            "schedule": crontab(minute="35", hour="7", day_of_week="mon"),
+            "kwargs": {
+                "model_version": os.getenv("MLB_BASE_MODEL_VERSION", "mlb-v1-pa-sim"),
+                "lookback_days": int(os.getenv("MLB_BACKTEST_LOOKBACK_DAYS", "180")),
+                "training_days": int(os.getenv("MLB_BACKTEST_TRAINING_DAYS", "45")),
+                "step_days": int(os.getenv("MLB_BACKTEST_STEP_DAYS", "7")),
+                "apply_calibration": os.getenv("MLB_BACKTEST_APPLY_CALIBRATION", "true")
+                .strip()
+                .lower()
+                in {"1", "true", "yes", "y", "on"},
+            },
+            "options": {"queue": MODELS_QUEUE},
         },
-        "options": {"queue": MODELS_QUEUE},
-    },
-}
+    }
+)

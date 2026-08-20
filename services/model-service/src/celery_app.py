@@ -165,6 +165,14 @@ celery_app.conf.task_routes = {
     "src.tasks.run_mlb_totals_park_wind_ablation": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
 }
 
+# NFL remat / player-layer tasks must never sit on ``default``. Bare season
+# rebuilds on default were the week-22 wipe class in LIVE smoke 2026-08-20.
+from src.nfl_remat_policy import NFL_MODELS_QUEUE_TASKS  # noqa: E402
+
+celery_app.conf.task_routes.update(
+    {name: {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS} for name in NFL_MODELS_QUEUE_TASKS}
+)
+
 # Beat schedule (optional; beat container can boot even if file missing)
 try:
     from src.celerybeat_schedule import beat_schedule  # type: ignore
@@ -175,10 +183,12 @@ except Exception:
 
 
 def celery_healthcheck() -> Dict[str, Any]:
+    from src.nfl_remat_policy import redact_broker_url
+
     return {
         "app": APP_NAME,
-        "broker": BROKER_URL,
-        "backend": RESULT_BACKEND,
+        "broker": redact_broker_url(BROKER_URL),
+        "backend": redact_broker_url(RESULT_BACKEND),
         "timezone": TIMEZONE,
         "enable_utc": ENABLE_UTC,
         "acks_late": TASK_ACKS_LATE,
