@@ -1,5 +1,9 @@
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
-import { shouldSoftFrameAdpGap } from "@/lib/fantasy/expert";
+import {
+  EXPERT_VALUE_ADP_MAX,
+  hasMaterialProjectedVolume,
+  shouldSoftFrameAdpGap,
+} from "@/lib/fantasy/expert";
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
 /** Late-round ADP floor for sleeper board (≈ round 8 in 12-team). */
@@ -25,11 +29,14 @@ export function selectSleeperRows(
   const withMarketValue = skill.filter((r) => {
     if (r.adp == null || r.valueDelta == null) return false;
     if (r.valueDelta < SLEEPER_MIN_VALUE_DELTA) return false;
+    if (r.adp > EXPERT_VALUE_ADP_MAX) return false;
+    if (!hasMaterialProjectedVolume(r)) return false;
     return r.adp >= SLEEPER_ADP_MIN || r.rankOverall >= SLEEPER_MODEL_RANK_MIN;
   });
 
   const lateUnmatched = skill.filter((r) => {
     if (r.adp != null && r.valueDelta != null) return false;
+    if (!hasMaterialProjectedVolume(r)) return false;
     return r.rankOverall >= SLEEPER_MODEL_RANK_MIN;
   });
 

@@ -113,6 +113,10 @@ describe("fantasy expert voice", () => {
       rankOverall: 22,
       adp: 40,
       valueDelta: 18,
+      receivingYardsTotal: 1100,
+      receptionsTotal: 80,
+      passYardsTotal: 0,
+      rushYardsTotal: 0,
       drivers: ["1100 receiving yards (~65/g)"],
       source: "model-service",
     } as FantasyDeskRow;
@@ -295,15 +299,15 @@ describe("ADP gap framing honesty", () => {
   it("notableValueNotes avoid +200 hero framing for Gesicki-style TE", () => {
     const notes = notableValueNotes(
       [
-        baseTeRow(),
+        baseTeRow({ adp: 210, valueDelta: 163 }),
         baseTeRow({
           playerId: "engram",
           playerName: "E.Engram",
           team: "DEN",
           rankOverall: 52,
           rankPosition: 10,
-          adp: 240,
-          valueDelta: 188,
+          adp: 220,
+          valueDelta: 168,
           drivers: ["580 receiving yards (~34/g)"],
         }),
         baseTeRow({
@@ -313,8 +317,8 @@ describe("ADP gap framing honesty", () => {
           rankOverall: 61,
           rankPosition: 14,
           tier: "TE3",
-          adp: 255,
-          valueDelta: 194,
+          adp: 230,
+          valueDelta: 169,
           drivers: ["510 receiving yards (~30/g)"],
         }),
       ],
@@ -323,9 +327,59 @@ describe("ADP gap framing honesty", () => {
     expect(notes.length).toBe(3);
     for (const note of notes) {
       expect(note).toMatch(/likes him more than ADP/i);
-      expect(note).not.toMatch(/\+22[0-9]|\+18[0-9]|\+19[0-9]/);
+      expect(note).not.toMatch(/\+16[0-9]|\+18[0-9]|\+19[0-9]/);
       expect(note).not.toMatch(/7\.7 receiving TDs|receiving TDs/i);
       expect(note).toMatch(/preseason sim/i);
     }
+  });
+
+  it("does not hero QB3-vs-ADP-435 or WR4 dust as expert values", () => {
+    const notes = notableValueNotes(
+      [
+        baseTeRow({
+          playerId: "oconnell",
+          playerName: "A.O'Connell",
+          team: "LV",
+          position: "QB",
+          rankOverall: 54,
+          rankPosition: 30,
+          adp: 438,
+          valueDelta: 384,
+          passYardsTotal: 3065,
+          rushYardsTotal: 18,
+          receivingYardsTotal: 0,
+          receptionsTotal: 0,
+          drivers: ["LV QB: near-replacement"],
+        }),
+        baseTeRow({
+          playerId: "cook",
+          playerName: "B.Cook",
+          team: "NYJ",
+          position: "QB",
+          rankOverall: 46,
+          rankPosition: 27,
+          adp: 297,
+          valueDelta: 251,
+          passYardsTotal: 3302,
+          receivingYardsTotal: 0,
+          drivers: ["near-replacement"],
+        }),
+        baseTeRow({
+          playerId: "dorsett",
+          playerName: "P.Dorsett",
+          team: "LV",
+          position: "WR",
+          rankOverall: 167,
+          rankPosition: 56,
+          adp: 410,
+          valueDelta: 243,
+          receivingYardsTotal: 478,
+          receptionsTotal: 37,
+          drivers: ["478 receiving yards"],
+        }),
+      ],
+      3,
+    );
+    expect(notes).toEqual([]);
   });
 });
