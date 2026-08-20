@@ -15,7 +15,20 @@ HD_CLEAN = HD_ROOT / "clean" / "cfb" / "historical"
 HD_RAW_PBP = HD_ROOT / "raw" / "cfb" / "pbp"
 HD_ODDS_CFB = HD_ROOT / "clean" / "odds" / "cfb"
 
-REPO_ROOT = Path(__file__).resolve().parents[5]
+def _resolve_repo_root() -> Path:
+    """Monorepo root locally; service root (/app) on Railway path-as-root."""
+    here = Path(__file__).resolve()
+    parents = list(here.parents)
+    for parent in parents:
+        if (parent / "services" / "model-service").is_dir() and (parent / "data").is_dir():
+            return parent
+    for parent in parents:
+        if (parent / "Dockerfile").is_file() and (parent / "src").is_dir():
+            return parent
+    return parents[min(3, len(parents) - 1)]
+
+
+REPO_ROOT = _resolve_repo_root()
 REPO_RAW = REPO_ROOT / "data" / "cfb" / "warehouse" / "raw"
 REPO_CLEAN = REPO_ROOT / "data" / "cfb" / "warehouse" / "clean"
 REPO_RAW_PBP = REPO_RAW / "pbp"
