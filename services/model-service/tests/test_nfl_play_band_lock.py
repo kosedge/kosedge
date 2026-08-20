@@ -34,8 +34,10 @@ def test_blend_weights_stay_at_gate_default() -> None:
     assert NFL_MARKET_BLEND_TOTAL_WEIGHT == 0.30
 
 
-def test_weekly_props_and_season_artifacts_stay_off() -> None:
+def test_weekly_props_live_is_explicit_web_flag() -> None:
+    """Spread PLAY band stays locked. Weekly props LIVE is the web flag only."""
     assert should_touch_season_artifacts() is False
     web = Path(__file__).resolve().parents[3] / "apps" / "web" / "lib" / "nfl-weekly-props-live.ts"
     text = web.read_text(encoding="utf-8")
-    assert "export const NFL_WEEKLY_PROPS_LIVE = false" in text
+    assert "export const NFL_WEEKLY_PROPS_LIVE = true" in text
+    assert "No PLAY / LEAN stake tags" in text

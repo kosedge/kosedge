@@ -91,8 +91,20 @@ def test_ops_rebuild_and_coverage_endpoints(monkeypatch) -> None:
     )
     assert rebuild.status_code == 200
     assert rebuild.json()["task_name"] == "src.tasks.run_nfl_props_layer_rebuild"
+    assert rebuild.json()["weeks"] == [14, 16, 17]
     assert sent[-1][0] == "src.tasks.run_nfl_props_layer_rebuild"
     assert sent[-1][1]["weeks"] == [14, 16, 17]
+    assert sent[-1][1]["week"] is None
+
+    season_only = client.post("/nfl/ops/rebuild-props-layers", params={"season": 2025})
+    assert season_only.status_code == 200
+    assert season_only.json()["weeks"] == list(range(1, 19))
+
+    bare_baselines = client.post(
+        "/nfl/ops/materialize-player-baselines",
+        params={"season": 2025},
+    )
+    assert bare_baselines.status_code == 400
 
     features = client.post(
         "/nfl/ops/materialize-player-features",
