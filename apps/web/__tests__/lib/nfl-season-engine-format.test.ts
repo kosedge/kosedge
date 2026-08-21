@@ -3,6 +3,7 @@ import {
   NFL_DEFAULT_N_GAME_BOX,
   NFL_DEFAULT_N_SURVIVOR_PATHS,
   NFL_HONEST_PRECISION_MIN_N,
+  NFL_INTERACTIVE_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
   NFL_SURVIVOR_PLAN_TOP_N,
   buildGameBoxesQuery,
@@ -88,6 +89,10 @@ describe("nfl-season-engine-format", () => {
     });
     expect(buildSurvivorBody({ week: 1 }).n_sims).toBe(
       NFL_DEFAULT_N_SURVIVOR_PATHS,
+    );
+    expect(NFL_INTERACTIVE_N_SURVIVOR_PATHS).toBe(50);
+    expect(NFL_INTERACTIVE_N_SURVIVOR_PATHS).toBeLessThan(
+      NFL_HONEST_PRECISION_MIN_N,
     );
     expect(
       buildStarOutInjuryPath({

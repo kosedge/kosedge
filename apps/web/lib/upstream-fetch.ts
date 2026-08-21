@@ -16,6 +16,8 @@ export const UPSTREAM_TIMEOUT_MS = {
    * must not use this budget — keep board timeout for slate loads.
    */
   seasonEngine: 180_000,
+  /** Planner / helper interactive n (50 paths) — fail honest, don't hang. */
+  seasonEngineInteractive: 25_000,
 } as const;
 
 export class UpstreamTimeoutError extends Error {

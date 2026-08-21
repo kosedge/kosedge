@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
 import {
-  NFL_DEFAULT_N_SURVIVOR_PATHS,
+  NFL_INTERACTIVE_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
   NFL_SURVIVOR_PLAN_TOP_N,
   formatDepthBadge,
@@ -75,8 +75,16 @@ type SuggestedPath = {
 };
 
 const STORAGE_KEY = "kosedge.nfl.survivor.planner.picks";
-/** Research-depth path pool (shared with suggest-paths when safe). */
-const N_SIMS = NFL_DEFAULT_N_SURVIVOR_PATHS;
+/** Interactive desk n — labeled low-depth. Research 2k+ stays CLI. */
+const N_SIMS = NFL_INTERACTIVE_N_SURVIVOR_PATHS;
+const PLAN_FETCH_MS = 25_000;
+
+const PLACEHOLDER_WEEKS: PlanWeek[] = Array.from({ length: 18 }, (_, i) => ({
+  week: i + 1,
+  status: "open",
+  ranked_picks: [],
+  available_teams: [...NFL_SEASON_ENGINE_TEAMS],
+}));
 
 const selectClass =
   "min-h-11 w-full rounded-lg border border-white/15 bg-black/40 px-2.5 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50";
@@ -246,14 +254,18 @@ export default function SeasonEngineSurvivorPlannerClient({
     const id = ++requestId.current;
     startTransition(async () => {
       setError(null);
+      const ac = new AbortController();
+      const kill = setTimeout(() => ac.abort(), PLAN_FETCH_MS);
       try {
         const res = await fetch("/api/nfl/season-engine/survivor/plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
+          signal: ac.signal,
           body: JSON.stringify({
             picks: nextPicks,
             nSims: N_SIMS,
             topN: NFL_SURVIVOR_PLAN_TOP_N,
+            includeDiagnostics: false,
           }),
         });
         const json = (await res.json()) as PlanPayload;
@@ -265,7 +277,15 @@ export default function SeasonEngineSurvivorPlannerClient({
         setResult(json);
       } catch (err) {
         if (id !== requestId.current) return;
+        if (err instanceof DOMException && err.name === "AbortError") {
+          setError(
+            "Engine warming — rankings timed out. Retry in a few seconds; the planner shell stays usable.",
+          );
+          return;
+        }
         setError(err instanceof Error ? err.message : "Request failed");
+      } finally {
+        clearTimeout(kill);
       }
     });
   }
@@ -280,45 +300,41 @@ export default function SeasonEngineSurvivorPlannerClient({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- evaluate intentionally stable via picks
   }, [picks, hydrated]);
 
-  useEffect(() => {
-    if (!hydrated) return;
-    let cancelled = false;
+  async function loadSuggestedPaths() {
     setSuggestPending(true);
     setSuggestError(null);
-    (async () => {
-      try {
-        const res = await fetch(
-          "/api/nfl/season-engine/survivor/suggest-paths",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ picks: {}, nSims: N_SIMS }),
-          },
-        );
-        const json = (await res.json()) as {
-          paths?: SuggestedPath[];
-          error?: string;
-        };
-        if (cancelled) return;
-        if (!res.ok || json.error) {
-          setSuggestError(json.error || `Suggest failed (${res.status})`);
-          setSuggested([]);
-          return;
-        }
-        setSuggested(Array.isArray(json.paths) ? json.paths.slice(0, 3) : []);
-      } catch (err) {
-        if (cancelled) return;
-        setSuggestError(
-          err instanceof Error ? err.message : "Suggest paths failed",
-        );
-      } finally {
-        if (!cancelled) setSuggestPending(false);
+    const ac = new AbortController();
+    const kill = setTimeout(() => ac.abort(), PLAN_FETCH_MS);
+    try {
+      const res = await fetch("/api/nfl/season-engine/survivor/suggest-paths", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: ac.signal,
+        body: JSON.stringify({ picks: {}, nSims: N_SIMS }),
+      });
+      const json = (await res.json()) as {
+        paths?: SuggestedPath[];
+        error?: string;
+      };
+      if (!res.ok || json.error) {
+        setSuggestError(json.error || `Suggest failed (${res.status})`);
+        setSuggested([]);
+        return;
       }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, [hydrated]);
+      setSuggested(Array.isArray(json.paths) ? json.paths.slice(0, 3) : []);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === "AbortError") {
+        setSuggestError("Engine warming — suggested paths timed out.");
+        return;
+      }
+      setSuggestError(
+        err instanceof Error ? err.message : "Suggest paths failed",
+      );
+    } finally {
+      clearTimeout(kill);
+      setSuggestPending(false);
+    }
+  }
 
   const used = useMemo(() => new Set(Object.values(picks)), [picks]);
   const usedList = useMemo(() => [...used].sort(), [used]);
@@ -326,7 +342,7 @@ export default function SeasonEngineSurvivorPlannerClient({
     () => NFL_SEASON_ENGINE_TEAMS.filter((t) => !used.has(t)),
     [used],
   );
-  const weeks = result?.weeks ?? [];
+  const weeks = result?.weeks?.length ? result.weeks : PLACEHOLDER_WEEKS;
   const grade = result?.slate_grade ?? "Empty";
   const lockedCount = Object.keys(picks).length;
 
@@ -539,17 +555,22 @@ export default function SeasonEngineSurvivorPlannerClient({
           </div>
 
           <div>
-            <div className="mb-2 flex items-end justify-between gap-2">
+            <div className="mb-2 flex flex-wrap items-end justify-between gap-2">
               <div>
                 <p className={labelClass}>AI suggested paths</p>
                 <p className="text-xs text-kos-text/55">
-                  Engine heuristics — chalk, balanced, contrarian save. One-click
-                  load, then edit freely.
+                  Engine heuristics — chalk, balanced, contrarian save. Load on
+                  demand so first paint stays light.
                 </p>
               </div>
-              {suggestPending ? (
-                <span className="text-[11px] text-kos-text/45">Loading…</span>
-              ) : null}
+              <button
+                type="button"
+                onClick={() => void loadSuggestedPaths()}
+                disabled={suggestPending}
+                className="min-h-11 rounded-lg border border-white/15 px-3 text-xs font-semibold text-kos-text/80 hover:border-kos-gold/40 disabled:opacity-50"
+              >
+                {suggestPending ? "Loading…" : "Load suggested paths"}
+              </button>
             </div>
             {suggestError ? (
               <p className="text-xs text-amber-200/90">{suggestError}</p>
@@ -581,7 +602,8 @@ export default function SeasonEngineSurvivorPlannerClient({
               ))}
               {!suggestPending && !suggested.length && !suggestError ? (
                 <p className="text-xs text-kos-text/50 sm:col-span-3">
-                  Suggested paths unavailable for this slate.
+                  Suggested paths stay off the default load — tap Load when you
+                  want chalk / balanced / save.
                 </p>
               ) : null}
             </div>
@@ -597,8 +619,9 @@ export default function SeasonEngineSurvivorPlannerClient({
       ) : null}
 
       {pending && !result ? (
-        <div className="rounded-xl border border-white/10 bg-black/25 px-4 py-8 text-center text-sm text-kos-text/65">
-          Running season paths for the full slate…
+        <div className="rounded-xl border border-white/10 bg-black/25 px-4 py-3 text-sm text-kos-text/65">
+          Ranking weeks ({N_SIMS.toLocaleString()} paths, low-depth estimate)…
+          you can lock a team now; chips fill in when ranks land.
         </div>
       ) : null}
 
@@ -727,7 +750,7 @@ export default function SeasonEngineSurvivorPlannerClient({
 
         {!weeks.length && !pending && !error ? (
           <div className="rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-8 text-center text-sm text-kos-text/60">
-            Waiting for planner rankings…
+            Planner shell failed to mount — refresh.
           </div>
         ) : null}
       </section>
