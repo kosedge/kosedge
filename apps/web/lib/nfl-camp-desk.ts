@@ -1,9 +1,11 @@
 import "server-only";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
 import {
   cardsFromDayFile,
   collectPreviewDeltas,
   collectSotFlags,
-  selectCampDeskCards,
+  partitionCampDeskShelf,
   type CampDeskCard,
   type CampDeskDayFile,
   type CampPreviewDelta,
@@ -16,9 +18,6 @@ import {
 } from "@/lib/nfl-espn-news";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
 import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
-import campDesk20260812 from "../../../content/writers/camp-desk-2026/2026-08-12.json";
-import campDesk20260817 from "../../../content/writers/camp-desk-2026/2026-08-17.json";
-import campRotationQueue from "../../../content/writers/camp-desk-2026/rotation-queue.json";
 import beatWritersJson from "../../../data/writers/nfl-beat-writers.json";
 
 export type CampBeatLink = {
@@ -51,6 +50,9 @@ export type CampDeskPayload = {
   eraLabel: string;
   hubHref: string;
   kosedgeCards: CampDeskCard[];
+  archiveCards: CampDeskCard[];
+  latestDeskDate: string | null;
+  deskStale: boolean;
   sotFlags: CampDeskCard[];
   previewDelta: CampPreviewDelta[];
   rotationNext: string[];
@@ -139,24 +141,53 @@ const ESPN_TEAM_CAMP_HUBS: Record<string, string> = {
   WAS: "https://www.espn.com/nfl/story/_/id/49368181/training-camp-2026-latest-news-intel-updates-buzz-all-32-teams",
 };
 
-function loadCampDeskDayFiles(): CampDeskDayFile[] {
-  const bundled = [
-    campDesk20260817 as CampDeskDayFile,
-    campDesk20260812 as CampDeskDayFile,
+function campDeskContentDir(): string {
+  const candidates = [
+    path.join(process.cwd(), "../../content/writers/camp-desk-2026"),
+    path.join(process.cwd(), "content/writers/camp-desk-2026"),
+    path.join(process.cwd(), "../content/writers/camp-desk-2026"),
   ];
-  return bundled
-    .filter(
-      (raw) =>
-        Boolean(raw?.desk_date) &&
-        Boolean(raw.league_wrap) &&
-        Array.isArray(raw.team_notes),
-    )
-    .sort((a, b) => b.desk_date.localeCompare(a.desk_date));
+  return candidates.find((dir) => existsSync(dir)) ?? candidates[0];
+}
+
+function loadCampDeskDayFiles(): CampDeskDayFile[] {
+  const dir = campDeskContentDir();
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir)
+    .filter((name) => /^\d{4}-\d{2}-\d{2}\.json$/.test(name))
+    .sort()
+    .reverse()
+    .flatMap((name) => {
+      try {
+        const raw = JSON.parse(
+          readFileSync(path.join(dir, name), "utf8"),
+        ) as CampDeskDayFile;
+        if (
+          !raw?.desk_date ||
+          !raw.league_wrap ||
+          !Array.isArray(raw.team_notes)
+        ) {
+          return [];
+        }
+        return [raw];
+      } catch {
+        return [];
+      }
+    });
 }
 
 function loadRotationNext(): string[] {
-  const bundled = campRotationQueue as { next_pulse?: string[] };
-  return Array.isArray(bundled.next_pulse) ? bundled.next_pulse : [];
+  const dir = campDeskContentDir();
+  const file = path.join(dir, "rotation-queue.json");
+  if (!existsSync(file)) return [];
+  try {
+    const bundled = JSON.parse(readFileSync(file, "utf8")) as {
+      next_pulse?: string[];
+    };
+    return Array.isArray(bundled.next_pulse) ? bundled.next_pulse : [];
+  } catch {
+    return [];
+  }
 }
 
 function wireItemInWindow(item: CampNewsItem, now: Date, inCamp: boolean): boolean {
@@ -184,7 +215,7 @@ function buildBeats(registry: BeatRegistry | null): CampBeatLink[] {
       kosEdgeWriter: entry?.kos_edge_writer ?? "Desk",
       primaryWriter: primary?.name ?? null,
       primaryOutlet: primary?.outlet ?? null,
-      primaryHandle: primary?.x?.[0] ?? null,
+      primaryHandle: null,
       espnCampHref: ESPN_TEAM_CAMP_HUBS[team.code] ?? null,
       previewHref: `/pro/nfl/previews/${team.code}`,
     };
@@ -208,10 +239,13 @@ export async function buildNflCampDesk(opts?: {
     .filter((item) => wireItemInWindow(item, now, inCamp))
     .slice(0, 8);
   const dayFiles = loadCampDeskDayFiles();
-  const kosedgeCards = selectCampDeskCards(
-    dayFiles.flatMap((file) => cardsFromDayFile(file)),
-    { now, team: opts?.team, inCamp },
-  );
+  const allCards = dayFiles.flatMap((file) => cardsFromDayFile(file));
+  const shelf = partitionCampDeskShelf(allCards, {
+    now,
+    team: opts?.team,
+    inCamp,
+  });
+  const kosedgeCards = shelf.live;
   // Preview "camp refs" blocks are not the Camp Desk product surface — skip
   // scanning season-previews so NFT does not pull that tree into this route.
   const writerIntel: CampWriterIntelItem[] = [];
@@ -221,6 +255,9 @@ export async function buildNflCampDesk(opts?: {
     eraLabel: registry?.era ?? "training-camp",
     hubHref: "/pro/nfl/camp",
     kosedgeCards,
+    archiveCards: shelf.archive,
+    latestDeskDate: shelf.latestDeskDate,
+    deskStale: shelf.deskStale,
     sotFlags: collectSotFlags(kosedgeCards),
     previewDelta: collectPreviewDeltas(dayFiles),
     rotationNext: loadRotationNext(),
@@ -231,9 +268,9 @@ export async function buildNflCampDesk(opts?: {
     beats,
     writers: WRITER_COVERAGE,
     notes: [
-      "Camp Desk hero is KosEdge-dated notes. Trusted X contact index + beat/official/multi-source live in Sources — citations, not the product.",
-      "Camp/Monday refresh prefers data/writers/nfl-beat-writers.json (trusted X) over any single outlet. ESPN may be one input, never the branded wire.",
-      "During camp, notes older than 72 hours are buried unless pinned. Empty team days stay empty — no filler essays.",
+      "Camp Desk hero is KosEdge-dated notes. Beat, official, and multi-source desks are citations — not an X timeline.",
+      "Camp/Monday refresh prefers data/writers/nfl-beat-writers.json (research index) over any single outlet. ESPN may be one input, never the branded wire. No X profile links on the product.",
+      "During camp, notes older than 72 hours move to Archive. The newest package always stays on the shelf so preseason is never a dead empty state.",
       "Material depth flags queue the existing SoT job. Prose does not publish a new active_run.",
       "Market mentions stay Pass unless a KEI path already supports a tag.",
     ],

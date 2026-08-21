@@ -36,10 +36,13 @@ export type CampPreviewDelta = {
   status: "flagged" | "touched" | "skipped";
 };
 
+export type CampDeskPackageKind = "daily" | "monday";
+
 export type CampDeskDayFile = {
   desk_date: string;
   pinned?: boolean;
   source_type: "kosedge-desk";
+  package?: CampDeskPackageKind;
   league_wrap: CampLeagueWrap;
   team_notes: CampTeamNote[];
   preview_delta?: CampPreviewDelta[];
@@ -50,6 +53,7 @@ export type CampDeskCard = {
   kind: "league_wrap" | "team_note";
   desk_date: string;
   pinned: boolean;
+  packageKind: CampDeskPackageKind;
   team_ids: string[];
   source_type: "kosedge-desk";
   is_material_depth: boolean;
@@ -65,6 +69,29 @@ export type CampDeskCard = {
 export function parseDeskDateMs(deskDate: string): number {
   const ts = Date.parse(`${deskDate}T12:00:00-04:00`);
   return Number.isFinite(ts) ? ts : 0;
+}
+
+export function isCampDeskXProfileHref(href: string): boolean {
+  try {
+    const host = new URL(href).hostname.replace(/^www\./, "").toLowerCase();
+    return host === "x.com" || host === "twitter.com" || host === "mobile.twitter.com";
+  } catch {
+    return /(?:^|\/\/)(?:www\.)?(?:x|twitter)\.com\//i.test(href);
+  }
+}
+
+export function publicCampDeskSources(sources: CampDeskSource[]): CampDeskSource[] {
+  return sources.filter((source) => !isCampDeskXProfileHref(source.href));
+}
+
+export function newestDeskDate(cards: CampDeskCard[]): string | null {
+  if (!cards.length) return null;
+  return cards.reduce((best, card) =>
+    parseDeskDateMs(card.desk_date) > parseDeskDateMs(best)
+      ? card.desk_date
+      : best,
+    cards[0].desk_date,
+  );
 }
 
 export function isWithinCampDeskWindow(
@@ -104,11 +131,13 @@ export function cardsFromDayFile(
   pinnedOverride?: boolean,
 ): CampDeskCard[] {
   const pinned = pinnedOverride ?? Boolean(file.pinned);
+  const packageKind: CampDeskPackageKind = file.package === "monday" ? "monday" : "daily";
   const wrap: CampDeskCard = {
     id: `wrap-${file.desk_date}`,
     kind: "league_wrap",
     desk_date: file.desk_date,
     pinned,
+    packageKind,
     team_ids: file.team_notes.map((note) => note.team_id),
     source_type: "kosedge-desk",
     is_material_depth: file.team_notes.some((note) => note.is_material_depth),
@@ -117,13 +146,14 @@ export function cardsFromDayFile(
     bottom_line: file.league_wrap.bottom_line,
     key_points: file.league_wrap.storylines,
     what_to_watch: file.league_wrap.what_to_watch,
-    sources: file.league_wrap.sources,
+    sources: publicCampDeskSources(file.league_wrap.sources),
   };
   const notes: CampDeskCard[] = file.team_notes.map((note) => ({
     id: `note-${file.desk_date}-${note.team_id}`,
     kind: "team_note",
     desk_date: file.desk_date,
     pinned,
+    packageKind,
     team_ids: [note.team_id],
     source_type: "kosedge-desk",
     is_material_depth: note.is_material_depth,
@@ -132,7 +162,7 @@ export function cardsFromDayFile(
     bottom_line: note.bottom_line,
     key_points: note.key_points,
     what_to_watch: note.what_to_watch,
-    sources: note.sources,
+    sources: publicCampDeskSources(note.sources),
     href: `/pro/nfl/previews/${note.team_id}`,
   }));
   return [wrap, ...notes];
@@ -144,25 +174,69 @@ export function selectCampDeskCards(
     now: Date;
     team?: string | null;
     inCamp?: boolean;
+    keepLatestIfEmpty?: boolean;
   },
 ): CampDeskCard[] {
   const team = opts.team?.trim().toUpperCase() || null;
   const inCamp = opts.inCamp ?? true;
-  return cards
-    .filter((card) => {
-      if (team && card.kind === "team_note" && !card.team_ids.includes(team)) {
-        return false;
-      }
-      if (team && card.kind === "league_wrap") return true;
-      if (!inCamp) return true;
-      return isWithinCampDeskWindow(card.desk_date, opts.now, card.pinned);
-    })
+  const keepLatestIfEmpty = opts.keepLatestIfEmpty ?? inCamp;
+  const scoped = cards.filter((card) => {
+    if (team && card.kind === "team_note" && !card.team_ids.includes(team)) {
+      return false;
+    }
+    if (team && card.kind === "league_wrap") return true;
+    return true;
+  });
+  const windowed = scoped.filter((card) => {
+    if (!inCamp) return true;
+    return isWithinCampDeskWindow(card.desk_date, opts.now, card.pinned);
+  });
+  const picked =
+    windowed.length > 0 || !keepLatestIfEmpty
+      ? windowed
+      : scoped.filter((card) => {
+          const latest = newestDeskDate(scoped);
+          return latest != null && card.desk_date === latest;
+        });
+  return picked.sort((a, b) => {
+    const dateDelta = parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
+    if (dateDelta !== 0) return dateDelta;
+    if (a.kind !== b.kind) return a.kind === "league_wrap" ? -1 : 1;
+    return a.id.localeCompare(b.id);
+  });
+}
+
+export function partitionCampDeskShelf(
+  cards: CampDeskCard[],
+  opts: {
+    now: Date;
+    team?: string | null;
+    inCamp?: boolean;
+  },
+): {
+  live: CampDeskCard[];
+  archive: CampDeskCard[];
+  latestDeskDate: string | null;
+  deskStale: boolean;
+} {
+  const latestDeskDate = newestDeskDate(cards);
+  const live = selectCampDeskCards(cards, {
+    ...opts,
+    keepLatestIfEmpty: true,
+  });
+  const liveIds = new Set(live.map((card) => card.id));
+  const archive = cards
+    .filter((card) => !liveIds.has(card.id))
     .sort((a, b) => {
       const dateDelta = parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
       if (dateDelta !== 0) return dateDelta;
       if (a.kind !== b.kind) return a.kind === "league_wrap" ? -1 : 1;
       return a.id.localeCompare(b.id);
     });
+  const deskStale =
+    latestDeskDate != null &&
+    !isWithinCampDeskWindow(latestDeskDate, opts.now, false);
+  return { live, archive, latestDeskDate, deskStale };
 }
 
 export function collectSotFlags(cards: CampDeskCard[]): CampDeskCard[] {

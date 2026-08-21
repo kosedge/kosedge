@@ -49,15 +49,32 @@ Default to news break / camp notebook during July–early September unless the a
 
 ### Camp / Monday refresh — source doctrine (locked)
 
-**Camp/Monday refresh uses the trusted X list + multi-source.**
+**Camp/Monday refresh uses the beat index + multi-source. X handles are a research contact list, not the product.**
 
-1. Start with the team’s trusted X handles in `nfl-beat-writers.json` (primary + local + team_site).
+1. Start with the team’s trusted contacts in `nfl-beat-writers.json` (primary + local + team_site). Use handles to *find* reporting — do not scrape or mirror tweets as copy.
 2. Corroborate with at least one second source (official, Athletic/local, AP, club site).
 3. ESPN may be *one* input. Never brand the desk as an ESPN wire mirror. Never invent quotes.
-4. Attribute generically when a quote is not on hand (“camp reports”, “team depth chart”, “coach availability notes”).
+4. Attribute generically when a quote is not on hand (“per team report”, “multiple beat reports”). **No X profile links, no “follow @…” CTAs on Camp Desk.**
 5. Team previews refresh **every Monday** in camp/season (`**Date:**` + Bottom line / What matters most at minimum).
+6. **Daily Camp Desk:** write `content/writers/camp-desk-2026/YYYY-MM-DD.json` (see that folder’s README). Newest file always shows in preseason. Quiet clubs skip — no filler essays. Injury days ship same-day; do not wait for Monday.
 
-If X tooling is unavailable, WebSearch + WebFetch of Athletic/local/official URLs is sufficient — still cite the writer and outlet, and still avoid ESPN-only branding.
+If X tooling is unavailable, WebSearch + WebFetch of Athletic/local/official URLs is sufficient — still cite the writer and outlet, never paste a tweet as the card.
+
+## Camp Desk product (preseason)
+
+Camp Desk (`/pro/nfl/camp`) surfaces **KosEdge copy only**. Empty “No KosEdge camp notes” is a bug while camp is active.
+
+| Slot | Spec |
+|------|------|
+| Daily | League wrap + every team with **real** news (`package: daily`) |
+| Monday | Full 32 + wrap (`package: monday`, see `2026-08-17.json`) |
+| Injury day | Same-day daily file |
+| Freshness | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive |
+| Empty pipeline | Honest **Desk updating** + last note date — never a dead shelf |
+
+Expertise contract: consensus first, specific impact, thin edge = **Pass**. Date-only byline. Depth/roster claims flag SoT intel — do not invent starters.
+
+How to add a day: `content/writers/camp-desk-2026/README.md`.
 
 ## News-break output template
 
