@@ -10,6 +10,7 @@ import {
 import { fetchNflIntel } from "@/lib/nfl-intel";
 import { PowerRatingsTable } from "./PowerRatingsTable";
 import SportProShell from "@/components/pro/SportProShell";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
 import { withEngineVersionOverride } from "@/lib/nfl-lineage";
@@ -170,7 +171,7 @@ export default async function PowerRatingsSportPage({
         pageTitle="NFL Power Ratings"
         pageSubtitle={
           deskMode
-            ? "Model PR = points better/worse than average on a neutral field (same strength path as Season Model). Ryan Adj defaults to 0."
+            ? "Team strength snapshot — research, not a bet card."
             : "Desk snapshot pending — showing expected-wins outlook until Tuesday publish lands."
         }
       >
@@ -197,6 +198,9 @@ export default async function PowerRatingsSportPage({
                   : ""}
               </p>
               {lineage ? <NflLineageBadge lineage={lineage} /> : null}
+              <p className="text-xs text-kos-text/45">
+                <ModelTransparencyLink hrefSuffix="#power-ratings" />
+              </p>
             </div>
             <Link
               href="/pro/nfl/model"
@@ -205,17 +209,6 @@ export default async function PowerRatingsSportPage({
               True PR drivers →
             </Link>
           </div>
-          <p className="mt-2 text-xs text-kos-text/50">
-            {deskMode
-              ? "Model PR is immutable on this snapshot. Ryan PR = Model + Adj. Active PR folds current injuries; Game PR stays on Edge Board. Early-season Tuesday updates use Bayesian shrinkage (Week 1–4 heavy prior)."
-              : "Expected wins remain the season-outlook board. Continuity, QB premium, SOS outlook, and blend live on the Season Model True PR surface."}
-          </p>
-          {deskMode && board.desk?.stNote ? (
-            <p className="mt-2 text-xs text-kos-text/45">
-              ST column: {board.desk.stNote}. Market PR shows — until futures /
-              win-total implied powers are wired.
-            </p>
-          ) : null}
 
           <NflAtAGlance rows={enriched} deskMode={deskMode} />
 
@@ -362,8 +355,8 @@ export default async function PowerRatingsSportPage({
           </div>
           <p className="mt-3 text-xs text-kos-text/45">
             {deskMode
-              ? "Model PR units = points vs league average (neutral field). Ryan Adj policy: ±0.25 routine · ±0.5 meaningful · ±1.0 major · >1.0 needs written reason. Tuesday job: scripts/nfl/tuesday_power_ratings_update.py"
-              : "Power Rating fallback = model expected wins. Off/Def = EPA/play (intel)."}
+              ? "ST is approximate until a shared K/DST publish lands."
+              : "Power Rating fallback = model expected wins."}
           </p>
         </main>
       </SportProShell>

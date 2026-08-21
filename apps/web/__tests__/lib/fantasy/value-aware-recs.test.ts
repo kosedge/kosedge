@@ -4,6 +4,7 @@ import {
   bestAvailableByNeedAware,
   bestAvailableByValueAware,
   computeTiming,
+  deskDraftAdvice,
   MAX_RECOMMEND_RANK_DELTA,
   reachPenalty,
   scoreValueAwarePlayer,
@@ -417,5 +418,31 @@ describe("value-aware recommendations", () => {
       expect(scored.timing).toBe("wait");
       expect(scored.timingHint).toMatch(/Wait/i);
     });
+  });
+
+  it("deskDraftAdvice is pick-agnostic Wait / Reach / Fair", () => {
+    const wait = row({
+      playerId: "wait-p",
+      playerName: "Wait",
+      position: "WR",
+      rankOverall: 20,
+      adp: 40,
+    });
+    expect(deskDraftAdvice(wait).timing).toBe("wait");
+    const reach = row({
+      playerId: "reach-p",
+      playerName: "Reach",
+      position: "RB",
+      rankOverall: 40,
+      adp: 20,
+    });
+    expect(deskDraftAdvice(reach).timing).toBe("reach");
+    expect(
+      deskDraftAdvice({
+        adp: 12,
+        valueDelta: 10,
+        adpMatchConfidence: null,
+      }).label,
+    ).toBe("—");
   });
 });

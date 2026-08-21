@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import {
   CurrentYtdHint,
@@ -205,20 +206,11 @@ export default async function NflAwardsPage() {
       ) : null}
 
       {anyRows ? (
-        <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/60">
-          <p className="text-xs font-semibold uppercase tracking-wide text-kos-text/45">
-            Methodology
-          </p>
-          <p className="mt-2">
-            Award Score is a relative 0–100 model index (team success + stat
-            composite + position prior) — not P(award). Multiple contenders can
-            sit in the 70–90 band; scores do not sum to 100. True award
-            probabilities would require one winner per sim path. Team success
-            blends projected wins and division-title probability from the Monte
-            Carlo. Stat composite compares same-position peers only. Current
-            for awards is <span className="font-mono">—</span> (no fake award
-            progress). Odds join best-effort — missing markets show{" "}
-            <span className="font-mono">—</span>.
+        <section className="mt-6 text-sm text-kos-text/55">
+          <p>
+            Award Score is a 0–100 research index, not P(award). Missing odds
+            stay —.{" "}
+            <ModelTransparencyLink hrefSuffix="#game-boxes" />
           </p>
           <p className="mt-2 text-xs text-kos-text/45" title={CURRENT_YTD_TOOLTIP}>
             {oddsBundle.note}

@@ -117,10 +117,7 @@ export default function SeasonEngineSurvivorClient({
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
           Mark teams you already used, choose a future week, and rank remaining
-          picks from path-coherent season sims. Bye weeks are excluded.
-          Scores blend this-week win rate with future save value — not full
-          multi-entry pool EV. Path SOS is schedule outlook only: harder slate
-          ≠ weaker team; intrinsic PR stays off the SOS dial.
+          picks. Bye weeks are excluded.
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>

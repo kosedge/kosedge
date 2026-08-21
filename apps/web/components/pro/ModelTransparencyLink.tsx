@@ -8,13 +8,15 @@ import {
 export default function ModelTransparencyLink({
   className = "text-xs text-kos-text/45 hover:text-kos-gold",
   label = "Model transparency",
+  hrefSuffix = "",
 }: {
   className?: string;
   label?: string;
+  hrefSuffix?: string;
 }) {
   return (
     <Link
-      href={MODEL_TRANSPARENCY_HREF}
+      href={`${MODEL_TRANSPARENCY_HREF}${hrefSuffix}`}
       className={className}
       title={MODEL_TRANSPARENCY_TITLE}
     >

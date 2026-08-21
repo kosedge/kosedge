@@ -18,7 +18,7 @@ import {
   teamGrade,
   type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
-import { draftAdviceClass } from "@/lib/fantasy/value-aware-recs";
+import { draftAdviceClass, deskDraftAdvice } from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskBoard, FantasyDeskRow } from "@/lib/fantasy/types";
 import {
   draftPositionBadgeClass,
@@ -211,9 +211,9 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Board order is <span className="text-kos-text/90">Model rank</span>
-                — projection order, not recommended pick order. Builder and Mock
-                add ADP-aware take / wait / reach advice.{" "}
+                Draft board — Model rank, ADP, and Value Δ. Sort defaults to
+                value, not pick-the-top-model-row. Builder and Mock add take /
+                wait / reach.{" "}
                 <Link
                   href="/pro/model-transparency#fantasy"
                   className="text-kos-text/45 hover:text-kos-gold"
@@ -261,7 +261,7 @@ export function FantasyDraftDeskClient({
       {isPreseason ? (
         <HonestStatusBanner title="Preseason fantasy board" tone="sky">
           <p>
-            Regular-season draft rankings aren&apos;t posted yet — this desk
+            Regular-season projection table isn&apos;t posted yet — this desk
             uses the season-engine preseason sim for skill positions (QB / RB /
             WR / TE). Market ADP is still FantasyPros; unmatched names show ADP
             as —. That is camp-season honesty, not an unfinished page. Start
@@ -274,11 +274,11 @@ export function FantasyDraftDeskClient({
         <HonestStatusBanner title="K / DST unavailable" tone="amber">
           <p>
             Kickers and defenses are not on this board. Preseason player totals
-            are QB / RB / WR / TE only — named K/DST rankings wait until{" "}
+            are QB / RB / WR / TE only — named K/DST wait until{" "}
+            <code className="text-amber-50">nfl_fantasy_season_draft_rankings</code>{" "}
+            includes K/DST from{" "}
             <code className="text-amber-50">nfl_kicker_dst_projections</code>{" "}
-            materializes into{" "}
-            <code className="text-amber-50">/nfl/fantasy/draft-rankings</code>{" "}
-            (and the preseason bundle). Until then mocks skip those roster slots
+            (and the next 100k publish). Until then mocks skip those roster slots
             and grades do not ding missing K/DST. No invented projections.
           </p>
           {kdFilter ? (
@@ -314,7 +314,8 @@ export function FantasyDraftDeskClient({
         <HonestStatusBanner title="No players for this view" tone="neutral">
           <p>
             Nothing matched this scoring / position filter. Clear filters, or
-            wait for draft rankings / the preseason sim board to load.
+            wait for the season projection table / the preseason sim board to
+            load.
           </p>
           {posFilter !== "ALL" ? (
             <p className="mt-2">
@@ -457,7 +458,7 @@ export function FantasyDraftDeskClient({
           scoring={board.scoringProfile}
           onSelect={(id) => setSelectedId(id)}
           onToggle={toggleRoster}
-          onBrowse={() => setTab("board")}
+          onBrowse={() => setTab("value")}
           boardRows={board.rows}
           posFilter={posFilter}
         />
@@ -532,6 +533,7 @@ export function FantasyDraftDeskClient({
                 <ul className="divide-y divide-white/10 md:hidden">
                   {filtered.map((row) => {
                     const value = valueLabel(row.valueDelta);
+                    const advice = deskDraftAdvice(row);
                     const onRoster = rosterSet.has(row.playerId);
                     const muted =
                       tab === "value" &&
@@ -592,6 +594,11 @@ export function FantasyDraftDeskClient({
                             >
                               {value.text}
                             </span>
+                            <span
+                              className={`max-w-[9rem] text-right text-[10px] leading-tight ${draftAdviceClass(advice.timing)}`}
+                            >
+                              {advice.label}
+                            </span>
                             <button
                               type="button"
                               onClick={() => toggleRoster(row.playerId)}
@@ -621,7 +628,8 @@ export function FantasyDraftDeskClient({
                           "Pos",
                           "Team",
                           "ADP",
-                          "Value",
+                          "Value Δ",
+                          "Advice",
                           "Floor",
                           "Med",
                           "Ceil",
@@ -640,6 +648,7 @@ export function FantasyDraftDeskClient({
                     <tbody>
                       {filtered.map((row, idx) => {
                         const value = valueLabel(row.valueDelta);
+                        const advice = deskDraftAdvice(row);
                         const onRoster = rosterSet.has(row.playerId);
                         const muted =
                           tab === "value" &&
@@ -695,6 +704,11 @@ export function FantasyDraftDeskClient({
                               }`}
                             >
                               {value.text}
+                            </td>
+                            <td
+                              className={`border-b border-white/5 px-2.5 py-2 text-[11px] font-medium ${draftAdviceClass(advice.timing)}`}
+                            >
+                              {advice.label}
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/75">
                               {row.floorPoints.toFixed(0)}
@@ -752,27 +766,15 @@ export function FantasyDraftDeskClient({
         </div>
       ) : null}
 
-      <details className="rounded-2xl border border-white/10 bg-black/25 px-3 py-2 sm:p-4 text-[11px] leading-relaxed text-kos-text/55 sm:text-xs">
-        <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 font-semibold uppercase tracking-[0.12em] text-kos-text/40 marker:content-none [&::-webkit-details-marker]:hidden">
-          <span>Methods</span>
-          <span className="font-normal normal-case tracking-normal text-kos-text/35">
-            Model rank vs draft advice
-          </span>
-        </summary>
-        <ul className="mt-2 list-disc space-y-1.5 pl-4 pb-1 sm:mt-3">
-          {board.limitations.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
-        <p className="mt-2 pb-1">
-          <Link
-            href="/pro/model-transparency#fantasy"
-            className="text-kos-text/45 hover:text-kos-gold"
-          >
-            Model transparency
-          </Link>
-        </p>
-      </details>
+      <p className="text-[11px] leading-relaxed text-kos-text/45">
+        Model rank is projection order. Advice is ADP-aware Wait / Take / Reach.{" "}
+        <Link
+          href="/pro/model-transparency#fantasy"
+          className="text-kos-text/45 hover:text-kos-gold"
+        >
+          Model transparency
+        </Link>
+      </p>
     </div>
   );
 }
@@ -852,6 +854,14 @@ function PlayerCard({
           </p>
         </div>
       </div>
+      {(() => {
+        const advice = deskDraftAdvice(row);
+        return (
+          <p className={`mt-2 text-xs ${draftAdviceClass(advice.timing)}`}>
+            {advice.label}
+          </p>
+        );
+      })()}
 
       {row.adpQaFlag ? (
         <div className="mt-4 rounded-xl border border-kos-gold/25 bg-kos-gold/8 p-3">
@@ -972,8 +982,8 @@ function TeamBuilderPanel({
           <div>
             <h2 className="text-lg font-semibold text-kos-text">Your roster</h2>
             <p className="text-sm text-kos-text/60">
-              Private scratchpad — suggestions below are ADP-aware. Rankings
-              stay raw Model rank. Next step is Mock.
+              Private scratchpad — suggestions below are ADP-aware. Model rank
+              stays projection order. Next step is Mock.
             </p>
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-center">
@@ -996,7 +1006,7 @@ function TeamBuilderPanel({
             onClick={onBrowse}
             className="min-h-10 rounded-xl border border-white/15 px-3 py-2 text-xs font-semibold text-kos-text/70 active:scale-[0.98]"
           >
-            ← Rankings
+            ← Draft board
           </button>
           <Link
             href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}

@@ -95,7 +95,7 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       title: "Fantasy",
       href: "/pro/nfl/fantasy",
       lines: [
-        "Rankings board is Model rank — projection order, not recommended pick order.",
+        "Draft board default is Value Δ + Wait/Take. Model rank is projection order, not pick order.",
         "Builder and Mock use the same projections with ADP-aware take / wait / reach advice.",
         "ADP source and freshness stay on the board. Missing K/DST stay empty until they exist.",
       ],

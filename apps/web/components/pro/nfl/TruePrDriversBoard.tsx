@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import TruePrDriverChips from "@/components/pro/nfl/TruePrDriverChips";
 import { driverChipsForTeam } from "@/lib/nfl-true-pr-format";
 import type { TruePrProductSurface } from "@/lib/nfl-true-pr";
@@ -37,10 +38,8 @@ export default function TruePrDriversBoard({
             True power ratings
           </h2>
           <p className="mt-1 max-w-2xl text-xs leading-relaxed text-kos-text/60">
-            Intrinsic PR is research fair strength. Drivers explain why a team
-            sits where it sits. 2026 SOS is schedule outlook only — harder
-            schedule ≠ weaker team. Blend stays prior-heavy through games 0–2
-            (no Week-1 cliff). Edge stays KEI vs market on Edge Board.
+            Intrinsic PR is research fair strength.{" "}
+            <ModelTransparencyLink hrefSuffix="#game-boxes" />
           </p>
         </div>
         <p className="text-[11px] text-kos-text/45">
@@ -92,9 +91,7 @@ export default function TruePrDriversBoard({
       </ol>
 
       <p className="mt-3 text-[11px] leading-relaxed text-kos-text/40">
-        Approximate factors are labeled. Missing evidence is hidden or marked
-        unavailable — never decorated as elite confidence. Full opponent-tier
-        pages and public non-Pro teaser remain out of scope.
+        Approximate factors are labeled. Missing evidence stays empty.
       </p>
     </section>
   );

@@ -173,8 +173,8 @@ function buildFallbackBoard(input: {
     limitations: [
       ...LIMITATIONS_BASE,
       bundle.nTeamSims && bundle.nTeamSims >= 50000
-        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths${lockBit}${dateBit} · ${bundle.bundleDirName}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in draft-rankings.`
-        : `Preseason board from season-engine sim (${bundle.bundleDirName}${lockBit}${dateBit}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in draft-rankings.`,
+        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths${lockBit}${dateBit} · ${bundle.bundleDirName}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in nfl_fantasy_season_draft_rankings.`
+        : `Preseason board from season-engine sim (${bundle.bundleDirName}${lockBit}${dateBit}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in nfl_fantasy_season_draft_rankings.`,
     ],
   };
 }

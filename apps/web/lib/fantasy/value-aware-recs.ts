@@ -80,6 +80,7 @@ export const DRAFT_ADVICE_COPY = {
   takeValue: "Take now — value at this pick",
   wait: "Wait — available later by ADP",
   reach: "Reach — only if need is extreme",
+  fairAligned: "Fair — model and market aligned",
 } as const;
 
 export type ValueAwareSuggestion = {
@@ -438,4 +439,32 @@ export function draftAdviceClass(timing: SuggestionTiming): string {
   if (timing === "wait") return "text-sky-300/90";
   if (timing === "reach") return "text-rose-300/90";
   return "text-kos-text/45";
+}
+
+/**
+ * Pick-agnostic Wait / Take / Reach on the draft desk.
+ * Builder/Mock keep the full scorer (need + pick number).
+ */
+export function deskDraftAdvice(
+  row: Pick<
+    FantasyDeskRow,
+    "adp" | "valueDelta" | "adpMatchConfidence"
+  >,
+): { timing: SuggestionTiming; label: string } {
+  if (
+    row.adp == null ||
+    row.valueDelta == null ||
+    !Number.isFinite(row.adp) ||
+    !Number.isFinite(row.valueDelta) ||
+    row.adpMatchConfidence !== "high"
+  ) {
+    return { timing: "fair", label: "—" };
+  }
+  if (row.valueDelta >= 8) {
+    return { timing: "wait", label: DRAFT_ADVICE_COPY.wait };
+  }
+  if (row.valueDelta <= -8) {
+    return { timing: "reach", label: DRAFT_ADVICE_COPY.reach };
+  }
+  return { timing: "fair", label: DRAFT_ADVICE_COPY.fairAligned };
 }
