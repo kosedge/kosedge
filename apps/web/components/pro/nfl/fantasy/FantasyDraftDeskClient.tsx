@@ -7,7 +7,6 @@ import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
-import { boardRank } from "@/lib/fantasy/desk-rank-policy";
 import {
   notableValueNotes,
   tierCliffNote,
@@ -19,6 +18,7 @@ import {
   teamGrade,
   type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
+import { draftAdviceClass } from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskBoard, FantasyDeskRow } from "@/lib/fantasy/types";
 import {
   draftPositionBadgeClass,
@@ -211,10 +211,10 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Board order is projected fantasy points (Half-PPR default).
-                Model # / pts stay raw. ADP and Value Δ are the market
-                comparison — large gaps mean investigate role, not a silent
-                edge.
+                Board order is <span className="text-kos-text/90">Model rank</span>
+                — projection order, not recommended pick order. ADP and Value Δ
+                stay beside it. Builder and Mock use the same projections with
+                ADP-aware take / wait / reach advice.
               </p>
               <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
                 Source · {board.source} · {board.adpSourceLabel}
@@ -398,7 +398,7 @@ export function FantasyDraftDeskClient({
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {(
               [
-                ["board", "Rankings"],
+                ["board", "Model rank"],
                 ["value", "Value"],
                 ["builder", "Builder"],
               ] as const
@@ -464,14 +464,18 @@ export function FantasyDraftDeskClient({
             <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-white/10 px-4 py-3">
               <div>
                 <h2 className="text-lg font-semibold text-kos-text">
-                  {tab === "value" ? "Value Board" : "Draft Rankings"}
+                  {tab === "value" ? "Value Board" : "Model rank"}
                 </h2>
                 {tab === "value" ? (
                   <p className="mt-0.5 text-[11px] text-kos-text/50">
                     {board.adpSourceLabel} · {board.adpFreshnessLabel} · Value Δ
                     only on high-confidence same-format matches
                   </p>
-                ) : null}
+                ) : (
+                  <p className="mt-0.5 text-[11px] text-kos-text/50">
+                    Projection order — not recommended pick order
+                  </p>
+                )}
               </div>
               <p className="text-xs text-kos-text/55">
                 {filtered.length} players
@@ -542,7 +546,7 @@ export function FantasyDraftDeskClient({
                             className="flex min-w-0 flex-1 items-start gap-3 text-left"
                           >
                             <span className="w-8 shrink-0 pt-0.5 text-sm font-semibold text-kos-text">
-                              {boardRank(row)}
+                              {row.rankOverall}
                             </span>
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-semibold text-kos-text">
@@ -560,8 +564,7 @@ export function FantasyDraftDeskClient({
                               ) : null}
                               <p className="mt-0.5 text-xs text-kos-text/55">
                                 {row.position}
-                                {row.rankPosition} · {row.team} · Model #
-                                {row.rankOverall} · ADP{" "}
+                                {row.rankPosition} · {row.team} · ADP{" "}
                                 {formatAdp(row.adp, 0)} · Med{" "}
                                 {row.medianPoints.toFixed(0)}
                               </p>
@@ -608,11 +611,10 @@ export function FantasyDraftDeskClient({
                     <thead>
                       <tr>
                         {[
-                          "Board",
+                          "Model",
                           "Player",
                           "Pos",
                           "Team",
-                          "Model",
                           "ADP",
                           "Value",
                           "Floor",
@@ -651,7 +653,7 @@ export function FantasyDraftDeskClient({
                             onClick={() => setSelectedId(row.playerId)}
                           >
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm font-semibold text-kos-text">
-                              {boardRank(row)}
+                              {row.rankOverall}
                             </td>
                             <td className="sticky left-0 border-b border-white/5 bg-[#0c0f14]/px-2.5 py-2 text-sm font-semibold text-kos-text">
                               <div className="flex flex-wrap items-center gap-1.5">
@@ -674,9 +676,6 @@ export function FantasyDraftDeskClient({
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
                               {row.team}
-                            </td>
-                            <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
-                              #{row.rankOverall}
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
                               {formatAdp(row.adp)}
@@ -752,7 +751,7 @@ export function FantasyDraftDeskClient({
         <summary className="flex min-h-11 cursor-pointer list-none items-center gap-2 font-semibold uppercase tracking-[0.12em] text-kos-text/40 marker:content-none [&::-webkit-details-marker]:hidden">
           <span>Methods</span>
           <span className="font-normal normal-case tracking-normal text-kos-text/35">
-            ADP · limits
+            Model rank vs draft advice
           </span>
         </summary>
         <ul className="mt-2 list-disc space-y-1.5 pl-4 pb-1 sm:mt-3">
@@ -806,7 +805,7 @@ function PlayerCard({
         <span
           className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}
         >
-          #{boardRank(row)}
+          #{row.rankOverall}
         </span>
       </div>
 
@@ -960,7 +959,8 @@ function TeamBuilderPanel({
           <div>
             <h2 className="text-lg font-semibold text-kos-text">Your roster</h2>
             <p className="text-sm text-kos-text/60">
-              Private scratchpad — next step is Mock for CPU practice.
+              Private scratchpad — suggestions below are ADP-aware. Rankings
+              stay raw Model rank. Next step is Mock.
             </p>
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-center">
@@ -1043,14 +1043,14 @@ function TeamBuilderPanel({
 
       <div className="space-y-5">
         <SuggestBlock
-          title="Best available by value"
+          title="ADP-aware value"
           suggestions={byValue}
           rosterSet={rosterSet}
           onSelect={onSelect}
           onToggle={onToggle}
         />
         <SuggestBlock
-          title="Best available by need"
+          title="ADP-aware need"
           suggestions={byNeed}
           rosterSet={rosterSet}
           onSelect={onSelect}
@@ -1105,15 +1105,7 @@ function SuggestBlock({
                     {valueLabel(row.valueDelta).text}
                   </p>
                   {timingHint ? (
-                    <p
-                      className={`mt-0.5 text-[11px] ${
-                        timing === "take_now"
-                          ? "text-kos-gold"
-                          : timing === "wait"
-                            ? "text-sky-300/90"
-                            : "text-kos-text/45"
-                      }`}
-                    >
+                    <p className={`mt-0.5 text-[11px] ${draftAdviceClass(timing)}`}>
                       {timingHint}
                     </p>
                   ) : null}

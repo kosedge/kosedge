@@ -35,6 +35,7 @@ import {
   bestAvailableByValue,
   type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
+import { draftAdviceClass } from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskBoard, FantasyDeskRow, FantasyScoringProfile } from "@/lib/fantasy/types";
 import {
   draftPositionBadgeClass,
@@ -351,9 +352,9 @@ function SetupView({
               through {MOCK_ROUNDS} rounds.
             </li>
             <li>
-              CPU mixes ADP, KosEdge value, and need — not pure BPA and not
-              random. Late-round QB2 stacking is suppressed once a starter is
-              rostered.
+              CPU uses the same ADP-aware scorer as Builder (need + VOR −
+              reach penalty) — not pure model BPA. R1 reach caps and late-QB2
+              suppress stay on. Not an optimal-pick claim.
             </li>
             <li>
               Board: {board.count} players · ADP matched{" "}
@@ -626,13 +627,13 @@ function LiveView({
             {userTurn ? (
               <div className="mt-3 grid gap-2 sm:grid-cols-2">
                 <SuggestRail
-                  title="Best by value"
+                  title="Take / wait"
                   suggestions={byValue}
                   disabled={busy}
                   onPick={onPick}
                 />
                 <SuggestRail
-                  title="Best by need"
+                  title="Fill a need"
                   suggestions={byNeed}
                   disabled={busy}
                   onPick={onPick}
@@ -837,15 +838,7 @@ function SuggestRail({
                   </span>
                 </span>
                 {timingHint ? (
-                  <span
-                    className={`text-[10px] ${
-                      timing === "take_now"
-                        ? "text-kos-gold"
-                        : timing === "wait"
-                          ? "text-sky-300/90"
-                          : "text-kos-text/45"
-                    }`}
-                  >
+                  <span className={`text-[10px] ${draftAdviceClass(timing)}`}>
                     {timingHint}
                   </span>
                 ) : null}

@@ -1,21 +1,21 @@
 /**
- * Value-aware draft recommendations — KosEdge Fantasy Draft Philosophy.
+ * Value-aware draft recommendations — action surface only.
  *
- * Model rank and ADP stay separate signals. This module scores *when* to take
- * a player given the current pick, roster need, and positional scarcity.
+ * Rankings stay raw Model rank. This module scores Builder / Mock *advice*
+ * (take / wait / reach). Not an “optimal pick” claim.
  *
  * Formula (per candidate, higher = stronger recommendation):
  *
- *   score = (baseModel + discountBonus − reachPenalty) × needMult + scarcity
+ *   score = (VOR + need − reach_penalty + wait_bonus) × needMult + scarcity
  *
- *   baseModel     = max(0, MODEL_BASE − modelRank × MODEL_RANK_WEIGHT)
- *   discountBonus = positive valueDelta bonus when ADP >> current pick (wait value)
- *   reachPenalty  = penalty when current pick << ADP (reaching early), reduced
- *                   when elite + cliff + real roster need justify the reach
- *   needMult      = 1 + min(NEED_CAP, unfilled starter slots × NEED_SLOT_BOOST)
- *   scarcity      = positional cliff bonus (few elite options left at pick)
+ *   VOR            = clamp(valueOverReplacement, 0, VOR_CAP) × VOR_SCALE
+ *   need           = unfilled starter slots at the position
+ *   reach_penalty  = picks you would take before ADP (and model-ahead vs ADP
+ *                    beyond one round), reduced only for elite + cliff + hole
+ *   wait_bonus     = positive Value Δ when ADP is still later than this pick
+ *   needMult       = 1 + min(NEED_CAP, slots × NEED_SLOT_BOOST)
  *
- * Tunable knobs live in VALUE_AWARE_WEIGHTS below.
+ * Model # and ADP stay on the row untouched. Tunable knobs below.
  */
 
 import { rosterNeeds } from "@/lib/fantasy/team-builder";
@@ -29,12 +29,18 @@ export const MAX_RECOMMEND_RANK_DELTA = 12;
 
 /** Tunable recommendation knobs — adjust without touching UI. */
 export const VALUE_AWARE_WEIGHTS = {
-  /** Base model-strength offset before rank decay. */
+  /** Cap on VOR contribution so one outlier QB cannot swamp the board. */
+  vorCap: 250,
+  /** Points per VOR (starter RB ~130 VOR → ~15.6). */
+  vorScale: 0.12,
+  /** Flat points per unfilled starter slot at the player's position. */
+  needPointsPerSlot: 8,
+  /** Base model-strength offset before rank decay (kept as a soft prior). */
   modelRankBase: 40,
   /** Points subtracted per model rank slot (lower rank = stronger). */
   modelRankPerPoint: 0.12,
   /** Multiplier on valueDelta when player is a market discount vs pick. */
-  discountBonusScale: 0.55,
+  discountBonusScale: 1.2,
   /** Minimum valueDelta before discount bonus applies. */
   discountMinDelta: 4,
   /** Picks before ADP where reach penalty starts (fair zone). */
@@ -63,9 +69,18 @@ export const VALUE_AWARE_WEIGHTS = {
   adpUrgencyWindow: 4,
   /** Picks ahead of ADP where "wait" hint applies with strong valueDelta. */
   waitAdpLeadMin: 8,
+  /** Do not Wait-CTA lottery ADP (Gesicki-class). Three 12-team rounds. */
+  waitHorizonPicks: 36,
 } as const;
 
-export type SuggestionTiming = "take_now" | "wait" | "fair";
+export type SuggestionTiming = "take_now" | "wait" | "reach" | "fair";
+
+export const DRAFT_ADVICE_COPY = {
+  takeAligned: "Take now — model and market aligned",
+  takeValue: "Take now — value at this pick",
+  wait: "Wait — available later by ADP",
+  reach: "Reach — only if need is extreme",
+} as const;
 
 export type ValueAwareSuggestion = {
   row: FantasyDeskRow;
@@ -83,9 +98,24 @@ export type ValueAwareContext = {
   needs?: Record<string, number>;
 };
 
-function baseModelStrength(rankOverall: number): number {
+function vorTerm(row: FantasyDeskRow): number {
   const w = VALUE_AWARE_WEIGHTS;
-  return Math.max(0, w.modelRankBase - rankOverall * w.modelRankPerPoint);
+  const vor = Number(row.valueOverReplacement) || 0;
+  return Math.max(0, Math.min(w.vorCap, vor)) * w.vorScale;
+}
+
+function needTerm(row: FantasyDeskRow, needs: Record<string, number>): number {
+  return positionalNeedScore(row, needs) * VALUE_AWARE_WEIGHTS.needPointsPerSlot;
+}
+
+function modelAheadReachPenalty(row: FantasyDeskRow): number {
+  const w = VALUE_AWARE_WEIGHTS;
+  if (row.adp == null || !Number.isFinite(row.adp)) return 0;
+  if (row.adpMatchConfidence !== "high") return 0;
+  const modelAhead = row.adp - row.rankOverall;
+  const extra = modelAhead - MAX_RECOMMEND_RANK_DELTA;
+  if (extra <= 0) return 0;
+  return extra * w.reachPenaltyPerPick;
 }
 
 function positionalNeedScore(
@@ -179,23 +209,31 @@ export function scoreValueAwarePlayer(
   row: FantasyDeskRow,
   ctx: ValueAwareContext,
 ): ValueAwareSuggestion {
-  const w = VALUE_AWARE_WEIGHTS;
   const needs = ctx.needs ?? rosterNeeds(ctx.roster);
   const needScore = positionalNeedScore(row, needs);
   const scarcity = scarcityBonus(row, ctx.available, ctx.pickOverall);
 
-  const base = baseModelStrength(row.rankOverall);
+  const vor = vorTerm(row);
+  const need = needTerm(row, needs);
   const discount = discountBonus(row, ctx.pickOverall);
-  const reach = reachPenalty(row, ctx.pickOverall, needScore, scarcity);
+  const pickReach = reachPenalty(row, ctx.pickOverall, needScore, scarcity);
+  const modelReach = modelAheadReachPenalty(row);
+  const reach = pickReach + modelReach;
   const needMult = needMultiplier(row, needs);
+  const rankPrior = Math.max(
+    0,
+    VALUE_AWARE_WEIGHTS.modelRankBase -
+      row.rankOverall * VALUE_AWARE_WEIGHTS.modelRankPerPoint,
+  );
 
-  const score = (base + discount - reach) * needMult + scarcity;
+  const score =
+    (vor + need + rankPrior + discount - reach) * needMult + scarcity;
   const { timing, timingHint } = computeTiming(
     row,
     ctx.pickOverall,
     needs,
     scarcity,
-    reach,
+    pickReach,
   );
 
   return { row, score, timing, timingHint };
@@ -245,48 +283,65 @@ export function computeTiming(
       return { timing: "fair", timingHint: null };
     }
     if (row.valueDelta != null && row.valueDelta >= 8) {
-      return { timing: "wait", timingHint: "Market discount — target later" };
+      return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
     }
     if (row.valueDelta != null && row.valueDelta <= -8) {
-      return { timing: "take_now", timingHint: "ADP premium — act soon" };
+      return { timing: "take_now", timingHint: DRAFT_ADVICE_COPY.takeAligned };
     }
     return { timing: "fair", timingHint: null };
   }
 
   if (adp == null) {
     if (hasNeed && row.rankOverall <= 36) {
-      return { timing: "take_now", timingHint: "Fills need — take now" };
+      return { timing: "take_now", timingHint: DRAFT_ADVICE_COPY.takeAligned };
     }
     return { timing: "fair", timingHint: null };
   }
 
-  // Past ±12 vs ADP: show the player, never a take-now or must-wait CTA.
-  if (overCap) {
-    return { timing: "fair", timingHint: null };
-  }
+  const adpLaterBy = adp - pickOverall;
+  const inWaitHorizon =
+    adpLaterBy > w.waitAdpLeadMin && adpLaterBy <= w.waitHorizonPicks;
 
-  // Wait first — model strength at a discount vs market; don't force early.
+  // Wait can fire past the ±12 take/reach cap — that's the whole point of
+  // "model 18 / ADP 35". Lottery ADP (beyond three rounds) stays unlabeled.
   if (
     row.valueDelta != null &&
     row.valueDelta >= 8 &&
-    adp > pickOverall + w.waitAdpLeadMin
+    inWaitHorizon
   ) {
-    return {
-      timing: "wait",
-      timingHint: `Wait — ADP ~${Math.round(adp)}`,
-    };
+    return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
   }
 
   if (
     row.valueDelta != null &&
     row.valueDelta >= w.discountMinDelta &&
-    adp > pickOverall + w.reachSoftThreshold + 4
+    adpLaterBy > w.reachSoftThreshold + 4 &&
+    adpLaterBy <= w.waitHorizonPicks
   ) {
-    return { timing: "wait", timingHint: "Discount — can wait" };
+    return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
+  }
+
+  // Past ±12 vs ADP: never a Take or Reach CTA.
+  if (overCap) {
+    return { timing: "fair", timingHint: null };
+  }
+
+  const extremeNeedReach =
+    hasNeed &&
+    scarcity >= w.reachOverrideScarcityMin &&
+    row.rankOverall <= w.eliteRankThreshold + 12 &&
+    adp > pickOverall + w.adpUrgencyWindow;
+
+  if (extremeNeedReach) {
+    return { timing: "reach", timingHint: DRAFT_ADVICE_COPY.reach };
   }
 
   if (adp <= pickOverall + w.adpUrgencyWindow) {
-    return { timing: "take_now", timingHint: "ADP window — take now" };
+    const hint =
+      row.valueDelta != null && row.valueDelta >= w.discountMinDelta
+        ? DRAFT_ADVICE_COPY.takeValue
+        : DRAFT_ADVICE_COPY.takeAligned;
+    return { timing: "take_now", timingHint: hint };
   }
 
   if (
@@ -295,19 +350,19 @@ export function computeTiming(
     row.rankOverall <= w.eliteRankThreshold + 12 &&
     adp <= pickOverall + w.reachSoftThreshold + 10
   ) {
-    return { timing: "take_now", timingHint: "Need + cliff — take now" };
+    return { timing: "take_now", timingHint: DRAFT_ADVICE_COPY.takeValue };
   }
 
   if (reachAmount > 0 && !hasNeed && scarcity < w.reachOverrideScarcityMin) {
-    return { timing: "wait", timingHint: "Early vs ADP — wait if you can" };
+    return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
   }
 
   if (Math.abs(pickOverall - adp) <= w.reachSoftThreshold) {
-    return { timing: "fair", timingHint: "Fair at this slot" };
+    return { timing: "fair", timingHint: null };
   }
 
   if (pos === "QB" && (needs.QB ?? 0) === 0 && pickOverall < adp - 10) {
-    return { timing: "wait", timingHint: "QB depth — can wait" };
+    return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
   }
 
   return { timing: "fair", timingHint: null };
@@ -376,4 +431,11 @@ export function bestAvailableByNeedAware(
   }
   pushMatching(() => true);
   return out.slice(0, limit);
+}
+
+export function draftAdviceClass(timing: SuggestionTiming): string {
+  if (timing === "take_now") return "text-kos-gold";
+  if (timing === "wait") return "text-sky-300/90";
+  if (timing === "reach") return "text-rose-300/90";
+  return "text-kos-text/45";
 }

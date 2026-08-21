@@ -92,9 +92,10 @@ describe("value-aware recommendations", () => {
         pickOverall: 28,
       });
       expect(nearAdp.timing).toBe("take_now");
+      expect(nearAdp.timingHint).toMatch(/Take now/i);
     });
 
-    it("model 22 / ADP 20 at pick 22 → fair / take-now window", () => {
+    it("model 22 / ADP 20 at pick 22 → take now (aligned)", () => {
       const player = row({
         playerId: "fair",
         playerName: "Fair WR",
@@ -103,8 +104,8 @@ describe("value-aware recommendations", () => {
         adp: 20,
       });
       const scored = scoreValueAwarePlayer(player, emptyCtx([player], [], 22));
-      expect(["fair", "take_now"]).toContain(scored.timing);
-      expect(scored.timingHint).toMatch(/fair|ADP window/i);
+      expect(scored.timing).toBe("take_now");
+      expect(scored.timingHint).toMatch(/Take now/i);
     });
 
     it("model 15 / ADP 28 at pick 18 → high-value wait candidate", () => {
@@ -180,8 +181,8 @@ describe("value-aware recommendations", () => {
         roster,
         pickOverall,
       });
-      expect(scored.timing).toBe("take_now");
-      expect(scored.timingHint).toMatch(/need|cliff|take now/i);
+      expect(scored.timing).toBe("reach");
+      expect(scored.timingHint).toMatch(/Reach/i);
 
       const fullReachPenalty = reachPenalty(
         eliteTe,
@@ -247,8 +248,7 @@ describe("value-aware recommendations", () => {
         2,
       );
       expect(atPick18[0]?.row.playerId).toBe("discount");
-      expect(atPick18[0]?.timing).toBe("fair");
-      expect(atPick18[0]?.timingHint).toBeNull();
+      expect(atPick18[0]?.timing).toBe("wait");
     });
   });
 
@@ -310,6 +310,7 @@ describe("value-aware recommendations", () => {
       });
       const timing = computeTiming(player, 22, {}, 0, 0);
       expect(timing.timing).toBe("take_now");
+      expect(timing.timingHint).toMatch(/Take now/i);
     });
   });
 
@@ -322,7 +323,7 @@ describe("value-aware recommendations", () => {
   });
 
   describe("MAX_RECOMMEND_RANK_DELTA = 12", () => {
-    it("never take-now / wait-spam when ADP is more than 12 spots later", () => {
+    it("never take-now / wait-spam lottery ADP more than three rounds later", () => {
       expect(MAX_RECOMMEND_RANK_DELTA).toBe(12);
       const lottery = row({
         playerId: "gesicki",
@@ -341,6 +342,7 @@ describe("value-aware recommendations", () => {
         3,
       );
       expect(suggestions[0]?.timing).not.toBe("take_now");
+      expect(suggestions[0]?.timing).not.toBe("reach");
     });
 
     it("still allows take-now when the reach vs ADP is within 12", () => {
@@ -366,6 +368,54 @@ describe("value-aware recommendations", () => {
       const scored = scoreValueAwarePlayer(player, emptyCtx([player], []));
       expect(scored.timing).toBe("fair");
       expect(scored.timingHint).toBeNull();
+    });
+  });
+
+  describe("named Take / Wait / Reach examples", () => {
+    it("CMC-class at pick 4 / ADP 5 → Take now", () => {
+      const cmc = row({
+        playerId: "cmc",
+        playerName: "C.McCaffrey",
+        position: "RB",
+        rankOverall: 1,
+        adp: 5,
+        valueOverReplacement: 230,
+      });
+      const scored = scoreValueAwarePlayer(cmc, emptyCtx([cmc], [], 4));
+      expect(scored.timing).toBe("take_now");
+      expect(scored.timingHint).toMatch(/Take now/i);
+    });
+
+    it("model-loved early QB (rank 3 / ADP 85) at pick 12 → no Take CTA", () => {
+      const lawrence = row({
+        playerId: "lawrence",
+        playerName: "T.Lawrence",
+        position: "QB",
+        rankOverall: 3,
+        adp: 85,
+        valueOverReplacement: 180,
+      });
+      const scored = scoreValueAwarePlayer(
+        lawrence,
+        emptyCtx([lawrence], [], 12),
+      );
+      expect(scored.timing).toBe("fair");
+      expect(scored.timingHint).toBeNull();
+      expect(lawrence.valueDelta).toBeGreaterThan(12);
+    });
+
+    it("model 18 / ADP 35 at pick 18 → Wait", () => {
+      const player = row({
+        playerId: "early-model",
+        playerName: "Model-loved WR",
+        position: "WR",
+        rankOverall: 18,
+        adp: 35,
+        valueOverReplacement: 90,
+      });
+      const scored = scoreValueAwarePlayer(player, emptyCtx([player], [], 18));
+      expect(scored.timing).toBe("wait");
+      expect(scored.timingHint).toMatch(/Wait/i);
     });
   });
 });

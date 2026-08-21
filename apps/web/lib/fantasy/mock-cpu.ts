@@ -1,15 +1,17 @@
 /**
  * Tunable CPU picker for KosEdge mock drafts.
  *
- * Mixes ADP urgency, model value, positional need/scarcity, and persona weights.
- * Uses model rank as a soft prior only when ADP is unmatched — never shown as ADP.
+ * Uses the same ADP-aware scorer as Builder / on-the-clock suggestions
+ * (`scoreValueAwarePlayer`: need + VOR − reach penalty), then mixes persona
+ * weights. Not pure model BPA.
  *
- * Hard guards (R1 especially): ADP reach caps and early-round value dampening so
- * lottery ADP + “value vs ADP” cannot steal the top of the draft.
+ * Hard guards stay: R1 ADP reach caps, early-round value dampening, late QB2
+ * suppress. Lottery ADP cannot steal the top of the draft.
  */
 
 import type { MockCpuPersona } from "@/lib/fantasy/mock-types";
 import { mockRosterNeeds } from "@/lib/fantasy/mock-roster";
+import { scoreValueAwarePlayer } from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
 export type CpuWeights = {
@@ -76,23 +78,6 @@ export function isCpuReachHardBlocked(opts: {
     if (pos === "QB" && marketAdp > teamCount * 2.5) return true;
   }
   return false;
-}
-
-function scarcityBonus(
-  available: FantasyDeskRow[],
-  position: string,
-  overall: number,
-): number {
-  const pos = position.toUpperCase();
-  const pool = available
-    .filter((r) => r.position.toUpperCase() === pos)
-    .sort((a, b) => a.rankOverall - b.rankOverall);
-  if (pool.length === 0) return 0;
-  const topLeft = pool.filter((r) => r.rankOverall <= overall + 40).length;
-  if (topLeft <= 1) return 18;
-  if (topLeft <= 3) return 10;
-  if (pos === "TE" && topLeft <= 5) return 8;
-  return 0;
 }
 
 function needScore(
@@ -175,6 +160,13 @@ export function scoreCpuCandidate(input: {
     return -Infinity;
   }
 
+  const va = scoreValueAwarePlayer(row, {
+    pickOverall: overall,
+    roster,
+    available,
+    needs: mockRosterNeeds(roster, board),
+  });
+
   const adpUrgency =
     market <= overall + 4
       ? 28
@@ -205,41 +197,19 @@ export function scoreCpuCandidate(input: {
     valueRaw *= 0.4;
   }
 
-  let rankQuality = Math.max(0, 40 - row.rankOverall * 0.12);
-  if (pos === "QB" && round <= 5) {
-    rankQuality *= 0.4;
-  }
-  if (pos === "QB" && qbCount >= 1) {
-    rankQuality *= 0.15;
-  }
-
-  // Prefer real positional surplus over ADP-value mirages early.
-  let vorpRaw = 0;
-  if (
-    round <= 4 &&
-    row.valueOverReplacement != null &&
-    Number.isFinite(row.valueOverReplacement)
-  ) {
-    vorpRaw = Math.min(20, Math.max(0, row.valueOverReplacement * 0.1));
-  }
-
-  // Scarcity on QB2+ is noise in 1QB — don't chase the next name.
-  let scarcity = scarcityBonus(available, row.position, overall);
-  if (pos === "QB" && qbCount >= 1) {
-    scarcity = 0;
-  }
   const need = needScore(row, roster, board, overall, teamCount);
 
   const noise =
     (stableNoise(`${persona}|${teamIndex}|${overall}|${row.playerId}`) - 0.5) *
     6;
 
+  // Same ADP-aware scorer as Builder / on-the-clock suggestions, plus
+  // persona mix and the R1 / late-QB2 hard guards above.
   return (
+    va.score * (0.55 + 0.45 * weights.rank) +
     weights.adp * (adpUrgency + reachPenalty) +
     weights.value * valueRaw +
     weights.need * need +
-    weights.rank * (rankQuality + vorpRaw) +
-    scarcity +
     noise
   );
 }
