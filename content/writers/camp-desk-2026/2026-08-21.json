@@ -1,0 +1,230 @@
+{
+  "desk_date": "2026-08-21",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Friday, Aug 21",
+    "bottom_line": "Joint-practice week added IR-level absences onto already-thin Week 1 pictures. Named jobs and confirmed season-enders matter; exhibition scripts do not. Thin camp info stays Pass.",
+    "storylines": [
+      "Commanders: Tunsil already a long-term OL miss; Newton pec surgery; Allegretti calf setback; White hamstring. Cluster is the Week 1 picture — not a win-total rewrite from one practice.",
+      "Texans: Higgins torn ACL, season over (NFL Network / multiple reports). Collins room thins; Dell, Noel, Hutchinson are usage flags, not a minted WR2.",
+      "Ravens: Pinter torn patellar tendon, extended miss. Center is Pocic vs Gwyn — do not crown a starter from joints.",
+      "Browns: Watson and Sanders still split ones vs Buffalo; Sanders starts Saturday. Wright carted with a lower-leg issue, status unconfirmed. QB1 unset.",
+      "Falcons: Penix still out of 11-on-11 after Colts joints; doctor check-in Thursday. Availability, not a grass derby.",
+      "Jets: Hall groin, 2–3 weeks, expected Week 1 (Glenn / AP). Allen is the preseason usage note, not a committee crown.",
+      "Vikings: Adams season-ending quad. Murray remains the named QB1 after a one-drive debut — Pass on inventing a new lean."
+    ],
+    "what_to_watch": "Saturday’s second preseason scripts (CLE/BUF, ATL/IND, WAS/DET) — who owns the ones after joints, and any official IR language. Evaluation tape, not market permission.",
+    "sources": [
+      {
+        "label": "Commanders.com — practice notes (Oweh / Newton / Allegretti)",
+        "href": "https://www.commanders.com/news/commanders-practice-highlights-jayden-daniels-terry-mclaurin-stefon-diggs-javon-kinlaw"
+      },
+      {
+        "label": "SI — Commanders injury report (Newton surgery, White hamstring)",
+        "href": "https://www.si.com/nfl/commanders/onsi/commanders-injury-updates-rachaad-white-nick-allegretti-trey-amos-johnny-newton"
+      },
+      {
+        "label": "Yahoo Sports — Higgins ACL (NFL Network)",
+        "href": "https://sports.yahoo.com/nfl/article/texans-wr-jayden-higgins-tears-acl-in-training-camp-will-miss-entire-2026-season-025228261.html"
+      },
+      {
+        "label": "Ravens.com — Pinter extended miss",
+        "href": "https://www.baltimoreravens.com/news/danny-pinter-miss-extended-time-ravens-center-injury-vikings-joint-practice"
+      },
+      {
+        "label": "Falcons.com — Penix return-to-play check-in",
+        "href": "https://www.atlantafalcons.com/news/that-time-is-coming-real-soon-michael-penix-jr-provides-update-on-return-to-play-timeline"
+      },
+      {
+        "label": "AP — Hall groin, expected Week 1",
+        "href": "https://apnews.com/article/jets-breece-hall-geno-smith-dece7c8a9feac448c625efd0f80c4213"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "WAS",
+      "title": "Commanders camp — Aug 21",
+      "bottom_line": "The Week 1 picture is an injury cluster, not a scheme story. Tunsil and Newton are long-term; Allegretti and White are availability. Pass on dressing this as a win-total lean.",
+      "key_points": [
+        "Tunsil (torn triceps, surgery) remains the OL SoT flag — Coleman has taken LT ones in camp. Do not invent a starter grade from that snap share.",
+        "Newton underwent pec surgery Wednesday; significant miss, per team/source confirmation. DL rotation was already missing Settle (Lisfranc ramp).",
+        "Allegretti returned then took a minor calf setback (Quinn, Thursday). Good-Jones has been the 11-on-11 center with Daniels. White hamstring from the Miami joint — hamstrings are week-to-week, not a RB1 rewrite.",
+        "Mariota (MCL) is out the rest of preseason; Quinn still points to the Sept. 13 opener. Backup math is thin, not a QB controversy."
+      ],
+      "what_to_watch": "Official IR language on Newton; whether Allegretti is a full-practice center before Detroit. Flag intel — do not silently publish a new active_run.",
+      "is_material_depth": true,
+      "sot_flag": "OL cluster + Newton pec are intel flags. Do not invent LT1/C or the DL rotation from camp prose.",
+      "sources": [
+        {
+          "label": "Commanders.com — Wednesday practice notes",
+          "href": "https://www.commanders.com/news/commanders-practice-highlights-jayden-daniels-terry-mclaurin-stefon-diggs-javon-kinlaw"
+        },
+        {
+          "label": "SI — injury report ahead of Lions",
+          "href": "https://www.si.com/nfl/commanders/onsi/commanders-injury-updates-rachaad-white-nick-allegretti-trey-amos-johnny-newton"
+        }
+      ]
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans camp — Aug 21",
+      "bottom_line": "Higgins is a season-ending ACL. Collins remains the alpha; the WR2 job is an open usage question, not a minted name. Pass.",
+      "key_points": [
+        "Higgins tore an ACL in Tuesday’s Raiders joint (NFL Network / multiple reports). Season over. He was the clear second option behind Collins as a 2025 first-year.",
+        "Dell (coming off 2025 knee) and Noel (finger/hamstring camp) are not automatic replacements. Hutchinson is the veteran volume candidate until the club says otherwise.",
+        "Mertz already on season-ending ACL IR; Rypien is emergency QB3. That is backup math, not a Stroud story."
+      ],
+      "what_to_watch": "First official depth-chart / IR posting for Higgins. Do not promote a WR2 in SoT until the club or packaged depth says so.",
+      "is_material_depth": true,
+      "sot_flag": "Higgins season-ending ACL. Do not silently promote a WR2 in SoT.",
+      "sources": [
+        {
+          "label": "Yahoo Sports — Higgins ACL (NFL Network)",
+          "href": "https://sports.yahoo.com/nfl/article/texans-wr-jayden-higgins-tears-acl-in-training-camp-will-miss-entire-2026-season-025228261.html"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens camp — Aug 21",
+      "bottom_line": "Pinter’s patellar tendon takes him off the center board for an extended stretch. Pocic vs Gwyn is still a competition. Pass on crowning the job.",
+      "key_points": [
+        "Pinter was carted in Wednesday’s Vikings joint; Garafolo reported a torn patellar tendon. Minter (Thursday): extended time, still gathering opinions.",
+        "Center was already open after Linderbaum left. Gwyn graded well vs Philadelphia; Pocic is ramping from a December Achilles. Bullock also gets Saturday snaps.",
+        "That is an OL SoT watch item. It is not a Week 1 starter declaration."
+      ],
+      "what_to_watch": "Who takes the ones Saturday in Minnesota, and whether Minter names a starter before the finale.",
+      "is_material_depth": true,
+      "sot_flag": "Pinter extended miss. Center remains a competition — no invented starter.",
+      "sources": [
+        {
+          "label": "Ravens.com — Pinter to miss extended time",
+          "href": "https://www.baltimoreravens.com/news/danny-pinter-miss-extended-time-ravens-center-injury-vikings-joint-practice"
+        }
+      ]
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns camp — Aug 21",
+      "bottom_line": "QB1 is still unset after a mixed Bills joint. Saturday’s script (Sanders start) is more tape, not a crown. Pass.",
+      "key_points": [
+        "Watson and Sanders split snaps vs Buffalo’s ones Thursday. Bright throws and the usual overthrows — typical August split, not a decision.",
+        "Monken’s plan holds: Sanders starts Saturday vs Buffalo; Watson in the third quarter. Same structure as the Chicago split, flipped.",
+        "Wright was carted with an apparent lower-leg issue in a 1-on-1. Monken had no update. Do not inventory a DE1 until the club does.",
+        "Judkins missed a second practice with something Monken called nagging, not big. Usage flag only."
+      ],
+      "what_to_watch": "Who owns the ones after Buffalo, and any official language on Wright. Fano LT1 remains the only clean OL flag from earlier camp.",
+      "is_material_depth": true,
+      "sot_flag": "QB1 still unset. Wright lower-leg unconfirmed — wait for club language. Do not invent a starter.",
+      "sources": [
+        {
+          "label": "Joint practice notes — Watson/Sanders split vs Bills",
+          "href": "https://community.triblive.com/news/4120378"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons camp — Aug 21",
+      "bottom_line": "Penix still has not taken 11-on-11. Thursday’s doctor call is a clearance check, not a Week 1 naming. Pass.",
+      "key_points": [
+        "Colts joints (Wed–Thu): Penix in individuals and 7-on-7 only. Tagovailoa took the ones. Same availability fog as Monday’s desk.",
+        "Penix after Thursday: scheduled doctor check-in; ‘that time is coming real soon’ on contact. Stefanski will not share an acclimation plan until medical clearance.",
+        "He will not play Saturday. First 11-on-11 sample — if it comes — is next week’s problem, not Saturday’s box score."
+      ],
+      "what_to_watch": "First cleared 11-on-11 period, or multi-day full-team work. Dual-QB availability stays unresolved.",
+      "is_material_depth": true,
+      "sot_flag": "Penix still not in 11s. Do not crown Week 1 from rehab language.",
+      "sources": [
+        {
+          "label": "Falcons.com — Penix doctor check-in",
+          "href": "https://www.atlantafalcons.com/news/that-time-is-coming-real-soon-michael-penix-jr-provides-update-on-return-to-play-timeline"
+        },
+        {
+          "label": "AJC — Penix nearing next ACL step",
+          "href": "https://feeds.ajc.com/sports/2026/08/falcons-michael-penix-jr-nearing-next-step-in-acl-recovery/"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets camp — Aug 21",
+      "bottom_line": "Hall is a 2–3 week groin, expected Week 1. That is a preseason-script miss, not an RB1 vacancy. Pass.",
+      "key_points": [
+        "Glenn Tuesday: tests confirmed a strain, not a tear. Out the rest of preseason; ‘ready for the regular season’ vs Tennessee Sept. 13 (AP / club).",
+        "Allen becomes the August usage note. Davis is also working back. Do not write a committee into SoT from two weeks of camp carries.",
+        "Smith’s swollen ankle is a separate Week 1 availability watch. Cautious with the ones is not a QB controversy."
+      ],
+      "what_to_watch": "Whether Hall is a full-practice back the week of Sept. 8. Flag only if the timeline slips.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "AP — Hall 2–3 weeks, expected Week 1",
+          "href": "https://apnews.com/article/jets-breece-hall-geno-smith-dece7c8a9feac448c625efd0f80c4213"
+        },
+        {
+          "label": "NFL.com — Hall expected for opener",
+          "href": "https://www.nfl.com/news/breece-hall-groin-expected-to-be-ready-for-jets-week-1-game-vs-titans"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings camp — Aug 21",
+      "bottom_line": "Adams is a season-ending quad. Murray remains the named starter. Pass on inventing a new win-total lean from either fact.",
+      "key_points": [
+        "O’Connell announced Adams’ torn quadriceps after the Giants opener — opposite leg from the 2022 Seattle tear. Veteran add, not a Week 1 identity piece.",
+        "Murray is still the named QB1 (Aug. 11). The one-drive Giants sample and Ravens joints do not reopen the job.",
+        "Center/OL notes from the Baltimore joint are Ravens-side (Pinter). Minnesota’s own OL picture is not a new SoT rewrite this week."
+      ],
+      "what_to_watch": "Safety rotation without Adams; no change to named QB1 unless the club says so.",
+      "is_material_depth": true,
+      "sot_flag": "Adams season-ending. Named QB1 (Murray) unchanged. Do not reopen the QB battle in SoT.",
+      "sources": [
+        {
+          "label": "CBS — preseason injury tracker (Adams)",
+          "href": "https://www.cbssports.com/nfl/news/nfl-training-camp-injury-tracker/"
+        },
+        {
+          "label": "Vikings.com — Murray / McCarthy debut (prior naming)",
+          "href": "https://www.vikings.com/news/jj-mccarthy-kyler-murray-preseason-debut-giants-2026"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "WAS",
+      "fields": ["bottom_line"],
+      "reason": "OL cluster (Tunsil + Allegretti) plus Newton pec surgery and White hamstring. Preview should name the injury picture; still Pass on a new win-total lean.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "HOU",
+      "fields": ["bottom_line"],
+      "reason": "Higgins season-ending ACL. WR2 usage is open; do not mint a name in the preview.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line"],
+      "reason": "Pinter extended miss. Center remains Pocic/Gwyn — no invented starter.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "ATL",
+      "fields": ["bottom_line"],
+      "reason": "Penix still not in 11-on-11 after Colts joints. Keep Pass on Week 1 crown.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "CLE",
+      "fields": ["bottom_line"],
+      "reason": "QB1 still unset after Bills joint. Wright lower-leg unconfirmed.",
+      "status": "flagged"
+    }
+  ]
+}

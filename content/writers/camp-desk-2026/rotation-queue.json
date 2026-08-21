@@ -1,6 +1,6 @@
 {
-  "updated": "2026-08-17",
-  "rule": "Every Monday in camp/season: full 32 pulse + league wrap. Midweek: every team with real news; quiet clubs rotate 3\u20134\u00d7/week. Prefer trusted X contact index + multi-source beats \u2014 never ESPN-only branding.",
+  "updated": "2026-08-21",
+  "rule": "Every Monday in camp/season: full 32 pulse + league wrap. Midweek: every team with real news; quiet clubs rotate 3–4×/week. Research from beat index + official/multi-source — never X profile links as the product, never ESPN-only branding.",
   "next_pulse": [
     "SF",
     "LAR",
@@ -11,6 +11,8 @@
     "LV",
     "JAX",
     "TEN",
-    "CAR"
+    "CAR",
+    "GB",
+    "CIN"
   ]
 }

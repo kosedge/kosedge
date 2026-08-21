@@ -1,3 +1,4 @@
+| 2026-08-21 | Desk (multi) | Camp Desk daily cadence + Friday package | NFL / Camp Desk | Pass across board; SoT flags WAS/HOU/BAL/ATL/CLE/MIN only | Preseason never empty; Desk updating fallback; no X profile product; Aug 21 wrap + 7 notes; Monday structure tagged | Living desk, not a 72h cliff. |
 | 2026-08-17 | Riley Nash (Editor) | Season-preview market fact-check (15 mismatches) | NFL / Previews | Pass on thin + Model↔market conflicts; soft Over only JAX/NO | Reported wrong primary win totals (LAR 9.5→11.5 etc.), fixed all 32 stamps to DK Aug board + Model SoT, added Editor employee + weekly SOP | Numbers can’t be off. |
 | 2026-08-17 | Desk (multi) | Camp Desk Monday + 32 preview date refresh | NFL / Camp Desk | Pass across board; material flags MIN/ATL/CLE/WAS/HOU/NYJ only | Full 32 notes dated 2026-08-17; killed Wire ESPN branding; trusted X doctrine locked; Monday cadence repaired. | Guest/family Monday freshness. |
 # Project Log
