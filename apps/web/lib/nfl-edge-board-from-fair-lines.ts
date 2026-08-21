@@ -122,6 +122,10 @@ export function fairLinesToEdgeBoardRows(
     const commenceTime =
       resolveNflKickoffIso({
         gameId: line.gameId,
+        season: line.season,
+        week: line.week,
+        awayAbbr: line.awayAbbr,
+        homeAbbr: line.homeAbbr,
         startTime: line.startTime,
         gameDate: line.gameDate,
       }) ?? undefined;

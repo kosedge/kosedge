@@ -5,6 +5,7 @@ import {
   type DeskEdgeRow,
   type DeskMarketType,
 } from "@/lib/nfl-edges";
+import { nflPropsSurfaceCopy } from "@/lib/nfl-props-surface";
 import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
@@ -109,6 +110,7 @@ export default async function NflEdgesDeskPage({
     desk.diagnostics.propsError
       ? desk.diagnostics.fairLinesError
       : undefined;
+  const propsCopy = nflPropsSurfaceCopy(desk.propsSurface);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -234,6 +236,18 @@ export default async function NflEdgesDeskPage({
             Edges · Week {week} · {season}
           </h2>
         </div>
+
+        {desk.propsSurface !== "book-joined" ? (
+          <p className="mt-3 text-xs text-kos-text/55">
+            Props: {propsCopy.title}. {propsCopy.body}{" "}
+            <Link
+              href="/pro/nfl/props"
+              className="text-kos-gold/80 hover:text-kos-gold hover:underline"
+            >
+              Props board
+            </Link>
+          </p>
+        ) : null}
 
         {!fetchError && desk.rows.length === 0 ? (
           <div className="mt-4 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-kos-text/70">

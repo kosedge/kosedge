@@ -16,6 +16,13 @@ import {
   propMarketLabel,
   type NflPropBoardRow,
 } from "@/lib/nfl-props-board";
+import { lookupCanonicalNflGameForTeam } from "@/lib/nfl-canonical-schedule";
+import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
+import {
+  edgesMayShowPropRows,
+  nflPropsSurfaceState,
+  type NflPropsSurfaceState,
+} from "@/lib/nfl-props-surface";
 
 export type DeskMarketType = "all" | "ml" | "spread" | "total" | "props";
 
@@ -45,6 +52,7 @@ export type NflEdgesDeskResponse = {
     minLineEdge: number;
     minConfidence: number;
   };
+  propsSurface: NflPropsSurfaceState;
   diagnostics: {
     gameCandidates: number;
     propCandidates: number;
@@ -72,7 +80,15 @@ export function deskEdgesFromFairLine(
   const { minProbEdge, minLineEdge } = opts;
   if (!row.marketJoined) return [];
   const matchup = `${row.awayAbbr} @ ${row.homeAbbr}`;
-  const kickoff = row.startTime;
+  const kickoff = resolveNflKickoffIso({
+    gameId: row.gameId,
+    season: row.season,
+    week: row.week,
+    awayAbbr: row.awayAbbr,
+    homeAbbr: row.homeAbbr,
+    startTime: row.startTime,
+    gameDate: row.gameDate,
+  });
   const out: DeskEdgeRow[] = [];
 
   if (row.mlEdgeProb !== null && Math.abs(row.mlEdgeProb) >= minProbEdge) {
@@ -156,6 +172,12 @@ export function deskEdgeFromPropRow(
   const edge = takeOver ? (over ?? 0) : (under ?? 0);
   if (Math.abs(edge) < minProbEdge) return null;
 
+  const kickoff =
+    lookupCanonicalNflGameForTeam({
+      week: row.week,
+      teamAbbr: row.team,
+    })?.kickoff_utc ?? null;
+
   return {
     id: `${row.playerId ?? row.playerName}-${row.marketKey}-${row.week}`,
     marketType: "props",
@@ -167,7 +189,7 @@ export function deskEdgeFromPropRow(
     edgeDisplay: formatEdgeProb(edge),
     side: takeOver ? "Over" : "Under",
     confidence: row.confidence,
-    kickoff: null,
+    kickoff,
     source: "props",
   };
 }
@@ -307,9 +329,12 @@ export async function fetchNflEdgesDesk(params: {
     ),
   ];
 
-  const propEdges = propsBoard.rows
-    .map((row) => deskEdgeFromPropRow(row, { minProbEdge, minConfidence }))
-    .filter((row): row is DeskEdgeRow => row !== null);
+  const propSurface = nflPropsSurfaceState(propsBoard);
+  const propEdges = edgesMayShowPropRows(propSurface)
+    ? propsBoard.rows
+        .map((row) => deskEdgeFromPropRow(row, { minProbEdge, minConfidence }))
+        .filter((row): row is DeskEdgeRow => row !== null)
+    : [];
 
   const allRows = filterDeskRows([...mergedGame, ...propEdges], market);
 
@@ -319,6 +344,7 @@ export async function fetchNflEdgesDesk(params: {
     count: allRows.length,
     rows: allRows,
     filters: { market, minProbEdge, minLineEdge, minConfidence },
+    propsSurface: propSurface,
     diagnostics: {
       gameCandidates: mergedGame.length,
       propCandidates: propEdges.length,

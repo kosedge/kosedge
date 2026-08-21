@@ -1,19 +1,33 @@
 /**
  * Single kickoff source for Edge Board / KEI Lines / Weekly Slate.
- * Prefer fair-lines `start_time`; fall back to game_date only when needed.
+ * Canonical REG pack wins over odds commence / fair-lines start_time.
  */
+
+import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
 
 export type NflKickoffSourceRow = {
   gameId: string;
+  season?: number | null;
+  week?: number | null;
+  awayAbbr?: string | null;
+  homeAbbr?: string | null;
   startTime?: string | null;
   gameDate?: string | null;
   commenceTime?: string | null;
 };
 
-/** Canonical kickoff ISO (or date) for a game_id — fair-lines first. */
+/** Canonical kickoff ISO for display — pack first, then fair-lines / odds. */
 export function resolveNflKickoffIso(
   row: NflKickoffSourceRow,
 ): string | null {
+  const packed = canonicalKickoffForMatchup({
+    gameId: row.gameId,
+    season: row.season,
+    week: row.week,
+    awayAbbr: row.awayAbbr,
+    homeAbbr: row.homeAbbr,
+  });
+  if (packed.found) return packed.kickoffUtc;
   const candidates = [row.startTime, row.commenceTime, row.gameDate];
   for (const c of candidates) {
     if (c == null) continue;

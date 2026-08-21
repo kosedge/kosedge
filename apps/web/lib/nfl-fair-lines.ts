@@ -3,6 +3,7 @@ import { env } from "@/lib/config/env";
 import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
+import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
 import type {
   ActionLabel,
   ConfidenceAssessment,
@@ -398,15 +399,26 @@ function normalizeDecision(raw: unknown): NflFairLineDecision | null {
 }
 
 function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
+  const week = toNumberOrNull(raw.week);
+  const homeAbbr = String(raw.home_abbr ?? "—");
+  const awayAbbr = String(raw.away_abbr ?? "—");
+  const packed = canonicalKickoffForMatchup({
+    gameId: typeof raw.game_id === "string" ? raw.game_id : null,
+    season: toNumberOrNull(raw.season),
+    week,
+    awayAbbr,
+    homeAbbr,
+  });
+  const oddsKickoff = toIsoOrNull(raw.start_time);
   return {
     gameId: String(raw.game_id ?? ""),
     season: toNumber(raw.season),
-    week: toNumberOrNull(raw.week),
+    week,
     seasonType:
       typeof raw.season_type === "string" && raw.season_type.trim()
         ? raw.season_type.trim().toUpperCase()
         : null,
-    startTime: toIsoOrNull(raw.start_time),
+    startTime: packed.found ? packed.kickoffUtc : oddsKickoff,
     gameDate: toIsoOrNull(raw.game_date),
     homeTeam: String(raw.home_team ?? "Home"),
     awayTeam: String(raw.away_team ?? "Away"),
