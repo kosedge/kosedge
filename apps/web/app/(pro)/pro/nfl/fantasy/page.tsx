@@ -48,6 +48,7 @@ export default async function NflFantasyDraftDeskPage({
         board={board}
         initialPosition={position}
         initialScoring={scoring}
+        initialTab="value"
         basePath="/pro/nfl/fantasy"
       />
     </main>

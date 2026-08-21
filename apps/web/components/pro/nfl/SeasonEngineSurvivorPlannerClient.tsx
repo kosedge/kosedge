@@ -493,10 +493,7 @@ export default function SeasonEngineSurvivorPlannerClient({
           </p>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-kos-text/70">
             Lock one team per week. Matchups stay visible before you pick.
-            Used teams are burned everywhere. Path SOS is schedule outlook —
-            harder slate ≠ weaker team; E[wins] / path grades move, intrinsic
-            PR does not. Metrics stay readable on a full slate — joint parlay
-            survival is advanced-only.
+            Used teams are burned everywhere.
           </p>
         </div>
 

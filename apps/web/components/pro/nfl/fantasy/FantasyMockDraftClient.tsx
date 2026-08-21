@@ -252,8 +252,8 @@ function SetupView({
           <p>
             Kickers and defenses aren&apos;t on this board — those roster slots
             are skipped in the mock and do not ding your grade. Named K/DST
-            wait on nfl_kicker_dst_projections → draft-rankings. No invented
-            projections.
+            wait on nfl_kicker_dst_projections → nfl_fantasy_season_draft_rankings.
+            No invented projections.
           </p>
         </HonestStatusBanner>
       ) : null}
@@ -266,7 +266,7 @@ function SetupView({
               href={`/pro/nfl/fantasy?scoring=${scoring}`}
               className="font-semibold text-kos-text underline underline-offset-2"
             >
-              Rankings
+              Draft desk
             </Link>{" "}
             first, then come back to start a mock.
           </p>
@@ -382,7 +382,7 @@ function SetupView({
               href={`/pro/nfl/fantasy?scoring=${scoring}`}
               className="min-h-12 rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
             >
-              Rankings
+              Draft desk
             </Link>
           </div>
         </section>
@@ -1004,7 +1004,7 @@ function ResultsView({
             onClick={onDesk}
             className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
           >
-            Rankings
+            Draft desk
           </button>
         </div>
       </section>

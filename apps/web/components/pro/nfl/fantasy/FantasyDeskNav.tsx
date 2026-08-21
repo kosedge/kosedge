@@ -17,7 +17,7 @@ const LINKS: {
 }[] = [
   {
     id: "rankings",
-    label: "Rankings",
+    label: "Model rank",
     href: (s) => `/pro/nfl/fantasy?scoring=${s}`,
   },
   {
@@ -32,7 +32,7 @@ const LINKS: {
   },
 ];
 
-/** Shared Rankings → Builder → Mock flow strip; preserves scoring. */
+/** Shared Model rank → Builder → Mock flow strip; preserves scoring. */
 export function FantasyDeskNav({ active, scoring, className = "" }: Props) {
   return (
     <div className={className}>
@@ -40,7 +40,7 @@ export function FantasyDeskNav({ active, scoring, className = "" }: Props) {
         Draft flow
       </p>
       <nav
-        aria-label="Rankings, Builder, Mock"
+        aria-label="Model rank, Builder, Mock"
         className="flex flex-wrap items-center gap-1.5 sm:gap-2"
       >
         {LINKS.map((link, index) => {

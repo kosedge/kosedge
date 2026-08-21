@@ -283,7 +283,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/fantasy",
           label: "Fantasy Draft Desk",
-          hint: "Model ranks vs ADP → Builder → Mock.",
+          hint: "Draft board: Model + ADP + value advice → Builder → Mock.",
           premium: true,
           status: "active",
         },

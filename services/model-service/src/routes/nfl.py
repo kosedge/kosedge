@@ -356,73 +356,222 @@ def _resolve_current_nfl_board_week(session: Any, season: int) -> int:
     return int(row[0] or 1) if row is not None else 1
 
 
+def _nfl_open_abbr_aliases(abbr: Optional[str]) -> List[str]:
+    """Schedule vs Odds may store Rams as LA or LAR, Washington as WSH or WAS."""
+    raw = str(abbr or "").strip().upper()
+    if not raw:
+        return []
+    if raw in {"LA", "LAR"}:
+        return ["LA", "LAR"]
+    if raw in {"WSH", "WAS"}:
+        return ["WSH", "WAS"]
+    return [raw]
+
+
+def _coerce_open_game_date(value: Any) -> Optional[date]:
+    if value is None or value == "":
+        return None
+    if isinstance(value, datetime):
+        return value.date()
+    if isinstance(value, date):
+        return value
+    raw = str(value).strip()
+    if not raw:
+        return None
+    try:
+        return date.fromisoformat(raw[:10])
+    except ValueError:
+        return None
+
+
 def _first_open_odds_by_game_ids(
-    session: Any, game_ids: List[str]
+    session: Any,
+    game_ids: List[str],
+    *,
+    games: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Dict[str, Any]]:
     """Immutable open + latest capture time from odds_snapshots.
 
-    Open = earliest non-null spread_home / total_points per game.
+    Open = earliest non-null spread_home / total_points per schedule game.
     Never invents open from the latest market quote.
+
+    Odds ingest often writes snapshots on a *parallel* ``games`` UUID for the
+    same matchup (DAL@NYG class). Exact-UUID-only lookup then silently blanks
+    Open while Current still joins on team names. Fall back to same-date
+    home/away (LA↔LAR, WSH↔WAS) and remap onto the schedule ``game_id``.
     """
-    if not game_ids:
-        return {}
-    # Dedupe while preserving order for stable binds.
     unique_ids = list(dict.fromkeys(str(g) for g in game_ids if g))
     if not unique_ids:
         return {}
+
+    by_id: Dict[str, Dict[str, Any]] = {}
+    for row in games or []:
+        gid = str(row.get("game_id") or "")
+        if gid:
+            by_id[gid] = row
+    home_abbrs = [str((by_id.get(gid) or {}).get("home_abbr") or "") for gid in unique_ids]
+    away_abbrs = [str((by_id.get(gid) or {}).get("away_abbr") or "") for gid in unique_ids]
+    game_dates = [
+        _coerce_open_game_date((by_id.get(gid) or {}).get("game_date")) for gid in unique_ids
+    ]
+    use_alias = any(game_dates) and any(home_abbrs) and any(away_abbrs)
+
     try:
-        rows = session.execute(
-            text(
-                """
-                WITH snaps AS (
-                  SELECT
-                    os.game_id::text AS game_id,
-                    m.code AS market_code,
-                    os.spread_home,
-                    os.total_points,
-                    os.captured_at
-                  FROM odds_snapshots os
-                  JOIN markets m ON m.id = os.market_id
-                  WHERE os.game_id::text = ANY(:game_ids)
-                    AND m.code IN ('spread', 'total', 'spreads', 'totals')
+        if use_alias:
+            rows = session.execute(
+                text(
+                    """
+                    WITH requested AS (
+                      SELECT
+                        t.game_id::text AS schedule_id,
+                        NULLIF(upper(trim(t.home_abbr)), '') AS home_abbr,
+                        NULLIF(upper(trim(t.away_abbr)), '') AS away_abbr,
+                        t.game_date::date AS game_date
+                      FROM unnest(
+                        CAST(:game_ids AS text[]),
+                        CAST(:home_abbrs AS text[]),
+                        CAST(:away_abbrs AS text[]),
+                        CAST(:game_dates AS date[])
+                      ) AS t(game_id, home_abbr, away_abbr, game_date)
+                    ),
+                    candidate_games AS (
+                      SELECT r.schedule_id, CAST(r.schedule_id AS uuid) AS snap_id
+                      FROM requested r
+                      WHERE r.schedule_id ~* '^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$'
+                      UNION
+                      SELECT r.schedule_id, g.id
+                      FROM requested r
+                      JOIN games g ON g.game_date = r.game_date
+                      JOIN seasons s ON s.id = g.season_id
+                      JOIN leagues l ON l.id = s.league_id
+                      JOIN teams home ON home.id = g.home_team_id
+                      JOIN teams away ON away.id = g.away_team_id
+                      WHERE l.code = 'nfl'
+                        AND r.game_date IS NOT NULL
+                        AND r.home_abbr IS NOT NULL
+                        AND r.away_abbr IS NOT NULL
+                        AND (
+                          home.abbr = r.home_abbr
+                          OR (r.home_abbr IN ('LA', 'LAR') AND home.abbr IN ('LA', 'LAR'))
+                          OR (r.home_abbr IN ('WSH', 'WAS') AND home.abbr IN ('WSH', 'WAS'))
+                        )
+                        AND (
+                          away.abbr = r.away_abbr
+                          OR (r.away_abbr IN ('LA', 'LAR') AND away.abbr IN ('LA', 'LAR'))
+                          OR (r.away_abbr IN ('WSH', 'WAS') AND away.abbr IN ('WSH', 'WAS'))
+                        )
+                    ),
+                    snaps AS (
+                      SELECT
+                        cg.schedule_id,
+                        os.game_id::text AS snap_id,
+                        m.code AS market_code,
+                        os.spread_home,
+                        os.total_points,
+                        os.captured_at
+                      FROM candidate_games cg
+                      JOIN odds_snapshots os ON os.game_id = cg.snap_id
+                      JOIN markets m ON m.id = os.market_id
+                      WHERE m.code IN ('spread', 'total', 'spreads', 'totals')
+                    ),
+                    open_spread AS (
+                      SELECT DISTINCT ON (schedule_id)
+                        schedule_id,
+                        snap_id AS spread_snap_id,
+                        spread_home AS open_spread_home
+                      FROM snaps
+                      WHERE market_code IN ('spread', 'spreads')
+                        AND spread_home IS NOT NULL
+                      ORDER BY schedule_id, captured_at ASC
+                    ),
+                    open_total AS (
+                      SELECT DISTINCT ON (schedule_id)
+                        schedule_id,
+                        snap_id AS total_snap_id,
+                        total_points AS open_total
+                      FROM snaps
+                      WHERE market_code IN ('total', 'totals')
+                        AND total_points IS NOT NULL
+                      ORDER BY schedule_id, captured_at ASC
+                    ),
+                    latest AS (
+                      SELECT schedule_id, MAX(captured_at) AS odds_captured_at
+                      FROM snaps
+                      GROUP BY schedule_id
+                    )
+                    SELECT
+                      COALESCE(os.schedule_id, ot.schedule_id, l.schedule_id) AS game_id,
+                      os.open_spread_home,
+                      ot.open_total,
+                      l.odds_captured_at,
+                      COALESCE(os.spread_snap_id, ot.total_snap_id) AS source_game_id
+                    FROM latest l
+                    FULL OUTER JOIN open_spread os ON os.schedule_id = l.schedule_id
+                    FULL OUTER JOIN open_total ot
+                      ON ot.schedule_id = COALESCE(l.schedule_id, os.schedule_id)
+                    """
                 ),
-                open_spread AS (
-                  SELECT DISTINCT ON (game_id)
-                    game_id,
-                    spread_home AS open_spread_home,
-                    captured_at AS open_captured_at
-                  FROM snaps
-                  WHERE market_code IN ('spread', 'spreads')
-                    AND spread_home IS NOT NULL
-                  ORDER BY game_id, captured_at ASC
+                {
+                    "game_ids": unique_ids,
+                    "home_abbrs": home_abbrs,
+                    "away_abbrs": away_abbrs,
+                    "game_dates": game_dates,
+                },
+            ).fetchall()
+        else:
+            rows = session.execute(
+                text(
+                    """
+                    WITH snaps AS (
+                      SELECT
+                        os.game_id::text AS game_id,
+                        m.code AS market_code,
+                        os.spread_home,
+                        os.total_points,
+                        os.captured_at
+                      FROM odds_snapshots os
+                      JOIN markets m ON m.id = os.market_id
+                      WHERE os.game_id::text = ANY(:game_ids)
+                        AND m.code IN ('spread', 'total', 'spreads', 'totals')
+                    ),
+                    open_spread AS (
+                      SELECT DISTINCT ON (game_id)
+                        game_id,
+                        spread_home AS open_spread_home,
+                        captured_at AS open_captured_at
+                      FROM snaps
+                      WHERE market_code IN ('spread', 'spreads')
+                        AND spread_home IS NOT NULL
+                      ORDER BY game_id, captured_at ASC
+                    ),
+                    open_total AS (
+                      SELECT DISTINCT ON (game_id)
+                        game_id,
+                        total_points AS open_total,
+                        captured_at AS open_captured_at
+                      FROM snaps
+                      WHERE market_code IN ('total', 'totals')
+                        AND total_points IS NOT NULL
+                      ORDER BY game_id, captured_at ASC
+                    ),
+                    latest AS (
+                      SELECT game_id, MAX(captured_at) AS odds_captured_at
+                      FROM snaps
+                      GROUP BY game_id
+                    )
+                    SELECT
+                      COALESCE(os.game_id, ot.game_id, l.game_id) AS game_id,
+                      os.open_spread_home,
+                      ot.open_total,
+                      l.odds_captured_at,
+                      COALESCE(os.game_id, ot.game_id, l.game_id) AS source_game_id
+                    FROM latest l
+                    FULL OUTER JOIN open_spread os ON os.game_id = l.game_id
+                    FULL OUTER JOIN open_total ot ON ot.game_id = COALESCE(l.game_id, os.game_id)
+                    """
                 ),
-                open_total AS (
-                  SELECT DISTINCT ON (game_id)
-                    game_id,
-                    total_points AS open_total,
-                    captured_at AS open_captured_at
-                  FROM snaps
-                  WHERE market_code IN ('total', 'totals')
-                    AND total_points IS NOT NULL
-                  ORDER BY game_id, captured_at ASC
-                ),
-                latest AS (
-                  SELECT game_id, MAX(captured_at) AS odds_captured_at
-                  FROM snaps
-                  GROUP BY game_id
-                )
-                SELECT
-                  COALESCE(os.game_id, ot.game_id, l.game_id) AS game_id,
-                  os.open_spread_home,
-                  ot.open_total,
-                  l.odds_captured_at
-                FROM latest l
-                FULL OUTER JOIN open_spread os ON os.game_id = l.game_id
-                FULL OUTER JOIN open_total ot ON ot.game_id = COALESCE(l.game_id, os.game_id)
-                """
-            ),
-            {"game_ids": unique_ids},
-        ).fetchall()
+                {"game_ids": unique_ids},
+            ).fetchall()
     except SQLAlchemyError:
         log.exception("Failed loading first-open odds from odds_snapshots")
         return {}
@@ -436,12 +585,21 @@ def _first_open_odds_by_game_ids(
         open_spread = _to_float(mapped.get("open_spread_home"))
         open_total = _to_float(mapped.get("open_total"))
         captured = mapped.get("odds_captured_at")
+        source_id = str(mapped.get("source_game_id") or gid)
+        if open_spread is None and open_total is None:
+            join_status = "missing"
+        elif source_id == gid:
+            join_status = "exact"
+        else:
+            join_status = "alias"
         out[gid] = {
             "open_spread_home": round(open_spread, 2) if open_spread is not None else None,
             "open_total": round(open_total, 2) if open_total is not None else None,
             "odds_captured_at": captured.isoformat() if hasattr(captured, "isoformat") else (
                 str(captured) if captured is not None else None
             ),
+            "open_join_status": join_status,
+            "open_source_game_id": source_id,
         }
     return out
 
@@ -3480,9 +3638,11 @@ def nfl_fair_lines(
                 "include_past_days": include_past_days,
             },
         ).fetchall()
+        fair_line_rows = [dict(r._mapping) for r in rows]
         open_by_game_id = _first_open_odds_by_game_ids(
             session,
-            [str(dict(r._mapping).get("game_id") or "") for r in rows],
+            [str(mapped.get("game_id") or "") for mapped in fair_line_rows],
+            games=fair_line_rows,
         )
     except SQLAlchemyError as exc:
         raise HTTPException(
@@ -3791,6 +3951,11 @@ def nfl_fair_lines(
                 ),
                 "open_total": (
                     round(_open_total, 2) if _open_total is not None else None
+                ),
+                "open_join_status": (
+                    str(_open_snap.get("open_join_status") or "missing")
+                    if _open_snap
+                    else "missing"
                 ),
                 "odds_captured_at": _open_snap.get("odds_captured_at"),
                 "best_spread_home": best_spread_home,

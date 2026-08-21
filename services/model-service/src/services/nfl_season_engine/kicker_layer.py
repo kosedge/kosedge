@@ -391,6 +391,12 @@ def league_fg_volume_sanity(
 
 
 def kicker_layer_documentation() -> Dict[str, Any]:
+    try:
+        from src.services.nfl_kdst_publish import kdst_publish_status
+
+        publish = kdst_publish_status(2026)
+    except Exception:
+        publish = {"status": "missing"}
     return {
         "version": KICKER_LAYER_VERSION,
         "status": "approximate",
@@ -404,9 +410,12 @@ def kicker_layer_documentation() -> Dict[str, Any]:
         "points_per_xp": POINTS_PER_XP,
         "script_fg_attempt_mult": dict(SCRIPT_FG_ATTEMPT_MULT),
         "dome_teams": sorted(DOME_OR_CLOSED_ROOF_TEAMS),
+        "kdst_publish": publish,
         "notes": (
             "Coarse short/mid/long FG model + near-constant XP. "
             "Script (lead late → more FG) and dome/outdoor-adverse knobs "
-            "are light multipliers. Not a calibrated per-kicker distance market."
+            "are light multipliers. Named Fantasy K/DST wait on "
+            "nfl_kdst_publish artifact → nfl_fantasy_season_draft_rankings. "
+            "Not a calibrated per-kicker distance market."
         ),
     }

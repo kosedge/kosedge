@@ -896,3 +896,71 @@ def test_nfl_intel_health_schema_and_availability(monkeypatch) -> None:
     assert payload["availability"]["standings"]["season"] == 2025
     assert payload["active_sources"]["rosters"] == "nfl_com"
     assert payload["active_sources"]["stats"] == "nfl_com"
+
+
+def test_first_open_odds_uses_team_date_candidate_games() -> None:
+    """Parallel Odds UUID must not silently blank Open (DAL@NYG class)."""
+
+    class _Session:
+        def __init__(self) -> None:
+            self.sql = ""
+            self.params: Dict[str, Any] = {}
+
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            self.sql = str(statement)
+            self.params = dict(params or {})
+            return _FakeResult(
+                [
+                    {
+                        "game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                        "open_spread_home": -3.0,
+                        "open_total": 47.5,
+                        "odds_captured_at": None,
+                        "source_game_id": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+                    }
+                ]
+            )
+
+    session = _Session()
+    out = nfl_routes._first_open_odds_by_game_ids(
+        session,
+        ["c1df8ae6-458e-4b33-9805-94c5fd3436c7"],
+        games=[
+            {
+                "game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                "home_abbr": "NYG",
+                "away_abbr": "DAL",
+                "game_date": date(2026, 9, 13),
+            }
+        ],
+    )
+    assert "candidate_games" in session.sql
+    assert session.params["home_abbrs"] == ["NYG"]
+    assert session.params["away_abbrs"] == ["DAL"]
+    snap = out["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    assert snap["open_spread_home"] == -3.0
+    assert snap["open_total"] == 47.5
+    assert snap["open_join_status"] == "alias"
+
+
+def test_first_open_odds_exact_uuid_without_game_metadata() -> None:
+    class _Session:
+        def __init__(self) -> None:
+            self.sql = ""
+
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            self.sql = str(statement)
+            return _FakeResult([])
+
+    session = _Session()
+    nfl_routes._first_open_odds_by_game_ids(
+        session, ["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    )
+    assert "candidate_games" not in session.sql
+    assert "ANY(:game_ids)" in session.sql
+
+
+def test_nfl_open_abbr_aliases_rams_and_washington() -> None:
+    assert nfl_routes._nfl_open_abbr_aliases("LAR") == ["LA", "LAR"]
+    assert nfl_routes._nfl_open_abbr_aliases("WAS") == ["WSH", "WAS"]
+    assert nfl_routes._nfl_open_abbr_aliases("SEA") == ["SEA"]

@@ -16997,7 +16997,14 @@ def _fetch_kicker_season_players(session: Any, *, season: int, model_version: st
     volume. See `nfl_kicker_dst_projections.py` for the full methodology.
     K fantasy scoring does not vary by PPR profile, so `total_points` here is
     profile-independent (the caller applies the same total to every
-    scoring_profile row)."""
+    scoring_profile row). Optional ``nfl_kdst_publish`` artifact overlays
+    FG/XP volume when a 100k publish exists — never invents named kickers."""
+    from src.services.nfl_kdst_publish import (
+        kdst_volume_overlay_for_team,
+        load_kdst_publish_artifact,
+    )
+
+    kdst_art = load_kdst_publish_artifact(int(season))
     league = _fetch_league_kicker_baselines(session)
     team_history = _fetch_team_kicker_history(session)
     career_stats = _fetch_kicker_career_bucket_stats(session)
@@ -17022,6 +17029,9 @@ def _fetch_kicker_season_players(session: Any, *, season: int, model_version: st
             league_avg_red_zone_td_rate=situational["league_avg_red_zone_td_rate"],
             games=games,
         )
+        overlay = kdst_volume_overlay_for_team(kdst_art, team)
+        if overlay and overlay.get("fg_attempts") is not None:
+            total_fg_attempts = float(overlay["fg_attempts"])
         attempts_by_bucket = allocate_attempts_to_buckets(
             total_attempts=total_fg_attempts,
             team_bucket_makes=team_hist.get("bucket_makes", {}),
@@ -17316,7 +17326,17 @@ def materialize_nfl_fantasy_season_draft_rankings(
         kicker_players = _fetch_kicker_season_players(session, season=season, model_version=model_version)
         dst_players = _fetch_dst_season_players(session, season=season)
         if not base_players and not kicker_players and not dst_players:
-            return {"season": int(season), "model_version": model_version, "status": "no_data", "rows_upserted": 0}
+            from src.services.nfl_kdst_publish import kdst_publish_status
+
+            return {
+                "season": int(season),
+                "model_version": model_version,
+                "status": "no_data",
+                "rows_upserted": 0,
+                "kickers": 0,
+                "dst_teams": 0,
+                "kdst_publish": kdst_publish_status(int(season)),
+            }
 
         k_dst_extra_columns = (
             "field_goals_made_total",
@@ -17528,6 +17548,8 @@ def materialize_nfl_fantasy_season_draft_rankings(
             },
         )
         session.commit()
+        from src.services.nfl_kdst_publish import kdst_publish_status
+
         return {
             "season": int(season),
             "model_version": model_version,
@@ -17535,6 +17557,7 @@ def materialize_nfl_fantasy_season_draft_rankings(
             "kickers": len(kicker_players),
             "dst_teams": len(dst_players),
             "rows_upserted": upserted,
+            "kdst_publish": kdst_publish_status(int(season)),
         }
     except Exception:
         session.rollback()
