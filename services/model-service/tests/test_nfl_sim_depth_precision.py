@@ -145,6 +145,32 @@ def test_survivor_path_pool_shared_plan_and_suggest() -> None:
     assert plan.notes.get("depth_label") == "low-depth estimate"
 
 
+def test_empty_survivor_plan_result_cached() -> None:
+    universe, _ = resolve_season_universe(
+        season=2026, as_of_week=1, demo=True, session=None
+    )
+    first = evaluate_survivor_plan(
+        universe, picks={}, n_sims=16, seed=5, injury_paths=[], top_n=4
+    )
+    second = evaluate_survivor_plan(
+        universe, picks={}, n_sims=16, seed=5, injury_paths=[], top_n=4
+    )
+    assert first.weeks and second.weeks
+    assert first.weeks[0]["ranked_picks"] == second.weeks[0]["ranked_picks"]
+    # Locked slates are not served from the empty cache.
+    team = str(first.weeks[0]["ranked_picks"][0]["team"])
+    locked = evaluate_survivor_plan(
+        universe,
+        picks={"1": team},
+        n_sims=16,
+        seed=5,
+        injury_paths=[],
+        top_n=4,
+    )
+    assert locked.locked_pick_count == 1
+    assert locked.weeks[0]["status"] == "locked"
+
+
 def test_game_box_means_stable_across_two_cached_runs() -> None:
     universe, _ = resolve_season_universe(
         season=2026, as_of_week=1, demo=True, session=None

@@ -624,6 +624,7 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
   topN?: number;
   injuryPaths?: InjuryPathInput[];
   includeDiagnostics?: boolean;
+  timeoutMs?: number;
 }): Promise<SeasonEngineSurvivorPlanResponse> {
   const base = baseUrl();
   if (!base) {
@@ -648,7 +649,7 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
     const res = await upstreamFetch(`${base}/nfl/season-engine/survivor/plan`, {
       method: "POST",
       headers: modelHeaders(),
-      timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
+      timeoutMs: input.timeoutMs ?? UPSTREAM_TIMEOUT_MS.seasonEngine,
       cache: "no-store",
       body: JSON.stringify(body),
     });
@@ -765,6 +766,7 @@ export async function fetchSeasonEngineSurvivorSuggestPaths(input: {
   demo?: boolean;
   injuryPaths?: InjuryPathInput[];
   includeDiagnostics?: boolean;
+  timeoutMs?: number;
 }): Promise<SeasonEngineSurvivorSuggestPathsResponse> {
   const base = baseUrl();
   if (!base) {
@@ -788,7 +790,7 @@ export async function fetchSeasonEngineSurvivorSuggestPaths(input: {
       {
         method: "POST",
         headers: modelHeaders(),
-        timeoutMs: UPSTREAM_TIMEOUT_MS.seasonEngine,
+        timeoutMs: input.timeoutMs ?? UPSTREAM_TIMEOUT_MS.seasonEngine,
         cache: "no-store",
         body: JSON.stringify({
           season: body.season,

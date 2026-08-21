@@ -262,7 +262,13 @@ export const NFL_HONEST_PRECISION_MIN_N = 2000;
 
 /** Interactive desk defaults (match model-service sim_depth knobs). */
 export const NFL_DEFAULT_N_GAME_BOX = 2000;
+/** Research / CLI survivor n. Not the planner page-load default. */
 export const NFL_DEFAULT_N_SURVIVOR_PATHS = 2000;
+/**
+ * Interactive planner / helper n. Rank order is stable enough to plan;
+ * 1-decimal WP is labeled low-depth. Research 2k+ stays offline / CLI.
+ */
+export const NFL_INTERACTIVE_N_SURVIVOR_PATHS = 50;
 /** Full remaining slate so the picker can show every unused team + matchup. */
 export const NFL_SURVIVOR_PLAN_TOP_N = 32;
 

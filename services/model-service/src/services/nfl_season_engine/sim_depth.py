@@ -1,8 +1,9 @@
 """Sim depth defaults, honesty thresholds, and process-local memo caches.
 
 Doctrine: do not publish one-decimal certainty the engine did not earn.
-Interactive Game Boxes / Survivor default to research-depth n (≥2k). Heavy
-publish bundles (50k–100k) stay on their own CLI path and are unchanged.
+Game Boxes HTTP default stays research-depth n (≥2k) + cache. Survivor
+*planner page-load* uses interactive n=50 (web); research 2k–100k stays
+CLI / explicit n_sims. Heavy publish bundles are unchanged.
 """
 
 from __future__ import annotations
@@ -243,6 +244,14 @@ _SURVIVOR_POOL_CACHE = _TtlLruCache(
     ),
 )
 
+# Empty already_used plan / week ranks (short TTL; busts with universe fingerprint).
+_SURVIVOR_EMPTY_RESULT_CACHE = _TtlLruCache(
+    maxsize=_env_int("NFL_SEASON_ENGINE_SURVIVOR_EMPTY_CACHE_SIZE", 24, min_v=1, max_v=128),
+    ttl_s=float(
+        _env_int("NFL_SEASON_ENGINE_SURVIVOR_EMPTY_CACHE_TTL_S", 600, min_v=30, max_v=86_400)
+    ),
+)
+
 
 def game_box_cache_get(key: Hashable) -> Any:
     return _GAME_BOX_CACHE.get(key)
@@ -260,15 +269,25 @@ def survivor_pool_cache_set(key: Hashable, value: Any) -> None:
     _SURVIVOR_POOL_CACHE.set(key, value)
 
 
+def survivor_empty_result_cache_get(key: Hashable) -> Any:
+    return _SURVIVOR_EMPTY_RESULT_CACHE.get(key)
+
+
+def survivor_empty_result_cache_set(key: Hashable, value: Any) -> None:
+    _SURVIVOR_EMPTY_RESULT_CACHE.set(key, value)
+
+
 def clear_sim_depth_caches() -> None:
     _GAME_BOX_CACHE.clear()
     _SURVIVOR_POOL_CACHE.clear()
+    _SURVIVOR_EMPTY_RESULT_CACHE.clear()
 
 
 def cache_stats() -> Dict[str, Any]:
     return {
         "game_boxes": _GAME_BOX_CACHE.stats(),
         "survivor_pools": _SURVIVOR_POOL_CACHE.stats(),
+        "survivor_empty_results": _SURVIVOR_EMPTY_RESULT_CACHE.stats(),
     }
 
 

@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import {
-  NFL_DEFAULT_N_SURVIVOR_PATHS,
+  NFL_INTERACTIVE_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
   formatDepthBadge,
   formatPathDifficultyGrade,
@@ -93,7 +93,7 @@ export default function SeasonEngineSurvivorClient({
           body: JSON.stringify({
             week,
             alreadyUsed: used,
-            nSims: NFL_DEFAULT_N_SURVIVOR_PATHS,
+            nSims: NFL_INTERACTIVE_N_SURVIVOR_PATHS,
             topN: 16,
           }),
         });
@@ -248,7 +248,7 @@ export default function SeasonEngineSurvivorClient({
                 {result.engine_version || engineVersion || "season engine"}
                 {" · "}
                 {formatDepthBadge(
-                  result.n_sims ?? NFL_DEFAULT_N_SURVIVOR_PATHS,
+                  result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
                   { surface: "survivor paths" },
                 )}
               </p>
@@ -261,7 +261,7 @@ export default function SeasonEngineSurvivorClient({
                 <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
                   Top pick ·{" "}
                   {formatPct(ranked[0].win_rate, {
-                    n: result.n_sims ?? NFL_DEFAULT_N_SURVIVOR_PATHS,
+                    n: result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
                     digits: 1,
                   })}{" "}
                   this week
@@ -326,7 +326,7 @@ export default function SeasonEngineSurvivorClient({
                     </td>
                     <td className="px-3 py-2.5 tabular-nums font-semibold text-kos-text">
                       {formatPct(pick.win_rate, {
-                        n: result.n_sims ?? NFL_DEFAULT_N_SURVIVOR_PATHS,
+                        n: result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
                         digits: 1,
                       })}
                     </td>

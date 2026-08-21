@@ -138,7 +138,7 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
 
       const seaChip = screen.getByRole("button", { name: /SEA/ });
       expect(within(seaChip).getByText(/ARI/)).toBeInTheDocument();
-      expect(within(seaChip).getByText(/62\.4%/)).toBeInTheDocument();
+      expect(within(seaChip).getByText(/62%/)).toBeInTheDocument();
       expect(seaChip.textContent || "").not.toMatch(/0\.38/);
 
       await user.click(seaChip);
@@ -212,6 +212,9 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
   it("loads an AI suggested path into the slate", async () => {
     const user = userEvent.setup();
     render(<SeasonEngineSurvivorPlannerClient />);
+    await user.click(
+      screen.getByRole("button", { name: /Load suggested paths/i }),
+    );
     await waitFor(
       () => {
         expect(screen.getByRole("button", { name: /Chalk/ })).toBeInTheDocument();
@@ -227,6 +230,7 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
 
   it("exposes hero slate metrics instead of joint survival as primary", async () => {
     render(<SeasonEngineSurvivorPlannerClient />);
+    expect(screen.getByText("Week 1")).toBeInTheDocument();
     await waitFor(
       () => {
         expect(screen.getByText("Slate grade")).toBeInTheDocument();
@@ -237,9 +241,26 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
       { timeout: 4000 },
     );
     expect(screen.queryByText("Path survival")).not.toBeInTheDocument();
-    // Touch targets on reset + suggest cards
     expect(screen.getByRole("button", { name: "Reset plan" }).className).toMatch(
       /min-h-11/,
     );
+    expect(
+      screen.getByRole("button", { name: /Load suggested paths/i }),
+    ).toBeInTheDocument();
+    await waitFor(() => {
+      const planCalls = vi
+        .mocked(fetch)
+        .mock.calls.filter((call) => String(call[0]).includes("/plan"));
+      expect(planCalls.length).toBeGreaterThan(0);
+      const body = JSON.parse(String(planCalls[0]?.[1]?.body ?? "{}")) as {
+        nSims?: number;
+      };
+      expect(body.nSims).toBe(50);
+    });
+    expect(
+      vi.mocked(fetch).mock.calls.some((call) =>
+        String(call[0]).includes("suggest-paths"),
+      ),
+    ).toBe(false);
   }, 15000);
 });

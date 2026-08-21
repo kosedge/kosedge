@@ -71,6 +71,8 @@ from src.services.nfl_season_engine.sim_depth import (
     depth_meta,
     resolve_n_survivor_paths,
     scenario_hash,
+    survivor_empty_result_cache_get,
+    survivor_empty_result_cache_set,
     survivor_pool_cache_get,
     survivor_pool_cache_set,
     universe_cache_fingerprint,
@@ -1081,6 +1083,17 @@ def evaluate_survivor_plan(
     paths = list(paths_arg or [])
     locked_items = list(locked.items())
 
+    empty_key = None
+    if not locked and not paths:
+        empty_key = (
+            f"plan_empty|{universe_cache_fingerprint(universe)}|"
+            f"n={n_sims}|seed={int(seed)}|top={top_n}|diag={int(include_diagnostics)}|"
+            f"packaged={int(paths_arg is None)}"
+        )
+        cached = survivor_empty_result_cache_get(empty_key)
+        if isinstance(cached, SurvivorPlanResult):
+            return cached
+
     wins_out, sched_out, by_week, max_week, path_ok, pool_hit = _build_win_matrix(
         universe,
         n_sims=n_sims,
@@ -1224,7 +1237,7 @@ def evaluate_survivor_plan(
         }
 
     locked_str_keys = {str(w): t for w, t in locked.items()}
-    return SurvivorPlanResult(
+    result = SurvivorPlanResult(
         season=universe.season,
         n_sims=n_sims,
         engine_version=engine_version,
@@ -1245,6 +1258,9 @@ def evaluate_survivor_plan(
         notes=notes,
         diagnostics=diagnostics,
     )
+    if empty_key:
+        survivor_empty_result_cache_set(empty_key, result)
+    return result
 
 
 def suggest_survivor_paths(
