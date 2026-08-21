@@ -13,7 +13,6 @@ import {
   NFL_WEEKLY_PROPS_GATE_BODY,
   NFL_WEEKLY_PROPS_GATE_TITLE,
   NFL_WEEKLY_PROPS_LIVE,
-  NFL_WEEKLY_PROPS_METHODS,
 } from "@/lib/nfl-weekly-props-live";
 import {
   PRIMARY_BOARD_MARKETS,
@@ -342,20 +341,20 @@ export default async function NflPropsBoardPage({
             )}
 
             <p className="mt-4 text-xs text-kos-text/50">
-              {PROPS_ELIGIBILITY_NOTE}{" "}
-              {NFL_WEEKLY_PROPS_METHODS.join(" ")} For matchup depth, open{" "}
+              {PROPS_ELIGIBILITY_NOTE} Numbers and market edge when a book is
+              joined — no PLAY / LEAN stake tags.{" "}
+              <Link
+                href="/pro/model-transparency#props"
+                className="font-semibold text-kos-gold hover:underline"
+              >
+                Model transparency
+              </Link>
+              . Matchup depth:{" "}
               <Link
                 href="/pro/nfl/game-boxes"
                 className="font-semibold text-kos-gold hover:underline"
               >
                 Game Boxes
-              </Link>{" "}
-              or{" "}
-              <Link
-                href="/pro/nfl/edges"
-                className="font-semibold text-kos-gold hover:underline"
-              >
-                Edges
               </Link>
               .
             </p>

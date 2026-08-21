@@ -10,7 +10,8 @@ import {
   buildSportOverviewContent,
 } from "@/lib/pro-sport-ia";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
-import { NFL_DESK_SUBTITLE, NFL_GUEST_PATH, NFL_TAGLINE, NFL_WEEK1_POSTURE } from "@/lib/nfl-pro-nav";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
+import { NFL_DESK_SUBTITLE, NFL_TAGLINE, NFL_WEEK1_POSTURE } from "@/lib/nfl-pro-nav";
 
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
@@ -37,19 +38,10 @@ export default async function NflOverviewPage() {
               NFL Overview
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              {NFL_TAGLINE}. {NFL_WEEK1_POSTURE}. {NFL_GUEST_PATH}.
+              {NFL_TAGLINE}. {NFL_WEEK1_POSTURE}.
             </p>
-            <p className="mt-3 text-sm">
-              <Link
-                href="/pro/nfl/launch-notes"
-                className="font-semibold text-kos-gold hover:underline"
-              >
-                How to read the desk
-              </Link>
-              <span className="text-kos-text/55">
-                {" "}
-                — Model vs KEI vs Tag in one page.
-              </span>
+            <p className="mt-3">
+              <ModelTransparencyLink className="text-sm font-medium text-kos-text/50 hover:text-kos-gold" />
             </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-56">
@@ -58,12 +50,6 @@ export default async function NflOverviewPage() {
               className="rounded-xl border border-edge-green/40 bg-edge-green/12 px-4 py-2.5 text-center text-sm font-semibold text-edge-green shadow-[0_0_18px_rgba(57,255,20,0.18)] transition hover:border-edge-green/60 hover:bg-edge-green/20"
             >
               Open Week 1 Edge Board
-            </Link>
-            <Link
-              href="/pro/nfl/launch-notes"
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
-            >
-              How to read the desk
             </Link>
             <Link
               href="/pro/nfl/fantasy/mock"

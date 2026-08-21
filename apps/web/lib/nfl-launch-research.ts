@@ -23,7 +23,7 @@ export function nflLaunchResearchDeskNotice(): string | null {
     n ? `${n} team W/L paths` : null,
     eng,
     when ? `generated ${when}` : null,
-    "Interactive desks default to research depth (≥2k); thin runs labeled low-depth estimate",
+    "Research lock ≥2k; interactive desks use labeled low-depth estimates",
   ]
     .filter(Boolean)
     .join(" · ");

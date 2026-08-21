@@ -2,7 +2,10 @@
  * Pro routes that stay open without Pro entitlement (desk notes + after paywall).
  * Matched via proxy `x-pathname`.
  */
-const PUBLIC_PRO_PATH_PREFIXES = ["/pro/nfl/launch-notes"] as const;
+const PUBLIC_PRO_PATH_PREFIXES = [
+  "/pro/nfl/launch-notes",
+  "/pro/model-transparency",
+] as const;
 
 export function isPublicProPath(
   pathname: string | null | undefined,

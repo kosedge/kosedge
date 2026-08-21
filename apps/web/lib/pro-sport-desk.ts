@@ -156,10 +156,10 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       },
       {
         href: "/pro/model-transparency",
-        title: "Model Health",
+        title: "Model Transparency",
         description:
-          "Transparency, CLV tracking, and performance accountability.",
-        cta: "Open model health →",
+          "How Model, KEI, and each surface work — one hub, not a banner on every board.",
+        cta: "Open model transparency →",
         accent: "green",
       },
       {
@@ -422,9 +422,9 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       },
       {
         href: "/pro/model-transparency",
-        title: "Model Health",
-        description: "Transparency and the CFB research-only contract.",
-        cta: "Open model health →",
+        title: "Model Transparency",
+        description: "How Model, KEI, and each surface work — one hub.",
+        cta: "Open model transparency →",
         accent: "green",
       },
       {

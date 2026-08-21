@@ -328,7 +328,7 @@ export default async function TrackingPage({
       sportKey={sportKey}
       sportName={sportName}
       base={base}
-      badge={`${sportName} Model Health`}
+      badge={`${sportName} tracking`}
       title={`${sportName} Tracking`}
       summary="CLV and post-close quality review. Outcome-neutral evaluation — process quality over narrative."
       primaryHref="/pro/clv-tracker"

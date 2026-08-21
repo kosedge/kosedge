@@ -37,6 +37,12 @@ export default function MethodologyPage() {
             Edge Board
           </Link>
           <Link
+            href="/pro/model-transparency"
+            className="inline-flex rounded-xl border border-kos-border bg-kos-surface/40 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
+          >
+            Model Transparency
+          </Link>
+          <Link
             href="/insights/doctrine"
             className="inline-flex rounded-xl border border-kos-border bg-kos-surface/40 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
           >
@@ -295,6 +301,12 @@ export default function MethodologyPage() {
             className="inline-flex rounded-xl bg-kos-gold px-5 py-3 text-sm font-semibold text-black hover:opacity-90"
           >
             Edge Board
+          </Link>
+          <Link
+            href="/pro/model-transparency"
+            className="inline-flex rounded-xl border border-kos-border bg-kos-surface/40 px-5 py-3 text-sm font-semibold text-kos-text hover:border-kos-gold/40"
+          >
+            Model Transparency
           </Link>
           <Link
             href="/insights/doctrine"

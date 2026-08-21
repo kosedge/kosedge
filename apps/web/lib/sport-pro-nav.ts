@@ -42,7 +42,7 @@ function sharedTools(sport: SportKey): SportNavItem[] {
     { href: `/pro/${sport}/execution`, label: "Execution Monitor" },
     keiTool,
     { href: `/pro/${sport}/tracking`, label: "Sport Tracking" },
-    { href: "/pro/model-transparency", label: "Model Health" },
+    { href: "/pro/model-transparency", label: "Model Transparency" },
     { href: "/pro/clv-tracker", label: "CLV Tracker" },
   ];
 }
@@ -118,7 +118,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       // Fantasy primary nav covers Draft Desk; weekly stays in tools.
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
       { href: "/wall-chart/nfl-2026", label: "Wall Chart" },
-      { href: "/pro/model-transparency", label: "Model Health" },
+      { href: "/pro/model-transparency", label: "Model Transparency" },
     ],
   },
   ncaam: {
@@ -156,7 +156,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/cfb/conferences", label: "Conferences" },
       { href: "/pro/cfb/teams", label: "Power Ratings" },
       { href: "/pro/kei-lines/cfb", label: "KEI Lines" },
-      { href: "/pro/model-transparency", label: "Model Health" },
+      { href: "/pro/model-transparency", label: "Model Transparency" },
     ],
   },
   nba: {

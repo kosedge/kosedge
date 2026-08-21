@@ -14,8 +14,8 @@ type HubCard = {
 
 const cards: HubCard[] = [
   {
-    title: "Model Transparency Panel",
-    desc: "Model vs open, model vs close, ROI, EV capture %, sport & market performance.",
+    title: "Model Transparency",
+    desc: "How Model, KEI, and each product surface work — in one place.",
     href: "/pro/model-transparency",
     accent: "gold",
   },

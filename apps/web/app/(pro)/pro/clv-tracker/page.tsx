@@ -52,7 +52,7 @@ export default function CLVTrackerPage() {
           href="/pro/model-transparency"
           className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
         >
-          Model Health
+          Model Transparency
         </Link>
       }
     >

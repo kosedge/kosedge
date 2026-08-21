@@ -124,9 +124,14 @@ export default async function NflFairLinesPage({
               KEI Lines
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Model = pre-market-blend research fair (stable). KEI = model +
-              Week 1 desk factors (injury / QB confirmation / rest-travel).
-              Tags compare KEI to market, not Model. Kickoffs in ET.
+              Model = research fair. KEI = model + late information. Tags
+              compare KEI to market, not Model.{" "}
+              <Link
+                href="/pro/model-transparency#kei-lines"
+                className="text-kos-text/45 hover:text-kos-gold"
+              >
+                Model transparency
+              </Link>
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
@@ -334,17 +339,16 @@ export default async function NflFairLinesPage({
         ) : null}
       </section>
 
-      <section className="mt-6 rounded-2xl border border-white/10 bg-black/25 p-4 text-sm text-kos-text/70">
-        <p>
-          Model is the pre-market-blend Monte Carlo fair when blend applied;
-          otherwise Model equals KEI until Week 1 desk factors fire. Fair ML /
-          win probs are post-blend only (no separate Model ML yet). Edges and
-          PLAY/LEAN tags use KEI vs market only. Weather, rest/short week, and
-          refs show on the driver line when applied — otherwise honest
-          not-applied (never climatology or fake numbers). REG Week 1 lines
-          when books have them; no preseason market theater.
-        </p>
-      </section>
+      <p className="mt-6 text-sm text-kos-text/70">
+        Weather, rest, and refs show when applied — otherwise honest
+        not-applied.{" "}
+        <Link
+          href="/pro/model-transparency#kei-lines"
+          className="text-kos-text/45 hover:text-kos-gold"
+        >
+          Model transparency
+        </Link>
+      </p>
     </main>
   );
 }
