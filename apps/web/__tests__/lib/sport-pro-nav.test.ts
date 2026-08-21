@@ -77,6 +77,7 @@ describe("sport-pro-nav", () => {
     expect(nflTools).toContain("KEI Lines");
     expect(nflTools).toContain("Season Model");
     expect(nflTools).toContain("Game Boxes");
+    expect(nflTools).toContain("Model Transparency");
     expect(nflTools).toContain("Team Previews");
     // Fantasy Draft Desk is primary — not duplicated in tools overflow.
     expect(nflTools).not.toContain("Draft Desk");

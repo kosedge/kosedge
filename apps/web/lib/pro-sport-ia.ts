@@ -58,7 +58,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
     heroSummary:
-      "Week 1 REG live · PRE off board · KEI = model + desk factors. Guest path: Edge Board → Survivor → Fantasy → Season Model.",
+      "Week 1 REG live · PRE off board. KEI = model + desk factors.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
@@ -367,7 +367,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/model-transparency",
           label: "Model Transparency",
-          hint: "Model vs open/close and edge capture accountability.",
+          hint: "How Model, KEI, and each surface work — in one place.",
           premium: true,
           status: "active",
         },
@@ -681,7 +681,7 @@ export function buildSportOverviewSections({
         {
           href: "/pro/model-transparency",
           label: "Model transparency",
-          hint: "Model vs open/close and edge capture accountability.",
+          hint: "How Model, KEI, and each surface work — in one place.",
           premium: true,
           status: "active",
         },

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import {
   getSportEdgeBoardHref,
   getSportOverviewHref,
@@ -93,6 +94,7 @@ export default function SportHubShell({
               >
                 Edge Board →
               </Link>
+              <ModelTransparencyLink className="min-h-11 inline-flex items-center font-medium text-kos-text/45 hover:text-kos-gold sm:min-h-0" />
             </div>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-48">

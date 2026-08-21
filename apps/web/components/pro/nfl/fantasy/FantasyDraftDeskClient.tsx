@@ -212,9 +212,14 @@ export function FantasyDraftDeskClient({
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
                 Board order is <span className="text-kos-text/90">Model rank</span>
-                — projection order, not recommended pick order. ADP and Value Δ
-                stay beside it. Builder and Mock use the same projections with
-                ADP-aware take / wait / reach advice.
+                — projection order, not recommended pick order. Builder and Mock
+                add ADP-aware take / wait / reach advice.{" "}
+                <Link
+                  href="/pro/model-transparency#fantasy"
+                  className="text-kos-text/45 hover:text-kos-gold"
+                >
+                  Model transparency
+                </Link>
               </p>
               <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
                 Source · {board.source} · {board.adpSourceLabel}
@@ -759,6 +764,14 @@ export function FantasyDraftDeskClient({
             <li key={item}>{item}</li>
           ))}
         </ul>
+        <p className="mt-2 pb-1">
+          <Link
+            href="/pro/model-transparency#fantasy"
+            className="text-kos-text/45 hover:text-kos-gold"
+          >
+            Model transparency
+          </Link>
+        </p>
       </details>
     </div>
   );

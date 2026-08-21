@@ -17,6 +17,7 @@ import {
 } from "@/lib/nfl-edge-board-week";
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
+import { MODEL_TRANSPARENCY_HREF } from "@/lib/model-transparency-hub";
 import {
   resolveSportKey,
   sportDisplayLabel,
@@ -172,12 +173,14 @@ export default async function EdgeBoardSportPage({
             {!isNfl ? (
               <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
                 {marketsOnly
-                  ? sportKey === "cfb"
-                    ? `Live sportsbook Open/Best when available. ${keiCode} handicap is not shipped — KEI columns stay blank (books ≠ KEI). Project Game numbers are MODEL research and are not copied here as edge. Research board, not picks.`
-                    : `Sportsbook Open/Best when available. ${keiCode} handicap is not shipped yet — KEI columns stay blank (no invented numbers). Research board, not picks.`
-                  : sportKey === "cfb"
-                    ? `KEI vs trusted market only. Outlier / single-book junk cannot PLAY. Model is research-fair. Early PLAY bar 4 pts · PASS default.`
-                    : `KEI (handicap) vs market. Open + Current when books post. ${keiCode} Line / Moneyline / O/U are Kosedge handicap projections — research, not picks.`}
+                  ? `${keiCode} handicap is not shipped — KEI stays blank (books ≠ KEI). Research board, not picks.`
+                  : `KEI vs market. Model is research-fair. Tags never use Model vs market.`}{" "}
+                <Link
+                  href={MODEL_TRANSPARENCY_HREF}
+                  className="text-kos-gold/80 hover:text-kos-gold hover:underline"
+                >
+                  Model transparency
+                </Link>
               </p>
             ) : null}
           </div>
@@ -250,13 +253,12 @@ export default async function EdgeBoardSportPage({
             </div>
             <p className="text-[11px] text-gray-500">
               Week {cfbWeek} · Tag = KEI vs trusted market · Model is
-              research-only · early PLAY bar 4 pts · PASS default · junk /
-              outlier books cannot PLAY ·{" "}
+              research-only ·{" "}
               <Link
-                href="/pro/cfb/overview"
+                href={MODEL_TRANSPARENCY_HREF}
                 className="text-kos-gold/80 hover:text-kos-gold hover:underline"
               >
-                How to read the desk
+                Model transparency
               </Link>
             </p>
           </div>
@@ -296,17 +298,15 @@ export default async function EdgeBoardSportPage({
             </div>
             <p
               className="text-[11px] text-gray-500"
-              title="We bet prices, not teams. Tag = KEI vs current best market (not Model alone). Edge pts and Confidence stay separate. PLAY/LEAN require play-to still available. Week 1–2 uses tighter bands."
+              title="Tag = KEI vs current best market (not Model alone)."
             >
               {slate === "week1" ? "Week 1" : nflWeekLabel} · Tag = KEI vs
-              market · KEI = model + desk factors · weather/rest honest
-              not-applied when not in stack · REG Week 1 lines when books post
-              ·{" "}
+              market · KEI = model + desk factors ·{" "}
               <Link
-                href="/pro/nfl/launch-notes"
+                href={MODEL_TRANSPARENCY_HREF}
                 className="text-kos-gold/80 hover:text-kos-gold hover:underline"
               >
-                How to read the desk
+                Model transparency
               </Link>
             </p>
           </div>

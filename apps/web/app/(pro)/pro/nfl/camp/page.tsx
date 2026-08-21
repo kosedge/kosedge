@@ -169,7 +169,13 @@ export default async function NflCampDeskPage({
             League wrap and short team notes when there is real news. Writers
             research beat, official, and sharp-capable desks — original KosEdge
             copy, never a tweet mirror. Thin camp info stays Pass — we do not
-            invent a lean from one good practice. {truth.period_line}.
+            invent a lean from one good practice. {truth.period_line}.{" "}
+            <Link
+              href="/pro/model-transparency#camp-desk"
+              className="text-kos-text/45 hover:text-kos-gold"
+            >
+              Model transparency
+            </Link>
           </p>
           <p className="mt-2 text-xs text-kos-text/55">
             {desk.diagnostics.kosedgeCardCount} KosEdge cards ·{" "}

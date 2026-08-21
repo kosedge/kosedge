@@ -216,7 +216,7 @@ describe("pro sport IA", () => {
       "Team Previews",
       "Season Model",
       "Game Boxes",
-      "Model Health",
+      "Model Transparency",
       "Wall Chart",
       "KEI Lines",
     ]);

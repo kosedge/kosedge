@@ -43,7 +43,7 @@ export default async function NflSeasonModelHubPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Season Model"
-      summary="True PR board plus full-season tools for Game Boxes and Survivor. Model = research fair; KEI = late reprice; Edge = KEI vs market only."
+      summary="True PR plus Game Boxes and Survivor. Model = research fair; KEI = late reprice; Edge = KEI vs market only."
       badge="NFL season engine"
       primaryHref="/pro/nfl/game-boxes"
       primaryLabel="Open Game Boxes"

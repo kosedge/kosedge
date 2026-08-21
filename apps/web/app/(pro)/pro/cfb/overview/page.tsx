@@ -72,7 +72,14 @@ export default function CfbOverviewPage() {
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75 sm:text-base">
             Independent lines are live. Model stays research-fair. KEI is the
-            published line. Edge / Tag = KEI vs market. {cfbModelDeskHonestyNote()}
+            published line. Edge / Tag = KEI vs market.{" "}
+            {cfbModelDeskHonestyNote()}{" "}
+            <Link
+              href="/pro/model-transparency"
+              className="text-kos-text/45 hover:text-kos-gold"
+            >
+              Model transparency
+            </Link>
           </p>
           <p className="mt-3 text-xs text-kos-text/55">
             Engine {version.engine_version} · N={version.n_sims} · as_of{" "}
@@ -83,15 +90,11 @@ export default function CfbOverviewPage() {
 
       <section className="mt-6 rounded-2xl border border-kos-gold/25 bg-black/35 p-5 sm:p-6">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-          Start here
+          Desk path
         </p>
         <h2 className="mt-2 text-xl font-semibold tracking-tight text-kos-text">
-          One-screen contract
+          Start here
         </h2>
-        <p className="mt-2 max-w-3xl text-sm text-kos-text/70">
-          Model = research fair. KEI = published line (used_in_spread). Tag =
-          KEI vs market. Early weeks: 4-pt PLAY bar, PASS default.
-        </p>
         <ol className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
           {START_HERE.map((item) => (
             <li key={item.step}>
