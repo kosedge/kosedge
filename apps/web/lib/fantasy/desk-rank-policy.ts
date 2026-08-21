@@ -1,16 +1,18 @@
 /**
  * Fantasy Draft Desk rank policy — display order vs honest Model column.
  *
- * Model rank (`rankOverall`) and points stay raw VOR / season-engine math.
- * Board **Rk** is a value-aware sort so the desk is not silently ±10 off
- * consensus unless we are taking a labeled side.
+ * Rankings stay raw Model rank (`rankOverall`). This key is **not** the
+ * Rankings table sort — applying it there would mush model order into ADP.
+ * Builder / Mock advice uses `value-aware-recs` (need + VOR − reach penalty).
  *
  * Diagnosis (2026-08-13): sorting on raw model *points* floods a 1QB board
- * with QBs (Burrow 375 pts vs CMC 318). The shipped key is therefore
- * **rank-space**, the same quantity Model # already uses:
+ * with QBs (Burrow 375 pts vs CMC 318). Rankings still sort on Model #.
+ * Draft-action scoring (not this board_key) is what stops early reaches.
+ *
+ * Kept as an inspectable rank-space helper / test fixture:
  *
  *   board_key = modelRank + reach_penalty_slots − wait_bubble_slots
- *   (lower = earlier on the board)
+ *   (lower = earlier if this were a blended board — it is not shipped on Rankings)
  *
  *   reach_penalty_slots = max(0, ADP − modelRank − 12) × 0.85
  *   wait_bubble_slots   = min(max(0, modelRank − ADP), 24) × 0.35

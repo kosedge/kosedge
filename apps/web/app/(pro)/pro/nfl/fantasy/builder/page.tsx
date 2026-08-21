@@ -44,7 +44,8 @@ export default async function FantasyTeamBuilderPage({
             Builder
           </h1>
           <p className="mt-1 text-sm text-kos-text/60">
-            Rankings → Builder → Mock. Add players here, then practice.
+            Rankings → Builder → Mock. Suggestions here are ADP-aware (take /
+            wait / reach) — Rankings stay raw Model rank.
           </p>
         </div>
         <FantasyDeskNav active="builder" scoring={scoring} />
