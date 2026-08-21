@@ -28,6 +28,10 @@ import {
   primaryStatsForPosition,
   rankSurvivorPicks,
   rawLaRamsHits,
+  slimInteractiveSurvivorPlan,
+  isHardSurvivorPlannerFailure,
+  isSurvivorPlannerWarmingFailure,
+  SURVIVOR_PLANNER_WARMING_COPY,
   starOutOptionsForMatchup,
 } from "@/lib/nfl-season-engine-format";
 import wallChart2026 from "@/lib/nfl-wall-chart-2026.schedule.json";
@@ -240,5 +244,57 @@ describe("nfl-season-engine-format", () => {
     ).toEqual({ "1": "KC", "3": "BUF" });
     expect(duplicateSurvivorPlanTeams({ "1": "KC", "2": "kc" })).toEqual(["KC"]);
     expect(buildSurvivorPlanBody({}).top_n).toBe(NFL_SURVIVOR_PLAN_TOP_N);
+  });
+
+  it("classifies planner failures: warming vs hard validation", () => {
+    expect(
+      isHardSurvivorPlannerFailure(
+        "Team KC locked in multiple weeks; survivor allows one use",
+        400,
+      ),
+    ).toBe(true);
+    expect(isSurvivorPlannerWarmingFailure("Engine warming — rankings timed out.", 504)).toBe(
+      true,
+    );
+    expect(isSurvivorPlannerWarmingFailure("Survivor plan unreachable", 502)).toBe(
+      true,
+    );
+    expect(
+      isSurvivorPlannerWarmingFailure(
+        "Team KC locked in multiple weeks; survivor allows one use",
+        400,
+      ),
+    ).toBe(false);
+    expect(SURVIVOR_PLANNER_WARMING_COPY).toMatch(/Engine warming/);
+  });
+
+  it("slims interactive plan JSON (drops future_week_win_rates + notes)", () => {
+    const slim = slimInteractiveSurvivorPlan({
+      n_sims: 50,
+      notes: { cal_sources: "huge" },
+      diagnostics: { seed: 42 },
+      weeks: [
+        {
+          week: 1,
+          ranked_picks: [
+            {
+              team: "CHI",
+              win_rate: 0.66,
+              opponent: "MIN",
+              future_week_win_rates: [{ week: 2, win_rate: 0.6 }],
+            },
+          ],
+          locked_pick: {
+            team: "SEA",
+            future_week_win_rates: [{ week: 3, win_rate: 0.5 }],
+          },
+        },
+      ],
+    });
+    expect(slim.notes).toBeUndefined();
+    expect(slim.diagnostics).toBeUndefined();
+    expect(slim.weeks?.[0]?.ranked_picks?.[0]?.future_week_win_rates).toBeUndefined();
+    expect(slim.weeks?.[0]?.ranked_picks?.[0]?.team).toBe("CHI");
+    expect(slim.weeks?.[0]?.locked_pick?.future_week_win_rates).toBeUndefined();
   });
 });

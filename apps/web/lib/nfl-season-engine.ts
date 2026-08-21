@@ -11,6 +11,7 @@ import {
   canonicalizeTeamCodeMap,
   normalizeNflTeamCode,
   parseAlreadyUsedTeams,
+  slimInteractiveSurvivorPlan,
   type InjuryPathInput,
   type SeasonEngineMatchupOption,
 } from "@/lib/nfl-season-engine-format";
@@ -670,7 +671,7 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
         error: detailError(payload, `Survivor plan failed (${res.status})`),
       };
     }
-    return {
+    const mapped = {
       mode: String(payload.mode ?? ""),
       schedule_source:
         typeof payload.schedule_source === "string"
@@ -740,6 +741,11 @@ export async function fetchSeasonEngineSurvivorPlan(input: {
           ? (payload.diagnostics as Record<string, unknown>)
           : undefined,
     };
+    return input.includeDiagnostics === false
+      ? (slimInteractiveSurvivorPlan(
+          mapped as unknown as Record<string, unknown>,
+        ) as unknown as SeasonEngineSurvivorPlanResponse)
+      : mapped;
   } catch (err) {
     return {
       mode: "",

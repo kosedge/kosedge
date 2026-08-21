@@ -263,4 +263,74 @@ describe("SeasonEngineSurvivorPlannerClient", () => {
       ),
     ).toBe(false);
   }, 15000);
+
+  it("shows engine warming, not Planner error, when plan times out", async () => {
+    vi.mocked(fetch).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input instanceof Request
+              ? input.url
+              : input,
+      );
+      if (url.includes("suggest-paths")) {
+        return { ok: true, status: 200, json: async () => suggestPayload };
+      }
+      return {
+        ok: false,
+        status: 504,
+        json: async () => ({
+          error:
+            "Engine warming — survivor rankings timed out. Retry in a few seconds; this is not a blank hang.",
+        }),
+      };
+    });
+    render(<SeasonEngineSurvivorPlannerClient engineVersion="test-engine" />);
+    await waitFor(
+      () => {
+        expect(screen.getByText("Engine warming")).toBeInTheDocument();
+      },
+      { timeout: 8000 },
+    );
+    expect(screen.queryByText("Planner error")).not.toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /Retry rankings/i }),
+    ).toBeInTheDocument();
+    expect(screen.getByText("Week 1")).toBeInTheDocument();
+  }, 12000);
+
+  it("keeps duplicate-team failures as Planner error", async () => {
+    vi.mocked(fetch).mockImplementation(async (input: RequestInfo | URL) => {
+      const url = String(
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input instanceof Request
+              ? input.url
+              : input,
+      );
+      if (url.includes("suggest-paths")) {
+        return { ok: true, status: 200, json: async () => suggestPayload };
+      }
+      return {
+        ok: false,
+        status: 400,
+        json: async () => ({
+          error: "Team KC locked in multiple weeks; survivor allows one use",
+        }),
+      };
+    });
+    render(<SeasonEngineSurvivorPlannerClient engineVersion="test-engine" />);
+    await waitFor(
+      () => {
+        expect(screen.getByText("Planner error")).toBeInTheDocument();
+      },
+      { timeout: 8000 },
+    );
+    expect(screen.queryByText("Engine warming")).not.toBeInTheDocument();
+    expect(screen.getByText(/Team KC locked in multiple weeks/)).toBeInTheDocument();
+  }, 12000);
 });

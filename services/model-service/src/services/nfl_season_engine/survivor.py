@@ -514,6 +514,7 @@ def score_team_survivor(
     already_used: Sequence[str],
     game: Optional[ScheduledGame],
     projected_sos: Optional[TeamProjectedSos] = None,
+    include_future_week_detail: bool = True,
 ) -> Dict[str, Any]:
     """Compute inspectable survivor scores for one team at ``week``."""
     used = set(_normalize_teams(already_used))
@@ -569,10 +570,11 @@ def score_team_survivor(
         "save_score": round(save_score, 4),
         "pick_now_score": round(pick_now_score, 4),
         "future_weeks_scored": len(future_wps),
-        "future_week_win_rates": future_week_detail,
         **_matchup_fields(game, team),
         "plays_this_week": plays,
     }
+    if include_future_week_detail:
+        row["future_week_win_rates"] = future_week_detail
     if projected_sos is not None:
         sos_val = float(projected_sos.projected_sos_2026)
         row["projected_sos_2026"] = round(sos_val, 4)
@@ -629,6 +631,7 @@ def evaluate_survivor(
             already_used=used,
             game=_team_map_get(week_games, team),
             projected_sos=_team_map_get(sos_by_team, team),
+            include_future_week_detail=include_diagnostics,
         )
         if not row["plays_this_week"]:
             bye_teams.append(team)
@@ -963,6 +966,7 @@ def _week_candidate_rows(
     max_week: int,
     used_teams: Sequence[str],
     sos_by_team: Optional[Mapping[str, TeamProjectedSos]] = None,
+    include_future_week_detail: bool = True,
 ) -> List[Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     sos_book = sos_by_team or {}
@@ -982,6 +986,7 @@ def _week_candidate_rows(
             already_used=used_teams,
             game=_team_map_get(week_games, canon),
             projected_sos=_team_map_get(sos_book, canon),
+            include_future_week_detail=include_future_week_detail,
         )
         if row["remaining"] and row["plays_this_week"]:
             rows.append(_enrich_pick_row(row))
@@ -1134,6 +1139,7 @@ def evaluate_survivor_plan(
                     already_used=[],
                     game=game,
                     projected_sos=_team_map_get(sos_by_team, team),
+                    include_future_week_detail=include_diagnostics,
                 )
             )
             weeks_out.append(
@@ -1156,6 +1162,7 @@ def evaluate_survivor_plan(
             max_week=max_week,
             used_teams=used_teams,
             sos_by_team=sos_by_team,
+            include_future_week_detail=include_diagnostics,
         )
         ranked.sort(
             key=lambda r: (
@@ -1186,25 +1193,32 @@ def evaluate_survivor_plan(
     )
 
     depth = depth_meta(n_sims, surface="survivor_plan")
-    notes = dict(universe.notes)
-    notes["survivor_mode"] = (
-        "planner team_wl_paths (Layers 1–2 + injury strength shocks; "
-        "Layers 3–4 skipped for speed)"
-    )
-    notes["path_survival"] = PATH_FORMULA_NOTES["path_survival"]
-    notes["path_strength"] = PATH_FORMULA_NOTES["path_strength"]
-    notes["avg_locked_wp"] = PATH_FORMULA_NOTES["avg_locked_wp"]
-    notes["danger_weeks"] = PATH_FORMULA_NOTES["danger_weeks"]
-    notes["slate_grade"] = PATH_FORMULA_NOTES["slate_grade"]
-    notes["projected_sos_2026"] = PATH_FORMULA_NOTES["projected_sos_2026"]
-    notes["schedule_difficulty"] = PATH_FORMULA_NOTES["schedule_difficulty"]
-    notes["path_difficulty_grade"] = PATH_FORMULA_NOTES["path_difficulty_grade"]
-    notes["used_teams"] = ",".join(used_teams) if used_teams else "(none)"
-    notes["depth_label"] = str(depth["depth_label"])
-    notes["honest_precision"] = "1" if depth["honest_precision"] else "0"
-    notes["path_pool_cache"] = "hit" if pool_hit else "miss"
-    if paths:
-        notes["injury_paths"] = f"{len(paths)} path(s) applied"
+    notes: Dict[str, Any] = {
+        "used_teams": ",".join(used_teams) if used_teams else "(none)",
+        "depth_label": str(depth["depth_label"]),
+        "honest_precision": "1" if depth["honest_precision"] else "0",
+        "path_pool_cache": "hit" if pool_hit else "miss",
+    }
+    if include_diagnostics:
+        notes = dict(universe.notes)
+        notes["survivor_mode"] = (
+            "planner team_wl_paths (Layers 1–2 + injury strength shocks; "
+            "Layers 3–4 skipped for speed)"
+        )
+        notes["path_survival"] = PATH_FORMULA_NOTES["path_survival"]
+        notes["path_strength"] = PATH_FORMULA_NOTES["path_strength"]
+        notes["avg_locked_wp"] = PATH_FORMULA_NOTES["avg_locked_wp"]
+        notes["danger_weeks"] = PATH_FORMULA_NOTES["danger_weeks"]
+        notes["slate_grade"] = PATH_FORMULA_NOTES["slate_grade"]
+        notes["projected_sos_2026"] = PATH_FORMULA_NOTES["projected_sos_2026"]
+        notes["schedule_difficulty"] = PATH_FORMULA_NOTES["schedule_difficulty"]
+        notes["path_difficulty_grade"] = PATH_FORMULA_NOTES["path_difficulty_grade"]
+        notes["used_teams"] = ",".join(used_teams) if used_teams else "(none)"
+        notes["depth_label"] = str(depth["depth_label"])
+        notes["honest_precision"] = "1" if depth["honest_precision"] else "0"
+        notes["path_pool_cache"] = "hit" if pool_hit else "miss"
+        if paths:
+            notes["injury_paths"] = f"{len(paths)} path(s) applied"
 
     diagnostics: Dict[str, Any] = {}
     if include_diagnostics:

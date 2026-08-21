@@ -3,6 +3,7 @@ import { fetchSeasonEngineSurvivorPlan } from "@/lib/nfl-season-engine";
 import {
   duplicateSurvivorPlanTeams,
   NFL_INTERACTIVE_N_SURVIVOR_PATHS,
+  slimInteractiveSurvivorPlan,
   type InjuryPathInput,
 } from "@/lib/nfl-season-engine-format";
 import {
@@ -90,7 +91,11 @@ export async function POST(req: Request) {
   if (cacheKey) {
     const cached = getEmptySurvivorPlan(cacheKey);
     if (cached && typeof cached === "object") {
-      return NextResponse.json(cached);
+      return NextResponse.json(
+        includeDiagnostics
+          ? cached
+          : slimInteractiveSurvivorPlan(cached as Record<string, unknown>),
+      );
     }
   }
 
@@ -127,6 +132,10 @@ export async function POST(req: Request) {
         : result;
     return NextResponse.json(warming, { status });
   }
-  if (cacheKey) setEmptySurvivorPlan(cacheKey, result);
-  return NextResponse.json(result);
+  const payload =
+    includeDiagnostics
+      ? result
+      : slimInteractiveSurvivorPlan(result as unknown as Record<string, unknown>);
+  if (cacheKey) setEmptySurvivorPlan(cacheKey, payload);
+  return NextResponse.json(payload);
 }
