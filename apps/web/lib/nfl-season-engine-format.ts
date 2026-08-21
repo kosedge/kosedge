@@ -4,6 +4,7 @@
  */
 
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
+import { lookupCanonicalNflGame } from "@/lib/nfl-canonical-schedule";
 
 export const NFL_SEASON_ENGINE_TEAMS = [
   "ARI",
@@ -784,13 +785,19 @@ export function matchupsFromWallChart(
       const key = `${week}|${away}@${home}`;
       if (seen.has(key)) continue;
       seen.add(key);
+      const packed = lookupCanonicalNflGame({
+        season,
+        week,
+        awayAbbr: away,
+        homeAbbr: home,
+      });
       out.push({
         id: `${season}-W${String(week).padStart(2, "0")}-${away}@${home}`,
         label: `${away} @ ${home} · W${week}`,
         homeTeam: home,
         awayTeam: away,
         week,
-        startTime: null,
+        startTime: packed?.kickoff_utc ?? null,
         source: "wall-chart",
       });
     }
