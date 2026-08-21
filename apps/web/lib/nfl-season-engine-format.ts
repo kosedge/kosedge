@@ -272,6 +272,71 @@ export const NFL_INTERACTIVE_N_SURVIVOR_PATHS = 50;
 /** Full remaining slate so the picker can show every unused team + matchup. */
 export const NFL_SURVIVOR_PLAN_TOP_N = 32;
 
+/** Shown when plan times out / 502 — not a red “Planner error” card. */
+export const SURVIVOR_PLANNER_WARMING_COPY =
+  "Engine warming — rankings timed out. Retry in a few seconds; the planner shell stays usable.";
+
+export function isHardSurvivorPlannerFailure(
+  error: string | undefined,
+  status?: number,
+): boolean {
+  if (status === 400) return true;
+  return /bye|not scheduled|multiple weeks|Unknown team|Invalid|one use/i.test(
+    error ?? "",
+  );
+}
+
+export function isSurvivorPlannerWarmingFailure(
+  error: string | undefined,
+  status?: number,
+): boolean {
+  if (isHardSurvivorPlannerFailure(error, status)) return false;
+  if (status === 504 || status === 502 || status === 503) return true;
+  return /timed out|warming|unreachable|failed to fetch|network|incomplete|Request failed/i.test(
+    error ?? "",
+  );
+}
+
+function omitFutureWeekWinRates<T extends Record<string, unknown>>(row: T): T {
+  if (!("future_week_win_rates" in row)) return row;
+  const { future_week_win_rates: _omit, ...rest } = row;
+  return rest as T;
+}
+
+/**
+ * Interactive planner payload: keep 32-team matchups, drop research dumps
+ * (`future_week_win_rates`, cal `notes`, diagnostics) that balloon JSON ~450KB.
+ */
+export function slimInteractiveSurvivorPlan<T extends Record<string, unknown>>(
+  payload: T,
+): T {
+  const weeks = Array.isArray(payload.weeks)
+    ? payload.weeks.map((week) => {
+        if (!week || typeof week !== "object") return week;
+        const w = week as Record<string, unknown>;
+        const locked =
+          w.locked_pick && typeof w.locked_pick === "object"
+            ? omitFutureWeekWinRates(w.locked_pick as Record<string, unknown>)
+            : w.locked_pick;
+        const ranked = Array.isArray(w.ranked_picks)
+          ? w.ranked_picks.map((row) =>
+              row && typeof row === "object"
+                ? omitFutureWeekWinRates(row as Record<string, unknown>)
+                : row,
+            )
+          : w.ranked_picks;
+        return { ...w, locked_pick: locked, ranked_picks: ranked };
+      })
+    : payload.weeks;
+  const next = { ...payload, weeks } as T & {
+    notes?: unknown;
+    diagnostics?: unknown;
+  };
+  delete next.notes;
+  delete next.diagnostics;
+  return next;
+}
+
 export function clampInt(
   value: unknown,
   fallback: number,

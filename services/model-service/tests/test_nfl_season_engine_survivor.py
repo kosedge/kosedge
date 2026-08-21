@@ -433,3 +433,30 @@ def test_real_week1_slate_has_no_raw_la_rams() -> None:
     assert "LA" not in (week1.get("available_teams") or [])
     assert _raw_la_rams_hits(plan.to_dict()) == []
 
+
+def test_interactive_plan_omits_future_week_win_rates_and_cal_notes() -> None:
+    universe = build_demo_universe(2026)
+    fat = evaluate_survivor_plan(
+        universe,
+        picks={},
+        n_sims=8,
+        seed=1,
+        top_n=4,
+        include_diagnostics=True,
+    )
+    thin = evaluate_survivor_plan(
+        universe,
+        picks={},
+        n_sims=8,
+        seed=1,
+        top_n=4,
+        include_diagnostics=False,
+    )
+    fat_row = fat.weeks[0]["ranked_picks"][0]
+    thin_row = thin.weeks[0]["ranked_picks"][0]
+    assert fat_row.get("future_week_win_rates")
+    assert "future_week_win_rates" not in thin_row
+    assert thin_row["team"] == fat_row["team"]
+    assert "cal_sources" not in thin.notes
+    assert thin.notes.get("depth_label")
+

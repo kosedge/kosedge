@@ -32,6 +32,7 @@ export function emptySurvivorPlanCacheKey(input: {
     `seed=${input.seed}`,
     `top=${input.topN}`,
     `diag=${input.includeDiagnostics ? 1 : 0}`,
+    "slim=1",
   ].join("|");
 }
 

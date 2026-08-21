@@ -5,10 +5,13 @@ import {
   NFL_INTERACTIVE_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
   NFL_SURVIVOR_PLAN_TOP_N,
+  SURVIVOR_PLANNER_WARMING_COPY,
   formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
   formatScheduleDifficulty,
+  isHardSurvivorPlannerFailure,
+  isSurvivorPlannerWarmingFailure,
   normalizeNflTeamCode,
   normalizeSurvivorPlanPicks,
 } from "@/lib/nfl-season-engine-format";
@@ -211,6 +214,7 @@ export default function SeasonEngineSurvivorPlannerClient({
   const [hydrated, setHydrated] = useState(false);
   const [pending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
+  const [warming, setWarming] = useState<string | null>(null);
   const [result, setResult] = useState<PlanPayload | null>(null);
   const [suggested, setSuggested] = useState<SuggestedPath[]>([]);
   const [suggestError, setSuggestError] = useState<string | null>(null);
@@ -254,13 +258,13 @@ export default function SeasonEngineSurvivorPlannerClient({
     const id = ++requestId.current;
     startTransition(async () => {
       setError(null);
-      const ac = new AbortController();
-      const kill = setTimeout(() => ac.abort(), PLAN_FETCH_MS);
-      try {
+      setWarming(null);
+
+      const fetchOnce = async (signal: AbortSignal) => {
         const res = await fetch("/api/nfl/season-engine/survivor/plan", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          signal: ac.signal,
+          signal,
           body: JSON.stringify({
             picks: nextPicks,
             nSims: N_SIMS,
@@ -268,25 +272,81 @@ export default function SeasonEngineSurvivorPlannerClient({
             includeDiagnostics: false,
           }),
         });
-        const json = (await res.json()) as PlanPayload;
-        if (id !== requestId.current) return;
+        let json: PlanPayload = {};
+        try {
+          json = (await res.json()) as PlanPayload;
+        } catch {
+          return {
+            kind: "warming" as const,
+            message:
+              "Engine warming — planner response was incomplete. Retry in a few seconds.",
+          };
+        }
         if (!res.ok || json.error) {
-          setError(json.error || `Request failed (${res.status})`);
-          return;
+          const message = json.error || `Request failed (${res.status})`;
+          if (isHardSurvivorPlannerFailure(message, res.status)) {
+            return { kind: "hard" as const, message };
+          }
+          return {
+            kind: "warming" as const,
+            message: isSurvivorPlannerWarmingFailure(message, res.status)
+              ? /timed out|warming/i.test(message)
+                ? message
+                : SURVIVOR_PLANNER_WARMING_COPY
+              : message,
+          };
         }
-        setResult(json);
-      } catch (err) {
-        if (id !== requestId.current) return;
-        if (err instanceof DOMException && err.name === "AbortError") {
-          setError(
-            "Engine warming — rankings timed out. Retry in a few seconds; the planner shell stays usable.",
+        return { kind: "ok" as const, json };
+      };
+
+      const runAttempt = async (attempt: number): Promise<void> => {
+        const ac = new AbortController();
+        const kill = setTimeout(() => ac.abort(), PLAN_FETCH_MS);
+        try {
+          const out = await fetchOnce(ac.signal);
+          if (id !== requestId.current) return;
+          if (out.kind === "ok") {
+            setResult(out.json);
+            setWarming(null);
+            setError(null);
+            return;
+          }
+          if (out.kind === "hard") {
+            setError(out.message);
+            return;
+          }
+          if (attempt === 0) {
+            await new Promise((r) => setTimeout(r, 800));
+            if (id !== requestId.current) return;
+            await runAttempt(1);
+            return;
+          }
+          setWarming(out.message);
+        } catch (err) {
+          if (id !== requestId.current) return;
+          const aborted =
+            err instanceof DOMException && err.name === "AbortError";
+          if (attempt === 0) {
+            await new Promise((r) => setTimeout(r, 800));
+            if (id !== requestId.current) return;
+            await runAttempt(1);
+            return;
+          }
+          setWarming(
+            aborted
+              ? SURVIVOR_PLANNER_WARMING_COPY
+              : err instanceof Error
+                ? /failed to fetch|network|load failed/i.test(err.message)
+                  ? SURVIVOR_PLANNER_WARMING_COPY
+                  : err.message
+                : SURVIVOR_PLANNER_WARMING_COPY,
           );
-          return;
+        } finally {
+          clearTimeout(kill);
         }
-        setError(err instanceof Error ? err.message : "Request failed");
-      } finally {
-        clearTimeout(kill);
-      }
+      };
+
+      await runAttempt(0);
     });
   }
 
@@ -400,6 +460,7 @@ export default function SeasonEngineSurvivorPlannerClient({
     setPicks({});
     setResult(null);
     setError(null);
+    setWarming(null);
     try {
       window.localStorage.removeItem(STORAGE_KEY);
     } catch {
@@ -611,6 +672,20 @@ export default function SeasonEngineSurvivorPlannerClient({
         </div>
       </section>
 
+      {warming ? (
+        <div className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100">
+          <p className="font-semibold">Engine warming</p>
+          <p className="mt-1 text-amber-100/90">{warming}</p>
+          <button
+            type="button"
+            className="mt-2 min-h-11 rounded-lg border border-amber-200/30 bg-black/25 px-3 text-xs font-medium text-amber-50 hover:bg-black/40"
+            onClick={() => evaluate(picks)}
+          >
+            Retry rankings
+          </button>
+        </div>
+      ) : null}
+
       {error ? (
         <div className="rounded-xl border border-red-500/30 bg-red-500/10 px-4 py-3 text-sm text-red-200">
           <p className="font-semibold text-red-100">Planner error</p>
@@ -748,7 +823,7 @@ export default function SeasonEngineSurvivorPlannerClient({
           );
         })}
 
-        {!weeks.length && !pending && !error ? (
+        {!weeks.length && !pending && !error && !warming ? (
           <div className="rounded-xl border border-dashed border-white/15 bg-black/20 px-4 py-8 text-center text-sm text-kos-text/60">
             Planner shell failed to mount — refresh.
           </div>
