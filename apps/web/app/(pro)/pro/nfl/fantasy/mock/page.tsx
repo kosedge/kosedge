@@ -37,7 +37,7 @@ export default async function FantasyMockDraftPage({
   const scoringRaw = firstValue(search.scoring);
   const scoring: FantasyScoringProfile = isScoringProfile(scoringRaw)
     ? scoringRaw
-    : "half_ppr";
+    : "ppr";
   const teams = parseTeams(firstValue(search.teams));
   const slot = parseSlot(firstValue(search.slot), teams);
 

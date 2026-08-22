@@ -9,9 +9,9 @@ export const FANTASY_SCORING_PROFILES: Array<{
   value: FantasyScoringProfile;
   label: string;
 }> = [
-  { value: "standard", label: "Standard" },
-  { value: "half_ppr", label: "Half PPR" },
   { value: "ppr", label: "PPR" },
+  { value: "half_ppr", label: "Half PPR" },
+  { value: "standard", label: "Standard" },
 ];
 
 export const FANTASY_DRAFT_POSITIONS = [

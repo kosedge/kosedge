@@ -7,6 +7,7 @@ import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
+import { draftRank } from "@/lib/fantasy/desk-rank-policy";
 import { notableValueNotes, tierCliffNote } from "@/lib/fantasy/expert";
 import {
   bestAvailableByNeed,
@@ -37,7 +38,7 @@ type Props = {
   board: FantasyDeskBoard;
   initialPosition?: string;
   initialScoring?: FantasyScoringProfile;
-  initialTab?: "board" | "value" | "builder";
+  initialTab?: "draft" | "board" | "value" | "builder";
   /** When true, hide the big hero (builder route already has a page title). */
   compactHero?: boolean;
   /** Rankings vs builder route — scoring links stay on this path. */
@@ -80,8 +81,8 @@ function persistRoster(ids: string[]) {
 export function FantasyDraftDeskClient({
   board,
   initialPosition = "ALL",
-  initialScoring = "half_ppr",
-  initialTab = "value",
+  initialScoring = "ppr",
+  initialTab = "draft",
   compactHero = false,
   basePath = "/pro/nfl/fantasy",
 }: Props) {
@@ -89,7 +90,9 @@ export function FantasyDraftDeskClient({
     board.rows[0]?.playerId ?? null,
   );
   const [rosterIds, setRosterIds] = useState<string[]>(readStoredRoster);
-  const [tab, setTab] = useState<"board" | "value" | "builder">(initialTab);
+  const [tab, setTab] = useState<"draft" | "board" | "value" | "builder">(
+    initialTab,
+  );
   const [query, setQuery] = useState("");
   /** Full draft board by default — true-values filter is opt-in, not the desk. */
   const [trueValuesOnly, setTrueValuesOnly] = useState(false);
@@ -141,9 +144,11 @@ export function FantasyDraftDeskClient({
     if (pos !== "ALL") {
       rows = rows.filter((r) => r.position.toUpperCase() === pos);
     }
-    // Default draft board = value / ADP gap. Model rank is the secondary tab.
-    if (tab === "value" || tab === "board") {
-      if (tab === "value") {
+    // Default draft board = KosEdge Draft Rank (projection + ADP guardrails).
+    if (tab === "draft" || tab === "value" || tab === "board") {
+      if (tab === "draft") {
+        rows = [...rows].sort((a, b) => draftRank(a) - draftRank(b));
+      } else if (tab === "value") {
         rows = [...rows]
           .filter((r) => r.adp != null && r.valueDelta != null)
           .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0));
@@ -216,7 +221,8 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Draft board by Value Δ vs ADP. Model rank is secondary.{" "}
+                KosEdge draft order from our projections — ADP limits extreme
+                reaches and falls. Default format PPR.{" "}
                 <Link
                   href="/pro/model-transparency#fantasy"
                   className="text-kos-text/45 hover:text-kos-gold"
@@ -409,8 +415,9 @@ export function FantasyDraftDeskClient({
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {(
               [
-                ["value", "Value / ADP"],
+                ["draft", "Draft rank"],
                 ["board", "Model rank"],
+                ["value", "Value / ADP"],
                 ["builder", "Builder"],
               ] as const
             ).map(([id, label]) => (
@@ -463,7 +470,7 @@ export function FantasyDraftDeskClient({
           scoring={board.scoringProfile}
           onSelect={(id) => setSelectedId(id)}
           onToggle={toggleRoster}
-          onBrowse={() => setTab("value")}
+          onBrowse={() => setTab("draft")}
           boardRows={board.rows}
           posFilter={posFilter}
         />
@@ -475,9 +482,18 @@ export function FantasyDraftDeskClient({
             <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-white/10 px-4 py-3">
               <div>
                 <h2 className="text-lg font-semibold text-kos-text">
-                  {tab === "value" ? "Draft board · Value / ADP" : "Model rank"}
+                  {tab === "draft"
+                    ? "Draft board · KosEdge rank"
+                    : tab === "value"
+                      ? "Draft board · Value / ADP"
+                      : "Model rank"}
                 </h2>
-                {tab === "value" ? (
+                {tab === "draft" ? (
+                  <p className="mt-0.5 text-[11px] text-kos-text/50">
+                    Projection order with ADP reach/wait guardrails — default
+                    snake take list
+                  </p>
+                ) : tab === "value" ? (
                   <p className="mt-0.5 text-[11px] text-kos-text/50">
                     {board.adpSourceLabel} · {board.adpFreshnessLabel} · Value Δ
                     only on high-confidence same-format matches
@@ -544,6 +560,11 @@ export function FantasyDraftDeskClient({
                       tab === "value" &&
                       !trueValuesOnly &&
                       value.kind === "fair";
+                    const displayRank =
+                      tab === "draft" ? draftRank(row) : row.rankOverall;
+                    const modelDiffers =
+                      row.deskOrder != null &&
+                      row.deskOrder !== row.rankOverall;
                     return (
                       <li
                         key={row.playerId}
@@ -558,7 +579,7 @@ export function FantasyDraftDeskClient({
                             className="flex min-w-0 flex-1 items-start gap-3 text-left"
                           >
                             <span className="w-8 shrink-0 pt-0.5 text-sm font-semibold text-kos-text">
-                              {row.rankOverall}
+                              {displayRank}
                             </span>
                             <div className="min-w-0 flex-1">
                               <p className="truncate text-sm font-semibold text-kos-text">
@@ -569,6 +590,11 @@ export function FantasyDraftDeskClient({
                                   </span>
                                 ) : null}
                               </p>
+                              {tab === "draft" && modelDiffers ? (
+                                <p className="text-[10px] text-kos-text/45">
+                                  Model #{row.rankOverall}
+                                </p>
+                              ) : null}
                               {row.adpQaFlag ? (
                                 <div className="mt-1">
                                   <AdpQaFlagChip flag={row.adpQaFlag} />
@@ -627,20 +653,53 @@ export function FantasyDraftDeskClient({
                   <table className="min-w-[880px] w-full border-separate border-spacing-0">
                     <thead>
                       <tr>
-                        {[
-                          "Model",
-                          "Player",
-                          "Pos",
-                          "Team",
-                          "ADP",
-                          "Value Δ",
-                          "Advice",
-                          "Floor",
-                          "Med",
-                          "Ceil",
-                          "Schedule",
-                          "",
-                        ].map((label) => (
+                        {(tab === "draft"
+                          ? [
+                              "Draft",
+                              "Model",
+                              "Player",
+                              "Pos",
+                              "Team",
+                              "Med",
+                              "ADP",
+                              "vs ADP",
+                              "Advice",
+                              "Floor",
+                              "Ceil",
+                              "Schedule",
+                              "",
+                            ]
+                          : tab === "board"
+                            ? [
+                                "Model",
+                                "Draft",
+                                "Player",
+                                "Pos",
+                                "Team",
+                                "ADP",
+                                "vs ADP",
+                                "Advice",
+                                "Floor",
+                                "Med",
+                                "Ceil",
+                                "Schedule",
+                                "",
+                              ]
+                            : [
+                                "Model",
+                                "Player",
+                                "Pos",
+                                "Team",
+                                "ADP",
+                                "Value Δ",
+                                "Advice",
+                                "Floor",
+                                "Med",
+                                "Ceil",
+                                "Schedule",
+                                "",
+                              ]
+                        ).map((label) => (
                           <th
                             key={label || "act"}
                             className="sticky top-0 border-b border-white/10 bg-[#10131a] px-2.5 py-2 text-left text-[10px] font-semibold uppercase tracking-wide text-kos-text/55"
@@ -659,6 +718,11 @@ export function FantasyDraftDeskClient({
                           tab === "value" &&
                           !trueValuesOnly &&
                           value.kind === "fair";
+                        const modelDiffers =
+                          row.deskOrder != null &&
+                          row.deskOrder !== row.rankOverall;
+                        const rankCellClass =
+                          "border-b border-white/5 px-2.5 py-2 text-sm font-semibold text-kos-text";
                         return (
                           <tr
                             key={row.playerId}
@@ -671,9 +735,41 @@ export function FantasyDraftDeskClient({
                             } hover:bg-white/[0.04] ${muted ? "opacity-55" : ""}`}
                             onClick={() => setSelectedId(row.playerId)}
                           >
-                            <td className="border-b border-white/5 px-2.5 py-2 text-sm font-semibold text-kos-text">
-                              {row.rankOverall}
-                            </td>
+                            {tab === "draft" ? (
+                              <>
+                                <td className={rankCellClass}>
+                                  {draftRank(row)}
+                                </td>
+                                <td
+                                  className={`${rankCellClass} ${
+                                    modelDiffers
+                                      ? "text-kos-text/55"
+                                      : "text-kos-text/35"
+                                  }`}
+                                >
+                                  {row.rankOverall}
+                                </td>
+                              </>
+                            ) : tab === "board" ? (
+                              <>
+                                <td className={rankCellClass}>
+                                  {row.rankOverall}
+                                </td>
+                                <td
+                                  className={`${rankCellClass} ${
+                                    modelDiffers
+                                      ? "text-kos-gold"
+                                      : "text-kos-text/35"
+                                  }`}
+                                >
+                                  {draftRank(row)}
+                                </td>
+                              </>
+                            ) : (
+                              <td className={rankCellClass}>
+                                {row.rankOverall}
+                              </td>
+                            )}
                             <td className="sticky left-0 border-b border-white/5 bg-[#0c0f14]/px-2.5 py-2 text-sm font-semibold text-kos-text">
                               <div className="flex flex-wrap items-center gap-1.5">
                                 <span>{row.playerName}</span>
@@ -696,6 +792,11 @@ export function FantasyDraftDeskClient({
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
                               {row.team}
                             </td>
+                            {tab === "draft" ? (
+                              <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-gold">
+                                {row.medianPoints.toFixed(0)}
+                              </td>
+                            ) : null}
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
                               {formatAdp(row.adp)}
                             </td>
@@ -718,9 +819,11 @@ export function FantasyDraftDeskClient({
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/75">
                               {row.floorPoints.toFixed(0)}
                             </td>
-                            <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-gold">
-                              {row.medianPoints.toFixed(0)}
-                            </td>
+                            {tab !== "draft" ? (
+                              <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-gold">
+                                {row.medianPoints.toFixed(0)}
+                              </td>
+                            ) : null}
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/75">
                               {row.ceilingPoints.toFixed(0)}
                             </td>
@@ -772,7 +875,8 @@ export function FantasyDraftDeskClient({
       ) : null}
 
       <p className="text-[11px] leading-relaxed text-kos-text/45">
-        Value / ADP is the draft board. Model rank is projection order.{" "}
+        Rank = our projections; ADP limits extreme reaches/falls. Default format
+        PPR.{" "}
         <Link
           href="/pro/model-transparency#fantasy"
           className="text-kos-text/45 hover:text-kos-gold"
@@ -825,7 +929,7 @@ function PlayerCard({
         <span
           className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}
         >
-          #{row.rankOverall}
+          #{draftRank(row)} draft
         </span>
       </div>
 
@@ -839,7 +943,7 @@ function PlayerCard({
         <div className="rounded-xl border border-white/10 bg-black/30 p-3">
           <p className="text-[10px] uppercase text-kos-text/45">Model / ADP</p>
           <p className="mt-1 font-semibold text-kos-text">
-            #{row.rankOverall} / {formatAdp(row.adp)}
+            #{row.rankOverall} model · ADP {formatAdp(row.adp)}
           </p>
         </div>
         <div className="rounded-xl border border-white/10 bg-black/30 p-3">
