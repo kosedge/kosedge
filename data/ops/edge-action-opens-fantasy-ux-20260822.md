@@ -111,6 +111,32 @@ DK/stake −6.5 with shop best −3 → Action grades vs −6.5 (PASS · 0.5), C
 | 6 | K=32 DST=32 still | ✅ ops status ready |
 | 7 | No new sim; Edge still 16 Week 1 games | ✅ |
 
+## PR #284 finish smoke (2026-08-22)
+
+**CI (merge bar = Production Gate on `deploy-vercel`):**
+
+| Check | Status |
+|-------|--------|
+| Web typecheck | ✅ green (`16ab755`) |
+| Web Next build (Vercel-identical) | ✅ green |
+| Vercel preview deploy | ✅ green |
+| PR Quality Checks (`pnpm format:check` repo-wide) | ❌ red — ~235 pre-existing files (same class as #283); **not** ship bar |
+
+**Edge Action smoke** (`apps/web/__tests__/lib/edge-action-smoke-284.test.ts`):
+
+| Game | Open | Current | Action spread | Action total | Pass |
+|------|------|---------|---------------|--------------|------|
+| NE@SEA | — / — | +3.5 / 44.5 | PASS · Edge 0.7 · Mkt −3.5 | PASS · Edge 1.2 · Mkt 44.5 | ✅ |
+| CLE@JAX | +7.5 / 40.5 | +7.5 / 41.0 | PASS · Edge 0.6 · Mkt −7.5 | PASS · Edge 0.5 · Mkt 41.0 | ✅ |
+| BUF@HOU | −1.5 / 44.5 | +1.5 / 44.0 | Action ≠ 0.0 · Mkt −1.5 | Action ≠ 0.0 · Mkt 44.0 | ✅ |
+| DAL@NYG (missing open) | — / — | +2.5 / 46.5 | Action ≠ 0.0; open not invented | same | ✅ |
+
+**Opens:** live fair-lines still 12 exact / 4 missing (`NE@SEA`, `SF@LAR`, `DAL@NYG`, `DEN@KC`). No `open = current`.
+
+**Fantasy:** `/pro/nfl/fantasy` → `initialTab="value"`; tab order Value/ADP first; `trueValuesOnly` default off. K/DST publish status **32/32 ready**.
+
+**Merge-ready:** **Yes** for Production Gate + desk smoke. PR Quality format noise is pre-existing debt, not a regression from #284.
+
 ## Tests
 
 - `apps/web/__tests__/lib/nfl-edge-board-from-fair-lines.test.ts` — Current-for-Action + overlay sync
