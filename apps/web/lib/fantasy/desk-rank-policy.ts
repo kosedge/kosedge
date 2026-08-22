@@ -1,35 +1,35 @@
 /**
- * Fantasy Draft Desk rank policy — KosEdge Draft Rank vs honest Model column.
+ * KosEdge Draft Rank — model order with a hard ADP reach cap.
  *
- * `rankOverall` stays raw projection order. `deskOrder` (1…N) is the default
- * draft-board sort: model rank nudged by ADP reach/wait guardrails.
- * Builder / Mock advice uses `value-aware-recs` (need + VOR − reach penalty).
+ * Rule: sort by our rank; never place someone more than ~1 round above ADP.
  *
- *   board_key = modelRank + reach_penalty_slots − wait_bubble_slots
- *   (lower = earlier on the draft board)
+ *   1. Start at model rank (projection / points order).
+ *   2. If model rank is more than `reachCapPicks` before ADP → cap at ADP − cap
+ *      (four-round reaches never sit at model rank on this board).
+ *   3. If ADP is ahead of model → mild bump up (still sorted by adjusted rank).
+ *   4. Assign deskOrder 1…N from the adjusted list.
  *
- *   reach_penalty_slots = max(0, ADP − modelRank − 12) × 0.85
- *   wait_bubble_slots   = min(max(0, modelRank − ADP), 24) × 0.35
- *   QB extra slots      = max(0, ADP − modelRank − 24) × 0.50
- *
- * Reaching ADP by 1+ rounds is penalized. Waiting on a model favorite may
- * bubble modestly. Unmatched / cross-format ADP is not blended (key =
- * modelRank). QB extra aligns with Mock late-QB2 suppress.
+ * Unmatched / cross-format ADP → model rank only (no invented blend).
  */
+
+import type { SuggestionTiming } from "@/lib/fantasy/value-aware-recs";
 
 export const DESK_RANK_POLICY = {
   /** 12-team snake round size. */
   roundSize: 12,
-  /** One round of model-ahead is free (not treated as a board reach). */
-  reachFreePicks: 12,
-  /** Board slots added per pick beyond the free round. */
-  reachPenaltyPerPick: 0.85,
-  /** Modest bubble when ADP is ahead of model rank (market favorite). */
-  waitBubblePerPick: 0.35,
-  waitBubbleCapPicks: 24,
-  /** Extra QB suppress when model ranks a QB 2+ rounds ahead of ADP. */
-  qbReachExtraAfterPicks: 24,
-  qbReachExtraPerPick: 0.5,
+  /**
+   * Hard max picks model can rank ahead of ADP on the draft board.
+   * 12 picks ≈ one round; tunable to 15–18 for 1.5 rounds.
+   */
+  reachCapPicks: 12,
+  /** Small reach zone — badge Reach, still allowed at model rank. */
+  reachBadgeMinPicks: 6,
+  /** Market ahead of model — Value badge threshold. */
+  valueBadgeMinPicks: 8,
+  /** Mild bump per pick when market ADP is ahead of model. */
+  valueBumpPerPick: 0.35,
+  /** Cap picks considered for value bump. */
+  valueBumpCapPicks: 18,
 } as const;
 
 export type DeskRankable = {
@@ -40,9 +40,7 @@ export type DeskRankable = {
 };
 
 /**
- * Lower = earlier on the board. Does not mutate Model rank or points.
- * `deskSortScore` is the descending-sort form (−key) for reuse next to
- * value-aware recs.
+ * Lower = earlier on the board. Does not mutate model rank.
  */
 export function deskBoardKey(row: DeskRankable): number {
   const rank = Number(row.rankOverall) || 0;
@@ -56,25 +54,44 @@ export function deskBoardKey(row: DeskRankable): number {
   }
 
   const modelAhead = adp - rank;
-  let key = rank;
 
-  if (modelAhead > DESK_RANK_POLICY.reachFreePicks) {
-    key +=
-      (modelAhead - DESK_RANK_POLICY.reachFreePicks) *
-      DESK_RANK_POLICY.reachPenaltyPerPick;
-  } else if (modelAhead < 0) {
-    const wait = Math.min(-modelAhead, DESK_RANK_POLICY.waitBubbleCapPicks);
-    key -= wait * DESK_RANK_POLICY.waitBubblePerPick;
+  if (modelAhead > DESK_RANK_POLICY.reachCapPicks) {
+    return adp - DESK_RANK_POLICY.reachCapPicks;
   }
 
-  const pos = row.position.toUpperCase();
-  if (pos === "QB" && modelAhead > DESK_RANK_POLICY.qbReachExtraAfterPicks) {
-    key +=
-      (modelAhead - DESK_RANK_POLICY.qbReachExtraAfterPicks) *
-      DESK_RANK_POLICY.qbReachExtraPerPick;
+  if (modelAhead < 0) {
+    const marketAhead = -modelAhead;
+    const bump = Math.min(marketAhead, DESK_RANK_POLICY.valueBumpCapPicks);
+    return rank - bump * DESK_RANK_POLICY.valueBumpPerPick;
   }
 
-  return key;
+  return rank;
+}
+
+/** True when model rank violates the hard reach cap vs ADP. */
+export function isReachCapped(row: DeskRankable): boolean {
+  const adp = row.adp;
+  if (
+    adp == null ||
+    !Number.isFinite(adp) ||
+    row.adpMatchConfidence !== "high"
+  ) {
+    return false;
+  }
+  return adp - row.rankOverall > DESK_RANK_POLICY.reachCapPicks;
+}
+
+/** Picks model ranks ahead of ADP (positive = model earlier). */
+export function modelAheadOfAdp(row: DeskRankable): number | null {
+  const adp = row.adp;
+  if (
+    adp == null ||
+    !Number.isFinite(adp) ||
+    row.adpMatchConfidence !== "high"
+  ) {
+    return null;
+  }
+  return adp - row.rankOverall;
 }
 
 /** Higher = stronger board slot. Inverse of `deskBoardKey`. */
@@ -106,3 +123,49 @@ export function draftRank(row: {
 
 /** @alias draftRank */
 export const boardRank = draftRank;
+
+export type DeskDraftBadgeLabel = "Fair" | "Reach" | "Value" | "Wait" | "—";
+
+/** ≤3-word badge for the draft board row. */
+export function deskDraftBadge(row: DeskRankable): {
+  timing: SuggestionTiming;
+  label: DeskDraftBadgeLabel;
+} {
+  const ahead = modelAheadOfAdp(row);
+  if (ahead == null) {
+    return { timing: "fair", label: "—" };
+  }
+  if (ahead > DESK_RANK_POLICY.reachCapPicks) {
+    return { timing: "wait", label: "Wait" };
+  }
+  if (ahead >= DESK_RANK_POLICY.reachBadgeMinPicks) {
+    return { timing: "reach", label: "Reach" };
+  }
+  if (ahead <= -DESK_RANK_POLICY.valueBadgeMinPicks) {
+    return { timing: "take_now", label: "Value" };
+  }
+  return { timing: "fair", label: "Fair" };
+}
+
+/**
+ * No matched player’s adjusted board slot sits more than `reachCapPicks` before ADP.
+ */
+export function assertNoHardReachViolations(rows: DeskRankable[]): void {
+  for (const row of rows) {
+    const adp = row.adp;
+    if (
+      adp == null ||
+      !Number.isFinite(adp) ||
+      row.adpMatchConfidence !== "high"
+    ) {
+      continue;
+    }
+    const slot = deskBoardKey(row);
+    const reach = adp - slot;
+    if (reach > DESK_RANK_POLICY.reachCapPicks) {
+      throw new Error(
+        `reach cap violated: model ${row.rankOverall} / ADP ${adp} / slot ${slot}`,
+      );
+    }
+  }
+}
