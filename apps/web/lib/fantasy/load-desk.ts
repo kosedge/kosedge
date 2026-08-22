@@ -23,6 +23,10 @@ import {
   fetchNflFantasyDraftRankings,
   type NflFantasyDraftRankingRow,
 } from "@/lib/nfl-fantasy-draft";
+import {
+  boardHasKd,
+  kdstEnrichableFromArtifact,
+} from "@/lib/nfl-kdst-artifact";
 import { loadLatestNflPreseasonBundle2026, loadNflWebLaunchPointer } from "@/lib/nfl-preseason-artifacts";
 
 const LIMITATIONS_BASE = [
@@ -173,9 +177,62 @@ function buildFallbackBoard(input: {
     limitations: [
       ...LIMITATIONS_BASE,
       bundle.nTeamSims && bundle.nTeamSims >= 50000
-        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths${lockBit}${dateBit} · ${bundle.bundleDirName}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in nfl_fantasy_season_draft_rankings.`
-        : `Preseason board from season-engine sim (${bundle.bundleDirName}${lockBit}${dateBit}) — skill positions only; K/DST omitted until nfl_kicker_dst_projections lands in nfl_fantasy_season_draft_rankings.`,
+        ? `Launch-current research (${bundle.nTeamSims.toLocaleString()} team paths${lockBit}${dateBit} · ${bundle.bundleDirName}).`
+        : `Preseason board from season-engine sim (${bundle.bundleDirName}${lockBit}${dateBit}).`,
     ],
+  };
+}
+
+function mergeKdstIfMissing(
+  rows: EnrichableDraftRow[],
+  input: {
+    season: number;
+    scoringProfile: FantasyScoringProfile;
+    position?: string;
+  },
+): { rows: EnrichableDraftRow[]; note: string | null } {
+  const pos = input.position?.toUpperCase();
+  if (pos && pos !== "K" && pos !== "DST") {
+    return { rows, note: null };
+  }
+  if (boardHasKd(rows)) {
+    return { rows, note: null };
+  }
+  const extra = kdstEnrichableFromArtifact(input).filter((row) =>
+    pos ? row.position === pos : true,
+  );
+  if (!extra.length) {
+    return {
+      rows,
+      note: "K/DST artifact missing or unscoreable — desk stays skill-only until remat.",
+    };
+  }
+  const ranked = rankSeasonFantasyPlayers(
+    [...rows, ...extra].map((row) => ({ ...row, playerKey: row.playerId })),
+  );
+  const merged = ranked.map(
+    ({
+      playerKey: _playerKey,
+      rankOverall,
+      rankPosition,
+      tier,
+      replacementPoints,
+      valueOverReplacement,
+      ...rest
+    }) => ({
+      ...rest,
+      rankOverall,
+      rankPosition,
+      tier,
+      replacementPoints,
+      valueOverReplacement,
+    }),
+  );
+  const kickers = extra.filter((row) => row.position === "K").length;
+  const dst = extra.filter((row) => row.position === "DST").length;
+  return {
+    rows: merged,
+    note: `K/DST merged from nfl_kdst_publish (${kickers} K / ${dst} DST).`,
   };
 }
 
@@ -256,6 +313,16 @@ export async function loadFantasyDraftDesk(params: {
         `Research limit: 2026 schedule/depth still thin — median games projected ${medianGames} (full season is 17).`,
       );
     }
+  }
+
+  const kdMerge = mergeKdstIfMissing(enrichable, {
+    season,
+    scoringProfile,
+    position: params.position,
+  });
+  enrichable = kdMerge.rows;
+  if (kdMerge.note) {
+    limitations = [...limitations, kdMerge.note];
   }
 
   const adpMatch = matchAdpToDeskRows(

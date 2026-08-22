@@ -1,0 +1,29 @@
+{
+  "source": "season_engine_launch_research",
+  "engine_version": "nfl-season-engine-v1.27-kicker-layer",
+  "n_team_sims": 100000,
+  "n_player_sims": 1000,
+  "preseason": true,
+  "kind": "Model",
+  "honesty": {
+    "playoff_prob": "7-seed MC from team_week_win_rates + wall-chart schedule",
+    "division_title_prob": "division winner frequency from same 7-seed MC paths",
+    "super_bowl_win_prob": "path-record strength bracket on same 7-seed MC (fallback softmax(expected_wins) only if bracket disabled)",
+    "playoff_player_totals": "empty \u2014 full player paths were regular-season only"
+  },
+  "source_bundle": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260822T004326Z",
+  "sanity": {
+    "sum_super_bowl_prob": 1.0,
+    "sum_division_title_prob": 8.0,
+    "sum_playoff_prob": 14.0,
+    "sum_playoff_afc": 7.0,
+    "sum_playoff_nfc": 7.0,
+    "sum_expected_wins": 272.0
+  },
+  "truth_layer": {
+    "playoff_method": "7seed_mc_plus_strength_bracket_sb",
+    "n_replicates": 20000
+  },
+  "lock_tag": "nfl-season-engine-2026-preseason-lock",
+  "identity": "nfl-season-engine-2026-preseason-lock \u00b7 N_team=100000 \u00b7 2026-08-22"
+}

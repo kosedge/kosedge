@@ -82,6 +82,13 @@ def kdst_publish_status(season: int) -> Dict[str, Any]:
     }
 
 
+def _team_aliases(team: str) -> set[str]:
+    code = str(team or "").strip().upper()
+    if code in {"LA", "LAR"}:
+        return {"LA", "LAR"}
+    return {code} if code else set()
+
+
 def kdst_volume_overlay_for_team(
     artifact: Optional[Dict[str, Any]],
     team: str,
@@ -89,11 +96,7 @@ def kdst_volume_overlay_for_team(
     """Optional FG/XP volume from a 100k publish — None means keep history priors."""
     if not artifact:
         return None
-    code = str(team or "").strip().upper()
-    if code in {"LA", "LAR"}:
-        aliases = {"LA", "LAR"}
-    else:
-        aliases = {code}
+    aliases = _team_aliases(team)
     for row in artifact.get("kickers") or []:
         if not isinstance(row, dict):
             continue
@@ -106,5 +109,50 @@ def kdst_volume_overlay_for_team(
             out["fg_attempts"] = float(fg)
         if isinstance(xp, (int, float)):
             out["xp_attempts"] = float(xp)
+        return out or None
+    return None
+
+
+def named_kickers_from_artifact(
+    artifact: Optional[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Named K rows from a publish file. Empty if missing ids — never invents names."""
+    if not artifact:
+        return []
+    out: List[Dict[str, Any]] = []
+    seen_teams: set[str] = set()
+    for row in artifact.get("kickers") or []:
+        if not isinstance(row, dict):
+            continue
+        team = str(row.get("team") or "").strip().upper()
+        player_id = str(row.get("player_id") or "").strip()
+        if not team or not player_id or team in seen_teams:
+            continue
+        seen_teams.add(team)
+        name = str(row.get("player_name") or "").strip() or player_id
+        out.append({"team": team, "player_id": player_id, "player_name": name})
+    return out
+
+
+def dst_overlay_for_team(
+    artifact: Optional[Dict[str, Any]],
+    team: str,
+) -> Optional[Dict[str, float]]:
+    """Optional DST volume from a 100k publish — None means keep history priors."""
+    if not artifact:
+        return None
+    aliases = _team_aliases(team)
+    for row in artifact.get("dst") or []:
+        if not isinstance(row, dict):
+            continue
+        if str(row.get("team") or "").strip().upper() not in aliases:
+            continue
+        out: Dict[str, float] = {}
+        pa = row.get("points_allowed_mean")
+        sacks = row.get("sacks")
+        if isinstance(pa, (int, float)):
+            out["points_allowed_mean"] = float(pa)
+        if isinstance(sacks, (int, float)):
+            out["sacks"] = float(sacks)
         return out or None
     return None
