@@ -17002,6 +17002,7 @@ def _fetch_kicker_season_players(session: Any, *, season: int, model_version: st
     from src.services.nfl_kdst_publish import (
         kdst_volume_overlay_for_team,
         load_kdst_publish_artifact,
+        named_kickers_from_artifact,
     )
 
     kdst_art = load_kdst_publish_artifact(int(season))
@@ -17009,6 +17010,8 @@ def _fetch_kicker_season_players(session: Any, *, season: int, model_version: st
     team_history = _fetch_team_kicker_history(session)
     career_stats = _fetch_kicker_career_bucket_stats(session)
     primary_kickers = _select_primary_kickers_per_team(session, season=season)
+    if not primary_kickers:
+        primary_kickers = named_kickers_from_artifact(kdst_art)
     situational = _fetch_team_situational_signal(session)
     offensive_tds_by_team = _fetch_team_offensive_td_totals(session, season=season, model_version=model_version)
     schedule_games = _fetch_team_schedule_game_counts(session, season=season)
@@ -17053,6 +17056,8 @@ def _fetch_kicker_season_players(session: Any, *, season: int, model_version: st
             two_point_attempt_rate=league["two_point_attempt_rate"],
             league_pat_make_rate=league["league_pat_make_rate"],
         )
+        if overlay and overlay.get("xp_attempts") is not None:
+            pat_makes = float(overlay["xp_attempts"]) * float(league["league_pat_make_rate"])
         total_points = compute_kicker_season_fantasy_points(fg_makes_by_bucket=makes_by_bucket, pat_makes=pat_makes)
         fg_made_total = sum(makes_by_bucket.values())
 
@@ -17177,6 +17182,9 @@ def _fetch_dst_season_players(session: Any, *, season: int) -> List[Dict[str, An
     pipeline's own real defensive-EPA-allowed signal for the points-allowed
     adjustment. See `nfl_kicker_dst_projections.py` for the full
     methodology. DST fantasy scoring does not vary by PPR profile."""
+    from src.services.nfl_kdst_publish import dst_overlay_for_team, load_kdst_publish_artifact
+
+    kdst_art = load_kdst_publish_artifact(int(season))
     defense_history = _fetch_team_defense_history(session)
     situational = _fetch_team_situational_signal(session)
     schedule_games = _fetch_team_schedule_game_counts(session, season=season)
@@ -17243,6 +17251,11 @@ def _fetch_dst_season_players(session: Any, *, season: int) -> List[Dict[str, An
             team_epa_per_play_defense_allowed=team_epa_allowed,
             league_avg_epa_per_play_defense_allowed=situational["league_avg_epa_per_play_defense_allowed"],
         )
+        dst_ov = dst_overlay_for_team(kdst_art, team)
+        if dst_ov and dst_ov.get("points_allowed_mean") is not None:
+            adjusted_points_allowed_mean = float(dst_ov["points_allowed_mean"])
+        if dst_ov and dst_ov.get("sacks") is not None and games > 0:
+            shrunk_sacks = float(dst_ov["sacks"]) / games
 
         breakdown = compute_dst_season_fantasy_points(
             points_allowed_mean_per_game=adjusted_points_allowed_mean,
