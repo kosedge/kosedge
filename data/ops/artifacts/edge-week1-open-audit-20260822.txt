@@ -1,0 +1,25 @@
+Week 1 games: 16
+odds_feed_status: degraded
+market_joined_count: 0
+
+Game       OpenS    OpenT    Join       MktS     BestS    ActS     ActEdge 
+ARI@LAC    -10.5    46.5     exact      None     None     PASS     0.0     
+ATL@PIT    -3.0     41.5     exact      None     None     PASS     0.0     
+BAL@IND    3.5      48.5     exact      None     None     PASS     0.0     
+BUF@HOU    1.5      44.5     exact      None     None     PASS     0.0     
+CHI@CAR    2.5      45.5     exact      None     None     PASS     0.0     
+CLE@JAX    -7.5     40.5     exact      None     None     PASS     0.0     
+DAL@NYG    None     None     missing    None     None     PASS     0.0     
+DEN@KC     None     None     missing    None     None     PASS     0.0     
+GB@MIN     -1.5     45.5     exact      None     None     PASS     0.0     
+MIA@LV     -3.5     40.5     exact      None     None     PASS     0.0     
+NE@SEA     None     None     missing    None     None     PASS     0.0     
+NO@DET     -7.0     49.5     exact      None     None     PASS     0.0     
+NYJ@TEN    -2.5     38.5     exact      None     None     PASS     0.0     
+SF@LAR     None     None     missing    None     None     PASS     0.0     
+TB@CIN     -3.5     52.5     exact      None     None     PASS     0.0     
+WAS@PHI    -4.5     47.5     exact      None     None     PASS     0.0     
+
+missing opens: ['NE@SEA', 'SF@LAR', 'DAL@NYG', 'DEN@KC']
+exact: 12
+alias: 0

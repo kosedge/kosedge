@@ -107,6 +107,272 @@ function formatJuice(price: number | null | undefined): string | undefined {
 }
 
 /**
+ * Single market line for Edge / Action (home-side spread or total points).
+ * Prefer stakeable DK/FD close, then consensus, then Current (best-of-books).
+ * Only treat market as missing when none of these exist.
+ */
+export function resolveMarketLineForEdge(args: {
+  stake?: number | null;
+  dk?: number | null;
+  fd?: number | null;
+  market?: number | null;
+  best?: number | null;
+}): number | null {
+  for (const v of [args.stake, args.dk, args.fd, args.market, args.best]) {
+    if (v != null && Number.isFinite(v)) return Number(v);
+  }
+  return null;
+}
+
+/** Parse away-spread label ("+3.5") → home-side number (−3.5). */
+export function parseAwaySpreadLabelToHome(
+  label: string | null | undefined,
+): number | null {
+  if (label == null) return null;
+  const raw = String(label).trim();
+  if (!raw || raw === "—") return null;
+  const n = parseFloat(raw.replace(/[^+\-\d.]/g, ""));
+  return Number.isFinite(n) ? -n : null;
+}
+
+/** Parse total label ("44.5" / "o44.5") → points. */
+export function parseTotalLabel(
+  label: string | null | undefined,
+): number | null {
+  if (label == null) return null;
+  const raw = String(label).trim();
+  if (!raw || raw === "—") return null;
+  const n = parseFloat(raw.replace(/[^\d.]/g, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+function parseKeiHomeSpread(label: string | null | undefined): number | null {
+  if (label == null) return null;
+  const raw = String(label).trim();
+  if (!raw || raw === "—") return null;
+  const n = parseFloat(raw.replace(/[^+\-\d.]/g, ""));
+  return Number.isFinite(n) ? n : null;
+}
+
+function rowDecisionMarketLine(row: EdgeBoardRow | undefined): number | null {
+  if (!row) return null;
+  const direct = (row as EdgeBoardRow & { decisionMarketLine?: number | null })
+    .decisionMarketLine;
+  if (direct != null && Number.isFinite(direct)) return Number(direct);
+  // API-shaped decision on the row (flat market_line).
+  const api = (row as EdgeBoardRow & { decision?: Record<string, unknown> })
+    .decision;
+  if (api && typeof api === "object") {
+    const ml = api.market_line ?? api.marketLine;
+    if (ml != null && Number.isFinite(Number(ml))) return Number(ml);
+  }
+  return null;
+}
+
+/**
+ * When a dedicated decision market is empty but Current (best) exists,
+ * recompute Action from KEI vs that Current so Action Edge never stays 0.0
+ * while the Edge column shows a real KEI−Current gap.
+ */
+export function syncEdgeBoardActionsWithCurrent(
+  rows: EdgeBoardRow[],
+): EdgeBoardRow[] {
+  // Pair spread+total by game so week / confidence stay coherent.
+  const byGame = new Map<
+    string,
+    { spread?: EdgeBoardRow; total?: EdgeBoardRow }
+  >();
+  for (const row of rows) {
+    const game = String(row.game ?? "");
+    if (!game) continue;
+    const entry = byGame.get(game) ?? {};
+    if (row.market === "Spread") entry.spread = row;
+    else if (row.market === "Total") entry.total = row;
+    byGame.set(game, entry);
+  }
+
+  const out = rows.map((row) => ({ ...row })) as EdgeBoardRow[];
+  const byId = new Map(out.map((r) => [r.id, r]));
+
+  for (const [, pair] of byGame) {
+    const spreadRow = pair.spread ? byId.get(pair.spread.id) : undefined;
+    const totalRow = pair.total ? byId.get(pair.total.id) : undefined;
+    if (!spreadRow && !totalRow) continue;
+
+    const week =
+      coerceNflWeek(
+        (spreadRow as EdgeBoardRow & { week?: unknown })?.week ??
+          (totalRow as EdgeBoardRow & { week?: unknown })?.week,
+      ) ?? null;
+    const homeAbbr =
+      (spreadRow as EdgeBoardRow & { homeAbbr?: string })?.homeAbbr ??
+      (totalRow as EdgeBoardRow & { homeAbbr?: string })?.homeAbbr;
+    const awayAbbr =
+      (spreadRow as EdgeBoardRow & { awayAbbr?: string })?.awayAbbr ??
+      (totalRow as EdgeBoardRow & { awayAbbr?: string })?.awayAbbr;
+
+    const fairSpread =
+      (spreadRow as EdgeBoardRow & { keiSpreadHome?: number })?.keiSpreadHome ??
+      parseKeiHomeSpread(
+        typeof spreadRow?.kei === "string" ? spreadRow.kei : undefined,
+      );
+    const fairTotal =
+      (totalRow as EdgeBoardRow & { keiTotal?: number })?.keiTotal ??
+      parseTotalLabel(
+        typeof totalRow?.kei === "string" ? totalRow.kei : undefined,
+      );
+
+    const decisionSpreadMkt = rowDecisionMarketLine(spreadRow);
+    const decisionTotalMkt = rowDecisionMarketLine(totalRow);
+
+    // Dedicated Mkt (stake/consensus already baked into decision) wins when set.
+    // Else Current = row.best (Odds overlay / best-of-books).
+    const currentSpreadHome =
+      decisionSpreadMkt ??
+      (spreadRow as EdgeBoardRow & { marketSpreadHome?: number })
+        ?.marketSpreadHome ??
+      parseAwaySpreadLabelToHome(
+        typeof spreadRow?.best === "string" ? spreadRow.best : undefined,
+      );
+    const currentTotal =
+      decisionTotalMkt ??
+      (totalRow as EdgeBoardRow & { marketTotal?: number })?.marketTotal ??
+      parseTotalLabel(
+        typeof totalRow?.best === "string" ? totalRow.best : undefined,
+      );
+
+    const needSpreadRefresh =
+      fairSpread != null &&
+      currentSpreadHome != null &&
+      (decisionSpreadMkt == null ||
+        ((spreadRow as EdgeBoardRow & { edgeMagnitude?: number })
+          .edgeMagnitude === 0 &&
+          Math.abs(fairSpread - currentSpreadHome) > 1e-6));
+    const needTotalRefresh =
+      fairTotal != null &&
+      currentTotal != null &&
+      (decisionTotalMkt == null ||
+        ((totalRow as EdgeBoardRow & { edgeMagnitude?: number })
+          .edgeMagnitude === 0 &&
+          Math.abs(fairTotal - currentTotal) > 1e-6));
+
+    if (!needSpreadRefresh && !needTotalRefresh) continue;
+
+    const local = decideGame({
+      week,
+      fairSpreadHome: fairSpread,
+      marketSpreadHome: currentSpreadHome,
+      fairTotal,
+      marketTotal: currentTotal,
+      homeAbbr,
+      awayAbbr,
+      openingSpreadHome: parseAwaySpreadLabelToHome(
+        typeof spreadRow?.open === "string" ? spreadRow.open : undefined,
+      ),
+      openingTotal: parseTotalLabel(
+        typeof totalRow?.open === "string" ? totalRow.open : undefined,
+      ),
+      confidence: assessConfidence(),
+      priceStillAvailableSpread: currentSpreadHome != null,
+      priceStillAvailableTotal: currentTotal != null,
+    });
+
+    if (spreadRow && needSpreadRefresh) {
+      const s = spreadRow as EdgeBoardRow & {
+        actionLabel?: string;
+        edgeMagnitude?: number | null;
+        decision?: ReturnType<typeof decisionResultToApi>;
+        fairLine?: number | null;
+        decisionMarketLine?: number | null;
+        coverProb?: number | null;
+        playToNotes?: string;
+        playToPlay?: number;
+        playToLean?: number;
+        playToPass?: number;
+        isBestBet?: boolean;
+        keyNumberCross?: boolean;
+        weekRegime?: string;
+        modelConfidenceScore?: number;
+        modelConfidenceBand?: string;
+        modelConfidenceTierConstant?: boolean;
+        marketSpreadHome?: number;
+      };
+      s.actionLabel = local.spread.actionLabel;
+      // Honest empty when market still missing — never fake 0.0 theater.
+      s.edgeMagnitude =
+        local.spread.marketLine == null &&
+        local.spread.reason === "missing_fair_or_market"
+          ? undefined
+          : local.spread.edgeMagnitude;
+      s.decision = decisionResultToApi(local.spread);
+      s.fairLine = local.spread.fairLine;
+      s.decisionMarketLine = local.spread.marketLine;
+      s.coverProb = local.spread.coverProb ?? undefined;
+      s.playToNotes = local.spread.playTo?.notes;
+      s.playToPlay = local.spread.playTo?.playTo;
+      s.playToLean = local.spread.playTo?.leanTo;
+      s.playToPass = local.spread.playTo?.passFrom;
+      s.isBestBet = local.spread.isBestBet;
+      s.keyNumberCross = local.spread.keyNumberCross;
+      s.weekRegime = local.weekRegime;
+      s.modelConfidenceScore = local.modelConfidence.score;
+      s.modelConfidenceBand = local.modelConfidence.band;
+      s.modelConfidenceTierConstant = isTierConstantConfidence(
+        local.modelConfidence,
+      );
+      s.marketSpreadHome = currentSpreadHome ?? s.marketSpreadHome;
+    }
+
+    if (totalRow && needTotalRefresh) {
+      const t = totalRow as EdgeBoardRow & {
+        actionLabel?: string;
+        edgeMagnitude?: number | null;
+        decision?: ReturnType<typeof decisionResultToApi>;
+        fairLine?: number | null;
+        decisionMarketLine?: number | null;
+        coverProb?: number | null;
+        playToNotes?: string;
+        playToPlay?: number;
+        playToLean?: number;
+        playToPass?: number;
+        isBestBet?: boolean;
+        keyNumberCross?: boolean;
+        weekRegime?: string;
+        modelConfidenceScore?: number;
+        modelConfidenceBand?: string;
+        modelConfidenceTierConstant?: boolean;
+        marketTotal?: number;
+      };
+      t.actionLabel = local.total.actionLabel;
+      t.edgeMagnitude =
+        local.total.marketLine == null &&
+        local.total.reason === "missing_fair_or_market"
+          ? undefined
+          : local.total.edgeMagnitude;
+      t.decision = decisionResultToApi(local.total);
+      t.fairLine = local.total.fairLine;
+      t.decisionMarketLine = local.total.marketLine;
+      t.coverProb = local.total.coverProb ?? undefined;
+      t.playToNotes = local.total.playTo?.notes;
+      t.playToPlay = local.total.playTo?.playTo;
+      t.playToLean = local.total.playTo?.leanTo;
+      t.playToPass = local.total.playTo?.passFrom;
+      t.isBestBet = local.total.isBestBet;
+      t.keyNumberCross = local.total.keyNumberCross;
+      t.weekRegime = local.weekRegime;
+      t.modelConfidenceScore = local.modelConfidence.score;
+      t.modelConfidenceBand = local.modelConfidence.band;
+      t.modelConfidenceTierConstant = isTierConstantConfidence(
+        local.modelConfidence,
+      );
+      t.marketTotal = currentTotal ?? t.marketTotal;
+    }
+  }
+
+  return out;
+}
+
+/**
  * One Spread + one Total row per fair-line game.
  * KEI always set from Kosedge.
  * Open = first-captured open when available (never invented as current).
@@ -186,56 +452,74 @@ export function fairLinesToEdgeBoardRows(
     const publishTagSpread = line.publishTagSpread ?? undefined;
     const publishTagTotal = line.publishTagTotal ?? undefined;
 
-    // Tag policy: prefer server decision (KEI vs DK/FD stake close); else compute locally.
-    const decisionBundle =
-      line.decision ??
-      (() => {
-        const compareSpread =
-          line.stakeSpreadHome ??
-          line.dkSpreadHome ??
-          line.fdSpreadHome ??
-          line.marketSpreadHome ??
-          null;
-        const compareTotal =
-          line.stakeTotal ?? line.dkTotal ?? line.fdTotal ?? line.marketTotal ?? null;
-        const local = decideGame({
-          week: line.week,
-          // Fair for tags = KEI (Model is research-only).
-          fairSpreadHome: line.spreadHome ?? line.modelSpreadHome,
-          marketSpreadHome: compareSpread,
-          fairTotal: line.totalMean ?? line.modelTotal,
-          marketTotal: compareTotal,
-          homeAbbr: line.homeAbbr,
-          awayAbbr: line.awayAbbr,
-          openingSpreadHome: line.openSpreadHome,
-          openingTotal: line.openTotal,
-          confidence: assessConfidence(),
-          priceStillAvailableSpread: compareSpread != null,
-          priceStillAvailableTotal: compareTotal != null,
-        });
-        return {
-          doctrine: local.doctrine,
-          week: local.week,
-          weekRegime: local.weekRegime,
-          spread: local.spread,
-          total: local.total,
-          edgeMagnitudeSpread: local.edgeMagnitudeSpread,
-          edgeMagnitudeTotal: local.edgeMagnitudeTotal,
-          modelConfidence: local.modelConfidence,
-          actionLabelSpread: local.actionLabelSpread,
-          actionLabelTotal: local.actionLabelTotal,
-        };
-      })();
+    // Single market input for Edge/Action: stake → DK/FD → consensus → Current.
+    const compareSpread = resolveMarketLineForEdge({
+      stake: line.stakeSpreadHome,
+      dk: line.dkSpreadHome,
+      fd: line.fdSpreadHome,
+      market: line.marketSpreadHome,
+      best: line.bestSpreadHome,
+    });
+    const compareTotal = resolveMarketLineForEdge({
+      stake: line.stakeTotal,
+      dk: line.dkTotal,
+      fd: line.fdTotal,
+      market: line.marketTotal,
+      best: line.bestTotal,
+    });
+
+    // Prefer server decision only when it already graded vs a usable market.
+    // If Mkt is empty on the server decision but Current exists locally, recompute
+    // so Action never stays Edge 0.0 / PASS while the Edge column shows a gap.
+    const serverSpreadMkt = line.decision?.spread?.marketLine ?? null;
+    const serverTotalMkt = line.decision?.total?.marketLine ?? null;
+    const serverDecisionUsable =
+      line.decision != null &&
+      ((serverSpreadMkt != null && Number.isFinite(serverSpreadMkt)) ||
+        (serverTotalMkt != null && Number.isFinite(serverTotalMkt)) ||
+        (compareSpread == null && compareTotal == null));
+
+    const decisionBundle = serverDecisionUsable
+      ? line.decision!
+      : (() => {
+          const local = decideGame({
+            week: line.week,
+            // Fair for tags = KEI (Model is research-only).
+            fairSpreadHome: line.spreadHome ?? line.modelSpreadHome,
+            marketSpreadHome: compareSpread,
+            fairTotal: line.totalMean ?? line.modelTotal,
+            marketTotal: compareTotal,
+            homeAbbr: line.homeAbbr,
+            awayAbbr: line.awayAbbr,
+            openingSpreadHome: line.openSpreadHome,
+            openingTotal: line.openTotal,
+            confidence: assessConfidence(),
+            priceStillAvailableSpread: compareSpread != null,
+            priceStillAvailableTotal: compareTotal != null,
+          });
+          return {
+            doctrine: local.doctrine,
+            week: local.week,
+            weekRegime: local.weekRegime,
+            spread: local.spread,
+            total: local.total,
+            edgeMagnitudeSpread: local.edgeMagnitudeSpread,
+            edgeMagnitudeTotal: local.edgeMagnitudeTotal,
+            modelConfidence: local.modelConfidence,
+            actionLabelSpread: local.actionLabelSpread,
+            actionLabelTotal: local.actionLabelTotal,
+          };
+        })();
 
     const spreadDecision = decisionBundle.spread;
     const totalDecision = decisionBundle.total;
     const actionLabelSpread =
-      line.actionLabelSpread ??
+      (serverDecisionUsable ? line.actionLabelSpread : null) ??
       decisionBundle.actionLabelSpread ??
       spreadDecision?.actionLabel ??
       null;
     const actionLabelTotal =
-      line.actionLabelTotal ??
+      (serverDecisionUsable ? line.actionLabelTotal : null) ??
       decisionBundle.actionLabelTotal ??
       totalDecision?.actionLabel ??
       null;
@@ -246,15 +530,9 @@ export function fairLinesToEdgeBoardRows(
       homeWinProb: line.homeWinProb ?? undefined,
       awayWinProb: line.awayWinProb ?? undefined,
       keiSpreadHome: handicapSpread ?? undefined,
-      marketSpreadHome:
-        line.stakeSpreadHome ??
-        line.dkSpreadHome ??
-        line.fdSpreadHome ??
-        line.marketSpreadHome ??
-        undefined,
+      marketSpreadHome: compareSpread ?? undefined,
       keiTotal: handicapTotal ?? undefined,
-      marketTotal:
-        line.stakeTotal ?? line.dkTotal ?? line.fdTotal ?? line.marketTotal ?? undefined,
+      marketTotal: compareTotal ?? undefined,
       gamesPlayedAway: week === 1 ? 0 : undefined,
       gamesPlayedHome: week === 1 ? 0 : undefined,
     };
@@ -290,7 +568,11 @@ export function fairLinesToEdgeBoardRows(
       decision: spreadDecision
         ? decisionResultToApi(spreadDecision)
         : undefined,
-      edgeMagnitude: spreadDecision?.edgeMagnitude,
+      edgeMagnitude:
+        spreadDecision?.marketLine == null &&
+        spreadDecision?.reason === "missing_fair_or_market"
+          ? undefined
+          : spreadDecision?.edgeMagnitude,
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
       modelConfidenceTierConstant: decisionBundle.modelConfidence
@@ -333,10 +615,12 @@ export function fairLinesToEdgeBoardRows(
       linesAsOf,
       publishTag: publishTagTotal,
       actionLabel: actionLabelTotal ?? undefined,
-      decision: totalDecision
-        ? decisionResultToApi(totalDecision)
-        : undefined,
-      edgeMagnitude: totalDecision?.edgeMagnitude,
+      decision: totalDecision ? decisionResultToApi(totalDecision) : undefined,
+      edgeMagnitude:
+        totalDecision?.marketLine == null &&
+        totalDecision?.reason === "missing_fair_or_market"
+          ? undefined
+          : totalDecision?.edgeMagnitude,
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
       modelConfidenceTierConstant: decisionBundle.modelConfidence
@@ -433,7 +717,9 @@ export function filterNflCurrentWeekRows(
     ...new Set(
       rows
         .map(rowWeek)
-        .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
+        .filter(
+          (w): w is number => typeof w === "number" && Number.isFinite(w),
+        ),
     ),
   ].sort((a, b) => a - b);
   if (weeks.length === 0) {
@@ -563,5 +849,6 @@ export function overlayOddsOntoFairLineRows(
 
   // Do not append odds-only extras (PRE noise, unmatched books). NFL board is
   // fair-line / KEINFL-backed; Odds overlays prices onto those rows only.
-  return fairRows;
+  // Current may land here while server decision still has Mkt — → recompute Action.
+  return syncEdgeBoardActionsWithCurrent(fairRows);
 }

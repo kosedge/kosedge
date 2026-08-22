@@ -30,6 +30,7 @@ import {
   filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
   sortNflEdgeBoardRows,
+  syncEdgeBoardActionsWithCurrent,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import {
   ensureNflScheduleWeekOnBoard,
@@ -84,10 +85,7 @@ async function pullOddsRows(sport: string): Promise<EdgeBoardRow[]> {
   return [];
 }
 
-function withFallback(
-  sport: string,
-  oddsRows: EdgeBoardRow[],
-): EdgeBoardRow[] {
+function withFallback(sport: string, oddsRows: EdgeBoardRow[]): EdgeBoardRow[] {
   if (countPriced(oddsRows) > 0 || oddsRows.length > 0) return oddsRows;
   return loadEdgeBoardFallback(sport);
 }
@@ -144,6 +142,8 @@ async function assembleNflEdgeBoardRows(
     keiGames = keiGamesFromNflFairLines(fair.lines);
     rows = fairLinesToEdgeBoardRows(fair.lines);
     rows = overlayOddsOntoFairLineRows(rows, odds);
+    // Odds/Current may arrive after fair-lines decision graded Mkt —; sync Action.
+    rows = syncEdgeBoardActionsWithCurrent(rows);
   } else {
     // File KEI fallback — still projection-backed; never surface PRE odds-only.
     keiGames = getKeiLines("nfl");

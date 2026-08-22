@@ -7,10 +7,7 @@ import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
-import {
-  notableValueNotes,
-  tierCliffNote,
-} from "@/lib/fantasy/expert";
+import { notableValueNotes, tierCliffNote } from "@/lib/fantasy/expert";
 import {
   bestAvailableByNeed,
   bestAvailableByValue,
@@ -18,7 +15,10 @@ import {
   teamGrade,
   type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
-import { draftAdviceClass, deskDraftAdvice } from "@/lib/fantasy/value-aware-recs";
+import {
+  draftAdviceClass,
+  deskDraftAdvice,
+} from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskBoard, FantasyDeskRow } from "@/lib/fantasy/types";
 import {
   draftPositionBadgeClass,
@@ -81,7 +81,7 @@ export function FantasyDraftDeskClient({
   board,
   initialPosition = "ALL",
   initialScoring = "half_ppr",
-  initialTab = "board",
+  initialTab = "value",
   compactHero = false,
   basePath = "/pro/nfl/fantasy",
 }: Props) {
@@ -91,7 +91,8 @@ export function FantasyDraftDeskClient({
   const [rosterIds, setRosterIds] = useState<string[]>(readStoredRoster);
   const [tab, setTab] = useState<"board" | "value" | "builder">(initialTab);
   const [query, setQuery] = useState("");
-  const [trueValuesOnly, setTrueValuesOnly] = useState(true);
+  /** Full draft board by default — true-values filter is opt-in, not the desk. */
+  const [trueValuesOnly, setTrueValuesOnly] = useState(false);
   const [posFilter, setPosFilter] = useState(
     (initialPosition || "ALL").toUpperCase(),
   );
@@ -112,7 +113,8 @@ export function FantasyDraftDeskClient({
   const rosterSet = useMemo(() => new Set(activeRosterIds), [activeRosterIds]);
 
   const unmatchedCount = useMemo(
-    () => board.rows.filter((r) => r.adp == null || r.valueDelta == null).length,
+    () =>
+      board.rows.filter((r) => r.adp == null || r.valueDelta == null).length,
     [board.rows],
   );
 
@@ -139,16 +141,19 @@ export function FantasyDraftDeskClient({
     if (pos !== "ALL") {
       rows = rows.filter((r) => r.position.toUpperCase() === pos);
     }
-    if (tab === "value") {
-      // Real market edge only — drop unmatched ADP so proxy distortion can't leak in.
-      rows = [...rows]
-        .filter((r) => r.adp != null && r.valueDelta != null)
-        .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0));
-      if (trueValuesOnly) {
-        rows = rows.filter(
-          (r) => Math.abs(r.valueDelta ?? 0) >= TRUE_VALUE_THRESHOLD,
-        );
+    // Default draft board = value / ADP gap. Model rank is the secondary tab.
+    if (tab === "value" || tab === "board") {
+      if (tab === "value") {
+        rows = [...rows]
+          .filter((r) => r.adp != null && r.valueDelta != null)
+          .sort((a, b) => (b.valueDelta ?? 0) - (a.valueDelta ?? 0));
+        if (trueValuesOnly) {
+          rows = rows.filter(
+            (r) => Math.abs(r.valueDelta ?? 0) >= TRUE_VALUE_THRESHOLD,
+          );
+        }
       }
+      // tab === "board" keeps model rank order from board.rows
     }
     if (!q) return rows;
     return rows.filter(
@@ -211,14 +216,12 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                Draft board — Model rank, ADP, and Value Δ. Sort defaults to
-                value, not pick-the-top-model-row. Builder and Mock add take /
-                wait / reach.{" "}
+                Draft board by Value Δ vs ADP. Model rank is secondary.{" "}
                 <Link
                   href="/pro/model-transparency#fantasy"
                   className="text-kos-text/45 hover:text-kos-gold"
                 >
-                  Model transparency
+                  Methods
                 </Link>
               </p>
               <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
@@ -275,11 +278,13 @@ export function FantasyDraftDeskClient({
           <p>
             Kickers and defenses are not on this board. Preseason player totals
             are QB / RB / WR / TE only — named K/DST wait until{" "}
-            <code className="text-amber-50">nfl_fantasy_season_draft_rankings</code>{" "}
+            <code className="text-amber-50">
+              nfl_fantasy_season_draft_rankings
+            </code>{" "}
             includes K/DST from{" "}
             <code className="text-amber-50">nfl_kicker_dst_projections</code>{" "}
-            (and the next 100k publish). Until then mocks skip those roster slots
-            and grades do not ding missing K/DST. No invented projections.
+            (and the next 100k publish). Until then mocks skip those roster
+            slots and grades do not ding missing K/DST. No invented projections.
           </p>
           {kdFilter ? (
             <p className="mt-2">
@@ -404,8 +409,8 @@ export function FantasyDraftDeskClient({
           <div className="mt-4 flex flex-wrap items-center gap-2">
             {(
               [
+                ["value", "Value / ADP"],
                 ["board", "Model rank"],
-                ["value", "Value"],
                 ["builder", "Builder"],
               ] as const
             ).map(([id, label]) => (
@@ -470,7 +475,7 @@ export function FantasyDraftDeskClient({
             <div className="flex flex-wrap items-baseline justify-between gap-3 border-b border-white/10 px-4 py-3">
               <div>
                 <h2 className="text-lg font-semibold text-kos-text">
-                  {tab === "value" ? "Value Board" : "Model rank"}
+                  {tab === "value" ? "Draft board · Value / ADP" : "Model rank"}
                 </h2>
                 {tab === "value" ? (
                   <p className="mt-0.5 text-[11px] text-kos-text/50">
@@ -767,12 +772,12 @@ export function FantasyDraftDeskClient({
       ) : null}
 
       <p className="text-[11px] leading-relaxed text-kos-text/45">
-        Model rank is projection order. Advice is ADP-aware Wait / Take / Reach.{" "}
+        Value / ADP is the draft board. Model rank is projection order.{" "}
         <Link
           href="/pro/model-transparency#fantasy"
           className="text-kos-text/45 hover:text-kos-gold"
         >
-          Model transparency
+          Methods
         </Link>
       </p>
     </div>
@@ -1030,7 +1035,9 @@ function TeamBuilderPanel({
         <ul className="mt-4 space-y-2">
           {roster.length === 0 ? (
             <li className="rounded-xl border border-dashed border-white/15 p-4 text-sm text-kos-text/55">
-              <p>Empty roster — search the drop box above, then Add to builder.</p>
+              <p>
+                Empty roster — search the drop box above, then Add to builder.
+              </p>
             </li>
           ) : (
             roster.map((row) => (
@@ -1128,7 +1135,9 @@ function SuggestBlock({
                     {valueLabel(row.valueDelta).text}
                   </p>
                   {timingHint ? (
-                    <p className={`mt-0.5 text-[11px] ${draftAdviceClass(timing)}`}>
+                    <p
+                      className={`mt-0.5 text-[11px] ${draftAdviceClass(timing)}`}
+                    >
                       {timingHint}
                     </p>
                   ) : null}

@@ -935,6 +935,7 @@ def test_first_open_odds_uses_team_date_candidate_games() -> None:
         ],
     )
     assert "candidate_games" in session.sql
+    assert "INTERVAL '1 day'" in session.sql
     assert session.params["home_abbrs"] == ["NYG"]
     assert session.params["away_abbrs"] == ["DAL"]
     snap = out["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
