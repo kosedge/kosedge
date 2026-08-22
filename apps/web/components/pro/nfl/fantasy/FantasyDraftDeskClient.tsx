@@ -7,10 +7,7 @@ import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
 import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
-import {
-  notableValueNotes,
-  tierCliffNote,
-} from "@/lib/fantasy/expert";
+import { notableValueNotes, tierCliffNote } from "@/lib/fantasy/expert";
 import {
   bestAvailableByNeed,
   bestAvailableByValue,
@@ -18,7 +15,10 @@ import {
   teamGrade,
   type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
-import { draftAdviceClass, deskDraftAdvice } from "@/lib/fantasy/value-aware-recs";
+import {
+  draftAdviceClass,
+  deskDraftAdvice,
+} from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskBoard, FantasyDeskRow } from "@/lib/fantasy/types";
 import {
   draftPositionBadgeClass,
@@ -113,7 +113,8 @@ export function FantasyDraftDeskClient({
   const rosterSet = useMemo(() => new Set(activeRosterIds), [activeRosterIds]);
 
   const unmatchedCount = useMemo(
-    () => board.rows.filter((r) => r.adp == null || r.valueDelta == null).length,
+    () =>
+      board.rows.filter((r) => r.adp == null || r.valueDelta == null).length,
     [board.rows],
   );
 
@@ -277,11 +278,13 @@ export function FantasyDraftDeskClient({
           <p>
             Kickers and defenses are not on this board. Preseason player totals
             are QB / RB / WR / TE only — named K/DST wait until{" "}
-            <code className="text-amber-50">nfl_fantasy_season_draft_rankings</code>{" "}
+            <code className="text-amber-50">
+              nfl_fantasy_season_draft_rankings
+            </code>{" "}
             includes K/DST from{" "}
             <code className="text-amber-50">nfl_kicker_dst_projections</code>{" "}
-            (and the next 100k publish). Until then mocks skip those roster slots
-            and grades do not ding missing K/DST. No invented projections.
+            (and the next 100k publish). Until then mocks skip those roster
+            slots and grades do not ding missing K/DST. No invented projections.
           </p>
           {kdFilter ? (
             <p className="mt-2">
@@ -1032,7 +1035,9 @@ function TeamBuilderPanel({
         <ul className="mt-4 space-y-2">
           {roster.length === 0 ? (
             <li className="rounded-xl border border-dashed border-white/15 p-4 text-sm text-kos-text/55">
-              <p>Empty roster — search the drop box above, then Add to builder.</p>
+              <p>
+                Empty roster — search the drop box above, then Add to builder.
+              </p>
             </li>
           ) : (
             roster.map((row) => (
@@ -1130,7 +1135,9 @@ function SuggestBlock({
                     {valueLabel(row.valueDelta).text}
                   </p>
                   {timingHint ? (
-                    <p className={`mt-0.5 text-[11px] ${draftAdviceClass(timing)}`}>
+                    <p
+                      className={`mt-0.5 text-[11px] ${draftAdviceClass(timing)}`}
+                    >
                       {timingHint}
                     </p>
                   ) : null}

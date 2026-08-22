@@ -48,10 +48,7 @@ export function FantasyDeskNav({ active, scoring, className = "" }: Props) {
           return (
             <Fragment key={link.id}>
               {index > 0 ? (
-                <span
-                  aria-hidden
-                  className="px-0.5 text-sm text-kos-text/30"
-                >
+                <span aria-hidden className="px-0.5 text-sm text-kos-text/30">
                   →
                 </span>
               ) : null}

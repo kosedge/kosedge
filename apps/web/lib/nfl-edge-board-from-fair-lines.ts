@@ -136,7 +136,9 @@ export function parseAwaySpreadLabelToHome(
 }
 
 /** Parse total label ("44.5" / "o44.5") → points. */
-export function parseTotalLabel(label: string | null | undefined): number | null {
+export function parseTotalLabel(
+  label: string | null | undefined,
+): number | null {
   if (label == null) return null;
   const raw = String(label).trim();
   if (!raw || raw === "—") return null;
@@ -152,9 +154,7 @@ function parseKeiHomeSpread(label: string | null | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-function rowDecisionMarketLine(
-  row: EdgeBoardRow | undefined,
-): number | null {
+function rowDecisionMarketLine(row: EdgeBoardRow | undefined): number | null {
   if (!row) return null;
   const direct = (row as EdgeBoardRow & { decisionMarketLine?: number | null })
     .decisionMarketLine;
@@ -178,7 +178,10 @@ export function syncEdgeBoardActionsWithCurrent(
   rows: EdgeBoardRow[],
 ): EdgeBoardRow[] {
   // Pair spread+total by game so week / confidence stay coherent.
-  const byGame = new Map<string, { spread?: EdgeBoardRow; total?: EdgeBoardRow }>();
+  const byGame = new Map<
+    string,
+    { spread?: EdgeBoardRow; total?: EdgeBoardRow }
+  >();
   for (const row of rows) {
     const game = String(row.game ?? "");
     if (!game) continue;
@@ -210,10 +213,14 @@ export function syncEdgeBoardActionsWithCurrent(
 
     const fairSpread =
       (spreadRow as EdgeBoardRow & { keiSpreadHome?: number })?.keiSpreadHome ??
-      parseKeiHomeSpread(spreadRow?.kei);
+      parseKeiHomeSpread(
+        typeof spreadRow?.kei === "string" ? spreadRow.kei : undefined,
+      );
     const fairTotal =
       (totalRow as EdgeBoardRow & { keiTotal?: number })?.keiTotal ??
-      parseTotalLabel(totalRow?.kei);
+      parseTotalLabel(
+        typeof totalRow?.kei === "string" ? totalRow.kei : undefined,
+      );
 
     const decisionSpreadMkt = rowDecisionMarketLine(spreadRow);
     const decisionTotalMkt = rowDecisionMarketLine(totalRow);
@@ -224,25 +231,29 @@ export function syncEdgeBoardActionsWithCurrent(
       decisionSpreadMkt ??
       (spreadRow as EdgeBoardRow & { marketSpreadHome?: number })
         ?.marketSpreadHome ??
-      parseAwaySpreadLabelToHome(spreadRow?.best);
+      parseAwaySpreadLabelToHome(
+        typeof spreadRow?.best === "string" ? spreadRow.best : undefined,
+      );
     const currentTotal =
       decisionTotalMkt ??
       (totalRow as EdgeBoardRow & { marketTotal?: number })?.marketTotal ??
-      parseTotalLabel(totalRow?.best);
+      parseTotalLabel(
+        typeof totalRow?.best === "string" ? totalRow.best : undefined,
+      );
 
     const needSpreadRefresh =
       fairSpread != null &&
       currentSpreadHome != null &&
       (decisionSpreadMkt == null ||
-        ((spreadRow as EdgeBoardRow & { edgeMagnitude?: number }).edgeMagnitude ===
-          0 &&
+        ((spreadRow as EdgeBoardRow & { edgeMagnitude?: number })
+          .edgeMagnitude === 0 &&
           Math.abs(fairSpread - currentSpreadHome) > 1e-6));
     const needTotalRefresh =
       fairTotal != null &&
       currentTotal != null &&
       (decisionTotalMkt == null ||
-        ((totalRow as EdgeBoardRow & { edgeMagnitude?: number }).edgeMagnitude ===
-          0 &&
+        ((totalRow as EdgeBoardRow & { edgeMagnitude?: number })
+          .edgeMagnitude === 0 &&
           Math.abs(fairTotal - currentTotal) > 1e-6));
 
     if (!needSpreadRefresh && !needTotalRefresh) continue;
@@ -255,8 +266,12 @@ export function syncEdgeBoardActionsWithCurrent(
       marketTotal: currentTotal,
       homeAbbr,
       awayAbbr,
-      openingSpreadHome: parseAwaySpreadLabelToHome(spreadRow?.open),
-      openingTotal: parseTotalLabel(totalRow?.open),
+      openingSpreadHome: parseAwaySpreadLabelToHome(
+        typeof spreadRow?.open === "string" ? spreadRow.open : undefined,
+      ),
+      openingTotal: parseTotalLabel(
+        typeof totalRow?.open === "string" ? totalRow.open : undefined,
+      ),
       confidence: assessConfidence(),
       priceStillAvailableSpread: currentSpreadHome != null,
       priceStillAvailableTotal: currentTotal != null,
@@ -285,7 +300,8 @@ export function syncEdgeBoardActionsWithCurrent(
       s.actionLabel = local.spread.actionLabel;
       // Honest empty when market still missing — never fake 0.0 theater.
       s.edgeMagnitude =
-        local.spread.marketLine == null && local.spread.reason === "missing_fair_or_market"
+        local.spread.marketLine == null &&
+        local.spread.reason === "missing_fair_or_market"
           ? undefined
           : local.spread.edgeMagnitude;
       s.decision = decisionResultToApi(local.spread);
@@ -329,7 +345,8 @@ export function syncEdgeBoardActionsWithCurrent(
       };
       t.actionLabel = local.total.actionLabel;
       t.edgeMagnitude =
-        local.total.marketLine == null && local.total.reason === "missing_fair_or_market"
+        local.total.marketLine == null &&
+        local.total.reason === "missing_fair_or_market"
           ? undefined
           : local.total.edgeMagnitude;
       t.decision = decisionResultToApi(local.total);
@@ -598,9 +615,7 @@ export function fairLinesToEdgeBoardRows(
       linesAsOf,
       publishTag: publishTagTotal,
       actionLabel: actionLabelTotal ?? undefined,
-      decision: totalDecision
-        ? decisionResultToApi(totalDecision)
-        : undefined,
+      decision: totalDecision ? decisionResultToApi(totalDecision) : undefined,
       edgeMagnitude:
         totalDecision?.marketLine == null &&
         totalDecision?.reason === "missing_fair_or_market"
@@ -702,7 +717,9 @@ export function filterNflCurrentWeekRows(
     ...new Set(
       rows
         .map(rowWeek)
-        .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
+        .filter(
+          (w): w is number => typeof w === "number" && Number.isFinite(w),
+        ),
     ),
   ].sort((a, b) => a - b);
   if (weeks.length === 0) {

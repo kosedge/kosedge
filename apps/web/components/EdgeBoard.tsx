@@ -16,10 +16,7 @@ import {
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
 import { buildMatchupContext } from "@/lib/edge-board-matchup-context";
 import { buildMatchupOverview } from "@/lib/edge-board-matchup-overview";
-import {
-  buildStatDrop,
-  type StatDrop,
-} from "@/lib/edge-board-stat-drop";
+import { buildStatDrop, type StatDrop } from "@/lib/edge-board-stat-drop";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -353,7 +350,11 @@ function ActionDecisionCell({
     actionLabel === "BEST VALUE" ||
     actionLabel === "ALERT";
   const ladderVerb =
-    actionLabel === "LEAN" ? "Lean to" : actionLabel === "ALERT" ? "Was to" : "Play to";
+    actionLabel === "LEAN"
+      ? "Lean to"
+      : actionLabel === "ALERT"
+        ? "Was to"
+        : "Play to";
   const ladderNum =
     actionLabel === "LEAN" && leanToNum != null
       ? leanToNum
@@ -369,7 +370,10 @@ function ActionDecisionCell({
       ) : publishTag ? (
         <span className={tagClassName(publishTag, compact)}>{publishTag}</span>
       ) : null}
-      {play && actionLabel && actionLabel !== "PASS" && actionLabel !== "STAY AWAY" ? (
+      {play &&
+      actionLabel &&
+      actionLabel !== "PASS" &&
+      actionLabel !== "STAY AWAY" ? (
         <div
           className={`mt-1 text-[11px] font-bold truncate ${
             actionLabel === "PLAY" || actionLabel === "BEST VALUE"
@@ -673,9 +677,7 @@ function parseKickoffStack(args: {
   const raw = String(args.time ?? "").trim();
   if (!raw || raw === "—") return { date: "—", time: "—", local: "" };
   // "09/10 8:35 PM ET" or similar
-  const m = raw.match(
-    /^(\d{1,2}\/\d{1,2})\s+(.+?)(?:\s+(ET|PT|CT|MT))?$/i,
-  );
+  const m = raw.match(/^(\d{1,2}\/\d{1,2})\s+(.+?)(?:\s+(ET|PT|CT|MT))?$/i);
   if (m) {
     return {
       date: m[1]!,
@@ -944,8 +946,7 @@ export function flatRowsToLegacy(
         signedLineEdge = signedProb;
         // Display / tag thresholds use percentage points (MLB: ≥1.5 LEAN / ≥3.0 PLAY).
         edgeLineNum = Math.abs(signedProb) * 100;
-        leanHome =
-          signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
+        leanHome = signedProb !== 0 ? signedProb > 0 : null; // +model vs market ⇒ Home
       }
     } else {
       // Compare home-side market vs home-side KEI.
@@ -1064,8 +1065,10 @@ export function flatRowsToLegacy(
       decisionMkt: number | null | undefined,
       fromCurrent: number | null,
     ): number | undefined => {
-      if (decisionMkt != null && Number.isFinite(decisionMkt)) return decisionMkt;
-      if (fromCurrent != null && Number.isFinite(fromCurrent)) return fromCurrent;
+      if (decisionMkt != null && Number.isFinite(decisionMkt))
+        return decisionMkt;
+      if (fromCurrent != null && Number.isFinite(fromCurrent))
+        return fromCurrent;
       return undefined;
     };
     const resolveActionEdge = (
@@ -1089,10 +1092,8 @@ export function flatRowsToLegacy(
     const marketSpreadHome =
       pickField((r) => r?.marketSpreadHome) ??
       (!isMoneyline ? parseSignedNum(bestLine.bottom.label) : null);
-    const matchupKeiTotal =
-      pickField((r) => r?.keiTotal) ?? keiTotalNum;
-    const matchupMarketTotal =
-      pickField((r) => r?.marketTotal) ?? bestTotalNum;
+    const matchupKeiTotal = pickField((r) => r?.keiTotal) ?? keiTotalNum;
+    const matchupMarketTotal = pickField((r) => r?.marketTotal) ?? bestTotalNum;
     const weekNum = (() => {
       const w = pickField((r) => r?.week as number | null | undefined);
       if (w != null) {
@@ -1109,10 +1110,8 @@ export function flatRowsToLegacy(
       gameId: String(src?.id ?? gameKey).replace(/-spread$|-total$/, ""),
       awayName: away,
       homeName: home,
-      awayAbbr:
-        pickField((r) => r?.awayAbbr) ?? undefined,
-      homeAbbr:
-        pickField((r) => r?.homeAbbr) ?? undefined,
+      awayAbbr: pickField((r) => r?.awayAbbr) ?? undefined,
+      homeAbbr: pickField((r) => r?.homeAbbr) ?? undefined,
       week: weekNum,
       seasonType: pickField((r) => r?.seasonType) ?? null,
       gamesPlayedAway: pickField((r) => r?.gamesPlayedAway) ?? null,
@@ -1145,8 +1144,7 @@ export function flatRowsToLegacy(
       : "Home";
     const awaySiteLabel: "Away" | "Home" = "Away";
 
-    const linesAsOf =
-      lineRow?.linesAsOf ?? totalRow?.linesAsOf ?? undefined;
+    const linesAsOf = lineRow?.linesAsOf ?? totalRow?.linesAsOf ?? undefined;
     result.push({
       id: String(lineRow?.id ?? total?.id ?? gameKey),
       time,
@@ -1157,8 +1155,7 @@ export function flatRowsToLegacy(
       teamA: {
         name: away,
         site: awaySiteLabel,
-        keiNumber:
-          keiLine.top.label !== "—" ? keiLine.top.label : undefined,
+        keiNumber: keiLine.top.label !== "—" ? keiLine.top.label : undefined,
       },
       teamB: {
         name: home,
@@ -1310,7 +1307,9 @@ export default function EdgeBoard({
           <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
           <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-3xl font-bebas text-edge-green">Edge Board</h2>
+              <h2 className="text-3xl font-bebas text-edge-green">
+                Edge Board
+              </h2>
               <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
                 Sample
               </span>
@@ -1375,8 +1374,8 @@ export default function EdgeBoard({
       </p>
       {marketsOnly ? (
         <p className="px-1 text-[11px] text-amber-200/80">
-          Open/Current from books when available. KEI Line / O/U / Edge stay blank
-          until a real model exists — we do not invent handicap numbers.
+          Open/Current from books when available. KEI Line / O/U / Edge stay
+          blank until a real model exists — we do not invent handicap numbers.
           {String(sportKey).toLowerCase() === "cfb"
             ? " Books ≠ KEI. Project Game stays MODEL research."
             : ""}
@@ -1493,8 +1492,7 @@ export default function EdgeBoard({
                   </div>
                   {r.modelLine || r.modelOU ? (
                     <div className="mt-2 text-[10px] leading-snug text-gray-400">
-                      Model{" "}
-                      {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
+                      Model {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
                       {r.modelOU ? r.modelOU.top.label : "—"}
                     </div>
                   ) : null}
@@ -1745,9 +1743,7 @@ export default function EdgeBoard({
                         <div className="mt-0.5 text-xs text-gray-400 leading-relaxed">
                           {r.isNeutral ? "Away" : r.teamA.site}
                           {r.teamA.record ? ` • ${r.teamA.record}` : ""}
-                          {r.teamA.confRecord
-                            ? ` (${r.teamA.confRecord})`
-                            : ""}
+                          {r.teamA.confRecord ? ` (${r.teamA.confRecord})` : ""}
                         </div>
                         <div className="mt-2.5 font-semibold leading-snug">
                           {r.teamB.name}
@@ -1769,9 +1765,7 @@ export default function EdgeBoard({
                             ? r.siteLabel || "Neutral"
                             : r.teamB.site}
                           {r.teamB.record ? ` • ${r.teamB.record}` : ""}
-                          {r.teamB.confRecord
-                            ? ` (${r.teamB.confRecord})`
-                            : ""}
+                          {r.teamB.confRecord ? ` (${r.teamB.confRecord})` : ""}
                         </div>
                         <button
                           type="button"
@@ -1871,7 +1865,9 @@ export default function EdgeBoard({
                           tag={r.tagLine}
                         />
                       </td>
-                      <td className={`${TD_DECISION} ${edgeCellClass(r.tagOU)}`}>
+                      <td
+                        className={`${TD_DECISION} ${edgeCellClass(r.tagOU)}`}
+                      >
                         <EdgeSideCell
                           edgeNum={r.edgeOUNum}
                           favor={r.edgeOUFavor}

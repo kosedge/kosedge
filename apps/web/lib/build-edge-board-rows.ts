@@ -85,10 +85,7 @@ async function pullOddsRows(sport: string): Promise<EdgeBoardRow[]> {
   return [];
 }
 
-function withFallback(
-  sport: string,
-  oddsRows: EdgeBoardRow[],
-): EdgeBoardRow[] {
+function withFallback(sport: string, oddsRows: EdgeBoardRow[]): EdgeBoardRow[] {
   if (countPriced(oddsRows) > 0 || oddsRows.length > 0) return oddsRows;
   return loadEdgeBoardFallback(sport);
 }

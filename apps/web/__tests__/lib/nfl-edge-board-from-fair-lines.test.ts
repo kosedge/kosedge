@@ -118,7 +118,9 @@ describe("nfl-edge-board-from-fair-lines", () => {
       }),
     ]);
     const spread = rows.find((r) => r.market === "Spread")!;
-    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(0.5);
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(
+      0.5,
+    );
     expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
     expect(spread.best).toBe("+3");
   });
@@ -317,7 +319,9 @@ describe("nfl-edge-board-from-fair-lines", () => {
     // Decision Engine action layer attached (Model fair vs market).
     // Week-1 early regime: |−3.5 − (−3.0)| = 0.5 → PASS (< 1.5).
     expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
-    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(0.5);
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(
+      0.5,
+    );
     expect(
       (spread as { modelConfidenceBand?: string }).modelConfidenceBand,
     ).toBeTruthy();
