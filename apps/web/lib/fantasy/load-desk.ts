@@ -32,7 +32,7 @@ import {
 } from "@/lib/nfl-preseason-artifacts";
 
 const LIMITATIONS_BASE = [
-  "KosEdge Draft Rank is our recommended snake order: projection rank with ADP reach/wait guardrails. Model rank stays raw points order. Value Δ is market comparison only — not the default board sort.",
+  "KosEdge Draft Rank = model projection order with a hard reach cap (~12 picks before ADP). Model rank column stays raw points. Value Δ tab is market comparison only.",
   "Draft advice (Builder suggestions + Mock on-the-clock + CPU) is ADP-aware: need + VOR − reach penalty when you would take a player before ADP. Same projections; different action scoring. Not an optimal-pick claim.",
   "Floor–med–ceiling from model quantiles when present; else a band around median.",
   "Schedule softness: W1–6 vs W14–17 opponent expected wins — not a full matchup sim.",

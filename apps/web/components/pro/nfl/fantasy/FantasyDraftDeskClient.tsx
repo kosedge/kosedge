@@ -4,11 +4,9 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
-import { AdpQaFlagChip } from "@/components/pro/nfl/fantasy/AdpQaFlagChip";
 import { PlayerCombobox } from "@/components/pro/nfl/fantasy/PlayerCombobox";
 import { formatAdp, valueLabel } from "@/lib/fantasy/adp-proxy";
-import { draftRank } from "@/lib/fantasy/desk-rank-policy";
-import { notableValueNotes, tierCliffNote } from "@/lib/fantasy/expert";
+import { deskDraftBadge, draftRank } from "@/lib/fantasy/desk-rank-policy";
 import {
   bestAvailableByNeed,
   bestAvailableByValue,
@@ -16,10 +14,7 @@ import {
   teamGrade,
   type ValueAwareSuggestion,
 } from "@/lib/fantasy/team-builder";
-import {
-  draftAdviceClass,
-  deskDraftAdvice,
-} from "@/lib/fantasy/value-aware-recs";
+import { draftAdviceClass } from "@/lib/fantasy/value-aware-recs";
 import type { FantasyDeskBoard, FantasyDeskRow } from "@/lib/fantasy/types";
 import {
   draftPositionBadgeClass,
@@ -169,15 +164,6 @@ export function FantasyDraftDeskClient({
     );
   }, [board.rows, query, tab, trueValuesOnly, posFilter]);
 
-  const expertNotes = useMemo(() => {
-    const notes = notableValueNotes(board.rows, 3);
-    for (const pos of ["RB", "WR", "TE", "QB"] as const) {
-      const cliff = tierCliffNote(board.rows, pos);
-      if (cliff) notes.push(cliff);
-    }
-    return notes.slice(0, 5);
-  }, [board.rows]);
-
   const grade = teamGrade(roster, board.rows);
   const needs = rosterNeeds(roster, board.rows);
   const byValue = bestAvailableByValue(board.rows, rosterSet, 5, { roster });
@@ -221,8 +207,8 @@ export function FantasyDraftDeskClient({
                 Fantasy Draft Desk
               </h1>
               <p className="mt-3 max-w-2xl text-sm text-kos-text/75 sm:text-base">
-                KosEdge draft order from our projections — ADP limits extreme
-                reaches and falls. Default format PPR.{" "}
+                Our draft order — model rank with a hard reach cap vs ADP.
+                Default PPR.{" "}
                 <Link
                   href="/pro/model-transparency#fantasy"
                   className="text-kos-text/45 hover:text-kos-gold"
@@ -230,16 +216,9 @@ export function FantasyDraftDeskClient({
                   Methods
                 </Link>
               </p>
-              <p className="mt-2 text-[11px] uppercase tracking-[0.14em] text-kos-text/45">
-                Source · {board.source} · {board.adpSourceLabel}
-              </p>
-              <p className="mt-1 text-[11px] text-kos-text/40">
-                ADP {board.adpFreshnessLabel} · matched {board.adpMatchedCount}/
-                {board.count} ({board.adpMatchedHighCount} high for Value Δ
-                {board.adpMatchedCrossFormatCount > 0
-                  ? ` · ${board.adpMatchedCrossFormatCount} cross-format`
-                  : ""}
-                )
+              <p className="mt-2 text-[11px] text-kos-text/40">
+                {board.adpSourceLabel} · {board.adpFreshnessLabel} · matched{" "}
+                {board.adpMatchedCount}/{board.count}
               </p>
             </div>
             <div className="grid min-w-44 gap-2">
@@ -340,29 +319,6 @@ export function FantasyDraftDeskClient({
             </p>
           ) : null}
         </HonestStatusBanner>
-      ) : null}
-
-      {!isEmpty && expertNotes.length > 0 ? (
-        <section className="rounded-2xl border border-white/10 bg-black/35 p-4 sm:p-5">
-          <div className="flex items-center justify-between gap-3">
-            <h2 className="text-sm font-semibold uppercase tracking-[0.12em] text-kos-gold">
-              Fantasy Expert
-            </h2>
-            <span className="text-[11px] text-kos-text/50">
-              Rank vs ADP · yards / role
-            </span>
-          </div>
-          <ul className="mt-3 space-y-2">
-            {expertNotes.map((note) => (
-              <li
-                key={note}
-                className="border-l-2 border-kos-gold/40 pl-3 text-sm text-kos-text/80"
-              >
-                {note}
-              </li>
-            ))}
-          </ul>
-        </section>
       ) : null}
 
       {!isEmpty ? (
@@ -490,8 +446,7 @@ export function FantasyDraftDeskClient({
                 </h2>
                 {tab === "draft" ? (
                   <p className="mt-0.5 text-[11px] text-kos-text/50">
-                    Projection order with ADP reach/wait guardrails — default
-                    snake take list
+                    Model rank with hard reach cap — never ~4 rounds above ADP
                   </p>
                 ) : tab === "value" ? (
                   <p className="mt-0.5 text-[11px] text-kos-text/50">
@@ -554,7 +509,7 @@ export function FantasyDraftDeskClient({
                 <ul className="divide-y divide-white/10 md:hidden">
                   {filtered.map((row) => {
                     const value = valueLabel(row.valueDelta);
-                    const advice = deskDraftAdvice(row);
+                    const badge = deskDraftBadge(row);
                     const onRoster = rosterSet.has(row.playerId);
                     const muted =
                       tab === "value" &&
@@ -595,11 +550,6 @@ export function FantasyDraftDeskClient({
                                   Model #{row.rankOverall}
                                 </p>
                               ) : null}
-                              {row.adpQaFlag ? (
-                                <div className="mt-1">
-                                  <AdpQaFlagChip flag={row.adpQaFlag} />
-                                </div>
-                              ) : null}
                               <p className="mt-0.5 text-xs text-kos-text/55">
                                 {row.position}
                                 {row.rankPosition} · {row.team} · ADP{" "}
@@ -614,22 +564,25 @@ export function FantasyDraftDeskClient({
                             </div>
                           </button>
                           <div className="flex shrink-0 flex-col items-end gap-1.5">
-                            <span
-                              className={`text-xs font-semibold ${
-                                value.kind === "value"
-                                  ? "text-edge-green"
-                                  : value.kind === "reach"
-                                    ? "text-rose-300"
-                                    : "text-kos-text/60"
-                              }`}
-                            >
-                              {value.text}
-                            </span>
-                            <span
-                              className={`max-w-[9rem] text-right text-[10px] leading-tight ${draftAdviceClass(advice.timing)}`}
-                            >
-                              {advice.label}
-                            </span>
+                            {tab === "value" ? (
+                              <span
+                                className={`text-xs font-semibold ${
+                                  value.kind === "value"
+                                    ? "text-edge-green"
+                                    : value.kind === "reach"
+                                      ? "text-rose-300"
+                                      : "text-kos-text/60"
+                                }`}
+                              >
+                                {value.text}
+                              </span>
+                            ) : (
+                              <span
+                                className={`text-xs font-semibold ${draftAdviceClass(badge.timing)}`}
+                              >
+                                {badge.label}
+                              </span>
+                            )}
                             <button
                               type="button"
                               onClick={() => toggleRoster(row.playerId)}
@@ -662,8 +615,7 @@ export function FantasyDraftDeskClient({
                               "Team",
                               "Med",
                               "ADP",
-                              "vs ADP",
-                              "Advice",
+                              "Tag",
                               "Floor",
                               "Ceil",
                               "Schedule",
@@ -677,8 +629,7 @@ export function FantasyDraftDeskClient({
                                 "Pos",
                                 "Team",
                                 "ADP",
-                                "vs ADP",
-                                "Advice",
+                                "Tag",
                                 "Floor",
                                 "Med",
                                 "Ceil",
@@ -692,7 +643,7 @@ export function FantasyDraftDeskClient({
                                 "Team",
                                 "ADP",
                                 "Value Δ",
-                                "Advice",
+                                "Tag",
                                 "Floor",
                                 "Med",
                                 "Ceil",
@@ -712,7 +663,7 @@ export function FantasyDraftDeskClient({
                     <tbody>
                       {filtered.map((row, idx) => {
                         const value = valueLabel(row.valueDelta);
-                        const advice = deskDraftAdvice(row);
+                        const badge = deskDraftBadge(row);
                         const onRoster = rosterSet.has(row.playerId);
                         const muted =
                           tab === "value" &&
@@ -778,7 +729,6 @@ export function FantasyDraftDeskClient({
                                     R
                                   </span>
                                 ) : null}
-                                <AdpQaFlagChip flag={row.adpQaFlag} />
                               </div>
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2">
@@ -800,21 +750,23 @@ export function FantasyDraftDeskClient({
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/80">
                               {formatAdp(row.adp)}
                             </td>
+                            {tab === "value" ? (
+                              <td
+                                className={`border-b border-white/5 px-2.5 py-2 text-sm font-semibold ${
+                                  value.kind === "value"
+                                    ? "text-edge-green"
+                                    : value.kind === "reach"
+                                      ? "text-rose-300"
+                                      : "text-kos-text/70"
+                                }`}
+                              >
+                                {value.text}
+                              </td>
+                            ) : null}
                             <td
-                              className={`border-b border-white/5 px-2.5 py-2 text-sm font-semibold ${
-                                value.kind === "value"
-                                  ? "text-edge-green"
-                                  : value.kind === "reach"
-                                    ? "text-rose-300"
-                                    : "text-kos-text/70"
-                              }`}
+                              className={`border-b border-white/5 px-2.5 py-2 text-sm font-semibold ${draftAdviceClass(badge.timing)}`}
                             >
-                              {value.text}
-                            </td>
-                            <td
-                              className={`border-b border-white/5 px-2.5 py-2 text-[11px] font-medium ${draftAdviceClass(advice.timing)}`}
-                            >
-                              {advice.label}
+                              {tab === "value" ? badge.label : badge.label}
                             </td>
                             <td className="border-b border-white/5 px-2.5 py-2 text-sm text-kos-text/75">
                               {row.floorPoints.toFixed(0)}
@@ -875,8 +827,7 @@ export function FantasyDraftDeskClient({
       ) : null}
 
       <p className="text-[11px] leading-relaxed text-kos-text/45">
-        Rank = our projections; ADP limits extreme reaches/falls. Default format
-        PPR.{" "}
+        Rank = our projections; hard cap ~1 round above ADP. Default format PPR.{" "}
         <Link
           href="/pro/model-transparency#fantasy"
           className="text-kos-text/45 hover:text-kos-gold"
@@ -900,8 +851,7 @@ function PlayerCard({
   if (!row) {
     return (
       <aside className="rounded-2xl border border-dashed border-white/15 bg-black/30 p-5 text-sm text-kos-text/60">
-        Tap a player to open the card — projections, value vs ADP, and the
-        Fantasy Expert note.
+        Tap a player for projections, model rank, and ADP.
       </aside>
     );
   }
@@ -920,11 +870,6 @@ function PlayerCard({
             {row.team} · {row.position}
             {row.rankPosition} · {draftTierLabel(row.tier)}
           </p>
-          {row.adpQaFlag ? (
-            <div className="mt-2">
-              <AdpQaFlagChip flag={row.adpQaFlag} />
-            </div>
-          ) : null}
         </div>
         <span
           className={`shrink-0 rounded-full border px-2 py-0.5 text-[11px] font-semibold ${draftTierBadgeClass(row.tier)}`}
@@ -947,45 +892,14 @@ function PlayerCard({
           </p>
         </div>
         <div className="rounded-xl border border-white/10 bg-black/30 p-3">
-          <p className="text-[10px] uppercase text-kos-text/45">Value Δ</p>
+          <p className="text-[10px] uppercase text-kos-text/45">Tag</p>
           <p
-            className={`mt-1 font-semibold ${
-              (row.valueDelta ?? 0) >= 8
-                ? "text-edge-green"
-                : (row.valueDelta ?? 0) <= -8
-                  ? "text-rose-300"
-                  : "text-kos-text"
-            }`}
+            className={`mt-1 font-semibold ${draftAdviceClass(deskDraftBadge(row).timing)}`}
           >
-            {row.valueDelta == null
-              ? "—"
-              : `${row.valueDelta >= 0 ? "+" : ""}${row.valueDelta.toFixed(1)}`}
+            {deskDraftBadge(row).label}
           </p>
         </div>
       </div>
-      {(() => {
-        const advice = deskDraftAdvice(row);
-        return (
-          <p className={`mt-2 text-xs ${draftAdviceClass(advice.timing)}`}>
-            {advice.label}
-          </p>
-        );
-      })()}
-
-      {row.adpQaFlag ? (
-        <div className="mt-4 rounded-xl border border-kos-gold/25 bg-kos-gold/8 p-3">
-          <p className="text-[10px] uppercase tracking-[0.12em] text-kos-gold">
-            {row.adpQaFlag.categoryLabel} · why this gap
-          </p>
-          <ul className="mt-2 space-y-1.5">
-            {row.adpQaFlag.drivers.map((d) => (
-              <li key={d} className="text-sm text-kos-text/80">
-                · {d}
-              </li>
-            ))}
-          </ul>
-        </div>
-      ) : null}
 
       <div className="mt-4">
         <p className="text-[10px] uppercase tracking-[0.12em] text-kos-text/45">
@@ -998,15 +912,6 @@ function PlayerCard({
             </li>
           ))}
         </ul>
-      </div>
-
-      <div className="mt-4 rounded-xl border border-white/10 bg-black/25 p-3">
-        <p className="text-[10px] uppercase tracking-[0.12em] text-kos-gold">
-          Fantasy Expert
-        </p>
-        <p className="mt-2 text-sm leading-relaxed text-kos-text/80">
-          {row.expertBlurb}
-        </p>
       </div>
 
       <div className="mt-4">

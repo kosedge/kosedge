@@ -1,9 +1,12 @@
 import { describe, expect, it } from "vitest";
 import {
   applyDeskRankPolicy,
-  boardRank,
+  assertNoHardReachViolations,
   deskBoardKey,
+  deskDraftBadge,
   DESK_RANK_POLICY,
+  draftRank,
+  isReachCapped,
 } from "@/lib/fantasy/desk-rank-policy";
 import type { DeskRankable } from "@/lib/fantasy/desk-rank-policy";
 
@@ -29,39 +32,30 @@ describe("desk rank policy", () => {
     expect(deskBoardKey(row)).toBe(4);
   });
 
-  it("does not blend cross-format ADP into the board key", () => {
+  it("hard caps a four-round model reach vs ADP", () => {
     const row = player({
-      rankOverall: 4,
-      position: "RB",
-      adp: 133,
-      adpMatchConfidence: "cross_format",
-    });
-    expect(deskBoardKey(row)).toBe(4);
-  });
-
-  it("penalizes reaching ADP by more than one round", () => {
-    const charbonnet = player({
-      rankOverall: 4,
-      position: "RB",
-      adp: 133,
+      rankOverall: 24,
+      position: "WR",
+      adp: 72,
       adpMatchConfidence: "high",
     });
-    const cmc = player({
-      rankOverall: 1,
-      position: "RB",
-      adp: 5,
-      adpMatchConfidence: "high",
-    });
-    expect(deskBoardKey(charbonnet)).toBeGreaterThan(deskBoardKey(cmc));
-    expect(deskBoardKey(charbonnet)).toBeGreaterThan(charbonnet.rankOverall);
-    const extra = 133 - 4 - DESK_RANK_POLICY.reachFreePicks;
-    expect(deskBoardKey(charbonnet)).toBeCloseTo(
-      4 + extra * DESK_RANK_POLICY.reachPenaltyPerPick,
-      5,
-    );
+    expect(deskBoardKey(row)).toBe(60);
+    expect(isReachCapped(row)).toBe(true);
+    expect(deskDraftBadge(row).label).toBe("Wait");
   });
 
-  it("lets a model favorite wait-bubble modestly vs ADP", () => {
+  it("allows a small reach within the cap", () => {
+    const henry = player({
+      rankOverall: 30,
+      position: "RB",
+      adp: 40,
+      adpMatchConfidence: "high",
+    });
+    expect(deskBoardKey(henry)).toBe(30);
+    expect(deskDraftBadge(henry).label).toBe("Reach");
+  });
+
+  it("bubbles a falling model favorite modestly vs ADP", () => {
     const gibbs = player({
       rankOverall: 17,
       position: "RB",
@@ -69,35 +63,15 @@ describe("desk rank policy", () => {
       adpMatchConfidence: "high",
     });
     expect(deskBoardKey(gibbs)).toBeLessThan(17);
-    const wait = Math.min(17 - 1, DESK_RANK_POLICY.waitBubbleCapPicks);
-    expect(deskBoardKey(gibbs)).toBeCloseTo(
-      17 - wait * DESK_RANK_POLICY.waitBubblePerPick,
-      5,
-    );
+    expect(deskDraftBadge(gibbs).label).toBe("Value");
   });
 
-  it("adds extra QB suppress when Model ranks a QB 2+ rounds ahead of ADP", () => {
-    const qb = player({
-      rankOverall: 10,
-      position: "QB",
-      adp: 80,
-      adpMatchConfidence: "high",
-    });
-    const rb = player({
-      rankOverall: 20,
-      position: "RB",
-      adp: 22,
-      adpMatchConfidence: "high",
-    });
-    expect(deskBoardKey(qb)).toBeGreaterThan(deskBoardKey(rb));
-  });
-
-  it("reorders the board without mutating Model rank", () => {
+  it("reorders without mutating model rank", () => {
     const rows = [
       player({
-        rankOverall: 4,
-        position: "RB",
-        adp: 133,
+        rankOverall: 24,
+        position: "WR",
+        adp: 72,
         adpMatchConfidence: "high",
       }),
       player({
@@ -107,16 +81,43 @@ describe("desk rank policy", () => {
         adpMatchConfidence: "high",
       }),
       player({
-        rankOverall: 17,
+        rankOverall: 30,
         position: "RB",
-        adp: 1,
+        adp: 40,
         adpMatchConfidence: "high",
       }),
     ];
     const ordered = applyDeskRankPolicy(rows);
-    expect(ordered.map((r) => r.rankOverall)).toEqual([1, 17, 4]);
-    expect(ordered.map((r) => r.deskOrder)).toEqual([1, 2, 3]);
-    expect(boardRank(ordered[2]!)).toBe(3);
-    expect(ordered[2]?.rankOverall).toBe(4);
+    expect(ordered.map((r) => r.rankOverall)).toEqual([1, 30, 24]);
+    expect(deskBoardKey(ordered.find((r) => r.rankOverall === 24)!)).toBe(60);
+    assertNoHardReachViolations(ordered);
+  });
+
+  it("never places a board slot more than reachCap before ADP", () => {
+    const rows = applyDeskRankPolicy([
+      player({
+        rankOverall: 4,
+        position: "RB",
+        adp: 133,
+        adpMatchConfidence: "high",
+      }),
+      player({
+        rankOverall: 10,
+        position: "QB",
+        adp: 80,
+        adpMatchConfidence: "high",
+      }),
+      player({
+        rankOverall: 3,
+        position: "QB",
+        adp: 28,
+        adpMatchConfidence: "high",
+      }),
+    ]);
+    for (const row of rows) {
+      if (row.adp == null || row.adpMatchConfidence !== "high") continue;
+      const reach = row.adp - deskBoardKey(row);
+      expect(reach).toBeLessThanOrEqual(DESK_RANK_POLICY.reachCapPicks);
+    }
   });
 });
