@@ -1,0 +1,460 @@
+{
+  "season": 2026,
+  "source": "player-production-v3-phase3c-100k",
+  "generated_at_utc": "2026-08-22T02:10:50.671259+00:00",
+  "research_dir": "data/ops/nfl-season-engine-launch-nfl-season-engine-v1.27-kicker-layer-Nteam100000-Nplayer1000-20260822T004326Z",
+  "n_player_rows": 383,
+  "kickers": [
+    {
+      "player_id": "00-0038567",
+      "player_name": "Chad Ryland",
+      "team": "ARI",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.635,
+      "fantasy_points": 107.046
+    },
+    {
+      "player_id": "00-0025565",
+      "player_name": "Nick Folk",
+      "team": "ATL",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.657,
+      "fantasy_points": 108.026
+    },
+    {
+      "player_id": "00-0040074",
+      "player_name": "Tyler Loop",
+      "team": "BAL",
+      "fg_attempts": 31.45,
+      "xp_attempts": 30.063,
+      "fantasy_points": 109.152
+    },
+    {
+      "player_id": "00-0036162",
+      "player_name": "Tyler Bass",
+      "team": "BUF",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.886,
+      "fantasy_points": 108.982
+    },
+    {
+      "player_id": "00-0040279",
+      "player_name": "Ryan Fitzgerald",
+      "team": "CAR",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.032,
+      "fantasy_points": 106.243
+    },
+    {
+      "player_id": "00-0031203",
+      "player_name": "Cairo Santos",
+      "team": "CHI",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.191,
+      "fantasy_points": 108.316
+    },
+    {
+      "player_id": "00-0036854",
+      "player_name": "Evan McPherson",
+      "team": "CIN",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.98,
+      "fantasy_points": 107.153
+    },
+    {
+      "player_id": "00-0038428",
+      "player_name": "Andre Szmyt",
+      "team": "CLE",
+      "fg_attempts": 31.45,
+      "xp_attempts": 26.294,
+      "fantasy_points": 105.534
+    },
+    {
+      "player_id": "00-0037692",
+      "player_name": "Brandon Aubrey",
+      "team": "DAL",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.765,
+      "fantasy_points": 109.089
+    },
+    {
+      "player_id": "00-0032569",
+      "player_name": "Wil Lutz",
+      "team": "DEN",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.995,
+      "fantasy_points": 108.127
+    },
+    {
+      "player_id": "00-0039172",
+      "player_name": "Jake Bates",
+      "team": "DET",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.534,
+      "fantasy_points": 108.868
+    },
+    {
+      "player_id": "00-0038152",
+      "player_name": "Lucas Havrisik",
+      "team": "GB",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.417,
+      "fantasy_points": 108.531
+    },
+    {
+      "player_id": "00-0032726",
+      "player_name": "Ka'imi Fairbairn",
+      "team": "HOU",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.222,
+      "fantasy_points": 107.608
+    },
+    {
+      "player_id": "00-0038905",
+      "player_name": "Blake Grupe",
+      "team": "IND",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.316,
+      "fantasy_points": 108.659
+    },
+    {
+      "player_id": "00-0039409",
+      "player_name": "Cam Little",
+      "team": "JAX",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.74,
+      "fantasy_points": 107.884
+    },
+    {
+      "player_id": "00-0033303",
+      "player_name": "Harrison Butker",
+      "team": "KC",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.298,
+      "fantasy_points": 107.459
+    },
+    {
+      "player_id": "00-0037224",
+      "player_name": "Cameron Dicker",
+      "team": "LAC",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.552,
+      "fantasy_points": 106.741
+    },
+    {
+      "player_id": "00-0039498",
+      "player_name": "Harrison Mevis",
+      "team": "LAR",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.704,
+      "fantasy_points": 108.808
+    },
+    {
+      "player_id": "00-0035269",
+      "player_name": "Matt Gay",
+      "team": "LV",
+      "fg_attempts": 31.45,
+      "xp_attempts": 25.911,
+      "fantasy_points": 105.391
+    },
+    {
+      "player_id": "00-0036816",
+      "player_name": "Riley Patterson",
+      "team": "MIA",
+      "fg_attempts": 31.45,
+      "xp_attempts": 26.544,
+      "fantasy_points": 105.774
+    },
+    {
+      "player_id": "00-0039404",
+      "player_name": "Will Reichard",
+      "team": "MIN",
+      "fg_attempts": 31.45,
+      "xp_attempts": 25.638,
+      "fantasy_points": 105.128
+    },
+    {
+      "player_id": "00-0040200",
+      "player_name": "Andy Borregales",
+      "team": "NE",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.638,
+      "fantasy_points": 107.785
+    },
+    {
+      "player_id": "00-0039229",
+      "player_name": "Charlie Smyth",
+      "team": "NO",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.389,
+      "fantasy_points": 106.809
+    },
+    {
+      "player_id": "00-0040530",
+      "player_name": "Ben Sauls",
+      "team": "NYG",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.344,
+      "fantasy_points": 107.501
+    },
+    {
+      "player_id": "00-0034794",
+      "player_name": "Jason Sanders",
+      "team": "NYJ",
+      "fg_attempts": 31.45,
+      "xp_attempts": 25.456,
+      "fantasy_points": 104.728
+    },
+    {
+      "player_id": "00-0033787",
+      "player_name": "Jake Elliott",
+      "team": "PHI",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.56,
+      "fantasy_points": 108.669
+    },
+    {
+      "player_id": "00-0031136",
+      "player_name": "Chris Boswell",
+      "team": "PIT",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.509,
+      "fantasy_points": 106.701
+    },
+    {
+      "player_id": "00-0031492",
+      "player_name": "Jason Myers",
+      "team": "SEA",
+      "fg_attempts": 31.45,
+      "xp_attempts": 31.107,
+      "fantasy_points": 110.153
+    },
+    {
+      "player_id": "00-0034173",
+      "player_name": "Eddy Pineiro",
+      "team": "SF",
+      "fg_attempts": 31.45,
+      "xp_attempts": 29.315,
+      "fantasy_points": 108.434
+    },
+    {
+      "player_id": "00-0035358",
+      "player_name": "Chase McLaughlin",
+      "team": "TB",
+      "fg_attempts": 31.45,
+      "xp_attempts": 28.46,
+      "fantasy_points": 107.613
+    },
+    {
+      "player_id": "00-0035192",
+      "player_name": "Joey Slye",
+      "team": "TEN",
+      "fg_attempts": 31.45,
+      "xp_attempts": 26.0,
+      "fantasy_points": 105.252
+    },
+    {
+      "player_id": "00-0038562",
+      "player_name": "Jake Moody",
+      "team": "WAS",
+      "fg_attempts": 31.45,
+      "xp_attempts": 27.805,
+      "fantasy_points": 106.986
+    }
+  ],
+  "dst": [
+    {
+      "team": "ARI",
+      "points_allowed_mean": 26.0441,
+      "sacks": 35.0,
+      "fantasy_points": 72.413
+    },
+    {
+      "team": "ATL",
+      "points_allowed_mean": 23.2794,
+      "sacks": 37.75,
+      "fantasy_points": 92.303
+    },
+    {
+      "team": "BAL",
+      "points_allowed_mean": 19.8082,
+      "sacks": 46.575,
+      "fantasy_points": 116.791
+    },
+    {
+      "team": "BUF",
+      "points_allowed_mean": 20.4342,
+      "sacks": 40.039,
+      "fantasy_points": 123.64
+    },
+    {
+      "team": "CAR",
+      "points_allowed_mean": 25.1884,
+      "sacks": 30.797,
+      "fantasy_points": 70.837
+    },
+    {
+      "team": "CHI",
+      "points_allowed_mean": 23.9143,
+      "sacks": 31.571,
+      "fantasy_points": 95.817
+    },
+    {
+      "team": "CIN",
+      "points_allowed_mean": 24.0286,
+      "sacks": 36.186,
+      "fantasy_points": 96.103
+    },
+    {
+      "team": "CLE",
+      "points_allowed_mean": 23.2174,
+      "sacks": 43.362,
+      "fantasy_points": 98.41
+    },
+    {
+      "team": "DAL",
+      "points_allowed_mean": 24.1831,
+      "sacks": 45.014,
+      "fantasy_points": 109.252
+    },
+    {
+      "team": "DEN",
+      "points_allowed_mean": 20.6338,
+      "sacks": 52.437,
+      "fantasy_points": 121.404
+    },
+    {
+      "team": "DET",
+      "points_allowed_mean": 23.6389,
+      "sacks": 40.847,
+      "fantasy_points": 95.92
+    },
+    {
+      "team": "GB",
+      "points_allowed_mean": 21.2222,
+      "sacks": 39.667,
+      "fantasy_points": 103.691
+    },
+    {
+      "team": "HOU",
+      "points_allowed_mean": 21.0405,
+      "sacks": 46.405,
+      "fantasy_points": 129.032
+    },
+    {
+      "team": "IND",
+      "points_allowed_mean": 24.7206,
+      "sacks": 42.5,
+      "fantasy_points": 98.975
+    },
+    {
+      "team": "JAX",
+      "points_allowed_mean": 22.1972,
+      "sacks": 34.718,
+      "fantasy_points": 101.891
+    },
+    {
+      "team": "KC",
+      "points_allowed_mean": 19.7179,
+      "sacks": 46.205,
+      "fantasy_points": 103.371
+    },
+    {
+      "team": "LAC",
+      "points_allowed_mean": 21.1549,
+      "sacks": 45.014,
+      "fantasy_points": 110.033
+    },
+    {
+      "team": "LAR",
+      "points_allowed_mean": 22.0676,
+      "sacks": 43.189,
+      "fantasy_points": 102.967
+    },
+    {
+      "team": "LV",
+      "points_allowed_mean": 23.75,
+      "sacks": 36.5,
+      "fantasy_points": 79.225
+    },
+    {
+      "team": "MIA",
+      "points_allowed_mean": 23.4,
+      "sacks": 42.986,
+      "fantasy_points": 95.141
+    },
+    {
+      "team": "MIN",
+      "points_allowed_mean": 21.6,
+      "sacks": 44.443,
+      "fantasy_points": 109.933
+    },
+    {
+      "team": "NE",
+      "points_allowed_mean": 20.9028,
+      "sacks": 38.722,
+      "fantasy_points": 111.077
+    },
+    {
+      "team": "NO",
+      "points_allowed_mean": 21.3676,
+      "sacks": 41.25,
+      "fantasy_points": 100.762
+    },
+    {
+      "team": "NYG",
+      "points_allowed_mean": 24.2,
+      "sacks": 38.371,
+      "fantasy_points": 89.368
+    },
+    {
+      "team": "NYJ",
+      "points_allowed_mean": 23.2059,
+      "sacks": 39.5,
+      "fantasy_points": 92.339
+    },
+    {
+      "team": "PHI",
+      "points_allowed_mean": 20.5714,
+      "sacks": 49.455,
+      "fantasy_points": 125.008
+    },
+    {
+      "team": "PIT",
+      "points_allowed_mean": 21.0282,
+      "sacks": 43.338,
+      "fantasy_points": 116.992
+    },
+    {
+      "team": "SEA",
+      "points_allowed_mean": 21.5278,
+      "sacks": 45.333,
+      "fantasy_points": 122.331
+    },
+    {
+      "team": "SF",
+      "points_allowed_mean": 20.8553,
+      "sacks": 36.013,
+      "fantasy_points": 102.762
+    },
+    {
+      "team": "TB",
+      "points_allowed_mean": 21.8472,
+      "sacks": 42.736,
+      "fantasy_points": 101.958
+    },
+    {
+      "team": "TEN",
+      "points_allowed_mean": 24.4706,
+      "sacks": 39.5,
+      "fantasy_points": 79.938
+    },
+    {
+      "team": "WAS",
+      "points_allowed_mean": 25.4789,
+      "sacks": 40.944,
+      "fantasy_points": 79.129
+    }
+  ],
+  "gaps": []
+}

@@ -5139,6 +5139,14 @@ def nfl_trigger_fantasy_draft_rankings_materialization(
     return {"task_id": task.id, "task_name": TASK_NFL_FANTASY_DRAFT_RANKINGS, "season": season, "model_version": model_version}
 
 
+@router.get("/ops/kdst-publish-status")
+def nfl_kdst_publish_status(season: int = Query(2026, ge=2010, le=2100)) -> Dict[str, Any]:
+    """Where remat will look for named K/DST — confirms the worker image has the file."""
+    from src.services.nfl_kdst_publish import kdst_publish_status
+
+    return kdst_publish_status(int(season))
+
+
 @router.post("/ops/materialize-award-projections")
 def nfl_trigger_award_projections_materialization(
     season: int = Query(..., ge=2010, le=2100),

@@ -21,8 +21,14 @@ Artifact schema (optional file)::
       ]
     }
 
-Path: ``NFL_KDST_PUBLISH_PATH`` or
+Path: ``NFL_KDST_PUBLISH_PATH``, then walk up from this module looking for
 ``data/ops/artifacts/nfl-kdst-season-{season}.json``.
+
+Railway deploys ``services/model-service`` as ``/app`` (``railway up
+--path-as-root``). The repo-root file is therefore copied into
+``services/model-service/data/ops/artifacts/`` so ``COPY . .`` puts it at
+``/app/data/ops/artifacts/``. Local Mac still finds the worktree copy by
+walking up to repo root.
 """
 
 from __future__ import annotations
@@ -33,15 +39,46 @@ from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 
-def default_kdst_artifact_path(season: int) -> Path:
-    here = Path(__file__).resolve()
-    repo = here.parents[4] if len(here.parents) >= 4 else here.parents[-1]
-    return repo / "data" / "ops" / "artifacts" / f"nfl-kdst-season-{int(season)}.json"
+def kdst_artifact_candidates(season: int, *, start: Optional[Path] = None) -> List[Path]:
+    """Search env (exclusive if set), then walk up from this module (repo or /app)."""
+    name = f"nfl-kdst-season-{int(season)}.json"
+    override = os.environ.get("NFL_KDST_PUBLISH_PATH")
+    if override:
+        return [Path(override)]
+    here = (start or Path(__file__)).resolve()
+    root = here.parent if here.suffix else here
+    out: List[Path] = [
+        root / "nfl_season_engine" / "data" / name,
+    ]
+    for parent in [root, *root.parents]:
+        out.append(parent / "data" / "ops" / "artifacts" / name)
+    out.append(Path.cwd() / "data" / "ops" / "artifacts" / name)
+    seen: set[str] = set()
+    uniq: List[Path] = []
+    for path in out:
+        key = str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        uniq.append(path)
+    return uniq
+
+
+def default_kdst_artifact_path(season: int, *, start: Optional[Path] = None) -> Path:
+    """First existing candidate, else the first search path (env or Docker layout)."""
+    cands = kdst_artifact_candidates(season, start=start)
+    for path in cands:
+        if path.is_file():
+            return path
+    if cands:
+        return cands[0]
+    here = (start or Path(__file__)).resolve()
+    service_root = here.parents[2] if len(here.parents) >= 2 else here.parent
+    return service_root / "data" / "ops" / "artifacts" / f"nfl-kdst-season-{int(season)}.json"
 
 
 def load_kdst_publish_artifact(season: int) -> Optional[Dict[str, Any]]:
-    override = os.environ.get("NFL_KDST_PUBLISH_PATH")
-    path = Path(override) if override else default_kdst_artifact_path(season)
+    path = default_kdst_artifact_path(season)
     if not path.is_file():
         return None
     try:
@@ -67,10 +104,12 @@ def load_kdst_publish_artifact(season: int) -> Optional[Dict[str, Any]]:
 def kdst_publish_status(season: int) -> Dict[str, Any]:
     art = load_kdst_publish_artifact(season)
     if not art:
+        missing = default_kdst_artifact_path(season)
         return {
             "status": "missing",
             "kickers": 0,
             "dst": 0,
+            "path": str(missing),
             "note": "Honest empty until artifact or history remat publishes K/DST into draft rankings.",
         }
     return {
@@ -79,6 +118,7 @@ def kdst_publish_status(season: int) -> Dict[str, Any]:
         "dst": len(art["dst"]),
         "source": art.get("source"),
         "path": art.get("path"),
+        "resolved": True,
     }
 
 

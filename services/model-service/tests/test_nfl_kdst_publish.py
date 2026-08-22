@@ -4,12 +4,35 @@ import json
 from pathlib import Path
 
 from src.services.nfl_kdst_publish import (
+    default_kdst_artifact_path,
     dst_overlay_for_team,
     kdst_publish_status,
     kdst_volume_overlay_for_team,
     load_kdst_publish_artifact,
     named_kickers_from_artifact,
 )
+
+
+def test_walks_up_to_service_root_data_ops(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.delenv("NFL_KDST_PUBLISH_PATH", raising=False)
+    module = tmp_path / "src" / "services" / "nfl_kdst_publish.py"
+    module.parent.mkdir(parents=True)
+    module.write_text("# placeholder\n", encoding="utf-8")
+    artifact = tmp_path / "data" / "ops" / "artifacts" / "nfl-kdst-season-2026.json"
+    artifact.parent.mkdir(parents=True)
+    artifact.write_text(
+        json.dumps({"season": 2026, "kickers": [{"player_id": "k1", "team": "KC"}], "dst": []}),
+        encoding="utf-8",
+    )
+    found = default_kdst_artifact_path(2026, start=module)
+    assert found == artifact
+
+
+def test_env_override_is_exclusive_even_when_missing(tmp_path: Path, monkeypatch) -> None:
+    monkeypatch.setenv("NFL_KDST_PUBLISH_PATH", str(tmp_path / "none.json"))
+    found = default_kdst_artifact_path(2026)
+    assert found == tmp_path / "none.json"
+    assert not found.is_file()
 
 
 def test_missing_artifact_is_honest_empty(tmp_path: Path, monkeypatch) -> None:
