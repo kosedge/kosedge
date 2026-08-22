@@ -1,18 +1,12 @@
 /**
- * Fantasy Draft Desk rank policy — display order vs honest Model column.
+ * Fantasy Draft Desk rank policy — KosEdge Draft Rank vs honest Model column.
  *
- * Rankings stay raw Model rank (`rankOverall`). This key is **not** the
- * Rankings table sort — applying it there would mush model order into ADP.
+ * `rankOverall` stays raw projection order. `deskOrder` (1…N) is the default
+ * draft-board sort: model rank nudged by ADP reach/wait guardrails.
  * Builder / Mock advice uses `value-aware-recs` (need + VOR − reach penalty).
  *
- * Diagnosis (2026-08-13): sorting on raw model *points* floods a 1QB board
- * with QBs (Burrow 375 pts vs CMC 318). Rankings still sort on Model #.
- * Draft-action scoring (not this board_key) is what stops early reaches.
- *
- * Kept as an inspectable rank-space helper / test fixture:
- *
  *   board_key = modelRank + reach_penalty_slots − wait_bubble_slots
- *   (lower = earlier if this were a blended board — it is not shipped on Rankings)
+ *   (lower = earlier on the draft board)
  *
  *   reach_penalty_slots = max(0, ADP − modelRank − 12) × 0.85
  *   wait_bubble_slots   = min(max(0, modelRank − ADP), 24) × 0.35
@@ -74,10 +68,7 @@ export function deskBoardKey(row: DeskRankable): number {
   }
 
   const pos = row.position.toUpperCase();
-  if (
-    pos === "QB" &&
-    modelAhead > DESK_RANK_POLICY.qbReachExtraAfterPicks
-  ) {
+  if (pos === "QB" && modelAhead > DESK_RANK_POLICY.qbReachExtraAfterPicks) {
     key +=
       (modelAhead - DESK_RANK_POLICY.qbReachExtraAfterPicks) *
       DESK_RANK_POLICY.qbReachExtraPerPick;
@@ -106,9 +97,12 @@ export function applyDeskRankPolicy<T extends DeskRankable>(
     .map((row, idx) => ({ ...row, deskOrder: idx + 1 }));
 }
 
-export function boardRank(row: {
+export function draftRank(row: {
   deskOrder?: number;
   rankOverall: number;
 }): number {
   return row.deskOrder ?? row.rankOverall;
 }
+
+/** @alias draftRank */
+export const boardRank = draftRank;

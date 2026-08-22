@@ -25,7 +25,7 @@ export default async function FantasyTeamBuilderPage({
   const scoringRaw = firstValue(search.scoring);
   const scoring: FantasyScoringProfile = isScoringProfile(scoringRaw)
     ? scoringRaw
-    : "half_ppr";
+    : "ppr";
 
   const board = await loadFantasyDraftDesk({
     season: 2026,

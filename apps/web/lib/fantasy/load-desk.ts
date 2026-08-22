@@ -5,15 +5,14 @@ import {
   formatAdpFreshness,
 } from "@/lib/fantasy/adp-fantasypros";
 import { matchAdpToDeskRows } from "@/lib/fantasy/adp-match";
+import { applyDeskRankPolicy } from "@/lib/fantasy/desk-rank-policy";
+import { enrichDraftRows, type EnrichableDraftRow } from "@/lib/fantasy/enrich";
 import {
-  enrichDraftRows,
-  type EnrichableDraftRow,
-} from "@/lib/fantasy/enrich";
-import { loadNfl2026DepthRows, loadNfl2026ScheduleGames } from "@/lib/fantasy/load-schedule";
+  loadNfl2026DepthRows,
+  loadNfl2026ScheduleGames,
+} from "@/lib/fantasy/load-schedule";
 import { fantasyPointsFromBox } from "@/lib/fantasy/scoring";
-import {
-  buildTeamScheduleNotes,
-} from "@/lib/fantasy/schedule-context";
+import { buildTeamScheduleNotes } from "@/lib/fantasy/schedule-context";
 import type {
   FantasyDeskBoard,
   FantasyScoringProfile,
@@ -27,10 +26,13 @@ import {
   boardHasKd,
   kdstEnrichableFromArtifact,
 } from "@/lib/nfl-kdst-artifact";
-import { loadLatestNflPreseasonBundle2026, loadNflWebLaunchPointer } from "@/lib/nfl-preseason-artifacts";
+import {
+  loadLatestNflPreseasonBundle2026,
+  loadNflWebLaunchPointer,
+} from "@/lib/nfl-preseason-artifacts";
 
 const LIMITATIONS_BASE = [
-  "Model rank is projection order, not recommended pick order. Sort is raw KosEdge points (Half-PPR default). ADP and Value Δ are the market comparison — unmatched ADP never invents a Δ.",
+  "KosEdge Draft Rank is our recommended snake order: projection rank with ADP reach/wait guardrails. Model rank stays raw points order. Value Δ is market comparison only — not the default board sort.",
   "Draft advice (Builder suggestions + Mock on-the-clock + CPU) is ADP-aware: need + VOR − reach penalty when you would take a player before ADP. Same projections; different action scoring. Not an optimal-pick claim.",
   "Floor–med–ceiling from model quantiles when present; else a band around median.",
   "Schedule softness: W1–6 vs W14–17 opponent expected wins — not a full matchup sim.",
@@ -39,11 +41,13 @@ const LIMITATIONS_BASE = [
   "|modelRank − ADP| ≥ 8 with high ADP-match confidence is flagged High deviation as a data/role warning — not a bet slip.",
 ];
 
-function apiRowToEnrichable(row: NflFantasyDraftRankingRow & {
-  floorPoints?: number | null;
-  medianPoints?: number | null;
-  ceilingPoints?: number | null;
-}): EnrichableDraftRow {
+function apiRowToEnrichable(
+  row: NflFantasyDraftRankingRow & {
+    floorPoints?: number | null;
+    medianPoints?: number | null;
+    ceilingPoints?: number | null;
+  },
+): EnrichableDraftRow {
   return {
     season: row.season,
     scoringProfile: row.scoringProfile,
@@ -167,9 +171,7 @@ function buildFallbackBoard(input: {
   rows = rows.slice(0, input.limit);
 
   const pointer = loadNflWebLaunchPointer();
-  const lockBit = pointer?.lock_tag
-    ? ` · pin ${pointer.lock_tag}`
-    : "";
+  const lockBit = pointer?.lock_tag ? ` · pin ${pointer.lock_tag}` : "";
   const when = pointer?.generated_at_utc?.slice(0, 10);
   const dateBit = when ? ` · ${when}` : "";
   return {
@@ -341,12 +343,14 @@ export async function loadFantasyDraftDesk(params: {
     },
   );
 
-  const rows = enrichDraftRows({
-    rows: enrichable,
-    scheduleByTeam,
-    depthRows,
-    adpByPlayerId: adpMatch.byPlayerId,
-  });
+  const rows = applyDeskRankPolicy(
+    enrichDraftRows({
+      rows: enrichable,
+      scheduleByTeam,
+      depthRows,
+      adpByPlayerId: adpMatch.byPlayerId,
+    }),
+  );
 
   const unmatchedPreview = adpMatch.unmatchedRows
     .slice(0, 12)
@@ -364,14 +368,14 @@ export async function loadFantasyDraftDesk(params: {
     `ADP match coverage: ${adpMatch.matched}/${enrichable.length} linked (${adpMatch.matchedHigh} same-format high-confidence for Value Δ; ${adpMatch.matchedCrossFormat} cross-format ADP display only; ${adpMatch.unmatched} unmatched → —).`,
     "Matching uses deterministic rules (ids, suffix-stripped names, short names, initial+last, unique team/pos keys, then team-agnostic unique keys for roster moves). No fuzzy edit-distance guesses.",
     ...(unmatchedPreview
-      ? [`Unmatched sample: ${unmatchedPreview}${adpMatch.unmatched > 12 ? "…" : ""}`]
+      ? [
+          `Unmatched sample: ${unmatchedPreview}${adpMatch.unmatched > 12 ? "…" : ""}`,
+        ]
       : []),
   ];
 
   const adpOrigin =
-    adpFeed.players.length === 0
-      ? ("none" as const)
-      : adpFeed.origin;
+    adpFeed.players.length === 0 ? ("none" as const) : adpFeed.origin;
 
   return {
     season,

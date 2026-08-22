@@ -32,7 +32,7 @@ export default async function NflFantasyDraftDeskPage({
   const scoringRaw = firstValue(search.scoring);
   const scoring: FantasyScoringProfile = isScoringProfile(scoringRaw)
     ? scoringRaw
-    : "half_ppr";
+    : "ppr";
   const rookiesOnly = firstValue(search.rookies) === "1";
 
   const board = await loadFantasyDraftDesk({
@@ -48,7 +48,7 @@ export default async function NflFantasyDraftDeskPage({
         board={board}
         initialPosition={position}
         initialScoring={scoring}
-        initialTab="value"
+        initialTab="draft"
         basePath="/pro/nfl/fantasy"
       />
     </main>
