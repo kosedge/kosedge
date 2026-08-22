@@ -6,6 +6,7 @@ import {
   filterNflProjectionBackedRows,
   filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
+  syncEdgeBoardActionsWithCurrent,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
 
@@ -120,6 +121,184 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(0.5);
     expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
     expect(spread.best).toBe("+3");
+  });
+
+  it("uses Current (best) for Action when dedicated Mkt / stake is empty", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 8,
+        modelSpreadHome: -7,
+        spreadHome: -7,
+        handicapSpreadHome: -7,
+        marketSpreadHome: null,
+        bestSpreadHome: -3,
+        stakeSpreadHome: null,
+        dkSpreadHome: null,
+        fdSpreadHome: null,
+        decision: null,
+        actionLabelSpread: null,
+        actionLabelTotal: null,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    expect(spread.best).toBe("+3");
+    expect((spread as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      -3,
+    );
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(4);
+    expect((spread as { actionLabel?: string }).actionLabel).toMatch(
+      /PLAY|BEST VALUE/,
+    );
+  });
+
+  it("syncs Action after Odds overlay fills Current onto a Mkt-empty decision", () => {
+    // Server-style decision: PASS · Edge 0.0 · Mkt — (missing market).
+    const fair = fairLinesToEdgeBoardRows([
+      line({
+        week: 1,
+        spreadHome: -4.2,
+        handicapSpreadHome: -4.2,
+        modelSpreadHome: -4.2,
+        marketSpreadHome: null,
+        bestSpreadHome: null,
+        stakeSpreadHome: null,
+        marketTotal: null,
+        bestTotal: null,
+        totalMean: 43.3,
+        handicapTotal: 43.3,
+        decision: {
+          doctrine: "We bet prices, not teams.",
+          week: 1,
+          weekRegime: "early",
+          spread: {
+            market: "spread",
+            actionLabel: "PASS",
+            pointGrade: "PASS",
+            edgeMagnitude: 0,
+            modelConfidence: {
+              score: 0.72,
+              band: "HIGH",
+              factors: {},
+              unresolvedFlags: [],
+            },
+            coverProb: null,
+            coverGrade: null,
+            playTo: null,
+            marketConfirmation: {
+              modelFair: -4.2,
+              opening: null,
+              current: null,
+              closing: null,
+              confirmsThesis: null,
+              weakensThesis: null,
+              note: "",
+            },
+            isBestBet: false,
+            modelWarning: false,
+            keyNumberCross: false,
+            priceStillAvailable: false,
+            numericalEdge: false,
+            confidenceOk: false,
+            reason: "missing_fair_or_market",
+            week: 1,
+            weekRegime: "early",
+            fairLine: -4.2,
+            marketLine: null,
+          },
+          total: {
+            market: "total",
+            actionLabel: "PASS",
+            pointGrade: "PASS",
+            edgeMagnitude: 0,
+            modelConfidence: {
+              score: 0.72,
+              band: "HIGH",
+              factors: {},
+              unresolvedFlags: [],
+            },
+            coverProb: null,
+            coverGrade: null,
+            playTo: null,
+            marketConfirmation: {
+              modelFair: 43.3,
+              opening: null,
+              current: null,
+              closing: null,
+              confirmsThesis: null,
+              weakensThesis: null,
+              note: "",
+            },
+            isBestBet: false,
+            modelWarning: false,
+            keyNumberCross: false,
+            priceStillAvailable: false,
+            numericalEdge: false,
+            confidenceOk: false,
+            reason: "missing_fair_or_market",
+            week: 1,
+            weekRegime: "early",
+            fairLine: 43.3,
+            marketLine: null,
+          },
+          edgeMagnitudeSpread: 0,
+          edgeMagnitudeTotal: 0,
+          modelConfidence: {
+            score: 0.72,
+            band: "HIGH",
+            factors: {},
+            unresolvedFlags: [],
+          },
+          actionLabelSpread: "PASS",
+          actionLabelTotal: "PASS",
+        },
+        actionLabelSpread: "PASS",
+        actionLabelTotal: "PASS",
+      }),
+    ]);
+    // Without Current, Action edge stays honest-empty (not 0.0 theater).
+    const pre = fair.find((r) => r.market === "Spread")!;
+    expect((pre as { edgeMagnitude?: number }).edgeMagnitude).toBeUndefined();
+
+    const overlaid = overlayOddsOntoFairLineRows(fair, [
+      {
+        id: "o1",
+        game: "New England Patriots @ Seattle Seahawks",
+        market: "Spread",
+        best: "+3.5",
+        bookKey: "fanduel",
+        book: "FanDuel",
+      } as any,
+      {
+        id: "o2",
+        game: "New England Patriots @ Seattle Seahawks",
+        market: "Total",
+        best: "44.5",
+        bookKey: "fanduel",
+        book: "FanDuel",
+      } as any,
+    ]);
+    const synced = syncEdgeBoardActionsWithCurrent(overlaid);
+    const spread = synced.find((r) => r.market === "Spread")!;
+    const total = synced.find((r) => r.market === "Total")!;
+    expect(spread.best).toBe("+3.5");
+    expect(total.best).toBe("44.5");
+    // KEI −4.2 vs Current −3.5 → |0.7|; Action Mkt must match Current.
+    expect((spread as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      -3.5,
+    );
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(
+      0.7,
+      1,
+    );
+    // Week-1 early band: 0.7 < 1.25 → PASS is correct; magnitude must not be 0.0.
+    expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
+    expect((total as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      44.5,
+    );
+    expect((total as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(
+      1.2,
+      1,
+    );
   });
 
   it("fills KEINFL + current market; open only from first-capture fields", () => {

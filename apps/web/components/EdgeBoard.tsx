@@ -382,7 +382,8 @@ function ActionDecisionCell({
           {play}
         </div>
       ) : null}
-      {edgeMagnitude != null ? (
+      {edgeMagnitude != null &&
+      !(edgeMagnitude === 0 && marketCurrent == null) ? (
         <div className="mt-1 text-[10px] text-gray-300 tabular-nums">
           Edge {edgeMagnitude.toFixed(1)}
           {coverProb != null ? (
@@ -396,6 +397,8 @@ function ActionDecisionCell({
         <div className="mt-1 text-[10px] text-gray-500 tabular-nums">
           Cover {(coverProb * 100).toFixed(1)}%
         </div>
+      ) : marketCurrent == null && fairKei != null ? (
+        <div className="mt-1 text-[10px] text-gray-500">Edge —</div>
       ) : null}
       {confLabel ? (
         <div className="mt-0.5 text-[10px] text-gray-500">{confLabel}</div>
@@ -1052,6 +1055,34 @@ export function flatRowsToLegacy(
       const n = parseFloat(String(s).replace(/[^+\-\d.]/g, ""));
       return Number.isFinite(n) ? n : null;
     };
+    // Current for Action Mkt: dedicated decision market, else home-side Current.
+    const marketLineFromCurrent = !isMoneyline
+      ? parseSignedNum(bestLine.bottom.label)
+      : null;
+    const marketOUFromCurrent = parseTotal(bestOU.top.label);
+    const resolveActionMarket = (
+      decisionMkt: number | null | undefined,
+      fromCurrent: number | null,
+    ): number | undefined => {
+      if (decisionMkt != null && Number.isFinite(decisionMkt)) return decisionMkt;
+      if (fromCurrent != null && Number.isFinite(fromCurrent)) return fromCurrent;
+      return undefined;
+    };
+    const resolveActionEdge = (
+      decisionEdge: number | null | undefined,
+      displayEdge: number | undefined,
+      market: number | undefined,
+    ): number | undefined => {
+      if (market == null) return undefined;
+      if (decisionEdge != null && Number.isFinite(decisionEdge)) {
+        // Stale 0.0 while display edge is non-zero → prefer display (KEI vs Current).
+        if (decisionEdge === 0 && displayEdge != null && displayEdge > 0) {
+          return displayEdge;
+        }
+        return decisionEdge;
+      }
+      return displayEdge;
+    };
     const keiSpreadHome =
       pickField((r) => r?.keiSpreadHome) ??
       (!isMoneyline ? parseSignedNum(keiLine.bottom.label) : null);
@@ -1158,8 +1189,16 @@ export function flatRowsToLegacy(
       tagOU,
       actionLabelLine: lineRow?.actionLabel,
       actionLabelOU: totalRow?.actionLabel,
-      edgeMagnitudeLine: lineRow?.edgeMagnitude ?? edgeLineNum,
-      edgeMagnitudeOU: totalRow?.edgeMagnitude ?? edgeOUNum,
+      edgeMagnitudeLine: resolveActionEdge(
+        lineRow?.edgeMagnitude,
+        edgeLineNum,
+        resolveActionMarket(lineRow?.decisionMarketLine, marketLineFromCurrent),
+      ),
+      edgeMagnitudeOU: resolveActionEdge(
+        totalRow?.edgeMagnitude,
+        edgeOUNum,
+        resolveActionMarket(totalRow?.decisionMarketLine, marketOUFromCurrent),
+      ),
       modelConfidenceScore:
         lineRow?.modelConfidenceScore ?? totalRow?.modelConfidenceScore,
       modelConfidenceBand:
@@ -1177,8 +1216,14 @@ export function flatRowsToLegacy(
       leanToOUNum: totalRow?.playToLean,
       fairLineKei: lineRow?.fairLine ?? undefined,
       fairOUKei: totalRow?.fairLine ?? undefined,
-      marketLineCurrent: lineRow?.decisionMarketLine ?? undefined,
-      marketOUCurrent: totalRow?.decisionMarketLine ?? undefined,
+      marketLineCurrent: resolveActionMarket(
+        lineRow?.decisionMarketLine,
+        marketLineFromCurrent,
+      ),
+      marketOUCurrent: resolveActionMarket(
+        totalRow?.decisionMarketLine,
+        marketOUFromCurrent,
+      ),
       isBestBetLine: lineRow?.isBestBet,
       isBestBetOU: totalRow?.isBestBet,
       overview: overviewText,
@@ -1922,7 +1967,7 @@ export default function EdgeBoard({
           {marketsOnly
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
-              ? "NFL Decision Engine — we bet prices, not teams. Action Labels grade Model fair vs market (PASS / LEAN / PLAY / BEST VALUE / ALERT / STAY AWAY). Edge Magnitude and Model Confidence stay separate. Play-To ladders on every LEAN/PLAY. KEI publish tags (KEI vs market) remain for desk evidence bands and show under Action when they differ. Weeks 1–2 tighter thresholds active by default. "
+              ? "We bet prices, not teams. Action = KEI vs Current (stakeable book when present). Edge magnitude and confidence stay separate. "
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
@@ -1930,11 +1975,11 @@ export default function EdgeBoard({
             (isMlb
               ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
               : isNfl
-                ? "KEI Edge column still shows KEI handicap vs market. Action uses Model research fair vs market. "
+                ? `${keiCode} Edge column and Action use the same market input. Open is first capture — never copied from Current. `
                 : "Edge shows pts + side favored vs KEI handicap. ")}
           {!marketsOnly
             ? isNfl
-              ? `${keiCode}: Kos Edge Index (handicap). Locked baseline fair lines are not mutated by this action layer.`
+              ? "Methods → Model transparency."
               : `Tag shows the action at the best book. ${keiCode}: Kos Edge Index (handicap).`
             : null}
         </div>

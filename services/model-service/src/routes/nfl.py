@@ -441,7 +441,9 @@ def _first_open_odds_by_game_ids(
                       UNION
                       SELECT r.schedule_id, g.id
                       FROM requested r
-                      JOIN games g ON g.game_date = r.game_date
+                      JOIN games g
+                        ON g.game_date BETWEEN (r.game_date - INTERVAL '1 day')
+                           AND (r.game_date + INTERVAL '1 day')
                       JOIN seasons s ON s.id = g.season_id
                       JOIN leagues l ON l.id = s.league_id
                       JOIN teams home ON home.id = g.home_team_id
