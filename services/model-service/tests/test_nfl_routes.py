@@ -965,3 +965,97 @@ def test_nfl_open_abbr_aliases_rams_and_washington() -> None:
     assert nfl_routes._nfl_open_abbr_aliases("LAR") == ["LA", "LAR"]
     assert nfl_routes._nfl_open_abbr_aliases("WAS") == ["WSH", "WAS"]
     assert nfl_routes._nfl_open_abbr_aliases("SEA") == ["SEA"]
+
+
+def test_redact_odds_api_error_strips_api_key() -> None:
+    raw = (
+        "401 Client Error: Unauthorized for url: "
+        "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+        "?bookmakers=draftkings&apiKey=3cf941bb533372b5533a0c9b946e7400"
+    )
+    out = nfl_routes._redact_odds_api_error(raw)
+    assert "3cf941bb" not in out
+    assert "apiKey=REDACTED" in out
+
+
+def test_merge_snapshot_current_fills_blank_live() -> None:
+    live: Dict[str, Any] = {
+        "market_spread_home": None,
+        "market_total": None,
+        "best_spread_home": None,
+        "best_total": None,
+    }
+    used = nfl_routes._merge_snapshot_current_into_live(
+        live,
+        {"current_spread_home": -3.5, "current_total": 44.5, "open_spread_home": -3.0},
+    )
+    assert used is True
+    assert live["market_spread_home"] == -3.5
+    assert live["market_total"] == 44.5
+    assert live["best_spread_home"] == -3.5
+    assert live["best_total"] == 44.5
+    assert live["best_spread_book"] == "market"
+
+
+def test_merge_snapshot_current_does_not_copy_open() -> None:
+    live: Dict[str, Any] = {"market_spread_home": None, "market_total": None}
+    used = nfl_routes._merge_snapshot_current_into_live(
+        live,
+        {
+            "open_spread_home": -3.5,
+            "open_total": 44.5,
+            "current_spread_home": None,
+            "current_total": None,
+        },
+    )
+    assert used is False
+    assert live["market_spread_home"] is None
+    assert live["market_total"] is None
+
+
+def test_merge_snapshot_current_does_not_overwrite_live() -> None:
+    live: Dict[str, Any] = {
+        "market_spread_home": -7.0,
+        "market_total": 48.5,
+        "best_spread_home": -7.5,
+        "best_total": 49.0,
+        "best_spread_book": "draftkings",
+    }
+    used = nfl_routes._merge_snapshot_current_into_live(
+        live,
+        {"current_spread_home": -3.5, "current_total": 44.5},
+    )
+    assert used is False
+    assert live["market_spread_home"] == -7.0
+    assert live["best_spread_book"] == "draftkings"
+
+
+def test_first_open_odds_maps_current_separately_from_open() -> None:
+    class _Session:
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            sql = str(statement)
+            assert "latest_book_spread" in sql
+            assert "current_spread_home" in sql
+            return _FakeResult(
+                [
+                    {
+                        "game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                        "open_spread_home": -3.0,
+                        "open_total": 47.5,
+                        "current_spread_home": -3.5,
+                        "current_total": 48.0,
+                        "odds_captured_at": None,
+                        "source_game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                    }
+                ]
+            )
+
+    out = nfl_routes._first_open_odds_by_game_ids(
+        _Session(), ["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    )
+    snap = out["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    assert snap["open_spread_home"] == -3.0
+    assert snap["open_total"] == 47.5
+    assert snap["current_spread_home"] == -3.5
+    assert snap["current_total"] == 48.0
+    assert snap["open_spread_home"] != snap["current_spread_home"]

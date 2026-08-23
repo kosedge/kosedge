@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from decimal import Decimal
 from datetime import date, datetime, timezone
@@ -384,16 +385,53 @@ def _coerce_open_game_date(value: Any) -> Optional[date]:
         return None
 
 
+def _redact_odds_api_error(exc: BaseException | str) -> str:
+    """Strip Odds API keys from feed errors before they hit diagnostics JSON."""
+    return re.sub(r"(apiKey=)[^&\s]+", r"\1REDACTED", str(exc), flags=re.IGNORECASE)[:500]
+
+
+def _merge_snapshot_current_into_live(
+    live: Dict[str, Any],
+    snap: Dict[str, Any],
+) -> bool:
+    """Fill blank live Current from latest odds_snapshots.
+
+    Open is a separate first-capture field and is never copied into Current.
+    Returns True when any current field was filled from the snapshot.
+    """
+    filled = False
+    if live.get("market_spread_home") is None:
+        current = _to_float(snap.get("current_spread_home"))
+        if current is not None:
+            live["market_spread_home"] = current
+            filled = True
+            if live.get("best_spread_home") is None:
+                live["best_spread_home"] = current
+            if not live.get("best_spread_book"):
+                live["best_spread_book"] = "market"
+    if live.get("market_total") is None:
+        current = _to_float(snap.get("current_total"))
+        if current is not None:
+            live["market_total"] = current
+            filled = True
+            if live.get("best_total") is None:
+                live["best_total"] = current
+            if not live.get("best_total_book"):
+                live["best_total_book"] = "market"
+    return filled
+
+
 def _first_open_odds_by_game_ids(
     session: Any,
     game_ids: List[str],
     *,
     games: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Dict[str, Any]]:
-    """Immutable open + latest capture time from odds_snapshots.
+    """Immutable open + latest Current from odds_snapshots.
 
     Open = earliest non-null spread_home / total_points per schedule game.
-    Never invents open from the latest market quote.
+    Current = latest-per-book consensus (never a copy of Open).
+    Missing Current stays None even when Open exists.
 
     Odds ingest often writes snapshots on a *parallel* ``games`` UUID for the
     same matchup (DAL@NYG class). Exact-UUID-only lookup then silently blanks
@@ -467,6 +505,7 @@ def _first_open_odds_by_game_ids(
                       SELECT
                         cg.schedule_id,
                         os.game_id::text AS snap_id,
+                        os.sportsbook_id,
                         m.code AS market_code,
                         os.spread_home,
                         os.total_points,
@@ -496,6 +535,34 @@ def _first_open_odds_by_game_ids(
                         AND total_points IS NOT NULL
                       ORDER BY schedule_id, captured_at ASC
                     ),
+                    latest_book_spread AS (
+                      SELECT DISTINCT ON (schedule_id, sportsbook_id)
+                        schedule_id,
+                        spread_home
+                      FROM snaps
+                      WHERE market_code IN ('spread', 'spreads')
+                        AND spread_home IS NOT NULL
+                      ORDER BY schedule_id, sportsbook_id, captured_at DESC
+                    ),
+                    current_spread AS (
+                      SELECT schedule_id, AVG(spread_home) AS current_spread_home
+                      FROM latest_book_spread
+                      GROUP BY schedule_id
+                    ),
+                    latest_book_total AS (
+                      SELECT DISTINCT ON (schedule_id, sportsbook_id)
+                        schedule_id,
+                        total_points
+                      FROM snaps
+                      WHERE market_code IN ('total', 'totals')
+                        AND total_points IS NOT NULL
+                      ORDER BY schedule_id, sportsbook_id, captured_at DESC
+                    ),
+                    current_total AS (
+                      SELECT schedule_id, AVG(total_points) AS current_total
+                      FROM latest_book_total
+                      GROUP BY schedule_id
+                    ),
                     latest AS (
                       SELECT schedule_id, MAX(captured_at) AS odds_captured_at
                       FROM snaps
@@ -505,12 +572,18 @@ def _first_open_odds_by_game_ids(
                       COALESCE(os.schedule_id, ot.schedule_id, l.schedule_id) AS game_id,
                       os.open_spread_home,
                       ot.open_total,
+                      cs.current_spread_home,
+                      ct.current_total,
                       l.odds_captured_at,
                       COALESCE(os.spread_snap_id, ot.total_snap_id) AS source_game_id
                     FROM latest l
                     FULL OUTER JOIN open_spread os ON os.schedule_id = l.schedule_id
                     FULL OUTER JOIN open_total ot
                       ON ot.schedule_id = COALESCE(l.schedule_id, os.schedule_id)
+                    LEFT JOIN current_spread cs
+                      ON cs.schedule_id = COALESCE(l.schedule_id, os.schedule_id, ot.schedule_id)
+                    LEFT JOIN current_total ct
+                      ON ct.schedule_id = COALESCE(l.schedule_id, os.schedule_id, ot.schedule_id)
                     """
                 ),
                 {
@@ -527,6 +600,7 @@ def _first_open_odds_by_game_ids(
                     WITH snaps AS (
                       SELECT
                         os.game_id::text AS game_id,
+                        os.sportsbook_id,
                         m.code AS market_code,
                         os.spread_home,
                         os.total_points,
@@ -556,6 +630,34 @@ def _first_open_odds_by_game_ids(
                         AND total_points IS NOT NULL
                       ORDER BY game_id, captured_at ASC
                     ),
+                    latest_book_spread AS (
+                      SELECT DISTINCT ON (game_id, sportsbook_id)
+                        game_id,
+                        spread_home
+                      FROM snaps
+                      WHERE market_code IN ('spread', 'spreads')
+                        AND spread_home IS NOT NULL
+                      ORDER BY game_id, sportsbook_id, captured_at DESC
+                    ),
+                    current_spread AS (
+                      SELECT game_id, AVG(spread_home) AS current_spread_home
+                      FROM latest_book_spread
+                      GROUP BY game_id
+                    ),
+                    latest_book_total AS (
+                      SELECT DISTINCT ON (game_id, sportsbook_id)
+                        game_id,
+                        total_points
+                      FROM snaps
+                      WHERE market_code IN ('total', 'totals')
+                        AND total_points IS NOT NULL
+                      ORDER BY game_id, sportsbook_id, captured_at DESC
+                    ),
+                    current_total AS (
+                      SELECT game_id, AVG(total_points) AS current_total
+                      FROM latest_book_total
+                      GROUP BY game_id
+                    ),
                     latest AS (
                       SELECT game_id, MAX(captured_at) AS odds_captured_at
                       FROM snaps
@@ -565,11 +667,17 @@ def _first_open_odds_by_game_ids(
                       COALESCE(os.game_id, ot.game_id, l.game_id) AS game_id,
                       os.open_spread_home,
                       ot.open_total,
+                      cs.current_spread_home,
+                      ct.current_total,
                       l.odds_captured_at,
                       COALESCE(os.game_id, ot.game_id, l.game_id) AS source_game_id
                     FROM latest l
                     FULL OUTER JOIN open_spread os ON os.game_id = l.game_id
                     FULL OUTER JOIN open_total ot ON ot.game_id = COALESCE(l.game_id, os.game_id)
+                    LEFT JOIN current_spread cs
+                      ON cs.game_id = COALESCE(l.game_id, os.game_id, ot.game_id)
+                    LEFT JOIN current_total ct
+                      ON ct.game_id = COALESCE(l.game_id, os.game_id, ot.game_id)
                     """
                 ),
                 {"game_ids": unique_ids},
@@ -586,6 +694,8 @@ def _first_open_odds_by_game_ids(
             continue
         open_spread = _to_float(mapped.get("open_spread_home"))
         open_total = _to_float(mapped.get("open_total"))
+        current_spread = _to_float(mapped.get("current_spread_home"))
+        current_total = _to_float(mapped.get("current_total"))
         captured = mapped.get("odds_captured_at")
         source_id = str(mapped.get("source_game_id") or gid)
         if open_spread is None and open_total is None:
@@ -597,6 +707,10 @@ def _first_open_odds_by_game_ids(
         out[gid] = {
             "open_spread_home": round(open_spread, 2) if open_spread is not None else None,
             "open_total": round(open_total, 2) if open_total is not None else None,
+            "current_spread_home": (
+                round(current_spread, 2) if current_spread is not None else None
+            ),
+            "current_total": round(current_total, 2) if current_total is not None else None,
             "odds_captured_at": captured.isoformat() if hasattr(captured, "isoformat") else (
                 str(captured) if captured is not None else None
             ),
@@ -3163,7 +3277,7 @@ def nfl_edges_today(
         if isinstance(raw_market_events, list):
             market_events = raw_market_events
     except Exception as exc:
-        odds_feed_error = str(exc)[:500]
+        odds_feed_error = _redact_odds_api_error(exc)
         log.warning("NFL odds feed unavailable for edges endpoint: %s", odds_feed_error)
     session = SessionLocal()
     tuned_guardrails = framework_cfg["guardrails"]
@@ -3532,7 +3646,7 @@ def nfl_fair_lines(
         if isinstance(raw_market_events, list):
             market_events = raw_market_events
     except Exception as exc:
-        odds_feed_error = str(exc)[:500]
+        odds_feed_error = _redact_odds_api_error(exc)
         log.warning("NFL odds feed unavailable for fair-lines endpoint: %s", odds_feed_error)
 
     # Always land pulled odds in Postgres for model training / CLV history.
@@ -3673,6 +3787,7 @@ def nfl_fair_lines(
 
     lines: List[Dict[str, Any]] = []
     market_joined_count = 0
+    snapshot_current_count = 0
     try:
         week1_pack = load_week1_pack(int(season))
     except Exception:
@@ -3691,7 +3806,11 @@ def nfl_fair_lines(
         if away_win_prob is None and home_win_prob is not None:
             away_win_prob = max(0.0, min(1.0, 1.0 - home_win_prob))
 
-        market = market_by_abbr.get((home_abbr, away_abbr), {})
+        market = dict(market_by_abbr.get((home_abbr, away_abbr), {}) or {})
+        _open_snap = open_by_game_id.get(str(mapped.get("game_id") or ""), {})
+        _snapshot_used = _merge_snapshot_current_into_live(market, _open_snap)
+        if _snapshot_used:
+            snapshot_current_count += 1
         market_home_ml = market.get("market_home_ml")
         market_away_ml = market.get("market_away_ml")
         market_total = market.get("market_total")
@@ -3878,7 +3997,6 @@ def nfl_fair_lines(
             if _decision_market_spread is not None
             else False,
         )
-        _open_snap = open_by_game_id.get(str(mapped.get("game_id") or ""), {})
         _open_spread = _to_float(_open_snap.get("open_spread_home"))
         _open_total = _to_float(_open_snap.get("open_total"))
         _decision = nfl_decide_game(
@@ -3985,6 +4103,9 @@ def nfl_fair_lines(
                 "total_edge": total_edge,
                 "spread_edge": spread_edge,
                 "market_joined": has_market,
+                "market_source": (
+                    "odds_snapshots" if _snapshot_used else ("live" if has_market else None)
+                ),
                 "publish_tag_spread": spread_pub.get("tag"),
                 "publish_tag_total": total_pub.get("tag"),
                 "publish_tag_ml": ml_pub.get("tag"),
@@ -4041,6 +4162,19 @@ def nfl_fair_lines(
         log.exception("NFL fair-lines: active-run pointer load failed")
         season_run = {}
     odds_as_of = datetime.now(timezone.utc).isoformat()
+    snapshot_as_of = None
+    for snap in open_by_game_id.values():
+        captured = snap.get("odds_captured_at")
+        if captured and (snapshot_as_of is None or str(captured) > str(snapshot_as_of)):
+            snapshot_as_of = captured
+    if snapshot_current_count and market_joined_count > snapshot_current_count:
+        current_source = "mixed"
+    elif snapshot_current_count:
+        current_source = "odds_snapshots"
+    elif market_joined_count:
+        current_source = "live"
+    else:
+        current_source = None
     return {
         "season": season,
         "model_version": effective_model_version,
@@ -4048,7 +4182,7 @@ def nfl_fair_lines(
         "count": len(lines),
         "lines": lines,
         "kickoff_source": "games.start_time",
-        "odds_as_of": odds_as_of if market_events else None,
+        "odds_as_of": odds_as_of if market_events else snapshot_as_of,
         "as_of": odds_as_of,
         "active_run_id": season_run.get("active_run_id"),
         "lineage": {
@@ -4066,11 +4200,13 @@ def nfl_fair_lines(
             "odds_feed_error": odds_feed_error,
             "odds_events_seen": len(market_events),
             "market_joined_count": market_joined_count,
+            "snapshot_current_count": snapshot_current_count,
+            "current_source": current_source,
             "bookmakers": resolved_bookmakers.split(","),
             "kosedge_only": market_joined_count == 0,
             "odds_persisted": odds_persist,
             "current_week": current_week,
-            "odds_as_of": odds_as_of if market_events else None,
+            "odds_as_of": odds_as_of if market_events else snapshot_as_of,
             "kei_week1_reprice": {
                 "applied_games": kei_reprice_applied_games,
                 "doctrine": "KEI = model + Week 1 desk factors; Edge/Tag = KEI vs market",

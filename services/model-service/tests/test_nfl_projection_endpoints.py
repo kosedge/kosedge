@@ -216,3 +216,62 @@ def test_nfl_fair_lines_returns_kosedge_board_when_odds_unavailable(monkeypatch)
     assert line["total_mean"] == 41.29
     assert line["fair_home_ml"] == -162
     assert line["market_home_ml"] is None
+    assert line["market_spread_home"] is None
+    assert payload["diagnostics"].get("snapshot_current_count", 0) == 0
+
+
+def test_nfl_fair_lines_uses_snapshot_current_when_odds_401(monkeypatch) -> None:
+    """Live Odds 401 → Current from latest odds_snapshots, Open stays first capture."""
+
+    class _SnapshotSession(_Session):
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _Result:
+            sql = " ".join(str(statement).split()).lower()
+            if "odds_snapshots" in sql:
+                return _Result(
+                    [
+                        {
+                            "game_id": "g-sea-ne",
+                            "open_spread_home": -3.0,
+                            "open_total": 44.0,
+                            "current_spread_home": -3.5,
+                            "current_total": 44.5,
+                            "odds_captured_at": datetime(2026, 8, 21, 13, 42, 55, tzinfo=timezone.utc),
+                            "source_game_id": "g-sea-ne",
+                        }
+                    ]
+                )
+            return super().execute(statement, params)
+
+    monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _SnapshotSession())
+
+    def _boom(**_kwargs):
+        raise RuntimeError(
+            "401 Client Error: Unauthorized for url: "
+            "https://api.the-odds-api.com/v4/sports/americanfootball_nfl/odds"
+            "?apiKey=3cf941bb533372b5533a0c9b946e7400"
+        )
+
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    client = TestClient(app)
+    response = client.get("/nfl/fair-lines", params={"season": 2026, "days_ahead": 120})
+    assert response.status_code == 200
+    payload = response.json()
+    diag = payload["diagnostics"]
+    assert diag["odds_feed_status"] == "degraded"
+    assert "3cf941bb" not in str(diag.get("odds_feed_error") or "")
+    assert diag["snapshot_current_count"] == 1
+    assert diag["market_joined_count"] == 1
+    assert diag["kosedge_only"] is False
+    assert diag["current_source"] == "odds_snapshots"
+    line = payload["lines"][0]
+    assert line["away_abbr"] == "NE"
+    assert line["home_abbr"] == "SEA"
+    assert line["open_spread_home"] == -3.0
+    assert line["open_total"] == 44.0
+    assert line["market_spread_home"] == -3.5
+    assert line["market_total"] == 44.5
+    assert line["market_spread_home"] != line["open_spread_home"]
+    assert line["market_source"] == "odds_snapshots"
+    decision = line.get("decision") or {}
+    spread = decision.get("spread") or {}
+    assert (spread.get("market_line") or spread.get("marketLine")) == -3.5
