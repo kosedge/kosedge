@@ -667,4 +667,85 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(filtered).toHaveLength(2);
     expect(filtered.every((r) => r.kei)).toBe(true);
   });
+
+  it("blanks 3.8 / 2.4-class Current and does not Action against it", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 1,
+        spreadHome: -4.22,
+        handicapSpreadHome: -4.22,
+        totalMean: 43.33,
+        handicapTotal: 43.33,
+        openSpreadHome: -3.5,
+        openTotal: 44.5,
+        marketSpreadHome: -3.58,
+        marketTotal: 44.42,
+        bestSpreadHome: -3.58,
+        bestTotal: 44.42,
+        marketJoined: true,
+        decision: null,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    const total = rows.find((r) => r.market === "Total")!;
+    expect(spread.open).toBe("+3.5");
+    expect(total.open).toBe("44.5");
+    expect(spread.best).toBeUndefined();
+    expect(total.best).toBeUndefined();
+    expect(
+      (spread as { decisionMarketLine?: number | null }).decisionMarketLine,
+    ).toBeNull();
+    expect(
+      (spread as { edgeMagnitude?: number }).edgeMagnitude,
+    ).toBeUndefined();
+  });
+
+  it("keeps posted-shaped Current (−3.5 / 44.5) and Actions against it", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 1,
+        spreadHome: -4.22,
+        handicapSpreadHome: -4.22,
+        openSpreadHome: -3.5,
+        marketSpreadHome: -3.5,
+        bestSpreadHome: -3.5,
+        marketTotal: 44.5,
+        bestTotal: 44.5,
+        decision: null,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    expect(spread.best).toBe("+3.5");
+    expect(spread.open).toBe("+3.5");
+    expect((spread as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      -3.5,
+    );
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(
+      0.72,
+      1,
+    );
+  });
+
+  it("does not overlay garbage Current onto a valid fair-line row", () => {
+    const fair = fairLinesToEdgeBoardRows([
+      line({
+        openSpreadHome: -3.5,
+        marketSpreadHome: -3.5,
+        bestSpreadHome: -3.5,
+      }),
+    ]);
+    const overlaid = overlayOddsOntoFairLineRows(fair, [
+      {
+        id: "o1",
+        game: "New England Patriots @ Seattle Seahawks",
+        market: "Spread",
+        best: "+3.8",
+        bookKey: "fanduel",
+        book: "FanDuel",
+      } as any,
+    ]);
+    const spread = overlaid.find((r) => r.market === "Spread")!;
+    expect(spread.open).toBe("+3.5");
+    expect(spread.best).toBe("+3.5");
+  });
 });
