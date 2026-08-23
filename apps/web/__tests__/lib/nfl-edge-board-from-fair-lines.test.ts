@@ -347,6 +347,44 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(total.best).toBe("48.5");
   });
 
+  it("paints NE@SEA Current from snapshot-backed fair-lines without copying Open", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 1,
+        spreadHome: -4.22,
+        handicapSpreadHome: -4.22,
+        totalMean: 43.33,
+        handicapTotal: 43.33,
+        openSpreadHome: -3.0,
+        openTotal: 44.0,
+        marketSpreadHome: -3.5,
+        marketTotal: 44.5,
+        bestSpreadHome: -3.5,
+        bestTotal: 44.5,
+        marketJoined: true,
+        decision: null,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    const total = rows.find((r) => r.market === "Total")!;
+    expect(spread.open).toBe("+3");
+    expect(spread.best).toBe("+3.5");
+    expect(spread.open).not.toBe(spread.best);
+    expect(total.open).toBe("44");
+    expect(total.best).toBe("44.5");
+    expect((spread as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      -3.5,
+    );
+    expect((spread as { edgeMagnitude?: number }).edgeMagnitude).toBeCloseTo(
+      0.72,
+      1,
+    );
+    expect((spread as { actionLabel?: string }).actionLabel).toBe("PASS");
+    expect((total as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      44.5,
+    );
+  });
+
   it("overlay updates current but does not overwrite open", () => {
     const fair = fairLinesToEdgeBoardRows([
       line({
