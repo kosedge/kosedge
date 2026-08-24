@@ -14,6 +14,13 @@ import {
 import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
 import { coerceNflWeek } from "@/lib/nfl-edge-board-week";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
+import {
+  isPlausibleNflCurrentDisplay,
+  sanitizeNflLine,
+  sanitizeNflSpread,
+  sanitizeNflTotal,
+  type NflMarketLineKind,
+} from "@/lib/nfl-market-line-hygiene";
 
 const ET = "America/New_York";
 
@@ -109,17 +116,21 @@ function formatJuice(price: number | null | undefined): string | undefined {
 /**
  * Single market line for Edge / Action (home-side spread or total points).
  * Prefer stakeable DK/FD close, then consensus, then Current (best-of-books).
- * Only treat market as missing when none of these exist.
+ * Invalid / non-book shapes are skipped — never painted into Action.
  */
-export function resolveMarketLineForEdge(args: {
-  stake?: number | null;
-  dk?: number | null;
-  fd?: number | null;
-  market?: number | null;
-  best?: number | null;
-}): number | null {
+export function resolveMarketLineForEdge(
+  args: {
+    stake?: number | null;
+    dk?: number | null;
+    fd?: number | null;
+    market?: number | null;
+    best?: number | null;
+  },
+  kind: NflMarketLineKind,
+): number | null {
   for (const v of [args.stake, args.dk, args.fd, args.market, args.best]) {
-    if (v != null && Number.isFinite(v)) return Number(v);
+    const cleaned = sanitizeNflLine(v, kind);
+    if (cleaned != null) return cleaned;
   }
   return null;
 }
@@ -225,21 +236,29 @@ export function syncEdgeBoardActionsWithCurrent(
     const decisionSpreadMkt = rowDecisionMarketLine(spreadRow);
     const decisionTotalMkt = rowDecisionMarketLine(totalRow);
 
-    // Dedicated Mkt (stake/consensus already baked into decision) wins when set.
-    // Else Current = row.best (Odds overlay / best-of-books).
+    // Dedicated Mkt (stake/consensus already baked into decision) wins when set
+    // and book-shaped. Else Current = row.best (Odds overlay / best-of-books).
     const currentSpreadHome =
-      decisionSpreadMkt ??
-      (spreadRow as EdgeBoardRow & { marketSpreadHome?: number })
-        ?.marketSpreadHome ??
-      parseAwaySpreadLabelToHome(
-        typeof spreadRow?.best === "string" ? spreadRow.best : undefined,
-      );
+      sanitizeNflSpread(decisionSpreadMkt).value ??
+      sanitizeNflSpread(
+        (spreadRow as EdgeBoardRow & { marketSpreadHome?: number })
+          ?.marketSpreadHome,
+      ).value ??
+      sanitizeNflSpread(
+        parseAwaySpreadLabelToHome(
+          typeof spreadRow?.best === "string" ? spreadRow.best : undefined,
+        ),
+      ).value;
     const currentTotal =
-      decisionTotalMkt ??
-      (totalRow as EdgeBoardRow & { marketTotal?: number })?.marketTotal ??
-      parseTotalLabel(
-        typeof totalRow?.best === "string" ? totalRow.best : undefined,
-      );
+      sanitizeNflTotal(decisionTotalMkt).value ??
+      sanitizeNflTotal(
+        (totalRow as EdgeBoardRow & { marketTotal?: number })?.marketTotal,
+      ).value ??
+      sanitizeNflTotal(
+        parseTotalLabel(
+          typeof totalRow?.best === "string" ? totalRow.best : undefined,
+        ),
+      ).value;
 
     const needSpreadRefresh =
       fairSpread != null &&
@@ -418,24 +437,33 @@ export function fairLinesToEdgeBoardRows(
         ? String(Math.round(line.modelTotal * 10) / 10)
         : undefined;
     // Current = latest consensus / best-of-books (moves with odds refresh).
+    // Only paint book-shaped numbers; AVG tenths become honest —.
+    const sanitizedBestSpread = sanitizeNflSpread(line.bestSpreadHome).value;
+    const sanitizedMarketSpread = sanitizeNflSpread(
+      line.marketSpreadHome,
+    ).value;
+    const paintedSpreadHome = sanitizedBestSpread ?? sanitizedMarketSpread;
+    const sanitizedBestTotal = sanitizeNflTotal(line.bestTotal).value;
+    const sanitizedMarketTotal = sanitizeNflTotal(line.marketTotal).value;
+    const paintedTotal = sanitizedBestTotal ?? sanitizedMarketTotal;
     const marketAwaySpread =
-      line.marketSpreadHome != null
-        ? awaySpreadFromHome(line.marketSpreadHome)
+      paintedSpreadHome != null
+        ? awaySpreadFromHome(paintedSpreadHome)
         : undefined;
     const marketTotal =
-      line.marketTotal != null
-        ? String(Math.round(line.marketTotal * 10) / 10)
+      paintedTotal != null
+        ? String(Math.round(paintedTotal * 10) / 10)
         : undefined;
-    const bestAwaySpread =
-      line.bestSpreadHome != null
-        ? awaySpreadFromHome(line.bestSpreadHome)
+    const bestAwaySpread = marketAwaySpread;
+    const bestTotal = marketTotal;
+    const bestSpreadBook =
+      sanitizedBestSpread != null
+        ? (line.bestSpreadBook ?? undefined)
         : undefined;
-    const bestTotal =
-      line.bestTotal != null
-        ? String(Math.round(line.bestTotal * 10) / 10)
+    const bestTotalBook =
+      sanitizedBestTotal != null
+        ? (line.bestTotalBook ?? undefined)
         : undefined;
-    const bestSpreadBook = line.bestSpreadBook ?? undefined;
-    const bestTotalBook = line.bestTotalBook ?? undefined;
     // Open = first-captured / official open only. Never invent open = current.
     const openAwaySpread =
       line.openSpreadHome != null
@@ -453,31 +481,48 @@ export function fairLinesToEdgeBoardRows(
     const publishTagTotal = line.publishTagTotal ?? undefined;
 
     // Single market input for Edge/Action: stake → DK/FD → consensus → Current.
-    const compareSpread = resolveMarketLineForEdge({
-      stake: line.stakeSpreadHome,
-      dk: line.dkSpreadHome,
-      fd: line.fdSpreadHome,
-      market: line.marketSpreadHome,
-      best: line.bestSpreadHome,
-    });
-    const compareTotal = resolveMarketLineForEdge({
-      stake: line.stakeTotal,
-      dk: line.dkTotal,
-      fd: line.fdTotal,
-      market: line.marketTotal,
-      best: line.bestTotal,
-    });
+    // Garbage Current (3.8 / −3.58) is not a market — Action stays honest —.
+    const compareSpread =
+      paintedSpreadHome == null
+        ? null
+        : resolveMarketLineForEdge(
+            {
+              stake: line.stakeSpreadHome,
+              dk: line.dkSpreadHome,
+              fd: line.fdSpreadHome,
+              market: line.marketSpreadHome,
+              best: line.bestSpreadHome,
+            },
+            "spread",
+          );
+    const compareTotal =
+      paintedTotal == null
+        ? null
+        : resolveMarketLineForEdge(
+            {
+              stake: line.stakeTotal,
+              dk: line.dkTotal,
+              fd: line.fdTotal,
+              market: line.marketTotal,
+              best: line.bestTotal,
+            },
+            "total",
+          );
 
-    // Prefer server decision only when it already graded vs a usable market.
-    // If Mkt is empty on the server decision but Current exists locally, recompute
-    // so Action never stays Edge 0.0 / PASS while the Edge column shows a gap.
-    const serverSpreadMkt = line.decision?.spread?.marketLine ?? null;
-    const serverTotalMkt = line.decision?.total?.marketLine ?? null;
+    // Prefer server decision only when it already graded vs a usable book-shaped market.
+    const serverSpreadMktRaw = line.decision?.spread?.marketLine ?? null;
+    const serverTotalMktRaw = line.decision?.total?.marketLine ?? null;
+    const serverSpreadMkt = sanitizeNflSpread(serverSpreadMktRaw).value;
+    const serverTotalMkt = sanitizeNflTotal(serverTotalMktRaw).value;
+    const serverHadMarket =
+      (serverSpreadMktRaw != null &&
+        Number.isFinite(Number(serverSpreadMktRaw))) ||
+      (serverTotalMktRaw != null && Number.isFinite(Number(serverTotalMktRaw)));
+    const serverMarketValid = serverSpreadMkt != null || serverTotalMkt != null;
     const serverDecisionUsable =
       line.decision != null &&
-      ((serverSpreadMkt != null && Number.isFinite(serverSpreadMkt)) ||
-        (serverTotalMkt != null && Number.isFinite(serverTotalMkt)) ||
-        (compareSpread == null && compareTotal == null));
+      (serverMarketValid ||
+        (!serverHadMarket && compareSpread == null && compareTotal == null));
 
     const decisionBundle = serverDecisionUsable
       ? line.decision!
@@ -829,11 +874,23 @@ export function overlayOddsOntoFairLineRows(
     };
     // Current line moves with odds. Never overwrite a set Open with live books
     // (Odds API "open" is preferred-book current, not first-captured open).
-    if (odds.best) tgt.best = odds.best;
-    if (odds.book) tgt.book = odds.book;
-    if (src.bookKey) tgt.bookKey = src.bookKey;
-    if (src.bestJuice) tgt.bestJuice = src.bestJuice;
-    if (src.bestJuiceHome) tgt.bestJuiceHome = src.bestJuiceHome;
+    // Reject non-book shapes (3.8 / 2.4) — do not paint or copy into Action.
+    const overlayKind = market === "Total" ? "total" : "spread";
+    if (
+      odds.best &&
+      isPlausibleNflCurrentDisplay(String(odds.best), overlayKind)
+    ) {
+      tgt.best = odds.best;
+      if (odds.book) tgt.book = odds.book;
+      if (src.bookKey) tgt.bookKey = src.bookKey;
+      if (src.bestJuice) tgt.bestJuice = src.bestJuice;
+      if (src.bestJuiceHome) tgt.bestJuiceHome = src.bestJuiceHome;
+    } else if (
+      tgt.best &&
+      !isPlausibleNflCurrentDisplay(String(tgt.best), overlayKind)
+    ) {
+      tgt.best = undefined;
+    }
     // Fill Open only when missing AND the odds row marks a true immutable open.
     if (!tgt.open && src.openIsImmutable && odds.open) {
       tgt.open = odds.open;

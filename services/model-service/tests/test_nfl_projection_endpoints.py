@@ -275,3 +275,56 @@ def test_nfl_fair_lines_uses_snapshot_current_when_odds_401(monkeypatch) -> None
     decision = line.get("decision") or {}
     spread = decision.get("spread") or {}
     assert (spread.get("market_line") or spread.get("marketLine")) == -3.5
+    hygiene = diag.get("current_hygiene") or {}
+    assert hygiene.get("kept_spread") == 1
+    assert hygiene.get("rejected_spread") == 0
+
+
+def test_nfl_fair_lines_rejects_snapshot_avg_garbage(monkeypatch) -> None:
+    """AVG tenths (3.8 / −3.58 class) must not paint Current; Open stays."""
+
+    class _SnapshotSession(_Session):
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _Result:
+            sql = " ".join(str(statement).split()).lower()
+            if "odds_snapshots" in sql:
+                return _Result(
+                    [
+                        {
+                            "game_id": "g-sea-ne",
+                            "open_spread_home": -3.5,
+                            "open_total": 44.5,
+                            "current_spread_home": -3.58,
+                            "current_total": 44.42,
+                            "odds_captured_at": datetime(2026, 8, 21, 13, 42, 55, tzinfo=timezone.utc),
+                            "source_game_id": "g-sea-ne",
+                        }
+                    ]
+                )
+            return super().execute(statement, params)
+
+    monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _SnapshotSession())
+
+    def _boom(**_kwargs):
+        raise RuntimeError("401 Client Error: Unauthorized")
+
+    monkeypatch.setattr(nfl_routes, "fetch_odds", _boom)
+    client = TestClient(app)
+    response = client.get("/nfl/fair-lines", params={"season": 2026, "days_ahead": 120})
+    assert response.status_code == 200
+    payload = response.json()
+    diag = payload["diagnostics"]
+    line = payload["lines"][0]
+    assert line["open_spread_home"] == -3.5
+    assert line["open_total"] == 44.5
+    assert line["market_spread_home"] is None
+    assert line["market_total"] is None
+    assert line["best_spread_home"] is None
+    assert line["best_total"] is None
+    assert diag.get("snapshot_current_count") == 0
+    hygiene = diag.get("current_hygiene") or {}
+    assert hygiene.get("snapshot_spread_rejected") == 1
+    assert hygiene.get("snapshot_total_rejected") == 1
+    decision = line.get("decision") or {}
+    spread = decision.get("spread") or {}
+    assert spread.get("market_line") is None
+    assert spread.get("reason") == "missing_fair_or_market"

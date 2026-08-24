@@ -69,6 +69,16 @@ from src.services.nfl_decision_engine import (
     decide_game as nfl_decide_game,
 )
 from src.services.nfl_market_close import stake_close_spread
+from src.services.nfl_market_line_hygiene import (
+    CurrentHygieneStats,
+    apply_nfl_current_hygiene,
+    consensus_nfl_ml,
+    consensus_nfl_spread,
+    consensus_nfl_total,
+    resolve_snapshot_current,
+    sanitize_nfl_spread,
+    sanitize_nfl_total,
+)
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
 log = logging.getLogger(__name__)
@@ -401,7 +411,7 @@ def _merge_snapshot_current_into_live(
     """
     filled = False
     if live.get("market_spread_home") is None:
-        current = _to_float(snap.get("current_spread_home"))
+        current, _reason = sanitize_nfl_spread(snap.get("current_spread_home"))
         if current is not None:
             live["market_spread_home"] = current
             filled = True
@@ -410,7 +420,7 @@ def _merge_snapshot_current_into_live(
             if not live.get("best_spread_book"):
                 live["best_spread_book"] = "market"
     if live.get("market_total") is None:
-        current = _to_float(snap.get("current_total"))
+        current, _reason = sanitize_nfl_total(snap.get("current_total"))
         if current is not None:
             live["market_total"] = current
             filled = True
@@ -545,7 +555,9 @@ def _first_open_odds_by_game_ids(
                       ORDER BY schedule_id, sportsbook_id, captured_at DESC
                     ),
                     current_spread AS (
-                      SELECT schedule_id, AVG(spread_home) AS current_spread_home
+                      SELECT
+                        schedule_id,
+                        array_agg(spread_home) AS current_spread_samples
                       FROM latest_book_spread
                       GROUP BY schedule_id
                     ),
@@ -559,7 +571,9 @@ def _first_open_odds_by_game_ids(
                       ORDER BY schedule_id, sportsbook_id, captured_at DESC
                     ),
                     current_total AS (
-                      SELECT schedule_id, AVG(total_points) AS current_total
+                      SELECT
+                        schedule_id,
+                        array_agg(total_points) AS current_total_samples
                       FROM latest_book_total
                       GROUP BY schedule_id
                     ),
@@ -572,8 +586,8 @@ def _first_open_odds_by_game_ids(
                       COALESCE(os.schedule_id, ot.schedule_id, l.schedule_id) AS game_id,
                       os.open_spread_home,
                       ot.open_total,
-                      cs.current_spread_home,
-                      ct.current_total,
+                      cs.current_spread_samples,
+                      ct.current_total_samples,
                       l.odds_captured_at,
                       COALESCE(os.spread_snap_id, ot.total_snap_id) AS source_game_id
                     FROM latest l
@@ -640,7 +654,9 @@ def _first_open_odds_by_game_ids(
                       ORDER BY game_id, sportsbook_id, captured_at DESC
                     ),
                     current_spread AS (
-                      SELECT game_id, AVG(spread_home) AS current_spread_home
+                      SELECT
+                        game_id,
+                        array_agg(spread_home) AS current_spread_samples
                       FROM latest_book_spread
                       GROUP BY game_id
                     ),
@@ -654,7 +670,9 @@ def _first_open_odds_by_game_ids(
                       ORDER BY game_id, sportsbook_id, captured_at DESC
                     ),
                     current_total AS (
-                      SELECT game_id, AVG(total_points) AS current_total
+                      SELECT
+                        game_id,
+                        array_agg(total_points) AS current_total_samples
                       FROM latest_book_total
                       GROUP BY game_id
                     ),
@@ -667,8 +685,8 @@ def _first_open_odds_by_game_ids(
                       COALESCE(os.game_id, ot.game_id, l.game_id) AS game_id,
                       os.open_spread_home,
                       ot.open_total,
-                      cs.current_spread_home,
-                      ct.current_total,
+                      cs.current_spread_samples,
+                      ct.current_total_samples,
                       l.odds_captured_at,
                       COALESCE(os.game_id, ot.game_id, l.game_id) AS source_game_id
                     FROM latest l
@@ -694,8 +712,18 @@ def _first_open_odds_by_game_ids(
             continue
         open_spread = _to_float(mapped.get("open_spread_home"))
         open_total = _to_float(mapped.get("open_total"))
-        current_spread = _to_float(mapped.get("current_spread_home"))
-        current_total = _to_float(mapped.get("current_total"))
+        current_spread, current_spread_reason = resolve_snapshot_current(
+            mapped,
+            samples_key="current_spread_samples",
+            scalar_key="current_spread_home",
+            kind="spread",
+        )
+        current_total, current_total_reason = resolve_snapshot_current(
+            mapped,
+            samples_key="current_total_samples",
+            scalar_key="current_total",
+            kind="total",
+        )
         captured = mapped.get("odds_captured_at")
         source_id = str(mapped.get("source_game_id") or gid)
         if open_spread is None and open_total is None:
@@ -707,10 +735,10 @@ def _first_open_odds_by_game_ids(
         out[gid] = {
             "open_spread_home": round(open_spread, 2) if open_spread is not None else None,
             "open_total": round(open_total, 2) if open_total is not None else None,
-            "current_spread_home": (
-                round(current_spread, 2) if current_spread is not None else None
-            ),
-            "current_total": round(current_total, 2) if current_total is not None else None,
+            "current_spread_home": current_spread,
+            "current_total": current_total,
+            "current_spread_reject": current_spread_reason,
+            "current_total_reject": current_total_reason,
             "odds_captured_at": captured.isoformat() if hasattr(captured, "isoformat") else (
                 str(captured) if captured is not None else None
             ),
@@ -936,10 +964,14 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
         elif over_point is not None and book_key == "fanduel":
             fd_total = over_point
 
-    market_home_ml = int(round(sum(home_prices) / len(home_prices))) if home_prices else None
-    market_away_ml = int(round(sum(away_prices) / len(away_prices))) if away_prices else None
-    market_total = round(sum(totals) / len(totals), 2) if totals else None
-    market_spread_home = round(sum(spreads) / len(spreads), 2) if spreads else None
+    market_home_ml, _ml_h_reason = consensus_nfl_ml(home_prices)
+    market_away_ml, _ml_a_reason = consensus_nfl_ml(away_prices)
+    if market_home_ml is not None:
+        market_home_ml = int(round(market_home_ml))
+    if market_away_ml is not None:
+        market_away_ml = int(round(market_away_ml))
+    market_total, _tot_reason = consensus_nfl_total(totals)
+    market_spread_home, _spr_reason = consensus_nfl_spread(spreads)
     market_depth = len(home_prices) + len(totals) + len(spreads)
     stake_spread, stake_spread_book = stake_close_spread(
         draftkings=dk_spread_home,
@@ -959,8 +991,16 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
         "market_total": market_total,
         "market_spread_home": market_spread_home,
         "market_depth": market_depth,
-        "best_spread_home": round(best_spread_home, 2) if best_spread_home is not None else None,
-        "best_total": round(best_total_point, 2) if best_total_point is not None else None,
+        "best_spread_home": (
+            sanitize_nfl_spread(best_spread_home)[0]
+            if best_spread_home is not None
+            else None
+        ),
+        "best_total": (
+            sanitize_nfl_total(best_total_point)[0]
+            if best_total_point is not None
+            else None
+        ),
         "best_spread_book": best_spread_book,
         "best_total_book": best_total_book,
         "best_spread_away_juice": best_away_juice,
@@ -3788,6 +3828,7 @@ def nfl_fair_lines(
     lines: List[Dict[str, Any]] = []
     market_joined_count = 0
     snapshot_current_count = 0
+    current_hygiene = CurrentHygieneStats()
     try:
         week1_pack = load_week1_pack(int(season))
     except Exception:
@@ -3809,7 +3850,10 @@ def nfl_fair_lines(
         market = dict(market_by_abbr.get((home_abbr, away_abbr), {}) or {})
         _open_snap = open_by_game_id.get(str(mapped.get("game_id") or ""), {})
         _snapshot_used = _merge_snapshot_current_into_live(market, _open_snap)
-        if _snapshot_used:
+        apply_nfl_current_hygiene(market, current_hygiene)
+        if _snapshot_used and (
+            market.get("market_spread_home") is not None or market.get("market_total") is not None
+        ):
             snapshot_current_count += 1
         market_home_ml = market.get("market_home_ml")
         market_away_ml = market.get("market_away_ml")
@@ -4175,6 +4219,17 @@ def nfl_fair_lines(
         current_source = "live"
     else:
         current_source = None
+    log.info(
+        "nfl_current_hygiene kept_spread=%s rejected_spread=%s kept_total=%s "
+        "rejected_total=%s kept_ml=%s rejected_ml=%s reasons=%s",
+        current_hygiene.kept_spread,
+        current_hygiene.rejected_spread,
+        current_hygiene.kept_total,
+        current_hygiene.rejected_total,
+        current_hygiene.kept_ml,
+        current_hygiene.rejected_ml,
+        dict(current_hygiene.reasons),
+    )
     return {
         "season": season,
         "model_version": effective_model_version,
@@ -4202,6 +4257,15 @@ def nfl_fair_lines(
             "market_joined_count": market_joined_count,
             "snapshot_current_count": snapshot_current_count,
             "current_source": current_source,
+            "current_hygiene": {
+                **current_hygiene.as_dict(),
+                "snapshot_spread_rejected": sum(
+                    1 for s in open_by_game_id.values() if s.get("current_spread_reject")
+                ),
+                "snapshot_total_rejected": sum(
+                    1 for s in open_by_game_id.values() if s.get("current_total_reject")
+                ),
+            },
             "bookmakers": resolved_bookmakers.split(","),
             "kosedge_only": market_joined_count == 0,
             "odds_persisted": odds_persist,

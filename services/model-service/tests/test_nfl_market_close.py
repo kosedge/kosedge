@@ -58,3 +58,67 @@ def test_extract_play_compare_uses_dk_not_shop_best() -> None:
     assert out["stake_spread_home"] == -6.5
     assert out["stake_spread_book"] == "draftkings"
     assert out["best_spread_home"] == -8.0
+
+
+def test_extract_consensus_is_mode_not_average() -> None:
+    event = {
+        "home_team": "Seattle Seahawks",
+        "away_team": "New England Patriots",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Seattle Seahawks", "point": -3.5, "price": -110},
+                            {"name": "New England Patriots", "point": 3.5, "price": -110},
+                        ],
+                    },
+                    {
+                        "key": "totals",
+                        "outcomes": [
+                            {"name": "Over", "point": 44.5, "price": -110},
+                            {"name": "Under", "point": 44.5, "price": -110},
+                        ],
+                    },
+                ],
+            },
+            {
+                "key": "fanduel",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Seattle Seahawks", "point": -4.0, "price": -110},
+                            {"name": "New England Patriots", "point": 4.0, "price": -110},
+                        ],
+                    },
+                    {
+                        "key": "totals",
+                        "outcomes": [
+                            {"name": "Over", "point": 44.5, "price": -110},
+                            {"name": "Under", "point": 44.5, "price": -110},
+                        ],
+                    },
+                ],
+            },
+            {
+                "key": "betmgm",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Seattle Seahawks", "point": -3.5, "price": -110},
+                            {"name": "New England Patriots", "point": 3.5, "price": -110},
+                        ],
+                    },
+                ],
+            },
+        ],
+    }
+    out = _extract_book_market_prices(event)
+    assert out["market_spread_home"] == -3.5  # not AVG −3.67
+    assert out["market_total"] == 44.5
+    assert out["best_spread_home"] == -3.5 or out["best_spread_home"] == -4.0
+

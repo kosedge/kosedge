@@ -1030,12 +1030,91 @@ def test_merge_snapshot_current_does_not_overwrite_live() -> None:
     assert live["best_spread_book"] == "draftkings"
 
 
+def test_merge_snapshot_current_rejects_avg_garbage() -> None:
+    live: Dict[str, Any] = {
+        "market_spread_home": None,
+        "market_total": None,
+        "best_spread_home": None,
+        "best_total": None,
+    }
+    used = nfl_routes._merge_snapshot_current_into_live(
+        live,
+        {
+            "current_spread_home": -3.58,
+            "current_total": 44.42,
+            "open_spread_home": -3.5,
+            "open_total": 44.5,
+        },
+    )
+    assert used is False
+    assert live["market_spread_home"] is None
+    assert live["market_total"] is None
+    assert live["best_spread_home"] is None
+
+
+def test_first_open_odds_mode_of_samples_not_average() -> None:
+    class _Session:
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            return _FakeResult(
+                [
+                    {
+                        "game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                        "open_spread_home": -3.0,
+                        "open_total": 47.5,
+                        "current_spread_samples": [-3.5, -4.0, -3.5],
+                        "current_total_samples": [48.0, 47.5, 48.0],
+                        "odds_captured_at": None,
+                        "source_game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                    }
+                ]
+            )
+
+    out = nfl_routes._first_open_odds_by_game_ids(
+        _Session(), ["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    )
+    snap = out["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    assert snap["open_spread_home"] == -3.0
+    assert snap["current_spread_home"] == -3.5
+    assert snap["current_total"] == 48.0
+    assert snap["current_spread_reject"] is None
+
+
+def test_first_open_odds_rejects_scalar_avg_garbage() -> None:
+    class _Session:
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            return _FakeResult(
+                [
+                    {
+                        "game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                        "open_spread_home": -3.5,
+                        "open_total": 44.5,
+                        "current_spread_home": -3.58,
+                        "current_total": 44.42,
+                        "odds_captured_at": None,
+                        "source_game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                    }
+                ]
+            )
+
+    out = nfl_routes._first_open_odds_by_game_ids(
+        _Session(), ["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    )
+    snap = out["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    assert snap["open_spread_home"] == -3.5
+    assert snap["open_total"] == 44.5
+    assert snap["current_spread_home"] is None
+    assert snap["current_total"] is None
+    assert snap["current_spread_reject"] == "not_half_point"
+    assert snap["current_total_reject"] == "not_half_point"
+
+
 def test_first_open_odds_maps_current_separately_from_open() -> None:
     class _Session:
         def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
             sql = str(statement)
             assert "latest_book_spread" in sql
-            assert "current_spread_home" in sql
+            assert "current_spread_samples" in sql
+            assert "AVG(spread_home)" not in sql
             return _FakeResult(
                 [
                     {
