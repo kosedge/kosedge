@@ -1,10 +1,11 @@
-"""Strict NFL Current-line hygiene.
+"""NFL Current-line hygiene — simple book-line gate.
 
-Current on Edge must look like a posted book line. Invalid → None (honest empty).
-Never round / invent a nearby half-point (e.g. −3.58 must not become −3.5).
+Spread valid if: number in [-20, 20] AND (integer or *.0 or *.5).
+Total valid if: number in [30, 65] AND (integer or *.0 or *.5).
+Else Current for that market is None (honest —). Never round junk into a
+nearby half-point. Never reject because Current equals Open.
 
-Consensus is the mode of samples that already pass the validator — not AVG.
-AVG of real books is how 3.8 / 2.4 / −3.58 leak onto the board.
+Consensus is the mode of samples that already pass the gate — not AVG.
 """
 
 from __future__ import annotations
@@ -17,19 +18,16 @@ from typing import Any, Dict, Iterable, List, Literal, Optional, Sequence, Tuple
 
 MarketKind = Literal["spread", "total", "ml"]
 
-# Posted NFL sides are half-points in a tight window. PK (0) is rejected on purpose.
-SPREAD_ABS_MIN = 0.5
-SPREAD_ABS_MAX = 20.5
-# Posted NFL totals: typically 30–65, .0 or .5.
+SPREAD_MIN = -20.0
+SPREAD_MAX = 20.0
 TOTAL_MIN = 30.0
 TOTAL_MAX = 65.0
-# American ML; decimal ML only when the column is ML.
+# American ML only when the column is ML — never painted into spread/total.
 ML_AMERICAN_ABS_MIN = 100.0
 ML_AMERICAN_ABS_MAX = 100_000.0
-ML_DECIMAL_MIN = 1.01
-ML_DECIMAL_MAX = 50.0
 
 _HALF_POINT_EPS = 1e-6
+_DASHES = ("\u2212", "\u2012", "\u2013", "\u2014", "\u2015", "\uff0d")
 
 CURRENT_SPREAD_FIELDS: Tuple[str, ...] = (
     "market_spread_home",
@@ -51,9 +49,21 @@ CURRENT_ML_FIELDS: Tuple[str, ...] = (
 )
 
 
+def normalize_numeric_text(raw: str) -> str:
+    """ASCII-minus so '−3.5' (U+2212) parses as -3.5."""
+    text = raw.strip()
+    for dash in _DASHES:
+        text = text.replace(dash, "-")
+    return text
+
+
 def to_float(value: Any) -> Optional[float]:
     if value is None or value == "":
         return None
+    if isinstance(value, str):
+        value = normalize_numeric_text(value)
+        if value in {"—", "-", "–", ""}:
+            return None
     try:
         out = float(value)
     except (TypeError, ValueError):
@@ -98,47 +108,27 @@ def canonicalize_half_point(value: float) -> float:
 
 
 def sanitize_nfl_spread(value: Any) -> Tuple[Optional[float], Optional[str]]:
-    """Return (canonical spread, None) or (None, reject_reason)."""
+    """Spread: [-20, 20] and integer / *.0 / *.5. Else —."""
     if value is None or value == "":
         return None, "null"
     num = to_float(value)
     if num is None:
         return None, "non_finite"
-    if abs(num) < 1e-12:
-        return None, "zero"
-    abs_n = abs(num)
-    if not is_nfl_half_point(num):
-        if 0 < abs_n < 1:
-            return None, "looks_like_probability"
-        if abs_n >= ML_AMERICAN_ABS_MIN:
-            return None, "looks_like_ml"
-        if abs_n >= TOTAL_MIN:
-            return None, "looks_like_total"
-        if abs_n > SPREAD_ABS_MAX:
-            return None, "out_of_range"
-        return None, "not_half_point"
-    if abs_n >= ML_AMERICAN_ABS_MIN:
-        return None, "looks_like_ml"
-    if abs_n >= TOTAL_MIN:
-        return None, "looks_like_total"
-    if abs_n < SPREAD_ABS_MIN or abs_n > SPREAD_ABS_MAX:
+    if num < SPREAD_MIN or num > SPREAD_MAX:
         return None, "out_of_range"
+    if not is_nfl_half_point(num):
+        return None, "not_half_point"
     return canonicalize_half_point(num), None
 
 
 def sanitize_nfl_total(value: Any) -> Tuple[Optional[float], Optional[str]]:
+    """Total: [30, 65] and integer / *.0 / *.5. Else —."""
     if value is None or value == "":
         return None, "null"
     num = to_float(value)
     if num is None:
         return None, "non_finite"
-    if abs(num) < 1e-12:
-        return None, "zero"
-    if 0 < num < 1:
-        return None, "looks_like_probability"
-    if num < TOTAL_MIN:
-        return None, "looks_like_spread" if abs(num) <= SPREAD_ABS_MAX else "out_of_range"
-    if num > TOTAL_MAX:
+    if num < TOTAL_MIN or num > TOTAL_MAX:
         return None, "out_of_range"
     if not is_nfl_half_point(num):
         return None, "not_half_point"
@@ -146,35 +136,18 @@ def sanitize_nfl_total(value: Any) -> Tuple[Optional[float], Optional[str]]:
 
 
 def sanitize_nfl_ml(value: Any) -> Tuple[Optional[float], Optional[str]]:
-    """American ML, or clear decimal ML. Never used to paint the spread slot."""
+    """American ML only. Never used to paint the spread/total slots."""
     if value is None or value == "":
         return None, "null"
     num = to_float(value)
     if num is None:
         return None, "non_finite"
-    if abs(num) < 1e-12:
-        return None, "zero"
-    if 0 < abs(num) < 1:
-        return None, "looks_like_probability"
-    # American: integer, |n| ≥ 100.
-    if abs(num - round(num)) < _HALF_POINT_EPS:
-        american = float(int(round(num)))
-        if ML_AMERICAN_ABS_MIN <= abs(american) <= ML_AMERICAN_ABS_MAX:
-            return american, None
+    if abs(num - round(num)) >= _HALF_POINT_EPS:
+        return None, "not_american_ml"
+    american = float(int(round(num)))
+    if abs(american) < ML_AMERICAN_ABS_MIN or abs(american) > ML_AMERICAN_ABS_MAX:
         return None, "out_of_range"
-    if is_nfl_half_point(num) and abs(num) <= SPREAD_ABS_MAX:
-        return None, "looks_like_spread"
-    # 3.8 / 2.4 class leaked into the ML column — not a book ML.
-    frac = abs(num - math.trunc(num))
-    tenth = frac * 10.0
-    if abs(tenth - round(tenth)) < _HALF_POINT_EPS:
-        digit = int(round(tenth)) % 10
-        if digit in {2, 4, 6, 8}:
-            return None, "looks_like_spread"
-    # Decimal ML (1.91 class) — only valid in the ML column.
-    if ML_DECIMAL_MIN <= num <= ML_DECIMAL_MAX:
-        return round(num, 3), None
-    return None, "not_american_or_decimal_ml"
+    return american, None
 
 
 def sanitize_nfl_line(value: Any, kind: MarketKind) -> Tuple[Optional[float], Optional[str]]:

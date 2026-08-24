@@ -78,6 +78,7 @@ from src.services.nfl_market_line_hygiene import (
     resolve_snapshot_current,
     sanitize_nfl_spread,
     sanitize_nfl_total,
+    to_float as hygiene_to_float,
 )
 
 router = APIRouter(prefix="/nfl", tags=["nfl-model"])
@@ -235,12 +236,8 @@ for _abbr, _full in NFL_ABBR_TO_FULL_NAME.items():
 
 
 def _to_float(v: Any) -> Optional[float]:
-    if v is None:
-        return None
-    try:
-        return float(v)
-    except (TypeError, ValueError):
-        return None
+    """Parse book/snapshot numbers; unicode minus (U+2212) → ASCII minus."""
+    return hygiene_to_float(v)
 
 
 def _to_int(v: Any) -> Optional[int]:
@@ -3829,6 +3826,7 @@ def nfl_fair_lines(
     market_joined_count = 0
     snapshot_current_count = 0
     current_hygiene = CurrentHygieneStats()
+    week1_current_log: List[Dict[str, Any]] = []
     try:
         week1_pack = load_week1_pack(int(season))
     except Exception:
@@ -3874,6 +3872,46 @@ def nfl_fair_lines(
         has_market = any(v is not None for v in (market_home_ml, market_away_ml, market_total, market_spread_home))
         if has_market:
             market_joined_count += 1
+        _week_now = mapped.get("week")
+        try:
+            _week_int_hygiene = int(_week_now) if _week_now is not None else None
+        except (TypeError, ValueError):
+            _week_int_hygiene = None
+        if _week_int_hygiene == 1:
+            painted_s = (
+                best_spread_home if best_spread_home is not None else market_spread_home
+            )
+            painted_t = best_total if best_total is not None else market_total
+            spread_reason = (
+                None
+                if painted_s is not None
+                else (_open_snap.get("current_spread_reject") or "missing")
+            )
+            total_reason = (
+                None
+                if painted_t is not None
+                else (_open_snap.get("current_total_reject") or "missing")
+            )
+            week1_current_log.append(
+                {
+                    "game": f"{away_abbr}@{home_abbr}",
+                    "open_spread": _to_float(_open_snap.get("open_spread_home")),
+                    "current_spread": painted_s,
+                    "spread_reason": spread_reason,
+                    "open_total": _to_float(_open_snap.get("open_total")),
+                    "current_total": painted_t,
+                    "total_reason": total_reason,
+                }
+            )
+            if spread_reason or total_reason:
+                log.info(
+                    "nfl_current_hygiene week1 %s spread=%s reason=%s total=%s reason=%s",
+                    f"{away_abbr}@{home_abbr}",
+                    painted_s,
+                    spread_reason,
+                    painted_t,
+                    total_reason,
+                )
 
         # Published columns = KEI handicap. Model = pre-blend research when available.
         spread_home = _to_float(mapped.get("spread_home"))
@@ -4264,6 +4302,13 @@ def nfl_fair_lines(
                 ),
                 "snapshot_total_rejected": sum(
                     1 for s in open_by_game_id.values() if s.get("current_total_reject")
+                ),
+                "week1": week1_current_log,
+                "week1_valid_spread": sum(
+                    1 for g in week1_current_log if g.get("current_spread") is not None
+                ),
+                "week1_valid_total": sum(
+                    1 for g in week1_current_log if g.get("current_total") is not None
                 ),
             },
             "bookmakers": resolved_bookmakers.split(","),

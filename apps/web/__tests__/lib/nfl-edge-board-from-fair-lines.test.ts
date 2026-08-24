@@ -6,6 +6,7 @@ import {
   filterNflProjectionBackedRows,
   filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
+  parseAwaySpreadLabelToHome,
   syncEdgeBoardActionsWithCurrent,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
@@ -698,6 +699,34 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(
       (spread as { edgeMagnitude?: number }).edgeMagnitude,
     ).toBeUndefined();
+  });
+
+  it("parses unicode minus away-spread labels into home Current", () => {
+    expect(parseAwaySpreadLabelToHome("−3.5")).toBe(3.5);
+    expect(parseAwaySpreadLabelToHome("+3.5")).toBe(-3.5);
+  });
+
+  it("keeps PK Current 0 and does not reject Current equal Open", () => {
+    const rows = fairLinesToEdgeBoardRows([
+      line({
+        week: 1,
+        spreadHome: -1.2,
+        handicapSpreadHome: -1.2,
+        openSpreadHome: 0,
+        marketSpreadHome: 0,
+        bestSpreadHome: 0,
+        marketTotal: 44.5,
+        bestTotal: 44.5,
+        openTotal: 44.5,
+        decision: null,
+      }),
+    ]);
+    const spread = rows.find((r) => r.market === "Spread")!;
+    expect(spread.best).toBe("+0");
+    expect(spread.open).toBe("+0");
+    expect((spread as { decisionMarketLine?: number }).decisionMarketLine).toBe(
+      0,
+    );
   });
 
   it("keeps posted-shaped Current (−3.5 / 44.5) and Actions against it", () => {

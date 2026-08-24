@@ -1030,6 +1030,22 @@ def test_merge_snapshot_current_does_not_overwrite_live() -> None:
     assert live["best_spread_book"] == "draftkings"
 
 
+def test_merge_snapshot_current_keeps_pk_zero() -> None:
+    live: Dict[str, Any] = {
+        "market_spread_home": None,
+        "market_total": None,
+        "best_spread_home": None,
+        "best_total": None,
+    }
+    used = nfl_routes._merge_snapshot_current_into_live(
+        live,
+        {"current_spread_home": 0, "current_total": 44.5, "open_spread_home": 0},
+    )
+    assert used is True
+    assert live["market_spread_home"] == 0.0
+    assert live["market_total"] == 44.5
+
+
 def test_merge_snapshot_current_rejects_avg_garbage() -> None:
     live: Dict[str, Any] = {
         "market_spread_home": None,
@@ -1076,6 +1092,33 @@ def test_first_open_odds_mode_of_samples_not_average() -> None:
     assert snap["open_spread_home"] == -3.0
     assert snap["current_spread_home"] == -3.5
     assert snap["current_total"] == 48.0
+    assert snap["current_spread_reject"] is None
+
+
+def test_first_open_odds_parses_unicode_minus_samples() -> None:
+    class _Session:
+        def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
+            return _FakeResult(
+                [
+                    {
+                        "game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                        "open_spread_home": "−3.5",
+                        "open_total": 44.5,
+                        "current_spread_samples": ["−3.5", "−3.5", -4.0],
+                        "current_total_samples": [44.5, 44.0, 44.5],
+                        "odds_captured_at": None,
+                        "source_game_id": "c1df8ae6-458e-4b33-9805-94c5fd3436c7",
+                    }
+                ]
+            )
+
+    out = nfl_routes._first_open_odds_by_game_ids(
+        _Session(), ["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    )
+    snap = out["c1df8ae6-458e-4b33-9805-94c5fd3436c7"]
+    assert snap["open_spread_home"] == -3.5
+    assert snap["current_spread_home"] == -3.5
+    assert snap["current_total"] == 44.5
     assert snap["current_spread_reject"] is None
 
 

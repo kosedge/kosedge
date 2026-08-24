@@ -19,6 +19,7 @@ import {
   sanitizeNflLine,
   sanitizeNflSpread,
   sanitizeNflTotal,
+  toFiniteNumber,
   type NflMarketLineKind,
 } from "@/lib/nfl-market-line-hygiene";
 
@@ -142,8 +143,8 @@ export function parseAwaySpreadLabelToHome(
   if (label == null) return null;
   const raw = String(label).trim();
   if (!raw || raw === "—") return null;
-  const n = parseFloat(raw.replace(/[^+\-\d.]/g, ""));
-  return Number.isFinite(n) ? -n : null;
+  const n = toFiniteNumber(raw);
+  return n == null ? null : -n;
 }
 
 /** Parse total label ("44.5" / "o44.5") → points. */
