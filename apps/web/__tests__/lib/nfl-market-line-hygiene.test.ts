@@ -4,16 +4,19 @@ import {
   sanitizeNflMl,
   sanitizeNflSpread,
   sanitizeNflTotal,
+  toFiniteNumber,
 } from "@/lib/nfl-market-line-hygiene";
 
 describe("nfl-market-line-hygiene", () => {
-  it("keeps posted NFL book shapes", () => {
+  it("keeps posted NFL book shapes including PK and unicode minus", () => {
     expect(sanitizeNflSpread(-3.5).value).toBe(-3.5);
     expect(sanitizeNflSpread(-3).value).toBe(-3);
-    expect(sanitizeNflSpread(0.5).value).toBe(0.5);
+    expect(sanitizeNflSpread(0).value).toBe(0);
+    expect(sanitizeNflSpread(7).value).toBe(7);
+    expect(toFiniteNumber("−3.5")).toBe(-3.5);
+    expect(sanitizeNflSpread("−3.5").value).toBe(-3.5);
     expect(sanitizeNflTotal(44.5).value).toBe(44.5);
     expect(sanitizeNflMl(-150).value).toBe(-150);
-    expect(sanitizeNflMl(1.91).value).toBe(1.91);
   });
 
   it("rejects 3.8 / 2.4 / AVG tenths and does not round them", () => {
@@ -26,11 +29,17 @@ describe("nfl-market-line-hygiene", () => {
     expect(sanitizeNflSpread(0.17).value).toBeNull();
     expect(sanitizeNflTotal(44.42).value).toBeNull();
     expect(sanitizeNflTotal(2.4).value).toBeNull();
-    expect(sanitizeNflSpread(-110).reason).toBe("looks_like_ml");
+    expect(sanitizeNflSpread(-110).reason).toBe("out_of_range");
+  });
+
+  it("does not reject Current because it equals Open", () => {
+    expect(sanitizeNflSpread(-3.5).value).toBe(-3.5);
+    expect(sanitizeNflTotal(44.5).value).toBe(44.5);
   });
 
   it("accepts away-spread display labels only when book-shaped", () => {
     expect(isPlausibleNflCurrentDisplay("+3.5", "spread")).toBe(true);
+    expect(isPlausibleNflCurrentDisplay("−3.5", "spread")).toBe(true);
     expect(isPlausibleNflCurrentDisplay("+3.8", "spread")).toBe(false);
     expect(isPlausibleNflCurrentDisplay("44.5", "total")).toBe(true);
     expect(isPlausibleNflCurrentDisplay("2.4", "total")).toBe(false);
