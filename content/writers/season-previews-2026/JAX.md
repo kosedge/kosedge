@@ -1,66 +1,68 @@
 # Jacksonville Jaguars 2026 Season Preview
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
-**Angle:** Board at 8.5 — Model ~9.8 clears threshold for soft Over if juice OK
-**Date:** August 17, 2026
-**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
-**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (+110 / -130)
-**Sources (beat desk):** Michael DiRocco (ESPN) @ESPNdirocco; Demetrius Harvey (Florida Times-Union) @Demetrius82; John Shipley (Jaguars on SI) @_John_Shipley
+**Angle:** The market reset from 9.5 to 8.5 gives Lawrence room to absorb a first-place schedule  
+**Date:** August 26, 2026  
+**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (O +110 / U -130)  
+**Sources (beat desk):** Michael DiRocco (ESPN); John Shipley (Jaguars Media / Jaguars on SI); Juston Lewis (Florida Times-Union)
 
-Jacksonville’s problem for bettors is not a shortage of talent. It is a surplus of variance dressed up as a finished product — now hanging at a number that finally admits it.
+Jacksonville does not need to repeat 13-4 to reward an Over bettor. It needs nine wins, and the market is offering plus money for a roster led by Trevor Lawrence in Year 2 of Liam Coen’s offense.
 
-Liam Coen’s first season produced a 13-4 AFC South title, an eight-game closing streak, and a wild-card loss to Buffalo. Trevor Lawrence played like the draft capital promised. Travis Hunter arrived as a two-way disruptor before a knee injury truncated his year. The brand now sells sustained success. The board is less romantic. The win total opened nearer 9.5 in February, drifted through 8.5 through the spring, and the primary desk number for this preview is **8.5**. That cut is the market admitting the flash was real and the repeatability is not free — and at **8.5**, the Over finally has room to breathe without buying last December as a baseline.
+That distinction is the case. DraftKings opened the Jaguars at 9.5 in February, then moved them to 8.5 after the schedule was released. The Kos Edge simulation lands at **9.77 expected wins**, 1.27 above the current total. At **+110**, the Over carries a 47.6% raw break-even price. The model gap clears the desk’s threshold, and the price does not consume it.
 
-## Year-two coaching tax
+This is still a soft Over, not an argument that Jacksonville established a permanent 13-win level last season. The first-place schedule is difficult, two starting receivers are dealing with late-August injuries, and the offensive line is only now settling on its best five. The bet works because those risks are being charged to an 8.5 total rather than the opening 9.5.
 
-Lead with scheme and consistency, not the highlight reel. Coen enters Year 2 asking the same franchise that has not stacked consecutive 10-win seasons in a generation to do the boring thing: look the same in October as it did in December. AP coverage from camp open captured the tone without needing hype — Coen’s public emphasis was proving it again, with consistency as the measuring stick. That is the correct handicapping frame. One magical stretch does not price a season. A **8.5** total, though, is no longer pricing magic. It is pricing regression plus a first-place slate with a soft floor underneath.
+## Lawrence and the offense are showing enough
 
-Michael DiRocco’s ESPN camp preview is blunt about the quiet, criticized offseason: Travis Etienne and Devin Lloyd out, limited external free-agent help, no first-round pick because of the Hunter trade, and a second-round tight end selection (Nate Boerkircher) that drew heavy draft-board skepticism. Scheme continuity is an asset. Roster churn at running back and linebacker is a variance injector. John Shipley’s SI lane and Demetrius Harvey’s Times-Union notes are where you track whether Coen’s “players over plays / flexible personnel” language turns into stable usage or weekly reinvention.
+The most useful camp evidence came against Tampa Bay on August 25. Local practice charts had Lawrence completing 17 of 28 passes with two touchdowns. He opened team work with a deep touchdown to Brian Thomas Jr. and operated well despite pressure from Tampa Bay’s front. One joint practice does not set a season projection, but the timing and downfield access were appropriate checks for an offense expected to carry the roster.
 
-Coen has pushed back on the idea that drafting tight ends means abandoning the receiver room. Flexibility is fine for Sunday play-calling. For a win total, flexibility without a settled identity is just another word for week-to-week noise — the exact profile that covers as a dog and ruins you as a short favorite. At **8.5**, that noise still matters for sides; it matters less for whether Jacksonville can clear eight wins.
+Thomas injured his left shoulder while landing on that touchdown. Juston Lewis reported that the receiver remained on the sideline in pads, and Coen’s expectation was that he would be ready for Week 1. That is encouraging, not final. Jakobi Meyers also remained out after jamming his right thumb in the August 19 joint practice with Carolina and had been wearing a brace.
 
-## Where the flash lives — and where it dies
+Those injuries matter because Travis Hunter has not simply shifted into a larger offensive role. John Shipley reported that Hunter took all of his August 25 team reps on defense and has spent most of the late-camp period at cornerback. The staff still plans to use him on both sides, but the evidence points toward a starting defensive role rather than automatic replacement volume for Meyers.
 
-Lawrence in Year 2 of the Coen offense is the bull case. DiRocco’s preview notes a strong spring, health after a relatively clean 2025, and an explicit camp priority: more downfield answers, especially with Brian Thomas Jr. If that chemistry holds, Jacksonville’s offense can stay in every game even when the defense regresses. Jakobi Meyers, Parker Washington, and Hunter give Lawrence real toys. That is not imaginary talent — and it is enough talent to make **Over 7.5** the process side if camp does not implode.
+That leaves Parker Washington and the younger receivers to absorb extra work if either Thomas or Meyers is limited. Jacksonville has options, but the roles are not interchangeable. Thomas provides the explosive outside element. Meyers offers route reliability. Hunter’s two-way allocation must protect his defensive development. The Over case is strongest if those three jobs stay distinct rather than forcing a late redistribution.
 
-The bear case is defensive and situational. A 13-win season stacked with takeaways is a classic regression candidate, especially after losing Lloyd and asking a first-place schedule to be polite. ESPN’s betting outlook also flagged that several 2025 losses were late collapses — the kind of tape that flips when you become the favorite more often. ATS heroes in Year 1 become chalk in Year 2. Chalk needs consistency. Consistency is the unproven part. Even so, “regression from 13” and “fails to clear eight” are different sentences. The Under needs more than nostalgia for last year’s chaos.
+## The line and run game are taking shape
 
-Hunter is the wild card inside the wild card. DiRocco’s Day 1 camp tracker had him on a managed snap plan (12 snaps in 11-on-11, weighted toward defense). Harvey’s local reporting described Coen carrying an intentional, highlighted practice schedule for Hunter’s reps — the staff trying to ramp a two-way player without guessing. Until that usage stabilizes, Hunter props and team totals both inherit extra uncertainty. Talent flash: obvious. Consistency: TBD. Neither erases Lawrence’s floor against a **8.5**.
+Jacksonville’s August 25 first-team line was Anton Harrison at left tackle, rookie Emmanuel Pregnon at left guard, Robert Hainsey at center, Ezra Cleveland at right guard and Walker Little at right tackle. Pregnon is the new piece. Little has stabilized the right side after an early-camp injury, while Cole Van Lanen is working back after beginning camp on the physically unable to perform list.
 
-## Schedule and environment
+This group does not need to become dominant for the Over. It needs to avoid turning Lawrence’s downfield offense into a constant pressure response. Tampa Bay created several would-be sacks in the joint practice, a useful warning beneath an otherwise positive day. The starting five has little time to waste before it faces Denver, New England and Philadelphia in the first six weeks.
 
-First-place schedule tax is real. London home games add travel and totals weirdness that this desk will not pretend to master in July. Heat spots in Jacksonville still matter for pace. The second-half calendar may offer repair if the early slate bruises them — several outs prefer playoff futures to the old higher win totals for that reason. That distinction still matters. Making the playoffs and clearing **8.5** are related bets; clearing **8.5** is the easier of the two.
+The running back room is also moving away from the prior structure. Shipley reported productive August 25 work from Bhayshul Tuten and Chris Rodriguez Jr., with Tuten showing the more explosive gear. The likely committee can help Coen keep Lawrence out of long-yardage situations without demanding that one back replace all of Travis Etienne Jr.’s former workload. For season-total purposes, functional efficiency matters more than naming an every-down back.
 
-OL and secondary health remain the DiRocco/Harvey leading indicators. Pressure rate without coverage collapse is how Jacksonville wins ugly. If that disappears, games become track meets they are not built to close every week — and an 8–9 or 9–8 season still cashes the Over.
+The defensive practice results were positive. Josh Hines-Allen generated multiple would-be sacks against Tampa Bay, and the secondary intercepted Baker Mayfield twice. Hunter’s heavier defensive workload adds a potential playmaker to a group that needs to keep games from becoming weekly scoring races. Again, camp results are not standings. They do show that Jacksonville’s path to nine wins is not limited to Lawrence winning every high-variance game.
 
-## What the market may be wrong about
+## The schedule explains the discount
 
-Treating 13-4 as a new baseline was the old mistake. Cutting through 9.5 and 8.5 toward **8.5** was the market’s honest move. The remaining error risk is emotional in the other direction: buying the Under because “regression” is a comfortable word after a banner year, or refusing the Over because last year’s ATS shine feels unrepeatable. Both need a price. At **8.5** with contested juice, research-adjusted fair nearer **8.2–8.8** clears the half-win band on the Over — still not automatic if Over juice stretches past −135.
+The Jaguars face five 2025 division champions because they won the AFC South: Denver, New England, Philadelphia, Chicago and Pittsburgh. Three appear in the first five weeks. Jacksonville hosts Cleveland, visits Denver, hosts New England, visits Cincinnati and then plays Philadelphia in London. Houston follows at Wembley in Week 6.
 
-If Kos Edge / KEICMB loves Jacksonville’s offense while beat notes show Hunter snap ambiguity and early LB attrition (camp already produced injury noise, including Jack Kiser’s knee MRI after Day 1), do not average into a soft Under. Prefer Over at shoppable juice, or Pass if the tax eats the edge.
+Back-to-back London games reduce repeated transatlantic travel, and the Week 7 bye gives the roster a recovery point immediately afterward. The tradeoff is a long stretch away from a conventional Jacksonville home environment. After hosting Indianapolis in Week 8, the Jaguars play three consecutive road games at Baltimore, Tennessee and the Giants.
 
+The closing calendar is mixed. Tennessee at home and Washington at home are useful spots. Road games at Chicago, Houston, Dallas and Indianapolis surround a Monday night home date with Pittsburgh. Three of the final four are away, including two division games.
 
-## Monday desk refresh (2026-08-17)
+This is not a friendly schedule. It is also why the total is 8.5. The Over does not require Jacksonville to beat every division champion. A 3-3 AFC South record leaves six non-division wins to reach nine. Taking care of Cleveland, Tennessee and the Giants would reduce the burden in the marquee games. Lawrence gives the Jaguars a credible chance to win two or three of the harder matchups rather than merely survive them.
 
-**Bottom line.** Live DK market is **8.5**, not 7.5. Model 9.76 vs 8.5 (~+1.3) supports a soft **Over** only with friendly juice; confidence ≤2.
+## Why the plus price matters
 
-**What matters most.** OL health; Over juice (+110) is the entry — Pass if taxed past −120.
+The Model fair of **9.77** sits 1.27 wins above market. Unlike Indianapolis, there is no obvious allocation conflict large enough to invalidate the comparison. Lawrence is healthy, Hunter’s role is becoming clearer, and the starting line has taken shape. Thomas and Meyers still need clean Week 1 trajectories, but current reporting does not place either on a long-term absence.
 
-**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
+At -125 or worse, the first-place schedule and receiver injuries would narrow the decision. At **+110**, the market pays the bettor to accept those risks. That supports a **soft Over 8.5** with confidence capped at 2/5.
+
 ## Betting Guide
 
-- **Win total (7.5):** Lean Over; prefer −125 or better. If Over is juiced past −140 without positive Lawrence/Thomas camp news, **Pass**. Conditional Under interest only if Lawrence or Hunter availability turns into a multi-week problem — not because “13-4 can’t repeat.”
-- **Sides theme:** Dogs over favorites until Year-2 identity looks boring. Jacksonville’s 2025 ATS shine does not transfer automatically to chalk, even if the season total Over is live.
-- **Totals theme:** Game-dependent. London and heat spots are individual studies, not a season-long lean.
-- **Props theme:** Thomas Jr. downfield usage if camp deep-ball work sticks. Hunter season props need snap-share confirmation on both sides of the ball. Fade “everyone eats” narratives until Coen’s personnel packages stabilize.
-- **Futures:** Playoff tickets can still make sense if you believe in Lawrence/Coen Year 2; do not require a 10-win path to like **Over 7.5**.
+- **Win total 8.5 (O +110 / U -130):** Soft Over. Model fair is 9.77, and the positive price preserves the 1.27-win margin.
+- **Price discipline:** Pass if the Over becomes heavily taxed. The case rests on buying the schedule discount, not paying for last year’s 13 wins.
+- **Early sides:** Jacksonville may remain more reliable as an underdog than as a favorite while the line and running back committee establish their weekly floor.
+- **Usage watch:** Hunter’s defensive snaps should not be projected as full offensive replacement volume. Track Thomas’ shoulder and Meyers’ hand separately.
+- **Schedule marker:** The record after the two London games will frame the season. A 3-3 start keeps nine wins realistic with the bye arriving immediately.
 
 **Handicapper’s Note**  
-Fair number: **9.76** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
-Market number: **8.5** (DK / RotoWire Aug 2026)  
-Lean: **Over 8.5**  
-Confidence: 2/5  
-Key risk: Model 9.76 clears 8.5 by 1.26; shop juice; confidence capped.
+Fair number: **9.77**  
+Market number: **8.5** (O +110 / U -130)  
+Lean: **Soft Over 8.5**  
+Confidence: **2/5**  
+Key risk: A five-division-winner schedule and late-August injuries to Thomas and Meyers could erase the cushion before Jacksonville reaches its Week 7 bye.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

@@ -1,72 +1,62 @@
 # Houston Texans 2026 Season Preview
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
-**Angle:** Stroud year-three tax already in the number  
-**Date:** August 17, 2026
-**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
-**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-125 / +105)
-**Market (DK/RotoWire, late July 2026):** Win total 9.5 (−125 / +105)  
-**Sources (beat desk):** DJ Bien-Aime (ESPN) [@djbienaime](https://x.com/djbienaime); Jonathan M. Alexander (Houston Chronicle) [@jonmalexander](https://x.com/jonmalexander); Aaron Wilson (KPRC) [@AaronWilson_NFL](https://x.com/AaronWilson_NFL)
+**Angle:** The defensive floor survives, but Houston’s WR2 uncertainty makes a taxed Over difficult to buy  
+**Date:** August 26, 2026  
+**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (O -125 / U +105)  
+**Sources (beat desk):** DJ Bien-Aime (ESPN); Jonathan M. Alexander (Houston Chronicle); Aaron Wilson (KPRC 2 / SportsTalk 790)
 
-Houston went 12-5 in 2025, won a wild-card game, and still opened 2026 at **9.5**. That gap is not a typo. It is the market collecting the C.J. Stroud tax before you do.
+Houston’s win total asks two different questions at once. Is a 12-win team with a high-end defense still more likely than not to reach 10? Probably. Is that answer strong enough to lay **-125** after a season-ending injury removed a starting receiver and left the next three options carrying separate availability or role questions? That is harder.
 
-The handicapping mistake on this board is chasing the Under because “the offense still has to prove it.” That sentence is already inside the number. Books shaved roughly two and a half wins off last year’s record, then made you lay −125 to buy the Over. The question is not whether Houston is a finished product. It is whether 9.5 still underprices a defense that rarely leaves games and an offense that spent the winter trying to stop living on borrowed close-game luck.
+The Kos Edge preseason simulation lands at **10.34 expected wins**, 0.84 above the posted 9.5. That is a real numerical gap, not a rounding error. The price changes the decision, though. An Over bettor at -125 needs to win 55.6% of the time before accounting for hold, and an expected-win mean is not the same thing as the probability of clearing nine wins. Houston opened at 9.5 in February and remains there in late August. The number held; the offensive certainty did not.
 
-## What 9.5 is actually saying
+## Higgins changes the passing-game floor
 
-A 12-win team does not land on 9.5 by accident. Houston was 7-5 in one-score games in 2025. That profile invites regression. The offense ranked mid-pack in points (about 21.9 per game) while the defense finished near the top of the league in points and yards allowed. DJ Bien-Aime’s camp framing is blunt: every key defensive piece is back, so the floor is real — and that puts pressure on the offense to stop being the limiter.
+Jayden Higgins tore his ACL during Houston’s August 18 joint practice with Las Vegas and will miss the season. Jonathan M. Alexander reported that Higgins had been one of the reasons the offense looked improved in camp. The second-year receiver was coming off 41 catches, 525 yards and six touchdowns, and the staff expected a larger role.
 
-Since Stroud and DeMeco Ryans arrived in 2023, Houston is 18-1 when it reaches 24 points. Bien-Aime’s preview math is the cleaner way to think about the season than “MVP Stroud” talk: get to average-plus scoring, and the defense does the rest. That is not a narrative. It is a threshold.
+This is not a generic depth loss. Higgins was positioned to be the stable second option opposite Nico Collins while Tank Dell completed a long return from the major knee injury that cost him all of 2025. DJ Bien-Aime reported in early August that Dell had no firm timetable for Week 1 and was taking his return one day at a time. Aaron Wilson’s August 24 report said Dell had not suffered a new setback, but he was working independently rather than carrying a normal daily practice load.
 
-The year-three (now year-four eligibility) tax on Stroud is already paid in the futures price. Playoff turnovers, extension noise, and midseason concussion absence all lived in the offseason discourse. Nick Caserio has publicly left the door open for productive extension talks; Ryans keeps pointing at on-field performance. None of that moves a win total by itself. Protection and early-down success rate will.
+The open WR2 job therefore belongs to a group, not a settled replacement. Dell owns the highest ceiling if his body accepts a full workload. Jaylin Noel returned to full team work after a hamstring strain and broken finger interrupted most of his camp. Xavier Hutchinson, who posted career highs with 35 catches and 428 yards last season, offers the cleanest recent availability. Houston can rotate those three, but rotation is not the same as continuity.
 
-## The winter was spent on the line and the run game
+That distinction matters for C.J. Stroud. Collins can remain the featured target and Dalton Schultz can absorb middle-of-field work, yet the Over case needs the offense to improve its weekly floor. If Dell is still managed, Noel is rebuilding timing and Hutchinson is learning a larger role, the Texans may again ask their defense to protect narrow margins. The Higgins injury does not turn Houston into an Under team. It does make -125 a poor price for treating offensive growth as settled.
 
-Houston’s 2025 problem was not “Stroud can’t throw.” It was a bottom-tier run game and a line that kept the offense behind schedule. The response was concrete: RT Braden Smith and LG Wyatt Teller in free agency, first-round center Keylan Rutledge, LT Aireontae Ersery continuing to settle in, and David Montgomery imported from Detroit to put weight into the ground game.
+## The line improved on paper; center is still new
 
-Camp Day 1 notes from Aaron Wilson and local coverage already show center rotation between Jake Andrews and Rutledge. That is healthy competition, not a red flag — but it is also a reminder that paper upgrades need August chemistry. Ryans has been clear: the run game has not been good enough since he arrived, and Montgomery was added because Houston needed a back who fits the physical brand.
+Houston did address its other offensive constraint. Bien-Aime’s final roster projection had first-round rookie Keylan Rutledge winning the center job over Jake Andrews. Rutledge was a college guard, so the Texans are trading experience at the position for more physical ability. That may be the correct long-term move, but a rookie center opening against Buffalo is still part of the September variance.
 
-If the new five-man group gels by Week 1, Stroud’s job gets simpler: stay on schedule, use play-action, let Nico Collins and a healthier Tank Dell work within structure under Nick Caley. If the line is still a committee in September, 9.5 starts to look honest — and the juiced Over becomes a trap.
+The relevant camp test is operation, not reputation: clean exchanges, protection calls and enough early-down run efficiency to keep Stroud out of obvious passing situations. The receiver injuries make that line work more important. A functional run game can keep Houston ahead of schedule while Dell and Noel ramp up. Protection leakage would force an unsettled receiver group to win on predictable downs.
 
-## Schedule: soft division floor, hard back half
+The defense remains the reason 10 wins is plausible even if the offense starts slowly. Will Anderson Jr., Danielle Hunter and the secondary give DeMeco Ryans multiple ways to control games without asking Stroud for 30 points. There is some depth damage: Wilson reported that defensive end Dylan Horton tore his Achilles on August 24, while Jadeveon Clowney was dealing with a lower-leg injury considered short term. Horton projected behind the primary edge group, so the injury trims rotation depth more than it changes the unit’s identity. It still matters over 17 games.
 
-Six AFC South games are the Over’s foundation. Indianapolis is a health story. Tennessee is a rebuild. Jacksonville is talented and volatile. Houston should be favored in most of those spots if the defense holds.
+## The schedule offers an early runway and a late bill
 
-The other side of the ledger is why the market did not hang 10.5. Week 1 home against Buffalo, a home date with Baltimore, and a cold outdoor stretch that can include Pittsburgh, Washington, Philadelphia, and Green Bay-type tests are ceiling limiters for a dome-built, defense-first club. Bank the division, steal two swing games, and survive December — that is the Over script. Split the division and go 1-5 against the hard slate, and the Under does not need a collapse.
+Houston opens with Buffalo and Cincinnati at home, then plays three consecutive AFC South games: at Indianapolis, at Tennessee and against Jacksonville at Wembley. The Week 8 bye arrives after a home date with the Giants. That structure gives the Texans a chance to build a record before the schedule becomes less forgiving.
 
-## Model vs beat
+The closing stretch is the concern. From Week 12 forward, Houston hosts Baltimore, visits Pittsburgh and Washington, hosts Jacksonville, then plays at Philadelphia on a Thursday and at Green Bay on a Monday before the Tennessee finale. The Eagles-to-Packers sequence creates two road games on short calendar spacing, and both are outdoors in late December or early January. Houston does not need to dominate that stretch to clear 9.5, but it cannot reach it needing a perfect finish.
 
-Kos Edge / KEICMB team-level allocation is not being used here as a forced fair number. Beat reporting (Bien-Aime, Alexander, Wilson) and the posted board are the primary inputs. Research-adjusted fair currently sits near **9.4** — close enough to 9.5 that juice decides the ticket, not vibes about Stroud’s “ascension.”
+The division is no longer a free source of wins. Jacksonville is the defending champion and owns enough offensive upside to split with Houston. Indianapolis has a healthy Daniel Jones entering Week 1, even if his durability remains a season-long question. Tennessee is still rebuilding but gets both Houston games in conventional regional spots. A 4-2 division record supports the Over. A 3-3 split puts more pressure on those difficult non-division dates.
 
-| Side | Case in one line |
-|------|------------------|
-| Over | Elite defensive floor + rebuilt OL/Montgomery + tax already in the number |
-| Under | Close-game regression + OL chemistry lag + brutal late schedule |
+## Price the uncertainty, not just the mean
 
-Neither case clears a full win of edge at −125 / +105.
+The Model fair of 10.34 supports Houston more than the market’s 9.5. The research does not fully reject that view: the defense is intact at its core, the center competition produced a winner and the schedule contains enough winnable games. The problem is paying -125 while the offense identifies a new second receiver and Dell’s availability remains open.
 
+At even money, the 0.84-win Model gap would justify a soft Over. At the current tax, the injury-adjustment risk absorbs too much of the margin. The disciplined position on August 26 is **Pass**, with Houston kept on the shopping list if the price improves or the receiver rotation becomes materially clearer.
 
-## Monday desk refresh (2026-08-17)
-
-**Bottom line.** Mertz season-ending ACL IR; Rypien signed as emergency QB3. Stroud/Mills path unchanged — depth note, not a starter rewrite. Pass.
-
-**What matters most.** Healthy Stroud/Mills practice weeks; any further QB-room churn.
-
-**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Win total 9.5 (−125 / +105):** Pass. Fair ≈ 9.4. The Stroud tax is already collected; laying −125 to “buy the regression already priced” is not threshold work.
-- **Alt numbers:** Prefer Over only if you can get 9.5 at +100 or better, or a 9-win alternate that does not require paying full juice for the same thesis.
-- **Sides:** Fade Houston as a huge road favorite in September until OL continuity shows up on early-down EPA. Home dogs with the defense traveling remain live.
-- **Props:** Montgomery rush attempts / yards — role clarity over brand. Collins receiving yards if target share holds. Pass Stroud season passing-yard Overs that assume a clean leap without line confirmation.
-- **Camp watch (through Aug. 13):** Center starter; Montgomery snap share vs committee; Dell practice participation; any secondary attrition that would actually threaten the defensive floor.
+- **Win total 9.5 (O -125 / U +105):** Pass. Model fair is 10.34, but the Higgins loss and Dell/Noel ramp-ups make the current Over tax difficult to justify.
+- **Buy point:** A return toward even money on Over 9.5 would reopen a small position if Dell is practicing consistently. Do not pay more merely because the defense looks ready.
+- **Early sides:** Treat Houston’s offense cautiously against Buffalo and Cincinnati until Rutledge’s protection calls and the WR2 rotation hold up under full-game volume.
+- **Usage watch:** Dell, Noel and Hutchinson snaps are more informative than a nominal depth-chart order. Collins volume may rise without the overall passing game becoming more efficient.
+- **Schedule marker:** Reassess after Week 7. The pre-bye record needs to carry Houston before the difficult December road sequence.
 
 **Handicapper’s Note**  
-Fair number: **10.35** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
-Market number: **9.5** (DK / RotoWire Aug 2026)  
-Lean: **Over 9.5**  
-Confidence: 2/5  
-Key risk: Model 10.35 clears 9.5 by 0.85; shop juice; confidence capped.
+Fair number: **10.34**  
+Market number: **9.5** (O -125 / U +105)  
+Lean: **Pass**  
+Confidence: **2/5**  
+Key risk: Houston’s defensive floor can still carry 10 wins, but Higgins’ season-ending ACL injury leaves Dell, Noel and Hutchinson to settle a crucial role at a taxed Over price.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

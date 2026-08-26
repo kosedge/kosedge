@@ -1,81 +1,66 @@
-# San Francisco 49ers 2026 Season Preview: Win Total 10.5
+# San Francisco 49ers 2026 Season Preview
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
-**Angle:** Availability is the scheme — board 10.5; Model ~8.5 conflict → Pass
-**Date:** August 17, 2026
-**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
-**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (+125 / -145)
-**Sources (beat desk):** Nick Wagoner (ESPN) [@nwagoner](https://x.com/nwagoner); Vic Tafur (The Athletic) [@VicTafur](https://x.com/VicTafur); Eric Branch (San Francisco Chronicle) [@Eric_Branch](https://x.com/Eric_Branch)  
-**Market (primary late July 2026):** Win total **10.5** — some shops still hang **10.5** with Under juice; shop live  
-**Research timestamp:** 2026-07-30 ET
+**Angle:** The market prices peak structure while the Model and participation sheet price fragility  
+**Date:** August 26, 2026  
+**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (Over +125 / Under -145)  
+**Sources (beat desk):** Nick Wagoner (ESPN); Vic Tafur (The Athletic); Eric Branch (San Francisco Chronicle); David Lombardi (independent)
 
-San Francisco still builds like a top NFC roster when the availability sheet is clean. The market question at **10.5** is whether you are buying a competent 49ers season for seventeen games or buying a team that has already taught the league how expensive its injury tax is — without paying the old eleven-win excellence tax.
+San Francisco presents the division’s sharpest disagreement. DraftKings posts **10.5** and makes the Under expensive at **-145**. Kos Edge projects **8.53 expected wins**, nearly two wins below the total. The late-camp participation sheet supplies evidence for the lower view, but it also contains meaningful returns from Christian McCaffrey and George Kittle.
 
-Paper does not play. Participation does. This desk’s primary input is not “Mike Evans signed” or “Purdy is fine.” It is the weekly ledger Nick Wagoner and Vic Tafur update from Santa Clara.
+That combination is not an automatic Under. It is a model-versus-market conflict with moving inputs. The Model may be correctly identifying accumulated availability risk. The market may be pricing Kyle Shanahan, Brock Purdy and the upper-end version of a roster that can still create efficient offense against almost any opponent. When those frameworks disagree by 1.97 wins and the directional side costs -145, discipline requires a **Pass**.
 
-## Availability is the scheme
+## Availability is not one variable
 
-Kyle Shanahan’s offense remains a structural edge when the chain is intact: Christian McCaffrey as the gravity piece, George Kittle as the mismatch, Brock Purdy as the timing executor, and now Mike Evans as a contested-catch stabilizer. That is excellence. Excellence is already partly in the number when the board asks for ten wins; it is less overpriced than when shops asked for eleven.
+The 49ers’ injury discussion cannot be reduced to “healthy” or “injured.” The important question is which parts of the offensive chain can function together and for how many snaps.
 
-Camp reality as of late July (Wagoner ESPN camp file; Tafur / Chronicle corroboration):
+Kittle was activated from the physically unable to perform list on Aug. 23, less than eight months after tearing his Achilles. He returned in full pads for individual work but did not participate in team drills. That is substantial progress and keeps a Week 1 return possible. It is not evidence that he is ready for his normal route, blocking and yards-after-catch workload. San Francisco can use Jake Tonges to preserve portions of the menu, but it cannot duplicate Kittle’s complete role.
 
-- **Ricky Pearsall** — knee swelling tied to last season’s PCL; team “concern,” exploring options including possible surgery  
-- **Christian Kirk** — calf strain, out indefinitely early  
-- **Nick Bosa** — ACL recovery from Week 3 of 2025; not on PUP, individual work, phased return aiming at Week 1  
-- **Vederian Lowe** — high-ankle sprain (tackle depth)  
-- **Malik Mustapha** — hamstring; **Jordan James** — rib fracture  
-- **Kyle Shanahan** — limited after a July 14 car accident (concussion symptoms lingering; Klay Kubiak on the headset in camp)  
+McCaffrey also returned on Aug. 23 after missing work with tightness. Nick Wagoner reported that he took a limited set of team repetitions and said he felt good. His return improves the outlook because Shanahan’s offense changes defensive spacing when McCaffrey can threaten the run, option routes and motion from the same personnel. The risk is workload continuity, not whether he can look explosive in a short practice segment.
 
-None of those lines alone kills a season. The pattern does. San Francisco’s board rewrites itself every Wednesday in-season. Futures bettors who ignore that pattern are buying a press-release roster.
+Mike Evans adds a different solution outside the numbers, but his camp has not been continuous. He had previously missed work with a quad issue, returned, then left Sunday’s practice early. Late Tuesday reporting listed him out with a groin injury. The latest designation should replace the older quad label; neither should be silently carried as current after the status changes. Evans was working on a side field, but his Week 1 workload remains another item to verify.
 
-Eric Branch’s Chronicle lane and Albert Breer’s camp notebook land on the same operational point: Shanahan is not a faux absence, but team meetings and full coaching bandwidth are disrupted while he heals. That is a September efficiency tax even if Purdy’s camp completion rates look sharp.
+The injuries extend beyond the three most visible names. Christian Kirk has been out with a calf strain. Nick Bosa remained sidelined with soreness during his return process. Fullback Kyle Juszczyk has dealt with a finger fracture, guard Dominick Puni entered concussion protocol, tackle Vederian Lowe has been out with a high-ankle sprain, and multiple defensive backs have missed time. No individual depth injury defines a season. The accumulation narrows the number of lineups that preserve Shanahan’s preferred answers.
 
-## Why 9.5 is the primary number — and what 10.5 still means
+## Why the upper-end case still exists
 
-Primary board: **9.5**. Kos Edge / KEINFL (2026-07-29 UTC) lands San Francisco at **8.53 expected wins**, with playoff odds in the low-50s and thin Super Bowl equity. Fair ~9.4 versus market 9.5 is roughly a **tenth of a win**. That is Pass territory under Edge Threshold Discipline before juice even enters.
+Purdy is the stabilizer in the market’s view. When protection and timing targets are available, he can operate the offense without the improvisational tax that often appears when a team changes quarterbacks. Shanahan still creates conflict through motion, condensed formations and run-pass sequencing. Evans gives the offense a boundary target it can use when defenses crowd the middle.
 
-**Shop variance:** Some books still hang **10.5** with Under juiced (older midsummer boards showed Over +125 / Under −145). At 10.5, fair ~9.4 is roughly a one-win Under edge — the lean that lived earlier in the summer. At 9.5, that edge is mostly gone. Do not chase Under after the number collapses. Do not invent an Over at 9.5 because the logo is still excellent. Do not treat **10.5** as the primary board for this piece.
+The returns of Kittle and McCaffrey matter because they reopen the possibility that San Francisco reaches September with most of the core available. Kittle’s individual-only work can progress to team periods. McCaffrey’s tightness can remain a managed August issue rather than a recurring limitation. Evans’ groin problem can resolve before the opener. If those three developments break favorably, the market’s ten-to-eleven-win frame becomes understandable.
 
-Juice matters either way. Confidence stays **2/5** on any lean that depends on shop location, precisely because this roster can still spike three months of health and look like a 12-win machine (see 2025: 12–5 through an injury gauntlet). Variance cuts both ways.
+That is also why paying -145 on the Under is uncomfortable. The price asks bettors to treat the lower projection as settled while the highest-impact players are moving toward, not away from, availability. San Francisco does not need perfect health for every week. It needs enough overlap among Purdy, McCaffrey, Kittle, Evans and the line to keep the offense efficient through the favorable parts of the schedule.
 
-## Division math without romance
+## What the 8.53 fair is saying
 
-NFC West is a three-team cage with Arizona as the softer week. Rams bought Garrett and McDuffie. Seattle defends a Super Bowl with a top scoring defense. San Francisco’s path to ten wins runs through six division games that do not care about April press conferences.
+The Kos Edge simulation does not deny San Francisco’s ceiling. It lowers the average outcome. A team can have a credible twelve-win path and still project below nine if its distribution includes enough games with replacement-level snaps at high-leverage positions. That is the 49ers’ central variance problem.
 
-Travel and short weeks have historically taxed this roster more than most. When the injury list is long, Shanahan’s script still creates explosives — and the team still loses games it “shouldn’t” because depth pieces are playing starter snaps. That is the weekly board, not the summer board.
+Against a 10.5 total, **8.53** points strongly toward the Under. The market’s **-145** price points the same direction while maintaining a much higher posted center. That apparent agreement is deceptive. One side says the team belongs around nine wins; the other makes bettors pay heavily just to say it does not reach eleven. Those are materially different assessments of the distribution.
 
-## What the market gets wrong
+The injury report alone cannot reconcile them. It supports the Model’s concern, but late-camp returns support part of the market’s optimism. A large discrepancy should increase the demand for clean inputs, not increase confidence in whichever number is more convenient.
 
-1. **Pricing peak availability at every number.** Evans + healthy CMC + Bosa at full speed is a different team than Evans + CMC managing + Bosa at 80% + Pearsall on the shelf.  
-2. **Treating 2025’s overachievement as mean.** Twelve wins with a shocking injury load was coaching and variance. Repeating it is not a base rate.  
-3. **Ignoring coaching bandwidth.** Shanahan’s recovery timeline is not a meme; it is an early-season process input (Breer / Wagoner).  
-4. **Confusing shop variance with edge.** Under at 10.5 and Pass at 9.5 can both be correct process in the same week.
+## Australia raises the Week 1 stakes
 
-What the market gets right at 9.5: Purdy is a settled starter, the scheme is still elite, and ten wins is a believable median if health mean-reverts even partially.
+San Francisco opens against the Rams in Melbourne on Sept. 10. The travel and preparation burden arrives before Kittle, McCaffrey and Evans have demonstrated a normal regular-season workload. Los Angeles is also the division’s highest-posted team at 11.5 wins. The opener therefore tests both the health assumptions and the market’s claim that San Francisco belongs near the top of the NFC.
 
+The rest of the division offers limited recovery room. Seattle is posted at 10.5 and brings a defense-first structure. Arizona is the softest market rating, but its Kos Edge fair is higher than the board. A split against the Rams and Seahawks plus a sweep of Arizona would produce a strong 4-2 division record; San Francisco would still need seven wins elsewhere to clear the total.
 
-## Monday desk refresh (2026-08-17)
+The season outlook is conditional. If the core practices together and the line stabilizes, the 49ers can outperform 8.53. If the current depth stress becomes weekly starter turnover, even the Model fair may prove optimistic. Neither outcome is priced cleanly enough for a preseason position.
 
-**Bottom line.** Live DK market is **10.5**, not 9.5. Model 8.53 vs 10.5 is a material conflict — **Pass**; present both.
-
-**What matters most.** Participation sheet for the skill/OL chain; Under juice (−145 DK).
-
-**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
 ## Betting Guide
 
-- **Win total 9.5 (primary):** **Pass.** Fair ~9.4; |edge| below half a win.  
-- **Win total 10.5 (live shops):** Lean **Under** at −145 or better. Pass if you cannot find Under shorter than −160.  
-- **Sides:** Fade San Francisco as a large favorite on short rest or when the midweek injury report stacks three-plus starters. Prefer them as dogs when the market overreacts to one ugly output and CMC/Purdy are active.  
-- **Totals:** Opponent and weather/travel driven; no season-long Over bias.  
-- **Props:** CMC yardage only when active and role confirmed — never assume. Evans volume is the cleaner WR path while Pearsall/Kirk are down. Pass Bosa sack season props until Week 1 participation is clear.  
-- **Futures:** NFC West around +300 is interesting as a long-shot structural bet only if you believe health mean-reverts hard; secondary to shopping the correct win-total number.
+- **Win total 10.5:** **Pass.** Model fair is 8.53, but the 1.97-win Model↔market conflict and -145 Under price require reconciliation.
+- **Week 1 availability:** Kittle needs team work, McCaffrey needs sustained participation, and Evans’ current groin designation needs resolution before the Australia opener.
+- **Weekly sides:** Price the active offensive chain, not the logo. Purdy with two primary mismatch pieces is a different handicap from Purdy behind a compromised line with replacement routes.
+- **Player markets:** No season recommendation while roles and workloads are moving. Production numbers must follow the shared player-production spine after participation is confirmed.
+- **Division futures:** Pass until the first-team availability picture is stable. The ceiling is real, but the current price cannot erase the lower tail.
 
 **Handicapper’s Note**  
-Fair number: **8.53** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
-Market number: **10.5** (DK / RotoWire Aug 2026)  
-Lean: **Pass**  
-Confidence: 2/5  
-Key risk: Material Model↔market conflict (Model 8.53 vs 10.5). Present both; Pass.
+Fair number: **8.53**  
+Market number: **10.5**  
+Lean: **Pass — Model↔market conflict**  
+Confidence: 1/5  
+Key risk: Kittle, McCaffrey and Evans could all be ready enough to restore a top-tier offense, while one setback in that chain could validate the Model’s much lower center.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

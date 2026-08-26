@@ -1,73 +1,74 @@
 # Los Angeles Chargers 2026 Season Preview
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
-**Angle:** Herbert’s arm vs availability math  
-**Date:** August 17, 2026
-**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
-**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-130 / +110)
-**Sources (beat desk):** Kris Rhim (ESPN) @krisrhim1; Daniel Popper (The Athletic) @danielrpopper  
-**Market (DK/RotoWire, late July 2026):** Season wins 9.5 (−130 / +110)
+**Angle:** A one-win model gap, a lost starting center and the league’s worst rest draw keep the Under live  
+**Date:** August 26, 2026  
+**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-130 / +110)  
+**Sources (beat desk):** Kris Rhim (ESPN); Daniel Popper (The Athletic); Los Angeles Chargers communications; Warren Sharp (Sharp Football Analysis)
 
-Justin Herbert can still put a drive in the end zone from anywhere on the field. Futures markets are bad at pricing the games he has to finish upright.
+The Chargers’ win total has already made its important move. DraftKings opened Los Angeles at 10.5 and now lists **9.5**, with the Over still carrying -130 and the Under offered at +110.
 
-The Chargers are hanging at **9.5** on the DraftKings/RotoWire late-July board with Over −130 and Under +110. That is not a soft number for an 11-6 Harbaugh team — it is a market that already doubts peak availability even while charging you to buy the Over. The handicap starts there: arm talent is not the dispute. Snap availability, offensive-line durability, and a nasty rest/schedule profile are.
+Dropping through 10 removed much of the easy Under argument. It did not remove all of it. The Kos Edge model makes the Chargers **8.48 wins**, 1.02 below the current number, and the most important late-camp development landed on the same side: starting center Tyler Biadasz is out for the season with ACL damage and additional injury to his left knee.
 
-## Two seasons of 11, one expensive Over
+Justin Herbert and Jim Harbaugh give Los Angeles a real double-digit ceiling. A rookie center, an unsettled left side of the line and a historically poor rest profile lower the floor. At plus money, the position is a **soft Under 9.5, confidence 2/5**.
 
-Jim Harbaugh has won exactly eleven games in each of his first two seasons in Los Angeles. In 2025 the Chargers did it while both starting tackles missed most of the year and Herbert absorbed a league-worst pressure diet (54 sacks, 263 pressures per team reporting). Books still make you lay −130 to clear 9.5. That juice is the tell: the board’s true expectation sits near ten wins, and it wants payment to say they get there.
+## Biadasz changes the protection plan
 
-Kos Edge / KEINFL preseason sim (2026-07-29 UTC) lands LAC at **8.50 expected wins**, ~25.6% division, ~55.7% playoff. Model fair vs 9.5 is a thin Under lean — inside or near half a win depending on how you round. Research adjustment for rest deficit and OL ramp-up keeps fair near **9.0–9.4**. That is not a hammer. It is enough to refuse −130 on the Over.
+Los Angeles signed Biadasz to a three-year deal worth up to $30 million to stabilize the interior of an offensive line that needed fewer moving parts. He started 80 NFL games across Dallas and Washington. That experience mattered in a new Mike McDaniel offense, where the center’s communication and timing with Herbert were supposed to reduce pressure before it arrived.
 
-(Some books still post 10.5 with the Under juiced. Same ~10-win team, different fence. Shop the number before you shop the side.)
+Biadasz suffered the knee injury during an August 18 joint practice with San Francisco when a defender fell into the back of his leg. The Chargers placed him on season-ending injured reserve on August 23. This is no longer a possible absence or a camp-management story.
 
-## Camp: clearance is not durability
+Rookie second-round pick Jake Slaughter is now the starting center. The path is clear, and it is more credible than a desperation conversion. Slaughter played center at Florida, has drawn praise from Harbaugh and McDaniel for his command, and was already competing for a starting job at left guard. He is not learning the position from zero.
 
-Kris Rhim’s ESPN camp hub and Daniel Popper’s Athletic notes are the availability ticker.
+He is learning Herbert’s protections on an accelerated schedule, however. Moving Slaughter also reopens the left-guard competition. The Chargers spent their penultimate camp practices rotating options there while Rashawn Slater worked back from a knee issue on a limited basis. Slater increased his team-period participation by August 24, a positive sign, while Joe Alt and Cole Strange held their expected roles on the right side.
 
-Late-July facts that matter:
+The important distinction is between replacement quality and unit continuity. Slaughter can be a capable starting center and the line can still be worse than the group Los Angeles intended to field. One missed pressure declaration in a division full of simulated pressure can be more expensive than several clean run-blocking reps.
 
-- Herbert looked comfortable in Mike McDaniel’s adjusted shotgun footwork in Day 1 team work — timing with receivers was the theme, not arm strength.  
-- Jim Harbaugh confirmed Joe Alt and Rashawn Slater are medically cleared for camp after 2025 season-ending injuries (ankle / patellar tendon). Harbaugh framed a deliberate ramp-up for the roster, not a green-light free-for-all.  
-- Ladd McConkey has been described as full go after an offseason hamstring issue.  
-- Tuli Tuipulotu’s Day 1 absence tracked as contract-related rather than injury; monitor extension noise separately from health.  
-- Interior OL turnover (Tyler Biadasz, Cole Strange, Jake Slaughter in the mix) means Herbert’s “better protection” story still has chemistry debt.
+## McDaniel gives Herbert a better answer than pure dropback volume
 
-Cleared in July is the start of the Over case. Available in December is the finish. Chargers seasons have a habit of selling the first sentence and failing the second.
+The Over case begins with Herbert and McDaniel. Los Angeles does not need to expose its quarterback to long-developing concepts on every important down. Motion, play action, condensed formations and faster answers can reduce the burden on a changing line. Harbaugh’s preference for physical offense should also keep the offense from becoming a weekly pass-protection test.
 
-McDaniel’s hire is the schematic swing. Less pure dropback, more run/play-action stress, faster ball — Harbaugh has already sold that publicly as a way to keep Herbert cleaner. If it works, EPA rises and sack rates fall. If it is September friction on a new footwork package, you get inefficient wins that look worse than Herbert’s raw talent.
+That fit matters. The Chargers won 11 games last season despite significant tackle injuries, evidence that the roster can survive imperfect protection. Alt’s development, Slater’s return and Herbert’s ability to solve coverage before the snap create a much higher ceiling than the model mean alone suggests.
 
-## Schedule and rest are not vibes
+The concern is that schematic help does not eliminate interior pressure. Center-quarterback exchanges, protection calls and the timing of motion all demand repetition. Slaughter had spent substantial camp time at guard before Biadasz went down. McDaniel can simplify the first month, but simplification has a cost when the market is charging Los Angeles to win at least 10.
 
-ESPN’s schedule package flagged Los Angeles with one of the league’s harder slates (roughly ninth-toughest by 2025 opponent winning percentage) and a brutal early stretch: Arizona, Las Vegas, at Buffalo, at Seattle, Denver, at Kansas City before the bye. Division games against Denver and Kansas City are not soft landings even when Herbert is dealing.
+The defense prevents this from becoming an aggressive Under. Tuli Tuipulotu’s pressure production and a front that can rotate edge threats give Harbaugh ways to win lower-possession games. The Chargers do not need top-five offensive efficiency every week. They do need the offense to avoid the negative plays that turn a controlled game into a one-score coin flip.
 
-Rest deficit reporting around this roster has been extreme — the kind of structural spot that does not show up in a highlight package and does show up in January win totals. Pair that with AFC West weeks that reset any soft-opponent confidence. The Under case is not “Herbert is bad.” It is “seventeen healthy, sharp Herbert weeks is the thing this franchise keeps failing to deliver.”
+## The schedule compounds the line concern
 
-## What the market may be wrong about
+Los Angeles opens at home against Arizona and Las Vegas, then travels to Buffalo and Seattle before hosting Denver and visiting Kansas City. The Week 7 bye comes after that six-game block. A 4-2 start is available; so is a stretch in which travel and division opponents expose a line still building its communication.
 
-Pricing peak Herbert for a full slate while hanging −130 on Over 9.5. The arm justifies contender talk. The price on the Over does not justify a bet. The opposite mistake — hammering every Chargers Under because of brand fatigue — ignores what this roster did last year *without* its tackles. Respect the talent; refuse the juice.
+The larger problem continues after the bye. Sharp Football Analysis calculates a league-worst **-24 days of net rest** for the Chargers. Los Angeles faces four opponents coming off their bye and two more coming off mini-byes. Seven games carry a rest disadvantage, and the team plays four of its final six on the road.
 
+Rest metrics are not standalone picks. They matter here because they pressure the same area already weakened by injury. Shorter recovery and preparation windows are harder on a line managing Slater’s return, a rookie center and an open left-guard job. They also reduce the installation time available to build counters when opponents identify protection tendencies.
 
-## Monday desk refresh (2026-08-17)
+The AFC West adds six games against teams that can attack that stress differently. Denver can win with coverage and pressure. Kansas City can disguise the source. Las Vegas has Maxx Crosby even if the rest of its reset takes time. Herbert’s talent raises the offense’s answer rate; it does not make those problems disappear.
 
-**Bottom line.** Rookie LG Jake Slaughter graded clean vs Houston. Herbert path unchanged — Pass.
+## The market has moved, but the price still matters
 
-**What matters most.** Slaughter ones share; Mesidor pressure rate.
+The opening 10.5 is gone. At current **9.5**, an Under ticket loses if Los Angeles merely repeats a 10-win-level regular season and avoids a late push. That is why this is soft, not a high-confidence continuation bet.
 
-**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
+Still, the current price is favorable. The Under is **+110** while bettors must lay **-130** on the Over. Kos Edge’s **8.48** fair clears the desk’s half-win threshold by a comfortable margin. Biadasz’s season-ending injury and the schedule’s rest structure agree with the model direction.
+
+There are also reasons not to push confidence beyond 2/5. Slaughter is a legitimate center prospect, not an emergency veteran signed in September. Slater is increasing his workload. Herbert is capable of covering protection errors, and Harbaugh has already built an 11-win season through offensive-line attrition.
+
+The Under is a price-sensitive position against 10 wins, not a claim that the Chargers are poor.
+
 ## Betting Guide
 
-- **Season wins 9.5 (−130/+110):** Pass. Fair ~9.0–9.4 vs 9.5 is below a clean half-win hammer; do **not** pay −130 Over. Under at +110 is the only ticket worth watching if August OL participation stays clean but not bulletproof — still not a forced lean.  
-- **If you find 10.5 elsewhere:** Under on 10.5 is a different bet than Under on 9.5; price that as a fade of eleven wins, not nine.  
-- **Sides:** Fade Chargers as big favorites on short rest; prefer them as dogs when Herbert is confirmed active and the OL is intact.  
-- **Props:** Target-share stability (McConkey / Njoku types) over boom-week deep shots until McDaniel’s usage settles.  
-- **Camp revisit:** Over only becomes interesting if Alt/Slater handle padded work without management weeks *and* Herbert’s new footwork looks automatic in joint practices. Under strengthens if either tackle becomes a snap-count story by mid-August.
+- **Season wins 9.5:** Soft Under at **+110**. Model fair is 8.48, and the Biadasz injury plus rest deficit support the same direction.
+- **Number discipline:** The opening 10.5 was materially better. Do not treat Under 9.5 as if that extra win is still available.
+- **Over price:** Laying -130 requires confidence in 10 or more wins despite a rookie center and seven rest-disadvantage games. The current evidence does not justify it.
+- **Early schedule:** Protection communication against Buffalo, Denver and Kansas City will be more informative than offensive output against the opening opponents.
+- **Reassessment:** Upgrade Los Angeles if Slaughter’s pressure calls remain clean and Slater reaches a normal workload. Downgrade if the left-guard rotation continues into Week 1.
 
 **Handicapper’s Note**  
-Fair number: **8.50** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
-Market number: **9.5** (DK / RotoWire Aug 2026)  
-Lean: **Under 9.5**  
-Confidence: 2/5  
-Key risk: Model 8.50 sits 1.00 under 9.5; shop juice; confidence capped.
+Fair number: **8.48**  
+Market number: **9.5** (Over -130 / Under +110)  
+Lean: **Soft Under 9.5**  
+Confidence: **2/5**  
+Key risk: Herbert, McDaniel and a credible rookie replacement could overcome the line disruption, making the lost value from the move off 10.5 decisive.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
