@@ -732,151 +732,91 @@
   "preview_deltas": [
     {
       "team_id": "ARI",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Benson waived/injured; Love still out; Sweat activated from PUP.",
       "status": "touched"
     },
     {
       "team_id": "ATL",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Penix cleared for 11-on-11 and splitting first-team work with Tagovailoa; QB1 remains open.",
       "status": "touched"
     },
     {
       "team_id": "BAL",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Pinter season-ending; center competition is Pocic versus Gwyn.",
       "status": "touched"
     },
     {
       "team_id": "CAR",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Scourton season-ending; Hubbard/Brooks committee confirmed while Hubbard ramps.",
       "status": "touched"
     },
     {
       "team_id": "CLE",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Watson named Week 1 starter and decision is not week to week.",
       "status": "touched"
     },
     {
       "team_id": "DET",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Mays expected to miss eight to 10 weeks; center replacement remains open.",
       "status": "touched"
     },
     {
       "team_id": "GB",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Parsons remains on PUP and outside the opening pass-rush plan.",
       "status": "touched"
     },
     {
       "team_id": "HOU",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Higgins season-ending ACL; Boutte acquired; WR2 usage remains open.",
       "status": "touched"
     },
     {
       "team_id": "LAC",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Biadasz placed on season-ending IR; Slaughter moves to center and left guard reopens.",
       "status": "touched"
     },
     {
       "team_id": "LV",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Jeanty ankle sprain is not considered long term, but Week 1 remains uncertain.",
       "status": "touched"
     },
     {
       "team_id": "MIN",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Murray remains QB1; McCarthy's reduced workload affects QB2 floor; Adams is out for the season.",
       "status": "touched"
     },
     {
       "team_id": "NO",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Bresee season-ending ACL and Kamara MCL absence change opening rotations.",
       "status": "touched"
     },
     {
       "team_id": "NYG",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Austin suffered a serious right-knee injury; final diagnosis and slot replacement remain pending.",
       "status": "touched"
     },
     {
       "team_id": "SEA",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Bobo, Clark and Richman are season-ending losses across three depth groups.",
       "status": "touched"
     },
     {
       "team_id": "WAS",
-      "fields": [
-        "bottom_line",
-        "what_matters_most",
-        "date"
-      ],
+      "fields": ["bottom_line", "what_matters_most", "date"],
       "reason": "Tunsil long-term absence, Coleman confirmed at LT, Humphries added as depth and center continuity unresolved.",
       "status": "touched"
     }

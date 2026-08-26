@@ -68,10 +68,10 @@ Different August market snapshots have shown meaningful juice movement around 8.
 
 ## Betting Guide
 
-- **Win total:** **Pass** at 8.5. Model 8.37 is only 0.13 below market.  
-- **Price discipline:** Do not turn Under +105 into a lean without more separation; plus money alone is not value.  
-- **Health watch:** Wirfs and Vea returned to team work August 25, a material positive that removes part of the earlier downside case.  
-- **Offense watch:** Evaluate how Robinson replaces Evans’ boundary and red-zone role, not which receiver wins one joint-practice period.  
+- **Win total:** **Pass** at 8.5. Model 8.37 is only 0.13 below market.
+- **Price discipline:** Do not turn Under +105 into a lean without more separation; plus money alone is not value.
+- **Health watch:** Wirfs and Vea returned to team work August 25, a material positive that removes part of the earlier downside case.
+- **Offense watch:** Evaluate how Robinson replaces Evans’ boundary and red-zone role, not which receiver wins one joint-practice period.
 - **Defense watch:** Organic pressure and third-down coverage will determine whether Tampa Bay turns an eight-win floor into a nine-win season.
 
 **Handicapper’s Note**  

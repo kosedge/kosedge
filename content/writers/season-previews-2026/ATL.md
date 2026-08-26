@@ -50,10 +50,10 @@ The second trigger is pass protection and pressure generation. Pittsburgh and Gr
 
 ## Betting Guide
 
-- **Win total:** **Pass** at 6.5. Model 9.03 is materially higher, but QB1 is unset and the model-to-beat conflict is unresolved.  
-- **Price discipline:** Do not chase an Over solely because 6.5 looks low. Recheck the number and juice after Stefanski names the starter.  
-- **Division:** Pass. A compressed four-team race can produce a division winner without producing nine wins.  
-- **Early-season filter:** Treat the Pittsburgh-to-Baltimore opening stretch as a stress test for quarterback timing and the depleted edge room.  
+- **Win total:** **Pass** at 6.5. Model 9.03 is materially higher, but QB1 is unset and the model-to-beat conflict is unresolved.
+- **Price discipline:** Do not chase an Over solely because 6.5 looks low. Recheck the number and juice after Stefanski names the starter.
+- **Division:** Pass. A compressed four-team race can produce a division winner without producing nine wins.
+- **Early-season filter:** Treat the Pittsburgh-to-Baltimore opening stretch as a stress test for quarterback timing and the depleted edge room.
 - **Information to watch:** Penix’s response to consecutive 11-on-11 days, the preseason-finale rep plan and whether Atlanta commits first-team volume to one quarterback.
 
 **Handicapper’s Note**  

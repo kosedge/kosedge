@@ -58,10 +58,10 @@ Threshold discipline requires more than choosing the same direction as the model
 
 ## Betting Guide
 
-- **Win total:** **Pass** at 7.5. Under is the model direction, but -130 is too expensive given Carolina’s offensive growth path.  
-- **Price watch:** Revisit only if Under juice moves materially toward even money; do not chase a move after another injury headline.  
-- **Backfield:** Treat Hubbard and Brooks as a committee until Canales shows otherwise. Hubbard’s expected Week 1 return does not restore feature-back assumptions.  
-- **Schedule:** The early Chicago game matters, but the first-place slate and long post-bye run are the larger season variables.  
+- **Win total:** **Pass** at 7.5. Under is the model direction, but -130 is too expensive given Carolina’s offensive growth path.
+- **Price watch:** Revisit only if Under juice moves materially toward even money; do not chase a move after another injury headline.
+- **Backfield:** Treat Hubbard and Brooks as a committee until Canales shows otherwise. Hubbard’s expected Week 1 return does not restore feature-back assumptions.
+- **Schedule:** The early Chicago game matters, but the first-place slate and long post-bye run are the larger season variables.
 - **Camp watch:** Legette’s post-boot ramp, Brooks’ pass protection and the edge rotation replacing Scourton.
 
 **Handicapper’s Note**  

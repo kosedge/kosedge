@@ -58,10 +58,10 @@ At **Over 7.5 (-120)**, Kos Edge still has enough model room to issue a soft lea
 
 ## Betting Guide
 
-- **Win total:** Soft **Over 7.5** at **-120 or better**. Pass if the price moves beyond -125 or the total rises to 8.5.  
-- **Confidence control:** Keep conviction at 2/5 because Bresee is out for the season and Kamara and Tyson may miss the opening stretch.  
-- **Schedule:** Do not overreact to road games at Detroit and Baltimore; judge the ticket against the full, favorable slate.  
-- **Offense watch:** Shough’s pressure response matters more than clean-practice completion rates. Etienne’s lead role is established while Kamara recovers.  
+- **Win total:** Soft **Over 7.5** at **-120 or better**. Pass if the price moves beyond -125 or the total rises to 8.5.
+- **Confidence control:** Keep conviction at 2/5 because Bresee is out for the season and Kamara and Tyson may miss the opening stretch.
+- **Schedule:** Do not overreact to road games at Detroit and Baltimore; judge the ticket against the full, favorable slate.
+- **Offense watch:** Shough’s pressure response matters more than clean-practice completion rates. Etienne’s lead role is established while Kamara recovers.
 - **Defense watch:** Broughton and the interior rotation must show they can replace enough of Bresee’s early-down and pass-rush value.
 
 **Handicapper’s Note**  
