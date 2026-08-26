@@ -6,7 +6,7 @@
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-140 / +115)  
-**Sources (beat desk):** Rob Demovsky (ESPN); Keller Nienau (Packers.com); Packers.com
+**Sources (beat desk):** Rob Demovsky (ESPN); Keller Nienau (Packers.com)
 
 Green Bay’s number is 9.5, but the price tells the sharper story. Bettors must lay **-140** to take the Over while the Under returns **+115**. The market is charging heavily for Jordan Love, Matt LaFleur and the expectation that last season’s five-game closing slide was a poor finish rather than a new baseline.
 
