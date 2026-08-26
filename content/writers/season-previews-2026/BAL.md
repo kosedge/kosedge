@@ -1,64 +1,70 @@
-# Baltimore Ravens 2026 Season Preview: Win Total 11.5
+# Baltimore Ravens 2026 Season Preview
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
-**Angle:** Lamar ceiling already in 11.5 — Model sits lower; Pass on forced Overs
-**Date:** August 17, 2026
-**Market fact-check:** August 17, 2026 · DraftKings via RotoWire · Editor Riley Nash  
-**Model SoT:** nfl-preseason-sim-2026-20260813T214500Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (+115 / -140)
-**Sources (beat desk):** Jamison Hensley (ESPN) [@jamisonhensley](https://www.espn.com/nfl/story/_/id/49434567/baltimore-ravens-training-camp-2026-intel-updates); Jeff Zrebiec (The Athletic) [@jeffzrebiec](https://www.nytimes.com/athletic/); Jonas Shaffer (Baltimore Banner) [@jonas_shaffer](https://www.thebanner.com/sports/ravens-nfl/ravens-training-camp-lamar-jackson-declan-doyle-22OVQN3I6BDWNAKMTCLMRKUTMI/)
+**Angle:** Baltimore is priced for a complete rebound while its offensive spine is still being rebuilt  
+**Date:** August 26, 2026  
+**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
+**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (+115 / -140)  
+**Sources (beat desk):** Jamison Hensley (ESPN); Jeff Zrebiec (The Athletic); Jonas Shaffer (The Baltimore Banner); Ryan Mink (BaltimoreRavens.com); Luke Jones (WNST)
 
-The board is not asking whether Lamar Jackson can still bend a Sunday. It already answered that. Late-July pricing hangs Baltimore at **11.5** — a contender number that prices bounce-back without demanding twelve wins on the nose. That split is the whole preview: ceiling on the brand, transition risk in the fine print. Kos Edge / KEICMB (July 29 preseason sim) lands at **11.12** expected wins — a little more than a half-win over the market on model alone. The bet, if there is one, is not “Lamar regresses.” It is whether supporting-cast and first-year coaching variance can keep a healthy-Jackson team from clearing eleven, or whether **11.5** already collected the tax.
+Baltimore does not need to prove it can contend. The Ravens need to prove that the market has not charged twice for the same comeback. DraftKings opened them at **10.5** in February and now lists **11.5**, the highest tier on the board, even after an 8-9 season and a complete change at the top of the coaching staff. Healthy-Lamar optimism is no longer an insight. It is the price.
 
-## The number first
+Kos Edge lands much lower. The August 22 simulation gives Baltimore **8.98 expected wins**, a 2.52-win gap below the market. Ordinarily, that distance would point directly to an Under. Here it creates a stop sign. The market, roster-level research and team health assumptions are telling a very different story from the simulation, while the Under costs **-140**. That is not the place to force conviction. It is a **Pass** until the disagreement can be explained rather than averaged away.
 
-Ten-and-a-half after an 8-9 season that ended John Harbaugh’s run is still aggressive relative to last year’s record. The market is buying the bounce-back story — uninjured Jackson, Derrick Henry still producing, Trey Hendrickson in the building — without posting an 11.5 ceiling line as the primary. When the line sits at **11.5**, books are pricing a very good team, not a Super Bowl chalk automaton. That is not a contradiction. It is a cleaner number than last winter’s high posts — and a harder one to fade automatically.
+## A contender with a new operating system
 
-Camp context from Hensley’s ESPN hub and Shaffer’s Banner notes: Jackson is healthy and working Declan Doyle’s new offense; early completions look sharp; Kyle Hamilton has described the under-center work as feeling natural for Jackson. None of that moves **11.5** by itself. Healthy Lamar is already baked into the Over.
+The quarterback still supplies the ceiling. Lamar Jackson finished an injury-disrupted 2025 on the field, and Baltimore enters 2026 expecting a healthy season from the player around whom every offensive answer is built. Derrick Henry remains the downhill counterweight. The Ravens also added Trey Hendrickson to give the defense the edge pressure it lacked, a move that makes the rebound case easy to understand.
 
-Juice still matters. If Overs sit near even or slightly juiced and Unders are plus money, you are not getting paid to fade Baltimore’s floor. If the Over stretches past −130 without Madubuike clarity, the thin model Over dies in the vig.
+The transition is larger than a few new formations. Jesse Minter replaced John Harbaugh after 18 seasons. Declan Doyle is the new offensive coordinator and play caller, with Anthony Weaver coordinating the defense. Baltimore retained its defining players but changed the weekly decision-makers around them. A first-year staff can improve a talented roster and still lose September possessions to communication, sequencing and fourth-down choices.
 
-## Where the variance actually lives
+That matters at 11.5. Clearing this number requires twelve wins. A strong 10-7 season is not close, and an 11-6 season still loses an Over ticket. The market moved a full win because it expects Jackson's availability, the staff reset and the Hendrickson addition to restore Baltimore quickly. There is little room left for an ordinary transition.
 
-Jesse Minter is a first-time NFL head coach installing his fingerprints on a defense that finished 24th a year ago. Doyle is the league’s youngest playcaller. Scheme installs can look clean in July and still cost you two September Sundays. That is not a knock on either coach — it is the base rate on year-one staffs with Super Bowl expectations.
+## The center problem changed in one practice
 
-The offensive interior is a live story, not a settled one. Tyler Linderbaum is gone from the center conversation that defined recent Baltimore lines. Ethan Pocic arrived mid-July on a short deal after an Achilles tear; Minter’s public framing (via Banner) is competition, not coronation, with Danny Pinter and Jovaughn Gwyn also in the mix and Corey Bullock working back from surgery. First-round guard Vega Ioane is expected to start early. Henry’s volume only travels if that front holds. Jackson’s scramble EPA still breaks lazy models — but scramble EPA assumes clean second-level decisions, not a weekly protection scramble.
+The most important August development is not cosmetic. Danny Pinter tore his right patella tendon during the August 19 joint practice with Minnesota. Minter said on August 24 that the injury appears season-ending. Pinter had taken most of the first-team work and was closing on the starting center job after Tyler Linderbaum left for Las Vegas.
 
-Defensively, Hendrickson’s work ethic has been a camp talking point (Hensley). The bigger binary is Nnamdi Madubuike’s neck timeline. He missed the last 15 games of 2025, had April surgery, and opened camp as a clearance question before trending toward a return. If he is a full Week 1 disruptor, Baltimore’s front looks like a top-half unit again. If he is managed or delayed, the “add Hendrickson, fix the defense” narrative loses its best interior piece. That is supporting-cast variance the public summary rarely prices at a full win — and at **11.5**, a full win is exactly the difference between Over and Under cash.
+The competition is now **Ethan Pocic versus Jovaughn Gwyn**. Baltimore's official site reported that Gwyn, who has not started an NFL game, worked with the first team after a strong preseason showing. Pocic offers 97 career starts, but he is still ramping up from the Achilles injury that ended his 2025 season in December. The Ravens planned to increase his first-team work during the final preseason week.
 
-Jeff Zrebiec’s Athletic reporting on Jackson’s offseason presence — regular voluntary work, public commitment to the franchise — supports the bounce-back narrative. It does not erase the 2025 injury cascade or the 6-7 mark in Jackson’s starts. Pre-2025, Jackson was 70-24 as a starter. That résumé prices the Over. Last year’s availability and the new staff price the caution.
+This is not a claim that one unsettled position sinks a Jackson offense. It is a distribution issue. Center handles protection communication, and Baltimore is installing a new offense with a young play caller while breaking in a new answer at the position. Pocic's experience could settle the unit. Gwyn's athleticism and familiarity with line coach Dwayne Ledford could win the job. Neither outcome is established on August 26.
 
-## Division math, not brand math
+For Henry, the question is whether the interior creates clean first contact. For Jackson, it is whether pressure identification remains automatic when opponents send September pressure packages. At 9.5, a temporary issue can be absorbed. At 11.5, one dropped game changes the ticket.
 
-The AFC North still hands Baltimore four games against Cincinnati and Cleveland rebuilds — the soft floor under any high total. The swing is Pittsburgh twice and the non-division gauntlet. An 11-win season is still the modal healthy-Jackson outcome in the model. A 10-win season is the Under cash: very good football that never quite stacks the soft spots. The Under does not need collapse; it needs Baltimore to be a strong 9- or 10-win team in a year with a new sideline and a rebuilt middle of the OL. Divisional variance alone can move three wins. That is why confidence stays low even when the model points Over.
+## Madubuike remains a Week 1 question
 
-Public Super Bowl tickets will keep selling the brand. Win totals are colder. If you need Baltimore exposure, prefer waiting on September side prices after two padded weeks and a clearer Madubuike participation log over paying full freight on a juiced futures Over you cannot exit cleanly.
+Nnamdi Madubuike's return is moving forward, but the calendar is tight. Baltimore reported that he hit the sled on August 24 for the first time this summer. He had not yet joined team drills after the neck injury that ended his 2025 season and required surgery. Asked whether the two-time Pro Bowler had enough time to play in the September 13 opener at Indianapolis, Minter said there was no definitive answer.
 
-## Model vs beat
+That distinction matters. Progress is not Week 1 availability, and Week 1 availability is not a full workload. Hendrickson can change the edge of the defense, but Madubuike is the interior piece who prevents protection from sliding comfortably outside. Baltimore has veteran depth, including Calais Campbell, Travis Jones and Broderick Washington Jr. It does not have a duplicate of a healthy Madubuike.
 
-KEICMB **11.12** vs market **10.5** clears a half-win on raw model edge. Research adjustment for coaching transition, center competition, and Madubuike binary pulls fair closer to **10.6–10.9**. That is Pass territory once vig hits — not enough to staple the Over, not enough to invent an Under. If Madubuike is full-go by Labor Day and Pocic/Ioane stabilize in joint practices, the Over becomes a 2/5 look only at soft juice. If the interior stays messy, stay flat. Do not average model and vibes into a fake lean.
+The defense can improve without him being ready for the opener. The 11.5 case, however, assumes a narrow margin for delay. Until Madubuike takes team reps and the Ravens define his workload, the market is pricing a more complete front than camp has shown.
 
+## The schedule offers a runway, then demands a finish
 
-## Monday desk refresh (2026-08-17)
+Baltimore opens at Indianapolis, and its first seven opponents all finished 2025 with losing records. That gives a new staff a favorable runway. It also explains part of the summer move from 10.5 to 11.5: the Ravens can build a record before the schedule tightens.
 
-**Bottom line.** Live DK market is **11.5** (was previewed at 10.5). Model E[wins] 8.97 vs 11.5 is a material conflict — **Pass**; present both.
+The second half is less forgiving. Buffalo, Jacksonville and the Chargers appear in a concentrated stretch, and four of the final five games are inside the AFC North. Pittsburgh comes twice in the last four weeks, including the Week 18 game in Baltimore. The Ravens do not merely need to start well; they need to carry enough health and line stability into a division-heavy finish.
 
-**What matters most.** Whether research fair climbs toward the board after camp health; juice on Under (−140 DK).
+Six divisional games also limit the value of broad strength-of-schedule labels. Cincinnati's offense has a healthy Joe Burrow, Pittsburgh won the division last year, and Cleveland at least has named its quarterback. These are high-variance games even when Baltimore is the better team.
 
-**Cadence.** Team previews refresh every Monday in camp/season. Sources: trusted X contact index (`data/writers/nfl-beat-writers.json`) + beat/official/multi-source — never ESPN-only branding.
+## Why the Model gap is a Pass
+
+The Model says **8.98**. The market says **11.5**, with bettors required to lay **-140** to take the Under. The football case for Baltimore sits much closer to the market than to a nine-win expectation: Jackson is healthy, the early schedule is manageable and Hendrickson materially raises the defensive ceiling. The caution case is equally concrete: new staff, unsettled center and no firm Madubuike date.
+
+Those inputs do not justify pretending the 2.52-win gap is clean value. They show that the simulation and the live evaluation are weighting Baltimore's range very differently. Until the center and defensive interior are resolved, the honest product is no ticket.
+
 ## Betting Guide
 
-- **Win total:** **Pass** on **10.5** at current juice. Model Over is real; research tax and year-one staff noise erase the stake. Revisit Over only if Madubuike is full-go and Over stays near even or better; if Under is plus money after negative OL news, still prefer Pass over a thin fade.
-- **Sides:** Fade Baltimore as a double-digit road favorite in September until Doyle’s offense shows third-down stability in pads.
-- **Props:** Prefer Jackson passing volume over rush-attempt Overs until Doyle’s under-center / designed-run mix is confirmed in preseason; Henry carry Unders if OL camp notes stay messy.
-- **Division:** Prefer AFC North Unders clusters over paying full freight on Baltimore Super Bowl tickets.
-- **Camp tells:** Clean Madubuike + settled center → Over gets a second look at 2/5. Pocic/Ioane stress + managed Madubuike → stay Pass; do not chase Under as a narrative.
+- **Win total:** **Pass** at 11.5. The Model's Under signal conflicts materially with the healthy-Jackson roster case, and **-140** removes any incentive to resolve that conflict with a guess.
+- **Early sides:** Treat Baltimore's opening stretch as a price exercise. A favorable opponent does not automatically justify laying a large number with a new staff and new center.
+- **Player markets:** Wait for Doyle's regular-season personnel rates and for the center choice before treating preseason usage as the shared production baseline.
+- **Division:** Baltimore has the highest ceiling in the North, but six divisional games and a back-loaded rivalry schedule make the win total less stable than the contender label suggests.
+- **Camp checkpoint:** Pocic or Gwyn securing the job and Madubuike joining team work would strengthen the market case. Continued rotation and a managed Madubuike return would widen the downside.
 
 **Handicapper’s Note**  
-Fair number: **8.97** (Model SoT nfl-preseason-sim-2026-20260813T214500Z)  
+Fair number: **8.98** (Model SoT nfl-preseason-sim-2026-20260822T013711Z)  
 Market number: **11.5** (DK / RotoWire Aug 2026)  
 Lean: **Pass**  
-Confidence: 2/5  
-Key risk: Material Model↔market conflict (Model 8.97 vs 11.5). Present both; Pass.
+Confidence: 1/5  
+Key risk: The Model is 2.52 wins below a market pricing a healthy Jackson and a fast staff transition; the unresolved conflict is larger than the actionable edge.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
