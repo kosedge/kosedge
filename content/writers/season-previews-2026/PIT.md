@@ -46,7 +46,7 @@ Special teams also preserve the floor. Chris Boswell remains the kicker, Cameron
 
 Pittsburgh opens with Atlanta at home, then travels to New England before consecutive division games against Cincinnati and Cleveland. Indianapolis and Tampa Bay follow. The Steelers then play New Orleans in Paris in Week 7, return home for Cleveland and reach the Week 9 bye.
 
-The placement of that bye is helpful after international travel. What follows is the challenge. Pittsburgh goes to Cincinnati and Philadelphia, then hosts Denver on a short Black Friday turnaround. Houston comes next, followed by a Monday night game at Jacksonville and two late meetings with Baltimore. Four of those opponents reached the 2025 conference championship round or carry current win totals of at least 9.5.
+The placement of that bye is helpful after international travel. What follows is the challenge. Pittsburgh goes to Cincinnati and Philadelphia, then hosts Denver on a short Black Friday turnaround. Houston comes next, followed by a Monday night game at Jacksonville and two late meetings with Baltimore. Five of those six opponents carry current win totals of at least 9.5.
 
 The final two games against Carolina and Tennessee provide relief before the Week 18 trip to Baltimore, but the second-half sequence can drain an older roster before it arrives there. Rest, travel and the Friday game matter more than opponent names in isolation.
 
