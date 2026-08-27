@@ -18,10 +18,10 @@ The Camp Desk loader reads every `YYYY-MM-DD.json` in this folder. No code chang
 
 ## Cadence
 
-| Slot | File shape |
-|------|------------|
+| Slot         | File shape                                                     |
+| ------------ | -------------------------------------------------------------- |
 | Daily (camp) | League wrap + every team with **real** news (skip quiet clubs) |
-| Monday | Full 32 + league wrap (see `2026-08-17.json`) |
-| Injury day | Same-day daily file — do not wait for Monday |
+| Monday       | Full 32 + league wrap (see `2026-08-17.json`)                  |
+| Injury day   | Same-day daily file — do not wait for Monday                   |
 
 During preseason the site always shows the newest file. Notes older than 72 hours move to Archive unless they are still the latest package.
