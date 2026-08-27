@@ -10,6 +10,7 @@ Usage:
   python scripts/nfl/queue_camp_sot_flags.py --scan
   python scripts/nfl/queue_camp_sot_flags.py --queue
   python scripts/nfl/queue_camp_sot_flags.py --alert-t1
+  python scripts/nfl/queue_camp_sot_flags.py --accept path.json --dry-run
   python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write --rematerialize --actor desk
   python scripts/nfl/queue_camp_sot_flags.py --reject path.json --actor desk --reason 'thin'
   python scripts/nfl/queue_camp_sot_flags.py --no-change path.json --actor desk
@@ -56,6 +57,11 @@ def main() -> int:
         type=Path,
         dest="no_change",
         help="Close as no_change — write nothing, no remat",
+    )
+    ap.add_argument(
+        "--dry-run",
+        action="store_true",
+        help="With --accept: preview pack_diff/line_delta; write nothing; leave queue open",
     )
     ap.add_argument(
         "--write",
@@ -143,6 +149,8 @@ def main() -> int:
         return 0
 
     if args.accept:
+        if args.dry_run and args.write:
+            ap.error("--dry-run cannot combine with --write")
         try:
             result = accept_proposal(
                 args.accept,
@@ -151,11 +159,15 @@ def main() -> int:
                 allow_empty_overrides=args.allow_empty,
                 actor=args.actor,
                 reason=args.reason,
+                dry_run=args.dry_run,
             )
         except ValueError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
         print(json.dumps(result, indent=2))
+        if result.get("disposition") == "dry_run":
+            print("DRY-RUN — pack/queue untouched", file=sys.stderr)
+            return 0
         if result.get("disposition") == "remat_failed":
             print("REMAT FAILED — pack rolled back; not accepted", file=sys.stderr)
             return 3

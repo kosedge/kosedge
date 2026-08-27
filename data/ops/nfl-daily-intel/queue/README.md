@@ -11,9 +11,12 @@ note → SOT FLAG / work item → human accept → pack → remat → receipt
 ```bash
 python scripts/nfl/queue_camp_sot_flags.py --scan
 python scripts/nfl/queue_camp_sot_flags.py --queue          # idempotent upsert
+python scripts/nfl/queue_camp_sot_flags.py --accept runtime/work-item-….json --dry-run
 python scripts/nfl/queue_camp_sot_flags.py --accept runtime/work-item-….json --write --rematerialize
 python scripts/nfl/queue_camp_sot_flags.py --reject runtime/work-item-….json
 python scripts/nfl/queue_camp_sot_flags.py --no-change runtime/work-item-….json
+python scripts/nfl/queue_camp_sot_flags.py --alert-t1
 ```
 
 Queue ≠ remat. Overdue T1 only means the pack is stale until Accept.
+`--dry-run` previews pack_diff / line_delta and leaves the queue open.

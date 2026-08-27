@@ -8,6 +8,9 @@ note → SOT FLAG / work item → human accept → pack → remat → receipt �
 
 Queue ≠ remat. Notes ≠ means. Remat fail ≠ accepted.
 
+**CLI entrypoint (real):** `python scripts/nfl/queue_camp_sot_flags.py`  
+(Not `nfl_camp_sot_queue.py` — that module lives under model-service.)
+
 ## Pass 1 — Mergeable PR
 
 | In git | Not in git |
@@ -29,23 +32,56 @@ Runtime queue: `data/ops/nfl-daily-intel/queue/runtime/` (gitignored).
 | Access | `x-kosedge-secret` on `/nfl/ops/depth-sot/*`; **no public accept UI** |
 | Ops | `--scan` / `--alert-t1` (exit 1 if T1 sits through a publish) |
 
+## Operator commands (authoritative)
+
+```bash
+# queue today's desk into runtime dir (gitignored); default = newest desk_date
+python scripts/nfl/queue_camp_sot_flags.py --queue
+
+# open / overdue summary (no --list flag — use --scan; filter with --tier on --queue)
+python scripts/nfl/queue_camp_sot_flags.py --scan
+python scripts/nfl/queue_camp_sot_flags.py --scan --json
+
+# dry-run accept (pack_diff + line_delta preview; pack/queue untouched)
+python scripts/nfl/queue_camp_sot_flags.py --accept \
+  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-CLE.json --dry-run
+python scripts/nfl/queue_camp_sot_flags.py --accept \
+  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-HOU.json --dry-run
+
+# real accept (staging pack path first; prod only when user says prod)
+python scripts/nfl/queue_camp_sot_flags.py --accept \
+  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-CLE.json \
+  --write --rematerialize --actor desk --reason 'Watson named QB1; competition closed'
+python scripts/nfl/queue_camp_sot_flags.py --accept \
+  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-HOU.json \
+  --write --rematerialize --actor desk --reason 'Higgins season-ending; no WR1 crown'
+
+# close noise (no remat)
+python scripts/nfl/queue_camp_sot_flags.py --no-change path.json --actor desk --reason 'thin camp / Pass'
+python scripts/nfl/queue_camp_sot_flags.py --reject path.json --actor desk --reason 'wrong read'
+
+# overnight SLA
+python scripts/nfl/queue_camp_sot_flags.py --alert-t1
+```
+
+Flags that do **not** exist: `--date`, `--list`, `--status`. Use `--scan` / `--json` and path-based `--accept`.
+
 ## Pass 3 — First live remats (after merge → staging → prod)
 
-Do **not** accept all overdue T1s. Only:
+Do **not** accept all overdue T1s. Only CLE Watson + HOU Higgins.
 
 ```bash
 python scripts/nfl/queue_camp_sot_flags.py --queue
 python scripts/nfl/queue_camp_sot_flags.py --accept \
-  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-CLE.json \
-  --write --rematerialize --actor desk --reason 'Watson named QB1'
+  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-CLE.json --dry-run
 python scripts/nfl/queue_camp_sot_flags.py --accept \
-  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-HOU.json \
-  --write --rematerialize --actor desk --reason 'Higgins season-ending; no WR1 crown'
-# Confirm receipt pack_diff + line_delta; then safe remat weeks 1–18 if needed.
-# Remaining T1s: --no-change or leave T2. ATL stays Pass.
+  data/ops/nfl-daily-intel/queue/runtime/work-item-2026-08-26-HOU.json --dry-run
+# Then --write --rematerialize on staging only (see above).
+# Confirm receipt pack_diff + line_delta; ATL dual-QB stays Pass (no accept).
+# Remaining T1s: --no-change or leave open.
 ```
 
-If Watson/Higgins remat and the rest of the board does not twitch, the design is working.
+If Watson/Higgins remat and ATL does not twitch, the gate works.
 
 ## Pass 4 — Daily loop
 
@@ -65,3 +101,4 @@ Weekly grade: time-to-accept T1, remat success, pack updates → CLV (not wrap p
 - Merge dated JSON dumps
 - Public accept UI before this API is boring
 - Clear the badge by accepting all 10 T1s
+- Call production accept until user says `prod`

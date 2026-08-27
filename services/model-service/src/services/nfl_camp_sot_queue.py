@@ -930,6 +930,36 @@ def _unlink_queue_file(proposal_path: Path) -> None:
         proposal_path.unlink()
 
 
+def _preview_pack_apply(
+    *,
+    pack_path: Path,
+    overrides: Sequence[Mapping[str, Any]],
+    as_of: str,
+) -> Tuple[str, str, List[Dict[str, Any]], List[Dict[str, Any]], Dict[str, Any]]:
+    """In-memory pack apply for dry-run. Never writes the pack."""
+    backup = pack_path.read_bytes()
+    pack_before_sha = _sha256_bytes(backup)
+    pack_before = json.loads(backup.decode("utf-8"))
+    teams = sorted({str(o.get("team") or "") for o in overrides if o.get("team")})
+    before_smoke = kei_smoke_for_teams(pack_before, teams) if teams else []
+    result = apply_intel_overrides(pack_before, overrides, as_of=as_of or None)
+    new_raw = (json.dumps(result.payload, indent=2) + "\n").encode("utf-8")
+    pack_after_sha = _sha256_bytes(new_raw)
+    apply_result = result.as_dict()
+    pack_diff = pack_diff_from_apply(apply_result)
+    after_smoke = (
+        kei_smoke_for_teams(result.payload, result.touched_teams)
+        if result.touched_teams
+        else []
+    )
+    line_delta = line_delta_from_kei(before_smoke, after_smoke)
+    apply_result = {
+        **apply_result,
+        "kei_smoke_lines": format_smoke_diff(before_smoke, after_smoke),
+    }
+    return pack_before_sha, pack_after_sha, pack_diff, line_delta, apply_result
+
+
 def accept_proposal(
     proposal_path: Path,
     *,
@@ -943,6 +973,7 @@ def accept_proposal(
     allow_empty_overrides: bool = False,
     actor: str = "",
     reason: str = "",
+    dry_run: bool = False,
 ) -> Dict[str, Any]:
     """Accept a DepthSotWorkItem with enterprise gate semantics.
 
@@ -951,9 +982,13 @@ def accept_proposal(
     - Pack write happens only here.
     - If ``rematerialize`` is set and remat fails: pack is rolled back and
       disposition is ``remat_failed`` (not accepted). Ticket stays open.
+    - ``dry_run`` previews pack_diff / line_delta and writes nothing
+      (pack, pending, disposition log, queue unlink all skipped).
     """
     assert_notes_cannot_touch_lines()
-    if rematerialize and not write_pack:
+    if dry_run and write_pack:
+        raise ValueError("dry_run cannot combine with --write")
+    if rematerialize and not write_pack and not dry_run:
         raise ValueError("rematerialize requires --write (accept is the only remat gate)")
 
     doc = json.loads(proposal_path.read_text(encoding="utf-8"))
@@ -975,9 +1010,63 @@ def accept_proposal(
     overrides = _strip_draft_markers(overrides_raw) if overrides_raw else []
     actor_s = (actor or "cli").strip() or "cli"
     reason_s = (reason or str(doc.get("sot_flag") or "")).strip()
+    as_of = str(doc.get("as_of") or "")
+
+    if dry_run:
+        pack_before_sha = ""
+        pack_after_sha = ""
+        pack_diff: List[Dict[str, Any]] = []
+        line_delta: List[Dict[str, Any]] = []
+        apply_result: Optional[Dict[str, Any]] = None
+        if overrides:
+            (
+                pack_before_sha,
+                pack_after_sha,
+                pack_diff,
+                line_delta,
+                apply_result,
+            ) = _preview_pack_apply(
+                pack_path=pack_path, overrides=overrides, as_of=as_of
+            )
+        return {
+            "work_item_id": work_item_id,
+            "flag_id": work_item_id,
+            "tier": tier,
+            "disposition": "dry_run",
+            "actor": actor_s,
+            "reason": reason_s,
+            "pending": None,
+            "receipt": None,
+            "wrote_pack": False,
+            "pack_diff": pack_diff,
+            "line_delta": line_delta,
+            "pack_before_sha256": pack_before_sha,
+            "pack_after_sha256": pack_after_sha,
+            "apply": apply_result,
+            "committed_fields": [
+                {
+                    "team": o.get("team"),
+                    "player_name": o.get("player_name"),
+                    "field": o.get("field"),
+                    "before": o.get("before"),
+                    "after": o.get("after"),
+                    "destination": o.get("destination"),
+                }
+                for o in overrides
+            ],
+            "rematerialize_status": "would_remat",
+            "remat_run_id": None,
+            "remat_error": None,
+            "rematerialize_hint": SAFE_REMAT_HINT,
+            "contract": {
+                "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
+                "proposals_may_auto_apply": PROPOSALS_MAY_AUTO_APPLY,
+                "public_accept_ui": False,
+                "internal_auth_only": True,
+            },
+        }
 
     pending_dir.mkdir(parents=True, exist_ok=True)
-    as_of = str(doc.get("as_of") or "")
     pending_name = work_item_filename(work_item_id).replace("work-item-", "camp-accepted-", 1)
     pending_path = pending_dir / pending_name
     pending_doc = {
@@ -1000,9 +1089,9 @@ def accept_proposal(
     }
     pending_path.write_text(json.dumps(pending_doc, indent=2) + "\n", encoding="utf-8")
 
-    apply_result: Optional[Dict[str, Any]] = None
-    pack_diff: List[Dict[str, Any]] = []
-    line_delta: List[Dict[str, Any]] = []
+    apply_result = None
+    pack_diff = []
+    line_delta = []
     pack_before_sha = ""
     pack_after_sha = ""
     remat_run_id = ""
@@ -1103,6 +1192,17 @@ def accept_proposal(
     if disposition == "accepted":
         _unlink_queue_file(proposal_path)
 
+    committed_fields = [
+        {
+            "team": o.get("team"),
+            "player_name": o.get("player_name"),
+            "field": o.get("field"),
+            "before": o.get("before"),
+            "after": o.get("after"),
+            "destination": o.get("destination"),
+        }
+        for o in overrides
+    ]
     return {
         "work_item_id": work_item_id,
         "flag_id": work_item_id,
@@ -1118,6 +1218,7 @@ def accept_proposal(
         "pack_before_sha256": pack_before_sha,
         "pack_after_sha256": pack_after_sha if disposition == "accepted" else pack_before_sha,
         "apply": apply_result if disposition == "accepted" else None,
+        "committed_fields": committed_fields if disposition == "accepted" else [],
         "rematerialize_status": remat_status,
         "remat_run_id": remat_run_id or None,
         "remat_error": remat_error or None,

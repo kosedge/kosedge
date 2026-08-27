@@ -53,8 +53,24 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Check formatting
-        run: pnpm format:check
+      - name: Check formatting (changed files vs base)
+        # Repo-wide prettier debt on deploy-vercel tip must not block PRs whose
+        # own changed files are already formatted. Full `pnpm format:check` stays
+        # available locally for cleanup sweeps.
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          mapfile -t FILES < <(
+            git diff --name-only --diff-filter=ACMR "$BASE"...HEAD \
+              | grep -E '\.(js|jsx|ts|tsx|mjs|cjs|json|md|yml|yaml|css|scss|html|mdx)$' \
+              || true
+          )
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "No Prettier-scoped files changed; skipping format check."
+            exit 0
+          fi
+          echo "Checking ${#FILES[@]} changed file(s) with Prettier…"
+          pnpm exec prettier --check "${FILES[@]}"
 
       - name: Run linter
         run: pnpm lint

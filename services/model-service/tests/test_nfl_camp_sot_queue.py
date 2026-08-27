@@ -106,6 +106,46 @@ def test_queue_idempotent_no_duplicate_open_items(tmp_path: Path) -> None:
     assert len(list(qdir.glob("work-item-*.json"))) == len(first.created)
 
 
+def test_dry_run_previews_without_writing(tmp_path: Path) -> None:
+    qdir = tmp_path / "queue"
+    pending = tmp_path / "pending"
+    log = tmp_path / "accepted.jsonl"
+    receipts = tmp_path / "receipts"
+    pack_copy = tmp_path / "pack.json"
+    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    before = pack_copy.read_text(encoding="utf-8")
+
+    flags = scan_camp_sot_flags(
+        camp_dir=CAMP_DIR,
+        pack_path=pack_copy,
+        proposed_dir=qdir,
+        accepted_log=log,
+        now=datetime(2026, 8, 27, 20, 0, tzinfo=timezone.utc),
+    )
+    cle = next(f for f in flags if f.work_item_id == _cle_id())
+    path = queue_flags([cle], proposed_dir=qdir, accepted_log=log).created[0]
+
+    result = accept_proposal(
+        path,
+        pack_path=pack_copy,
+        pending_dir=pending,
+        accepted_log=log,
+        receipts_dir=receipts,
+        dry_run=True,
+        actor="desk",
+        reason="preview Watson QB1",
+    )
+    assert result["disposition"] == "dry_run"
+    assert result["wrote_pack"] is False
+    assert result["receipt"] is None
+    assert result["pack_diff"]
+    assert result["committed_fields"]
+    assert pack_copy.read_text(encoding="utf-8") == before
+    assert path.is_file()
+    assert not log.exists() or "accepted" not in log.read_text(encoding="utf-8")
+    assert not list(pending.glob("*"))
+
+
 def test_accept_writes_pack_then_remats_once(tmp_path: Path) -> None:
     qdir = tmp_path / "queue"
     pending = tmp_path / "pending"
