@@ -14,12 +14,14 @@ Extends daily intel + the one depth pack. No second SoT. No public UI required.
 
 from __future__ import annotations
 
+import hashlib
 import json
 import re
+import uuid
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from typing import Any, Callable, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
 from src.services.nfl_daily_intel import (
@@ -70,6 +72,36 @@ SAFE_REMAT_HINT = (
 )
 
 CLOSED_DISPOSITIONS = frozenset({"accepted", "reject", "no_change"})
+# remat_failed is audited but does NOT close the ticket (retryable; pack rolled back).
+
+
+@dataclass
+class RematResult:
+    """Outcome of the rematerialize step. Fail ⇒ accept disposition is not written."""
+
+    ok: bool
+    run_id: str = ""
+    error: str = ""
+    mode: str = "enqueue"  # enqueue | receipt_only | dry_run
+
+
+RematFn = Callable[[], RematResult]
+
+
+def _sha256_bytes(raw: bytes) -> str:
+    return hashlib.sha256(raw).hexdigest()
+
+
+def receipt_only_remat() -> RematResult:
+    """Desk default when enqueue is not wired — still yields a remat_run_id."""
+    return RematResult(ok=True, run_id=f"receipt-only-{uuid.uuid4().hex[:12]}", mode="receipt_only")
+
+
+def failing_remat(message: str = "remat failed") -> RematFn:
+    def _fn() -> RematResult:
+        return RematResult(ok=False, run_id="", error=message, mode="enqueue")
+
+    return _fn
 
 
 _OUT_RE = re.compile(
@@ -815,6 +847,12 @@ def write_receipt(
     disposition: str,
     pack_diff: Optional[Sequence[Mapping[str, Any]]] = None,
     line_delta: Optional[Sequence[Mapping[str, Any]]] = None,
+    actor: str = "",
+    reason: str = "",
+    pack_before_sha256: str = "",
+    pack_after_sha256: str = "",
+    remat_run_id: str = "",
+    remat_error: str = "",
     receipts_dir: Path = RECEIPTS_DEFAULT,
 ) -> Path:
     receipts_dir.mkdir(parents=True, exist_ok=True)
@@ -825,23 +863,43 @@ def write_receipt(
         "work_item_id": work_item_id,
         "tier": tier,
         "disposition": disposition,
+        "actor": actor or "unknown",
+        "reason": reason,
         "accepted_at": _now_iso(),
         "pending": str(pending_path) if pending_path else None,
         "wrote_pack": wrote_pack,
+        "pack_before_sha256": pack_before_sha256,
+        "pack_after_sha256": pack_after_sha256,
         "pack_diff": list(pack_diff or []),
         "line_delta": list(line_delta or []),
         "apply": dict(apply_result) if apply_result else None,
         "rematerialize": {
             "status": rematerialize_status,
-            "entrypoint": SAFE_REMAT_HINT if rematerialize_status.startswith("required") else None,
+            "run_id": remat_run_id or None,
+            "error": remat_error or None,
+            "entrypoint": SAFE_REMAT_HINT if rematerialize_status.startswith("required") or remat_run_id else None,
             "ops_note": "data/ops/nfl-spine-safe-rematerialize.md",
-            "rule": "Accept is the only gate that may rematerialize. Notes never write means.",
+            "rule": (
+                "Accept is the only gate that may rematerialize. "
+                "Remat fail ≠ accepted (pack rolled back)."
+            ),
+        },
+        "audit": {
+            "actor": actor or "unknown",
+            "reason": reason,
+            "pack_before_sha256": pack_before_sha256,
+            "pack_after_sha256": pack_after_sha256,
+            "remat_run_id": remat_run_id or None,
+            "line_delta_count": len(list(line_delta or [])),
+            "pack_diff_count": len(list(pack_diff or [])),
         },
         "contract": {
             "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
             "notes_may_touch_props": NOTES_MAY_TOUCH_PROPS,
             "notes_may_touch_spreads": NOTES_MAY_TOUCH_SPREADS,
             "proposals_may_auto_apply": PROPOSALS_MAY_AUTO_APPLY,
+            "public_accept_ui": False,
+            "internal_auth_only": True,
         },
         "board_path": (
             "depth pack → rematerialize weeks 1–18 → props/fantasy/KEI inherit"
@@ -881,11 +939,18 @@ def accept_proposal(
     receipts_dir: Path = RECEIPTS_DEFAULT,
     write_pack: bool = False,
     rematerialize: bool = False,
+    remat_fn: Optional[RematFn] = None,
     allow_empty_overrides: bool = False,
+    actor: str = "",
+    reason: str = "",
 ) -> Dict[str, Any]:
-    """Accept a DepthSotWorkItem: pending → pack write (optional) → remat receipt.
+    """Accept a DepthSotWorkItem with enterprise gate semantics.
 
-    Rematerialize is requested only after accept+write. Notes never rewrite means.
+    - Notes never rewrite means.
+    - ``proposed_patch`` never auto-applies (caller must Accept).
+    - Pack write happens only here.
+    - If ``rematerialize`` is set and remat fails: pack is rolled back and
+      disposition is ``remat_failed`` (not accepted). Ticket stays open.
     """
     assert_notes_cannot_touch_lines()
     if rematerialize and not write_pack:
@@ -908,6 +973,8 @@ def accept_proposal(
             "(or pass allow_empty_overrides for T3 Pass / reviewed-no-write)"
         )
     overrides = _strip_draft_markers(overrides_raw) if overrides_raw else []
+    actor_s = (actor or "cli").strip() or "cli"
+    reason_s = (reason or str(doc.get("sot_flag") or "")).strip()
 
     pending_dir.mkdir(parents=True, exist_ok=True)
     as_of = str(doc.get("as_of") or "")
@@ -915,7 +982,7 @@ def accept_proposal(
     pending_path = pending_dir / pending_name
     pending_doc = {
         "as_of": as_of,
-        "approved_by": "depth-sot-accept",
+        "approved_by": actor_s,
         "fixture": False,
         "work_item_id": work_item_id,
         "flag_id": work_item_id,
@@ -923,10 +990,12 @@ def accept_proposal(
         "tier": tier,
         "source": "camp_desk",
         "notes": doc.get("sot_flag") or doc.get("notes") or "",
+        "reason": reason_s,
         "overrides": overrides,
         "contract": {
             "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
             "proposals_may_auto_apply": PROPOSALS_MAY_AUTO_APPLY,
+            "public_accept_ui": False,
         },
     }
     pending_path.write_text(json.dumps(pending_doc, indent=2) + "\n", encoding="utf-8")
@@ -934,12 +1003,26 @@ def accept_proposal(
     apply_result: Optional[Dict[str, Any]] = None
     pack_diff: List[Dict[str, Any]] = []
     line_delta: List[Dict[str, Any]] = []
+    pack_before_sha = ""
+    pack_after_sha = ""
+    remat_run_id = ""
+    remat_error = ""
+    wrote_pack = False
+    disposition = "accepted"
+    remat_status = "skipped"
+    backup: Optional[bytes] = None
+
     if write_pack and overrides:
-        pack_before = load_pack(pack_path)
+        backup = pack_path.read_bytes()
+        pack_before_sha = _sha256_bytes(backup)
+        pack_before = json.loads(backup.decode("utf-8"))
         teams = sorted({str(o.get("team") or "") for o in overrides if o.get("team")})
         before_smoke = kei_smoke_for_teams(pack_before, teams) if teams else []
         result = apply_intel_overrides(pack_before, overrides, as_of=as_of or None)
-        pack_path.write_text(json.dumps(result.payload, indent=2) + "\n", encoding="utf-8")
+        new_raw = (json.dumps(result.payload, indent=2) + "\n").encode("utf-8")
+        pack_path.write_bytes(new_raw)
+        wrote_pack = True
+        pack_after_sha = _sha256_bytes(new_raw)
         apply_result = result.as_dict()
         pack_diff = pack_diff_from_apply(apply_result)
         after_smoke = (
@@ -948,29 +1031,46 @@ def accept_proposal(
             else []
         )
         line_delta = line_delta_from_kei(before_smoke, after_smoke)
-        # Keep human-readable smoke lines available on apply blob.
         apply_result = {
             **apply_result,
             "kei_smoke_lines": format_smoke_diff(before_smoke, after_smoke),
         }
 
-    if write_pack and overrides and rematerialize:
-        remat_status = "required"
-    elif write_pack and overrides:
-        remat_status = "required_after_accept"
-    else:
+        if rematerialize:
+            fn = remat_fn or receipt_only_remat
+            remat = fn()
+            remat_run_id = remat.run_id
+            if not remat.ok:
+                # Remat fail ≠ accepted — roll pack back; keep queue item open.
+                pack_path.write_bytes(backup)
+                wrote_pack = False
+                pack_after_sha = pack_before_sha
+                disposition = "remat_failed"
+                remat_status = "failed"
+                remat_error = remat.error or "remat failed"
+            else:
+                remat_status = "ok" if remat.mode != "receipt_only" else "required"
+        else:
+            remat_status = "required_after_accept"
+    elif rematerialize:
         remat_status = "skipped"
 
     receipt_path = write_receipt(
         work_item_id=work_item_id or proposal_path.stem,
         tier=tier,
-        pending_path=pending_path,
-        wrote_pack=bool(write_pack and overrides),
-        apply_result=apply_result,
+        pending_path=pending_path if disposition == "accepted" else None,
+        wrote_pack=wrote_pack,
+        apply_result=apply_result if disposition == "accepted" else None,
         rematerialize_status=remat_status,
-        disposition="accepted",
-        pack_diff=pack_diff,
-        line_delta=line_delta,
+        disposition=disposition,
+        pack_diff=pack_diff if disposition == "accepted" else [],
+        line_delta=line_delta if disposition == "accepted" else [],
+        actor=actor_s,
+        reason=reason_s,
+        pack_before_sha256=pack_before_sha,
+        pack_after_sha256=pack_after_sha if disposition == "accepted" else pack_before_sha,
+        remat_run_id=remat_run_id,
+        remat_error=remat_error,
         receipts_dir=receipts_dir,
     )
 
@@ -981,37 +1081,52 @@ def accept_proposal(
             "flag_id": work_item_id,
             "note_id": doc.get("note_id"),
             "tier": tier,
-            "disposition": "accepted",
+            "disposition": disposition,
+            "actor": actor_s,
+            "reason": reason_s,
             "accepted_at": _now_iso(),
             "proposal": str(proposal_path),
-            "pending": str(pending_path),
+            "pending": str(pending_path) if disposition == "accepted" else None,
             "receipt": str(receipt_path),
-            "wrote_pack": bool(write_pack and overrides),
+            "wrote_pack": wrote_pack,
             "rematerialize_status": remat_status,
+            "remat_run_id": remat_run_id or None,
+            "remat_error": remat_error or None,
+            "pack_before_sha256": pack_before_sha or None,
+            "pack_after_sha256": pack_after_sha if disposition == "accepted" else None,
             "override_count": len(overrides),
-            "pack_diff_count": len(pack_diff),
-            "line_delta_count": len(line_delta),
+            "pack_diff_count": len(pack_diff) if disposition == "accepted" else 0,
+            "line_delta_count": len(line_delta) if disposition == "accepted" else 0,
         },
     )
 
-    _unlink_queue_file(proposal_path)
+    if disposition == "accepted":
+        _unlink_queue_file(proposal_path)
 
     return {
         "work_item_id": work_item_id,
         "flag_id": work_item_id,
         "tier": tier,
-        "disposition": "accepted",
-        "pending": str(pending_path),
+        "disposition": disposition,
+        "actor": actor_s,
+        "reason": reason_s,
+        "pending": str(pending_path) if disposition == "accepted" else None,
         "receipt": str(receipt_path),
-        "wrote_pack": bool(write_pack and overrides),
-        "pack_diff": pack_diff,
-        "line_delta": line_delta,
-        "apply": apply_result,
+        "wrote_pack": wrote_pack,
+        "pack_diff": pack_diff if disposition == "accepted" else [],
+        "line_delta": line_delta if disposition == "accepted" else [],
+        "pack_before_sha256": pack_before_sha,
+        "pack_after_sha256": pack_after_sha if disposition == "accepted" else pack_before_sha,
+        "apply": apply_result if disposition == "accepted" else None,
         "rematerialize_status": remat_status,
+        "remat_run_id": remat_run_id or None,
+        "remat_error": remat_error or None,
         "rematerialize_hint": SAFE_REMAT_HINT if remat_status.startswith("required") else None,
         "contract": {
             "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
             "proposals_may_auto_apply": PROPOSALS_MAY_AUTO_APPLY,
+            "public_accept_ui": False,
+            "internal_auth_only": True,
         },
     }
 
@@ -1023,6 +1138,7 @@ def close_work_item(
     accepted_log: Path = ACCEPTED_LOG_DEFAULT,
     receipts_dir: Path = RECEIPTS_DEFAULT,
     reason: str = "",
+    actor: str = "",
 ) -> Dict[str, Any]:
     """reject / no_change — writes nothing to the depth pack and does not remat."""
     assert_notes_cannot_touch_lines()
@@ -1034,6 +1150,8 @@ def close_work_item(
     if work_item_id in closed:
         raise ValueError(f"work item {work_item_id} already closed as {closed[work_item_id]}")
     tier = str(doc.get("tier") or "T2")
+    actor_s = (actor or "cli").strip() or "cli"
+    reason_s = reason or disposition
     receipt_path = write_receipt(
         work_item_id=work_item_id or proposal_path.stem,
         tier=tier,
@@ -1044,6 +1162,8 @@ def close_work_item(
         disposition=disposition,
         pack_diff=[],
         line_delta=[],
+        actor=actor_s,
+        reason=reason_s,
         receipts_dir=receipts_dir,
     )
     _append_disposition_log(
@@ -1054,18 +1174,21 @@ def close_work_item(
             "note_id": doc.get("note_id"),
             "tier": tier,
             "disposition": disposition,
+            "actor": actor_s,
+            "reason": reason_s,
             "accepted_at": _now_iso(),
             "proposal": str(proposal_path),
             "receipt": str(receipt_path),
             "wrote_pack": False,
             "rematerialize_status": "skipped",
-            "reason": reason or disposition,
         },
     )
     _unlink_queue_file(proposal_path)
     return {
         "work_item_id": work_item_id,
         "disposition": disposition,
+        "actor": actor_s,
+        "reason": reason_s,
         "wrote_pack": False,
         "rematerialize_status": "skipped",
         "receipt": str(receipt_path),
@@ -1074,12 +1197,41 @@ def close_work_item(
     }
 
 
+def t1_past_kei_publish(
+    flags: Iterable[DepthSotWorkItem],
+    *,
+    now: Optional[datetime] = None,
+) -> List[DepthSotWorkItem]:
+    """T1 items still open after a KEI publish window — ops alert set."""
+    clock = now or _now_utc()
+    out: List[DepthSotWorkItem] = []
+    for flag in flags:
+        if flag.tier != "T1":
+            continue
+        if flag.status in CLOSED_DISPOSITIONS:
+            continue
+        if not flag.next_kei_publish:
+            if flag.overdue:
+                out.append(flag)
+            continue
+        try:
+            deadline = datetime.fromisoformat(
+                flag.next_kei_publish.replace("Z", "+00:00")
+            )
+        except ValueError:
+            continue
+        if clock >= deadline:
+            out.append(flag)
+    return out
+
+
 def overdue_summary(flags: Iterable[DepthSotWorkItem]) -> Dict[str, Any]:
     rows = list(flags)
     overdue = [f for f in rows if f.overdue]
     open_flags = [f for f in rows if f.status in {"open", "overdue"}]
     queued = [f for f in rows if f.status == "queued"]
     by_tier = {t: sum(1 for f in rows if f.tier == t) for t in ("T1", "T2", "T3")}
+    t1_alert = t1_past_kei_publish(rows)
     return {
         "total_material": len(rows),
         "open": len(open_flags),
@@ -1088,9 +1240,13 @@ def overdue_summary(flags: Iterable[DepthSotWorkItem]) -> Dict[str, Any]:
         "overdue_flag_ids": [f.work_item_id for f in overdue],
         "overdue_reasons": {f.work_item_id: f.overdue_reason for f in overdue},
         "by_tier": by_tier,
+        "t1_past_kei_publish": [f.work_item_id for f in t1_alert],
+        "t1_past_kei_publish_count": len(t1_alert),
         "draft_override_count": sum(len(f.proposed_patch) for f in rows),
         "contract": {
             "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
             "proposals_may_auto_apply": PROPOSALS_MAY_AUTO_APPLY,
+            "public_accept_ui": False,
+            "internal_auth_only": True,
         },
     }

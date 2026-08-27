@@ -1,15 +1,18 @@
 #!/usr/bin/env python3
-"""DepthSotWorkItem handoff: Camp Desk SOT FLAG → runtime queue → accept/reject.
+"""DepthSotWorkItem gated workflow: queue → accept/reject → remat receipt.
 
 Notes stay copy. Proposals never auto-apply. Accept is the only pack/remat gate.
-Queue files live in data/ops/nfl-daily-intel/queue/runtime/ (gitignored).
+Remat fail ≠ accepted (pack rolled back). No public UI.
+
+Queue files: data/ops/nfl-daily-intel/queue/runtime/ (gitignored).
 
 Usage:
   python scripts/nfl/queue_camp_sot_flags.py --scan
   python scripts/nfl/queue_camp_sot_flags.py --queue
-  python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write --rematerialize
-  python scripts/nfl/queue_camp_sot_flags.py --reject path.json
-  python scripts/nfl/queue_camp_sot_flags.py --no-change path.json
+  python scripts/nfl/queue_camp_sot_flags.py --alert-t1
+  python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write --rematerialize --actor desk
+  python scripts/nfl/queue_camp_sot_flags.py --reject path.json --actor desk --reason 'thin'
+  python scripts/nfl/queue_camp_sot_flags.py --no-change path.json --actor desk
 """
 
 from __future__ import annotations
@@ -33,6 +36,7 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
     overdue_summary,
     queue_flags,
     scan_camp_sot_flags,
+    t1_past_kei_publish,
 )
 
 
@@ -40,6 +44,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--scan", action="store_true", help="Print open/overdue DepthSotWorkItems")
     ap.add_argument("--queue", action="store_true", help="Upsert work items into queue/runtime/")
+    ap.add_argument(
+        "--alert-t1",
+        action="store_true",
+        help="Exit 1 if any T1 is still open past next KEI publish",
+    )
     ap.add_argument("--accept", type=Path, help="Accept a work item")
     ap.add_argument("--reject", type=Path, help="Reject — write nothing, no remat")
     ap.add_argument(
@@ -56,13 +65,15 @@ def main() -> int:
     ap.add_argument(
         "--rematerialize",
         action="store_true",
-        help="With --accept --write: mark remat required on the receipt",
+        help="With --accept --write: run remat gate (fail ⇒ not accepted, pack rolled back)",
     )
     ap.add_argument(
         "--allow-empty",
         action="store_true",
         help="With --accept: T3 Pass / reviewed with zero overrides",
     )
+    ap.add_argument("--actor", default="cli", help="Audit actor (staff id / desk)")
+    ap.add_argument("--reason", default="", help="Audit reason")
     ap.add_argument("--only-overdue", action="store_true", help="Queue overdue only")
     ap.add_argument(
         "--only-with-drafts",
@@ -86,25 +97,46 @@ def main() -> int:
         action="store_true",
         help="Scan every Camp Desk day file (default: newest desk_date only)",
     )
-    ap.add_argument("--reason", default="", help="Optional reason for --reject / --no-change")
-    ap.add_argument("--json", action="store_true", help="Machine-readable scan/queue output")
+    ap.add_argument("--json", action="store_true", help="Machine-readable output")
     args = ap.parse_args()
 
-    actions = [args.scan, args.queue, args.accept, args.reject, args.no_change]
+    actions = [
+        args.scan,
+        args.queue,
+        args.alert_t1,
+        args.accept,
+        args.reject,
+        args.no_change,
+    ]
     if not any(actions):
-        ap.error("pass --scan, --queue, --accept, --reject, and/or --no-change")
+        ap.error("pass --scan, --queue, --alert-t1, --accept, --reject, and/or --no-change")
 
     if NOTES_MAY_TOUCH_MEANS or PROPOSALS_MAY_AUTO_APPLY:
         print("FATAL: notes/proposals must not auto-write lines", file=sys.stderr)
         return 2
 
     if args.reject:
-        print(json.dumps(close_work_item(args.reject, disposition="reject", reason=args.reason), indent=2))
+        print(
+            json.dumps(
+                close_work_item(
+                    args.reject,
+                    disposition="reject",
+                    reason=args.reason,
+                    actor=args.actor,
+                ),
+                indent=2,
+            )
+        )
         return 0
     if args.no_change:
         print(
             json.dumps(
-                close_work_item(args.no_change, disposition="no_change", reason=args.reason),
+                close_work_item(
+                    args.no_change,
+                    disposition="no_change",
+                    reason=args.reason,
+                    actor=args.actor,
+                ),
                 indent=2,
             )
         )
@@ -117,11 +149,16 @@ def main() -> int:
                 write_pack=args.write,
                 rematerialize=args.rematerialize,
                 allow_empty_overrides=args.allow_empty,
+                actor=args.actor,
+                reason=args.reason,
             )
         except ValueError as exc:
             print(f"error: {exc}", file=sys.stderr)
             return 2
         print(json.dumps(result, indent=2))
+        if result.get("disposition") == "remat_failed":
+            print("REMAT FAILED — pack rolled back; not accepted", file=sys.stderr)
+            return 3
         if result.get("rematerialize_hint"):
             print("REMAT:", result["rematerialize_hint"])
         return 0
@@ -131,6 +168,23 @@ def main() -> int:
         latest_desk_only=not args.all_dates,
     )
     summary = overdue_summary(flags)
+
+    if args.alert_t1:
+        alerts = t1_past_kei_publish(flags)
+        payload = {
+            "alert": "t1_past_kei_publish",
+            "count": len(alerts),
+            "work_item_ids": [f.work_item_id for f in alerts],
+            "teams": [f.team for f in alerts],
+        }
+        if args.json:
+            print(json.dumps(payload, indent=2))
+        else:
+            print(
+                f"T1 past KEI publish: {len(alerts)} "
+                f"teams={','.join(f.team for f in alerts) or 'none'}"
+            )
+        return 1 if alerts else 0
 
     if args.scan:
         if args.json:
@@ -147,11 +201,12 @@ def main() -> int:
                 f"T1={tiers['T1']} T2={tiers['T2']} T3={tiers['T3']} "
                 f"open={summary['open']} queued={summary['queued']} "
                 f"overdue={summary['overdue']} "
+                f"t1_past_kei={summary['t1_past_kei_publish_count']} "
                 f"proposed_patch_rows={summary['draft_override_count']}"
             )
             print(
-                "contract: notes never touch means/props/spreads; "
-                "proposals never auto-apply; queue≠remat"
+                "contract: notes≠means; patch≠auto; accept-only remat; "
+                "remat-fail≠accepted; no public UI; queue≠remat"
             )
             for flag in flags:
                 mark = "OVERDUE" if flag.overdue else flag.status.upper()

@@ -132,17 +132,24 @@ def test_accept_writes_pack_then_remats_once(tmp_path: Path) -> None:
         receipts_dir=receipts,
         write_pack=True,
         rematerialize=True,
+        actor="desk",
+        reason="Watson named QB1",
     )
+    assert result["disposition"] == "accepted"
     assert result["wrote_pack"] is True
-    assert result["rematerialize_status"] == "required"
+    assert result["actor"] == "desk"
+    assert result["remat_run_id"]
+    assert result["pack_before_sha256"]
+    assert result["pack_after_sha256"]
     assert result["pack_diff"]
     receipt = json.loads(Path(result["receipt"]).read_text(encoding="utf-8"))
     assert receipt["schema"] == RECEIPT_SCHEMA
+    assert receipt["audit"]["actor"] == "desk"
+    assert receipt["audit"]["remat_run_id"]
     assert "pack_diff" in receipt
     assert "line_delta" in receipt
-    assert receipt["rematerialize"]["status"] == "required"
+    assert receipt["contract"]["public_accept_ui"] is False
 
-    # Second accept must not remat again.
     path.write_text(json.dumps(proposal_doc_for_flag(cle), indent=2) + "\n", encoding="utf-8")
     try:
         accept_proposal(
@@ -153,10 +160,51 @@ def test_accept_writes_pack_then_remats_once(tmp_path: Path) -> None:
             receipts_dir=receipts,
             write_pack=True,
             rematerialize=True,
+            actor="desk",
         )
         assert False, "expected already-closed error"
     except ValueError as exc:
         assert "already closed" in str(exc)
+
+
+def test_remat_fail_rolls_back_and_is_not_accepted(tmp_path: Path) -> None:
+    from src.services.nfl_camp_sot_queue import failing_remat
+
+    qdir = tmp_path / "queue"
+    log = tmp_path / "accepted.jsonl"
+    receipts = tmp_path / "receipts"
+    pack_copy = tmp_path / "pack.json"
+    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    before = pack_copy.read_text(encoding="utf-8")
+
+    flags = scan_camp_sot_flags(
+        camp_dir=CAMP_DIR,
+        pack_path=pack_copy,
+        proposed_dir=qdir,
+        accepted_log=log,
+        now=datetime(2026, 8, 27, 20, 0, tzinfo=timezone.utc),
+    )
+    cle = next(f for f in flags if f.work_item_id == _cle_id())
+    path = queue_flags([cle], proposed_dir=qdir, accepted_log=log).created[0]
+
+    result = accept_proposal(
+        path,
+        pack_path=pack_copy,
+        pending_dir=tmp_path / "pending",
+        accepted_log=log,
+        receipts_dir=receipts,
+        write_pack=True,
+        rematerialize=True,
+        remat_fn=failing_remat("celery down"),
+        actor="desk",
+        reason="should rollback",
+    )
+    assert result["disposition"] == "remat_failed"
+    assert result["wrote_pack"] is False
+    assert pack_copy.read_text(encoding="utf-8") == before
+    assert path.is_file()  # still open for retry
+    assert '"disposition": "remat_failed"' in log.read_text(encoding="utf-8")
+    assert '"disposition": "accepted"' not in log.read_text(encoding="utf-8")
 
 
 def test_reject_and_no_change_write_nothing(tmp_path: Path) -> None:
