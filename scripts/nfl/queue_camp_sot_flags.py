@@ -1,20 +1,15 @@
 #!/usr/bin/env python3
-"""Camp Desk SoT flags → daily-intel proposed queue → accept (one depth pack).
+"""DepthSotWorkItem handoff: Camp Desk SOT FLAG → queue → accept → remat receipt.
 
-Extends ``is_material_depth`` / daily intel / rematerialize — no second SoT,
-no public UI.
+Notes stay copy. Proposals never auto-apply. Accept is the only pack/remat gate.
+No second SoT. No public UI required.
 
 Usage:
-  # List open / overdue material flags (+ draft override count)
   python scripts/nfl/queue_camp_sot_flags.py --scan
-
-  # Write proposals under data/ops/nfl-daily-intel/proposed/
   python scripts/nfl/queue_camp_sot_flags.py --queue
-  python scripts/nfl/queue_camp_sot_flags.py --queue --only-overdue
-
-  # Human reviews proposal, fills overrides if needed, then:
-  python scripts/nfl/queue_camp_sot_flags.py --accept path.json
+  python scripts/nfl/queue_camp_sot_flags.py --queue --tier T1
   python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write
+  # After --write: rematerialize via safe rebuild (receipt records the command)
 """
 
 from __future__ import annotations
@@ -31,6 +26,8 @@ if str(MS) not in sys.path:
 
 from src.services.nfl_camp_sot_queue import (  # noqa: E402
     DEFAULT_OVERDUE_HOURS,
+    NOTES_MAY_TOUCH_MEANS,
+    PROPOSALS_MAY_AUTO_APPLY,
     accept_proposal,
     overdue_summary,
     queue_flags,
@@ -40,34 +37,45 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("--scan", action="store_true", help="Print open/overdue SoT flags")
-    ap.add_argument("--queue", action="store_true", help="Write proposal JSON files")
+    ap.add_argument("--scan", action="store_true", help="Print open/overdue DepthSotWorkItems")
+    ap.add_argument("--queue", action="store_true", help="Write work-item JSON to proposed/")
     ap.add_argument(
         "--accept",
         type=Path,
-        help="Accept a proposal (writes pending/; optional --write pack)",
+        help="Accept a work item (pending/ + optional --write pack + receipt)",
     )
     ap.add_argument(
         "--write",
         action="store_true",
-        help="With --accept: apply overrides to the depth SoT pack",
+        help="With --accept: apply structured overrides to the one depth pack",
+    )
+    ap.add_argument(
+        "--rematerialize",
+        action="store_true",
+        help="With --accept --write: mark remat required on the receipt (safe weeks 1–18)",
     )
     ap.add_argument(
         "--allow-empty",
         action="store_true",
-        help="With --accept: mark flag reviewed with zero overrides",
+        help="With --accept: T3 Pass / reviewed with zero overrides",
     )
     ap.add_argument("--only-overdue", action="store_true", help="Queue overdue only")
     ap.add_argument(
         "--only-with-drafts",
         action="store_true",
-        help="Queue only flags that have draft overrides",
+        help="Queue only items that have a proposed_patch",
+    )
+    ap.add_argument(
+        "--tier",
+        action="append",
+        choices=["T1", "T2", "T3"],
+        help="Queue only these tiers (repeatable)",
     )
     ap.add_argument(
         "--overdue-hours",
         type=int,
-        default=DEFAULT_OVERDUE_HOURS,
-        help=f"Hours after desk_date before overdue (default {DEFAULT_OVERDUE_HOURS})",
+        default=None,
+        help=f"Override per-tier SLA hours (default T1={DEFAULT_OVERDUE_HOURS})",
     )
     ap.add_argument(
         "--all-dates",
@@ -80,15 +88,24 @@ def main() -> int:
     if not (args.scan or args.queue or args.accept):
         ap.error("pass --scan, --queue, and/or --accept")
 
+    if NOTES_MAY_TOUCH_MEANS or PROPOSALS_MAY_AUTO_APPLY:
+        print("FATAL: notes/proposals must not auto-write lines", file=sys.stderr)
+        return 2
+
     if args.accept:
-        result = accept_proposal(
-            args.accept,
-            write_pack=args.write,
-            allow_empty_overrides=args.allow_empty,
-        )
+        try:
+            result = accept_proposal(
+                args.accept,
+                write_pack=args.write,
+                rematerialize=args.rematerialize,
+                allow_empty_overrides=args.allow_empty,
+            )
+        except ValueError as exc:
+            print(f"error: {exc}", file=sys.stderr)
+            return 2
         print(json.dumps(result, indent=2))
         if result.get("rematerialize_hint"):
-            print(result["rematerialize_hint"])
+            print("REMAT:", result["rematerialize_hint"])
         return 0
 
     flags = scan_camp_sot_flags(
@@ -101,22 +118,26 @@ def main() -> int:
         if args.json:
             print(
                 json.dumps(
-                    {"summary": summary, "flags": [f.as_dict() for f in flags]},
+                    {"summary": summary, "work_items": [f.as_dict() for f in flags]},
                     indent=2,
                 )
             )
         else:
+            tiers = summary["by_tier"]
             print(
-                f"material={summary['total_material']} open={summary['open']} "
-                f"queued={summary['queued']} overdue={summary['overdue']} "
-                f"draft_overrides={summary['draft_override_count']}"
+                f"material={summary['total_material']} "
+                f"T1={tiers['T1']} T2={tiers['T2']} T3={tiers['T3']} "
+                f"open={summary['open']} queued={summary['queued']} "
+                f"overdue={summary['overdue']} "
+                f"proposed_patch_rows={summary['draft_override_count']}"
             )
+            print("contract: notes never touch means/props/spreads; proposals never auto-apply")
             for flag in flags:
                 mark = "OVERDUE" if flag.overdue else flag.status.upper()
-                drafts = len(flag.draft_overrides)
+                drafts = len(flag.proposed_patch)
                 print(
-                    f"  [{mark}] {flag.flag_id}  drafts={drafts}  "
-                    f"age_h={flag.age_hours:.0f}"
+                    f"  [{mark}] [{flag.tier}] {flag.work_item_id}  "
+                    f"patch={drafts}  sla_h={flag.sla_hours}  age_h={flag.age_hours:.0f}"
                 )
                 if flag.sot_flag:
                     print(f"           {flag.sot_flag[:120]}")
@@ -126,8 +147,9 @@ def main() -> int:
             flags,
             only_overdue=args.only_overdue,
             only_with_drafts=args.only_with_drafts,
+            tiers=args.tier,
         )
-        print(f"queued {len(written)} proposal(s)")
+        print(f"queued {len(written)} DepthSotWorkItem(s)")
         for path in written:
             print(f"  {path}")
 

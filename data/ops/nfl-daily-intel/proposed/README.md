@@ -1,25 +1,18 @@
-# Camp Desk → depth SoT proposals
+# DepthSotWorkItem proposals (Camp Desk → one depth pack)
 
-Open material-depth flags from Camp Desk (`is_material_depth`) land here as
-**proposals**. They are not applied until a human accepts.
+Open `is_material_depth` / SOT FLAG tickets. **Notes stay copy.**
 
-```bash
-# Scan overdue / open flags
-python scripts/nfl/queue_camp_sot_flags.py --scan
-
-# Write/refresh proposals in this folder
-python scripts/nfl/queue_camp_sot_flags.py --queue
-
-# Review a file, edit overrides if needed, then accept → pending/
-python scripts/nfl/queue_camp_sot_flags.py --accept data/ops/nfl-daily-intel/proposed/camp-flag-YYYY-MM-DD-TEAM.json
-
-# Accept + write the one depth pack (then rematerialize weeks 1–18)
-python scripts/nfl/queue_camp_sot_flags.py --accept <file> --write
+```
+note → work item → human accept structured fields → rematerialize → receipt
 ```
 
-Rules:
+```bash
+python scripts/nfl/queue_camp_sot_flags.py --scan
+python scripts/nfl/queue_camp_sot_flags.py --queue --tier T1
+python scripts/nfl/queue_camp_sot_flags.py --accept <file> --write --rematerialize
+```
 
-- Extends daily intel / rematerialize — **no second SoT**.
-- Drafts may suggest `injury_status` / `competition_status` only.
-- Never invent `depth_order` or new starters from prose.
-- Weekly operate lists these as `human_required`; it does not auto-write.
+- `proposed_patch` is a suggestion only — never auto-applied.
+- Accept is the only gate that may write the pack or rematerialize.
+- T3 Pass: `--accept --allow-empty` to clear without a pack write.
+- No second SoT. See `data/ops/nfl-camp-sot-queue-accept-20260827.md`.

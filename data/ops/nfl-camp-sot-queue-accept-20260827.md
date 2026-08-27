@@ -1,44 +1,51 @@
-# Camp Desk SoT flags → queue → accept (2026-08-27)
+# Camp Desk → DepthSotWorkItem handoff (2026-08-27)
 
-**Scope:** model + queue + accept only. No public UI.
-
-## Why
-
-Camp Desk `is_material_depth` / `sot_flag` were UI-only. Lines only move when
-structured fields hit the one depth pack. This wires the flags into the
-existing daily-intel path so overdue SoT flags are tracked and accepted
-overrides can unblock Week 1 / props / KEI without a second map.
-
-## Path
+**Add the handoff, not auto line moves.**
 
 ```
-Camp Desk JSON (is_material_depth)
-  → scan / draft (nfl_camp_sot_queue)
-  → data/ops/nfl-daily-intel/proposed/camp-flag-*.json
-  → human --accept [--write]
-  → pending/ + apply_intel_overrides → nfl_depth_chart_2026_w1.json
-  → rematerialize weeks 1–18 (safe rebuild)
+note → SOT FLAG / DepthSotWorkItem → human accept structured pack fields
+  → rematerialize → receipt → board
 ```
+
+## Contract
+
+| Rule | Value |
+|------|-------|
+| Notes touch means / props / spreads | **Never** |
+| Proposed pack patch auto-applies | **Never** |
+| Who may write the depth pack | **Accept only** |
+| Who may rematerialize | **Accept only** (`--write`, receipt marks remat) |
+| Second SoT / second depth map | **Forbidden** |
+
+## Tiers
+
+| Tier | Meaning | SLA |
+|------|---------|-----|
+| **T1** | Same-day (named starter, season-ending IR/out on pack) | 12h |
+| **T2** | Next remat (material flag, human must fill fields) | 48h |
+| **T3** | Pass (thin August / do-not-crown; no pack write) | 72h |
+
+Overdue SOT FLAGs stay tickets until accept (or T3 `--allow-empty`).
+
+## Pieces
 
 | Piece | Path |
 |-------|------|
-| Model | `services/model-service/src/services/nfl_camp_sot_queue.py` |
+| Model | `services/model-service/src/services/nfl_camp_sot_queue.py` (`DepthSotWorkItem`) |
 | CLI | `scripts/nfl/queue_camp_sot_flags.py` |
-| Proposed queue | `data/ops/nfl-daily-intel/proposed/` |
-| Accept → apply | existing `apply_daily_intel_overrides` / `apply_intel_overrides` |
-| Operate hook | `run_weekly_operate` depth_injury stage lists proposals |
-
-## Rules
-
-- Drafts: `injury_status=out` / `competition_status` only when flag text + pack name match.
-- Never draft `depth_order` / new rows / starter crowns from thin language.
-- `--queue` does not write the pack. `--accept` without `--write` only stages pending/.
-- After `--write`: rematerialize via safe entrypoint (weeks 1–18). Do not bare `season=` rebuild.
+| Queue | `data/ops/nfl-daily-intel/proposed/` |
+| Accept → apply | existing `apply_intel_overrides` (one pack) |
+| Receipts | `data/ops/nfl-daily-intel/receipts/` |
+| Remat | safe rebuild weeks 1–18 (`nfl-spine-safe-rematerialize.md`) |
 
 ## Commands
 
 ```bash
 python scripts/nfl/queue_camp_sot_flags.py --scan
-python scripts/nfl/queue_camp_sot_flags.py --queue --only-overdue
-python scripts/nfl/queue_camp_sot_flags.py --accept data/ops/nfl-daily-intel/proposed/camp-flag-2026-08-26-CLE.json --write
+python scripts/nfl/queue_camp_sot_flags.py --queue --tier T1
+python scripts/nfl/queue_camp_sot_flags.py --accept data/ops/nfl-daily-intel/proposed/camp-flag-2026-08-26-CLE.json --write --rematerialize
+# Then run the receipt's POST /nfl/ops/rebuild-props-layers?season=2026&weeks=1..18
 ```
+
+Watson Week 1 starter, Higgins ACL, and similar claims must not live only in the
+Wednesday wrap — they become T1 work items with a proposed patch until Accept.

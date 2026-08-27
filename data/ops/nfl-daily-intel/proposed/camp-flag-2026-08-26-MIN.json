@@ -1,5 +1,6 @@
 {
-  "schema": "nfl-camp-sot-proposal/v1",
+  "schema": "nfl-depth-sot-work-item/v1",
+  "work_item_id": "2026-08-26:MIN",
   "flag_id": "2026-08-26:MIN",
   "as_of": "2026-08-26",
   "source": "camp_desk",
@@ -7,6 +8,8 @@
   "title": "Vikings camp \u2014 Aug 26",
   "sot_flag": "Murray is QB1. McCarthy remains QB2 with reduced late-camp work; Adams is out for the season. Do not reopen QB1 or promote another backup without confirmation.",
   "bottom_line": "Murray remains QB1; McCarthy is still QB2 but worked a reduced load after getting banged up, and Adams is out for the season. Pass.",
+  "tier": "T1",
+  "sla_hours": 12,
   "sources": [
     {
       "label": "Vikings \u2014 Murray named starting quarterback",
@@ -23,7 +26,17 @@
   ],
   "status": "proposed",
   "requires_human_accept": true,
-  "queued_at": "2026-08-27T16:43:19Z",
-  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
-  "overrides": []
+  "may_auto_apply": false,
+  "queued_at": "2026-08-27T16:46:09Z",
+  "notes": "Proposed pack patch only \u2014 never auto-applied. Notes must not touch means/props/spreads. Accept \u2192 pack write \u2192 rematerialize \u2192 receipt. Never invent depth_order / new starters from prose. CLI: scripts/nfl/queue_camp_sot_flags.py --accept <file> [--write]",
+  "proposed_patch": {
+    "overrides": []
+  },
+  "overrides": [],
+  "contract": {
+    "notes_may_touch_means": false,
+    "notes_may_touch_props": false,
+    "notes_may_touch_spreads": false,
+    "proposals_may_auto_apply": false
+  }
 }
