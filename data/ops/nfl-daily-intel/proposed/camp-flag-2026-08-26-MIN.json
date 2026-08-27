@@ -1,0 +1,29 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:MIN",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "MIN",
+  "title": "Vikings camp \u2014 Aug 26",
+  "sot_flag": "Murray is QB1. McCarthy remains QB2 with reduced late-camp work; Adams is out for the season. Do not reopen QB1 or promote another backup without confirmation.",
+  "bottom_line": "Murray remains QB1; McCarthy is still QB2 but worked a reduced load after getting banged up, and Adams is out for the season. Pass.",
+  "sources": [
+    {
+      "label": "Vikings \u2014 Murray named starting quarterback",
+      "href": "https://www.vikings.com/news/kyler-murray-quarterback-starting-2026-nfl-season"
+    },
+    {
+      "label": "ESPN \u2014 McCarthy banged up against Baltimore (Aug 22)",
+      "href": "https://www.espn.ph/nfl/story/_/id/49695231/mccarthy-plays-18-snaps-gets-banged-vikings-loss"
+    },
+    {
+      "label": "The Athletic \u2014 Adams season-ending quad",
+      "href": "https://www.nytimes.com/athletic/7517951/2026/08/16/vikings-jamal-adams-season-ending-knee-injury/"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

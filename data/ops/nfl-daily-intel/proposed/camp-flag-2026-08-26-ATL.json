@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:ATL",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "ATL",
+  "title": "Falcons camp \u2014 Aug 26",
+  "sot_flag": "Penix is back in 11-on-11; QB1 remains unresolved between Penix and Tagovailoa. Do not crown either player.",
+  "bottom_line": "Penix is cleared for 11-on-11 and splitting first-team work with Tagovailoa. The medical gate opened; QB1 did not close. Pass.",
+  "sources": [
+    {
+      "label": "Falcons \u2014 Penix returns to full-team work (Aug 24)",
+      "href": "https://www.atlantafalcons.com/news/falcons-camp-report-recapping-michael-penix-jr-return-full-team-work"
+    },
+    {
+      "label": "AP \u2014 Penix joins full team drills (Aug 24)",
+      "href": "https://apnews.com/article/falcons-penix-tagovailoa-c57a3ebdf1b7ad68588df87ec2f98bd1"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

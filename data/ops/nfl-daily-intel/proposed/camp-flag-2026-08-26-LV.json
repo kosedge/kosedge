@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:LV",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "LV",
+  "title": "Raiders camp \u2014 Aug 26",
+  "sot_flag": "Jeanty's ankle sprain makes Week 1 availability uncertain. Do not transfer his season role to Washington from temporary practice reps.",
+  "bottom_line": "Jeanty avoided a reported long-term injury, but his ankle timetable and Week 1 status remain open. Washington's first-team reps are temporary evidence. Pass.",
+  "sources": [
+    {
+      "label": "Las Vegas Review-Journal \u2014 Jeanty ankle update (Aug 24)",
+      "href": "https://www.reviewjournal.com/sports/raiders/raiders-get-positive-update-on-injured-star-ashton-jeanty-3868372/"
+    },
+    {
+      "label": "NBC Sports \u2014 Jeanty diagnosed with ankle sprain",
+      "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/raiders-rb-ashton-jeanty-diagnosed-with-sprained-ankle"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

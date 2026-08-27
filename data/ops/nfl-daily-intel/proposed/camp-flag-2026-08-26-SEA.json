@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:SEA",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "SEA",
+  "title": "Seahawks camp \u2014 Aug 26",
+  "sot_flag": "Bobo, Clark and Richman are out for the season. Flag WR, safety and OL depth without naming one-for-one successors.",
+  "bottom_line": "Seattle lost Bobo, Clark and Richman for the season in one costly Tennessee stretch. These are real depth hits; Pass on assigning all vacated roles to one next man.",
+  "sources": [
+    {
+      "label": "ESPN \u2014 Clark and Richman placed on IR (Aug 25)",
+      "href": "https://www.espn.com/nfl/story/_/id/49725451/seahawks-put-clark-richman-season-ending-injured-reserve"
+    },
+    {
+      "label": "Seahawks \u2014 Clark, Richman and Bobo injury context",
+      "href": "https://www.seahawks.com/news/rookie-safety-bud-clark-suffers-broken-ankle-in-seahawks-preseason-loss-to-titans"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

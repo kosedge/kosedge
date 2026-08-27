@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:DET",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "DET",
+  "title": "Lions camp \u2014 Aug 26",
+  "sot_flag": "Mays is a long-term center absence. Keep Scruggs/McLaughlin as an open competition; do not invent the replacement.",
+  "bottom_line": "Mays' wrist removes Detroit's planned center for the opening stretch, while LaPorta's return improves the skill group. Center SoT moves; the broader call is Pass.",
+  "sources": [
+    {
+      "label": "Detroit Football Network \u2014 LaPorta return and center work (Aug 25)",
+      "href": "https://www.detroitfootball.net/p/lions-camp-observations-laporta-and"
+    },
+    {
+      "label": "Detroit Free Press \u2014 Mays and LaPorta injury context",
+      "href": "https://www.freep.com/story/sports/nfl/lions/2026/08/20/sam-laporta-injury-update-lions-news-nfl/91389382007/"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

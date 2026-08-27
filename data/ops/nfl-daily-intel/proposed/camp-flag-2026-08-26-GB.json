@@ -1,0 +1,21 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:GB",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "GB",
+  "title": "Packers camp \u2014 Aug 26",
+  "sot_flag": "Parsons remains unavailable for the opening stretch. Preserve replacement rush shares without treating one camp standout as a full substitute.",
+  "bottom_line": "Green Bay is building its opening plan without Parsons while the offensive line tries to settle. That is a Week 1 structure note, not a futures push. Pass.",
+  "sources": [
+    {
+      "label": "PackersNews \u2014 defense and participation report (Aug 24)",
+      "href": "https://www.usatoday.com/story/sports/nfl/packers/2026/08/24/green-bay-packers-training-camp-today-practice-updates--live/91441121007/"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

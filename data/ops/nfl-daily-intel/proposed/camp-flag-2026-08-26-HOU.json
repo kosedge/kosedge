@@ -1,0 +1,45 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:HOU",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "HOU",
+  "title": "Texans camp \u2014 Aug 26",
+  "sot_flag": "Higgins is a season-ending loss. Collins remains WR1; do not silently assign WR2 to Boutte, Dell, Noel or Hutchinson.",
+  "bottom_line": "Higgins is out for the season and Boutte is the new option, not an automatic WR2. Keep Collins first and the rest as an open usage group. Pass.",
+  "sources": [
+    {
+      "label": "NFL \u2014 Higgins torn ACL, out for 2026",
+      "href": "https://www.nfl.com/news/texans-wr-jayden-higgins-torn-acl-out-2026-season"
+    },
+    {
+      "label": "AP \u2014 Texans acquire Boutte (Aug 24)",
+      "href": "https://apnews.com/article/texans-patriots-kayshon-boutte-trade-80aed90c99d086630c2e1da0be9544db"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": [
+    {
+      "team": "HOU",
+      "player_name": "Jayden Higgins",
+      "player_id": "00-0040130",
+      "position": "WR",
+      "layer": "rows",
+      "field": "injury_status",
+      "before": null,
+      "after": "out",
+      "reason": "Camp Desk SoT flag (2026-08-26): Higgins is a season-ending loss. Collins remains WR1; do not silently assign WR2 to Boutte, Dell, Noel or Hutchinson.",
+      "as_of": "2026-08-26",
+      "confidence": "medium",
+      "destination": "kei_only",
+      "sources": [
+        "https://www.nfl.com/news/texans-wr-jayden-higgins-torn-acl-out-2026-season",
+        "https://apnews.com/article/texans-patriots-kayshon-boutte-trade-80aed90c99d086630c2e1da0be9544db"
+      ],
+      "draft": true
+    }
+  ]
+}

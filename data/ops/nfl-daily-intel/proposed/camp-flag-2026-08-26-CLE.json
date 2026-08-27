@@ -1,0 +1,45 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:CLE",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "CLE",
+  "title": "Browns camp \u2014 Aug 26",
+  "sot_flag": "Watson is the named QB1 and Sanders is QB2. Remove all open-competition or split-starter allocations.",
+  "bottom_line": "Watson is Cleveland's Week 1 starter, and the choice is not week to week. Carry one QB1 into the spine; the win-total angle remains Pass.",
+  "sources": [
+    {
+      "label": "Browns \u2014 Watson named starting quarterback (Aug 24)",
+      "href": "https://www.clevelandbrowns.com/news/deshaun-watson-named-browns-starting-quarterback"
+    },
+    {
+      "label": "NBC Sports \u2014 decision not week to week (Aug 24)",
+      "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/todd-monken-we-expect-deshaun-watson-to-play-well-or-we-wouldnt-be-starting-him"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": [
+    {
+      "team": "CLE",
+      "player_name": "Deshaun Watson",
+      "player_id": "00-0033537",
+      "position": "QB",
+      "layer": "rows",
+      "field": "competition_status",
+      "before": "open_competition",
+      "after": "named_starter",
+      "reason": "Camp Desk SoT flag (2026-08-26): Watson is the named QB1 and Sanders is QB2. Remove all open-competition or split-starter allocations.",
+      "as_of": "2026-08-26",
+      "confidence": "medium",
+      "destination": "sot",
+      "sources": [
+        "https://www.clevelandbrowns.com/news/deshaun-watson-named-browns-starting-quarterback",
+        "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/todd-monken-we-expect-deshaun-watson-to-play-well-or-we-wouldnt-be-starting-him"
+      ],
+      "draft": true
+    }
+  ]
+}

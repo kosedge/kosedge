@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:NO",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "NO",
+  "title": "Saints camp \u2014 Aug 26",
+  "sot_flag": "Bresee is out for the season and Kamara is an early absence. Preserve Etienne's opening lead work without converting it into an unsupported season-long monopoly.",
+  "bottom_line": "New Orleans has an injury plan, not a clean roster: Bresee is out for the year and Kamara will miss at least a month. Carry the absences; Pass on a one-player replacement.",
+  "sources": [
+    {
+      "label": "Saints \u2014 injury and IR update (Aug 25)",
+      "href": "https://www.neworleanssaints.com/news/two-placed-on-injured-reserve-as-new-orleans-saints-continue-to-work-around-injuries"
+    },
+    {
+      "label": "ESPN \u2014 Kamara MCL timetable",
+      "href": "https://global.espn.com/nfl/story/_/id/49658952/source-saints-rb-kamara-least-month-mcl-sprain"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

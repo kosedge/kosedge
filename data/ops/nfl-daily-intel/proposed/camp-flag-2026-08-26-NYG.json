@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:NYG",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "NYG",
+  "title": "Giants camp \u2014 Aug 26",
+  "sot_flag": "Austin has a serious knee injury with diagnosis pending. Flag the slot role but do not promote Berrios, Beckham or Mooney as a permanent replacement yet.",
+  "bottom_line": "Austin's right-knee injury is serious, but the MRI result is still the missing fact. Berrios took slot reps; Pass on naming a permanent replacement.",
+  "sources": [
+    {
+      "label": "ESPN \u2014 Austin carted off with serious knee injury (Aug 25)",
+      "href": "https://www.espn.com/nfl/story/_/id/49724505/new-york-giants-wr-calvin-austin-carted-practice-field"
+    },
+    {
+      "label": "New York Post \u2014 Austin knee injury at practice",
+      "href": "https://nypost.com/2026/08/25/sports/calvin-austin-suffers-potentially-major-knee-injury-at-giants-practice/"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

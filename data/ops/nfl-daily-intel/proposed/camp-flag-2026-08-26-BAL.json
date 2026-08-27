@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:BAL",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "BAL",
+  "title": "Ravens camp \u2014 Aug 26",
+  "sot_flag": "Pinter is a season-ending loss. Center remains Pocic versus Gwyn; no starter should be inferred from one practice.",
+  "bottom_line": "Pinter's season is over and the center competition resets to Pocic versus Gwyn. Pass on turning the next first-team period into a winner.",
+  "sources": [
+    {
+      "label": "Ravens \u2014 Pinter and center competition update (Aug 24)",
+      "href": "https://www.baltimoreravens.com/news/nnamdi-madubuike-next-step-hits-sled-first-time-danny-pinter-injury-season-ending-ravens-preseason-week-3"
+    },
+    {
+      "label": "NFL \u2014 Pinter torn patellar tendon",
+      "href": "https://www.nfl.com/news/ravens-center-danny-pinter-torn-patellar-tendon"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

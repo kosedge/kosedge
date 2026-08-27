@@ -43,6 +43,7 @@ HOOKS = {
     "rolling_features": "scripts/nfl/materialize_team_rolling_features.py",
     "proof_lake": "services/model-service/src/services/proof_layer/proof_lake.py",
     "daily_intel": "scripts/nfl/apply_daily_intel_overrides.py",
+    "camp_sot_queue": "scripts/nfl/queue_camp_sot_flags.py",
     "injury_kei": "scripts/nfl/injury_kei_reprice.py",
     "identity_audit": "scripts/nfl/audit_nfl_pack_vs_market.py",
     "edge_board": "scripts/nfl/check_edge_board_week1.py",
@@ -56,6 +57,7 @@ HUMAN_ONLY = (
     "SOT_SKILL_OVERRIDES / tag policy judgment",
     "True outages (Railway / Vercel / DB down)",
     "Approved daily-intel writes to the one SoT pack",
+    "Camp Desk SoT proposals: queue_camp_sot_flags.py --accept [--write] then rematerialize",
     "ROS checkpoint --execute (50k/100k research sim + pointer flip after gate PASS)",
 )
 
@@ -190,5 +192,17 @@ def pending_intel_files(intel_dir: Path | None = None) -> List[Path]:
     return sorted(
         p
         for p in base.glob("*.json")
+        if p.is_file() and not p.name.startswith(".")
+    )
+
+
+def proposed_camp_sot_files(proposed_dir: Path | None = None) -> List[Path]:
+    """Camp Desk SoT proposals awaiting human accept (not auto-applied)."""
+    base = proposed_dir or (ROOT / "data/ops/nfl-daily-intel/proposed")
+    if not base.is_dir():
+        return []
+    return sorted(
+        p
+        for p in base.glob("camp-flag-*.json")
         if p.is_file() and not p.name.startswith(".")
     )

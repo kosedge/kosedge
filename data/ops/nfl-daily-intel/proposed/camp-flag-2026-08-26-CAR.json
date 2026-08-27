@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:CAR",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "CAR",
+  "title": "Panthers camp \u2014 Aug 26",
+  "sot_flag": "Scourton is out for the season. Hubbard and Brooks are a confirmed committee; do not restore feature volume or invent one edge replacement.",
+  "bottom_line": "Hubbard is tracking toward Week 1, but Carolina has confirmed a Hubbard-Brooks committee and still lacks Scourton for the season. Pass.",
+  "sources": [
+    {
+      "label": "Panthers \u2014 Hubbard and Legette update (Aug 24)",
+      "href": "https://www.panthers.com/news/training-camp-observations-joint-practice-will-determine-workload-in-finale"
+    },
+    {
+      "label": "AP \u2014 Hubbard expected for opener",
+      "href": "https://apnews.com/article/panthers-hubbard-season-opener-7bc3839cb7b761b18bee4e0c04f69330"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}

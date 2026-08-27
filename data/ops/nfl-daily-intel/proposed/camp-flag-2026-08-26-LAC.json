@@ -1,0 +1,25 @@
+{
+  "schema": "nfl-camp-sot-proposal/v1",
+  "flag_id": "2026-08-26:LAC",
+  "as_of": "2026-08-26",
+  "source": "camp_desk",
+  "team": "LAC",
+  "title": "Chargers camp \u2014 Aug 26",
+  "sot_flag": "Biadasz is out for the season. Move Slaughter to the center lane and leave left guard open until the club confirms it.",
+  "bottom_line": "Biadasz is on season-ending IR, sending Slaughter back to center and reopening left guard. Carry the line change; Pass on assuming no drop-off.",
+  "sources": [
+    {
+      "label": "Chargers \u2014 Biadasz placed on injured reserve (Aug 23)",
+      "href": "https://www.chargers.com/news/tyler-biadasz-injured-reserve-sign-gary-jennings-2026"
+    },
+    {
+      "label": "NFL \u2014 Biadasz season-ending IR and replacement context",
+      "href": "https://www.nfl.com/news/chargers-place-veteran-c-tyler-biadasz-knee-on-season-ending-injured-reserve"
+    }
+  ],
+  "status": "proposed",
+  "requires_human_accept": true,
+  "queued_at": "2026-08-27T16:43:19Z",
+  "notes": "Draft overrides are suggestions only. Review before accept. Never invent depth_order / new starters from prose. Accept via scripts/nfl/queue_camp_sot_flags.py --accept <file>.",
+  "overrides": []
+}
