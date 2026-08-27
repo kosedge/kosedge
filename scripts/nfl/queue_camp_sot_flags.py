@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""DepthSotWorkItem handoff: Camp Desk SOT FLAG → queue → accept → remat receipt.
+"""DepthSotWorkItem handoff: Camp Desk SOT FLAG → runtime queue → accept/reject.
 
 Notes stay copy. Proposals never auto-apply. Accept is the only pack/remat gate.
-No second SoT. No public UI required.
+Queue files live in data/ops/nfl-daily-intel/queue/runtime/ (gitignored).
 
 Usage:
   python scripts/nfl/queue_camp_sot_flags.py --scan
   python scripts/nfl/queue_camp_sot_flags.py --queue
-  python scripts/nfl/queue_camp_sot_flags.py --queue --tier T1
-  python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write
-  # After --write: rematerialize via safe rebuild (receipt records the command)
+  python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write --rematerialize
+  python scripts/nfl/queue_camp_sot_flags.py --reject path.json
+  python scripts/nfl/queue_camp_sot_flags.py --no-change path.json
 """
 
 from __future__ import annotations
@@ -29,6 +29,7 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
     NOTES_MAY_TOUCH_MEANS,
     PROPOSALS_MAY_AUTO_APPLY,
     accept_proposal,
+    close_work_item,
     overdue_summary,
     queue_flags,
     scan_camp_sot_flags,
@@ -38,11 +39,14 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--scan", action="store_true", help="Print open/overdue DepthSotWorkItems")
-    ap.add_argument("--queue", action="store_true", help="Write work-item JSON to proposed/")
+    ap.add_argument("--queue", action="store_true", help="Upsert work items into queue/runtime/")
+    ap.add_argument("--accept", type=Path, help="Accept a work item")
+    ap.add_argument("--reject", type=Path, help="Reject — write nothing, no remat")
     ap.add_argument(
-        "--accept",
+        "--no-change",
         type=Path,
-        help="Accept a work item (pending/ + optional --write pack + receipt)",
+        dest="no_change",
+        help="Close as no_change — write nothing, no remat",
     )
     ap.add_argument(
         "--write",
@@ -52,7 +56,7 @@ def main() -> int:
     ap.add_argument(
         "--rematerialize",
         action="store_true",
-        help="With --accept --write: mark remat required on the receipt (safe weeks 1–18)",
+        help="With --accept --write: mark remat required on the receipt",
     )
     ap.add_argument(
         "--allow-empty",
@@ -82,15 +86,29 @@ def main() -> int:
         action="store_true",
         help="Scan every Camp Desk day file (default: newest desk_date only)",
     )
-    ap.add_argument("--json", action="store_true", help="Machine-readable scan output")
+    ap.add_argument("--reason", default="", help="Optional reason for --reject / --no-change")
+    ap.add_argument("--json", action="store_true", help="Machine-readable scan/queue output")
     args = ap.parse_args()
 
-    if not (args.scan or args.queue or args.accept):
-        ap.error("pass --scan, --queue, and/or --accept")
+    actions = [args.scan, args.queue, args.accept, args.reject, args.no_change]
+    if not any(actions):
+        ap.error("pass --scan, --queue, --accept, --reject, and/or --no-change")
 
     if NOTES_MAY_TOUCH_MEANS or PROPOSALS_MAY_AUTO_APPLY:
         print("FATAL: notes/proposals must not auto-write lines", file=sys.stderr)
         return 2
+
+    if args.reject:
+        print(json.dumps(close_work_item(args.reject, disposition="reject", reason=args.reason), indent=2))
+        return 0
+    if args.no_change:
+        print(
+            json.dumps(
+                close_work_item(args.no_change, disposition="no_change", reason=args.reason),
+                indent=2,
+            )
+        )
+        return 0
 
     if args.accept:
         try:
@@ -131,27 +149,39 @@ def main() -> int:
                 f"overdue={summary['overdue']} "
                 f"proposed_patch_rows={summary['draft_override_count']}"
             )
-            print("contract: notes never touch means/props/spreads; proposals never auto-apply")
+            print(
+                "contract: notes never touch means/props/spreads; "
+                "proposals never auto-apply; queue≠remat"
+            )
             for flag in flags:
                 mark = "OVERDUE" if flag.overdue else flag.status.upper()
                 drafts = len(flag.proposed_patch)
+                why = f" ({flag.overdue_reason})" if flag.overdue_reason else ""
                 print(
-                    f"  [{mark}] [{flag.tier}] {flag.work_item_id}  "
-                    f"patch={drafts}  sla_h={flag.sla_hours}  age_h={flag.age_hours:.0f}"
+                    f"  [{mark}] [{flag.tier}] {flag.team}  "
+                    f"patch={drafts}  sla_h={flag.sla_hours}  "
+                    f"kei={flag.next_kei_publish}  age_h={flag.age_hours:.0f}{why}"
                 )
                 if flag.sot_flag:
                     print(f"           {flag.sot_flag[:120]}")
 
     if args.queue:
-        written = queue_flags(
+        result = queue_flags(
             flags,
             only_overdue=args.only_overdue,
             only_with_drafts=args.only_with_drafts,
             tiers=args.tier,
         )
-        print(f"queued {len(written)} DepthSotWorkItem(s)")
-        for path in written:
-            print(f"  {path}")
+        if args.json:
+            print(json.dumps(result.as_dict(), indent=2))
+        else:
+            print(
+                f"queue idempotent: created={len(result.created)} "
+                f"updated={len(result.updated)} unchanged={len(result.unchanged)} "
+                f"skipped={len(result.skipped)}"
+            )
+            for path in result.written:
+                print(f"  {path}")
 
     return 0
 

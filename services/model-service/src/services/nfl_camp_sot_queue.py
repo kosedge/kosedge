@@ -17,16 +17,26 @@ from __future__ import annotations
 import json
 import re
 from dataclasses import dataclass, field
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence
+from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
+from zoneinfo import ZoneInfo
 
 from src.services.nfl_daily_intel import (
     ALLOWED_FIELDS,
     PACK_DEFAULT,
     apply_intel_overrides,
+    format_smoke_diff,
+    kei_smoke_for_teams,
     normalize_override,
 )
+
+ET = ZoneInfo("America/New_York")
+# Midweek + Friday final KEI publish (matches nfl-injury-kei-cadence config).
+_KEI_PUBLISH_WEEKDAYS = (3, 4)  # Thu, Fri
+_KEI_PUBLISH_HOUR_ET = 16
+_KEI_PUBLISH_MINUTE_ET = 0
+
 
 # Hard contract — notes must never touch projection / market numbers.
 NOTES_MAY_TOUCH_MEANS = False
@@ -37,9 +47,13 @@ PROPOSALS_MAY_AUTO_APPLY = False
 _SERVICES = Path(__file__).resolve().parent
 _REPO = _SERVICES.parents[3]  # services/ → src → model-service → services → repo
 CAMP_DESK_DEFAULT = _REPO / "content" / "writers" / "camp-desk-2026"
-PROPOSED_DEFAULT = _REPO / "data" / "ops" / "nfl-daily-intel" / "proposed"
+# Runtime queue — generated work items; not committed (see .gitignore).
+QUEUE_RUNTIME_DEFAULT = _REPO / "data" / "ops" / "nfl-daily-intel" / "queue" / "runtime"
+PROPOSED_DEFAULT = QUEUE_RUNTIME_DEFAULT  # alias
 PENDING_DEFAULT = _REPO / "data" / "ops" / "nfl-daily-intel" / "pending"
-ACCEPTED_LOG_DEFAULT = _REPO / "data" / "ops" / "nfl-daily-intel" / "accepted" / "camp-sot-log.jsonl"
+ACCEPTED_LOG_DEFAULT = (
+    _REPO / "data" / "ops" / "nfl-daily-intel" / "accepted" / "camp-sot-log.jsonl"
+)
 RECEIPTS_DEFAULT = _REPO / "data" / "ops" / "nfl-daily-intel" / "receipts"
 
 WORK_ITEM_SCHEMA = "nfl-depth-sot-work-item/v1"
@@ -48,11 +62,15 @@ RECEIPT_SCHEMA = "nfl-depth-sot-receipt/v1"
 # T1 same-day · T2 next remat · T3 Pass (no pack write expected)
 TIER_SLA_HOURS = {"T1": 12, "T2": 48, "T3": 72}
 DEFAULT_OVERDUE_HOURS = TIER_SLA_HOURS["T1"]  # scan fallback; per-item SLA wins
+# T1 also overdue at next KEI publish (Thu/Fri 16:00 ET) — see next_kei_publish_utc.
 
 SAFE_REMAT_HINT = (
     "POST /nfl/ops/rebuild-props-layers?season=2026"
     "&weeks=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18"
 )
+
+CLOSED_DISPOSITIONS = frozenset({"accepted", "reject", "no_change"})
+
 
 _OUT_RE = re.compile(
     r"(?i)\b("
@@ -96,6 +114,45 @@ def _now_iso() -> str:
 def desk_date_start_utc(desk_date: str) -> datetime:
     """Camp desk dates are Eastern calendar days; use noon ET ≈ 16:00Z."""
     return datetime.fromisoformat(f"{desk_date}T16:00:00+00:00")
+
+
+def next_kei_publish_utc(after: datetime) -> datetime:
+    """Next Thu/Fri 16:00 America/New_York at or after ``after`` (UTC-aware)."""
+    if after.tzinfo is None:
+        after = after.replace(tzinfo=timezone.utc)
+    local = after.astimezone(ET)
+    for offset in range(0, 10):
+        day = (local + timedelta(days=offset)).date()
+        if day.weekday() not in _KEI_PUBLISH_WEEKDAYS:
+            continue
+        candidate = datetime(
+            day.year,
+            day.month,
+            day.day,
+            _KEI_PUBLISH_HOUR_ET,
+            _KEI_PUBLISH_MINUTE_ET,
+            tzinfo=ET,
+        )
+        if candidate >= local:
+            return candidate.astimezone(timezone.utc)
+    # Fallback: +7d Thursday
+    return (local + timedelta(days=7)).astimezone(timezone.utc)
+
+
+def work_item_id_for(*, as_of: str, team_id: str, note_id: Optional[str] = None) -> str:
+    """Stable id: note_id + team_id + as_of (idempotent queue key)."""
+    team = _norm_team(team_id)
+    nid = (note_id or f"note-{as_of}-{team}").strip()
+    return f"{as_of}:{team}:{nid}"
+
+
+def work_item_filename(work_item_id: str) -> str:
+    """Stable runtime filename from work_item_id (no duplicates on re-queue)."""
+    # as_of:TEAM:note-as_of-TEAM → work-item-as_of-TEAM.json
+    parts = work_item_id.split(":")
+    if len(parts) >= 2:
+        return f"work-item-{parts[0]}-{parts[1]}.json"
+    return f"work-item-{work_item_id.replace(':', '-')}.json"
 
 
 def load_camp_day_files(camp_dir: Path) -> List[Dict[str, Any]]:
@@ -350,15 +407,17 @@ class DepthSotWorkItem:
     title: str
     sot_flag: str
     bottom_line: str
+    note_id: str = ""
     tier: str = "T2"
     sla_hours: int = 48
+    next_kei_publish: str = ""
     sources: List[Dict[str, Any]] = field(default_factory=list)
     proposed_patch: List[Dict[str, Any]] = field(default_factory=list)
-    status: str = "open"  # open | queued | accepted | overdue | pass
+    status: str = "open"  # open | queued | accepted | overdue | pass | reject | no_change
     overdue: bool = False
     age_hours: float = 0.0
+    overdue_reason: str = ""
 
-    # Legacy aliases for thinner-cut callers / tests.
     @property
     def flag_id(self) -> str:
         return self.work_item_id
@@ -371,19 +430,24 @@ class DepthSotWorkItem:
         return {
             "schema": WORK_ITEM_SCHEMA,
             "work_item_id": self.work_item_id,
+            "note_id": self.note_id,
             "flag_id": self.work_item_id,
             "desk_date": self.desk_date,
+            "as_of": self.desk_date,
             "team": self.team,
+            "team_id": self.team,
             "title": self.title,
             "sot_flag": self.sot_flag,
             "bottom_line": self.bottom_line,
             "tier": self.tier,
             "sla_hours": self.sla_hours,
+            "next_kei_publish": self.next_kei_publish,
             "sources": self.sources,
             "proposed_patch": {"overrides": self.proposed_patch},
-            "draft_overrides": self.proposed_patch,  # legacy
+            "draft_overrides": self.proposed_patch,
             "status": self.status,
             "overdue": self.overdue,
+            "overdue_reason": self.overdue_reason,
             "age_hours": round(self.age_hours, 1),
             "contract": {
                 "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
@@ -398,10 +462,11 @@ class DepthSotWorkItem:
 CampSotFlag = DepthSotWorkItem
 
 
-def _accepted_flag_ids(log_path: Path) -> set[str]:
+def _disposition_map(log_path: Path) -> Dict[str, str]:
+    """work_item_id → disposition (accepted|reject|no_change)."""
     if not log_path.is_file():
-        return set()
-    ids: set[str] = set()
+        return {}
+    out: Dict[str, str] = {}
     for line in log_path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line:
@@ -411,24 +476,52 @@ def _accepted_flag_ids(log_path: Path) -> set[str]:
         except json.JSONDecodeError:
             continue
         fid = str(row.get("work_item_id") or row.get("flag_id") or "")
-        if fid:
-            ids.add(fid)
-    return ids
+        disp = str(row.get("disposition") or row.get("status") or "")
+        if not fid:
+            continue
+        if disp in CLOSED_DISPOSITIONS:
+            out[fid] = disp
+        elif row.get("wrote_pack") is not None or row.get("accepted_at"):
+            out[fid] = "accepted"
+    return out
 
 
-def _queued_flag_ids(proposed_dir: Path) -> set[str]:
+def _accepted_flag_ids(log_path: Path) -> set[str]:
+    return set(_disposition_map(log_path))
+
+
+def _queued_flag_ids(proposed_dir: Path) -> Dict[str, Path]:
     if not proposed_dir.is_dir():
-        return set()
-    ids: set[str] = set()
-    for path in proposed_dir.glob("camp-flag-*.json"):
+        return {}
+    ids: Dict[str, Path] = {}
+    for path in list(proposed_dir.glob("work-item-*.json")) + list(
+        proposed_dir.glob("camp-flag-*.json")
+    ):
         try:
             doc = json.loads(path.read_text(encoding="utf-8"))
         except (OSError, json.JSONDecodeError):
             continue
         fid = str(doc.get("work_item_id") or doc.get("flag_id") or "")
         if fid:
-            ids.add(fid)
+            ids[fid] = path
     return ids
+
+
+def _is_overdue(
+    *,
+    tier: str,
+    age_h: float,
+    sla_hours: int,
+    desk_start: datetime,
+    now: datetime,
+) -> Tuple[bool, str]:
+    if age_h >= sla_hours:
+        return True, f"age_h>={sla_hours}"
+    if tier == "T1":
+        deadline = next_kei_publish_utc(desk_start)
+        if now >= deadline:
+            return True, f"past_kei_publish:{deadline.strftime('%Y-%m-%dT%H:%MZ')}"
+    return False, ""
 
 
 def scan_camp_sot_flags(
@@ -445,7 +538,7 @@ def scan_camp_sot_flags(
     """Scan Camp Desk material flags → DepthSotWorkItem list with overdue SLAs."""
     assert_notes_cannot_touch_lines()
     payload = dict(pack) if pack is not None else load_pack(pack_path)
-    accepted = _accepted_flag_ids(accepted_log)
+    closed = _disposition_map(accepted_log)
     queued = _queued_flag_ids(proposed_dir)
     clock = now or _now_utc()
     days = load_camp_day_files(camp_dir)
@@ -463,6 +556,7 @@ def scan_camp_sot_flags(
         except ValueError:
             continue
         age_h = max(0.0, (clock - start).total_seconds() / 3600.0)
+        kei_deadline = next_kei_publish_utc(start)
         for note in day.get("team_notes") or []:
             if not isinstance(note, dict) or not note.get("is_material_depth"):
                 continue
@@ -470,7 +564,8 @@ def scan_camp_sot_flags(
             sot_flag = str(note.get("sot_flag") or "").strip()
             if not team:
                 continue
-            work_item_id = f"{desk_date}:{team}"
+            note_id = f"note-{desk_date}-{team}"
+            wid = work_item_id_for(as_of=desk_date, team_id=team, note_id=note_id)
             players = _pack_players_for_team(payload, team)
             patch = _propose_pack_patch(
                 team=team,
@@ -481,46 +576,63 @@ def scan_camp_sot_flags(
             )
             tier = classify_tier(sot_flag=sot_flag, proposed_patch=patch)
             sla = overdue_hours if overdue_hours is not None else TIER_SLA_HOURS[tier]
-            overdue = False
-            if work_item_id in accepted:
-                status = "accepted"
-            elif work_item_id in queued:
+            overdue, overdue_reason = _is_overdue(
+                tier=tier,
+                age_h=age_h,
+                sla_hours=sla,
+                desk_start=start,
+                now=clock,
+            )
+            if wid in closed:
+                status = closed[wid]
+                overdue = False
+                overdue_reason = ""
+            elif wid in queued:
                 status = "queued"
-                overdue = age_h >= sla
             else:
-                overdue = age_h >= sla
-                if tier == "T3" and not patch:
-                    status = "pass" if not overdue else "overdue"
+                if tier == "T3" and not patch and not overdue:
+                    status = "pass"
                 else:
                     status = "overdue" if overdue else "open"
             items.append(
                 DepthSotWorkItem(
-                    work_item_id=work_item_id,
+                    work_item_id=wid,
                     desk_date=desk_date,
                     team=team,
+                    note_id=note_id,
                     title=str(note.get("title") or ""),
                     sot_flag=sot_flag,
                     bottom_line=str(note.get("bottom_line") or ""),
                     tier=tier,
                     sla_hours=sla,
+                    next_kei_publish=kei_deadline.strftime("%Y-%m-%dT%H:%M:%SZ"),
                     sources=list(note.get("sources") or []),
                     proposed_patch=patch,
                     status=status,
                     overdue=overdue,
+                    overdue_reason=overdue_reason,
                     age_hours=age_h,
                 )
             )
-    items.sort(key=lambda f: (0 if f.tier == "T1" else 1 if f.tier == "T2" else 2, -int(f.overdue), f.team))
+    items.sort(
+        key=lambda f: (
+            0 if f.tier == "T1" else 1 if f.tier == "T2" else 2,
+            -int(f.overdue),
+            f.team,
+        )
+    )
     return items
 
 
 def proposal_doc_for_flag(flag: DepthSotWorkItem) -> Dict[str, Any]:
-    """Serialize a DepthSotWorkItem for the proposed/ queue (never auto-applied)."""
+    """Serialize a DepthSotWorkItem for the runtime queue (never auto-applied)."""
     return {
         "schema": WORK_ITEM_SCHEMA,
         "work_item_id": flag.work_item_id,
+        "note_id": flag.note_id,
         "flag_id": flag.work_item_id,
         "as_of": flag.desk_date,
+        "team_id": flag.team,
         "source": "camp_desk",
         "team": flag.team,
         "title": flag.title,
@@ -528,6 +640,7 @@ def proposal_doc_for_flag(flag: DepthSotWorkItem) -> Dict[str, Any]:
         "bottom_line": flag.bottom_line,
         "tier": flag.tier,
         "sla_hours": flag.sla_hours,
+        "next_kei_publish": flag.next_kei_publish,
         "sources": flag.sources,
         "status": "proposed",
         "requires_human_accept": True,
@@ -537,11 +650,10 @@ def proposal_doc_for_flag(flag: DepthSotWorkItem) -> Dict[str, Any]:
             "Proposed pack patch only — never auto-applied. "
             "Notes must not touch means/props/spreads. "
             "Accept → pack write → rematerialize → receipt. "
-            "Never invent depth_order / new starters from prose. "
-            "CLI: scripts/nfl/queue_camp_sot_flags.py --accept <file> [--write]"
+            "reject / no_change writes nothing. "
+            "CLI: scripts/nfl/queue_camp_sot_flags.py --accept|--reject|--no-change"
         ),
         "proposed_patch": {"overrides": flag.proposed_patch},
-        # Legacy key so older accept paths keep working.
         "overrides": flag.proposed_patch,
         "contract": {
             "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
@@ -552,21 +664,59 @@ def proposal_doc_for_flag(flag: DepthSotWorkItem) -> Dict[str, Any]:
     }
 
 
+def _canonical_work_item_doc(doc: Mapping[str, Any]) -> str:
+    """Compare queue docs ignoring queued_at timestamps."""
+    payload = {k: v for k, v in doc.items() if k != "queued_at"}
+    return json.dumps(payload, sort_keys=True, default=str)
+
+
+@dataclass
+class QueueRunResult:
+    created: List[Path] = field(default_factory=list)
+    updated: List[Path] = field(default_factory=list)
+    unchanged: List[Path] = field(default_factory=list)
+    skipped: List[str] = field(default_factory=list)
+
+    @property
+    def written(self) -> List[Path]:
+        return [*self.created, *self.updated]
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "created": [str(p) for p in self.created],
+            "updated": [str(p) for p in self.updated],
+            "unchanged": [str(p) for p in self.unchanged],
+            "skipped": list(self.skipped),
+            "created_count": len(self.created),
+            "updated_count": len(self.updated),
+            "unchanged_count": len(self.unchanged),
+        }
+
+
 def queue_flags(
     flags: Sequence[DepthSotWorkItem],
     *,
     proposed_dir: Path = PROPOSED_DEFAULT,
+    accepted_log: Path = ACCEPTED_LOG_DEFAULT,
     only_overdue: bool = False,
     only_with_drafts: bool = False,
     tiers: Optional[Sequence[str]] = None,
-) -> List[Path]:
-    """Write DepthSotWorkItem JSON. Does not touch the depth pack or means."""
+) -> QueueRunResult:
+    """Upsert DepthSotWorkItem JSON by note_id+team_id+as_of. Idempotent.
+
+    Does not touch the depth pack or means. Re-runs update in place — no duplicates.
+    """
     assert_notes_cannot_touch_lines()
     proposed_dir.mkdir(parents=True, exist_ok=True)
+    closed = _disposition_map(accepted_log)
     wanted = {t.upper() for t in tiers} if tiers else None
-    written: List[Path] = []
+    result = QueueRunResult()
     for flag in flags:
-        if flag.status == "accepted":
+        if flag.work_item_id in closed:
+            result.skipped.append(f"{flag.work_item_id}:{closed[flag.work_item_id]}")
+            continue
+        if flag.status in CLOSED_DISPOSITIONS:
+            result.skipped.append(f"{flag.work_item_id}:{flag.status}")
             continue
         if only_overdue and not flag.overdue:
             continue
@@ -574,10 +724,25 @@ def queue_flags(
             continue
         if wanted and flag.tier not in wanted:
             continue
-        path = proposed_dir / f"camp-flag-{flag.desk_date}-{flag.team}.json"
-        path.write_text(json.dumps(proposal_doc_for_flag(flag), indent=2) + "\n", encoding="utf-8")
-        written.append(path)
-    return written
+        path = proposed_dir / work_item_filename(flag.work_item_id)
+        doc = proposal_doc_for_flag(flag)
+        if path.is_file():
+            try:
+                old = json.loads(path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                old = {}
+            # Preserve original queued_at for stable identity.
+            if old.get("queued_at"):
+                doc["queued_at"] = old["queued_at"]
+            if _canonical_work_item_doc(old) == _canonical_work_item_doc(doc):
+                result.unchanged.append(path)
+                continue
+            path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+            result.updated.append(path)
+        else:
+            path.write_text(json.dumps(doc, indent=2) + "\n", encoding="utf-8")
+            result.created.append(path)
+    return result
 
 
 def _strip_draft_markers(overrides: Sequence[Mapping[str, Any]]) -> List[Dict[str, Any]]:
@@ -596,14 +761,60 @@ def _overrides_from_doc(doc: Mapping[str, Any]) -> List[Dict[str, Any]]:
     return list(doc.get("overrides") or [])
 
 
+def pack_diff_from_apply(apply_result: Optional[Mapping[str, Any]]) -> List[Dict[str, Any]]:
+    if not apply_result:
+        return []
+    rows = []
+    for item in apply_result.get("applied") or []:
+        rows.append(
+            {
+                "team": item.get("team"),
+                "player_name": item.get("player_name"),
+                "field": item.get("field"),
+                "before": item.get("previous", item.get("before")),
+                "after": item.get("after"),
+            }
+        )
+    return rows
+
+
+def line_delta_from_kei(
+    before_rows: Sequence[Mapping[str, Any]],
+    after_rows: Sequence[Mapping[str, Any]],
+) -> List[Dict[str, Any]]:
+    before = {str(r.get("game")): r for r in before_rows}
+    deltas: List[Dict[str, Any]] = []
+    for row in after_rows:
+        game = str(row.get("game"))
+        prev = before.get(game) or {}
+        d_spread = float(row.get("spread_delta") or 0) - float(prev.get("spread_delta") or 0)
+        d_total = float(row.get("total_delta") or 0) - float(prev.get("total_delta") or 0)
+        new_factors = [
+            f for f in (row.get("factors") or []) if f not in (prev.get("factors") or [])
+        ]
+        if abs(d_spread) > 1e-9 or abs(d_total) > 1e-9 or new_factors:
+            deltas.append(
+                {
+                    "game": game,
+                    "spread_delta": round(d_spread, 3),
+                    "total_delta": round(d_total, 3),
+                    "new_factors": new_factors,
+                }
+            )
+    return deltas
+
+
 def write_receipt(
     *,
     work_item_id: str,
     tier: str,
-    pending_path: Path,
+    pending_path: Optional[Path],
     wrote_pack: bool,
     apply_result: Optional[Mapping[str, Any]],
     rematerialize_status: str,
+    disposition: str,
+    pack_diff: Optional[Sequence[Mapping[str, Any]]] = None,
+    line_delta: Optional[Sequence[Mapping[str, Any]]] = None,
     receipts_dir: Path = RECEIPTS_DEFAULT,
 ) -> Path:
     receipts_dir.mkdir(parents=True, exist_ok=True)
@@ -613,13 +824,16 @@ def write_receipt(
         "schema": RECEIPT_SCHEMA,
         "work_item_id": work_item_id,
         "tier": tier,
+        "disposition": disposition,
         "accepted_at": _now_iso(),
-        "pending": str(pending_path),
+        "pending": str(pending_path) if pending_path else None,
         "wrote_pack": wrote_pack,
+        "pack_diff": list(pack_diff or []),
+        "line_delta": list(line_delta or []),
         "apply": dict(apply_result) if apply_result else None,
         "rematerialize": {
             "status": rematerialize_status,
-            "entrypoint": SAFE_REMAT_HINT,
+            "entrypoint": SAFE_REMAT_HINT if rematerialize_status.startswith("required") else None,
             "ops_note": "data/ops/nfl-spine-safe-rematerialize.md",
             "rule": "Accept is the only gate that may rematerialize. Notes never write means.",
         },
@@ -639,6 +853,25 @@ def write_receipt(
     return path
 
 
+def _append_disposition_log(
+    log_path: Path,
+    row: Mapping[str, Any],
+) -> None:
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    with log_path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(dict(row)) + "\n")
+
+
+def _unlink_queue_file(proposal_path: Path) -> None:
+    if proposal_path.is_file() and (
+        proposal_path.parent == PROPOSED_DEFAULT
+        or "runtime" in proposal_path.parts
+        or "proposed" in proposal_path.parts
+        or "queue" in proposal_path.parts
+    ):
+        proposal_path.unlink()
+
+
 def accept_proposal(
     proposal_path: Path,
     *,
@@ -650,11 +883,9 @@ def accept_proposal(
     rematerialize: bool = False,
     allow_empty_overrides: bool = False,
 ) -> Dict[str, Any]:
-    """Accept a DepthSotWorkItem: pending → optional pack write → receipt.
+    """Accept a DepthSotWorkItem: pending → pack write (optional) → remat receipt.
 
-    Rematerialize is **requested** only after accept+write. This never lets
-    note prose rewrite means. ``rematerialize=True`` records a remat-required
-    receipt with the safe rebuild entrypoint (does not bare ``season=`` curl).
+    Rematerialize is requested only after accept+write. Notes never rewrite means.
     """
     assert_notes_cannot_touch_lines()
     if rematerialize and not write_pack:
@@ -662,6 +893,13 @@ def accept_proposal(
 
     doc = json.loads(proposal_path.read_text(encoding="utf-8"))
     work_item_id = str(doc.get("work_item_id") or doc.get("flag_id") or "")
+    closed = _disposition_map(accepted_log)
+    if work_item_id in closed:
+        raise ValueError(
+            f"work item {work_item_id} already closed as {closed[work_item_id]} "
+            "(accept remats once)"
+        )
+
     tier = str(doc.get("tier") or "T2")
     overrides_raw = _overrides_from_doc(doc)
     if not overrides_raw and not allow_empty_overrides:
@@ -673,7 +911,7 @@ def accept_proposal(
 
     pending_dir.mkdir(parents=True, exist_ok=True)
     as_of = str(doc.get("as_of") or "")
-    pending_name = proposal_path.name.replace("camp-flag-", "camp-accepted-", 1)
+    pending_name = work_item_filename(work_item_id).replace("work-item-", "camp-accepted-", 1)
     pending_path = pending_dir / pending_name
     pending_doc = {
         "as_of": as_of,
@@ -681,6 +919,7 @@ def accept_proposal(
         "fixture": False,
         "work_item_id": work_item_id,
         "flag_id": work_item_id,
+        "note_id": doc.get("note_id"),
         "tier": tier,
         "source": "camp_desk",
         "notes": doc.get("sot_flag") or doc.get("notes") or "",
@@ -693,11 +932,27 @@ def accept_proposal(
     pending_path.write_text(json.dumps(pending_doc, indent=2) + "\n", encoding="utf-8")
 
     apply_result: Optional[Dict[str, Any]] = None
+    pack_diff: List[Dict[str, Any]] = []
+    line_delta: List[Dict[str, Any]] = []
     if write_pack and overrides:
-        pack = load_pack(pack_path)
-        result = apply_intel_overrides(pack, overrides, as_of=as_of or None)
+        pack_before = load_pack(pack_path)
+        teams = sorted({str(o.get("team") or "") for o in overrides if o.get("team")})
+        before_smoke = kei_smoke_for_teams(pack_before, teams) if teams else []
+        result = apply_intel_overrides(pack_before, overrides, as_of=as_of or None)
         pack_path.write_text(json.dumps(result.payload, indent=2) + "\n", encoding="utf-8")
         apply_result = result.as_dict()
+        pack_diff = pack_diff_from_apply(apply_result)
+        after_smoke = (
+            kei_smoke_for_teams(result.payload, result.touched_teams)
+            if result.touched_teams
+            else []
+        )
+        line_delta = line_delta_from_kei(before_smoke, after_smoke)
+        # Keep human-readable smoke lines available on apply blob.
+        apply_result = {
+            **apply_result,
+            "kei_smoke_lines": format_smoke_diff(before_smoke, after_smoke),
+        }
 
     if write_pack and overrides and rematerialize:
         remat_status = "required"
@@ -713,41 +968,44 @@ def accept_proposal(
         wrote_pack=bool(write_pack and overrides),
         apply_result=apply_result,
         rematerialize_status=remat_status,
+        disposition="accepted",
+        pack_diff=pack_diff,
+        line_delta=line_delta,
         receipts_dir=receipts_dir,
     )
 
-    accepted_log.parent.mkdir(parents=True, exist_ok=True)
-    with accepted_log.open("a", encoding="utf-8") as fh:
-        fh.write(
-            json.dumps(
-                {
-                    "work_item_id": work_item_id,
-                    "flag_id": work_item_id,
-                    "tier": tier,
-                    "accepted_at": _now_iso(),
-                    "proposal": str(proposal_path),
-                    "pending": str(pending_path),
-                    "receipt": str(receipt_path),
-                    "wrote_pack": bool(write_pack and overrides),
-                    "rematerialize_status": remat_status,
-                    "override_count": len(overrides),
-                }
-            )
-            + "\n"
-        )
+    _append_disposition_log(
+        accepted_log,
+        {
+            "work_item_id": work_item_id,
+            "flag_id": work_item_id,
+            "note_id": doc.get("note_id"),
+            "tier": tier,
+            "disposition": "accepted",
+            "accepted_at": _now_iso(),
+            "proposal": str(proposal_path),
+            "pending": str(pending_path),
+            "receipt": str(receipt_path),
+            "wrote_pack": bool(write_pack and overrides),
+            "rematerialize_status": remat_status,
+            "override_count": len(overrides),
+            "pack_diff_count": len(pack_diff),
+            "line_delta_count": len(line_delta),
+        },
+    )
 
-    if proposal_path.is_file() and (
-        proposal_path.parent == PROPOSED_DEFAULT or "proposed" in proposal_path.parts
-    ):
-        proposal_path.unlink()
+    _unlink_queue_file(proposal_path)
 
     return {
         "work_item_id": work_item_id,
         "flag_id": work_item_id,
         "tier": tier,
+        "disposition": "accepted",
         "pending": str(pending_path),
         "receipt": str(receipt_path),
         "wrote_pack": bool(write_pack and overrides),
+        "pack_diff": pack_diff,
+        "line_delta": line_delta,
         "apply": apply_result,
         "rematerialize_status": remat_status,
         "rematerialize_hint": SAFE_REMAT_HINT if remat_status.startswith("required") else None,
@@ -755,6 +1013,64 @@ def accept_proposal(
             "notes_may_touch_means": NOTES_MAY_TOUCH_MEANS,
             "proposals_may_auto_apply": PROPOSALS_MAY_AUTO_APPLY,
         },
+    }
+
+
+def close_work_item(
+    proposal_path: Path,
+    *,
+    disposition: str,
+    accepted_log: Path = ACCEPTED_LOG_DEFAULT,
+    receipts_dir: Path = RECEIPTS_DEFAULT,
+    reason: str = "",
+) -> Dict[str, Any]:
+    """reject / no_change — writes nothing to the depth pack and does not remat."""
+    assert_notes_cannot_touch_lines()
+    if disposition not in {"reject", "no_change"}:
+        raise ValueError("disposition must be reject or no_change")
+    doc = json.loads(proposal_path.read_text(encoding="utf-8"))
+    work_item_id = str(doc.get("work_item_id") or doc.get("flag_id") or "")
+    closed = _disposition_map(accepted_log)
+    if work_item_id in closed:
+        raise ValueError(f"work item {work_item_id} already closed as {closed[work_item_id]}")
+    tier = str(doc.get("tier") or "T2")
+    receipt_path = write_receipt(
+        work_item_id=work_item_id or proposal_path.stem,
+        tier=tier,
+        pending_path=None,
+        wrote_pack=False,
+        apply_result=None,
+        rematerialize_status="skipped",
+        disposition=disposition,
+        pack_diff=[],
+        line_delta=[],
+        receipts_dir=receipts_dir,
+    )
+    _append_disposition_log(
+        accepted_log,
+        {
+            "work_item_id": work_item_id,
+            "flag_id": work_item_id,
+            "note_id": doc.get("note_id"),
+            "tier": tier,
+            "disposition": disposition,
+            "accepted_at": _now_iso(),
+            "proposal": str(proposal_path),
+            "receipt": str(receipt_path),
+            "wrote_pack": False,
+            "rematerialize_status": "skipped",
+            "reason": reason or disposition,
+        },
+    )
+    _unlink_queue_file(proposal_path)
+    return {
+        "work_item_id": work_item_id,
+        "disposition": disposition,
+        "wrote_pack": False,
+        "rematerialize_status": "skipped",
+        "receipt": str(receipt_path),
+        "pack_diff": [],
+        "line_delta": [],
     }
 
 
@@ -770,6 +1086,7 @@ def overdue_summary(flags: Iterable[DepthSotWorkItem]) -> Dict[str, Any]:
         "queued": len(queued),
         "overdue": len(overdue),
         "overdue_flag_ids": [f.work_item_id for f in overdue],
+        "overdue_reasons": {f.work_item_id: f.overdue_reason for f in overdue},
         "by_tier": by_tier,
         "draft_override_count": sum(len(f.proposed_patch) for f in rows),
         "contract": {

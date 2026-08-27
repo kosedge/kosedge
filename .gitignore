@@ -119,3 +119,11 @@ data/mlb/statcast_cache/**/pitches_*.csv
 data/mlb/statcast_cache/**/pitches_*.meta.json
 data/mlb/statcast_cache/**/pitcher_raw_counts.json
 data/ops/nfl-phase3-depth-cache/
+
+# DepthSotWorkItem runtime queue / receipts (generate locally; do not commit day dumps)
+data/ops/nfl-daily-intel/queue/runtime/
+data/ops/nfl-daily-intel/proposed/camp-flag-*.json
+data/ops/nfl-daily-intel/proposed/work-item-*.json
+data/ops/nfl-daily-intel/receipts/receipt-*.json
+data/ops/nfl-daily-intel/accepted/camp-sot-log.jsonl
+data/ops/nfl-daily-intel/pending/camp-accepted-*.json

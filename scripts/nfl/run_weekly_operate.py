@@ -234,10 +234,11 @@ def stage_depth_injury(*, dry_run: bool) -> Dict[str, Any]:
             "depth_injury_hook",
             "human_required",
             (
-                f"no pending intel; {len(proposed)} Camp Desk SoT proposal(s) await accept. "
+                f"no pending intel; {len(proposed)} Camp Desk SoT work item(s) await accept. "
                 f"python {camp_hook} --scan ; "
-                f"python {camp_hook} --accept data/ops/nfl-daily-intel/proposed/<file> [--write]. "
-                f"Rematerialize after pack write via safe rebuild (weeks 1–18)."
+                f"python {camp_hook} --accept data/ops/nfl-daily-intel/queue/runtime/<file> [--write]. "
+                f"Rematerialize after pack write via safe rebuild (weeks 1–18). "
+                f"Queue≠remat — overdue T1 does not move the board until Accept."
             ),
             hook=camp_hook,
         )

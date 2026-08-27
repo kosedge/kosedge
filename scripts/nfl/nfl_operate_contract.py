@@ -197,12 +197,12 @@ def pending_intel_files(intel_dir: Path | None = None) -> List[Path]:
 
 
 def proposed_camp_sot_files(proposed_dir: Path | None = None) -> List[Path]:
-    """Camp Desk SoT proposals awaiting human accept (not auto-applied)."""
-    base = proposed_dir or (ROOT / "data/ops/nfl-daily-intel/proposed")
+    """Camp Desk SoT work items awaiting human accept (runtime queue; not auto-applied)."""
+    base = proposed_dir or (ROOT / "data/ops/nfl-daily-intel/queue/runtime")
     if not base.is_dir():
         return []
     return sorted(
         p
-        for p in base.glob("camp-flag-*.json")
+        for p in list(base.glob("work-item-*.json")) + list(base.glob("camp-flag-*.json"))
         if p.is_file() and not p.name.startswith(".")
     )

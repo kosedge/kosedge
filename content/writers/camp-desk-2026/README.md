@@ -9,8 +9,8 @@ Dated KosEdge packages for `/pro/nfl/camp`.
 3. Save as `YYYY-MM-DD.json` in this folder. Set `"package": "daily"` or `"package": "monday"`.
 4. Original headlines + notes. Date only — no writer byline. Credit outlet names in `sources` (article URLs, never `x.com` / `twitter.com`).
 5. `is_material_depth: true` only when roster/depth should hit the intel path. Never invent a starter in SoT from prose.
-   Handoff (notes never write numbers): `python scripts/nfl/queue_camp_sot_flags.py --scan` → `--queue` → `--accept [--write]`.
-   See `data/ops/nfl-camp-sot-queue-accept-20260827.md` (`DepthSotWorkItem`, T1/T2/T3).
+   Handoff (notes never write numbers): `python scripts/nfl/queue_camp_sot_flags.py --scan` → `--queue` → `--accept|--reject|--no-change`.
+   Runtime queue is gitignored — do not commit day dumps. See `data/ops/nfl-camp-sot-queue-accept-20260827.md`.
 6. Update `rotation-queue.json` `next_pulse` for quiet clubs. Update `project-log.md`.
 7. Full SOP: `docs/writers/TRAINING_CAMP_DESK.md` and `data/ops/nfl-camp-desk-daily-cadence-20260821.md`.
 

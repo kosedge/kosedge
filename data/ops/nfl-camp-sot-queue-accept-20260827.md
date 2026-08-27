@@ -1,51 +1,43 @@
 # Camp Desk → DepthSotWorkItem handoff (2026-08-27)
 
-**Add the handoff, not auto line moves.**
+**Add the handoff, not auto line moves. Queue ≠ remat.**
 
 ```
 note → SOT FLAG / DepthSotWorkItem → human accept structured pack fields
-  → rematerialize → receipt → board
+  → rematerialize → receipt (pack_diff + line_delta) → board
 ```
+
+## What ships in git
+
+| Keep | Do not commit |
+|------|----------------|
+| `nfl_camp_sot_queue.py` (`DepthSotWorkItem`) | `queue/runtime/work-item-*.json` day dumps |
+| `scripts/nfl/queue_camp_sot_flags.py` | `receipt-*.json`, accept logs |
+| tests | Aug 26 camp-flag snapshots |
+
+Generate the queue after merge: `python scripts/nfl/queue_camp_sot_flags.py --queue`
 
 ## Contract
 
 | Rule | Value |
 |------|-------|
 | Notes touch means / props / spreads | **Never** |
-| Proposed pack patch auto-applies | **Never** |
-| Who may write the depth pack | **Accept only** |
-| Who may rematerialize | **Accept only** (`--write`, receipt marks remat) |
-| Second SoT / second depth map | **Forbidden** |
+| `proposed_patch` auto-applies | **Never** |
+| Pack write / remat | **Accept only** |
+| reject / no_change | writes **nothing**, no remat |
+| Queue idempotent key | `note_id` + `team_id` + `as_of` |
 
-## Tiers
+## Tiers / SLA
 
 | Tier | Meaning | SLA |
 |------|---------|-----|
-| **T1** | Same-day (named starter, season-ending IR/out on pack) | 12h |
-| **T2** | Next remat (material flag, human must fill fields) | 48h |
-| **T3** | Pass (thin August / do-not-crown; no pack write) | 72h |
+| **T1** | Same-day | 12h **or** before next KEI publish (Thu/Fri 16:00 ET) |
+| **T2** | Next remat | 48h |
+| **T3** | Pass | 72h / `--no-change` |
 
-Overdue SOT FLAGs stay tickets until accept (or T3 `--allow-empty`).
+## Human steps this week
 
-## Pieces
-
-| Piece | Path |
-|-------|------|
-| Model | `services/model-service/src/services/nfl_camp_sot_queue.py` (`DepthSotWorkItem`) |
-| CLI | `scripts/nfl/queue_camp_sot_flags.py` |
-| Queue | `data/ops/nfl-daily-intel/proposed/` |
-| Accept → apply | existing `apply_intel_overrides` (one pack) |
-| Receipts | `data/ops/nfl-daily-intel/receipts/` |
-| Remat | safe rebuild weeks 1–18 (`nfl-spine-safe-rematerialize.md`) |
-
-## Commands
-
-```bash
-python scripts/nfl/queue_camp_sot_flags.py --scan
-python scripts/nfl/queue_camp_sot_flags.py --queue --tier T1
-python scripts/nfl/queue_camp_sot_flags.py --accept data/ops/nfl-daily-intel/proposed/camp-flag-2026-08-26-CLE.json --write --rematerialize
-# Then run the receipt's POST /nfl/ops/rebuild-props-layers?season=2026&weeks=1..18
-```
-
-Watson Week 1 starter, Higgins ACL, and similar claims must not live only in the
-Wednesday wrap — they become T1 work items with a proposed patch until Accept.
+1. `--queue` (runtime only)
+2. Accept CLE Watson + HOU Higgins (`--write --rematerialize`)
+3. Confirm remat moved those teams’ KEI / props
+4. `--no-change` or `--reject` the other T1s so overdue is not a junk pile
