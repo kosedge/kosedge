@@ -197,6 +197,32 @@ class BookStore:
                 return {"ok": True, "row": existing}
         raise KeyError(f"book_id not found: {book_id}")
 
+    def annotate_pending(self, book_id: str, **fields: Any) -> Dict[str, Any]:
+        """Patch metadata on a pending row only (payload, flags). Not for result/units."""
+        forbidden = {"result", "units", "pnl_units", "book_id", "clv", "settled_at"}
+        bad = forbidden.intersection(fields)
+        if bad:
+            raise ValueError(f"cannot annotate forbidden fields: {sorted(bad)}")
+        with _lock:
+            rows = self._read_all()
+            for i, existing in enumerate(rows):
+                if existing.get("book_id") != book_id:
+                    continue
+                if str(existing.get("result", "pending")).lower() != "pending":
+                    raise ValueError("settled row is immutable")
+                for k, v in fields.items():
+                    if k == "payload" and isinstance(v, dict):
+                        merged = dict(existing.get("payload") or {})
+                        merged.update(v)
+                        existing["payload"] = merged
+                    else:
+                        existing[k] = v
+                existing["updated_at"] = _utc_now()
+                rows[i] = existing
+                self._write_all(rows)
+                return {"ok": True, "row": existing}
+        raise KeyError(f"book_id not found: {book_id}")
+
     def write_slate_artifact(self, *, sport: str, slate: str, summary: Dict[str, Any]) -> Path:
         self._ensure_root()
         path = self.root / f"{sport}-{slate}.json"
