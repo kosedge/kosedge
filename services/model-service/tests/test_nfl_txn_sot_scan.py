@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import copy
 import json
 from datetime import datetime, timezone
 from pathlib import Path
@@ -31,20 +30,6 @@ PACK_PATH = (
 
 def _pack() -> dict:
     return json.loads(PACK_PATH.read_text(encoding="utf-8"))
-
-
-def _sleeper_ir(name: str, team: str, pos: str, *, gsis: str = "", depth: int | None = 9) -> dict:
-    return {
-        "player_id": "sleeper-test",
-        "full_name": name,
-        "team": team,
-        "position": pos,
-        "status": "Inactive",
-        "injury_status": "IR",
-        "gsis_id": gsis,
-        "depth_chart_order": depth,
-        "injury_notes": "",
-    }
 
 
 def test_feed_cannot_mutate_pack_or_means(tmp_path: Path) -> None:
