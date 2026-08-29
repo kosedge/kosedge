@@ -19,6 +19,7 @@ from src.routes import (
     cfb_router,
     edge_board_router,
     mlb_router,
+    model_tracker_router,
     nba_router,
     nfl_router,
     proof_router,
@@ -293,6 +294,7 @@ app = FastAPI(
 app.include_router(edge_board_router)
 app.include_router(cfb_router)
 app.include_router(proof_router)
+app.include_router(model_tracker_router)
 app.include_router(mlb_router)
 app.include_router(nba_router)
 app.include_router(nfl_router)
