@@ -147,5 +147,27 @@
   "result": "pending",
   "season": 2026,
   "slate_date": "2026-08-29",
-  "sport": "cfb"
+  "slate_scope": {
+    "definition": "Complete CFB Week 0 official slate for the 2026-08-29 desk window: all 7 kickoffs on 2026-08-29 plus MEM@UNLV (2026-08-30T02:00Z). Matches official slate n_w0=8. Not a sample of Week 1 (89 games). Includes FBS and FCS openers that appear on the official Week 0 board.",
+    "kind": "full_priced_slate",
+    "n_missing": 0,
+    "n_official_week0": 8,
+    "n_snapshotted": 8,
+    "sample": false
+  },
+  "sport": "cfb",
+  "trust_notes": {
+    "sjsu_usc_play": {
+      "bars": {
+        "absurd_vs_kei": 12.0,
+        "single_book_outlier": 8.0
+      },
+      "book_count": 1,
+      "gap_pts": 4.26,
+      "kei_spread_home": -34.24,
+      "market_spread_home": -38.5,
+      "note": "Same trustCfbMarket bar as absurd PASSes; gap 4.26 < single-book 8 and < absurd 12 \u2192 trusted PLAY.",
+      "trust_reason": "best"
+    }
+  }
 }
