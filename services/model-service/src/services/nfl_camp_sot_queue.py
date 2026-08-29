@@ -222,22 +222,109 @@ def http_props_layer_remat(
         return RematResult(ok=False, run_id="", error=str(exc), mode="enqueue")
 
 
-def live_remat_fn() -> RematFn:
-    """Prefer Celery enqueue; fall back to HTTP rebuild-props (never receipt-only)."""
+def enqueue_fantasy_materialize(
+    *,
+    season: int = 2026,
+    week: int = 1,
+) -> RematResult:
+    """Enqueue Celery ``materialize_nfl_fantasy_projections`` (companion to props remat)."""
+    try:
+        from src.celery_app import QUEUE_MODELS, celery_app
+    except Exception as exc:  # pragma: no cover - import env
+        return RematResult(ok=False, run_id="", error=f"celery import failed: {exc}", mode="enqueue")
+    task_name = "src.tasks.materialize_nfl_fantasy_projections"
+    try:
+        task = celery_app.send_task(
+            task_name,
+            kwargs={
+                "season": int(season),
+                "week": int(week),
+                "model_version": "nfl-player-v1",
+            },
+            queue=QUEUE_MODELS,
+        )
+        run_id = str(getattr(task, "id", "") or "")
+        if not run_id:
+            return RematResult(ok=False, run_id="", error="fantasy enqueue empty task id", mode="enqueue")
+        return RematResult(ok=True, run_id=run_id, mode="enqueue")
+    except Exception as exc:
+        return RematResult(ok=False, run_id="", error=str(exc), mode="enqueue")
 
-    def _fn() -> RematResult:
-        via_celery = enqueue_props_layer_remat()
-        if via_celery.ok:
-            return via_celery
-        via_http = http_props_layer_remat()
-        if via_http.ok:
-            return via_http
+
+def http_fantasy_materialize(
+    *,
+    base_url: Optional[str] = None,
+    season: int = 2026,
+    week: int = 1,
+) -> RematResult:
+    """CLI/prod bridge: POST ``/nfl/ops/materialize-fantasy``.
+
+    Requires ``MODEL_SERVICE_URL`` (or ``base_url``) — no hardcoded host.
+    """
+    import json as _json
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
+    root = (base_url or os.environ.get("MODEL_SERVICE_URL") or "").strip().rstrip("/")
+    if not root:
         return RematResult(
             ok=False,
             run_id="",
-            error=f"celery:{via_celery.error}; http:{via_http.error}",
+            error="MODEL_SERVICE_URL unset for fantasy materialize",
             mode="enqueue",
         )
+    url = (
+        f"{root}/nfl/ops/materialize-fantasy?"
+        + urllib.parse.urlencode({"season": int(season), "week": int(week)})
+    )
+    try:
+        req = urllib.request.Request(url, method="POST", data=b"")
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            payload = _json.loads(resp.read().decode("utf-8"))
+        task_id = str(payload.get("task_id") or "")
+        if not task_id:
+            return RematResult(ok=False, run_id="", error=f"no task_id in {payload!r}", mode="enqueue")
+        return RematResult(ok=True, run_id=task_id, mode="enqueue")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")[:300]
+        return RematResult(ok=False, run_id="", error=f"HTTP {exc.code}: {body}", mode="enqueue")
+    except Exception as exc:
+        return RematResult(ok=False, run_id="", error=str(exc), mode="enqueue")
+
+
+def live_remat_fn(*, include_fantasy: bool = True) -> RematFn:
+    """Prefer Celery enqueue; fall back to HTTP rebuild-props (never receipt-only).
+
+    Enqueues ``rebuild-props-layers`` once. When ``include_fantasy`` is set, also
+    enqueues ``materialize-fantasy`` as a companion — does **not** double-fire
+    props if the live remat hook already handled rebuild-props.
+    Fantasy enqueue failure is non-fatal once props remat succeeded.
+    """
+
+    def _fn() -> RematResult:
+        via_celery = enqueue_props_layer_remat()
+        props = via_celery if via_celery.ok else http_props_layer_remat()
+        if not props.ok:
+            return RematResult(
+                ok=False,
+                run_id="",
+                error=f"celery:{via_celery.error}; http:{props.error}",
+                mode="enqueue",
+            )
+        if include_fantasy:
+            fantasy = enqueue_fantasy_materialize()
+            if not fantasy.ok:
+                fantasy = http_fantasy_materialize()
+            # Props remat_run_id stays authoritative; fantasy is companion.
+            if fantasy.ok and fantasy.run_id:
+                return RematResult(
+                    ok=True,
+                    run_id=props.run_id,
+                    mode="enqueue",
+                    error=f"fantasy_task_id={fantasy.run_id}",
+                )
+        return props
 
     return _fn
 

@@ -127,6 +127,8 @@ data/ops/nfl-daily-intel/proposed/work-item-*.json
 data/ops/nfl-daily-intel/receipts/receipt-*.json
 data/ops/nfl-daily-intel/accepted/camp-sot-log.jsonl
 data/ops/nfl-daily-intel/pending/camp-accepted-*.json
+# Free txn feed caches (Sleeper / optional PFR) — never commit
+data/ops/nfl-daily-intel/cache/
 
 # Staged into Railway image context by deploy-railway.yml (not source of truth)
 services/model-service/content/writers/
