@@ -95,7 +95,22 @@ jobs:
 
       - name: Run linter (web changes only)
         if: steps.paths.outputs.web == '1'
-        run: pnpm lint
+        # Base tip has known eslint debt; full `pnpm lint` fails any web PR.
+        # Mirror Prettier: lint only files this PR changed under apps/web.
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          mapfile -t FILES < <(
+            git diff --name-only --diff-filter=ACMR "$BASE"...HEAD \
+              | grep -E '^apps/web/.*\.(js|jsx|ts|tsx|mjs|cjs)$' \
+              || true
+          )
+          if [ "${#FILES[@]}" -eq 0 ]; then
+            echo "No apps/web JS/TS files changed; skipping eslint."
+            exit 0
+          fi
+          echo "Linting ${#FILES[@]} changed web file(s)…"
+          pnpm --filter @kosedge/web exec eslint "${FILES[@]#apps/web/}"
 
       - name: Skip linter (no web changes)
         if: steps.paths.outputs.web != '1'

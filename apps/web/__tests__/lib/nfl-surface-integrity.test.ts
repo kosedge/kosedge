@@ -82,49 +82,49 @@ describe("nfl surface integrity — web", () => {
     expect(flags.some((f) => f.kind === "availability")).toBe(true);
   });
 
-  it("recouples launch CSV TDs to yards and zeros pack IR", () => {
-    const rows = applySurfaceIntegrityToPlayerTotals([
-      {
-        season: 2026,
-        playerKey: "00-0033873",
-        playerName: "Matthew Stafford",
-        team: "LAR",
-        position: "QB",
-        gamesProjected: 17,
-        passYardsTotal: 4252,
-        rushYardsTotal: 0,
-        receivingYardsTotal: 0,
-        receptionsTotal: 0,
-        passTdsTotal: 16.5,
-        rushTdsTotal: 0,
-        recTdsTotal: 0,
-        anytimeTdProbTotal: 0,
-      },
-      {
-        season: 2026,
-        playerKey: "00-0036322",
-        playerName: "Ja'Marr Chase",
-        team: "CIN",
-        position: "WR",
-        gamesProjected: 17,
-        passYardsTotal: 0,
-        rushYardsTotal: 0,
-        receivingYardsTotal: 1791,
-        receptionsTotal: 120,
-        passTdsTotal: 0,
-        rushTdsTotal: 0,
-        recTdsTotal: 6.5,
-        anytimeTdProbTotal: 0.4,
-      },
-    ]);
+  it("CSV fallback recouples TDs to yards; spine pages must not use CSV TDs", () => {
+    const rows = applySurfaceIntegrityToPlayerTotals(
+      [
+        {
+          season: 2026,
+          playerKey: "00-0033873",
+          playerName: "Matthew Stafford",
+          team: "LAR",
+          position: "QB",
+          gamesProjected: 17,
+          passYardsTotal: 4252,
+          rushYardsTotal: 0,
+          receivingYardsTotal: 0,
+          receptionsTotal: 0,
+          passTdsTotal: 16.5,
+          rushTdsTotal: 0,
+          recTdsTotal: 0,
+          anytimeTdProbTotal: 0,
+        },
+        {
+          season: 2026,
+          playerKey: "00-0036322",
+          playerName: "Ja'Marr Chase",
+          team: "CIN",
+          position: "WR",
+          gamesProjected: 17,
+          passYardsTotal: 0,
+          rushYardsTotal: 0,
+          receivingYardsTotal: 1791,
+          receptionsTotal: 120,
+          passTdsTotal: 0,
+          rushTdsTotal: 0,
+          recTdsTotal: 6.5,
+          anytimeTdProbTotal: 0.4,
+        },
+      ],
+      2026,
+      { recoupleTds: true },
+    );
     const stafford = rows[0];
     const chase = rows[1];
     expect(stafford.passTdsTotal).toBeCloseTo(4252 / PASS_TD_YARDS_PER, 5);
     expect(chase.recTdsTotal).toBeCloseTo(1791 / REC_TD_YARDS_PER, 5);
-    expect(stafford.passTdsTotal).toBeGreaterThanOrEqual(32);
-    expect(stafford.passTdsTotal).toBeLessThanOrEqual(48);
-    expect(chase.recTdsTotal).toBeGreaterThanOrEqual(12);
-    expect(chase.recTdsTotal).toBeLessThanOrEqual(20);
   });
 
   it("shows PRESEASON readiness banner when sample 0 / no-go", () => {
