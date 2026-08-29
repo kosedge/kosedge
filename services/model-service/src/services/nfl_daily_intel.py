@@ -29,8 +29,18 @@ from src.services.nfl_kei_week1_reprice import (
 DESTINATIONS = frozenset({"sot", "kei_only", "wait_republish"})
 IDENTITY_FIELDS = frozenset({"player_name", "player_id", "depth_order", "depth_slot"})
 QB_REPUBLISH_FIELDS = IDENTITY_FIELDS | frozenset({"competition_status"})
+# snap_share_prior / snap_share_package: accept-only via proposed_patch (sot).
+# See ``nfl_snap_share_prior``.
 ALLOWED_FIELDS = IDENTITY_FIELDS | frozenset(
-    {"injury_status", "injury_window", "injury_note", "competition_status", "role_confidence"}
+    {
+        "injury_status",
+        "injury_window",
+        "injury_note",
+        "competition_status",
+        "role_confidence",
+        "snap_share_prior",
+        "snap_share_package",
+    }
 )
 # Rest/weather game-card fields are remat SoT only — never note / intel overrides.
 # See ``nfl_rest_weather_game_card.GAME_CARD_FIELDS``.
@@ -181,10 +191,16 @@ def apply_intel_overrides(
                     }
                 )
                 continue
-            row[ov["field"]] = ov["after"]
+            after_val = ov["after"]
+            if ov["field"] == "snap_share_prior":
+                from src.services.nfl_snap_share_prior import clamp_share
+
+                after_val = clamp_share(after_val)
+            row[ov["field"]] = after_val
             applied.append(
                 {
                     **ov,
+                    "after": after_val,
                     "matched_player_id": row.get("player_id"),
                     "previous": current,
                 }
@@ -199,6 +215,13 @@ def apply_intel_overrides(
                 republish_reasons.append(
                     f"{ov['team']} {ov['player_name']} {ov['field']} identity/QB SoT change"
                 )
+
+    # Accept out → redistribute snap_share_prior to existing committee (no crowns).
+    from src.services.nfl_snap_share_prior import apply_out_redistribution_after_overrides
+
+    snap_events = apply_out_redistribution_after_overrides(out, applied)
+    if snap_events:
+        out["snap_share_redistributions"] = snap_events
 
     if as_of:
         out["daily_intel_as_of"] = as_of
