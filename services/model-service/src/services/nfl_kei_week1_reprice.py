@@ -1174,6 +1174,9 @@ def apply_week1_kei_reprice(
     weather_obs: Optional[Mapping[str, Any]] = None,
     officials: Optional[Mapping[str, Any]] = None,
     game_card: Optional[Mapping[str, Any]] = None,
+    market_line: Any = None,
+    market_line_at_pack: Any = None,
+    market_as_of: Any = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Return (new_handicap, log). Model markets are not touched.
 
@@ -1182,6 +1185,9 @@ def apply_week1_kei_reprice(
     When ``game_card`` is provided (remat path), rest + weather come from
     ``nfl_rest_weather_game_card`` only — missing weather ⇒ no KEI weather change.
     Notes cannot write those fields.
+
+    Optional ``market_line`` / ``market_line_at_pack`` / ``market_as_of`` attach
+    ``info_overlap`` on the log (MVP). ``market_ahead`` never adds KEI juice.
     """
     handicap_out = dict(handicap)
     skipped = {
@@ -1410,6 +1416,16 @@ def apply_week1_kei_reprice(
             "ref_total": REF_TOTAL_CAP,
         },
     }
+    # info_overlap MVP — attach only; never alter handicap when market_ahead.
+    from src.services.nfl_market_info_overlap import attach_info_overlap_to_kei_log
+
+    log = attach_info_overlap_to_kei_log(
+        log,
+        market_line=market_line,
+        market_line_at_pack=market_line_at_pack,
+        market_as_of=market_as_of,
+        pack_as_of=pack.as_of,
+    )
     return handicap_out, log
 
 
@@ -1435,6 +1451,9 @@ def week1_slate_reprice_table(
             season=int(g.get("season") or SCOPE_SEASON),
             season_type=str(g.get("game_type") or g.get("season_type") or "REG"),
             pack=pack,
+            market_line=g.get("market_line"),
+            market_line_at_pack=g.get("market_line_at_pack"),
+            market_as_of=g.get("market_as_of"),
         )
         rows.append(
             {
@@ -1450,6 +1469,10 @@ def week1_slate_reprice_table(
                 "mean": log.get("mean"),
                 "uncertainty": log.get("uncertainty"),
                 "qb_clear": log.get("qb_clear"),
+                "kei_situation_flags": log.get("kei_situation_flags"),
+                "market_line": log.get("market_line"),
+                "market_as_of": log.get("market_as_of"),
+                "info_overlap": log.get("info_overlap"),
                 "factors": [
                     e.get("reason")
                     for e in (log.get("applied_factors") or [])
