@@ -417,7 +417,13 @@ def test_week1_sot_smoke_model_neq_kei() -> None:
 
     cle = by_game["CLE @JAX"]
     cle_text = " ".join(cle["factors"] + cle["not_applied"])
-    assert "open_competition" in cle_text
+    # Desk accept (#296) closed Watson as named_starter; depth_slot may still
+    # say open_competition historically — either label is honest SoT.
+    assert (
+        "Watson" in cle_text
+        or "named_starter" in cle_text
+        or "open_competition" in cle_text
+    )
 
     was = by_game["WAS @PHI"]
     was_text = " ".join(was["factors"])

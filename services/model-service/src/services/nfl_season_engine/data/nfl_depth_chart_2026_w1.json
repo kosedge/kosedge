@@ -13,6 +13,14 @@
     "WR",
     "TE"
   ],
+  "defense_positions": [
+    "EDGE",
+    "DL",
+    "LB",
+    "CB",
+    "S",
+    "NB"
+  ],
   "max_depth_order": 3,
   "team_count": 32,
   "row_count": 383,
@@ -33,7 +41,8 @@
     "Daily intel 2026-08-26: 1 override(s) applied",
     "Camp OL seed 2026-08-29: BAL C (Pinter/Pocic/Gwyn open) + LAC C (Biadasz/Slaughter) rows for desk accept \u2014 no crowns.",
     "Daily intel 2026-08-26: 3 override(s) applied",
-    "Daily intel 2026-08-26: 5 override(s) applied"
+    "Daily intel 2026-08-26: 5 override(s) applied",
+    "Defense SoT 2026-08-29: defense_roles layer (EDGE/DL/LB/CB/S/NB) \u2014 same pack as skill/OL; KEI inherits on accept+remat. No unit shocks/snap/weather. SF seed for desk accept fixture (Bosa EDGE1)."
   ],
   "rows": [
     {
@@ -3694,6 +3703,86 @@
       "role_note": "Camp Desk 2026-08-12: Fano moved to left tackle with the ones. OL SoT, not a QB crown.",
       "sources": [
         "https://www.beaconjournal.com/story/sports/pro/browns/2026/08/10/todd-monken-browns-preseason-opener-deshaun-watson-shedeur-sanders/91239216007/"
+      ]
+    }
+  ],
+  "defense_roles": [
+    {
+      "team": "SF",
+      "position": "EDGE",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Nick Bosa",
+      "player_id": "SF-EDGE-1",
+      "injury_status": "active",
+      "role_note": "Defense SoT seed \u2014 EDGE1. Accept path only; no auto-crown from feeds.",
+      "sources": [
+        "defense_roles_seed_20260829"
+      ]
+    },
+    {
+      "team": "SF",
+      "position": "DL",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Javon Hargrave",
+      "player_id": "SF-DL-1",
+      "injury_status": "active",
+      "role_note": "Defense SoT seed \u2014 DL1.",
+      "sources": [
+        "defense_roles_seed_20260829"
+      ]
+    },
+    {
+      "team": "SF",
+      "position": "LB",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Fred Warner",
+      "player_id": "SF-LB-1",
+      "injury_status": "active",
+      "role_note": "Defense SoT seed \u2014 LB1.",
+      "sources": [
+        "defense_roles_seed_20260829"
+      ]
+    },
+    {
+      "team": "SF",
+      "position": "CB",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Charvarius Ward",
+      "player_id": "SF-CB-1",
+      "injury_status": "active",
+      "role_note": "Defense SoT seed \u2014 CB1.",
+      "sources": [
+        "defense_roles_seed_20260829"
+      ]
+    },
+    {
+      "team": "SF",
+      "position": "S",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Talanoa Hufanga",
+      "player_id": "SF-S-1",
+      "injury_status": "active",
+      "role_note": "Defense SoT seed \u2014 S1 (alternate fixture to EDGE).",
+      "sources": [
+        "defense_roles_seed_20260829"
+      ]
+    },
+    {
+      "team": "SF",
+      "position": "NB",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Deommodore Lenoir",
+      "player_id": "SF-NB-1",
+      "injury_status": "active",
+      "role_note": "Defense SoT seed \u2014 nickel1.",
+      "sources": [
+        "defense_roles_seed_20260829"
       ]
     }
   ],

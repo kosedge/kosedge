@@ -28,6 +28,7 @@ from zoneinfo import ZoneInfo
 from src.services.nfl_daily_intel import (
     ALLOWED_FIELDS,
     PACK_DEFAULT,
+    PACK_SOT_LAYERS,
     apply_intel_overrides,
     format_smoke_diff,
     kei_smoke_for_teams,
@@ -352,7 +353,7 @@ def assert_notes_cannot_touch_lines() -> None:
 def _pack_players_for_team(payload: Mapping[str, Any], team: str) -> List[Dict[str, Any]]:
     team_n = _norm_team(team)
     rows: List[Dict[str, Any]] = []
-    for layer in ("rows", "ol_roles"):
+    for layer in PACK_SOT_LAYERS:
         for row in payload.get(layer) or []:
             if not isinstance(row, dict):
                 continue

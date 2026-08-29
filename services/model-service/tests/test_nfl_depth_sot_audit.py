@@ -86,7 +86,9 @@ def test_known_conflicts_match_desk() -> None:
         [r for r in rows if r["team"] == "CLE" and r["position"] == "QB"],
         key=lambda r: int(r["depth_order"]),
     )
-    assert cle_qbs[0]["competition_status"] == "open_competition"
+    # Desk accept (#296): Watson named_starter; Sanders remains open_competition backup.
+    assert cle_qbs[0]["player_name"] == "Deshaun Watson"
+    assert cle_qbs[0]["competition_status"] == "named_starter"
     assert cle_qbs[1]["player_name"] == "Shedeur Sanders"
 
     rbs = _starters([r for r in rows if r["position"] == "RB"])

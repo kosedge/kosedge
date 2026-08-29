@@ -32,6 +32,9 @@ QB_REPUBLISH_FIELDS = IDENTITY_FIELDS | frozenset({"competition_status"})
 ALLOWED_FIELDS = IDENTITY_FIELDS | frozenset(
     {"injury_status", "injury_window", "injury_note", "competition_status", "role_confidence"}
 )
+# One pack, three layers — skill rows + OL + defense. No second SoT / queue type.
+PACK_SOT_LAYERS = ("rows", "ol_roles", "defense_roles")
+DEFENSE_POSITIONS = frozenset({"EDGE", "DL", "LB", "CB", "S", "NB"})
 
 _SERVICES = Path(__file__).resolve().parent
 PACK_DEFAULT = _SERVICES / "nfl_season_engine" / "data" / "nfl_depth_chart_2026_w1.json"
@@ -101,12 +104,14 @@ def _row_match(row: Mapping[str, Any], ov: Mapping[str, Any]) -> bool:
 
 
 def _target_list(payload: Dict[str, Any], layer: str) -> List[Dict[str, Any]]:
-    if layer == "ol_roles":
-        rows = payload.setdefault("ol_roles", [])
-    else:
-        rows = payload.setdefault("rows", [])
+    layer_n = str(layer or "rows").strip().lower() or "rows"
+    if layer_n not in PACK_SOT_LAYERS:
+        raise ValueError(
+            f"invalid layer {layer!r} (use {' / '.join(PACK_SOT_LAYERS)})"
+        )
+    rows = payload.setdefault(layer_n, [])
     if not isinstance(rows, list):
-        raise ValueError(f"{layer} must be a list")
+        raise ValueError(f"{layer_n} must be a list")
     return rows
 
 
