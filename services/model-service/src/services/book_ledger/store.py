@@ -18,8 +18,9 @@ from src.services.book_ledger.ids import make_book_id, normalize_posted_at, unit
 from src.services.book_ledger.schema import BookRow, default_created_at
 
 _SERVICE_ROOT = Path(__file__).resolve().parents[3]
-_REPO_ROOT = _SERVICE_ROOT.parents[1]
-_DEFAULT_DIR = _REPO_ROOT / "data" / "ops" / "book"
+# Railway uses `railway up --path-as-root` so service root is /app (no monorepo
+# parent). Never index parents[1] of /app — that IndexError crashes uvicorn boot.
+_DEFAULT_DIR = _SERVICE_ROOT / "data" / "ops" / "book"
 
 _lock = threading.RLock()
 _STORE: Optional["BookStore"] = None
@@ -38,8 +39,11 @@ def default_book_dir() -> Path:
 class BookStore:
     def __init__(self, root: Optional[Path] = None) -> None:
         self.root = Path(root) if root else default_book_dir()
-        self.root.mkdir(parents=True, exist_ok=True)
+        # Defer create so import never blocks on I/O; mkdir when first used.
         self._index_path = self.root / "ledger.jsonl"
+
+    def _ensure_root(self) -> None:
+        self.root.mkdir(parents=True, exist_ok=True)
 
     def _read_all(self) -> List[Dict[str, Any]]:
         if not self._index_path.exists():
@@ -53,6 +57,7 @@ class BookStore:
         return rows
 
     def _write_all(self, rows: Sequence[Mapping[str, Any]]) -> None:
+        self._ensure_root()
         tmp = self._index_path.with_suffix(".jsonl.tmp")
         with tmp.open("w", encoding="utf-8") as fh:
             for row in rows:
@@ -193,6 +198,7 @@ class BookStore:
         raise KeyError(f"book_id not found: {book_id}")
 
     def write_slate_artifact(self, *, sport: str, slate: str, summary: Dict[str, Any]) -> Path:
+        self._ensure_root()
         path = self.root / f"{sport}-{slate}.json"
         path.write_text(json.dumps(summary, indent=2, sort_keys=True, default=str) + "\n", encoding="utf-8")
         return path

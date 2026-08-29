@@ -19,6 +19,20 @@ def test_units_play_lean_pass() -> None:
     assert units_for_type("pass") == 0.0
 
 
+def test_default_book_dir_survives_railway_path_as_root() -> None:
+    """Import-time path must not index past /app (Railway --path-as-root)."""
+    from src.services.book_ledger import store as store_mod
+
+    # Service root is model-service (local) or /app (Railway). Never require a parent.
+    assert store_mod._DEFAULT_DIR == store_mod._SERVICE_ROOT / "data" / "ops" / "book"
+    # Simulate /app layout: parents[1] of /app raises — our default must not do that.
+    app_root = Path("/app")
+    assert len(app_root.parents) == 1  # only '/'
+    # default_book_dir must remain constructible without touching parents[1]
+    d = store_mod.default_book_dir()
+    assert str(d).endswith("data/ops/book")
+
+
 def test_book_id_idempotent() -> None:
     a = make_book_id(
         sport="cfb",
