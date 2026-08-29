@@ -222,11 +222,17 @@ function loadBundleFromDir(
   }
 
   const teamRows = mapTeamRows(parseCsvRows(readFileSync(teamPath, "utf8")));
+  // Pack IR only — do not mint a second TD universe from CSV yards.
+  // Player TD SoT is spine fantasy via loadPlayerSeasonTotalsSpine.
   const playerTotalsRegular = applySurfaceIntegrityToPlayerTotals(
     mapPlayerTotalsRows(parseCsvRows(readFileSync(regularPath, "utf8"))),
+    2026,
+    { recoupleTds: false },
   );
   const playerTotalsPlayoff = applySurfaceIntegrityToPlayerTotals(
     mapPlayerTotalsRows(parseCsvRows(readFileSync(playoffPath, "utf8"))),
+    2026,
+    { recoupleTds: false },
   );
 
   let generatedAtUtc: string | null = null;

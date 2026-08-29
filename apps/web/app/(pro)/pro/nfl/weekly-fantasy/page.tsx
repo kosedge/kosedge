@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
-import {
-  loadLatestNflPreseasonBundle2026,
-  type PlayerProjectionTotalsRow,
-} from "@/lib/nfl-preseason-artifacts";
+import { loadPlayerSeasonTotalsSpine } from "@/lib/nfl-player-season-totals-spine";
+import type { PlayerProjectionTotalsRow } from "@/lib/nfl-preseason-artifacts";
 
 type SearchValue = string | string[] | undefined;
 type Scoring = "standard" | "half_ppr" | "ppr";
@@ -13,9 +11,11 @@ function firstValue(value: SearchValue): string | undefined {
   return value;
 }
 
-function fantasyPoints(player: PlayerProjectionTotalsRow, scoring: Scoring): number {
-  const recBonus =
-    scoring === "ppr" ? 1 : scoring === "half_ppr" ? 0.5 : 0;
+function fantasyPoints(
+  player: PlayerProjectionTotalsRow,
+  scoring: Scoring,
+): number {
+  const recBonus = scoring === "ppr" ? 1 : scoring === "half_ppr" ? 0.5 : 0;
   return (
     player.passYardsTotal / 25 +
     player.passTdsTotal * 4 +
@@ -33,9 +33,7 @@ function buildHref(base: Record<string, string | undefined>): string {
     if (value) params.set(key, value);
   }
   const query = params.toString();
-  return query
-    ? `/pro/nfl/weekly-fantasy?${query}`
-    : "/pro/nfl/weekly-fantasy";
+  return query ? `/pro/nfl/weekly-fantasy?${query}` : "/pro/nfl/weekly-fantasy";
 }
 
 export default async function NflWeeklyFantasyPage({
@@ -49,16 +47,17 @@ export default async function NflWeeklyFantasyPage({
     scoringRaw === "standard" || scoringRaw === "ppr" ? scoringRaw : "half_ppr";
   const position = (firstValue(search.pos) ?? "ALL").toUpperCase();
 
-  const bundle = loadLatestNflPreseasonBundle2026();
-  const players = (bundle?.playerTotalsRegular ?? [])
+  const bundleSpine = await loadPlayerSeasonTotalsSpine({
+    season: 2026,
+    limit: 400,
+  });
+  const players = bundleSpine.rows
     .filter((p) => (position === "ALL" ? true : p.position === position))
     .map((p) => ({
       ...p,
       pts: fantasyPoints(p, scoring),
       ppg:
-        p.gamesProjected > 0
-          ? fantasyPoints(p, scoring) / p.gamesProjected
-          : 0,
+        p.gamesProjected > 0 ? fantasyPoints(p, scoring) / p.gamesProjected : 0,
     }))
     .sort((a, b) => b.ppg - a.ppg);
 
@@ -69,14 +68,15 @@ export default async function NflWeeklyFantasyPage({
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <section className="rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-5 sm:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-          Week · 2026 preseason bundle
+          Week · player-production spine
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
           Weekly Fantasy Projections
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-          Season-rate fantasy points from the active projection bundle,
-          expressed per game. Research surface — not a start/sit service.
+          Season-rate fantasy points from the shared player-production spine
+          (same board as fantasy draft rankings), expressed per game. Research
+          surface — not a start/sit service.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
           <Link
@@ -101,21 +101,27 @@ export default async function NflWeeklyFantasyPage({
       </section>
 
       <div className="mt-6">
-        <HonestStatusBanner title="Preseason · not a live weekly slate" tone="sky">
+        <HonestStatusBanner
+          title="Preseason · not a live weekly slate"
+          tone="sky"
+        >
           <p>
-            These are season-rate PPG figures from the projection bundle — not
-            week-specific start/sit ranks. K and DST are not included on this
-            surface until weekly fantasy feeds land.
+            These are season-rate PPG figures from the player-production spine —
+            not week-specific start/sit ranks. K and DST are not included on
+            this surface until weekly fantasy feeds land.
           </p>
         </HonestStatusBanner>
       </div>
 
-      {!bundle ? (
+      {bundleSpine.rows.length === 0 ? (
         <div className="mt-6">
-          <HonestStatusBanner title="Projection bundle missing" tone="amber">
+          <HonestStatusBanner
+            title="Player production spine missing"
+            tone="amber"
+          >
             <p>
-              No 2026 preseason sim bundle is available in this environment —
-              weekly leaders stay empty until artifacts load.
+              No spine fantasy rankings (or CSV fallback) are available in this
+              environment — weekly leaders stay empty until the board loads.
             </p>
           </HonestStatusBanner>
         </div>
@@ -237,7 +243,7 @@ export default async function NflWeeklyFantasyPage({
             <HonestStatusBanner title="No rows for this filter" tone="neutral">
               <p>
                 No skill-position projection rows matched. Try ALL / another
-                position, or wait for the preseason bundle to load.
+                position, or wait for the player-production spine to load.
               </p>
             </HonestStatusBanner>
           </div>

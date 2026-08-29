@@ -12,6 +12,7 @@ import {
   type PlayerProjectionTotalsRow,
   type TeamProjectionRow,
 } from "@/lib/nfl-preseason-artifacts";
+import { loadPlayerSeasonTotalsSpine } from "@/lib/nfl-player-season-totals-spine";
 import {
   loadNflProjectionActualsAsync,
   playerActualsFor,
@@ -127,9 +128,7 @@ function playerRaceMeta(key: string): {
   unit: string;
   digits: number;
   projectedOf: (row: PlayerProjectionTotalsRow) => number;
-  currentOf: (
-    a: ReturnType<typeof playerActualsFor>,
-  ) => number | null;
+  currentOf: (a: ReturnType<typeof playerActualsFor>) => number | null;
 } {
   if (key === "tds") {
     return {
@@ -157,8 +156,7 @@ function playerRaceMeta(key: string): {
     unit: "yds",
     digits: 0,
     projectedOf: totalYards,
-    currentOf: (a) =>
-      sumNullable(a.passYards, a.rushYards, a.receivingYards),
+    currentOf: (a) => sumNullable(a.passYards, a.rushYards, a.receivingYards),
   };
 }
 
@@ -170,6 +168,10 @@ export default async function NflProjectionsPage({
   const search = await searchParams;
   const bundle = loadLatestNflPreseasonBundle2026();
   const pointer = loadNflWebLaunchPointer();
+  const playerSpine = await loadPlayerSeasonTotalsSpine({
+    season: 2026,
+    limit: 500,
+  });
   const lineage =
     bundle?.lineage ??
     resolveActiveNflLineage({
@@ -180,14 +182,14 @@ export default async function NflProjectionsPage({
     loadNflProjectionActualsAsync(2026),
     loadNflFuturesOdds(),
   ]);
-  if (!bundle) {
+  if (!bundle && playerSpine.rows.length === 0) {
     return (
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
         <section className="rounded-2xl border border-amber-400/30 bg-amber-400/10 p-5 text-amber-100">
           <h1 className="text-2xl font-semibold">NFL Projections Hub</h1>
           <p className="mt-2 text-sm text-amber-100/90">
-            No 2026 preseason simulation bundle was found yet. Run the
-            simulation export and reload this page.
+            No 2026 player production spine or preseason bundle was found yet.
+            Run the simulation export and reload this page.
           </p>
         </section>
       </main>
@@ -214,19 +216,25 @@ export default async function NflProjectionsPage({
     percentiles: showPercentiles,
   };
 
+  const teamBundleRows = bundle?.teamRows ?? [];
   const uniqueTeams = [
-    ...new Set(bundle.teamRows.map((row) => row.team)),
+    ...new Set([
+      ...teamBundleRows.map((row) => row.team),
+      ...playerSpine.rows.map((row) => row.team),
+    ]),
   ].sort();
+  // Player SoT = spine fantasy (same board as /pro/nfl/fantasy). Playoff
+  // phase still uses launch CSV when present; regular never re-reads CSV TDs.
   const phaseRows =
-    phase === "playoff"
-      ? bundle.playerTotalsPlayoff
-      : bundle.playerTotalsRegular;
+    phase === "playoff" && (bundle?.playerTotalsPlayoff?.length ?? 0) > 0
+      ? bundle!.playerTotalsPlayoff
+      : playerSpine.rows;
   const uniquePositions = [
     ...new Set(phaseRows.map((row) => row.position)),
   ].sort();
 
   const teamRows = sortTeamRows(
-    bundle.teamRows.filter((row) => (team ? row.team === team : true)),
+    teamBundleRows.filter((row) => (team ? row.team === team : true)),
     teamSort,
   );
   const players = sortPlayerRows(
@@ -241,10 +249,10 @@ export default async function NflProjectionsPage({
   );
 
   const race = playerRaceMeta(playerSort);
-  const favorite = sortTeamRows(bundle.teamRows, "sb")[0];
-  const winsLeader = sortTeamRows(bundle.teamRows, "wins")[0];
-  const playoffLeader = sortTeamRows(bundle.teamRows, "playoff")[0];
-  const fantasyLeader = sortPlayerRows(bundle.playerTotalsRegular, "yards")[0];
+  const favorite = sortTeamRows(teamBundleRows, "sb")[0];
+  const winsLeader = sortTeamRows(teamBundleRows, "wins")[0];
+  const playoffLeader = sortTeamRows(teamBundleRows, "playoff")[0];
+  const fantasyLeader = sortPlayerRows(playerSpine.rows, "yards")[0];
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -270,11 +278,15 @@ export default async function NflProjectionsPage({
               {isPreseasonResearch
                 ? "Honesty: preseason Model board — soft-pile W/L after conservation reshape; not a locked in-season futures market. "
                 : ""}
-              Source: {bundle.bundleDirName}
-              {bundle.generatedAtUtc
+              Player SoT:{" "}
+              {playerSpine.source === "spine-fantasy"
+                ? "player-production spine (fantasy draft rankings)"
+                : `CSV fallback (${playerSpine.error ?? "spine unavailable"})`}
+              {bundle ? ` • Team board: ${bundle.bundleDirName}` : ""}
+              {bundle?.generatedAtUtc
                 ? ` • Generated ${new Date(bundle.generatedAtUtc).toLocaleString()}`
                 : ""}
-              {bundle.engineVersion ? ` • ${bundle.engineVersion}` : ""}
+              {bundle?.engineVersion ? ` • ${bundle.engineVersion}` : ""}
               {actuals.asOfUtc
                 ? ` • Actuals as of ${new Date(actuals.asOfUtc).toLocaleString()}`
                 : " • Actuals: awaiting Week 1+"}
@@ -340,9 +352,7 @@ export default async function NflProjectionsPage({
           <p className="text-sm text-kos-gold">
             {percentage(favorite?.superBowlWinProb ?? 0, 2)} proj ·{" "}
             {formatCurrentOdds(
-              favorite
-                ? superBowlOddsForTeam(oddsBundle, favorite.team)
-                : null,
+              favorite ? superBowlOddsForTeam(oddsBundle, favorite.team) : null,
             )}{" "}
             odds
           </p>
@@ -503,7 +513,7 @@ export default async function NflProjectionsPage({
             rows={teamRows.slice(0, 32)}
             actuals={actuals}
             oddsBundle={oddsBundle}
-            nSims={bundle.nTeamSims ?? null}
+            nSims={bundle?.nTeamSims ?? null}
             showPercentiles={showPercentiles}
             percentilesHref={projectionsHref({
               ...queryState,
@@ -783,7 +793,11 @@ function PlayerFuturesBoard({
                     Current
                   </dt>
                   <dd className="mt-0.5 text-sm tabular-nums text-kos-text/85">
-                    {formatCurrentYtd(race.currentOf(a), "counting", race.digits)}
+                    {formatCurrentYtd(
+                      race.currentOf(a),
+                      "counting",
+                      race.digits,
+                    )}
                   </dd>
                 </div>
                 <div>
