@@ -374,6 +374,146 @@ def map_feed_player_to_pack(
     return candidates[0]
 
 
+@dataclass
+class SleeperIdMiss:
+    """Print-only unmatched Sleeper → pack ID (Desk OS item C). Never rewrites roster."""
+
+    as_of_date: str
+    sleeper_id: str
+    gsis_id: str
+    team: str
+    player_name: str
+    position: str
+    event: str
+    injury_status_raw: str = ""
+    reason: str = "unmatched"
+    source: str = "sleeper"
+
+    def as_dict(self) -> Dict[str, Any]:
+        return {
+            "as_of_date": self.as_of_date,
+            "sleeper_id": self.sleeper_id,
+            "gsis_id": self.gsis_id,
+            "team": self.team,
+            "player_name": self.player_name,
+            "position": self.position,
+            "event": self.event,
+            "injury_status_raw": self.injury_status_raw,
+            "reason": self.reason,
+            "source": self.source,
+        }
+
+
+def collect_sleeper_id_misses(
+    events: Sequence[TxnFeedEvent],
+    *,
+    pack: Optional[Mapping[str, Any]] = None,
+    pack_path: Path = PACK_DEFAULT,
+) -> List[SleeperIdMiss]:
+    """Txn-scope Sleeper events that do not map to the live pack.
+
+    Print / log only. Does **not** rewrite the pack or identity map.
+    Scope = same events as ``--scan-txns`` (not the full Sleeper roster).
+    """
+    payload = dict(pack) if pack is not None else load_pack(pack_path)
+    index = index_pack_players(payload)
+    misses: List[SleeperIdMiss] = []
+    seen: set[str] = set()
+    for event in events:
+        if event.source != "sleeper":
+            continue
+        pack_row = map_feed_player_to_pack(
+            {
+                "gsis_id": event.gsis_id,
+                "team": event.team,
+                "full_name": event.player_name,
+                "position": event.position,
+            },
+            index,
+        )
+        if pack_row is not None:
+            continue
+        key = event.sleeper_id or f"{event.team}:{event.player_name}:{event.event}"
+        if key in seen:
+            continue
+        seen.add(key)
+        why = "unmatched"
+        if event.gsis_id and event.gsis_id.startswith("00-"):
+            why = "unmatched_gsis"
+        elif not event.gsis_id:
+            why = "unmatched_no_gsis_team_name"
+        else:
+            why = "unmatched_team_name"
+        misses.append(
+            SleeperIdMiss(
+                as_of_date=event.as_of_date,
+                sleeper_id=event.sleeper_id,
+                gsis_id=event.gsis_id,
+                team=event.team,
+                player_name=event.player_name,
+                position=event.position,
+                event=event.event,
+                injury_status_raw=event.injury_status_raw,
+                reason=why,
+                source=event.source,
+            )
+        )
+    misses.sort(key=lambda m: (m.team, m.player_name, m.sleeper_id))
+    return misses
+
+
+def format_sleeper_miss_table(misses: Sequence[SleeperIdMiss]) -> str:
+    """Human table for Desk OS item C miss list."""
+    if not misses:
+        return "(no Sleeper unmatched IDs in txn feed scope)"
+    headers = (
+        "team",
+        "player",
+        "pos",
+        "event",
+        "sleeper_id",
+        "gsis_id",
+        "reason",
+    )
+    rows: List[Tuple[str, ...]] = [headers]
+    for m in misses:
+        rows.append(
+            (
+                m.team,
+                m.player_name[:28],
+                m.position,
+                m.event,
+                (m.sleeper_id or "")[:12],
+                (m.gsis_id or "")[:12],
+                m.reason,
+            )
+        )
+    widths = [max(len(r[i]) for r in rows) for i in range(len(headers))]
+    lines = [
+        "  ".join(cell.ljust(widths[i]) for i, cell in enumerate(row)) for row in rows
+    ]
+    return "\n".join(lines)
+
+
+def write_sleeper_miss_log(
+    misses: Sequence[SleeperIdMiss],
+    *,
+    cache_dir: Optional[Path] = None,
+    as_of_date: str = "",
+) -> Optional[Path]:
+    """Append miss rows to gitignored cache jsonl. No pack/ID rewrite."""
+    if not misses:
+        return None
+    root = cache_dir or CACHE_DIR_DEFAULT
+    root.mkdir(parents=True, exist_ok=True)
+    day = as_of_date or misses[0].as_of_date or "unknown"
+    path = root / f"sleeper-unmatched-{day}.jsonl"
+    with path.open("a", encoding="utf-8") as fh:
+        for m in misses:
+            fh.write(json.dumps(m.as_dict(), sort_keys=True) + "\n")
+    return path
+
+
 def proposed_injury_after(event: str) -> str:
     if event in {"ir", "out_for_season", "waived_injured", "out"}:
         return "out"

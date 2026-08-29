@@ -13,6 +13,7 @@ Usage:
   python scripts/nfl/queue_camp_sot_flags.py --scan
   python scripts/nfl/queue_camp_sot_flags.py --queue
   python scripts/nfl/queue_camp_sot_flags.py --scan-txns
+  # Desk OS item C: --scan-txns also prints Sleeper unmatched ID miss list (no roster rewrite)
   python scripts/nfl/queue_camp_sot_flags.py --scan-defense
   python scripts/nfl/queue_camp_sot_flags.py --queue-defense
   python scripts/nfl/queue_camp_sot_flags.py --scan-report
@@ -62,10 +63,13 @@ from src.services.nfl_injury_report_scan import (  # noqa: E402
     scan_injury_report,
 )
 from src.services.nfl_txn_sot_scan import (  # noqa: E402
+    collect_sleeper_id_misses,
     format_scan_table,
+    format_sleeper_miss_table,
     ingest_txn_events,
     queue_txn_flags,
     scan_txn_flags,
+    write_sleeper_miss_log,
 )
 
 # Pack already carries these SoT accepts — txn scan must not open new T1s for them.
@@ -180,6 +184,12 @@ def _run_scan_txns(args: argparse.Namespace) -> Tuple[List[DepthSotWorkItem], in
     )
     summary = overdue_summary(flags)
     t1s = [f for f in flags if f.tier == "T1"]
+    # Desk OS item C — print-only unmatched Sleeper IDs (no roster rewrite).
+    misses = collect_sleeper_id_misses(events)
+    miss_path = write_sleeper_miss_log(
+        misses,
+        as_of_date=str(args.as_of or (misses[0].as_of_date if misses else "")),
+    )
 
     if args.json:
         print(
@@ -189,6 +199,8 @@ def _run_scan_txns(args: argparse.Namespace) -> Tuple[List[DepthSotWorkItem], in
                     "already_in_sot_skip": list(ALREADY_IN_SOT),
                     "t1": [f.as_dict() for f in t1s],
                     "work_items": [f.as_dict() for f in flags],
+                    "sleeper_unmatched": [m.as_dict() for m in misses],
+                    "sleeper_unmatched_count": len(misses),
                     "accepts_performed": 0,
                 },
                 indent=2,
@@ -213,6 +225,14 @@ def _run_scan_txns(args: argparse.Namespace) -> Tuple[List[DepthSotWorkItem], in
         print()
         print("All txn flags:")
         print(format_scan_table(flags))
+        print()
+        print(
+            f"=== Desk OS item C: Sleeper unmatched ID miss list "
+            f"(n={len(misses)}; print only — no roster rewrite) ==="
+        )
+        print(format_sleeper_miss_table(misses))
+        if miss_path:
+            print(f"miss log (gitignored): {miss_path}")
 
     if args.queue:
         result = queue_txn_flags(

@@ -257,3 +257,79 @@ def test_map_prefers_gsis_and_ignores_sleeper_depth() -> None:
     assert row is not None
     assert row["player_id"] == "00-0040130"
     assert int(row["depth_order"]) == 2  # pack SoT depth, not Sleeper
+
+
+def test_sleeper_unmatched_id_miss_log_print_only(tmp_path: Path) -> None:
+    """Desk OS item C: unmatched Sleeper IDs print/log; pack untouched."""
+    from src.services.nfl_txn_sot_scan import (
+        collect_sleeper_id_misses,
+        format_sleeper_miss_table,
+        write_sleeper_miss_log,
+    )
+
+    pack_copy = tmp_path / "pack.json"
+    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    before = pack_copy.read_text(encoding="utf-8")
+    events = [
+        TxnFeedEvent(
+            source="sleeper",
+            event="ir",
+            as_of_date="2026-08-29",
+            team="SEA",
+            player_name="Totally Fake Player",
+            position="WR",
+            gsis_id="00-0099999",
+            sleeper_id="sleeper-miss-1",
+            injury_status_raw="Injured Reserve",
+        ),
+        TxnFeedEvent(
+            source="sleeper",
+            event="out",
+            as_of_date="2026-08-29",
+            team="HOU",
+            player_name="Jayden Higgins",
+            position="WR",
+            gsis_id="00-0040130",
+            sleeper_id="matched-skip",
+        ),
+        TxnFeedEvent(
+            source="pfr",
+            event="ir",
+            as_of_date="2026-08-29",
+            team="NYG",
+            player_name="PFR Only Ghost",
+            position="RB",
+            gsis_id="",
+            sleeper_id="",
+        ),
+    ]
+    misses = collect_sleeper_id_misses(events, pack_path=pack_copy)
+    assert len(misses) == 1
+    assert misses[0].sleeper_id == "sleeper-miss-1"
+    assert misses[0].reason.startswith("unmatched")
+    table = format_sleeper_miss_table(misses)
+    assert "sleeper-miss" in table
+    assert "Totally Fake" in table
+    path = write_sleeper_miss_log(misses, cache_dir=tmp_path / "cache", as_of_date="2026-08-29")
+    assert path is not None and path.is_file()
+    assert "sleeper-miss-1" in path.read_text(encoding="utf-8")
+    assert pack_copy.read_text(encoding="utf-8") == before
+
+
+def test_sleeper_miss_empty_when_all_match() -> None:
+    from src.services.nfl_txn_sot_scan import collect_sleeper_id_misses, format_sleeper_miss_table
+
+    events = [
+        TxnFeedEvent(
+            source="sleeper",
+            event="ir",
+            as_of_date="2026-08-29",
+            team="HOU",
+            player_name="Jayden Higgins",
+            position="WR",
+            gsis_id="00-0040130",
+            sleeper_id="ok",
+        )
+    ]
+    assert collect_sleeper_id_misses(events, pack_path=PACK_PATH) == []
+    assert "no Sleeper unmatched" in format_sleeper_miss_table([])
