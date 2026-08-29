@@ -42,7 +42,8 @@
     "Camp OL seed 2026-08-29: BAL C (Pinter/Pocic/Gwyn open) + LAC C (Biadasz/Slaughter) rows for desk accept \u2014 no crowns.",
     "Daily intel 2026-08-26: 3 override(s) applied",
     "Daily intel 2026-08-26: 5 override(s) applied",
-    "Defense SoT 2026-08-29: defense_roles layer (EDGE/DL/LB/CB/S/NB) \u2014 same pack as skill/OL; KEI inherits on accept+remat. No unit shocks/snap/weather. SF seed for desk accept fixture (Bosa EDGE1)."
+    "Defense SoT 2026-08-29: defense_roles layer (EDGE/DL/LB/CB/S/NB) \u2014 same pack as skill/OL; KEI inherits on accept+remat. No unit shocks/snap/weather. SF seed for desk accept fixture (Bosa EDGE1).",
+    "Daily intel 2026-08-29: 1 override(s) applied"
   ],
   "rows": [
     {
@@ -3529,7 +3530,7 @@
     }
   ],
   "full_skill_starter_teams": 32,
-  "daily_intel_as_of": "2026-08-26",
+  "daily_intel_as_of": "2026-08-29",
   "ol_roles": [
     {
       "team": "WAS",
@@ -3784,6 +3785,67 @@
       "sources": [
         "defense_roles_seed_20260829"
       ]
+    },
+    {
+      "team": "MIN",
+      "position": "S",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Jamal Adams",
+      "player_id": "MIN-S-ADAMS",
+      "injury_status": "ir",
+      "role_note": "Adams-class S1 IR \u2014 planned safety hybrid; durable out only.",
+      "sources": [
+        "The Athletic \u2014 Adams season-ending quad",
+        "camp-desk:2026-08-26:MIN"
+      ],
+      "confirmation": "high"
+    },
+    {
+      "team": "NO",
+      "position": "DL",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Bryan Bresee",
+      "player_id": "NO-DL-BRESEE",
+      "injury_status": "ir",
+      "role_note": "Bresee DL1 season-ending IR \u2014 durable out.",
+      "sources": [
+        "Saints \u2014 injury and IR update (Aug 25)",
+        "camp-desk:2026-08-26:NO"
+      ],
+      "confirmation": "high"
+    },
+    {
+      "team": "SEA",
+      "position": "S",
+      "depth_order": 2,
+      "depth_slot": "depth",
+      "player_name": "Bud Clark",
+      "player_id": "SEA-S-CLARK",
+      "injury_status": "ir",
+      "role_note": "Clark S IR \u2014 durable out; not crowned starter.",
+      "sources": [
+        "ESPN \u2014 Clark and Richman placed on IR (Aug 25)",
+        "Seahawks \u2014 Clark, Richman and Bobo injury context",
+        "camp-desk:2026-08-26:SEA"
+      ],
+      "confirmation": "high"
+    },
+    {
+      "team": "CAR",
+      "position": "EDGE",
+      "depth_order": 2,
+      "depth_slot": "depth",
+      "player_name": "Nic Scourton",
+      "player_id": "CAR-EDGE-SCOURTON",
+      "injury_status": "ir",
+      "role_note": "Scourton EDGE IR-only \u2014 durable out; NOT crowned EDGE1 (accept #306).",
+      "sources": [
+        "Panthers \u2014 Hubbard and Legette update (Aug 24)",
+        "camp-desk:2026-08-26:CAR"
+      ],
+      "confirmation": "high"
     }
   ],
   "camp_intel": {
@@ -3894,5 +3956,116 @@
     "max_age_days_camp_season": 7,
     "archive_dir": "services/model-service/src/services/nfl_season_engine/data/snapshots/",
     "effective_dated": true
-  }
+  },
+  "situation_events": [
+    {
+      "team": "MIN",
+      "player_id": "MIN-S-ADAMS",
+      "player_name": "Jamal Adams",
+      "position": "S",
+      "field": "injury_status",
+      "before": null,
+      "after": "ir",
+      "destination": "kei_only",
+      "confirmation": "high",
+      "mean_shock_scale": 1.0,
+      "variance_widen": 1.0,
+      "kei": {
+        "mean": {
+          "spread": 1.0,
+          "total": 1.0
+        },
+        "uncertainty": {
+          "confirmation": "high",
+          "mean_shock_scale": 1.0,
+          "variance_widen": 1.0,
+          "confidence_delta": 0.0,
+          "version": "confirmation_variance_v1"
+        }
+      },
+      "version": "confirmation_variance_v1"
+    },
+    {
+      "team": "NO",
+      "player_id": "NO-DL-BRESEE",
+      "player_name": "Bryan Bresee",
+      "position": "DL",
+      "field": "injury_status",
+      "before": null,
+      "after": "ir",
+      "destination": "kei_only",
+      "confirmation": "high",
+      "mean_shock_scale": 1.0,
+      "variance_widen": 1.0,
+      "kei": {
+        "mean": {
+          "spread": 1.0,
+          "total": 1.0
+        },
+        "uncertainty": {
+          "confirmation": "high",
+          "mean_shock_scale": 1.0,
+          "variance_widen": 1.0,
+          "confidence_delta": 0.0,
+          "version": "confirmation_variance_v1"
+        }
+      },
+      "version": "confirmation_variance_v1"
+    },
+    {
+      "team": "SEA",
+      "player_id": "SEA-S-CLARK",
+      "player_name": "Bud Clark",
+      "position": "S",
+      "field": "injury_status",
+      "before": null,
+      "after": "ir",
+      "destination": "kei_only",
+      "confirmation": "high",
+      "mean_shock_scale": 1.0,
+      "variance_widen": 1.0,
+      "kei": {
+        "mean": {
+          "spread": 1.0,
+          "total": 1.0
+        },
+        "uncertainty": {
+          "confirmation": "high",
+          "mean_shock_scale": 1.0,
+          "variance_widen": 1.0,
+          "confidence_delta": 0.0,
+          "version": "confirmation_variance_v1"
+        }
+      },
+      "version": "confirmation_variance_v1"
+    },
+    {
+      "team": "CAR",
+      "player_id": "CAR-EDGE-SCOURTON",
+      "player_name": "Nic Scourton",
+      "position": "EDGE",
+      "field": "injury_status",
+      "before": null,
+      "after": "ir",
+      "destination": "kei_only",
+      "confirmation": "high",
+      "mean_shock_scale": 1.0,
+      "variance_widen": 1.0,
+      "kei": {
+        "mean": {
+          "spread": 1.0,
+          "total": 1.0
+        },
+        "uncertainty": {
+          "confirmation": "high",
+          "mean_shock_scale": 1.0,
+          "variance_widen": 1.0,
+          "confidence_delta": 0.0,
+          "version": "confirmation_variance_v1"
+        }
+      },
+      "version": "confirmation_variance_v1"
+    }
+  ],
+  "confirmation_variance_version": "confirmation_variance_v1"
 }

@@ -2,7 +2,8 @@
 
 **Branch:** `cursor/populate-defense-sot-7d1e` → `deploy-vercel`  
 **Prerequisite:** #305 on e253 (`git_sha=3af0ab115626`)  
-**Doctrine:** source → DepthSotWorkItem → human accept → pack. **Zero accepts in this PR.**
+**Doctrine:** source → DepthSotWorkItem → human accept → pack.  
+**Accept pass:** see `data/ops/nfl-defense-sot-accept-306-20260829.md` (4 accepted / 2 no_change; Scourton IR-only).
 
 ## What
 
