@@ -17,7 +17,10 @@ function findRepoRoot(): string | null {
     current = parent;
   }
   // When cwd is apps/web itself
-  if (existsSync(path.join(current, "lib")) && existsSync(path.join(current, "package.json"))) {
+  if (
+    existsSync(path.join(current, "lib")) &&
+    existsSync(path.join(current, "package.json"))
+  ) {
     return path.dirname(current);
   }
   return null;
@@ -95,9 +98,7 @@ export function loadNfl2026ScheduleGames(): ScheduleGame[] {
           awayTeam: normalizeTeam(g.away_team),
         }));
       }
-      return gamesFromWallChart(
-        raw as Record<string, Record<string, string>>,
-      );
+      return gamesFromWallChart(raw as Record<string, Record<string, string>>);
     }
     return [];
   } catch {
@@ -123,6 +124,7 @@ export function loadNfl2026DepthRows(): DepthRow[] {
         player_name: string;
         player_id?: string;
         role_confidence: number;
+        injury_status?: string;
       }>;
     };
     const snapshotId = String(parsed.snapshot_id ?? "");
@@ -134,6 +136,9 @@ export function loadNfl2026DepthRows(): DepthRow[] {
       roleConfidence: Number(row.role_confidence) || 0.5,
       playerId: row.player_id ? String(row.player_id) : undefined,
       snapshotId: snapshotId || undefined,
+      injuryStatus: row.injury_status
+        ? String(row.injury_status).trim().toLowerCase()
+        : undefined,
     }));
   } catch {
     return [];

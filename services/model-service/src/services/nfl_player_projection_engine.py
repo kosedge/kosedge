@@ -9,6 +9,7 @@ from .nfl_playing_time import (
     apply_hard_share_caps,
     rank_keys_by_depth_sot,
 )
+from .nfl_surface_integrity import PASS_TD_YARDS_PER, REC_TD_YARDS_PER
 
 
 def _clamp(value: float, low: float, high: float) -> float:
@@ -660,31 +661,16 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # season projected for only ~110 yards/~5 TDs).
         carries_mean = _clamp(0.3 + (29.8 * inputs.rush_share), 0.0, 10.0) * qb_starter_share_factor
         rush_yards_mean = carries_mean * _clamp((4.6 - (0.7 * inputs.qb_pressure_factor)) * opp_rush_factor, 2.6, 7.0)
-        # Real bug found while spot-checking a live 2026 RB rush-TD-cluster
-        # anomaly (see rush_tds_mean's fix in the RB branch below) and
-        # re-auditing every other TD-adjacent coefficient while in there:
-        # the `0.32 * red_zone_share` interaction term assumed a QB's OWN
-        # red_zone_share (the same generic (red_zone_targets +
-        # red_zone_carries) / team_red_zone_events metric every position
-        # uses) predicts passing-TD efficiency -- but for a QB, this metric
-        # is overwhelmingly a RUSHING-share signal (QBs almost never draw
-        # red_zone_targets as a receiver), so it's really "how much does
-        # this QB run near the goal line," which has no real positive
-        # relationship to passing efficiency. Confirmed via real weighted
-        # least squares against 108 real 2023-2025 QB-seasons (>=8 games,
-        # >=100 attempts): adding the red_zone_share interaction term
-        # explains essentially zero incremental variance (R^2 0.520 with
-        # it removed vs. 0.522 with it, i.e. noise) and the fitted
-        # interaction sign is actually negative, not the assumed +0.32 --
-        # keeping a positive 0.32 slope while under-fitting the flat base
-        # rate (0.72 vs. a real ~0.79) produced a systematic real
-        # weighted-average bias of -0.083 pass TDs/game (~-1.4/season) for
-        # a typical full-time starter. Dropped the red_zone_share term
-        # entirely and refit the flat base rate to the real single-variable
-        # weighted fit (0.79, vs. the old effective ~0.72-0.80 depending on
-        # red_zone_share) -- weighted bias improves to +0.015 TDs/game and
-        # weighted RMSE improves ~6% (0.333->0.313 TDs/game).
-        pass_tds_mean = _clamp((pass_yards_mean / 115.0) * 0.79, 0.15, 3.8) * qb_starter_share_factor
+        # Surface integrity (2026-08-29): pass TDs must share a yards rate
+        # with pass_yards. Historical league TD leaders land mid-30s to
+        # mid-40s on ~4k–4.5k yards ⇒ ~115 yards / TD. The prior
+        # (yards/115)*0.79 discount (~146 yd/TD) capped live leaders near
+        # ~29 and left projections hubs printing ~17–20. Rate is now
+        # yards/PASS_TD_YARDS_PER with no discount; RZ share stays out
+        # (still a rushing-share proxy for QBs, not pass efficiency).
+        pass_tds_mean = (
+            _clamp(pass_yards_mean / PASS_TD_YARDS_PER, 0.15, 3.8) * qb_starter_share_factor
+        )
         # rush_tds_mean's coefficient is refit alongside carries_mean above
         # (same real regression exercise): real QB rushing TDs, isolated
         # from passing TDs via (touchdowns_scored - pass_touchdowns) across
@@ -793,24 +779,12 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         # (~22), not a 2.0 stub that understated gadget/jet-sweep WRs ~16x.
         carries_mean = _clamp(22.0 * inputs.rush_share * pace_factor, 0.0, 8.0)
         rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
-        # Real bug found while re-validating the targets_mean fix (same
-        # "evaporating share" pattern the box-score engine's backtest
-        # addendum flagged, but in TD math this time, not target counts):
-        # rec_tds_mean's coefficient (0.14) drastically undercounted real
-        # receiving TDs regardless of real volume. A simple ratio-of-sums
-        # fit against 2023-2025 usage data (real receiving TDs / real
-        # receptions*red_zone_share weighted sum, league-wide) implies
-        # ~0.90, but that fit is dominated by low-volume bench WR/TEs and
-        # overshoots real elite WR1s once checked end-to-end (a real 126
-        # rec / 1,235 yd season projected ~18 receiving TDs -- beyond even
-        # the all-time record). A weighted-least-squares fit (weights each
-        # real observation by its own volume, so it fits the
-        # high-target/high-red-zone-share players who actually drive real
-        # receiving-TD totals, not diluted by scrub-role noise) lands at
-        # ~0.50 and reproduces realistic real-world TD totals end-to-end
-        # (that same real elite WR1 profile: ~9-10 receiving TDs, matching
-        # real comparable seasons).
-        rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.50, 0.0, 1.5)
+        # Surface integrity (2026-08-29): receiving TDs must share a yards
+        # rate with receiving_yards. Receptions×RZ alone let Chase-class
+        # volume print ~9–10 TDs on ~1.8k yards (and zero-TD rows with
+        # hundreds of yards). Historical WR TD leaders land ~12–18 on
+        # ~1.2k–1.8k yards ⇒ ~100 yards / TD.
+        rec_tds_mean = _clamp(receiving_yards_mean / REC_TD_YARDS_PER, 0.0, 1.5)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
     elif position == "TE":
         opp_pass_factor = _clamp(inputs.opponent_pass_defense_factor, 0.75, 1.30)
@@ -831,7 +805,7 @@ def baseline_projection_from_features(inputs: PlayerFeatureInputs) -> Dict[str, 
         )
         carries_mean = _clamp(18.0 * inputs.rush_share * pace_factor, 0.0, 6.0)
         rush_yards_mean = carries_mean * _clamp((5.0 + (0.8 * volume_signal)) * opp_rush_factor, 3.0, 9.0)
-        rec_tds_mean = _clamp(receptions_mean * inputs.red_zone_share * 0.50, 0.0, 1.5)
+        rec_tds_mean = _clamp(receiving_yards_mean / REC_TD_YARDS_PER, 0.0, 1.5)
         rush_tds_mean = _clamp(carries_mean * inputs.red_zone_share * 0.08, 0.0, 0.7)
     # else: OL/DL/LB/DB/K/P/LS/ST -- every *_mean stays at its 0.0 default.
     # Real bug found via a live production spot-check: this branch used to

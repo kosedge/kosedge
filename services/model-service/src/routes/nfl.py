@@ -5024,8 +5024,24 @@ def nfl_fantasy_draft_rankings(
             payload["floor_points"] = proj.get("floor_points")
             payload["median_points"] = proj.get("median_points", payload.get("total_points"))
             payload["ceiling_points"] = proj.get("ceiling_points")
+            payload["projection_payload"] = proj
             out_rows.append(payload)
-        return {"count": len(out_rows), "rows": out_rows}
+
+        # Surface integrity: pack IR/out → games≈0; yards↔TD recouple.
+        try:
+            from src.services.nfl_season_engine.loaders import load_packaged_depth_chart
+            from src.services.nfl_surface_integrity import apply_pack_injury_to_fantasy_rows
+
+            pack_rows, _pack_meta = load_packaged_depth_chart(int(season))
+            integrity = apply_pack_injury_to_fantasy_rows(out_rows, pack_rows, recouple_tds=True)
+        except Exception as exc:  # noqa: BLE001
+            integrity = {"error": str(exc)[:200], "method": "pack_injury_fantasy_overlay_v1"}
+
+        return {
+            "count": len(out_rows),
+            "rows": out_rows,
+            "surface_integrity": integrity,
+        }
     finally:
         session.close()
 
@@ -6526,6 +6542,148 @@ def nfl_season_engine_game_boxes_post(
     )
 
 
+def _normalize_kei_team_abbr(raw: Any) -> str:
+    """Align fair-lines abbrs with survivor canonical codes (LA→LAR)."""
+    t = str(raw or "").strip().upper()
+    if t in {"LA", "STL"}:
+        return "LAR"
+    return t
+
+
+def _load_kei_week_win_prob_lines(*, season: int, week: int) -> List[Dict[str, Any]]:
+    """Light KEI win% rows for survivor overlay (same math as fair-lines)."""
+    session = SessionLocal()
+    lines: List[Dict[str, Any]] = []
+    try:
+        effective_model_version = _resolve_active_nfl_model_version(session)
+        rows = session.execute(
+            text(
+                """
+                SELECT DISTINCT ON (sch.week, sch.home_team, sch.away_team)
+                  sch.week AS week,
+                  s.season_year AS season,
+                  home.abbr AS home_abbr,
+                  away.abbr AS away_abbr,
+                  p.home_win_prob,
+                  p.away_win_prob,
+                  p.spread_home,
+                  p.total_mean,
+                  p.fair_home_ml,
+                  p.fair_away_ml,
+                  p.projection,
+                  g.start_time,
+                  'REG' AS season_type
+                FROM nfl_dp_schedules sch
+                JOIN leagues l ON l.code = 'nfl'
+                JOIN seasons s ON s.league_id = l.id AND s.season_year = sch.season
+                JOIN teams home ON home.league_id = l.id AND (
+                  home.abbr = sch.home_team
+                  OR (
+                    sch.home_team IN ('LA', 'LAR')
+                    AND home.abbr IN ('LA', 'LAR')
+                  )
+                )
+                JOIN teams away ON away.league_id = l.id AND (
+                  away.abbr = sch.away_team
+                  OR (
+                    sch.away_team IN ('LA', 'LAR')
+                    AND away.abbr IN ('LA', 'LAR')
+                  )
+                )
+                JOIN games g
+                  ON g.season_id = s.id
+                 AND g.home_team_id = home.id
+                 AND g.away_team_id = away.id
+                LEFT JOIN LATERAL (
+                  SELECT *
+                  FROM nfl_market_projections np
+                  WHERE np.game_id = g.id
+                    AND np.model_version = :model_version
+                  ORDER BY
+                    CASE
+                      WHEN np.projection->'audit'->'final_totals_calibration'->'apply_meta'->>'shrink' IS NOT NULL THEN 0
+                      WHEN np.projection->'audit'->'totals_calibration'->>'prior_delta_removed' IS NOT NULL THEN 1
+                      WHEN np.projection->'audit'->>'pre_calibration_total' IS NOT NULL THEN 2
+                      ELSE 3
+                    END,
+                    (np.projection->'audit'->>'pipeline_run_at')::timestamptz DESC NULLS LAST,
+                    np.created_at DESC
+                  LIMIT 1
+                ) p ON TRUE
+                WHERE sch.season = :season
+                  AND sch.week = :week
+                ORDER BY sch.week, sch.home_team, sch.away_team, g.start_time NULLS LAST
+                """
+            ),
+            {
+                "season": int(season),
+                "week": int(week),
+                "model_version": effective_model_version,
+            },
+        ).mappings().all()
+
+        week1_pack = None
+        try:
+            week1_pack = load_week1_pack(season=int(season))
+        except Exception:  # noqa: BLE001
+            week1_pack = None
+
+        for mapped in rows:
+            home_abbr = _normalize_kei_team_abbr(mapped.get("home_abbr"))
+            away_abbr = _normalize_kei_team_abbr(mapped.get("away_abbr"))
+            home_win_prob = _to_float(mapped.get("home_win_prob"))
+            away_win_prob = _to_float(mapped.get("away_win_prob"))
+            if away_win_prob is None and home_win_prob is not None:
+                away_win_prob = max(0.0, min(1.0, 1.0 - home_win_prob))
+            spread_home = _to_float(mapped.get("spread_home"))
+            total_mean = _to_float(mapped.get("total_mean"))
+            _model_markets, handicap_markets = resolve_model_and_handicap(
+                projection=mapped.get("projection"),
+                spread_home=spread_home,
+                total_mean=total_mean,
+                home_win_prob=home_win_prob,
+                away_win_prob=away_win_prob,
+                fair_home_ml=mapped.get("fair_home_ml"),
+                fair_away_ml=mapped.get("fair_away_ml"),
+            )
+            try:
+                handicap_markets, _log = apply_week1_kei_reprice(
+                    handicap=handicap_markets,
+                    home_abbr=home_abbr,
+                    away_abbr=away_abbr,
+                    week=mapped.get("week"),
+                    season=int(mapped.get("season") or season),
+                    season_type=str(mapped.get("season_type") or "REG"),
+                    projection=mapped.get("projection"),
+                    start_time=mapped.get("start_time"),
+                    pack=week1_pack,
+                )
+            except Exception:  # noqa: BLE001
+                pass
+            home_wp = _to_float(handicap_markets.get("home_win_prob", home_win_prob))
+            away_wp = _to_float(handicap_markets.get("away_win_prob", away_win_prob))
+            if home_wp is None and away_wp is None:
+                continue
+            lines.append(
+                {
+                    "week": int(mapped.get("week") or week),
+                    "home_abbr": home_abbr,
+                    "away_abbr": away_abbr,
+                    "home_win_prob": home_wp,
+                    "away_win_prob": away_wp
+                    if away_wp is not None
+                    else (1.0 - float(home_wp) if home_wp is not None else None),
+                    "handicap_home_win_prob": home_wp,
+                    "handicap_away_win_prob": away_wp
+                    if away_wp is not None
+                    else (1.0 - float(home_wp) if home_wp is not None else None),
+                }
+            )
+    finally:
+        session.close()
+    return lines
+
+
 @router.post("/season-engine/survivor")
 def nfl_season_engine_survivor(
     body: SeasonEngineSurvivorBody = Body(...),
@@ -6581,6 +6739,35 @@ def nfl_season_engine_survivor(
     )
     payload["depth_named_skill_teams"] = schedule_meta.get("depth_named_skill_teams")
     payload["sim_depth"] = depth_meta(result.n_sims, surface="survivor")
+
+    # Surface integrity: survivor P(win) must equal KEI fair-lines win% for
+    # the same week matchup (LAC-ARI 54% vs KEI 75% is a fail).
+    try:
+        from src.services.nfl_surface_integrity import (
+            build_kei_win_prob_map_from_fair_lines,
+            overlay_survivor_kei_win_probs,
+        )
+
+        kei_lines = _load_kei_week_win_prob_lines(
+            season=int(body.season or 2026),
+            week=int(body.week),
+        )
+        kei_map = build_kei_win_prob_map_from_fair_lines(kei_lines, week=int(body.week))
+        if kei_map:
+            payload["kei_overlay"] = overlay_survivor_kei_win_probs(payload, kei_map)
+            # Re-rank by KEI win_prob (pick_now still uses sim path elsewhere).
+            ranked = payload.get("ranked_picks")
+            if isinstance(ranked, list) and ranked:
+                ranked.sort(
+                    key=lambda r: (
+                        -float((r or {}).get("win_prob") or 0.0),
+                        str((r or {}).get("team") or ""),
+                    )
+                )
+                payload["ranked_picks"] = ranked
+    except Exception as exc:  # noqa: BLE001
+        payload["kei_overlay"] = {"error": str(exc)[:240], "overlay": "kei_fair_lines"}
+
     return payload
 
 

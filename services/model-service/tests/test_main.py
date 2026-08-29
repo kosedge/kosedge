@@ -108,6 +108,26 @@ def test_classify_nfl_readiness_go() -> None:
     assert out["checks"]["clv_ok"] is True
 
 
+def test_classify_nfl_readiness_clv_not_ok_on_sample_zero() -> None:
+    """clv_ok on sample 0 is a bug — preseason empty holdout must fail CLV."""
+    out = _classify_nfl_readiness(
+        sample_size=0,
+        calendar_days=0,
+        last_game_date=None,
+        moneyline_brier=None,
+        total_mae=None,
+        clv_avg=0.02,
+        min_sample_size=100,
+        min_calendar_days=14,
+        max_last_game_age_days=8,
+        max_moneyline_brier=0.255,
+        max_total_mae=6.0,
+        min_clv_avg=0.0,
+    )
+    assert out["checks"]["clv_ok"] is False
+    assert out["status"] == "no-go"
+
+
 def test_classify_nfl_readiness_no_go_for_stale_and_error() -> None:
     out = _classify_nfl_readiness(
         sample_size=80,

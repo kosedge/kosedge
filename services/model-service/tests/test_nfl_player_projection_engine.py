@@ -631,17 +631,8 @@ def test_pocket_qb_rush_share_stays_low() -> None:
 
 
 def test_elite_receiver_rec_tds_land_in_realistic_season_range() -> None:
-    # Real bug found while re-validating the targets_mean fix (same
-    # "evaporating share" pattern, but in TD math): rec_tds_mean's
-    # coefficient (0.14 for WR/TE, 0.08 for RB) drastically undercounted
-    # real receiving TDs -- a real elite WR1 catching 126 passes for 1,235
-    # yards was projecting under 3 receiving TDs for the WHOLE SEASON (real
-    # comparable seasons score 9-11). Fixed via a weighted-least-squares fit
-    # against real 2023-2025 usage data (receiving TDs vs.
-    # receptions*red_zone_share, weighted by volume so real elite
-    # performances anchor the fit instead of bench-role noise): WR/TE
-    # coefficient ~0.50, RB (receiving-only, isolated from rushing TDs via
-    # team pass_touchdowns minus WR/TE touchdowns_scored) ~0.10.
+    # Surface integrity: WR rec TDs share yards rate (~100 yd/TD). Elite WR1
+    # profile (~73 yd/g → ~1.25k season) lands in the historical leader band.
     elite_wr1 = PlayerFeatureInputs(
         position="WR", snap_proxy=0.6, route_proxy=0.46, target_proxy=0.27,
         rush_share=0.0, red_zone_share=0.20, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
@@ -649,7 +640,7 @@ def test_elite_receiver_rec_tds_land_in_realistic_season_range() -> None:
     )
     projection = baseline_projection_from_features(elite_wr1)
     season_rec_tds = projection["rec_tds_mean"] * 17
-    assert 5.0 < season_rec_tds < 14.0
+    assert 12.0 < season_rec_tds < 20.0
 
 
 def test_pass_catching_rb_rec_tds_land_in_realistic_season_range() -> None:
@@ -678,18 +669,8 @@ def test_bellcow_rb_rush_tds_no_longer_cluster_at_extreme_range() -> None:
 
 
 def test_qb_pass_tds_mean_realistic_season_range() -> None:
-    # Real bug found during the same TD-coefficient audit that fixed RB
-    # rush_tds_mean above: pass_tds_mean's `0.32 * red_zone_share`
-    # interaction term assumed a QB's OWN red_zone_share (overwhelmingly a
-    # rushing-share signal for a QB, not a passing-efficiency one) predicts
-    # passing-TD rate. Real weighted least squares against 108 real
-    # 2023-2025 QB-seasons showed the interaction explains ~zero
-    # incremental variance (and its true sign is negative, not +0.32),
-    # while the flat base rate (0.72) was itself undercounting real pass
-    # TDs by a real weighted-average bias of -0.083 TDs/game (~-1.4/season)
-    # for a typical starter. Refit to a flat 0.79 with the red_zone_share
-    # term dropped -- locks in a realistic season range for a real
-    # full-time starter profile.
+    # Surface integrity: pass TDs = pass_yards / 115 (no 0.79 discount).
+    # Elite starter profile lands in the historical league-leader band.
     starter_qb = PlayerFeatureInputs(
         position="QB", snap_proxy=0.85, route_proxy=0.0, target_proxy=0.05,
         rush_share=0.05, red_zone_share=0.05, qb_dropback_factor=1.0, qb_pressure_factor=1.0,
@@ -698,7 +679,7 @@ def test_qb_pass_tds_mean_realistic_season_range() -> None:
     )
     projection = baseline_projection_from_features(starter_qb)
     season_pass_tds = projection["pass_tds_mean"] * 17
-    assert 24.0 < season_pass_tds < 42.0
+    assert 32.0 < season_pass_tds < 48.0
 
 
 def test_qb_pass_tds_mean_no_longer_depends_on_red_zone_share() -> None:

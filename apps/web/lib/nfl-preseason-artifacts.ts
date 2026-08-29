@@ -8,6 +8,7 @@ import {
   type NflLineage,
   type NflWebLaunchPointerLike,
 } from "@/lib/nfl-lineage";
+import { applySurfaceIntegrityToPlayerTotals } from "@/lib/nfl-surface-integrity";
 
 type CsvRow = Record<string, string>;
 
@@ -221,11 +222,11 @@ function loadBundleFromDir(
   }
 
   const teamRows = mapTeamRows(parseCsvRows(readFileSync(teamPath, "utf8")));
-  const playerTotalsRegular = mapPlayerTotalsRows(
-    parseCsvRows(readFileSync(regularPath, "utf8")),
+  const playerTotalsRegular = applySurfaceIntegrityToPlayerTotals(
+    mapPlayerTotalsRows(parseCsvRows(readFileSync(regularPath, "utf8"))),
   );
-  const playerTotalsPlayoff = mapPlayerTotalsRows(
-    parseCsvRows(readFileSync(playoffPath, "utf8")),
+  const playerTotalsPlayoff = applySurfaceIntegrityToPlayerTotals(
+    mapPlayerTotalsRows(parseCsvRows(readFileSync(playoffPath, "utf8"))),
   );
 
   let generatedAtUtc: string | null = null;
@@ -341,9 +342,7 @@ export function loadLatestNflPreseasonBundle2026(): NflPreseasonBundle | null {
 }
 
 /** Latest N valid 2026 preseason sim bundles (newest first). Used for weekly Δ. */
-export function loadNflPreseasonBundles2026(
-  limit = 2,
-): NflPreseasonBundle[] {
+export function loadNflPreseasonBundles2026(limit = 2): NflPreseasonBundle[] {
   const repoRoot = findRepoRoot();
   if (!repoRoot) return [];
   const dataOpsPath = path.join(repoRoot, "data", "ops");
