@@ -1,15 +1,35 @@
 /**
  * NFL surface integrity — yards↔TD rates + pack IR overlay for launch CSV.
  * Mirrors model-service `nfl_surface_integrity.py` constants.
+ *
+ * When the player-production spine (fantasy draft rankings) is available,
+ * pages should use that SoT and skip CSV TD recouple — CSV yards mint a
+ * second universe.
  */
 
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
 
-import type { PlayerProjectionTotalsRow } from "@/lib/nfl-preseason-artifacts";
-
 export const PASS_TD_YARDS_PER = 115;
 export const REC_TD_YARDS_PER = 100;
+
+/** Minimal player totals shape (avoids circular import with artifacts). */
+export type SurfacePlayerTotals = {
+  season: number;
+  playerKey: string;
+  playerName: string;
+  team: string;
+  position: string;
+  gamesProjected: number;
+  passYardsTotal: number;
+  rushYardsTotal: number;
+  receivingYardsTotal: number;
+  receptionsTotal: number;
+  passTdsTotal: number;
+  rushTdsTotal: number;
+  recTdsTotal: number;
+  anytimeTdProbTotal: number;
+};
 
 const HARD_OUT = new Set([
   "out",
@@ -77,9 +97,9 @@ export function loadPackInjuryRows(season = 2026): PackInjuryRow[] {
   }
 }
 
-export function recouplePlayerTdsToYards(
-  row: PlayerProjectionTotalsRow,
-): PlayerProjectionTotalsRow {
+export function recouplePlayerTdsToYards<T extends SurfacePlayerTotals>(
+  row: T,
+): T {
   const passTds =
     row.passYardsTotal > 1
       ? row.passYardsTotal / PASS_TD_YARDS_PER
@@ -95,10 +115,14 @@ export function recouplePlayerTdsToYards(
   };
 }
 
-export function applySurfaceIntegrityToPlayerTotals(
-  rows: PlayerProjectionTotalsRow[],
-  season = 2026,
-): PlayerProjectionTotalsRow[] {
+/**
+ * Pack IR always applied. TD recouple is for CSV-fallback honesty only —
+ * spine fantasy pages must not re-rate from CSV yards.
+ */
+export function applySurfaceIntegrityToPlayerTotals<
+  T extends SurfacePlayerTotals,
+>(rows: T[], season = 2026, opts?: { recoupleTds?: boolean }): T[] {
+  const recoupleTds = opts?.recoupleTds !== false;
   const pack = loadPackInjuryRows(season);
   const byId = new Map<string, PackInjuryRow>();
   const byName = new Map<string, PackInjuryRow>();
@@ -129,6 +153,6 @@ export function applySurfaceIntegrityToPlayerTotals(
         anytimeTdProbTotal: 0,
       };
     }
-    return recouplePlayerTdsToYards(row);
+    return recoupleTds ? recouplePlayerTdsToYards(row) : row;
   });
 }

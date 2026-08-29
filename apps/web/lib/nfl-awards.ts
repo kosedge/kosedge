@@ -1,5 +1,6 @@
 import "server-only";
 import { env } from "@/lib/config/env";
+import { loadPlayerSeasonTotalsSpine } from "@/lib/nfl-player-season-totals-spine";
 
 export type NflAwardType = "mvp" | "opoy";
 
@@ -125,6 +126,37 @@ export async function fetchNflAwardProjections(params: {
     const rows = Array.isArray(payload.rows)
       ? payload.rows.map(normalizeAwardRow)
       : [];
+    // Overlay spine yards/TDs so awards print the same numbers as fantasy /
+    // projections (award_score ranking stays from the awards materializer).
+    const spine = await loadPlayerSeasonTotalsSpine({
+      season: params.season,
+      limit: 500,
+    });
+    if (spine.source === "spine-fantasy" && spine.rows.length > 0) {
+      const byId = new Map(
+        spine.rows.map((r) => [`${r.team.toUpperCase()}:${r.playerKey}`, r]),
+      );
+      const byName = new Map(
+        spine.rows.map((r) => [
+          `${r.team.toUpperCase()}:${r.playerName.toLowerCase().replace(/[^a-z0-9]+/g, "")}`,
+          r,
+        ]),
+      );
+      for (const row of rows) {
+        const hit =
+          byId.get(`${row.team.toUpperCase()}:${row.playerId}`) ||
+          byName.get(
+            `${row.team.toUpperCase()}:${row.playerName.toLowerCase().replace(/[^a-z0-9]+/g, "")}`,
+          );
+        if (!hit) continue;
+        row.passYardsTotal = hit.passYardsTotal;
+        row.rushYardsTotal = hit.rushYardsTotal;
+        row.receivingYardsTotal = hit.receivingYardsTotal;
+        row.passTdsTotal = hit.passTdsTotal;
+        row.rushTdsTotal = hit.rushTdsTotal;
+        row.recTdsTotal = hit.recTdsTotal;
+      }
+    }
     return {
       count: typeof payload.count === "number" ? payload.count : rows.length,
       rows,

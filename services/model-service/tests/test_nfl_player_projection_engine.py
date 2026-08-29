@@ -679,7 +679,8 @@ def test_qb_pass_tds_mean_realistic_season_range() -> None:
     )
     projection = baseline_projection_from_features(starter_qb)
     season_pass_tds = projection["pass_tds_mean"] * 17
-    assert 32.0 < season_pass_tds < 48.0
+    # Surface integrity peak band — do not loosen for CI (broken was ~17–29).
+    assert 32.0 <= season_pass_tds <= 45.0
 
 
 def test_qb_pass_tds_mean_no_longer_depends_on_red_zone_share() -> None:

@@ -1,9 +1,7 @@
 import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
-import {
-  loadLatestNflPreseasonBundle2026,
-  type PlayerProjectionTotalsRow,
-} from "@/lib/nfl-preseason-artifacts";
+import { loadPlayerSeasonTotalsSpine } from "@/lib/nfl-player-season-totals-spine";
+import type { PlayerProjectionTotalsRow } from "@/lib/nfl-preseason-artifacts";
 
 type SearchValue = string | string[] | undefined;
 type Site = "dk" | "fd";
@@ -37,9 +35,9 @@ export default async function NflDfsPage({
 }) {
   const search = await searchParams;
   const site: Site = firstValue(search.site) === "fd" ? "fd" : "dk";
-  const bundle = loadLatestNflPreseasonBundle2026();
+  const spine = await loadPlayerSeasonTotalsSpine({ season: 2026, limit: 400 });
 
-  const rows = (bundle?.playerTotalsRegular ?? [])
+  const rows = spine.rows
     .filter((p) => ["QB", "RB", "WR", "TE"].includes(p.position))
     .map((p) => {
       const seasonPts = projPoints(p);
@@ -78,8 +76,9 @@ export default async function NflDfsPage({
           <HonestStatusBanner title="Preseason · slate fields empty" tone="sky">
             <p>
               Opp, Salary, Value, and Own% stay blank until a live DFS slate
-              connects. Skill-position projections/ceilings below are season-rate
-              from the model — not a priced contest slate. K/DST omitted.
+              connects. Skill-position projections/ceilings below are
+              season-rate from the model — not a priced contest slate. K/DST
+              omitted.
             </p>
           </HonestStatusBanner>
         </div>
@@ -115,7 +114,9 @@ export default async function NflDfsPage({
 
       <section className="mt-6 grid gap-3 md:grid-cols-2">
         <div className="rounded-xl border border-white/10 bg-black/35 p-4">
-          <h2 className="text-sm font-semibold text-kos-gold">Top projections</h2>
+          <h2 className="text-sm font-semibold text-kos-gold">
+            Top projections
+          </h2>
           <ol className="mt-3 space-y-2">
             {topProj.map((r, i) => (
               <li

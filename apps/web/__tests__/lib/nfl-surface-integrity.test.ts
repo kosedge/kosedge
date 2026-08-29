@@ -64,8 +64,10 @@ describe("nfl surface integrity — web", () => {
         injuryStatus: "out",
       },
     ];
+    // Broken copy was 17g / ~491 yd / empty risk — must not survive.
     const patched = applyPackInjuryToDraftRow(baseRow(), depth);
     expect(patched.gamesProjected).toBe(0);
+    expect(patched.gamesProjected).not.toBe(17);
     expect(patched.receivingYardsTotal).toBe(0);
     expect(patched.recTdsTotal).toBe(0);
 
@@ -80,51 +82,60 @@ describe("nfl surface integrity — web", () => {
       teammateRushYards: [],
     });
     expect(flags.some((f) => f.kind === "availability")).toBe(true);
+    expect(flags.some((f) => f.label === "OUT")).toBe(true);
   });
 
-  it("recouples launch CSV TDs to yards and zeros pack IR", () => {
-    const rows = applySurfaceIntegrityToPlayerTotals([
-      {
-        season: 2026,
-        playerKey: "00-0033873",
-        playerName: "Matthew Stafford",
-        team: "LAR",
-        position: "QB",
-        gamesProjected: 17,
-        passYardsTotal: 4252,
-        rushYardsTotal: 0,
-        receivingYardsTotal: 0,
-        receptionsTotal: 0,
-        passTdsTotal: 16.5,
-        rushTdsTotal: 0,
-        recTdsTotal: 0,
-        anytimeTdProbTotal: 0,
-      },
-      {
-        season: 2026,
-        playerKey: "00-0036322",
-        playerName: "Ja'Marr Chase",
-        team: "CIN",
-        position: "WR",
-        gamesProjected: 17,
-        passYardsTotal: 0,
-        rushYardsTotal: 0,
-        receivingYardsTotal: 1791,
-        receptionsTotal: 120,
-        passTdsTotal: 0,
-        rushTdsTotal: 0,
-        recTdsTotal: 6.5,
-        anytimeTdProbTotal: 0.4,
-      },
-    ]);
-    const stafford = rows[0];
-    const chase = rows[1];
+  it("recoupled season TDs land in integrity peak bands (not broken copy)", () => {
+    // Stale CSV inputs (16.5 pass / 6.5 rec) must not be the answer.
+    const rows = applySurfaceIntegrityToPlayerTotals(
+      [
+        {
+          season: 2026,
+          playerKey: "00-0033873",
+          playerName: "Matthew Stafford",
+          team: "LAR",
+          position: "QB",
+          gamesProjected: 17,
+          passYardsTotal: 4252,
+          rushYardsTotal: 0,
+          receivingYardsTotal: 0,
+          receptionsTotal: 0,
+          passTdsTotal: 16.5,
+          rushTdsTotal: 0,
+          recTdsTotal: 0,
+          anytimeTdProbTotal: 0,
+        },
+        {
+          season: 2026,
+          playerKey: "00-0036322",
+          playerName: "Ja'Marr Chase",
+          team: "CIN",
+          position: "WR",
+          gamesProjected: 17,
+          passYardsTotal: 0,
+          rushYardsTotal: 0,
+          receivingYardsTotal: 1791,
+          receptionsTotal: 120,
+          passTdsTotal: 0,
+          rushTdsTotal: 0,
+          recTdsTotal: 6.5,
+          anytimeTdProbTotal: 0.4,
+        },
+      ],
+      2026,
+      { recoupleTds: true },
+    );
+    const stafford = rows[0]!;
+    const chase = rows[1]!;
     expect(stafford.passTdsTotal).toBeCloseTo(4252 / PASS_TD_YARDS_PER, 5);
     expect(chase.recTdsTotal).toBeCloseTo(1791 / REC_TD_YARDS_PER, 5);
+    // Invariants — do not loosen for CI; broken copy was ~17–29 / ~6–11.
     expect(stafford.passTdsTotal).toBeGreaterThanOrEqual(32);
-    expect(stafford.passTdsTotal).toBeLessThanOrEqual(48);
+    expect(stafford.passTdsTotal).toBeLessThanOrEqual(45);
+    expect(stafford.passTdsTotal).not.toBe(28.9);
     expect(chase.recTdsTotal).toBeGreaterThanOrEqual(12);
     expect(chase.recTdsTotal).toBeLessThanOrEqual(20);
+    expect(chase.recTdsTotal).not.toBe(6.5);
   });
 
   it("shows PRESEASON readiness banner when sample 0 / no-go", () => {
