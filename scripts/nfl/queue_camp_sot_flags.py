@@ -42,13 +42,6 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
     scan_camp_sot_flags,
     t1_past_kei_publish,
 )
-from src.services.nfl_txn_depth_sot import (  # noqa: E402
-    LIVE_PROVE_WATCH,
-    collect_events,
-    format_scan_table,
-    queue_txn_flags,
-    scan_txn_depth_flags,
-)
 from src.services.nfl_txn_sot_scan import (  # noqa: E402
     format_scan_table,
     ingest_txn_events,
