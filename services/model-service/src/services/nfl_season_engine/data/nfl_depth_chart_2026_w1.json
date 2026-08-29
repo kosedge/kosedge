@@ -29,7 +29,8 @@
     "Data integrity gate 20260809: snapshot_id effective-dated; Diggs player_id corrected to GSIS 00-0031588 (was Adams collision).",
     "Go-mode SoT audit 20260813: Tua\u2192ATL (open_competition vs Penix); Willis\u2192MIA1; CLE QB open_competition (Watson/Sanders); MIN Murray named starter (desk 2026-08-12). Demo fill blocked when pack present.",
     "Skill SoT 2026-08-13T15:33Z: Walker\u2192SEA RB1, Charbonnet\u2192SEA RB2, KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved).",
-    "Skill SoT 2026-08-13T17:25Z: HOTFIX Walker\u2192KC RB1 (2026 FA; pack-as-SoT was wrong). Charbonnet\u2192SEA RB1. Johnson KC RB2."
+    "Skill SoT 2026-08-13T17:25Z: HOTFIX Walker\u2192KC RB1 (2026 FA; pack-as-SoT was wrong). Charbonnet\u2192SEA RB1. Johnson KC RB2.",
+    "Daily intel 2026-08-26: 1 override(s) applied"
   ],
   "rows": [
     {
@@ -806,7 +807,7 @@
       "player_name": "Deshaun Watson",
       "depth_slot": "open_competition",
       "role_confidence": 0.55,
-      "competition_status": "open_competition",
+      "competition_status": "named_starter",
       "injury_note": "Camp Desk 2026-08-12: Monken has not named a starter. Watson and Sanders each start one of the first two preseason games. Pack order is not a crown."
     },
     {
@@ -1439,7 +1440,8 @@
       "player_id": "00-0040130",
       "player_name": "Jayden Higgins",
       "depth_slot": "backup",
-      "role_confidence": 0.65
+      "role_confidence": 0.65,
+      "injury_status": "out"
     },
     {
       "team": "HOU",
@@ -3515,7 +3517,7 @@
     }
   ],
   "full_skill_starter_teams": 32,
-  "daily_intel_as_of": "2026-08-13",
+  "daily_intel_as_of": "2026-08-26",
   "ol_roles": [
     {
       "team": "WAS",
