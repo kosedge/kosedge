@@ -34,6 +34,10 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
 from src.services.nfl_injury_kei_cadence import DEFAULT_IMPACT_POINTS
+from src.services.nfl_unit_shock_table import (
+    collect_shock_table_v1,
+    row_covered_by_shock_table,
+)
 
 # ---------------------------------------------------------------------------
 # Caps / scope
@@ -432,14 +436,53 @@ def _qb_factor(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool]:
 
 
 def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool]:
-    """Known key injuries from SoT. No invented IR. TE3/depth skips."""
+    """Known key injuries from SoT. No invented IR. TE3/depth skips.
+
+    Keystone outs (C / LT / EDGE1 / CB1 / S1) use ``shock_table_v1`` once —
+    never stacked with a full unit wipe for the same event.
+    """
     applied: List[FactorEntry] = []
     considered: List[FactorEntry] = []
     injury_clear = True
     team_spread = 0.0
     team_total = 0.0
 
+    shocks = collect_shock_table_v1(
+        team=team,
+        ol_rows=pack.ol(team),
+        defense_rows=pack.defense(team),
+    )
+    for shock in shocks.role_shocks:
+        team_spread += shock.spread_pts
+        team_total += shock.total_pts
+        factor = "injury_ol" if shock.unit == "ol" else "injury_defense"
+        applied.append(
+            _entry(
+                factor=factor,
+                applied=True,
+                team=team,
+                direction="team_weaker",
+                spread_pts=shock.spread_pts,
+                total_pts=shock.total_pts,
+                reason=shock.reason(),
+            )
+        )
+    for skip in shocks.unit_wipe_skips:
+        considered.append(
+            _entry(
+                factor="unit_wipe",
+                applied=False,
+                team=team,
+                direction="none",
+                spread_pts=0.0,
+                total_pts=0.0,
+                reason=skip.reason(),
+            )
+        )
+
     for row in pack.ol(team):
+        if row_covered_by_shock_table(row, shocks):
+            continue  # shock_table_v1 already applied — no flat ol_out double-count
         inj = _status(row.get("injury_status"))
         slot = str(row.get("depth_slot") or "").strip().lower()
         order = int(row.get("depth_order") or 0)
@@ -488,6 +531,8 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
             )
 
     for row in pack.defense(team):
+        if row_covered_by_shock_table(row, shocks):
+            continue  # shock_table_v1 already applied — no flat defense_out double-count
         pos = str(row.get("position") or "").upper() or "DEF"
         if pos not in DEFENSE_POSITIONS and pos != "DEF":
             continue
