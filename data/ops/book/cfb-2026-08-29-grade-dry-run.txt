@@ -1,0 +1,132 @@
+=== The Book — CFB close+grade ===
+slate:    2026-08-29
+dry_run:  True
+pending:  8
+settled:  0
+void:     0
+skipped:  8
+  UNC@TCU  skip  reason=in_progress  result=None  clv_note=None LATE
+  SJSU@USC  skip  reason=not_final  result=None  clv_note=None
+  NCSU@UVA  skip  reason=not_final  result=None  clv_note=None
+  JVST@fcs:NDSU  skip  reason=not_final  result=None  clv_note=None
+  fcs:SAC@EMU  skip  reason=not_final  result=None  clv_note=None
+  HAW@STAN  skip  reason=not_final  result=None  clv_note=None
+  NMSU@FSU  skip  reason=not_final  result=None  clv_note=None
+  MEM@UNLV  skip  reason=not_final  result=None  clv_note=None
+{
+  "ok": true,
+  "sport": "cfb",
+  "week_or_slate": "2026-08-29",
+  "dry_run": true,
+  "n_pending_in": 8,
+  "n_settled": 0,
+  "n_void": 0,
+  "n_skipped": 8,
+  "actions": [
+    {
+      "book_id": "book_6c1d698d873ef4443c924336",
+      "game_id": "401856766",
+      "away": "UNC",
+      "home": "TCU",
+      "type": "pass",
+      "late_post": true,
+      "post_timing": "after_open",
+      "espn_state": "in",
+      "espn_status": "STATUS_IN_PROGRESS",
+      "action": "skip",
+      "reason": "in_progress"
+    },
+    {
+      "book_id": "book_4c2029367d4c47fee8d02b40",
+      "game_id": "401864494",
+      "away": "SJSU",
+      "home": "USC",
+      "type": "play",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    },
+    {
+      "book_id": "book_a48cd1605451fd844f33617a",
+      "game_id": "401858202",
+      "away": "NCSU",
+      "home": "UVA",
+      "type": "pass",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    },
+    {
+      "book_id": "book_d87d60b51f7c4fd2ff96b205",
+      "game_id": "401864577",
+      "away": "JVST",
+      "home": "fcs:NDSU",
+      "type": "pass",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    },
+    {
+      "book_id": "book_65ae127745bd6c81a7f92947",
+      "game_id": "401866408",
+      "away": "fcs:SAC",
+      "home": "EMU",
+      "type": "pass",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    },
+    {
+      "book_id": "book_5d06bf88773226790b3f3707",
+      "game_id": "401858201",
+      "away": "HAW",
+      "home": "STAN",
+      "type": "pass",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    },
+    {
+      "book_id": "book_200aea0f01c6f749b828a138",
+      "game_id": "401864570",
+      "away": "NMSU",
+      "home": "FSU",
+      "type": "pass",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    },
+    {
+      "book_id": "book_f700a1010717595f11c232d3",
+      "game_id": "401862693",
+      "away": "MEM",
+      "home": "UNLV",
+      "type": "pass",
+      "late_post": false,
+      "post_timing": "pre_kick",
+      "espn_state": "pre",
+      "espn_status": "STATUS_SCHEDULED",
+      "action": "skip",
+      "reason": "not_final"
+    }
+  ],
+  "note": "No lookahead. In-progress skipped. late_post CLV tagged after_open."
+}

@@ -63,12 +63,23 @@ class SettleBody(BaseModel):
     pnl_units: Optional[float] = None
 
 
-class CfbSnapshotBody(BaseModel):
+class CfbCloseGradeBody(BaseModel):
     slate_date: str
-    season: int = 2026
-    stake_flag: str = "paper"
-    actor: str = "ops"
     include_aug30_late: bool = False
+    dry_run: bool = True
+
+
+@router.post("/ops/book/cfb/close-grade")
+def book_cfb_close_grade(request: Request, body: CfbCloseGradeBody) -> Dict[str, Any]:
+    require_kosedge_internal(request)
+    from src.services.book_ledger.grade import close_and_grade_slate
+
+    extra = ["2026-08-30"] if body.include_aug30_late else None
+    return close_and_grade_slate(
+        week_or_slate=body.slate_date,
+        extra_dates=extra,
+        dry_run=body.dry_run,
+    )
 
 
 @router.get("/ops/book/ping")

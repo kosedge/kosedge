@@ -27,6 +27,7 @@ def test_book_ops_routes_require_internal_secret() -> None:
         '/ops/book/rows',
         '/ops/book/snapshot',
         '/ops/book/cfb/snapshot',
+        '/ops/book/cfb/close-grade',
         '/ops/book/metrics',
     ):
         assert path in text
@@ -37,6 +38,7 @@ def test_book_ops_routes_require_internal_secret() -> None:
         "def book_rows",
         "def book_snapshot",
         "def book_cfb_snapshot",
+        "def book_cfb_close_grade",
         "def book_close",
         "def book_settle",
         "def book_metrics",
