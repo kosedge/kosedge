@@ -676,6 +676,8 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
             "injury_note",
             "injury_sources",
             "competition_status",
+            "snap_share_prior",
+            "snap_share_package",
         ):
             if key in r and r.get(key) not in (None, ""):
                 row[key] = r.get(key)
@@ -756,6 +758,10 @@ def _role_from_depth_row(
     is_rookie: bool = False,
     draft_round: Optional[int] = None,
     rookie_status: str = "veteran",
+    snap_share_prior: Optional[float] = None,
+    snap_share_package: Optional[str] = None,
+    injury_status: Optional[str] = None,
+    depth_slot: Optional[str] = None,
 ) -> Tuple[PlayerRole, bool]:
     """Build a PlayerRole from a depth-chart identity + share priors."""
     conf = (
@@ -764,17 +770,25 @@ def _role_from_depth_row(
         else (0.7 if depth == 1 else 0.5)
     )
     status = str(rookie_status or ("rookie" if is_rookie else "veteran"))
+    from src.services.nfl_snap_share_prior import resolve_snap_share_prior
+
+    pack_share = resolve_snap_share_prior(
+        {
+            "position": pos,
+            "depth_order": depth,
+            "snap_share_prior": snap_share_prior,
+            "snap_share_package": snap_share_package,
+            "injury_status": injury_status,
+            "depth_slot": depth_slot,
+        }
+    )
     role = PlayerRole(
         player_key=f"{team}-{pos}{depth}-{name}".replace(" ", ""),
         player_name=name,
         team=team,
         position=pos,
         depth_order=depth,
-        snap_share=(
-            {1: 0.9, 2: 0.45, 3: 0.2}.get(depth, 0.1)
-            if pos == "QB"
-            else {1: 0.65, 2: 0.38, 3: 0.18}.get(depth, 0.1)
-        ),
+        snap_share=float(pack_share),
         target_share=(
             {1: 0.22, 2: 0.14, 3: 0.08}.get(depth, 0.05)
             if pos in ("WR", "TE")
@@ -885,6 +899,18 @@ def _rosters_from_depth_rows(
             status_raw = getattr(r, "rookie_status", None)
         if not status_raw:
             status_raw = "rookie" if is_rookie_raw else "veteran"
+        snap_prior_raw = r.get("snap_share_prior")
+        if snap_prior_raw is None:
+            snap_prior_raw = getattr(r, "snap_share_prior", None)
+        snap_pkg_raw = r.get("snap_share_package")
+        if snap_pkg_raw is None:
+            snap_pkg_raw = getattr(r, "snap_share_package", None)
+        injury_raw = r.get("injury_status")
+        if injury_raw is None:
+            injury_raw = getattr(r, "injury_status", None)
+        slot_raw = r.get("depth_slot")
+        if slot_raw is None:
+            slot_raw = getattr(r, "depth_slot", None)
         role, hit = _role_from_depth_row(
             team=team,
             pos=pos,
@@ -896,6 +922,10 @@ def _rosters_from_depth_rows(
             is_rookie=bool(is_rookie_raw),
             draft_round=draft_i,
             rookie_status=str(status_raw),
+            snap_share_prior=float(snap_prior_raw) if snap_prior_raw is not None else None,
+            snap_share_package=str(snap_pkg_raw) if snap_pkg_raw not in (None, "") else None,
+            injury_status=str(injury_raw) if injury_raw not in (None, "") else None,
+            depth_slot=str(slot_raw) if slot_raw not in (None, "") else None,
         )
         pid = str(r.get("player_id") or getattr(r, "player_id", "") or "").strip()
         if pid and not pid.startswith(f"{team}-{pos}-"):
