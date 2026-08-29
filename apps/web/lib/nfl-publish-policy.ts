@@ -87,6 +87,7 @@ export function nflPublishTag(
     return { tag: "PASS", stakeEligible: false, reason: "missing_edge" };
   }
   const candidate = nflCandidateTag(market, absEdge);
+  // Readiness / product no-go (incl. preseason sample 0): never emit PLAY.
   if (productGate === "RED" || candidate === "PASS") {
     return {
       tag: "PASS",

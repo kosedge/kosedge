@@ -8,6 +8,7 @@ import {
   type NflLineage,
   type NflWebLaunchPointerLike,
 } from "@/lib/nfl-lineage";
+import { applySurfaceIntegrityToPlayerTotals } from "@/lib/nfl-surface-integrity";
 
 type CsvRow = Record<string, string>;
 
@@ -221,11 +222,11 @@ function loadBundleFromDir(
   }
 
   const teamRows = mapTeamRows(parseCsvRows(readFileSync(teamPath, "utf8")));
-  const playerTotalsRegular = mapPlayerTotalsRows(
-    parseCsvRows(readFileSync(regularPath, "utf8")),
+  const playerTotalsRegular = applySurfaceIntegrityToPlayerTotals(
+    mapPlayerTotalsRows(parseCsvRows(readFileSync(regularPath, "utf8"))),
   );
-  const playerTotalsPlayoff = mapPlayerTotalsRows(
-    parseCsvRows(readFileSync(playoffPath, "utf8")),
+  const playerTotalsPlayoff = applySurfaceIntegrityToPlayerTotals(
+    mapPlayerTotalsRows(parseCsvRows(readFileSync(playoffPath, "utf8"))),
   );
 
   let generatedAtUtc: string | null = null;

@@ -17336,6 +17336,15 @@ def materialize_nfl_fantasy_season_draft_rankings(
     upserted = 0
     try:
         base_players = _fetch_season_player_totals(session, season=season, model_version=model_version)
+        # Surface integrity: depth-pack IR/out → games≈0 + zero volume; yards↔TD.
+        try:
+            from .services.nfl_season_engine.loaders import load_packaged_depth_chart
+            from .services.nfl_surface_integrity import apply_pack_injury_to_fantasy_rows
+
+            pack_rows, _meta = load_packaged_depth_chart(int(season))
+            apply_pack_injury_to_fantasy_rows(base_players, pack_rows, recouple_tds=True)
+        except Exception:
+            log.exception("fantasy draft rankings: pack injury overlay failed")
         kicker_players = _fetch_kicker_season_players(session, season=season, model_version=model_version)
         dst_players = _fetch_dst_season_players(session, season=season)
         if not base_players and not kicker_players and not dst_players:

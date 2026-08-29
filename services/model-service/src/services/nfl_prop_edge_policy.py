@@ -308,13 +308,24 @@ def classify_prop_tag(
         and role_ok
         and avail_ok
     ):
+        # Surface integrity: never emit PLAY when stake_eligible is false.
+        # Research highlights that fail stake confirmation stay WATCH.
+        if not PLAY_STAKE_ELIGIBLE:
+            return {
+                "tag": "WATCH",
+                "tag_side": side,
+                "tag_action": side,
+                "size_down": False,
+                "stake_eligible": False,
+                "tag_reason": "rec_yds_research_unconfirmed",
+            }
         return {
             "tag": "PLAY",
             "tag_side": side,
             "tag_action": side,
             "size_down": False,
-            "stake_eligible": bool(PLAY_STAKE_ELIGIBLE),
-            "tag_reason": "rec_yds_research_unconfirmed",
+            "stake_eligible": True,
+            "tag_reason": "rec_yds_stake_confirmed",
         }
 
     if mk in WATCH_MARKETS:

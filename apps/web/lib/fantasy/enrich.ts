@@ -16,6 +16,66 @@ import type {
   ScheduleWindowNote,
 } from "@/lib/fantasy/types";
 
+const HARD_OUT = new Set([
+  "out",
+  "ir",
+  "pup",
+  "suspended",
+  "inactive",
+  "waived",
+]);
+
+function normalizeName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "")
+    .replace(/jr$|sr$|ii$|iii$|iv$/, "");
+}
+
+function nameMatch(a: string, b: string): boolean {
+  const na = normalizeName(a);
+  const nb = normalizeName(b);
+  if (!na || !nb) return false;
+  return na === nb || na.includes(nb) || nb.includes(na);
+}
+
+/** Pack IR/out → zero games + volume (web defense if API lag). */
+export function applyPackInjuryToDraftRow(
+  row: EnrichableDraftRow,
+  depthRows: DepthRow[],
+): EnrichableDraftRow {
+  const pos = row.position.toUpperCase();
+  const team = row.team.toUpperCase();
+  const self = depthRows.find(
+    (d) =>
+      d.team.toUpperCase() === team &&
+      d.position.toUpperCase() === pos &&
+      (d.playerId
+        ? d.playerId === row.playerId
+        : nameMatch(d.playerName, row.playerName)),
+  );
+  const status = String(self?.injuryStatus || "")
+    .trim()
+    .toLowerCase();
+  if (!HARD_OUT.has(status)) return row;
+  return {
+    ...row,
+    gamesProjected: 0,
+    passYardsTotal: 0,
+    rushYardsTotal: 0,
+    receivingYardsTotal: 0,
+    receptionsTotal: 0,
+    passTdsTotal: 0,
+    rushTdsTotal: 0,
+    recTdsTotal: 0,
+    totalPoints: 0,
+    floorPoints: 0,
+    medianPoints: 0,
+    ceilingPoints: 0,
+    valueOverReplacement: 0,
+  };
+}
+
 export type EnrichableDraftRow = {
   season: number;
   scoringProfile: FantasyScoringProfile;
@@ -57,7 +117,10 @@ export function enrichDraftRows(input: {
   adpByPlayerId?: Map<string, AdpMatchResult>;
 }): FantasyDeskRow[] {
   const rushByTeam = new Map<string, Array<{ playerName: string; rushYards: number }>>();
-  for (const row of input.rows) {
+  const patchedRows = input.rows.map((row) =>
+    applyPackInjuryToDraftRow(row, input.depthRows),
+  );
+  for (const row of patchedRows) {
     if (row.position.toUpperCase() !== "RB") continue;
     const list = rushByTeam.get(row.team.toUpperCase()) ?? [];
     list.push({ playerName: row.playerName, rushYards: row.rushYardsTotal });
@@ -66,7 +129,7 @@ export function enrichDraftRows(input: {
 
   const adpByPlayerId = input.adpByPlayerId ?? new Map();
 
-  return input.rows.map((row) => {
+  return patchedRows.map((row) => {
     const committeeProbe = buildRiskFlags({
       playerName: row.playerName,
       team: row.team,

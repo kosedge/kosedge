@@ -14,7 +14,8 @@ def test_devig_two_way_removes_juice() -> None:
 
 
 def test_rec_play_requires_z_060_but_not_stake_eligible() -> None:
-    # z = (82-64.5)/18 ≈ 0.97 → PLAY research tag; stake blocked post batch-5
+    # z = (82-64.5)/18 ≈ 0.97 → research highlight; stake blocked post batch-5
+    # Surface integrity: no PLAY tag when stake_eligible is false → WATCH.
     edge = evaluate_prop_edge(
         model_mean=82.0,
         model_std=18.0,
@@ -26,7 +27,7 @@ def test_rec_play_requires_z_060_but_not_stake_eligible() -> None:
         role_confidence=0.8,
         availability_confidence=0.9,
     )
-    assert edge["tag"] == "PLAY"
+    assert edge["tag"] == "WATCH"
     assert edge["stake_eligible"] is False
     assert edge["tag_reason"] == "rec_yds_research_unconfirmed"
 

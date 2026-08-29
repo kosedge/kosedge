@@ -273,7 +273,12 @@ def _classify_nfl_readiness(
         else True,
         "moneyline_brier_ok": moneyline_brier is not None and moneyline_brier <= max_moneyline_brier,
         "total_mae_ok": total_mae is not None and total_mae <= max_total_mae,
-        "clv_ok": clv_avg is not None and clv_avg >= min_clv_avg,
+        # Sample 0 must not green-light CLV (preseason / empty holdout).
+        "clv_ok": (
+            sample_size > 0
+            and clv_avg is not None
+            and clv_avg >= min_clv_avg
+        ),
     }
     failed_reasons = [name for name, passed in checks.items() if not passed]
     status = "go" if all(checks.values()) else "no-go"

@@ -10,6 +10,8 @@ export type DepthRow = {
   playerId?: string;
   /** Effective-dated depth snapshot id when pack carries lineage */
   snapshotId?: string;
+  /** Pack injury_status (out/ir/…) — drives games/volume + riskFlags */
+  injuryStatus?: string;
 };
 
 function normalizeName(name: string): string {
@@ -51,6 +53,21 @@ export function buildRiskFlags(input: {
     nameMatch(row.playerName, input.playerName),
   );
 
+  const injuryStatus = String(self?.injuryStatus || "")
+    .trim()
+    .toLowerCase();
+  const hardOut = ["out", "ir", "pup", "suspended", "inactive", "waived"].includes(
+    injuryStatus,
+  );
+
+  if (hardOut) {
+    flags.push({
+      kind: "availability",
+      label: injuryStatus.toUpperCase(),
+      detail: `Depth pack injury_status=${injuryStatus} — season volume should be near zero.`,
+    });
+  }
+
   if (input.isRookie) {
     flags.push({
       kind: "rookie",
@@ -59,11 +76,23 @@ export function buildRiskFlags(input: {
     });
   }
 
-  if (input.gamesProjected > 0 && input.gamesProjected < 15) {
+  if (
+    !hardOut &&
+    input.gamesProjected > 0 &&
+    input.gamesProjected < 15
+  ) {
     flags.push({
       kind: "availability",
       label: "Availability",
       detail: `Only ${input.gamesProjected} games projected — durability/role path is thinner than a full slate.`,
+    });
+  }
+
+  if (input.gamesProjected <= 0 && !hardOut) {
+    flags.push({
+      kind: "availability",
+      label: "Availability",
+      detail: "Zero games projected — role/injury path is inactive for the season.",
     });
   }
 
