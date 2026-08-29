@@ -30,7 +30,10 @@
     "Go-mode SoT audit 20260813: Tua\u2192ATL (open_competition vs Penix); Willis\u2192MIA1; CLE QB open_competition (Watson/Sanders); MIN Murray named starter (desk 2026-08-12). Demo fill blocked when pack present.",
     "Skill SoT 2026-08-13T15:33Z: Walker\u2192SEA RB1, Charbonnet\u2192SEA RB2, KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved).",
     "Skill SoT 2026-08-13T17:25Z: HOTFIX Walker\u2192KC RB1 (2026 FA; pack-as-SoT was wrong). Charbonnet\u2192SEA RB1. Johnson KC RB2.",
-    "Daily intel 2026-08-26: 1 override(s) applied"
+    "Daily intel 2026-08-26: 1 override(s) applied",
+    "Camp OL seed 2026-08-29: BAL C (Pinter/Pocic/Gwyn open) + LAC C (Biadasz/Slaughter) rows for desk accept \u2014 no crowns.",
+    "Daily intel 2026-08-26: 3 override(s) applied",
+    "Daily intel 2026-08-26: 5 override(s) applied"
   ],
   "rows": [
     {
@@ -3608,6 +3611,77 @@
       "player_id": "WAS-RT-1",
       "injury_status": "active",
       "role_note": "Remains RT; not sliding to LT in preferred plan."
+    },
+    {
+      "team": "BAL",
+      "position": "C",
+      "depth_order": 99,
+      "depth_slot": "out",
+      "player_name": "Danny Pinter",
+      "player_id": "BAL-C-PINTER",
+      "injury_status": "out",
+      "competition_status": "open_competition",
+      "role_note": "Camp frontrunner at C before patellar tendon; competition not crowned.",
+      "sources": [
+        "https://www.baltimoreravens.com/news/nnamdi-madubuike-next-step-hits-sled-first-time-danny-pinter-injury-season-ending-ravens-preseason-week-3",
+        "https://www.nfl.com/news/ravens-center-danny-pinter-torn-patellar-tendon"
+      ]
+    },
+    {
+      "team": "BAL",
+      "position": "C",
+      "depth_order": 2,
+      "depth_slot": "starter_competition",
+      "player_name": "Ethan Pocic",
+      "player_id": "BAL-C-POCIC",
+      "injury_status": "active",
+      "competition_status": "open_competition",
+      "role_note": "97 career starts; ramping from Achilles. Open C competition with Gwyn \u2014 not crowned.",
+      "sources": [
+        "https://www.baltimoreravens.com/news/nnamdi-madubuike-next-step-hits-sled-first-time-danny-pinter-injury-season-ending-ravens-preseason-week-3"
+      ]
+    },
+    {
+      "team": "BAL",
+      "position": "C",
+      "depth_order": 3,
+      "depth_slot": "starter_competition",
+      "player_name": "Jovaughn Gwyn",
+      "player_id": "BAL-C-GWYN",
+      "injury_status": "active",
+      "competition_status": "open_competition",
+      "role_note": "First-team work; no NFL starts. Open C competition with Pocic \u2014 not crowned.",
+      "sources": [
+        "https://www.baltimoreravens.com/news/nnamdi-madubuike-next-step-hits-sled-first-time-danny-pinter-injury-season-ending-ravens-preseason-week-3"
+      ]
+    },
+    {
+      "team": "LAC",
+      "position": "C",
+      "depth_order": 99,
+      "depth_slot": "out",
+      "player_name": "Tyler Biadasz",
+      "player_id": "LAC-C-BIADASZ",
+      "injury_status": "out",
+      "role_note": "Signed as starting center; ACL/knee before IR designation.",
+      "sources": [
+        "https://www.chargers.com/news/tyler-biadasz-placed-on-injured-reserve",
+        "https://www.nfl.com/news/chargers-place-c-tyler-biadasz-on-injured-reserve"
+      ]
+    },
+    {
+      "team": "LAC",
+      "position": "C",
+      "depth_order": 1,
+      "depth_slot": "starter",
+      "player_name": "Jake Slaughter",
+      "player_id": "LAC-C-SLAUGHTER",
+      "injury_status": "active",
+      "role_note": "Rookie C/LG; next man at center after Biadasz. LG competition reopens \u2014 no invented LG starter.",
+      "sources": [
+        "https://www.chargers.com/news/tyler-biadasz-placed-on-injured-reserve",
+        "https://www.nfl.com/news/chargers-place-c-tyler-biadasz-on-injured-reserve"
+      ]
     },
     {
       "team": "CLE",
