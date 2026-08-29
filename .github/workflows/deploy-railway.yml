@@ -131,11 +131,26 @@ jobs:
             --service "${SVC_NAME}" \
             -m "ci ${GITHUB_SHA::12} beat"
 
+      - name: DepthSot deploy smoke (e253 must not 404)
+        env:
+          INTERNAL_API_SECRET: ${{ secrets.INTERNAL_API_SECRET }}
+          EXPECTED_GIT_SHA: ${{ github.sha }}
+          MODEL_BASE: https://model-service-production-e253.up.railway.app
+          # brave-art API service id from prior CI Build Logs URLs
+          RAILWAY_API_SERVICE_ID: e0c54f94-3ee0-41c0-8081-e96d3e246a4a
+          DEPTH_SOT_SMOKE_WAIT_SECONDS: "420"
+        run: bash scripts/ci/railway-depth-sot-deploy-smoke.sh
+
       - name: Summary
+        if: always()
         run: |
           {
             echo "## Railway deploy"
             echo "- **Branch:** ${{ github.ref_name }}"
             echo "- **Commit:** ${{ github.sha }}"
             echo "- **Services:** model-service / model-service-worker / model-service-beat"
+            echo "- **API service id (expected):** e0c54f94-3ee0-41c0-8081-e96d3e246a4a"
+            echo "- **e253:** https://model-service-production-e253.up.railway.app"
+            echo "- **Smoke:** GET /nfl/ops/depth-sot/status must be 200/401 (404 fails the job)"
+            echo "- **Note:** \`railway up --detach\` is upload-only and is not a pass"
           } >> "$GITHUB_STEP_SUMMARY"

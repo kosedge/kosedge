@@ -310,7 +310,22 @@ app.add_middleware(
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    return {"status": "ok", "service": APP_NAME}
+    """Liveness + deploy identity (Railway sets RAILWAY_* at runtime)."""
+    git_sha = (
+        os.environ.get("RAILWAY_GIT_COMMIT_SHA")
+        or os.environ.get("GITHUB_SHA")
+        or os.environ.get("GIT_COMMIT")
+        or ""
+    ).strip()
+    return {
+        "status": "ok",
+        "service": APP_NAME,
+        "git_sha": git_sha[:12] or None,
+        "railway_service_id": (os.environ.get("RAILWAY_SERVICE_ID") or "").strip() or None,
+        "railway_environment_id": (os.environ.get("RAILWAY_ENVIRONMENT_ID") or "").strip()
+        or None,
+        "process_type": (os.environ.get("PROCESS_TYPE") or "").strip() or None,
+    }
 
 
 @app.get("/health/db")
