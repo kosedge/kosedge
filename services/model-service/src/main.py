@@ -16,6 +16,7 @@ from src.celery_app import QUEUE_MODELS, celery_app, celery_healthcheck
 from src.db import engine
 from src.nfl_remat_policy import resolve_remat_weeks
 from src.routes import (
+    book_router,
     cfb_router,
     edge_board_router,
     mlb_router,
@@ -291,6 +292,7 @@ app = FastAPI(
 
 # Routers
 app.include_router(edge_board_router)
+app.include_router(book_router)
 app.include_router(cfb_router)
 app.include_router(proof_router)
 app.include_router(mlb_router)
