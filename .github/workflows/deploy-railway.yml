@@ -85,7 +85,9 @@ jobs:
           ENV_ID="$(printf '%s' "${RAILWAY_ENVIRONMENT:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
           PROJECT_ID="$(printf '%s' "${RAILWAY_PROJECT_ID:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
           SVC_NAME="$(printf '%s' "${SVC:-model-service}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-          railway up services/model-service --path-as-root --no-gitignore --detach \
+          # --ci streams build logs and fails the job if the image does not
+          # build/deploy. --detach only uploads and left depth-sot 404 after #291/#292.
+          railway up services/model-service --path-as-root --no-gitignore --ci \
             --project "${PROJECT_ID:-${RAILWAY_PROJECT_ID_DEFAULT}}" \
             --environment "${ENV_ID:-${RAILWAY_ENVIRONMENT_ID_DEFAULT}}" \
             --service "${SVC_NAME}" \
@@ -104,7 +106,7 @@ jobs:
           ENV_ID="$(printf '%s' "${RAILWAY_ENVIRONMENT:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
           PROJECT_ID="$(printf '%s' "${RAILWAY_PROJECT_ID:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
           SVC_NAME="$(printf '%s' "${SVC:-model-service-worker}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
-          railway up services/model-service --path-as-root --no-gitignore --detach \
+          railway up services/model-service --path-as-root --no-gitignore --ci \
             --project "${PROJECT_ID:-${RAILWAY_PROJECT_ID_DEFAULT}}" \
             --environment "${ENV_ID:-${RAILWAY_ENVIRONMENT_ID_DEFAULT}}" \
             --service "${SVC_NAME}" \
