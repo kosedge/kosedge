@@ -1,6 +1,6 @@
 import "server-only";
 
-import { env } from "@/lib/env";
+import { env } from "@/lib/config/env";
 
 export type NflProductionReadiness = {
   status: "go" | "no-go" | "unknown";
@@ -29,7 +29,10 @@ export async function fetchNflProductionReadiness(): Promise<NflProductionReadin
     const raw = (await res.json().catch(() => ({}))) as Record<string, unknown>;
     // FastAPI may wrap in detail when raising 503, or return flat body.
     const body =
-      raw && typeof raw === "object" && raw.detail && typeof raw.detail === "object"
+      raw &&
+      typeof raw === "object" &&
+      raw.detail &&
+      typeof raw.detail === "object"
         ? (raw.detail as Record<string, unknown>)
         : raw;
     if (!res.ok && !body.status) {
@@ -65,8 +68,7 @@ export async function fetchNflProductionReadiness(): Promise<NflProductionReadin
         : typeof body.sample_size === "number"
           ? body.sample_size
           : null;
-    const clvOk =
-      typeof checks.clv_ok === "boolean" ? checks.clv_ok : null;
+    const clvOk = typeof checks.clv_ok === "boolean" ? checks.clv_ok : null;
     return { status, reasons, sampleSize, clvOk };
   } catch (err) {
     return {

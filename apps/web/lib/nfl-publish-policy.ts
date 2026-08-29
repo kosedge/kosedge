@@ -102,7 +102,11 @@ export function nflPublishTag(
       reason: "edge_and_segment_cleared",
     };
   }
-  return { tag: "PASS", stakeEligible: false, reason: "segment_evidence_failed" };
+  return {
+    tag: "PASS",
+    stakeEligible: false,
+    reason: "segment_evidence_failed",
+  };
 }
 
 export function americanToDecimal(american: number): number {
@@ -137,7 +141,12 @@ export function nflPublishMoneylineTag(args: {
   productGate?: NflProductGateStatus;
   minEv?: number;
   seasonType?: string | null;
-}): { tag: NflPublishTag; stakeEligible: boolean; reason: string; ev?: number } {
+}): {
+  tag: NflPublishTag;
+  stakeEligible: boolean;
+  reason: string;
+  ev?: number;
+} {
   if (isPreseasonSeasonType(args.seasonType) && isPreseasonInfoMode()) {
     return {
       tag: "PASS",
@@ -149,7 +158,10 @@ export function nflPublishMoneylineTag(args: {
   if (gate === "RED") {
     return { tag: "PASS", stakeEligible: false, reason: "product_gate_red" };
   }
-  if (!args.spreadStakeEligible || String(args.spreadTag).toUpperCase() !== "PLAY") {
+  if (
+    !args.spreadStakeEligible ||
+    String(args.spreadTag).toUpperCase() !== "PLAY"
+  ) {
     return { tag: "PASS", stakeEligible: false, reason: "spread_not_play" };
   }
   if (

@@ -30,7 +30,9 @@ export async function NflProductionReadinessBanner() {
       className="border-b border-sky-500/35 bg-sky-500/10 px-6 py-3 text-sm text-sky-50"
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-1 sm:flex-row sm:items-baseline sm:justify-between">
-        <p className="font-medium tracking-tight">PRESEASON · production readiness no-go</p>
+        <p className="font-medium tracking-tight">
+          PRESEASON · production readiness no-go
+        </p>
         <p className="text-sky-50/80">
           PLAY stake tags and survivor locks stay research-only until readiness
           is go. {reasons}

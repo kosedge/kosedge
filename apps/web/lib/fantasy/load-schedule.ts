@@ -17,7 +17,10 @@ function findRepoRoot(): string | null {
     current = parent;
   }
   // When cwd is apps/web itself
-  if (existsSync(path.join(current, "lib")) && existsSync(path.join(current, "package.json"))) {
+  if (
+    existsSync(path.join(current, "lib")) &&
+    existsSync(path.join(current, "package.json"))
+  ) {
     return path.dirname(current);
   }
   return null;
@@ -95,9 +98,7 @@ export function loadNfl2026ScheduleGames(): ScheduleGame[] {
           awayTeam: normalizeTeam(g.away_team),
         }));
       }
-      return gamesFromWallChart(
-        raw as Record<string, Record<string, string>>,
-      );
+      return gamesFromWallChart(raw as Record<string, Record<string, string>>);
     }
     return [];
   } catch {

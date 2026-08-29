@@ -56,9 +56,14 @@ export function buildRiskFlags(input: {
   const injuryStatus = String(self?.injuryStatus || "")
     .trim()
     .toLowerCase();
-  const hardOut = ["out", "ir", "pup", "suspended", "inactive", "waived"].includes(
-    injuryStatus,
-  );
+  const hardOut = [
+    "out",
+    "ir",
+    "pup",
+    "suspended",
+    "inactive",
+    "waived",
+  ].includes(injuryStatus);
 
   if (hardOut) {
     flags.push({
@@ -72,15 +77,12 @@ export function buildRiskFlags(input: {
     flags.push({
       kind: "rookie",
       label: "Rookie",
-      detail: "No NFL track record — outcome band is wider than a veteran peer.",
+      detail:
+        "No NFL track record — outcome band is wider than a veteran peer.",
     });
   }
 
-  if (
-    !hardOut &&
-    input.gamesProjected > 0 &&
-    input.gamesProjected < 15
-  ) {
+  if (!hardOut && input.gamesProjected > 0 && input.gamesProjected < 15) {
     flags.push({
       kind: "availability",
       label: "Availability",
@@ -92,7 +94,8 @@ export function buildRiskFlags(input: {
     flags.push({
       kind: "availability",
       label: "Availability",
-      detail: "Zero games projected — role/injury path is inactive for the season.",
+      detail:
+        "Zero games projected — role/injury path is inactive for the season.",
     });
   }
 

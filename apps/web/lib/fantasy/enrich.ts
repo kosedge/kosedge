@@ -6,9 +6,7 @@ import {
 import { resolveAdpQaFlag } from "@/lib/fantasy/adp-qa-flags";
 import { buildDrivers, buildExpertBlurb } from "@/lib/fantasy/expert";
 import { buildRiskFlags, type DepthRow } from "@/lib/fantasy/risk-signals";
-import {
-  floorMedianCeilingFromMean,
-} from "@/lib/fantasy/scoring";
+import { floorMedianCeilingFromMean } from "@/lib/fantasy/scoring";
 import { NEUTRAL_SCHEDULE } from "@/lib/fantasy/schedule-context";
 import type {
   FantasyDeskRow,
@@ -116,7 +114,10 @@ export function enrichDraftRows(input: {
   /** Real market ADP by desk playerId. Missing → null ADP / value. */
   adpByPlayerId?: Map<string, AdpMatchResult>;
 }): FantasyDeskRow[] {
-  const rushByTeam = new Map<string, Array<{ playerName: string; rushYards: number }>>();
+  const rushByTeam = new Map<
+    string,
+    Array<{ playerName: string; rushYards: number }>
+  >();
   const patchedRows = input.rows.map((row) =>
     applyPackInjuryToDraftRow(row, input.depthRows),
   );
