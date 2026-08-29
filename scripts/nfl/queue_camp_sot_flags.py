@@ -11,6 +11,8 @@ Usage:
   python scripts/nfl/queue_camp_sot_flags.py --queue
   python scripts/nfl/queue_camp_sot_flags.py --scan-defense
   python scripts/nfl/queue_camp_sot_flags.py --queue-defense
+  python scripts/nfl/queue_camp_sot_flags.py --scan-report
+  python scripts/nfl/queue_camp_sot_flags.py --queue-report
   python scripts/nfl/queue_camp_sot_flags.py --alert-t1
   python scripts/nfl/queue_camp_sot_flags.py --accept path.json --dry-run
   python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write --rematerialize --actor desk
@@ -47,6 +49,12 @@ from src.services.nfl_defense_sot_populate import (  # noqa: E402
     queue_defense_flags,
     scan_defense_populate,
 )
+from src.services.nfl_injury_report_scan import (  # noqa: E402
+    REPORT_SOURCE,
+    format_t1_table,
+    queue_injury_report_flags,
+    scan_injury_report,
+)
 
 
 def main() -> int:
@@ -64,9 +72,19 @@ def main() -> int:
         help="Upsert defense populate T1s into queue/runtime/ (propose only; no accepts)",
     )
     ap.add_argument(
+        "--scan-report",
+        action="store_true",
+        help="Week-of injury report T1s (Sleeper DNP/LP/FP/Out); propose only",
+    )
+    ap.add_argument(
+        "--queue-report",
+        action="store_true",
+        help="Upsert injury-report T1s into queue/runtime/ (propose only; no accepts)",
+    )
+    ap.add_argument(
         "--alert-t1",
         action="store_true",
-        help="Exit 1 if any T1 is still open past next KEI publish",
+        help="Exit 1 if any T1 is still open past next KEI publish (camp + report)",
     )
     ap.add_argument("--accept", type=Path, help="Accept a work item")
     ap.add_argument("--reject", type=Path, help="Reject — write nothing, no remat")
@@ -129,6 +147,8 @@ def main() -> int:
         args.queue,
         args.scan_defense,
         args.queue_defense,
+        args.scan_report,
+        args.queue_report,
         args.alert_t1,
         args.accept,
         args.reject,
@@ -137,6 +157,7 @@ def main() -> int:
     if not any(actions):
         ap.error(
             "pass --scan, --queue, --scan-defense, --queue-defense, "
+            "--scan-report, --queue-report, "
             "--alert-t1, --accept, --reject, and/or --no-change"
         )
 
@@ -242,6 +263,44 @@ def main() -> int:
             )
         return 0
 
+    if args.scan_report or args.queue_report:
+        items, rows, meta = scan_injury_report()
+        print(format_t1_table(rows))
+        print()
+        print(
+            f"injury_report t1={len(rows)} source={meta.get('source')} "
+            f"as_of={meta.get('as_of')} (STOP — zero accepts)"
+        )
+        if args.json:
+            print(
+                json.dumps(
+                    {
+                        "meta": meta,
+                        "t1": [r.as_dict() for r in rows],
+                        "work_item_ids": [f.work_item_id for f in items],
+                        "accepts_performed": 0,
+                        "source": REPORT_SOURCE,
+                    },
+                    indent=2,
+                )
+            )
+        if args.queue_report:
+            q = queue_injury_report_flags(items)
+            print(
+                json.dumps(
+                    {
+                        "created": [str(p) for p in q.created],
+                        "updated": [str(p) for p in q.updated],
+                        "unchanged": [str(p) for p in q.unchanged],
+                        "skipped": q.skipped,
+                        "accepts_performed": 0,
+                        "source": REPORT_SOURCE,
+                    },
+                    indent=2,
+                )
+            )
+        return 0
+
     flags = scan_camp_sot_flags(
         overdue_hours=args.overdue_hours,
         latest_desk_only=not args.all_dates,
@@ -249,19 +308,33 @@ def main() -> int:
     summary = overdue_summary(flags)
 
     if args.alert_t1:
-        alerts = t1_past_kei_publish(flags)
+        report_items, _, _ = scan_injury_report()
+        all_for_alert = list(flags) + list(report_items)
+        alerts = t1_past_kei_publish(all_for_alert)
         payload = {
             "alert": "t1_past_kei_publish",
             "count": len(alerts),
             "work_item_ids": [f.work_item_id for f in alerts],
             "teams": [f.team for f in alerts],
+            "sources": sorted(
+                {
+                    (
+                        "sleeper"
+                        if "injury-report" in f.work_item_id
+                        else "camp_desk"
+                    )
+                    for f in alerts
+                }
+            ),
         }
         if args.json:
             print(json.dumps(payload, indent=2))
         else:
+            src = ",".join(payload["sources"]) or "none"
             print(
                 f"T1 past KEI publish: {len(alerts)} "
-                f"teams={','.join(f.team for f in alerts) or 'none'}"
+                f"teams={','.join(f.team for f in alerts) or 'none'} "
+                f"sources={src}"
             )
         return 1 if alerts else 0
 
