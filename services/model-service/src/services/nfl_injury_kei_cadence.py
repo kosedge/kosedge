@@ -110,7 +110,9 @@ QB1_FORCE_REPRICE_STATUSES = frozenset({"out", "doubtful"})
 
 SKILL_POSITIONS = frozenset({"RB", "WR", "TE", "HB", "FB"})
 OL_POSITIONS = frozenset({"LT", "LG", "C", "RG", "RT", "OL", "T", "G"})
-DEF_POSITIONS = frozenset({"DE", "DT", "DL", "EDGE", "LB", "CB", "S", "DB", "NT"})
+DEF_POSITIONS = frozenset(
+    {"DE", "DT", "DL", "EDGE", "LB", "CB", "S", "DB", "NT", "NB"}
+)
 
 
 @dataclass(frozen=True)

@@ -625,8 +625,9 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
     artifact is missing or empty — callers fall through to demo depth.
 
     When the pack is present it is the exclusive player→team SoT. Optional
-    ``ol_roles`` / ``injury_paths`` / ``camp_intel`` ride along in ``meta``
-    for ops + sim defaults (OL does not enter skill usage allocation).
+    ``ol_roles`` / ``defense_roles`` / ``injury_paths`` / ``camp_intel`` ride
+    along in ``meta`` for ops + KEI (OL/defense do not enter skill usage
+    allocation).
     """
     path = _PACKAGED_DEPTH_FILES.get(int(season))
     if path is None or not path.is_file():
@@ -690,6 +691,11 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
     ol_roles = [
         dict(p) for p in (payload.get("ol_roles") or []) if isinstance(p, Mapping)
     ]
+    defense_roles = [
+        dict(p)
+        for p in (payload.get("defense_roles") or [])
+        if isinstance(p, Mapping)
+    ]
     sha = pack_sha256(path)
     meta = {
         "roster_source": str(payload.get("source") or ROSTER_SOURCE_PACKAGED),
@@ -707,6 +713,8 @@ def load_packaged_depth_chart(season: int) -> Tuple[List[Dict[str, Any]], Dict[s
         ),
         "injury_paths": injury_paths,
         "ol_roles": ol_roles,
+        "defense_roles": defense_roles,
+        "defense_positions": list(payload.get("defense_positions") or []),
         "camp_intel": dict(payload.get("camp_intel") or {})
         if isinstance(payload.get("camp_intel"), Mapping)
         else {},

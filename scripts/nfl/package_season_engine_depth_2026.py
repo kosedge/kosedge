@@ -271,6 +271,8 @@ def package(*, parquet_path: Path, out_path: Path, upstream_last_updated: str = 
         for key in (
             "daily_intel_as_of",
             "ol_roles",
+            "defense_roles",
+            "defense_positions",
             "camp_intel",
             "injury_paths",
         ):

@@ -11,7 +11,8 @@ Doctrine
 SoT
 ---
 QB1 / injury names come from the packaged depth chart (#220), not a second map.
-OL injuries live in pack ``ol_roles``; skill injuries on pack rows.
+OL injuries live in pack ``ol_roles``; defense in ``defense_roles``;
+skill injuries on pack rows.
 
 Honesty
 -------
@@ -66,6 +67,7 @@ OUT_STATUSES = frozenset({"out", "ir", "pup", "suspended", "inactive"})
 UNRESOLVED_STATUSES = frozenset({"limited", "questionable", "doubtful"})
 SKILL_POSITIONS = frozenset({"RB", "WR", "TE", "HB", "FB"})
 QB_POSITIONS = frozenset({"QB"})
+DEFENSE_POSITIONS = frozenset({"EDGE", "DL", "LB", "CB", "S", "NB", "DE", "DT", "DB", "NT"})
 
 TZ_EASTERN = ZoneInfo("America/New_York")
 
@@ -119,10 +121,11 @@ def _status(raw: Any) -> str:
 
 @dataclass
 class Week1Pack:
-    """Skill rows + OL roles from the #220 depth pack."""
+    """Skill rows + OL + defense roles from the #220 depth pack."""
 
     skill_by_team: Dict[str, List[Dict[str, Any]]] = field(default_factory=dict)
     ol_by_team: Dict[str, List[Dict[str, Any]]] = field(default_factory=dict)
+    defense_by_team: Dict[str, List[Dict[str, Any]]] = field(default_factory=dict)
     snapshot_id: str = ""
     as_of: str = ""
     loaded: bool = False
@@ -136,6 +139,9 @@ class Week1Pack:
 
     def ol(self, team: str) -> List[Dict[str, Any]]:
         return list(self.ol_by_team.get(_norm_team(team), []))
+
+    def defense(self, team: str) -> List[Dict[str, Any]]:
+        return list(self.defense_by_team.get(_norm_team(team), []))
 
     def qb_rows(self, team: str) -> List[Dict[str, Any]]:
         rows = [r for r in self.skill(team) if str(r.get("position") or "").upper() == "QB"]
@@ -161,9 +167,18 @@ class Week1Pack:
             if not team:
                 continue
             ol.setdefault(team, []).append(dict(raw))
+        defense: Dict[str, List[Dict[str, Any]]] = {}
+        for raw in payload.get("defense_roles") or []:
+            if not isinstance(raw, Mapping):
+                continue
+            team = _norm_team(raw.get("team"))
+            if not team:
+                continue
+            defense.setdefault(team, []).append(dict(raw))
         return cls(
             skill_by_team=skill,
             ol_by_team=ol,
+            defense_by_team=defense,
             snapshot_id=str(payload.get("snapshot_id") or ""),
             as_of=str(payload.get("as_of") or payload.get("as_of_timestamp") or ""),
             loaded=bool(skill),
@@ -198,9 +213,19 @@ def load_week1_pack(season: int = SCOPE_SEASON) -> Week1Pack:
             continue
         ol.setdefault(team, []).append(dict(raw))
 
+    defense: Dict[str, List[Dict[str, Any]]] = {}
+    for raw in meta.get("defense_roles") or []:
+        if not isinstance(raw, Mapping):
+            continue
+        team = _norm_team(raw.get("team"))
+        if not team:
+            continue
+        defense.setdefault(team, []).append(dict(raw))
+
     return Week1Pack(
         skill_by_team=skill,
         ol_by_team=ol,
+        defense_by_team=defense,
         snapshot_id=str(meta.get("snapshot_id") or ""),
         as_of=str(meta.get("roster_as_of") or meta.get("as_of") or ""),
         loaded=True,
@@ -458,6 +483,76 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     spread_pts=pts,
                     total_pts=tot,
                     confidence_delta=-0.06,
+                    reason=f"{name} {pos} {inj} starter — unresolved",
+                )
+            )
+
+    for row in pack.defense(team):
+        pos = str(row.get("position") or "").upper() or "DEF"
+        if pos not in DEFENSE_POSITIONS and pos != "DEF":
+            continue
+        inj = _status(row.get("injury_status"))
+        slot = str(row.get("depth_slot") or "").strip().lower()
+        order = int(row.get("depth_order") or 0)
+        name = str(row.get("player_name") or pos)
+        is_out_slot = slot == "out" or order >= 90
+        is_starter = order == 1 or slot in {"starter", "starter_competition"}
+        if inj in OUT_STATUSES or is_out_slot:
+            if not is_starter and not is_out_slot and order >= 3:
+                considered.append(
+                    _entry(
+                        factor="injury_defense",
+                        applied=False,
+                        team=team,
+                        reason=f"{name} {pos}{order} {inj} — not a key role, not applied",
+                    )
+                )
+                continue
+            pts = float(DEFAULT_IMPACT_POINTS["defense_out_spread"])
+            tot = float(DEFAULT_IMPACT_POINTS["defense_out_total"])
+            if is_starter or is_out_slot or order <= 1:
+                pass  # full starter impact
+            elif order == 2:
+                pts = 0.35
+                tot = 0.10
+            else:
+                considered.append(
+                    _entry(
+                        factor="injury_defense",
+                        applied=False,
+                        team=team,
+                        reason=f"{name} {pos}{order} {inj} — not a key role, not applied",
+                    )
+                )
+                continue
+            team_spread += pts
+            team_total += tot
+            applied.append(
+                _entry(
+                    factor="injury_defense",
+                    applied=True,
+                    team=team,
+                    direction="team_weaker",
+                    spread_pts=pts,
+                    total_pts=tot,
+                    reason=f"{name} {pos}{order or 1} {inj or slot} (SoT defense_roles)",
+                )
+            )
+        elif inj in UNRESOLVED_STATUSES and is_starter:
+            injury_clear = False
+            pts = 0.25
+            tot = 0.10
+            team_spread += pts
+            team_total += tot
+            applied.append(
+                _entry(
+                    factor="injury_defense",
+                    applied=True,
+                    team=team,
+                    direction="team_weaker",
+                    spread_pts=pts,
+                    total_pts=tot,
+                    confidence_delta=-0.05,
                     reason=f"{name} {pos} {inj} starter — unresolved",
                 )
             )
