@@ -307,6 +307,19 @@ def main() -> int:
             print()
             print("All txn flags:")
             print(format_scan_table(flags))
+            print()
+            print("LIVE PROVE (print only — no accepts):")
+            for label in (
+                "Jayden Higgins",
+                "Danny Pinter",
+                "Tyler Biadasz",
+                "Calvin Austin",
+            ):
+                hits = [f for f in t1s if label.lower() in (f.title or "").lower()]
+                if hits:
+                    print(f"  FAIL {label}: would open T1 (unexpected)")
+                else:
+                    print(f"  OK   {label}: no new T1")
 
         if args.queue:
             result = queue_txn_flags(

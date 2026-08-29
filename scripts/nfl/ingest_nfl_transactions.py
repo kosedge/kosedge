@@ -27,17 +27,29 @@ MS = REPO / "services" / "model-service"
 if str(MS) not in sys.path:
     sys.path.insert(0, str(MS))
 
-from src.services.nfl_txn_depth_sot import (  # noqa: E402
+from src.services.nfl_camp_sot_queue import (  # noqa: E402
+    NOTES_MAY_TOUCH_MEANS,
+    PROPOSALS_MAY_AUTO_APPLY,
+    overdue_summary,
+)
+from src.services.nfl_txn_sot_scan import (  # noqa: E402
     CACHE_DIR_DEFAULT,
-    FEED_MAY_WRITE_MEANS,
-    FEED_MAY_WRITE_PACK,
-    LIVE_PROVE_WATCH,
-    assert_feed_cannot_mutate_pack_or_means,
-    collect_events,
-    fetch_sleeper_players,
     format_scan_table,
+    ingest_txn_events,
+    load_sleeper_players,
     queue_txn_flags,
-    scan_txn_depth_flags,
+    scan_txn_flags,
+)
+
+# Desk-accepted / already in live pack — expect no new T1 from this feed.
+ALREADY_IN_SOT = (
+    "HOU Jayden Higgins",
+    "BAL Danny Pinter",
+    "LAC Tyler Biadasz",
+    "NYG Calvin Austin III",
+    "CLE Deshaun Watson",
+    "WAS Laremy Tunsil",
+    "WAS Brandon Coleman",
 )
 
 
@@ -51,8 +63,10 @@ def main() -> int:
     )
     ap.add_argument("--refresh-cache", action="store_true", help="Force Sleeper cache refresh")
     ap.add_argument("--include-pfr", action="store_true", help="Best-effort PFR month scrape")
-    ap.add_argument("--as-of", default="", help="as_of_date YYYY-MM-DD (default: today UTC)")
-    ap.add_argument("--cache-dir", type=Path, default=CACHE_DIR_DEFAULT)
+    ap.add_argument("--with-pfr", action="store_true", help="Alias for --include-pfr")
+    ap.add_argument("--as-of", default=None, help="as_of_date YYYY-MM-DD (default: today ET)")
+    ap.add_argument("--cache-dir", type=Path, default=None)
+    ap.add_argument("--force-refresh", action="store_true", help="Bypass Sleeper/PFR cache TTL")
     ap.add_argument("--json", action="store_true", help="Machine-readable output")
     ap.add_argument(
         "--tier",
@@ -65,54 +79,73 @@ def main() -> int:
     if not any([args.scan, args.queue, args.refresh_cache]):
         ap.error("pass --scan, --queue, and/or --refresh-cache")
 
-    if FEED_MAY_WRITE_PACK or FEED_MAY_WRITE_MEANS:
+    if NOTES_MAY_TOUCH_MEANS or PROPOSALS_MAY_AUTO_APPLY:
         print("FATAL: txn feed must not write pack/means", file=sys.stderr)
         return 2
-    assert_feed_cannot_mutate_pack_or_means()
 
+    cache_dir = args.cache_dir or CACHE_DIR_DEFAULT
     if args.refresh_cache and not (args.scan or args.queue):
-        path = fetch_sleeper_players(cache_dir=args.cache_dir, force=True)
-        # fetch returns dict; cache path printed via save
-        print(f"sleeper cache refreshed under {args.cache_dir} players={len(path)}")
+        payload = load_sleeper_players(cache_dir=cache_dir, force_refresh=True)
+        print(f"sleeper cache refreshed under {cache_dir} players={len(payload)}")
         return 0
 
-    as_of = args.as_of.strip() or None
-    events = collect_events(
-        include_pfr=args.include_pfr,
-        as_of_date=as_of,
-        cache_dir=args.cache_dir,
-        force_refresh=args.refresh_cache,
+    events = ingest_txn_events(
+        as_of_date=args.as_of,
+        with_pfr=bool(args.include_pfr or args.with_pfr),
+        force_refresh=bool(args.force_refresh or args.refresh_cache),
+        cache_dir=cache_dir,
     )
-    result = scan_txn_depth_flags(events=events, watch_names=LIVE_PROVE_WATCH)
+    flags = scan_txn_flags(events=events)
+    summary = overdue_summary(flags)
+    t1s = [f for f in flags if f.tier == "T1"]
 
     if args.scan:
         if args.json:
-            print(json.dumps(result.as_dict(), indent=2))
+            print(
+                json.dumps(
+                    {
+                        "summary": summary,
+                        "already_in_sot_skip": list(ALREADY_IN_SOT),
+                        "t1": [f.as_dict() for f in t1s],
+                        "work_items": [f.as_dict() for f in flags],
+                        "contract": {
+                            "feed_may_write_pack": False,
+                            "feed_may_write_means": False,
+                            "proposals_may_auto_apply": False,
+                            "accepts_in_this_pr": False,
+                        },
+                    },
+                    indent=2,
+                )
+            )
         else:
-            print(format_scan_table(result))
-            # Explicit live-prove lines for desk-accepted names
-            print("\nLIVE PROVE (no accepts):")
-            for name in ("Jayden Higgins", "Danny Pinter", "Tyler Biadasz", "Calvin Austin"):
-                rows = [
-                    r
-                    for r in result.table
-                    if name.lower() in r.player_name.lower()
-                    or r.player_name.lower() in name.lower()
-                ]
-                if not rows:
-                    print(f"  {name}: no feed hit / no new T1")
+            print(
+                f"txn-scan material={summary['total_material']} "
+                f"T1={summary['by_tier']['T1']} T2={summary['by_tier']['T2']}"
+            )
+            print("already-in-SoT (expect no new T1): " + "; ".join(ALREADY_IN_SOT))
+            print("\nT1 candidates (DO NOT ACCEPT in this PR):")
+            print(format_scan_table(t1s))
+            print("\nAll txn flags:")
+            print(format_scan_table(flags))
+            # Explicit prove lines for Higgins / Pinter / Biadasz / Austin
+            print("\nLIVE PROVE (print only — no accepts):")
+            for label in (
+                "Jayden Higgins",
+                "Danny Pinter",
+                "Tyler Biadasz",
+                "Calvin Austin",
+            ):
+                hits = [f for f in t1s if label.lower() in (f.title or "").lower()]
+                if hits:
+                    print(f"  FAIL {label}: would open T1 (unexpected)")
                 else:
-                    for r in rows:
-                        print(
-                            f"  {r.player_name} ({r.team}): {r.disposition} "
-                            f"event={r.event} pack={r.pack_injury or '—'} "
-                            f"(tier={r.tier or '—'})"
-                        )
+                    print(f"  OK   {label}: no new T1")
 
     if args.queue:
-        q = queue_txn_flags(result.items, tiers=args.tier)
+        q = queue_txn_flags(flags, tiers=args.tier)
         if args.json:
-            print(json.dumps(q.as_dict(), indent=2))
+            print(json.dumps({"queue": q.as_dict()}, indent=2))
         else:
             print(
                 f"txn queue idempotent: created={len(q.created)} "

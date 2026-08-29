@@ -44,7 +44,6 @@ from src.services.nfl_camp_sot_queue import (
     desk_date_start_utc,
     load_pack,
     next_kei_publish_utc,
-    work_item_filename,
 )
 from src.services.nfl_daily_intel import ALLOWED_FIELDS, PACK_DEFAULT, normalize_override
 
@@ -299,10 +298,9 @@ def pack_row_skill_relevant(row: Mapping[str, Any]) -> bool:
         depth = 99
     if depth in {1, 2, 3}:
         return True
-    if pos in SKILL_POS and depth <= 3:
+    # Skill-relevant regardless of depth_order (Sleeper depth never consulted).
+    if pos in SKILL_POS:
         return True
-    # Skill chart depth 1–3 already covered; depth≤3 skill-only is enough.
-    # Also treat OL starters (depth 1) as relevant — already covered by depth check.
     return False
 
 
@@ -441,6 +439,10 @@ def sleeper_players_to_events(
         if _pos_family(pos) not in {"QB", "RB", "WR", "TE", "OL"}:
             continue
         name = str(raw.get("full_name") or "").strip()
+        if not name:
+            first = str(raw.get("first_name") or "").strip()
+            last = str(raw.get("last_name") or "").strip()
+            name = f"{first} {last}".strip()
         if not name:
             continue
         depth = raw.get("depth_chart_order")
@@ -757,8 +759,9 @@ def queue_txn_flags(
             continue
         if wanted and flag.tier not in wanted:
             continue
-        path = proposed_dir / work_item_filename(flag.work_item_id)
-        # as_of:pid:event → work-item-as_of-pid.json (no camp TEAM collision).
+        # as_of:pid:event → keep full key so ir vs pup same day do not collide.
+        safe = flag.work_item_id.replace(":", "-").replace("/", "-")
+        path = proposed_dir / f"work-item-{safe}.json"
         doc = proposal_doc_for_txn_flag(flag)
         if path.is_file():
             try:
