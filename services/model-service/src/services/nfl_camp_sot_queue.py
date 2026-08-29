@@ -348,6 +348,12 @@ def assert_notes_cannot_touch_lines() -> None:
     assert NOTES_MAY_TOUCH_PROPS is False
     assert NOTES_MAY_TOUCH_SPREADS is False
     assert PROPOSALS_MAY_AUTO_APPLY is False
+    # Rest/weather game-card fields are remat SoT — notes cannot invent them.
+    from src.services.nfl_rest_weather_game_card import (
+        assert_notes_cannot_write_game_card_fields,
+    )
+
+    assert_notes_cannot_write_game_card_fields()
 
 
 def _pack_players_for_team(payload: Mapping[str, Any], team: str) -> List[Dict[str, Any]]:

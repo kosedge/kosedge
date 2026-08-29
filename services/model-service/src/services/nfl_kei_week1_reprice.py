@@ -34,6 +34,10 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 from zoneinfo import ZoneInfo
 
 from src.services.nfl_injury_kei_cadence import DEFAULT_IMPACT_POINTS
+from src.services.nfl_rest_weather_game_card import (
+    apply_rest_weather_game_card,
+    parse_game_card,
+)
 from src.services.nfl_unit_shock_table import (
     collect_shock_table_v1,
     row_covered_by_shock_table,
@@ -1062,10 +1066,15 @@ def apply_week1_kei_reprice(
     pack: Optional[Week1Pack] = None,
     weather_obs: Optional[Mapping[str, Any]] = None,
     officials: Optional[Mapping[str, Any]] = None,
+    game_card: Optional[Mapping[str, Any]] = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Return (new_handicap, log). Model markets are not touched.
 
     ``spread_pts`` on the log net is home-spread convention (positive = home weaker).
+
+    When ``game_card`` is provided (remat path), rest + weather come from
+    ``nfl_rest_weather_game_card`` only — missing weather ⇒ no KEI weather change.
+    Notes cannot write those fields.
     """
     handicap_out = dict(handicap)
     skipped = {
@@ -1156,34 +1165,63 @@ def apply_week1_kei_reprice(
                 else:
                     considered.append(e)
 
-    # --- Rest / travel ---
-    skip_travel = model_already_has_travel(projection)
-    for e in _rest_travel_factors(
-        home=home,
-        away=away,
-        start_time=start_time,
-        skip_travel_points=skip_travel,
-    ):
-        if e.applied:
+    # --- Rest / travel / weather ---
+    # Remat game-card path: deterministic modifiers from explicit fields only.
+    # Missing weather ⇒ no KEI weather change. Notes cannot write these fields.
+    weather_clear = True
+    if game_card is not None:
+        card = parse_game_card(game_card)
+        rw = apply_rest_weather_game_card(card=card)
+        for e in rw.applied:
+            # FactorLog → FactorEntry shape for the shared log.
+            fe = _entry(
+                factor=e.factor,
+                applied=True,
+                direction="game_card",
+                spread_pts=e.spread_pts,
+                total_pts=e.total_pts,
+                reason=e.reason,
+            )
             net_spread += e.spread_pts
             net_total += e.total_pts
-            applied.append(e)
-        else:
-            considered.append(e)
+            applied.append(fe)
+        for e in rw.considered_not_applied:
+            considered.append(
+                _entry(
+                    factor=e.factor,
+                    applied=False,
+                    reason=e.reason,
+                )
+            )
+        weather_clear = True
+    else:
+        # Legacy Week 1 path (TZ from teams + optional weather_obs / fetch).
+        skip_travel = model_already_has_travel(projection)
+        for e in _rest_travel_factors(
+            home=home,
+            away=away,
+            start_time=start_time,
+            skip_travel_points=skip_travel,
+        ):
+            if e.applied:
+                net_spread += e.spread_pts
+                net_total += e.total_pts
+                applied.append(e)
+            else:
+                considered.append(e)
 
-    # --- Weather (real forecast when present; never climatology) ---
-    weather_entries, weather_clear = _weather_factors(
-        home=home,
-        projection=projection,
-        start_time=start_time,
-        weather_obs=weather_obs,
-    )
-    for e in weather_entries:
-        if e.applied:
-            net_total += e.total_pts
-            applied.append(e)
-        else:
-            considered.append(e)
+        weather_entries, weather_clear = _weather_factors(
+            home=home,
+            projection=projection,
+            start_time=start_time,
+            weather_obs=weather_obs,
+        )
+        for e in weather_entries:
+            if e.applied:
+                net_total += e.total_pts
+                applied.append(e)
+            else:
+                considered.append(e)
 
     # --- Refs (crew pack only; empty pack → not applied) ---
     ref_entry = _ref_factor(home=home, away=away, officials=officials)

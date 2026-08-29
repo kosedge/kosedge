@@ -32,6 +32,8 @@ QB_REPUBLISH_FIELDS = IDENTITY_FIELDS | frozenset({"competition_status"})
 ALLOWED_FIELDS = IDENTITY_FIELDS | frozenset(
     {"injury_status", "injury_window", "injury_note", "competition_status", "role_confidence"}
 )
+# Rest/weather game-card fields are remat SoT only — never note / intel overrides.
+# See ``nfl_rest_weather_game_card.GAME_CARD_FIELDS``.
 # One pack, three layers — skill rows + OL + defense. No second SoT / queue type.
 PACK_SOT_LAYERS = ("rows", "ol_roles", "defense_roles")
 DEFENSE_POSITIONS = frozenset({"EDGE", "DL", "LB", "CB", "S", "NB"})
@@ -68,6 +70,10 @@ def normalize_override(raw: Mapping[str, Any]) -> Dict[str, Any]:
     if dest not in DESTINATIONS:
         raise ValueError(f"invalid destination {dest!r} (use sot / kei_only / wait_republish)")
     if field not in ALLOWED_FIELDS:
+        # Explicit rest/weather game-card rejection (remat SoT; notes cannot write).
+        from src.services.nfl_rest_weather_game_card import reject_note_game_card_write
+
+        reject_note_game_card_write(field)
         raise ValueError(f"unsupported field {field!r}")
     if not team:
         raise ValueError("team is required")
