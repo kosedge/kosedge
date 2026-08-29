@@ -3,6 +3,7 @@ from __future__ import annotations
 import logging
 import os
 from datetime import date
+from pathlib import Path
 from typing import Any, Dict, List, Optional
 
 from fastapi import FastAPI, HTTPException, Query
@@ -310,13 +311,26 @@ app.add_middleware(
 
 @app.get("/health")
 def health() -> Dict[str, Any]:
-    """Liveness + deploy identity (Railway sets RAILWAY_* at runtime)."""
+    """Liveness + deploy identity (Railway env and/or baked `.deploy-git-sha`)."""
     git_sha = (
         os.environ.get("RAILWAY_GIT_COMMIT_SHA")
         or os.environ.get("GITHUB_SHA")
         or os.environ.get("GIT_COMMIT")
+        or os.environ.get("KOSEDGE_GIT_SHA")
         or ""
     ).strip()
+    if not git_sha:
+        for candidate in (
+            Path("/app/.deploy-git-sha"),
+            Path(__file__).resolve().parents[1] / ".deploy-git-sha",
+        ):
+            try:
+                if candidate.is_file():
+                    git_sha = candidate.read_text(encoding="utf-8").strip()
+                    if git_sha:
+                        break
+            except OSError:
+                pass
     return {
         "status": "ok",
         "service": APP_NAME,
