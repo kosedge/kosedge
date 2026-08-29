@@ -228,13 +228,14 @@ describe("pro sport IA", () => {
     expect(gameBoxes?.description.toLowerCase()).toContain("typical range");
   });
 
-  it("does not advertise invented KEI on the CFB hub footer", () => {
+  it("CFB hub footer advertises published KEI with research-fair model", () => {
     const desk = getSportDeskConfig("cfb");
     const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
-    expect(edge?.description.toLowerCase()).toContain("no cfb kei");
+    expect(edge?.description.toLowerCase()).toContain("kei vs trusted market");
+    expect(edge?.description.toLowerCase()).toContain("research-fair");
     expect(edge?.description.toLowerCase()).not.toContain("directional edge tags");
     const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
-    expect(kei?.description.toLowerCase()).toContain("honest empty");
+    expect(kei?.description.toLowerCase()).toContain("published cfb kei");
     expect(kei?.description.toLowerCase()).not.toContain("projected spread/total baselines");
   });
 
