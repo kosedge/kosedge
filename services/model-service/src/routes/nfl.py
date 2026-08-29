@@ -6729,7 +6729,7 @@ def nfl_depth_sot_accept(
 ) -> Dict[str, Any]:
     """Accept structured pack fields → optional remat. Internal auth only."""
     _require_kosedge_internal(request)
-    from src.services.nfl_camp_sot_queue import accept_proposal
+    from src.services.nfl_camp_sot_queue import accept_proposal, live_remat_fn
 
     path = Path(body.work_item_path)
     if not path.is_file():
@@ -6739,6 +6739,7 @@ def nfl_depth_sot_accept(
             path,
             write_pack=bool(body.write),
             rematerialize=bool(body.rematerialize),
+            remat_fn=live_remat_fn() if body.rematerialize else None,
             allow_empty_overrides=bool(body.allow_empty),
             actor=body.actor,
             reason=body.reason,
@@ -6748,6 +6749,32 @@ def nfl_depth_sot_accept(
     if result.get("disposition") == "remat_failed":
         raise HTTPException(status_code=409, detail=result)
     return result
+
+
+@router.post("/ops/depth-sot/queue")
+def nfl_depth_sot_queue(request: Request) -> Dict[str, Any]:
+    """Upsert Camp Desk material flags into runtime queue. Internal auth only."""
+    _require_kosedge_internal(request)
+    from src.services.nfl_camp_sot_queue import queue_flags, scan_camp_sot_flags
+
+    flags = scan_camp_sot_flags()
+    result = queue_flags(flags)
+    return {"public_accept_ui": False, **result.as_dict()}
+
+
+@router.get("/ops/depth-sot/ping")
+def nfl_depth_sot_ping(request: Request) -> Dict[str, Any]:
+    """Deploy probe — auth required; proves #291 cutover routes are live."""
+    _require_kosedge_internal(request)
+    return {
+        "ok": True,
+        "service": "depth-sot",
+        "public_accept_ui": False,
+        "git_sha": (os.environ.get("RAILWAY_GIT_COMMIT_SHA") or os.environ.get("GITHUB_SHA") or "")[
+            :12
+        ]
+        or None,
+    }
 
 
 @router.post("/ops/depth-sot/reject")

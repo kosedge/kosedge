@@ -17,10 +17,13 @@ def test_depth_sot_ops_routes_require_internal_secret() -> None:
     assert 'headers.get("x-kosedge-secret")' in text
     assert 'raise HTTPException(status_code=401' in text
     assert '@router.get("/ops/depth-sot/status")' in text
+    assert '@router.get("/ops/depth-sot/ping")' in text
     assert '@router.post("/ops/depth-sot/accept")' in text
+    assert '@router.post("/ops/depth-sot/queue")' in text
     assert '@router.post("/ops/depth-sot/reject")' in text
     assert '@router.post("/ops/depth-sot/no-change")' in text
     assert '"public_accept_ui": False' in text
-    # Accept path must call the secret gate.
-    accept_block = text.split("def nfl_depth_sot_accept")[1].split("def nfl_depth_sot_reject")[0]
+    # Accept path must call the secret gate + live remat hook (not receipt-only default).
+    accept_block = text.split("def nfl_depth_sot_accept")[1].split("def nfl_depth_sot_queue")[0]
     assert "_require_kosedge_internal(request)" in accept_block
+    assert "live_remat_fn" in accept_block

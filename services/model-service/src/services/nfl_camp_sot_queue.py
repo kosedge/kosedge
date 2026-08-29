@@ -16,6 +16,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import uuid
 from dataclasses import dataclass, field
@@ -47,7 +48,28 @@ NOTES_MAY_TOUCH_SPREADS = False
 PROPOSALS_MAY_AUTO_APPLY = False
 
 _SERVICES = Path(__file__).resolve().parent
-_REPO = _SERVICES.parents[3]  # services/ → src → model-service → services → repo
+
+
+def _resolve_repo_root() -> Path:
+    """Monorepo checkout *or* Railway ``path-as-root`` image (WORKDIR=/app)."""
+    candidates = [
+        _SERVICES.parents[3],  # …/repo (services/model-service/src/services)
+        _SERVICES.parents[2],  # …/model-service or /app
+        Path("/app"),
+        Path.cwd(),
+    ]
+    for root in candidates:
+        if (root / "content" / "writers" / "camp-desk-2026").is_dir():
+            return root
+        if (root / "src" / "services" / "nfl_camp_sot_queue.py").is_file() and (
+            root / "src" / "services" / "nfl_season_engine"
+        ).is_dir():
+            # Image without camp desk still resolves for pack/receipts under /app
+            return root
+    return _SERVICES.parents[2]
+
+
+_REPO = _resolve_repo_root()
 CAMP_DESK_DEFAULT = _REPO / "content" / "writers" / "camp-desk-2026"
 # Runtime queue — generated work items; not committed (see .gitignore).
 QUEUE_RUNTIME_DEFAULT = _REPO / "data" / "ops" / "nfl-daily-intel" / "queue" / "runtime"
@@ -100,6 +122,102 @@ def receipt_only_remat() -> RematResult:
 def failing_remat(message: str = "remat failed") -> RematFn:
     def _fn() -> RematResult:
         return RematResult(ok=False, run_id="", error=message, mode="enqueue")
+
+    return _fn
+
+
+DEFAULT_REMAT_WEEKS = list(range(1, 19))
+
+
+def enqueue_props_layer_remat(
+    *,
+    season: int = 2026,
+    weeks: Optional[Sequence[int]] = None,
+) -> RematResult:
+    """Enqueue Celery ``run_nfl_props_layer_rebuild`` — real remat_run_id = task id.
+
+    Prefer this on the API/worker. Never return ``receipt-only-*`` when enqueue works.
+    """
+    week_list = list(weeks) if weeks else list(DEFAULT_REMAT_WEEKS)
+    try:
+        from src.celery_app import QUEUE_MODELS, celery_app
+    except Exception as exc:  # pragma: no cover - import env
+        return RematResult(ok=False, run_id="", error=f"celery import failed: {exc}", mode="enqueue")
+    task_name = "src.tasks.run_nfl_props_layer_rebuild"
+    try:
+        task = celery_app.send_task(
+            task_name,
+            kwargs={
+                "season": int(season),
+                "week": None,
+                "weeks": week_list,
+                "model_version": "nfl-player-v1",
+                "replace_features": True,
+                "rematerialize_season_features": False,
+            },
+            queue=QUEUE_MODELS,
+        )
+        run_id = str(getattr(task, "id", "") or "")
+        if not run_id:
+            return RematResult(ok=False, run_id="", error="enqueue returned empty task id", mode="enqueue")
+        return RematResult(ok=True, run_id=run_id, mode="enqueue")
+    except Exception as exc:
+        return RematResult(ok=False, run_id="", error=str(exc), mode="enqueue")
+
+
+def http_props_layer_remat(
+    *,
+    base_url: Optional[str] = None,
+    season: int = 2026,
+    weeks: Optional[Sequence[int]] = None,
+) -> RematResult:
+    """CLI/prod bridge: POST ``/nfl/ops/rebuild-props-layers``; remat_run_id = task_id."""
+    import json as _json
+    import urllib.error
+    import urllib.parse
+    import urllib.request
+
+    root = (base_url or os.environ.get("MODEL_SERVICE_URL") or "").strip().rstrip("/")
+    # Prefer the full model-service host when env points at a thin edge proxy.
+    if "kosedge-production.up.railway.app" in root or not root:
+        root = "https://model-service-production-e253.up.railway.app"
+    week_list = list(weeks) if weeks else list(DEFAULT_REMAT_WEEKS)
+    weeks_q = ",".join(str(w) for w in week_list)
+    url = (
+        f"{root}/nfl/ops/rebuild-props-layers?"
+        + urllib.parse.urlencode({"season": int(season), "weeks": weeks_q})
+    )
+    try:
+        req = urllib.request.Request(url, method="POST", data=b"")
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            payload = _json.loads(resp.read().decode("utf-8"))
+        task_id = str(payload.get("task_id") or "")
+        if not task_id:
+            return RematResult(ok=False, run_id="", error=f"no task_id in {payload!r}", mode="enqueue")
+        return RematResult(ok=True, run_id=task_id, mode="enqueue")
+    except urllib.error.HTTPError as exc:
+        body = exc.read().decode("utf-8", errors="replace")[:300]
+        return RematResult(ok=False, run_id="", error=f"HTTP {exc.code}: {body}", mode="enqueue")
+    except Exception as exc:
+        return RematResult(ok=False, run_id="", error=str(exc), mode="enqueue")
+
+
+def live_remat_fn() -> RematFn:
+    """Prefer Celery enqueue; fall back to HTTP rebuild-props (never receipt-only)."""
+
+    def _fn() -> RematResult:
+        via_celery = enqueue_props_layer_remat()
+        if via_celery.ok:
+            return via_celery
+        via_http = http_props_layer_remat()
+        if via_http.ok:
+            return via_http
+        return RematResult(
+            ok=False,
+            run_id="",
+            error=f"celery:{via_celery.error}; http:{via_http.error}",
+            mode="enqueue",
+        )
 
     return _fn
 
@@ -1126,6 +1244,8 @@ def accept_proposal(
         }
 
         if rematerialize:
+            # Default stays receipt_only for unit tests / offline desks.
+            # API + CLI pass live_remat_fn() so remat_run_id is a real Celery task id.
             fn = remat_fn or receipt_only_remat
             remat = fn()
             remat_run_id = remat.run_id

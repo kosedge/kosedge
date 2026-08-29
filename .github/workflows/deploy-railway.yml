@@ -66,6 +66,9 @@ jobs:
       - name: Stage NFL K/DST artifact into model-service image context
         run: bash scripts/nfl/stage_nfl_kdst_into_model_service.sh
 
+      - name: Stage Camp Desk into model-service image context
+        run: bash scripts/nfl/stage_camp_desk_into_model_service.sh
+
       - name: Install Railway CLI
         run: npm install -g @railway/cli@5.2.0
 
