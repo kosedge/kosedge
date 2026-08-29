@@ -4,14 +4,14 @@
   "package": "monday",
   "source_type": "kosedge-desk",
   "league_wrap": {
-    "title": "Camp Desk — Wednesday, Aug 26",
+    "title": "Camp Desk \u2014 Wednesday, Aug 26",
     "bottom_line": "The full-league reset has one named quarterback, one newly live quarterback race and several confirmed season-ending losses. Carry the depth changes; leave thin August conclusions as Pass.",
     "storylines": [
-      "Cleveland closed its competition: Deshaun Watson starts Week 1, and Todd Monken said the choice is not week to week. Atlanta moved the other way — Michael Penix Jr. returned to 11-on-11 and is now splitting first-team work with Tua Tagovailoa.",
+      "Cleveland closed its competition: Deshaun Watson starts Week 1, and Todd Monken said the choice is not week to week. Atlanta moved the other way \u2014 Michael Penix Jr. returned to 11-on-11 and is now splitting first-team work with Tua Tagovailoa.",
       "Baltimore lost center frontrunner Danny Pinter for the season; Ethan Pocic and Jovaughn Gwyn remain in the competition. The Chargers put Tyler Biadasz on season-ending IR and moved rookie Jake Slaughter back to center.",
       "Houston lost Jayden Higgins to a season-ending ACL and traded for Kayshon Boutte. Nico Collins is the lead target; Boutte, Tank Dell, Jaylin Noel and Xavier Hutchinson are a usage group, not an automatic WR2 crown.",
       "Washington added veteran tackle D.J. Humphries after Laremy Tunsil's triceps surgery, but Brandon Coleman remains the confirmed replacement at left tackle and Nick Allegretti's calf leaves center continuity unresolved.",
-      "The Giants are awaiting an MRI after Calvin Austin III suffered a serious right-knee injury. Braxton Berrios took the next slot reps, but the final diagnosis must come before a durable depth rewrite.",
+      "The Giants placed Calvin Austin III on season-ending IR with a torn ACL. Braxton Berrios took next-slot reps, but that is not a durable WR1 crown.",
       "Las Vegas believes Ashton Jeanty's ankle sprain is not long term, but Week 1 remains uncertain. Minnesota still has Kyler Murray at QB1 while a banged-up J.J. McCarthy works a reduced QB2 load; Jamal Adams is out for the year.",
       "Other confirmed depth hits belong in the file: Arizona waived injured Trey Benson, Carolina lost Nic Scourton for the season, Detroit expects a long Cade Mays absence, and Micah Parsons remains on Green Bay's PUP list.",
       "New Orleans is planning around Alvin Kamara's MCL absence and Bryan Bresee's season-ending ACL. Seattle placed Bud Clark and Mason Richman on season-ending IR after already losing Jake Bobo for the year."
@@ -19,43 +19,43 @@
     "what_to_watch": "The final preseason scripts and Sunday cutdown are for role confirmation: Atlanta's QB split, the Baltimore and Los Angeles center plans, Week 1 practice ramps for Jeanty and McCarthy, and official diagnoses for Austin and Chicago tackle Darnell Wright. Do not turn one exhibition result into a starter.",
     "sources": [
       {
-        "label": "Browns — Watson named starter (Aug 24)",
+        "label": "Browns \u2014 Watson named starter (Aug 24)",
         "href": "https://www.clevelandbrowns.com/news/deshaun-watson-named-browns-starting-quarterback"
       },
       {
-        "label": "Falcons — Penix returns to full-team work (Aug 24)",
+        "label": "Falcons \u2014 Penix returns to full-team work (Aug 24)",
         "href": "https://www.atlantafalcons.com/news/falcons-camp-report-recapping-michael-penix-jr-return-full-team-work"
       },
       {
-        "label": "Ravens — Pinter season-ending outlook (Aug 24)",
+        "label": "Ravens \u2014 Pinter season-ending outlook (Aug 24)",
         "href": "https://www.baltimoreravens.com/news/nnamdi-madubuike-next-step-hits-sled-first-time-danny-pinter-injury-season-ending-ravens-preseason-week-3"
       },
       {
-        "label": "AP — Texans acquire Boutte after Higgins injury (Aug 24)",
+        "label": "AP \u2014 Texans acquire Boutte after Higgins injury (Aug 24)",
         "href": "https://apnews.com/article/texans-patriots-kayshon-boutte-trade-80aed90c99d086630c2e1da0be9544db"
       },
       {
-        "label": "AP — Commanders turn to Coleman after Tunsil injury",
+        "label": "AP \u2014 Commanders turn to Coleman after Tunsil injury",
         "href": "https://apnews.com/article/laremy-tunsil-brandon-coleman-dan-quinn-washington-commanders-2ccc5313a3e3ed0b0feec2bd25a3adac"
       },
       {
-        "label": "ESPN — Austin serious knee injury (Aug 25)",
+        "label": "ESPN \u2014 Austin serious knee injury (Aug 25)",
         "href": "https://www.espn.com/nfl/story/_/id/49724505/new-york-giants-wr-calvin-austin-carted-practice-field"
       },
       {
-        "label": "Chargers — Biadasz placed on IR (Aug 23)",
+        "label": "Chargers \u2014 Biadasz placed on IR (Aug 23)",
         "href": "https://www.chargers.com/news/tyler-biadasz-injured-reserve-sign-gary-jennings-2026"
       },
       {
-        "label": "Las Vegas Review-Journal — Jeanty ankle update (Aug 24)",
+        "label": "Las Vegas Review-Journal \u2014 Jeanty ankle update (Aug 24)",
         "href": "https://www.reviewjournal.com/sports/raiders/raiders-get-positive-update-on-injured-star-ashton-jeanty-3868372/"
       },
       {
-        "label": "Vikings — Murray named starting quarterback",
+        "label": "Vikings \u2014 Murray named starting quarterback",
         "href": "https://www.vikings.com/news/kyler-murray-quarterback-starting-2026-nfl-season"
       },
       {
-        "label": "ESPN — Seahawks place Clark and Richman on IR (Aug 25)",
+        "label": "ESPN \u2014 Seahawks place Clark and Richman on IR (Aug 25)",
         "href": "https://www.espn.com/nfl/story/_/id/49725451/seahawks-put-clark-richman-season-ending-injured-reserve"
       }
     ]
@@ -63,7 +63,7 @@
   "team_notes": [
     {
       "team_id": "ARI",
-      "title": "Cardinals camp — Aug 26",
+      "title": "Cardinals camp \u2014 Aug 26",
       "bottom_line": "Josh Sweat is off PUP, but the backfield lost Trey Benson while Jeremiyah Love remains out. Pass on assigning the open work before Week 1 practice.",
       "key_points": [
         "Arizona activated Sweat on Aug. 24, giving its top 2025 pass rusher time to build toward the Chargers opener.",
@@ -75,14 +75,14 @@
       "sot_flag": "Benson waived/injured and Love still out. Flag Arizona RB depth; do not elevate a replacement from preseason carries.",
       "sources": [
         {
-          "label": "Cardinals — Sweat activated, Benson waived/injured (Aug 24)",
+          "label": "Cardinals \u2014 Sweat activated, Benson waived/injured (Aug 24)",
           "href": "https://www.azcardinals.com/news/cardinals-activate-josh-sweat-from-pup-waive-trey-benson"
         }
       ]
     },
     {
       "team_id": "ATL",
-      "title": "Falcons camp — Aug 26",
+      "title": "Falcons camp \u2014 Aug 26",
       "bottom_line": "Penix is cleared for 11-on-11 and splitting first-team work with Tagovailoa. The medical gate opened; QB1 did not close. Pass.",
       "key_points": [
         "Penix took his first full-team reps Aug. 24 after receiving contact clearance, logging 14 snaps and finishing 4-of-8 in the period.",
@@ -94,18 +94,18 @@
       "sot_flag": "Penix is back in 11-on-11; QB1 remains unresolved between Penix and Tagovailoa. Do not crown either player.",
       "sources": [
         {
-          "label": "Falcons — Penix returns to full-team work (Aug 24)",
+          "label": "Falcons \u2014 Penix returns to full-team work (Aug 24)",
           "href": "https://www.atlantafalcons.com/news/falcons-camp-report-recapping-michael-penix-jr-return-full-team-work"
         },
         {
-          "label": "AP — Penix joins full team drills (Aug 24)",
+          "label": "AP \u2014 Penix joins full team drills (Aug 24)",
           "href": "https://apnews.com/article/falcons-penix-tagovailoa-c57a3ebdf1b7ad68588df87ec2f98bd1"
         }
       ]
     },
     {
       "team_id": "BAL",
-      "title": "Ravens camp — Aug 26",
+      "title": "Ravens camp \u2014 Aug 26",
       "bottom_line": "Pinter's season is over and the center competition resets to Pocic versus Gwyn. Pass on turning the next first-team period into a winner.",
       "key_points": [
         "Pinter tore his right patellar tendon in the Minnesota joint practice after working as the center frontrunner.",
@@ -117,18 +117,18 @@
       "sot_flag": "Pinter is a season-ending loss. Center remains Pocic versus Gwyn; no starter should be inferred from one practice.",
       "sources": [
         {
-          "label": "Ravens — Pinter and center competition update (Aug 24)",
+          "label": "Ravens \u2014 Pinter and center competition update (Aug 24)",
           "href": "https://www.baltimoreravens.com/news/nnamdi-madubuike-next-step-hits-sled-first-time-danny-pinter-injury-season-ending-ravens-preseason-week-3"
         },
         {
-          "label": "NFL — Pinter torn patellar tendon",
+          "label": "NFL \u2014 Pinter torn patellar tendon",
           "href": "https://www.nfl.com/news/ravens-center-danny-pinter-torn-patellar-tendon"
         }
       ]
     },
     {
       "team_id": "BUF",
-      "title": "Bills camp — Aug 26",
+      "title": "Bills camp \u2014 Aug 26",
       "bottom_line": "Buffalo's receiver rotation is an availability exercise, not a new hierarchy. Coleman and Shakir remain out while Skyler Bell is back. Pass.",
       "key_points": [
         "Coleman remained in a walking boot with a foot/toe injury, while Shakir continued to miss practice with an unspecified issue.",
@@ -139,14 +139,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Democrat and Chronicle — Bills injury roundup (Aug 24)",
+          "label": "Democrat and Chronicle \u2014 Bills injury roundup (Aug 24)",
           "href": "https://www.democratandchronicle.com/story/sports/football/nfl/bills/2026/08/24/buffalo-bills-injury-update-keon-coleman-khalil-shakir-ed-oliver/91438114007/"
         }
       ]
     },
     {
       "team_id": "CAR",
-      "title": "Panthers camp — Aug 26",
+      "title": "Panthers camp \u2014 Aug 26",
       "bottom_line": "Hubbard is tracking toward Week 1, but Carolina has confirmed a Hubbard-Brooks committee and still lacks Scourton for the season. Pass.",
       "key_points": [
         "Hubbard is ahead of schedule in his hamstring recovery and expected to be ready for the Chicago opener.",
@@ -158,18 +158,18 @@
       "sot_flag": "Scourton is out for the season. Hubbard and Brooks are a confirmed committee; do not restore feature volume or invent one edge replacement.",
       "sources": [
         {
-          "label": "Panthers — Hubbard and Legette update (Aug 24)",
+          "label": "Panthers \u2014 Hubbard and Legette update (Aug 24)",
           "href": "https://www.panthers.com/news/training-camp-observations-joint-practice-will-determine-workload-in-finale"
         },
         {
-          "label": "AP — Hubbard expected for opener",
+          "label": "AP \u2014 Hubbard expected for opener",
           "href": "https://apnews.com/article/panthers-hubbard-season-opener-7bc3839cb7b761b18bee4e0c04f69330"
         }
       ]
     },
     {
       "team_id": "CHI",
-      "title": "Bears camp — Aug 26",
+      "title": "Bears camp \u2014 Aug 26",
       "bottom_line": "Wright left practice with right-elbow discomfort and Chicago has not supplied a diagnosis. Record the watch item; Pass on a tackle rewrite.",
       "key_points": [
         "Wright exited the Aug. 25 red-zone period after trainers examined the same elbow he injured in 2025.",
@@ -180,14 +180,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Daily Herald — Wright exits practice (Aug 25)",
+          "label": "Daily Herald \u2014 Wright exits practice (Aug 25)",
           "href": "https://www.dailyherald.com/20260825/chicago-bears/bears-training-camp-wright-leaves-with-apparent-elbow-injuries-and-a-look-at-new-threads/"
         }
       ]
     },
     {
       "team_id": "CIN",
-      "title": "Bengals camp — Aug 26",
+      "title": "Bengals camp \u2014 Aug 26",
       "bottom_line": "Cincinnati's defensive health moved forward: B.J. Hill returned to 11-on-11 while Cook and Dax Hill continued their ramps. Pass on assuming Week 1 workloads.",
       "key_points": [
         "B.J. Hill took his first full-team reps of camp Aug. 24 after the ankle injury.",
@@ -198,14 +198,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Bengals — five observations from practice (Aug 24)",
+          "label": "Bengals \u2014 five observations from practice (Aug 24)",
           "href": "https://www.bengals.com/news/five-observations-day-15-bengals-training-camp-august-24-2026"
         }
       ]
     },
     {
       "team_id": "CLE",
-      "title": "Browns camp — Aug 26",
+      "title": "Browns camp \u2014 Aug 26",
       "bottom_line": "Watson is Cleveland's Week 1 starter, and the choice is not week to week. Carry one QB1 into the spine; the win-total angle remains Pass.",
       "key_points": [
         "Monken named Watson on Aug. 24 after the full offseason, camp, joint practice and two preseason games.",
@@ -217,18 +217,18 @@
       "sot_flag": "Watson is the named QB1 and Sanders is QB2. Remove all open-competition or split-starter allocations.",
       "sources": [
         {
-          "label": "Browns — Watson named starting quarterback (Aug 24)",
+          "label": "Browns \u2014 Watson named starting quarterback (Aug 24)",
           "href": "https://www.clevelandbrowns.com/news/deshaun-watson-named-browns-starting-quarterback"
         },
         {
-          "label": "NBC Sports — decision not week to week (Aug 24)",
+          "label": "NBC Sports \u2014 decision not week to week (Aug 24)",
           "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/todd-monken-we-expect-deshaun-watson-to-play-well-or-we-wouldnt-be-starting-him"
         }
       ]
     },
     {
       "team_id": "DAL",
-      "title": "Cowboys camp — Aug 26",
+      "title": "Cowboys camp \u2014 Aug 26",
       "bottom_line": "Dallas reaches cutdown with right tackle and back-end roster questions, not a new offensive identity. Pass.",
       "key_points": [
         "Steele retains the first-team right-tackle lane despite an uneven camp because no challenger has displaced him.",
@@ -239,14 +239,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Cowboys — roster decisions by position (Aug 25)",
+          "label": "Cowboys \u2014 roster decisions by position (Aug 25)",
           "href": "https://www.dallascowboys.com/news/roster-decisions-facing-the-cowboys-at-each-position-ahead-of-deadline"
         }
       ]
     },
     {
       "team_id": "DEN",
-      "title": "Broncos camp — Aug 26",
+      "title": "Broncos camp \u2014 Aug 26",
       "bottom_line": "Nix's first game back was clean; Tuesday's side-field group is the quieter Week 1 watch. Pass on reading more into the finale.",
       "key_points": [
         "Nix completed 6 of 9 for 76 yards and a touchdown in his first game action since the ankle fracture, with no reported setback.",
@@ -257,18 +257,18 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Broncos Wire — practice injury report (Aug 25)",
+          "label": "Broncos Wire \u2014 practice injury report (Aug 25)",
           "href": "https://broncoswire.usatoday.com/story/sports/nfl/broncos/2026/08/25/broncos-injury-report-8-players-not-practicing/91459626007/"
         },
         {
-          "label": "Broncos Wire — Nix game return",
+          "label": "Broncos Wire \u2014 Nix game return",
           "href": "https://broncoswire.usatoday.com/story/sports/nfl/broncos/2026/08/24/nfl-news-broncos-bo-nix-felt-great-returning-injury/91434489007/"
         }
       ]
     },
     {
       "team_id": "DET",
-      "title": "Lions camp — Aug 26",
+      "title": "Lions camp \u2014 Aug 26",
       "bottom_line": "Mays' wrist removes Detroit's planned center for the opening stretch, while LaPorta's return improves the skill group. Center SoT moves; the broader call is Pass.",
       "key_points": [
         "Mays is expected to miss roughly eight to 10 weeks, leaving Juice Scruggs and Seth McLaughlin as the primary center options.",
@@ -280,18 +280,18 @@
       "sot_flag": "Mays is a long-term center absence. Keep Scruggs/McLaughlin as an open competition; do not invent the replacement.",
       "sources": [
         {
-          "label": "Detroit Football Network — LaPorta return and center work (Aug 25)",
+          "label": "Detroit Football Network \u2014 LaPorta return and center work (Aug 25)",
           "href": "https://www.detroitfootball.net/p/lions-camp-observations-laporta-and"
         },
         {
-          "label": "Detroit Free Press — Mays and LaPorta injury context",
+          "label": "Detroit Free Press \u2014 Mays and LaPorta injury context",
           "href": "https://www.freep.com/story/sports/nfl/lions/2026/08/20/sam-laporta-injury-update-lions-news-nfl/91389382007/"
         }
       ]
     },
     {
       "team_id": "GB",
-      "title": "Packers camp — Aug 26",
+      "title": "Packers camp \u2014 Aug 26",
       "bottom_line": "Green Bay is building its opening plan without Parsons while the offensive line tries to settle. That is a Week 1 structure note, not a futures push. Pass.",
       "key_points": [
         "Parsons remains on PUP in his ACL recovery and is expected to miss the opening block rather than play at Minnesota.",
@@ -303,14 +303,14 @@
       "sot_flag": "Parsons remains unavailable for the opening stretch. Preserve replacement rush shares without treating one camp standout as a full substitute.",
       "sources": [
         {
-          "label": "PackersNews — defense and participation report (Aug 24)",
+          "label": "PackersNews \u2014 defense and participation report (Aug 24)",
           "href": "https://www.usatoday.com/story/sports/nfl/packers/2026/08/24/green-bay-packers-training-camp-today-practice-updates--live/91441121007/"
         }
       ]
     },
     {
       "team_id": "HOU",
-      "title": "Texans camp — Aug 26",
+      "title": "Texans camp \u2014 Aug 26",
       "bottom_line": "Higgins is out for the season and Boutte is the new option, not an automatic WR2. Keep Collins first and the rest as an open usage group. Pass.",
       "key_points": [
         "Higgins tore his ACL in the Aug. 18 Raiders joint practice after entering camp as the stable second receiver opposite Collins.",
@@ -322,18 +322,18 @@
       "sot_flag": "Higgins is a season-ending loss. Collins remains WR1; do not silently assign WR2 to Boutte, Dell, Noel or Hutchinson.",
       "sources": [
         {
-          "label": "NFL — Higgins torn ACL, out for 2026",
+          "label": "NFL \u2014 Higgins torn ACL, out for 2026",
           "href": "https://www.nfl.com/news/texans-wr-jayden-higgins-torn-acl-out-2026-season"
         },
         {
-          "label": "AP — Texans acquire Boutte (Aug 24)",
+          "label": "AP \u2014 Texans acquire Boutte (Aug 24)",
           "href": "https://apnews.com/article/texans-patriots-kayshon-boutte-trade-80aed90c99d086630c2e1da0be9544db"
         }
       ]
     },
     {
       "team_id": "IND",
-      "title": "Colts camp — Aug 26",
+      "title": "Colts camp \u2014 Aug 26",
       "bottom_line": "Jones and Taylor are being held from the finale while Indianapolis tries to get Pierce and Warren ready for Week 1. Preparation note only. Pass.",
       "key_points": [
         "The Colts hope to remove Pierce from active/PUP this week, but he still needs a practice ramp after ankle/heel surgery.",
@@ -344,14 +344,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Colts — Pierce, Warren and finale plan (Aug 25)",
+          "label": "Colts \u2014 Pierce, Warren and finale plan (Aug 25)",
           "href": "https://www.colts.com/news/colts-hopeful-alec-pierce-returns-to-practice-this-week-starters-minus-daniel-jones-jonathan-taylor-to-play-8-12-plays-in-preseason-finale-vs-detroit-lions"
         }
       ]
     },
     {
       "team_id": "JAX",
-      "title": "Jaguars camp — Aug 26",
+      "title": "Jaguars camp \u2014 Aug 26",
       "bottom_line": "Thomas' shoulder exit looks precautionary, while Meyers remains out and Hunter's late-camp work is defense-heavy. Pass on reallocating receiver volume.",
       "key_points": [
         "Thomas landed on his shoulder after a long touchdown Aug. 25; Coen said the plan is to hold him out and have him ready for Cleveland.",
@@ -362,14 +362,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Jaguars — Day 19 camp snapshot (Aug 25)",
+          "label": "Jaguars \u2014 Day 19 camp snapshot (Aug 25)",
           "href": "https://www.jaguars.com/news/camp-snapshot-day-19-pleased-with-the-progression"
         }
       ]
     },
     {
       "team_id": "KC",
-      "title": "Chiefs camp — Aug 26",
+      "title": "Chiefs camp \u2014 Aug 26",
       "bottom_line": "Mahomes is practicing but still lacks formal Week 1 clearance. Trey Smith's return helps; Simmons' absence keeps protection live. Pass.",
       "key_points": [
         "Reid said Mahomes is doing well but remains day to day pending doctors, trainers and the quarterback's own response.",
@@ -380,18 +380,18 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "KCTV — Mahomes Week 1 status undecided (Aug 24)",
+          "label": "KCTV \u2014 Mahomes Week 1 status undecided (Aug 24)",
           "href": "https://www.kctv5.com/2026/08/24/andy-reid-says-mahomes-doing-great-playing-status-week-1-remains-undecided/"
         },
         {
-          "label": "KMBC — Smith returns, Simmons sidelined",
+          "label": "KMBC \u2014 Smith returns, Simmons sidelined",
           "href": "https://www.kmbc.com/article/chiefs-injury-update-trey-smith-chris-oladokun-josh-simmons/73516355"
         }
       ]
     },
     {
       "team_id": "LAC",
-      "title": "Chargers camp — Aug 26",
+      "title": "Chargers camp \u2014 Aug 26",
       "bottom_line": "Biadasz is on season-ending IR, sending Slaughter back to center and reopening left guard. Carry the line change; Pass on assuming no drop-off.",
       "key_points": [
         "Biadasz suffered ACL and additional left-knee damage in the San Francisco joint practice and was placed on IR Aug. 23.",
@@ -403,18 +403,18 @@
       "sot_flag": "Biadasz is out for the season. Move Slaughter to the center lane and leave left guard open until the club confirms it.",
       "sources": [
         {
-          "label": "Chargers — Biadasz placed on injured reserve (Aug 23)",
+          "label": "Chargers \u2014 Biadasz placed on injured reserve (Aug 23)",
           "href": "https://www.chargers.com/news/tyler-biadasz-injured-reserve-sign-gary-jennings-2026"
         },
         {
-          "label": "NFL — Biadasz season-ending IR and replacement context",
+          "label": "NFL \u2014 Biadasz season-ending IR and replacement context",
           "href": "https://www.nfl.com/news/chargers-place-veteran-c-tyler-biadasz-knee-on-season-ending-injured-reserve"
         }
       ]
     },
     {
       "team_id": "LAR",
-      "title": "Rams camp — Aug 26",
+      "title": "Rams camp \u2014 Aug 26",
       "bottom_line": "Nacua and Garrett remain out of team work while useful depth returns. The roster is managing September, not changing its top jobs. Pass.",
       "key_points": [
         "Nacua continued side work with a psoas issue and Garrett remained out with a knee issue Aug. 24.",
@@ -425,14 +425,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Rams — injury updates (Aug 24)",
+          "label": "Rams \u2014 injury updates (Aug 24)",
           "href": "https://www.therams.com/news/injury-updates-ol-justin-dedich-hand-and-te-davis-allen-quad-return-to-practice-wr-puka-nacua-psoas-and-de-myles-garrett-knee-still-non-participants"
         }
       ]
     },
     {
       "team_id": "LV",
-      "title": "Raiders camp — Aug 26",
+      "title": "Raiders camp \u2014 Aug 26",
       "bottom_line": "Jeanty avoided a reported long-term injury, but his ankle timetable and Week 1 status remain open. Washington's first-team reps are temporary evidence. Pass.",
       "key_points": [
         "Jeanty sprained his right ankle Aug. 23 after landing awkwardly on a low pass and needed help off the field.",
@@ -444,18 +444,18 @@
       "sot_flag": "Jeanty's ankle sprain makes Week 1 availability uncertain. Do not transfer his season role to Washington from temporary practice reps.",
       "sources": [
         {
-          "label": "Las Vegas Review-Journal — Jeanty ankle update (Aug 24)",
+          "label": "Las Vegas Review-Journal \u2014 Jeanty ankle update (Aug 24)",
           "href": "https://www.reviewjournal.com/sports/raiders/raiders-get-positive-update-on-injured-star-ashton-jeanty-3868372/"
         },
         {
-          "label": "NBC Sports — Jeanty diagnosed with ankle sprain",
+          "label": "NBC Sports \u2014 Jeanty diagnosed with ankle sprain",
           "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/raiders-rb-ashton-jeanty-diagnosed-with-sprained-ankle"
         }
       ]
     },
     {
       "team_id": "MIA",
-      "title": "Dolphins camp — Aug 26",
+      "title": "Dolphins camp \u2014 Aug 26",
       "bottom_line": "Willis followed a sharp Monday with a rough Tuesday while Bell expanded his workload. That is development variance, not a new quarterback verdict. Pass.",
       "key_points": [
         "Willis had exchange problems and two interception outcomes in the Aug. 25 team periods as the defense controlled practice.",
@@ -466,18 +466,18 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Dolphins On SI — practice observations (Aug 25)",
+          "label": "Dolphins On SI \u2014 practice observations (Aug 25)",
           "href": "https://www.si.com/nfl/dolphins/onsi/miami-dolphins-training-camp-practice-15-observations-rough-day-on-offense-woodard-shines-again-01m0wrfjjm70"
         },
         {
-          "label": "Dolphins — practice notebook (Aug 24)",
+          "label": "Dolphins \u2014 practice notebook (Aug 24)",
           "href": "https://www.miamidolphins.com/news/practice-15-2026-miami-dolphins-training-camp-notebook"
         }
       ]
     },
     {
       "team_id": "MIN",
-      "title": "Vikings camp — Aug 26",
+      "title": "Vikings camp \u2014 Aug 26",
       "bottom_line": "Murray remains QB1; McCarthy is still QB2 but worked a reduced load after getting banged up, and Adams is out for the season. Pass.",
       "key_points": [
         "O'Connell named Murray on Aug. 11, giving the starter a full month of first-team preparation before Green Bay.",
@@ -489,22 +489,22 @@
       "sot_flag": "Murray is QB1. McCarthy remains QB2 with reduced late-camp work; Adams is out for the season. Do not reopen QB1 or promote another backup without confirmation.",
       "sources": [
         {
-          "label": "Vikings — Murray named starting quarterback",
+          "label": "Vikings \u2014 Murray named starting quarterback",
           "href": "https://www.vikings.com/news/kyler-murray-quarterback-starting-2026-nfl-season"
         },
         {
-          "label": "ESPN — McCarthy banged up against Baltimore (Aug 22)",
+          "label": "ESPN \u2014 McCarthy banged up against Baltimore (Aug 22)",
           "href": "https://www.espn.ph/nfl/story/_/id/49695231/mccarthy-plays-18-snaps-gets-banged-vikings-loss"
         },
         {
-          "label": "The Athletic — Adams season-ending quad",
+          "label": "The Athletic \u2014 Adams season-ending quad",
           "href": "https://www.nytimes.com/athletic/7517951/2026/08/16/vikings-jamal-adams-season-ending-knee-injury/"
         }
       ]
     },
     {
       "team_id": "NE",
-      "title": "Patriots camp — Aug 26",
+      "title": "Patriots camp \u2014 Aug 26",
       "bottom_line": "Gonzalez returned fully while Henderson left with an undiagnosed foot/ankle issue. One trend up, one watch item; Pass.",
       "key_points": [
         "Gonzalez rejoined the starting defense Aug. 24 after two weeks out and moved without an obvious limitation.",
@@ -515,18 +515,18 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Boston.com — Gonzalez return and Henderson exit (Aug 24)",
+          "label": "Boston.com \u2014 Gonzalez return and Henderson exit (Aug 24)",
           "href": "https://www.boston.com/sports/new-england-patriots/2026/08/24/new-england-patriots-training-camp-nfl-football-takeaways-christian-gonzalez-injury-treveyon-henderson/"
         },
         {
-          "label": "AP — Boutte trade with Houston",
+          "label": "AP \u2014 Boutte trade with Houston",
           "href": "https://apnews.com/article/texans-patriots-kayshon-boutte-trade-80aed90c99d086630c2e1da0be9544db"
         }
       ]
     },
     {
       "team_id": "NO",
-      "title": "Saints camp — Aug 26",
+      "title": "Saints camp \u2014 Aug 26",
       "bottom_line": "New Orleans has an injury plan, not a clean roster: Bresee is out for the year and Kamara will miss at least a month. Carry the absences; Pass on a one-player replacement.",
       "key_points": [
         "Bresee's ACL ended his season, while Kamara's MCL sprain is expected to keep him out at least through the remaining preseason window.",
@@ -538,41 +538,45 @@
       "sot_flag": "Bresee is out for the season and Kamara is an early absence. Preserve Etienne's opening lead work without converting it into an unsupported season-long monopoly.",
       "sources": [
         {
-          "label": "Saints — injury and IR update (Aug 25)",
+          "label": "Saints \u2014 injury and IR update (Aug 25)",
           "href": "https://www.neworleanssaints.com/news/two-placed-on-injured-reserve-as-new-orleans-saints-continue-to-work-around-injuries"
         },
         {
-          "label": "ESPN — Kamara MCL timetable",
+          "label": "ESPN \u2014 Kamara MCL timetable",
           "href": "https://global.espn.com/nfl/story/_/id/49658952/source-saints-rb-kamara-least-month-mcl-sprain"
         }
       ]
     },
     {
       "team_id": "NYG",
-      "title": "Giants camp — Aug 26",
-      "bottom_line": "Austin's right-knee injury is serious, but the MRI result is still the missing fact. Berrios took slot reps; Pass on naming a permanent replacement.",
+      "title": "Giants camp \u2014 Aug 26",
+      "bottom_line": "Austin is on season-ending IR with a torn ACL. Flag the slot role out; do not crown Berrios, Beckham or Mooney as WR1.",
       "key_points": [
-        "Austin went down without contact in one-on-one work Aug. 25 and was carted off before an MRI.",
+        "Austin tore his right ACL in Aug. 25 one-on-one work and was placed on injured reserve Aug. 27, ending his season.",
         "He had been in line for a significant slot role while Nabers continued a controlled return from knee surgery.",
-        "Berrios took first-team slot work after the injury, while Beckham and Mooney also produced in practice."
+        "Berrios took first-team slot work after the injury; that is temporary evidence, not a permanent WR1 or slot crown."
       ],
-      "what_to_watch": "The MRI diagnosis, Austin's roster designation and Nabers' continued contact workload.",
+      "what_to_watch": "Nabers' contact ramp and how slot snaps split without inventing a one-for-one Austin replacement.",
       "is_material_depth": true,
-      "sot_flag": "Austin has a serious knee injury with diagnosis pending. Flag the slot role but do not promote Berrios, Beckham or Mooney as a permanent replacement yet.",
+      "sot_flag": "Austin placed on season-ending IR with torn ACL \u2014 out for the season. Do not crown a new WR1.",
       "sources": [
         {
-          "label": "ESPN — Austin carted off with serious knee injury (Aug 25)",
-          "href": "https://www.espn.com/nfl/story/_/id/49724505/new-york-giants-wr-calvin-austin-carted-practice-field"
+          "label": "Giants \u2014 Austin placed on IR with torn ACL (Aug 27)",
+          "href": "https://www.giants.com/news/calvin-austin-iii-injury-status-roster-new-york-giants"
         },
         {
-          "label": "New York Post — Austin knee injury at practice",
-          "href": "https://nypost.com/2026/08/25/sports/calvin-austin-suffers-potentially-major-knee-injury-at-giants-practice/"
+          "label": "NBC Sports \u2014 Giants place Austin on IR",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/giants-place-wr-calvin-austin-on-injured-reserve"
+        },
+        {
+          "label": "ESPN \u2014 Austin carted off (Aug 25)",
+          "href": "https://www.espn.com/nfl/story/_/id/49724505/new-york-giants-wr-calvin-austin-carted-practice-field"
         }
       ]
     },
     {
       "team_id": "NYJ",
-      "title": "Jets camp — Aug 26",
+      "title": "Jets camp \u2014 Aug 26",
       "bottom_line": "Smith is back in full-team command while Hall and Sadiq remain on Week 1 ramps. Availability is improving; usage assumptions stay Pass.",
       "key_points": [
         "Smith led the first offense through a successful two-minute touchdown drive Aug. 24 after the earlier ankle management.",
@@ -583,14 +587,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Jets — practice report and Week 1 ramps (Aug 24)",
+          "label": "Jets \u2014 practice report and Week 1 ramps (Aug 24)",
           "href": "https://www.newyorkjets.com/news/jets-practice-report-geno-smith-2-minute-drill-touchdown-omar-cooper-08-24-2026"
         }
       ]
     },
     {
       "team_id": "PHI",
-      "title": "Eagles camp — Aug 26",
+      "title": "Eagles camp \u2014 Aug 26",
       "bottom_line": "Smith and Lemon returned to full work as Philadelphia keeps installing its under-center offense. Useful progress, not a depth-chart rewrite. Pass.",
       "key_points": [
         "Smith and Lemon were full participants Aug. 24 for the first time since Aug. 3 after hamstring injuries.",
@@ -601,14 +605,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Philadelphia Inquirer — Smith and Lemon return (Aug 24)",
+          "label": "Philadelphia Inquirer \u2014 Smith and Lemon return (Aug 24)",
           "href": "https://www.inquirer.com/eagles/training-camp-2026-observations-devonta-smith-makai-lemon-jalyx-hunt-moro-ojomo-20260824.html"
         }
       ]
     },
     {
       "team_id": "PIT",
-      "title": "Steelers camp — Aug 26",
+      "title": "Steelers camp \u2014 Aug 26",
       "bottom_line": "Iheanachor is back for the final right-tackle evaluation; Cook still owns the first-team history, not a permanent crown. Pass.",
       "key_points": [
         "Iheanachor returned to a full padded practice Aug. 24 after missing more than two weeks with an upper-body issue.",
@@ -619,18 +623,18 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Steelers — Iheanachor returns to practice (Aug 24)",
+          "label": "Steelers \u2014 Iheanachor returns to practice (Aug 24)",
           "href": "https://www.steelers.com/news/reinforcements-on-the-way"
         },
         {
-          "label": "TribLive — right-tackle competition",
+          "label": "TribLive \u2014 right-tackle competition",
           "href": "https://triblive.com/sports/steelers-1st-round-pick-max-iheanaschor-returns-to-practice-after-missing-2-%C2%BD-weeks/"
         }
       ]
     },
     {
       "team_id": "SEA",
-      "title": "Seahawks camp — Aug 26",
+      "title": "Seahawks camp \u2014 Aug 26",
       "bottom_line": "Seattle lost Bobo, Clark and Richman for the season in one costly Tennessee stretch. These are real depth hits; Pass on assigning all vacated roles to one next man.",
       "key_points": [
         "Clark broke his ankle and Richman suffered a major right-leg injury in the preseason game; both went to season-ending IR Aug. 25.",
@@ -642,18 +646,18 @@
       "sot_flag": "Bobo, Clark and Richman are out for the season. Flag WR, safety and OL depth without naming one-for-one successors.",
       "sources": [
         {
-          "label": "ESPN — Clark and Richman placed on IR (Aug 25)",
+          "label": "ESPN \u2014 Clark and Richman placed on IR (Aug 25)",
           "href": "https://www.espn.com/nfl/story/_/id/49725451/seahawks-put-clark-richman-season-ending-injured-reserve"
         },
         {
-          "label": "Seahawks — Clark, Richman and Bobo injury context",
+          "label": "Seahawks \u2014 Clark, Richman and Bobo injury context",
           "href": "https://www.seahawks.com/news/rookie-safety-bud-clark-suffers-broken-ankle-in-seahawks-preseason-loss-to-titans"
         }
       ]
     },
     {
       "team_id": "SF",
-      "title": "49ers camp — Aug 26",
+      "title": "49ers camp \u2014 Aug 26",
       "bottom_line": "McCaffrey is back in team work, Kittle is still in non-competitive periods and Evans is managing a groin. Price the active chain, not the logo. Pass.",
       "key_points": [
         "McCaffrey completed a second straight practice with team work after the planned tightness ramp.",
@@ -664,14 +668,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "49ers — Day 17 participation and roster work (Aug 25)",
+          "label": "49ers \u2014 Day 17 participation and roster work (Aug 25)",
           "href": "https://www.49ers.com/news/day-17-of-2026-training-camp-53-man-cut-is-near-as-49ers-gear-up-for-final-preseason-game"
         }
       ]
     },
     {
       "team_id": "TB",
-      "title": "Buccaneers camp — Aug 26",
+      "title": "Buccaneers camp \u2014 Aug 26",
       "bottom_line": "Wirfs and Vea returned to 11-on-11 in Jacksonville, removing two early-camp alarms. That is restored structure, not a new betting edge. Pass.",
       "key_points": [
         "Wirfs took full-team work Aug. 25 for the first time since his conditioning-test hamstring strain.",
@@ -682,14 +686,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Buccaneers — Jacksonville joint-practice takeaways (Aug 25)",
+          "label": "Buccaneers \u2014 Jacksonville joint-practice takeaways (Aug 25)",
           "href": "https://www.buccaneers.com/news/takeaways-from-buccaneers-jaguars-joint-practice-day-1-2026"
         }
       ]
     },
     {
       "team_id": "TEN",
-      "title": "Titans camp — Aug 26",
+      "title": "Titans camp \u2014 Aug 26",
       "bottom_line": "Ward had a rough Tuesday while Robinson's short-area role kept producing. One practice confirms variance, not a new season verdict. Pass.",
       "key_points": [
         "Ward finished 7-of-16 in charted work with two interceptions against an active Titans secondary.",
@@ -700,14 +704,14 @@
       "is_material_depth": false,
       "sources": [
         {
-          "label": "Titans — ten observations from practice (Aug 25)",
+          "label": "Titans \u2014 ten observations from practice (Aug 25)",
           "href": "https://www.tennesseetitans.com/news/ten-observations-from-titans-training-camp-on-tuesday-x8102"
         }
       ]
     },
     {
       "team_id": "WAS",
-      "title": "Commanders camp — Aug 26",
+      "title": "Commanders camp \u2014 Aug 26",
       "bottom_line": "Humphries adds experience behind Coleman, but Tunsil's long absence and Allegretti's calf still leave Washington's line thin. Carry the cluster; Pass on inventing a new center.",
       "key_points": [
         "Tunsil underwent triceps surgery and will miss significant time; Coleman is the confirmed replacement at left tackle.",
@@ -719,11 +723,11 @@
       "sot_flag": "Tunsil is a long-term loss; Coleman is the confirmed LT replacement. Center remains unresolved while Allegretti ramps. Humphries is depth, not an invented starter.",
       "sources": [
         {
-          "label": "AP — Coleman takes over after Tunsil injury",
+          "label": "AP \u2014 Coleman takes over after Tunsil injury",
           "href": "https://apnews.com/article/laremy-tunsil-brandon-coleman-dan-quinn-washington-commanders-2ccc5313a3e3ed0b0feec2bd25a3adac"
         },
         {
-          "label": "ESPN — Humphries signing and center depth (Aug 25)",
+          "label": "ESPN \u2014 Humphries signing and center depth (Aug 25)",
           "href": "https://www.espn.com/nfl/story/_/id/49725726/commanders-sign-veteran-tackle-humphries-source-says"
         }
       ]
@@ -732,91 +736,151 @@
   "preview_deltas": [
     {
       "team_id": "ARI",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Benson waived/injured; Love still out; Sweat activated from PUP.",
       "status": "touched"
     },
     {
       "team_id": "ATL",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Penix cleared for 11-on-11 and splitting first-team work with Tagovailoa; QB1 remains open.",
       "status": "touched"
     },
     {
       "team_id": "BAL",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Pinter season-ending; center competition is Pocic versus Gwyn.",
       "status": "touched"
     },
     {
       "team_id": "CAR",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Scourton season-ending; Hubbard/Brooks committee confirmed while Hubbard ramps.",
       "status": "touched"
     },
     {
       "team_id": "CLE",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Watson named Week 1 starter and decision is not week to week.",
       "status": "touched"
     },
     {
       "team_id": "DET",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Mays expected to miss eight to 10 weeks; center replacement remains open.",
       "status": "touched"
     },
     {
       "team_id": "GB",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Parsons remains on PUP and outside the opening pass-rush plan.",
       "status": "touched"
     },
     {
       "team_id": "HOU",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Higgins season-ending ACL; Boutte acquired; WR2 usage remains open.",
       "status": "touched"
     },
     {
       "team_id": "LAC",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Biadasz placed on season-ending IR; Slaughter moves to center and left guard reopens.",
       "status": "touched"
     },
     {
       "team_id": "LV",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Jeanty ankle sprain is not considered long term, but Week 1 remains uncertain.",
       "status": "touched"
     },
     {
       "team_id": "MIN",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Murray remains QB1; McCarthy's reduced workload affects QB2 floor; Adams is out for the season.",
       "status": "touched"
     },
     {
       "team_id": "NO",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Bresee season-ending ACL and Kamara MCL absence change opening rotations.",
       "status": "touched"
     },
     {
       "team_id": "NYG",
-      "fields": ["bottom_line", "what_matters_most", "date"],
-      "reason": "Austin suffered a serious right-knee injury; final diagnosis and slot replacement remain pending.",
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
+      "reason": "Austin season-ending IR/ACL; slot role flagged out without crowning a WR1.",
       "status": "touched"
     },
     {
       "team_id": "SEA",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Bobo, Clark and Richman are season-ending losses across three depth groups.",
       "status": "touched"
     },
     {
       "team_id": "WAS",
-      "fields": ["bottom_line", "what_matters_most", "date"],
+      "fields": [
+        "bottom_line",
+        "what_matters_most",
+        "date"
+      ],
       "reason": "Tunsil long-term absence, Coleman confirmed at LT, Humphries added as depth and center continuity unresolved.",
       "status": "touched"
     }

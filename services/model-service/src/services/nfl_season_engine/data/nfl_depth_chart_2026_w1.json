@@ -33,7 +33,8 @@
     "Daily intel 2026-08-26: 1 override(s) applied",
     "Camp OL seed 2026-08-29: BAL C (Pinter/Pocic/Gwyn open) + LAC C (Biadasz/Slaughter) rows for desk accept \u2014 no crowns.",
     "Daily intel 2026-08-26: 3 override(s) applied",
-    "Daily intel 2026-08-26: 5 override(s) applied"
+    "Daily intel 2026-08-26: 5 override(s) applied",
+    "Camp skill seed 2026-08-29: NYG WR Calvin Austin III row for desk accept (IR/ACL) \u2014 no WR1 crown."
   ],
   "rows": [
     {
@@ -2638,6 +2639,21 @@
       "player_name": "Darnell Mooney",
       "depth_slot": "rotation",
       "role_confidence": 0.5
+    },
+    {
+      "team": "NYG",
+      "position": "WR",
+      "depth_order": 99,
+      "player_id": "00-0037837",
+      "player_name": "Calvin Austin III",
+      "depth_slot": "out",
+      "role_confidence": 0.5,
+      "injury_status": "active",
+      "role_note": "Camp slot role before torn ACL / season-ending IR (Aug 27). Do not crown Berrios/Beckham/Mooney as WR1.",
+      "sources": [
+        "https://www.giants.com/news/calvin-austin-iii-injury-status-roster-new-york-giants",
+        "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/giants-place-wr-calvin-austin-on-injured-reserve"
+      ]
     },
     {
       "team": "NYJ",
