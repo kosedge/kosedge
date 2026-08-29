@@ -1473,6 +1473,60 @@ def t1_past_kei_publish(
     return out
 
 
+class KeiPublishBlocked(RuntimeError):
+    """Raised when KEI publish is refused due to overdue open T1s."""
+
+    def __init__(self, blockers: Sequence[DepthSotWorkItem], message: str = ""):
+        self.blockers = list(blockers)
+        ids = [f.work_item_id for f in self.blockers]
+        teams = [f.team for f in self.blockers]
+        detail = message or (
+            "KEI publish refused: overdue T1 with no accept/no_change/reject — "
+            f"count={len(self.blockers)} teams={','.join(teams) or 'none'} "
+            f"ids={','.join(ids) or 'none'}"
+        )
+        super().__init__(detail)
+
+
+def overdue_t1_blocking_kei_publish(
+    flags: Iterable[DepthSotWorkItem],
+    *,
+    now: Optional[datetime] = None,
+) -> List[DepthSotWorkItem]:
+    """T1s that must be accept / no_change / reject before KEI publish.
+
+    Blocks when a T1 is still open (not accept/no_change/reject) and either:
+    - marked overdue (SLA or past KEI window), or
+    - past the next KEI publish deadline.
+    """
+    clock = now or _now_utc()
+    past = {f.work_item_id: f for f in t1_past_kei_publish(flags, now=clock)}
+    out: List[DepthSotWorkItem] = []
+    seen: set[str] = set()
+    for flag in flags:
+        if flag.tier != "T1":
+            continue
+        if flag.status in CLOSED_DISPOSITIONS:
+            continue
+        if flag.overdue or flag.work_item_id in past:
+            if flag.work_item_id in seen:
+                continue
+            seen.add(flag.work_item_id)
+            out.append(flag)
+    return out
+
+
+def assert_kei_publish_allowed(
+    flags: Iterable[DepthSotWorkItem],
+    *,
+    now: Optional[datetime] = None,
+) -> None:
+    """Hard-block KEI publish when overdue T1s lack accept/no_change/reject."""
+    blockers = overdue_t1_blocking_kei_publish(flags, now=now)
+    if blockers:
+        raise KeiPublishBlocked(blockers)
+
+
 def overdue_summary(flags: Iterable[DepthSotWorkItem]) -> Dict[str, Any]:
     rows = list(flags)
     overdue = [f for f in rows if f.overdue]

@@ -39,6 +39,13 @@ MS_SRC = REPO / "services" / "model-service"
 if str(MS_SRC) not in sys.path:
     sys.path.insert(0, str(MS_SRC))
 
+from src.services.nfl_camp_sot_queue import (  # noqa: E402
+    KeiPublishBlocked,
+    assert_kei_publish_allowed,
+    overdue_t1_blocking_kei_publish,
+    scan_camp_sot_flags,
+    t1_past_kei_publish,
+)
 from src.services.nfl_injury_kei_cadence import (  # noqa: E402
     CONFIG_RELATIVE,
     WindowId,
@@ -48,9 +55,62 @@ from src.services.nfl_injury_kei_cadence import (  # noqa: E402
     run_injury_kei_window,
     window_config,
 )
+from src.services.nfl_injury_report_scan import scan_injury_report  # noqa: E402
+from src.services.nfl_txn_sot_scan import (  # noqa: E402
+    ingest_txn_events,
+    scan_txn_flags,
+)
 
 OPS_DIR = REPO / "data" / "ops" / "nfl-injury-kei-cadence"
 LATEST_LOG = OPS_DIR / "latest-run.json"
+
+
+def _desk_os_open_t1_flags():
+    """Camp + injury-report + txn open tickets for the KEI publish hard-block."""
+    camp = scan_camp_sot_flags(latest_desk_only=True)
+    report_items, _, _ = scan_injury_report()
+    try:
+        txn_events = ingest_txn_events()
+        txn_flags = scan_txn_flags(events=txn_events)
+    except Exception as exc:  # noqa: BLE001 — feed down must not skip the camp/report gate
+        print(f"kei-publish-gate: txn scan unavailable ({exc}); camp+report only", file=sys.stderr)
+        txn_flags = []
+    return list(camp) + list(report_items) + list(txn_flags)
+
+
+def _enforce_kei_publish_gate(*, dry_run: bool) -> int:
+    """Refuse live KEI publish when overdue T1 lacks accept/no_change/reject.
+
+    Dry-run still prints blockers but does not fail (desk can inspect).
+    Returns non-zero only when a live publish is refused.
+    """
+    flags = _desk_os_open_t1_flags()
+    blockers = overdue_t1_blocking_kei_publish(flags)
+    if not blockers:
+        return 0
+    ids = [f.work_item_id for f in blockers]
+    teams = [f.team for f in blockers]
+    msg = (
+        "KEI publish refused: overdue T1 with no accept/no_change/reject — "
+        f"count={len(blockers)} teams={','.join(teams) or 'none'} "
+        f"ids={','.join(ids) or 'none'}"
+    )
+    print(msg, file=sys.stderr)
+    for flag in blockers:
+        why = flag.overdue_reason or "overdue_or_past_kei_publish"
+        print(
+            f"  BLOCK {flag.team} {flag.work_item_id} status={flag.status} why={why}",
+            file=sys.stderr,
+        )
+    if dry_run:
+        print("dry_run: publish gate would refuse; no files written", file=sys.stderr)
+        return 0
+    try:
+        assert_kei_publish_allowed(flags)
+    except KeiPublishBlocked as exc:
+        print(str(exc), file=sys.stderr)
+        return 1
+    return 1
 
 
 def _load_json(path: Path) -> Optional[Any]:
@@ -125,6 +185,11 @@ def main() -> int:
         week = int(os.environ.get("WEEK", "1"))
 
     cfg = load_cadence_config(reload=True)
+
+    # Desk OS item B — hard-block live KEI publish on overdue open T1s.
+    gate_rc = _enforce_kei_publish_gate(dry_run=bool(args.dry_run))
+    if gate_rc != 0:
+        return gate_rc
 
     if args.fixture:
         window: WindowId = (args.window or "friday_final")  # type: ignore[assignment]
