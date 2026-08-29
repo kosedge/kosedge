@@ -9,6 +9,8 @@ Queue files: data/ops/nfl-daily-intel/queue/runtime/ (gitignored).
 Usage:
   python scripts/nfl/queue_camp_sot_flags.py --scan
   python scripts/nfl/queue_camp_sot_flags.py --queue
+  python scripts/nfl/queue_camp_sot_flags.py --scan-defense
+  python scripts/nfl/queue_camp_sot_flags.py --queue-defense
   python scripts/nfl/queue_camp_sot_flags.py --alert-t1
   python scripts/nfl/queue_camp_sot_flags.py --accept path.json --dry-run
   python scripts/nfl/queue_camp_sot_flags.py --accept path.json --write --rematerialize --actor desk
@@ -40,12 +42,27 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
     scan_camp_sot_flags,
     t1_past_kei_publish,
 )
+from src.services.nfl_defense_sot_populate import (  # noqa: E402
+    format_populate_table,
+    queue_defense_flags,
+    scan_defense_populate,
+)
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--scan", action="store_true", help="Print open/overdue DepthSotWorkItems")
     ap.add_argument("--queue", action="store_true", help="Upsert work items into queue/runtime/")
+    ap.add_argument(
+        "--scan-defense",
+        action="store_true",
+        help="Print defense populate table (IR/out + named starters vs pack); no accepts",
+    )
+    ap.add_argument(
+        "--queue-defense",
+        action="store_true",
+        help="Upsert defense populate T1s into queue/runtime/ (propose only; no accepts)",
+    )
     ap.add_argument(
         "--alert-t1",
         action="store_true",
@@ -110,13 +127,18 @@ def main() -> int:
     actions = [
         args.scan,
         args.queue,
+        args.scan_defense,
+        args.queue_defense,
         args.alert_t1,
         args.accept,
         args.reject,
         args.no_change,
     ]
     if not any(actions):
-        ap.error("pass --scan, --queue, --alert-t1, --accept, --reject, and/or --no-change")
+        ap.error(
+            "pass --scan, --queue, --scan-defense, --queue-defense, "
+            "--alert-t1, --accept, --reject, and/or --no-change"
+        )
 
     if NOTES_MAY_TOUCH_MEANS or PROPOSALS_MAY_AUTO_APPLY:
         print("FATAL: notes/proposals must not auto-write lines", file=sys.stderr)
@@ -182,6 +204,42 @@ def main() -> int:
             return 4
         if result.get("rematerialize_hint"):
             print("REMAT:", result["rematerialize_hint"])
+        return 0
+
+    if args.scan_defense or args.queue_defense:
+        flags, table = scan_defense_populate()
+        print(format_populate_table(table))
+        print()
+        proposed = [r for r in table if r.proposed_t1]
+        print(
+            f"proposed_t1={len(proposed)} queued_candidates={len(flags)} "
+            f"(STOP for human accept — zero accepts in this path)"
+        )
+        if args.json:
+            print(
+                json.dumps(
+                    {
+                        "table": [r.as_dict() for r in table],
+                        "work_item_ids": [f.work_item_id for f in flags],
+                        "accepts_performed": 0,
+                    },
+                    indent=2,
+                )
+            )
+        if args.queue_defense:
+            q = queue_defense_flags(flags)
+            print(
+                json.dumps(
+                    {
+                        "created": [str(p) for p in q.created],
+                        "updated": [str(p) for p in q.updated],
+                        "unchanged": [str(p) for p in q.unchanged],
+                        "skipped": q.skipped,
+                        "accepts_performed": 0,
+                    },
+                    indent=2,
+                )
+            )
         return 0
 
     flags = scan_camp_sot_flags(

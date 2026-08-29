@@ -110,6 +110,13 @@ def normalize_override(raw: Mapping[str, Any]) -> Dict[str, Any]:
     }
     if conf_level:
         out["confirmation"] = conf_level
+    # Blank-pack populate: Accept may insert a defense_roles row when missing.
+    # Never invent from feeds alone — scanner must set this explicitly.
+    if raw.get("create_if_missing"):
+        out["create_if_missing"] = True
+        seed = raw.get("seed_row")
+        if isinstance(seed, Mapping):
+            out["seed_row"] = dict(seed)
     return out
 
 
@@ -138,6 +145,51 @@ def _target_list(payload: Dict[str, Any], layer: str) -> List[Dict[str, Any]]:
     if not isinstance(rows, list):
         raise ValueError(f"{layer_n} must be a list")
     return rows
+
+
+def _maybe_create_missing_defense_row(
+    rows: List[Dict[str, Any]],
+    ov: Mapping[str, Any],
+) -> Optional[Dict[str, Any]]:
+    """Insert a defense_roles row when Accept carries create_if_missing.
+
+    Only ``defense_roles``. Empty stays empty unless the work item explicitly
+    asks to seed a named player from a durable source (IR / named starter).
+    """
+    if not ov.get("create_if_missing"):
+        return None
+    if str(ov.get("layer") or "").strip().lower() != "defense_roles":
+        return None
+    pos = str(ov.get("position") or "").strip().upper()
+    name = str(ov.get("player_name") or "").strip()
+    team = str(ov.get("team") or "").strip().upper()
+    if not team or not name or pos not in DEFENSE_POSITIONS:
+        return None
+    seed = ov.get("seed_row") if isinstance(ov.get("seed_row"), Mapping) else {}
+    try:
+        depth_order = int(seed.get("depth_order") or 1)
+    except (TypeError, ValueError):
+        depth_order = 1
+    depth_slot = str(seed.get("depth_slot") or "").strip() or "starter"
+    pid = str(ov.get("player_id") or seed.get("player_id") or "").strip()
+    if not pid:
+        pid = f"{team}-{pos}-{depth_order}"
+    row: Dict[str, Any] = {
+        "team": team,
+        "position": pos,
+        "depth_order": depth_order,
+        "depth_slot": depth_slot,
+        "player_name": name,
+        "player_id": pid,
+        "injury_status": "active",
+        "role_note": str(seed.get("role_note") or "").strip(),
+        "sources": list(seed.get("sources") or ov.get("sources") or []),
+    }
+    # Do not invent crowns: non-starter seeds stay non-starter.
+    if depth_slot not in {"starter", "named_starter"}:
+        row["depth_slot"] = depth_slot or "depth"
+    rows.append(row)
+    return row
 
 
 @dataclass
@@ -187,8 +239,11 @@ def apply_intel_overrides(
         rows = _target_list(out, ov["layer"])
         matches = [r for r in rows if isinstance(r, dict) and _row_match(r, ov)]
         if not matches:
-            skipped.append({**ov, "skip_reason": "no matching SoT row"})
-            continue
+            created = _maybe_create_missing_defense_row(rows, ov)
+            if created is None:
+                skipped.append({**ov, "skip_reason": "no matching SoT row"})
+                continue
+            matches = [created]
         for row in matches:
             # Open competition stays a mixture — sleeper/notes cannot close.
             from src.services.nfl_confirmation_variance import (
