@@ -45,3 +45,18 @@ python scripts/nfl/print_rest_weather_week_modifiers.py --week 1
 ## Tests
 
 `services/model-service/tests/test_nfl_rest_weather_feed.py` — rest from schedule; timeout weather = no modifier; notes cannot write; stadium roof table; cache `as_of`.
+
+## Week 1 print (2026-08-29) — STOP, no accepts
+
+`n_week=16` / `n_with_modifier=8`. Rest blank (no prior REG). Weather either indoor-skipped, outside Open-Meteo 16d window (DEN@KC Mon), unavailable, or below KEI bands — **only `timezone_shift` applied**.
+
+| Game | Roof | Rest H/A | TZ | Weather | Applied | Spread Δ | Total Δ |
+|------|------|----------|----|---------|---------|----------|---------|
+| CHI@CAR | outdoor | —/— | 1 | w4,t81F,p0.0 | timezone_shift | -0.35 | -0.15 |
+| NO@DET | dome | —/— | 1 | indoor roof=dome | timezone_shift | -0.35 | -0.15 |
+| BUF@HOU | retractable_closed | —/— | 1 | indoor roof=retractable_closed | timezone_shift | -0.35 | -0.15 |
+| DEN@KC | outdoor | —/— | 1 | outside_forecast_window | timezone_shift | -0.35 | -0.15 |
+| MIA@LV | dome | —/— | 3 | indoor roof=dome | timezone_shift | -1.00 | -0.50 |
+| DAL@NYG | outdoor | —/— | 1 | unavailable | timezone_shift | -0.35 | -0.15 |
+| NE@SEA | outdoor | —/— | 3 | w5,t76F,p0.0 | timezone_shift | -1.00 | -0.50 |
+| NYJ@TEN | outdoor | —/— | 1 | w7,t89F,p0.0 | timezone_shift | -0.35 | -0.15 |
