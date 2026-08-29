@@ -87,32 +87,50 @@ def variance_confidence_delta(level: str) -> float:
     )
 
 
-def _sources_blob(raw: Any) -> str:
+def _source_items(raw: Any) -> List[str]:
     if raw is None:
-        return ""
+        return []
     if isinstance(raw, str):
-        return raw.lower()
+        return [raw]
     if isinstance(raw, Mapping):
-        parts = [str(v) for v in raw.values()]
-        return " ".join(parts).lower()
+        return [str(v) for v in raw.values() if v not in (None, "")]
     if isinstance(raw, (list, tuple)):
-        return " ".join(str(x) for x in raw).lower()
-    return str(raw).lower()
+        out: List[str] = []
+        for x in raw:
+            if isinstance(x, Mapping):
+                out.extend(str(v) for v in x.values() if v not in (None, ""))
+            elif x not in (None, ""):
+                out.append(str(x))
+        return out
+    return [str(raw)]
+
+
+def _sources_blob(raw: Any) -> str:
+    return " ".join(_source_items(raw)).lower()
 
 
 def sources_are_weak(sources: Any, *, confidence: Any = None) -> bool:
-    """Beat-only / notes / sleeper / rumor — not official depth."""
-    blob = _sources_blob(sources)
+    """Beat-only / notes / sleeper / rumor — not official depth.
+
+    Per-source: an official URL in the same list still counts as official
+    (do not let a rumor-mill sibling poison the whole blob).
+    """
     conf = str(confidence or "").strip().lower()
     if conf in {"low", "weak", "beat", "beat-only", "beat_only"}:
         return True
-    if not blob:
-        return conf in {"", "medium", "med"} and False
-    return any(tok in blob for tok in _WEAK_SOURCE_TOKENS)
+    items = _source_items(sources)
+    if not items:
+        return False
+    # Weak only when every item is weak (or empty).
+    weak_items = 0
+    for item in items:
+        blob = item.lower()
+        if any(tok in blob for tok in _WEAK_SOURCE_TOKENS):
+            weak_items += 1
+    return weak_items == len(items)
 
 
 def sources_are_official_depth(sources: Any, *, confidence: Any = None) -> bool:
-    blob = _sources_blob(sources)
     conf = str(confidence or "").strip().lower()
     if conf in {"high", "official", "official_depth"}:
         return True
@@ -125,8 +143,15 @@ def sources_are_official_depth(sources: Any, *, confidence: Any = None) -> bool:
         "team release",
         "nfl.com",
         "official_depth",
+        ".com/news/",  # team site news posts (e.g. named starter)
     )
-    return any(tok in blob for tok in official_tokens)
+    for item in _source_items(sources):
+        blob = item.lower()
+        if any(tok in blob for tok in _WEAK_SOURCE_TOKENS):
+            continue
+        if any(tok in blob for tok in official_tokens):
+            return True
+    return False
 
 
 def resolve_confirmation(
