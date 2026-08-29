@@ -177,11 +177,15 @@ def test_injury_ol_away_weaker() -> None:
         },
     )
     new_h, log = _apply(pack=pack)
-    # Away OL out → away weaker → home spread more negative
-    assert new_h["spread_home"] == -3.5
-    assert log["spread_delta"] == -0.5
+    # Away LT out → shock_table_v1 LT (0.80) → away weaker → home more favored
+    assert new_h["spread_home"] == -3.8
+    assert log["spread_delta"] == -0.8
     reasons = " ".join(e["reason"] for e in log["applied_factors"])
     assert "Tunsil" in reasons
+    assert "shock_table_v1" in reasons
+    skipped = " ".join(e["reason"] for e in log["considered_not_applied"])
+    assert "unit wipe skipped" in skipped
+    assert "no double-count" in skipped
 
 
 def test_injury_not_restacked_when_already_in_model() -> None:
@@ -380,7 +384,7 @@ def test_caps_bind_runaway_stack() -> None:
             ]
         },
     )
-    # Home weaker from QB out 3.5 + OL 1.0 + 1-band travel > cap 4.0
+    # Home weaker from QB out 3.5 + shock_table LT+C (0.80+0.65) > spread cap 4.0
     new_h, log = _apply(home_abbr="KC", away_abbr="DEN", pack=pack, handicap=_handicap(-7.0))
     assert log["capped"] is True
     assert log["spread_delta"] == 4.0

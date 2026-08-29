@@ -213,8 +213,9 @@ def test_fixture_starter_edge_out_moves_side_and_total() -> None:
     assert out_h["total_mean"] > healthy_h["total_mean"]
     reasons = " ".join(e["reason"] for e in out_log["applied_factors"])
     assert "Bosa" in reasons
-    assert "defense_roles" in reasons
-
+    assert "shock_table_v1" in reasons or "defense_roles" in reasons
+    skipped = " ".join(e["reason"] for e in out_log["considered_not_applied"])
+    assert "unit wipe skipped" in skipped
 
 def test_fixture_accept_edge_out_line_delta_via_smoke(tmp_path: Path) -> None:
     """Accept EDGE out on live pack copy → kei smoke side+total delta."""

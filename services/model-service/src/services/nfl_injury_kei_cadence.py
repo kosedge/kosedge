@@ -419,15 +419,47 @@ def _impact_for_change(change: InjuryStatusChange) -> KeiDelta:
         if abs(severity) > 1e-9:
             reasons.append(f"{pos} {change.previous_status}→{status}")
     elif pos in OL_POSITIONS:
-        spread = float(pts.get("ol_out_spread", 0.5)) * severity
-        total = -float(pts.get("ol_out_total", 0.25)) * severity
+        # Keystone C / LT use shock_table_v1 (not flat ol_out + unit wipe).
+        from src.services.nfl_unit_shock_table import SHOCK_TABLE_V1
+
+        role = None
+        if pos == "C" and change.depth_order <= 1:
+            role = "C"
+        elif pos == "LT" and (change.depth_order <= 1 or change.depth_order >= 90):
+            role = "LT"
+        if role:
+            base_spread = float(SHOCK_TABLE_V1[role]["spread"])
+            base_total = float(SHOCK_TABLE_V1[role]["total"])
+        else:
+            base_spread = float(pts.get("ol_out_spread", 0.5))
+            base_total = float(pts.get("ol_out_total", 0.25))
+        spread = base_spread * severity
+        total = -base_total * severity
         if abs(severity) > 1e-9:
-            reasons.append(f"OL {change.previous_status}→{status}")
+            tag = f"shock_table_v1 {role}" if role else "OL"
+            reasons.append(f"{tag} {change.previous_status}→{status}")
     elif pos in DEF_POSITIONS:
-        spread = float(pts.get("defense_out_spread", 0.6)) * severity
-        total = -float(pts.get("defense_out_total", 0.2)) * severity
+        from src.services.nfl_unit_shock_table import SHOCK_TABLE_V1
+
+        role = None
+        if change.depth_order <= 1:
+            if pos == "EDGE":
+                role = "EDGE1"
+            elif pos == "CB":
+                role = "CB1"
+            elif pos == "S":
+                role = "S1"
+        if role:
+            base_spread = float(SHOCK_TABLE_V1[role]["spread"])
+            base_total = float(SHOCK_TABLE_V1[role]["total"])
+        else:
+            base_spread = float(pts.get("defense_out_spread", 0.6))
+            base_total = float(pts.get("defense_out_total", 0.2))
+        spread = base_spread * severity
+        total = -base_total * severity
         if abs(severity) > 1e-9:
-            reasons.append(f"DEF {change.previous_status}→{status}")
+            tag = f"shock_table_v1 {role}" if role else "DEF"
+            reasons.append(f"{tag} {change.previous_status}→{status}")
     else:
         spread = 0.35 * severity
         total = -0.15 * severity
