@@ -31,6 +31,28 @@ PACK_PATH = (
 CAMP_DIR = Path(__file__).resolve().parents[3] / "content/writers/camp-desk-2026"
 
 
+def _pre_accept_pack_bytes() -> str:
+    """Pack state before CLE Watson / HOU Higgins desk accepts (#296).
+
+    Live SoT pack may already have those fields applied; heuristic drafts skip
+    no-ops, so accept/preview tests need the pre-accept competition/injury rows.
+    """
+    payload = json.loads(PACK_PATH.read_text(encoding="utf-8"))
+    for row in payload.get("rows") or []:
+        if not isinstance(row, dict):
+            continue
+        if row.get("team") == "CLE" and row.get("player_name") == "Deshaun Watson":
+            row["competition_status"] = "open_competition"
+        if row.get("team") == "HOU" and row.get("player_name") == "Jayden Higgins":
+            row.pop("injury_status", None)
+    return json.dumps(payload, indent=2) + "\n"
+
+
+def _write_pre_accept_pack(path: Path) -> Path:
+    path.write_text(_pre_accept_pack_bytes(), encoding="utf-8")
+    return path
+
+
 def _cle_id() -> str:
     return work_item_id_for(
         as_of="2026-08-26", team_id="CLE", note_id="note-2026-08-26-CLE"
@@ -69,8 +91,7 @@ def test_note_text_cannot_change_means(tmp_path: Path) -> None:
 
 
 def test_proposed_patch_never_auto_applies(tmp_path: Path) -> None:
-    pack_copy = tmp_path / "pack.json"
-    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
     before = json.loads(before_text := pack_copy.read_text(encoding="utf-8"))
     flags = scan_camp_sot_flags(
         camp_dir=CAMP_DIR,
@@ -111,8 +132,7 @@ def test_dry_run_previews_without_writing(tmp_path: Path) -> None:
     pending = tmp_path / "pending"
     log = tmp_path / "accepted.jsonl"
     receipts = tmp_path / "receipts"
-    pack_copy = tmp_path / "pack.json"
-    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
     before = pack_copy.read_text(encoding="utf-8")
 
     flags = scan_camp_sot_flags(
@@ -151,8 +171,7 @@ def test_accept_writes_pack_then_remats_once(tmp_path: Path) -> None:
     pending = tmp_path / "pending"
     log = tmp_path / "accepted.jsonl"
     receipts = tmp_path / "receipts"
-    pack_copy = tmp_path / "pack.json"
-    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
 
     flags = scan_camp_sot_flags(
         camp_dir=CAMP_DIR,
@@ -213,8 +232,7 @@ def test_remat_fail_rolls_back_and_is_not_accepted(tmp_path: Path) -> None:
     qdir = tmp_path / "queue"
     log = tmp_path / "accepted.jsonl"
     receipts = tmp_path / "receipts"
-    pack_copy = tmp_path / "pack.json"
-    pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
+    pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
     before = pack_copy.read_text(encoding="utf-8")
 
     flags = scan_camp_sot_flags(
@@ -331,9 +349,10 @@ def test_never_drafts_depth_order(tmp_path: Path) -> None:
 
 
 def test_named_starter_and_committee_guards(tmp_path: Path) -> None:
+    pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
     flags = scan_camp_sot_flags(
         camp_dir=CAMP_DIR,
-        pack_path=PACK_PATH,
+        pack_path=pack_copy,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
         now=datetime(2026, 8, 27, 20, 0, tzinfo=timezone.utc),

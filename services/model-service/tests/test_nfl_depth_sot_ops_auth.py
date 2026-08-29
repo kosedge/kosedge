@@ -7,8 +7,18 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from src.services.nfl_camp_sot_queue import _resolve_repo_root
+
 
 NFL_ROUTES = Path(__file__).resolve().parents[1] / "src" / "routes" / "nfl.py"
+
+
+def test_resolve_repo_root_path_as_root_no_indexerror() -> None:
+    """Railway /app/src/services only has parents[0..2] — must not IndexError."""
+    shallow = Path("/app/src/services")
+    assert len(shallow.parents) == 3  # indices 0..2; parents[3] would IndexError
+    root = _resolve_repo_root(shallow)
+    assert root in {Path("/app"), Path("/"), Path.cwd()}
 
 
 def test_depth_sot_ops_routes_require_internal_secret() -> None:

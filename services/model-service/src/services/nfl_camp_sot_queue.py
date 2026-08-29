@@ -50,15 +50,31 @@ PROPOSALS_MAY_AUTO_APPLY = False
 _SERVICES = Path(__file__).resolve().parent
 
 
-def _resolve_repo_root() -> Path:
-    """Monorepo checkout *or* Railway ``path-as-root`` image (WORKDIR=/app)."""
-    candidates = [
-        _SERVICES.parents[3],  # …/repo (services/model-service/src/services)
-        _SERVICES.parents[2],  # …/model-service or /app
-        Path("/app"),
-        Path.cwd(),
-    ]
+def _resolve_repo_root(services_dir: Optional[Path] = None) -> Path:
+    """Monorepo checkout *or* Railway ``path-as-root`` image (WORKDIR=/app).
+
+    Under ``railway up … --path-as-root``, ``__file__`` is
+    ``/app/src/services/nfl_camp_sot_queue.py`` so ``services_dir.parents`` only
+    has indices 0..2. Never index ``parents[3]`` (IndexError → depth-sot
+    status/accept/no-change 500 while ping stays 200). Same class as #187.
+    """
+    base = (services_dir or _SERVICES).resolve()
+    candidates: List[Path] = []
+    # Monorepo: services/model-service/src/services → parents[3] = repo root
+    if len(base.parents) > 3:
+        candidates.append(base.parents[3])
+    # model-service root or /app (path-as-root)
+    if len(base.parents) > 2:
+        candidates.append(base.parents[2])
+    elif len(base.parents) > 1:
+        candidates.append(base.parents[1])
+    candidates.append(Path("/app"))
+    candidates.append(Path.cwd())
+    seen: set[Path] = set()
     for root in candidates:
+        if root in seen:
+            continue
+        seen.add(root)
         if (root / "content" / "writers" / "camp-desk-2026").is_dir():
             return root
         if (root / "src" / "services" / "nfl_camp_sot_queue.py").is_file() and (
@@ -66,7 +82,11 @@ def _resolve_repo_root() -> Path:
         ).is_dir():
             # Image without camp desk still resolves for pack/receipts under /app
             return root
-    return _SERVICES.parents[2]
+    if len(base.parents) > 2:
+        return base.parents[2]
+    if len(base.parents) > 1:
+        return base.parents[1]
+    return Path("/app")
 
 
 _REPO = _resolve_repo_root()
