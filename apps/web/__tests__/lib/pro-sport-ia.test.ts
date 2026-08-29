@@ -198,9 +198,7 @@ describe("pro sport IA", () => {
     expect(
       marketSection?.links.find((link) => link.label === "Props")?.href,
     ).toBe("/pro/nfl/props");
-    expect(
-      marketSection?.links.map((link) => link.label),
-    ).toEqual([
+    expect(marketSection?.links.map((link) => link.label)).toEqual([
       "KEI Lines",
       "Edges",
       "Props",
@@ -233,10 +231,14 @@ describe("pro sport IA", () => {
     const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
     expect(edge?.description.toLowerCase()).toContain("kei vs trusted market");
     expect(edge?.description.toLowerCase()).toContain("research-fair");
-    expect(edge?.description.toLowerCase()).not.toContain("directional edge tags");
+    expect(edge?.description.toLowerCase()).not.toContain(
+      "directional edge tags",
+    );
     const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
     expect(kei?.description.toLowerCase()).toContain("published cfb kei");
-    expect(kei?.description.toLowerCase()).not.toContain("projected spread/total baselines");
+    expect(kei?.description.toLowerCase()).not.toContain(
+      "projected spread/total baselines",
+    );
   });
 
   it("points MLB betting desk path Fair Lines → Edges → Run Line", () => {
@@ -319,7 +321,10 @@ describe("pro sport IA", () => {
 
   it("omits props walls for college sports (no forced props on NCAAM/CFB)", () => {
     for (const sportKey of ["cfb", "ncaam"] as const) {
-      const content = buildSportOverviewContent(sportKey, sportKey.toUpperCase());
+      const content = buildSportOverviewContent(
+        sportKey,
+        sportKey.toUpperCase(),
+      );
       const sections = buildSportOverviewSections({
         sportKey,
         base: `/pro/${sportKey}`,
