@@ -11,7 +11,7 @@ from typing import Any, Dict, List, Optional, Tuple, TypedDict
 
 import logging
 
-from fastapi import APIRouter, Body, HTTPException, Query
+from fastapi import APIRouter, Body, HTTPException, Query, Request
 from pydantic import BaseModel, Field
 from sqlalchemy import text
 from sqlalchemy.exc import OperationalError, ProgrammingError, SQLAlchemyError
@@ -6689,3 +6689,98 @@ def nfl_season_engine_survivor_suggest_paths(
     payload["sim_depth"] = depth_meta(result.n_sims, surface="survivor_suggest_paths")
     return payload
 
+
+# --- DepthSotWorkItem gated workflow (internal auth only) ---
+
+
+def _require_kosedge_internal(request: Request) -> str:
+    """Staff/ops only — no public accept button. Header: x-kosedge-secret."""
+    expected = (os.environ.get("INTERNAL_API_SECRET") or "").strip()
+    got = (request.headers.get("x-kosedge-secret") or "").strip()
+    if not expected:
+        raise HTTPException(status_code=503, detail="INTERNAL_API_SECRET not configured")
+    if not got or got != expected:
+        raise HTTPException(status_code=401, detail="internal auth required")
+    return "internal"
+
+
+class DepthSotDispositionBody(BaseModel):
+    work_item_path: str = Field(..., description="Path under queue/runtime/")
+    actor: str = Field(..., min_length=1)
+    reason: str = ""
+    write: bool = False
+    rematerialize: bool = False
+    allow_empty: bool = False
+
+
+@router.get("/ops/depth-sot/status")
+def nfl_depth_sot_status(request: Request) -> Dict[str, Any]:
+    """Overdue / tier summary for the desk. Internal auth only."""
+    _require_kosedge_internal(request)
+    from src.services.nfl_camp_sot_queue import overdue_summary, scan_camp_sot_flags
+
+    flags = scan_camp_sot_flags()
+    return {"summary": overdue_summary(flags), "public_accept_ui": False}
+
+
+@router.post("/ops/depth-sot/accept")
+def nfl_depth_sot_accept(
+    request: Request, body: DepthSotDispositionBody = Body(...)
+) -> Dict[str, Any]:
+    """Accept structured pack fields → optional remat. Internal auth only."""
+    _require_kosedge_internal(request)
+    from src.services.nfl_camp_sot_queue import accept_proposal
+
+    path = Path(body.work_item_path)
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail=f"work item not found: {path}")
+    try:
+        result = accept_proposal(
+            path,
+            write_pack=bool(body.write),
+            rematerialize=bool(body.rematerialize),
+            allow_empty_overrides=bool(body.allow_empty),
+            actor=body.actor,
+            reason=body.reason,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    if result.get("disposition") == "remat_failed":
+        raise HTTPException(status_code=409, detail=result)
+    return result
+
+
+@router.post("/ops/depth-sot/reject")
+def nfl_depth_sot_reject(
+    request: Request, body: DepthSotDispositionBody = Body(...)
+) -> Dict[str, Any]:
+    _require_kosedge_internal(request)
+    from src.services.nfl_camp_sot_queue import close_work_item
+
+    path = Path(body.work_item_path)
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail=f"work item not found: {path}")
+    try:
+        return close_work_item(
+            path, disposition="reject", actor=body.actor, reason=body.reason
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@router.post("/ops/depth-sot/no-change")
+def nfl_depth_sot_no_change(
+    request: Request, body: DepthSotDispositionBody = Body(...)
+) -> Dict[str, Any]:
+    _require_kosedge_internal(request)
+    from src.services.nfl_camp_sot_queue import close_work_item
+
+    path = Path(body.work_item_path)
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail=f"work item not found: {path}")
+    try:
+        return close_work_item(
+            path, disposition="no_change", actor=body.actor, reason=body.reason
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc

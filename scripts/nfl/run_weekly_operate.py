@@ -40,6 +40,7 @@ from nfl_operate_contract import (  # noqa: E402
     overall_status,
     pending_intel_files,
     pointer_lock_tag,
+    proposed_camp_sot_files,
     read_pointer,
     stage,
     utc_now,
@@ -195,7 +196,15 @@ def stage_proof_log(*, week: int, dry_run: bool) -> Dict[str, Any]:
 
 def stage_depth_injury(*, dry_run: bool) -> Dict[str, Any]:
     hook = HOOKS["daily_intel"]
+    camp_hook = HOOKS["camp_sot_queue"]
     pending = pending_intel_files()
+    proposed = proposed_camp_sot_files()
+    camp_note = ""
+    if proposed:
+        camp_note = (
+            f" Camp SoT proposals ({len(proposed)}): "
+            f"python {camp_hook} --scan then --accept <file> [--write]."
+        )
     if pending:
         names = ", ".join(p.name for p in pending)
         if dry_run:
@@ -204,7 +213,8 @@ def stage_depth_injury(*, dry_run: bool) -> Dict[str, Any]:
                 "human_required",
                 (
                     f"pending intel {names} — dry-run will not write the SoT pack. "
-                    f"Human: python {hook} --overrides <file> --write"
+                    f"Human: python {hook} --overrides <file> --write."
+                    f"{camp_note}"
                 ),
                 hook=hook,
             )
@@ -214,9 +224,23 @@ def stage_depth_injury(*, dry_run: bool) -> Dict[str, Any]:
             (
                 f"pending intel {names} found. Weekly job does not auto-write SoT "
                 f"(Walker stays KC unless human override). "
-                f"Apply via python {hook} --overrides data/ops/nfl-daily-intel/pending/<file> --write"
+                f"Apply via python {hook} --overrides data/ops/nfl-daily-intel/pending/<file> --write."
+                f"{camp_note}"
             ),
             hook=hook,
+        )
+    if proposed:
+        return stage(
+            "depth_injury_hook",
+            "human_required",
+            (
+                f"no pending intel; {len(proposed)} Camp Desk SoT work item(s) await accept. "
+                f"python {camp_hook} --scan ; "
+                f"python {camp_hook} --accept data/ops/nfl-daily-intel/queue/runtime/<file> [--write]. "
+                f"Rematerialize after pack write via safe rebuild (weeks 1–18). "
+                f"Queue≠remat — overdue T1 does not move the board until Accept."
+            ),
+            hook=camp_hook,
         )
     return stage(
         "depth_injury_hook",
@@ -225,6 +249,7 @@ def stage_depth_injury(*, dry_run: bool) -> Dict[str, Any]:
             "no live injury scrape in this pipeline. Manual intel: "
             "fill data/ops/nfl-daily-intel/pending/*.json then "
             f"python {hook} --overrides <file> --write. "
+            f"Camp flags: python {camp_hook} --scan [--queue]. "
             f"Optional KEI heartbeat: python {HOOKS['injury_kei']} --window midweek --dry-run"
         ),
         hook=hook,
