@@ -119,6 +119,8 @@ data/mlb/statcast_cache/**/pitches_*.csv
 data/mlb/statcast_cache/**/pitches_*.meta.json
 data/mlb/statcast_cache/**/pitcher_raw_counts.json
 data/ops/nfl-phase3-depth-cache/
+# Rest/weather game-card forecast cache (as_of JSON; do not commit)
+data/ops/nfl-rest-weather-cache/
 
 # DepthSotWorkItem runtime queue / receipts (generate locally; do not commit day dumps)
 data/ops/nfl-daily-intel/queue/runtime/
