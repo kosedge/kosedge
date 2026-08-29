@@ -32,7 +32,7 @@ def test_rec_td_yards_rate_constant() -> None:
 
 
 def test_invariant_1_qb_pass_td_peak_band() -> None:
-    """max(QB pass_tds) season projection ∈ [32, 48] for elite starter yards."""
+    """max(QB pass_tds) season projection ∈ [32, 45] (surface integrity)."""
     starter_qb = PlayerFeatureInputs(
         position="QB",
         snap_proxy=0.85,
@@ -51,7 +51,8 @@ def test_invariant_1_qb_pass_td_peak_band() -> None:
     projection = baseline_projection_from_features(starter_qb)
     season_pass_tds = projection["pass_tds_mean"] * 17
     season_pass_yds = projection["pass_yards_mean"] * 17
-    assert 32.0 <= season_pass_tds <= 48.0
+    # Do not loosen this band for CI — broken copy was ~17–29 / "20".
+    assert 32.0 <= season_pass_tds <= 45.0
     # Yards and TDs share a rate.
     assert abs(season_pass_tds - season_pass_yds / PASS_TD_YARDS_PER) < 0.05
 
@@ -139,13 +140,19 @@ def test_invariant_3_pack_ir_zeros_games_and_volume() -> None:
     assert higgins["games_projected"] == 0
     assert higgins["receiving_yards_total"] == 0.0
     assert higgins["rec_tds_total"] == 0.0
-    assert any(f.get("kind") == "availability" for f in higgins.get("risk_flags") or [])
+    # Never accept broken copy: 17g / ~491 yd with empty risk.
+    assert higgins["games_projected"] != 17
+    flags = higgins.get("risk_flags") or []
+    assert any(f.get("kind") == "availability" for f in flags)
+    assert any(str(f.get("label") or "").upper() == "OUT" for f in flags)
     assert chase["games_projected"] == 17
     assert abs(chase["rec_tds_total"] - 1791.0 / REC_TD_YARDS_PER) < 1e-6
+    assert 12.0 <= chase["rec_tds_total"] <= 20.0
     assert audit["pack_injury_zeroed"] == 1
 
 
 def test_invariant_4_survivor_matches_kei_win_prob() -> None:
+    # Broken inputs (~0.54 LAC) must be overwritten to fair-lines KEI ±0.5pp.
     payload = {
         "ranked_picks": [
             {"team": "LAC", "win_prob": 0.54, "win_rate": 0.54, "opponent": "ARI"},
@@ -177,10 +184,13 @@ def test_invariant_4_survivor_matches_kei_win_prob() -> None:
     kei = build_kei_win_prob_map_from_fair_lines(lines, week=1)
     overlay_survivor_kei_win_probs(payload, kei)
     by_team = {r["team"]: r for r in payload["ranked_picks"]}
-    assert abs(by_team["LAC"]["win_prob"] - 0.7522) < 0.005
-    assert abs(by_team["ARI"]["win_prob"] - 0.2478) < 0.005
-    assert abs(by_team["LAR"]["win_prob"] - 0.6058) < 0.005
-    assert abs(by_team["SF"]["win_prob"] - 0.3942) < 0.005
+    # ±0.5pp of KEI — never leave broken copy (0.54 / 0.66) as the answer.
+    assert abs(by_team["LAC"]["win_prob"] - 0.7522) <= 0.005
+    assert abs(by_team["ARI"]["win_prob"] - 0.2478) <= 0.005
+    assert abs(by_team["LAR"]["win_prob"] - 0.6058) <= 0.005
+    assert abs(by_team["SF"]["win_prob"] - 0.3942) <= 0.005
+    assert by_team["LAC"]["win_prob"] != 0.54
+    assert by_team["LAR"]["win_prob"] != 0.66
     assert by_team["LAC"]["win_prob_source"] == "kei_fair_lines"
 
 

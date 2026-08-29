@@ -64,8 +64,10 @@ describe("nfl surface integrity — web", () => {
         injuryStatus: "out",
       },
     ];
+    // Broken copy was 17g / ~491 yd / empty risk — must not survive.
     const patched = applyPackInjuryToDraftRow(baseRow(), depth);
     expect(patched.gamesProjected).toBe(0);
+    expect(patched.gamesProjected).not.toBe(17);
     expect(patched.receivingYardsTotal).toBe(0);
     expect(patched.recTdsTotal).toBe(0);
 
@@ -80,9 +82,11 @@ describe("nfl surface integrity — web", () => {
       teammateRushYards: [],
     });
     expect(flags.some((f) => f.kind === "availability")).toBe(true);
+    expect(flags.some((f) => f.label === "OUT")).toBe(true);
   });
 
-  it("CSV fallback recouples TDs to yards; spine pages must not use CSV TDs", () => {
+  it("recoupled season TDs land in integrity peak bands (not broken copy)", () => {
+    // Stale CSV inputs (16.5 pass / 6.5 rec) must not be the answer.
     const rows = applySurfaceIntegrityToPlayerTotals(
       [
         {
@@ -121,10 +125,17 @@ describe("nfl surface integrity — web", () => {
       2026,
       { recoupleTds: true },
     );
-    const stafford = rows[0];
-    const chase = rows[1];
+    const stafford = rows[0]!;
+    const chase = rows[1]!;
     expect(stafford.passTdsTotal).toBeCloseTo(4252 / PASS_TD_YARDS_PER, 5);
     expect(chase.recTdsTotal).toBeCloseTo(1791 / REC_TD_YARDS_PER, 5);
+    // Invariants — do not loosen for CI; broken copy was ~17–29 / ~6–11.
+    expect(stafford.passTdsTotal).toBeGreaterThanOrEqual(32);
+    expect(stafford.passTdsTotal).toBeLessThanOrEqual(45);
+    expect(stafford.passTdsTotal).not.toBe(28.9);
+    expect(chase.recTdsTotal).toBeGreaterThanOrEqual(12);
+    expect(chase.recTdsTotal).toBeLessThanOrEqual(20);
+    expect(chase.recTdsTotal).not.toBe(6.5);
   });
 
   it("shows PRESEASON readiness banner when sample 0 / no-go", () => {
