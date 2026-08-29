@@ -2,6 +2,10 @@
 # Production smoke — Vercel (www) + Railway (model-service) must both answer.
 # used_in_spread / KEI are not flipped here; this only proves the subscription
 # surfaces are reachable after a deploy-vercel ship.
+#
+# Desk OS item D: CFB projections N=10000 is NOT asserted here (soak only).
+# See scripts/ci/cfb-projections-n10000-soak.sh and
+# .github/workflows/cfb-projections-soak.yml — not merge-blocking.
 set -euo pipefail
 
 WEB_BASE="${WEB_BASE:-https://www.kosedge.com}"
@@ -44,7 +48,8 @@ for i in $(seq 1 "$ATTEMPTS"); do
   check "cfb slate" "${WEB_BASE}/pro/cfb/slate" "Official slate"
   check "cfb model" "${WEB_BASE}/pro/cfb/model" "used_in_spread"
   check "cfb project-game" "${WEB_BASE}/pro/cfb/project-game" "Project Game"
-  check "cfb projections" "${WEB_BASE}/pro/cfb/projections" "N=10000"
+  # Reachability only — N=10000 grain is soak/slow (cfb-projections-soak.yml), not merge-blocking.
+  check "cfb projections" "${WEB_BASE}/pro/cfb/projections"
   check "cfb teams" "${WEB_BASE}/pro/cfb/teams" "136"
   check "cfb previews" "${WEB_BASE}/pro/cfb/previews" "team previews"
   check "cfb conferences" "${WEB_BASE}/pro/cfb/conferences" "conference previews"

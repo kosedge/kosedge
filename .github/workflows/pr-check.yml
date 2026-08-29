@@ -135,11 +135,17 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Run model-service DepthSot / changed tests
-        if: steps.paths.outputs.model_service == '1'
+      # Always install when nfl_ops or model-service changes — invariants need numpy
+      # even if DepthSot pytest is skipped (ops-doc-only PRs were failing KICKOFF_SMOKE).
+      - name: Install model-service Python deps
+        if: steps.paths.outputs.model_service == '1' || steps.paths.outputs.nfl_ops == '1'
         run: |
           python -m pip install --upgrade pip
           pip install -r services/model-service/requirements.txt pytest
+
+      - name: Run model-service DepthSot / changed tests
+        if: steps.paths.outputs.model_service == '1'
+        run: |
           cd services/model-service
           # Prefer targeted DepthSot / auth contract tests when present; fall back to full suite.
           if ls tests/test_nfl_camp_sot_queue.py tests/test_nfl_depth_sot_ops_auth.py >/dev/null 2>&1; then

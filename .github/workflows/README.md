@@ -15,7 +15,18 @@ If this is red, www did not ship. Do not merge.
 
 ### `production-smoke.yml` — live www + Railway
 
-Runs after every push to `deploy-vercel`. Retries `/api/ping`, CFB desk routes, Railway `/health`, and CFB engine status until they 200 (or the window expires).
+Runs after every push to `deploy-vercel`. Retries `/api/ping`, CFB desk routes
+(reachability), Railway `/health`, and CFB engine status until they 200 (or the
+window expires).
+
+**Does not** assert CFB projections `N=10000` (Desk OS item D). That grain is
+soak-only — see `cfb-projections-soak.yml`.
+
+### `cfb-projections-soak.yml` — CFB N=10000 soak/slow
+
+Nightly + `workflow_dispatch`. Same `N=10000` assertion, unchanged. Failure →
+ticket; does **not** fail `deploy-vercel` / Desk OS ship bar.
+Script: `scripts/ci/cfb-projections-n10000-soak.sh`.
 
 ### `ci.yml` - Continuous Integration
 
