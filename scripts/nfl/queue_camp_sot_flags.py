@@ -34,6 +34,7 @@ from src.services.nfl_camp_sot_queue import (  # noqa: E402
     PROPOSALS_MAY_AUTO_APPLY,
     accept_proposal,
     close_work_item,
+    live_remat_fn,
     overdue_summary,
     queue_flags,
     scan_camp_sot_flags,
@@ -156,6 +157,7 @@ def main() -> int:
                 args.accept,
                 write_pack=args.write,
                 rematerialize=args.rematerialize,
+                remat_fn=live_remat_fn() if (args.rematerialize and not args.dry_run) else None,
                 allow_empty_overrides=args.allow_empty,
                 actor=args.actor,
                 reason=args.reason,
@@ -171,6 +173,13 @@ def main() -> int:
         if result.get("disposition") == "remat_failed":
             print("REMAT FAILED — pack rolled back; not accepted", file=sys.stderr)
             return 3
+        rid = str(result.get("remat_run_id") or "")
+        if args.rematerialize and rid.startswith("receipt-only-"):
+            print(
+                "WARNING: remat_run_id is still receipt-only — live remat hook not on prod",
+                file=sys.stderr,
+            )
+            return 4
         if result.get("rematerialize_hint"):
             print("REMAT:", result["rematerialize_hint"])
         return 0
