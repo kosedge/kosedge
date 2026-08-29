@@ -31,6 +31,8 @@ IDENTITY_FIELDS = frozenset({"player_name", "player_id", "depth_order", "depth_s
 QB_REPUBLISH_FIELDS = IDENTITY_FIELDS | frozenset({"competition_status"})
 # snap_share_prior / snap_share_package: accept-only via proposed_patch (sot).
 # See ``nfl_snap_share_prior``.
+# confirmation (high|med|low): stamped on committed situation events —
+# see ``nfl_confirmation_variance``.
 ALLOWED_FIELDS = IDENTITY_FIELDS | frozenset(
     {
         "injury_status",
@@ -40,6 +42,7 @@ ALLOWED_FIELDS = IDENTITY_FIELDS | frozenset(
         "role_confidence",
         "snap_share_prior",
         "snap_share_package",
+        "confirmation",
     }
 )
 # Rest/weather game-card fields are remat SoT only — never note / intel overrides.
@@ -87,7 +90,10 @@ def normalize_override(raw: Mapping[str, Any]) -> Dict[str, Any]:
         raise ValueError(f"unsupported field {field!r}")
     if not team:
         raise ValueError("team is required")
-    return {
+    from src.services.nfl_confirmation_variance import normalize_confirmation
+
+    conf_level = normalize_confirmation(raw.get("confirmation"))
+    out = {
         "team": team,
         "player_name": str(raw.get("player_name") or "").strip(),
         "player_id": str(raw.get("player_id") or "").strip(),
@@ -102,6 +108,9 @@ def normalize_override(raw: Mapping[str, Any]) -> Dict[str, Any]:
         "destination": dest,
         "sources": list(raw.get("sources") or []),
     }
+    if conf_level:
+        out["confirmation"] = conf_level
+    return out
 
 
 def _row_match(row: Mapping[str, Any], ov: Mapping[str, Any]) -> bool:
@@ -181,6 +190,15 @@ def apply_intel_overrides(
             skipped.append({**ov, "skip_reason": "no matching SoT row"})
             continue
         for row in matches:
+            # Open competition stays a mixture — sleeper/notes cannot close.
+            from src.services.nfl_confirmation_variance import (
+                notes_or_sleeper_cannot_close_open_competition,
+            )
+
+            close_block = notes_or_sleeper_cannot_close_open_competition(ov, row)
+            if close_block:
+                skipped.append({**ov, "skip_reason": close_block})
+                continue
             current = row.get(ov["field"])
             expected = ov.get("before")
             if expected not in (None, "") and str(current) != str(expected):
@@ -196,6 +214,10 @@ def apply_intel_overrides(
                 from src.services.nfl_snap_share_prior import clamp_share
 
                 after_val = clamp_share(after_val)
+            if ov["field"] == "confirmation":
+                from src.services.nfl_confirmation_variance import normalize_confirmation
+
+                after_val = normalize_confirmation(after_val) or after_val
             row[ov["field"]] = after_val
             applied.append(
                 {
@@ -222,6 +244,11 @@ def apply_intel_overrides(
     snap_events = apply_out_redistribution_after_overrides(out, applied)
     if snap_events:
         out["snap_share_redistributions"] = snap_events
+
+    # Stamp confirmation high|med|low on every committed situation event.
+    from src.services.nfl_confirmation_variance import apply_confirmation_to_pack_events
+
+    apply_confirmation_to_pack_events(out, applied)
 
     if as_of:
         out["daily_intel_as_of"] = as_of

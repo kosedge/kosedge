@@ -255,9 +255,17 @@ class FactorEntry:
     total_pts: float
     confidence_delta: float
     reason: str
+    confirmation: Optional[str] = None
+    uncertainty: Optional[Dict[str, Any]] = None
 
     def as_dict(self) -> Dict[str, Any]:
-        return asdict(self)
+        d = asdict(self)
+        # Keep log compact when confirmation unused.
+        if not d.get("confirmation"):
+            d.pop("confirmation", None)
+        if not d.get("uncertainty"):
+            d.pop("uncertainty", None)
+        return d
 
 
 def _entry(
@@ -270,6 +278,8 @@ def _entry(
     spread_pts: float = 0.0,
     total_pts: float = 0.0,
     confidence_delta: float = 0.0,
+    confirmation: Optional[str] = None,
+    uncertainty: Optional[Mapping[str, Any]] = None,
 ) -> FactorEntry:
     return FactorEntry(
         factor=factor,
@@ -280,7 +290,29 @@ def _entry(
         total_pts=round(float(total_pts), 4),
         confidence_delta=round(float(confidence_delta), 4),
         reason=reason,
+        confirmation=confirmation,
+        uncertainty=dict(uncertainty) if uncertainty else None,
     )
+
+
+def _confirm_scale_points(
+    row: Mapping[str, Any],
+    spread_pts: float,
+    total_pts: float,
+    *,
+    confidence_delta: float = 0.0,
+) -> Tuple[float, float, float, str, Dict[str, Any]]:
+    """Scale KEI mean points by pack-row confirmation; widen uncertainty for low."""
+    from src.services.nfl_confirmation_variance import (
+        row_confirmation,
+        scale_mean_shock,
+        variance_confidence_delta,
+    )
+
+    level = row_confirmation(row)
+    scaled_s, scaled_t, unc = scale_mean_shock(spread_pts, total_pts, level)
+    conf = float(confidence_delta) + float(variance_confidence_delta(level))
+    return scaled_s, scaled_t, conf, level, unc
 
 
 def _home_signed(team: str, home: str, away: str, team_spread: float) -> Tuple[float, str]:
@@ -398,6 +430,9 @@ def _qb_factor(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool]:
     if inj in OUT_STATUSES:
         pts = float(DEFAULT_IMPACT_POINTS["qb1_out_spread"])
         tot = float(DEFAULT_IMPACT_POINTS["qb1_out_total"])
+        pts, tot, conf, level, unc = _confirm_scale_points(
+            qb1, pts, tot, confidence_delta=-0.08
+        )
         # Team-weaker magnitude; apply_week1_kei_reprice signs into home-spread.
         return [
             _entry(
@@ -407,12 +442,29 @@ def _qb_factor(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool]:
                 direction="team_weaker",
                 spread_pts=pts,
                 total_pts=tot,
-                confidence_delta=-0.08,
-                reason=f"QB1 {name} {inj} — backup drop-off",
+                confidence_delta=conf,
+                confirmation=level,
+                uncertainty=unc,
+                reason=f"QB1 {name} {inj} — backup drop-off (confirmation={level})",
             )
         ], False
 
     if status == "open_competition":
+        # Mixture — zero mean lock; widen uncertainty. Notes cannot close.
+        from src.services.nfl_confirmation_variance import (
+            open_competition_mixture_shares,
+            variance_confidence_delta,
+        )
+
+        mixture = open_competition_mixture_shares(rows, team=team, position="QB")
+        level = "low"  # unresolved mixture → variance path
+        unc = {
+            "confirmation": level,
+            "mean_shock_scale": 0.0,
+            "variance_widen": 1.35,
+            "confidence_delta": variance_confidence_delta(level) - 0.12,
+            "open_competition_mixture": mixture,
+        }
         return [
             _entry(
                 factor="qb_confirmation",
@@ -421,11 +473,15 @@ def _qb_factor(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool]:
                 direction="none",
                 spread_pts=0.0,
                 total_pts=0.0,
-                confidence_delta=-0.12,
-                reason=f"open_competition {names} — no crown; wider uncertainty",
+                confidence_delta=-0.12 + variance_confidence_delta(level),
+                confirmation=level,
+                uncertainty=unc,
+                reason=f"open_competition {names} — no crown; mixture; wider uncertainty",
             )
         ], False
 
+    # Named starter / official depth → high confirmation, zero mean (logged).
+    pts, tot, conf, level, unc = _confirm_scale_points(qb1, 0.0, 0.0)
     return [
         _entry(
             factor="qb_confirmation",
@@ -434,7 +490,10 @@ def _qb_factor(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool]:
             direction="none",
             spread_pts=0.0,
             total_pts=0.0,
-            reason=f"QB1 confirmed {name} ({status or 'named_starter'})",
+            confidence_delta=conf,
+            confirmation=level,
+            uncertainty=unc,
+            reason=f"QB1 confirmed {name} ({status or 'named_starter'}; confirmation={level})",
         )
     ], True
 
@@ -456,9 +515,22 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
         ol_rows=pack.ol(team),
         defense_rows=pack.defense(team),
     )
+    # Index pack rows for confirmation scaling (shock table itself untouched).
+    pack_rows_by_name = {
+        str(r.get("player_name") or ""): r
+        for r in list(pack.ol(team)) + list(pack.defense(team))
+        if isinstance(r, Mapping)
+    }
     for shock in shocks.role_shocks:
-        team_spread += shock.spread_pts
-        team_total += shock.total_pts
+        row = pack_rows_by_name.get(shock.player_name) or {
+            "injury_status": "ir",
+            "player_name": shock.player_name,
+        }
+        pts, tot, conf, level, unc = _confirm_scale_points(
+            row, shock.spread_pts, shock.total_pts
+        )
+        team_spread += pts
+        team_total += tot
         factor = "injury_ol" if shock.unit == "ol" else "injury_defense"
         applied.append(
             _entry(
@@ -466,9 +538,12 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                 applied=True,
                 team=team,
                 direction="team_weaker",
-                spread_pts=shock.spread_pts,
-                total_pts=shock.total_pts,
-                reason=shock.reason(),
+                spread_pts=pts,
+                total_pts=tot,
+                confidence_delta=conf,
+                confirmation=level,
+                uncertainty=unc,
+                reason=f"{shock.reason()} (confirmation={level})",
             )
         )
     for skip in shocks.unit_wipe_skips:
@@ -497,12 +572,16 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
         if inj in OUT_STATUSES or is_out_slot:
             pts = float(DEFAULT_IMPACT_POINTS["ol_out_spread"])
             tot = float(DEFAULT_IMPACT_POINTS["ol_out_total"])
-            team_spread += pts
-            team_total += tot
             if "unknown" in str(row.get("injury_window") or "").lower() or not is_out_slot:
                 # Allegretti-class: listed out but W1 window not invented.
                 if "unknown" in str(row.get("injury_window") or "").lower():
                     injury_clear = False
+            base_conf = -0.04 if not injury_clear else 0.0
+            pts, tot, conf, level, unc = _confirm_scale_points(
+                row, pts, tot, confidence_delta=base_conf
+            )
+            team_spread += pts
+            team_total += tot
             applied.append(
                 _entry(
                     factor="injury_ol",
@@ -511,14 +590,19 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     direction="team_weaker",
                     spread_pts=pts,
                     total_pts=tot,
-                    confidence_delta=-0.04 if not injury_clear else 0.0,
-                    reason=f"{name} {pos} {inj or slot} (SoT ol_roles)",
+                    confidence_delta=conf,
+                    confirmation=level,
+                    uncertainty=unc,
+                    reason=f"{name} {pos} {inj or slot} (SoT ol_roles; confirmation={level})",
                 )
             )
         elif inj in UNRESOLVED_STATUSES and is_starter:
             injury_clear = False
             pts = 0.25
             tot = 0.10
+            pts, tot, conf, level, unc = _confirm_scale_points(
+                row, pts, tot, confidence_delta=-0.06
+            )
             team_spread += pts
             team_total += tot
             applied.append(
@@ -529,8 +613,10 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     direction="team_weaker",
                     spread_pts=pts,
                     total_pts=tot,
-                    confidence_delta=-0.06,
-                    reason=f"{name} {pos} {inj} starter — unresolved",
+                    confidence_delta=conf,
+                    confirmation=level,
+                    uncertainty=unc,
+                    reason=f"{name} {pos} {inj} starter — unresolved (confirmation={level})",
                 )
             )
 
@@ -574,6 +660,7 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     )
                 )
                 continue
+            pts, tot, conf, level, unc = _confirm_scale_points(row, pts, tot)
             team_spread += pts
             team_total += tot
             applied.append(
@@ -584,13 +671,22 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     direction="team_weaker",
                     spread_pts=pts,
                     total_pts=tot,
-                    reason=f"{name} {pos}{order or 1} {inj or slot} (SoT defense_roles)",
+                    confidence_delta=conf,
+                    confirmation=level,
+                    uncertainty=unc,
+                    reason=(
+                        f"{name} {pos}{order or 1} {inj or slot} "
+                        f"(SoT defense_roles; confirmation={level})"
+                    ),
                 )
             )
         elif inj in UNRESOLVED_STATUSES and is_starter:
             injury_clear = False
             pts = 0.25
             tot = 0.10
+            pts, tot, conf, level, unc = _confirm_scale_points(
+                row, pts, tot, confidence_delta=-0.05
+            )
             team_spread += pts
             team_total += tot
             applied.append(
@@ -601,8 +697,10 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     direction="team_weaker",
                     spread_pts=pts,
                     total_pts=tot,
-                    confidence_delta=-0.05,
-                    reason=f"{name} {pos} {inj} starter — unresolved",
+                    confidence_delta=conf,
+                    confirmation=level,
+                    uncertainty=unc,
+                    reason=f"{name} {pos} {inj} starter — unresolved (confirmation={level})",
                 )
             )
 
@@ -634,6 +732,7 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
             else:
                 pts = 0.40
                 tot = 0.20
+            pts, tot, conf, level, unc = _confirm_scale_points(row, pts, tot)
             team_spread += pts
             team_total += tot
             applied.append(
@@ -644,13 +743,19 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                     direction="team_weaker",
                     spread_pts=pts,
                     total_pts=tot,
-                    reason=f"{name} {pos}{order} {inj} (SoT)",
+                    confidence_delta=conf,
+                    confirmation=level,
+                    uncertainty=unc,
+                    reason=f"{name} {pos}{order} {inj} (SoT; confirmation={level})",
                 )
             )
         else:
             injury_clear = False
             if order == 1:
                 pts, tot = 0.25, 0.10
+                pts, tot, conf, level, unc = _confirm_scale_points(
+                    row, pts, tot, confidence_delta=-0.05
+                )
                 team_spread += pts
                 team_total += tot
                 applied.append(
@@ -661,8 +766,10 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                         direction="team_weaker",
                         spread_pts=pts,
                         total_pts=tot,
-                        confidence_delta=-0.05,
-                        reason=f"{name} {pos}1 {inj} — unresolved",
+                        confidence_delta=conf,
+                        confirmation=level,
+                        uncertainty=unc,
+                        reason=f"{name} {pos}1 {inj} — unresolved (confirmation={level})",
                     )
                 )
             else:
@@ -1256,6 +1363,26 @@ def apply_week1_kei_reprice(
     handicap_out["spread_home"] = round(spread + net_spread, 2)
 
     fires = abs(net_spread) > 1e-9 or abs(net_total) > 1e-9
+    from src.services.nfl_confirmation_variance import (
+        CONFIRMATION_VARIANCE_VERSION,
+        expose_kei_mean_uncertainty,
+    )
+
+    # Aggregate confirmation from applied mean-moving factors (default high when none).
+    conf_levels = [
+        str(e.confirmation)
+        for e in applied
+        if e.confirmation and abs(e.spread_pts) + abs(e.total_pts) > 1e-12
+    ]
+    surface_level = "low" if "low" in conf_levels else (
+        "med" if "med" in conf_levels else ("high" if conf_levels else "high")
+    )
+    kei_surface = expose_kei_mean_uncertainty(
+        mean_spread=net_spread,
+        mean_total=net_total,
+        confirmation=surface_level,
+        extra={"confidence_delta": round(net_conf, 4)},
+    )
     log = {
         "scope": "week1_reg_2026",
         "applied": fires,
@@ -1264,6 +1391,9 @@ def apply_week1_kei_reprice(
         "spread_delta": net_spread,
         "total_delta": net_total,
         "confidence_delta": round(net_conf, 4),
+        "mean": kei_surface["mean"],
+        "uncertainty": kei_surface["uncertainty"],
+        "confirmation_variance_version": CONFIRMATION_VARIANCE_VERSION,
         "qb_clear": qb_clear,
         "injury_clear": injury_clear,
         "weather_clear": weather_clear,
@@ -1317,6 +1447,8 @@ def week1_slate_reprice_table(
                 "kei_total": new_h.get("total_mean"),
                 "spread_delta": log.get("spread_delta"),
                 "total_delta": log.get("total_delta"),
+                "mean": log.get("mean"),
+                "uncertainty": log.get("uncertainty"),
                 "qb_clear": log.get("qb_clear"),
                 "factors": [
                     e.get("reason")
