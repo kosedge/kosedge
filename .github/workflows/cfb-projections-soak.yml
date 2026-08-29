@@ -1,0 +1,29 @@
+# Desk OS item D — CFB N=10000 soak (not merge-blocking).
+# Scheduled + workflow_dispatch only. Failure → ticket, not deploy-vercel red.
+# See scripts/ci/cfb-projections-n10000-soak.sh
+
+name: CFB Projections Soak
+
+on:
+  schedule:
+    # Nightly 06:15 UTC
+    - cron: "15 6 * * *"
+  workflow_dispatch:
+
+concurrency:
+  group: cfb-projections-soak
+  cancel-in-progress: true
+
+jobs:
+  soak:
+    name: cfb projections N=10000 (soak/slow)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Soak CFB projections N=10000
+        run: bash scripts/ci/cfb-projections-n10000-soak.sh
+        env:
+          ATTEMPTS: "10"
+          SLEEP_SECS: "20"

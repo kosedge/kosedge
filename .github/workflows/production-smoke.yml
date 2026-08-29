@@ -1,6 +1,8 @@
 # Post-ship smoke for the subscription site.
 # Runs after every push to deploy-vercel (Vercel + Railway both listen there).
 # Retries while Vercel finishes building so a slow deploy is not a false red.
+#
+# Desk OS item D: does NOT assert CFB N=10000 (that lives in cfb-projections-soak.yml).
 
 name: Production Smoke
 

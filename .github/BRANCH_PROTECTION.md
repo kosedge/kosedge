@@ -24,6 +24,8 @@ Do **not** require the old “PR Checks” push run — that was a 0s false fail
 
 Optional after merge: watch **Production Smoke**. It is post-deploy (Vercel is async)
 so it should not block the merge; it should page if www or Railway did not come up.
+CFB projections `N=10000` is **not** in that smoke (Desk OS item D) — it runs in
+**CFB Projections Soak** (`cfb-projections-soak.yml`, nightly / manual) only.
 
 ### Main Branch Protection
 
