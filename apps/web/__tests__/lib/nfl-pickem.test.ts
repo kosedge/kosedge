@@ -1,8 +1,12 @@
 import { describe, expect, it } from "vitest";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
 import {
+  buildNflAtsPickemCard,
   buildNflPickemCard,
   filterPickemWeekLines,
+  parsePickemTab,
+  resolveAtsPickemTag,
+  resolveAtsSide,
   resolvePickemTag,
 } from "@/lib/nfl-pickem";
 
@@ -94,6 +98,7 @@ function makeSlate(n: number): NflFairLineRow[] {
       awayWinProb: 1 - homeWin,
       handicapSpreadHome: -(i + 1),
       spreadHome: -(i + 1),
+      marketSpreadHome: -(i + 0.5),
       startTime: `2026-09-14T${String(17 + (i % 6)).padStart(2, "0")}:00:00Z`,
       publishTagSpread: "PASS",
       publishTagMl: "PASS",
@@ -101,15 +106,17 @@ function makeSlate(n: number): NflFairLineRow[] {
   });
 }
 
-describe("buildNflPickemCard", () => {
-  it("assigns unique ranks N..1 for a 16-game slate", () => {
+describe("buildNflPickemCard (SU)", () => {
+  it("assigns unique ranks 1..N for a 16-game slate (first = 1)", () => {
     const card = buildNflPickemCard(makeSlate(16));
     expect(card).toHaveLength(16);
-    const confidences = card.map((p) => p.confidence);
-    expect(confidences).toEqual([
-      16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+    const ranks = card.map((p) => p.rank);
+    expect(ranks).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
     ]);
-    expect(new Set(confidences).size).toBe(16);
+    expect(card[0]!.rank).toBe(1);
+    expect(card[card.length - 1]!.rank).toBe(16);
+    expect(new Set(ranks).size).toBe(16);
   });
 
   it("sorts PLAY above LEAN above PASS, then by win-prob gap", () => {
@@ -151,7 +158,7 @@ describe("buildNflPickemCard", () => {
       "lean-mid",
       "pass-big",
     ]);
-    expect(card.map((p) => p.confidence)).toEqual([4, 3, 2, 1]);
+    expect(card.map((p) => p.rank)).toEqual([1, 2, 3, 4]);
     expect(card[0]!.tag).toBe("PLAY");
     expect(card[2]!.tag).toBe("LEAN");
   });
@@ -195,12 +202,12 @@ describe("buildNflPickemCard", () => {
     ];
     const card = buildNflPickemCard(lines);
     expect(card[0]!.gameId).toBe("has-prob");
-    expect(card[0]!.confidence).toBe(2);
+    expect(card[0]!.rank).toBe(1);
     expect(card[1]!.gameId).toBe("no-prob");
     expect(card[1]!.side).toBe(null);
     expect(card[1]!.pickAbbr).toBe(null);
     expect(card[1]!.winProb).toBe(null);
-    expect(card[1]!.confidence).toBe(1);
+    expect(card[1]!.rank).toBe(2);
   });
 
   it("falls back to |KEI spread| when win-prob gap ties and never invents", () => {
@@ -221,7 +228,6 @@ describe("buildNflPickemCard", () => {
       }),
     ];
     const card = buildNflPickemCard(lines);
-    // Same gap (0.1); larger |spread| first.
     expect(card.map((p) => p.gameId)).toEqual(["wide", "narrow"]);
   });
 
@@ -256,9 +262,226 @@ describe("buildNflPickemCard", () => {
 
   it("shrinks N with bye weeks (fewer games)", () => {
     const card = buildNflPickemCard(makeSlate(14));
-    expect(card.map((p) => p.confidence)).toEqual([
-      14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+    expect(card.map((p) => p.rank)).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14,
     ]);
+  });
+});
+
+describe("buildNflAtsPickemCard", () => {
+  it("picks home when KEI is stronger than the market number", () => {
+    const card = buildNflAtsPickemCard([
+      line({
+        gameId: "home-cover",
+        handicapSpreadHome: -4.5,
+        spreadHome: -4.5,
+        marketSpreadHome: -3.0,
+        publishTagSpread: "PASS",
+      }),
+    ]);
+    expect(card[0]!.side).toBe("home");
+    expect(card[0]!.pickAbbr).toBe("SEA");
+    expect(card[0]!.marketSpreadPick).toBe(-3.0);
+    expect(card[0]!.keiSpreadPick).toBe(-4.5);
+    expect(card[0]!.atsEdge).toBe(-1.5);
+    expect(Math.abs(card[0]!.atsEdge!)).toBe(1.5);
+  });
+
+  it("picks away when KEI is weaker than the market number", () => {
+    const card = buildNflAtsPickemCard([
+      line({
+        gameId: "away-cover",
+        handicapSpreadHome: -1.0,
+        spreadHome: -1.0,
+        marketSpreadHome: -3.0,
+        publishTagSpread: "PASS",
+      }),
+    ]);
+    expect(card[0]!.side).toBe("away");
+    expect(card[0]!.pickAbbr).toBe("NE");
+    expect(card[0]!.marketSpreadPick).toBe(3.0);
+    expect(card[0]!.keiSpreadPick).toBe(1.0);
+    expect(card[0]!.atsEdge).toBe(2.0);
+  });
+
+  it("sinks missing market with side null and last ranks", () => {
+    const lines = [
+      line({
+        gameId: "no-mkt",
+        handicapSpreadHome: -4,
+        marketSpreadHome: null,
+        dkSpreadHome: null,
+        fdSpreadHome: null,
+        stakeSpreadHome: null,
+        publishTagSpread: "PLAY",
+        startTime: "2026-09-14T13:00:00Z",
+      }),
+      line({
+        gameId: "has-mkt",
+        handicapSpreadHome: -3,
+        marketSpreadHome: -2,
+        publishTagSpread: "PASS",
+        startTime: "2026-09-14T20:00:00Z",
+      }),
+    ];
+    const card = buildNflAtsPickemCard(lines);
+    expect(card[0]!.gameId).toBe("has-mkt");
+    expect(card[0]!.rank).toBe(1);
+    expect(card[1]!.gameId).toBe("no-mkt");
+    expect(card[1]!.side).toBe(null);
+    expect(card[1]!.pickAbbr).toBe(null);
+    expect(card[1]!.marketSpreadPick).toBe(null);
+    expect(card[1]!.rank).toBe(2);
+  });
+
+  it("orders PLAY spread above LEAN above PASS by |edge| inside bucket", () => {
+    const lines = [
+      line({
+        gameId: "pass-big-edge",
+        publishTagSpread: "PASS",
+        publishTagMl: "PASS",
+        handicapSpreadHome: -7,
+        marketSpreadHome: -3,
+        startTime: "2026-09-14T17:00:00Z",
+      }),
+      line({
+        gameId: "lean-mid",
+        publishTagSpread: "LEAN",
+        handicapSpreadHome: -4,
+        marketSpreadHome: -3,
+        startTime: "2026-09-14T17:00:00Z",
+      }),
+      line({
+        gameId: "play-small",
+        publishTagSpread: "PLAY",
+        handicapSpreadHome: -3.5,
+        marketSpreadHome: -3,
+        startTime: "2026-09-14T17:00:00Z",
+      }),
+      line({
+        gameId: "play-big",
+        publishTagSpread: "PLAY",
+        handicapSpreadHome: -6,
+        marketSpreadHome: -3,
+        startTime: "2026-09-14T20:00:00Z",
+      }),
+    ];
+    const card = buildNflAtsPickemCard(lines);
+    expect(card.map((p) => p.gameId)).toEqual([
+      "play-big",
+      "play-small",
+      "lean-mid",
+      "pass-big-edge",
+    ]);
+    expect(card[0]!.rank).toBe(1);
+    expect(Math.abs(card[0]!.atsEdge!)).toBe(3);
+    expect(card[0]!.tag).toBe("PLAY");
+  });
+
+  it("does not promote an ATS row on ML PLAY alone", () => {
+    expect(
+      resolveAtsPickemTag(
+        line({ publishTagSpread: "PASS", publishTagMl: "PLAY" }),
+      ),
+    ).toBe("PASS");
+
+    const card = buildNflAtsPickemCard([
+      line({
+        gameId: "ml-play-only",
+        publishTagSpread: "PASS",
+        publishTagMl: "PLAY",
+        handicapSpreadHome: -5,
+        marketSpreadHome: -3,
+        startTime: "2026-09-14T17:00:00Z",
+      }),
+      line({
+        gameId: "spread-lean",
+        publishTagSpread: "LEAN",
+        publishTagMl: "PASS",
+        handicapSpreadHome: -3.5,
+        marketSpreadHome: -3,
+        startTime: "2026-09-14T20:00:00Z",
+      }),
+    ]);
+    expect(card.map((p) => p.gameId)).toEqual(["spread-lean", "ml-play-only"]);
+    expect(card[0]!.tag).toBe("LEAN");
+    expect(card[1]!.tag).toBe("PASS");
+  });
+
+  it("sinks zero edge as no ATS pick", () => {
+    const resolved = resolveAtsSide(-3, -3);
+    expect(resolved.side).toBe(null);
+    expect(resolved.atsEdge).toBe(0);
+
+    const card = buildNflAtsPickemCard([
+      line({
+        gameId: "zero",
+        handicapSpreadHome: -3,
+        marketSpreadHome: -3,
+        publishTagSpread: "PLAY",
+        startTime: "2026-09-14T13:00:00Z",
+      }),
+      line({
+        gameId: "edge",
+        handicapSpreadHome: -4,
+        marketSpreadHome: -3,
+        publishTagSpread: "PASS",
+        startTime: "2026-09-14T20:00:00Z",
+      }),
+    ]);
+    expect(card[0]!.gameId).toBe("edge");
+    expect(card[1]!.gameId).toBe("zero");
+    expect(card[1]!.side).toBe(null);
+    expect(card[1]!.rank).toBe(2);
+  });
+
+  it("ranks 1 as largest |edge| inside the top tag bucket", () => {
+    const card = buildNflAtsPickemCard([
+      line({
+        gameId: "play-small",
+        publishTagSpread: "PLAY",
+        handicapSpreadHome: -3.2,
+        marketSpreadHome: -3,
+      }),
+      line({
+        gameId: "play-large",
+        publishTagSpread: "PLAY",
+        handicapSpreadHome: -5,
+        marketSpreadHome: -3,
+      }),
+    ]);
+    expect(card[0]!.gameId).toBe("play-large");
+    expect(card[0]!.rank).toBe(1);
+    expect(Math.abs(card[0]!.atsEdge!)).toBeGreaterThan(
+      Math.abs(card[1]!.atsEdge!),
+    );
+  });
+
+  it("prefers stake → DK → FD → consensus and never best-of-books", () => {
+    const card = buildNflAtsPickemCard([
+      line({
+        gameId: "stake",
+        handicapSpreadHome: -4,
+        stakeSpreadHome: -3.5,
+        stakeSpreadBook: "DraftKings",
+        dkSpreadHome: -2,
+        fdSpreadHome: -1,
+        marketSpreadHome: 0,
+        bestSpreadHome: -10,
+      }),
+    ]);
+    expect(card[0]!.marketSpreadHome).toBe(-3.5);
+    expect(card[0]!.marketSpreadPick).toBe(-3.5);
+    expect(card[0]!.stakeBook).toBe("DraftKings");
+  });
+});
+
+describe("parsePickemTab", () => {
+  it("defaults to ats", () => {
+    expect(parsePickemTab(undefined)).toBe("ats");
+    expect(parsePickemTab("")).toBe("ats");
+    expect(parsePickemTab("su")).toBe("su");
+    expect(parsePickemTab("ats")).toBe("ats");
   });
 });
 

@@ -1,21 +1,25 @@
 /**
- * NFL Fantasy Pick’em card — straight-up winners ranked by confidence.
+ * NFL Fantasy Pick’em cards — straight-up and ATS, ranked 1–N.
  *
- * Sort key (stable):
- * 1. Tag bucket: PLAY (spread or ML publish tag) → LEAN → everything else
- * 2. Inside a bucket: larger KEI win-prob gap (max(home, away) − 0.5).
- *    Fallback: larger |KEI spread|. Never invent a number.
- * 3. Tie-break: earlier kickoff, then gameId.
+ * SU sort (stable):
+ * 1. Tag bucket: PLAY (spread or ML) → LEAN → everything else
+ * 2. Inside bucket: larger KEI win-prob gap; fallback |KEI spread|
+ * 3. Tie-break: earlier kickoff, then gameId
  *
- * Games missing both win probs get side: null and sink to the bottom
- * (leftover low confidence ranks). Side is always SU from KEI — spread
- * PLAY only boosts rank, it is not an ATS pick.
+ * ATS sort (stable):
+ * 1. No-pick / missing line sinks last
+ * 2. Tag bucket from publishTagSpread only: PLAY → LEAN → other
+ * 3. Inside bucket: larger |keiHome − marketHome|
+ * 4. Tie-break: earlier kickoff, then gameId
+ *
+ * Rank is always index + 1 after sort (1 = strongest on the week).
  */
 
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
 
 export type NflPickemSide = "home" | "away" | null;
 export type NflPickemTag = "PLAY" | "LEAN" | "PASS" | null;
+export type NflPickemTab = "ats" | "su";
 
 export type NflPickemPick = {
   gameId: string;
@@ -39,13 +43,24 @@ export type NflPickemPick = {
    * Null when no pick or no spread.
    */
   keiSpreadPick: number | null;
-  /** Unique confidence N … 1 (N = most confident = slate size). */
-  confidence: number;
-  /** Effective publish tag for sort/display (spread or ML). */
+  /** Unique rank 1 … N (1 = strongest pick on the week). */
+  rank: number;
+  /** Effective publish tag for sort/display (spread or ML on SU). */
   tag: NflPickemTag;
 };
 
-type Rankable = {
+export type NflAtsPickemPick = NflPickemPick & {
+  /** Stake line home (stake → DK → FD → consensus). */
+  marketSpreadHome: number | null;
+  /** Market/stake number from the pick’s perspective. */
+  marketSpreadPick: number | null;
+  /** keiHome − marketHome (home-spread convention). Null when no ATS pick. */
+  atsEdge: number | null;
+  /** Book of the stake line when known. */
+  stakeBook: string | null;
+};
+
+type SuRankable = {
   row: NflFairLineRow;
   side: NflPickemSide;
   homeWin: number | null;
@@ -54,6 +69,19 @@ type Rankable = {
   gap: number | null;
   keiSpreadHome: number | null;
   absSpread: number | null;
+  tag: NflPickemTag;
+  tagBucket: number;
+  kickoffMs: number;
+};
+
+type AtsRankable = {
+  row: NflFairLineRow;
+  side: NflPickemSide;
+  keiSpreadHome: number | null;
+  marketSpreadHome: number | null;
+  atsEdge: number | null;
+  absEdge: number | null;
+  stakeBook: string | null;
   tag: NflPickemTag;
   tagBucket: number;
   kickoffMs: number;
@@ -77,6 +105,28 @@ function resolveKeiSpreadHome(row: NflFairLineRow): number | null {
 }
 
 /**
+ * Contest / stake line for ATS — never best-of-books.
+ * Order: stake → DK → FD → consensus market.
+ */
+export function resolveAtsMarketLineHome(row: NflFairLineRow): {
+  marketHome: number | null;
+  stakeBook: string | null;
+} {
+  const candidates: Array<{ value: number | null; book: string | null }> = [
+    { value: row.stakeSpreadHome, book: row.stakeSpreadBook },
+    { value: row.dkSpreadHome, book: "DraftKings" },
+    { value: row.fdSpreadHome, book: "FanDuel" },
+    { value: row.marketSpreadHome, book: null },
+  ];
+  for (const c of candidates) {
+    if (c.value != null && Number.isFinite(c.value)) {
+      return { marketHome: c.value, stakeBook: c.book };
+    }
+  }
+  return { marketHome: null, stakeBook: null };
+}
+
+/**
  * PLAY if either spread or ML publish tag is PLAY; else LEAN if either;
  * else PASS if either; else null. Tag only affects sort — side stays SU.
  */
@@ -85,6 +135,13 @@ export function resolvePickemTag(row: NflFairLineRow): NflPickemTag {
   if (tags.includes("PLAY")) return "PLAY";
   if (tags.includes("LEAN")) return "LEAN";
   if (tags.includes("PASS")) return "PASS";
+  return null;
+}
+
+/** ATS tag — spread publish tag only. ML PLAY must not promote an ATS row. */
+export function resolveAtsPickemTag(row: NflFairLineRow): NflPickemTag {
+  const tag = row.publishTagSpread;
+  if (tag === "PLAY" || tag === "LEAN" || tag === "PASS") return tag;
   return null;
 }
 
@@ -107,6 +164,26 @@ function resolveSide(home: number | null, away: number | null): NflPickemSide {
   return "away";
 }
 
+/**
+ * ATS side from home-spread edge (negative home = home favored).
+ * edgeHome = keiHome − marketHome
+ *   < 0 → home covers vs the number
+ *   > 0 → away covers vs the number
+ *   = 0 → no edge → sink
+ */
+export function resolveAtsSide(
+  keiHome: number | null,
+  marketHome: number | null,
+): { side: NflPickemSide; atsEdge: number | null } {
+  if (keiHome == null || marketHome == null) {
+    return { side: null, atsEdge: null };
+  }
+  const atsEdge = keiHome - marketHome;
+  if (atsEdge === 0) return { side: null, atsEdge: 0 };
+  if (atsEdge < 0) return { side: "home", atsEdge };
+  return { side: "away", atsEdge };
+}
+
 function winProbGap(home: number | null, away: number | null): number | null {
   if (home == null && away == null) return null;
   const max = Math.max(
@@ -123,22 +200,19 @@ function kickoffMs(startTime: string | null): number {
   return Number.isFinite(t) ? t : Number.POSITIVE_INFINITY;
 }
 
-function compareRankable(a: Rankable, b: Rankable): number {
-  // Missing-side games sink to the bottom regardless of tag.
+function compareSuRankable(a: SuRankable, b: SuRankable): number {
   const aHasSide = a.side != null ? 0 : 1;
   const bHasSide = b.side != null ? 0 : 1;
   if (aHasSide !== bHasSide) return aHasSide - bHasSide;
 
   if (a.tagBucket !== b.tagBucket) return a.tagBucket - b.tagBucket;
 
-  // Larger gap first; null gap sorts after known gaps (never invent).
   if (a.gap != null && b.gap != null && a.gap !== b.gap) {
     return b.gap - a.gap;
   }
   if (a.gap != null && b.gap == null) return -1;
   if (a.gap == null && b.gap != null) return 1;
 
-  // Fallback: larger |KEI spread|.
   if (
     a.absSpread != null &&
     b.absSpread != null &&
@@ -153,8 +227,73 @@ function compareRankable(a: Rankable, b: Rankable): number {
   return a.row.gameId.localeCompare(b.row.gameId);
 }
 
+function compareAtsRankable(a: AtsRankable, b: AtsRankable): number {
+  const aHasSide = a.side != null ? 0 : 1;
+  const bHasSide = b.side != null ? 0 : 1;
+  if (aHasSide !== bHasSide) return aHasSide - bHasSide;
+
+  if (a.tagBucket !== b.tagBucket) return a.tagBucket - b.tagBucket;
+
+  if (a.absEdge != null && b.absEdge != null && a.absEdge !== b.absEdge) {
+    return b.absEdge - a.absEdge;
+  }
+  if (a.absEdge != null && b.absEdge == null) return -1;
+  if (a.absEdge == null && b.absEdge != null) return 1;
+
+  if (a.kickoffMs !== b.kickoffMs) return a.kickoffMs - b.kickoffMs;
+  return a.row.gameId.localeCompare(b.row.gameId);
+}
+
+function toPickFields(
+  row: NflFairLineRow,
+  side: NflPickemSide,
+  keiSpreadHome: number | null,
+): Pick<
+  NflPickemPick,
+  | "gameId"
+  | "week"
+  | "seasonType"
+  | "kickoff"
+  | "homeTeam"
+  | "awayTeam"
+  | "homeAbbr"
+  | "awayAbbr"
+  | "side"
+  | "pickAbbr"
+  | "oppAbbr"
+  | "keiSpreadHome"
+  | "keiSpreadPick"
+> {
+  const pickAbbr =
+    side === "home" ? row.homeAbbr : side === "away" ? row.awayAbbr : null;
+  const oppAbbr =
+    side === "home" ? row.awayAbbr : side === "away" ? row.homeAbbr : null;
+  let keiSpreadPick: number | null = null;
+  if (side === "home" && keiSpreadHome != null) {
+    keiSpreadPick = keiSpreadHome;
+  } else if (side === "away" && keiSpreadHome != null) {
+    keiSpreadPick = -keiSpreadHome;
+  }
+  return {
+    gameId: row.gameId,
+    week: row.week,
+    seasonType: row.seasonType,
+    kickoff: row.startTime,
+    homeTeam: row.homeTeam,
+    awayTeam: row.awayTeam,
+    homeAbbr: row.homeAbbr,
+    awayAbbr: row.awayAbbr,
+    side,
+    pickAbbr,
+    oppAbbr,
+    keiSpreadHome,
+    keiSpreadPick,
+  };
+}
+
+/** Straight-up card: KEI winner, ranked 1–N. */
 export function buildNflPickemCard(lines: NflFairLineRow[]): NflPickemPick[] {
-  const rankable: Rankable[] = lines.map((row) => {
+  const rankable: SuRankable[] = lines.map((row) => {
     const { home, away } = resolveWinProbs(row);
     const side = resolveSide(home, away);
     const keiSpreadHome = resolveKeiSpreadHome(row);
@@ -175,42 +314,76 @@ export function buildNflPickemCard(lines: NflFairLineRow[]): NflPickemPick[] {
     };
   });
 
-  rankable.sort(compareRankable);
+  rankable.sort(compareSuRankable);
 
-  const n = rankable.length;
   return rankable.map((item, index) => {
-    const confidence = n - index;
     const { row, side, winProb, keiSpreadHome, tag } = item;
-    const pickAbbr =
-      side === "home" ? row.homeAbbr : side === "away" ? row.awayAbbr : null;
-    const oppAbbr =
-      side === "home" ? row.awayAbbr : side === "away" ? row.homeAbbr : null;
-    let keiSpreadPick: number | null = null;
-    if (side === "home" && keiSpreadHome != null) {
-      keiSpreadPick = keiSpreadHome;
-    } else if (side === "away" && keiSpreadHome != null) {
-      keiSpreadPick = -keiSpreadHome;
-    }
-
     return {
-      gameId: row.gameId,
-      week: row.week,
-      seasonType: row.seasonType,
-      kickoff: row.startTime,
-      homeTeam: row.homeTeam,
-      awayTeam: row.awayTeam,
-      homeAbbr: row.homeAbbr,
-      awayAbbr: row.awayAbbr,
-      side,
-      pickAbbr,
-      oppAbbr,
+      ...toPickFields(row, side, keiSpreadHome),
       winProb,
-      keiSpreadHome,
-      keiSpreadPick,
-      confidence,
+      rank: index + 1,
       tag,
     };
   });
+}
+
+/** ATS card: cover vs stake line, ranked 1–N. */
+export function buildNflAtsPickemCard(
+  lines: NflFairLineRow[],
+): NflAtsPickemPick[] {
+  const rankable: AtsRankable[] = lines.map((row) => {
+    const keiSpreadHome = resolveKeiSpreadHome(row);
+    const { marketHome, stakeBook } = resolveAtsMarketLineHome(row);
+    const { side, atsEdge } = resolveAtsSide(keiSpreadHome, marketHome);
+    const tag = resolveAtsPickemTag(row);
+    return {
+      row,
+      side,
+      keiSpreadHome,
+      marketSpreadHome: marketHome,
+      atsEdge,
+      absEdge: atsEdge != null ? Math.abs(atsEdge) : null,
+      stakeBook,
+      tag,
+      tagBucket: tagBucket(tag),
+      kickoffMs: kickoffMs(row.startTime),
+    };
+  });
+
+  rankable.sort(compareAtsRankable);
+
+  return rankable.map((item, index) => {
+    const {
+      row,
+      side,
+      keiSpreadHome,
+      marketSpreadHome,
+      atsEdge,
+      stakeBook,
+      tag,
+    } = item;
+    let marketSpreadPick: number | null = null;
+    if (side === "home" && marketSpreadHome != null) {
+      marketSpreadPick = marketSpreadHome;
+    } else if (side === "away" && marketSpreadHome != null) {
+      marketSpreadPick = -marketSpreadHome;
+    }
+
+    return {
+      ...toPickFields(row, side, keiSpreadHome),
+      winProb: null,
+      marketSpreadHome,
+      marketSpreadPick,
+      atsEdge,
+      stakeBook,
+      rank: index + 1,
+      tag,
+    };
+  });
+}
+
+export function parsePickemTab(raw: string | undefined): NflPickemTab {
+  return raw === "su" ? "su" : "ats";
 }
 
 /** Filter REG (or matching product week season type) lines for a week. */

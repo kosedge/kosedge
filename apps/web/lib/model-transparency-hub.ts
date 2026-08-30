@@ -115,9 +115,9 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       title: "Pick’em",
       href: "/pro/nfl/fantasy/pickem",
       lines: [
-        "Weekly straight-up card. Rank is confidence 1–N, not a stake.",
-        "Side is the KEI winner. PLAY / LEAN only change sort order.",
-        "Research estimates, not a contest entry and not a lock list.",
+        "Two cards: ATS (default) and Straight up. Rank is 1–N, not a stake.",
+        "ATS side is KEI vs the stake line (DK → FD → consensus). SU side is the KEI winner.",
+        "PLAY / LEAN only change sort order. Research estimates, not a contest entry.",
       ],
     },
     {
