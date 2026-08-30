@@ -1,8 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import SportProHeader from "@/components/pro/SportProHeader";
-import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
-import { NflProductionReadinessBanner } from "@/components/pro/NflProductionReadinessBanner";
+import { NflDeskStatusBar } from "@/components/pro/NflDeskStatusBar";
 import {
   getSportEdgeBoardHref,
   getSportOverviewHref,
@@ -40,8 +39,7 @@ export default function SportProShell({
   return (
     <div className="min-h-screen bg-kos-black text-kos-text">
       <SportProHeader activeSport={sportKey} />
-      {freshness ? <NflProductionReadinessBanner /> : null}
-      {freshness ? <NflDataFreshnessBanner /> : null}
+      {freshness ? <NflDeskStatusBar /> : null}
 
       {(pageTitle || actions) && (
         <div className="border-b border-white/5 bg-kos-surface/20">

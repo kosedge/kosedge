@@ -52,6 +52,16 @@ export type ModelTransparencyGlossaryEntry = {
 export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntry[] =
   [
     {
+      id: "desk-status",
+      title: "Desk status (PRESEASON / data stale)",
+      lines: [
+        "PRESEASON / production no-go: PLAY stake tags and survivor locks stay research-only until readiness is go.",
+        "data stale: boards may use the last owned snapshot; do not treat PLAY tags as live stakes until freshness recovers.",
+        "The slim desk status bar only shows short tokens. Full blocker lists and research policy live here — not in the header.",
+        "CLV Tracker and Performance remain the live / held-out accountability surfaces.",
+      ],
+    },
+    {
       id: "edge-board",
       title: "Edge Board",
       href: "/edge-board/nfl",
