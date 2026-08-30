@@ -4,6 +4,8 @@ export type MarkdownSection = {
 };
 
 export type HandicappersNote = {
+  /** Optional label when the note is titled e.g. "Handicapper's Note — Spread". */
+  label: string | null;
   fairNumber: string | null;
   marketNumber: string | null;
   lean: string | null;
@@ -36,10 +38,20 @@ export type NewsUpdateSlots = {
   handicappersNote: HandicappersNote;
 };
 
+export type DeskHandicapSlots = {
+  bottomLine: string;
+  bodyMarkdown: string;
+  sources: string | null;
+  handicappersNotes: HandicappersNote[];
+};
+
 const DISCLAIMER =
   /This analysis is for informational and educational purposes only\.[\s\S]*$/i;
 
-function stripDisclaimer(text: string): { body: string; disclaimer: string | null } {
+function stripDisclaimer(text: string): {
+  body: string;
+  disclaimer: string | null;
+} {
   const match = text.match(DISCLAIMER);
   if (!match) return { body: text.trim(), disclaimer: null };
   return {
@@ -72,37 +84,85 @@ export function splitMarkdownSections(markdown: string): MarkdownSection[] {
   return sections;
 }
 
-export function extractHandicappersNote(source: string): HandicappersNote {
-  const blockMatch = source.match(
-    /\*\*Handicapper['\u2019]s Note\*\*\s*([\s\S]*?)(?=\n\nThis analysis is for informational|$)/i,
-  );
-  const raw = blockMatch?.[0]?.trim() ?? null;
-  const inner = blockMatch?.[1]?.trim() ?? "";
+function handicappersNoteBlockRegex(): RegExp {
+  return /\*\*Handicapper['\u2019]s Note(?:\s*[—\-–]\s*([^*]+))?\*\*\s*([\s\S]*?)(?=\n\*\*Handicapper['\u2019]s Note|\n\nThis analysis is for informational|$)/gi;
+}
 
-  const pick = (label: string): string | null => {
-    const re = new RegExp(`${label}:\\s*(.+?)\\s*(?:\\n|$)`, "i");
+function parseHandicappersNoteInner(
+  inner: string,
+  opts: {
+    label: string | null;
+    raw: string | null;
+    disclaimer: string | null;
+  },
+): HandicappersNote {
+  const pick = (field: string): string | null => {
+    const re = new RegExp(`${field}:\\s*(.+?)\\s*(?:\\n|$)`, "i");
     return inner.match(re)?.[1]?.trim() ?? null;
   };
 
-  const disclaimerMatch = source.match(DISCLAIMER);
-
   return {
+    label: opts.label,
     fairNumber: pick("Fair number"),
     marketNumber: pick("Market number"),
     lean: pick("Lean"),
     confidence: pick("Confidence"),
     keyRisk: pick("Key risk"),
-    disclaimer: disclaimerMatch?.[0]?.trim() ?? null,
-    raw,
+    disclaimer: opts.disclaimer,
+    raw: opts.raw,
   };
+}
+
+/** Extract every Handicapper's Note block (spread/side/total variants included). */
+export function extractHandicappersNotes(source: string): HandicappersNote[] {
+  const disclaimerMatch = source.match(DISCLAIMER);
+  const disclaimer = disclaimerMatch?.[0]?.trim() ?? null;
+  const notes: HandicappersNote[] = [];
+
+  for (const match of source.matchAll(handicappersNoteBlockRegex())) {
+    const label = match[1]?.trim() || null;
+    const inner = match[2]?.trim() ?? "";
+    notes.push(
+      parseHandicappersNoteInner(inner, {
+        label,
+        raw: match[0]?.trim() ?? null,
+        disclaimer: null,
+      }),
+    );
+  }
+
+  if (notes.length === 0) {
+    return [
+      {
+        label: null,
+        fairNumber: null,
+        marketNumber: null,
+        lean: null,
+        confidence: null,
+        keyRisk: null,
+        disclaimer,
+        raw: null,
+      },
+    ];
+  }
+
+  // Shared footer disclaimer rides on the last note so multi-note UIs show it once.
+  notes[notes.length - 1] = {
+    ...notes[notes.length - 1],
+    disclaimer,
+  };
+
+  return notes;
+}
+
+/** First Handicapper's Note only — kept for news/preview callers. */
+export function extractHandicappersNote(source: string): HandicappersNote {
+  return extractHandicappersNotes(source)[0]!;
 }
 
 function removeHandicappersBlock(text: string): string {
   return text
-    .replace(
-      /\*\*Handicapper['\u2019]s Note\*\*[\s\S]*?(?=\n\nThis analysis is for informational|$)/i,
-      "",
-    )
+    .replace(handicappersNoteBlockRegex(), "")
     .replace(DISCLAIMER, "")
     .trim();
 }
@@ -125,7 +185,9 @@ function matchTeamPreviewSlot(heading: string): keyof TeamPreviewSlots | null {
   ) {
     return "whatMattersMost";
   }
-  if (/roster|depth chart|bubble|receiver room|offense after|aging pieces/.test(h)) {
+  if (
+    /roster|depth chart|bubble|receiver room|offense after|aging pieces/.test(h)
+  ) {
     return "rosterSnapshot";
   }
   if (
@@ -272,8 +334,40 @@ export function sectionizeNewsUpdate(bodyMarkdown: string): NewsUpdateSlots {
   };
 }
 
+/**
+ * Desk handicaps are continuous prose (rarely H2s) with one or more
+ * Handicapper's Notes. Keep the full body — do not drop paragraphs after the dek.
+ */
+export function sectionizeDeskHandicap(
+  bodyMarkdown: string,
+  opts?: { angle?: string | null; sources?: string | null },
+): DeskHandicapSlots {
+  const handicappersNotes = extractHandicappersNotes(bodyMarkdown);
+  const cleaned = removeHandicappersBlock(bodyMarkdown);
+  const introParas = cleaned
+    .split(/\n\s*\n/)
+    .map((p) => p.trim())
+    .filter((p) => p && !p.startsWith("#"));
+
+  const angle = opts?.angle?.trim() || null;
+  const bottomLine = angle || introParas[0]?.replace(/\*\*/g, "") || "";
+  const body =
+    angle || !introParas.length
+      ? cleaned.trim()
+      : introParas.slice(1).join("\n\n").trim() || cleaned.trim();
+
+  return {
+    bottomLine,
+    bodyMarkdown: body,
+    sources: opts?.sources ?? null,
+    handicappersNotes,
+  };
+}
+
 export function extractInlineSources(markdown: string): string | null {
-  const match = markdown.match(/\*\*Sources(?: \(beat desk\))?:\*\*\s*(.+?)\s*$/im);
+  const match = markdown.match(
+    /\*\*Sources(?: \(beat desk\))?:\*\*\s*(.+?)\s*$/im,
+  );
   return match?.[1]?.trim() ?? null;
 }
 
