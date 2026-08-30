@@ -40,7 +40,9 @@ describe("model transparency hub", () => {
   });
 
   it("separates Model rank from fantasy pick order", () => {
-    expect(MODEL_TRANSPARENCY_SHOW.join(" ")).toMatch(/not recommended pick order/i);
+    expect(MODEL_TRANSPARENCY_SHOW.join(" ")).toMatch(
+      /not recommended pick order/i,
+    );
   });
 
   it("covers every required surface with short entries", () => {
@@ -53,7 +55,9 @@ describe("model transparency hub", () => {
   });
 
   it("explains PRESEASON / data stale desk status without raw probe dumps", () => {
-    const desk = MODEL_TRANSPARENCY_GLOSSARY.find((e) => e.id === "desk-status");
+    const desk = MODEL_TRANSPARENCY_GLOSSARY.find(
+      (e) => e.id === "desk-status",
+    );
     expect(desk).toBeTruthy();
     const blob = desk!.lines.join(" ");
     expect(blob).toMatch(/PRESEASON/i);
