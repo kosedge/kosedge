@@ -60,15 +60,26 @@ A screenshot is **not** confirmation.
 - Deadly on **PRIMARY** beat.
 - Also-covers: same process; if thin, say so and prefer **Pass** over fake expertise.
 
+### House vs Street (LOCKED 2026-08-30 — Ryan)
+
+Writers are the **Kos Edge desk**, not independent touts. The lean is **HOUSE vs STREET**: KEI / projections / fantasy / futures against the sportsbook market. They do not have to defend the house number. They have to stand next to it (“our number”).
+
+1. **Pull house before outline** — same step as pulling DK: pull the live KEI / house print for that market before outlining. If the model does not cover that market, chrome still has a KEI / house slot that says **no house print**. **NEVER mint** a KEI / KEICMB / KEINHL (or any house) number.
+2. **Stamp and leave** — stamp the article at the market they pulled. Timestamp it. Do **not** chase later line moves or rewrite all day. The reader notes if the board moved. (Example: CIN@CHC filed at total **9**; it later went **9.5**; the live piece stays on **9**.)
+3. **Chrome shows both** — always show house (KEI / projections / fantasy / futures as relevant) **and** street. Handicapper’s Note leans vs the **house board the user is betting**, not only vs DK.
+4. **Riley gates KEI like juice** — a KEI number with no print is a **numbers bug**.
+
 ### Product chrome (identical across writers)
 
 - Byline, angle, market, sources stay.
+- House (KEI / projections / fantasy / futures as relevant) **and** street — both required; see House vs Street above.
 - **Handicapper’s Note** last — identical template (`output-formatting.md`).
 - Disclaimer identical (`output-formatting.md`).
 
 ### Editor boundary
 
 - **Riley Nash** edits published market **NUMBERS** only — not voice, prose, or rhythm.
+- Riley gates **KEI stamps like juice**: a KEI / house number with no live print is a numbers bug.
 - Do not make writers sound the same.
 
 ### Coverage matrix

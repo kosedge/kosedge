@@ -2,7 +2,7 @@
 
 How to assign and ship NFL training-camp news breaks and camp notebooks without breaking Edge Threshold Discipline.
 
-**Desk OS (2026-08-30):** Handicapping product is **LOCKED**; body prose is **UNLOCKED** per writer voice pack. See `style-bible.md` and `.cursor/rules/ai-writer-team.mdc`. Do not flatten writers into one house voice. CFB is off this desk. NFL trusted X list only (`data/writers/nfl-beat-writers.*`).
+**Desk OS (2026-08-30):** Handicapping product is **LOCKED**; body prose is **UNLOCKED** per writer voice pack. See `style-bible.md` and `.cursor/rules/ai-writer-team.mdc`. Do not flatten writers into one house voice. **HOUSE vs STREET** (pull KEI before outline; never mint; stamp at pull; chrome shows both) is LOCKED — Ryan 2026-08-30. CFB is off this desk. NFL trusted X list only (`data/writers/nfl-beat-writers.*`).
 
 ## Mission
 
