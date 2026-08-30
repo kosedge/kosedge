@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState, useTransition } from "react";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import {
   NFL_INTERACTIVE_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
@@ -26,6 +27,9 @@ type PlanPick = {
   is_favorite?: boolean;
   favorite_team?: string | null;
   favorite_wp?: number;
+  /** Season-engine weekly wp (path / save math). */
+  engine_wp?: number;
+  wp_source?: "kei" | "engine";
   save_score?: number;
   pick_now_score?: number;
   schedule_difficulty?: string | null;
@@ -90,30 +94,35 @@ const PLACEHOLDER_WEEKS: PlanWeek[] = Array.from({ length: 18 }, (_, i) => ({
 }));
 
 const selectClass =
-  "min-h-11 w-full rounded-lg border border-white/15 bg-black/40 px-2.5 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50";
+  "min-h-11 w-full rounded-lg border border-white/20 bg-[#0B0E14] px-2.5 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50";
 const labelClass =
   "mb-1 block text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/55";
 
 function gradeTone(grade: string | undefined): string {
   switch (grade) {
     case "A":
-      return "border-emerald-500/40 bg-emerald-500/10 text-emerald-100";
+      return "border-emerald-500/40 bg-emerald-500/10";
     case "B":
-      return "border-kos-gold/45 bg-kos-gold/10 text-kos-gold";
+      return "border-kos-gold/45 bg-kos-gold/10";
     case "C":
-      return "border-amber-500/35 bg-amber-500/10 text-amber-100";
+      return "border-amber-500/35 bg-amber-500/10";
     case "D":
     case "F":
-      return "border-red-500/35 bg-red-500/10 text-red-100";
+      return "border-red-500/35 bg-red-500/10";
     default:
-      return "border-white/15 bg-white/5 text-kos-text/75";
+      return "border-white/15 bg-white/5";
   }
 }
 
-function favoriteWp(pick: PlanPick): number {
-  if (typeof pick.favorite_wp === "number") return pick.favorite_wp;
-  const wp = pick.this_week_wp ?? pick.win_rate;
-  return pick.is_favorite === false ? Math.max(0, 1 - wp) : wp;
+/** Candidate / locked team's own weekly wp (KEI when joined). */
+function teamWp(pick: PlanPick): number {
+  if (
+    typeof pick.this_week_wp === "number" &&
+    Number.isFinite(pick.this_week_wp)
+  ) {
+    return pick.this_week_wp;
+  }
+  return pick.win_rate;
 }
 
 function fmtWp(value: number | null | undefined, nSims?: number): string {
@@ -143,7 +152,9 @@ function readPicksFromStorage(): Record<string, string> {
   try {
     const raw = window.localStorage.getItem(STORAGE_KEY);
     if (!raw) return {};
-    return normalizeSurvivorPlanPicks(JSON.parse(raw) as Record<string, string>);
+    return normalizeSurvivorPlanPicks(
+      JSON.parse(raw) as Record<string, string>,
+    );
   } catch {
     return {};
   }
@@ -160,43 +171,19 @@ function MatchupLine({ pick }: { pick: PlanPick }) {
   const team = pick.team;
   const opp = pick.opponent;
   const connector = pick.home_away === "away" ? "@" : "vs";
-  const favTeam =
-    pick.favorite_team || (pick.is_favorite === false ? opp || team : team);
-  const wp = favoriteWp(pick);
-
-  const renderSide = (side: string) => {
-    const isFav = side === favTeam;
-    return (
-      <span
-        className={
-          isFav
-            ? "font-semibold text-kos-gold"
-            : "font-medium text-kos-text/55"
-        }
-      >
-        {side}
-        {isFav ? (
-          <span className="ml-1 tabular-nums text-kos-gold/90">
-            {fmtWp(wp)}
-          </span>
-        ) : null}
-      </span>
-    );
-  };
-
-  if (!opp) {
-    return (
-      <span className="inline-flex flex-wrap items-baseline gap-x-1.5 text-sm">
-        {renderSide(team)}
-      </span>
-    );
-  }
+  const wp = teamWp(pick);
 
   return (
     <span className="inline-flex flex-wrap items-baseline gap-x-1.5 text-sm">
-      {renderSide(team)}
-      <span className="text-kos-text/35">{connector}</span>
-      {renderSide(opp)}
+      <span className="text-base font-semibold tabular-nums text-kos-gold">
+        {team} {fmtWp(wp)}
+      </span>
+      {opp ? (
+        <>
+          <span className="text-kos-text/40">{connector}</span>
+          <span className="font-medium text-kos-text/55">{opp}</span>
+        </>
+      ) : null}
     </span>
   );
 }
@@ -220,6 +207,7 @@ export default function SeasonEngineSurvivorPlannerClient({
   const [suggestError, setSuggestError] = useState<string | null>(null);
   const [suggestPending, setSuggestPending] = useState(false);
   const [flashWeek, setFlashWeek] = useState<number | null>(null);
+  const [openPickerWeek, setOpenPickerWeek] = useState<number | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const requestId = useRef(0);
@@ -227,7 +215,9 @@ export default function SeasonEngineSurvivorPlannerClient({
 
   useEffect(() => {
     const fromUrl = readPicksFromUrl();
-    setPicks(fromUrl && Object.keys(fromUrl).length ? fromUrl : readPicksFromStorage());
+    setPicks(
+      fromUrl && Object.keys(fromUrl).length ? fromUrl : readPicksFromStorage(),
+    );
     setHydrated(true);
   }, []);
 
@@ -481,7 +471,9 @@ export default function SeasonEngineSurvivorPlannerClient({
   function loadSuggestedPath(path: SuggestedPath) {
     const next = normalizeSurvivorPlanPicks(path.picks || {});
     setPicks(next);
-    pulseWeek(Number(Object.keys(next).sort((a, b) => Number(a) - Number(b))[0] || 1));
+    pulseWeek(
+      Number(Object.keys(next).sort((a, b) => Number(a) - Number(b))[0] || 1),
+    );
   }
 
   return (
@@ -492,8 +484,12 @@ export default function SeasonEngineSurvivorPlannerClient({
             Survivor command
           </p>
           <p className="mt-1 max-w-2xl text-sm leading-relaxed text-kos-text/70">
-            Lock one team per week. Matchups stay visible before you pick.
-            Used teams are burned everywhere.
+            Lock one team per week. Matchups stay visible before you pick. Used
+            teams are burned everywhere.
+          </p>
+          <p className="mt-2 text-[11px] leading-relaxed text-kos-text/55">
+            This week % is KEI (same as Pick’em). Path / save still uses the
+            season engine. <ModelTransparencyLink hrefSuffix="#survivor" />
           </p>
         </div>
 
@@ -503,10 +499,10 @@ export default function SeasonEngineSurvivorPlannerClient({
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div className="min-w-0">
               <p className={labelClass}>Slate grade</p>
-              <p className="text-3xl font-semibold tracking-tight sm:text-4xl">
+              <p className="text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
                 {result ? grade : pending ? "…" : "—"}
               </p>
-              <p className="mt-0.5 text-[11px] opacity-75">
+              <p className="mt-0.5 text-[11px] text-kos-text/55">
                 {result?.slate_score != null
                   ? `Score ${result.slate_score}`
                   : lockedCount
@@ -516,37 +512,41 @@ export default function SeasonEngineSurvivorPlannerClient({
             </div>
             <div className="min-w-0">
               <p className={labelClass}>Avg weekly WP</p>
-              <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
-                {result?.avg_locked_wp != null
-                  ? fmtWp(result.avg_locked_wp, result.n_sims)
-                  : pending && lockedCount
-                    ? "…"
-                    : "—"}
+              <p className="text-2xl font-semibold tabular-nums tracking-tight text-kos-gold sm:text-3xl">
+                {lockedCount === 0
+                  ? "—"
+                  : result?.avg_locked_wp != null
+                    ? fmtWp(result.avg_locked_wp, result.n_sims)
+                    : pending
+                      ? "…"
+                      : "—"}
               </p>
-              <p className="mt-0.5 text-[11px] opacity-75">
-                {lockedCount} locked
+              <p className="mt-0.5 text-[11px] text-kos-text/55">
+                {lockedCount} locked · KEI when posted
               </p>
             </div>
             <div className="min-w-0">
               <p className={labelClass}>Danger weeks</p>
-              <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
+              <p className="text-2xl font-semibold tabular-nums tracking-tight text-kos-text sm:text-3xl">
                 {result && lockedCount ? (result.danger_weeks ?? 0) : "—"}
               </p>
-              <p className="mt-0.5 text-[11px] opacity-75">WP &lt; 55%</p>
+              <p className="mt-0.5 text-[11px] text-kos-text/55">WP &lt; 55%</p>
             </div>
             <div className="min-w-0">
               <p className={labelClass}>Best left</p>
-              <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
+              <p className="text-2xl font-semibold tabular-nums tracking-tight text-kos-text sm:text-3xl">
                 {result?.best_remaining_equity != null
                   ? fmtWp(result.best_remaining_equity, result.n_sims)
                   : lockedCount && result
                     ? "Full"
                     : "—"}
               </p>
-              <p className="mt-0.5 text-[11px] opacity-75">Max open chalk</p>
+              <p className="mt-0.5 text-[11px] text-kos-text/55">
+                Max open chalk
+              </p>
             </div>
           </div>
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] opacity-70">
+          <div className="mt-3 flex flex-wrap items-center justify-between gap-2 text-[11px] text-kos-text/55">
             <p>
               {formatDepthBadge(result?.n_sims ?? N_SIMS, {
                 surface: "survivor paths",
@@ -556,23 +556,19 @@ export default function SeasonEngineSurvivorPlannerClient({
             <button
               type="button"
               onClick={() => setShowAdvanced((v) => !v)}
-              className="min-h-11 rounded-lg px-2 font-semibold underline-offset-2 hover:underline sm:min-h-0 sm:py-1"
+              className="min-h-11 rounded-lg px-2 font-semibold text-kos-text/70 underline-offset-2 hover:underline sm:min-h-0 sm:py-1"
             >
               {showAdvanced ? "Hide advanced" : "Advanced: joint survival"}
             </button>
           </div>
           {showAdvanced ? (
-            <p className="mt-2 text-xs opacity-80">
+            <p className="mt-2 text-xs text-kos-text/70">
               Joint path survival{" "}
-              <span className="font-semibold tabular-nums">
-                {result
-                  ? fmtWp(result.path_survival ?? 0, result.n_sims)
-                  : "—"}
+              <span className="font-semibold tabular-nums text-kos-text">
+                {result ? fmtWp(result.path_survival ?? 0, result.n_sims) : "—"}
               </span>
-              {result?.path_strength
-                ? ` · ${result.path_strength}`
-                : ""}{" "}
-              — share of sims where every locked pick wins (collapses on long
+              {result?.path_strength ? ` · ${result.path_strength}` : ""} —
+              share of sims where every locked pick wins (collapses on long
               parlays).
             </p>
           ) : null}
@@ -710,20 +706,27 @@ export default function SeasonEngineSurvivorPlannerClient({
             weekRow.locked_pick?.team === lockedTeam
               ? weekRow.locked_pick
               : optimisticPick;
-          const available =
-            weekRow.available_teams?.length
-              ? weekRow.available_teams
-              : ranked.map((r) => r.team);
+          const available = weekRow.available_teams?.length
+            ? weekRow.available_teams
+            : ranked.map((r) => r.team);
           const selectOptions = locked
-            ? Array.from(new Set([lockedTeam, ...available.filter((t) => !used.has(t) || t === lockedTeam)]))
+            ? Array.from(
+                new Set([
+                  lockedTeam,
+                  ...available.filter((t) => !used.has(t) || t === lockedTeam),
+                ]),
+              )
             : available.filter((t) => !used.has(t));
           const flashing = flashWeek === week;
+          const pickerOpen = openPickerWeek === week;
 
           return (
             <div
               key={week}
               id={`survivor-week-${week}`}
               className={`scroll-mt-[calc(var(--kos-pro-header-h,7.5rem)+6.5rem)] rounded-xl border px-3 py-3 transition duration-300 sm:scroll-mt-[var(--kos-pro-header-h,7.5rem)] sm:px-4 ${
+                pickerOpen ? "relative z-30" : "relative z-0"
+              } ${
                 locked
                   ? "border-kos-gold/40 bg-kos-gold/[0.07] shadow-[inset_0_0_0_1px_rgba(212,175,55,0.08)]"
                   : "border-white/10 bg-black/25"
@@ -747,7 +750,7 @@ export default function SeasonEngineSurvivorPlannerClient({
                       <MatchupLine pick={lockedPick} />
                     </div>
                   ) : locked ? (
-                    <p className="mt-1.5 text-sm font-semibold text-kos-gold">
+                    <p className="mt-1.5 text-base font-semibold text-kos-gold">
                       {lockedTeam}
                     </p>
                   ) : null}
@@ -769,6 +772,9 @@ export default function SeasonEngineSurvivorPlannerClient({
                     })}
                     onPick={(team) => lockWeek(week, team)}
                     onClear={() => clearWeek(week)}
+                    onOpenChange={(next) =>
+                      setOpenPickerWeek(next ? week : null)
+                    }
                   />
                 </div>
               </div>
@@ -787,7 +793,7 @@ export default function SeasonEngineSurvivorPlannerClient({
                           idx === 0 && !burned
                             ? "border-kos-gold/45 bg-kos-gold/15"
                             : "border-white/10 bg-white/[0.04] hover:border-white/25"
-                        } disabled:cursor-not-allowed disabled:opacity-35`}
+                        } disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.02]`}
                       >
                         <MatchupLine pick={pick} />
                         {pick.schedule_difficulty ? (
@@ -798,7 +804,11 @@ export default function SeasonEngineSurvivorPlannerClient({
                               : ""}
                           </span>
                         ) : null}
-                        <span className="mt-1 block text-[11px] text-kos-text/45">
+                        <span
+                          className={`mt-1 block text-[11px] ${
+                            burned ? "text-kos-text/45" : "text-kos-text/45"
+                          }`}
+                        >
                           {burned
                             ? "Already used"
                             : idx === 0
@@ -853,6 +863,7 @@ function WeekTeamPicker({
   options,
   onPick,
   onClear,
+  onOpenChange,
 }: {
   week: number;
   lockedTeam: string;
@@ -863,6 +874,7 @@ function WeekTeamPicker({
   }>;
   onPick: (team: string) => void;
   onClear: () => void;
+  onOpenChange?: (open: boolean) => void;
 }) {
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -875,8 +887,14 @@ function WeekTeamPicker({
   });
   const locked = Boolean(lockedTeam);
 
+  function setOpenState(next: boolean) {
+    setOpen(next);
+    onOpenChange?.(next);
+    if (!next) setQuery("");
+  }
+
   return (
-    <div className="relative z-20 w-full">
+    <div className={`relative w-full ${open ? "z-30" : "z-20"}`}>
       <label className="sr-only" htmlFor={`plan-week-${week}`}>
         Week {week} pick
       </label>
@@ -890,7 +908,7 @@ function WeekTeamPicker({
           aria-haspopup="listbox"
           aria-expanded={open}
           aria-controls={listId}
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpenState(!open)}
           className={`${selectClass} text-left`}
         >
           {locked ? lockedTeam : "Pick any remaining team"}
@@ -899,19 +917,19 @@ function WeekTeamPicker({
           <button
             type="button"
             onClick={onClear}
-            className="min-h-11 shrink-0 rounded-lg border border-white/15 px-3 text-sm font-semibold text-kos-text/70 hover:border-white/30"
+            className="min-h-11 shrink-0 rounded-lg border border-white/20 bg-[#0B0E14] px-3 text-sm font-semibold text-kos-text/80 hover:border-white/30"
           >
             Clear
           </button>
         ) : null}
       </div>
       {open ? (
-        <div className="absolute left-0 right-0 top-full z-40 mt-1 rounded-xl border border-white/15 bg-[#10131a] shadow-xl shadow-black/50">
+        <div className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-white/20 bg-[#0B0E14] shadow-xl shadow-black/60">
           <input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search team / opponent"
-            className="min-h-11 w-full border-b border-white/10 bg-transparent px-3 text-sm text-kos-text placeholder:text-kos-text/40 outline-none"
+            className="min-h-11 w-full border-b border-white/15 bg-[#0B0E14] px-3 text-sm text-kos-text placeholder:text-kos-text/40 outline-none"
             autoFocus
           />
           <ul
@@ -925,22 +943,29 @@ function WeekTeamPicker({
               </li>
             ) : (
               filtered.map((opt) => (
-                <li key={opt.team} role="option" aria-selected={opt.team === lockedTeam}>
+                <li
+                  key={opt.team}
+                  role="option"
+                  aria-selected={opt.team === lockedTeam}
+                >
                   <button
                     type="button"
                     disabled={opt.burned}
                     onClick={() => {
                       if (opt.burned) return;
                       onPick(opt.team);
-                      setOpen(false);
-                      setQuery("");
+                      setOpenState(false);
                     }}
-                    className="flex min-h-11 w-full flex-col items-start px-3 py-2 text-left text-sm disabled:cursor-not-allowed disabled:opacity-40 hover:bg-kos-gold/10"
+                    className={`flex min-h-11 w-full flex-col items-start px-3 py-2 text-left text-sm hover:bg-kos-gold/10 disabled:cursor-not-allowed ${
+                      opt.burned ? "text-kos-text/45" : "text-kos-text"
+                    }`}
                   >
                     {opt.pick ? (
                       <MatchupLine pick={opt.pick} />
                     ) : (
-                      <span className="font-semibold text-kos-text">{opt.team}</span>
+                      <span className="text-base font-semibold text-kos-text">
+                        {opt.team}
+                      </span>
                     )}
                     <span className="text-[11px] text-kos-text/45">
                       {opt.burned

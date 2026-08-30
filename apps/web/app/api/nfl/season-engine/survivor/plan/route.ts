@@ -11,6 +11,8 @@ import {
   getEmptySurvivorPlan,
   setEmptySurvivorPlan,
 } from "@/lib/nfl-survivor-empty-plan-cache";
+import { overlaySurvivorPlanWithKei } from "@/lib/nfl-survivor-kei";
+import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
@@ -18,6 +20,23 @@ export const maxDuration = 60;
 
 function isEmptyPicks(picks: Record<string, string>): boolean {
   return Object.keys(picks).length === 0;
+}
+
+async function withKeiOverlay(
+  payload: Record<string, unknown>,
+  season: number,
+): Promise<Record<string, unknown>> {
+  try {
+    const board = await fetchNflFairLines({
+      season,
+      daysAhead: 120,
+      includePastDays: 2,
+    });
+    if (board.error || !board.lines.length) return payload;
+    return overlaySurvivorPlanWithKei(payload, board.lines);
+  } catch {
+    return payload;
+  }
 }
 
 export async function POST(req: Request) {
@@ -91,11 +110,10 @@ export async function POST(req: Request) {
   if (cacheKey) {
     const cached = getEmptySurvivorPlan(cacheKey);
     if (cached && typeof cached === "object") {
-      return NextResponse.json(
-        includeDiagnostics
-          ? cached
-          : slimInteractiveSurvivorPlan(cached as Record<string, unknown>),
-      );
+      const base = includeDiagnostics
+        ? (cached as Record<string, unknown>)
+        : slimInteractiveSurvivorPlan(cached as Record<string, unknown>);
+      return NextResponse.json(await withKeiOverlay(base, season));
     }
   }
 
@@ -115,13 +133,14 @@ export async function POST(req: Request) {
   });
 
   if (result.error) {
-    const status = /bye|not scheduled|multiple weeks|Unknown team|Invalid/i.test(
-      result.error,
-    )
-      ? 400
-      : /timed out/i.test(result.error)
-        ? 504
-        : 502;
+    const status =
+      /bye|not scheduled|multiple weeks|Unknown team|Invalid/i.test(
+        result.error,
+      )
+        ? 400
+        : /timed out/i.test(result.error)
+          ? 504
+          : 502;
     const warming =
       status === 504
         ? {
@@ -132,10 +151,10 @@ export async function POST(req: Request) {
         : result;
     return NextResponse.json(warming, { status });
   }
-  const payload =
-    includeDiagnostics
-      ? result
-      : slimInteractiveSurvivorPlan(result as unknown as Record<string, unknown>);
-  if (cacheKey) setEmptySurvivorPlan(cacheKey, payload);
-  return NextResponse.json(payload);
+  const payload = includeDiagnostics
+    ? (result as unknown as Record<string, unknown>)
+    : slimInteractiveSurvivorPlan(result as unknown as Record<string, unknown>);
+  const withKei = await withKeiOverlay(payload, season);
+  if (cacheKey) setEmptySurvivorPlan(cacheKey, withKei);
+  return NextResponse.json(withKei);
 }

@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { fetchSeasonEngineSurvivor } from "@/lib/nfl-season-engine";
 import type { InjuryPathInput } from "@/lib/nfl-season-engine-format";
+import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import { overlaySurvivorHelperPicksWithKei } from "@/lib/nfl-survivor-kei";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 180;
@@ -30,6 +32,13 @@ export async function POST(req: Request) {
         ? (raw.already_used as string | string[])
         : [];
 
+  const season =
+    typeof raw.season === "number"
+      ? raw.season
+      : typeof raw.season === "string"
+        ? Number(raw.season)
+        : 2026;
+
   const result = await fetchSeasonEngineSurvivor({
     week,
     alreadyUsed,
@@ -39,12 +48,7 @@ export async function POST(req: Request) {
         : typeof raw.n_sims === "number"
           ? raw.n_sims
           : undefined,
-    season:
-      typeof raw.season === "number"
-        ? raw.season
-        : typeof raw.season === "string"
-          ? Number(raw.season)
-          : undefined,
+    season,
     seed: typeof raw.seed === "number" ? raw.seed : undefined,
     demo: typeof raw.demo === "boolean" ? raw.demo : undefined,
     topN:
@@ -69,5 +73,30 @@ export async function POST(req: Request) {
   if (result.error) {
     return NextResponse.json(result, { status: 502 });
   }
+
+  try {
+    const board = await fetchNflFairLines({
+      season,
+      daysAhead: 120,
+      includePastDays: 2,
+    });
+    if (
+      !board.error &&
+      board.lines.length &&
+      Array.isArray(result.ranked_picks)
+    ) {
+      return NextResponse.json({
+        ...result,
+        ranked_picks: overlaySurvivorHelperPicksWithKei(
+          result.ranked_picks,
+          week,
+          board.lines,
+        ),
+      });
+    }
+  } catch {
+    // Keep engine payload when fair-lines miss.
+  }
+
   return NextResponse.json(result);
 }
