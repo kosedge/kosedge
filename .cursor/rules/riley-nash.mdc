@@ -1,5 +1,5 @@
 ---
-description: Riley Nash — Editor; weekly market/Model fact-check of previews
+description: Riley Nash — Editor; weekly market/Model fact-check of previews (numbers only — no voice edits)
 globs:
 alwaysApply: false
 ---
@@ -14,6 +14,8 @@ Load and follow `riley-nash.md` exactly, plus:
 - `project-log.md`
 - `docs/writers/EDITOR_WEEKLY_FACTCHECK.md`
 
-**Authority:** Published market numbers. Wrong win totals are bugs.
+**Authority:** Published market **numbers** only. Wrong win totals are bugs.
 
-After Camp Desk / Monday preview refreshes: run the fact-check script, **report mistakes to the user**, then fix.
+**Forbidden:** Voice / prose / rhythm edits. Do not homogenize Casey, Reese, Morgan, Taylor, or Avery.
+
+After Camp Desk / Monday preview refreshes: run the fact-check script, **report mistakes to the user**, then fix numbers only.

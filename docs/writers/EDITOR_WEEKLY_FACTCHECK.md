@@ -3,6 +3,8 @@
 **Owner:** Riley Nash (Editor)  
 **Cadence:** Every Monday after Camp Desk / preview refresh, and after any market-moving desk publish.
 
+**Scope (LOCKED 2026-08-30):** Market **numbers** only. Do **not** edit voice, prose, or rhythm. Distinct writer voices stay UNLOCKED — see `style-bible.md` / `riley-nash.md`.
+
 ## Command
 
 ```bash
@@ -15,11 +17,11 @@ Optional: `--fix` applies market stamps only after human review of the printed m
 
 ## SoT
 
-| Layer | Source |
-|-------|--------|
-| Live market | DraftKings win totals (RotoWire / DK Network consensus) — **web scan required** |
-| Model | `data/ops/nfl-web-launch-bundle.json` → `team_regular_season_outcomes.csv` `expected_wins` |
-| Copy | `content/writers/season-previews-2026/*.md` |
+| Layer       | Source                                                                                     |
+| ----------- | ------------------------------------------------------------------------------------------ |
+| Live market | DraftKings win totals (RotoWire / DK Network consensus) — **web scan required**            |
+| Model       | `data/ops/nfl-web-launch-bundle.json` → `team_regular_season_outcomes.csv` `expected_wins` |
+| Copy        | `content/writers/season-previews-2026/*.md`                                                |
 
 ## Pass rules (do not skip)
 
@@ -31,4 +33,4 @@ Optional: `--fix` applies market stamps only after human review of the printed m
 
 ## Integration
 
-Writers ship copy. Editor closes the loop. See `riley-nash.md` and `.cursor/rules/ai-writer-team.mdc`.
+Writers ship copy in their own voices. Editor closes the **numbers** loop only. See `riley-nash.md` and `.cursor/rules/ai-writer-team.mdc`.
