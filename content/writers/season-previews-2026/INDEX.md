@@ -29,7 +29,7 @@ Subscription desk package for Kos Edge. Condensed versions feed the betting guid
 | [New Orleans Saints](NO.md)     | Avery Cole    | The schedule and a settled quarterback support the model, but camp attrition caps convi…  |
 | [New York Giants](NYG.md)       | Jordan Vale   | Harbaugh and Dart raise the floor, but Calvin Austin III's knee injury removes margin f…  |
 | [New York Jets](NYJ.md)         | Taylor Brooks | An improved defense cannot hide an offense trying to get healthy while learning a new s…  |
-| [Philadelphia Eagles](PHI.md)   | Jordan Vale   | Philadelphia remains the class of the East, but 10.5 is already a contender number and …  |
+| [Philadelphia Eagles](PHI.md)   | Avery Cole    | Philadelphia remains the class of the East, but 10.5 is already a contender number and …  |
 | [Pittsburgh Steelers](PIT.md)   | Reese Quinn   | Pittsburgh's familiar floor meets an old quarterback, a new coach and a difficult secon…  |
 | [Seattle Seahawks](SEA.md)      | Morgan Hale   | A championship defense supports the floor, but 10.5 leaves no room for a thin edge        |
 | [San Francisco 49ers](SF.md)    | Morgan Hale   | The market prices peak structure while the Model and participation sheet price fragility  |
@@ -44,3 +44,5 @@ Subscription desk package for Kos Edge. Condensed versions feed the betting guid
 - Avery Cole — NFC South (ATL, CAR, NO, TB); NFC East (DAL, NYG, PHI, WAS)
 - Taylor Brooks — AFC East (BUF, MIA, NE, NYJ); AFC South (HOU, IND, JAX, TEN)
 - Morgan Hale — NFC West (ARI, LAR, SF, SEA)
+
+**PHI byline going forward:** Avery Cole (NFC East). Index/coverage pointer only — do not rewrite `PHI.md` solely for the byline; Monday’s NUMBER pass owns it.

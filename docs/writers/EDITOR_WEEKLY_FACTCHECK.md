@@ -1,7 +1,7 @@
 # Editor Weekly Fact-Check — NFL previews & articles
 
 **Owner:** Riley Nash (Editor)  
-**Cadence:** Every Monday after Camp Desk / preview refresh, and after any market-moving desk publish.
+**Cadence:** Every **Monday** after Camp Desk full-32 + preview **NUMBER** pass, and after any market-moving desk publish. Weekday Camp Desk (Tue–Fri real-news only) does not replace Monday’s number gate.
 
 **Scope (LOCKED 2026-08-30):** Market **numbers** only. Do **not** edit voice, prose, or rhythm. Distinct writer voices stay UNLOCKED — see `style-bible.md` / `riley-nash.md`.
 

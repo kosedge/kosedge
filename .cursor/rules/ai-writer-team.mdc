@@ -84,6 +84,15 @@ Coverage matrix updates require an explicit product ask.
 
 NFL trusted X list lives at `data/writers/nfl-beat-writers.md` + `.json` only. Do **not** invent NBA/NHL/MLB/WNBA trusted-X lists.
 
+### NFL Camp Desk cadence (LOCKED 2026-08-30 — Ryan)
+
+Execution lock — not a new product. SoT: `docs/writers/TRAINING_CAMP_DESK.md` · `style-bible.md`.
+
+- **Weekday (Tue–Fri):** real-news clubs only; quiet skip or pulse; ~6pm ET. **NEVER** a 32-card dump. Daily ≠ 32 essays.
+- **Monday:** full-32 camp package + weekly preview **NUMBER** pass (Riley gates numbers; HOUSE vs STREET — pull KEI if printed, never mint).
+- Camp cards = date-only. **PHI** preview byline going forward = **Avery Cole**.
+- “Desk updating” is UI fallback — **not** a substitute for shipping.
+
 ## Editor weekly fact-check (mandatory)
 
 After every Camp Desk / Monday preview refresh — and at least weekly in season — assign **Riley Nash**:
