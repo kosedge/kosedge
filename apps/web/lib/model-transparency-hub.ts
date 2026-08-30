@@ -177,7 +177,9 @@ export function modelTransparencyHubCopy(): string {
   ].join("\n");
 }
 
-export function assertModelTransparencyHubSafe(copy = modelTransparencyHubCopy()) {
+export function assertModelTransparencyHubSafe(
+  copy = modelTransparencyHubCopy(),
+) {
   for (const pattern of FORBIDDEN_HUB_PHRASES) {
     if (pattern.test(copy)) {
       throw new Error(`Hub copy contains forbidden phrase: ${pattern}`);

@@ -18,11 +18,7 @@ import {
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import { MODEL_TRANSPARENCY_HREF } from "@/lib/model-transparency-hub";
-import {
-  resolveSportKey,
-  sportDisplayLabel,
-  SPORTS,
-} from "@/lib/sports";
+import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 
@@ -104,7 +100,9 @@ export default async function EdgeBoardSportPage({
     ...new Set(
       rows
         .map((r) => (r as { week?: number }).week)
-        .filter((w): w is number => typeof w === "number" && Number.isFinite(w)),
+        .filter(
+          (w): w is number => typeof w === "number" && Number.isFinite(w),
+        ),
     ),
   ].sort((a, b) => a - b);
   const nflWeekLabel =
@@ -158,7 +156,9 @@ export default async function EdgeBoardSportPage({
               <div className="mt-2">
                 <TruthStateBadges
                   states={["LIVE"]}
-                  testId={sportKey === "cfb" ? "cfb-truth-state" : "truth-state"}
+                  testId={
+                    sportKey === "cfb" ? "cfb-truth-state" : "truth-state"
+                  }
                 />
               </div>
             ) : null}
@@ -225,7 +225,11 @@ export default async function EdgeBoardSportPage({
 
         {sportKey === "cfb" ? (
           <div className="mt-3 space-y-1.5">
-            <div className="flex flex-wrap gap-2" role="tablist" aria-label="CFB week">
+            <div
+              className="flex flex-wrap gap-2"
+              role="tablist"
+              aria-label="CFB week"
+            >
               <Link
                 href="/edge-board/cfb?week=0"
                 role="tab"
@@ -306,7 +310,7 @@ export default async function EdgeBoardSportPage({
           variant="full"
           rows={rows}
           sportKey={sportKey}
-          slateWeek={slate === "week1" ? 1 : nflWeeks[0] ?? null}
+          slateWeek={slate === "week1" ? 1 : (nflWeeks[0] ?? null)}
           emptyHint={
             isNfl && slate === "week1"
               ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."

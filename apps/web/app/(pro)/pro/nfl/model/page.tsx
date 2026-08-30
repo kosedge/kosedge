@@ -7,7 +7,10 @@ import {
   isSeasonEngineReady,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
-import { nflLaunchResearchDeskNotice, resolveActiveNflLineage } from "@/lib/nfl-launch-research";
+import {
+  nflLaunchResearchDeskNotice,
+  resolveActiveNflLineage,
+} from "@/lib/nfl-launch-research";
 import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 
 export const dynamic = "force-dynamic";
@@ -54,7 +57,9 @@ export default async function NflSeasonModelHubPage() {
         <div className="-mt-2 mb-4">
           <NflLineageBadge lineage={lineage} />
           {deskNotice ? (
-            <p className="mt-1.5 text-[11px] leading-snug text-kos-text/45">{deskNotice}</p>
+            <p className="mt-1.5 text-[11px] leading-snug text-kos-text/45">
+              {deskNotice}
+            </p>
           ) : null}
         </div>
       ) : null}
@@ -68,7 +73,9 @@ export default async function NflSeasonModelHubPage() {
             href={tool.href}
             className="min-h-11 rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50 active:border-kos-gold/50"
           >
-            <h2 className="text-sm font-semibold text-kos-gold">{tool.title}</h2>
+            <h2 className="text-sm font-semibold text-kos-gold">
+              {tool.title}
+            </h2>
             <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
               {tool.body}
             </p>
@@ -112,7 +119,9 @@ export default async function NflSeasonModelHubPage() {
                 {status.schedule_game_count != null
                   ? ` · ${status.schedule_game_count} REG`
                   : ""}
-                {status.schedule_as_of ? ` · as of ${status.schedule_as_of}` : ""}
+                {status.schedule_as_of
+                  ? ` · as of ${status.schedule_as_of}`
+                  : ""}
               </dd>
             </div>
             <div>
@@ -130,8 +139,9 @@ export default async function NflSeasonModelHubPage() {
           </dl>
         ) : null}
         <p className="mt-3 text-xs text-kos-text/50">
-          Proxied through Next.js BFF — browser never calls Railway with secrets.
-          Full-season simulate and raw diagnostics remain API/CLI only for now.
+          Proxied through Next.js BFF — browser never calls Railway with
+          secrets. Full-season simulate and raw diagnostics remain API/CLI only
+          for now.
         </p>
       </section>
     </SportHubShell>
