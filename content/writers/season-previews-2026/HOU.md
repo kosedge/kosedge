@@ -2,11 +2,14 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** The defensive floor survives, but Houston’s WR2 uncertainty makes a taxed Over difficult to buy  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (O -125 / U +105)  
 **Sources (beat desk):** DJ Bien-Aime (ESPN); Jonathan M. Alexander (Houston Chronicle); Aaron Wilson (KPRC 2 / SportsTalk 790)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Houston’s win total asks two different questions at once. Is a 12-win team with a high-end defense still more likely than not to reach 10? Probably. Is that answer strong enough to lay **-125** after a season-ending injury removed a starting receiver and left the next three options carrying separate availability or role questions? That is harder.
 

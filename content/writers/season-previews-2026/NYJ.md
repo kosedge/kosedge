@@ -2,11 +2,14 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** An improved defense cannot hide an offense trying to get healthy while learning a new system  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **5.5** (-120 / +100)  
 **Sources (beat desk):** Rich Cimini (ESPN); Zack Rosenblatt (The Athletic); Brian Costello (New York Post); New York Jets communications
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 The Jets do not need to become good to beat this total. They need six wins after finishing 3–14, and the roster is plainly more talented than the group that limped through the end of 2025. Geno Smith offers competence at quarterback. Breece Hall and Garrett Wilson remain high-level skill players. Aaron Glenn has added speed and experience to a defense he will call himself.
 

@@ -2,11 +2,14 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** The market has already removed four wins, but Denver’s floor still looks too sturdy for 9.5  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-115 / -105)  
 **Sources (beat desk):** Jeff Legwold (ESPN); Mike Klis (9NEWS); Troy Renck (Denver7); Denver Broncos communications
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Denver won 14 games last season, earned the AFC’s top seed and reached the conference title game. DraftKings is asking whether it can win 10 now.
 

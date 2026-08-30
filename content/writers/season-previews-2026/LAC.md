@@ -2,11 +2,14 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** A one-win model gap, a lost starting center and the league’s worst rest draw keep the Under live  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-130 / +110)  
 **Sources (beat desk):** Kris Rhim (ESPN); Daniel Popper (The Athletic); Los Angeles Chargers communications; Warren Sharp (Sharp Football Analysis)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 The Chargers’ win total has already made its important move. DraftKings opened Los Angeles at 10.5 and now lists **9.5**, with the Over still carrying -130 and the Under offered at +110.
 

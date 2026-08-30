@@ -2,11 +2,14 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Love and LaFleur provide the floor; early trench and pass-rush absences cap the price  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-140 / +115)  
 **Sources (beat desk):** Rob Demovsky (ESPN); Keller Nienau (Packers.com)
+
+**Bottom line:** Jacobs is on the commissioner's exempt list and unavailable to practice or play; Green Bay added Kaleb Johnson for RB depth. Week 1 backfield is an availability story, not a win-total rewrite. Pass.  
+**What matters most:** Who takes first-team RB work with Jacobs out, and whether Lloyd / Brooks / Johnson settle into a clear Week 1 order before Minnesota.
 
 Green Bay’s number is 9.5, but the price tells the sharper story. Bettors must lay **-140** to take the Over while the Under returns **+115**. The market is charging heavily for Jordan Love, Matt LaFleur and the expectation that last season’s five-game closing slide was a poor finish rather than a new baseline.
 

@@ -1,0 +1,231 @@
+{
+  "desk_date": "2026-08-30",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Sunday, Aug 30",
+    "bottom_line": "Cutdown Sunday set the 53-man shelves and moved several Week 1 pictures. Named IR and exempt-list absences matter; trade chatter without a second source does not. Thin camp info stays Pass.",
+    "storylines": [
+      "Packers: Josh Jacobs is on the commissioner's exempt list (league announcement) and cannot practice or play while the case proceeds. Green Bay traded for Steelers RB Kaleb Johnson the same day — depth insurance, not a starter crown for Lloyd or Brooks.",
+      "Giants: Calvin Austin III is on season-ending IR with a torn ACL (club confirmation Aug 27). Slot work defaults to Berrios and a thinner WR room; do not invent a WR2 from preseason snaps.",
+      "Dolphins / Jaguars: Miami traded Quinn Ewers to Jacksonville (2028 sixth), then acquired Kyle McCord from Green Bay for a 2028 sixth. Willis remains the named Miami starter; McCord is backup math. Jacksonville added QB depth, not a Week 1 starter rewrite.",
+      "Cowboys / Steelers: Dallas acquired OT Broderick Jones (and a 2027 fourth) for 2027 third- and sixth-round picks (AP / club). Jones is swing-tackle depth and RT competition with Steele — Pass on crowning a new starter from the trade alone.",
+      "League-wide: every club must be at 53 by 6 p.m. ET. Final practice-squad and claim chatter will keep moving Monday; treat Sunday cut lists as the first shelf, not a futures lean.",
+      "Carry-forward depth: Watson is Cleveland's named Week 1 starter; Atlanta's Penix–Tagovailoa split still needs a formal Week 1 call; Higgins (HOU) and Pinter (BAL) remain season-ending OL/WR hits from last week."
+    ],
+    "what_to_watch": "Monday's initial 53 lists and practice-squad claims; any formal Week 1 starter language in Atlanta; Packers RB practice plan with Jacobs unavailable; Cowboys tackle snap share after Jones clears.",
+    "sources": [
+      {
+        "label": "theScore — Jacobs on commissioner's exempt list",
+        "href": "https://www.thescore.com/nfl/news/3588883/nfl-places-jacobs-on-commissioners-exempt-list"
+      },
+      {
+        "label": "Pro Football Rumors — Jacobs exempt list",
+        "href": "https://www.profootballrumors.com/2026/08/packers-rb-josh-jacobs-to-land-on-commissioners-exempt-list"
+      },
+      {
+        "label": "TSN / ESPN — Packers acquire Kaleb Johnson",
+        "href": "https://www.tsn.ca/nfl/article/report-packers-acquire-rb-johnson-in-trade-with-steelers-n1-49774343/"
+      },
+      {
+        "label": "Giants.com — Austin placed on IR (torn ACL)",
+        "href": "https://www.giants.com/news/calvin-austin-iii-injury-status-roster-new-york-giants"
+      },
+      {
+        "label": "Jaguars.com — acquire Quinn Ewers",
+        "href": "https://www.jaguars.com/news/trade-jaguars-acquire-qb-quinn-ewers"
+      },
+      {
+        "label": "ESPN — Dolphins acquire Kyle McCord",
+        "href": "https://www.espn.com/nfl/story/_/id/49773349/sources-dolphins-acquire-qb-kyle-mccord-trade-packers"
+      },
+      {
+        "label": "AP — Cowboys acquire Broderick Jones",
+        "href": "https://apnews.com/article/cowboys-steelers-trade-broderick-jones-48661b0eb589163abda1e371e9a3c22a"
+      },
+      {
+        "label": "Cowboys.com — Broderick Jones trade terms",
+        "href": "https://www.dallascowboys.com/news/cowboys-agree-to-terms-on-trade-for-ot-broderick-jones"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "GB",
+      "title": "Packers camp — Aug 30",
+      "bottom_line": "Jacobs is unavailable on the commissioner's exempt list, and Green Bay added Kaleb Johnson for backfield depth. Lloyd and Brooks remain the in-house plan; Pass on crowning a Week 1 RB1 from the trade.",
+      "key_points": [
+        "The league placed Jacobs on the commissioner's exempt list Sunday — paid leave, no practice, no games while legal and NFL processes continue.",
+        "Green Bay traded for Steelers RB Kaleb Johnson on cutdown day (ESPN/TSN). Pierre Strong Jr. is not expected to make the 53 after the deal.",
+        "MarShawn Lloyd and Chris Brooks were already the next names behind Jacobs. Johnson is depth insurance, not a starter declaration."
+      ],
+      "what_to_watch": "Who takes first-team RB work in Week 1 prep with Jacobs out, and whether the club posts an updated depth chart.",
+      "is_material_depth": true,
+      "sot_flag": "Jacobs unavailable (exempt list); Johnson added. Flag Packers RB depth — do not invent a Week 1 starter from camp prose.",
+      "sources": [
+        {
+          "label": "theScore — Jacobs exempt list",
+          "href": "https://www.thescore.com/nfl/news/3588883/nfl-places-jacobs-on-commissioners-exempt-list"
+        },
+        {
+          "label": "TSN — Packers acquire Kaleb Johnson",
+          "href": "https://www.tsn.ca/nfl/article/report-packers-acquire-rb-johnson-in-trade-with-steelers-n1-49774343/"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants camp — Aug 30",
+      "bottom_line": "Austin's season is over on IR (torn ACL). Slot depth thins to Berrios and a committee; Pass on naming a replacement WR2 from cutdown noise.",
+      "key_points": [
+        "Giants.com confirmed Austin on injured reserve Aug 27 after a torn ACL in the Aug 25 practice — season-ending.",
+        "Braxton Berrios is the next slot name in beat reporting; Odell Beckham Jr. and tight-end packages can absorb snaps. Roles are unset.",
+        "Cutdown day still shuffles the final WR and special-teams edges; do not treat one release as a futures rewrite."
+      ],
+      "what_to_watch": "Unofficial Week 1 WR depth chart and who returns punts with Austin gone.",
+      "is_material_depth": true,
+      "sot_flag": "Austin season-ending IR. Flag Giants WR/slot depth — do not invent a replacement starter.",
+      "sources": [
+        {
+          "label": "Giants.com — Austin IR / torn ACL",
+          "href": "https://www.giants.com/news/calvin-austin-iii-injury-status-roster-new-york-giants"
+        },
+        {
+          "label": "Giants Wire — season-ending IR",
+          "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/08/28/new-york-giants-place-calvin-austin-season-ending-ir/91504366007/"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins camp — Aug 30",
+      "bottom_line": "Ewers is gone to Jacksonville; McCord arrives as Willis' backup. Named starter is still Willis. Pass on inventing a QB controversy from cutdown trades.",
+      "key_points": [
+        "Miami traded Quinn Ewers to the Jaguars for a 2028 sixth-round pick (club confirmation on the Jacksonville side).",
+        "On Sunday the Dolphins acquired Kyle McCord from Green Bay for a 2028 sixth — Schefter/ESPN — after releasing Cam Miller and Mark Gronowski.",
+        "Hafley has signaled a likely two-QB 53. McCord is depth behind Willis, not a starter claim."
+      ],
+      "what_to_watch": "Final 53 QB count and any practice-squad reclaim language for cut passers.",
+      "is_material_depth": true,
+      "sot_flag": "Ewers traded out; McCord in as QB2 depth. Do not change Miami QB1 from Willis without a club statement.",
+      "sources": [
+        {
+          "label": "Jaguars.com — Ewers trade",
+          "href": "https://www.jaguars.com/news/trade-jaguars-acquire-qb-quinn-ewers"
+        },
+        {
+          "label": "ESPN — Dolphins acquire McCord",
+          "href": "https://www.espn.com/nfl/story/_/id/49773349/sources-dolphins-acquire-qb-kyle-mccord-trade-packers"
+        }
+      ]
+    },
+    {
+      "team_id": "JAX",
+      "title": "Jaguars camp — Aug 30",
+      "bottom_line": "Jacksonville added Quinn Ewers for QB depth and released veteran Nick Mullens in the same cutdown window. Pass on reading a starter change into the trade.",
+      "key_points": [
+        "Official: Jaguars acquire Ewers from Miami for a 2028 sixth-round pick, pending physical.",
+        "Multiple reports (NFL Network / Schefter) had Jacksonville releasing Nick Mullens as the 53 took shape — veteran backup math, not a Trevor Lawrence story.",
+        "Ewers gives Coen a developmental/backup body after Miami's camp sample. Week 1 QB1 remains Lawrence unless the club says otherwise."
+      ],
+      "what_to_watch": "Who is listed QB2 on the first posted 53 and any practice-squad QB reclaim.",
+      "is_material_depth": true,
+      "sot_flag": "Ewers added; Mullens reportedly released. Flag JAX QB depth only — do not invent a starter change.",
+      "sources": [
+        {
+          "label": "Jaguars.com — acquire Quinn Ewers",
+          "href": "https://www.jaguars.com/news/trade-jaguars-acquire-qb-quinn-ewers"
+        },
+        {
+          "label": "Sportsnet — cutdown tracker (Ewers / Mullens)",
+          "href": "https://www.sportsnet.ca/nfl/article/nfl-2026-roster-cutdown-day-tracker-every-notable-move/"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys camp — Aug 30",
+      "bottom_line": "Dallas added Broderick Jones for tackle depth and RT competition. Steele / Guyton jobs are not settled by the trade alone. Pass.",
+      "key_points": [
+        "Cowboys.com and AP: Dallas sends 2027 third- and sixth-round picks to Pittsburgh for Jones and a 2027 fourth.",
+        "Jones, a 2023 first-rounder returning from 2025 neck surgery, projects as swing tackle and possible Steele competition — not an automatic Week 1 starter.",
+        "Cutdown still decides how many tackles Dallas carries; one trade does not rewrite the OL SoT."
+      ],
+      "what_to_watch": "First 53 OL count and who takes RT ones in Week 1 prep after Jones clears.",
+      "is_material_depth": true,
+      "sot_flag": "Jones acquired. Flag Cowboys OT depth / RT competition — do not invent a starter from the trade.",
+      "sources": [
+        {
+          "label": "Cowboys.com — Broderick Jones trade",
+          "href": "https://www.dallascowboys.com/news/cowboys-agree-to-terms-on-trade-for-ot-broderick-jones"
+        },
+        {
+          "label": "AP — Cowboys acquire Jones",
+          "href": "https://apnews.com/article/cowboys-steelers-trade-broderick-jones-48661b0eb589163abda1e371e9a3c22a"
+        }
+      ]
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers camp — Aug 30",
+      "bottom_line": "Pittsburgh moved Broderick Jones to Dallas and Kaleb Johnson to Green Bay on the cutdown window. Tackle and RB depth thins; Pass on inventing new starters from the exits.",
+      "key_points": [
+        "Jones and a 2027 fourth went to Dallas for third- and sixth-round picks (AP / Cowboys). Fautanu / Cook / Iheanachor remain the in-house tackle picture.",
+        "Kaleb Johnson was traded to Green Bay (ESPN/TSN) as Packers RB depth behind an unavailable Jacobs — Pittsburgh sheds a low-usage second-year back.",
+        "Those are depth exits on deadline day. Do not crown Iheanachor or a new RB2 from the transactions alone."
+      ],
+      "what_to_watch": "Posted 53 OT and RB counts after claims settle Monday.",
+      "is_material_depth": true,
+      "sot_flag": "Jones and Johnson traded out. Flag Steelers OT/RB depth — no invented starters.",
+      "sources": [
+        {
+          "label": "AP — Jones to Dallas",
+          "href": "https://apnews.com/article/cowboys-steelers-trade-broderick-jones-48661b0eb589163abda1e371e9a3c22a"
+        },
+        {
+          "label": "TSN — Johnson to Green Bay",
+          "href": "https://www.tsn.ca/nfl/article/report-packers-acquire-rb-johnson-in-trade-with-steelers-n1-49774343/"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "GB",
+      "fields": ["Bottom line", "What matters most"],
+      "reason": "Jacobs exempt list + Kaleb Johnson trade — Week 1 RB availability",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NYG",
+      "fields": ["Bottom line", "What matters most"],
+      "reason": "Austin season-ending IR confirmed",
+      "status": "flagged"
+    },
+    {
+      "team_id": "MIA",
+      "fields": ["Bottom line", "What matters most"],
+      "reason": "Ewers out / McCord in; Willis remains QB1",
+      "status": "flagged"
+    },
+    {
+      "team_id": "JAX",
+      "fields": ["Bottom line", "What matters most"],
+      "reason": "Ewers acquired for QB depth",
+      "status": "flagged"
+    },
+    {
+      "team_id": "DAL",
+      "fields": ["Bottom line", "What matters most"],
+      "reason": "Broderick Jones trade — OT depth",
+      "status": "flagged"
+    },
+    {
+      "team_id": "PIT",
+      "fields": ["Bottom line", "What matters most"],
+      "reason": "Jones and Johnson traded out on cutdown",
+      "status": "flagged"
+    }
+  ]
+}

@@ -1,17 +1,17 @@
 {
-  "updated": "2026-08-26",
+  "updated": "2026-08-30",
   "rule": "Every Monday in camp/season: full 32 pulse + league wrap. Midweek: every team with real news; quiet clubs rotate 3–4×/week. Research from beat index + official/multi-source — never X profile links as the product, never ESPN-only branding.",
   "next_pulse": [
+    "ARI",
+    "ATL",
+    "BAL",
     "BUF",
     "CHI",
     "CIN",
-    "DAL",
     "DEN",
     "IND",
-    "JAX",
     "KC",
     "LAR",
-    "MIA",
     "NYJ",
     "TB"
   ]

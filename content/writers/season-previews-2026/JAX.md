@@ -2,11 +2,14 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** The market reset from 9.5 to 8.5 gives Lawrence room to absorb a first-place schedule  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (O +110 / U -130)  
 **Sources (beat desk):** Michael DiRocco (ESPN); John Shipley (Jaguars Media / Jaguars on SI); Juston Lewis (Florida Times-Union)
+
+**Bottom line:** Jacksonville added Quinn Ewers for QB depth and shed veteran Mullens in the cutdown window. Lawrence remains QB1. Pass on reading a starter change into the trade.  
+**What matters most:** Who is listed QB2 on the first 53 and any practice-squad reclaim language.
 
 Jacksonville does not need to repeat 13-4 to reward an Over bettor. It needs nine wins, and the market is offering plus money for a roster led by Trevor Lawrence in Year 2 of Liam Coen’s offense.
 

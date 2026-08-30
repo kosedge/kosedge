@@ -1,25 +1,23 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import { buildNflCampDesk } from "@/lib/nfl-camp-desk";
 import {
+  campDeskEtDateKey,
   formatCampDeskDayLabel,
   formatCampDeskShortDate,
+  isCampDeskCadenceActive,
   isCampDeskXProfileHref,
   type CampDeskCard,
 } from "@/lib/nfl-camp-desk-daily";
 import { NFL_TEAM_DIRECTORY, teamDisplayName } from "@/lib/nfl-team-intel";
-import {
-  NFL_PRODUCT_SEASON,
-  resolveNflTruthLabel,
-} from "@/lib/nfl-truth-label";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "NFL Camp Desk",
   description:
-    "KosEdge daily camp desk — league wrap and team notes. Beat and official sources are citations, not an X timeline.",
+    "KosEdge daily camp desk — league wrap and team notes with beat and official citations.",
 };
 
 function formatPublished(value: string | null): string {
@@ -51,7 +49,7 @@ function CampNoteCard({ card }: { card: CampDeskCard }) {
     >
       <div className="flex flex-wrap items-center gap-2">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-          KosEdge · {formatCampDeskShortDate(card.desk_date)}
+          {formatCampDeskShortDate(card.desk_date)}
         </p>
         {card.packageKind === "monday" ? (
           <span className="rounded-md border border-kos-gold/35 bg-kos-gold/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold">
@@ -85,7 +83,9 @@ function CampNoteCard({ card }: { card: CampDeskCard }) {
       ) : null}
       {card.what_to_watch ? (
         <p className="mt-3 text-sm text-kos-text/75">
-          <span className="font-semibold text-kos-text/70">What to watch. </span>
+          <span className="font-semibold text-kos-text/70">
+            What to watch.{" "}
+          </span>
           {card.what_to_watch}
         </p>
       ) : null}
@@ -101,17 +101,17 @@ function CampNoteCard({ card }: { card: CampDeskCard }) {
             {card.sources
               .filter((source) => !isCampDeskXProfileHref(source.href))
               .map((source) => (
-              <li key={`${source.label}-${source.href}`}>
-                <a
-                  href={source.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-kos-gold/90 underline-offset-2 hover:underline"
-                >
-                  {source.label}
-                </a>
-              </li>
-            ))}
+                <li key={`${source.label}-${source.href}`}>
+                  <a
+                    href={source.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-kos-gold/90 underline-offset-2 hover:underline"
+                  >
+                    {source.label}
+                  </a>
+                </li>
+              ))}
           </ul>
         </div>
       ) : null}
@@ -139,48 +139,39 @@ export default async function NflCampDeskPage({
       ? teamRaw.trim().toUpperCase()
       : null;
   const desk = await buildNflCampDesk({ team: teamFilter });
-  const truth = resolveNflTruthLabel({
-    season: NFL_PRODUCT_SEASON,
-    launchPreseason: true,
-  });
-  const wrap = desk.kosedgeCards.find((card) => card.kind === "league_wrap");
-  const notes = desk.kosedgeCards.filter((card) => card.kind === "team_note");
+  const now = new Date();
+  const todayEt = campDeskEtDateKey(now);
+  const asOfLabel = desk.latestDeskDate
+    ? formatCampDeskDayLabel(desk.latestDeskDate)
+    : "—";
+  const missingToday =
+    isCampDeskCadenceActive(now) &&
+    desk.latestDeskDate != null &&
+    desk.latestDeskDate !== todayEt;
   const beatsByDivision = new Map<string, typeof desk.beats>();
   for (const beat of desk.beats) {
     const list = beatsByDivision.get(beat.division) ?? [];
     list.push(beat);
     beatsByDivision.set(beat.division, list);
   }
+  const wrap = desk.kosedgeCards.find((card) => card.kind === "league_wrap");
+  const notes = desk.kosedgeCards.filter((card) => card.kind === "team_note");
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
-              NFL Pro · Camp Desk
-            </p>
-            <NflTruthStateBadge state="PRESEASON" />
-          </div>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
+            NFL Pro · Camp Desk
+          </p>
           <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
             KosEdge daily desk
           </h1>
-          <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            League wrap and short team notes when there is real news. Writers
-            research beat, official, and sharp-capable desks — original KosEdge
-            copy, never a tweet mirror. Thin camp info stays Pass — we do not
-            invent a lean from one good practice. {truth.period_line}.{" "}
-            <Link
-              href="/pro/model-transparency#camp-desk"
-              className="text-kos-text/45 hover:text-kos-gold"
-            >
-              Model transparency
-            </Link>
+          <p className="mt-2 text-sm text-kos-text/75">
+            Camp notes · as of {asOfLabel}
           </p>
-          <p className="mt-2 text-xs text-kos-text/55">
-            {desk.diagnostics.kosedgeCardCount} KosEdge cards ·{" "}
-            {desk.diagnostics.wireCount} citation headlines (72h) ·{" "}
-            {desk.diagnostics.beatCount} team beats
+          <p className="mt-1">
+            <ModelTransparencyLink hrefSuffix="#camp-desk" />
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -214,7 +205,7 @@ export default async function NflCampDeskPage({
           <select
             name="team"
             defaultValue={teamFilter ?? ""}
-            className="mt-1 block min-h-11 min-w-[12rem] rounded-lg border border-white/15 bg-black/50 px-3 text-sm text-kos-text"
+            className="mt-1 block min-h-11 min-w-[12rem] rounded-lg border border-white/20 bg-[#0B0E14] px-3 text-sm text-kos-text outline-none focus:border-kos-gold/50 scheme-dark"
           >
             <option value="">All teams with notes</option>
             {NFL_TEAM_DIRECTORY.map((team) => (
@@ -241,13 +232,12 @@ export default async function NflCampDeskPage({
       </form>
 
       <section className="mt-8 space-y-4">
-        {desk.deskStale && desk.latestDeskDate ? (
+        {missingToday && desk.latestDeskDate ? (
           <p
             className="rounded-xl border border-amber-500/30 bg-amber-500/10 px-4 py-3 text-sm text-amber-100"
             data-testid="camp-desk-updating"
           >
-            Desk updating — last KosEdge notes {formatCampDeskDayLabel(desk.latestDeskDate)}.
-            The shelf stays up; writers add the next dated package rather than leaving a blank page.
+            {`Last package ${formatCampDeskDayLabel(desk.latestDeskDate)} — daily file missing.`}
           </p>
         ) : null}
         {wrap ? <CampNoteCard card={wrap} /> : null}
@@ -261,27 +251,12 @@ export default async function NflCampDeskPage({
           >
             Desk updating
             {desk.latestDeskDate
-              ? ` — last KosEdge notes ${formatCampDeskDayLabel(desk.latestDeskDate)}`
+              ? ` — last package ${formatCampDeskDayLabel(desk.latestDeskDate)}`
               : ""}
-            {teamFilter ? ` (${teamDisplayName(teamFilter)})` : ""}. Preseason
-            Camp Desk is never a dead empty shelf.
+            {teamFilter ? ` (${teamDisplayName(teamFilter)})` : ""}.
           </div>
         ) : null}
       </section>
-
-      {desk.rotationNext.length > 0 ? (
-        <p className="mt-4 text-xs text-kos-text/50">
-          Quiet-club pulse queue: {desk.rotationNext.join(" · ")}
-        </p>
-      ) : null}
-
-      {desk.sotFlags.length > 0 ? (
-        <p className="mt-4 text-xs text-kos-text/50">
-          SoT flags ({desk.sotFlags.map((card) => card.team_ids[0]).join(", ")}
-          ): queue the existing depth job. This page does not publish a new
-          model run.
-        </p>
-      ) : null}
 
       {desk.archiveCards.length > 0 ? (
         <details className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4">
@@ -306,8 +281,7 @@ export default async function NflCampDeskPage({
         </summary>
         <p className="mt-2 text-xs text-kos-text/55">
           Public headlines from the last 72 hours for research. Citations only —
-          KosEdge judgment lives in the cards above. Use the beat map for outlet
-          names — not a social timeline.
+          KosEdge judgment lives in the cards above.
         </p>
         {desk.wire.length === 0 && desk.injuryNews.length === 0 ? (
           <p className="mt-3 text-sm text-kos-text/60">
@@ -325,7 +299,9 @@ export default async function NflCampDeskPage({
                 >
                   <span className="text-[10px] font-semibold uppercase tracking-wide text-kos-text/45">
                     Public feed
-                    {item.published ? ` · ${formatPublished(item.published)}` : ""}
+                    {item.published
+                      ? ` · ${formatPublished(item.published)}`
+                      : ""}
                   </span>
                   <span className="mt-0.5 block text-kos-text/85">
                     {item.headline}
@@ -337,18 +313,14 @@ export default async function NflCampDeskPage({
         )}
       </details>
 
-      <section className="mt-10">
-        <div className="mb-4">
-          <h2 className="text-xl font-semibold text-kos-text">
-            Beat map · all 32
-          </h2>
-          <p className="mt-1 max-w-3xl text-sm text-kos-text/65">
-            Primary beat and outlet for research. Jump to the season preview or
-            desk filter — citations, not today&apos;s hero cards. No X profile
-            links on this page.
-          </p>
-        </div>
-        <div className="space-y-6">
+      <details className="mt-8 rounded-2xl border border-white/10 bg-black/25 p-4">
+        <summary className="cursor-pointer text-sm font-semibold text-kos-text">
+          Beat map · all 32
+        </summary>
+        <p className="mt-2 max-w-3xl text-sm text-kos-text/65">
+          Primary beat and outlet for research — not today&apos;s hero cards.
+        </p>
+        <div className="mt-4 space-y-6">
           {[...beatsByDivision.entries()]
             .sort(([a], [b]) => a.localeCompare(b))
             .map(([division, beats]) => (
@@ -399,7 +371,7 @@ export default async function NflCampDeskPage({
               </div>
             ))}
         </div>
-      </section>
+      </details>
     </main>
   );
 }

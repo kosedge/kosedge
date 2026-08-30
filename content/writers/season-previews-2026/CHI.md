@@ -2,11 +2,14 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Ten wins require cleaner offense and healthy protection, not another season of late-down improvisation  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (+100 / -120)  
 **Sources (beat desk):** Courtney Cronin (ESPN); Sean Hammond (Daily Herald); ChicagoBears.com
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Chicago is being asked to win 10 games after winning 11, taking the NFC North and beating Green Bay in the playoffs. That sounds like a modest tax on a young contender. The current evidence makes it more complicated.
 

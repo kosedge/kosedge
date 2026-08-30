@@ -2,11 +2,14 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Tampa Bay owns the division’s clearest floor, and the market charges full price for it  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (-125 / +105)  
 **Sources (beat desk):** Jenna Laine (ESPN); Greg Auman (FOX Sports); Rick Stroud (Tampa Bay Times); Buccaneers.com staff; Riley Nash (Kos Edge market desk)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Tampa Bay has the NFC South’s safest quarterback situation and its highest win total. Both are reasonable. Neither creates an edge.
 

@@ -2,11 +2,14 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Cleveland has a Week 1 quarterback now; it still does not have an Over worth forcing  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **6.5** (+105 / -120)  
 **Sources (beat desk):** Daniel Oyefusi (ESPN); Mary Kay Cabot (Cleveland.com); Zac Jackson (The Athletic); ClevelandBrowns.com staff; Nick Shook (NFL.com)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 The quarterback competition is over. On August 24, Todd Monken named **Deshaun Watson** the Browns' starter for the September 13 opener at Jacksonville, choosing him over Shedeur Sanders after the full offseason, training camp, joint practice and two preseason games. Monken also removed the escape hatch: this is **not a week-to-week decision**.
 

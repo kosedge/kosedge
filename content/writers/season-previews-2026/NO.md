@@ -2,11 +2,14 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** The schedule and a settled quarterback support the model, but camp attrition caps conviction  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-120 / +100)  
 **Sources (beat desk):** Katherine Terrell (ESPN); Mike Triplett (NewOrleans.Football); Nick Underhill (New Orleans local); Luke Johnson (The Times-Picayune/NOLA.com); Riley Nash (Kos Edge market desk)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 New Orleans is the one NFC South team whose model edge, quarterback plan and schedule point in the same direction. The injury report is the reason the conclusion stays soft.
 

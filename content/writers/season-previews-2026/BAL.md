@@ -2,11 +2,14 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Baltimore is priced for a complete rebound while its offensive spine is still being rebuilt  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (+115 / -140)  
 **Sources (beat desk):** Jamison Hensley (ESPN); Jeff Zrebiec (The Athletic); Jonas Shaffer (The Baltimore Banner); Ryan Mink (BaltimoreRavens.com); Luke Jones (WNST)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Baltimore does not need to prove it can contend. The Ravens need to prove that the market has not charged twice for the same comeback. DraftKings opened them at **10.5** in February and now lists **11.5**, the highest tier on the board, even after an 8-9 season and a complete change at the top of the coaching staff. Healthy-Lamar optimism is no longer an insight. It is the price.
 

@@ -147,9 +147,11 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       title: "Camp Desk / Injuries & News",
       href: "/pro/nfl/camp",
       lines: [
-        "Camp Desk: dated KosEdge notes with citations, not an X timeline.",
-        "Injuries & News: the feed when it is posted.",
-        "Neither is a pricing engine.",
+        "Camp Desk: dated KosEdge notes with citations — never a tweet mirror.",
+        "Research beat, official, and sharp-capable desks; thin camp info stays Pass.",
+        "Daily YYYY-MM-DD packages; Monday refreshes all 32 team previews (Date + Bottom line / What matters most).",
+        "SoT flags queue the existing depth job — this page does not publish a new model run.",
+        "Injuries & News is the feed when posted. Neither surface is a pricing engine.",
       ],
     },
     {

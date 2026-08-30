@@ -2,11 +2,14 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** A friendlier schedule creates a Year 2 runway for Cam Ward, but 6.5 already charges for the improvement  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **6.5** (O -110 / U -110)  
 **Sources (beat desk):** Turron Davenport (ESPN); Jim Wyatt (Titans.com); Terry McCormick (TitanInsider)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Tennessee’s 6.5 asks for seven wins from a franchise coming off consecutive 3-14 seasons. That sounds aggressive until the schedule and offensive investment enter the picture. It still is not an automatic Under.
 

@@ -2,11 +2,14 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Harbaugh and Dart raise the floor, but Calvin Austin III's knee injury removes margin from a tightly priced 7.5  
-**Date:** August 26, 2026
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-115 / -105)
 **Sources (beat desk):** Jordan Raanan (ESPN); Dan Duggan (The Athletic); Paul Schwartz (New York Post); New York Giants schedule desk
+
+**Bottom line:** Austin is on season-ending IR with a torn ACL. Slot depth thins; Nabers remains the alpha when active. The 7.5 total still sits near the Model — Pass.  
+**What matters most:** Posted Week 1 WR depth and punt-return plan without Austin; do not invent a WR2 from cutdown noise.
 
 The Giants are easier to believe in than they were a year ago. At **7.5**, belief is already in the price.
 

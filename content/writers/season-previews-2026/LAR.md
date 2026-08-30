@@ -2,11 +2,14 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** The conference favorite can be excellent and still be fully priced at 11.5  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (Over -125 / Under +105)  
 **Sources (beat desk):** Sarah Barshop (ESPN); Jourdan Rodrigue (The Athletic); Gary Klein (Los Angeles Times); Stu Jackson (Rams.com)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 The Rams do not have to be overrated for Over 11.5 to be a poor purchase. They can own one of the league’s best quarterback-coach combinations, carry high-end talent on both sides and remain a clear January threat. The ticket still requires twelve wins, and DraftKings charges **-125** for the privilege of betting that they get there.
 
