@@ -11,7 +11,11 @@ type Props = {
   className?: string;
   /** Highlight on the research strip (Guillotine / Sleepers / Pick’em). */
   researchActive?: ResearchSurface | null;
-  /** When false, hide the research strip (draft-only surfaces). Default true. */
+  /**
+   * When true, always show the research strip.
+   * When omitted, the strip shows only if `researchActive` is set
+   * (draft/mock keep scoring-only chrome).
+   */
   showResearch?: boolean;
 };
 
@@ -65,8 +69,9 @@ export function FantasyDeskNav({
   scoring,
   className = "",
   researchActive = null,
-  showResearch = true,
+  showResearch,
 }: Props) {
+  const showResearchNav = showResearch ?? researchActive != null;
   return (
     <div className={className}>
       <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-kos-text/40">
@@ -101,7 +106,7 @@ export function FantasyDeskNav({
         })}
       </nav>
 
-      {showResearch ? (
+      {showResearchNav ? (
         <nav
           className="mt-3 flex flex-wrap gap-2"
           aria-label="Fantasy research pages"
