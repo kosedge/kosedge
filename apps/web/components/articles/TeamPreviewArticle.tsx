@@ -1,16 +1,12 @@
 import ArticleShell from "@/components/articles/ArticleShell";
 import ArticleSection from "@/components/articles/ArticleSection";
 import ArticleProseBody from "@/components/articles/ArticleProseBody";
-import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
-import {
-  articleNumberCardClasses,
-} from "@/lib/article-prose";
+import { articleNumberCardClasses } from "@/lib/article-prose";
 import {
   formatPreviewDate,
   sectionizeTeamPreview,
   type HandicappersNote,
 } from "@/lib/article-sectionizer";
-import { editorialSnapshotLineage } from "@/lib/nfl-lineage";
 import type { NflSeasonPreviewArticle } from "@/lib/nfl-season-previews";
 
 type TeamPreviewArticleProps = {
@@ -40,7 +36,9 @@ function NumberCard({
             <dt className="text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/60">
               Market
             </dt>
-            <dd className="mt-1 text-lg font-semibold text-kos-text">{marketNum}</dd>
+            <dd className="mt-1 text-lg font-semibold text-kos-text">
+              {marketNum}
+            </dd>
           </div>
         ) : null}
         {fair ? (
@@ -102,7 +100,9 @@ function ModelNote({ note }: { note: HandicappersNote }) {
   );
 }
 
-export default function TeamPreviewArticle({ article }: TeamPreviewArticleProps) {
+export default function TeamPreviewArticle({
+  article,
+}: TeamPreviewArticleProps) {
   const slots = sectionizeTeamPreview(article.bodyMarkdown);
   const bottomLine =
     article.angle?.replace(/\*\*/g, "") ||
@@ -164,11 +164,6 @@ export default function TeamPreviewArticle({ article }: TeamPreviewArticleProps)
       title={article.title}
       date={published}
       metaLine={`2026 season preview · ${article.wordCount.toLocaleString()} words`}
-      headerExtra={
-        <NflLineageBadge
-          lineage={editorialSnapshotLineage(article.publishedDate)}
-        />
-      }
       bottomLine={bottomLine}
       breadcrumbs={[
         { label: "NFL Overview", href: "/pro/nfl/overview" },

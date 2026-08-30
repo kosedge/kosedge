@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
 import { fetchNflIntel } from "@/lib/nfl-intel";
 import { fetchEspnNflStandings } from "@/lib/nfl-espn-schedule";
@@ -10,7 +9,10 @@ import {
   teamDisplayName,
 } from "@/lib/nfl-team-intel";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
-import { loadLatestNflPreseasonBundle2026, loadNflWebLaunchPointer } from "@/lib/nfl-preseason-artifacts";
+import {
+  loadLatestNflPreseasonBundle2026,
+  loadNflWebLaunchPointer,
+} from "@/lib/nfl-preseason-artifacts";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import {
   nflModelPlayoffColumnLabel,
@@ -37,9 +39,7 @@ type StandingRow = {
   playoffProb: number | null;
 };
 
-function firstValue(
-  value: string | string[] | undefined,
-): string | undefined {
+function firstValue(value: string | string[] | undefined): string | undefined {
   if (Array.isArray(value)) return value[0];
   return value;
 }
@@ -76,10 +76,7 @@ export default async function StandingsPage({
   const projByTeam = new Map(
     (bundle?.teamRows ?? []).map((r) => {
       const code = canonicalizeNflTeam(r.team) ?? r.team;
-      return [
-        code,
-        { wins: r.expectedWins, playoff: r.playoffProb },
-      ] as const;
+      return [code, { wins: r.expectedWins, playoff: r.playoffProb }] as const;
     }),
   );
 
@@ -235,7 +232,6 @@ export default async function StandingsPage({
                   : [truth.ui_state, "MODEL"]
               }
             />
-            {lineage ? <NflLineageBadge lineage={lineage} /> : null}
           </div>
           <p className="mt-2 text-sm text-kos-text/70">{sourceNote}</p>
         </div>
@@ -360,7 +356,9 @@ export default async function StandingsPage({
                     <th className="px-3 py-3">Streak</th>
                     <th className="px-3 py-3">Last 5</th>
                     <th className="px-3 py-3">{nflModelWinsColumnLabel()}</th>
-                    <th className="px-3 py-3">{nflModelPlayoffColumnLabel()}</th>
+                    <th className="px-3 py-3">
+                      {nflModelPlayoffColumnLabel()}
+                    </th>
                   </tr>
                 </thead>
                 <tbody>

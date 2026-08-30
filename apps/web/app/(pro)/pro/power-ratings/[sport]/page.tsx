@@ -11,11 +11,17 @@ import { fetchNflIntel } from "@/lib/nfl-intel";
 import { PowerRatingsTable } from "./PowerRatingsTable";
 import SportProShell from "@/components/pro/SportProShell";
 import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
-import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
-import { withEngineVersionOverride } from "@/lib/nfl-lineage";
+import {
+  lineageAsOfDate,
+  shortEngineVersion,
+  withEngineVersionOverride,
+} from "@/lib/nfl-lineage";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
-import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
+import {
+  isNflCalendarPreseason,
+  NFL_PRODUCT_SEASON,
+} from "@/lib/nfl-truth-label";
 
 export const dynamic = "force-dynamic";
 
@@ -88,29 +94,18 @@ function NflAtAGlance({
           ? `${formatPoints(valueOf(r))} Model PR`
           : `${r.rating.toFixed(2)} wins`,
       )}
-      {card("Biggest Risers", risers, (r) =>
-        `Δ ${formatSigned(r.weeklyDelta)}`,
+      {card(
+        "Biggest Risers",
+        risers,
+        (r) => `Δ ${formatSigned(r.weeklyDelta)}`,
       )}
-      {card("Biggest Fallers", fallers, (r) =>
-        `Δ ${formatSigned(r.weeklyDelta)}`,
+      {card(
+        "Biggest Fallers",
+        fallers,
+        (r) => `Δ ${formatSigned(r.weeklyDelta)}`,
       )}
     </section>
   );
-}
-
-function bundleLabel(id: string, opts?: { nTeamSims?: number | null }): string {
-  const stamp = id.replace("nfl-preseason-sim-2026-", "");
-  const day =
-    stamp.length >= 8
-      ? `${stamp.slice(0, 4)}-${stamp.slice(4, 6)}-${stamp.slice(6, 8)}`
-      : null;
-  if (opts?.nTeamSims && opts.nTeamSims >= 50000) {
-    return day
-      ? `Launch ${opts.nTeamSims.toLocaleString()} · ${day}`
-      : `Launch ${opts.nTeamSims.toLocaleString()}`;
-  }
-  if (day) return `Sim ${day}`;
-  return id;
 }
 
 const DESK_HEADERS = [
@@ -160,10 +155,26 @@ export default async function PowerRatingsSportPage({
     );
 
     const lineage =
-      withEngineVersionOverride(
-        board.lineage ?? null,
-        board.engineVersion,
-      ) ?? resolveActiveNflLineage();
+      withEngineVersionOverride(board.lineage ?? null, board.engineVersion) ??
+      resolveActiveNflLineage();
+    const opsLineageTitle = lineage
+      ? [
+          lineage.kind,
+          lineage.lockTag ? `pin ${lineage.lockTag}` : null,
+          `run ${lineage.run_id}`,
+          lineage.engine_version
+            ? `engine ${shortEngineVersion(lineage.engine_version) ?? lineage.engine_version}`
+            : null,
+          typeof lineage.nTeamSims === "number"
+            ? `${lineage.nTeamSims.toLocaleString()} paths`
+            : null,
+          lineageAsOfDate(lineage.generated_at)
+            ? `as of ${lineageAsOfDate(lineage.generated_at)}`
+            : null,
+        ]
+          .filter(Boolean)
+          .join(" · ")
+      : undefined;
 
     return (
       <SportProShell
@@ -178,26 +189,16 @@ export default async function PowerRatingsSportPage({
         <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div className="min-w-0 space-y-2">
-              <NflTruthStateBadges
-                states={
-                  isNflCalendarPreseason(NFL_PRODUCT_SEASON) ||
-                  board.desk?.phase === "preseason"
-                    ? ["PRESEASON", "MODEL"]
-                    : ["MODEL"]
-                }
-              />
-              <p className="text-sm text-kos-text/65">
-                {deskMode
-                  ? `Method ${board.desk?.method ?? "B"} · ${board.desk?.phase ?? "preseason"}`
-                  : board.bundleId
-                    ? `Active · ${bundleLabel(board.bundleId, { nTeamSims: board.nTeamSims })}`
-                    : "No sim bundle found"}
-                {board.engineVersion ? ` · ${board.engineVersion}` : ""}
-                {board.activeRunId
-                  ? ` · run ${board.activeRunId.replace("nfl-preseason-sim-2026-", "")}`
-                  : ""}
-              </p>
-              {lineage ? <NflLineageBadge lineage={lineage} /> : null}
+              <span title={opsLineageTitle}>
+                <NflTruthStateBadges
+                  states={
+                    isNflCalendarPreseason(NFL_PRODUCT_SEASON) ||
+                    board.desk?.phase === "preseason"
+                      ? ["PRESEASON", "MODEL"]
+                      : ["MODEL"]
+                  }
+                />
+              </span>
               <p className="text-xs text-kos-text/45">
                 <ModelTransparencyLink hrefSuffix="#power-ratings" />
               </p>
@@ -274,9 +275,7 @@ export default async function PowerRatingsSportPage({
                         {formatPoints(r.activePr)}
                       </td>
                       <td className="px-2.5 py-2.5 text-kos-text/75">
-                        {r.uncertainty != null
-                          ? r.uncertainty.toFixed(2)
-                          : "—"}
+                        {r.uncertainty != null ? r.uncertainty.toFixed(2) : "—"}
                       </td>
                       <td className="px-2.5 py-2.5 text-kos-text/75">
                         {formatPoints(r.prevWeekModelPr)}

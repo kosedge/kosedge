@@ -7,10 +7,7 @@ import {
   isSeasonEngineReady,
   seasonEnginePackagedNotice,
 } from "@/lib/nfl-season-engine";
-import {
-  nflLaunchResearchDeskNotice,
-  resolveActiveNflLineage,
-} from "@/lib/nfl-launch-research";
+import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 
 export const dynamic = "force-dynamic";
@@ -35,7 +32,6 @@ export default async function NflSeasonModelHubPage() {
   ]);
   const ready = isSeasonEngineReady(status);
   const packagedNotice = seasonEnginePackagedNotice(status);
-  const deskNotice = nflLaunchResearchDeskNotice();
   const lineage = resolveActiveNflLineage({
     engineVersionOverride: status.engine_version || truePr.engine_version,
   });
@@ -56,11 +52,6 @@ export default async function NflSeasonModelHubPage() {
       {lineage ? (
         <div className="-mt-2 mb-4">
           <NflLineageBadge lineage={lineage} />
-          {deskNotice ? (
-            <p className="mt-1.5 text-[11px] leading-snug text-kos-text/45">
-              {deskNotice}
-            </p>
-          ) : null}
         </div>
       ) : null}
 

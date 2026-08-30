@@ -2,7 +2,6 @@ import Link from "next/link";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import SportProHeader from "@/components/pro/SportProHeader";
 import { NflDeskStatusBar } from "@/components/pro/NflDeskStatusBar";
-import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
   loadAssembledEdgeBoardRows,
@@ -15,7 +14,6 @@ import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
-import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import { MODEL_TRANSPARENCY_HREF } from "@/lib/model-transparency-hub";
 import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
@@ -107,7 +105,6 @@ export default async function EdgeBoardSportPage({
 
   const isNfl = sportKey === "nfl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
-  const nflLineage = isNfl ? resolveActiveNflLineage() : null;
 
   const slateLabel =
     sportKey === "nfl" || sportKey === "cfb" ? "Weekly Slate" : "Daily Slate";
@@ -154,11 +151,6 @@ export default async function EdgeBoardSportPage({
             <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-edge-green">
               {sportName} Edge Board
             </h1>
-            {isNfl && nflLineage ? (
-              <div className="mt-2">
-                <NflLineageBadge lineage={nflLineage} />
-              </div>
-            ) : null}
             {!isNfl ? (
               <p className="mt-2 text-sm sm:text-base text-gray-200/80 max-w-3xl">
                 {marketsOnly
