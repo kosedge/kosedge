@@ -2,9 +2,11 @@
 
 How to assign and ship NFL training-camp news breaks and camp notebooks without breaking Edge Threshold Discipline.
 
+**Desk OS (2026-08-30):** Handicapping product is **LOCKED**; body prose is **UNLOCKED** per writer voice pack. See `style-bible.md` and `.cursor/rules/ai-writer-team.mdc`. Do not flatten writers into one house voice. CFB is off this desk. NFL trusted X list only (`data/writers/nfl-beat-writers.*`).
+
 ## Mission
 
-Expert researchers who move fast when camp news breaks. Style serves the fact pattern — never the reverse.
+Expert researchers who move fast when camp news breaks. Product chrome and thresholds are shared; **voice is not**. Each writer keeps their pack (Casey freeze, Reese conversational, Morgan clinical, Taylor patient, Avery crisp).
 
 Brand still applies: no hype, no locks, process over results. Thin edges → **Pass**.
 
@@ -149,9 +151,11 @@ This analysis is for informational and educational purposes only. Sports betting
 
 ## Shared files (always load)
 
-1. `style-bible.md`
-2. `research-standards.md`
-3. `output-formatting.md`
+1. `style-bible.md` (LOCKED product + UNLOCKED voice pointer)
+2. `research-standards.md` (LOCKED)
+3. `output-formatting.md` (LOCKED chrome)
 4. `project-log.md`
-5. Writer prompt (`casey-voss.md` etc.)
-6. Beat registry for relevant teams
+5. Writer prompt voice pack (`casey-voss.md` etc. — UNLOCKED)
+6. Beat registry for relevant NFL teams only (`nfl-beat-writers.json`)
+
+Riley Nash fact-checks **numbers** only — see `docs/writers/EDITOR_WEEKLY_FACTCHECK.md`.
