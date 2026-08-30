@@ -17,7 +17,7 @@ export const MODEL_TRANSPARENCY_CONTRACT = [
   {
     term: "KEI",
     meaning:
-      "Final handicap. Model plus late information and reprice (injury, rest, weather, confirmation).",
+      "Final handicap. Model plus late information and reprice — desk factors such as injury, rest, weather, confirmation.",
   },
   {
     term: "Edge / Tag",

@@ -40,8 +40,8 @@ export default async function NflWeeklySlatePage({
             {date === "today" ? "Weekly Slate" : `Slate · ${date}`}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Slate snapshot and matchup cards for KosEdge briefs. Model lines and
-            market context when joined — research desk, not a picks feed.
+            Slate snapshot and matchup cards for KosEdge briefs, with model
+            lines and market context when joined.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">

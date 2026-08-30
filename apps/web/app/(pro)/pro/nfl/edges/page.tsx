@@ -124,9 +124,8 @@ export default async function NflEdgesDeskPage({
               Model vs Market Edges
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Meaningful separations between Kos Edge lines and the joined
-              market. Research context only — not a pick sheet. Empty when
-              nothing clears the cut.
+              Separations between KosEdge lines and the joined market. Empty
+              when nothing clears the cut.
             </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">

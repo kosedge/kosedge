@@ -296,12 +296,8 @@ export default async function EdgeBoardSportPage({
                 Full slate{fullCount ? ` (${fullCount})` : ""}
               </Link>
             </div>
-            <p
-              className="text-[11px] text-gray-500"
-              title="Tag = KEI vs current best market (not Model alone)."
-            >
-              {slate === "week1" ? "Week 1" : nflWeekLabel} · Tag = KEI vs
-              market · KEI = model + desk factors ·{" "}
+            <p className="text-[11px] text-gray-500">
+              {slate === "week1" ? "Week 1" : nflWeekLabel} ·{" "}
               <Link
                 href={MODEL_TRANSPARENCY_HREF}
                 className="text-kos-gold/80 hover:text-kos-gold hover:underline"

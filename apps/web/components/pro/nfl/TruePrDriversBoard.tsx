@@ -38,7 +38,6 @@ export default function TruePrDriversBoard({
             True power ratings
           </h2>
           <p className="mt-1 max-w-2xl text-xs leading-relaxed text-kos-text/60">
-            Intrinsic PR is research fair strength.{" "}
             <ModelTransparencyLink hrefSuffix="#game-boxes" />
           </p>
         </div>
