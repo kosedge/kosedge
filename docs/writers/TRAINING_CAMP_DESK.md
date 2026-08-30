@@ -92,6 +92,8 @@ Camp Desk (`/pro/nfl/camp`) surfaces **KosEdge copy only**. Empty “No KosEdge 
 
 Expertise contract: consensus first, specific impact, thin edge = **Pass**. Camp cards = **date-only** (no writer byline). Depth/roster claims flag SoT intel — do not invent starters.
 
+**Schema note — `preview_delta` (singular):** `apps/web/lib/nfl-camp-desk-daily.ts` collects **`preview_delta` only**. Plural `preview_deltas` is ignored (Aug 26 used the plural key — those 15 deltas never collected). Monday packages must use the singular key; copy that field’s shape from `2026-08-17.json`, not `2026-08-26.json`.
+
 How to add a day: `content/writers/camp-desk-2026/README.md`.
 
 ## News-break output template

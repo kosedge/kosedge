@@ -14,6 +14,14 @@ Dated KosEdge packages for `/pro/nfl/camp`.
 6. Update `rotation-queue.json` only when a quiet club needs a **pulse** line (not a force-rotate of all 32 on weekdays). Update `project-log.md`.
 7. Full SOP: `docs/writers/TRAINING_CAMP_DESK.md` (cadence SoT). Historical ship notes: `data/ops/nfl-camp-desk-daily-cadence-20260821.md`.
 
+### Schema — `preview_delta` (singular)
+
+Loader SoT: `apps/web/lib/nfl-camp-desk-daily.ts` reads **`preview_delta`** only (`file.preview_delta ?? []`). Plural **`preview_deltas` is ignored**.
+
+- Monday (and weekday) packages must use the **singular** key.
+- Copy Monday shape for that field from **`2026-08-17.json`**, not `2026-08-26.json` (Aug 26 shipped `preview_deltas` — 15 deltas never collected).
+- Do not rewrite live Aug 26 JSON in the cadence OS PR; fix on the next Monday ship if still needed.
+
 The Camp Desk loader reads every `YYYY-MM-DD.json` in this folder. No code change required for a new day.
 
 ## Cadence (LOCKED 2026-08-30 — Ryan)

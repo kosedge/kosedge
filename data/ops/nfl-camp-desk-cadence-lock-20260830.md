@@ -25,3 +25,7 @@ Monday NUMBER pass inherits HOUSE vs STREET (pull KEI if printed, never mint, st
 - `style-bible.md` · `.cursor/rules/ai-writer-team.mdc`
 - `content/writers/season-previews-2026/INDEX.md` (PHI → Avery)
 - `content/writers/camp-desk-2026/rotation-queue.json` (rule string)
+
+## Schema — `preview_delta` (singular)
+
+Loader `apps/web/lib/nfl-camp-desk-daily.ts` reads **`preview_delta` only**. Plural `preview_deltas` is ignored (`2026-08-26.json` shipped 15 under the plural key — never collected). Monday packages must use singular; copy Monday shape for that field from `2026-08-17.json`, not Aug 26. OS/docs note only — do not rewrite live Aug 26 JSON in the cadence lock PR.
