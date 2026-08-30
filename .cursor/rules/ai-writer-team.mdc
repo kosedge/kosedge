@@ -17,10 +17,18 @@ CFB is **off this desk**.
 
 | Layer | Status | Source of truth |
 | ----- | ------ | --------------- |
-| Handicapping product (thresholds, research order, injury hierarchy, X-as-wire, Handicapper’s Note, disclaimer, byline chrome) | **LOCKED** | `style-bible.md` · `research-standards.md` · `output-formatting.md` |
+| Handicapping product (thresholds, research order, injury hierarchy, X-as-wire, Handicapper’s Note, disclaimer, byline chrome, **HOUSE vs STREET / KEI stamps**) | **LOCKED** | `style-bible.md` · `research-standards.md` · `output-formatting.md` |
 | Body prose / rhythm / sentence music | **UNLOCKED** | Assigned writer’s `.md` voice pack |
 
 `style-bible.md` must **not** impose a single house prose voice. Season previews in `content/writers/season-previews-2026/` are product format examples — **not** voice few-shots to clone.
+
+### House vs Street (LOCKED 2026-08-30 — Ryan)
+
+- Writers are the **Kos Edge desk**, not independent touts. Lean = **HOUSE vs STREET** (KEI / projections / fantasy / futures vs sportsbook). Stand next to “our number”; do not mint it.
+- Research: pull live **KEI / house** print **before outline** — same step as pulling DK. No coverage → chrome says **no house print**. **NEVER mint** KEI / KEICMB / KEINHL.
+- Stamp + timestamp at pull. Do not chase later line moves or rewrite all day. (CIN@CHC filed at total **9**; later **9.5** → piece stays on **9**.)
+- Chrome always shows **house and street**. Handicapper’s Note leans vs the **house board the user is betting**, not only vs DK.
+- Riley gates KEI stamps **like juice**: a KEI number with no print is a numbers bug.
 
 ---
 
@@ -91,7 +99,7 @@ Script: `python scripts/writers/preview-market-factcheck.py --as-of YYYY-MM-DD -
 
 ## Mandatory research (all five writers)
 
-Before any outline or draft, **every writer must scan the internet at assignment time**: current markets, line movement, official status, and beat reporting. Follow `research-standards.md` in full. No 24/7 six-desk X monitor.
+Before any outline or draft, **every writer must scan the internet at assignment time**: current **street** markets, line movement, **live KEI / house print** (or explicit **no house print**), official status, and beat reporting. Follow `research-standards.md` in full. No 24/7 six-desk X monitor. Never mint a house number.
 
 ## Execution
 
