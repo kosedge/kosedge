@@ -86,6 +86,20 @@ Writers are the **Kos Edge desk**, not independent touts. The lean is **HOUSE vs
 
 Live matrix after PR #330 — five hired desks + Riley. Do **not** reassign beats. Do **not** hire Jordan Vale, Drew Kessler, or Sam Ortiz. See `ai-writer-team.mdc`.
 
+**PHI** season-preview byline going forward: **Avery Cole** (NFC East also-cover). Coverage/docs pointer — Monday NUMBER pass owns the file; do not rewrite `PHI.md` solely to flip the byline.
+
+### NFL Camp Desk cadence (LOCKED 2026-08-30 — Ryan)
+
+Execution lock only — not a new product. Full SoT: `docs/writers/TRAINING_CAMP_DESK.md`.
+
+| Slot                  | Ships                                                                                      | Forbidden                                         |
+| --------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| **Weekday (Tue–Fri)** | Clubs with **real** news only; quiet skip or pulse; ~6pm ET cutoff                         | **NEVER** a 32-card hero dump. Daily ≠ 32 essays. |
+| **Monday**            | Full-32 camp package (news + pulse for quiet) **plus** weekly team-preview **NUMBER** pass | Voice rewrites; chasing later lines; minting KEI  |
+| **Injury day**        | Same-day weekday file                                                                      | Waiting for Monday                                |
+
+Camp cards = **date-only** (no writer byline). Riley gates Monday **numbers** only. HOUSE vs STREET applies on the NUMBER pass. “Desk updating” is empty-shelf UI — **not** a substitute for shipping.
+
 ---
 
 ## UNLOCKED — Body prose (distinct voices required)

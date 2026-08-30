@@ -2,13 +2,29 @@
 
 How to assign and ship NFL training-camp news breaks and camp notebooks without breaking Edge Threshold Discipline.
 
-**Desk OS (2026-08-30):** Handicapping product is **LOCKED**; body prose is **UNLOCKED** per writer voice pack. See `style-bible.md` and `.cursor/rules/ai-writer-team.mdc`. Do not flatten writers into one house voice. **HOUSE vs STREET** (pull KEI before outline; never mint; stamp at pull; chrome shows both) is LOCKED — Ryan 2026-08-30. CFB is off this desk. NFL trusted X list only (`data/writers/nfl-beat-writers.*`).
+**Desk OS (2026-08-30):** Handicapping product is **LOCKED**; body prose is **UNLOCKED** per writer voice pack. See `style-bible.md` and `.cursor/rules/ai-writer-team.mdc`. Do not flatten writers into one house voice. **HOUSE vs STREET** (pull KEI before outline; never mint; stamp at pull; chrome shows both) is LOCKED — Ryan 2026-08-30. **Cadence** (weekday vs Monday) is LOCKED below — execution only, not a new product. CFB is off this desk. NFL trusted X list only (`data/writers/nfl-beat-writers.*`).
 
 ## Mission
 
 Expert researchers who move fast when camp news breaks. Product chrome and thresholds are shared; **voice is not**. Each writer keeps their pack (Casey freeze, Reese conversational, Morgan clinical, Taylor patient, Avery crisp).
 
 Brand still applies: no hype, no locks, process over results. Thin edges → **Pass**.
+
+## Cadence (LOCKED — weekday vs Monday)
+
+Ryan confirmed **2026-08-30**. Writers ship on NFL also-covers (Casey NFC North; Avery NFC East + South; Reese AFC North + West; Morgan NFC West; Taylor AFC East + South).
+
+| Slot                  | What ships                                                                                             | What does **not**                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| **Weekday (Tue–Fri)** | Only clubs with **real** news. Quiet clubs **skip** or get a short **pulse** line. Cutoff **~6pm ET**. | **NEVER** a 32-card hero dump. Daily ≠ 32 essays.     |
+| **Monday**            | Full-32 camp package (news cards + pulse for quiet) **plus** the weekly team-preview **NUMBER** pass.  | Voice rewrites of previews; chasing later line moves. |
+| **Injury day**        | Same-day weekday file — do not wait for Monday.                                                        | Holding material news for the Monday package.         |
+
+**Monday NUMBER pass:** Riley Nash gates **numbers only** (not voice). HOUSE vs STREET already locked — pull live KEI if a print exists, **never mint**, stamp at pull, do not chase. Full SoT: `style-bible.md` House vs Street.
+
+**Byline rules:** Camp cards stay **date-only** (no writer byline). Season-preview bylines follow the coverage matrix — **PHI going forward is Avery Cole** (not Jordan Vale). Do not rewrite locked preview bodies just to flip a byline; Monday’s number pass owns the pointer.
+
+**Shipping:** “Desk updating” on an empty shelf is honest **UI fallback**, not a substitute for shipping the weekday news package or Monday full-32 + number pass.
 
 ## When to use which format
 
@@ -57,24 +73,26 @@ Default to news break / camp notebook during July–early September unless the a
 2. Corroborate with at least one second source (official, Athletic/local, AP, club site).
 3. ESPN may be _one_ input. Never brand the desk as an ESPN wire mirror. Never invent quotes.
 4. Attribute generically when a quote is not on hand (“per team report”, “multiple beat reports”). **No X profile links, no “follow @…” CTAs on Camp Desk.**
-5. Team previews refresh **every Monday** in camp/season (`**Date:**` + Bottom line / What matters most at minimum).
-6. **Daily Camp Desk:** write `content/writers/camp-desk-2026/YYYY-MM-DD.json` (see that folder’s README). Newest file always shows in preseason. Quiet clubs skip — no filler essays. Injury days ship same-day; do not wait for Monday.
+5. Team previews get a **NUMBER** pass **every Monday** in camp/season (`**Date:**` + Bottom line / What matters most at minimum). Riley gates numbers; HOUSE vs STREET — pull KEI if printed, never mint.
+6. **Camp Desk day files:** write `content/writers/camp-desk-2026/YYYY-MM-DD.json` (see that folder’s README). Newest file always shows in preseason. **Weekday** = real-news clubs only (quiet skip/pulse). **Monday** = full 32. Injury days ship same-day.
 
 If X tooling is unavailable, WebSearch + WebFetch of Athletic/local/official URLs is sufficient — still cite the writer and outlet, never paste a tweet as the card.
 
 ## Camp Desk product (preseason)
 
-Camp Desk (`/pro/nfl/camp`) surfaces **KosEdge copy only**. Empty “No KosEdge camp notes” is a bug while camp is active.
+Camp Desk (`/pro/nfl/camp`) surfaces **KosEdge copy only**. Empty “No KosEdge camp notes” is a bug while camp is active — ship the cadence package; do not leave the shelf on “Desk updating” as a substitute for writing.
 
-| Slot           | Spec                                                                          |
-| -------------- | ----------------------------------------------------------------------------- |
-| Daily          | League wrap + every team with **real** news (`package: daily`)                |
-| Monday         | Full 32 + wrap (`package: monday`, see `2026-08-17.json`)                     |
-| Injury day     | Same-day daily file                                                           |
-| Freshness      | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive |
-| Empty pipeline | Honest **Desk updating** + last note date — never a dead shelf                |
+| Slot              | Spec                                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| Weekday (Tue–Fri) | League wrap + clubs with **real** news only (`package: daily`). Quiet = skip or pulse. **Not** 32 essays. ~6pm ET cutoff. |
+| Monday            | Full 32 (news + pulse for quiet) + wrap (`package: monday`) **and** weekly preview NUMBER pass                            |
+| Injury day        | Same-day weekday file                                                                                                     |
+| Freshness         | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive                                             |
+| Empty pipeline    | Honest **Desk updating** + last note date is UI only — never a dead shelf, **never** an excuse to skip ship               |
 
-Expertise contract: consensus first, specific impact, thin edge = **Pass**. Date-only byline. Depth/roster claims flag SoT intel — do not invent starters.
+Expertise contract: consensus first, specific impact, thin edge = **Pass**. Camp cards = **date-only** (no writer byline). Depth/roster claims flag SoT intel — do not invent starters.
+
+**Schema note — `preview_delta` (singular):** `apps/web/lib/nfl-camp-desk-daily.ts` collects **`preview_delta` only**. Plural `preview_deltas` is ignored (Aug 26 used the plural key — those 15 deltas never collected). Monday packages must use the singular key; copy that field’s shape from `2026-08-17.json`, not `2026-08-26.json`.
 
 How to add a day: `content/writers/camp-desk-2026/README.md`.
 
@@ -141,13 +159,17 @@ This analysis is for informational and educational purposes only. Sports betting
 
 ## Coverage owners (NFL slices)
 
-| Writer        | NFL primary / also  |
+Also-covers for Camp Desk + Monday NUMBER pass (LOCKED matrix):
+
+| Writer        | NFL also-covers     |
 | ------------- | ------------------- |
 | Casey Voss    | NFC North           |
 | Reese Quinn   | AFC North, AFC West |
 | Morgan Hale   | NFC West            |
 | Taylor Brooks | AFC East, AFC South |
-| Avery Cole    | NFC South, NFC East |
+| Avery Cole    | NFC East, NFC South |
+
+**PHI** season-preview byline going forward: **Avery Cole** (NFC East). Coverage pointer only until Monday’s pass owns the file — do not rewrite `PHI.md` solely for the byline flip.
 
 ## Shared files (always load)
 

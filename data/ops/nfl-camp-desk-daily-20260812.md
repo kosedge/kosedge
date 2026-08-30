@@ -4,13 +4,15 @@ Date: 2026-08-12
 Branch: `feat/nfl-camp-desk-daily`  
 Doctrine: ESPN/beats are sources. KosEdge is the desk. Thin info = PASS.
 
+> **LOCKED addendum (2026-08-30 — Ryan):** Living cadence SoT is `docs/writers/TRAINING_CAMP_DESK.md`. Weekday ≠ Monday. Do **not** treat “Full 32 ≥3–4 pulse passes per week” below as current SOP — that midweek force-rotate is **superseded**. Weekdays = real news only; Monday = full 32 + NUMBER pass.
+
 ## Cadence
 
 | Slot | Spec |
 |------|------|
-| Every day | League wrap + every team with **real** news |
-| Full 32 | ≥3–4 pulse passes per week via `content/writers/camp-desk-2026/rotation-queue.json` |
-| Empty team day | Skip. No filler essay. |
+| Weekday (Tue–Fri) | League wrap + every team with **real** news; quiet skip or pulse; ~6pm ET. **NEVER** 32-card dump. |
+| Monday | Full 32 (news + pulse for quiet) + weekly preview NUMBER pass |
+| Empty team day (weekday) | Skip. No filler essay. |
 | Freshness | Newest `desk_date` first. During camp, hide items older than **72h** unless `pinned` |
 
 ## Template (cards)
