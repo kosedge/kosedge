@@ -19,6 +19,9 @@ type SurvivorPick = {
   opponent?: string | null;
   home_away?: string | null;
   win_rate: number;
+  this_week_wp?: number;
+  engine_wp?: number;
+  wp_source?: "kei" | "engine";
   save_score: number;
   pick_now_score: number;
   plays_this_week?: boolean;
@@ -44,9 +47,19 @@ type SurvivorPayload = {
 };
 
 const selectClass =
-  "min-h-11 w-full rounded-lg border border-white/15 bg-black/40 px-3 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50";
+  "min-h-11 w-full rounded-lg border border-white/20 bg-[#0B0E14] px-3 py-2 text-sm text-kos-text outline-none focus:border-kos-gold/50 scheme-dark";
 const labelClass =
   "mb-1 block text-[11px] font-semibold uppercase tracking-[0.12em] text-kos-text/55";
+
+function displayWp(pick: SurvivorPick): number {
+  if (
+    typeof pick.this_week_wp === "number" &&
+    Number.isFinite(pick.this_week_wp)
+  ) {
+    return pick.this_week_wp;
+  }
+  return pick.win_rate;
+}
 
 export default function SeasonEngineSurvivorClient({
   defaultWeek = 1,
@@ -115,9 +128,13 @@ export default function SeasonEngineSurvivorClient({
   return (
     <div className="space-y-6">
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
-        <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
+        <p className="mb-2 text-xs leading-relaxed text-kos-text/65">
           Mark teams you already used, choose a future week, and rank remaining
           picks. Bye weeks are excluded.
+        </p>
+        <p className="mb-4 text-[11px] leading-relaxed text-kos-text/55">
+          This week % is KEI (same as Pick’em). Path / save still uses the
+          season engine.
         </p>
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
@@ -126,12 +143,16 @@ export default function SeasonEngineSurvivorClient({
             </label>
             <select
               id="survivor-week"
-              className={`${selectClass} scheme-dark`}
+              className={selectClass}
               value={week}
               onChange={(e) => setWeek(Number(e.target.value))}
             >
               {Array.from({ length: 18 }, (_, i) => i + 1).map((w) => (
-                <option key={w} value={w}>
+                <option
+                  key={w}
+                  value={w}
+                  className="bg-[#0B0E14] text-kos-text"
+                >
                   Week {w}
                 </option>
               ))}
@@ -150,8 +171,9 @@ export default function SeasonEngineSurvivorClient({
           </p>
           <p className="min-h-11 rounded-lg border border-white/10 bg-black/25 px-3 py-2 text-sm text-kos-text/80">
             Available:{" "}
-            {NFL_SEASON_ENGINE_TEAMS.filter((t) => !used.includes(t)).join(", ") ||
-              "none left"}
+            {NFL_SEASON_ENGINE_TEAMS.filter((t) => !used.includes(t)).join(
+              ", ",
+            ) || "none left"}
           </p>
         </div>
 
@@ -257,10 +279,12 @@ export default function SeasonEngineSurvivorClient({
                 </p>
                 <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
                   Top pick ·{" "}
-                  {formatPct(ranked[0].win_rate, {
-                    n: result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
-                    digits: 1,
-                  })}{" "}
+                  <span className="text-base font-semibold tabular-nums text-kos-gold">
+                    {formatPct(displayWp(ranked[0]), {
+                      n: result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
+                      digits: 1,
+                    })}
+                  </span>{" "}
                   this week
                 </p>
               </div>
@@ -321,8 +345,8 @@ export default function SeasonEngineSurvivorClient({
                         ? `${pick.home_away === "home" ? "vs" : "@"} ${pick.opponent}`
                         : "—"}
                     </td>
-                    <td className="px-3 py-2.5 tabular-nums font-semibold text-kos-text">
-                      {formatPct(pick.win_rate, {
+                    <td className="px-3 py-2.5 tabular-nums text-base font-semibold text-kos-gold">
+                      {formatPct(displayWp(pick), {
                         n: result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
                         digits: 1,
                       })}

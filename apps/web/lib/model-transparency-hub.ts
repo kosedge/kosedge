@@ -96,7 +96,8 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       href: "/pro/nfl/survivor",
       lines: [
         "Season-path planner: remaining teams, byes, and suggested paths.",
-        "Interactive runs are labeled low-depth estimates; the research lock is deeper.",
+        "This week % on the desk is KEI SU win probability (same as Pick’em) when a fair line joins.",
+        "Path / save / pick-now still use the season engine. Interactive runs are low-depth estimates.",
         "Path % is research, not a promise and not a weekly betting board.",
       ],
     },
