@@ -34,14 +34,11 @@ No hype. No locks. No chasing. Process over results. Threshold discipline only.
 
 | Writer | Primary | Also covers | Prompt file |
 |--------|---------|-------------|-------------|
-| Casey Voss | NFL – NFC North | MLB Central (AL + NL), NHL Central, NBA Northwest, WNBA Western | `casey-voss.md` |
-| Reese Quinn | NBA – Northwest | NFL AFC North, NHL Pacific, MLB AL West, WNBA Eastern | `reese-quinn.md` |
+| Casey Voss | NFL – NFC North | NBA Central, MLB Central (AL + NL), NHL Central, NBA Northwest, WNBA Western | `casey-voss.md` |
+| Reese Quinn | NBA – Northwest | NFL AFC North, NFL AFC West, NHL Pacific, MLB AL West, WNBA Eastern | `reese-quinn.md` |
 | Morgan Hale | NHL – Central | NFL NFC West, NBA Pacific, MLB NL West, NHL Metropolitan | `morgan-hale.md` |
-| Taylor Brooks | MLB – Central (AL + NL) | NFL AFC East, NBA Southwest, NHL Atlantic, MLB AL East | `taylor-brooks.md` |
-| Avery Cole | WNBA – Western | NFL NFC South, NBA Atlantic + Southeast, MLB NL East | `avery-cole.md` |
-| Jordan Vale | NFL – NFC East | MLB NL East overflow, NHL Metropolitan | `jordan-vale.md` |
-| Drew Kessler | NFL – AFC South | NBA Southwest overflow | `drew-kessler.md` |
-| Sam Ortiz | NFL – AFC West | MLB AL West overflow | `sam-ortiz.md` |
+| Taylor Brooks | MLB – Central (AL + NL) | NFL AFC East, NFL AFC South, NBA Southwest, NHL Atlantic, MLB AL East | `taylor-brooks.md` |
+| Avery Cole | WNBA – Western | NFL NFC South, NFL NFC East, NBA Atlantic + Southeast, MLB NL East | `avery-cole.md` |
 | **Riley Nash** | **Editor (all sports)** | Weekly market / Model fact-check of previews & articles | `riley-nash.md` |
 
 **Conflict rule:** Primary owner has final authority on their home base. **Editor has final authority on published market numbers** — wrong win totals are bugs, not style.

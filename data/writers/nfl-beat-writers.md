@@ -85,7 +85,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 
 ### AFC South
 
-#### HOU — Houston Texans _(confidence: high; Kos Edge: Drew Kessler)_
+#### HOU — Houston Texans _(confidence: high; Kos Edge: Taylor Brooks)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -93,7 +93,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | Jonathan M. Alexander | Houston Chronicle | @jonmalexander | local |
 | Aaron Wilson | KPRC / local | @AaronWilson_NFL | local |
 
-#### IND — Indianapolis Colts _(confidence: high; Kos Edge: Drew Kessler)_
+#### IND — Indianapolis Colts _(confidence: high; Kos Edge: Taylor Brooks)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -101,7 +101,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | Mike Chappell | FOX59 | @mchappell51 | local |
 | George Bremer | CNHI / Herald Bulletin | @GMbremer | local |
 
-#### JAX — Jacksonville Jaguars _(confidence: high; Kos Edge: Drew Kessler)_
+#### JAX — Jacksonville Jaguars _(confidence: high; Kos Edge: Taylor Brooks)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -110,7 +110,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | John Shipley | Jaguars on SI | @_John_Shipley | local |
 | Hays Carlyon | 1010 XL | @HaysCarlyon | local |
 
-#### TEN — Tennessee Titans _(confidence: high; Kos Edge: Drew Kessler)_
+#### TEN — Tennessee Titans _(confidence: high; Kos Edge: Taylor Brooks)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -120,7 +120,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 
 ### AFC West
 
-#### DEN — Denver Broncos _(confidence: high; Kos Edge: Sam Ortiz)_
+#### DEN — Denver Broncos _(confidence: high; Kos Edge: Reese Quinn)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -129,7 +129,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | Troy Renck | Denver7 | @TroyRenck | local |
 | Nicki Jhabvala* | The Athletic / Washington Post (verify) | — | candidate |
 
-#### KC — Kansas City Chiefs _(confidence: high; Kos Edge: Sam Ortiz)_
+#### KC — Kansas City Chiefs _(confidence: high; Kos Edge: Reese Quinn)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -137,14 +137,14 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | Matt Derrick | Chiefs Digest | @mattderrick | local |
 | Jesse Newell* | The Athletic / local | @jessenewell | local |
 
-#### LAC — Los Angeles Chargers _(confidence: high; Kos Edge: Sam Ortiz)_
+#### LAC — Los Angeles Chargers _(confidence: high; Kos Edge: Reese Quinn)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
 | Kris Rhim | ESPN | @krisrhim1 | primary |
 | Daniel Popper | The Athletic | @danielrpopper | primary |
 
-#### LV — Las Vegas Raiders _(confidence: medium; Kos Edge: Sam Ortiz)_
+#### LV — Las Vegas Raiders _(confidence: medium; Kos Edge: Reese Quinn)_
 
 > ESPN primary Ryan McFadden confirmed via camp hub/bio; X handle listed as candidate pending bio link confirmation.
 
@@ -157,7 +157,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 
 ### NFC East
 
-#### DAL — Dallas Cowboys _(confidence: high; Kos Edge: Jordan Vale)_
+#### DAL — Dallas Cowboys _(confidence: high; Kos Edge: Avery Cole)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -166,7 +166,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | David Moore | Dallas Morning News | @DavidMooreDMN | local |
 | Calvin Watkins | Dallas Morning News | @CalvinWatkins | local |
 
-#### NYG — New York Giants _(confidence: high; Kos Edge: Jordan Vale)_
+#### NYG — New York Giants _(confidence: high; Kos Edge: Avery Cole)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -175,7 +175,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | Paul Schwartz | New York Post | @NYPost_Schwartz | local |
 | Ryan Dunleavy | New York Post | @rydunleavy | local |
 
-#### PHI — Philadelphia Eagles _(confidence: high; Kos Edge: Jordan Vale)_
+#### PHI — Philadelphia Eagles _(confidence: high; Kos Edge: Avery Cole)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|
@@ -184,7 +184,7 @@ Use before every NFL piece. Lookup: `python scripts/writers/beat-lookup.py --tea
 | Brooks Kubena | The Athletic | @BKubena | primary |
 | Zach Berman | PHLY | @ZBerm | local |
 
-#### WAS — Washington Commanders _(confidence: high; Kos Edge: Jordan Vale)_
+#### WAS — Washington Commanders _(confidence: high; Kos Edge: Avery Cole)_
 
 | Writer | Outlet | X | Role |
 |--------|--------|---|------|

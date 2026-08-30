@@ -27,44 +27,27 @@ export const WRITERS: Record<WriterId, WriterProfile> = {
     name: "Avery Cole",
     shortName: "Avery",
   },
-  "jordan-vale": {
-    id: "jordan-vale",
-    name: "Jordan Vale",
-    shortName: "Jordan",
-  },
-  "drew-kessler": {
-    id: "drew-kessler",
-    name: "Drew Kessler",
-    shortName: "Drew",
-  },
-  "sam-ortiz": {
-    id: "sam-ortiz",
-    name: "Sam Ortiz",
-    shortName: "Sam",
-  },
 };
 
 /**
  * Coverage matrix from `.cursor/rules/ai-writer-team.mdc`.
  * Primary owner wins on home base; “also covers” fills the rest.
- *
- * NFL divisions not named in the matrix are assigned by desk affinity
- * (documented below) so every team still has a preview owner.
  */
 const NFL_DIVISION_OWNER: Record<string, WriterId> = {
   "NFC|North": "casey-voss",
   "AFC|North": "reese-quinn",
+  "AFC|West": "reese-quinn",
   "NFC|West": "morgan-hale",
   "AFC|East": "taylor-brooks",
+  "AFC|South": "taylor-brooks",
   "NFC|South": "avery-cole",
-  "NFC|East": "jordan-vale",
-  "AFC|South": "drew-kessler",
-  "AFC|West": "sam-ortiz",
+  "NFC|East": "avery-cole",
 };
 
 const MLB_OWNER: Record<string, WriterId> = {
-  "AL|Central": "casey-voss",
-  "NL|Central": "casey-voss",
+  // Taylor primary on Central; Casey also covers — primary wins
+  "AL|Central": "taylor-brooks",
+  "NL|Central": "taylor-brooks",
   "AL|West": "reese-quinn",
   "NL|West": "morgan-hale",
   "AL|East": "taylor-brooks",
@@ -72,12 +55,12 @@ const MLB_OWNER: Record<string, WriterId> = {
 };
 
 const NBA_OWNER: Record<string, WriterId> = {
-  Northwest: "casey-voss", // also Reese primary — Casey listed on also-covers; Reese is primary on Northwest
+  Northwest: "casey-voss", // also Reese primary — Casey listed on also-covers
   Pacific: "morgan-hale",
   Southwest: "taylor-brooks",
   Atlantic: "avery-cole",
   Southeast: "avery-cole",
-  Central: "reese-quinn", // not named in matrix; Reese owns Northwest primary + North affinity
+  Central: "casey-voss",
 };
 
 /** Reese is primary on NBA Northwest; override Casey also-covers. */
@@ -174,7 +157,7 @@ export function assignTeamPreviewWriter(
     return {
       writer: WRITERS[id],
       note: `Coverage matrix · NBA ${divKey}`,
-      provisional: divKey === "Central",
+      provisional: false,
     };
   }
 

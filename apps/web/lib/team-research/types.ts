@@ -5,10 +5,7 @@ export type WriterId =
   | "reese-quinn"
   | "morgan-hale"
   | "taylor-brooks"
-  | "avery-cole"
-  | "jordan-vale"
-  | "drew-kessler"
-  | "sam-ortiz";
+  | "avery-cole";
 
 export type WriterProfile = {
   id: WriterId;

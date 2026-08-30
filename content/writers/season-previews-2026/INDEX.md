@@ -40,10 +40,7 @@ Subscription desk package for Kos Edge. Condensed versions feed the betting guid
 ## Coverage
 
 - Casey Voss — NFC North (CHI, DET, GB, MIN)
-- Reese Quinn — AFC North (BAL, CIN, CLE, PIT)
-- Avery Cole — NFC South (ATL, CAR, NO, TB)
-- Taylor Brooks — AFC East (BUF, MIA, NE, NYJ)
+- Reese Quinn — AFC North (BAL, CIN, CLE, PIT); AFC West (DEN, KC, LAC, LV)
+- Avery Cole — NFC South (ATL, CAR, NO, TB); NFC East (DAL, NYG, PHI, WAS)
+- Taylor Brooks — AFC East (BUF, MIA, NE, NYJ); AFC South (HOU, IND, JAX, TEN)
 - Morgan Hale — NFC West (ARI, LAR, SF, SEA)
-- Jordan Vale — NFC East (DAL, NYG, PHI, WAS)
-- Drew Kessler — AFC South (HOU, IND, JAX, TEN)
-- Sam Ortiz — AFC West (DEN, KC, LAC, LV)

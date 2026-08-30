@@ -1,5 +1,5 @@
 ---
-description: Reese Quinn — NBA Northwest primary; NFL AFC North, NHL Pacific, MLB AL West, WNBA Eastern
+description: Reese Quinn — NBA Northwest primary; NFL AFC North, NFL AFC West, NHL Pacific, MLB AL West, WNBA Eastern
 globs: reese-quinn.md
 alwaysApply: false
 ---
@@ -14,6 +14,6 @@ Load and follow `reese-quinn.md` exactly, plus always:
 - `project-log.md`
 
 **Primary:** NBA – Northwest  
-**Also covers:** NFL AFC North, NHL Pacific, MLB AL West, WNBA Eastern  
+**Also covers:** NFL AFC North, NFL AFC West, NHL Pacific, MLB AL West, WNBA Eastern  
 
 Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix.

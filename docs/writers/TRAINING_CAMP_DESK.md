@@ -10,11 +10,11 @@ Brand still applies: no hype, no locks, process over results. Thin edges → **P
 
 ## When to use which format
 
-| Format | When | Length |
-|--------|------|--------|
-| **News break** | Injury, cut, starter change, practice DNP that moves a number | 120–280 words |
-| **Camp notebook** | Day’s practice themes, battles, bubble notes | 400–700 words |
-| **Full preview / matchup** | Season win totals, Week 1 cards, futures packages | Per `style-bible.md` |
+| Format                     | When                                                          | Length               |
+| -------------------------- | ------------------------------------------------------------- | -------------------- |
+| **News break**             | Injury, cut, starter change, practice DNP that moves a number | 120–280 words        |
+| **Camp notebook**          | Day’s practice themes, battles, bubble notes                  | 400–700 words        |
+| **Full preview / matchup** | Season win totals, Week 1 cards, futures packages             | Per `style-bible.md` |
 
 Default to news break / camp notebook during July–early September unless the assignment asks for a full preview.
 
@@ -37,23 +37,23 @@ Default to news break / camp notebook during July–early September unless the a
 
 ## Required tools
 
-| Tool | Use |
-|------|-----|
-| `WebSearch` | Fresh headlines before every piece |
-| `WebFetch` | Read full beat articles / camp notebooks |
+| Tool                        | Use                                                                                                                  |
+| --------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `WebSearch`                 | Fresh headlines before every piece                                                                                   |
+| `WebFetch`                  | Read full beat articles / camp notebooks                                                                             |
 | **Trusted X contact index** | `data/writers/nfl-beat-writers.json` / `.md` — **primary** fast-update source for Camp Desk + Monday preview refresh |
-| Beat lookup script | `scripts/writers/beat-lookup.py --team XYZ` |
-| X / Twitter | Handles in registry; use if available in environment — never invent tweets |
-| League breakers | `@AdamSchefter`, `@RapSheet`, `@TomPelissero`, `@MikeGarafolo` — supplement only |
-| Also ok | Team official, credible local beat, RotoWire / VSiN-class when relevant |
+| Beat lookup script          | `scripts/writers/beat-lookup.py --team XYZ`                                                                          |
+| X / Twitter                 | Handles in registry; use if available in environment — never invent tweets                                           |
+| League breakers             | `@AdamSchefter`, `@RapSheet`, `@TomPelissero`, `@MikeGarafolo` — supplement only                                     |
+| Also ok                     | Team official, credible local beat, RotoWire / VSiN-class when relevant                                              |
 
 ### Camp / Monday refresh — source doctrine (locked)
 
 **Camp/Monday refresh uses the beat index + multi-source. X handles are a research contact list, not the product.**
 
-1. Start with the team’s trusted contacts in `nfl-beat-writers.json` (primary + local + team_site). Use handles to *find* reporting — do not scrape or mirror tweets as copy.
+1. Start with the team’s trusted contacts in `nfl-beat-writers.json` (primary + local + `team_site`). Use handles to find reporting — do not scrape or mirror tweets as copy.
 2. Corroborate with at least one second source (official, Athletic/local, AP, club site).
-3. ESPN may be *one* input. Never brand the desk as an ESPN wire mirror. Never invent quotes.
+3. ESPN may be _one_ input. Never brand the desk as an ESPN wire mirror. Never invent quotes.
 4. Attribute generically when a quote is not on hand (“per team report”, “multiple beat reports”). **No X profile links, no “follow @…” CTAs on Camp Desk.**
 5. Team previews refresh **every Monday** in camp/season (`**Date:**` + Bottom line / What matters most at minimum).
 6. **Daily Camp Desk:** write `content/writers/camp-desk-2026/YYYY-MM-DD.json` (see that folder’s README). Newest file always shows in preseason. Quiet clubs skip — no filler essays. Injury days ship same-day; do not wait for Monday.
@@ -64,13 +64,13 @@ If X tooling is unavailable, WebSearch + WebFetch of Athletic/local/official URL
 
 Camp Desk (`/pro/nfl/camp`) surfaces **KosEdge copy only**. Empty “No KosEdge camp notes” is a bug while camp is active.
 
-| Slot | Spec |
-|------|------|
-| Daily | League wrap + every team with **real** news (`package: daily`) |
-| Monday | Full 32 + wrap (`package: monday`, see `2026-08-17.json`) |
-| Injury day | Same-day daily file |
-| Freshness | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive |
-| Empty pipeline | Honest **Desk updating** + last note date — never a dead shelf |
+| Slot           | Spec                                                                          |
+| -------------- | ----------------------------------------------------------------------------- |
+| Daily          | League wrap + every team with **real** news (`package: daily`)                |
+| Monday         | Full 32 + wrap (`package: monday`, see `2026-08-17.json`)                     |
+| Injury day     | Same-day daily file                                                           |
+| Freshness      | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive |
+| Empty pipeline | Honest **Desk updating** + last note date — never a dead shelf                |
 
 Expertise contract: consensus first, specific impact, thin edge = **Pass**. Date-only byline. Depth/roster claims flag SoT intel — do not invent starters.
 
@@ -108,18 +108,23 @@ This analysis is for informational and educational purposes only. Sports betting
 **Sources:** … (handles + URLs)
 
 **Participation / injuries**
+
 - …
 
 **Battles / depth chart**
+
 - …
 
 **Bubble / cuts watch**
+
 - …
 
 **Week 1 implication**
+
 - …
 
 **Model vs beat**
+
 - Flag conflicts; Pass if unresolved.
 
 **Handicapper’s Note** (if markets attached)
@@ -134,16 +139,13 @@ This analysis is for informational and educational purposes only. Sports betting
 
 ## Coverage owners (NFL slices)
 
-| Writer | NFL primary / also |
-|--------|--------------------|
-| Casey Voss | NFC North |
-| Reese Quinn | AFC North |
-| Morgan Hale | NFC West |
-| Taylor Brooks | AFC East |
-| Avery Cole | NFC South |
-| Jordan Vale | NFC East |
-| Drew Kessler | AFC South |
-| Sam Ortiz | AFC West |
+| Writer        | NFL primary / also  |
+| ------------- | ------------------- |
+| Casey Voss    | NFC North           |
+| Reese Quinn   | AFC North, AFC West |
+| Morgan Hale   | NFC West            |
+| Taylor Brooks | AFC East, AFC South |
+| Avery Cole    | NFC South, NFC East |
 
 ## Shared files (always load)
 

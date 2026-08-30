@@ -17,7 +17,10 @@ import {
   type EspnNflNewsItem,
 } from "@/lib/nfl-espn-news";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
-import { isNflCalendarPreseason, NFL_PRODUCT_SEASON } from "@/lib/nfl-truth-label";
+import {
+  isNflCalendarPreseason,
+  NFL_PRODUCT_SEASON,
+} from "@/lib/nfl-truth-label";
 import beatWritersJson from "../../../data/writers/nfl-beat-writers.json";
 
 export type CampBeatLink = {
@@ -96,13 +99,10 @@ type BeatRegistry = {
 
 const WRITER_COVERAGE: Array<{ name: string; coverage: string }> = [
   { name: "Casey Voss", coverage: "NFC North" },
-  { name: "Reese Quinn", coverage: "AFC North" },
+  { name: "Reese Quinn", coverage: "AFC North, AFC West" },
   { name: "Morgan Hale", coverage: "NFC West" },
-  { name: "Taylor Brooks", coverage: "AFC East" },
-  { name: "Avery Cole", coverage: "NFC South" },
-  { name: "Jordan Vale", coverage: "NFC East" },
-  { name: "Drew Kessler", coverage: "AFC South" },
-  { name: "Sam Ortiz", coverage: "AFC West" },
+  { name: "Taylor Brooks", coverage: "AFC East, AFC South" },
+  { name: "Avery Cole", coverage: "NFC South, NFC East" },
 ];
 
 /** Known ESPN 2026 team camp hubs (public story pages). */
@@ -190,7 +190,11 @@ function loadRotationNext(): string[] {
   }
 }
 
-function wireItemInWindow(item: CampNewsItem, now: Date, inCamp: boolean): boolean {
+function wireItemInWindow(
+  item: CampNewsItem,
+  now: Date,
+  inCamp: boolean,
+): boolean {
   if (!inCamp) return true;
   if (!item.published) return false;
   const ts = Date.parse(item.published);
