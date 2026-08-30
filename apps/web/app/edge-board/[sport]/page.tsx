@@ -297,13 +297,7 @@ export default async function EdgeBoardSportPage({
               </Link>
             </div>
             <p className="text-[11px] text-gray-500">
-              {slate === "week1" ? "Week 1" : nflWeekLabel} ·{" "}
-              <Link
-                href={MODEL_TRANSPARENCY_HREF}
-                className="text-kos-gold/80 hover:text-kos-gold hover:underline"
-              >
-                Model transparency
-              </Link>
+              {slate === "week1" ? "Week 1" : nflWeekLabel}
             </p>
           </div>
         ) : null}
