@@ -141,6 +141,23 @@
       "type": "pass"
     }
   ],
+  "grade_pass": {
+    "as_of": "2026-08-30T00:10Z",
+    "pending": 5,
+    "play": {
+      "away": "SJSU",
+      "book_id": "book_4c2029367d4c47fee8d02b40",
+      "close_line": 37.5,
+      "clv": 1.0,
+      "home": "USC",
+      "line": 38.5,
+      "pnl_units": 1.0,
+      "result": "win",
+      "side": "away",
+      "type": "play"
+    },
+    "settled": 3
+  },
   "ok": true,
   "posted_at": "2026-08-29T16:23:44Z",
   "primary_metric": "clv",
