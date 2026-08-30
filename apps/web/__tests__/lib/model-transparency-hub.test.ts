@@ -10,6 +10,7 @@ import {
 } from "@/lib/model-transparency-hub";
 
 const REQUIRED_GLOSSARY_IDS = [
+  "desk-status",
   "edge-board",
   "kei-lines",
   "weekly-slate",
@@ -49,6 +50,17 @@ describe("model transparency hub", () => {
       expect(entry.lines.length).toBeGreaterThanOrEqual(2);
       expect(entry.lines.length).toBeLessThanOrEqual(5);
     }
+  });
+
+  it("explains PRESEASON / data stale desk status without raw probe dumps", () => {
+    const desk = MODEL_TRANSPARENCY_GLOSSARY.find((e) => e.id === "desk-status");
+    expect(desk).toBeTruthy();
+    const blob = desk!.lines.join(" ");
+    expect(blob).toMatch(/PRESEASON/i);
+    expect(blob).toMatch(/data stale/i);
+    expect(blob).toMatch(/research-only/i);
+    expect(blob).not.toMatch(/sample_size_ok/);
+    expect(blob).not.toMatch(/schedules_scores:/);
   });
 
   it("does not sell guaranteed edge", () => {

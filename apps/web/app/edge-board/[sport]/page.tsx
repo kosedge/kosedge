@@ -1,7 +1,7 @@
 import Link from "next/link";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import SportProHeader from "@/components/pro/SportProHeader";
-import { NflDataFreshnessBanner } from "@/components/pro/NflDataFreshnessBanner";
+import { NflDeskStatusBar } from "@/components/pro/NflDeskStatusBar";
 import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import {
@@ -115,7 +115,7 @@ export default async function EdgeBoardSportPage({
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
       <SportProHeader activeSport={sportKey} />
-      {isNfl ? <NflDataFreshnessBanner /> : null}
+      {isNfl ? <NflDeskStatusBar /> : null}
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-edge-green/12 blur-3xl animate-pulse-slow" />
         <div className="absolute top-24 -left-40 h-[520px] w-[520px] rounded-full bg-edge-green/10 blur-3xl animate-pulse-slow" />
