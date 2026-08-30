@@ -94,10 +94,7 @@ function tagBucket(tag: NflPickemTag): number {
   return 2;
 }
 
-function resolveSide(
-  home: number | null,
-  away: number | null,
-): NflPickemSide {
+function resolveSide(home: number | null, away: number | null): NflPickemSide {
   if (home == null && away == null) return null;
   if (home != null && away != null) {
     if (home === away) {
@@ -112,7 +109,10 @@ function resolveSide(
 
 function winProbGap(home: number | null, away: number | null): number | null {
   if (home == null && away == null) return null;
-  const max = Math.max(home ?? Number.NEGATIVE_INFINITY, away ?? Number.NEGATIVE_INFINITY);
+  const max = Math.max(
+    home ?? Number.NEGATIVE_INFINITY,
+    away ?? Number.NEGATIVE_INFINITY,
+  );
   if (!Number.isFinite(max)) return null;
   return max - 0.5;
 }
@@ -139,7 +139,11 @@ function compareRankable(a: Rankable, b: Rankable): number {
   if (a.gap == null && b.gap != null) return 1;
 
   // Fallback: larger |KEI spread|.
-  if (a.absSpread != null && b.absSpread != null && a.absSpread !== b.absSpread) {
+  if (
+    a.absSpread != null &&
+    b.absSpread != null &&
+    a.absSpread !== b.absSpread
+  ) {
     return b.absSpread - a.absSpread;
   }
   if (a.absSpread != null && b.absSpread == null) return -1;

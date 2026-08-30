@@ -42,10 +42,7 @@ function parseWeek(raw: string | undefined, fallback: number): number {
   return Math.floor(n);
 }
 
-function tagChipClass(
-  tag: "PLAY" | "LEAN",
-  researchOnly: boolean,
-): string {
+function tagChipClass(tag: "PLAY" | "LEAN", researchOnly: boolean): string {
   if (researchOnly) {
     return "border-white/20 bg-white/5 text-kos-text/70";
   }
@@ -55,9 +52,7 @@ function tagChipClass(
   return "border-kos-gold/40 bg-kos-gold/10 text-kos-gold";
 }
 
-function displayTag(
-  tag: NflPickemTag,
-): "PLAY" | "LEAN" | null {
+function displayTag(tag: NflPickemTag): "PLAY" | "LEAN" | null {
   if (tag === "PLAY" || tag === "LEAN") return tag;
   return null;
 }

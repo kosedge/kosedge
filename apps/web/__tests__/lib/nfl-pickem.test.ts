@@ -106,7 +106,9 @@ describe("buildNflPickemCard", () => {
     const card = buildNflPickemCard(makeSlate(16));
     expect(card).toHaveLength(16);
     const confidences = card.map((p) => p.confidence);
-    expect(confidences).toEqual([16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]);
+    expect(confidences).toEqual([
+      16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1,
+    ]);
     expect(new Set(confidences).size).toBe(16);
   });
 

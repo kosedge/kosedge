@@ -9,7 +9,10 @@ import {
   selectSleeperRows,
   sleeperWhyLine,
 } from "@/lib/fantasy/sleepers";
-import type { FantasyDeskRow, FantasyScoringProfile } from "@/lib/fantasy/types";
+import type {
+  FantasyDeskRow,
+  FantasyScoringProfile,
+} from "@/lib/fantasy/types";
 
 const KOSEDGE_DATE = "August 11, 2026";
 
@@ -103,8 +106,8 @@ export default async function NflSleepersPage({
         <div className="mt-6">
           <HonestStatusBanner title="Market ADP unavailable" tone="amber">
             <p>
-              FantasyPros ADP isn&apos;t loaded — Value Δ / Gap stays blank until
-              the feed returns. Model ranks still show.
+              FantasyPros ADP isn&apos;t loaded — Value Δ / Gap stays blank
+              until the feed returns. Model ranks still show.
             </p>
           </HonestStatusBanner>
         </div>
