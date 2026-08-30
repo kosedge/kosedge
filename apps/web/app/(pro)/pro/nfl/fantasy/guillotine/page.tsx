@@ -74,22 +74,12 @@ export default async function NflGuillotinePage({
           </div>
         </div>
         <div className="mt-5">
-          <FantasyDeskNav active="rankings" scoring={scoring} />
+          <FantasyDeskNav
+            active="rankings"
+            scoring={scoring}
+            researchActive="guillotine"
+          />
         </div>
-        <nav
-          className="mt-3 flex flex-wrap gap-2"
-          aria-label="Fantasy research pages"
-        >
-          <span className="rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold">
-            Guillotine
-          </span>
-          <Link
-            href={`/pro/nfl/fantasy/sleepers?scoring=${scoring}`}
-            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
-          >
-            Sleepers
-          </Link>
-        </nav>
       </section>
 
       {isPreseason ? (

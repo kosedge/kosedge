@@ -3,11 +3,16 @@ import type { FantasyScoringProfile } from "@/lib/fantasy/types";
 import { Fragment } from "react";
 
 type DeskSurface = "rankings" | "builder" | "mock";
+type ResearchSurface = "guillotine" | "sleepers" | "pickem";
 
 type Props = {
   active: DeskSurface;
   scoring: FantasyScoringProfile;
   className?: string;
+  /** Highlight on the research strip (Guillotine / Sleepers / Pick’em). */
+  researchActive?: ResearchSurface | null;
+  /** When false, hide the research strip (draft-only surfaces). Default true. */
+  showResearch?: boolean;
 };
 
 const LINKS: {
@@ -32,8 +37,36 @@ const LINKS: {
   },
 ];
 
+const RESEARCH_LINKS: {
+  id: ResearchSurface;
+  label: string;
+  href: (s: FantasyScoringProfile) => string;
+}[] = [
+  {
+    id: "guillotine",
+    label: "Guillotine",
+    href: (s) => `/pro/nfl/fantasy/guillotine?scoring=${s}`,
+  },
+  {
+    id: "sleepers",
+    label: "Sleepers",
+    href: (s) => `/pro/nfl/fantasy/sleepers?scoring=${s}`,
+  },
+  {
+    id: "pickem",
+    label: "Pick’em",
+    href: () => `/pro/nfl/fantasy/pickem`,
+  },
+];
+
 /** Shared Draft board → Builder → Mock flow strip; preserves scoring. */
-export function FantasyDeskNav({ active, scoring, className = "" }: Props) {
+export function FantasyDeskNav({
+  active,
+  scoring,
+  className = "",
+  researchActive = null,
+  showResearch = true,
+}: Props) {
   return (
     <div className={className}>
       <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-kos-text/40">
@@ -67,6 +100,36 @@ export function FantasyDeskNav({ active, scoring, className = "" }: Props) {
           );
         })}
       </nav>
+
+      {showResearch ? (
+        <nav
+          className="mt-3 flex flex-wrap gap-2"
+          aria-label="Fantasy research pages"
+        >
+          {RESEARCH_LINKS.map((link) => {
+            const isActive = researchActive === link.id;
+            if (isActive) {
+              return (
+                <span
+                  key={link.id}
+                  className="rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold"
+                >
+                  {link.label}
+                </span>
+              );
+            }
+            return (
+              <Link
+                key={link.id}
+                href={link.href(scoring)}
+                className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
+              >
+                {link.label}
+              </Link>
+            );
+          })}
+        </nav>
+      ) : null}
     </div>
   );
 }

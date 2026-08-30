@@ -51,6 +51,7 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
     "Weekly Fantasy Projections",
     "Guillotine League",
     "Sleepers",
+    "Pick’em",
   ],
   "Team Intel": [
     "Team Research Hub",
@@ -135,6 +136,7 @@ describe("pro sport IA", () => {
     );
     expect(byLabel["Guillotine League"]).toBe("/pro/nfl/fantasy/guillotine");
     expect(byLabel.Sleepers).toBe("/pro/nfl/fantasy/sleepers");
+    expect(byLabel["Pick’em"]).toBe("/pro/nfl/fantasy/pickem");
     expect(byLabel["DFS Board"]).toBeUndefined();
     expect(byLabel["Team Research Hub"]).toBe("/pro/nfl/teams");
     expect(byLabel["Power Ratings"]).toBe("/pro/power-ratings/nfl");
