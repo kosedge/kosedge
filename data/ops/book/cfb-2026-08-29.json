@@ -142,8 +142,14 @@
     }
   ],
   "grade_pass": {
+<<<<<<< Updated upstream
     "as_of": "2026-08-30T00:10Z",
     "pending": 5,
+=======
+    "as_of": "2026-08-30T02:38Z",
+    "e253_note": "ops API 401 secret mismatch \u2014 graded with #313 job locally against ESPN official",
+    "pending": 2,
+>>>>>>> Stashed changes
     "play": {
       "away": "SJSU",
       "book_id": "book_4c2029367d4c47fee8d02b40",
@@ -156,7 +162,11 @@
       "side": "away",
       "type": "play"
     },
+<<<<<<< Updated upstream
     "settled": 3
+=======
+    "settled": 6
+>>>>>>> Stashed changes
   },
   "ok": true,
   "posted_at": "2026-08-29T16:23:44Z",
