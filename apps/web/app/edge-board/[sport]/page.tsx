@@ -15,7 +15,6 @@ import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
-import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import { MODEL_TRANSPARENCY_HREF } from "@/lib/model-transparency-hub";
 import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
@@ -105,16 +104,6 @@ export default async function EdgeBoardSportPage({
         ),
     ),
   ].sort((a, b) => a - b);
-  const nflWeekLabel =
-    nflWeeks.length === 1
-      ? formatNflBoardWeekLabel(nflWeeks[0], {
-          season: 2026,
-          hasRowsForCurrentWeek: games > 0,
-          lineCount: games,
-        })
-      : nflWeeks.length > 1
-        ? `Weeks ${nflWeeks[0]}–${nflWeeks[nflWeeks.length - 1]} REG`
-        : "REG";
 
   const isNfl = sportKey === "nfl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
@@ -269,40 +258,35 @@ export default async function EdgeBoardSportPage({
         ) : null}
 
         {sportKey === "nfl" ? (
-          <div className="mt-3 space-y-1.5">
-            <div
-              className="flex flex-wrap gap-2"
-              role="tablist"
-              aria-label="NFL Edge Board slate"
+          <div
+            className="mt-3 flex flex-wrap gap-2"
+            role="tablist"
+            aria-label="NFL Edge Board slate"
+          >
+            <Link
+              href="/edge-board/nfl?slate=week1"
+              role="tab"
+              aria-selected={slate === "week1"}
+              className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                slate === "week1"
+                  ? "bg-edge-green/20 border border-edge-green/40 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
+                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+              }`}
             >
-              <Link
-                href="/edge-board/nfl?slate=week1"
-                role="tab"
-                aria-selected={slate === "week1"}
-                className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
-                  slate === "week1"
-                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
-                    : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
-                }`}
-              >
-                Week 1{week1Count ? ` (${week1Count})` : ""}
-              </Link>
-              <Link
-                href="/edge-board/nfl?slate=full"
-                role="tab"
-                aria-selected={slate === "full"}
-                className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
-                  slate === "full"
-                    ? "bg-edge-green/20 border border-edge-green/40 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
-                    : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
-                }`}
-              >
-                Full slate{fullCount ? ` (${fullCount})` : ""}
-              </Link>
-            </div>
-            <p className="text-[11px] text-gray-500">
-              {slate === "week1" ? "Week 1" : nflWeekLabel}
-            </p>
+              Week 1{week1Count ? ` (${week1Count})` : ""}
+            </Link>
+            <Link
+              href="/edge-board/nfl?slate=full"
+              role="tab"
+              aria-selected={slate === "full"}
+              className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                slate === "full"
+                  ? "bg-edge-green/20 border border-edge-green/40 text-edge-green shadow-[0_0_16px_rgba(57,255,20,0.2)]"
+                  : "bg-black/30 border border-white/12 hover:border-kos-gold/35 text-gray-300"
+              }`}
+            >
+              Full slate{fullCount ? ` (${fullCount})` : ""}
+            </Link>
           </div>
         ) : null}
 
