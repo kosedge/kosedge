@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
-import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import { NflTruthStateBadges } from "@/components/pro/nfl/NflTruthStateBadge";
 import { fetchNflIntel } from "@/lib/nfl-intel";
 import {
@@ -15,7 +14,11 @@ import {
   nflModelWinsColumnLabel,
   resolveNflTruthLabel,
 } from "@/lib/nfl-truth-label";
-import { RANGE_LABEL, RANGE_TOOLTIP, formatRangeBand } from "@/lib/nfl-range-ux";
+import {
+  RANGE_LABEL,
+  RANGE_TOOLTIP,
+  formatRangeBand,
+} from "@/lib/nfl-range-ux";
 
 export const dynamic = "force-dynamic";
 
@@ -86,7 +89,10 @@ export default async function StatsPage({
   if (team) rows = rows.filter((row) => row.team === team);
   rows = rows
     .slice()
-    .sort((a, b) => b.expectedWins - a.expectedWins || b.playoffProb - a.playoffProb);
+    .sort(
+      (a, b) =>
+        b.expectedWins - a.expectedWins || b.playoffProb - a.playoffProb,
+    );
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -97,7 +103,6 @@ export default async function StatsPage({
           </h1>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <NflTruthStateBadges states={["PRESEASON", "MODEL"]} />
-            {lineage ? <NflLineageBadge lineage={lineage} /> : null}
           </div>
           <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
             <span className="font-semibold text-kos-gold/90">

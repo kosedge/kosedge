@@ -1,6 +1,5 @@
 import Link from "next/link";
 import AutoSubmitForm from "@/components/pro/AutoSubmitForm";
-import NflLineageBadge from "@/components/pro/nfl/NflLineageBadge";
 import {
   CurrentYtdHint,
   PlayerFutureColumnHeaders,
@@ -30,7 +29,6 @@ import {
   superBowlOddsForTeam,
   type NflFuturesOddsBundle,
 } from "@/lib/nfl-futures-odds";
-import { resolveActiveNflLineage } from "@/lib/nfl-launch-research";
 import {
   HIDE_PERCENTILES_LABEL,
   RANGE_TOOLTIP,
@@ -172,11 +170,6 @@ export default async function NflProjectionsPage({
     season: 2026,
     limit: 500,
   });
-  const lineage =
-    bundle?.lineage ??
-    resolveActiveNflLineage({
-      engineVersionOverride: bundle?.engineVersion ?? pointer?.engine_version,
-    });
   const isPreseasonResearch = Boolean(pointer?.preseason ?? true);
   const [actuals, oddsBundle] = await Promise.all([
     loadNflProjectionActualsAsync(2026),
@@ -265,7 +258,6 @@ export default async function NflProjectionsPage({
                   ? "2026 Futures · PRESEASON / MODEL"
                   : "2026 Futures · Research desk"}
               </p>
-              <NflLineageBadge lineage={lineage} />
             </div>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               Futures
@@ -286,7 +278,6 @@ export default async function NflProjectionsPage({
               {bundle?.generatedAtUtc
                 ? ` • Generated ${new Date(bundle.generatedAtUtc).toLocaleString()}`
                 : ""}
-              {bundle?.engineVersion ? ` • ${bundle.engineVersion}` : ""}
               {actuals.asOfUtc
                 ? ` • Actuals as of ${new Date(actuals.asOfUtc).toLocaleString()}`
                 : " • Actuals: awaiting Week 1+"}

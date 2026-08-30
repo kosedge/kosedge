@@ -127,6 +127,7 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       lines: [
         "Strength snapshot that feeds the model — not a bet card.",
         "Rank order is research, not a lock list.",
+        "Current pin is Method B compressed strength; engine / run / path count live on Season Model, not on the ratings table.",
       ],
     },
     {
