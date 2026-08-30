@@ -28,11 +28,11 @@ The Camp Desk loader reads every `YYYY-MM-DD.json` in this folder. No code chang
 
 Weekday ≠ Monday. Execution lock — not a new product. **Daily ≠ 32 essays.**
 
-| Slot | File shape |
-| ---- | ---------- |
-| **Weekday (Tue–Fri)** | League wrap + clubs with **real** news only (`package: daily`). Quiet clubs **skip** or a short **pulse** line. **NEVER** a 32-card hero dump. Cutoff **~6pm ET**. |
-| **Monday** | Full 32 (news cards + pulse for quiet) + league wrap (`package: monday`, see `2026-08-17.json`) **plus** weekly team-preview **NUMBER** pass (Riley gates numbers; HOUSE vs STREET — pull KEI if printed, never mint). |
-| **Injury day** | Same-day weekday file — do not wait for Monday. |
+| Slot                  | File shape                                                                                                                                                                                                             |
+| --------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Weekday (Tue–Fri)** | League wrap + clubs with **real** news only (`package: daily`). Quiet clubs **skip** or a short **pulse** line. **NEVER** a 32-card hero dump. Cutoff **~6pm ET**.                                                     |
+| **Monday**            | Full 32 (news cards + pulse for quiet) + league wrap (`package: monday`, see `2026-08-17.json`) **plus** weekly team-preview **NUMBER** pass (Riley gates numbers; HOUSE vs STREET — pull KEI if printed, never mint). |
+| **Injury day**        | Same-day weekday file — do not wait for Monday.                                                                                                                                                                        |
 
 Writers on NFL also-covers: Casey NFC North; Avery NFC East + South; Reese AFC North + West; Morgan NFC West; Taylor AFC East + South. Camp cards stay date-only.
 

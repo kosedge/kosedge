@@ -14,11 +14,11 @@ Brand still applies: no hype, no locks, process over results. Thin edges → **P
 
 Ryan confirmed **2026-08-30**. Writers ship on NFL also-covers (Casey NFC North; Avery NFC East + South; Reese AFC North + West; Morgan NFC West; Taylor AFC East + South).
 
-| Slot | What ships | What does **not** |
-| ---- | ---------- | ----------------- |
-| **Weekday (Tue–Fri)** | Only clubs with **real** news. Quiet clubs **skip** or get a short **pulse** line. Cutoff **~6pm ET**. | **NEVER** a 32-card hero dump. Daily ≠ 32 essays. |
-| **Monday** | Full-32 camp package (news cards + pulse for quiet) **plus** the weekly team-preview **NUMBER** pass. | Voice rewrites of previews; chasing later line moves. |
-| **Injury day** | Same-day weekday file — do not wait for Monday. | Holding material news for the Monday package. |
+| Slot                  | What ships                                                                                             | What does **not**                                     |
+| --------------------- | ------------------------------------------------------------------------------------------------------ | ----------------------------------------------------- |
+| **Weekday (Tue–Fri)** | Only clubs with **real** news. Quiet clubs **skip** or get a short **pulse** line. Cutoff **~6pm ET**. | **NEVER** a 32-card hero dump. Daily ≠ 32 essays.     |
+| **Monday**            | Full-32 camp package (news cards + pulse for quiet) **plus** the weekly team-preview **NUMBER** pass.  | Voice rewrites of previews; chasing later line moves. |
+| **Injury day**        | Same-day weekday file — do not wait for Monday.                                                        | Holding material news for the Monday package.         |
 
 **Monday NUMBER pass:** Riley Nash gates **numbers only** (not voice). HOUSE vs STREET already locked — pull live KEI if a print exists, **never mint**, stamp at pull, do not chase. Full SoT: `style-bible.md` House vs Street.
 
@@ -82,13 +82,13 @@ If X tooling is unavailable, WebSearch + WebFetch of Athletic/local/official URL
 
 Camp Desk (`/pro/nfl/camp`) surfaces **KosEdge copy only**. Empty “No KosEdge camp notes” is a bug while camp is active — ship the cadence package; do not leave the shelf on “Desk updating” as a substitute for writing.
 
-| Slot           | Spec                                                                                                      |
-| -------------- | --------------------------------------------------------------------------------------------------------- |
+| Slot              | Spec                                                                                                                      |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------------- |
 | Weekday (Tue–Fri) | League wrap + clubs with **real** news only (`package: daily`). Quiet = skip or pulse. **Not** 32 essays. ~6pm ET cutoff. |
-| Monday         | Full 32 (news + pulse for quiet) + wrap (`package: monday`) **and** weekly preview NUMBER pass            |
-| Injury day     | Same-day weekday file                                                                                     |
-| Freshness      | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive                             |
-| Empty pipeline | Honest **Desk updating** + last note date is UI only — never a dead shelf, **never** an excuse to skip ship |
+| Monday            | Full 32 (news + pulse for quiet) + wrap (`package: monday`) **and** weekly preview NUMBER pass                            |
+| Injury day        | Same-day weekday file                                                                                                     |
+| Freshness         | Newest `desk_date` always on the shelf in preseason. Older than 72h → Archive                                             |
+| Empty pipeline    | Honest **Desk updating** + last note date is UI only — never a dead shelf, **never** an excuse to skip ship               |
 
 Expertise contract: consensus first, specific impact, thin edge = **Pass**. Camp cards = **date-only** (no writer byline). Depth/roster claims flag SoT intel — do not invent starters.
 

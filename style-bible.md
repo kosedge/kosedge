@@ -92,11 +92,11 @@ Live matrix after PR #330 — five hired desks + Riley. Do **not** reassign beat
 
 Execution lock only — not a new product. Full SoT: `docs/writers/TRAINING_CAMP_DESK.md`.
 
-| Slot | Ships | Forbidden |
-| ---- | ----- | --------- |
-| **Weekday (Tue–Fri)** | Clubs with **real** news only; quiet skip or pulse; ~6pm ET cutoff | **NEVER** a 32-card hero dump. Daily ≠ 32 essays. |
-| **Monday** | Full-32 camp package (news + pulse for quiet) **plus** weekly team-preview **NUMBER** pass | Voice rewrites; chasing later lines; minting KEI |
-| **Injury day** | Same-day weekday file | Waiting for Monday |
+| Slot                  | Ships                                                                                      | Forbidden                                         |
+| --------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- |
+| **Weekday (Tue–Fri)** | Clubs with **real** news only; quiet skip or pulse; ~6pm ET cutoff                         | **NEVER** a 32-card hero dump. Daily ≠ 32 essays. |
+| **Monday**            | Full-32 camp package (news + pulse for quiet) **plus** weekly team-preview **NUMBER** pass | Voice rewrites; chasing later lines; minting KEI  |
+| **Injury day**        | Same-day weekday file                                                                      | Waiting for Monday                                |
 
 Camp cards = **date-only** (no writer byline). Riley gates Monday **numbers** only. HOUSE vs STREET applies on the NUMBER pass. “Desk updating” is empty-shelf UI — **not** a substitute for shipping.
 
