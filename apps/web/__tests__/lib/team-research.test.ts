@@ -73,6 +73,32 @@ describe("team-research writer assignment", () => {
     const assignment = assignTeamPreviewWriter("mlb", bos);
     expect(assignment.writer.id).toBe("taylor-brooks");
   });
+
+  it("maps NFL AFC South to Taylor (also-covers)", () => {
+    const hou = findTeamInDirectory("nfl", "hou")!;
+    const assignment = assignTeamPreviewWriter("nfl", hou);
+    expect(assignment.writer.id).toBe("taylor-brooks");
+    expect(assignment.provisional).toBe(false);
+  });
+
+  it("maps NFL AFC West to Reese (also-covers)", () => {
+    const den = findTeamInDirectory("nfl", "den")!;
+    const assignment = assignTeamPreviewWriter("nfl", den);
+    expect(assignment.writer.id).toBe("reese-quinn");
+  });
+
+  it("maps NFL NFC East to Avery (also-covers)", () => {
+    const dal = findTeamInDirectory("nfl", "dal")!;
+    const assignment = assignTeamPreviewWriter("nfl", dal);
+    expect(assignment.writer.id).toBe("avery-cole");
+  });
+
+  it("maps NBA Central to Casey (also-covers)", () => {
+    const chi = findTeamInDirectory("nba", "chi")!;
+    const assignment = assignTeamPreviewWriter("nba", chi);
+    expect(assignment.writer.id).toBe("casey-voss");
+    expect(assignment.provisional).toBe(false);
+  });
 });
 
 describe("team-research sport config", () => {

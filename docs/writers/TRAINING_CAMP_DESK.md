@@ -137,13 +137,10 @@ This analysis is for informational and educational purposes only. Sports betting
 | Writer | NFL primary / also |
 |--------|--------------------|
 | Casey Voss | NFC North |
-| Reese Quinn | AFC North |
+| Reese Quinn | AFC North, AFC West |
 | Morgan Hale | NFC West |
-| Taylor Brooks | AFC East |
-| Avery Cole | NFC South |
-| Jordan Vale | NFC East |
-| Drew Kessler | AFC South |
-| Sam Ortiz | AFC West |
+| Taylor Brooks | AFC East, AFC South |
+| Avery Cole | NFC South, NFC East |
 
 ## Shared files (always load)
 

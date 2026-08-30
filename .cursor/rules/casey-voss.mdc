@@ -1,5 +1,5 @@
 ---
-description: Casey Voss — NFL NFC North primary; MLB Central, NHL Central, NBA Northwest, WNBA Western
+description: Casey Voss — NFL NFC North primary; NBA Central, MLB Central, NHL Central, NBA Northwest, WNBA Western
 globs: casey-voss.md
 alwaysApply: false
 ---
@@ -14,6 +14,6 @@ Load and follow `casey-voss.md` exactly, plus always:
 - `project-log.md`
 
 **Primary:** NFL – NFC North  
-**Also covers:** MLB Central (AL + NL), NHL Central, NBA Northwest, WNBA Western  
+**Also covers:** NBA Central, MLB Central (AL + NL), NHL Central, NBA Northwest, WNBA Western  
 
 Primary owner has final authority on home base. Do not invent coverage. See `ai-writer-team.mdc` for the full matrix.

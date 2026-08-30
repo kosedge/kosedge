@@ -344,8 +344,8 @@
     "DAL": {
       "team": "Dallas Cowboys",
       "division": "NFC East",
-      "kos_edge_writer": "Jordan Vale",
-      "notes": "Kos Edge primary: Jordan Vale (NFC East / overflow assignment 2026-07-30).",
+      "kos_edge_writer": "Avery Cole",
+      "notes": "Kos Edge primary: Avery Cole (NFC East / coverage matrix 2026-08-30).",
       "confidence": "high",
       "writers": [
         {
@@ -386,7 +386,7 @@
     "DEN": {
       "team": "Denver Broncos",
       "division": "AFC West",
-      "kos_edge_writer": "Sam Ortiz",
+      "kos_edge_writer": "Reese Quinn",
       "confidence": "high",
       "writers": [
         {
@@ -422,7 +422,8 @@
           "confidence": "medium",
           "notes": "Has covered Broncos historically; confirm current beat before citing"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Reese Quinn (coverage matrix 2026-08-30)."
     },
     "DET": {
       "team": "Detroit Lions",
@@ -510,7 +511,7 @@
     "HOU": {
       "team": "Houston Texans",
       "division": "AFC South",
-      "kos_edge_writer": "Drew Kessler",
+      "kos_edge_writer": "Taylor Brooks",
       "confidence": "high",
       "writers": [
         {
@@ -538,12 +539,13 @@
           ],
           "role": "local"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Taylor Brooks (coverage matrix 2026-08-30)."
     },
     "IND": {
       "team": "Indianapolis Colts",
       "division": "AFC South",
-      "kos_edge_writer": "Drew Kessler",
+      "kos_edge_writer": "Taylor Brooks",
       "confidence": "high",
       "writers": [
         {
@@ -571,12 +573,13 @@
           ],
           "role": "local"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Taylor Brooks (coverage matrix 2026-08-30)."
     },
     "JAX": {
       "team": "Jacksonville Jaguars",
       "division": "AFC South",
-      "kos_edge_writer": "Drew Kessler",
+      "kos_edge_writer": "Taylor Brooks",
       "confidence": "high",
       "writers": [
         {
@@ -612,12 +615,13 @@
           ],
           "role": "local"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Taylor Brooks (coverage matrix 2026-08-30)."
     },
     "KC": {
       "team": "Kansas City Chiefs",
       "division": "AFC West",
-      "kos_edge_writer": "Sam Ortiz",
+      "kos_edge_writer": "Reese Quinn",
       "confidence": "high",
       "writers": [
         {
@@ -646,12 +650,13 @@
           "role": "local",
           "confidence": "medium"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Reese Quinn (coverage matrix 2026-08-30)."
     },
     "LAC": {
       "team": "Los Angeles Chargers",
       "division": "AFC West",
-      "kos_edge_writer": "Sam Ortiz",
+      "kos_edge_writer": "Reese Quinn",
       "confidence": "high",
       "writers": [
         {
@@ -671,7 +676,8 @@
           ],
           "role": "primary"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Reese Quinn (coverage matrix 2026-08-30)."
     },
     "LAR": {
       "team": "Los Angeles Rams",
@@ -710,7 +716,7 @@
     "LV": {
       "team": "Las Vegas Raiders",
       "division": "AFC West",
-      "kos_edge_writer": "Sam Ortiz",
+      "kos_edge_writer": "Reese Quinn",
       "confidence": "medium",
       "notes": "ESPN primary Ryan McFadden confirmed via camp hub/bio; X handle listed as candidate pending bio link confirmation.",
       "writers": [
@@ -887,7 +893,7 @@
     "NYG": {
       "team": "New York Giants",
       "division": "NFC East",
-      "kos_edge_writer": "Jordan Vale",
+      "kos_edge_writer": "Avery Cole",
       "confidence": "high",
       "writers": [
         {
@@ -923,7 +929,8 @@
           ],
           "role": "local"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Avery Cole (coverage matrix 2026-08-30)."
     },
     "NYJ": {
       "team": "New York Jets",
@@ -961,7 +968,7 @@
     "PHI": {
       "team": "Philadelphia Eagles",
       "division": "NFC East",
-      "kos_edge_writer": "Jordan Vale",
+      "kos_edge_writer": "Avery Cole",
       "confidence": "high",
       "writers": [
         {
@@ -997,7 +1004,8 @@
           ],
           "role": "local"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Avery Cole (coverage matrix 2026-08-30)."
     },
     "PIT": {
       "team": "Pittsburgh Steelers",
@@ -1143,7 +1151,7 @@
     "TEN": {
       "team": "Tennessee Titans",
       "division": "AFC South",
-      "kos_edge_writer": "Drew Kessler",
+      "kos_edge_writer": "Taylor Brooks",
       "confidence": "high",
       "writers": [
         {
@@ -1171,12 +1179,13 @@
           ],
           "role": "local"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Taylor Brooks (coverage matrix 2026-08-30)."
     },
     "WAS": {
       "team": "Washington Commanders",
       "division": "NFC East",
-      "kos_edge_writer": "Jordan Vale",
+      "kos_edge_writer": "Avery Cole",
       "confidence": "high",
       "writers": [
         {
@@ -1196,7 +1205,8 @@
           ],
           "role": "primary"
         }
-      ]
+      ],
+      "notes": "Kos Edge desk: Avery Cole (coverage matrix 2026-08-30)."
     }
   }
 }

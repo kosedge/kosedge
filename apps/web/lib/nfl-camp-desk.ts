@@ -96,13 +96,10 @@ type BeatRegistry = {
 
 const WRITER_COVERAGE: Array<{ name: string; coverage: string }> = [
   { name: "Casey Voss", coverage: "NFC North" },
-  { name: "Reese Quinn", coverage: "AFC North" },
+  { name: "Reese Quinn", coverage: "AFC North, AFC West" },
   { name: "Morgan Hale", coverage: "NFC West" },
-  { name: "Taylor Brooks", coverage: "AFC East" },
-  { name: "Avery Cole", coverage: "NFC South" },
-  { name: "Jordan Vale", coverage: "NFC East" },
-  { name: "Drew Kessler", coverage: "AFC South" },
-  { name: "Sam Ortiz", coverage: "AFC West" },
+  { name: "Taylor Brooks", coverage: "AFC East, AFC South" },
+  { name: "Avery Cole", coverage: "NFC South, NFC East" },
 ];
 
 /** Known ESPN 2026 team camp hubs (public story pages). */
