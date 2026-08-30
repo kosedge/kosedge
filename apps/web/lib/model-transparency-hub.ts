@@ -17,7 +17,7 @@ export const MODEL_TRANSPARENCY_CONTRACT = [
   {
     term: "KEI",
     meaning:
-      "Final handicap. Model plus late information and reprice (injury, rest, weather, confirmation).",
+      "Final handicap. Model plus late information and reprice — desk factors such as injury, rest, weather, confirmation.",
   },
   {
     term: "Edge / Tag",
@@ -177,7 +177,9 @@ export function modelTransparencyHubCopy(): string {
   ].join("\n");
 }
 
-export function assertModelTransparencyHubSafe(copy = modelTransparencyHubCopy()) {
+export function assertModelTransparencyHubSafe(
+  copy = modelTransparencyHubCopy(),
+) {
   for (const pattern of FORBIDDEN_HUB_PHRASES) {
     if (pattern.test(copy)) {
       throw new Error(`Hub copy contains forbidden phrase: ${pattern}`);

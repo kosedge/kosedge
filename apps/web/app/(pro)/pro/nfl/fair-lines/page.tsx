@@ -123,16 +123,6 @@ export default async function NflFairLinesPage({
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               KEI Lines
             </h1>
-            <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Model = research fair. KEI = model + late information. Tags
-              compare KEI to market, not Model.{" "}
-              <Link
-                href="/pro/model-transparency#kei-lines"
-                className="text-kos-text/45 hover:text-kos-gold"
-              >
-                Model transparency
-              </Link>
-            </p>
           </div>
           <div className="grid gap-2 sm:min-w-48">
             <Link

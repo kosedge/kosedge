@@ -57,8 +57,7 @@ type SportCopyOverride = Omit<Partial<OverviewContent>, "sectionTitles"> & {
 const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
-    heroSummary:
-      "Week 1 REG live · PRE off board. KEI = model + desk factors.",
+    heroSummary: "Week 1 REG live · PRE off board.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {

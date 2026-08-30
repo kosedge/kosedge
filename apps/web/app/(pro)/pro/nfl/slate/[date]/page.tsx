@@ -14,10 +14,8 @@ export const metadata: Metadata = {
 function tagClass(tag: "PLAY" | "LEAN" | "PASS" | null): string {
   if (tag === "PLAY")
     return "border-edge-green/40 bg-edge-green/10 text-edge-green";
-  if (tag === "LEAN")
-    return "border-kos-gold/40 bg-kos-gold/10 text-kos-gold";
-  if (tag === "PASS")
-    return "border-white/15 bg-white/5 text-kos-text/70";
+  if (tag === "LEAN") return "border-kos-gold/40 bg-kos-gold/10 text-kos-gold";
+  if (tag === "PASS") return "border-white/15 bg-white/5 text-kos-text/70";
   return "border-white/10 bg-white/5 text-kos-text/55";
 }
 
@@ -40,8 +38,8 @@ export default async function NflWeeklySlatePage({
             {date === "today" ? "Weekly Slate" : `Slate · ${date}`}
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Slate snapshot and matchup cards for KosEdge briefs. Model lines and
-            market context when joined — research desk, not a picks feed.
+            Slate snapshot and matchup cards for KosEdge briefs, with model
+            lines and market context when joined.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -176,8 +174,7 @@ export default async function NflWeeklySlatePage({
                           {card.spreadEdge != null &&
                           card.seasonType === "PRE" ? (
                             <p className="col-span-2 text-kos-text/55">
-                              Ref vs market{" "}
-                              {card.spreadEdge > 0 ? "+" : ""}
+                              Ref vs market {card.spreadEdge > 0 ? "+" : ""}
                               {card.spreadEdge.toFixed(1)}
                             </p>
                           ) : null}

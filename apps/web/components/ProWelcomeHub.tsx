@@ -84,7 +84,7 @@ export default function ProWelcomeHub() {
             </h2>
             <p className="mt-1 text-sm text-kos-text/70">
               Edge Board → Survivor → Fantasy → Season Model. Week 1 REG live ·
-              PRE off board · KEI = model + desk factors.
+              PRE off board.
             </p>
           </div>
           <Link
