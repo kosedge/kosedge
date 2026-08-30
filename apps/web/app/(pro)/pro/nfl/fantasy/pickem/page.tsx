@@ -9,9 +9,13 @@ import {
   formatWinProb,
 } from "@/lib/nfl-fair-lines";
 import {
+  buildNflAtsPickemCard,
   buildNflPickemCard,
   filterPickemWeekLines,
+  parsePickemTab,
+  type NflAtsPickemPick,
   type NflPickemPick,
+  type NflPickemTab,
   type NflPickemTag,
 } from "@/lib/nfl-pickem";
 import {
@@ -57,8 +61,14 @@ function displayTag(tag: NflPickemTag): "PLAY" | "LEAN" | null {
   return null;
 }
 
-function weekHref(week: number): string {
-  return `/pro/nfl/fantasy/pickem?week=${week}`;
+function pickemHref(tab: NflPickemTab, week: number): string {
+  return `/pro/nfl/fantasy/pickem?tab=${tab}&week=${week}`;
+}
+
+function formatAtsEdge(edge: number | null): string {
+  if (edge == null || !Number.isFinite(edge)) return "—";
+  const abs = Math.abs(Math.round(edge * 100) / 100);
+  return abs.toFixed(2);
 }
 
 export default async function NflFantasyPickemPage({
@@ -67,6 +77,7 @@ export default async function NflFantasyPickemPage({
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
   const search = await searchParams;
+  const tab = parsePickemTab(firstValue(search.tab));
   const [board, readiness] = await Promise.all([
     fetchNflFairLines({
       season: DEFAULT_SEASON,
@@ -81,7 +92,9 @@ export default async function NflFantasyPickemPage({
   const weekLines = filterPickemWeekLines(board.lines, week, {
     seasonType: "REG",
   });
-  const card = buildNflPickemCard(weekLines);
+  const suCard = buildNflPickemCard(weekLines);
+  const atsCard = buildNflAtsPickemCard(weekLines);
+  const card = tab === "su" ? suCard : atsCard;
   const researchOnlyTags = readinessBlocksPlay(readiness);
 
   const availableWeeks = Array.from(
@@ -106,6 +119,11 @@ export default async function NflFantasyPickemPage({
     board.slateStatus &&
     board.slateStatus !== "ok";
 
+  const subtitle =
+    tab === "ats"
+      ? "Weekly ATS card ranked 1–N. PLAY / LEAN first; fill the rest vs the stake line."
+      : "Weekly straight-up card ranked 1–N. PLAY / LEAN first; fill the rest of the slate.";
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <section className="rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-5 sm:p-7">
@@ -118,11 +136,11 @@ export default async function NflFantasyPickemPage({
               Pick’em
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              Weekly straight-up card ranked N→1. PLAY / LEAN sit first; the
-              rest of the slate fills out the card.
+              {subtitle}
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
-              Week {week} · REG · confidence is research rank, not a stake
+              Week {week} · REG · {tab === "ats" ? "ATS" : "Straight up"} · rank
+              is research order, not a stake
             </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
@@ -185,13 +203,44 @@ export default async function NflFantasyPickemPage({
 
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
+          <nav className="flex flex-wrap gap-2" aria-label="Pick’em card">
+            {(
+              [
+                { id: "ats" as const, label: "ATS" },
+                { id: "su" as const, label: "Straight up" },
+              ] as const
+            ).map((item) => {
+              const isActive = item.id === tab;
+              return (
+                <Link
+                  key={item.id}
+                  href={pickemHref(item.id, week)}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                    isActive
+                      ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
+                      : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-kos-gold/25 hover:text-kos-text"
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              );
+            })}
+          </nav>
+          <p className="text-xs text-kos-text/55">
+            {card.length > 0
+              ? `${card.length} game${card.length === 1 ? "" : "s"} · ranks 1–${card.length}`
+              : "No REG games this week"}
+          </p>
+        </div>
+
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
           <nav className="flex flex-wrap gap-2" aria-label="Pick’em week">
             {weekChips.map((w) => {
               const isActive = w === week;
               return (
                 <Link
                   key={w}
-                  href={weekHref(w)}
+                  href={pickemHref(tab, w)}
                   className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
                     isActive
                       ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
@@ -203,11 +252,6 @@ export default async function NflFantasyPickemPage({
               );
             })}
           </nav>
-          <p className="text-xs text-kos-text/55">
-            {card.length > 0
-              ? `${card.length} game${card.length === 1 ? "" : "s"} · ranks ${card.length}→1`
-              : "No REG games this week"}
-          </p>
         </div>
 
         {card.length === 0 && !emptyHonest && !board.error ? (
@@ -221,24 +265,24 @@ export default async function NflFantasyPickemPage({
           </div>
         ) : null}
 
-        {card.length > 0 ? (
+        {card.length > 0 && tab === "ats" ? (
           <>
             <div className="mt-4 hidden overflow-x-auto md:block">
               <table className="min-w-full text-left text-sm">
                 <thead className="text-xs uppercase tracking-wide text-kos-text/55">
                   <tr className="border-b border-white/10">
-                    <th className="px-3 py-2 font-semibold">Conf</th>
+                    <th className="px-3 py-2 font-semibold">Rank</th>
                     <th className="px-3 py-2 font-semibold">Pick</th>
-                    <th className="px-3 py-2 font-semibold">Opp</th>
+                    <th className="px-3 py-2 font-semibold">Line</th>
                     <th className="px-3 py-2 font-semibold">KEI</th>
-                    <th className="px-3 py-2 font-semibold">Win%</th>
+                    <th className="px-3 py-2 font-semibold">Edge</th>
                     <th className="px-3 py-2 font-semibold">Tag</th>
                     <th className="px-3 py-2 font-semibold">Kickoff</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {card.map((pick) => (
-                    <PickemRow
+                  {(card as NflAtsPickemPick[]).map((pick) => (
+                    <AtsPickemRow
                       key={pick.gameId}
                       pick={pick}
                       researchOnlyTags={researchOnlyTags}
@@ -249,8 +293,47 @@ export default async function NflFantasyPickemPage({
             </div>
 
             <ul className="mt-4 space-y-3 md:hidden">
-              {card.map((pick) => (
-                <PickemCard
+              {(card as NflAtsPickemPick[]).map((pick) => (
+                <AtsPickemCard
+                  key={pick.gameId}
+                  pick={pick}
+                  researchOnlyTags={researchOnlyTags}
+                />
+              ))}
+            </ul>
+          </>
+        ) : null}
+
+        {card.length > 0 && tab === "su" ? (
+          <>
+            <div className="mt-4 hidden overflow-x-auto md:block">
+              <table className="min-w-full text-left text-sm">
+                <thead className="text-xs uppercase tracking-wide text-kos-text/55">
+                  <tr className="border-b border-white/10">
+                    <th className="px-3 py-2 font-semibold">Rank</th>
+                    <th className="px-3 py-2 font-semibold">Pick</th>
+                    <th className="px-3 py-2 font-semibold">Opp</th>
+                    <th className="px-3 py-2 font-semibold">KEI</th>
+                    <th className="px-3 py-2 font-semibold">Win%</th>
+                    <th className="px-3 py-2 font-semibold">Tag</th>
+                    <th className="px-3 py-2 font-semibold">Kickoff</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(card as NflPickemPick[]).map((pick) => (
+                    <SuPickemRow
+                      key={pick.gameId}
+                      pick={pick}
+                      researchOnlyTags={researchOnlyTags}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <ul className="mt-4 space-y-3 md:hidden">
+              {(card as NflPickemPick[]).map((pick) => (
+                <SuPickemCard
                   key={pick.gameId}
                   pick={pick}
                   researchOnlyTags={researchOnlyTags}
@@ -264,7 +347,7 @@ export default async function NflFantasyPickemPage({
   );
 }
 
-function PickemRow({
+function SuPickemRow({
   pick,
   researchOnlyTags,
 }: {
@@ -275,7 +358,7 @@ function PickemRow({
   return (
     <tr className="border-b border-white/5 hover:bg-white/5">
       <td className="px-3 py-3 text-2xl font-semibold tabular-nums text-kos-gold">
-        {pick.confidence}
+        {pick.rank}
       </td>
       <td className="px-3 py-3 text-base font-semibold text-kos-text">
         {pick.pickAbbr ?? "—"}
@@ -307,7 +390,50 @@ function PickemRow({
   );
 }
 
-function PickemCard({
+function AtsPickemRow({
+  pick,
+  researchOnlyTags,
+}: {
+  pick: NflAtsPickemPick;
+  researchOnlyTags: boolean;
+}) {
+  const tag = displayTag(pick.tag);
+  return (
+    <tr className="border-b border-white/5 hover:bg-white/5">
+      <td className="px-3 py-3 text-2xl font-semibold tabular-nums text-kos-gold">
+        {pick.rank}
+      </td>
+      <td className="px-3 py-3 text-base font-semibold text-kos-text">
+        {pick.pickAbbr ?? "—"}
+      </td>
+      <td className="px-3 py-3 tabular-nums text-kos-text/80">
+        {formatSpread(pick.marketSpreadPick)}
+      </td>
+      <td className="px-3 py-3 tabular-nums text-kos-text/80">
+        {formatSpread(pick.keiSpreadPick)}
+      </td>
+      <td className="px-3 py-3 tabular-nums text-kos-text/80">
+        {formatAtsEdge(pick.atsEdge)}
+      </td>
+      <td className="px-3 py-3">
+        {tag ? (
+          <span
+            className={`inline-flex rounded-md border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${tagChipClass(tag, researchOnlyTags)}`}
+          >
+            {tag}
+          </span>
+        ) : (
+          <span className="text-kos-text/40">—</span>
+        )}
+      </td>
+      <td className="px-3 py-3 text-kos-text/70">
+        {formatKickoff(pick.kickoff)}
+      </td>
+    </tr>
+  );
+}
+
+function SuPickemCard({
   pick,
   researchOnlyTags,
 }: {
@@ -320,7 +446,7 @@ function PickemCard({
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <p className="text-2xl font-semibold tabular-nums text-kos-gold">
-            {pick.confidence}
+            {pick.rank}
           </p>
           <p className="mt-1 text-base font-semibold text-kos-text">
             {pick.pickAbbr ?? "—"}
@@ -334,6 +460,44 @@ function PickemCard({
           <p className="mt-1 text-xs text-kos-text/55">
             KEI {formatSpread(pick.keiSpreadPick)} ·{" "}
             {formatWinProb(pick.winProb)} · {formatKickoff(pick.kickoff)}
+          </p>
+        </div>
+        {tag ? (
+          <span
+            className={`shrink-0 rounded-md border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${tagChipClass(tag, researchOnlyTags)}`}
+          >
+            {tag}
+          </span>
+        ) : null}
+      </div>
+    </li>
+  );
+}
+
+function AtsPickemCard({
+  pick,
+  researchOnlyTags,
+}: {
+  pick: NflAtsPickemPick;
+  researchOnlyTags: boolean;
+}) {
+  const tag = displayTag(pick.tag);
+  return (
+    <li className="rounded-xl border border-white/10 bg-white/3 p-3">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-2xl font-semibold tabular-nums text-kos-gold">
+            {pick.rank}
+          </p>
+          <p className="mt-1 text-base font-semibold text-kos-text">
+            {pick.pickAbbr ?? "—"}{" "}
+            <span className="font-normal tabular-nums text-kos-text/75">
+              {formatSpread(pick.marketSpreadPick)}
+            </span>
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">
+            KEI {formatSpread(pick.keiSpreadPick)} · edge{" "}
+            {formatAtsEdge(pick.atsEdge)} · {formatKickoff(pick.kickoff)}
           </p>
         </div>
         {tag ? (
