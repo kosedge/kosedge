@@ -4,9 +4,11 @@ import {
   buildNflAtsPickemCard,
   buildNflPickemCard,
   filterPickemWeekLines,
+  PICKEM_REG_WEEK_CHIPS,
   parsePickemTab,
   resolveAtsPickemTag,
   resolveAtsSide,
+  resolvePickemDefaultWeek,
   resolvePickemTag,
 } from "@/lib/nfl-pickem";
 
@@ -485,6 +487,44 @@ describe("parsePickemTab", () => {
   });
 });
 
+describe("resolvePickemDefaultWeek", () => {
+  it("uses currentWeek when that week has REG rows", () => {
+    const lines = [
+      line({ gameId: "w1", week: 1 }),
+      line({ gameId: "w2", week: 2 }),
+    ];
+    expect(resolvePickemDefaultWeek(lines, 2)).toBe(2);
+  });
+
+  it("falls back to earliest REG week when currentWeek is empty", () => {
+    const lines = [
+      line({ gameId: "w1", week: 1 }),
+      line({ gameId: "w3", week: 3 }),
+    ];
+    expect(resolvePickemDefaultWeek(lines, 12)).toBe(1);
+  });
+
+  it("ignores PRE rows when choosing the default week", () => {
+    const lines = [
+      line({ gameId: "pre", week: 1, seasonType: "PRE" }),
+      line({ gameId: "reg2", week: 2, seasonType: "REG" }),
+    ];
+    expect(resolvePickemDefaultWeek(lines, 1)).toBe(2);
+  });
+
+  it("returns 1 when the payload has no REG rows", () => {
+    expect(resolvePickemDefaultWeek([], 0)).toBe(1);
+  });
+});
+
+describe("PICKEM_REG_WEEK_CHIPS", () => {
+  it("is fixed Weeks 1–18 independent of the fair-lines window", () => {
+    expect(PICKEM_REG_WEEK_CHIPS).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+    ]);
+  });
+});
+
 describe("filterPickemWeekLines", () => {
   it("keeps REG for the requested week and drops PRE", () => {
     const lines = [
@@ -494,5 +534,21 @@ describe("filterPickemWeekLines", () => {
     ];
     const week1 = filterPickemWeekLines(lines, 1);
     expect(week1.map((r) => r.gameId)).toEqual(["reg1"]);
+  });
+});
+
+describe("pickem page fair-lines fetch window", () => {
+  it("matches nfl-slate (120 ahead / 2 past), not the 200d timeout path", async () => {
+    const { readFileSync } = await import("node:fs");
+    const { join } = await import("node:path");
+    const src = readFileSync(
+      join(__dirname, "../../app/(pro)/pro/nfl/fantasy/pickem/page.tsx"),
+      "utf8",
+    );
+    expect(src).toContain("daysAhead: 120");
+    expect(src).toContain("includePastDays: 2");
+    expect(src).not.toContain("daysAhead: 200");
+    expect(src).not.toContain("FETCH_DAYS_AHEAD");
+    expect(src).toContain("PICKEM_REG_WEEK_CHIPS");
   });
 });
