@@ -277,7 +277,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Fantasy",
       subtitle:
-        "Draft desk, guillotine stay-alive desk, and late-round sleeper value vs ADP.",
+        "Draft desk, guillotine stay-alive desk, late-round sleepers, and weekly SU pick’em.",
       links: [
         {
           href: "/pro/nfl/fantasy",
@@ -304,6 +304,13 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           href: "/pro/nfl/fantasy/sleepers",
           label: "Sleepers",
           hint: "Late-round ADP value from model ranks vs FantasyPros.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/fantasy/pickem",
+          label: "Pick’em",
+          hint: "Weekly SU card ranked 1–N. PLAY / LEAN first, then the rest of the slate.",
           premium: true,
           status: "active",
         },

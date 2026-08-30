@@ -6,7 +6,10 @@ import {
   selectGuillotineSafeFloor,
 } from "@/lib/fantasy/guillotine";
 import { loadFantasyDraftDesk } from "@/lib/fantasy/load-desk";
-import type { FantasyDeskRow, FantasyScoringProfile } from "@/lib/fantasy/types";
+import type {
+  FantasyDeskRow,
+  FantasyScoringProfile,
+} from "@/lib/fantasy/types";
 
 const KOSEDGE_DATE = "August 11, 2026";
 
@@ -56,7 +59,9 @@ export default async function NflGuillotinePage({
               much as your draft. Use season-long ranks and schedule softness to
               stay alive; a fuller weekly guillotine tool can deepen later.
             </p>
-            <p className="mt-2 text-xs text-kos-text/55">Date: {KOSEDGE_DATE}</p>
+            <p className="mt-2 text-xs text-kos-text/55">
+              Date: {KOSEDGE_DATE}
+            </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link
@@ -74,22 +79,12 @@ export default async function NflGuillotinePage({
           </div>
         </div>
         <div className="mt-5">
-          <FantasyDeskNav active="rankings" scoring={scoring} />
+          <FantasyDeskNav
+            active="rankings"
+            scoring={scoring}
+            researchActive="guillotine"
+          />
         </div>
-        <nav
-          className="mt-3 flex flex-wrap gap-2"
-          aria-label="Fantasy research pages"
-        >
-          <span className="rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold">
-            Guillotine
-          </span>
-          <Link
-            href={`/pro/nfl/fantasy/sleepers?scoring=${scoring}`}
-            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
-          >
-            Sleepers
-          </Link>
-        </nav>
       </section>
 
       {isPreseason ? (
@@ -224,7 +219,9 @@ function NameList({
     return (
       <article className="rounded-2xl border border-dashed border-white/15 bg-black/25 p-4 sm:p-5">
         <h2 className="text-lg font-semibold text-kos-text">{title}</h2>
-        <p className="mt-1 text-sm text-kos-text/60">No names for this cut yet.</p>
+        <p className="mt-1 text-sm text-kos-text/60">
+          No names for this cut yet.
+        </p>
       </article>
     );
   }
@@ -248,7 +245,9 @@ function NameList({
                 {row.rankPosition} · model #{row.rankOverall}
               </p>
               {row.drivers[0] ? (
-                <p className="mt-1 text-xs text-kos-text/70">{row.drivers[0]}</p>
+                <p className="mt-1 text-xs text-kos-text/70">
+                  {row.drivers[0]}
+                </p>
               ) : null}
             </div>
             <div className="shrink-0 text-right text-xs tabular-nums text-kos-text/65">

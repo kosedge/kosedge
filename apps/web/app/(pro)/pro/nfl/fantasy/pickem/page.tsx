@@ -1,0 +1,349 @@
+import Link from "next/link";
+import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
+import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
+import { FantasyDeskNav } from "@/components/pro/nfl/fantasy/FantasyDeskNav";
+import {
+  fetchNflFairLines,
+  formatKickoff,
+  formatSpread,
+  formatWinProb,
+} from "@/lib/nfl-fair-lines";
+import {
+  buildNflPickemCard,
+  filterPickemWeekLines,
+  type NflPickemPick,
+  type NflPickemTag,
+} from "@/lib/nfl-pickem";
+import {
+  honestEmptySlateCopy,
+  modelUnreachableCopy,
+  shouldShowModelUnreachableBanner,
+} from "@/lib/model-service-status";
+import {
+  fetchNflProductionReadiness,
+  readinessBlocksPlay,
+} from "@/lib/nfl-production-readiness";
+
+export const dynamic = "force-dynamic";
+
+const DEFAULT_SEASON = 2026;
+const FETCH_DAYS_AHEAD = 200;
+
+type SearchValue = string | string[] | undefined;
+
+function firstValue(value: SearchValue): string | undefined {
+  if (Array.isArray(value)) return value[0];
+  return value;
+}
+
+function parseWeek(raw: string | undefined, fallback: number): number {
+  const n = Number(raw);
+  if (!Number.isFinite(n) || n < 1 || n > 22) return fallback;
+  return Math.floor(n);
+}
+
+function tagChipClass(tag: "PLAY" | "LEAN", researchOnly: boolean): string {
+  if (researchOnly) {
+    return "border-white/20 bg-white/5 text-kos-text/70";
+  }
+  if (tag === "PLAY") {
+    return "border-edge-green/40 bg-edge-green/10 text-edge-green";
+  }
+  return "border-kos-gold/40 bg-kos-gold/10 text-kos-gold";
+}
+
+function displayTag(tag: NflPickemTag): "PLAY" | "LEAN" | null {
+  if (tag === "PLAY" || tag === "LEAN") return tag;
+  return null;
+}
+
+function weekHref(week: number): string {
+  return `/pro/nfl/fantasy/pickem?week=${week}`;
+}
+
+export default async function NflFantasyPickemPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, SearchValue>>;
+}) {
+  const search = await searchParams;
+  const [board, readiness] = await Promise.all([
+    fetchNflFairLines({
+      season: DEFAULT_SEASON,
+      daysAhead: FETCH_DAYS_AHEAD,
+      includePastDays: 0,
+    }),
+    fetchNflProductionReadiness(),
+  ]);
+
+  const defaultWeek = board.currentWeek > 0 ? board.currentWeek : 1;
+  const week = parseWeek(firstValue(search.week), defaultWeek);
+  const weekLines = filterPickemWeekLines(board.lines, week, {
+    seasonType: "REG",
+  });
+  const card = buildNflPickemCard(weekLines);
+  const researchOnlyTags = readinessBlocksPlay(readiness);
+
+  const availableWeeks = Array.from(
+    new Set(
+      board.lines
+        .filter((row) => {
+          const st = (row.seasonType ?? "").trim().toUpperCase();
+          return row.week != null && (st === "" || st === "REG");
+        })
+        .map((row) => row.week as number),
+    ),
+  ).sort((a, b) => a - b);
+
+  const weekChips =
+    availableWeeks.length > 0
+      ? availableWeeks
+      : Array.from({ length: Math.max(defaultWeek, 1) }, (_, i) => i + 1);
+
+  const emptyHonest =
+    !board.error &&
+    card.length === 0 &&
+    board.slateStatus &&
+    board.slateStatus !== "ok";
+
+  return (
+    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+      <section className="rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-5 sm:p-7">
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="max-w-3xl">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
+              Fantasy · Pick’em
+            </p>
+            <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
+              Pick’em
+            </h1>
+            <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
+              Weekly straight-up card ranked N→1. PLAY / LEAN sit first; the
+              rest of the slate fills out the card.
+            </p>
+            <p className="mt-2 text-xs text-kos-text/55">
+              Week {week} · REG · confidence is research rank, not a stake
+            </p>
+          </div>
+          <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
+            <Link
+              href="/pro/nfl/fantasy"
+              className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
+            >
+              Draft Desk →
+            </Link>
+            <Link
+              href="/pro/nfl/fantasy/sleepers"
+              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text hover:border-kos-gold/35"
+            >
+              Sleepers
+            </Link>
+          </div>
+        </div>
+        <div className="mt-5">
+          <FantasyDeskNav
+            active="rankings"
+            scoring="half_ppr"
+            researchActive="pickem"
+          />
+        </div>
+        <div className="mt-3">
+          <ModelTransparencyLink hrefSuffix="#pickem" />
+        </div>
+      </section>
+
+      {shouldShowModelUnreachableBanner({
+        error: board.error,
+        hasContent: card.length > 0,
+        slateStatus: board.slateStatus,
+      }) ? (
+        <div className="mt-6">
+          <HonestStatusBanner title="Model unreachable" tone="amber">
+            <p>{modelUnreachableCopy(board.error)}</p>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
+
+      {emptyHonest ? (
+        <div className="mt-6">
+          <HonestStatusBanner title="Empty slate" tone="neutral">
+            <p>{honestEmptySlateCopy(board.slateStatus)}</p>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
+
+      {researchOnlyTags ? (
+        <div className="mt-6">
+          <HonestStatusBanner title="PLAY tags research-only" tone="sky">
+            <p>
+              Production readiness is no-go — PLAY / LEAN here are sort labels
+              for the research card, not live stakes.
+            </p>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
+
+      <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <nav className="flex flex-wrap gap-2" aria-label="Pick’em week">
+            {weekChips.map((w) => {
+              const isActive = w === week;
+              return (
+                <Link
+                  key={w}
+                  href={weekHref(w)}
+                  className={`rounded-lg px-3 py-1.5 text-sm font-semibold transition ${
+                    isActive
+                      ? "border border-kos-gold/45 bg-kos-gold/20 text-kos-gold"
+                      : "border border-white/10 bg-white/5 text-kos-text/75 hover:border-kos-gold/25 hover:text-kos-text"
+                  }`}
+                >
+                  Week {w}
+                </Link>
+              );
+            })}
+          </nav>
+          <p className="text-xs text-kos-text/55">
+            {card.length > 0
+              ? `${card.length} game${card.length === 1 ? "" : "s"} · ranks ${card.length}→1`
+              : "No REG games this week"}
+          </p>
+        </div>
+
+        {card.length === 0 && !emptyHonest && !board.error ? (
+          <div className="mt-4">
+            <HonestStatusBanner title="No pick’em slate yet" tone="neutral">
+              <p>
+                No REG games for Week {week}. Switch weeks or check back when
+                the fair-lines board posts the slate.
+              </p>
+            </HonestStatusBanner>
+          </div>
+        ) : null}
+
+        {card.length > 0 ? (
+          <>
+            <div className="mt-4 hidden overflow-x-auto md:block">
+              <table className="min-w-full text-left text-sm">
+                <thead className="text-xs uppercase tracking-wide text-kos-text/55">
+                  <tr className="border-b border-white/10">
+                    <th className="px-3 py-2 font-semibold">Conf</th>
+                    <th className="px-3 py-2 font-semibold">Pick</th>
+                    <th className="px-3 py-2 font-semibold">Opp</th>
+                    <th className="px-3 py-2 font-semibold">KEI</th>
+                    <th className="px-3 py-2 font-semibold">Win%</th>
+                    <th className="px-3 py-2 font-semibold">Tag</th>
+                    <th className="px-3 py-2 font-semibold">Kickoff</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {card.map((pick) => (
+                    <PickemRow
+                      key={pick.gameId}
+                      pick={pick}
+                      researchOnlyTags={researchOnlyTags}
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            <ul className="mt-4 space-y-3 md:hidden">
+              {card.map((pick) => (
+                <PickemCard
+                  key={pick.gameId}
+                  pick={pick}
+                  researchOnlyTags={researchOnlyTags}
+                />
+              ))}
+            </ul>
+          </>
+        ) : null}
+      </section>
+    </main>
+  );
+}
+
+function PickemRow({
+  pick,
+  researchOnlyTags,
+}: {
+  pick: NflPickemPick;
+  researchOnlyTags: boolean;
+}) {
+  const tag = displayTag(pick.tag);
+  return (
+    <tr className="border-b border-white/5 hover:bg-white/5">
+      <td className="px-3 py-3 text-2xl font-semibold tabular-nums text-kos-gold">
+        {pick.confidence}
+      </td>
+      <td className="px-3 py-3 text-base font-semibold text-kos-text">
+        {pick.pickAbbr ?? "—"}
+      </td>
+      <td className="px-3 py-3 text-kos-text/75">
+        {pick.oppAbbr ? `vs ${pick.oppAbbr}` : "—"}
+      </td>
+      <td className="px-3 py-3 tabular-nums text-kos-text/80">
+        {formatSpread(pick.keiSpreadPick)}
+      </td>
+      <td className="px-3 py-3 tabular-nums text-kos-text/80">
+        {formatWinProb(pick.winProb)}
+      </td>
+      <td className="px-3 py-3">
+        {tag ? (
+          <span
+            className={`inline-flex rounded-md border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${tagChipClass(tag, researchOnlyTags)}`}
+          >
+            {tag}
+          </span>
+        ) : (
+          <span className="text-kos-text/40">—</span>
+        )}
+      </td>
+      <td className="px-3 py-3 text-kos-text/70">
+        {formatKickoff(pick.kickoff)}
+      </td>
+    </tr>
+  );
+}
+
+function PickemCard({
+  pick,
+  researchOnlyTags,
+}: {
+  pick: NflPickemPick;
+  researchOnlyTags: boolean;
+}) {
+  const tag = displayTag(pick.tag);
+  return (
+    <li className="rounded-xl border border-white/10 bg-white/3 p-3">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <p className="text-2xl font-semibold tabular-nums text-kos-gold">
+            {pick.confidence}
+          </p>
+          <p className="mt-1 text-base font-semibold text-kos-text">
+            {pick.pickAbbr ?? "—"}
+            {pick.oppAbbr ? (
+              <span className="font-normal text-kos-text/60">
+                {" "}
+                vs {pick.oppAbbr}
+              </span>
+            ) : null}
+          </p>
+          <p className="mt-1 text-xs text-kos-text/55">
+            KEI {formatSpread(pick.keiSpreadPick)} ·{" "}
+            {formatWinProb(pick.winProb)} · {formatKickoff(pick.kickoff)}
+          </p>
+        </div>
+        {tag ? (
+          <span
+            className={`shrink-0 rounded-md border px-2 py-0.5 text-[11px] font-semibold uppercase tracking-wide ${tagChipClass(tag, researchOnlyTags)}`}
+          >
+            {tag}
+          </span>
+        ) : null}
+      </div>
+    </li>
+  );
+}

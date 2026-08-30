@@ -16,6 +16,7 @@ const REQUIRED_GLOSSARY_IDS = [
   "weekly-slate",
   "survivor",
   "fantasy",
+  "pickem",
   "game-boxes",
   "power-ratings",
   "camp-desk",

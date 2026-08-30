@@ -111,6 +111,16 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       ],
     },
     {
+      id: "pickem",
+      title: "Pick’em",
+      href: "/pro/nfl/fantasy/pickem",
+      lines: [
+        "Weekly straight-up card. Rank is confidence 1–N, not a stake.",
+        "Side is the KEI winner. PLAY / LEAN only change sort order.",
+        "Research estimates, not a contest entry and not a lock list.",
+      ],
+    },
+    {
       id: "game-boxes",
       title: "Game Boxes / Season Model",
       href: "/pro/nfl/model",

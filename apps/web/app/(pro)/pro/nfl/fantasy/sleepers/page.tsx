@@ -9,7 +9,10 @@ import {
   selectSleeperRows,
   sleeperWhyLine,
 } from "@/lib/fantasy/sleepers";
-import type { FantasyDeskRow, FantasyScoringProfile } from "@/lib/fantasy/types";
+import type {
+  FantasyDeskRow,
+  FantasyScoringProfile,
+} from "@/lib/fantasy/types";
 
 const KOSEDGE_DATE = "August 11, 2026";
 
@@ -80,22 +83,12 @@ export default async function NflSleepersPage({
           </div>
         </div>
         <div className="mt-5">
-          <FantasyDeskNav active="rankings" scoring={scoring} />
+          <FantasyDeskNav
+            active="rankings"
+            scoring={scoring}
+            researchActive="sleepers"
+          />
         </div>
-        <nav
-          className="mt-3 flex flex-wrap gap-2"
-          aria-label="Fantasy research pages"
-        >
-          <Link
-            href={`/pro/nfl/fantasy/guillotine?scoring=${scoring}`}
-            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text/75 hover:border-kos-gold/30"
-          >
-            Guillotine
-          </Link>
-          <span className="rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold">
-            Sleepers
-          </span>
-        </nav>
       </section>
 
       {isPreseason ? (
@@ -113,8 +106,8 @@ export default async function NflSleepersPage({
         <div className="mt-6">
           <HonestStatusBanner title="Market ADP unavailable" tone="amber">
             <p>
-              FantasyPros ADP isn&apos;t loaded — Value Δ / Gap stays blank until
-              the feed returns. Model ranks still show.
+              FantasyPros ADP isn&apos;t loaded — Value Δ / Gap stays blank
+              until the feed returns. Model ranks still show.
             </p>
           </HonestStatusBanner>
         </div>
