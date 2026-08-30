@@ -71,12 +71,8 @@ const nextConfig: NextConfig = {
       "../../data/writers/**/*",
       "../../content/writers/camp-desk-2026/**/*",
     ],
-    "/pro/[sport]/tracking": [
-      "../../data/ops/nfl-clv-benchmark-report.json",
-    ],
-    "/pro/nfl/injuries": [
-      "../../data/writers/**/*",
-    ],
+    "/pro/[sport]/tracking": ["../../data/ops/nfl-clv-benchmark-report.json"],
+    "/pro/nfl/injuries": ["../../data/writers/**/*"],
     "/pro/prediction-market": [
       "../../data/ops/**/*",
       "../../content/writers/season-previews-2026/**/*",
@@ -86,6 +82,8 @@ const nextConfig: NextConfig = {
     "/pro/model-transparency": ["../../data/ops/**/*"],
     "/pro/nfl/news": ["../../content/writers/news-breaks-2026/**/*"],
     "/pro/nfl/news/[slug]": ["../../content/writers/news-breaks-2026/**/*"],
+    "/pro/desk": ["../../content/writers/desk-2026/**/*"],
+    "/pro/desk/[slug]": ["../../content/writers/desk-2026/**/*"],
   },
 
   async redirects() {
