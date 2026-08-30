@@ -12,7 +12,9 @@ import {
   buildNflAtsPickemCard,
   buildNflPickemCard,
   filterPickemWeekLines,
+  PICKEM_REG_WEEK_CHIPS,
   parsePickemTab,
+  resolvePickemDefaultWeek,
   type NflAtsPickemPick,
   type NflPickemPick,
   type NflPickemTab,
@@ -31,7 +33,6 @@ import {
 export const dynamic = "force-dynamic";
 
 const DEFAULT_SEASON = 2026;
-const FETCH_DAYS_AHEAD = 200;
 
 type SearchValue = string | string[] | undefined;
 
@@ -79,15 +80,16 @@ export default async function NflFantasyPickemPage({
   const search = await searchParams;
   const tab = parsePickemTab(firstValue(search.tab));
   const [board, readiness] = await Promise.all([
+    // Match nfl-slate / working Edge Board window — 200d cold-loads time out.
     fetchNflFairLines({
       season: DEFAULT_SEASON,
-      daysAhead: FETCH_DAYS_AHEAD,
-      includePastDays: 0,
+      daysAhead: 120,
+      includePastDays: 2,
     }),
     fetchNflProductionReadiness(),
   ]);
 
-  const defaultWeek = board.currentWeek > 0 ? board.currentWeek : 1;
+  const defaultWeek = resolvePickemDefaultWeek(board.lines, board.currentWeek);
   const week = parseWeek(firstValue(search.week), defaultWeek);
   const weekLines = filterPickemWeekLines(board.lines, week, {
     seasonType: "REG",
@@ -96,25 +98,15 @@ export default async function NflFantasyPickemPage({
   const atsCard = buildNflAtsPickemCard(weekLines);
   const card = tab === "su" ? suCard : atsCard;
   const researchOnlyTags = readinessBlocksPlay(readiness);
-
-  const availableWeeks = Array.from(
-    new Set(
-      board.lines
-        .filter((row) => {
-          const st = (row.seasonType ?? "").trim().toUpperCase();
-          return row.week != null && (st === "" || st === "REG");
-        })
-        .map((row) => row.week as number),
-    ),
-  ).sort((a, b) => a - b);
-
-  const weekChips =
-    availableWeeks.length > 0
-      ? availableWeeks
-      : Array.from({ length: Math.max(defaultWeek, 1) }, (_, i) => i + 1);
-
+  const weekChips = PICKEM_REG_WEEK_CHIPS;
+  const boardHasLines = board.lines.length > 0;
+  const modelUnreachable =
+    Boolean(board.error?.trim()) && !boardHasLines && card.length === 0;
+  const weekFilterEmpty =
+    !board.error && boardHasLines && weekLines.length === 0;
   const emptyHonest =
     !board.error &&
+    !boardHasLines &&
     card.length === 0 &&
     board.slateStatus &&
     board.slateStatus !== "ok";
@@ -172,7 +164,8 @@ export default async function NflFantasyPickemPage({
 
       {shouldShowModelUnreachableBanner({
         error: board.error,
-        hasContent: card.length > 0,
+        // Board rows mean the slate loaded — an empty week filter is not an outage.
+        hasContent: boardHasLines || card.length > 0,
         slateStatus: board.slateStatus,
       }) ? (
         <div className="mt-6">
@@ -229,7 +222,9 @@ export default async function NflFantasyPickemPage({
           <p className="text-xs text-kos-text/55">
             {card.length > 0
               ? `${card.length} game${card.length === 1 ? "" : "s"} · ranks 1–${card.length}`
-              : "No REG games this week"}
+              : modelUnreachable
+                ? "Waiting on fair lines"
+                : `No REG lines for Week ${week} yet`}
           </p>
         </div>
 
@@ -254,12 +249,31 @@ export default async function NflFantasyPickemPage({
           </nav>
         </div>
 
-        {card.length === 0 && !emptyHonest && !board.error ? (
+        {weekFilterEmpty && !emptyHonest ? (
+          <div className="mt-4">
+            <HonestStatusBanner
+              title="No lines for this week yet"
+              tone="neutral"
+            >
+              <p>
+                No REG lines for Week {week} yet. Near-term weeks may already be
+                on the board — try Week {defaultWeek} or check back when
+                fair-lines posts this slate.
+              </p>
+            </HonestStatusBanner>
+          </div>
+        ) : null}
+
+        {card.length === 0 &&
+        !board.error &&
+        !boardHasLines &&
+        !emptyHonest &&
+        !weekFilterEmpty ? (
           <div className="mt-4">
             <HonestStatusBanner title="No pick’em slate yet" tone="neutral">
               <p>
-                No REG games for Week {week}. Switch weeks or check back when
-                the fair-lines board posts the slate.
+                No REG lines for Week {week} yet. Switch weeks or check back
+                when the fair-lines board posts the slate.
               </p>
             </HonestStatusBanner>
           </div>

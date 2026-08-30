@@ -386,6 +386,50 @@ export function parsePickemTab(raw: string | undefined): NflPickemTab {
   return raw === "su" ? "su" : "ats";
 }
 
+/** REG season week chips — do not derive from a near-term fair-lines window. */
+export const PICKEM_REG_WEEK_CHIPS: readonly number[] = Array.from(
+  { length: 18 },
+  (_, i) => i + 1,
+);
+
+export function isPickemRegSeasonType(
+  seasonType: string | null | undefined,
+): boolean {
+  const st = (seasonType ?? "").trim().toUpperCase();
+  return st === "" || st === "REG";
+}
+
+/** REG weeks that currently have fair-line rows (may be a near-term subset). */
+export function listPickemRegWeeksWithLines(lines: NflFairLineRow[]): number[] {
+  const weeks = new Set<number>();
+  for (const row of lines) {
+    if (row.week == null || !Number.isFinite(row.week)) continue;
+    if (!isPickemRegSeasonType(row.seasonType)) continue;
+    weeks.add(row.week);
+  }
+  return [...weeks].sort((a, b) => a - b);
+}
+
+/**
+ * Default week: currentWeek when it has REG rows; else earliest REG week in
+ * the payload; else 1. Avoid landing on an empty bye week when Week 1 is present.
+ */
+export function resolvePickemDefaultWeek(
+  lines: NflFairLineRow[],
+  currentWeek: number,
+): number {
+  const weeksWithLines = listPickemRegWeeksWithLines(lines);
+  if (
+    Number.isFinite(currentWeek) &&
+    currentWeek > 0 &&
+    weeksWithLines.includes(Math.floor(currentWeek))
+  ) {
+    return Math.floor(currentWeek);
+  }
+  if (weeksWithLines.length > 0) return weeksWithLines[0]!;
+  return 1;
+}
+
 /** Filter REG (or matching product week season type) lines for a week. */
 export function filterPickemWeekLines(
   lines: NflFairLineRow[],
