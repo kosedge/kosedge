@@ -2,11 +2,14 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** A championship defense supports the floor, but 10.5 leaves no room for a thin edge  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (Over -115 / Under -105)  
 **Sources (beat desk):** Brady Henderson (ESPN); Bob Condotta (Seattle Times); Gregg Bell (Tacoma News Tribune); John Boyle (Seahawks.com)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Seattle’s case begins with a defense capable of keeping ordinary offensive weeks competitive. Its price begins much higher. The defending champions are posted at **10.5**, and Kos Edge projects **10.81 expected wins**. A 0.31-win difference is not an edge. With the Over priced at **-115**, it is a clear **Pass**.
 

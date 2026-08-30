@@ -2,11 +2,14 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** The Model sees six wins; the roster and schedule still look like a rebuild board  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **4.5** (-110 / -110)  
 **Sources (beat desk):** Marcel Louis-Jacques (ESPN); David Furones (Sun Sentinel); Joe Schad (Palm Beach Post); Alain Poupart (Dolphins On SI); Miami Dolphins communications
+
+**Bottom line:** Ewers is in Jacksonville; McCord arrives as Willis' backup. Named starter is still Willis. Cutdown trades are depth math, not a Model Over trigger. Pass.  
+**What matters most:** Final 53 QB count and whether Miami stays at two quarterbacks into Week 1.
 
 Miami creates the largest AFC East disagreement between the Kos Edge Model and the market. The Model projects **6.14 wins**. DraftKings, through the Aug. 26 RotoWire fact-check, asks **4.5** at standard **-110** pricing. A 1.64-win gap would usually force a serious Over discussion.
 

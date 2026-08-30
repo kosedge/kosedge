@@ -2,11 +2,14 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** The offense can sell ten wins; the defense, travel, and a 7.10 Model fair keep 9.5 in conflict territory  
-**Date:** August 26, 2026
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (+115 / -140)
 **Sources (beat desk):** Todd Archer (ESPN); Nick Eatman and Tommy Yarrish (DallasCowboys.com); Dallas Cowboys schedule desk
+
+**Bottom line:** Dallas acquired Broderick Jones for tackle depth and RT competition with Steele. One trade does not settle the OL. Pass.  
+**What matters most:** First 53 OT count and who takes RT ones after Jones clears.
 
 Dallas has enough offense to win ten games. That is not the same as saying ten should be the betting expectation.
 

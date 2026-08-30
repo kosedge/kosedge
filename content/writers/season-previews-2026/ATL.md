@@ -2,11 +2,14 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** A nine-win model meets a quarterback decision camp still has not made  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **6.5** (-115 / -105)  
 **Sources (beat desk):** Marc Raimondi (ESPN); D. Orlando Ledbetter (Atlanta Journal-Constitution); Tori McElhaney (AtlantaFalcons.com); Riley Nash (Kos Edge market desk)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Atlanta has the largest model-to-market gap in the NFC South and the least settled answer at the sport’s most important position. That combination is not an automatic Over. It is a reason to wait.
 

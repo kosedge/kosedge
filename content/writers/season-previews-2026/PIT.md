@@ -2,11 +2,14 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Pittsburgh's familiar floor meets an old quarterback, a new coach and a difficult second-half schedule  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (+100 / -120)  
 **Sources (beat desk):** Brooke Pryor (ESPN); Mark Kaboly (Pittsburgh beat); Dale Lolley (Steelers.com); Steelers.com staff; 93.7 The Fan
+
+**Bottom line:** Pittsburgh traded Broderick Jones to Dallas and Kaleb Johnson to Green Bay on the cutdown window. Tackle and RB depth thinned; Pass on inventing new starters from the exits.  
+**What matters most:** Posted 53 OT and RB counts after Monday claims settle.
 
 Pittsburgh won ten games and the AFC North in 2025. The market responded with **8.5**, the same number DraftKings posted in February, and asks bettors to lay **-120** on the Under. That is a clear statement: last year's record is not the baseline, even for a franchise that has made finishing above .500 look routine.
 

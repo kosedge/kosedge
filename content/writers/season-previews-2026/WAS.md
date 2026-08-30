@@ -2,11 +2,14 @@
 
 **By Jordan Vale** · Kos Edge Analytics · NFC East desk  
 **Angle:** Jayden Daniels supplies the ceiling, but an injury cluster in both lines makes 7.5 difficult to trust  
-**Date:** August 26, 2026
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-120 / +100)
 **Sources (beat desk):** John Keim (ESPN); Ben Standig (The Athletic / Last Man Standig); Washington Commanders schedule desk
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Washington's win total is a bet on recovery. Its camp has made recovery harder.
 

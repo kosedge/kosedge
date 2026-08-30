@@ -2,11 +2,14 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** The market prices peak structure while the Model and participation sheet price fragility  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (Over +125 / Under -145)  
 **Sources (beat desk):** Nick Wagoner (ESPN); Vic Tafur (The Athletic); Eric Branch (San Francisco Chronicle); David Lombardi (independent)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 San Francisco presents the division’s sharpest disagreement. DraftKings posts **10.5** and makes the Under expensive at **-145**. Kos Edge projects **8.53 expected wins**, nearly two wins below the total. The late-camp participation sheet supplies evidence for the lower view, but it also contains meaningful returns from Christian McCaffrey and George Kittle.
 

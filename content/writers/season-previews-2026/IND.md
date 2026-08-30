@@ -2,11 +2,14 @@
 
 **By Drew Kessler** · Kos Edge Analytics · AFC South desk  
 **Angle:** A healthy-looking Daniel Jones and a 10.29-win Model still cannot reconcile a market priced at 7.5  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (O -130 / U +110)  
 **Sources (beat desk):** Stephen Holder (ESPN); Joel A. Erickson (Indianapolis Star); Mike Chappell (FOX59)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Indianapolis presents the largest Model-to-market disagreement in the AFC South. The Kos Edge simulation makes the Colts a **10.29-win** team. DraftKings asks whether they can reach eight, and charges **-130** on the Over. A 2.79-win gap usually demands attention. Here it demands restraint.
 

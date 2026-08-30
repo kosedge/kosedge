@@ -1,6 +1,6 @@
 # 2026 NFL Season Previews — Index
 
-Subscription desk package for Kos Edge. Condensed versions feed the betting guide. Markets cited are DraftKings via RotoWire (August 2026 fact-check); books move. Full rewrite: **August 26, 2026**. Model SoT: `nfl-preseason-sim-2026-20260822T013711Z`.
+Subscription desk package for Kos Edge. Condensed versions feed the betting guide. Markets cited are DraftKings via RotoWire (August 2026 fact-check); books move. Monday refresh: **August 31, 2026** (Date + Bottom line / What matters most). Model SoT: `nfl-preseason-sim-2026-20260822T013711Z`.
 
 | Team                            | Writer        | Hook                                                                                      |
 | ------------------------------- | ------------- | ----------------------------------------------------------------------------------------- |

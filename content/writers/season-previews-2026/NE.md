@@ -2,11 +2,14 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** New England is built to contend again, but the schedule and Under tax make 10.5 a Pass  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (+125 / -150)  
 **Sources (beat desk):** Mike Reiss (ESPN); Phil Perry (NBC Sports Boston); Evan Lazar (Patriots.com); New England Patriots communications
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 New England’s question is no longer whether the rebuild worked. Drake Maye and Mike Vrabel took the Patriots to a 14–3 record and the AFC championship in 2025. The market now asks them to win 11 games against a first-place schedule, and it charges **-150** to bet that they will not.
 

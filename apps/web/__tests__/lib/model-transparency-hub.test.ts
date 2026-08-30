@@ -68,6 +68,15 @@ describe("model transparency hub", () => {
     expect(blob).not.toMatch(/schedules_scores:/);
   });
 
+  it("keeps Camp Desk doctrine on the hub, not the product page", () => {
+    const camp = MODEL_TRANSPARENCY_GLOSSARY.find((e) => e.id === "camp-desk");
+    expect(camp).toBeTruthy();
+    const blob = camp!.lines.join(" ");
+    expect(blob).toMatch(/never a tweet mirror/i);
+    expect(blob).toMatch(/thin camp info stays Pass/i);
+    expect(blob).toMatch(/Monday/i);
+  });
+
   it("does not sell guaranteed edge", () => {
     expect(() => assertModelTransparencyHubSafe()).not.toThrow();
     expect(modelTransparencyHubCopy()).not.toMatch(/guaranteed/i);

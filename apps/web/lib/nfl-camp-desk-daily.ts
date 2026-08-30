@@ -5,6 +5,29 @@
 
 export const CAMP_DESK_MAX_AGE_MS = 72 * 60 * 60 * 1000;
 
+/** Camp cadence window ends at Week 1 kickoff day (ET). */
+export const CAMP_DESK_CADENCE_END = "2026-09-09";
+
+export function campDeskEtDateKey(now: Date = new Date()): string {
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/New_York",
+  }).format(now);
+}
+
+export function isCampDeskCadenceActive(now: Date = new Date()): boolean {
+  return campDeskEtDateKey(now) < CAMP_DESK_CADENCE_END;
+}
+
+/** True when camp is open and the newest package is not today's ET date. */
+export function isCampDeskMissingToday(
+  latestDeskDate: string | null,
+  now: Date = new Date(),
+): boolean {
+  if (!isCampDeskCadenceActive(now)) return false;
+  if (!latestDeskDate) return true;
+  return latestDeskDate !== campDeskEtDateKey(now);
+}
+
 export type CampDeskSource = {
   label: string;
   href: string;
@@ -74,22 +97,29 @@ export function parseDeskDateMs(deskDate: string): number {
 export function isCampDeskXProfileHref(href: string): boolean {
   try {
     const host = new URL(href).hostname.replace(/^www\./, "").toLowerCase();
-    return host === "x.com" || host === "twitter.com" || host === "mobile.twitter.com";
+    return (
+      host === "x.com" ||
+      host === "twitter.com" ||
+      host === "mobile.twitter.com"
+    );
   } catch {
     return /(?:^|\/\/)(?:www\.)?(?:x|twitter)\.com\//i.test(href);
   }
 }
 
-export function publicCampDeskSources(sources: CampDeskSource[]): CampDeskSource[] {
+export function publicCampDeskSources(
+  sources: CampDeskSource[],
+): CampDeskSource[] {
   return sources.filter((source) => !isCampDeskXProfileHref(source.href));
 }
 
 export function newestDeskDate(cards: CampDeskCard[]): string | null {
   if (!cards.length) return null;
-  return cards.reduce((best, card) =>
-    parseDeskDateMs(card.desk_date) > parseDeskDateMs(best)
-      ? card.desk_date
-      : best,
+  return cards.reduce(
+    (best, card) =>
+      parseDeskDateMs(card.desk_date) > parseDeskDateMs(best)
+        ? card.desk_date
+        : best,
     cards[0].desk_date,
   );
 }
@@ -131,7 +161,8 @@ export function cardsFromDayFile(
   pinnedOverride?: boolean,
 ): CampDeskCard[] {
   const pinned = pinnedOverride ?? Boolean(file.pinned);
-  const packageKind: CampDeskPackageKind = file.package === "monday" ? "monday" : "daily";
+  const packageKind: CampDeskPackageKind =
+    file.package === "monday" ? "monday" : "daily";
   const wrap: CampDeskCard = {
     id: `wrap-${file.desk_date}`,
     kind: "league_wrap",
@@ -199,7 +230,8 @@ export function selectCampDeskCards(
           return latest != null && card.desk_date === latest;
         });
   return picked.sort((a, b) => {
-    const dateDelta = parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
+    const dateDelta =
+      parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
     if (dateDelta !== 0) return dateDelta;
     if (a.kind !== b.kind) return a.kind === "league_wrap" ? -1 : 1;
     return a.id.localeCompare(b.id);
@@ -228,21 +260,24 @@ export function partitionCampDeskShelf(
   const archive = cards
     .filter((card) => !liveIds.has(card.id))
     .sort((a, b) => {
-      const dateDelta = parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
+      const dateDelta =
+        parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
       if (dateDelta !== 0) return dateDelta;
       if (a.kind !== b.kind) return a.kind === "league_wrap" ? -1 : 1;
       return a.id.localeCompare(b.id);
     });
-  const deskStale =
-    latestDeskDate != null &&
-    !isWithinCampDeskWindow(latestDeskDate, opts.now, false);
+  const deskStale = isCampDeskMissingToday(latestDeskDate, opts.now);
   return { live, archive, latestDeskDate, deskStale };
 }
 
 export function collectSotFlags(cards: CampDeskCard[]): CampDeskCard[] {
-  return cards.filter((card) => card.is_material_depth && card.kind === "team_note");
+  return cards.filter(
+    (card) => card.is_material_depth && card.kind === "team_note",
+  );
 }
 
-export function collectPreviewDeltas(files: CampDeskDayFile[]): CampPreviewDelta[] {
+export function collectPreviewDeltas(
+  files: CampDeskDayFile[],
+): CampPreviewDelta[] {
   return files.flatMap((file) => file.preview_delta ?? []);
 }

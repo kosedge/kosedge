@@ -2,8 +2,11 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
+  campDeskEtDateKey,
   cardsFromDayFile,
   formatCampDeskDayLabel,
+  isCampDeskCadenceActive,
+  isCampDeskMissingToday,
   isCampDeskXProfileHref,
   isWithinCampDeskWindow,
   partitionCampDeskShelf,
@@ -41,7 +44,9 @@ const fixture: CampDeskDayFile = {
 
 describe("camp desk daily freshness", () => {
   it("labels the live day as a weekday + short month", () => {
-    expect(formatCampDeskDayLabel("2026-08-12")).toMatch(/Wednesday,\s+Aug(?:ust)?\s+12/);
+    expect(formatCampDeskDayLabel("2026-08-12")).toMatch(
+      /Wednesday,\s+Aug(?:ust)?\s+12/,
+    );
   });
 
   it("keeps notes inside 72h and buries older ones unless pinned", () => {
@@ -55,7 +60,10 @@ describe("camp desk daily freshness", () => {
     const today: CampDeskDayFile = {
       ...fixture,
       desk_date: "2026-08-12",
-      league_wrap: { ...fixture.league_wrap, title: "Camp Desk — Wednesday, Aug 12" },
+      league_wrap: {
+        ...fixture.league_wrap,
+        title: "Camp Desk — Wednesday, Aug 12",
+      },
       team_notes: [
         {
           ...fixture.team_notes[0],
@@ -77,7 +85,10 @@ describe("camp desk daily freshness", () => {
     const today: CampDeskDayFile = {
       ...fixture,
       desk_date: "2026-08-12",
-      league_wrap: { ...fixture.league_wrap, title: "Camp Desk — Wednesday, Aug 12" },
+      league_wrap: {
+        ...fixture.league_wrap,
+        title: "Camp Desk — Wednesday, Aug 12",
+      },
     };
     const windowed = selectCampDeskCards(cardsFromDayFile(today), {
       now: AUG_16,
@@ -92,6 +103,20 @@ describe("camp desk daily freshness", () => {
     });
     expect(fallback[0]?.desk_date).toBe("2026-08-12");
     expect(fallback[0]?.kind).toBe("league_wrap");
+  });
+
+  it("flags missing today ET during the camp cadence window", () => {
+    const sun = new Date("2026-08-30T16:00:00-04:00");
+    expect(campDeskEtDateKey(sun)).toBe("2026-08-30");
+    expect(isCampDeskCadenceActive(sun)).toBe(true);
+    expect(isCampDeskMissingToday("2026-08-26", sun)).toBe(true);
+    expect(isCampDeskMissingToday("2026-08-30", sun)).toBe(false);
+    expect(
+      isCampDeskMissingToday(
+        "2026-08-30",
+        new Date("2026-09-10T12:00:00-04:00"),
+      ),
+    ).toBe(false);
   });
 });
 
@@ -121,26 +146,6 @@ describe("Aug 17 live Camp Desk day", () => {
     expect(live.team_notes.some((note) => note.is_material_depth)).toBe(true);
     expect(live.preview_delta?.some((row) => row.team_id === "MIN")).toBe(true);
   });
-
-  it("Camp Desk page heroes KosEdge cards and kills wire-ESPN branding", () => {
-    const src = readFileSync(
-      path.join(__dirname, "../../app/(pro)/pro/nfl/camp/page.tsx"),
-      "utf8",
-    );
-    expect(src).toContain("KosEdge daily desk");
-    expect(src).toContain("camp-desk-wrap");
-    expect(src).toContain("PRESEASON");
-    expect(src).toContain("Citation headlines (not the desk)");
-    expect(src).toContain("Beat map · all 32");
-    expect(src).toContain("Desk updating");
-    expect(src).toContain("Archive · prior desk days");
-    expect(src).not.toContain("Trusted X · beat map");
-    expect(src).not.toContain("https://x.com/");
-    expect(src).not.toContain("No KosEdge camp notes");
-    expect(src).not.toContain("Wire · ESPN headlines");
-    expect(src).not.toContain("Latest camp headlines");
-    expect(src).not.toContain("formatArticleAttribution");
-  });
 });
 
 describe("Aug 21 live Camp Desk day", () => {
@@ -167,9 +172,11 @@ describe("Aug 21 live Camp Desk day", () => {
     expect(blob).not.toMatch(/\bPLAY\b/);
     expect(blob).not.toMatch(/\bLEAN\b/);
     expect(blob).not.toMatch(/https?:\/\/(www\.)?(x|twitter)\.com/i);
-    expect(live.team_notes.some((note) => note.team_id === "WAS" && note.is_material_depth)).toBe(
-      true,
-    );
+    expect(
+      live.team_notes.some(
+        (note) => note.team_id === "WAS" && note.is_material_depth,
+      ),
+    ).toBe(true);
     expect(live.preview_delta?.some((row) => row.team_id === "HOU")).toBe(true);
   });
 
@@ -203,5 +210,78 @@ describe("Aug 21 live Camp Desk day", () => {
       true,
     );
     expect(shelf.deskStale).toBe(false);
+  });
+});
+
+describe("Aug 30 live Camp Desk day", () => {
+  const live = JSON.parse(
+    readFileSync(
+      path.join(
+        __dirname,
+        "../../../../content/writers/camp-desk-2026/2026-08-30.json",
+      ),
+      "utf8",
+    ),
+  ) as CampDeskDayFile;
+
+  it("is Sunday cutdown daily with real news only and no lock language", () => {
+    expect(live.desk_date).toBe("2026-08-30");
+    expect(live.package).toBe("daily");
+    expect(live.source_type).toBe("kosedge-desk");
+    expect(live.league_wrap.title).toBe("Camp Desk — Sunday, Aug 30");
+    expect(live.league_wrap.storylines.length).toBeGreaterThanOrEqual(5);
+    expect(live.league_wrap.storylines.length).toBeLessThanOrEqual(8);
+    expect(live.team_notes.length).toBeGreaterThanOrEqual(4);
+    expect(live.team_notes.length).toBeLessThan(32);
+    expect(live.league_wrap.bottom_line.toLowerCase()).toContain("pass");
+    const blob = JSON.stringify(live);
+    expect(blob).not.toMatch(/\bPLAY\b/);
+    expect(blob).not.toMatch(/\bLEAN\b/);
+    expect(blob.toLowerCase()).not.toMatch(/must-?bet/);
+    expect(blob.toLowerCase()).not.toMatch(/\block of the/);
+    expect(blob).not.toMatch(/https?:\/\/(www\.)?(x|twitter)\.com/i);
+    expect(
+      live.team_notes.some(
+        (note) => note.team_id === "GB" && note.is_material_depth,
+      ),
+    ).toBe(true);
+  });
+
+  it("marks the shelf current when as-of matches desk_date", () => {
+    const now = new Date("2026-08-30T18:00:00-04:00");
+    const shelf = partitionCampDeskShelf(cardsFromDayFile(live), {
+      now,
+      inCamp: true,
+    });
+    expect(shelf.latestDeskDate).toBe("2026-08-30");
+    expect(shelf.deskStale).toBe(false);
+  });
+});
+
+describe("Camp Desk page chrome", () => {
+  const src = readFileSync(
+    path.join(__dirname, "../../app/(pro)/pro/nfl/camp/page.tsx"),
+    "utf8",
+  );
+
+  it("heroes as-of date without writer doctrine or diagnostics", () => {
+    expect(src).toContain("KosEdge daily desk");
+    expect(src).toContain("Camp notes · as of");
+    expect(src).toContain("camp-desk-wrap");
+    expect(src).toContain('hrefSuffix="#camp-desk"');
+    expect(src).toContain("Archive · prior desk days");
+    expect(src).toContain("Beat map · all 32");
+    expect(src).toContain("scheme-dark");
+    expect(src).toContain("bg-[#0B0E14]");
+    expect(src).toContain("Last package");
+    expect(src).toContain("daily file missing");
+    expect(src).not.toContain("never a tweet mirror");
+    expect(src).not.toContain("Quiet-club pulse queue");
+    expect(src).not.toContain("queue the existing depth job");
+    expect(src).not.toContain("KosEdge cards ·");
+    expect(src).not.toContain("citation headlines (72h)");
+    expect(src).not.toContain("NflTruthStateBadge");
+    expect(src).not.toContain("https://x.com/");
+    expect(src).not.toContain("Trusted X · beat map");
   });
 });

@@ -127,6 +127,14 @@ jobs:
       - name: Enforce web Python boundary policy
         run: pnpm check:web-python-boundary
 
+      - name: Camp Desk cadence gate
+        # Cheap date + file existence check — always on so a missing daily
+        # package cannot silently rot during the camp window.
+        run: |
+          set -euo pipefail
+          python3 scripts/writers/check-camp-cadence.py --self-test
+          python3 scripts/writers/check-camp-cadence.py
+
       - name: Run tests (web changes only)
         if: steps.paths.outputs.web == '1'
         run: pnpm test

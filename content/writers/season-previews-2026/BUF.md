@@ -2,11 +2,14 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Allen keeps the ceiling high, but 10.5 leaves no room to ignore a bruised supporting cast  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (-120 / +100)  
 **Sources (beat desk):** Alaina Getzenberg (ESPN); Joe Buscaglia (The Athletic); Matt Parrino (Syracuse.com); Sal Maiorana (Democrat & Chronicle); Buffalo Bills communications
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Buffalo can be the best team in the AFC East and still fail to clear this number. That is the useful distinction at **10.5**, where the market asks for 11 wins and charges **-120** to take the Over. Josh Allen remains the division’s strongest weekly advantage, but the Kos Edge Model lands at **10.26 expected wins**. A quarter-win gap to the Under is not an edge. It is a reminder that admiration for the quarterback and value on the season total are separate questions.
 

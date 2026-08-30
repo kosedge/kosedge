@@ -2,11 +2,14 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** The defending division champion carries a first-place schedule and a regression price  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (+110 / -130)  
 **Sources (beat desk):** Joseph Person (The Athletic); Sheena Quick (FOX Sports/local); Darin Gantt (Panthers.com); Riley Nash (Kos Edge market desk)
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Carolina’s banner says division champion. Its underlying profile says the market should keep asking questions.
 

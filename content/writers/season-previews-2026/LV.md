@@ -2,11 +2,14 @@
 
 **By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
 **Angle:** The model reaches six wins, but the price and Ashton Jeanty’s ankle remove the betting edge  
-**Date:** August 26, 2026  
+**Date:** August 31, 2026  
 **Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
 **Market (DK / RotoWire, Aug 2026 fact-check):** Win total **5.5** (-146 / +120)  
 **Sources (beat desk):** Ryan McFadden (ESPN); Tashan Reed (The Athletic); Vincent Bonsignore (Las Vegas Review-Journal); Las Vegas Raiders communications
+
+**Bottom line:** Cutdown Sunday set the first 53-man shelf. No dual-sourced Week 1 starter change beyond the dated Camp Desk notes. Pass on inventing a lean from quiet-club cuts.  
+**What matters most:** Confirm the posted 53 and any practice-squad claims before rewriting depth; leave thin cutdown noise as Pass.
 
 Las Vegas does not need to become a contender to cash Over 5.5. A six-win season would do it, and the Kos Edge model lands just above that line at **6.07**.
 
