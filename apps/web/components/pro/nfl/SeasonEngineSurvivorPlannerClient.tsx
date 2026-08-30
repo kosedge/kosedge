@@ -16,6 +16,7 @@ import {
   normalizeNflTeamCode,
   normalizeSurvivorPlanPicks,
 } from "@/lib/nfl-season-engine-format";
+import { sortSurvivorLeansByDisplayWp } from "@/lib/nfl-survivor-kei";
 
 type PlanPick = {
   team: string;
@@ -188,15 +189,7 @@ function MatchupLine({ pick }: { pick: PlanPick }) {
   );
 }
 
-export default function SeasonEngineSurvivorPlannerClient({
-  engineVersion,
-  depthSource,
-  depthAsOf,
-}: {
-  engineVersion?: string;
-  depthSource?: string;
-  depthAsOf?: string;
-}) {
+export default function SeasonEngineSurvivorPlannerClient() {
   const [picks, setPicks] = useState<Record<string, string>>({});
   const [hydrated, setHydrated] = useState(false);
   const [pending, startTransition] = useTransition();
@@ -347,7 +340,6 @@ export default function SeasonEngineSurvivorPlannerClient({
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- evaluate intentionally stable via picks
   }, [picks, hydrated]);
 
   async function loadSuggestedPaths() {
@@ -550,8 +542,7 @@ export default function SeasonEngineSurvivorPlannerClient({
             <p>
               {formatDepthBadge(result?.n_sims ?? N_SIMS, {
                 surface: "survivor paths",
-              })}{" "}
-              · {engineVersion || result?.engine_version || "season engine"}
+              })}
             </p>
             <button
               type="button"
@@ -600,12 +591,6 @@ export default function SeasonEngineSurvivorPlannerClient({
             >
               Reset plan
             </button>
-            {(depthSource || depthAsOf) && (
-              <p className="text-[11px] text-kos-text/45 break-words">
-                Depth {depthSource || "—"}
-                {depthAsOf ? ` · ${depthAsOf}` : ""}
-              </p>
-            )}
           </div>
 
           <div>
@@ -781,19 +766,20 @@ export default function SeasonEngineSurvivorPlannerClient({
 
               {!locked && ranked.length ? (
                 <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
-                  {ranked.slice(0, 6).map((pick, idx) => {
-                    const burned = used.has(pick.team);
+                  {sortSurvivorLeansByDisplayWp(ranked, {
+                    burned: used,
+                    limit: 6,
+                  }).map((pick, idx) => {
                     return (
                       <button
                         key={`${week}-${pick.team}`}
                         type="button"
                         onClick={() => lockWeek(week, pick.team)}
-                        disabled={burned}
                         className={`min-h-11 rounded-lg border px-3 py-2.5 text-left transition ${
-                          idx === 0 && !burned
+                          idx === 0
                             ? "border-kos-gold/45 bg-kos-gold/15"
                             : "border-white/10 bg-white/[0.04] hover:border-white/25"
-                        } disabled:cursor-not-allowed disabled:border-white/10 disabled:bg-white/[0.02]`}
+                        }`}
                       >
                         <MatchupLine pick={pick} />
                         {pick.schedule_difficulty ? (
@@ -804,16 +790,8 @@ export default function SeasonEngineSurvivorPlannerClient({
                               : ""}
                           </span>
                         ) : null}
-                        <span
-                          className={`mt-1 block text-[11px] ${
-                            burned ? "text-kos-text/45" : "text-kos-text/45"
-                          }`}
-                        >
-                          {burned
-                            ? "Already used"
-                            : idx === 0
-                              ? "Top lean · tap to lock"
-                              : "Tap to lock"}
+                        <span className="mt-1 block text-[11px] text-kos-text/45">
+                          {idx === 0 ? "Top lean · tap to lock" : "Tap to lock"}
                         </span>
                       </button>
                     );

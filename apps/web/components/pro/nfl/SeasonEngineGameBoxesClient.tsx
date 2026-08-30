@@ -99,9 +99,6 @@ const labelClass =
 export default function SeasonEngineGameBoxesClient({
   matchups,
   defaultWeek = 1,
-  engineVersion,
-  depthSource,
-  depthAsOf,
 }: {
   matchups: SeasonEngineMatchupOption[];
   defaultWeek?: number;
@@ -196,8 +193,7 @@ export default function SeasonEngineGameBoxesClient({
 
   const active = injured ?? baseline;
   const modeNote = active?.mode === "demo" || baseline?.mode === "demo";
-  const byeWarning =
-    active?.notes?.bye_warning || baseline?.notes?.bye_warning;
+  const byeWarning = active?.notes?.bye_warning || baseline?.notes?.bye_warning;
   const synthetic =
     (active?.notes?.schedule_match || baseline?.notes?.schedule_match) ===
     "synthetic_matchup";
@@ -208,8 +204,8 @@ export default function SeasonEngineGameBoxesClient({
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
           Pick a 2026 matchup (or custom teams), then project skill-player boxes
           from the season engine. Optional star-out applies an{" "}
-          <span className="text-kos-text/85">out</span> injury path for that week
-          only and shows side-by-side vs baseline.
+          <span className="text-kos-text/85">out</span> injury path for that
+          week only and shows side-by-side vs baseline.
         </p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <div className="sm:col-span-2 lg:col-span-2">
@@ -223,7 +219,9 @@ export default function SeasonEngineGameBoxesClient({
               onChange={(e) => applyMatchup(e.target.value)}
             >
               {matchups.length === 0 ? (
-                <option value="manual">No slate loaded — use teams below</option>
+                <option value="manual">
+                  No slate loaded — use teams below
+                </option>
               ) : null}
               {matchups.map((m) => (
                 <option key={m.id} value={m.id}>
@@ -331,19 +329,10 @@ export default function SeasonEngineGameBoxesClient({
             {pending ? "Simulating…" : "Project box scores"}
           </button>
           <p className="text-xs text-kos-text/55">
-            {engineVersion
-              ? `Engine ${engineVersion}`
-              : "Season engine via model-service"}{" "}
-            · {formatDepthBadge(NFL_DEFAULT_N_GAME_BOX)} · yards median +{" "}
-            {TYPICAL_RANGE_LABEL.toLowerCase()} · TDs as P(TD) + expected rate
+            Yards median + {TYPICAL_RANGE_LABEL.toLowerCase()} · TDs as P(TD) +
+            expected rate
           </p>
         </div>
-        {(depthSource || depthAsOf) && (
-          <p className="mt-3 text-[11px] text-kos-text/50">
-            Depth: {depthSource || "—"}
-            {depthAsOf ? ` · as of ${depthAsOf}` : ""}
-          </p>
-        )}
       </section>
 
       {error ? (
@@ -351,8 +340,8 @@ export default function SeasonEngineGameBoxesClient({
           <p className="font-semibold text-red-100">Could not project boxes</p>
           <p className="mt-1 text-red-200/90">{error}</p>
           <p className="mt-2 text-xs text-red-200/70">
-            Check teams/week, then retry. If this persists, the model-service may
-            be unreachable.
+            Check teams/week, then retry. If this persists, the model-service
+            may be unreachable.
           </p>
         </div>
       ) : null}
@@ -380,30 +369,27 @@ export default function SeasonEngineGameBoxesClient({
                 {active.week != null ? ` · Week ${active.week}` : ""}
               </h2>
               <p className="mt-1 text-xs text-kos-text/60">
-                {active.engine_version || engineVersion || "season engine"}
-                {injured ? " · injury scenario vs baseline below" : ""}
+                {injured
+                  ? "Injury scenario vs baseline below"
+                  : "Projected boxes"}
               </p>
             </div>
             {active.game_script_summary ? (
               <div className="text-right">
                 <p className="text-lg font-semibold tabular-nums text-kos-gold">
-                  {formatPct(active.game_script_summary.home_win_prob_mean ?? 0, {
-                    n: active.n_replicates ?? NFL_DEFAULT_N_GAME_BOX,
-                    digits: 1,
-                  })}
+                  {formatPct(
+                    active.game_script_summary.home_win_prob_mean ?? 0,
+                    {
+                      n: active.n_replicates ?? NFL_DEFAULT_N_GAME_BOX,
+                      digits: 1,
+                    },
+                  )}
                 </p>
                 <p className="text-[11px] uppercase tracking-wide text-kos-text/45">
                   Home win · total{" "}
-                  {(active.game_script_summary.expected_total_mean ?? 0).toFixed(
-                    1,
-                  )}
-                </p>
-                <p className="mt-1 text-[11px] text-kos-text/45">
-                  {formatDepthBadge(
-                    active.n_replicates ??
-                      active.sim_depth?.n ??
-                      NFL_DEFAULT_N_GAME_BOX,
-                  )}
+                  {(
+                    active.game_script_summary.expected_total_mean ?? 0
+                  ).toFixed(1)}
                 </p>
               </div>
             ) : null}
@@ -414,21 +400,7 @@ export default function SeasonEngineGameBoxesClient({
               Explicit demo schedule (demo=true) — round-robin placeholder, not
               the locked 2026 NFL schedule.
             </p>
-          ) : (
-            <p className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/70">
-              Real 2026 schedule
-              {active.schedule_source ? ` · ${active.schedule_source}` : ""}
-              {active.schedule_game_count
-                ? ` · ${active.schedule_game_count} REG games`
-                : ""}
-              {active.roster_source || depthSource
-                ? ` · depth ${active.roster_source || depthSource}`
-                : ""}
-              {active.roster_as_of || depthAsOf
-                ? ` (as of ${active.roster_as_of || depthAsOf})`
-                : ""}
-            </p>
-          )}
+          ) : null}
 
           {byeWarning || synthetic ? (
             <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-100/90">
@@ -530,7 +502,9 @@ function KickingSummary({
   return (
     <div className="rounded-2xl border border-white/10 bg-black/25 px-4 py-3">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
-        <h3 className="text-sm font-semibold text-kos-text">Kicking / scoring</h3>
+        <h3 className="text-sm font-semibold text-kos-text">
+          Kicking / scoring
+        </h3>
         <p className="text-[11px] text-kos-text/45">
           FG + XP ·{" "}
           {kicking.model_status === "approximate"
@@ -571,7 +545,9 @@ function KickingSummary({
                   </dd>
                 </div>
                 <div>
-                  <dt className="text-[10px] uppercase text-kos-text/45">Kick pts</dt>
+                  <dt className="text-[10px] uppercase text-kos-text/45">
+                    Kick pts
+                  </dt>
                   <dd className="text-kos-text">
                     {formatStatNumber(line.points_from_kicking ?? 0)}
                   </dd>
@@ -649,9 +625,7 @@ function TeamBoxTable({
             className="min-h-11 shrink-0 rounded-lg px-2 text-[11px] font-semibold text-kos-gold/90 underline-offset-2 hover:underline sm:min-h-0 sm:py-1"
             title={RANGE_TOOLTIP}
           >
-            {showPercentiles
-              ? HIDE_PERCENTILES_LABEL
-              : SHOW_PERCENTILES_LABEL}
+            {showPercentiles ? HIDE_PERCENTILES_LABEL : SHOW_PERCENTILES_LABEL}
           </button>
         </div>
       </div>
@@ -727,7 +701,8 @@ function TeamBoxTable({
                                   </div>
                                 );
                               }
-                              const value = dist?.p50 ?? p.point_estimate?.[stat];
+                              const value =
+                                dist?.p50 ?? p.point_estimate?.[stat];
                               return (
                                 <div key={stat}>
                                   {formatStatNumber(value ?? 0)}

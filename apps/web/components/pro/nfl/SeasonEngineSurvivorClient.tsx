@@ -4,7 +4,6 @@ import { useMemo, useState, useTransition } from "react";
 import {
   NFL_INTERACTIVE_N_SURVIVOR_PATHS,
   NFL_SEASON_ENGINE_TEAMS,
-  formatDepthBadge,
   formatPathDifficultyGrade,
   formatPct,
   formatScheduleDifficulty,
@@ -63,9 +62,6 @@ function displayWp(pick: SurvivorPick): number {
 
 export default function SeasonEngineSurvivorClient({
   defaultWeek = 1,
-  engineVersion,
-  depthSource,
-  depthAsOf,
 }: {
   defaultWeek?: number;
   engineVersion?: string;
@@ -216,19 +212,7 @@ export default function SeasonEngineSurvivorClient({
           >
             Clear used
           </button>
-          <p className="text-xs text-kos-text/55">
-            {engineVersion
-              ? `Engine ${engineVersion}`
-              : "Season engine via model-service"}{" "}
-            · 200 path sims
-          </p>
         </div>
-        {(depthSource || depthAsOf) && (
-          <p className="mt-3 text-[11px] text-kos-text/50">
-            Depth: {depthSource || "—"}
-            {depthAsOf ? ` · as of ${depthAsOf}` : ""}
-          </p>
-        )}
       </section>
 
       {error ? (
@@ -263,14 +247,6 @@ export default function SeasonEngineSurvivorClient({
               <h2 className="text-lg font-semibold text-kos-text">
                 Week {result.week} ranked picks
               </h2>
-              <p className="mt-1 text-xs text-kos-text/60">
-                {result.engine_version || engineVersion || "season engine"}
-                {" · "}
-                {formatDepthBadge(
-                  result.n_sims ?? NFL_INTERACTIVE_N_SURVIVOR_PATHS,
-                  { surface: "survivor paths" },
-                )}
-              </p>
             </div>
             {ranked[0] ? (
               <div className="text-right">
@@ -296,22 +272,7 @@ export default function SeasonEngineSurvivorClient({
               Explicit demo schedule (demo=true) — round-robin placeholder with
               no byes. Not the locked 2026 NFL schedule.
             </p>
-          ) : (
-            <p className="rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-xs text-kos-text/70">
-              Real 2026 schedule
-              {result.schedule_source ? ` · ${result.schedule_source}` : ""}
-              {result.schedule_game_count
-                ? ` · ${result.schedule_game_count} REG games`
-                : ""}
-              {result.roster_source || depthSource
-                ? ` · depth ${result.roster_source || depthSource}`
-                : ""}
-              {result.roster_as_of || depthAsOf
-                ? ` (as of ${result.roster_as_of || depthAsOf})`
-                : ""}
-              . Bye weeks respected.
-            </p>
-          )}
+          ) : null}
 
           <div className="overflow-x-auto rounded-2xl border border-white/10 bg-black/25">
             <table className="min-w-full text-left text-sm">

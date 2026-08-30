@@ -9,30 +9,25 @@ function readSrc(rel: string) {
 }
 
 describe("NflDeskStatusBar chrome", () => {
-  it("SportProShell mounts one slim bar, not two banners", () => {
+  it("is not mounted on SportProShell product layouts", () => {
     const src = readSrc("components/pro/SportProShell.tsx");
-    expect(src).toMatch(/import \{ NflDeskStatusBar \}/);
-    expect(src.match(/<NflDeskStatusBar\s*\/>/g)?.length).toBe(1);
+    expect(src).not.toContain("NflDeskStatusBar");
+    expect(src).not.toContain("nfl-desk-status-bar");
     expect(src).not.toContain("NflProductionReadinessBanner");
     expect(src).not.toContain("NflDataFreshnessBanner");
   });
 
-  it("edge-board NFL mounts the same single bar outside SportProShell", () => {
+  it("is not mounted on edge-board", () => {
     const src = readSrc("app/edge-board/[sport]/page.tsx");
-    expect(src.match(/<NflDeskStatusBar\s*\/>/g)?.length).toBe(1);
+    expect(src).not.toContain("NflDeskStatusBar");
+    expect(src).not.toContain("nfl-desk-status-bar");
     expect(src).not.toContain("NflDataFreshnessBanner");
   });
 
-  it("status bar copy stays token-only (no probe essays in the closed row)", () => {
+  it("component still exists for ops probes but is not a customer mount", () => {
     const src = readSrc("components/pro/NflDeskStatusBar.tsx");
-    expect(src).toContain('tokens.push("PRESEASON")');
-    expect(src).toContain('tokens.push("data stale")');
-    expect(src).toContain('tokens.push("PLAY tags research-only")');
+    expect(src).toContain("fetchNflProductionReadiness");
+    expect(src).toContain("fetchNflDataFreshness");
     expect(src).toContain("#desk-status");
-    expect(src).toContain("MODEL_TRANSPARENCY_HREF");
-    expect(src).not.toContain("production readiness no-go");
-    expect(src).not.toContain("Data freshness degraded");
-    expect(src).not.toContain("Boards may use last owned");
-    expect(src).not.toContain("sample_size_ok");
   });
 });

@@ -15,29 +15,20 @@ const CUSTOMER_BOARDS = [
   "app/(pro)/pro/[sport]/standings/page.tsx",
   "app/(pro)/pro/[sport]/stats/page.tsx",
   "components/articles/TeamPreviewArticle.tsx",
-] as const;
-
-const ENGINE_DESKS = [
   "app/(pro)/pro/nfl/model/page.tsx",
   "app/(pro)/pro/nfl/game-boxes/page.tsx",
   "app/(pro)/pro/nfl/survivor/page.tsx",
 ] as const;
 
 describe("NflLineageBadge mounts", () => {
-  it("stays off customer boards (title + numbers only)", () => {
+  it("stays off customer boards and engine desks (title + numbers only)", () => {
     for (const rel of CUSTOMER_BOARDS) {
       const src = readSrc(rel);
       expect(src, rel).not.toContain("NflLineageBadge");
       expect(src, rel).not.toMatch(/Method \$\{/);
       expect(src, rel).not.toContain("100,000 paths");
-    }
-  });
-
-  it("remains on engine desks as a single chip", () => {
-    for (const rel of ENGINE_DESKS) {
-      const src = readSrc(rel);
-      expect(src, rel).toContain("<NflLineageBadge");
-      expect(src.match(/<NflLineageBadge/g)?.length, rel).toBe(1);
+      expect(src, rel).not.toContain("nflLaunchResearchDeskNotice");
+      expect(src, rel).not.toContain("seasonEnginePackagedNotice");
     }
   });
 
