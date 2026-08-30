@@ -57,7 +57,7 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       lines: [
         "PRESEASON / production no-go: PLAY stake tags and survivor locks stay research-only until readiness is go.",
         "data stale: boards may use the last owned snapshot; do not treat PLAY tags as live stakes until freshness recovers.",
-        "The slim desk status bar only shows short tokens. Full blocker lists and research policy live here — not in the header.",
+        "Freshness and readiness probes still gate PLAY tags. Policy lives here — not on product boards.",
         "CLV Tracker and Performance remain the live / held-out accountability surfaces.",
       ],
     },
@@ -98,7 +98,7 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
         "Season-path planner: remaining teams, byes, and suggested paths.",
         "This week % on the desk is KEI SU win probability (same as Pick’em) when a fair line joins.",
         "Path / save / pick-now still use the season engine. Interactive runs are low-depth estimates.",
-        "Path % is research, not a promise and not a weekly betting board.",
+        "Packaged depth as-of is not a live injury feed. Path % is research, not a promise.",
       ],
     },
     {
@@ -128,6 +128,7 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
       lines: [
         "One production spine: player-game means for boxes; season totals are the sum of weeks.",
         "True PR, Game Boxes, and Survivor share that engine — not three stories.",
+        "Research lock and path-count lineage live here — not in the page header.",
         "Preseason boards are labeled as such.",
       ],
     },

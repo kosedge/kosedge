@@ -1,16 +1,19 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SeasonEngineSurvivorClient from "@/components/pro/nfl/SeasonEngineSurvivorClient";
 import SeasonEngineSurvivorPlannerClient from "@/components/pro/nfl/SeasonEngineSurvivorPlannerClient";
 
 type Mode = "planner" | "helper";
 
+function initialMode(defaultMode: Mode): Mode {
+  if (typeof window === "undefined") return defaultMode;
+  const q = new URLSearchParams(window.location.search).get("mode");
+  return q === "helper" || q === "planner" ? q : defaultMode;
+}
+
 export default function SeasonEngineSurvivorShell({
   defaultWeek = 1,
-  engineVersion,
-  depthSource,
-  depthAsOf,
   defaultMode = "planner",
 }: {
   defaultWeek?: number;
@@ -19,13 +22,7 @@ export default function SeasonEngineSurvivorShell({
   depthAsOf?: string;
   defaultMode?: Mode;
 }) {
-  const [mode, setMode] = useState<Mode>(defaultMode);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const q = new URLSearchParams(window.location.search).get("mode");
-    if (q === "helper" || q === "planner") setMode(q);
-  }, []);
+  const [mode, setMode] = useState<Mode>(() => initialMode(defaultMode));
 
   function selectMode(next: Mode) {
     setMode(next);
@@ -77,18 +74,9 @@ export default function SeasonEngineSurvivorShell({
       </div>
 
       {mode === "planner" ? (
-        <SeasonEngineSurvivorPlannerClient
-          engineVersion={engineVersion}
-          depthSource={depthSource}
-          depthAsOf={depthAsOf}
-        />
+        <SeasonEngineSurvivorPlannerClient />
       ) : (
-        <SeasonEngineSurvivorClient
-          defaultWeek={defaultWeek}
-          engineVersion={engineVersion}
-          depthSource={depthSource}
-          depthAsOf={depthAsOf}
-        />
+        <SeasonEngineSurvivorClient defaultWeek={defaultWeek} />
       )}
     </div>
   );

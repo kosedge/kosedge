@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import SportProHeader from "@/components/pro/SportProHeader";
-import { NflDeskStatusBar } from "@/components/pro/NflDeskStatusBar";
 import {
   getSportEdgeBoardHref,
   getSportOverviewHref,
@@ -11,26 +10,25 @@ import { sportDisplayLabel } from "@/lib/sports";
 
 /**
  * Shared chrome for all Pro / Edge Board / Odds sport surfaces:
- * logo header, sports nav, sport-specific subnav, optional freshness + page chrome.
+ * logo header, sports nav, sport-specific subnav, optional page chrome.
+ * Desk status / freshness probes stay off customer layouts — hub owns that.
  */
 export default function SportProShell({
   sport,
   children,
-  showFreshness,
   pageTitle,
   pageSubtitle,
   actions,
 }: {
   sport: string;
   children: ReactNode;
-  /** Defaults to true for NFL only (existing freshness pipeline). */
+  /** @deprecated Unused — desk status bar no longer mounts on product layouts. */
   showFreshness?: boolean;
   pageTitle?: string;
   pageSubtitle?: string;
   actions?: ReactNode;
 }) {
   const sportKey = (sport || "nfl").toLowerCase();
-  const freshness = showFreshness ?? sportKey === "nfl";
   const overviewHref = getSportOverviewHref(sportKey);
   const edgeHref = getSportEdgeBoardHref(sportKey);
   const short = sportDisplayShort(sportKey);
@@ -39,7 +37,6 @@ export default function SportProShell({
   return (
     <div className="min-h-screen bg-kos-black text-kos-text">
       <SportProHeader activeSport={sportKey} />
-      {freshness ? <NflDeskStatusBar /> : null}
 
       {(pageTitle || actions) && (
         <div className="border-b border-white/5 bg-kos-surface/20">

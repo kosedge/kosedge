@@ -233,3 +233,43 @@ export function overlaySurvivorHelperPicksWithKei<
 >(picks: T[], week: number, lines: NflFairLineRow[]): T[] {
   return picks.map((p) => overlaySurvivorPickWithKei(p, week, lines));
 }
+
+/** Display weekly wp for lean chips (KEI overlay when present). */
+export function survivorDisplayWp(pick: {
+  this_week_wp?: number;
+  win_rate: number;
+}): number {
+  if (
+    typeof pick.this_week_wp === "number" &&
+    Number.isFinite(pick.this_week_wp)
+  ) {
+    return pick.this_week_wp;
+  }
+  return pick.win_rate;
+}
+
+/**
+ * Top lean boxes for an open week: remaining (not burned) picks sorted by
+ * display wp descending. Highest % first.
+ */
+export function sortSurvivorLeansByDisplayWp<
+  T extends { team: string; this_week_wp?: number; win_rate: number },
+>(
+  picks: T[],
+  opts?: { burned?: ReadonlySet<string> | Iterable<string>; limit?: number },
+): T[] {
+  const burned = new Set(
+    opts?.burned
+      ? [...opts.burned].map((t) => String(t).trim().toUpperCase())
+      : [],
+  );
+  const limit = opts?.limit ?? 6;
+  return [...picks]
+    .filter((p) => !burned.has(String(p.team).trim().toUpperCase()))
+    .sort((a, b) => {
+      const d = survivorDisplayWp(b) - survivorDisplayWp(a);
+      if (d !== 0) return d;
+      return a.team.localeCompare(b.team);
+    })
+    .slice(0, limit);
+}

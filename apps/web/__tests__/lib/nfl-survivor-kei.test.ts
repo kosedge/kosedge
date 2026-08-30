@@ -5,6 +5,7 @@ import {
   keiWinProbForTeam,
   overlaySurvivorPickWithKei,
   overlaySurvivorPlanWithKei,
+  sortSurvivorLeansByDisplayWp,
 } from "@/lib/nfl-survivor-kei";
 
 function line(partial: Partial<NflFairLineRow>): NflFairLineRow {
@@ -293,5 +294,23 @@ describe("overlaySurvivorPlanWithKei", () => {
         { "12": "KC" },
       ),
     ).toBeNull();
+  });
+});
+
+describe("sortSurvivorLeansByDisplayWp", () => {
+  it("orders remaining picks by display wp descending", () => {
+    const leans = sortSurvivorLeansByDisplayWp(
+      [
+        { team: "MID", win_rate: 0.61, this_week_wp: 0.61 },
+        { team: "HIGH", win_rate: 0.5, this_week_wp: 0.78 },
+        { team: "LOW", win_rate: 0.54, this_week_wp: 0.54 },
+        { team: "BURN", win_rate: 0.9, this_week_wp: 0.9 },
+      ],
+      { burned: new Set(["BURN"]), limit: 6 },
+    );
+    expect(leans.map((p) => p.team)).toEqual(["HIGH", "MID", "LOW"]);
+    expect(
+      leans.map((p) => Math.round((p.this_week_wp ?? p.win_rate) * 100)),
+    ).toEqual([78, 61, 54]);
   });
 });

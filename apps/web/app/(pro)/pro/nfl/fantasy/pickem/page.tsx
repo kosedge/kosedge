@@ -183,17 +183,6 @@ export default async function NflFantasyPickemPage({
         </div>
       ) : null}
 
-      {researchOnlyTags ? (
-        <div className="mt-6">
-          <HonestStatusBanner title="PLAY tags research-only" tone="sky">
-            <p>
-              Production readiness is no-go — PLAY / LEAN here are sort labels
-              for the research card, not live stakes.
-            </p>
-          </HonestStatusBanner>
-        </div>
-      ) : null}
-
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <nav className="flex flex-wrap gap-2" aria-label="Pick’em card">
