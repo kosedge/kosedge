@@ -14,30 +14,30 @@ Applied to `off_eff` / `def_eff` / `success_*` / `explosiveness`. Raw SP+ (`sp_o
 
 ## Where it lives
 
-| Piece | Location |
-| --- | --- |
-| Constant | `priors.py` → `EFF_CARRY_SHRINK = 0.85` |
+| Piece        | Location                                                                                                                           |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------- |
+| Constant     | `priors.py` → `EFF_CARRY_SHRINK = 0.85`                                                                                            |
 | Compose read | `efficiency.build_efficiency_profile` (pack stamped `carry_shrink=0.85` → no double-shrink; legacy raw packs still shrink at load) |
-| Packager | `scripts/cfb/package_efficiency_2025_carry.py` (`CARRY_SHRINK=0.85`) |
-| Snapshot | `cfb_efficiency_snapshot_2025_carry_2026.json` (`as_of=2026-08-31`, `carry_shrink=0.85`) |
-| Power | live `build_power_sot` → rematerialized `cfb_power_sot_2026.json` (+ web mirror) |
-| KEI | `build_cfb_kei_futures_2026.py --kei-only` (futures **not** rewritten) |
+| Packager     | `scripts/cfb/package_efficiency_2025_carry.py` (`CARRY_SHRINK=0.85`)                                                               |
+| Snapshot     | `cfb_efficiency_snapshot_2025_carry_2026.json` (`as_of=2026-08-31`, `carry_shrink=0.85`)                                           |
+| Power        | live `build_power_sot` → rematerialized `cfb_power_sot_2026.json` (+ web mirror)                                                   |
+| KEI          | `build_cfb_kei_futures_2026.py --kei-only` (futures **not** rewritten)                                                             |
 
 ---
 
 ## Live compose vs paper-sim 0.85
 
-| Gate | Paper-sim | Live | Result |
-| --- | ---: | ---: | --- |
-| OSU #1 | PASS | **OSU #1** | PASS |
-| BALL@OSU WP | ~0.979 | **0.9791** (KEI −40.51 / WP 0.98) | PASS |
-| STAN off_eff | 31.45 | **31.45** (pre 28.18) | PASS |
-| UNC off_eff | 28.68 | **28.68** (pre 24.92) | PASS |
-| TCU off_eff | 62.53 | **62.53** (pre 64.74) | PASS |
-| TCU raw margin | 15.11 | **15.14** (< 16.48) | PASS |
-| HAW off_eff | ~50.18 | **50.18** | PASS |
-| HAW@STAN KEI | ~+5.90 | **+5.93** (flip not required) | reported |
-| Membership | near-ties only | **ND→TEX**; ORE↔MISS order | PASS |
+| Gate           |      Paper-sim |                              Live | Result   |
+| -------------- | -------------: | --------------------------------: | -------- |
+| OSU #1         |           PASS |                        **OSU #1** | PASS     |
+| BALL@OSU WP    |         ~0.979 | **0.9791** (KEI −40.51 / WP 0.98) | PASS     |
+| STAN off_eff   |          31.45 |             **31.45** (pre 28.18) | PASS     |
+| UNC off_eff    |          28.68 |             **28.68** (pre 24.92) | PASS     |
+| TCU off_eff    |          62.53 |             **62.53** (pre 64.74) | PASS     |
+| TCU raw margin |          15.11 |               **15.14** (< 16.48) | PASS     |
+| HAW off_eff    |         ~50.18 |                         **50.18** | PASS     |
+| HAW@STAN KEI   |         ~+5.90 |     **+5.93** (flip not required) | reported |
+| Membership     | near-ties only |        **ND→TEX**; ORE↔MISS order | PASS     |
 
 Live top-7: **OSU, MISS, ORE, MIA, TAMU, IU, TEX** — enter `{TEX}` / leave `{ND}` only.
 
@@ -45,11 +45,11 @@ Live top-7: **OSU, MISS, ORE, MIA, TAMU, IU, TEX** — enter `{TEX}` / leave `{N
 
 ## Other canaries
 
-| Gate | Result |
-| --- | --- |
-| Utah natty% | **6.2%** (futures not rewritten) PASS |
-| USF vs OSU E[wins] | futures not cloned PASS |
-| No team if / RESPONSE / WEIGHT_OFF_EFF / STRENGTH_NOISE / roster blend / PBP SoT / 1C–1E revert | PASS |
+| Gate                                                                                            | Result                                |
+| ----------------------------------------------------------------------------------------------- | ------------------------------------- |
+| Utah natty%                                                                                     | **6.2%** (futures not rewritten) PASS |
+| USF vs OSU E[wins]                                                                              | futures not cloned PASS               |
+| No team if / RESPONSE / WEIGHT_OFF_EFF / STRENGTH_NOISE / roster blend / PBP SoT / 1C–1E revert | PASS                                  |
 
 ---
 
