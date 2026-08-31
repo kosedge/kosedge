@@ -11,19 +11,19 @@ Book-audit fact reused (not rediscovered): 35 `absurd_vs_kei` · **27** sign-mis
 
 ## Function path + signature
 
-| Layer | Path | Signature |
-|---|---|---|
-| **Web SoT** | `apps/web/lib/cfb-trusted-market.ts` | `trustCfbMarket({ kei?, best?, open?, bookCount? }) → { trusted, market, reason }` |
-| Apply | same file `applyCfbTrustedMarketToRows` | Spread rows only; clears `best` when untrusted |
-| Dump twin | `scripts/cfb/cfb_dump_edgeboard.py` `trust_cfb_market` | Verbatim port; same raw compare |
-| Model-service twin | `services/model-service/src/services/book_ledger/cfb_trusted_market.py` | `trust_cfb_market(*, kei, best, open_line, book_count)` |
+| Layer              | Path                                                                    | Signature                                                                          |
+| ------------------ | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Web SoT**        | `apps/web/lib/cfb-trusted-market.ts`                                    | `trustCfbMarket({ kei?, best?, open?, bookCount? }) → { trusted, market, reason }` |
+| Apply              | same file `applyCfbTrustedMarketToRows`                                 | Spread rows only; clears `best` when untrusted                                     |
+| Dump twin          | `scripts/cfb/cfb_dump_edgeboard.py` `trust_cfb_market`                  | Verbatim port; same raw compare                                                    |
+| Model-service twin | `services/model-service/src/services/book_ledger/cfb_trusted_market.py` | `trust_cfb_market(*, kei, best, open_line, book_count)`                            |
 
 ---
 
 ## What KEI sign is (home)
 
 - Bundled pack field: `kei.kei_spread_home` (BALL@OSU = **−42.2**).
-- Board merge: `mergeKeiIntoEdgeBoardRows` sets `row.kei = formatSpread(proj.projSpreadHome)` — comment at `edge-board-kei.ts:245`: *“Spread → row.kei = projected home spread”*.
+- Board merge: `mergeKeiIntoEdgeBoardRows` sets `row.kei = formatSpread(proj.projSpreadHome)` — comment at `edge-board-kei.ts:245`: _“Spread → row.kei = projected home spread”_.
 - EdgeBoard display flips KEI for the Away row only (`flipSpread(lineKei)`); bottom / trust input stays **home**.
 
 ---
@@ -74,12 +74,12 @@ Call into that compare with **mismatched signs**:
 
 BALL@OSU arithmetic:
 
-| quantity | value |
-|---|---:|
-| `kei` (home) | −42.2 |
-| `candidate` (away Open/Best) | +50.5 |
-| **`gap` = \|−42.2 − (+50.5)\|** | **92.7** → `absurd_vs_kei` |
-| same-side \|−42.2 − (−50.5)\| | **8.3** &lt; 12 → should **keep** |
+| quantity                        |                             value |
+| ------------------------------- | --------------------------------: |
+| `kei` (home)                    |                             −42.2 |
+| `candidate` (away Open/Best)    |                             +50.5 |
+| **`gap` = \|−42.2 − (+50.5)\|** |        **92.7** → `absurd_vs_kei` |
+| same-side \|−42.2 − (−50.5)\|   | **8.3** &lt; 12 → should **keep** |
 
 EdgeBoard re-checks trust with the same mismatch (still passes raw `lineRow.best`):
 
@@ -113,12 +113,12 @@ Also: `CFB_OUTLIER_VS_OPEN_PTS = 3.5` · `CFB_LEAN_EDGE_PTS = 2.5` · `CFB_PLAY_
 
 ## Call sites (Edge Board, dump script, any API)
 
-| Site | Role |
-|---|---|
-| `build-edge-board-rows.ts:216` | `sport === "cfb" ? applyCfbTrustedMarketToRows(merged)` — clears Best before UI |
-| `EdgeBoard.tsx:961` | Second trust gate on edge; same away vs home inputs |
-| `scripts/cfb/cfb_dump_edgeboard.py` | Measure twin (book-audit) |
-| `book_ledger/cfb_snapshot.py:204` | Calls Python twin with `best=raw_spread` from **`spread_home`** |
+| Site                                | Role                                                                            |
+| ----------------------------------- | ------------------------------------------------------------------------------- |
+| `build-edge-board-rows.ts:216`      | `sport === "cfb" ? applyCfbTrustedMarketToRows(merged)` — clears Best before UI |
+| `EdgeBoard.tsx:961`                 | Second trust gate on edge; same away vs home inputs                             |
+| `scripts/cfb/cfb_dump_edgeboard.py` | Measure twin (book-audit)                                                       |
+| `book_ledger/cfb_snapshot.py:204`   | Calls Python twin with `best=raw_spread` from **`spread_home`**                 |
 
 ---
 

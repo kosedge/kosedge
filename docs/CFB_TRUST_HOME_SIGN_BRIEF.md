@@ -49,12 +49,19 @@ rg -n "trustCfbMarket|absurd_vs_kei|trusted-market|trustedMarket|raw_gap|ss_gap"
 # CFB trustCfbMarket — home-sign audit
 
 ## Function path + signature
+
 ## What KEI sign is (home)
+
 ## What Open/Best sign is on the row today
+
 ## Exact compare (file:line) that produces raw_gap 92.7 on BALL@OSU
+
 ## Band constant (quote)
+
 ## Call sites (Edge Board, dump script, any API)
+
 ## Shared with NFL/CBB? (if yes, CFB-only branch or arg — do not retune other sports)
+
 ## Phase 1 allowlist (named files)
 ```
 
@@ -76,19 +83,19 @@ Stop if you cannot point at the compare with a line number.
 
 ### Canaries (must appear on the scorecard)
 
-| pair | before (audit) | after (required direction) |
-|---|---|---|
-| `BALL@OSU` | raw 92.7, Best cleared, PASS | Best **kept** if ss 8.3 < band; edge = KEI_h − Open_h ≈ **+8.3** (KEI shorter fav than book); tag from thresholds — likely **PLAY on the book side / PASS on fire** — print the tag, do not invent a card |
-| `ECU@ALA` | ss 2.28, cleared | Best kept; tiny edge; PASS |
-| `FIU@USF` | ss 6.24, KEI longer | Best kept; edge ≈ −6.24 |
-| `TXST@TEX` | ss 5.35 | Best kept |
-| `UCLA@CAL` | PLAY −14.33 | Must **drop** if it was a sign artifact; if same-side edge still ≥ 4, print it and leave for operator |
-| `SMU@FSU` | PLAY +5.35 same-sign already | Should stay in the same ballpark; do not “fix” it toward market |
-| `UNLV@HAW` / `WYO@CSU` | polarity-odd PLAY | Recalc; if they disappear, they were bugs |
+| pair                   | before (audit)               | after (required direction)                                                                                                                                                                                |
+| ---------------------- | ---------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `BALL@OSU`             | raw 92.7, Best cleared, PASS | Best **kept** if ss 8.3 < band; edge = KEI_h − Open_h ≈ **+8.3** (KEI shorter fav than book); tag from thresholds — likely **PLAY on the book side / PASS on fire** — print the tag, do not invent a card |
+| `ECU@ALA`              | ss 2.28, cleared             | Best kept; tiny edge; PASS                                                                                                                                                                                |
+| `FIU@USF`              | ss 6.24, KEI longer          | Best kept; edge ≈ −6.24                                                                                                                                                                                   |
+| `TXST@TEX`             | ss 5.35                      | Best kept                                                                                                                                                                                                 |
+| `UCLA@CAL`             | PLAY −14.33                  | Must **drop** if it was a sign artifact; if same-side edge still ≥ 4, print it and leave for operator                                                                                                     |
+| `SMU@FSU`              | PLAY +5.35 same-sign already | Should stay in the same ballpark; do not “fix” it toward market                                                                                                                                           |
+| `UNLV@HAW` / `WYO@CSU` | polarity-odd PLAY            | Recalc; if they disappear, they were bugs                                                                                                                                                                 |
 
 ### Forbidden
 
-- Widen band so OSU 8.3 *and* a 20-pt miss both survive
+- Widen band so OSU 8.3 _and_ a 20-pt miss both survive
 - Clamp KEI toward −50.5
 - Flip KEI to away
 - Loosen trusted-market for missing books
@@ -118,5 +125,5 @@ Desk can show Family A books now. That is the point.
 Still not a card:
 
 - OSU KEI −42 vs book −50 is **calibration**, not fade-OSU
-- SMU@FSU remains the only Family B name previously allowed to be *discussed*
+- SMU@FSU remains the only Family B name previously allowed to be _discussed_
 - UCLA/UNLV/WYO wait for the after-dump
