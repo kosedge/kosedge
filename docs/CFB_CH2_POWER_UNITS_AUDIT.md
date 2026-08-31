@@ -2,188 +2,137 @@
 
 **Stamp:** `cfb-season-engine-v0.15-power-sot` · `as_of=2026-08-31`  
 **Brief:** `docs/CFB_CH2_POWER_UNITS_BRIEF.md`  
-**This PR:** zero writes to compose weights, `MATCHUP_RESPONSE`, power sort, KEI, or SD.
+**Method:** live `compose_team_projection` → `expected_team_points` → `project_game` → `apply_cfb_kei` (read-only).  
+**This PR:** **zero** writes to compose weights, `MATCHUP_RESPONSE`, power sort, KEI, or SD.
 
-Chapter 1 locked: TCU KEI **−20.39** (raw margin **~19.19**); HAW@STAN KEI **+10.9** (wrong side). Short-bucket map 1.188 is **not** on `deploy-vercel` tip yet; this decomposition uses live `project_game` without that map (identity on long/cupcake/mid either way).
+Chapter 1 locked: TCU KEI **−20.39**; HAW@STAN **+10.9** wrong side. Short-bucket map **not** on this `deploy-vercel` tip (`BUCKET_MARGIN_SCALE` absent); for \|raw\|≥7 it would be identity anyway.
 
-Spine (file:line):
+Spine file:line:
 
-| Step                | Location                                                                             |
-| ------------------- | ------------------------------------------------------------------------------------ |
-| Compose O/D indices | `team_projection.py:85` `compose_team_projection`                                    |
-| Expected points     | `team_projection.py:309–371` `expected_team_points`                                  |
-| HFA resolve         | `home_field.py:187–205` `resolve_hfa_points`                                         |
-| ST nudge + margin   | `team_projection.py:558–566` `project_game`                                          |
-| Matchup response    | `priors.py:107` `MATCHUP_RESPONSE=1.40`; `priors.py:310` `matchup_response_for_week` |
+| Step               | File:line                                            |
+| ------------------ | ---------------------------------------------------- |
+| Compose            | `team_projection.py:85`                              |
+| Expected points    | `team_projection.py:309–371`                         |
+| HFA resolve        | `home_field.py:187–205`                              |
+| ST + margin        | `team_projection.py:558–566`                         |
+| Power `0.5*(O+D)`  | `power_sot.py:128–157`                               |
+| `MATCHUP_RESPONSE` | `priors.py:107` (=1.40); week mapper `priors.py:310` |
 
-Formula (`team_projection.py:333–345`):
+---
 
-```text
-pts = LEAGUE_TEAM_PPG(25.9) * (off/def)^response * off_boost * def_dampen * pace
-    + HFA + coaching_week_adj
-```
+## Mandatory team table (live)
+
+| Term                           |       UNC |            TCU |            HAW |      STAN | File:line                                                                        |
+| ------------------------------ | --------: | -------------: | -------------: | --------: | -------------------------------------------------------------------------------- |
+| offense_index                  |    0.8866 |     **1.4571** |     **1.2675** |    0.8987 | `team_projection.py:85–161`                                                      |
+| defense_index                  |    1.1375 |         1.1782 |         1.0599 |    1.0667 | same                                                                             |
+| power 0.5\*(O+D)               |     1.012 |     **1.3176** |     **1.1637** |    0.9827 | `power_sot.py:128`                                                               |
+| QB term (`qb_situation_index`) |    0.9203 | **1.38** (cap) | **1.38** (cap) |    0.8996 | compose + `priors.QB_INDEX_BLEND`                                                |
+| roster_strength                |     62.20 |          62.44 |          55.64 |     60.88 | `roster.roster_strength`                                                         |
+| returning_production           |     55.58 |          60.82 |          60.91 |     59.77 | `roster.returning_production`                                                    |
+| returning_snap_share           |    0.5558 |         0.6082 |         0.6091 |    0.5977 | `roster.returning_snap_share` (feeds roster_strength; not a separate pts addend) |
+| unit OL                        |     59.75 |          61.79 |          54.01 |     63.16 | `position_groups`                                                                |
+| unit skill                     |     62.10 |          62.31 |          55.50 |     60.76 |                                                                                  |
+| unit F7                        |     59.90 |          60.39 |          56.91 |     59.45 |                                                                                  |
+| unit secondary                 |     60.87 |          63.34 |          56.73 |     59.30 |                                                                                  |
+| unit ST grade                  |     66.43 |          65.74 |          55.39 |     63.63 |                                                                                  |
+| offense_boost (from units)     |    1.0151 |         1.0168 |         1.0066 |    1.0169 | `team_projection.py:285–292`                                                     |
+| coaching new_hc/oc/dc          |     F/F/F |          F/F/F |          F/F/F |     F/F/F | all returning                                                                    |
+| coaching index mult O/D        | 1.0 / 1.0 |      1.0 / 1.0 |      1.0 / 1.0 | 1.0 / 1.0 |                                                                                  |
+| off_eff (compose input)        | **24.92** |      **64.74** |      **50.21** | **28.18** | efficiency pack                                                                  |
+| def_eff                        |     53.13 |          56.29 |          47.78 |     44.37 |                                                                                  |
+
+---
+
+## Mandatory game table
+
+| Term                                |                                                        UNC@TCU |                                HAW@STAN | File:line                                                  |
+| ----------------------------------- | -------------------------------------------------------------: | --------------------------------------: | ---------------------------------------------------------- |
+| site flag                           |                                **neutral Dublin** (both sides) |                    STAN home / HAW away | slate `neutral_site`                                       |
+| expected pts **before HFA** (home)  |                                                         36.553 |                                  20.141 | `pre_clamp − hfa` from `expected_team_points`              |
+| expected pts **before HFA** (away)  |                                                         17.364 |                                  31.740 |                                                            |
+| HFA applied? (home pts)             |                 **0.0** (`reason=neutral_site`, applied=false) | **+1.7** (`variable_hfa`, applied=true) | `home_field.py:195–205`                                    |
+| HFA away                            |                                                            0.0 |                                     0.0 |                                                            |
+| ST nudge (total, split 50/50)       |                                                         +0.241 |                                  +0.143 | `team_projection.py:561` `SPECIAL_TEAMS_TOTAL_SCALE=0.015` |
+| home_exp (final)                    |                                                      **36.67** |                               **21.91** | `project_game`                                             |
+| away_exp (final)                    |                                                      **17.48** |                               **31.81** |                                                            |
+| raw margin home                     |                                                     **+19.19** |                               **−9.90** |                                                            |
+| MATCHUP_RESPONSE                    |                                       1.40 (week 0, no soften) |                                    1.40 | `priors.py:310`                                            |
+| margin @ response 1.40              |                                                         +19.19 |                                   −9.90 |                                                            |
+| margin @ response 1.00              |                                                         +13.68 |                                   −6.43 | same ratios, core rescaled                                 |
+| **1.40 contribution (pts vs 1.00)** |                                                      **+5.51** |                               **−3.47** | amplifies existing sign                                    |
+| short-bucket map 1.188 applied?     | **no** (\|raw\|=19.19≥7; map absent on tip / identity on long) |                  **no** (\|raw\|=9.9≥7) | Ch1 map only scales **short** \|m\|∈[3,7)                  |
+| model spread_home                   |                                                         −19.19 |                                   +9.90 |                                                            |
+| KEI after bias guard                |                                                     **−20.39** |                              **+10.90** | `cfb_kei.py:250`                                           |
+| desk close                          |                                                       **−7.5** |                                **−4.0** | Chapter 0 tape                                             |
+
+**Dublin one-liner:** `project_game` does **not** add `HFA_BASELINE_POINTS=1.7` to TCU — `resolve_hfa_points` zeros HFA when `neutral_site` (`home_field.py:195`). Measured here; not a Chapter 3 leak.
 
 ---
 
 ## project_game terms for UNC@TCU (every addend)
 
-**Context:** Week **0**, **neutral** (Dublin). Slate home=TCU, away=UNC.
+Week **0**, **neutral**.
 
-### Identity / power
+1. **Compose** builds TCU offense_index **1.457** vs UNC **0.887** — driven by off_eff **64.74 vs 24.92** and QB index **1.38 vs 0.9203**. Roster/units nearly tied.
+2. **Matchup ratios:** TCU 1.281 · UNC 0.7525 (`team_projection.py:324`).
+3. **Response 1.40** spends that gap (+5.51 pts vs linear).
+4. **Units** ~+1.6% / dampen ~−2% — small.
+5. **HFA = 0** (neutral).
+6. **Coaching** +0.15 both (cancels in margin).
+7. **ST** +0.24 total split.
+8. **Scores 36.67–17.48 → raw +19.19 → KEI −20.39.**
 
-| Side            | offense_index | defense_index | power_index | power rank |
-| --------------- | ------------: | ------------: | ----------: | ---------: |
-| TCU             |    **1.4571** |        1.1782 |  **1.3176** |         28 |
-| UNC             |    **0.8866** |        1.1375 |   **1.012** |         99 |
-| Gap (home−away) |               |               | **+0.3056** |            |
-
-OSU−ND reference gap = **0.1152**. TCU−UNC is **~2.7×** that tick — already a large separation before matchup power.
-
-### Compose inputs (dominant)
-
-| Term                  |            TCU |           UNC | Notes                                              |
-| --------------------- | -------------: | ------------: | -------------------------------------------------- |
-| off_eff (0–100)       |      **64.74** |     **24.92** | `WEIGHT_OFF_EFF=0.34`                              |
-| def_eff               |          56.29 |         53.13 | Similar                                            |
-| qb_situation_index    | **1.38** (cap) |    **0.9203** | `WEIGHT_QB_SITUATION=0.24` + `QB_INDEX_BLEND=0.26` |
-| roster_strength       |          62.44 |         62.20 | Nearly tied                                        |
-| OL / skill / F7 / sec |         ~60–63 |        ~60–62 | Unit grades **not** the separator                  |
-| Coaching flags        |  all returning | all returning | placeholder +0.15 both sides                       |
-
-### `expected_team_points` addends (week 0 → response **1.40**)
-
-| Addend                  |                      TCU (home) | UNC (away) |
-| ----------------------- | ------------------------------: | ---------: |
-| matchup_ratio (off/def) |                       **1.281** | **0.7525** |
-| matchup_response        |                        **1.40** |   **1.40** |
-| offense_boost (units)   |                          1.0168 |     1.0151 |
-| defense_dampen (units)  |                          0.9814 |     0.9789 |
-| pace                    |                          0.9959 |     0.9959 |
-| **HFA**                 | **0.0** (`reason=neutral_site`) |    **0.0** |
-| coaching_net_adj        |                           +0.15 |      +0.15 |
-| pre_clamp / points      |                       **36.55** |  **17.36** |
-| ST nudge (split)        |                           +0.12 |      +0.12 |
-| **Final scores**        |                       **36.67** |  **17.48** |
-
-| Derived           |      Value |
-| ----------------- | ---------: |
-| raw_margin_home   | **+19.19** |
-| model spread_home | **−19.19** |
-| KEI (bias guard)  | **−20.39** |
-
-**Counterfactual:** if Dublin were _not_ neutral, TCU home would get ~+1.7 HFA → home pts **38.25** (even longer). Neutral is applied correctly and **shrinks** the home side vs a true home game.
-
-**Response sensitivity (core scoring without HFA/coach):** at response 1.40 vs 1.0, TCU core **+3.43**, UNC core **−2.07** → ~**5.5 pts** of the 19-pt margin is `MATCHUP_RESPONSE` amplifying an already large off/def ratio. Units contribute ~±2% multipliers — not the story.
+Power gap TCU−UNC = **0.3056** (~2.7× OSU−ND **0.1152**).
 
 ---
 
 ## project_game terms for HAW@STAN (every addend)
 
-**Context:** Week **0**, Stanford home (not neutral).
+Week **0**, Stanford home.
 
-### Identity / power
-
-| Side            | offense_index | defense_index | power_index | power rank |
-| --------------- | ------------: | ------------: | ----------: | ---------: |
-| STAN (home)     |    **0.8987** |        1.0667 |  **0.9827** |        118 |
-| HAW (away)      |    **1.2675** |        1.0599 |  **1.1637** |         62 |
-| Gap (home−away) |               |               |  **−0.181** |            |
-
-Model believes **Hawaii is the better team** before the kickoff. Market STAN −4 is the opposite polarity.
-
-### Compose inputs (dominant)
-
-| Term               |       STAN |            HAW | Notes                                        |
-| ------------------ | ---------: | -------------: | -------------------------------------------- |
-| off_eff            |  **28.18** |      **50.21** | Primary offense separator                    |
-| def_eff            |      44.37 |          47.78 | Mild                                         |
-| qb_situation_index | **0.8996** | **1.38** (cap) | Same QB-cap pattern as TCU                   |
-| roster_strength    |      60.88 |          55.64 | Stanford slightly higher — **not** enough    |
-| Units              |     ~59–63 |         ~54–57 | Stanford units better; still loses on eff+QB |
-| Coaching           |  returning |      returning | +0.15 both                                   |
-
-### `expected_team_points` addends
-
-| Addend           |                        STAN (home) |          HAW (away) |
-| ---------------- | ---------------------------------: | ------------------: |
-| matchup_ratio    |                         **0.8479** |          **1.1882** |
-| matchup_response |                           **1.40** |            **1.40** |
-| offense_boost    |                             1.0169 |              1.0066 |
-| defense_dampen   |                             0.9877 |              0.9831 |
-| pace             |                             0.9682 |              0.9682 |
-| **HFA**          | **+1.7** (applied, average bucket) | **0.0** (away_side) |
-| coaching_net     |                              +0.15 |               +0.15 |
-| points           |                          **21.84** |           **31.74** |
-| ST nudge         |                              +0.07 |               +0.07 |
-| **Final scores** |                          **21.91** |           **31.81** |
-
-| Derived           |               Value |
-| ----------------- | ------------------: |
-| raw_margin_home   |            **−9.9** |
-| model spread_home | **+9.9** (home dog) |
-| KEI               |           **+10.9** |
-
-**HFA is not the bug.** Stanford already receives +1.7. Removing it would make the wrong-side margin **worse**. Polarity is **compose identity** (eff + QB → offense_index → ratio), then `MATCHUP_RESPONSE=1.40` widens it (~3.5 pts vs response 1.0).
+1. **Compose** has Hawaii ahead: offense_index **1.268 vs 0.899**, power **1.164 vs 0.983**, QB **1.38 vs 0.900**, off_eff **50.21 vs 28.18**.
+2. Stanford units are _better_; still lose on eff+QB.
+3. **HFA +1.7 applied** to Stanford — without it, wrong-side margin would be worse.
+4. **Response 1.40** adds **−3.47** home margin (helps Hawaii).
+5. **Scores 21.91–31.81 → raw −9.9 → KEI +10.9.** Polarity is compose, not HFA.
 
 ---
 
 ## What MATCHUP_RESPONSE=1.40 does to a mid-tier gap
 
-`matchup = ratio ** response` (`team_projection.py:323–329`).
+`matchup = ratio ** response` (`team_projection.py:323–329`). Week 0 uses full **1.40** (early soften is W1–W4 only).
 
-Week 0: `matchup_response_for_week(0) = 1.40` (no early soften; soften only W1–W4) — `priors.py:310–311`, `EARLY_SEASON_SEPARATION_SOFTEN`.
+| Game     | Favorite ratio | @1.00 margin | @1.40 margin |     Δ pts |
+| -------- | -------------: | -----------: | -----------: | --------: |
+| UNC@TCU  |          1.281 |       +13.68 |   **+19.19** | **+5.51** |
+| HAW@STAN |   1.188 (away) |        −6.43 |    **−9.90** | **−3.47** |
 
-| Game            | Favorite ratio | ratio^1.0 | ratio^1.40 | Mult vs linear |
-| --------------- | -------------: | --------: | ---------: | -------------: |
-| TCU vs UNC def  |          1.281 |     1.281 |  **1.366** |      **+6.7%** |
-| UNC vs TCU def  |         0.7525 |    0.7525 |  **0.699** |      **−7.1%** |
-| HAW vs STAN def |          1.188 |     1.188 |  **1.243** |      **+4.6%** |
-| STAN vs HAW def |          0.848 |     0.848 |  **0.812** |      **−4.2%** |
-
-On a **mid-tier** gap like TCU−UNC (power 0.31), response 1.40 turns a large ratio into a **~19-pt** expected margin. It does not invent the sign — it **spends** an existing index gap into points. Cupcakes (BALL@OSU ratio raw 1.84 → clamped 1.61) get even more spend, which is why OSU can print −41 while TCU prints −19 on a smaller-but-still-large gap.
+Response does not invent the sign. It **spends** an existing index gap into points.
 
 ---
 
 ## HFA_BASELINE 1.7 on Dublin neutral — is neutral applied?
 
-**Yes.** `resolve_hfa_points` (`home_field.py:195–205`):
-
-```text
-if neutral_site or not home:
-    hfa_points = 0.0
-    reason = "neutral_site" | "away_side"
-```
-
-UNC@TCU live diag: `applied=False`, `reason=neutral_site`, `hfa_points=0.0`.  
-Baseline 1.7 is recorded but **not added**. Dublin is not leaking home HFA into the margin. Situation-layer (Chapter 3) is not the TCU lever for the 19-pt raw print.
+**Yes.** `home_field.py:195–205`: `if neutral_site: hfa_points=0.0, reason=neutral_site`.  
+Live UNC@TCU: `applied=false`, **0.0 pts**. Baseline 1.7 is **not** added to TCU.
 
 ---
 
 ## Power ticks: TCU vs UNC, STAN vs HAW vs OSU–ND 0.115
 
-| Pair       | power_index gap | Notes                                 |
-| ---------- | --------------: | ------------------------------------- |
-| OSU − ND   |      **0.1152** | Top-7 adjacent tick (canary scale)    |
-| TCU − UNC  |      **0.3056** | ~2.7× OSU−ND                          |
-| HAW − STAN |      **0.1810** | Hawaii ahead; Stanford home still dog |
-| OSU − BALL |      **0.7949** | Cupcake class                         |
-
-Power sort key remains `0.5*(off+def)` (`power_sot.py:128–157`). These gaps are **outputs of compose**, not a separate ratings sheet. Rescaling power ticks without changing compose would fight the same indices `expected_team_points` already uses.
+| Pair       | power_index gap |
+| ---------- | --------------: |
+| OSU − ND   |      **0.1152** |
+| TCU − UNC  |      **0.3056** |
+| HAW − STAN |      **0.1810** |
+| OSU − BALL |      **0.7949** |
 
 ---
 
 ## Why cupcake raw margins can be "right" while TCU is long
 
-|                      | BALL@OSU                         | UNC@TCU                                           |
-| -------------------- | -------------------------------- | ------------------------------------------------- |
-| Power gap            | 0.79                             | 0.31                                              |
-| Ratio                | clamped ~1.61                    | 1.28 (unclamped)                                  |
-| HFA                  | elite **+3.1**                   | neutral **0**                                     |
-| Model spread         | **−41.0**                        | **−19.19**                                        |
-| Market / close class | ~−50 (short of book)             | ~−7.5 (**long** vs book)                          |
-| Failure mode         | Magnitude shy on a true mismatch | Magnitude / separation too large for a mid market |
-
-Same `MATCHUP_RESPONSE` and unit scales. Cupcake is "right direction, maybe short of a −50 book." TCU is "wrong magnitude for a −7.5 book" because **compose built a 0.31 power gap and 1.28 ratio** (eff 65 vs 25, QB cap vs 0.92) that the curve honestly spends into ~19 points. Fixing TCU by crushing cupcake response would regress OSU WP/spread. That is why Chapter 1 froze long/cupcake scales at 1.0.
+Same response and unit scales. OSU−BALL gap **0.79** + elite HFA **+3.1** → model **−41** (short of a −50 book, right _direction_). TCU−UNC gap **0.31** + neutral 0 → model **−19** vs market **−7.5** (too much spend for a mid book). Crushing response to fix TCU would regress cupcakes — why Chapter 1 froze long/cupcake at 1.0.
 
 ---
 
@@ -191,31 +140,26 @@ Same `MATCHUP_RESPONSE` and unit scales. Cupcake is "right direction, maybe shor
 
 **Recommend: compose / efficiency–QB path — not units-only.**
 
-| Option                                                         | Evidence from this audit                               | Verdict                                                              |
-| -------------------------------------------------------------- | ------------------------------------------------------ | -------------------------------------------------------------------- |
-| **Units-only** (`UNIT_OFFENSE_BOOST_SCALE` 0.07 / dampen 0.09) | Live boosts ~1.01–1.02; ST negligible                  | **Will not** flip Hawaii or cut TCU 19→8. Reject as sole Phase 1     |
-| **Compose weights / eff+QB blends**                            | TCU/UNC and HAW/STAN separators are off_eff + qb_index | **Only lever** that changes sign/magnitude at the source             |
-| Situation Ch3 (HFA/neutral)                                    | Dublin already neutral; STAN already +1.7              | Not the polarity fix; optional later for Dublin _information_ on KEI |
+| Option                                | Evidence                            | Verdict                                |
+| ------------------------------------- | ----------------------------------- | -------------------------------------- |
+| Units-only (`UNIT_*_SCALE` 0.07/0.09) | Live offense_boost ~1.01            | **Cannot** flip Hawaii or cut TCU 19→8 |
+| Compose / eff+QB                      | Separators are off_eff + qb_index   | **Only** source-level lever            |
+| Situation Ch3                         | Dublin already 0; STAN already +1.7 | Not the polarity fix                   |
 
-**Allowlist for a later Phase 1 PR (not this one):**
+If compose work is refused → **leave raw / research-only**, not a fake units ticket.
 
-1. Discovery-gated edits to efficiency prior fidelity / QB situation inputs (or named compose blends) with **top-7 power order frozen**
-2. Scorecard: TCU raw margin ↓ toward mid-band **without** OSU cupcake WP leaving the 90s; HAW@STAN side report (flip still not required if blocker)
-3. Still forbidden: `if team ==`, stretching `WIN_PROB_MARGIN_SD`, Utah beauty pass, `MATCHUP_RESPONSE` solo crush as a TCU patch
-
-If operator refuses compose-weight work, the honest alternative is **leave raw / research-only** on these two games until roster-efficiency SoT improves — not a fake units ticket.
+**Later allowlist (not this PR):** efficiency/QB input fidelity or named compose blends with **top-7 frozen**. Still no `if team`, no SD stretch, no Utah pass.
 
 ---
 
 ## Blocker conditions
 
-| Condition                                      | Status                                                           |
-| ---------------------------------------------- | ---------------------------------------------------------------- |
-| Units-only Phase 1 claimed to fix TCU/Hawaii   | **Blocker** — units are <2% of pts here                          |
-| `MATCHUP_RESPONSE` solo crush to mint TCU −8.5 | **Blocker** — harms cupcake class; sign not invented by response |
-| Dublin HFA "bug" as TCU explanation            | **False** — neutral applied (`home_field.py:195`)                |
-| Hawaii flip via HFA hack                       | **Blocker** — HFA already helps Stanford                         |
-| Team-name branches                             | **Forbidden**                                                    |
-| Top-7 shuffle to make TCU look better          | **Forbidden**                                                    |
+| Condition                                      | Status                               |
+| ---------------------------------------------- | ------------------------------------ |
+| Units-only Phase 1 as TCU/Hawaii fix           | **Blocker**                          |
+| Solo `MATCHUP_RESPONSE` crush to mint TCU −8.5 | **Blocker** (hurts cupcakes)         |
+| Dublin HFA leak as TCU explanation             | **False** — neutral measured 0.0     |
+| Hawaii flip via HFA hack                       | **Blocker** — HFA already helps STAN |
+| Team-name branches / top-7 shuffle             | **Forbidden**                        |
 
-**Phase 0 done.** Operator picks next fit PR: compose/eff–QB (recommended) vs research-only hold. Not units-only.
+**Phase 0 done.** Operator picks: compose/eff–QB fit vs research-only hold.

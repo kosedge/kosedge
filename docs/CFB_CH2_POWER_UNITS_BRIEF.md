@@ -4,11 +4,11 @@
 **Base:** `deploy-vercel` after Chapter 1 fit + blockers  
 **Engine:** `cfb-season-engine-v0.15-power-sot` (plus short-bucket map 1.188 if that PR merged)
 
-Chapter 1 result (locked): TCU still −20.39 (raw ~19–20); HAW@STAN +10.9 wrong side. One monotonic map cannot fix both. Remaining miss is **expected points**, not WP SD.
+Chapter 1 result (locked): TCU still −20.39 (raw ~19–20); HAW@STAN +10.9 wrong side. Remaining miss is **expected points**, not WP SD.
 
 ## This PR
 
-Phase 0 only. Decompose UNC@TCU and HAW@STAN term-by-term from compose / `expected_team_points` / HFA / units. File:line. No weight edits.
+Phase 0 only. Mandatory live decomposition tables for UNC/TCU/HAW/STAN + both games. File:line. No weight edits.
 
 ## Forbidden
 
