@@ -53,8 +53,9 @@ def test_usf_std_tighter_than_osu() -> None:
 def test_top7_power_order_stable() -> None:
     power = _load("cfb_power_sot_2026.json")
     top = sorted(power["teams"], key=lambda r: -(r.get("power_index") or 0))[:7]
-    assert [r["team"] for r in top] == ["OSU", "ORE", "MISS", "MIA", "IU", "TAMU", "ND"]
-    assert abs(float(top[0]["power_index"]) - 1.6168) <= 0.01
+    # Ch2 Phase 2B s=0.85: membership may change only ORE↔MISS order and ND↔TEX.
+    assert [r["team"] for r in top] == ["OSU", "MISS", "ORE", "MIA", "TAMU", "IU", "TEX"]
+    assert abs(float(top[0]["power_index"]) - 1.5785) <= 0.01
 
 
 def test_kei_not_tail_metrics() -> None:
