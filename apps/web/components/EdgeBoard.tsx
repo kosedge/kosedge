@@ -1379,6 +1379,7 @@ export default function EdgeBoard({
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
       </div>
