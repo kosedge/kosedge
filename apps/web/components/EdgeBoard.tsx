@@ -1331,42 +1331,44 @@ export default function EdgeBoard({
 
   if (variant === "home") {
     return (
-      <div className="relative mt-4">
-        <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
-        <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
-          <div className="mb-4">
-            <h2 className="text-3xl font-bebas text-edge-green">Edge Board</h2>
-          </div>
-          <div className="overflow-hidden rounded-2xl border border-white/10">
-            <div className="overflow-x-auto">
-              <table className="w-full min-w-[520px] text-sm sm:text-base">
+      <div className="lg:col-span-5">
+        <div className="relative">
+          <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+          <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
+            <div className="mb-5">
+              <h2 className="text-3xl font-bebas text-edge-green">
+                Edge Board
+              </h2>
+            </div>
+            <div className="rounded-2xl border border-white/10">
+              <table className="w-full text-sm sm:text-base">
                 <thead className="bg-white/5">
                   <tr className="text-left text-gray-300">
-                    <th className="py-2.5 px-3">Game</th>
-                    <th className="py-2.5 px-3">Best Line</th>
-                    <th className="py-2.5 px-3">Best O/U</th>
-                    <th className="py-2.5 px-3">Edge</th>
-                    <th className="py-2.5 px-3">Tag</th>
+                    <th className="py-3 px-3">Game</th>
+                    <th className="py-3 px-3">Best Line</th>
+                    <th className="py-3 px-3">Best O/U</th>
+                    <th className="py-3 px-3">Edge</th>
+                    <th className="py-3 px-3">Tag</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-white/10 text-gray-200">
                   {homePreviewRows.map((r) => (
                     <tr key={r.id} className="hover:bg-white/5 transition">
-                      <td className="py-2.5 px-3">
-                        <div className="font-semibold">
+                      <td className="py-3.5 px-3">
+                        <div className="font-semibold whitespace-nowrap">
                           {r.teamA.name} @ {r.teamB.name}
                         </div>
                       </td>
-                      <td className="py-2.5 px-3 font-semibold">
+                      <td className="py-3.5 px-3 font-semibold whitespace-nowrap">
                         {r.bestLine.top.label}
                       </td>
-                      <td className="py-2.5 px-3 font-semibold">
+                      <td className="py-3.5 px-3 font-semibold whitespace-nowrap">
                         {r.bestOU.top.label}
                       </td>
-                      <td className="py-2.5 px-3 font-bold tabular-nums">
+                      <td className="py-3.5 px-3 font-bold tabular-nums">
                         {r.edgeLineNum != null ? r.edgeLineNum.toFixed(1) : "—"}
                       </td>
-                      <td className="py-2.5 px-3">
+                      <td className="py-3.5 px-3">
                         {r.tagLine ? (
                           <span className={tagClassName(r.tagLine, true)}>
                             {r.tagLine}
