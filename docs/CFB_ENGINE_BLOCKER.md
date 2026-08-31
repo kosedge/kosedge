@@ -6,25 +6,25 @@
 
 ## What passed before the stop
 
-| Gate | Result |
-|---|---|
-| One spine restored (`power_sot` + official schedule) | OK |
-| Single `as_of=2026-08-31` on power / proj / futures / KEI | OK |
-| Week 0 FBS finals locked (6/6) without power refit | OK |
-| Top-7 power unchanged (OSU…ND) | OK |
-| Cupcake model WP ≥ 0.90 on large gaps (BALL@OSU, UTEP@OU, MOST@TAMU, FRES@USC, MASS@RUT) | OK |
-| USF win-total **std** < OSU **std** (1.118 < 1.309) after SCORE_NOISE shrink + WP saturation | OK |
-| USF E[wins] separated from OSU (8.884≈OSU → 8.382 vs OSU 9.537) | OK |
-| KEI remains game line (`apply_cfb_kei`); `assert_kei_not_tail` | OK |
-| Futures field = P4 autos + one G6 auto + power-aware at-larges | OK |
-| No team-id branches; NFL/CBB/MLB untouched | OK |
+| Gate                                                                                         | Result |
+| -------------------------------------------------------------------------------------------- | ------ |
+| One spine restored (`power_sot` + official schedule)                                         | OK     |
+| Single `as_of=2026-08-31` on power / proj / futures / KEI                                    | OK     |
+| Week 0 FBS finals locked (6/6) without power refit                                           | OK     |
+| Top-7 power unchanged (OSU…ND)                                                               | OK     |
+| Cupcake model WP ≥ 0.90 on large gaps (BALL@OSU, UTEP@OU, MOST@TAMU, FRES@USC, MASS@RUT)     | OK     |
+| USF win-total **std** < OSU **std** (1.118 < 1.309) after SCORE_NOISE shrink + WP saturation | OK     |
+| USF E[wins] separated from OSU (8.884≈OSU → 8.382 vs OSU 9.537)                              | OK     |
+| KEI remains game line (`apply_cfb_kei`); `assert_kei_not_tail`                               | OK     |
+| Futures field = P4 autos + one G6 auto + power-aware at-larges                               | OK     |
+| No team-id branches; NFL/CBB/MLB untouched                                                   | OK     |
 
 ## Blocker: `UTAH_TITLE_TAIL_UNMOVED`
 
-| Metric | Before (audit dump) | After (same functions) |
-|---|---|---|
-| Utah `power_index` | 1.4841 | 1.4841 (flat — correct) |
-| Utah `natty_pct` | **6.6** | **6.2** |
+| Metric             | Before (audit dump) | After (same functions)  |
+| ------------------ | ------------------- | ----------------------- |
+| Utah `power_index` | 1.4841              | 1.4841 (flat — correct) |
+| Utah `natty_pct`   | **6.6**             | **6.2**                 |
 
 Change is noise (6.6 → 6.2), not “moved a lot” off the ~5% tail.
 

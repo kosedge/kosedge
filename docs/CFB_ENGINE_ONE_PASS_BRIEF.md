@@ -55,22 +55,22 @@ The published CFB surface is inconsistent and miscalibrated in a way that looks 
 
 Symptoms (not licenses to special-case teams):
 
-| # | Symptom | Real layer |
-|---|---|---|
-| 1 | Week 0 not closed; surfaces disagree on `as_of` | snapshot / publisher |
-| 2 | Cupcake favorites not printing real 90s | margin → WP |
-| 3 | USF-class win-total band as wide as (or wider than) OSU | year-shock + soft WP |
-| 4 | Title % tails (Utah ~5%) | shock + field constructor using season tails |
-| 5 | KEI at risk of becoming E[wins] or natty % | publisher / KEI definition |
+| #   | Symptom                                                 | Real layer                                   |
+| --- | ------------------------------------------------------- | -------------------------------------------- |
+| 1   | Week 0 not closed; surfaces disagree on `as_of`         | snapshot / publisher                         |
+| 2   | Cupcake favorites not printing real 90s                 | margin → WP                                  |
+| 3   | USF-class win-total band as wide as (or wider than) OSU | year-shock + soft WP                         |
+| 4   | Title % tails (Utah ~5%)                                | shock + field constructor using season tails |
+| 5   | KEI at risk of becoming E[wins] or natty %              | publisher / KEI definition                   |
 
 Canaries — diagnostics only. Never appear as `if team ==` in code.
 
-| Canary | Broken look | Fixed look |
-|---|---|---|
-| USF | E[wins] / band distorted | E[wins] moves **a lot**; win-total width **< OSU** |
-| Utah | title % ~5% from tails | title % moves **a lot** down if WP+shock were the cause |
-| Top-7 / OSU power | tempting to “fix” futures here | **barely moves** |
-| UNC–TCU | tempting training point | **must not retune power** |
+| Canary            | Broken look                    | Fixed look                                              |
+| ----------------- | ------------------------------ | ------------------------------------------------------- |
+| USF               | E[wins] / band distorted       | E[wins] moves **a lot**; win-total width **< OSU**      |
+| Utah              | title % ~5% from tails         | title % moves **a lot** down if WP+shock were the cause |
+| Top-7 / OSU power | tempting to “fix” futures here | **barely moves**                                        |
+| UNC–TCU           | tempting training point        | **must not retune power**                               |
 
 If Utah is still ~5% after a real WP + shock fix, write a blocker. Do not stretch the logistic / WP scale (the ~1.617-class constant, whatever the repo names it) to look like Vegas.
 
@@ -131,7 +131,7 @@ Close does not mean: update power from UNC–TCU or any Week 0 result; blend Wee
 
 ### 5.2 Recalibrate margin → WP
 
-Goal: large favorites on cupcakes print **real 90s**, not 75–85. Edit the existing mapper only. Prefer noise-floor / saturation / scale *application*. Do not fit to Week 0 results or lines. Do not change the named scale constant just to move Utah. Gate: power gap ≥ `T` ⇒ WP ≥ 0.90 on a neutral-or-home favorite against an out-of-class opponent.
+Goal: large favorites on cupcakes print **real 90s**, not 75–85. Edit the existing mapper only. Prefer noise-floor / saturation / scale _application_. Do not fit to Week 0 results or lines. Do not change the named scale constant just to move Utah. Gate: power gap ≥ `T` ⇒ WP ≥ 0.90 on a neutral-or-home favorite against an out-of-class opponent.
 
 ### 5.3 Shrink year-shock
 
@@ -176,14 +176,14 @@ Market may join for comparison column on scorecard only. Zero market leakage int
 
 ## 7. Required deliverable files
 
-| File | When |
-|---|---|
-| `docs/CFB_ENGINE_ONE_PASS_BRIEF.md` | this brief, in-repo |
-| `docs/CFB_ENGINE_AUDIT_WEEK0.md` | end of Phase 0 |
-| `docs/CFB_ENGINE_GATES.md` | Phase 1 |
-| `docs/CFB_ENGINE_WEEK0_SCORECARD.md` | Phase 1 |
-| `docs/CFB_ENGINE_BLOCKER.md` | only if a law forces stop |
-| canary dump script on the existing pattern | Phase 1 |
+| File                                           | When                       |
+| ---------------------------------------------- | -------------------------- |
+| `docs/CFB_ENGINE_ONE_PASS_BRIEF.md`            | this brief, in-repo        |
+| `docs/CFB_ENGINE_AUDIT_WEEK0.md`               | end of Phase 0             |
+| `docs/CFB_ENGINE_GATES.md`                     | Phase 1                    |
+| `docs/CFB_ENGINE_WEEK0_SCORECARD.md`           | Phase 1                    |
+| `docs/CFB_ENGINE_BLOCKER.md`                   | only if a law forces stop  |
+| canary dump script on the existing pattern     | Phase 1                    |
 | optional CFB gate tests next to existing tests | Phase 1 if a runner exists |
 
 ---

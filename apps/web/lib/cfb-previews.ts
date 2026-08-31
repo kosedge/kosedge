@@ -402,8 +402,12 @@ export function getCfbConferencePreviews(): CfbConferencePreview[] {
   return CFB_CONFERENCE_PREVIEWS;
 }
 
-export function findCfbTeamPreview(slugOrTeam: string): CfbTeamPreview | undefined {
-  const key = String(slugOrTeam || "").trim().toLowerCase();
+export function findCfbTeamPreview(
+  slugOrTeam: string,
+): CfbTeamPreview | undefined {
+  const key = String(slugOrTeam || "")
+    .trim()
+    .toLowerCase();
   return CFB_TEAM_PREVIEWS.find(
     (p) => p.slug === key || p.team.toLowerCase() === key,
   );
@@ -412,6 +416,8 @@ export function findCfbTeamPreview(slugOrTeam: string): CfbTeamPreview | undefin
 export function findCfbConferencePreview(
   slug: string,
 ): CfbConferencePreview | undefined {
-  const key = String(slug || "").trim().toLowerCase();
+  const key = String(slug || "")
+    .trim()
+    .toLowerCase();
   return CFB_CONFERENCE_PREVIEWS.find((p) => p.slug === key);
 }
