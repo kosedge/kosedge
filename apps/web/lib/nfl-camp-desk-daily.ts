@@ -74,22 +74,29 @@ export function parseDeskDateMs(deskDate: string): number {
 export function isCampDeskXProfileHref(href: string): boolean {
   try {
     const host = new URL(href).hostname.replace(/^www\./, "").toLowerCase();
-    return host === "x.com" || host === "twitter.com" || host === "mobile.twitter.com";
+    return (
+      host === "x.com" ||
+      host === "twitter.com" ||
+      host === "mobile.twitter.com"
+    );
   } catch {
     return /(?:^|\/\/)(?:www\.)?(?:x|twitter)\.com\//i.test(href);
   }
 }
 
-export function publicCampDeskSources(sources: CampDeskSource[]): CampDeskSource[] {
+export function publicCampDeskSources(
+  sources: CampDeskSource[],
+): CampDeskSource[] {
   return sources.filter((source) => !isCampDeskXProfileHref(source.href));
 }
 
 export function newestDeskDate(cards: CampDeskCard[]): string | null {
   if (!cards.length) return null;
-  return cards.reduce((best, card) =>
-    parseDeskDateMs(card.desk_date) > parseDeskDateMs(best)
-      ? card.desk_date
-      : best,
+  return cards.reduce(
+    (best, card) =>
+      parseDeskDateMs(card.desk_date) > parseDeskDateMs(best)
+        ? card.desk_date
+        : best,
     cards[0].desk_date,
   );
 }
@@ -131,7 +138,8 @@ export function cardsFromDayFile(
   pinnedOverride?: boolean,
 ): CampDeskCard[] {
   const pinned = pinnedOverride ?? Boolean(file.pinned);
-  const packageKind: CampDeskPackageKind = file.package === "monday" ? "monday" : "daily";
+  const packageKind: CampDeskPackageKind =
+    file.package === "monday" ? "monday" : "daily";
   const wrap: CampDeskCard = {
     id: `wrap-${file.desk_date}`,
     kind: "league_wrap",
@@ -175,11 +183,14 @@ export function selectCampDeskCards(
     team?: string | null;
     inCamp?: boolean;
     keepLatestIfEmpty?: boolean;
+    /** When set, shelf is exactly this desk day (archive navigation). */
+    deskDate?: string | null;
   },
 ): CampDeskCard[] {
   const team = opts.team?.trim().toUpperCase() || null;
   const inCamp = opts.inCamp ?? true;
   const keepLatestIfEmpty = opts.keepLatestIfEmpty ?? inCamp;
+  const requestedDate = opts.deskDate?.trim() || null;
   const scoped = cards.filter((card) => {
     if (team && card.kind === "team_note" && !card.team_ids.includes(team)) {
       return false;
@@ -187,23 +198,60 @@ export function selectCampDeskCards(
     if (team && card.kind === "league_wrap") return true;
     return true;
   });
-  const windowed = scoped.filter((card) => {
-    if (!inCamp) return true;
-    return isWithinCampDeskWindow(card.desk_date, opts.now, card.pinned);
-  });
-  const picked =
-    windowed.length > 0 || !keepLatestIfEmpty
-      ? windowed
-      : scoped.filter((card) => {
-          const latest = newestDeskDate(scoped);
-          return latest != null && card.desk_date === latest;
-        });
+
+  // Customer shelf = one desk day. Newest package by default; optional archive date.
+  const availableDates = [
+    ...new Set(scoped.map((card) => card.desk_date)),
+  ].sort((a, b) => parseDeskDateMs(b) - parseDeskDateMs(a));
+  const latest = availableDates[0] ?? newestDeskDate(scoped);
+  const activeDate =
+    requestedDate && availableDates.includes(requestedDate)
+      ? requestedDate
+      : latest;
+
+  let picked =
+    activeDate == null
+      ? []
+      : scoped.filter((card) => card.desk_date === activeDate);
+
+  // Default customer shelf always keeps the newest package (deskStale banners).
+  // keepLatestIfEmpty=false is the empty-shelf probe used by freshness tests.
+  if (
+    inCamp &&
+    !keepLatestIfEmpty &&
+    !requestedDate &&
+    activeDate != null &&
+    !scoped.some(
+      (card) =>
+        card.desk_date === activeDate &&
+        isWithinCampDeskWindow(card.desk_date, opts.now, card.pinned),
+    )
+  ) {
+    return [];
+  }
+
+  if (picked.length === 0 && keepLatestIfEmpty && latest != null) {
+    picked = scoped.filter((card) => card.desk_date === latest);
+  }
+
+  // When not in camp, still one day — never pile every historical package.
+  if (!inCamp && picked.length === 0 && latest != null) {
+    picked = scoped.filter((card) => card.desk_date === latest);
+  }
+
   return picked.sort((a, b) => {
-    const dateDelta = parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
+    const dateDelta =
+      parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
     if (dateDelta !== 0) return dateDelta;
     if (a.kind !== b.kind) return a.kind === "league_wrap" ? -1 : 1;
     return a.id.localeCompare(b.id);
   });
+}
+
+export function listCampDeskDates(cards: CampDeskCard[]): string[] {
+  return [...new Set(cards.map((card) => card.desk_date))].sort(
+    (a, b) => parseDeskDateMs(b) - parseDeskDateMs(a),
+  );
 }
 
 export function partitionCampDeskShelf(
@@ -212,23 +260,29 @@ export function partitionCampDeskShelf(
     now: Date;
     team?: string | null;
     inCamp?: boolean;
+    deskDate?: string | null;
   },
 ): {
   live: CampDeskCard[];
   archive: CampDeskCard[];
   latestDeskDate: string | null;
+  activeDeskDate: string | null;
+  deskDates: string[];
   deskStale: boolean;
 } {
   const latestDeskDate = newestDeskDate(cards);
+  const deskDates = listCampDeskDates(cards);
   const live = selectCampDeskCards(cards, {
     ...opts,
     keepLatestIfEmpty: true,
   });
   const liveIds = new Set(live.map((card) => card.id));
+  const activeDeskDate = live[0]?.desk_date ?? null;
   const archive = cards
     .filter((card) => !liveIds.has(card.id))
     .sort((a, b) => {
-      const dateDelta = parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
+      const dateDelta =
+        parseDeskDateMs(b.desk_date) - parseDeskDateMs(a.desk_date);
       if (dateDelta !== 0) return dateDelta;
       if (a.kind !== b.kind) return a.kind === "league_wrap" ? -1 : 1;
       return a.id.localeCompare(b.id);
@@ -236,13 +290,24 @@ export function partitionCampDeskShelf(
   const deskStale =
     latestDeskDate != null &&
     !isWithinCampDeskWindow(latestDeskDate, opts.now, false);
-  return { live, archive, latestDeskDate, deskStale };
+  return {
+    live,
+    archive,
+    latestDeskDate,
+    activeDeskDate,
+    deskDates,
+    deskStale,
+  };
 }
 
 export function collectSotFlags(cards: CampDeskCard[]): CampDeskCard[] {
-  return cards.filter((card) => card.is_material_depth && card.kind === "team_note");
+  return cards.filter(
+    (card) => card.is_material_depth && card.kind === "team_note",
+  );
 }
 
-export function collectPreviewDeltas(files: CampDeskDayFile[]): CampPreviewDelta[] {
+export function collectPreviewDeltas(
+  files: CampDeskDayFile[],
+): CampPreviewDelta[] {
   return files.flatMap((file) => file.preview_delta ?? []);
 }
