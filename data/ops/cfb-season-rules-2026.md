@@ -35,7 +35,7 @@ Manual v1. KEI may reprice. Model does not. Boards say packaged as_of when there
 
 ## Futures
 
-12-team CFP: 5 conference champs + 7 at-large. Independents at-large only. G5 champ can take an auto bid if among the top-5 conference champs by rank. Seeds 1–4 bye. Sim-derived. Not book prices.
+12-team CFP: ACC + Big Ten + Big 12 + SEC champions + one G6 auto (highest G6 conference champion by engine power) + 7 power-aware at-larges (power_index primary, wins secondary). Independents at-large only. Seeds 1–4 bye. Sim-derived. Not book prices.
 
 ## Residual honesty
 

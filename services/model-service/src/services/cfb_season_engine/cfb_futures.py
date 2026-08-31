@@ -3,17 +3,16 @@
 Assumptions (explicit, 2026)
 ----------------------------
 - Field: 12-team CFP.
-- Auto bids: 5 highest-ranked conference champions (any conference with a
-  champion = team with most conference wins on that path; Independents cannot
-  be conference champions).
-- At-large: next 7 teams by ranking not already in.
-- Ranking on a path: regular-season wins, then power_index, then team code.
+- Auto bids: ACC, Big Ten, Big 12, SEC champions + one G6 auto (highest
+  G6 conference champion on the engine ranking/power — not highest E[wins]).
+- At-large: remaining slots are power-aware (power_index primary, wins
+  secondary). Year-shock luck must not mint a national-title tail.
+- Ranking for seeding / byes: power_index, then wins, then team code.
 - Byes: seeds 1–4. First round 5v12, 6v11, 7v10, 8v9. Neutral-site playoff
-  games use project_game WP (or power-index logistic if project_game missing).
+  games use power-index logistic.
 - Conference title: most conference wins in that conference on the path
   (tiebreak: total wins, then power).
-- G5: a G5 champion can take an auto bid if they are one of the top-5
-  conference champions by rank. Otherwise they are at-large only.
+- Independents: at-large only (cannot be conference champions).
 - Preseason mass is wide — publish percents to 1 decimal for N≥1000, else
   integer percent / rank tiers.
 
@@ -31,13 +30,15 @@ from src.services.cfb_season_engine.conferences import conference_for
 
 FUTURES_VERSION = "cfb-futures-v1-cfp12-2026"
 CFP_FIELD = 12
-AUTO_BIDS = 5
+AUTO_BIDS = 5  # 4 Power-4 autos + 1 G6 auto
 AT_LARGE = 7
 BYE_SEEDS = 4
 POWER4 = frozenset({"SEC", "Big Ten", "ACC", "Big 12"})
 G5 = frozenset(
     {"AAC", "Mountain West", "Sun Belt", "MAC", "CUSA", "Pac-12", "Conference USA"}
 )
+# Alias G6 = Group of 5 + remaining non-P4 FBS conferences with a champ path.
+G6 = G5
 
 ROUND_PAIRINGS = ((5, 12), (6, 11), (7, 10), (8, 9))
 
@@ -47,6 +48,15 @@ def _power(team: str, power: Mapping[str, float]) -> float:
 
 
 def _rank_key(
+    team: str,
+    wins: Mapping[str, float],
+    power: Mapping[str, float],
+) -> Tuple[float, float, str]:
+    """Power-aware ranking: power first, wins second (at-large / seeding)."""
+    return (_power(team, power), float(wins.get(team, 0.0)), team)
+
+
+def _wins_then_power_key(
     team: str,
     wins: Mapping[str, float],
     power: Mapping[str, float],
@@ -91,7 +101,7 @@ def select_cfp_field(
     conferences: Mapping[str, str],
     power: Mapping[str, float],
 ) -> List[str]:
-    ranked = sorted(teams, key=lambda t: _rank_key(t, wins, power), reverse=True)
+    """12-team field: P4 autos + one G6 auto (by power) + power-aware at-larges."""
     champs = conference_champions(
         teams=teams,
         conf_wins=conf_wins,
@@ -99,14 +109,29 @@ def select_cfp_field(
         conferences=conferences,
         power=power,
     )
-    champ_rank = {team: i for i, team in enumerate(ranked)}
-    auto = sorted(champs.values(), key=lambda t: champ_rank.get(t, 10_000))[:AUTO_BIDS]
     field: List[str] = []
     seen = set()
-    for team in auto:
-        if team not in seen:
+
+    # Power-4 autos (conference champions).
+    for conf in ("ACC", "Big Ten", "Big 12", "SEC"):
+        team = champs.get(conf)
+        if team and team not in seen:
             field.append(team)
             seen.add(team)
+
+    # One G6 auto: highest-ranked G6 conference champion by engine power.
+    g6_champs = [
+        champs[c]
+        for c in champs
+        if c in G6 and champs[c] not in seen
+    ]
+    if g6_champs:
+        g6_auto = max(g6_champs, key=lambda t: (_power(t, power), float(wins.get(t, 0.0)), t))
+        field.append(g6_auto)
+        seen.add(g6_auto)
+
+    # At-larges: power-aware (power primary), not raw win-total tails.
+    ranked = sorted(teams, key=lambda t: _rank_key(t, wins, power), reverse=True)
     for team in ranked:
         if team in seen:
             continue
@@ -114,8 +139,8 @@ def select_cfp_field(
         seen.add(team)
         if len(field) >= CFP_FIELD:
             break
-    # Re-seed by ranking
-    return sorted(field, key=lambda t: _rank_key(t, wins, power), reverse=True)
+    # Re-seed by the same power-aware ranking.
+    return sorted(field, key=lambda t: _rank_key(t, wins, power), reverse=True)[:CFP_FIELD]
 
 
 def _playoff_wp(home: str, away: str, power: Mapping[str, float]) -> float:
@@ -262,17 +287,27 @@ def finalize_futures(
         "at_large": AT_LARGE,
         "bye_seeds": BYE_SEEDS,
         "method": (
-            "Path-level ranking (wins, power_index) → 12-team CFP "
-            "(5 conference champs + 7 at-large) → neutral-site playoff WP from power gap. "
+            "P4 autos (ACC/B1G/B12/SEC) + one G6 auto by engine power + "
+            "power-aware at-larges → neutral-site playoff WP from power gap. "
             "Sim-derived. Not book prices. Not an ESPN bracket copy."
         ),
         "assumptions": {
             "cfp_field": CFP_FIELD,
-            "auto_bids": AUTO_BIDS,
+            "auto_bids": "ACC + Big Ten + Big 12 + SEC champs + one G6 auto by power",
+            "at_large": "power_index primary, wins secondary",
             "independents": "at-large only",
-            "g5": "G5 champ can take an auto bid if among the top-5 conference champs by rank",
+            "g6_auto": "highest-ranked G6 conference champion by power_index",
             "playoff_wp": "logistic of power_index gap, neutral",
             "precision": "1 decimal when N>=1000 else integer percent",
+        },
+        "lineage": {
+            "engine": "cfb",
+            "as_of": as_of,
+            "sim_n": n,
+            "wp_mapper": "cfb_futures._playoff_wp",
+            "shock": "priors.SCORE_NOISE_SD+STRENGTH_NOISE",
+            "kei_def": "cfb_kei.apply_cfb_kei",
+            "field": "select_cfp_field",
         },
         "used_in_spread": False,
         "kei": False,

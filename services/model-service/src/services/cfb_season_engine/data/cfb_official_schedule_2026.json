@@ -1,6 +1,6 @@
 {
   "season": 2026,
-  "as_of": "2026-08-13",
+  "as_of": "2026-08-31",
   "official": true,
   "source": "espn_team_schedule_public",
   "source_detail": "ESPN site.web.api team schedule, seasontype=2 regular + 3 postseason. One SoT. Not densified. Not CFBD.",
@@ -27,7 +27,10 @@
       "fcs_away": false,
       "fbs_vs_fcs": false,
       "season_type": "regular",
-      "venue": "Aviva Stadium"
+      "venue": "Aviva Stadium",
+      "away_score": 15,
+      "home_score": 10,
+      "status": "final"
     },
     {
       "game_id": "401864494",
@@ -47,7 +50,10 @@
       "fcs_away": false,
       "fbs_vs_fcs": false,
       "season_type": "regular",
-      "venue": "Los Angeles Memorial Coliseum"
+      "venue": "Los Angeles Memorial Coliseum",
+      "away_score": 26,
+      "home_score": 42,
+      "status": "final"
     },
     {
       "game_id": "401858202",
@@ -67,7 +73,10 @@
       "fcs_away": false,
       "fbs_vs_fcs": false,
       "season_type": "regular",
-      "venue": "Scott Stadium"
+      "venue": "Scott Stadium",
+      "away_score": 8,
+      "home_score": 34,
+      "status": "final"
     },
     {
       "game_id": "401864577",
@@ -127,7 +136,10 @@
       "fcs_away": false,
       "fbs_vs_fcs": false,
       "season_type": "regular",
-      "venue": "Stanford Stadium"
+      "venue": "Stanford Stadium",
+      "away_score": 27,
+      "home_score": 37,
+      "status": "final"
     },
     {
       "game_id": "401864570",
@@ -147,7 +159,10 @@
       "fcs_away": false,
       "fbs_vs_fcs": false,
       "season_type": "regular",
-      "venue": "Doak Campbell Stadium"
+      "venue": "Doak Campbell Stadium",
+      "away_score": 17,
+      "home_score": 34,
+      "status": "final"
     },
     {
       "game_id": "401862693",
@@ -167,7 +182,10 @@
       "fcs_away": false,
       "fbs_vs_fcs": false,
       "season_type": "regular",
-      "venue": "Allegiant Stadium"
+      "venue": "Allegiant Stadium",
+      "away_score": 27,
+      "home_score": 21,
+      "status": "final"
     },
     {
       "game_id": "401858423",
@@ -17829,5 +17847,7 @@
     "slate_complete": true
   },
   "slate_complete": true,
-  "n_games": 889
+  "n_games": 889,
+  "week0_closed": true,
+  "week0_close_note": "FBS finals locked for research sim start-state. Power SoT not refit from these results (close \u2260 train)."
 }
