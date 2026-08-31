@@ -1,0 +1,124 @@
+{
+  "ok": true,
+  "clean_dir": "/workspace/services/model-service/data/cfb/warehouse/clean",
+  "n_games": 5196,
+  "n_close_rows": 5196,
+  "n_with_close_spread": 3089,
+  "n_missing_close_spread": 2107,
+  "seasons_close_rows": {
+    "2020": 571,
+    "2021": 891,
+    "2022": 900,
+    "2023": 911,
+    "2024": 965,
+    "2025": 958
+  },
+  "by_bucket": {
+    "pick": 507,
+    "short": 673,
+    "mid": 693,
+    "long": 429,
+    "cupcake": 787
+  },
+  "by_season_bucket": {
+    "2020": {
+      "pick": 7,
+      "short": 1,
+      "mid": 2,
+      "long": 5,
+      "cupcake": 22
+    },
+    "2021": {
+      "pick": 13,
+      "short": 7,
+      "mid": 6,
+      "long": 8,
+      "cupcake": 88
+    },
+    "2022": {
+      "pick": 8,
+      "short": 8,
+      "mid": 13,
+      "long": 13,
+      "cupcake": 83
+    },
+    "2023": {
+      "pick": 140,
+      "short": 221,
+      "mid": 202,
+      "long": 130,
+      "cupcake": 189
+    },
+    "2024": {
+      "pick": 181,
+      "short": 199,
+      "mid": 237,
+      "long": 146,
+      "cupcake": 202
+    },
+    "2025": {
+      "pick": 158,
+      "short": 237,
+      "mid": 233,
+      "long": 127,
+      "cupcake": 203
+    }
+  },
+  "by_bucket_tier": {
+    "pick": {
+      "FCS": 49,
+      "P4_vs_G5": 45,
+      "G5_vs_G5": 210,
+      "P4_vs_P4": 203
+    },
+    "short": {
+      "FCS": 31,
+      "P4_vs_P4": 304,
+      "G5_vs_G5": 284,
+      "P4_vs_G5": 54
+    },
+    "mid": {
+      "FCS": 67,
+      "G5_vs_G5": 282,
+      "P4_vs_G5": 70,
+      "P4_vs_P4": 274
+    },
+    "long": {
+      "FCS": 80,
+      "G5_vs_G5": 132,
+      "P4_vs_G5": 75,
+      "P4_vs_P4": 142
+    },
+    "cupcake": {
+      "FCS": 474,
+      "P4_vs_G5": 154,
+      "P4_vs_P4": 94,
+      "G5_vs_G5": 65
+    }
+  },
+  "bucket_edges": {
+    "pick": [
+      0.0,
+      3.0
+    ],
+    "short": [
+      3.0,
+      7.0
+    ],
+    "mid": [
+      7.0,
+      14.0
+    ],
+    "long": [
+      14.0,
+      21.0
+    ],
+    "cupcake": [
+      21.0,
+      999.0
+    ]
+  },
+  "close_source_note": "Uses finite close_spread_home only (NaN skipped).",
+  "fit": false,
+  "note": "Counts only \u2014 no model residual, no WP refit."
+}

@@ -371,6 +371,39 @@ def expected_team_points(
     return points, diag
 
 
+def bucket_for_abs_margin(abs_margin: float) -> str:
+    """Chapter 0 / Chapter 1 edges on |margin| (points)."""
+    m = abs(float(abs_margin))
+    if m < 3.0:
+        return "pick"
+    if m < 7.0:
+        return "short"
+    if m < 14.0:
+        return "mid"
+    if m < 21.0:
+        return "long"
+    return "cupcake"
+
+
+def apply_bucket_margin_map(raw_margin: float) -> Dict[str, Any]:
+    """Named monotonic map: mapped = scale[bucket(|raw|)] * raw.
+
+    Keeps sign. Does not special-case teams. Identity on pick/mid/long/cupcake
+    in v1 (see BUCKET_MARGIN_MAP_ID freeze reasons).
+    """
+    raw = float(raw_margin)
+    bucket = bucket_for_abs_margin(abs(raw))
+    scale = float(P.BUCKET_MARGIN_SCALE.get(bucket, 1.0))
+    mapped = raw * scale
+    return {
+        "map_id": P.BUCKET_MARGIN_MAP_ID,
+        "bucket": bucket,
+        "scale": scale,
+        "raw_margin": round(raw, 4),
+        "mapped_margin": round(mapped, 4),
+    }
+
+
 def win_prob_from_expected_scores(
     home_points: float,
     away_points: float,
@@ -561,9 +594,15 @@ def project_game(
     st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
     home_exp_adj = round(home_exp + 0.5 * st_nudge, 2)
     away_exp_adj = round(away_exp + 0.5 * st_nudge, 2)
+    raw_margin = home_exp_adj - away_exp_adj
+    midpoint = 0.5 * (home_exp_adj + away_exp_adj)
+    margin_map = apply_bucket_margin_map(raw_margin)
+    mapped_margin = float(margin_map["mapped_margin"])
+    home_exp_adj = round(midpoint + 0.5 * mapped_margin, 2)
+    away_exp_adj = round(midpoint - 0.5 * mapped_margin, 2)
     total = round(home_exp_adj + away_exp_adj, 2)
     spread = round(away_exp_adj - home_exp_adj, 2)  # home spread (neg = favorite)
-    margin = home_exp_adj - away_exp_adj
+    margin = mapped_margin
     home_wp = win_prob_from_expected_scores(
         home_exp_adj, away_exp_adj, margin_sd=margin_sd
     )
@@ -584,6 +623,8 @@ def project_game(
             "home_coaching_adj": home_coach_adj,
             "away_coaching_adj": away_coach_adj,
             "st_total_nudge": round(st_nudge, 3),
+            "margin_raw": round(raw_margin, 2),
+            "bucket_margin_map": margin_map,
             "margin": round(margin, 2),
             "spread_home": spread,
             "expected_total": total,

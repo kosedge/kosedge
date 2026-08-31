@@ -40,7 +40,19 @@ from typing import Any, Dict, Mapping
 # Bump when priors / architecture change in a material way.
 # Week-0 close publisher stamp — live API and frozen artifacts share this string.
 ENGINE_VERSION = "cfb-season-engine-v0.15-power-sot"
-CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
+CALIBRATION_TAG = "cfb-bucket-margin-map-v1-20260831"
+# Chapter 1 Phase 1B — named margin→points map by |raw_margin| bucket.
+# Fit: scripts/cfb/cfb_ch1_bucket_map_fit.py (train 2020–24 / hold out 2025).
+# Does NOT stretch WIN_PROB_MARGIN_SD. Does NOT enable margin_calibration tanh.
+# Engine stamp stays v0.15-power-sot (power SoT unchanged); map id is the curve stamp.
+BUCKET_MARGIN_MAP_ID = "cfb-bucket-margin-map-v1-20260831"
+BUCKET_MARGIN_SCALE = {
+    "pick": 1.0,
+    "short": 1.188,
+    "mid": 1.0,
+    "long": 1.0,
+    "cupcake": 1.0,
+}
 
 # ---------------------------------------------------------------------------
 # League environment (FBS-ish)

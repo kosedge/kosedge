@@ -1,0 +1,712 @@
+{
+  "ok": true,
+  "engine_version": "cfb-season-engine-v0.15-power-sot",
+  "reconstruction": "historical_proxy_prior_year_efficiency_league_avg_identity",
+  "clean_dir": "/workspace/services/model-service/data/cfb/warehouse/clean",
+  "seasons": [
+    2024,
+    2025
+  ],
+  "n_joined_with_close": 1607,
+  "n_scored": 1352,
+  "skipped": {
+    "team_not_in_universe": 255
+  },
+  "bucket_edges_abs_close": {
+    "pick": [
+      0.0,
+      3.0
+    ],
+    "short": [
+      3.0,
+      7.0
+    ],
+    "mid": [
+      7.0,
+      14.0
+    ],
+    "long": [
+      14.0,
+      21.0
+    ],
+    "cupcake": [
+      21.0,
+      999.0
+    ]
+  },
+  "model_vs_close_by_bucket": {
+    "pick": {
+      "n": 257,
+      "mean_residual": -0.8712,
+      "mae": 4.3559,
+      "median_ae": 3.41
+    },
+    "short": {
+      "n": 357,
+      "mean_residual": -0.6781,
+      "mae": 4.9417,
+      "median_ae": 3.99
+    },
+    "mid": {
+      "n": 365,
+      "mean_residual": -0.1213,
+      "mae": 7.2239,
+      "median_ae": 6.45
+    },
+    "long": {
+      "n": 193,
+      "mean_residual": 3.5926,
+      "mae": 11.448,
+      "median_ae": 11.48
+    },
+    "cupcake": {
+      "n": 180,
+      "mean_residual": 11.0157,
+      "mae": 17.8164,
+      "median_ae": 17.45
+    }
+  },
+  "kei_vs_close_by_bucket": {
+    "pick": {
+      "n": 257,
+      "mean_residual": -0.9133,
+      "mae": 4.4056,
+      "median_ae": 3.53
+    },
+    "short": {
+      "n": 357,
+      "mean_residual": -0.7083,
+      "mae": 4.9614,
+      "median_ae": 3.96
+    },
+    "mid": {
+      "n": 365,
+      "mean_residual": -0.1603,
+      "mae": 7.1772,
+      "median_ae": 6.35
+    },
+    "long": {
+      "n": 193,
+      "mean_residual": 3.4608,
+      "mae": 11.3248,
+      "median_ae": 11.28
+    },
+    "cupcake": {
+      "n": 180,
+      "mean_residual": 10.757,
+      "mae": 17.551,
+      "median_ae": 17.36
+    }
+  },
+  "model_vs_close_by_season_bucket": {
+    "2024": {
+      "pick": {
+        "n": 137,
+        "mean_residual": -0.9016,
+        "mae": 4.0314,
+        "median_ae": 2.83
+      },
+      "short": {
+        "n": 162,
+        "mean_residual": -0.8701,
+        "mae": 5.0473,
+        "median_ae": 3.99
+      },
+      "mid": {
+        "n": 176,
+        "mean_residual": -0.6329,
+        "mae": 7.2887,
+        "median_ae": 6.88
+      },
+      "long": {
+        "n": 105,
+        "mean_residual": 2.4851,
+        "mae": 12.2208,
+        "median_ae": 11.48
+      },
+      "cupcake": {
+        "n": 92,
+        "mean_residual": 11.0602,
+        "mae": 18.397,
+        "median_ae": 17.91
+      }
+    },
+    "2025": {
+      "pick": {
+        "n": 120,
+        "mean_residual": -0.8365,
+        "mae": 4.7263,
+        "median_ae": 3.84
+      },
+      "short": {
+        "n": 195,
+        "mean_residual": -0.5186,
+        "mae": 4.8539,
+        "median_ae": 4.0
+      },
+      "mid": {
+        "n": 189,
+        "mean_residual": 0.3551,
+        "mae": 7.1635,
+        "median_ae": 6.29
+      },
+      "long": {
+        "n": 88,
+        "mean_residual": 4.9141,
+        "mae": 10.5259,
+        "median_ae": 11.48
+      },
+      "cupcake": {
+        "n": 88,
+        "mean_residual": 10.9692,
+        "mae": 17.2094,
+        "median_ae": 17.36
+      }
+    }
+  },
+  "kei_vs_close_by_season_bucket": {
+    "2024": {
+      "pick": {
+        "n": 137,
+        "mean_residual": -0.9487,
+        "mae": 4.058,
+        "median_ae": 3.09
+      },
+      "short": {
+        "n": 162,
+        "mean_residual": -0.8802,
+        "mae": 5.0746,
+        "median_ae": 4.06
+      },
+      "mid": {
+        "n": 176,
+        "mean_residual": -0.6824,
+        "mae": 7.2514,
+        "median_ae": 6.88
+      },
+      "long": {
+        "n": 105,
+        "mean_residual": 2.3634,
+        "mae": 12.1455,
+        "median_ae": 11.48
+      },
+      "cupcake": {
+        "n": 92,
+        "mean_residual": 10.8189,
+        "mae": 18.1426,
+        "median_ae": 17.55
+      }
+    },
+    "2025": {
+      "pick": {
+        "n": 120,
+        "mean_residual": -0.8728,
+        "mae": 4.8023,
+        "median_ae": 4.32
+      },
+      "short": {
+        "n": 195,
+        "mean_residual": -0.5654,
+        "mae": 4.8674,
+        "median_ae": 3.77
+      },
+      "mid": {
+        "n": 189,
+        "mean_residual": 0.3258,
+        "mae": 7.108,
+        "median_ae": 6.13
+      },
+      "long": {
+        "n": 88,
+        "mean_residual": 4.7701,
+        "mae": 10.3456,
+        "median_ae": 11.28
+      },
+      "cupcake": {
+        "n": 88,
+        "mean_residual": 10.6923,
+        "mae": 16.9325,
+        "median_ae": 17.29
+      }
+    }
+  },
+  "fit": false,
+  "note": "Residuals = spread_home \u2212 close_home. Negative \u21d2 model/KEI longer favorite than close; positive \u21d2 shorter than close (cupcake-direction).",
+  "sample_rows": [
+    {
+      "game_id": "401635525",
+      "season": 2024,
+      "week": 1,
+      "home": "GT",
+      "away": "FSU",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": 10.5,
+      "raw_margin_home": -4.92,
+      "model_spread_home": 4.92,
+      "kei_spread_home": 5.21,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": -5.58,
+      "residual_kei_minus_close": -5.29,
+      "model_home_wp": 0.4024,
+      "kei_home_wp": 0.3968
+    },
+    {
+      "game_id": "401628448",
+      "season": 2024,
+      "week": 1,
+      "home": "MINN",
+      "away": "UNC",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": 1.5,
+      "raw_margin_home": -4.27,
+      "model_spread_home": 4.27,
+      "kei_spread_home": 4.64,
+      "bucket_close": "pick",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": 2.77,
+      "residual_kei_minus_close": 3.14,
+      "model_home_wp": 0.4151,
+      "kei_home_wp": 0.4078
+    },
+    {
+      "game_id": "401628328",
+      "season": 2024,
+      "week": 1,
+      "home": "OU",
+      "away": "TEM",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -43.5,
+      "raw_margin_home": 28.11,
+      "model_spread_home": -28.11,
+      "kei_spread_home": -29.31,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "cupcake",
+      "residual_model_minus_close": 15.39,
+      "residual_kei_minus_close": 14.19,
+      "model_home_wp": 0.9211,
+      "kei_home_wp": 0.9296
+    },
+    {
+      "game_id": "401628453",
+      "season": 2024,
+      "week": 1,
+      "home": "MSU",
+      "away": "FAU",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -12.5,
+      "raw_margin_home": 3.98,
+      "model_spread_home": -3.98,
+      "kei_spread_home": -4.56,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": 8.52,
+      "residual_kei_minus_close": 7.94,
+      "model_home_wp": 0.5792,
+      "kei_home_wp": 0.5906
+    },
+    {
+      "game_id": "401628461",
+      "season": 2024,
+      "week": 1,
+      "home": "WIS",
+      "away": "WMU",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -24.5,
+      "raw_margin_home": 14.43,
+      "model_spread_home": -14.43,
+      "kei_spread_home": -15.63,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "long",
+      "residual_model_minus_close": 10.07,
+      "residual_kei_minus_close": 8.87,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.7839
+    },
+    {
+      "game_id": "401634300",
+      "season": 2024,
+      "week": 1,
+      "home": "STAN",
+      "away": "TCU",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": 8.5,
+      "raw_margin_home": -7.64,
+      "model_spread_home": 7.64,
+      "kei_spread_home": 8.64,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "mid",
+      "residual_model_minus_close": -0.86,
+      "residual_kei_minus_close": 0.14,
+      "model_home_wp": 0.3506,
+      "kei_home_wp": 0.3321
+    },
+    {
+      "game_id": "401628323",
+      "season": 2024,
+      "week": 1,
+      "home": "UGA",
+      "away": "CLEM",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": -10.5,
+      "raw_margin_home": 4.8,
+      "model_spread_home": -4.8,
+      "kei_spread_home": -5.28,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": 5.7,
+      "residual_kei_minus_close": 5.22,
+      "model_home_wp": 0.5953,
+      "kei_home_wp": 0.6046
+    },
+    {
+      "game_id": "401628455",
+      "season": 2024,
+      "week": 1,
+      "home": "OSU",
+      "away": "AKR",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -48.5,
+      "raw_margin_home": 24.28,
+      "model_spread_home": -24.28,
+      "kei_spread_home": -25.48,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "cupcake",
+      "residual_model_minus_close": 24.22,
+      "residual_kei_minus_close": 23.02,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.8998
+    },
+    {
+      "game_id": "401628319",
+      "season": 2024,
+      "week": 1,
+      "home": "ALA",
+      "away": "WKU",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -37.5,
+      "raw_margin_home": 16.56,
+      "model_spread_home": -16.56,
+      "kei_spread_home": -17.76,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "long",
+      "residual_model_minus_close": 20.94,
+      "residual_kei_minus_close": 19.74,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.8139
+    },
+    {
+      "game_id": "401628332",
+      "season": 2024,
+      "week": 1,
+      "home": "TAMU",
+      "away": "ND",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -2.5,
+      "raw_margin_home": 0.18,
+      "model_spread_home": -0.18,
+      "kei_spread_home": -1.21,
+      "bucket_close": "pick",
+      "bucket_raw_margin": "pick",
+      "residual_model_minus_close": 2.32,
+      "residual_kei_minus_close": 1.29,
+      "model_home_wp": 0.5036,
+      "kei_home_wp": 0.5242
+    },
+    {
+      "game_id": "401628457",
+      "season": 2024,
+      "week": 1,
+      "home": "WVU",
+      "away": "PSU",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": 7.5,
+      "raw_margin_home": -4.33,
+      "model_spread_home": 4.33,
+      "kei_spread_home": 4.69,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": -3.17,
+      "residual_kei_minus_close": -2.81,
+      "model_home_wp": 0.4139,
+      "kei_home_wp": 0.4069
+    },
+    {
+      "game_id": "401628452",
+      "season": 2024,
+      "week": 1,
+      "home": "MICH",
+      "away": "FRES",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -2.5,
+      "raw_margin_home": 16.28,
+      "model_spread_home": -16.28,
+      "kei_spread_home": -17.48,
+      "bucket_close": "pick",
+      "bucket_raw_margin": "long",
+      "residual_model_minus_close": -13.78,
+      "residual_kei_minus_close": -14.98,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.8101
+    },
+    {
+      "game_id": "401628322",
+      "season": 2024,
+      "week": 1,
+      "home": "UF",
+      "away": "MIA",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": 2.5,
+      "raw_margin_home": -0.2,
+      "model_spread_home": 0.2,
+      "kei_spread_home": 1.06,
+      "bucket_close": "pick",
+      "bucket_raw_margin": "pick",
+      "residual_model_minus_close": -2.3,
+      "residual_kei_minus_close": -1.44,
+      "model_home_wp": 0.496,
+      "kei_home_wp": 0.4788
+    },
+    {
+      "game_id": "401628333",
+      "season": 2024,
+      "week": 1,
+      "home": "VAN",
+      "away": "VT",
+      "tier": "P4_vs_P4",
+      "fcs": false,
+      "close_spread_home": 13.5,
+      "raw_margin_home": -3.07,
+      "model_spread_home": 3.07,
+      "kei_spread_home": 3.58,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": -10.43,
+      "residual_kei_minus_close": -9.92,
+      "model_home_wp": 0.4387,
+      "kei_home_wp": 0.4286
+    },
+    {
+      "game_id": "401628451",
+      "season": 2024,
+      "week": 1,
+      "home": "MD",
+      "away": "CONN",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -18.5,
+      "raw_margin_home": 12.83,
+      "model_spread_home": -12.83,
+      "kei_spread_home": -14.03,
+      "bucket_close": "long",
+      "bucket_raw_margin": "mid",
+      "residual_model_minus_close": 5.67,
+      "residual_kei_minus_close": 4.47,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.7596
+    },
+    {
+      "game_id": "401634305",
+      "season": 2024,
+      "week": 1,
+      "home": "PITT",
+      "away": "KENT",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -23.5,
+      "raw_margin_home": 12.3,
+      "model_spread_home": -12.3,
+      "kei_spread_home": -13.5,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "mid",
+      "residual_model_minus_close": 11.2,
+      "residual_kei_minus_close": 10.0,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.7512
+    },
+    {
+      "game_id": "401628449",
+      "season": 2024,
+      "week": 1,
+      "home": "IU",
+      "away": "FIU",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -25.5,
+      "raw_margin_home": 9.58,
+      "model_spread_home": -9.58,
+      "kei_spread_home": -10.78,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "mid",
+      "residual_model_minus_close": 15.92,
+      "residual_kei_minus_close": 14.72,
+      "model_home_wp": 0.6848,
+      "kei_home_wp": 0.706
+    },
+    {
+      "game_id": "401628454",
+      "season": 2024,
+      "week": 1,
+      "home": "NEB",
+      "away": "UTEP",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -35.5,
+      "raw_margin_home": 10.56,
+      "model_spread_home": -10.56,
+      "kei_spread_home": -11.76,
+      "bucket_close": "cupcake",
+      "bucket_raw_margin": "mid",
+      "residual_model_minus_close": 24.94,
+      "residual_kei_minus_close": 23.74,
+      "model_home_wp": 0.9,
+      "kei_home_wp": 0.7227
+    },
+    {
+      "game_id": "401629039",
+      "season": 2024,
+      "week": 1,
+      "home": "MASS",
+      "away": "EMU",
+      "tier": "G5_vs_G5",
+      "fcs": false,
+      "close_spread_home": -2.5,
+      "raw_margin_home": 4.31,
+      "model_spread_home": -4.31,
+      "kei_spread_home": -4.85,
+      "bucket_close": "pick",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": -1.81,
+      "residual_kei_minus_close": -2.35,
+      "model_home_wp": 0.5857,
+      "kei_home_wp": 0.5963
+    },
+    {
+      "game_id": "401634304",
+      "season": 2024,
+      "week": 1,
+      "home": "SYR",
+      "away": "OHIO",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -17.5,
+      "raw_margin_home": 1.02,
+      "model_spread_home": -1.02,
+      "kei_spread_home": -1.95,
+      "bucket_close": "long",
+      "bucket_raw_margin": "pick",
+      "residual_model_minus_close": 16.48,
+      "residual_kei_minus_close": 15.55,
+      "model_home_wp": 0.5204,
+      "kei_home_wp": 0.539
+    },
+    {
+      "game_id": "401641015",
+      "season": 2024,
+      "week": 1,
+      "home": "UTSA",
+      "away": "KENNESAW",
+      "tier": "G5_vs_G5",
+      "fcs": false,
+      "close_spread_home": -15.5,
+      "raw_margin_home": 2.02,
+      "model_spread_home": -2.02,
+      "kei_spread_home": -2.83,
+      "bucket_close": "long",
+      "bucket_raw_margin": "pick",
+      "residual_model_minus_close": 13.48,
+      "residual_kei_minus_close": 12.67,
+      "model_home_wp": 0.5404,
+      "kei_home_wp": 0.5565
+    },
+    {
+      "game_id": "401644683",
+      "season": 2024,
+      "week": 1,
+      "home": "NW",
+      "away": "M-OH",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -3.5,
+      "raw_margin_home": 5.73,
+      "model_spread_home": -5.73,
+      "kei_spread_home": -6.1,
+      "bucket_close": "short",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": -2.23,
+      "residual_kei_minus_close": -2.6,
+      "model_home_wp": 0.6133,
+      "kei_home_wp": 0.6204
+    },
+    {
+      "game_id": "401643700",
+      "season": 2024,
+      "week": 1,
+      "home": "GASO",
+      "away": "BOISE",
+      "tier": "G5_vs_G5",
+      "fcs": false,
+      "close_spread_home": 12.5,
+      "raw_margin_home": -5.24,
+      "model_spread_home": 5.24,
+      "kei_spread_home": 5.49,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": -7.26,
+      "residual_kei_minus_close": -7.01,
+      "model_home_wp": 0.3962,
+      "kei_home_wp": 0.3913
+    },
+    {
+      "game_id": "401636611",
+      "season": 2024,
+      "week": 1,
+      "home": "HOU",
+      "away": "UNLV",
+      "tier": "P4_vs_G5",
+      "fcs": false,
+      "close_spread_home": -2.5,
+      "raw_margin_home": 0.35,
+      "model_spread_home": -0.35,
+      "kei_spread_home": -1.36,
+      "bucket_close": "pick",
+      "bucket_raw_margin": "pick",
+      "residual_model_minus_close": 2.15,
+      "residual_kei_minus_close": 1.14,
+      "model_home_wp": 0.507,
+      "kei_home_wp": 0.5272
+    },
+    {
+      "game_id": "401641039",
+      "season": 2024,
+      "week": 1,
+      "home": "RICE",
+      "away": "SHSU",
+      "tier": "G5_vs_G5",
+      "fcs": false,
+      "close_spread_home": -9.5,
+      "raw_margin_home": 6.88,
+      "model_spread_home": -6.88,
+      "kei_spread_home": -8.08,
+      "bucket_close": "mid",
+      "bucket_raw_margin": "short",
+      "residual_model_minus_close": 2.62,
+      "residual_kei_minus_close": 1.42,
+      "model_home_wp": 0.6352,
+      "kei_home_wp": 0.6576
+    }
+  ]
+}
