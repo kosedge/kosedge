@@ -226,6 +226,6 @@ describe("cfb kei lines bundle", () => {
     );
     expect(ballOsu).toBeTruthy();
     expect(ballOsu?.handicapSpreadHome).toBeLessThanOrEqual(-40);
-    expect(ballOsu?.handicapSpreadHome).toBe(-42.21);
+    expect(ballOsu?.handicapSpreadHome).toBe(-42.05);
   });
 });

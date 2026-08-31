@@ -1284,6 +1284,57 @@ def test_talent_from_qb_stats_attempt_term_phase1d() -> None:
     )
 
 
+def test_resolve_qb_talent_lowsample_phase1e() -> None:
+    """Phase 1E: att < 80 blends to recruiting_class_score; HAW volume untouched."""
+    import importlib.util
+    import math
+    from pathlib import Path
+
+    path = (
+        Path(__file__).resolve().parents[2].parent
+        / "scripts"
+        / "cfb"
+        / "package_real_roster_2026.py"
+    )
+    if not path.is_file():
+        path = Path("/workspace/scripts/cfb/package_real_roster_2026.py")
+    spec = importlib.util.spec_from_file_location("package_real_roster_2026", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+    assert mod.QB_TALENT_LOWSAMPLE_ATTEMPTS == 80
+    # Zero attempts → all fallback
+    assert mod.resolve_qb_talent(0, 0, 0, is_portal=False, recruiting_class_score=70.0) == 70.0
+    # STAN-like: 3 att / recruit 70 → between stats (~50) and 70, nearer recruit
+    stan_stats = mod.talent_from_qb_stats(3, 22, 1, is_portal=False)
+    stan = mod.resolve_qb_talent(3, 22, 1, is_portal=False, recruiting_class_score=70.0)
+    w = math.sqrt(3 / 80.0)
+    expected = (1.0 - w) * 70.0 + w * stan_stats
+    assert abs(stan - expected) < 1e-9
+    assert stan > 60.0
+    assert stan > stan_stats
+    # At N: pure stats (MICH edge — 82 stays on stats path; 80 == N)
+    at_n_stats = mod.talent_from_qb_stats(80, 476, 5, is_portal=False)
+    at_n = mod.resolve_qb_talent(80, 476, 5, is_portal=False, recruiting_class_score=90.0)
+    assert abs(at_n - at_n_stats) < 1e-9
+    # Continuous: 79 < 80 blend still applies
+    just_under = mod.resolve_qb_talent(79, 476, 5, is_portal=False, recruiting_class_score=90.0)
+    assert just_under != at_n_stats
+
+    from src.services.cfb_season_engine.loaders import build_packaged_universe
+
+    universe = build_packaged_universe(2026)
+    assert universe.teams["HAW"].qb.qb_talent == 77.89
+    assert universe.teams["STAN"].qb.qb_talent > 60.0
+    assert universe.teams["STAN"].qb.qb_talent > 50.58
+    assert (
+        universe.teams["OSU"].qb.qb_situation_index
+        > universe.teams["HAW"].qb.qb_situation_index
+        > universe.teams["TCU"].qb.qb_situation_index
+    )
+
+
 def test_calibration_blue_blood_vs_g5_ordering() -> None:
     """UGA/TEX/OSU remain clear favorites vs BALL; spreads bettable, not absurd."""
     from src.services.cfb_season_engine.priors import (
