@@ -1,18 +1,18 @@
 # Denver Broncos 2026 Season Preview
 
-**By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
+**By Reese Quinn** · Kos Edge Analytics · AFC West desk  
 **Angle:** The market has already removed four wins, but Denver’s floor still looks too sturdy for 9.5  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-115 / -105)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **9.5** (-115 / -105)
 **Sources (beat desk):** Jeff Legwold (ESPN); Mike Klis (9NEWS); Troy Renck (Denver7); Denver Broncos communications
 
 Denver won 14 games last season, earned the AFC’s top seed and reached the conference title game. DraftKings is asking whether it can win 10 now.
 
 That four-win haircut is mostly justified. The Broncos went 11-2 in one-score games, a profile that should regress even when the coaching and defense remain good. They also drew a first-place schedule. Yet the correction may have gone a little too far. The Kos Edge model makes Denver **10.51**, a full 1.01 wins above the posted 9.5, and late-August reporting has reduced the most important health concern rather than amplified it.
 
-The result is a restrained position, not a declaration: **soft Over 9.5 at -115, confidence 2/5**. Denver does not need to approach 14 wins again. It only needs to reach 10.
+The result is a restrained position, not a declaration: **Over 9.5 at -115, confidence 2/5**. Denver does not need to approach 14 wins again. It only needs to reach 10.
 
 ## Nix gave the Over case the August evidence it needed
 
@@ -52,7 +52,7 @@ This remains a soft position because close-game regression, Nix’s full-season 
 
 ## Betting Guide
 
-- **Season wins 9.5:** Soft Over at **-115**. The model’s 10.51 fair and Nix’s clean game return support 10 or more, but keep confidence at 2/5.
+- **Season wins 9.5:** **Over 2/5** at **-115**. The model’s 10.51 fair and Nix’s clean game return support 10 or more; Cooper’s commissioner’s-exempt listing is not a house rewrite.
 - **Price discipline:** Pass if Over 9.5 becomes meaningfully more expensive than -120. Do not pay for a 14-win repeat narrative.
 - **Early sides:** Denver may offer more value as an underdog during the first-six-week gauntlet than as a favorite. Confirm Nix’s movement and the offensive-line combination each week.
 - **Live reassessment:** Separate a difficult early record from underlying performance. Pressure allowed, early-down efficiency and defensive disruption will be more useful than raw wins through Week 6.
@@ -60,8 +60,8 @@ This remains a soft position because close-game regression, Nix’s full-season 
 
 **Handicapper’s Note**  
 Fair number: **10.51**  
-Market number: **9.5** (Over -115 / Under -105)  
-Lean: **Soft Over 9.5**  
+Market number: **9.5** (-115 / -105)
+Lean: **Over 2/5**  
 Confidence: **2/5**  
 Key risk: One-score regression and a five-playoff-team opening stretch could overwhelm the roster gains if Nix’s ankle or Denver’s defensive efficiency slips.
 

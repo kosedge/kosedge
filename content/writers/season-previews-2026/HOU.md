@@ -1,16 +1,16 @@
 # Houston Texans 2026 Season Preview
 
-**By Drew Kessler** · Kos Edge Analytics · AFC South desk  
+**By Taylor Brooks** · Kos Edge Analytics · AFC South desk  
 **Angle:** The defensive floor survives, but Houston’s WR2 uncertainty makes a taxed Over difficult to buy  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (O -125 / U +105)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **9.5** (O -146 / U +124)
 **Sources (beat desk):** DJ Bien-Aime (ESPN); Jonathan M. Alexander (Houston Chronicle); Aaron Wilson (KPRC 2 / SportsTalk 790)
 
-Houston’s win total asks two different questions at once. Is a 12-win team with a high-end defense still more likely than not to reach 10? Probably. Is that answer strong enough to lay **-125** after a season-ending injury removed a starting receiver and left the next three options carrying separate availability or role questions? That is harder.
+Houston’s win total asks two different questions at once. Is a 12-win team with a high-end defense still more likely than not to reach 10? Probably. Is that answer strong enough to lay **-146** after a season-ending injury removed a starting receiver and left the next three options carrying separate availability or role questions? That is harder.
 
-The Kos Edge preseason simulation lands at **10.34 expected wins**, 0.84 above the posted 9.5. That is a real numerical gap, not a rounding error. The price changes the decision, though. An Over bettor at -125 needs to win 55.6% of the time before accounting for hold, and an expected-win mean is not the same thing as the probability of clearing nine wins. Houston opened at 9.5 in February and remains there in late August. The number held; the offensive certainty did not.
+The Kos Edge preseason simulation lands at **10.34 expected wins**, 0.84 above the posted 9.5. That is a real numerical gap, not a rounding error. The price changes the decision, though. An Over bettor at **-146** needs roughly a 59.3% win rate before accounting for hold, and an expected-win mean is not the same thing as the probability of clearing nine wins. Houston opened at 9.5 in February and remains there on the Aug. 31 SI stamp. The number held; the offensive certainty did not.
 
 ## Higgins changes the passing-game floor
 
@@ -20,7 +20,7 @@ This is not a generic depth loss. Higgins was positioned to be the stable second
 
 The open WR2 job therefore belongs to a group, not a settled replacement. Dell owns the highest ceiling if his body accepts a full workload. Jaylin Noel returned to full team work after a hamstring strain and broken finger interrupted most of his camp. Xavier Hutchinson, who posted career highs with 35 catches and 428 yards last season, offers the cleanest recent availability. Houston can rotate those three, but rotation is not the same as continuity.
 
-That distinction matters for C.J. Stroud. Collins can remain the featured target and Dalton Schultz can absorb middle-of-field work, yet the Over case needs the offense to improve its weekly floor. If Dell is still managed, Noel is rebuilding timing and Hutchinson is learning a larger role, the Texans may again ask their defense to protect narrow margins. The Higgins injury does not turn Houston into an Under team. It does make -125 a poor price for treating offensive growth as settled.
+That distinction matters for C.J. Stroud. Collins can remain the featured target and Dalton Schultz can absorb middle-of-field work, yet the Over case needs the offense to improve its weekly floor. If Dell is still managed, Noel is rebuilding timing and Hutchinson is learning a larger role, the Texans may again ask their defense to protect narrow margins. The Higgins injury does not turn Houston into an Under team. It does make **-146** a poor price for treating offensive growth as settled.
 
 ## The line improved on paper; center is still new
 
@@ -40,13 +40,13 @@ The division is no longer a free source of wins. Jacksonville is the defending c
 
 ## Price the uncertainty, not just the mean
 
-The Model fair of 10.34 supports Houston more than the market’s 9.5. The research does not fully reject that view: the defense is intact at its core, the center competition produced a winner and the schedule contains enough winnable games. The problem is paying -125 while the offense identifies a new second receiver and Dell’s availability remains open.
+The Model fair of 10.34 supports Houston more than the market’s 9.5. The research does not fully reject that view: the defense is intact at its core, the center competition produced a winner and the schedule contains enough winnable games. The problem is paying **-146** while the offense identifies a new second receiver and Dell’s availability remains open.
 
-At even money, the 0.84-win Model gap would justify a soft Over. At the current tax, the injury-adjustment risk absorbs too much of the margin. The disciplined position on August 26 is **Pass**, with Houston kept on the shopping list if the price improves or the receiver rotation becomes materially clearer.
+At even money, the 0.84-win Model gap would justify a soft Over. At the current tax, the injury-adjustment risk absorbs too much of the margin. The disciplined Aug. 31 position is **Pass**, with Houston kept on the shopping list if the price improves or the receiver rotation becomes materially clearer.
 
 ## Betting Guide
 
-- **Win total 9.5 (O -125 / U +105):** Pass. Model fair is 10.34, but the Higgins loss and Dell/Noel ramp-ups make the current Over tax difficult to justify.
+- **Win total 9.5 (O -146 / U +124):** Pass. Model fair is 10.34, but the Higgins loss and Dell/Noel ramp-ups make the current Over tax difficult to justify.
 - **Buy point:** A return toward even money on Over 9.5 would reopen a small position if Dell is practicing consistently. Do not pay more merely because the defense looks ready.
 - **Early sides:** Treat Houston’s offense cautiously against Buffalo and Cincinnati until Rutledge’s protection calls and the WR2 rotation hold up under full-game volume.
 - **Usage watch:** Dell, Noel and Hutchinson snaps are more informative than a nominal depth-chart order. Collins volume may rise without the overall passing game becoming more efficient.
@@ -54,9 +54,9 @@ At even money, the 0.84-win Model gap would justify a soft Over. At the current 
 
 **Handicapper’s Note**  
 Fair number: **10.34**  
-Market number: **9.5** (O -125 / U +105)  
+Market number: **9.5** (O -146 / U +124)
 Lean: **Pass**  
-Confidence: **2/5**  
+Confidence: **4/5**  
 Key risk: Houston’s defensive floor can still carry 10 wins, but Higgins’ season-ending ACL injury leaves Dell, Noel and Hutchinson to settle a crucial role at a taxed Over price.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

@@ -1,16 +1,16 @@
 # Dallas Cowboys 2026 Season Preview
 
-**By Jordan Vale** · Kos Edge Analytics · NFC East desk  
+**By Avery Cole** · Kos Edge Analytics · NFC East desk  
 **Angle:** The offense can sell ten wins; the defense, travel, and a 7.10 Model fair keep 9.5 in conflict territory  
-**Date:** August 26, 2026
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (+115 / -140)
+**Market (DK / SI, Aug 31 fact-check):** Win total **9.5** (+100 / -120)
 **Sources (beat desk):** Todd Archer (ESPN); Nick Eatman and Tommy Yarrish (DallasCowboys.com); Dallas Cowboys schedule desk
 
 Dallas has enough offense to win ten games. That is not the same as saying ten should be the betting expectation.
 
-DraftKings opened the Cowboys at **8.5** in February and now asks them to clear **9.5**, with the Under taxed to **-140**. The Kos Edge Model lands much lower at **7.10 expected wins**. That 2.40-win disagreement is impossible to hide, but it is not an automatic Under ticket. The market has aggressively priced an intact offense and a redesigned defense; the Model remains skeptical that the conversion from 7-9-1 to double-digit winner happens this quickly. When two credible views are that far apart, the disciplined answer is **Pass**, not false precision.
+DraftKings opened the Cowboys at **8.5** in February and now asks them to clear **9.5**, with the Aug. 31 SI Under at **-120** (Over **+100**). The Kos Edge Model lands much lower at **7.10 expected wins**. That 2.40-win disagreement is impossible to hide — do not average it — but it is not an automatic Under ticket. The market has aggressively priced an intact offense and a redesigned defense; the Model remains skeptical that the conversion from 7-9-1 to double-digit winner happens this quickly. When two credible views are that far apart, the disciplined answer is **Pass**, not false precision.
 
 ## The offense is not the argument
 
@@ -44,13 +44,13 @@ That sequence creates more than generic strength-of-schedule pressure. It create
 
 The Model distribution is wide: its 10th-to-90th percentile band runs from **three to 11 wins**. The mean is not claiming Dallas cannot reach ten. It is saying the route requires a favorable mix of defensive improvement, tackle health, and close-game conversion.
 
-At the same time, laying **-140** on Under 9.5 asks the bettor to pay a large toll for the Model's skepticism. The number already moved a full win from the opener. That combination—large projection conflict, expensive Under, and a roster with genuine offensive ceiling—is why this is a Pass.
+At the same time, laying **-120** on Under 9.5 still asks the bettor to pay for the Model's skepticism against a high-ceiling offense. The number already moved a full win from the opener. That combination—large projection conflict, juiced Under, and a roster with genuine offensive ceiling—is why this is a Pass.
 
 The cleaner early-season approach is to evaluate the defense in pieces. Track early-down success allowed, pressure created without blitzing, explosive passes conceded, and how quickly Downs and the corners pass off motion. If those indicators settle near league average, the market's ten-win case will have support. If Dallas still needs 30 points every week, the schedule will expose it without help from a preseason narrative.
 
 ## Betting Guide
 
-- **Win total 9.5:** **Pass.** The Model's **7.10** fair is materially below the market, but **-140** on the Under and a high-end offense make the Model-market conflict too large to treat as a routine edge.
+- **Win total 9.5:** **Pass.** The Model's **7.10** fair is materially below the market, but **-120** on the Under and a high-end offense make the Model-market conflict too large to treat as a routine edge. Do not average the 2.40 gap.
 - **Line movement:** The move from an **8.5** opener to **9.5** is meaningful. Do not handicap the stale number.
 - **Early-season trigger:** Reassess only after the new defense shows it can prevent explosives and win third down against starting quarterbacks.
 - **Schedule watch:** The Brazil-Houston-Tampa Bay-Green Bay-Philadelphia run is the pressure point; travel and short rest amplify a new defensive install.
@@ -60,7 +60,7 @@ The cleaner early-season approach is to evaluate the defense in pieces. Track ea
 Fair number: **7.10**  
 Market number: **9.5**  
 Lean: **Pass**  
-Confidence: **2/5**  
+Confidence: **1/5**  
 Key risk: The Model and market are 2.40 wins apart, while the expensive Under must survive an elite offense and the possibility of rapid defensive improvement.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

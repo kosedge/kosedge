@@ -2,17 +2,17 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Ten wins require cleaner offense and healthy protection, not another season of late-down improvisation  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire live widget · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (+100 / -120)  
+**Market (DK / RotoWire live widget, Aug 31 fact-check):** Win total **9.5** (+105 / -125)
 **Sources (beat desk):** Courtney Cronin (ESPN); Sean Hammond (Daily Herald); ChicagoBears.com
 
 Chicago is being asked to win 10 games after winning 11, taking the NFC North and beating Green Bay in the playoffs. That sounds like a modest tax on a young contender. The current evidence makes it more complicated.
 
 The Kos Edge model lands at **8.34 expected wins**, 1.16 below the market. Yet the Bears also have a quarterback showing more command in his second summer with Ben Johnson, a defense entering Year 2 in Dennis Allen’s system and enough unresolved injury information to make a clean Under case premature. The disagreement is real. It is not automatically a bet.
 
-That distinction matters at **9.5**, where the Over is even money and the Under costs **-120**. Chicago has enough upside to punish anyone who treats expected wins as an Under probability. It also has enough fragility at tackle, running back and in the secondary to make 10 wins a demanding baseline.
+That distinction matters at **9.5**, where the Aug. 31 RW live-widget stamp posts Over **+105** and Under **-125**. Chicago has enough upside to punish anyone who treats expected wins as an Under probability. It also has enough fragility at tackle, running back and in the secondary to make 10 wins a demanding baseline.
 
 ## Williams has more command; accuracy remains the test
 
@@ -52,20 +52,20 @@ The North offers no obvious recovery game. Detroit carries a 10.5 total, Green B
 
 ## Price, model and the decision
 
-The arithmetic points toward the Under: **8.34 fair versus 9.5 market**. The price complicates the screen. Under -120 requires a break-even rate of about 54.5%, and expected wins alone do not provide that probability. More important, the football evidence conflicts with a simple model-first position. Williams’ command and schematic continuity support a ceiling above the mean; Monangai, the tackles and the secondary widen the downside.
+The arithmetic points toward the Under: **8.34 fair versus 9.5 market**. The price complicates the screen. Under **-125** requires a break-even rate of about 55.6%, and expected wins alone do not provide that probability. More important, the football evidence conflicts with a simple model-first position. Williams’ command and schematic continuity support a ceiling above the mean; Monangai, the tackles and the secondary widen the downside.
 
 This is exactly where threshold discipline prevents a forced opinion. Kos Edge is not converting a model-market disagreement into an Under while material Week 1 availability remains unresolved. It is also not ignoring the 1.16-win gap to sell an Over narrative. The decision is **Pass**.
 
 ## Betting Guide
 
-- **Season wins 9.5:** Pass at Over +100 / Under -120. The model favors the Under direction, but current roster and quarterback evidence does not produce a clean, reconciled edge.
+- **Season wins 9.5:** Pass at Over +105 / Under -125. The model favors the Under direction, but current roster and quarterback evidence does not produce a clean, reconciled edge.
 - **Before Week 1:** Reassess Wright’s elbow, Monangai’s practice ramp and the final left-tackle decision. Those are inputs, not automatic triggers.
 - **Early season:** Williams’ completion rate under pressure and Chicago’s early-down rushing efficiency matter more than preseason scoring.
 - **Division stretch:** Preserve flexibility for Weeks 16-18. The closing three-game North run is likely to carry more information than an August futures position.
 
 **Handicapper’s Note**  
 Fair number: **8.34 wins**  
-Market number: **9.5** (Over +100 / Under -120)  
+Market number: **9.5** (+105 / -125)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: The model sits 1.16 wins below the market, but improved quarterback command and unresolved tackle, backfield and secondary health create a material Model-market conflict.

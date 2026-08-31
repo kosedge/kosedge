@@ -1,18 +1,18 @@
 # Jacksonville Jaguars 2026 Season Preview
 
-**By Drew Kessler** · Kos Edge Analytics · AFC South desk  
+**By Taylor Brooks** · Kos Edge Analytics · AFC South desk  
 **Angle:** The market reset from 9.5 to 8.5 gives Lawrence room to absorb a first-place schedule  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (O +110 / U -130)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **8.5** (O -140 / U +116)
 **Sources (beat desk):** Michael DiRocco (ESPN); John Shipley (Jaguars Media / Jaguars on SI); Juston Lewis (Florida Times-Union)
 
-Jacksonville does not need to repeat 13-4 to reward an Over bettor. It needs nine wins, and the market is offering plus money for a roster led by Trevor Lawrence in Year 2 of Liam Coen’s offense.
+Jacksonville does not need to repeat 13-4 to clear eight wins. It needs nine, with Trevor Lawrence in Year 2 of Liam Coen’s offense — but the Aug. 31 SI stamp no longer pays plus money to buy that ask.
 
-That distinction is the case. DraftKings opened the Jaguars at 9.5 in February, then moved them to 8.5 after the schedule was released. The Kos Edge simulation lands at **9.77 expected wins**, 1.27 above the current total. At **+110**, the Over carries a 47.6% raw break-even price. The model gap clears the desk’s threshold, and the price does not consume it.
+DraftKings opened the Jaguars at 9.5 in February, then moved them to 8.5 after the schedule was released. The Kos Edge simulation lands at **9.77 expected wins**, 1.27 above the current total. At **O -140 / U +116**, the Over tax consumes the prior buy. The model gap remains; the price does not clear.
 
-This is still a soft Over, not an argument that Jacksonville established a permanent 13-win level last season. The first-place schedule is difficult, two starting receivers are dealing with late-August injuries, and the offensive line is only now settling on its best five. The bet works because those risks are being charged to an 8.5 total rather than the opening 9.5.
+This is no longer a soft Over on the Aug. 31 stamp — it is **Pass**, not an argument that Jacksonville established a permanent 13-win level last season. The first-place schedule is difficult, two starting receivers are dealing with late-August injuries, and the offensive line is only now settling on its best five. The prior Over case leaned on buying 8.5 rather than the opening 9.5; the current SI juice removes that buy.
 
 ## Lawrence and the offense are showing enough
 
@@ -48,21 +48,21 @@ This is not a friendly schedule. It is also why the total is 8.5. The Over does 
 
 The Model fair of **9.77** sits 1.27 wins above market. Unlike Indianapolis, there is no obvious allocation conflict large enough to invalidate the comparison. Lawrence is healthy, Hunter’s role is becoming clearer, and the starting line has taken shape. Thomas and Meyers still need clean Week 1 trajectories, but current reporting does not place either on a long-term absence.
 
-At -125 or worse, the first-place schedule and receiver injuries would narrow the decision. At **+110**, the market pays the bettor to accept those risks. That supports a **soft Over 8.5** with confidence capped at 2/5.
+At the Aug. 31 SI stamp of **O -140 / U +116**, the market no longer pays the bettor to accept those risks. That kills the prior soft Over and leaves **Pass**.
 
 ## Betting Guide
 
-- **Win total 8.5 (O +110 / U -130):** Soft Over. Model fair is 9.77, and the positive price preserves the 1.27-win margin.
-- **Price discipline:** Pass if the Over becomes heavily taxed. The case rests on buying the schedule discount, not paying for last year’s 13 wins.
+- **Win total 8.5 (O -140 / U +116):** **Pass.** Model fair is 9.77, but **-140** Over juice removes the prior soft-Over buy.
+- **Price discipline:** The case rested on buying the schedule discount at a plus-money Over, not paying for last year’s 13 wins.
 - **Early sides:** Jacksonville may remain more reliable as an underdog than as a favorite while the line and running back committee establish their weekly floor.
 - **Usage watch:** Hunter’s defensive snaps should not be projected as full offensive replacement volume. Track Thomas’ shoulder and Meyers’ hand separately.
 - **Schedule marker:** The record after the two London games will frame the season. A 3-3 start keeps nine wins realistic with the bye arriving immediately.
 
 **Handicapper’s Note**  
 Fair number: **9.77**  
-Market number: **8.5** (O +110 / U -130)  
-Lean: **Soft Over 8.5**  
-Confidence: **2/5**  
+Market number: **8.5** (O -140 / U +116)
+Lean: **Pass**  
+Confidence: **4/5**  
 Key risk: A five-division-winner schedule and late-August injuries to Thomas and Meyers could erase the cushion before Jacksonville reaches its Week 7 bye.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

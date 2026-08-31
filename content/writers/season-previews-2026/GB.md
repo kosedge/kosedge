@@ -2,15 +2,15 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Love and LaFleur provide the floor; early trench and pass-rush absences cap the price  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire live widget · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-140 / +115)  
+**Market (DK / RotoWire live widget, Aug 31 fact-check):** Win total **9.5** (-130 / +110)
 **Sources (beat desk):** Rob Demovsky (ESPN); Keller Nienau (Packers.com)
 
-Green Bay’s number is 9.5, but the price tells the sharper story. Bettors must lay **-140** to take the Over while the Under returns **+115**. The market is charging heavily for Jordan Love, Matt LaFleur and the expectation that last season’s five-game closing slide was a poor finish rather than a new baseline.
+Green Bay’s number is 9.5, but the price tells the sharper story. Bettors must lay **-130** to take the Over while the Under returns **+110** on the Aug. 31 RW live-widget stamp. The market is charging for Jordan Love, Matt LaFleur and the expectation that last season’s five-game closing slide was a poor finish rather than a new baseline. Do not mint a Jacobs-off house number.
 
-The Kos Edge model is less enthusiastic without being meaningfully opposed. Its fair number is **9.33 expected wins**, only 0.17 below the total. That is not enough to call the plus-money Under value. It is certainly not enough to lay -140 on the Over.
+The Kos Edge model is less enthusiastic without being meaningfully opposed. Its fair number is **9.33 expected wins**, only 0.17 below the total. That is not enough to call the plus-money Under value. It is certainly not enough to lay -130 on the Over.
 
 Green Bay has a familiar offensive structure, a healthier Tucker Kraft and a defense that has challenged Love throughout camp. It also expects to begin the season without Micah Parsons and has spent August assembling its preferred offensive line. The most honest position is the least exciting one: **Pass**.
 
@@ -56,22 +56,22 @@ The division adds more compression. Detroit is priced at 10.5, Chicago shares Gr
 
 ## The juice does not rescue a thin edge
 
-Under +115 is more attractive than Over -140 in isolation. It still needs to win often enough to justify a position. A **9.33** expected-win projection versus **9.5** does not establish that probability, and the 0.17-win difference is far below the half-win threshold.
+Under +110 is more attractive than Over -130 in isolation. It still needs to win often enough to justify a position. A **9.33** expected-win projection versus **9.5** does not establish that probability, and the 0.17-win difference is far below the half-win threshold.
 
-The Over price is easier to reject. Laying -140 requires an implied break-even rate of roughly 58.3%, a steep cost for a team opening without Parsons and with limited line continuity. Green Bay may win 10 or more. At this price, being right about the team is not enough.
+The Over price is easier to reject. Laying -130 requires an implied break-even rate of roughly 56.5%, a steep cost for a team opening without Parsons and with limited line continuity. Green Bay may win 10 or more. At this price, being right about the team is not enough.
 
 The model and market are effectively aligned on the range. The plus price on the Under is not permission to invent an edge.
 
 ## Betting Guide
 
-- **Season wins 9.5:** Pass at Over -140 / Under +115. Model fair is only 0.17 wins below market.
+- **Season wins 9.5:** Pass at Over -130 / Under +110. Model fair is only 0.17 wins below market.
 - **Opening month:** Evaluate line communication and the four-man rush before considering Green Bay as a road favorite.
 - **Injury checkpoints:** Kraft’s workload, Banks’ knee and Parsons’ activation matter; none turns the current thin edge into a preseason bet by itself.
 - **Late season:** Four home games in the final five weeks make Green Bay’s December side prices more useful than forcing the season total now.
 
 **Handicapper’s Note**  
 Fair number: **9.33 wins**  
-Market number: **9.5** (Over -140 / Under +115)  
+Market number: **9.5** (-130 / +110)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: Parsons’ opening absence and line continuity create downside, but a 0.17-win model gap is too small to justify even the plus-money Under.

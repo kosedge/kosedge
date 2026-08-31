@@ -2,10 +2,10 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** The conference favorite can be excellent and still be fully priced at 11.5  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (Over -125 / Under +105)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **11.5** (Over -125 / Under +105)
 **Sources (beat desk):** Sarah Barshop (ESPN); Jourdan Rodrigue (The Athletic); Gary Klein (Los Angeles Times); Stu Jackson (Rams.com)
 
 The Rams do not have to be overrated for Over 11.5 to be a poor purchase. They can own one of the league’s best quarterback-coach combinations, carry high-end talent on both sides and remain a clear January threat. The ticket still requires twelve wins, and DraftKings charges **-125** for the privilege of betting that they get there.
@@ -63,8 +63,8 @@ That is the correct scale for the wager. The question is not whether Los Angeles
 **Handicapper’s Note**  
 Fair number: **11.07**  
 Market number: **11.5**  
-Lean: **Pass — thin versus 11.5**  
-Confidence: 2/5  
+Lean: **Pass**  
+Confidence: 1/5  
 Key risk: Stafford and McVay can push an elite roster into the 12-to-13-win range, while even a brief protection or availability disruption can leave a contender at ten or eleven.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

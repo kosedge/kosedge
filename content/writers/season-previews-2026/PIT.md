@@ -2,10 +2,10 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Pittsburgh's familiar floor meets an old quarterback, a new coach and a difficult second-half schedule  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (+100 / -120)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **8.5** (+100 / -120)
 **Sources (beat desk):** Brooke Pryor (ESPN); Mark Kaboly (Pittsburgh beat); Dale Lolley (Steelers.com); Steelers.com staff; 93.7 The Fan
 
 Pittsburgh won ten games and the AFC North in 2025. The market responded with **8.5**, the same number DraftKings posted in February, and asks bettors to lay **-120** on the Under. That is a clear statement: last year's record is not the baseline, even for a franchise that has made finishing above .500 look routine.
@@ -68,7 +68,7 @@ The Over case also stops short. Rodgers' camp availability, a deeper receiver ro
 
 **Handicapper’s Note**  
 Fair number: **8.16** (Model SoT nfl-preseason-sim-2026-20260822T013711Z)  
-Market number: **8.5** (DK / RotoWire Aug 2026)  
+Market number: **8.5** (+100 / -120)
 Lean: **Pass**  
 Confidence: 2/5  
 Key risk: A 0.34-win Model gap is below threshold, while Rodgers' durability and the unsettled right tackle widen both tails.

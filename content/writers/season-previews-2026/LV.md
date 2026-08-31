@@ -1,11 +1,11 @@
 # Las Vegas Raiders 2026 Season Preview
 
-**By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
+**By Reese Quinn** · Kos Edge Analytics · AFC West desk  
 **Angle:** The model reaches six wins, but the price and Ashton Jeanty’s ankle remove the betting edge  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **5.5** (-146 / +120)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **5.5** (-146 / +120)
 **Sources (beat desk):** Ryan McFadden (ESPN); Tashan Reed (The Athletic); Vincent Bonsignore (Las Vegas Review-Journal); Las Vegas Raiders communications
 
 Las Vegas does not need to become a contender to cash Over 5.5. A six-win season would do it, and the Kos Edge model lands just above that line at **6.07**.
@@ -66,7 +66,7 @@ Weather is not a material concern for the controlled home opener at Allegiant St
 
 **Handicapper’s Note**  
 Fair number: **6.07**  
-Market number: **5.5** (Over -146 / Under +120)  
+Market number: **5.5** (-146 / +120)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: Jeanty’s ankle timetable is unresolved, and the small model edge cannot absorb both that uncertainty and the expensive Over price.

@@ -1,11 +1,11 @@
 # New York Giants 2026 Season Preview
 
-**By Jordan Vale** · Kos Edge Analytics · NFC East desk  
+**By Avery Cole** · Kos Edge Analytics · NFC East desk  
 **Angle:** Harbaugh and Dart raise the floor, but Calvin Austin III's knee injury removes margin from a tightly priced 7.5  
-**Date:** August 26, 2026
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-115 / -105)
+**Market (DK / SI, Aug 31 fact-check):** Win total **7.5** (-110 / -110)
 **Sources (beat desk):** Jordan Raanan (ESPN); Dan Duggan (The Athletic); Paul Schwartz (New York Post); New York Giants schedule desk
 
 The Giants are easier to believe in than they were a year ago. At **7.5**, belief is already in the price.
@@ -52,7 +52,7 @@ That shape puts pressure on the start. A young offense cannot spend September me
 
 ## Market math
 
-The headline total has held at **7.5** since the February opener, but the price moved toward the Over—from **+110** at open to **-115** on the Aug. 26 DK/RotoWire board. The Under moved from **-130** to **-105**. The market did not raise the bar; it made optimism more expensive.
+The headline total has held at **7.5** since the February opener. The Aug. 31 SI stamp is now even (**-110 / -110**), after earlier August boards had taxed the Over toward **-115**. The market did not raise the bar; it kept charging for the Harbaugh-Dart story.
 
 Kos Edge projects **7.03** wins, with a broad three-to-11-win 10th-to-90th percentile band. That distribution fits the roster: a defense capable of carrying games, a talented young quarterback, and fragile receiving depth. The mean points slightly Under, but a 0.47-win gap is not enough to clear threshold. Austin's injury is serious news, not permission to turn a Pass into a conviction.
 

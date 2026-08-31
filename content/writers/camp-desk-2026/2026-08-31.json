@@ -1,0 +1,1200 @@
+{
+  "desk_date": "2026-08-31",
+  "pinned": false,
+  "package": "monday",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Monday, Aug 31",
+    "bottom_line": "Cutdown weekend. Official 53s are the fact; beat lists are not. Two season-total leans only (DEN Over 2/5, LAC Under 2/5). Everything else Pass. Stamp at pull — do not chase the board.",
+    "storylines": [
+      "Official 53s posted at Green Bay, Chicago, Minnesota, Washington, and others. Detroit still unposted Sunday night — do not invent a Lions 53.",
+      "Packers: Jacobs on the commissioner's exempt list (off the 53). Kaleb Johnson in for a 2028 sixth, pending physical. Parsons, Musgrave, and Riley start on Reserve/PUP. Do not mint a Jacobs-off house number.",
+      "Bears sent DT Gervon Dexter Sr. to Atlanta for CB Clark Phillips III and a 2027 fifth, pending physicals. Gordon, Noah Sewell, and Shemar Turner start on Reserve/PUP.",
+      "Commanders posted the official dump. Tunsil is not on tonight's IR. Good-Jones is out. Coleman is the LT plan. No named center.",
+      "Falcons QB1 is still Penix vs Tua. Eagles QB2 is still McKee vs Dalton. Named jobs wait on the club.",
+      "Broncos: Cooper is on the commissioner's exempt list (off the 53). Chargers: Biadasz is season IR and Branson Taylor is IR; Slaughter is the center option, not a new crown."
+    ],
+    "what_to_watch": "Remaining official 53s (Detroit especially), named QB jobs in Atlanta and Philadelphia, and whether the Arizona 4.5 board blinks after a posted 53 / Conner designation.",
+    "sources": [
+      {
+        "label": "Packers — initial 2026 roster / 53 (Aug 30)",
+        "href": "https://www.packers.com/news/packers-keep-six-receivers-seven-defensive-linemen-here-s-the-initial-2026-roster"
+      },
+      {
+        "label": "Packers — roster moves / Johnson trade (Aug 30)",
+        "href": "https://www.packers.com/news/packers-announce-roster-moves-aug-30-2026"
+      },
+      {
+        "label": "NFL.com — Jacobs commissioner's exempt (Aug 30)",
+        "href": "https://www.nfl.com/news/nfl-places-packers-rb-josh-jacobs-commissioner-exempt-list"
+      },
+      {
+        "label": "Bears — Dexter to Atlanta for Phillips + 2027 fifth (Aug 30)",
+        "href": "https://www.chicagobears.com/news/roster-moves-chicago-bears-agree-to-acquire-fifth-round-pick-and-db-clark-phillips-iii-in-trade-with-atlanta"
+      },
+      {
+        "label": "Commanders — cuts and IR (Aug 30, 5:59 p.m. ET)",
+        "href": "https://www.commanders.com/news/commanders-announce-multiple-roster-cuts-place-2-players-on-ir"
+      },
+      {
+        "label": "SI — 2026 NFL win-total projections (DK, pulled ~6:00 p.m. ET Aug 30)",
+        "href": "https://www.si.com/betting/2026-nfl-win-total-projections-for-every-team-lions-will-benefit-from-league-s-easiest-schedule-01m0xm77seqx"
+      },
+      {
+        "label": "RotoWire — NFL team futures live widget (DK, pulled 6:02 p.m. ET Aug 30)",
+        "href": "https://www.rotowire.com/betting/nfl/team-futures.php"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "MIN",
+      "title": "Vikings camp — Aug 31",
+      "bottom_line": "Official 53 is posted. Jurgens is IR-DFR. Batty is season-ending IR. Scott and Tavierre Thomas are off. Murray remains QB1. Pass.",
+      "key_points": [
+        "vikings.com 08/30 waived RB Zavier Scott among 24 and terminated S Tavierre Thomas, P Johnny Hekker, DL Isaiahh Loudermilk, and DL Jonathan Harris.",
+        "Reserve/Injured: C Michael Jurgens (Designated for Return) and OLB Tyler Batty (season-ending). WR Jeshaun Jones to Reserve/Suspended. Minnesota traded T Walter Rouse and a 2027 seventh to New England for a 2027 sixth.",
+        "McCarthy is on the 53 (four QBs). Do not write him off. Club lists Brandel first at center on the unofficial depth chart; do not treat that as a Week 1 crown."
+      ],
+      "what_to_watch": "Whether Jurgens' DFR clock puts him in play midseason, and who actually starts at center Week 1.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Vikings — initial 53, Jurgens IR-DFR / Batty season IR (Aug 30, 5:00pm ET)",
+          "href": "https://www.vikings.com/news/53-man-roster-2026-nfl-initial"
+        },
+        {
+          "label": "Vikings — transactions, 08/30 cutdown / IR / Rouse trade",
+          "href": "https://www.vikings.com/team/transactions/2026"
+        },
+        {
+          "label": "Vikings — Rouse + 2027 7th to NE for 2027 6th (Aug 30)",
+          "href": "https://www.vikings.com/news/walter-rouse-trade-patriots-2026"
+        },
+        {
+          "label": "Vikings — Murray named starting quarterback (Aug 11)",
+          "href": "https://www.vikings.com/news/kyler-murray-quarterback-starting-2026-nfl-season"
+        }
+      ],
+      "sot_flag": "Jurgens is IR-DFR at center, not season IR. Batty is season-ending. Flag MIN C. Do not invent C1. McCarthy is on the 53."
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons camp — Aug 31",
+      "bottom_line": "Dexter is in, Trice is out, and Stefanski still has not named a quarterback. The 53 is not posted. Pass.",
+      "key_points": [
+        "Club/beats: DT Gervon Dexter Sr. from Chicago for CB Clark Phillips III and a 2027 fifth, pending physical. Dexter has a hamstring.",
+        "Named beat: 2024 third-round DE Bralen Trice waived (never a regular-season snap). OT Wanya Morris released after the June Kansas City trade.",
+        "Stefanski has not named a Week 1 starter. Penix sat the finale; Tua started it. Pearce's eight-game suspension starts now. Do not crown either quarterback."
+      ],
+      "what_to_watch": "Club 53. Whether one quarterback owns first-team reps this week.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "ESPN — Dexter trade (Raimondi, Aug 30)",
+          "href": "https://www.espn.com/nfl/story/_/id/49771892/sources-falcons-add-gervon-dexter-sr-trade-bears"
+        },
+        {
+          "label": "Falcons Wire — Trice waived (Jones/Athletic)",
+          "href": "https://thefalconswire.usatoday.com/story/sports/nfl/falcons/2026/08/30/atlanta-falcons-bralen-trice-roster-cuts/91538323007/"
+        },
+        {
+          "label": "ESPN — no starter named; Tua started finale (Aug 26)",
+          "href": "https://www.espn.com/nfl/story/_/id/49733404/tua-start-falcons-preseason-finale-no-starter-named-yet"
+        },
+        {
+          "label": "AJC — Morris released (Aug 30)",
+          "href": "https://www.ajc.com/sports/2026/08/falcons-cut-graysons-wanya-morris-after-trading-for-him-in-june-source-says/"
+        },
+        {
+          "label": "Falcons — Pearce suspension effective Aug 30",
+          "href": "https://www.atlantafalcons.com/news/james-pearce-jr-suspension-nfl-eight-games-season"
+        }
+      ],
+      "sot_flag": "QB1 remains Penix vs Tagovailoa. Club has not named one. Dexter acquired, not a named starter. Do not crown either quarterback."
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns camp — Aug 31",
+      "bottom_line": "Club posted the 53: three QBs kept, Watson still named, Gabriel to IR. Do not reopen QB1.",
+      "key_points": [
+        "Official initial 53 (Aug 30, 4:32 p.m.): Deshaun Watson, Shedeur Sanders, Taylen Green. Watson listed as the starter, Sanders the backup.",
+        "QB Dillon Gabriel to reserve/injured (back), designated to return. TE Joe Royer to reserve/NFI, designated to return.",
+        "Todd Monken named Watson on Aug 24, not week-to-week. Cutdown day did not reopen it. Easterling: back flared Aug 29; MRI drove the IR."
+      ],
+      "what_to_watch": "Gabriel’s four-game window and first-team continuity at Jacksonville. Not another camp competition.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Browns — initial 53-man roster (Aug 30)",
+          "href": "https://www.clevelandbrowns.com/news/browns-announce-initial-53-man-roster-heading-into-the-2026-season"
+        },
+        {
+          "label": "PFT — Gabriel IR, not waived (Aug 30)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/browns-put-dillon-gabriel-on-ir-as-they-set-initial-53-man-roster"
+        },
+        {
+          "label": "Akron Beacon Journal / Yahoo — Gabriel MRI (Aug 30)",
+          "href": "https://sports.yahoo.com/articles/browns-qb-dillon-gabriel-opens-210405781.html"
+        },
+        {
+          "label": "ESPN — Watson named QB1 (Aug 24)",
+          "href": "https://www.espn.com/nfl/story/_/id/49711613/sources-browns-tab-deshaun-watson-not-shedeur-sanders-qb1"
+        }
+      ],
+      "sot_flag": "Watson is the named QB1; Sanders is QB2; Green is QB3. Gabriel is IR-to-return. Remove open-competition or split-starter allocations."
+    },
+    {
+      "team_id": "WAS",
+      "title": "Commanders camp — Aug 31",
+      "bottom_line": "Official cut dump at 5:59 p.m. ET. Good-Jones is out. Tunsil is not on tonight's IR. Coleman remains the LT plan. Center is a hole. Pass on inventing a starting five.",
+      "key_points": [
+        "Club tonight: 34 released, including C Julian Good-Jones. IR-DTR: CB Trey Amos and RB Jeremy McNichols. Reserve/PUP: DE Deatrich Wise Jr. Both Sunday DTR slots are used. Tunsil is not on that IR list.",
+        "Coleman is Quinn's LT plan after Tunsil's triceps surgery. Humphries signed Aug 26 and was not cut — depth, not a takeover.",
+        "Allegretti (calf, no timetable) was not in the cut list. The camp backup center was. Do not name a Week 1 center."
+      ],
+      "what_to_watch": "Tunsil as a Monday after-53 IR or not. Allegretti's first full practice. Interior protection in Week 1.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Commanders — cuts and IR (Aug 30, 5:59 p.m. ET)",
+          "href": "https://www.commanders.com/news/commanders-announce-multiple-roster-cuts-place-2-players-on-ir"
+        },
+        {
+          "label": "Commanders — Humphries signing (Aug 26)",
+          "href": "https://www.commanders.com/news/commanders-sign-t-dj-humphries"
+        },
+        {
+          "label": "AP — Coleman gets first crack at LT",
+          "href": "https://apnews.com/article/laremy-tunsil-brandon-coleman-dan-quinn-washington-commanders-2ccc5313a3e3ed0b0feec2bd25a3adac"
+        },
+        {
+          "label": "NBC Sports — Allegretti no timetable (Aug 25)",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-08-25/allegretti-has-no-timetable-for-return"
+        }
+      ],
+      "sot_flag": "Coleman is the confirmed LT plan, not a posted depth chart. Tunsil is not on tonight's IR (Amos and McNichols took the DTR slots). Good-Jones released. Do not invent a center."
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans camp — Aug 31",
+      "bottom_line": "Higgins is already on IR. Boutte is already in. Tonight’s 53 is not on the club news page. Those two WR moves are the depth story; they are not a new number. Pass.",
+      "key_points": [
+        "Club, Aug 21: WR Jayden Higgins to Reserve/Injured. AP and NFL.com/Rapoport: ACL, season-ending — that language is not on the club line.",
+        "Club, Aug 25: acquired WR Kayshon Boutte from New England; sent S Jaylen Reed the other way. Club, Aug 26: DE Dylan Horton to IR; signed DE Derek Parish.",
+        "Club, Aug 24: released WR Juwann Winfree; waived WR Jha’Quan Jackson; waived/injured LB Marte Mapu. 53 NOT POSTED on houstontexans.com as of this filing. Beat cuts stay off the card."
+      ],
+      "what_to_watch": "Club 53 / transactions dump. Boutte’s actual role, not a guessed depth chart.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Texans club — Higgins IR, 8/21",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-21-2026"
+        },
+        {
+          "label": "AP — Higgins ACL, season-ending",
+          "href": "https://apnews.com/article/jayden-higgins-texans-injury-1e97026283980e93c0b974e9efdea56b"
+        },
+        {
+          "label": "Texans club — Boutte in, Reed out, 8/25",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-25-2026"
+        },
+        {
+          "label": "Texans club — Horton IR, Parish signed, 8/26",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-26-2026"
+        },
+        {
+          "label": "Texans club — 8/24 cuts",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-24-2026"
+        },
+        {
+          "label": "AP — Boutte trade",
+          "href": "https://apnews.com/article/texans-patriots-kayshon-boutte-trade-80aed90c99d086630c2e1da0be9544db"
+        }
+      ],
+      "sot_flag": "WR — Higgins IR; Boutte in. DE Horton IR. 53 not posted."
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets camp — Aug 31",
+      "bottom_line": "Cutdown day, no club 53 post. Hall’s groin is the only market-relevant item, and Glenn has him pointed at Week 1. This is a pulse. Pass.",
+      "key_points": [
+        "Club news homepage still has Mougey/Glenn on tough conversations. Transactions log through Aug 25 (Cade York released) has no Aug 30 53 dump. 53 NOT POSTED.",
+        "AP (Waszak): Breece Hall strained groin, miss rest of preseason, expected Week 1 at Tennessee. Glenn Aug 24 still on track (NBC). Do not move a win total off a preseason groin with a Week 1 target.",
+        "Club recap, Aug 28 finale: Ossai (activated off PUP Aug 11) exited with a foot; Chip Trayanum to hospital with a neck. Not a 53. Do not invent replacements."
+      ],
+      "what_to_watch": "Club 53. Hall’s first full practice. Ossai/Trayanum follow-ups from the club, not aggregators.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Jets club transactions",
+          "href": "https://www.newyorkjets.com/team/transactions/"
+        },
+        {
+          "label": "AP — Hall groin, expected Week 1",
+          "href": "https://apnews.com/article/jets-breece-hall-geno-smith-dece7c8a9feac448c625efd0f80c4213"
+        },
+        {
+          "label": "Jets club — Giants finale recap",
+          "href": "https://www.newyorkjets.com/news/jets-giants-game-recap-08-28-2026"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants camp — Aug 31",
+      "bottom_line": "Austin is done for the year. The rest of the 53 is still a Saturday eight plus reporter names. Pass on Hyatt, Berrios, and OBJ as official.",
+      "key_points": [
+        "Official: Calvin Austin III torn ACL, Reserve/Injured Aug 27. Season over. Harbaugh called it a blow. Do not name a permanent slot replacement.",
+        "Official: Joshua Ezeudu to Kansas City for a 2028 7th. Harbaugh confirmed DT C.J. Okoye from Baltimore for a 2028 7th Saturday — club quotes, not yet on the transactions table.",
+        "Official Saturday eight includes WR Isaiah Hodgins. Hyatt waived and Berrios/OBJ reports are aggregator/league-desk, not a Giants.com 53. Harbaugh would not confirm OBJ."
+      ],
+      "what_to_watch": "Club 53. OBJ confirmation. Whether Berrios returns as a vested-vet cut. Slot work without Austin.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Giants — Austin IR (Aug 27)",
+          "href": "https://www.giants.com/news/calvin-austin-iii-injury-status-roster-new-york-giants"
+        },
+        {
+          "label": "Giants — Ezeudu trade (Aug 26)",
+          "href": "https://www.giants.com/news/joshua-ezeudu-trade-details-kansas-city-chiefs-nfl-draft-picks"
+        },
+        {
+          "label": "Giants — Saturday eight (posted Aug 30 a.m.)",
+          "href": "https://www.giants.com/news/giants-release-8-players-ahead-of-53-man-roster-deadline-2026"
+        },
+        {
+          "label": "AP — Okoye trade, Harbaugh (Aug 29)",
+          "href": "https://apnews.com/article/giants-trade-for-cj-okoye-c50050b3fc0cb6fec4214b6904ee2398"
+        }
+      ],
+      "sot_flag": "Austin is season IR. Okoye in, Ezeudu out. Do not promote a WR replacement or write OBJ as a lock."
+    },
+    {
+      "team_id": "GB",
+      "title": "Packers camp — Aug 31",
+      "bottom_line": "Official 53 is posted. Jacobs sits on the commissioner's exempt list. Kaleb Johnson is in for a 2028 sixth (pending physical). Parsons starts on Reserve/PUP. Pass.",
+      "key_points": [
+        "packers.com 08/30 cutdown: 53 active. Josh Jacobs is on the Commissioner's Exempt list (club roster). He cannot practice or attend games. Do not put him on the 53.",
+        "Club confirmed RB Kaleb Johnson from Pittsburgh for a 2028 sixth (pending physical). Active RBs: Chris Brooks, MarShawn Lloyd, Kaleb Johnson. Do not name an RB1.",
+        "Club Reserve/PUP: EDGE Micah Parsons, TE Luke Musgrave, DT Jordon Riley (first four minimum). IR-DFR: EDGE Collin Oliver, WR Savion Williams. TE Mark Redman in from LAR for a 2028 seventh (pending physical). McCord traded to Miami for a 2028 sixth. Club kept six WR (Sturdivant UDFA) and seven DT (Anthony Campbell on)."
+      ],
+      "what_to_watch": "How Lloyd, Brooks, and Johnson split carries without Jacobs, and whether Parsons' PUP clock keeps him out past the first four.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Packers — initial 2026 roster / 53 breakdown (Aug 30, 5:02pm CT)",
+          "href": "https://www.packers.com/news/packers-keep-six-receivers-seven-defensive-linemen-here-s-the-initial-2026-roster"
+        },
+        {
+          "label": "Packers — roster moves / cutdown + Johnson trade (Aug 30, 5:00pm CT)",
+          "href": "https://www.packers.com/news/packers-announce-roster-moves-aug-30-2026"
+        },
+        {
+          "label": "Packers — transactions 2026 (08/30 cutdown, Johnson, Redman, McCord)",
+          "href": "https://www.packers.com/team/transactions/2026"
+        },
+        {
+          "label": "Packers — active roster + Commissioner Exempt (Jacobs) / Reserve lists",
+          "href": "https://www.packers.com/team/players-roster/"
+        },
+        {
+          "label": "NFL.com — Jacobs placed on commissioner's exempt list (Aug 30)",
+          "href": "https://www.nfl.com/news/nfl-places-packers-rb-josh-jacobs-commissioner-exempt-list"
+        }
+      ],
+      "sot_flag": "Jacobs is off the 53 (commissioner's exempt). Johnson is in (pending physical). Parsons, Musgrave, and Riley start on Reserve/PUP. Do not name an RB1 from Lloyd/Brooks/Johnson."
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys camp — Aug 31",
+      "bottom_line": "Dallas bought Broderick Jones and shipped Nate Thomas in 24 hours. The 53 is not posted. Pass on naming a tackle.",
+      "key_points": [
+        "Official: OT Broderick Jones from Pittsburgh (2027 3rd and 6th for Jones and a 4th). Swing tackle and competition, not a named starter.",
+        "Official: OT Nate Thomas to Houston for a 2027 7th. Tackle room after the swap is Guyton, Steele, Jones, Shelton — that is a list, not a depth chart.",
+        "Schefter: 2025 fifth-round RB Jaydon Blue waived; Malik Davis won the camp job. Liufau fractured a forearm Friday, surgery, miss some weeks. DTR-IR is an option. The club has not posted IR."
+      ],
+      "what_to_watch": "The official 53 and whether Liufau uses a DTR-IR slot.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Cowboys — Jones trade (Aug 29)",
+          "href": "https://www.dallascowboys.com/news/cowboys-agree-to-terms-on-trade-for-ot-broderick-jones"
+        },
+        {
+          "label": "Cowboys — Thomas to Texans (Aug 30)",
+          "href": "https://www.dallascowboys.com/news/cowboys-agree-to-terms-on-trade-sending-ot-nate-thomas-to-texans"
+        },
+        {
+          "label": "ESPN — Blue waived (Schefter, Aug 30)",
+          "href": "https://www.espn.com/nfl/story/_/id/49775363/dallas-cowboys-waive-running-back-jaydon-blue"
+        },
+        {
+          "label": "Cowboys — Liufau surgery (club)",
+          "href": "https://www.dallascowboys.com/news/marist-liufau-to-have-surgery-on-fractured-forearm-will-miss-some-weeks"
+        }
+      ],
+      "sot_flag": "Jones is acquired, not a named starter. Do not install him over Guyton or Steele. Blue waived on a beat report, not a club 53. Liufau is not IR until the club posts it."
+    },
+    {
+      "team_id": "PHI",
+      "title": "Eagles camp — Aug 31",
+      "bottom_line": "Cutdown is reporter-led. The club has not posted a 53. Lemon's debut was messy. QB2 is still McKee versus Dalton. Pass.",
+      "key_points": [
+        "NBCSP tracker: Carson Steele, Quez Watkins, Myles Hinton among Saturday cuts. Official transactions still stop at Aug 27. Do not freeze that list as a 53.",
+        "Makai Lemon's first action: three catches, three yards, a drop that became an interception, a muffed punt. Sirianni still counting on the slot. DeVonta Smith is the other half of that rehab pair — there is no player named Lemon-Smith.",
+        "Under-center install is camp-long, not this week's news. McKee went 12-of-22 for 55 yards and an INT Friday. Dalton as trade bait is a projection. Stowers IR-DTR is a projection."
+      ],
+      "what_to_watch": "Official 53, a named QB2, Stowers if the club actually posts IR.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "NBCSP — cuts tracker",
+          "href": "https://www.nbcsportsphiladelphia.com/nfl/philadelphia-eagles/eagles-2026-roster-cuts-tracking-roster-moves-to-53/748614/"
+        },
+        {
+          "label": "NBCSP — Lemon debut",
+          "href": "https://www.nbcsportsphiladelphia.com/nfl/philadelphia-eagles/eagles-makai-lemon-preseason-debut-bengals-tanner-mckee-nick-sirianni/748667/"
+        },
+        {
+          "label": "Northeast Times — 16 Saturday cuts (Aug 30)",
+          "href": "https://northeasttimes.com/2026/08/30/eagles-cut-16-players-as-roseman-races-toward-53-man-deadline/"
+        }
+      ]
+    },
+    {
+      "team_id": "KC",
+      "title": "Chiefs camp — Aug 31",
+      "bottom_line": "Mahomes has practiced the whole camp and is on track for Week 1; Reid still had not gotten game clearance before the finale, and nothing after Aug 26 flipped that stamp. Veach added Pounds and Ezeudu. No posted 53.",
+      "key_points": [
+        "Last club/beat medical: fully cleared for camp, has not missed practice, not game-cleared as of Reid before the preseason finale. Mahomes said he is on track for Denver Sept. 14. No newer clearance found after Aug 26.",
+        "Added OT Diego Pounds from Baltimore (conditional 2028 sixth) and earlier OG Joshua Ezeudu from the Giants (2028 seventh).",
+        "Named-beat cuts in motion (Schefter/Newell/McDowell): Bissainthe, Elam, Tre Watson, Loyd, Nygra, Ogbah. Nate Taylor: TE Jake Briningstool making the 53. Club list not posted."
+      ],
+      "what_to_watch": "Game clearance and unrestricted movement for Mahomes before Denver. Do not write him medically cleared to play until the club does.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "ESPN — Mahomes on track for Week 1",
+          "href": "https://www.espn.com/nfl/story/_/id/49724277/patrick-mahomes-feeling-great-track-start-week-1"
+        },
+        {
+          "label": "Ravens — Pounds traded to Chiefs (Aug 29)",
+          "href": "https://www.baltimoreravens.com/news/diego-pounds-traded-ravens-to-chiefs-53-man-roster-cut-deadline-deal-2026"
+        },
+        {
+          "label": "PFT — Ezeudu to Chiefs (Aug 25)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/giants-trade-og-joshua-ezeudu-to-the-chiefs"
+        },
+        {
+          "label": "SI Chiefs OnSI — cutdown tracker (Aug 30)",
+          "href": "https://www.si.com/nfl/chiefs/onsi/chiefs-53-man-roster-tracker-cutdown-day-news-ahead-of-week-1"
+        }
+      ],
+      "sot_flag": "Mahomes is practicing and on track, not game-cleared. Do not write a medical Week 1 stamp."
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers camp — Aug 31",
+      "bottom_line": "Biadasz is already on IR; Harbaugh was already comfortable with Slaughter at center. Today’s new math is Branson Taylor to IR and Junior Colson on waivers. No posted 53.",
+      "key_points": [
+        "Club placed C Tyler Biadasz on Reserve/Injured Aug 23 (ACL / left knee). Harbaugh on Aug 21: comfortable with Jake Slaughter as the potential 2026 starting center. No new naming after Aug 26.",
+        "Ian Rapoport: G Branson Taylor to IR (upper body), designated to return, miss at least four.",
+        "Adam Schefter: waiving LB Junior Colson (2024 third-rounder). Pelissero/Rhim: traded UDFA CB Avery Smith to Seattle for a 2027 sixth."
+      ],
+      "what_to_watch": "Slaughter’s first-team protection and the posted 53. Do not name Kayode Awosika starting LG from PFT inference.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Chargers — Biadasz IR (Aug 23)",
+          "href": "https://www.chargers.com/news/tyler-biadasz-injured-reserve-sign-gary-jennings-2026"
+        },
+        {
+          "label": "NFL.com — Biadasz season-ending IR",
+          "href": "https://www.nfl.com/news/chargers-place-veteran-c-tyler-biadasz-knee-on-season-ending-injured-reserve"
+        },
+        {
+          "label": "PFT — Branson Taylor IR (Aug 30)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/chargers-to-put-ol-branson-taylor-on-ir"
+        },
+        {
+          "label": "Chargers Wire — Colson waived (Aug 30)",
+          "href": "https://chargerswire.usatoday.com/story/sports/nfl/chargers/2026/08/30/chargers-roster-news-junior-colson-waived/91539751007/"
+        }
+      ],
+      "sot_flag": "Biadasz is season IR. Slaughter is the club’s center option (Harbaugh Aug 21), not a fresh named-job release. Taylor is IR-to-return. Do not crown a left guard."
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers camp — Aug 31",
+      "bottom_line": "Pittsburgh sold a 2023 first-round tackle and a 2025 third-round back on cutdown weekend, then dumped Roberts and Harrison. Club has not posted the 53.",
+      "key_points": [
+        "Traded OT Broderick Jones to Dallas (Jones + 2027 fourth for Dallas 2027 third and sixth). ESPN, Dallas announced.",
+        "Traded RB Kaleb Johnson to Green Bay (Jeremy Fowler / Brooke Pryor, ESPN, Aug 30). Terms not in the first story.",
+        "Released ILB Elandon Roberts and ILB Malik Harrison (Schefter / Pelissero; PFT). Earlier club waves Aug 28–29 still leave no posted 53."
+      ],
+      "what_to_watch": "The posted 53 and who actually lines up at RT next to Fautanu. Do not crown Cook from camp reps.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Steelers — second-wave cuts (Aug 29)",
+          "href": "https://www.steelers.com/news/steelers-make-second-wave-of-moves-to-get-to-53-man-roster"
+        },
+        {
+          "label": "ESPN — Cowboys acquire Broderick Jones",
+          "href": "https://www.espn.com/nfl/story/_/id/49766398/sources-cowboys-acquire-ot-jones-exchange-two-draft-picks"
+        },
+        {
+          "label": "ESPN — Packers acquire Kaleb Johnson (Aug 30)",
+          "href": "https://www.espn.com/nfl/story/_/id/49774343/sources-packers-acquire-kaleb-johnson-trade-steelers"
+        },
+        {
+          "label": "PFT — Roberts and Harrison released (Aug 30)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/steelers-shed-linebackers-elandon-roberts-malik-harrison"
+        }
+      ],
+      "sot_flag": "Jones is in Dallas; Johnson is in Green Bay. Do not invent a starting RT or RB2 from camp first-team charts."
+    },
+    {
+      "team_id": "CIN",
+      "title": "Bengals camp — Aug 31",
+      "bottom_line": "Club posted the 53 at 5:57pm ET. Parker II and Ja'Sir Taylor to IR-return; Josh Johnson released; McKinnley Jackson and Charlie Jones waived (club confirms Rapoport). Pass on inventing replacements in the returner or DT rooms.",
+      "key_points": [
+        "Official 53 posted 5:57pm ET Aug 30: G Brian Parker II (knee) and CB Ja'Sir Taylor (hamstring) to reserve/injured, designated to return.",
+        "Released QB Josh Johnson. Waived DT McKinnley Jackson and WR/KR Charlie Jones; club confirms the Rapoport reports.",
+        "No stamp change. Do not invent a new KR1 or DT replacement from the cut list."
+      ],
+      "what_to_watch": "Practice-squad landings for Jones/Jackson and who actually returns kicks Week 1. Not a win-total rewrite.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Bengals — reduce roster to 53 (Aug 30, 5:57pm ET)",
+          "href": "https://www.bengals.com/news/bengals-reduce-final-roster-53-2026-season"
+        },
+        {
+          "label": "Bengals — 53-man deadline explainer (Aug 30)",
+          "href": "https://www.bengals.com/news/2026-nfl-53-man-roster-cutdown-deadline-essential-information"
+        }
+      ],
+      "sot_flag": "Parker II and Taylor are IR-to-return. Johnson is out of the room. Jackson and Jones are off the 53. Do not invent replacements."
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens camp — Aug 31",
+      "bottom_line": "Pinter is gone, Dawkins is gone, and the club still has not named a center. Gwyn started Friday; Pocic still played; Minter still has both. Trades of Okoye and Pounds are real. The 53 is not posted.",
+      "key_points": [
+        "Danny Pinter is already out for the year; UDFA C Nick Dawkins was waived. Jovaughn Gwyn started the preseason finale and Ethan Pocic rotated in. Jesse Minter has not picked.",
+        "Club traded DL C.J. Okoye to the Giants for a 2028 seventh and OT Diego Pounds to Kansas City for a conditional 2028 sixth.",
+        "Named-beat cuts still arriving (Isaac, Benny, Kone to short-term IR). No official 53 on the team site as of Sunday evening."
+      ],
+      "what_to_watch": "A posted 53 and any formal center decision before Indianapolis. Do not crown Gwyn from one finale start.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Ravens — roster-cut rumor mill (Aug 29–30)",
+          "href": "https://www.baltimoreravens.com/news/ravens-roster-cuts-53-player-deadline-rumor-mill-2026-august"
+        },
+        {
+          "label": "Ravens — Gwyn/Pocic, preseason finale (Aug 28)",
+          "href": "https://www.baltimoreravens.com/news/ravens-defense-shines-preseason-week-3-commanders-tyler-loop-joe-fagnano"
+        },
+        {
+          "label": "Ravens — Okoye traded to Giants (Aug 29)",
+          "href": "https://www.baltimoreravens.com/news/ravens-trade-cj-okoye-giants-reports-john-harbaugh-dennis-johnson-reunited"
+        },
+        {
+          "label": "Ravens — Pounds traded to Chiefs (Aug 29)",
+          "href": "https://www.baltimoreravens.com/news/diego-pounds-traded-ravens-to-chiefs-53-man-roster-cut-deadline-deal-2026"
+        }
+      ],
+      "sot_flag": "Pinter is a season-ending loss. Center remains Pocic versus Gwyn. Do not infer a starter from the finale snap chart."
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills camp — Aug 31",
+      "bottom_line": "Cutdown is moving and the 53 is not on the club homepage. Buffalo sent C Sedrick Van Pran-Granger and a 2027 7th to Indianapolis for a 2027 6th, then had already released 13 on Saturday. Until the club posts the 53, this is a depth note, not a win-total move. Pass.",
+      "key_points": [
+        "Club, Aug 30: traded C Sedrick Van Pran-Granger + 2027 7th to IND for a 2027 6th, announced as a Sunday-morning move ahead of cutting to 53.",
+        "Club, Aug 29: released 13 — OLB Cade Denhoff, CB Jordan Dunbar, G Bruno Fina, ILB Theron Gaines, WR Mecole Hardman Jr., C Sincere Haynesworth, DL Zion Logue, CB D.J. Miller, S Wande Owens, WR Dante Pettis, LB Otis Reese IV, WR Quentin Skinner, TE Shane Zylstra. Depth, not identity.",
+        "53 NOT POSTED on buffalobills.com/news as of this filing. Democrat & Chronicle tracker is still live after 5:50 p.m.; unverified beat-tracker names stay off the 53."
+      ],
+      "what_to_watch": "Club 53 post (interior OL after Van Pran). Practice-squad claims Monday.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Bills club — Van Pran-Granger to IND",
+          "href": "https://www.buffalobills.com/news/bills-trade-c-sedrick-van-pran-granger-to-the-indianapolis-colts"
+        },
+        {
+          "label": "Bills club — release 13, Aug 29",
+          "href": "https://www.buffalobills.com/news/bills-release-13-players-aug-29"
+        }
+      ],
+      "sot_flag": "Interior OL — Van Pran out, 53 not posted."
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins camp — Aug 31",
+      "bottom_line": "Miami did the 53 work on the transactions log. Quinn Ewers is gone, Kyle McCord is in (both pending physical), and the club waived Cam Miller and Mark Gronowski with the rest of the cutdown. The street already moved this number 4.5 → 3.5. Camp does not change the Pass. Pass.",
+      "key_points": [
+        "Club, Aug 30: acquired QB Kyle McCord from Green Bay for a 2028 6th, pending physical. Club, Aug 29: sent QB Quinn Ewers to Jacksonville for a 2028 6th, pending physical. The room is Willis/McCord on paper once the physicals clear; do not invent a starter.",
+        "Club transactions, Aug 30: waived T Gottlieb Ayedze, CB Miles Battle, S Major Burns, TE Jeremiah Franklin, QB Mark Gronowski, RB Jarquez Hunter, WR Donaven McCulley, EDGE Rodney McGraw, CB Jai'Onte' McMillan, QB Cam Miller, DL Fatorma Mulbah, ILB Cam Riley, RB Carlos Washington Jr. Released DL Matthew Butler, ILB Tyrel Dodson, EDGE Cameron Goode, T Charlie Heck, S Lonnie Johnson Jr., WR Terrace Marshall Jr., EDGE David Ojabo, WR Jalen Reagor, CB Marco Wilson. Baker Jr. and Storm Duck to reserve/PUP. DL Kenneth Grant and EDGE/ILB Trey Moore to IR (DTR).",
+        "Club, Aug 29: waived 12 more (Austin, Bennett, Cline, Coleman-Lyles, Conner, Dix, Edwards, Huntley, Louis Moore, Rice, Thomas, Wease Jr.). Cutdown is the story. No full named 53 article on the news homepage; the transactions log is the club 53."
+      ],
+      "what_to_watch": "McCord physical. Grant/Moore IR-DTR timeline. Practice squad (Gronowski was the earlier plan in beat copy; do not stamp a PS signing the club has not posted).",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Dolphins club — McCord from GB",
+          "href": "https://www.miamidolphins.com/news/dolphins-make-trade-with-green-bay"
+        },
+        {
+          "label": "Dolphins club — Ewers to JAX",
+          "href": "https://www.miamidolphins.com/news/dolphins-make-trade-with-jacksonville"
+        },
+        {
+          "label": "Dolphins club transactions 2026",
+          "href": "https://www.miamidolphins.com/team/transactions/2026"
+        }
+      ],
+      "sot_flag": "QB room — Ewers out, McCord in; Grant/Moore IR-DTR."
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots camp — Aug 31",
+      "bottom_line": "The WR room already changed (Boutte to Houston). The backfield added Corey Kiner and dropped Hassan Haskins. Club latest-news is teasing a 53 post that cannot load as 2026 copy (slug still serves 2023). Do not invent this year’s 53. Pass.",
+      "key_points": [
+        "Club, Aug 25: traded WR Kayshon Boutte to Houston for S Jaylen Reed and a 2028 7th.",
+        "Club, Aug 29: acquired RB Corey Kiner from Arizona for a 2028 7th; released RB Hassan Haskins.",
+        "Club, Aug 24: signed OL Jack Conley and P Matt Haack; released CB Kenneth Harris and WR Kobe Prentice. Latest-news teaser (not the 2023 archive): “released 36” and acquired OL Walter Rouse + 2027 7th from Minnesota for a 2027 6th. Until that 2026 article loads as 2026 copy, those names stay in the teaser column."
+      ],
+      "what_to_watch": "Loadable 2026 53 article. WR depth behind the Boutte hole.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Patriots club — Boutte to HOU",
+          "href": "https://www.patriots.com/news/patriots-trade-wr-kayshon-boutte-to-the-texans"
+        },
+        {
+          "label": "Patriots club — Kiner in, Haskins out",
+          "href": "https://www.patriots.com/news/patriots-acquire-rb-corey-kiner-in-a-trade-with-arizona-release-rb-hassan-haskins"
+        }
+      ],
+      "sot_flag": "WR — Boutte out; 53 article not verified as 2026 copy."
+    },
+    {
+      "team_id": "IND",
+      "title": "Colts camp — Aug 31",
+      "bottom_line": "Indianapolis posted the initial 53. Van Pran-Granger is in. Pierce is off PUP. Spencer Shrader won the kicking job; Grupe waived. Keenan Allen’s Sunday arrest is real and it is not a roster move. None of it closes the house-vs-street gap on 7.5. Pass.",
+      "key_points": [
+        "Club, Aug 30, 5:59 p.m. ET: initial 53. Waived includes K Blake Grupe, WR Anthony Gould, T Blake Freeland. Released Easton Stick and WR Nick Westbrook-Ikhine. IR: TE Will Mallory (DTR), WR D.J. Montgomery, WR Coleman Owen.",
+        "Club, Aug 30 a.m.: acquired C Sedrick Van Pran-Granger + 2027 7th from Buffalo for a 2027 6th. Club, Aug 27: Alec Pierce off Active/PUP (ankle), ramp for Week 1 vs BAL. Club: Spencer Shrader won the kicking job; Grupe waived.",
+        "AP / ESPN (Holder): Keenan Allen arrested ~1 a.m. ET Sunday, downtown Indianapolis, misdemeanor OVWI and OVWI-endangering. Club statement: aware, gathering information, no further comment. Released afternoon, court Sept 16. NFL typically waits the legal process. Not a 53 and not a number."
+      ],
+      "what_to_watch": "Allen legal / club discipline. Pierce’s first full week. Shrader is the named kicker.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Colts club — initial 53",
+          "href": "https://www.colts.com/news/colts-make-roster-moves-to-form-initial-53-man-roster"
+        },
+        {
+          "label": "Colts club — Van Pran-Granger",
+          "href": "https://www.colts.com/news/colts-acquire-c-sedrick-van-pran-granger-in-trade-with-buffalo-bills"
+        },
+        {
+          "label": "Colts club — Pierce off PUP",
+          "href": "https://www.colts.com/news/colts-remove-wr-alec-pierce-from-active-physically-unable-to-perform-list"
+        },
+        {
+          "label": "Colts club — Shrader wins kicking job",
+          "href": "https://www.colts.com/news/spencer-shrader-wins-colts-kicking-competition"
+        },
+        {
+          "label": "ESPN — Allen arrest (Holder)",
+          "href": "https://www.espn.com/nfl/story/_/id/49771289/colts-wr-keenan-allen-arrested-drunk-driving-charges"
+        },
+        {
+          "label": "AP via NBC — Allen arrest",
+          "href": "https://www.nbcnews.com/news/us-news/keenan-allen-arrested-drunken-driving-charges-rcna595155"
+        }
+      ],
+      "sot_flag": "WR/OL/ST — Pierce off PUP; Van Pran in; Shrader is the kicker; Grupe waived; Allen off-field."
+    },
+    {
+      "team_id": "JAX",
+      "title": "Jaguars camp — Aug 31",
+      "bottom_line": "Jacksonville posted the 53. Quinn Ewers is the new QB2 on paper; Nick Mullens was released. Hunter Long + a 2028 7th went to Arizona for a 2028 6th, pending physical. Room changes, not a win-total change, and the Over juice is now the other way. Pass.",
+      "key_points": [
+        "Club, Aug 30: reduced to 53. Released QB Nick Mullens. Waived QB Joey Aguilar; waived/injured QB Carter Bradley. Acquired QB Quinn Ewers from Miami Aug 29 (2028 6th, pending physical). Lawrence remains the starter.",
+        "Club, Aug 30: traded TE Hunter Long + 2028 7th to Arizona for a 2028 6th, pending physical. TE depth, not a win-total.",
+        "Also waived/released: LB Yasir Abdullah, LB Amari Burney, LB Jack Kiser, LB Jalen McLeod, LB Baylon Spector (released), RB DeeJay Dallas (released), OL Chuma Edoga (released), OL Geron Christian Sr. (released), OL Patrick Mekari to IR-DTR, DE Zach Durfee IR-DTR, OL Sam Mustipher IR. Old news slug still serves 2018 copy — use the 2026 53 article + transactions log."
+      ],
+      "what_to_watch": "Ewers physical. Long physical. Practice-squad for Mullens/Aguilar if the club posts it. Mekari/Durfee IR-DTR.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Jaguars club — reduce roster to 53",
+          "href": "https://www.jaguars.com/news/roster-moves-jaguars-reduce-roster-to-53-players"
+        },
+        {
+          "label": "Jaguars club transactions 2026",
+          "href": "https://www.jaguars.com/team/transactions/2026"
+        },
+        {
+          "label": "Jaguars club — Ewers trade",
+          "href": "https://www.jaguars.com/news/trade-jaguars-acquire-qb-quinn-ewers"
+        },
+        {
+          "label": "Jaguars club — Long + 2028 7th to ARI for 2028 6th",
+          "href": "https://www.jaguars.com/news/trade-jaguars-acquire-sixth-round-selection-in-2028-nfl-draft-from-arizona-cardinals"
+        }
+      ],
+      "sot_flag": "QB2 — Ewers in, Mullens released. TE Long traded. 53 posted."
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans camp — Aug 31",
+      "bottom_line": "Deadline day, and the club still has not posted a 53. Last transactions on the 2026 log are Aug 25. This is a quiet pulse. Pass.",
+      "key_points": [
+        "Club recap of the preseason finale noted the Sunday 53 deadline. Titans.com/news did not return a cutdown story on fetch; the 2026 transactions log had nothing after Aug 25 as of this filing.",
+        "53 NOT POSTED. Beat cutdown names stay off the card until the club posts.",
+        "Also-cover, thin on purpose. Win-total stamp is Pass on the number, not on this pulse."
+      ],
+      "what_to_watch": "Club 53 / transactions dump. Club confirmation on Levis. Anything that actually hits a starter.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Titans club transactions 2026",
+          "href": "https://www.tennesseetitans.com/team/transactions/2026"
+        },
+        {
+          "label": "Titans club — preseason finale (deadline noted)",
+          "href": "https://www.tennesseetitans.com/news/titans-end-preseason-with-24-15-loss-to-the-bears"
+        }
+      ]
+    },
+    {
+      "team_id": "DEN",
+      "title": "Broncos camp — Aug 31",
+      "bottom_line": "Cooper is on the commissioner’s exempt list — off the 53 without a cut. Klis has Ehlinger surviving as QB3 and fifth-round TE Joly waived. No posted 53.",
+      "key_points": [
+        "NFL placed OLB Jonathon Cooper on the commissioner’s exempt list Sunday (first: Mike Klis; confirmed to Schefter; Legwold). He does not count against the 53, cannot practice or play, still paid. Arraignment Monday.",
+        "Mike Klis: keeping QB Sam Ehlinger on the 53 behind Nix and Stidham.",
+        "Klis: waived 2026 fifth-round TE Justin Joly. No official 53 posted."
+      ],
+      "what_to_watch": "Exempt-list duration and the posted 53. Do not name Jonah Elliss a starter from inference.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "ESPN/TSN — Cooper exempt list (Aug 30)",
+          "href": "https://www.tsn.ca/nfl/article/report-broncos-olb-cooper-placed-on-exempt-list-n1-49774684/"
+        },
+        {
+          "label": "Denver Sports — Cooper exempt",
+          "href": "https://denversports.com/nfl/denver-broncos/broncos-cooper-exempt"
+        },
+        {
+          "label": "Broncos Wire — Ehlinger kept (Aug 30)",
+          "href": "https://broncoswire.usatoday.com/story/sports/nfl/broncos/2026/08/30/nfl-news-broncos-keep-sam-ehlinger-on-53-roster/91537976007/"
+        },
+        {
+          "label": "Broncos Wire — Joly waived (Aug 30)",
+          "href": "https://broncoswire.usatoday.com/story/sports/nfl/broncos/2026/08/30/denver-broncos-news-te-justin-joly-cut/91539347007/"
+        }
+      ],
+      "sot_flag": "Cooper is on the exempt list and cannot play. Do not crown an opposite-Bonitto starter from beat inference."
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders camp — Aug 31",
+      "bottom_line": "Kubiak is counting on Jeanty for Week 1. That is the quote, not a clearance. They kept him off IR and waived Dare Ogunbowale. No posted 53. Pass on transferring the role.",
+      "key_points": [
+        "Klint Kubiak, Aug 28: still on the mend, another week to assess, “we’re counting on him” for the opener. Ankle sprain from Aug 23 practice. Not a guarantee.",
+        "Jeremy Fowler: waiving RB Dare Ogunbowale.",
+        "Club deadline page is up; no official 53. Waiver priority Weeks 1–3 is No. 1, so the roster will move again."
+      ],
+      "what_to_watch": "Jeanty’s practice participation in Miami week. Do not assign Week 1 RB1 to Mike Washington from temporary first-team reps.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "PFT — Kubiak counting on Jeanty Week 1 (Aug 28)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/klint-kubiak-were-counting-on-ashton-jeanty-for-week-1"
+        },
+        {
+          "label": "NFLTradeRumors — Fowler on Ogunbowale",
+          "href": "https://nfltraderumors.co/raiders-waiving-rb-dare-ogunbowale/"
+        },
+        {
+          "label": "Raiders — 53-man deadline FAQ",
+          "href": "https://www.raiders.com/news/53-man-roster-deadline-what-to-know-faq-nfl-upcoming-dates-2026-season"
+        }
+      ],
+      "sot_flag": "Jeanty Week 1 is coach-hope, not club-cleared. Do not transfer his season role from practice reps."
+    },
+    {
+      "team_id": "ARI",
+      "title": "Cardinals camp — Aug 31",
+      "bottom_line": "Cutdown incomplete. RB room material; no RB2/starter call. Street 4.5 juiced Under vs house 6.55. Pass",
+      "key_points": [
+        "Kiner to NE for 2028 7th (pending physical). Urban: Love/Allgeier/Knight expected; Conner another possibility; Hull PS candidate.",
+        "Long from JAX: 2028 6th out, 2028 7th back (pending physical). Reiman not ready (still Active/PUP). Blocking add.",
+        "Conner IR-DTR per Gambo/Arizona Sports — not official; still Active on club roster. 53-man not posted. Incomplete. Pass on RB2/starter."
+      ],
+      "what_to_watch": "Official 53 + any Conner IR post on azcardinals.com. Kiner/Long physicals. Love ankle — last club note Aug 24 Urban (progressing; out that week). Benson WI already on Aug 26 card; do not re-essay.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Darren Urban / AZCardinals.com — Kiner to NE",
+          "href": "https://www.azcardinals.com/news/cardinals-begin-roster-moves-by-trading-corey-kiner-to-patriots"
+        },
+        {
+          "label": "Darren Urban / AZCardinals.com — Hunter Long trade",
+          "href": "https://www.azcardinals.com/news/cardinals-add-tight-end-with-trade-for-hunter-long"
+        },
+        {
+          "label": "John Gambadoro / Arizona Sports — Conner IR-DTR (beat, not official)",
+          "href": "https://arizonasports.com/nfl/arizona-cardinals/cardinals-james-conner-starting-season-on-injured-reserve"
+        },
+        {
+          "label": "Darren Urban / AZCardinals.com — Sweat from PUP, Benson WI, Love ankle",
+          "href": "https://www.azcardinals.com/news/cardinals-activate-josh-sweat-from-pup-waive-trey-benson"
+        }
+      ],
+      "sot_flag": "RB depth — Benson WI (prior); Kiner traded; Conner IR (beat, unofficial); Love Week 1 unconfirmed. Do not lock RB2."
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams camp — Aug 31",
+      "bottom_line": "Club 53 posted. No starter cut or IR. Donald unretired onto the DL. Street 11.5 unmoved. Pass",
+      "key_points": [
+        "therams.com posted the initial 53 Aug 30, 1:44 p.m. PT. No starter waived or IR’d. Depth IR only: Dedich, Trost, Caldwell. Donald on the 53 after unretiring the same afternoon.",
+        "Nacua and Garrett are on the 53. That is not a health clear. Last official practice report (club, Aug 24): both DNP — Nacua psoas, Garrett knee. No later official participation report. Aug 26 DNP notes stand.",
+        "Three QBs kept: Stafford, Bennett, Simpson. Club copy as of Aug 27: Week 1 QB2 still unnamed. Do not invent."
+      ],
+      "what_to_watch": "First official practice participation for Nacua (psoas) and Garrett (knee) before Australia. McVay names QB2. Whether Donald actually practices.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Rams.com initial 53-man",
+          "href": "https://www.therams.com/news/rams-announce-initial-53-man-roster-for-2026-season"
+        },
+        {
+          "label": "Rams.com Donald unretires",
+          "href": "https://www.therams.com/news/aaron-donald-unretires-will-play-for-rams-in-2026"
+        },
+        {
+          "label": "Rams.com last official practice report (Aug 24)",
+          "href": "https://www.therams.com/news/injury-updates-ol-justin-dedich-hand-and-te-davis-allen-quad-return-to-practice-wr-puka-nacua-psoas-and-de-myles-garrett-knee-still-non-participants"
+        },
+        {
+          "label": "Rams.com McVay 3 QBs / QB2 unnamed",
+          "href": "https://www.therams.com/news/head-coach-sean-mcvay-rams-3-qbs-initial-53-man-roster-2026-quarterbacks-matthew-stafford-stetson-bennett-ty-simpson-matthew-caldwell"
+        },
+        {
+          "label": "ESPN / Schefter-Rapoport — Donald terms",
+          "href": "https://www.espn.com/nfl/story/_/id/49775423/sources-aaron-donald-unretires-reaches-20m-deal-rams"
+        }
+      ],
+      "sot_flag": "Official 53 posted. Donald unretired onto DL. No starter cut/IR. Nacua/Garrett on 53 ≠ healthy (last official NP Aug 24)."
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers camp — Aug 31",
+      "bottom_line": "Quiet. Official 53 still not posted. Last club availability remains Day 17. CMC/Kittle/Evans open. Street PUP unverified. House 8.53 vs juiced 10.5 Under. Thin. Pass.",
+      "key_points": [
+        "Club roster still camp-sized. Last 49ers.com transaction 08/27 (Jah Joyner signed; Dimukeje to IR). Unofficial depth chart last updated 08/27/26. No official 53-man.",
+        "CMC/Kittle/Evans unchanged from official Day 17: CMC in team work; Kittle off Active/PUP, non-competitive only; Mike Evans DNP groin, expected next week. Australia travel for Kittle not official. Do not invent Week 1 starters.",
+        "Guerendo (pec) and Mykel Williams (ACL) remain Active/PUP on 49ers.com. Reserve/PUP street copy is not club-verified. Do not write season-opening PUP."
+      ],
+      "what_to_watch": "Official 53 plus any club note that moves CMC, Kittle, or Evans before the Australia departure. Until then the file is thin.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "49ers.com Day 17 camp report",
+          "href": "https://www.49ers.com/news/day-17-of-2026-training-camp-53-man-cut-is-near-as-49ers-gear-up-for-final-preseason-game"
+        },
+        {
+          "label": "49ers.com roster (Active / Active-PUP / IR)",
+          "href": "https://www.49ers.com/team/players-roster/"
+        },
+        {
+          "label": "49ers.com 2026 transactions",
+          "href": "https://www.49ers.com/team/transactions/2026"
+        },
+        {
+          "label": "49ers.com unofficial depth chart (08/27/26)",
+          "href": "https://www.49ers.com/team/depth-chart"
+        },
+        {
+          "label": "Nick Wagoner, ESPN — 2026 camp intel",
+          "href": "https://www.espn.com/nfl/story/_/id/49427696/san-francisco-49ers-training-camp-2026-intel-updates"
+        }
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks camp — Aug 31",
+      "bottom_line": "Club 53 still not posted. Street unmoved. Pass",
+      "key_points": [
+        "seahawks.com Active still 90; no initial-53 news. Cutdown 3 p.m. PT Aug 30. Not official.",
+        "Last club txn 8/29: Arnold signed, Graham waived. Reserve/Injured: no new material names. Aggregator cut lists are not the 53.",
+        "DK via RotoWire still SEA 10.5 Over −115 / Under −105. House 10.81. Gap 0.31."
+      ],
+      "what_to_watch": "Official seahawks.com 53-man (or NEW IR) after the 3 p.m. PT filing. Ignore aggregator cut trackers until the club posts. Street 10.5 juice if it moves.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Seahawks roster",
+          "href": "https://www.seahawks.com/team/players-roster/"
+        },
+        {
+          "label": "Seahawks transactions",
+          "href": "https://www.seahawks.com/team/transactions/"
+        },
+        {
+          "label": "Seahawks sign CB Terrion Arnold",
+          "href": "https://www.seahawks.com/news/seahawks-sign-cb-terrion-arnold"
+        },
+        {
+          "label": "RotoWire NFL win totals (DraftKings)",
+          "href": "https://www.rotowire.com/betting/nfl/win-totals.php"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers camp — Aug 31",
+      "bottom_line": "Rapoport has Jalon Daniels as QB2 and Browning out. The club has not posted a 53. Pass on treating that as a depth-chart file.",
+      "key_points": [
+        "Rapoport via ESPN: UDFA Jalon Daniels is Mayfield's backup; Jake Browning to be released Sunday. NFL.com tracker already lists Browning.",
+        "Jenna Laine: RB Josh Williams waived. Jeremy Fowler: Sean Tucker reworked to one year, $2.5 million guaranteed.",
+        "Bowles: Egbuka (toe) and McMillan (knee) health decide extra WR versus extra QB/RB. Official 53 not posted."
+      ],
+      "what_to_watch": "Club 53. Whether Daniels is actually the only backup. Egbuka and McMillan for Week 1.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "ESPN — Daniels QB2, Williams waived, Tucker (Aug 30)",
+          "href": "https://www.espn.com/nfl/story/_/id/49772519/source-bucs-tab-undrafted-rookie-jalon-daniels-backup-qb"
+        },
+        {
+          "label": "Buccaneers — Bowles depth decisions (Aug 29)",
+          "href": "https://www.buccaneers.com/news/positional-depth-decisions-complicate-bucs-roster-cutdown-2026"
+        }
+      ],
+      "sot_flag": "Daniels is a reported QB2, not a club 53. Mayfield is the undisputed starter. Do not invent a third quarterback."
+    },
+    {
+      "team_id": "CAR",
+      "title": "Panthers camp — Aug 31",
+      "bottom_line": "Saturday's seven are official. Okereke and Trask are not. The 53 is not posted. Pass.",
+      "key_points": [
+        "Official Saturday wave: seven waived/released, including OT Ryan Hayes (waived-injured).",
+        "Club is still 'reports: agree to terms' with LB Bobby Okereke on a one-year deal. Not on the transactions page.",
+        "PFT: Kyle Trask cut. Haynes King to the 53 and Ekwonu Reserve/PUP conversion are unconfirmed. Nic Scourton is already season IR."
+      ],
+      "what_to_watch": "Official 53. Okereke as a real transaction. Ekwonu Reserve/PUP versus counting on the 53.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Panthers — Saturday seven (Aug 29)",
+          "href": "https://www.panthers.com/news/panthers-part-ways-with-seven-players-in-advance-of-roster-deadline"
+        },
+        {
+          "label": "Panthers — Okereke reports (Aug 29)",
+          "href": "https://www.panthers.com/news/reports-panthers-agree-to-terms-with-linebacker-bobby-okereke-free-agent-roster-deadline"
+        },
+        {
+          "label": "PFT — Trask cut (Aug 30)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/panthers-cut-backup-qb-kyle-trask"
+        }
+      ],
+      "sot_flag": "Scourton is already season IR. Okereke is agree-to-terms, not an official add. Do not name Haynes King to the 53."
+    },
+    {
+      "team_id": "NO",
+      "title": "Saints camp — Aug 31",
+      "bottom_line": "Saturday's 10 are official. Yiadom is the surprise if Underhill is right. The club 53 is not up. Pass on a new backfield king.",
+      "key_points": [
+        "Official Saturday: 10 waived, including WR Bub Means and QB Hunter Dekkers.",
+        "Nick Underhill: veteran CB Isaac Yiadom released (13 of 14 projections had him in); 2026 seventh-round CB TJ Hall Jr. waived, practice-squad candidate.",
+        "Kamara's MCL is still at least a month with no new designation tonight. Tipton to Reserve/PUP is beat reporting, not a club alert. Do not convert Etienne's first-team work into a season monopoly."
+      ],
+      "what_to_watch": "Club 53. Kamara IR-or-active. Rattler versus Wilson as the unnamed QB2.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Saints — Saturday 10 (Aug 29)",
+          "href": "https://www.neworleanssaints.com/news/saints-roster-moves-transaction-alert-august-29-2026"
+        },
+        {
+          "label": "Underhill via Yahoo — Yiadom released",
+          "href": "https://sports.yahoo.com/articles/saints-surprisingly-release-veteran-cornerback-204011666.html"
+        },
+        {
+          "label": "Underhill via Yahoo — Hall waived",
+          "href": "https://sports.yahoo.com/articles/saints-already-cut-one-rookie-200703011.html"
+        },
+        {
+          "label": "ESPN — Kamara MCL timetable",
+          "href": "https://global.espn.com/nfl/story/_/id/49658952/source-saints-rb-kamara-least-month-mcl-sprain"
+        }
+      ],
+      "sot_flag": "Bresee is already season IR. Kamara has no new official designation tonight. Do not invent an RB1 or a posted Rattler keep."
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears camp — Aug 31",
+      "bottom_line": "Chicago sent Dexter to Atlanta for Phillips and a 2027 fifth. Gordon, Noah Sewell, and Shemar Turner start the year on Reserve/PUP. Pass.",
+      "key_points": [
+        "The Bears agreed to send DT Gervon Dexter Sr. to Atlanta for CB Clark Phillips III and a 2027 fifth-round pick, pending physicals (chicagobears.com, Aug. 30). Phillips is on the club's initial-53 photo set.",
+        "Official 08/30: DB Kyler Gordon, LB Noah Sewell, and DL Shemar Turner to Reserve/PUP. RB Brittain Brown, LB Tony Fields, DB Jaylon Jones, and WR Ray-Ray McCloud III to Reserve/Injured. P Tory Taylor activated off the international exemption.",
+        "Coby Bryant is on the initial 53, not IR, despite Poles saying the knee keeps him out until at least mid-December. Do not invent a nickel or DT1."
+      ],
+      "what_to_watch": "Whether Phillips' physical closes, and who takes Gordon's nickel snaps with Bryant on the 53 but not practicing.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "Bears — Dexter to Atlanta for Phillips + 2027 fifth, pending physicals (Aug 30)",
+          "href": "https://www.chicagobears.com/news/roster-moves-chicago-bears-agree-to-acquire-fifth-round-pick-and-db-clark-phillips-iii-in-trade-with-atlanta"
+        },
+        {
+          "label": "Bears — transactions, Reserve/PUP and IR (Aug 30)",
+          "href": "https://www.chicagobears.com/team/transactions/2026"
+        },
+        {
+          "label": "Bears — Poles on Bryant knee / cutdown (Aug 29)",
+          "href": "https://www.chicagobears.com/news/ryan-poles-talks-roster-cutdown-day-on-preseason-broadcast"
+        },
+        {
+          "label": "Bears — initial 53 (Bryant on 53; Dexter off; Phillips on)",
+          "href": "https://www.chicagobears.com/news/chicago-bears-announce-roster-moves-initial-53-man-2026"
+        }
+      ],
+      "sot_flag": "Dexter is out via trade; Phillips is in. Gordon, Noah Sewell, and Shemar Turner start on Reserve/PUP. Flag DT, nickel, and EDGE/DL depth. Do not crown DT1 or nickel."
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions camp — Aug 31",
+      "bottom_line": "Mays remains a long-term center absence and McLaughlin entered concussion protocol. Official 53 is not posted. Pass.",
+      "key_points": [
+        "Seth McLaughlin was diagnosed with a concussion and entered the league's five-step protocol after Saturday, per Nolan Bianchi of The Detroit News.",
+        "Cade Mays is still expected to miss roughly eight to 10 weeks. Do not name a Week 1 center.",
+        "WR Greg Dortch was released, per Tom Pelissero. EDGE Payton Turner is already on Reserve/Injured (official Aug. 27). Joseph and Branch remain on Active/PUP; detroitlions.com has no 08/30 53 dump as of 6:15pm ET Sunday."
+      ],
+      "what_to_watch": "The official 53, first-team center snaps, and whether Joseph and Branch start the year on Reserve/PUP.",
+      "is_material_depth": true,
+      "sources": [
+        {
+          "label": "CBS Sports — McLaughlin concussion protocol, citing Bianchi (Aug 29)",
+          "href": "https://www.cbssports.com/fantasy/football/news/lions-seth-mclaughlin-enters-concussion-protocol/"
+        },
+        {
+          "label": "Yahoo — Dortch released, citing Pelissero (Aug 30)",
+          "href": "https://sports.yahoo.com/articles/detroit-lions-shocking-cut-roster-212636153.html"
+        },
+        {
+          "label": "Lions — transactions, Turner IR (Aug 27); no 08/30 53 dump",
+          "href": "https://www.detroitlions.com/team/transactions/"
+        }
+      ],
+      "sot_flag": "Mays remains a long-term center absence. McLaughlin is in concussion protocol. Keep the replacement open; do not invent C1."
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "MIN",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Monday number pass + Jurgens IR-DFR. House 8.38 vs 8.5 (|diff| 0.12) ≤ 0.5. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "ATL",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Identity moved on the total; QB1 unnamed. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "CLE",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 8.59 vs 6.5 (2.09) is model Over vs beat-adjusted band ~6.3–6.7. House already Pass. Also-cover. Do not force the Model Over over Watson’s gap and the Garrett trade.",
+      "status": "touched"
+    },
+    {
+      "team_id": "WAS",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Price killed the prior +100 Under. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "HOU",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 10.34 vs 9.5 (|diff| 0.84). Over −146. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "NYJ",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 4.73 vs 5.5 (|diff| 0.77). Also-cover, no Handicapper’s Note lean. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "NYG",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "0.47-win gap. Thin. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "GB",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Club 53 posted + Jacobs exempt / Johnson / Parsons PUP. House 9.33 vs 9.5 (|diff| 0.17) ≤ 0.5. Did not mint a new GB number. Pass. GB@MIN Week 1 hold stands.",
+      "status": "touched"
+    },
+    {
+      "team_id": "DAL",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Model-market conflict material. Threshold Pass. Do not average.",
+      "status": "touched"
+    },
+    {
+      "team_id": "PHI",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "0.15-win gap. Never dress up the Under at -148.",
+      "status": "touched"
+    },
+    {
+      "team_id": "KC",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 9.31 vs 10.5 (1.19). House already Pass: model Under, but U -140 plus unresolved Mahomes game clearance. Also-cover.",
+      "status": "touched"
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 8.48 vs 9.5 (1.02). Under +110. Opened 10.5, now 9.5 — extra win off the old number is gone. Also-cover; house already 2/5. Key risk: Herbert / McDaniel / Slaughter can still get to 10.",
+      "status": "touched"
+    },
+    {
+      "team_id": "PIT",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 8.16 vs 8.5. |diff| 0.34 ≤ 0.5 and Under already -120.",
+      "status": "touched"
+    },
+    {
+      "team_id": "CIN",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 7.21 vs 9.5 (2.29). House already Pass (model Under vs healthy-Burrow + D rebuild). Over now -140. Also-cover.",
+      "status": "touched"
+    },
+    {
+      "team_id": "BAL",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 8.98 vs street 11.5 is a 2.52-win model/market conflict; house already sat; Under juiced to -140. Also-cover. Key risk: new staff / center / Madubuike is larger than any Under after juice.",
+      "status": "touched"
+    },
+    {
+      "team_id": "BUF",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 10.26 vs 10.5 (|diff| 0.24) ≤ 0.5. Pass. Key risk: club 53 still unposted.",
+      "status": "touched"
+    },
+    {
+      "team_id": "MIA",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 6.14 vs street 3.5 (|diff| 2.64). Identity 4.5→3.5. Pass, show both. Do not chase if the board bounces Monday.",
+      "status": "touched"
+    },
+    {
+      "team_id": "NE",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 9.98 vs 10.5 (|diff| 0.52). Under juiced to −140. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "IND",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 10.29 vs 7.5 (|diff| 2.79). Pass, show both. Over −140. Shrader is the named kicker — ST fact, not a number.",
+      "status": "touched"
+    },
+    {
+      "team_id": "JAX",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 9.77 vs 8.5 (|diff| 1.27). Over juice flipped to −140. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "TEN",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 5.88 vs 6.5 (|diff| 0.62). Club 53 unposted. Beat Levis/Volson stay off the card until club posts. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "DEN",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 10.51 vs 9.5 (|diff| 1.01). Street juice still playable at -115. Also-cover; house already capped 2/5. Key risk: Nix ankle + five-playoff-team open + Cooper unavailable while exempt.",
+      "status": "touched"
+    },
+    {
+      "team_id": "LV",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 6.07 vs 5.5 (0.57) is barely over a half-win; Over juiced to -146 and Jeanty Week 1 is coach-hope not clearance. Also-cover.",
+      "status": "touched"
+    },
+    {
+      "team_id": "ARI",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 6.55 vs DK 4.5 = 2.05-win conflict. Under −150 juiced. Do not average. Do not lean Over. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "LAR",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 11.07 vs street 11.5. Gap 0.43. Half-win rule. Over juice −125. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "SF",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 8.53 vs market 10.5 = ~1.97-win conflict. Under juiced to −145. Juice eats the lean. Do not lean Under. Thin file. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "SEA",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 10.81 vs street 10.5 = gap 0.31. Juice unchanged. No official 53-man, no new material IR. Thin. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "TB",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "0.13-win gap. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "CAR",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Under direction, juiced price. Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "NO",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "Show both: house 8.96, street 7.5 -120. No new SoT. Pass rather than a fake lean.",
+      "status": "touched"
+    },
+    {
+      "team_id": "CHI",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 8.34 vs street 9.5 (|diff| 1.16). All four NFC North Pass. Did not force the model Under. Also-cover.",
+      "status": "touched"
+    },
+    {
+      "team_id": "DET",
+      "fields": ["date", "bottom_line", "what_matters_most"],
+      "reason": "House 10.69 vs 10.5 (|diff| 0.19) ≤ 0.5. Pass.",
+      "status": "touched"
+    }
+  ]
+}

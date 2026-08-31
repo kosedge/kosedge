@@ -2,10 +2,10 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Burrow is healthy, the defense is deeper and the market has made bettors pay for both conclusions  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-140 / +115)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **9.5** (-140 / +115)
 **Sources (beat desk):** Ben Baby (ESPN); Paul Dehner Jr. (The Athletic); Kelsey Conway (Cincinnati Enquirer); Dan Hoard (Bengals.com)
 
 Cincinnati's win total has barely moved. The cost of agreeing with the popular story has. DraftKings opened the Bengals at **9.5** with the Over around **-115** in February. The August 26 board still shows 9.5, but the Over is now **-140**. Bettors did not push the threshold to ten; they made ten wins considerably more expensive.
@@ -58,7 +58,7 @@ Buying the Over means accepting premium juice before the new defense plays a reg
 
 **Handicapper’s Note**  
 Fair number: **7.21** (Model SoT nfl-preseason-sim-2026-20260822T013711Z)  
-Market number: **9.5** (DK / RotoWire Aug 2026)  
+Market number: **9.5** (-140 / +115)
 Lean: **Pass**  
 Confidence: 1/5  
 Key risk: The Model sits 2.29 wins below a market built around healthy Burrow and major defensive additions; neither side of that conflict is priced cleanly.

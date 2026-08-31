@@ -2,10 +2,10 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** The market prices peak structure while the Model and participation sheet price fragility  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (Over +125 / Under -145)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **10.5** (Over +125 / Under -145)
 **Sources (beat desk):** Nick Wagoner (ESPN); Vic Tafur (The Athletic); Eric Branch (San Francisco Chronicle); David Lombardi (independent)
 
 San Francisco presents the division’s sharpest disagreement. DraftKings posts **10.5** and makes the Under expensive at **-145**. Kos Edge projects **8.53 expected wins**, nearly two wins below the total. The late-camp participation sheet supplies evidence for the lower view, but it also contains meaningful returns from Christian McCaffrey and George Kittle.
@@ -59,7 +59,7 @@ The season outlook is conditional. If the core practices together and the line s
 **Handicapper’s Note**  
 Fair number: **8.53**  
 Market number: **10.5**  
-Lean: **Pass — Model↔market conflict**  
+Lean: **Pass**  
 Confidence: 1/5  
 Key risk: Kittle, McCaffrey and Evans could all be ready enough to restore a top-tier offense, while one setback in that chain could validate the Model’s much lower center.
 

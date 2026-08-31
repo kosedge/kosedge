@@ -2,13 +2,13 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** The Model sees six wins; the roster and schedule still look like a rebuild board  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **4.5** (-110 / -110)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **3.5** (-142 / +110)
 **Sources (beat desk):** Marcel Louis-Jacques (ESPN); David Furones (Sun Sentinel); Joe Schad (Palm Beach Post); Alain Poupart (Dolphins On SI); Miami Dolphins communications
 
-Miami creates the largest AFC East disagreement between the Kos Edge Model and the market. The Model projects **6.14 wins**. DraftKings, through the Aug. 26 RotoWire fact-check, asks **4.5** at standard **-110** pricing. A 1.64-win gap would usually force a serious Over discussion.
+Miami creates the largest AFC East disagreement between the Kos Edge Model and the market. The Model projects **6.14 wins**. DraftKings, through the Aug. 31 SI stamp, now asks **3.5** (**-142 / +110**); the prior board was **4.5**. Show both — do not average them into a middle fair. A 2.64-win gap to 3.5 would usually force a serious Over discussion.
 
 This is not a usual board. The Dolphins are replacing a head coach, a quarterback and much of the identity that defined their offense. Malik Willis has flashed enough in camp to make five wins plausible, but he has not established the stable passing floor that would make a six-win projection easy to trust. The schedule applies immediate pressure to a young roster, and late-August practice has reinforced the range of outcomes rather than narrowed it.
 
@@ -34,7 +34,7 @@ That matters more for Miami than it would for a veteran contender. A rebuilding 
 
 ## Why the Model edge does not become an Over
 
-At **6.14**, the Model gives Miami room to clear 4.5. The basic Over case needs only five wins: a split with the Jets, two or three favorable home results and one game stolen by Achane or defensive variance. The NFL’s weekly volatility makes five a modest target even for a weak roster.
+At **6.14**, the Model gives Miami room to clear both the old **4.5** and the new **3.5**. The basic Over case at 3.5 needs only four wins: a split with the Jets, a couple of favorable home results and one game stolen by Achane or defensive variance. The NFL’s weekly volatility makes four a modest target even for a weak roster.
 
 The market case is more severe. It treats Miami as a true bottom-tier team because the quarterback sample is thin, the pass-catching hierarchy is unfinished and the roster has been stripped faster than it can reasonably be rebuilt. That view also expects the schedule to turn development weeks into losses before the Dolphins find stable combinations.
 
@@ -50,17 +50,17 @@ The early travel is especially difficult for a new staff. Las Vegas and San Fran
 
 ## Betting Guide
 
-- **Win total — 4.5:** Pass. The **6.14** Model fair points Over, but the roster teardown, quarterback uncertainty and schedule create a material conflict with that projection.
-- **Do not force the Under:** Miami needs only five wins to beat the number, and Achane gives the offense a real source of upset variance.
+- **Win total — 3.5 (was 4.5):** Pass. The **6.14** Model fair points Over, but the roster teardown, quarterback uncertainty and schedule create a material conflict with that projection. Show both boards; do not average.
+- **Do not force the Under:** Miami needs only four wins to beat **3.5** (five to beat the old **4.5**), and Achane gives the offense a real source of upset variance.
 - **Early checkpoint:** Track Willis’ turnover-worthy mistakes and the health of Sieler, Grant and Brooks through the first two road games.
 - **Weekly sides:** Miami may be more useful as an underdog after the market reacts to an ugly start. Demand a healthy front and a price that reflects the opponent.
 - **Revisit point:** The Week 6 bye offers the first honest reassessment after five difficult opponents and four travel spots.
 
 **Handicapper’s Note**  
 Fair number: **6.14**  
-Market number: **4.5**  
+Market number: **3.5**  
 Lean: **Pass**  
-Confidence: **1/5**  
+Confidence: **4/5**  
 Key risk: The Model’s clear Over signal may be right, but it conflicts with a rebuilt roster, an unstable passing floor and one of the league’s least forgiving opening schedules.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

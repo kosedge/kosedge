@@ -41,7 +41,9 @@ const fixture: CampDeskDayFile = {
 
 describe("camp desk daily freshness", () => {
   it("labels the live day as a weekday + short month", () => {
-    expect(formatCampDeskDayLabel("2026-08-12")).toMatch(/Wednesday,\s+Aug(?:ust)?\s+12/);
+    expect(formatCampDeskDayLabel("2026-08-12")).toMatch(
+      /Wednesday,\s+Aug(?:ust)?\s+12/,
+    );
   });
 
   it("keeps notes inside 72h and buries older ones unless pinned", () => {
@@ -55,7 +57,10 @@ describe("camp desk daily freshness", () => {
     const today: CampDeskDayFile = {
       ...fixture,
       desk_date: "2026-08-12",
-      league_wrap: { ...fixture.league_wrap, title: "Camp Desk — Wednesday, Aug 12" },
+      league_wrap: {
+        ...fixture.league_wrap,
+        title: "Camp Desk — Wednesday, Aug 12",
+      },
       team_notes: [
         {
           ...fixture.team_notes[0],
@@ -77,7 +82,10 @@ describe("camp desk daily freshness", () => {
     const today: CampDeskDayFile = {
       ...fixture,
       desk_date: "2026-08-12",
-      league_wrap: { ...fixture.league_wrap, title: "Camp Desk — Wednesday, Aug 12" },
+      league_wrap: {
+        ...fixture.league_wrap,
+        title: "Camp Desk — Wednesday, Aug 12",
+      },
     };
     const windowed = selectCampDeskCards(cardsFromDayFile(today), {
       now: AUG_16,
@@ -143,6 +151,75 @@ describe("Aug 17 live Camp Desk day", () => {
   });
 });
 
+describe("Aug 31 live Camp Desk day", () => {
+  const live = JSON.parse(
+    readFileSync(
+      path.join(
+        __dirname,
+        "../../../../content/writers/camp-desk-2026/2026-08-31.json",
+      ),
+      "utf8",
+    ),
+  ) as CampDeskDayFile;
+
+  it("is a Monday package with all-32 notes, singular preview_delta, and no X profile sources", () => {
+    expect(live.desk_date).toBe("2026-08-31");
+    expect(live.package).toBe("monday");
+    expect(live.pinned).toBe(false);
+    expect(live.source_type).toBe("kosedge-desk");
+    expect(live.league_wrap.title).toBe("Camp Desk — Monday, Aug 31");
+    expect(live.league_wrap.storylines.length).toBeGreaterThanOrEqual(5);
+    expect(live.league_wrap.storylines.length).toBeLessThanOrEqual(8);
+    expect(live.team_notes.length).toBe(32);
+    expect(live.preview_delta).toHaveLength(32);
+    expect(live.preview_delta?.every((row) => row.status === "touched")).toBe(
+      true,
+    );
+    expect(live.team_notes.map((note) => note.team_id)).toEqual([
+      "MIN",
+      "ATL",
+      "CLE",
+      "WAS",
+      "HOU",
+      "NYJ",
+      "NYG",
+      "GB",
+      "DAL",
+      "PHI",
+      "KC",
+      "LAC",
+      "PIT",
+      "CIN",
+      "BAL",
+      "BUF",
+      "MIA",
+      "NE",
+      "IND",
+      "JAX",
+      "TEN",
+      "DEN",
+      "LV",
+      "ARI",
+      "LAR",
+      "SF",
+      "SEA",
+      "TB",
+      "CAR",
+      "NO",
+      "CHI",
+      "DET",
+    ]);
+    expect(live.league_wrap.bottom_line.toLowerCase()).toContain("pass");
+    const blob = JSON.stringify(live);
+    expect(blob).not.toMatch(/\bPLAY\b/);
+    expect(blob).not.toMatch(/\bLEAN\b/);
+    expect(blob).not.toMatch(/https?:\/\/(www\.)?(x|twitter)\.com/i);
+    expect(blob).not.toContain("preview_deltas");
+    expect(live.team_notes.some((note) => note.is_material_depth)).toBe(true);
+    expect(live.preview_delta?.some((row) => row.team_id === "DET")).toBe(true);
+  });
+});
+
 describe("Aug 21 live Camp Desk day", () => {
   const live = JSON.parse(
     readFileSync(
@@ -167,9 +244,11 @@ describe("Aug 21 live Camp Desk day", () => {
     expect(blob).not.toMatch(/\bPLAY\b/);
     expect(blob).not.toMatch(/\bLEAN\b/);
     expect(blob).not.toMatch(/https?:\/\/(www\.)?(x|twitter)\.com/i);
-    expect(live.team_notes.some((note) => note.team_id === "WAS" && note.is_material_depth)).toBe(
-      true,
-    );
+    expect(
+      live.team_notes.some(
+        (note) => note.team_id === "WAS" && note.is_material_depth,
+      ),
+    ).toBe(true);
     expect(live.preview_delta?.some((row) => row.team_id === "HOU")).toBe(true);
   });
 

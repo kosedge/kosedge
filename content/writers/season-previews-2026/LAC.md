@@ -1,18 +1,18 @@
 # Los Angeles Chargers 2026 Season Preview
 
-**By Sam Ortiz** · Kos Edge Analytics · AFC West desk  
+**By Reese Quinn** · Kos Edge Analytics · AFC West desk  
 **Angle:** A one-win model gap, a lost starting center and the league’s worst rest draw keep the Under live  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **9.5** (-130 / +110)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **9.5** (-130 / +110)
 **Sources (beat desk):** Kris Rhim (ESPN); Daniel Popper (The Athletic); Los Angeles Chargers communications; Warren Sharp (Sharp Football Analysis)
 
 The Chargers’ win total has already made its important move. DraftKings opened Los Angeles at 10.5 and now lists **9.5**, with the Over still carrying -130 and the Under offered at +110.
 
 Dropping through 10 removed much of the easy Under argument. It did not remove all of it. The Kos Edge model makes the Chargers **8.48 wins**, 1.02 below the current number, and the most important late-camp development landed on the same side: starting center Tyler Biadasz is out for the season with ACL damage and additional injury to his left knee.
 
-Justin Herbert and Jim Harbaugh give Los Angeles a real double-digit ceiling. A rookie center, an unsettled left side of the line and a historically poor rest profile lower the floor. At plus money, the position is a **soft Under 9.5, confidence 2/5**.
+Justin Herbert and Jim Harbaugh give Los Angeles a real double-digit ceiling. A rookie center, an unsettled left side of the line and a historically poor rest profile lower the floor. At plus money, the position is **Under 9.5, confidence 2/5** — keep the stamped **-130 / +110** even if other boards drift.
 
 ## Biadasz changes the protection plan
 
@@ -58,7 +58,7 @@ The Under is a price-sensitive position against 10 wins, not a claim that the Ch
 
 ## Betting Guide
 
-- **Season wins 9.5:** Soft Under at **+110**. Model fair is 8.48, and the Biadasz injury plus rest deficit support the same direction.
+- **Season wins 9.5:** **Under 2/5** at **+110** (Over **-130**). Model fair is 8.48, and the Biadasz injury plus rest deficit support the same direction. Keep stamped juice.
 - **Number discipline:** The opening 10.5 was materially better. Do not treat Under 9.5 as if that extra win is still available.
 - **Over price:** Laying -130 requires confidence in 10 or more wins despite a rookie center and seven rest-disadvantage games. The current evidence does not justify it.
 - **Early schedule:** Protection communication against Buffalo, Denver and Kansas City will be more informative than offensive output against the opening opponents.
@@ -66,8 +66,8 @@ The Under is a price-sensitive position against 10 wins, not a claim that the Ch
 
 **Handicapper’s Note**  
 Fair number: **8.48**  
-Market number: **9.5** (Over -130 / Under +110)  
-Lean: **Soft Under 9.5**  
+Market number: **9.5** (-130 / +110)
+Lean: **Under 2/5**  
 Confidence: **2/5**  
 Key risk: Herbert, McDaniel and a credible rookie replacement could overcome the line disruption, making the lost value from the move off 10.5 decisive.
 

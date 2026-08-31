@@ -2,10 +2,10 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** A championship defense supports the floor, but 10.5 leaves no room for a thin edge  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (Over -115 / Under -105)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **10.5** (Over -115 / Under -105)
 **Sources (beat desk):** Brady Henderson (ESPN); Bob Condotta (Seattle Times); Gregg Bell (Tacoma News Tribune); John Boyle (Seahawks.com)
 
 Seattle’s case begins with a defense capable of keeping ordinary offensive weeks competitive. Its price begins much higher. The defending champions are posted at **10.5**, and Kos Edge projects **10.81 expected wins**. A 0.31-win difference is not an edge. With the Over priced at **-115**, it is a clear **Pass**.
@@ -67,8 +67,8 @@ The defense gives the Seahawks a chance in every style of division game. The win
 **Handicapper’s Note**  
 Fair number: **10.81**  
 Market number: **10.5**  
-Lean: **Pass — thin versus 10.5**  
-Confidence: 2/5  
+Lean: **Pass**  
+Confidence: 1/5  
 Key risk: Macdonald’s defense can carry Seattle past eleven wins, but losses at receiver, safety and line depth can turn a few close games without changing the team’s playoff quality.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
