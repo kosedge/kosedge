@@ -55,6 +55,8 @@ export type CampDeskPayload = {
   kosedgeCards: CampDeskCard[];
   archiveCards: CampDeskCard[];
   latestDeskDate: string | null;
+  activeDeskDate: string | null;
+  deskDates: string[];
   deskStale: boolean;
   sotFlags: CampDeskCard[];
   previewDelta: CampPreviewDelta[];
@@ -229,6 +231,7 @@ function buildBeats(registry: BeatRegistry | null): CampBeatLink[] {
 export async function buildNflCampDesk(opts?: {
   now?: Date;
   team?: string | null;
+  deskDate?: string | null;
 }): Promise<CampDeskPayload> {
   const now = opts?.now ?? new Date();
   const inCamp = isNflCalendarPreseason(NFL_PRODUCT_SEASON, now);
@@ -247,6 +250,7 @@ export async function buildNflCampDesk(opts?: {
   const shelf = partitionCampDeskShelf(allCards, {
     now,
     team: opts?.team,
+    deskDate: opts?.deskDate,
     inCamp,
   });
   const kosedgeCards = shelf.live;
@@ -261,6 +265,8 @@ export async function buildNflCampDesk(opts?: {
     kosedgeCards,
     archiveCards: shelf.archive,
     latestDeskDate: shelf.latestDeskDate,
+    activeDeskDate: shelf.activeDeskDate,
+    deskDates: shelf.deskDates,
     deskStale: shelf.deskStale,
     sotFlags: collectSotFlags(kosedgeCards),
     previewDelta: collectPreviewDeltas(dayFiles),
@@ -274,7 +280,7 @@ export async function buildNflCampDesk(opts?: {
     notes: [
       "Camp Desk hero is KosEdge-dated notes. Beat, official, and multi-source desks are citations — not an X timeline.",
       "Camp/Monday refresh prefers data/writers/nfl-beat-writers.json (research index) over any single outlet. ESPN may be one input, never the branded wire. No X profile links on the product.",
-      "During camp, notes older than 72 hours move to Archive. The newest package always stays on the shelf so preseason is never a dead empty state.",
+      "Customer shelf shows one desk day (newest package). Prior days are archive navigation, not a stacked dump.",
       "Material depth flags queue the existing SoT job. Prose does not publish a new active_run.",
       "Market mentions stay Pass unless a KEI path already supports a tag.",
     ],
