@@ -35,6 +35,11 @@ export type FlatEdgeBoardRow = {
   best?: string;
   book?: string;
   bookKey?: string;
+  /** CFB: trust flag for Edge/Tag only — feed Best stays painted. */
+  cfbMarketTrusted?: boolean;
+  cfbTrustReason?: string;
+  /** CFB footnote: `untrusted` | `no book` when not trusted. */
+  cfbTrustLabel?: string;
   /** American odds juice for Open top (away / over). */
   openJuice?: string;
   /** American odds juice for Open bottom (home / under). */
@@ -138,6 +143,8 @@ export type LegacyEdgeBoardRow = {
   bestOU: PricePair;
   bestLineBook?: string;
   bestOUBook?: string;
+  /** CFB: show beside Current when feed exists but trust failed. */
+  bestLineTrustLabel?: string;
   keiLine?: PricePair;
   keiOU?: PricePair;
   /** Optional Model (pre-blend) pair when it differs from KEI. */
@@ -505,12 +512,15 @@ function PriceCell({
   valueClassName = "text-gray-200 font-semibold",
   compact = false,
   book,
+  trustLabel,
 }: {
   p: PricePair;
   valueClassName?: string;
   compact?: boolean;
   /** Sportsbook that holds this best price (shown under the lines). */
   book?: string | null;
+  /** CFB: `untrusted` / `no book` — shown with the number, never instead of it. */
+  trustLabel?: string | null;
 }) {
   const sep = compact ? "mt-1 h-px" : "mt-1.5 h-px";
   const topPad = compact ? "mt-1" : "mt-1.5";
@@ -522,6 +532,13 @@ function PriceCell({
     p.bottom.label === "—";
   const showTopJuice = Boolean(p.top.juice && p.top.juice !== "—");
   const showBottomJuice = Boolean(p.bottom.juice && p.bottom.juice !== "—");
+  const trustNote =
+    trustLabel === "untrusted" || trustLabel === "no book" ? trustLabel : null;
+  const bookIsTrustOnly =
+    book === "untrusted" || book === "no book" ? book : null;
+  const footnote = trustNote || (blank ? bookIsTrustOnly : null);
+  const showBookBadge =
+    !blank && book && book !== "untrusted" && book !== "no book";
 
   return (
     <div className={valueLeading}>
@@ -534,12 +551,13 @@ function PriceCell({
       {showBottomJuice ? (
         <div className="text-[11px] text-gray-400">({p.bottom.juice})</div>
       ) : null}
-      {!blank && book && book !== "untrusted" && book !== "no book" ? (
+      {showBookBadge ? (
         <div className={`${topPad}`}>
           <SportsbookBadge book={book} compact />
         </div>
-      ) : blank && (book === "untrusted" || book === "no book") ? (
-        <div className={`${topPad} text-[10px] text-gray-400`}>{book}</div>
+      ) : null}
+      {footnote ? (
+        <div className={`${topPad} text-[10px] text-gray-400`}>{footnote}</div>
       ) : null}
     </div>
   );
@@ -957,18 +975,21 @@ export function flatRowsToLegacy(
       const bestSpreadNum = parseSpread(bestLine.bottom.label);
       const keiSpreadNum = parseSpread(keiLine.bottom.label);
       // CFB: board Open/Best are away-signed; KEI + bestLine.bottom are home.
-      // Convert book → home before trust (same helper as applyCfbTrustedMarketToRows).
+      // Prefer assemble-time trust flag; else recompute (same helper).
       const openHome = cfbAwayBookToHome(lineRow?.open);
       const bestHome = cfbAwayBookToHome(lineRow?.best) ?? bestSpreadNum;
       const cfbBookCount = openHome != null && bestHome != null ? 2 : 1;
       const cfbTrusted =
-        String(sportKey).toLowerCase() !== "cfb" ||
-        trustCfbMarket({
-          kei: lineRow?.kei ?? keiSpreadNum,
-          best: bestHome,
-          open: openHome,
-          bookCount: cfbBookCount,
-        }).trusted;
+        String(sportKey).toLowerCase() !== "cfb"
+          ? true
+          : typeof lineRow?.cfbMarketTrusted === "boolean"
+            ? lineRow.cfbMarketTrusted
+            : trustCfbMarket({
+                kei: lineRow?.kei ?? keiSpreadNum,
+                best: bestHome,
+                open: openHome,
+                bookCount: cfbBookCount,
+              }).trusted;
       signedLineEdge =
         hasSportsbookLine &&
         cfbTrusted &&
@@ -1175,10 +1196,10 @@ export function flatRowsToLegacy(
       openLine,
       bestLine,
       bestOU,
-      // Prefer bookKey; fall through to book so CFB "untrusted"/"no book"
-      // survive after trusted-market clears bookKey.
+      // Prefer bookKey; fall through to book for sportsbook chip.
       bestLineBook: lineRow?.bookKey || lineRow?.book,
       bestOUBook: totalRow?.bookKey || totalRow?.book,
+      bestLineTrustLabel: lineRow?.cfbTrustLabel,
       keiLine,
       keiOU,
       modelLine,
@@ -1482,6 +1503,12 @@ export default function EdgeBoard({
                   <div className="mt-2 text-[10px] text-gray-500">
                     Open {r.openLine.top.label} / {r.openOU.top.label}
                   </div>
+                  {r.bestLineTrustLabel === "untrusted" ||
+                  r.bestLineTrustLabel === "no book" ? (
+                    <div className="mt-2 text-[10px] text-gray-400">
+                      {r.bestLineTrustLabel}
+                    </div>
+                  ) : null}
                   {r.bestLineBook === "untrusted" ||
                   r.bestLineBook === "no book" ? (
                     <div className="mt-2 text-[10px] text-gray-400">
@@ -1837,6 +1864,7 @@ export default function EdgeBoard({
                           compact
                           valueClassName="text-gray-50 font-semibold"
                           book={r.bestLineBook}
+                          trustLabel={r.bestLineTrustLabel}
                         />
                       </td>
                       <td className={`${TD_BASE} ${COL_MARKET}`}>
@@ -1982,7 +2010,7 @@ export default function EdgeBoard({
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : String(sportKey).toLowerCase() === "cfb"
-                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. Cleared Best shows untrusted or no book — never invent Open. "
+                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. Current paints the feed; untrusted / no book is a footnote — never invent Open. "
                   : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb

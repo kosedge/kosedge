@@ -9,6 +9,9 @@
  * rows store Open/Best away-signed (`awayOutcome.point`). Convert book →
  * home at this boundary via `cfbAwayBookToHome` before trust/edge. Do not
  * rewrite the odds cache; do not flip the Python ledger `spread_home` path.
+ *
+ * Display vs trust: Open/Best feed prices always stay on the row. Trust only
+ * sets `cfbMarketTrusted` / `cfbTrustReason`. Edge/Tag use trusted Best only.
  */
 
 export const CFB_PLAY_EDGE_PTS = 4.0;
@@ -27,6 +30,13 @@ export type CfbTrustedMarket = {
   reason: string;
 };
 
+export type CfbTrustRowFields = {
+  cfbMarketTrusted?: boolean;
+  cfbTrustReason?: string;
+  /** Desk footnote: `untrusted` | `no book` | undefined when trusted. */
+  cfbTrustLabel?: string;
+};
+
 function num(v: unknown): number | null {
   if (v == null || v === "" || v === "—") return null;
   const n = parseFloat(String(v).replace(/[^+\-\d.]/g, ""));
@@ -40,6 +50,18 @@ function num(v: unknown): number | null {
 export function cfbAwayBookToHome(awaySigned: unknown): number | null {
   const n = num(awaySigned);
   return n == null ? null : -n;
+}
+
+export function cfbTrustLabelForReason(reason: string): string | undefined {
+  if (reason === "best" || reason === "best_outlier_vs_open") return undefined;
+  if (
+    reason === "no_market" ||
+    reason === "no_kei" ||
+    reason === "no_candidate"
+  ) {
+    return "no book";
+  }
+  return "untrusted";
 }
 
 /**
@@ -109,7 +131,7 @@ export function applyCfbTrustedMarketToRows<
     book?: string;
     bookKey?: string;
   },
->(rows: T[]): T[] {
+>(rows: T[]): (T & CfbTrustRowFields)[] {
   return rows.map((row) => {
     if (String(row.market || "") !== "Spread") return row;
     // Board Open/Best are away-signed; KEI is home. Compare home vs home.
@@ -125,15 +147,14 @@ export function applyCfbTrustedMarketToRows<
       open: openHome,
       bookCount,
     });
-    if (verdict.trusted) return row;
-    // Preserve a desk-readable label when Best is cleared. UI used to swallow
-    // these because Best="—" hid the book chip; keep enum-adjacent strings only.
-    // Row Open/Best storage stays away-signed (display still flipSpreads).
+    // Never blank feed Best/Open. Trust is a flag for Edge/Tag only.
     return {
       ...row,
-      best: "",
-      book: verdict.reason === "no_market" ? "no book" : "untrusted",
-      bookKey: "",
+      cfbMarketTrusted: verdict.trusted,
+      cfbTrustReason: verdict.reason,
+      cfbTrustLabel: verdict.trusted
+        ? undefined
+        : cfbTrustLabelForReason(verdict.reason),
     };
   });
 }

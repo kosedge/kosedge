@@ -77,6 +77,25 @@ ALIASES = {
     "haw": "hawaii",
     "san jose": "san jose",
     "sjsu": "san jose",
+    # Massachusetts / UMass
+    "umass": "massachusetts",
+    "umass minutemen": "massachusetts minutemen",
+    "massachusetts": "massachusetts",
+    "massachusetts minutemen": "massachusetts minutemen",
+    "mass": "massachusetts",
+    # Miami FL vs Miami OH (distinct first tokens)
+    "miami oh": "miami-ohio",
+    "miami ohio": "miami-ohio",
+    "miami oh redhawks": "miami-ohio redhawks",
+    "miami ohio redhawks": "miami-ohio redhawks",
+    "m-oh": "miami-ohio",
+    "moh": "miami-ohio",
+    "miami fl": "miami-florida",
+    "miami florida": "miami-florida",
+    "miami hurricanes": "miami-florida hurricanes",
+    "miami florida hurricanes": "miami-florida hurricanes",
+    "mia": "miami-florida",
+    "rut": "rutgers",
 }
 
 
@@ -90,7 +109,20 @@ def fold(raw: str) -> str:
 
 def alias_token(s: str) -> str:
     f = fold(s)
-    return ALIASES.get(f, f)
+    if not f:
+        return f
+    if f in ALIASES:
+        return ALIASES[f]
+    words = f.split()
+    if len(words) >= 2:
+        two = f"{words[0]} {words[1]}"
+        if two in ALIASES:
+            rest = " ".join(words[2:])
+            return f"{ALIASES[two]} {rest}".strip()
+    if words and words[0] in ALIASES:
+        rest = " ".join(words[1:])
+        return f"{ALIASES[words[0]]} {rest}".strip()
+    return f
 
 
 def match_keys(game: str) -> List[str]:
@@ -386,9 +418,20 @@ def main() -> int:
             trusted_reason = verdict["reason"]
 
         # Trusted market candidate is home-signed after boundary convert.
+        # Feed Current (best_home) always paints; trustedBest only when trusted.
         best_home_trusted = None
         if verdict["trusted"] and verdict["market"] is not None:
             best_home_trusted = float(verdict["market"])
+        current_h = best_home if best_home is not None else open_home
+        painted_without_trust = bool(
+            current_h is not None and not verdict["trusted"]
+        )
+        trust_label = None
+        if not verdict["trusted"]:
+            if trusted_reason in ("no_market", "no_kei", "no_candidate", "no_feed"):
+                trust_label = "no book"
+            else:
+                trust_label = "untrusted"
 
         edge_line = None
         if best_home_trusted is not None:
@@ -433,9 +476,13 @@ def main() -> int:
                 "kei_spread_home": kei_home,
                 "kei_total": kei_tot,
                 "open_spread_away": open_away,
+                "open_h": open_home,
                 "open_spread_home": open_home,
                 "best_spread_away_raw": best_away,
+                "current_h": current_h,
                 "best_spread_home_trusted": best_home_trusted,
+                "painted_without_trust": painted_without_trust,
+                "trust_label": trust_label,
                 "open_total": open_tot,
                 "best_total": best_tot,
                 "n_books": n_books,

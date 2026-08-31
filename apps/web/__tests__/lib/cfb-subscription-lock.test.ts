@@ -11,8 +11,7 @@ import {
 } from "@/lib/cfb-trusted-market";
 
 describe("cfb trusted market", () => {
-  it("rejects the TCU-class junk book so it cannot PLAY", () => {
-    // Home-side junk: KEI −20 vs home book +8.5 (gap ~28.9 ≥ 12).
+  it("rejects the TCU-class junk book for Edge/Tag but keeps feed Best", () => {
     const before = trustCfbMarket({
       kei: -20.39,
       best: 8.5,
@@ -23,7 +22,6 @@ describe("cfb trusted market", () => {
     expect(cfbEdgeTag(Math.abs(-20.39 - 8.5))).toBe("PLAY"); // raw would fire
     expect(cfbEdgeTag(before.market == null ? null : 28)).toBe("PASS");
 
-    // Board rows store away: home +8.5 ⇒ away −8.5.
     const rows = applyCfbTrustedMarketToRows([
       {
         market: "Spread",
@@ -34,9 +32,11 @@ describe("cfb trusted market", () => {
         bookKey: "hardrockbet",
       },
     ]);
-    expect(rows[0]?.best).toBe("");
-    expect(rows[0]?.book).toBe("untrusted");
-    expect(rows[0]?.bookKey).toBe("");
+    expect(rows[0]?.best).toBe("-8.5"); // feed kept
+    expect(rows[0]?.bookKey).toBe("hardrockbet");
+    expect(rows[0]?.cfbMarketTrusted).toBe(false);
+    expect(rows[0]?.cfbTrustLabel).toBe("untrusted");
+    expect(JSON.stringify(rows[0])).not.toContain('"best":""');
   });
 
   it("labels no_market as no book when Best is missing", () => {
@@ -51,7 +51,8 @@ describe("cfb trusted market", () => {
       },
     ]);
     expect(rows[0]?.best).toBe("");
-    expect(rows[0]?.book).toBe("no book");
+    expect(rows[0]?.cfbTrustLabel).toBe("no book");
+    expect(rows[0]?.cfbMarketTrusted).toBe(false);
   });
 
   it("keeps a normal multi-book number inside the KEI neighborhood", () => {
@@ -75,7 +76,7 @@ describe("cfb trusted market", () => {
 
   it("BALL@OSU: same-side gap ~8.3 keeps Best; KEI stays −42.2", () => {
     const kei = -42.2;
-    const openAway = 50.5; // book home −50.5
+    const openAway = 50.5;
     const openHome = cfbAwayBookToHome(openAway);
     expect(openHome).toBe(-50.5);
     const ssGap = Math.abs(kei - (openHome as number));
@@ -90,7 +91,6 @@ describe("cfb trusted market", () => {
     });
     expect(verdict.trusted).toBe(true);
     expect(verdict.market).toBe(-50.5);
-    expect(verdict.reason).toBe("best");
 
     const rows = applyCfbTrustedMarketToRows([
       {
@@ -102,34 +102,40 @@ describe("cfb trusted market", () => {
         bookKey: "draftkings",
       },
     ]);
-    expect(rows[0]?.best).toBe("+50.5"); // kept; storage still away
-    expect(rows[0]?.book).toBe("DraftKings");
-
-    const edge = kei - (verdict.market as number);
-    expect(edge).toBeCloseTo(8.3, 5);
-    expect(cfbEdgeTag(Math.abs(edge))).toBe("PLAY"); // threshold-eligible, not a fire card
+    expect(rows[0]?.best).toBe("+50.5");
+    expect(rows[0]?.cfbMarketTrusted).toBe(true);
+    expect(rows[0]?.cfbTrustLabel).toBeUndefined();
   });
 
-  it("UCLA@CAL sign-artifact PLAY is cleared on home vs home", () => {
-    // Before: away open −1.5 vs home KEI −12.83 → raw gap 11.33 kept → edge −14.33 PLAY.
-    // After: home open +1.5 vs −12.83 → gap 14.33 ≥ 12 → absurd.
-    const kei = -12.83;
-    const openAway = -1.5;
+  it("AKR@WAKE: paints Current when absurd; Edge/Tag stay PASS", () => {
+    const kei = -11.93;
+    const openAway = 24.5; // home −24.5
     const openHome = cfbAwayBookToHome(openAway);
-    expect(openHome).toBe(1.5);
+    expect(openHome).toBe(-24.5);
     const ssGap = Math.abs(kei - (openHome as number));
-    expect(ssGap).toBeCloseTo(14.33, 2);
     expect(ssGap).toBeGreaterThanOrEqual(CFB_ABSURD_VS_KEI_PTS);
 
-    const verdict = trustCfbMarket({
-      kei,
-      best: openHome,
-      open: openHome,
-      bookCount: 2,
-    });
-    expect(verdict.trusted).toBe(false);
-    expect(verdict.reason).toBe("absurd_vs_kei");
+    const rows = applyCfbTrustedMarketToRows([
+      {
+        market: "Spread",
+        kei: "-11.93",
+        best: "+24.5",
+        open: "+24.5",
+        book: "DraftKings",
+        bookKey: "draftkings",
+      },
+    ]);
+    expect(rows[0]?.best).toBe("+24.5"); // Current still painted
+    expect(rows[0]?.cfbMarketTrusted).toBe(false);
+    expect(rows[0]?.cfbTrustReason).toBe("absurd_vs_kei");
+    expect(rows[0]?.cfbTrustLabel).toBe("untrusted");
+    expect(cfbEdgeTag(null)).toBe("PASS");
+  });
 
+  it("UCLA@CAL sign-artifact: feed kept, not trusted for Edge", () => {
+    const kei = -12.83;
+    const openHome = cfbAwayBookToHome(-1.5);
+    expect(openHome).toBe(1.5);
     const rows = applyCfbTrustedMarketToRows([
       {
         market: "Spread",
@@ -140,8 +146,9 @@ describe("cfb trusted market", () => {
         bookKey: "fanduel",
       },
     ]);
-    expect(rows[0]?.best).toBe("");
-    expect(rows[0]?.book).toBe("untrusted");
+    expect(rows[0]?.best).toBe("-1.5");
+    expect(rows[0]?.cfbMarketTrusted).toBe(false);
+    expect(rows[0]?.cfbTrustLabel).toBe("untrusted");
   });
 });
 
@@ -160,6 +167,37 @@ describe("cfb name match", () => {
       ),
     ).toBe(true);
     expect(cfbGameMatchKeys("SJSU @ USC").length).toBeGreaterThan(0);
+  });
+
+  it("joins UMass Minutemen Odds name to Massachusetts Minutemen slate", () => {
+    expect(
+      cfbGamesMatch(
+        "UMass Minutemen @ Rutgers Scarlet Knights",
+        "Massachusetts Minutemen @ Rutgers Scarlet Knights",
+      ),
+    ).toBe(true);
+    expect(
+      cfbGamesMatch("UMass Minutemen @ Rutgers Scarlet Knights", "MASS @ RUT"),
+    ).toBe(true);
+  });
+
+  it("never collapses Miami OH with Miami FL", () => {
+    const miaStan = "Miami Hurricanes @ Stanford Cardinal";
+    const mohPitt = "Miami (OH) RedHawks @ Pittsburgh Panthers";
+    expect(cfbGamesMatch(miaStan, mohPitt)).toBe(false);
+    // Same-opponent trap: take(1) used to be bare `miami` for both.
+    expect(
+      cfbGamesMatch(
+        "Miami Hurricanes @ Pittsburgh Panthers",
+        "Miami (OH) RedHawks @ Pittsburgh Panthers",
+      ),
+    ).toBe(false);
+    const miaKeys = cfbGameMatchKeys(miaStan).join("|");
+    const mohKeys = cfbGameMatchKeys(mohPitt).join("|");
+    expect(miaKeys).toContain("miami-florida");
+    expect(mohKeys).toContain("miami-ohio");
+    expect(miaKeys).not.toMatch(/(^|\|)miami @/);
+    expect(mohKeys).not.toMatch(/(^|\|)miami @/);
   });
 
   it("stamps week 0 on accent-mismatched Odds rows", () => {
