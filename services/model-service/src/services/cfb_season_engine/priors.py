@@ -116,8 +116,12 @@ STRENGTH_MEAN_REVERT = 0.010
 STRENGTH_NOISE = 0.010
 # Wider team-index band — v0.6 piled ~33 teams at the old 1.55 offense ceiling.
 STRENGTH_CLAMP = (0.52, 1.68)
-# QB situation alone must not invent power-conference offense from MAC talent proxies.
-QB_SITUATION_INDEX_CLAMP = (0.62, 1.38)
+# Soft ceiling (Phase 1C): identity below KNEE; exponential taper above.
+# Hard clamp is a safety rail *above* the taper — not a flatten-to-1.38 bucket.
+# Asymptote ≈ KNEE + TAU (1.41). Do not drop the rail to 1.20.
+QB_SITUATION_SOFT_KNEE = 1.25
+QB_SITUATION_SOFT_TAU = 0.16
+QB_SITUATION_INDEX_CLAMP = (0.62, 1.55)
 EARLY_STRENGTH_NOISE_MULT: Dict[int, float] = {
     1: 1.35,
     2: 1.25,
@@ -394,6 +398,8 @@ def documentation() -> Dict[str, Any]:
             "matchup_ratio_excess_retain": MATCHUP_RATIO_EXCESS_RETAIN,
             "strength_clamp": list(STRENGTH_CLAMP),
             "qb_situation_index_clamp": list(QB_SITUATION_INDEX_CLAMP),
+            "qb_situation_soft_knee": QB_SITUATION_SOFT_KNEE,
+            "qb_situation_soft_tau": QB_SITUATION_SOFT_TAU,
             "score_to_index_divisor": SCORE_TO_INDEX_DIVISOR,
             "player_yards_per_point": PLAYER_YARDS_PER_POINT,
             "player_pass_residual": PLAYER_PASS_RESIDUAL,
