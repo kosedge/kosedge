@@ -164,12 +164,12 @@ So: **not a missing-feed problem.** It is KEI short of a long Open **plus** trus
 
 ---
 
-## Phase 1 allowlist (after this gate)
+## Phase 1 allowlist (shipped this pass)
 
-1. Keep / polish `scripts/cfb/cfb_dump_edgeboard.py` + dated JSON under `data/ops/`.
+1. `scripts/cfb/cfb_dump_edgeboard.py` + dated JSON under `data/ops/`.
 2. `docs/CFB_WEEK1_BOOK_SCORECARD.md` from this sheet.
-3. **Optional UI:** surface trust reason (`untrusted` / `no book`) in existing footnote — **do not** flip Open to home inside trust without a separate signed brief (that would change who gets Edge).
-4. Assert BALL@OSU KEI still −42.2 in a dump test.
+3. **UI:** cleared Best shows `untrusted` / `no book` in footnote style (was swallowed when Best = —). **Did not** flip Open to home inside trust.
+4. Assert BALL@OSU KEI still −42.2 (vitest + dump `--assert-canary`).
 
 ### Still forbidden
 
@@ -177,13 +177,9 @@ So: **not a missing-feed problem.** It is KEI short of a long Open **plus** trus
 
 ---
 
-## Phase 0 gate
+## Phase 0 → 1 status
 
-Ready for operator row-gate:
+Phase 0 dump + Phase 1 scorecard/script/UI label are in. **Operator still gates** which PLAY candidates may be discussed. Not a card.
 
-- Dump is reproducible from live loaders mirror + Odds key.
-- Family A residuals measured (Open longer except FIU@USF).
-- Trusted-market eat count named (**27 sign-bug / 8 true absurd / 1 no book**).
-- PLAY candidates listed without amplification.
-
-**Awaiting which rows are even allowed to be discussed.**
+**Reproduce:** `ODDS_API_KEY=… python3 scripts/cfb/cfb_dump_edgeboard.py --json`  
+**Canary (no Odds key):** `python3 scripts/cfb/cfb_dump_edgeboard.py --assert-canary`

@@ -268,7 +268,25 @@ def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--json", action="store_true", help="Emit full JSON")
     ap.add_argument("--markdown", action="store_true", help="Emit markdown table (default)")
+    ap.add_argument(
+        "--assert-canary",
+        action="store_true",
+        help="Assert BALL@OSU bundled KEI is still -42.2 (no Odds call)",
+    )
     args = ap.parse_args()
+
+    if args.assert_canary:
+        kei = json.loads(KEI_PATH.read_text())
+        hit = None
+        for g in kei.get("games") or []:
+            if g.get("away") == "BALL" and g.get("home") == "OSU" and g.get("week") == 1:
+                hit = (g.get("kei") or {}).get("kei_spread_home")
+                break
+        if hit != -42.2:
+            print(f"FAIL: BALL@OSU KEI expected -42.2, got {hit!r}", file=sys.stderr)
+            return 1
+        print("OK: BALL@OSU kei_spread_home == -42.2")
+        return 0
     if not args.json and not args.markdown:
         args.markdown = True
 
