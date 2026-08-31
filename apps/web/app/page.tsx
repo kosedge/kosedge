@@ -134,6 +134,7 @@ export default function Home() {
 
       {/* HERO */}
       <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 pt-10 sm:pt-14 pb-16 sm:pb-20">
+        {/* Hero row grows with the taller Edge Board; clear gap before lower block */}
         <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           <div className="lg:col-span-7">
             <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bebas tracking-tight leading-[0.95]">
@@ -176,7 +177,7 @@ export default function Home() {
           <EdgeBoard variant="home" />
         </div>
 
-        <div className="mt-10 sm:mt-12 grid lg:grid-cols-12 gap-6 lg:gap-8">
+        <div className="mt-16 sm:mt-20 lg:mt-24 grid lg:grid-cols-12 gap-6 lg:gap-8">
           <div className="lg:col-span-7 space-y-6">
             <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
               {pillars.map((p) => {

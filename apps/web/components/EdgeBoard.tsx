@@ -1331,9 +1331,14 @@ export default function EdgeBoard({
 
   if (variant === "home") {
     return (
-      <div className="lg:col-span-5">
-        <div className="relative">
-          <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+      <div className="lg:col-span-5 self-start">
+        {/*
+          Padding keeps the absolute gold/green glow inside the layout box so
+          the hero row grows with the taller 3-row card and nothing bleeds onto
+          the lower section. Do not overflow-hide here — that clips the board.
+        */}
+        <div className="relative p-3 sm:p-4">
+          <div className="pointer-events-none absolute inset-0 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
           <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
             <div className="mb-5">
               <h2 className="text-3xl font-bebas text-edge-green">
