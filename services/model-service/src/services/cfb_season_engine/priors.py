@@ -215,6 +215,12 @@ DEF_UNIT_BLEND = 0.14
 EFF_OFF_INDEX_BLEND = 0.12
 EFF_DEF_INDEX_BLEND = 0.12
 
+# Chapter 2 Phase 2B — global shrink of final-2025 SP+ carry toward league 50.
+# Packaged off_eff/def_eff (and success/explosiveness proxies) are stored
+# post-shrink; compose reads them via efficiency.build_efficiency_profile.
+# Do not invent values outside the paper-sim set {0.70, 0.80, 0.85}.
+EFF_CARRY_SHRINK = 0.85
+
 # Game-level unit matchup multipliers (applied in expected_team_points).
 # Softened vs v0.7 so unit matchup + efficiency index don't double-count.
 UNIT_OFFENSE_BOOST_SCALE = 0.07  # ±7% at unit grade extremes (0/100)
@@ -372,6 +378,8 @@ def documentation() -> Dict[str, Any]:
             "primary complementary O/D driver; unit weights/blends reduced to "
             "avoid double-counting. success/explosiveness are SP+ proxies "
             "(no full PBP). Preseason 2026 = prior-year eff + roster/QB update.",
+            f"Chapter 2 Phase 2B: EFF_CARRY_SHRINK={EFF_CARRY_SHRINK} regresses "
+            "packaged 2025 SP+ off/def (and proxies) toward league 50.",
             "v0.8.1: historical closing-line calibration (SportsDataverse ESPN "
             "spreads/totals + scores; prior-year cfb_ratings efficiency proxy; "
             "league-avg roster/QB reconstruction). Measured: lower PPG, trim HFA, "
@@ -442,6 +450,7 @@ def documentation() -> Dict[str, Any]:
                 "def_unit_blend": DEF_UNIT_BLEND,
                 "eff_index_blend": EFF_DEF_INDEX_BLEND,
             },
+            "eff_carry_shrink": EFF_CARRY_SHRINK,
             "anti_double_count": (
                 "Efficiency + reduced unit weights/blends + softer game-level "
                 "unit matchup scales — units remain ablation-testable but do "

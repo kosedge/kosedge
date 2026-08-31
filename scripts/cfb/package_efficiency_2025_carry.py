@@ -188,6 +188,14 @@ def _z_to_score(z: float, scale: float = 18.0) -> float:
     return max(5.0, min(95.0, 50.0 + scale * z))
 
 
+# Chapter 2 Phase 2B — must match priors.EFF_CARRY_SHRINK (compose SoT).
+CARRY_SHRINK = 0.85
+
+
+def _apply_carry_shrink(value: float, shrink: float = CARRY_SHRINK) -> float:
+    return 50.0 + float(shrink) * (float(value) - 50.0)
+
+
 def fetch_sp_plus_public() -> List[Dict[str, Any]]:
     url = "https://cfbupdate.com/sp-ratings"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 kosedge"})
@@ -290,6 +298,14 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             continue
         z_off = (p["sp_offense"] - mean_off) / sd_off
         z_def = (mean_def - p["sp_defense"]) / sd_def
+        # Raw z→score, then global carry shrink toward league 50 (Chapter 2 2B).
+        off_raw = _z_to_score(z_off)
+        def_raw = _z_to_score(z_def)
+        suc_off_raw = _z_to_score(0.85 * z_off, scale=16.0)
+        suc_def_raw = _z_to_score(0.85 * z_def, scale=16.0)
+        expl_raw = _z_to_score(
+            max(-1.5, z_off - 0.35 * max(0.0, -z_off)), scale=17.0
+        )
         teams[code] = {
             "team": code,
             "sp_plus": p["sp_plus"],
@@ -299,22 +315,22 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             "sp_rank": p["rank"],
             "sp_offense_rank": p.get("sp_offense_rank"),
             "sp_defense_rank": p.get("sp_defense_rank"),
-            "off_eff": round(_z_to_score(z_off), 2),
-            "def_eff": round(_z_to_score(z_def), 2),
-            "success_off": round(_z_to_score(0.85 * z_off, scale=16.0), 2),
-            "success_def": round(_z_to_score(0.85 * z_def, scale=16.0), 2),
-            "explosiveness": round(
-                _z_to_score(max(-1.5, z_off - 0.35 * max(0.0, -z_off)), scale=17.0),
-                2,
-            ),
+            "off_eff": round(_apply_carry_shrink(off_raw), 2),
+            "def_eff": round(_apply_carry_shrink(def_raw), 2),
+            "success_off": round(_apply_carry_shrink(suc_off_raw), 2),
+            "success_def": round(_apply_carry_shrink(suc_def_raw), 2),
+            "explosiveness": round(_apply_carry_shrink(expl_raw), 2),
+            "off_eff_pre_shrink": round(off_raw, 2),
+            "def_eff_pre_shrink": round(def_raw, 2),
             "prior_year": 2025,
             "carry_to_season": 2026,
+            "carry_shrink": CARRY_SHRINK,
             "source": "packaged_sp_plus_final_2025",
             "fidelity": "approximate",
             "notes": (
                 "Final-2025 SP+ offense/defense (opponent-adjusted efficiency). "
                 "success_* / explosiveness are SP+-correlated proxies, not PBP EPA rates. "
-                "Preseason 2026 carry — no 2026 games yet."
+                f"Preseason 2026 carry — EFF_CARRY_SHRINK={CARRY_SHRINK} toward 50."
             ),
         }
 
@@ -352,9 +368,10 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
         }
 
     return {
-        "as_of": "2026-08-04",
+        "as_of": "2026-08-31",
         "prior_season": 2025,
         "carry_to_season": 2026,
+        "carry_shrink": CARRY_SHRINK,
         "fidelity": "approximate",
         "metric_family": "sp_plus_opponent_adjusted_efficiency",
         "source": {
@@ -366,6 +383,10 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             ),
             "cfbd": "optional_when_CFBD_API_KEY (ratings/sp)",
             "pbp": "not_used",
+            "carry_shrink": (
+                f"off_eff/def_eff/success/explosiveness = "
+                f"50 + {CARRY_SHRINK}*(raw_2025 - 50); sp_* unchanged"
+            ),
         },
         "normalization": {
             "sp_offense_mean": round(mean_off, 4),
@@ -373,20 +394,22 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             "sp_offense_sd": round(sd_off, 4),
             "sp_defense_sd": round(sd_def, 4),
             "score_map": (
-                "off_eff/def_eff = 50 + 18*z (clamp 5–95); "
-                "defense z inverted so higher=better"
+                "raw off_eff/def_eff = 50 + 18*z (clamp 5–95); "
+                "defense z inverted so higher=better; "
+                f"then EFF_CARRY_SHRINK={CARRY_SHRINK} toward 50"
             ),
             "success_explosiveness": (
                 "Proxies from SP+ z-scores (muted), not true success-rate / "
-                "iso-explosiveness PBP"
+                "iso-explosiveness PBP; same carry shrink as off/def_eff"
             ),
+            "eff_carry_shrink": CARRY_SHRINK,
         },
         "notes": [
             "2025 final SP+ is opponent-adjusted efficiency (Bill Connelly). "
             "Packaged for 2026 preseason carry.",
+            f"Chapter 2 Phase 2B: EFF_CARRY_SHRINK={CARRY_SHRINK} toward league 50.",
             "No full PBP store in-repo; CFBD advanced/PPA optional when key present.",
             "success_off/def and explosiveness are approximate SP+-correlated proxies.",
-            "Early 2026 season: blend prior-year efficiency with roster/QB identity; labeled approximate.",
             "Do not treat as live in-season SP+ updates until a refresh pipeline is wired.",
         ],
         "team_count": len(teams),
