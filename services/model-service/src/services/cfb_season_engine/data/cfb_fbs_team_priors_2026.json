@@ -26,7 +26,8 @@
     "Returning snap/start shares remain approximate class-year proxies unless CFBD returning overlay applied.",
     "Depth order is production/experience heuristic \u2014 official camp depth charts often unpublished preseason.",
     "Portal-out is incomplete without a full departure feed; portal-in from teamHistory sample (+ optional CFBD).",
-    "home_field and coaching blocks retained from curated priors."
+    "home_field and coaching blocks retained from curated priors.",
+    "Phase 1D: talent_from_qb_stats attempt term min(22, att/22); pass_td_2025 recovered+persisted"
   ],
   "teams": {
     "UGA": {
@@ -56,7 +57,7 @@
         "starter_key": "5079679",
         "qb_name": "Ryan Puglisi",
         "experience_starts": 1,
-        "qb_talent": 50.41,
+        "qb_talent": 50.14,
         "ol_support": 69.32,
         "weapons_support": 70.82,
         "is_portal": false,
@@ -67,7 +68,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 69.32,
@@ -226,7 +228,7 @@
         "starter_key": "5079508",
         "qb_name": "Austin Mack",
         "experience_starts": 1,
-        "qb_talent": 52.32,
+        "qb_talent": 51.99,
         "ol_support": 76.26,
         "weapons_support": 76.16,
         "is_portal": false,
@@ -237,7 +239,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 2
       },
       "position_groups": {
         "ol": 76.26,
@@ -396,7 +399,7 @@
         "starter_key": "5079712",
         "qb_name": "Julian Sayin",
         "experience_starts": 13,
-        "qb_talent": 83.88,
+        "qb_talent": 79.93,
         "ol_support": 70.98,
         "weapons_support": 70.01,
         "is_portal": false,
@@ -407,7 +410,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 70.98,
@@ -566,7 +570,7 @@
         "starter_key": "4833597",
         "qb_name": "Brayden Fowler-Nicolosi",
         "experience_starts": 3,
-        "qb_talent": 53.45,
+        "qb_talent": 52.62,
         "ol_support": 71.64,
         "weapons_support": 70.47,
         "is_portal": false,
@@ -577,7 +581,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 71.64,
@@ -736,7 +741,7 @@
         "starter_key": "4870906",
         "qb_name": "Arch Manning",
         "experience_starts": 13,
-        "qb_talent": 82.16,
+        "qb_talent": 78.08,
         "ol_support": 72.36,
         "weapons_support": 72.96,
         "is_portal": false,
@@ -747,7 +752,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 26
       },
       "position_groups": {
         "ol": 72.36,
@@ -906,7 +912,7 @@
         "starter_key": "4915980",
         "qb_name": "John Mateer",
         "experience_starts": 13,
-        "qb_talent": 78.95,
+        "qb_talent": 74.94,
         "ol_support": 69.33,
         "weapons_support": 71.2,
         "is_portal": true,
@@ -917,7 +923,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 14
       },
       "position_groups": {
         "ol": 69.33,
@@ -1076,7 +1083,7 @@
         "starter_key": "4870921",
         "qb_name": "Dante Moore",
         "experience_starts": 14,
-        "qb_talent": 86.41,
+        "qb_talent": 82.25,
         "ol_support": 68.29,
         "weapons_support": 65.91,
         "is_portal": true,
@@ -1087,7 +1094,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 68.29,
@@ -1246,7 +1254,7 @@
         "starter_key": "4801299",
         "qb_name": "Rocco Becht",
         "experience_starts": 11,
-        "qb_talent": 74.82,
+        "qb_talent": 71.39,
         "ol_support": 67.57,
         "weapons_support": 68.4,
         "is_portal": false,
@@ -1257,7 +1265,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 16
       },
       "position_groups": {
         "ol": 67.57,
@@ -1416,7 +1425,7 @@
         "starter_key": "5224789",
         "qb_name": "Landen Clark",
         "experience_starts": 9,
-        "qb_talent": 72.91,
+        "qb_talent": 70.11,
         "ol_support": 71.0,
         "weapons_support": 70.81,
         "is_portal": false,
@@ -1427,7 +1436,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 71.0,
@@ -1586,7 +1596,7 @@
         "starter_key": "5079369",
         "qb_name": "CJ Carr",
         "experience_starts": 10,
-        "qb_talent": 76.97,
+        "qb_talent": 74.01,
         "ol_support": 65.31,
         "weapons_support": 63.55,
         "is_portal": false,
@@ -1597,7 +1607,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 24
       },
       "position_groups": {
         "ol": 65.31,
@@ -1756,7 +1767,7 @@
         "starter_key": "4899369",
         "qb_name": "Christopher Vizzina",
         "experience_starts": 2,
-        "qb_talent": 53.63,
+        "qb_talent": 52.92,
         "ol_support": 74.83,
         "weapons_support": 76.34,
         "is_portal": false,
@@ -1767,7 +1778,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 4
       },
       "position_groups": {
         "ol": 74.83,
@@ -1926,7 +1938,7 @@
         "starter_key": "5121169",
         "qb_name": "Darian Mensah",
         "experience_starts": 17,
-        "qb_talent": 90.52,
+        "qb_talent": 84.74,
         "ol_support": 68.74,
         "weapons_support": 70.84,
         "is_portal": true,
@@ -1937,7 +1949,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 68.74,
@@ -2096,7 +2109,7 @@
         "starter_key": "5083847",
         "qb_name": "Dean DeNobile",
         "experience_starts": 12,
-        "qb_talent": 75.94,
+        "qb_talent": 72.44,
         "ol_support": 64.97,
         "weapons_support": 64.21,
         "is_portal": false,
@@ -2107,7 +2120,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 19
       },
       "position_groups": {
         "ol": 64.97,
@@ -2266,7 +2280,7 @@
         "starter_key": "4917093",
         "qb_name": "Ryan Staub",
         "experience_starts": 2,
-        "qb_talent": 54.65,
+        "qb_talent": 54.09,
         "ol_support": 65.7,
         "weapons_support": 67.72,
         "is_portal": false,
@@ -2277,7 +2291,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 3
       },
       "position_groups": {
         "ol": 65.7,
@@ -2436,7 +2451,7 @@
         "starter_key": "4685454",
         "qb_name": "Jayden Maiava",
         "experience_starts": 13,
-        "qb_talent": 84.92,
+        "qb_talent": 80.85,
         "ol_support": 66.67,
         "weapons_support": 65.62,
         "is_portal": true,
@@ -2447,7 +2462,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 24
       },
       "position_groups": {
         "ol": 66.67,
@@ -2606,7 +2622,7 @@
         "starter_key": "5079653",
         "qb_name": "Demond Williams Jr.",
         "experience_starts": 12,
-        "qb_talent": 79.94,
+        "qb_talent": 76.36,
         "ol_support": 64.94,
         "weapons_support": 62.79,
         "is_portal": false,
@@ -2617,7 +2633,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 25
       },
       "position_groups": {
         "ol": 64.94,
@@ -2776,7 +2793,7 @@
         "starter_key": "4870971",
         "qb_name": "Marcel Reed",
         "experience_starts": 13,
-        "qb_talent": 80.94,
+        "qb_talent": 77.13,
         "ol_support": 67.0,
         "weapons_support": 66.57,
         "is_portal": false,
@@ -2787,7 +2804,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 25
       },
       "position_groups": {
         "ol": 67.0,
@@ -2946,7 +2964,7 @@
         "starter_key": "4911529",
         "qb_name": "Trinidad Chambliss",
         "experience_starts": 15,
-        "qb_talent": 86.15,
+        "qb_talent": 81.66,
         "ol_support": 70.52,
         "weapons_support": 71.64,
         "is_portal": true,
@@ -2957,7 +2975,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 22
       },
       "position_groups": {
         "ol": 70.52,
@@ -3116,7 +3135,7 @@
         "starter_key": "5295814",
         "qb_name": "Tramell Jones Jr.",
         "experience_starts": 0,
-        "qb_talent": 50.65,
+        "qb_talent": 50.29,
         "ol_support": 65.38,
         "weapons_support": 67.64,
         "is_portal": false,
@@ -3127,7 +3146,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts",
+        "pass_td_2025": 2
       },
       "position_groups": {
         "ol": 65.38,
@@ -3286,7 +3306,7 @@
         "starter_key": "4880272",
         "qb_name": "Byrum Brown",
         "experience_starts": 11,
-        "qb_talent": 80.93,
+        "qb_talent": 77.49,
         "ol_support": 70.02,
         "weapons_support": 69.27,
         "is_portal": false,
@@ -3297,7 +3317,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 28
       },
       "position_groups": {
         "ol": 70.02,
@@ -3456,7 +3477,7 @@
         "starter_key": "4918099",
         "qb_name": "Kenny Minchey",
         "experience_starts": 1,
-        "qb_talent": 51.74,
+        "qb_talent": 51.47,
         "ol_support": 63.8,
         "weapons_support": 63.85,
         "is_portal": false,
@@ -3467,7 +3488,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 63.8,
@@ -3626,7 +3648,7 @@
         "starter_key": "5081405",
         "qb_name": "AJ Swann",
         "experience_starts": 7,
-        "qb_talent": 67.24,
+        "qb_talent": 65.0,
         "ol_support": 62.05,
         "weapons_support": 58.52,
         "is_portal": true,
@@ -3637,7 +3659,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 10
       },
       "position_groups": {
         "ol": 62.05,
@@ -3796,7 +3819,7 @@
         "starter_key": "5079516",
         "qb_name": "KJ Jackson",
         "experience_starts": 2,
-        "qb_talent": 55.03,
+        "qb_talent": 54.49,
         "ol_support": 63.62,
         "weapons_support": 66.03,
         "is_portal": false,
@@ -3807,7 +3830,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 3
       },
       "position_groups": {
         "ol": 63.62,
@@ -3966,7 +3990,7 @@
         "starter_key": "4875127",
         "qb_name": "LaNorris Sellers",
         "experience_starts": 10,
-        "qb_talent": 71.98,
+        "qb_talent": 69.02,
         "ol_support": 67.76,
         "weapons_support": 65.08,
         "is_portal": false,
@@ -3977,7 +4001,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 13
       },
       "position_groups": {
         "ol": 67.76,
@@ -4136,7 +4161,7 @@
         "starter_key": "5121691",
         "qb_name": "Blaze Berlowitz",
         "experience_starts": 1,
-        "qb_talent": 53.77,
+        "qb_talent": 53.6,
         "ol_support": 66.23,
         "weapons_support": 64.92,
         "is_portal": true,
@@ -4147,7 +4172,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 66.23,
@@ -4306,7 +4332,7 @@
         "starter_key": "4685401",
         "qb_name": "Josh Hoover",
         "experience_starts": 14,
-        "qb_talent": 84.19,
+        "qb_talent": 80.02,
         "ol_support": 60.17,
         "weapons_support": 59.62,
         "is_portal": false,
@@ -4317,7 +4343,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 60.17,
@@ -4476,7 +4503,7 @@
         "starter_key": "4795295",
         "qb_name": "Katin Houser",
         "experience_starts": 14,
-        "qb_talent": 82.21,
+        "qb_talent": 78.09,
         "ol_support": 60.32,
         "weapons_support": 62.85,
         "is_portal": true,
@@ -4487,7 +4514,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 19
       },
       "position_groups": {
         "ol": 60.32,
@@ -4646,7 +4674,7 @@
         "starter_key": "5089314",
         "qb_name": "Hank Brown",
         "experience_starts": 1,
-        "qb_talent": 51.12,
+        "qb_talent": 50.91,
         "ol_support": 67.19,
         "weapons_support": 65.94,
         "is_portal": true,
@@ -4657,7 +4685,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 67.19,
@@ -4816,7 +4845,7 @@
         "starter_key": "5125715",
         "qb_name": "Colton Joseph",
         "experience_starts": 10,
-        "qb_talent": 75.41,
+        "qb_talent": 72.48,
         "ol_support": 61.91,
         "weapons_support": 62.54,
         "is_portal": false,
@@ -4827,7 +4856,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 21
       },
       "position_groups": {
         "ol": 61.91,
@@ -4986,7 +5016,7 @@
         "starter_key": "5144959",
         "qb_name": "Drake Lindsey",
         "experience_starts": 13,
-        "qb_talent": 76.65,
+        "qb_talent": 72.72,
         "ol_support": 57.24,
         "weapons_support": 58.86,
         "is_portal": false,
@@ -4997,7 +5027,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 57.24,
@@ -5156,7 +5187,7 @@
         "starter_key": "5044387",
         "qb_name": "Anthony Colandrea",
         "experience_starts": 14,
-        "qb_talent": 84.34,
+        "qb_talent": 80.13,
         "ol_support": 67.95,
         "weapons_support": 65.29,
         "is_portal": true,
@@ -5167,7 +5198,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 23
       },
       "position_groups": {
         "ol": 67.95,
@@ -5326,7 +5358,7 @@
         "starter_key": "5075805",
         "qb_name": "Aidan Chiles",
         "experience_starts": 7,
-        "qb_talent": 66.32,
+        "qb_talent": 64.27,
         "ol_support": 54.26,
         "weapons_support": 55.26,
         "is_portal": true,
@@ -5337,7 +5369,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 10
       },
       "position_groups": {
         "ol": 54.26,
@@ -5496,7 +5529,7 @@
         "starter_key": "5104738",
         "qb_name": "Ryan Browne",
         "experience_starts": 11,
-        "qb_talent": 70.93,
+        "qb_talent": 67.52,
         "ol_support": 60.73,
         "weapons_support": 60.7,
         "is_portal": false,
@@ -5507,7 +5540,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 60.73,
@@ -5666,7 +5700,7 @@
         "starter_key": "4870900",
         "qb_name": "Dylan Lonergan",
         "experience_starts": 9,
-        "qb_talent": 71.82,
+        "qb_talent": 68.95,
         "ol_support": 66.68,
         "weapons_support": 64.9,
         "is_portal": true,
@@ -5677,7 +5711,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 12
       },
       "position_groups": {
         "ol": 66.68,
@@ -5836,7 +5871,7 @@
         "starter_key": "5141695",
         "qb_name": "Malik Washington",
         "experience_starts": 16,
-        "qb_talent": 81.12,
+        "qb_talent": 76.34,
         "ol_support": 60.85,
         "weapons_support": 62.74,
         "is_portal": false,
@@ -5847,7 +5882,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 17
       },
       "position_groups": {
         "ol": 60.85,
@@ -6006,7 +6042,7 @@
         "starter_key": "5146670",
         "qb_name": "Alessio Milivojevic",
         "experience_starts": 6,
-        "qb_talent": 63.17,
+        "qb_talent": 61.42,
         "ol_support": 62.81,
         "weapons_support": 62.71,
         "is_portal": false,
@@ -6017,7 +6053,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 10
       },
       "position_groups": {
         "ol": 62.81,
@@ -6176,7 +6213,7 @@
         "starter_key": "4870799",
         "qb_name": "Nico Iamaleava",
         "experience_starts": 11,
-        "qb_talent": 73.06,
+        "qb_talent": 69.8,
         "ol_support": 65.72,
         "weapons_support": 64.75,
         "is_portal": true,
@@ -6187,7 +6224,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 13
       },
       "position_groups": {
         "ol": 65.72,
@@ -6346,7 +6384,7 @@
         "starter_key": "5164313",
         "qb_name": "Jaron-Keawe Sagapolutele",
         "experience_starts": 16,
-        "qb_talent": 83.36,
+        "qb_talent": 78.02,
         "ol_support": 60.6,
         "weapons_support": 62.04,
         "is_portal": false,
@@ -6357,7 +6395,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 60.6,
@@ -6516,7 +6555,7 @@
         "starter_key": "4914482",
         "qb_name": "Charlie Mirer",
         "experience_starts": 0,
-        "qb_talent": 50.58,
+        "qb_talent": 50.55,
         "ol_support": 63.16,
         "weapons_support": 60.76,
         "is_portal": false,
@@ -6527,7 +6566,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 63.16,
@@ -6686,7 +6726,7 @@
         "starter_key": "5141378",
         "qb_name": "Cutter Boley",
         "experience_starts": 10,
-        "qb_talent": 71.87,
+        "qb_talent": 68.83,
         "ol_support": 63.3,
         "weapons_support": 63.95,
         "is_portal": false,
@@ -6697,7 +6737,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 15
       },
       "position_groups": {
         "ol": 63.3,
@@ -6856,7 +6897,7 @@
         "starter_key": "4801717",
         "qb_name": "Noah Fifita",
         "experience_starts": 14,
-        "qb_talent": 84.07,
+        "qb_talent": 79.75,
         "ol_support": 63.19,
         "weapons_support": 63.56,
         "is_portal": false,
@@ -6867,7 +6908,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 63.19,
@@ -7026,7 +7068,7 @@
         "starter_key": "5105849",
         "qb_name": "Devon Dampier",
         "experience_starts": 11,
-        "qb_talent": 79.16,
+        "qb_talent": 75.78,
         "ol_support": 64.42,
         "weapons_support": 66.8,
         "is_portal": true,
@@ -7037,7 +7079,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 24
       },
       "position_groups": {
         "ol": 64.42,
@@ -7196,7 +7239,7 @@
         "starter_key": "5159016",
         "qb_name": "Julian Lewis",
         "experience_starts": 3,
-        "qb_talent": 55.51,
+        "qb_talent": 54.57,
         "ol_support": 74.45,
         "weapons_support": 71.45,
         "is_portal": false,
@@ -7207,7 +7250,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 4
       },
       "position_groups": {
         "ol": 74.45,
@@ -7366,7 +7410,7 @@
         "starter_key": "5141367",
         "qb_name": "Bear Bachmeier",
         "experience_starts": 13,
-        "qb_talent": 77.37,
+        "qb_talent": 73.46,
         "ol_support": 59.79,
         "weapons_support": 59.34,
         "is_portal": false,
@@ -7377,7 +7421,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 15
       },
       "position_groups": {
         "ol": 59.79,
@@ -7536,7 +7581,7 @@
         "starter_key": "5126468",
         "qb_name": "Will Hammond",
         "experience_starts": 4,
-        "qb_talent": 57.37,
+        "qb_talent": 56.27,
         "ol_support": 60.66,
         "weapons_support": 65.84,
         "is_portal": false,
@@ -7547,7 +7592,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; split / unsettled QB room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; split / unsettled QB room",
+        "pass_td_2025": 7
       },
       "position_groups": {
         "ol": 60.66,
@@ -7706,7 +7752,7 @@
         "starter_key": "4986096",
         "qb_name": "Chase Jenkins",
         "experience_starts": 6,
-        "qb_talent": 61.26,
+        "qb_talent": 59.52,
         "ol_support": 59.56,
         "weapons_support": 60.98,
         "is_portal": false,
@@ -7717,7 +7763,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 59.56,
@@ -7876,7 +7923,7 @@
         "starter_key": "4870857",
         "qb_name": "Avery Johnson",
         "experience_starts": 11,
-        "qb_talent": 74.94,
+        "qb_talent": 71.49,
         "ol_support": 61.68,
         "weapons_support": 62.38,
         "is_portal": false,
@@ -7887,7 +7934,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 61.68,
@@ -8046,7 +8094,7 @@
         "starter_key": "5080403",
         "qb_name": "Jaylen Raynor",
         "experience_starts": 17,
-        "qb_talent": 83.86,
+        "qb_talent": 78.03,
         "ol_support": 62.23,
         "weapons_support": 62.47,
         "is_portal": false,
@@ -8057,7 +8105,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 19
       },
       "position_groups": {
         "ol": 62.23,
@@ -8216,7 +8265,7 @@
         "starter_key": "5083569",
         "qb_name": "Jaden Craig",
         "experience_starts": 11,
-        "qb_talent": 78.86,
+        "qb_talent": 75.45,
         "ol_support": 61.79,
         "weapons_support": 62.31,
         "is_portal": false,
@@ -8227,7 +8276,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 25
       },
       "position_groups": {
         "ol": 61.79,
@@ -8386,7 +8436,7 @@
         "starter_key": "5079555",
         "qb_name": "DJ Lagway",
         "experience_starts": 11,
-        "qb_talent": 73.71,
+        "qb_talent": 70.31,
         "ol_support": 68.84,
         "weapons_support": 66.57,
         "is_portal": false,
@@ -8397,7 +8447,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 16
       },
       "position_groups": {
         "ol": 68.84,
@@ -8556,7 +8607,7 @@
         "starter_key": "4685345",
         "qb_name": "JC French IV",
         "experience_starts": 13,
-        "qb_talent": 78.89,
+        "qb_talent": 74.96,
         "ol_support": 61.11,
         "weapons_support": 61.43,
         "is_portal": false,
@@ -8567,7 +8618,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 20
       },
       "position_groups": {
         "ol": 61.11,
@@ -8726,7 +8778,7 @@
         "starter_key": "4911929",
         "qb_name": "Alonza Barnett III",
         "experience_starts": 12,
-        "qb_talent": 78.95,
+        "qb_talent": 75.21,
         "ol_support": 65.5,
         "weapons_support": 59.05,
         "is_portal": false,
@@ -8737,7 +8789,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 23
       },
       "position_groups": {
         "ol": 65.5,
@@ -8896,7 +8949,7 @@
         "starter_key": "5208138",
         "qb_name": "Luke Carney",
         "experience_starts": 0,
-        "qb_talent": 45.85,
+        "qb_talent": 45.78,
         "ol_support": 60.68,
         "weapons_support": 60.41,
         "is_portal": false,
@@ -8907,7 +8960,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; true freshman / no meaningful 2025 attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; true freshman / no meaningful 2025 attempts",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 60.68,
@@ -9066,7 +9120,7 @@
         "starter_key": "5164314",
         "qb_name": "Scotty Fox Jr.",
         "experience_starts": 6,
-        "qb_talent": 62.15,
+        "qb_talent": 60.43,
         "ol_support": 61.22,
         "weapons_support": 60.62,
         "is_portal": false,
@@ -9077,7 +9131,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 7
       },
       "position_groups": {
         "ol": 61.22,
@@ -9236,7 +9291,7 @@
         "starter_key": "4836476",
         "qb_name": "Davin Wydner",
         "experience_starts": 9,
-        "qb_talent": 68.85,
+        "qb_talent": 66.2,
         "ol_support": 65.95,
         "weapons_support": 66.18,
         "is_portal": false,
@@ -9247,7 +9302,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 15
       },
       "position_groups": {
         "ol": 65.95,
@@ -9406,7 +9462,7 @@
         "starter_key": "5191162",
         "qb_name": "Alberto Mendoza",
         "experience_starts": 1,
-        "qb_talent": 57.08,
+        "qb_talent": 56.84,
         "ol_support": 62.1,
         "weapons_support": 63.29,
         "is_portal": false,
@@ -9417,7 +9473,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 5
       },
       "position_groups": {
         "ol": 62.1,
@@ -9576,7 +9633,7 @@
         "starter_key": "5144078",
         "qb_name": "Ethan Grunkemeyer",
         "experience_starts": 6,
-        "qb_talent": 62.96,
+        "qb_talent": 61.17,
         "ol_support": 60.91,
         "weapons_support": 61.88,
         "is_portal": false,
@@ -9587,7 +9644,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 8
       },
       "position_groups": {
         "ol": 60.91,
@@ -9746,7 +9804,7 @@
         "starter_key": "5208095",
         "qb_name": "Mason Heintschel",
         "experience_starts": 11,
-        "qb_talent": 73.35,
+        "qb_talent": 70.16,
         "ol_support": 61.35,
         "weapons_support": 60.96,
         "is_portal": false,
@@ -9757,7 +9815,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 16
       },
       "position_groups": {
         "ol": 61.35,
@@ -9916,7 +9975,7 @@
         "starter_key": "4592532",
         "qb_name": "Billy Edwards Jr.",
         "experience_starts": 1,
-        "qb_talent": 52.66,
+        "qb_talent": 52.5,
         "ol_support": 59.75,
         "weapons_support": 62.1,
         "is_portal": true,
@@ -9927,7 +9986,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 59.75,
@@ -10086,7 +10146,7 @@
         "starter_key": "5079301",
         "qb_name": "CJ Bailey",
         "experience_starts": 13,
-        "qb_talent": 81.41,
+        "qb_talent": 77.4,
         "ol_support": 66.23,
         "weapons_support": 64.99,
         "is_portal": false,
@@ -10097,7 +10157,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 25
       },
       "position_groups": {
         "ol": 66.23,
@@ -10256,7 +10317,7 @@
         "starter_key": "4694149",
         "qb_name": "Walker Eget",
         "experience_starts": 13,
-        "qb_talent": 78.32,
+        "qb_talent": 74.35,
         "ol_support": 61.55,
         "weapons_support": 62.04,
         "is_portal": false,
@@ -10267,7 +10328,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 17
       },
       "position_groups": {
         "ol": 61.55,
@@ -10426,7 +10488,7 @@
         "starter_key": "4920227",
         "qb_name": "Gio Lopez",
         "experience_starts": 9,
-        "qb_talent": 69.36,
+        "qb_talent": 66.73,
         "ol_support": 61.0,
         "weapons_support": 59.53,
         "is_portal": true,
@@ -10437,7 +10499,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 10
       },
       "position_groups": {
         "ol": 61.0,
@@ -10596,7 +10659,7 @@
         "starter_key": "4685696",
         "qb_name": "Beau Pribula",
         "experience_starts": 9,
-        "qb_talent": 70.76,
+        "qb_talent": 68.03,
         "ol_support": 67.76,
         "weapons_support": 68.2,
         "is_portal": true,
@@ -10607,7 +10670,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 11
       },
       "position_groups": {
         "ol": 67.76,
@@ -10766,7 +10830,7 @@
         "starter_key": "5153782",
         "qb_name": "Amari Odom",
         "experience_starts": 10,
-        "qb_talent": 76.62,
+        "qb_talent": 73.68,
         "ol_support": 59.91,
         "weapons_support": 59.24,
         "is_portal": true,
@@ -10777,7 +10841,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 19
       },
       "position_groups": {
         "ol": 59.91,
@@ -10947,7 +11012,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 59.14,
@@ -11106,7 +11172,7 @@
         "starter_key": "5084084",
         "qb_name": "Kevin Jennings",
         "experience_starts": 15,
-        "qb_talent": 85.14,
+        "qb_talent": 80.56,
         "ol_support": 64.18,
         "weapons_support": 62.79,
         "is_portal": false,
@@ -11117,7 +11183,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 26
       },
       "position_groups": {
         "ol": 64.18,
@@ -11276,7 +11343,7 @@
         "starter_key": "4870513",
         "qb_name": "Maddux Madsen",
         "experience_starts": 10,
-        "qb_talent": 73.58,
+        "qb_talent": 70.53,
         "ol_support": 60.28,
         "weapons_support": 56.71,
         "is_portal": false,
@@ -11287,7 +11354,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 60.28,
@@ -11446,7 +11514,7 @@
         "starter_key": "5079548",
         "qb_name": "Air Noland",
         "experience_starts": 0,
-        "qb_talent": 46.93,
+        "qb_talent": 46.9,
         "ol_support": 64.57,
         "weapons_support": 60.05,
         "is_portal": false,
@@ -11457,7 +11525,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 64.57,
@@ -11616,7 +11685,7 @@
         "starter_key": "4870518",
         "qb_name": "Zeon Chriss-Gremillion",
         "experience_starts": 1,
-        "qb_talent": 51.17,
+        "qb_talent": 50.96,
         "ol_support": 57.78,
         "weapons_support": 56.83,
         "is_portal": true,
@@ -11627,7 +11696,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 57.78,
@@ -11786,7 +11856,7 @@
         "starter_key": "5147757",
         "qb_name": "Arrington Maiden",
         "experience_starts": 0,
-        "qb_talent": 49.05,
+        "qb_talent": 48.94,
         "ol_support": 56.85,
         "weapons_support": 55.18,
         "is_portal": false,
@@ -11797,7 +11867,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 56.85,
@@ -11956,7 +12027,7 @@
         "starter_key": "4870607",
         "qb_name": "Jackson Arnold",
         "experience_starts": 7,
-        "qb_talent": 64.74,
+        "qb_talent": 62.57,
         "ol_support": 57.69,
         "weapons_support": 60.42,
         "is_portal": true,
@@ -11967,7 +12038,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 6
       },
       "position_groups": {
         "ol": 57.69,
@@ -12126,7 +12198,7 @@
         "starter_key": "4870971",
         "qb_name": "Marcel Reed",
         "experience_starts": 13,
-        "qb_talent": 80.94,
+        "qb_talent": 77.13,
         "ol_support": 67.0,
         "weapons_support": 66.57,
         "is_portal": false,
@@ -12137,7 +12209,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 25
       },
       "position_groups": {
         "ol": 67.0,
@@ -12296,7 +12369,7 @@
         "starter_key": "4911529",
         "qb_name": "Trinidad Chambliss",
         "experience_starts": 15,
-        "qb_talent": 86.15,
+        "qb_talent": 81.66,
         "ol_support": 70.52,
         "weapons_support": 71.64,
         "is_portal": true,
@@ -12307,7 +12380,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 22
       },
       "position_groups": {
         "ol": 70.52,
@@ -12466,7 +12540,7 @@
         "starter_key": "4691272",
         "qb_name": "Stone Earle",
         "experience_starts": 15,
-        "qb_talent": 84.32,
+        "qb_talent": 79.88,
         "ol_support": 56.38,
         "weapons_support": 60.07,
         "is_portal": true,
@@ -12477,7 +12551,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 22
       },
       "position_groups": {
         "ol": 56.38,
@@ -12636,7 +12711,7 @@
         "starter_key": "5223108",
         "qb_name": "Josh Johnson",
         "experience_starts": 1,
-        "qb_talent": 56.96,
+        "qb_talent": 56.67,
         "ol_support": 61.25,
         "weapons_support": 60.02,
         "is_portal": false,
@@ -12647,7 +12722,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 4
       },
       "position_groups": {
         "ol": 61.25,
@@ -12806,7 +12882,7 @@
         "starter_key": "4431091",
         "qb_name": "Ben Finley",
         "experience_starts": 12,
-        "qb_talent": 78.28,
+        "qb_talent": 74.63,
         "ol_support": 59.51,
         "weapons_support": 53.45,
         "is_portal": true,
@@ -12817,7 +12893,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 19
       },
       "position_groups": {
         "ol": 59.51,
@@ -12976,7 +13053,7 @@
         "starter_key": "5248199",
         "qb_name": "Noah Gillon",
         "experience_starts": 0,
-        "qb_talent": 49.1,
+        "qb_talent": 48.71,
         "ol_support": 56.19,
         "weapons_support": 54.25,
         "is_portal": false,
@@ -12987,7 +13064,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 56.19,
@@ -13146,7 +13224,7 @@
         "starter_key": "5150297",
         "qb_name": "Cale Hellums",
         "experience_starts": 3,
-        "qb_talent": 57.01,
+        "qb_talent": 56.13,
         "ol_support": 52.63,
         "weapons_support": 50.3,
         "is_portal": false,
@@ -13157,7 +13235,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 4
       },
       "position_groups": {
         "ol": 52.63,
@@ -13316,7 +13395,7 @@
         "starter_key": "5075392",
         "qb_name": "Keldric Luster",
         "experience_starts": 0,
-        "qb_talent": 49.3,
+        "qb_talent": 49.27,
         "ol_support": 52.27,
         "weapons_support": 52.84,
         "is_portal": true,
@@ -13327,7 +13406,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 52.27,
@@ -13486,7 +13566,7 @@
         "starter_key": "5221382",
         "qb_name": "Hunter Najm",
         "experience_starts": 2,
-        "qb_talent": 55.3,
+        "qb_talent": 54.63,
         "ol_support": 49.22,
         "weapons_support": 50.63,
         "is_portal": false,
@@ -13497,7 +13577,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 5
       },
       "position_groups": {
         "ol": 49.22,
@@ -13667,7 +13748,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 56.6,
@@ -13826,7 +13908,7 @@
         "starter_key": "5296439",
         "qb_name": "Deuce Bailey",
         "experience_starts": 0,
-        "qb_talent": 53.15,
+        "qb_talent": 52.68,
         "ol_support": 55.85,
         "weapons_support": 55.27,
         "is_portal": false,
@@ -13837,7 +13919,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts",
+        "pass_td_2025": 2
       },
       "position_groups": {
         "ol": 55.85,
@@ -13996,7 +14079,7 @@
         "starter_key": "4915837",
         "qb_name": "Grayson Loftis",
         "experience_starts": 8,
-        "qb_talent": 66.4,
+        "qb_talent": 64.05,
         "ol_support": 56.3,
         "weapons_support": 55.04,
         "is_portal": true,
@@ -14007,7 +14090,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 8
       },
       "position_groups": {
         "ol": 56.3,
@@ -14166,7 +14250,7 @@
         "starter_key": "4577962",
         "qb_name": "Camden Orth",
         "experience_starts": 7,
-        "qb_talent": 69.01,
+        "qb_talent": 66.8,
         "ol_support": 54.17,
         "weapons_support": 52.15,
         "is_portal": true,
@@ -14177,7 +14261,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 13
       },
       "position_groups": {
         "ol": 54.17,
@@ -14336,7 +14421,7 @@
         "starter_key": "5084769",
         "qb_name": "Angel Flores",
         "experience_starts": 1,
-        "qb_talent": 53.92,
+        "qb_talent": 53.63,
         "ol_support": 52.92,
         "weapons_support": 53.25,
         "is_portal": true,
@@ -14347,7 +14432,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal body in unsettled room",
+        "pass_td_2025": 2
       },
       "position_groups": {
         "ol": 52.92,
@@ -14506,7 +14592,7 @@
         "starter_key": "5079619",
         "qb_name": "Kalieb Osborne",
         "experience_starts": 0,
-        "qb_talent": 54.97,
+        "qb_talent": 54.45,
         "ol_support": 50.78,
         "weapons_support": 51.93,
         "is_portal": false,
@@ -14517,7 +14603,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts",
+        "pass_td_2025": 3
       },
       "position_groups": {
         "ol": 50.78,
@@ -14676,7 +14763,7 @@
         "starter_key": "4690158",
         "qb_name": "Noah Kim",
         "experience_starts": 13,
-        "qb_talent": 80.34,
+        "qb_talent": 76.28,
         "ol_support": 59.99,
         "weapons_support": 56.02,
         "is_portal": true,
@@ -14687,7 +14774,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 59.99,
@@ -14846,7 +14934,7 @@
         "starter_key": "5219898",
         "qb_name": "Drew Devillier",
         "experience_starts": 1,
-        "qb_talent": 49.96,
+        "qb_talent": 49.75,
         "ol_support": 58.1,
         "weapons_support": 59.37,
         "is_portal": false,
@@ -14857,7 +14945,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 58.1,
@@ -15016,7 +15105,7 @@
         "starter_key": "4870883",
         "qb_name": "JJ Kohl",
         "experience_starts": 7,
-        "qb_talent": 67.66,
+        "qb_talent": 65.48,
         "ol_support": 55.24,
         "weapons_support": 52.53,
         "is_portal": true,
@@ -15027,7 +15116,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 12
       },
       "position_groups": {
         "ol": 55.24,
@@ -15186,7 +15276,7 @@
         "starter_key": "5146667",
         "qb_name": "Khristian Martin",
         "experience_starts": 1,
-        "qb_talent": 50.09,
+        "qb_talent": 49.92,
         "ol_support": 52.8,
         "weapons_support": 51.62,
         "is_portal": false,
@@ -15197,7 +15287,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 52.8,
@@ -15356,7 +15447,7 @@
         "starter_key": "4685740",
         "qb_name": "Max Johnson",
         "experience_starts": 3,
-        "qb_talent": 55.0,
+        "qb_talent": 54.12,
         "ol_support": 57.67,
         "weapons_support": 59.11,
         "is_portal": true,
@@ -15367,7 +15458,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 2
       },
       "position_groups": {
         "ol": 57.67,
@@ -15526,7 +15618,7 @@
         "starter_key": "5083490",
         "qb_name": "Ayden Pereira",
         "experience_starts": 10,
-        "qb_talent": 70.92,
+        "qb_talent": 67.79,
         "ol_support": 53.3,
         "weapons_support": 54.42,
         "is_portal": true,
@@ -15537,7 +15629,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 53.3,
@@ -15696,7 +15789,7 @@
         "starter_key": "5101124",
         "qb_name": "Micah Alejado",
         "experience_starts": 14,
-        "qb_talent": 82.23,
+        "qb_talent": 77.89,
         "ol_support": 54.01,
         "weapons_support": 55.5,
         "is_portal": false,
@@ -15707,7 +15800,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 24
       },
       "position_groups": {
         "ol": 54.01,
@@ -15866,7 +15960,7 @@
         "starter_key": "5298293",
         "qb_name": "Sawyer Teeney",
         "experience_starts": 0,
-        "qb_talent": 46.88,
+        "qb_talent": 46.72,
         "ol_support": 48.68,
         "weapons_support": 50.05,
         "is_portal": false,
@@ -15877,7 +15971,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 48.68,
@@ -16036,7 +16131,7 @@
         "starter_key": "5119841",
         "qb_name": "Dru DeShields",
         "experience_starts": 8,
-        "qb_talent": 70.94,
+        "qb_talent": 68.51,
         "ol_support": 50.64,
         "weapons_support": 51.36,
         "is_portal": false,
@@ -16047,7 +16142,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 50.64,
@@ -16206,7 +16302,7 @@
         "starter_key": "4832918",
         "qb_name": "Ethan Vasko",
         "experience_starts": 9,
-        "qb_talent": 70.39,
+        "qb_talent": 67.7,
         "ol_support": 55.08,
         "weapons_support": 57.35,
         "is_portal": true,
@@ -16217,7 +16313,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 10
       },
       "position_groups": {
         "ol": 55.08,
@@ -16376,7 +16473,7 @@
         "starter_key": "5150998",
         "qb_name": "Blake Baker",
         "experience_starts": 5,
-        "qb_talent": 61.24,
+        "qb_talent": 59.67,
         "ol_support": 51.4,
         "weapons_support": 52.65,
         "is_portal": false,
@@ -16387,7 +16484,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 5
       },
       "position_groups": {
         "ol": 51.4,
@@ -16546,7 +16644,7 @@
         "starter_key": "5298739",
         "qb_name": "Logan Inagawa",
         "experience_starts": 6,
-        "qb_talent": 63.77,
+        "qb_talent": 61.85,
         "ol_support": 58.42,
         "weapons_support": 56.53,
         "is_portal": false,
@@ -16557,7 +16655,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 58.42,
@@ -16716,7 +16815,7 @@
         "starter_key": "5142146",
         "qb_name": "Thomas Gotkowski",
         "experience_starts": 3,
-        "qb_talent": 55.53,
+        "qb_talent": 54.66,
         "ol_support": 53.36,
         "weapons_support": 50.82,
         "is_portal": false,
@@ -16727,7 +16826,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 4
       },
       "position_groups": {
         "ol": 53.36,
@@ -16886,7 +16986,7 @@
         "starter_key": "4432691",
         "qb_name": "Carlos Del Rio-Wilson",
         "experience_starts": 9,
-        "qb_talent": 72.95,
+        "qb_talent": 70.36,
         "ol_support": 52.12,
         "weapons_support": 56.64,
         "is_portal": true,
@@ -16897,7 +16997,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 17
       },
       "position_groups": {
         "ol": 52.12,
@@ -17056,7 +17157,7 @@
         "starter_key": "5194626",
         "qb_name": "Roman Gagliano",
         "experience_starts": 4,
-        "qb_talent": 60.14,
+        "qb_talent": 58.78,
         "ol_support": 54.87,
         "weapons_support": 53.98,
         "is_portal": false,
@@ -17067,7 +17168,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 7
       },
       "position_groups": {
         "ol": 54.87,
@@ -17226,7 +17328,7 @@
         "starter_key": "5220473",
         "qb_name": "Jackson Gutierrez",
         "experience_starts": 0,
-        "qb_talent": 42.11,
+        "qb_talent": 42.09,
         "ol_support": 51.05,
         "weapons_support": 52.67,
         "is_portal": false,
@@ -17237,7 +17339,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 51.05,
@@ -17396,7 +17499,7 @@
         "starter_key": "4881032",
         "qb_name": "Taron Dickens",
         "experience_starts": 12,
-        "qb_talent": 82.85,
+        "qb_talent": 79.16,
         "ol_support": 49.67,
         "weapons_support": 49.49,
         "is_portal": false,
@@ -17407,7 +17510,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 49.67,
@@ -17566,7 +17670,7 @@
         "starter_key": "5224084",
         "qb_name": "Trey Hedden",
         "experience_starts": 14,
-        "qb_talent": 79.02,
+        "qb_talent": 74.78,
         "ol_support": 57.56,
         "weapons_support": 59.58,
         "is_portal": false,
@@ -17577,7 +17681,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 17
       },
       "position_groups": {
         "ol": 57.56,
@@ -17736,7 +17841,7 @@
         "starter_key": "5171031",
         "qb_name": "Matt Vezza",
         "experience_starts": 12,
-        "qb_talent": 77.12,
+        "qb_talent": 73.39,
         "ol_support": 53.29,
         "weapons_support": 51.99,
         "is_portal": false,
@@ -17747,7 +17852,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 19
       },
       "position_groups": {
         "ol": 53.29,
@@ -17906,7 +18012,7 @@
         "starter_key": "5212654",
         "qb_name": "Braden Atkinson",
         "experience_starts": 14,
-        "qb_talent": 84.37,
+        "qb_talent": 80.26,
         "ol_support": 53.37,
         "weapons_support": 54.42,
         "is_portal": false,
@@ -17917,7 +18023,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 53.37,
@@ -18076,7 +18183,7 @@
         "starter_key": "5265447",
         "qb_name": "Patrick Crayton Jr.",
         "experience_starts": 0,
-        "qb_talent": 48.54,
+        "qb_talent": 48.39,
         "ol_support": 51.08,
         "weapons_support": 51.22,
         "is_portal": false,
@@ -18087,7 +18194,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; freshman listed without prior attempts",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 51.08,
@@ -18246,7 +18354,7 @@
         "starter_key": "5295238",
         "qb_name": "Luke Weaver",
         "experience_starts": 4,
-        "qb_talent": 56.51,
+        "qb_talent": 55.45,
         "ol_support": 54.05,
         "weapons_support": 53.09,
         "is_portal": false,
@@ -18257,7 +18365,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 6
       },
       "position_groups": {
         "ol": 54.05,
@@ -18416,7 +18525,7 @@
         "starter_key": "4685311",
         "qb_name": "Jayden Denegal",
         "experience_starts": 8,
-        "qb_talent": 68.83,
+        "qb_talent": 66.38,
         "ol_support": 54.76,
         "weapons_support": 54.54,
         "is_portal": true,
@@ -18427,7 +18536,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 54.76,
@@ -18586,7 +18696,7 @@
         "starter_key": "5219898",
         "qb_name": "Drew Devillier",
         "experience_starts": 1,
-        "qb_talent": 49.96,
+        "qb_talent": 49.75,
         "ol_support": 58.1,
         "weapons_support": 59.37,
         "is_portal": false,
@@ -18597,7 +18707,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 58.1,
@@ -18747,10 +18858,11 @@
       },
       "qb": {
         "qb_class": "unknown",
-        "qb_talent": 50,
+        "qb_talent": 48.0,
         "ol_support": 50,
         "weapons_support": 50,
-        "fidelity": "placeholder"
+        "fidelity": "placeholder",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 50.7,
@@ -18833,7 +18945,7 @@
         "starter_key": "5148427",
         "qb_name": "Landyn Locke",
         "experience_starts": 5,
-        "qb_talent": 57.2,
+        "qb_talent": 55.78,
         "ol_support": 60.25,
         "weapons_support": 60.34,
         "is_portal": false,
@@ -18844,7 +18956,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 4
       },
       "position_groups": {
         "ol": 60.25,
@@ -18994,10 +19107,11 @@
       },
       "qb": {
         "qb_class": "unknown",
-        "qb_talent": 50,
+        "qb_talent": 48.0,
         "ol_support": 50,
         "weapons_support": 50,
-        "fidelity": "placeholder"
+        "fidelity": "placeholder",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 50.7,
@@ -19091,7 +19205,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; insufficient starter signal",
+        "pass_td_2025": 0
       },
       "position_groups": {
         "ol": 59.11,
@@ -19250,7 +19365,7 @@
         "starter_key": "5224011",
         "qb_name": "Baylor Hayes",
         "experience_starts": 11,
-        "qb_talent": 73.27,
+        "qb_talent": 70.08,
         "ol_support": 54.61,
         "weapons_support": 54.51,
         "is_portal": true,
@@ -19261,7 +19376,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 12
       },
       "position_groups": {
         "ol": 54.61,
@@ -19420,7 +19536,7 @@
         "starter_key": "4912119",
         "qb_name": "Tucker Kilcrease",
         "experience_starts": 7,
-        "qb_talent": 65.1,
+        "qb_talent": 62.86,
         "ol_support": 60.45,
         "weapons_support": 61.73,
         "is_portal": false,
@@ -19431,7 +19547,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 60.45,
@@ -19590,7 +19707,7 @@
         "starter_key": "5148803",
         "qb_name": "Brad Jackson",
         "experience_starts": 12,
-        "qb_talent": 78.98,
+        "qb_talent": 75.42,
         "ol_support": 55.88,
         "weapons_support": 52.94,
         "is_portal": false,
@@ -19601,7 +19718,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 21
       },
       "position_groups": {
         "ol": 55.88,
@@ -19760,7 +19878,7 @@
         "starter_key": "5146661",
         "qb_name": "Daniel Beale",
         "experience_starts": 3,
-        "qb_talent": 52.19,
+        "qb_talent": 51.34,
         "ol_support": 50.44,
         "weapons_support": 50.31,
         "is_portal": false,
@@ -19771,7 +19889,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 50.44,
@@ -19930,7 +20049,7 @@
         "starter_key": "5146661",
         "qb_name": "Daniel Beale",
         "experience_starts": 3,
-        "qb_talent": 52.19,
+        "qb_talent": 51.34,
         "ol_support": 50.44,
         "weapons_support": 50.31,
         "is_portal": false,
@@ -19941,7 +20060,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning depth with some 2025 work",
+        "pass_td_2025": 1
       },
       "position_groups": {
         "ol": 50.44,
@@ -20100,7 +20220,7 @@
         "starter_key": "5122054",
         "qb_name": "Aidan Armenta",
         "experience_starts": 8,
-        "qb_talent": 67.34,
+        "qb_talent": 64.78,
         "ol_support": 64.0,
         "weapons_support": 62.99,
         "is_portal": false,
@@ -20111,7 +20231,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 12
       },
       "position_groups": {
         "ol": 64.0,
@@ -20270,7 +20391,7 @@
         "starter_key": "4869553",
         "qb_name": "Bishop Davenport",
         "experience_starts": 10,
-        "qb_talent": 72.29,
+        "qb_talent": 69.32,
         "ol_support": 56.3,
         "weapons_support": 58.85,
         "is_portal": true,
@@ -20281,7 +20402,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 12
       },
       "position_groups": {
         "ol": 56.3,
@@ -20440,7 +20562,7 @@
         "starter_key": "5232131",
         "qb_name": "KJ Cooper",
         "experience_starts": 9,
-        "qb_talent": 67.69,
+        "qb_talent": 65.11,
         "ol_support": 55.62,
         "weapons_support": 56.81,
         "is_portal": false,
@@ -20451,7 +20573,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 13
       },
       "position_groups": {
         "ol": 55.62,
@@ -20610,7 +20733,7 @@
         "starter_key": "4833635",
         "qb_name": "Landry Lyddy",
         "experience_starts": 2,
-        "qb_talent": 56.18,
+        "qb_talent": 55.65,
         "ol_support": 58.64,
         "weapons_support": 57.95,
         "is_portal": true,
@@ -20621,7 +20744,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 2
       },
       "position_groups": {
         "ol": 58.64,
@@ -20780,7 +20904,7 @@
         "starter_key": "4695600",
         "qb_name": "Bryson Barnes",
         "experience_starts": 12,
-        "qb_talent": 78.74,
+        "qb_talent": 75.14,
         "ol_support": 55.01,
         "weapons_support": 52.78,
         "is_portal": true,
@@ -20791,7 +20915,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 18
       },
       "position_groups": {
         "ol": 55.01,
@@ -20950,7 +21075,7 @@
         "starter_key": "5141395",
         "qb_name": "EJ Colson Jr.",
         "experience_starts": 10,
-        "qb_talent": 74.0,
+        "qb_talent": 71.01,
         "ol_support": 51.91,
         "weapons_support": 54.02,
         "is_portal": true,
@@ -20961,7 +21086,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 16
       },
       "position_groups": {
         "ol": 51.91,
@@ -21120,7 +21246,7 @@
         "starter_key": "4775136",
         "qb_name": "Owen McCown",
         "experience_starts": 14,
-        "qb_talent": 84.81,
+        "qb_talent": 80.67,
         "ol_support": 57.41,
         "weapons_support": 55.78,
         "is_portal": true,
@@ -21131,7 +21257,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 57.41,
@@ -21290,7 +21417,7 @@
         "starter_key": "4838536",
         "qb_name": "Tyler Hughes",
         "experience_starts": 10,
-        "qb_talent": 74.43,
+        "qb_talent": 71.32,
         "ol_support": 52.64,
         "weapons_support": 53.92,
         "is_portal": false,
@@ -21301,7 +21428,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 20
       },
       "position_groups": {
         "ol": 52.64,
@@ -21460,7 +21588,7 @@
         "starter_key": "5074245",
         "qb_name": "Broc Lowry",
         "experience_starts": 9,
-        "qb_talent": 69.28,
+        "qb_talent": 66.63,
         "ol_support": 50.66,
         "weapons_support": 54.34,
         "is_portal": true,
@@ -21471,7 +21599,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 50.66,
@@ -21630,7 +21759,7 @@
         "starter_key": "5196864",
         "qb_name": "Rodney Tisdale Jr.",
         "experience_starts": 7,
-        "qb_talent": 64.36,
+        "qb_talent": 62.22,
         "ol_support": 54.72,
         "weapons_support": 57.91,
         "is_portal": false,
@@ -21641,7 +21770,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 9
       },
       "position_groups": {
         "ol": 54.72,
@@ -21800,7 +21930,7 @@
         "starter_key": "5083042",
         "qb_name": "Skyler Locklear",
         "experience_starts": 7,
-        "qb_talent": 67.66,
+        "qb_talent": 65.53,
         "ol_support": 54.41,
         "weapons_support": 55.39,
         "is_portal": true,
@@ -21811,7 +21941,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 13
       },
       "position_groups": {
         "ol": 54.41,
@@ -21970,7 +22101,7 @@
         "starter_key": "5153846",
         "qb_name": "Nick Minicucci",
         "experience_starts": 17,
-        "qb_talent": 85.96,
+        "qb_talent": 79.96,
         "ol_support": 58.64,
         "weapons_support": 56.02,
         "is_portal": false,
@@ -21981,7 +22112,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 23
       },
       "position_groups": {
         "ol": 58.64,
@@ -22140,7 +22272,7 @@
         "starter_key": "4870645",
         "qb_name": "Rickie Collins",
         "experience_starts": 6,
-        "qb_talent": 62.49,
+        "qb_talent": 60.66,
         "ol_support": 53.56,
         "weapons_support": 56.48,
         "is_portal": true,
@@ -22151,7 +22283,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; portal addition with prior production",
+        "pass_td_2025": 6
       },
       "position_groups": {
         "ol": 53.56,
@@ -22310,7 +22443,7 @@
         "starter_key": "5212654",
         "qb_name": "Braden Atkinson",
         "experience_starts": 14,
-        "qb_talent": 84.37,
+        "qb_talent": 80.26,
         "ol_support": 53.37,
         "weapons_support": 54.42,
         "is_portal": false,
@@ -22321,7 +22454,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 53.37,
@@ -22480,7 +22614,7 @@
         "starter_key": "5226019",
         "qb_name": "Caden Pinnick",
         "experience_starts": 12,
-        "qb_talent": 81.39,
+        "qb_talent": 77.9,
         "ol_support": 53.61,
         "weapons_support": 54.65,
         "is_portal": false,
@@ -22491,7 +22625,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 53.61,
@@ -22650,7 +22785,7 @@
         "starter_key": "5219834",
         "qb_name": "Drew Mestemaker",
         "experience_starts": 15,
-        "qb_talent": 88.13,
+        "qb_talent": 83.45,
         "ol_support": 55.2,
         "weapons_support": 55.28,
         "is_portal": false,
@@ -22661,7 +22796,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 29
       },
       "position_groups": {
         "ol": 55.2,
@@ -22820,7 +22956,7 @@
         "starter_key": "4870971",
         "qb_name": "Marcel Reed",
         "experience_starts": 13,
-        "qb_talent": 80.94,
+        "qb_talent": 77.13,
         "ol_support": 67.0,
         "weapons_support": 66.57,
         "is_portal": false,
@@ -22831,7 +22967,8 @@
         "fidelity": "approximate",
         "source": "packaged_espn_roster_2026",
         "identity_fidelity": "real",
-        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter"
+        "notes": "ESPN 2026 roster QB1 by 2025 attempts/experience; returning production starter",
+        "pass_td_2025": 25
       },
       "position_groups": {
         "ol": 67.0,

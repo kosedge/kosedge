@@ -1245,6 +1245,45 @@ def test_qb_situation_soft_ceiling_orders_elites_not_flat_80_4() -> None:
     assert [t for t, _ in live[:7]] == base7
 
 
+def test_talent_from_qb_stats_attempt_term_phase1d() -> None:
+    """Phase 1D: attempt term min(22, att/22); HAW volume no longer prints 82+."""
+    import importlib.util
+    from pathlib import Path
+
+    path = (
+        Path(__file__).resolve().parents[2].parent
+        / "scripts"
+        / "cfb"
+        / "package_real_roster_2026.py"
+    )
+    if not path.is_file():
+        path = Path("/workspace/scripts/cfb/package_real_roster_2026.py")
+    spec = importlib.util.spec_from_file_location("package_real_roster_2026", path)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    talent_from_qb_stats = mod.talent_from_qb_stats
+
+    # 430 att @ HAW-like ypa/tds: attempt term 19.55 (was 23.89); talent < 82.23
+    haw = talent_from_qb_stats(430, 3106, 24, is_portal=False)
+    assert haw < 82.23
+    assert abs(haw - 77.89) < 0.05
+    # Cap: attempts/22 never exceeds 22 (same YPA/TDs)
+    huge = talent_from_qb_stats(600, int(600 * 7.5), 30, is_portal=False)
+    capped = talent_from_qb_stats(484, int(484 * 7.5), 30, is_portal=False)
+    assert abs(huge - capped) < 1e-9
+
+    from src.services.cfb_season_engine.loaders import build_packaged_universe
+
+    universe = build_packaged_universe(2026)
+    assert universe.teams["HAW"].qb.qb_talent < 82.23
+    assert (
+        universe.teams["OSU"].qb.qb_situation_index
+        > universe.teams["HAW"].qb.qb_situation_index
+        > universe.teams["TCU"].qb.qb_situation_index
+    )
+
+
 def test_calibration_blue_blood_vs_g5_ordering() -> None:
     """UGA/TEX/OSU remain clear favorites vs BALL; spreads bettable, not absurd."""
     from src.services.cfb_season_engine.priors import (
