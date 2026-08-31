@@ -201,6 +201,16 @@ class ScheduledGame:
     away_team: str
     neutral_site: bool = False
     night_game: bool = False
+    kickoff: str = ""
+    conference_game: bool = False
+    fcs_home: bool = False
+    fcs_away: bool = False
+    source_game_id: str = ""
+    # Week-close bookkeeping (research). When both scores are set, Bernoulli /
+    # path sims lock the result — they do not refit power from the margin.
+    home_score: Optional[float] = None
+    away_score: Optional[float] = None
+    status: str = ""
 
 
 @dataclass(frozen=True)

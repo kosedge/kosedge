@@ -377,8 +377,22 @@ def win_prob_from_expected_scores(
     *,
     margin_sd: float,
 ) -> float:
-    margin = home_points - away_points
-    z = margin / max(8.0, margin_sd)
+    """Φ(margin / sd) with cupcake saturation on the SD application.
+
+    Does not retune WIN_PROB_MARGIN_SD. When |margin| is large enough that the
+    raw SD would print below WP_CUPCAKE_TARGET, compress effective SD so the
+    favorite clears the gate (real 90s on out-of-class mismatches).
+    """
+    margin = float(home_points) - float(away_points)
+    raw_sd = max(8.0, float(margin_sd))
+    abs_m = abs(margin)
+    # Saturation: effective_sd ≤ |margin| / z_90 so Φ ≥ 0.90 for large gaps.
+    if abs_m >= P.WP_CUPCAKE_Z * 8.0:
+        sat_sd = abs_m / P.WP_CUPCAKE_Z
+        eff_sd = min(raw_sd, sat_sd)
+    else:
+        eff_sd = raw_sd
+    z = margin / max(8.0, eff_sd)
     return _clamp(0.5 * (1.0 + math.erf(z / math.sqrt(2.0))), 0.02, 0.98)
 
 

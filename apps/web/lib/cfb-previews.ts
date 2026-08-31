@@ -4,7 +4,7 @@
  * Research language only. No KEI, PLAY, LEAN, or invented market lines.
  */
 
-export const CFB_PREVIEW_AS_OF = "2026-08-14";
+export const CFB_PREVIEW_AS_OF = "2026-08-31";
 export const CFB_PREVIEW_PUBLISHED = "2026-08-17";
 
 export type CfbTeamPreview = {

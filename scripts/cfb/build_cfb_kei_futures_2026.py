@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import os
 import random
 import sys
 from collections import defaultdict
@@ -37,9 +38,9 @@ from src.services.cfb_season_engine.product_desk import official_week_board  # n
 from src.services.cfb_season_engine.team_projection import expected_team_points  # noqa: E402
 from src.services.cfb_season_engine import priors as P  # noqa: E402
 
-AS_OF = "2026-08-17"
+AS_OF = os.environ.get("CFB_CLOSE_AS_OF") or "2026-08-31"
 N_FUTURES = 2500
-SEED = 20260817
+SEED = int(os.environ.get("CFB_FUTURES_SEED") or 20260831)
 
 
 def hydrate_missing_from_power_sot(universe) -> int:
@@ -189,6 +190,7 @@ def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
         if code in universe.teams
     }
     precomputed = []
+    locked = []
     for raw in official.get("games") or []:
         if str(raw.get("season_type") or "regular") not in {"regular", ""}:
             continue
@@ -202,6 +204,28 @@ def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
             week = int(raw.get("week"))
         except (TypeError, ValueError):
             week = 1
+        conf_game = bool(raw.get("conference_game")) or (
+            conference_for(home, conferences)
+            == conference_for(away, conferences)
+            != "Independent"
+        )
+        # Lock closed finals — no power refit from the margin.
+        if raw.get("home_score") is not None and raw.get("away_score") is not None:
+            try:
+                hs = float(raw["home_score"])
+                aws = float(raw["away_score"])
+            except (TypeError, ValueError):
+                hs = aws = None
+            if hs is not None and aws is not None:
+                locked.append(
+                    {
+                        "home": home,
+                        "away": away,
+                        "home_won": hs >= aws,
+                        "conference_game": conf_game,
+                    }
+                )
+                continue
         hs = universe.teams[home]
         aws = universe.teams[away]
         home_exp, _ = expected_team_points(
@@ -229,12 +253,7 @@ def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
                 "home_exp": home_exp,
                 "away_exp": away_exp,
                 "sd": P.score_noise_sd_for_week(week),
-                "conference_game": bool(raw.get("conference_game"))
-                or (
-                    conference_for(home, conferences)
-                    == conference_for(away, conferences)
-                    != "Independent"
-                ),
+                "conference_game": conf_game,
             }
         )
 
@@ -243,6 +262,15 @@ def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
     for i in range(N_FUTURES):
         wins: Dict[str, float] = defaultdict(float)
         conf_wins: Dict[str, float] = defaultdict(float)
+        for g in locked:
+            if g["home_won"]:
+                wins[g["home"]] += 1.0
+                if g["conference_game"]:
+                    conf_wins[g["home"]] += 1.0
+            else:
+                wins[g["away"]] += 1.0
+                if g["conference_game"]:
+                    conf_wins[g["away"]] += 1.0
         for g in precomputed:
             hs = max(0.0, rng.gauss(g["home_exp"], g["sd"]))
             aws = max(0.0, rng.gauss(g["away_exp"], g["sd"]))
@@ -275,7 +303,8 @@ def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
         engine_version=DEFAULT_SEASON_ENGINE_VERSION,
         as_of=AS_OF,
     )
-    payload["n_games_scored"] = len(precomputed)
+    payload["n_games_scored"] = len(precomputed) + len(locked)
+    payload["n_games_locked"] = len(locked)
     payload["generated_at"] = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
     payload["futures_version"] = FUTURES_VERSION
     return payload

@@ -306,7 +306,7 @@ def apply_cfb_kei(
         edge_pts = _round(mkt - kei_spread)
     tag = tag_from_edge(edge_pts, week=week, fbs_vs_fbs=fbs_vs_fbs and not (fcs_home or fcs_away))
 
-    return {
+    out = {
         "kei_version": KEI_VERSION,
         "bias_guard_version": BIAS_GUARD_VERSION,
         "used_in_spread": True,
@@ -330,6 +330,29 @@ def apply_cfb_kei(
         "drivers": drivers,
         "rules_doc": KEI_RULES_DOC,
     }
+    assert_kei_not_tail(out)
+    return out
+
+
+def assert_kei_not_tail(kei_payload: Mapping[str, Any]) -> None:
+    """Guard: published KEI line must not be E[wins] / natty% / playoff%.
+
+    Raises AssertionError with KEI_EQUALS_TAIL if a publisher collapses tails
+    into the KEI object.
+    """
+    forbidden = (
+        "expected_wins",
+        "e_wins",
+        "mean_wins",
+        "natty_pct",
+        "cfp_make_pct",
+        "playoff_pct",
+        "title_pct",
+    )
+    keys = {str(k).lower() for k in kei_payload.keys()}
+    hit = [k for k in forbidden if k in keys]
+    if hit:
+        raise AssertionError(f"KEI_EQUALS_TAIL: KEI payload contains {hit}")
 
 
 def diagnostic_short_fav_sample() -> Dict[str, Any]:

@@ -52,9 +52,16 @@ LEAGUE_TEAM_PPG = 25.9
 HFA_BASELINE_POINTS = 1.7
 HOME_FIELD_POINTS = HFA_BASELINE_POINTS
 NEUTRAL_SITE_HFA = 0.0
-SCORE_NOISE_SD = 12.5
+SCORE_NOISE_SD = 10.5
 # Mid-season WP↔spread alignment: slightly wider SD after spread decompress.
 WIN_PROB_MARGIN_SD = 15.2
+# Cupcake saturation: when |margin| / margin_sd would print < 0.90 for a large
+# gap, compress effective SD toward the gap (application only — not a retune of
+# WIN_PROB_MARGIN_SD itself). z for Φ^{-1}(0.90) ≈ 1.28155.
+WP_CUPCAKE_TARGET = 0.90
+WP_CUPCAKE_Z = 1.28155156554
+# Power-index gap gate threshold (engine units) for cupcake WP ≥ 0.90.
+WP_POWER_GAP_T = 0.28
 LEAGUE_BASE_PLAYS = 70.0
 LEAGUE_BASE_PASS_RATE = 0.55
 EXPECTED_POINTS_CLAMP = (7.0, 55.0)
@@ -105,16 +112,16 @@ MATCHUP_RATIO_EXCESS_RETAIN = 0.42
 # Path evolution (mild; not backtested). Early weeks add extra noise.
 STRENGTH_UPDATE_RATE = 0.028
 STRENGTH_MEAN_REVERT = 0.010
-STRENGTH_NOISE = 0.014
+STRENGTH_NOISE = 0.010
 # Wider team-index band — v0.6 piled ~33 teams at the old 1.55 offense ceiling.
 STRENGTH_CLAMP = (0.52, 1.68)
 # QB situation alone must not invent power-conference offense from MAC talent proxies.
 QB_SITUATION_INDEX_CLAMP = (0.62, 1.38)
 EARLY_STRENGTH_NOISE_MULT: Dict[int, float] = {
-    1: 1.55,
-    2: 1.40,
-    3: 1.25,
-    4: 1.12,
+    1: 1.35,
+    2: 1.25,
+    3: 1.15,
+    4: 1.08,
 }
 
 # ---------------------------------------------------------------------------
@@ -222,16 +229,16 @@ SCORE_TO_INDEX_CLAMP = (0.58, 1.58)
 # ---------------------------------------------------------------------------
 EARLY_SEASON_LAST_WEEK = 4
 EARLY_SEASON_SCORE_NOISE_MULT: Dict[int, float] = {
-    1: 1.32,
-    2: 1.24,
-    3: 1.16,
-    4: 1.08,
+    1: 1.18,
+    2: 1.12,
+    3: 1.08,
+    4: 1.04,
 }
 EARLY_SEASON_MARGIN_SD_MULT: Dict[int, float] = {
-    1: 1.38,
-    2: 1.26,
-    3: 1.16,
-    4: 1.08,
+    1: 1.18,
+    2: 1.12,
+    3: 1.08,
+    4: 1.04,
 }
 # Hist-cal: early W1–W4 under-rated favorites vs close (bias +2.3) — soften less.
 # Uncertainty stays in margin_sd / score noise, not by collapsing separation.

@@ -1,8 +1,8 @@
 {
   "ok": true,
-  "power_version": "cfb-power-sot-v0.15-20260814",
-  "power_as_of": "2026-08-14",
-  "engine_version": "cfb-season-engine-v0.15-power-sot",
+  "power_version": "cfb-power-sot-v0.15-week0-close-20260831",
+  "power_as_of": "2026-08-31",
+  "engine_version": "cfb-season-engine-v0.9-inseason",
   "n_teams": 136,
   "official_fbs": 136,
   "used_in_spread": false,
@@ -825,28 +825,6 @@
       "rank": 37
     },
     {
-      "team": "UNT",
-      "conference": "Independent",
-      "offense_index": 1.4969,
-      "defense_index": 1.0722,
-      "power_index": 1.2845,
-      "early_season_uncertainty": 0.316,
-      "qb_class": "portal",
-      "qb_name": "Tayven Jackson",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 80.49,
-      "def_eff": 37.87,
-      "next": {
-        "week": 1,
-        "opponent": "IU",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 38
-    },
-    {
       "team": "CIN",
       "conference": "Big 12",
       "offense_index": 1.4214,
@@ -866,7 +844,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 39
+      "rank": 38
     },
     {
       "team": "DUKE",
@@ -888,7 +866,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 40
+      "rank": 39
     },
     {
       "team": "NEB",
@@ -910,7 +888,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 41
+      "rank": 40
     },
     {
       "team": "FSU",
@@ -932,7 +910,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 42
+      "rank": 41
     },
     {
       "team": "USF",
@@ -954,7 +932,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 43
+      "rank": 42
     },
     {
       "team": "GT",
@@ -976,7 +954,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 44
+      "rank": 43
     },
     {
       "team": "ARK",
@@ -998,7 +976,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 45
+      "rank": 44
     },
     {
       "team": "RUT",
@@ -1020,7 +998,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 46
+      "rank": 45
     },
     {
       "team": "UCF",
@@ -1042,7 +1020,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 47
+      "rank": 46
     },
     {
       "team": "BOISE",
@@ -1064,7 +1042,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 48
+      "rank": 47
     },
     {
       "team": "MD",
@@ -1086,7 +1064,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 49
+      "rank": 48
     },
     {
       "team": "MINN",
@@ -1108,7 +1086,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 50
+      "rank": 49
     },
     {
       "team": "COLO",
@@ -1130,7 +1108,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 51
+      "rank": 50
     },
     {
       "team": "CAL",
@@ -1152,7 +1130,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 52
+      "rank": 51
     },
     {
       "team": "WAKE",
@@ -1174,7 +1152,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 53
+      "rank": 52
     },
     {
       "team": "MSST",
@@ -1196,7 +1174,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 54
+      "rank": 53
     },
     {
       "team": "WIS",
@@ -1218,7 +1196,7 @@
         "home": false,
         "neutral_site": true
       },
-      "rank": 55
+      "rank": 54
     },
     {
       "team": "UTSA",
@@ -1240,7 +1218,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 56
+      "rank": 55
     },
     {
       "team": "KU",
@@ -1262,29 +1240,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 57
-    },
-    {
-      "team": "MIZZ",
-      "conference": "Independent",
-      "offense_index": 1.1807,
-      "defense_index": 1.2009,
-      "power_index": 1.1908,
-      "early_season_uncertainty": 0.241,
-      "qb_class": "incumbent",
-      "qb_name": "Austin Simmons",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 55.42,
-      "def_eff": 71.63,
-      "next": {
-        "week": 1,
-        "opponent": "FCS:UAPB",
-        "home": true,
-        "neutral_site": false
-      },
-      "rank": 58
+      "rank": 56
     },
     {
       "team": "UK",
@@ -1306,7 +1262,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 59
+      "rank": 57
     },
     {
       "team": "WSU",
@@ -1328,7 +1284,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 60
+      "rank": 58
     },
     {
       "team": "MSU",
@@ -1350,7 +1306,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 61
+      "rank": 59
     },
     {
       "team": "TXST",
@@ -1372,29 +1328,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 62
-    },
-    {
-      "team": "TOL",
-      "conference": "Independent",
-      "offense_index": 1.089,
-      "defense_index": 1.2525,
-      "power_index": 1.1707,
-      "early_season_uncertainty": 0.2295,
-      "qb_class": "incumbent",
-      "qb_name": "John Alan Richter",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 47.3,
-      "def_eff": 73.46,
-      "next": {
-        "week": 1,
-        "opponent": "MSU",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 63
+      "rank": 60
     },
     {
       "team": "UF",
@@ -1416,7 +1350,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 64
+      "rank": 61
     },
     {
       "team": "HAW",
@@ -1438,7 +1372,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 65
+      "rank": 62
     },
     {
       "team": "UNLV",
@@ -1460,7 +1394,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 66
+      "rank": 63
     },
     {
       "team": "PUR",
@@ -1482,29 +1416,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 67
-    },
-    {
-      "team": "UNM",
-      "conference": "Independent",
-      "offense_index": 1.2194,
-      "defense_index": 1.0798,
-      "power_index": 1.1496,
-      "early_season_uncertainty": 0.3304,
-      "qb_class": "portal",
-      "qb_name": "Jack Layne",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 50.57,
-      "def_eff": 47.68,
-      "next": {
-        "week": 1,
-        "opponent": "CMU",
-        "home": true,
-        "neutral_site": false
-      },
-      "rank": 68
+      "rank": 64
     },
     {
       "team": "JMU",
@@ -1526,7 +1438,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 69
+      "rank": 65
     },
     {
       "team": "NW",
@@ -1548,7 +1460,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 70
+      "rank": 66
     },
     {
       "team": "SDSU",
@@ -1570,29 +1482,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 71
-    },
-    {
-      "team": "ECU",
-      "conference": "Independent",
-      "offense_index": 1.0858,
-      "defense_index": 1.1828,
-      "power_index": 1.1343,
-      "early_season_uncertainty": 0.378,
-      "qb_class": "open_competition",
-      "qb_name": "Mitch Griffis",
-      "open_qb": true,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 53.76,
-      "def_eff": 59.6,
-      "next": {
-        "week": 1,
-        "opponent": "ALA",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 72
+      "rank": 67
     },
     {
       "team": "WKU",
@@ -1614,7 +1504,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 73
+      "rank": 68
     },
     {
       "team": "TROY",
@@ -1636,7 +1526,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 74
+      "rank": 69
     },
     {
       "team": "UTAHST",
@@ -1658,7 +1548,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 75
+      "rank": 70
     },
     {
       "team": "MEM",
@@ -1680,7 +1570,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 76
+      "rank": 71
     },
     {
       "team": "WVU",
@@ -1702,7 +1592,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 77
+      "rank": 72
     },
     {
       "team": "AFA",
@@ -1724,7 +1614,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 78
+      "rank": 73
     },
     {
       "team": "HOU",
@@ -1746,29 +1636,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 79
-    },
-    {
-      "team": "ODU",
-      "conference": "Independent",
-      "offense_index": 0.9892,
-      "defense_index": 1.2229,
-      "power_index": 1.106,
-      "early_season_uncertainty": 0.3966,
-      "qb_class": "open_competition",
-      "qb_name": "Jaxon Potter",
-      "open_qb": true,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 48.44,
-      "def_eff": 74.89,
-      "next": {
-        "week": 1,
-        "opponent": "FCS:NORF",
-        "home": true,
-        "neutral_site": false
-      },
-      "rank": 80
+      "rank": 74
     },
     {
       "team": "OHIO",
@@ -1790,7 +1658,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 81
+      "rank": 75
     },
     {
       "team": "UCLA",
@@ -1812,7 +1680,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 82
+      "rank": 76
     },
     {
       "team": "VT",
@@ -1834,7 +1702,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 83
+      "rank": 77
     },
     {
       "team": "WMU",
@@ -1856,7 +1724,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 84
+      "rank": 78
     },
     {
       "team": "DEL",
@@ -1878,7 +1746,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 85
+      "rank": 79
     },
     {
       "team": "TULN",
@@ -1900,7 +1768,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 86
+      "rank": 80
     },
     {
       "team": "MRSH",
@@ -1922,7 +1790,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 87
+      "rank": 81
     },
     {
       "team": "LT",
@@ -1944,7 +1812,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 88
+      "rank": 82
     },
     {
       "team": "NMSU",
@@ -1966,7 +1834,29 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 89
+      "rank": 83
+    },
+    {
+      "team": "M-OH",
+      "conference": "MAC",
+      "offense_index": 1.0971,
+      "defense_index": 1.0217,
+      "power_index": 1.0594,
+      "early_season_uncertainty": 0.2803,
+      "qb_class": "incumbent",
+      "qb_name": "Thomas Gotkowski",
+      "open_qb": false,
+      "efficiency_source": "league_average_fill",
+      "efficiency_fill": "league_avg",
+      "off_eff": 50.0,
+      "def_eff": 50.0,
+      "next": {
+        "week": 1,
+        "opponent": "PITT",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 84
     },
     {
       "team": "SYR",
@@ -1988,7 +1878,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 90
+      "rank": 85
     },
     {
       "team": "WYO",
@@ -2010,7 +1900,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 91
+      "rank": 86
     },
     {
       "team": "LIB",
@@ -2032,7 +1922,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 92
+      "rank": 87
     },
     {
       "team": "KENNESAW",
@@ -2054,7 +1944,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 93
+      "rank": 88
     },
     {
       "team": "USM",
@@ -2076,7 +1966,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 94
+      "rank": 89
     },
     {
       "team": "USA",
@@ -2098,7 +1988,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 95
+      "rank": 90
     },
     {
       "team": "ARMY",
@@ -2120,7 +2010,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 96
+      "rank": 91
     },
     {
       "team": "AKR",
@@ -2142,7 +2032,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 97
+      "rank": 92
     },
     {
       "team": "ULM",
@@ -2164,7 +2054,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 98
+      "rank": 93
     },
     {
       "team": "EMU",
@@ -2186,7 +2076,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 99
+      "rank": 94
     },
     {
       "team": "ORST",
@@ -2208,7 +2098,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 100
+      "rank": 95
     },
     {
       "team": "FAU",
@@ -2230,29 +2120,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 101
-    },
-    {
-      "team": "UAB",
-      "conference": "Independent",
-      "offense_index": 1.1568,
-      "defense_index": 0.9052,
-      "power_index": 1.031,
-      "early_season_uncertainty": 0.2361,
-      "qb_class": "incumbent",
-      "qb_name": "Ryder Burton",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 50.64,
-      "def_eff": 27.37,
-      "next": {
-        "week": 1,
-        "opponent": "ILL",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 102
+      "rank": 96
     },
     {
       "team": "OKST",
@@ -2274,7 +2142,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 103
+      "rank": 97
     },
     {
       "team": "MOST",
@@ -2296,29 +2164,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 104
-    },
-    {
-      "team": "JVST",
-      "conference": "Independent",
-      "offense_index": 1.0578,
-      "defense_index": 0.9751,
-      "power_index": 1.0165,
-      "early_season_uncertainty": 0.2461,
-      "qb_class": "incumbent",
-      "qb_name": "Caden Creel",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 34.09,
-      "def_eff": 41.87,
-      "next": {
-        "week": 0,
-        "opponent": "FCS:NDSU",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 105
+      "rank": 98
     },
     {
       "team": "UNC",
@@ -2340,7 +2186,7 @@
         "home": false,
         "neutral_site": true
       },
-      "rank": 106
+      "rank": 99
     },
     {
       "team": "GASO",
@@ -2362,7 +2208,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 107
+      "rank": 100
     },
     {
       "team": "FIU",
@@ -2384,7 +2230,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 108
+      "rank": 101
     },
     {
       "team": "TLSA",
@@ -2406,7 +2252,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 109
+      "rank": 102
     },
     {
       "team": "FRES",
@@ -2428,29 +2274,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 110
-    },
-    {
-      "team": "M-OH",
-      "conference": "MAC",
-      "offense_index": 0.9858,
-      "defense_index": 1.0061,
-      "power_index": 0.996,
-      "early_season_uncertainty": 0.2469,
-      "qb_class": "incumbent",
-      "qb_name": "Thomas Gotkowski",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 34.1,
-      "def_eff": 47.8,
-      "next": {
-        "week": 1,
-        "opponent": "PITT",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 111
+      "rank": 103
     },
     {
       "team": "CONN",
@@ -2472,7 +2296,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 112
+      "rank": 104
     },
     {
       "team": "NAVY",
@@ -2494,7 +2318,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 113
+      "rank": 105
     },
     {
       "team": "TEM",
@@ -2516,29 +2340,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 114
-    },
-    {
-      "team": "ARST",
-      "conference": "Independent",
-      "offense_index": 0.9327,
-      "defense_index": 1.0374,
-      "power_index": 0.985,
-      "early_season_uncertainty": 0.3797,
-      "qb_class": "open_competition",
-      "qb_name": "Drew Dickey",
-      "open_qb": true,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 34.6,
-      "def_eff": 40.82,
-      "next": {
-        "week": 1,
-        "opponent": "MEM",
-        "home": false,
-        "neutral_site": false
-      },
-      "rank": 115
+      "rank": 106
     },
     {
       "team": "STAN",
@@ -2560,29 +2362,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 116
-    },
-    {
-      "team": "NEV",
-      "conference": "Independent",
-      "offense_index": 0.9534,
-      "defense_index": 1.0116,
-      "power_index": 0.9825,
-      "early_season_uncertainty": 0.2428,
-      "qb_class": "incumbent",
-      "qb_name": "Carter Jones",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 23.07,
-      "def_eff": 46.56,
-      "next": {
-        "week": 1,
-        "opponent": "WKU",
-        "home": true,
-        "neutral_site": false
-      },
-      "rank": 117
+      "rank": 107
     },
     {
       "team": "SJSU",
@@ -2604,7 +2384,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 118
+      "rank": 108
     },
     {
       "team": "BC",
@@ -2626,7 +2406,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 119
+      "rank": 109
     },
     {
       "team": "NIU",
@@ -2648,7 +2428,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 120
+      "rank": 110
     },
     {
       "team": "MTSU",
@@ -2670,7 +2450,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 121
+      "rank": 111
     },
     {
       "team": "UTEP",
@@ -2692,7 +2472,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 122
+      "rank": 112
     },
     {
       "team": "UL",
@@ -2714,7 +2494,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 123
+      "rank": 113
     },
     {
       "team": "KENT",
@@ -2736,29 +2516,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 124
-    },
-    {
-      "team": "CSU",
-      "conference": "Independent",
-      "offense_index": 0.927,
-      "defense_index": 0.963,
-      "power_index": 0.945,
-      "early_season_uncertainty": 0.4264,
-      "qb_class": "true_freshman",
-      "qb_name": "Darius Curry",
-      "open_qb": false,
-      "efficiency_source": "warehouse_pbp_epa_adj_2025",
-      "efficiency_fill": "warehouse",
-      "off_eff": 41.87,
-      "def_eff": 35.52,
-      "next": {
-        "week": 1,
-        "opponent": "WYO",
-        "home": true,
-        "neutral_site": false
-      },
-      "rank": 125
+      "rank": 114
     },
     {
       "team": "BUFF",
@@ -2780,14 +2538,14 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 126
+      "rank": 115
     },
     {
       "team": "CMU",
       "conference": "MAC",
-      "offense_index": 0.825,
+      "offense_index": 0.8251,
       "defense_index": 1.0434,
-      "power_index": 0.9342,
+      "power_index": 0.9343,
       "early_season_uncertainty": 0.3992,
       "qb_class": "open_competition",
       "qb_name": "Angel Flores",
@@ -2802,7 +2560,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 127
+      "rank": 116
     },
     {
       "team": "BGSU",
@@ -2824,7 +2582,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 128
+      "rank": 117
     },
     {
       "team": "SHSU",
@@ -2846,7 +2604,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 129
+      "rank": 118
     },
     {
       "team": "GAST",
@@ -2868,7 +2626,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 130
+      "rank": 119
     },
     {
       "team": "CCU",
@@ -2890,7 +2648,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 131
+      "rank": 120
     },
     {
       "team": "APP",
@@ -2912,7 +2670,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 132
+      "rank": 121
     },
     {
       "team": "CHAR",
@@ -2934,7 +2692,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 133
+      "rank": 122
     },
     {
       "team": "MASS",
@@ -2956,7 +2714,7 @@
         "home": false,
         "neutral_site": false
       },
-      "rank": 134
+      "rank": 123
     },
     {
       "team": "RICE",
@@ -2978,7 +2736,7 @@
         "home": true,
         "neutral_site": false
       },
-      "rank": 135
+      "rank": 124
     },
     {
       "team": "BALL",
@@ -2997,6 +2755,248 @@
       "next": {
         "week": 1,
         "opponent": "OSU",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 125
+    },
+    {
+      "team": "ARST",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "MEM",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 126
+    },
+    {
+      "team": "CSU",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "WYO",
+        "home": true,
+        "neutral_site": false
+      },
+      "rank": 127
+    },
+    {
+      "team": "ECU",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "ALA",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 128
+    },
+    {
+      "team": "JVST",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 0,
+        "opponent": "FCS:NDSU",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 129
+    },
+    {
+      "team": "MIZZ",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "FCS:UAPB",
+        "home": true,
+        "neutral_site": false
+      },
+      "rank": 130
+    },
+    {
+      "team": "NEV",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "WKU",
+        "home": true,
+        "neutral_site": false
+      },
+      "rank": 131
+    },
+    {
+      "team": "ODU",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "FCS:NORF",
+        "home": true,
+        "neutral_site": false
+      },
+      "rank": 132
+    },
+    {
+      "team": "TOL",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "MSU",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 133
+    },
+    {
+      "team": "UAB",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "ILL",
+        "home": false,
+        "neutral_site": false
+      },
+      "rank": 134
+    },
+    {
+      "team": "UNM",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "CMU",
+        "home": true,
+        "neutral_site": false
+      },
+      "rank": 135
+    },
+    {
+      "team": "UNT",
+      "conference": "Independent",
+      "offense_index": null,
+      "defense_index": null,
+      "power_index": null,
+      "early_season_uncertainty": null,
+      "qb_class": null,
+      "qb_name": null,
+      "open_qb": false,
+      "efficiency_source": null,
+      "efficiency_fill": "sp_plus_or_packaged",
+      "off_eff": null,
+      "def_eff": null,
+      "next": {
+        "week": 1,
+        "opponent": "IU",
         "home": false,
         "neutral_site": false
       },
