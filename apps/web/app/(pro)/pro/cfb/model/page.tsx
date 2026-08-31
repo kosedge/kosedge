@@ -22,7 +22,7 @@ const TOOLS = [
     body: "Any FBS matchup or Week 0–2 slate row — research-fair spread, total, WP, team totals, σ, and drivers.",
   },
   {
-    href: "/pro/cfb/slate",
+    href: "/pro/cfb/slate?week=1",
     title: "Official slate",
     body: "KosEdge W0/W1 artifact — ESPN primary, Odds API fact-check. Open a row in Project Game.",
   },

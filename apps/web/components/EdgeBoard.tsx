@@ -1050,20 +1050,28 @@ export function flatRowsToLegacy(
           }
         : EMPTY_PAIR;
 
-    const tagLine = edgeToTag(
+    const tagLineRaw = edgeToTag(
       edgeLineNum,
       "line",
       sportKey,
       lineRow?.seasonType ?? totalRow?.seasonType,
       lineRow?.publishTag,
     );
-    const tagOU = edgeToTag(
+    const tagOURaw = edgeToTag(
       edgeOUNum,
       "total",
       sportKey,
       totalRow?.seasonType ?? lineRow?.seasonType,
       totalRow?.publishTag,
     );
+    // CFB Week 0 is the close tape — finals stay visible, never PLAY/LEAN.
+    const rowWeek = Number(lineRow?.week ?? totalRow?.week);
+    const cfbFinalTape =
+      String(sportKey).toLowerCase() === "cfb" && rowWeek === 0;
+    const tagLine = cfbFinalTape ? ("PASS" as Tag) : tagLineRaw;
+    const tagOU = cfbFinalTape ? ("PASS" as Tag) : tagOURaw;
+    const playLineOut = cfbFinalTape ? undefined : playLine;
+    const playOUOut = cfbFinalTape ? undefined : playOU;
 
     const src = (lineRow ?? totalRow) as FlatEdgeBoardRow | undefined;
     const srcSpread = entry.spread as FlatEdgeBoardRow | undefined;
@@ -1208,8 +1216,8 @@ export function flatRowsToLegacy(
       edgeOUNum,
       edgeLineFavor,
       edgeOUFavor,
-      playLine,
-      playOU,
+      playLine: playLineOut,
+      playOU: playOUOut,
       edgeOUCaution: isNflTotalCaution(edgeOUNum, sportKey),
       tagLine,
       tagOU,
