@@ -2,15 +2,15 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** The defending division champion carries a first-place schedule and a regression price  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (+110 / -130)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **7.5** (+115 / -136)
 **Sources (beat desk):** Joseph Person (The Athletic); Sheena Quick (FOX Sports/local); Darin Gantt (Panthers.com); Riley Nash (Kos Edge market desk)
 
 Carolina’s banner says division champion. Its underlying profile says the market should keep asking questions.
 
-The Panthers went 8-9, allowed 69 more points than they scored and took the NFC South through a three-way tiebreaker. DraftKings opened them at 6.5 and the August board now asks **7.5**, with bettors offered +110 on the Over and charged -130 on the Under. Kos Edge lands at **6.46 expected wins**. The model points down, but the price makes the decision less aggressive than the projection: **Pass**.
+The Panthers went 8-9, allowed 69 more points than they scored and took the NFC South through a three-way tiebreaker. DraftKings opened them at 6.5 and the Aug. 31 SI stamp asks **7.5**, with bettors offered **+115** on the Over and charged **-136** on the Under. Kos Edge lands at **6.46 expected wins**. The model points down, but the price makes the decision less aggressive than the projection: **Pass**.
 
 ## A backfield answer with a usage warning
 
@@ -38,7 +38,7 @@ Jaelan Phillips and Devin Lloyd raise the talent level in the front seven. Phill
 
 The problem is what disappeared around them. Nic Scourton tore his ACL early in camp and will miss the season. He was expected to start opposite Phillips after a promising rookie year. Carolina now needs D.J. Jones and Princely Umanmielen to absorb a larger edge rotation. Brazzell’s injury hurts receiving depth; Scourton’s changes the defense’s weekly pressure plan.
 
-That distinction matters against **Under 7.5 at -130**. The model’s 6.46 creates a 1.04-win gap, and Carolina’s minus-69 differential supports regression. But -130 demands a healthy hit rate, while Young’s development and the defensive additions provide a real path back to eight. The Under is the only side worth monitoring. It is not priced well enough to recommend today.
+That distinction matters against **Under 7.5 at -136**. The model’s 6.46 creates a 1.04-win gap, and Carolina’s minus-69 differential supports regression. But **-136** demands a healthy hit rate, while Young’s development and the defensive additions provide a real path back to eight. The Under is the only side worth monitoring. It is not priced well enough to recommend today.
 
 ## The calendar removes last year’s margin
 
@@ -52,13 +52,13 @@ Schedule sequencing also complicates the backfield. An early bye can help Hubbar
 
 ## Why the final answer is Pass
 
-Kos Edge fair is **6.46**, below the market by slightly more than a win. The team’s point differential, schedule and camp attrition all agree with the Under direction. The market has already extracted payment, however: Under bettors must lay **-130**, while the Over receives plus money.
+Kos Edge fair is **6.46**, below the market by slightly more than a win. The team’s point differential, schedule and camp attrition all agree with the Under direction. The market has already extracted payment, however: Under bettors must lay **-136**, while the Over receives plus money.
 
 Threshold discipline requires more than choosing the same direction as the model. At a better Under price, the regression case would deserve another look. At the current price, the cost collides with meaningful offensive upside. Passing is not indecision; it is refusing to buy a correct argument at the wrong number.
 
 ## Betting Guide
 
-- **Win total:** **Pass** at 7.5. Under is the model direction, but -130 is too expensive given Carolina’s offensive growth path.
+- **Win total:** **Pass** at 7.5. Under is the model direction, but **-136** is too expensive given Carolina’s offensive growth path.
 - **Price watch:** Revisit only if Under juice moves materially toward even money; do not chase a move after another injury headline.
 - **Backfield:** Treat Hubbard and Brooks as a committee until Canales shows otherwise. Hubbard’s expected Week 1 return does not restore feature-back assumptions.
 - **Schedule:** The early Chicago game matters, but the first-place slate and long post-bye run are the larger season variables.
@@ -66,7 +66,7 @@ Threshold discipline requires more than choosing the same direction as the model
 
 **Handicapper’s Note**  
 Fair number: **6.46** (Kos Edge Model)  
-Market number: **7.5** (DK / RotoWire, +110 Over / -130 Under)  
+Market number: **7.5** (+115 / -136)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: The model and regression case point Under, but expensive juice collides with a plausible Year 4 jump from Young.

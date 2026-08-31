@@ -1,16 +1,16 @@
 # Tennessee Titans 2026 Season Preview
 
-**By Drew Kessler** · Kos Edge Analytics · AFC South desk  
+**By Taylor Brooks** · Kos Edge Analytics · AFC South desk  
 **Angle:** A friendlier schedule creates a Year 2 runway for Cam Ward, but 6.5 already charges for the improvement  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **6.5** (O -110 / U -110)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **6.5** (O -105 / U -115)
 **Sources (beat desk):** Turron Davenport (ESPN); Jim Wyatt (Titans.com); Terry McCormick (TitanInsider)
 
 Tennessee’s 6.5 asks for seven wins from a franchise coming off consecutive 3-14 seasons. That sounds aggressive until the schedule and offensive investment enter the picture. It still is not an automatic Under.
 
-The Kos Edge simulation lands at **5.88 expected wins**, 0.62 below market. DraftKings opened Tennessee at 6.5 in February and has held the number through August, now dealing both sides at -110. The Model points down, but the gap is only modestly beyond the desk’s half-win threshold. At -110, an Under bettor needs to win 52.4% of the time before hold. Cam Ward’s second-year range and a fourth-place schedule are wide enough to keep that price from qualifying.
+The Kos Edge simulation lands at **5.88 expected wins**, 0.62 below market. DraftKings opened Tennessee at 6.5 in February and has held the number through August; the Aug. 31 SI stamp is **O -105 / U -115**. The Model points down, but the gap is only modestly beyond the desk’s half-win threshold. At -115, an Under bettor needs about a 53.5% win rate before hold. Cam Ward’s second-year range and a fourth-place schedule are wide enough to keep that price from qualifying.
 
 This is a **Pass**. Tennessee can improve substantially and still finish 6-11. It can also convert a few soft games, get an ordinary Year 2 step from Ward and reach seven without becoming a playoff team. Neither outcome is mispriced enough at the current number.
 
@@ -54,7 +54,7 @@ A plausible Over route starts 2-1, splits the six division games and finds two m
 
 ## Betting Guide
 
-- **Win total 6.5 (O -110 / U -110):** Pass. Model fair is 5.88, but a 0.62-win gap does not adequately pay for Ward’s upside and the fourth-place schedule.
+- **Win total 6.5 (O -105 / U -115):** Pass. Model fair is 5.88, but a 0.62-win gap does not adequately pay for Ward’s upside and the fourth-place schedule.
 - **Early sides:** Do not price the Titans as a stable favorite until Ward and the interior line show repeatable third-down operation. Their underdog value may be more useful.
 - **Usage watch:** Robinson’s high-volume camp role looks real; Tate’s route depth is the complementary variable. Both can produce even if the team finishes below seven wins.
 - **Line watch:** Schlottmann and Carmona need continuity beside Skoronski and Latham. Protection is the cleanest signal for revisiting the total.
@@ -62,9 +62,9 @@ A plausible Over route starts 2-1, splits the six division games and finds two m
 
 **Handicapper’s Note**  
 Fair number: **5.88**  
-Market number: **6.5** (O -110 / U -110)  
+Market number: **6.5** (O -105 / U -115)
 Lean: **Pass**  
-Confidence: **1/5**  
+Confidence: **3/5**  
 Key risk: The Model leans Under, but a modest Ward leap and a fourth-place schedule can produce seven wins without Tennessee becoming materially stronger than expected.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

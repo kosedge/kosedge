@@ -2,15 +2,15 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** Tampa Bay owns the division’s clearest floor, and the market charges full price for it  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (-125 / +105)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **8.5** (+115 / -136)
 **Sources (beat desk):** Jenna Laine (ESPN); Greg Auman (FOX Sports); Rick Stroud (Tampa Bay Times); Buccaneers.com staff; Riley Nash (Kos Edge market desk)
 
 Tampa Bay has the NFC South’s safest quarterback situation and its highest win total. Both are reasonable. Neither creates an edge.
 
-Kos Edge projects **8.37 wins** against a market of **8.5**. A difference of **0.13 wins** is a Pass before price enters the discussion. DraftKings/RotoWire asks **-125** for the Over and offers **+105** on the Under, but plus money does not turn a near-zero projection gap into a recommendation. The Buccaneers are the division’s clearest example of a fair market.
+Kos Edge projects **8.37 wins** against a market of **8.5**. A difference of **0.13 wins** is a Pass before price enters the discussion. The Aug. 31 SI stamp asks **+115** for the Over and **-136** on the Under; juice flipped from the prior -125/+105 board, and neither side turns a near-zero projection gap into a recommendation. The Buccaneers are the division’s clearest example of a fair market.
 
 ## The veteran core is healthier and quieter
 
@@ -62,21 +62,21 @@ The opening month can stabilize the new offense if Tampa Bay handles its home ga
 
 ## Why neither side clears
 
-Over bettors are paying -125 for Mayfield’s floor, improved health and organizational continuity. Under bettors receive +105 but must fade the division’s most stable quarterback and a roster that has already resolved the Vea issue. Those are coherent opinions, not edges.
+Over bettors are paying **+115** for Mayfield’s floor, improved health and organizational continuity on the Aug. 31 SI stamp. Under bettors must lay **-136** to fade the division’s most stable quarterback and a roster that has already resolved the Vea issue. Those are coherent opinions, not edges.
 
-Different August market snapshots have shown meaningful juice movement around 8.5, so the live price should be confirmed before any decision. The August 26 Kos Edge board is **Over -125 / Under +105**. At that price, the recommendation remains Pass. A move to 7.5 or a model change of at least half a win would require a fresh handicap.
+Juice around 8.5 has moved through August; stamp the SI board and do not chase. At **+115 / -136**, the recommendation remains Pass. A move to 7.5 or a model change of at least half a win would require a fresh handicap.
 
 ## Betting Guide
 
 - **Win total:** **Pass** at 8.5. Model 8.37 is only 0.13 below market.
-- **Price discipline:** Do not turn Under +105 into a lean without more separation; plus money alone is not value.
+- **Price discipline:** Do not turn Under **-136** into a lean without more separation; juice alone is not value.
 - **Health watch:** Wirfs and Vea returned to team work August 25, a material positive that removes part of the earlier downside case.
 - **Offense watch:** Evaluate how Robinson replaces Evans’ boundary and red-zone role, not which receiver wins one joint-practice period.
 - **Defense watch:** Organic pressure and third-down coverage will determine whether Tampa Bay turns an eight-win floor into a nine-win season.
 
 **Handicapper’s Note**  
 Fair number: **8.37** (Kos Edge Model)  
-Market number: **8.5** (DK / RotoWire, -125 Over / +105 Under)  
+Market number: **8.5** (+115 / -136)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: The model sits essentially on the market, while improved line health offsets transition risk after Evans and David.

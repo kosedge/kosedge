@@ -2,17 +2,17 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** An improved defense cannot hide an offense trying to get healthy while learning a new system  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **5.5** (-120 / +100)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **5.5** (-120 / +100)
 **Sources (beat desk):** Rich Cimini (ESPN); Zack Rosenblatt (The Athletic); Brian Costello (New York Post); New York Jets communications
 
 The Jets do not need to become good to beat this total. They need six wins after finishing 3–14, and the roster is plainly more talented than the group that limped through the end of 2025. Geno Smith offers competence at quarterback. Breece Hall and Garrett Wilson remain high-level skill players. Aaron Glenn has added speed and experience to a defense he will call himself.
 
 The price still leans the other way. The Kos Edge Model projects **4.73 wins**, a **0.77-win** gap below the **5.5** market. DraftKings is offering the Under at **+100**, so there is no vig penalty hiding the edge. Late-camp injuries have also concentrated around the players New York most needs to make Frank Reich’s new offense functional.
 
-That earns a **soft Under**, not a strong position. The Jets have improved enough to make six or seven wins credible, and several injured starters are expected back for Week 1. At even money, however, the Model gap and the difficult schedule clear the desk’s initial threshold.
+That is directional only — the Aug. 31 stamp is **Pass**, not a soft Under. The Jets have improved enough to make six or seven wins credible, and several injured starters are expected back for Week 1. The Model gap and schedule still matter; they do not clear a ticket at this price.
 
 ## The offense has talent but very little margin
 
@@ -54,7 +54,7 @@ After the bye, the Jets face Denver, visit Arizona and close with New England, M
 
 ## Betting Guide
 
-- **Win total — 5.5:** Soft Under at **+100**. The Model’s **4.73** fair creates a 0.77-win edge, supported by offensive health concerns and a late bye.
+- **Win total — 5.5:** **Pass.** The Model’s **4.73** fair creates a 0.77-win edge, but the Aug. 31 stamp does not clear a soft Under.
 - **Confidence stays low:** Smith, Hall and Sadiq are all expected to be available for Week 1, and the defense has enough new talent to outperform last year quickly.
 - **Key checkpoint:** Watch Hall’s full-team workload and Smith’s ankle during opener preparation. Availability alone is not the same as normal usage.
 - **Schedule pivot:** Weeks 5–8 determine the Over path. The Jets need to win the home opportunities before Kansas City, Buffalo and the Chargers.
@@ -63,8 +63,8 @@ After the bye, the Jets face Denver, visit Arizona and close with New England, M
 **Handicapper’s Note**  
 Fair number: **4.73**  
 Market number: **5.5**  
-Lean: **Soft Under 5.5 (+100)**  
-Confidence: **2/5**  
+Lean: **Pass**  
+Confidence: **3/5**  
 Key risk: Smith, Hall and Sadiq could all be ready for Week 1, allowing the improved defense and favorable October home stretch to produce six wins.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

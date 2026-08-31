@@ -1,14 +1,14 @@
 # Indianapolis Colts 2026 Season Preview
 
-**By Drew Kessler** · Kos Edge Analytics · AFC South desk  
+**By Taylor Brooks** · Kos Edge Analytics · AFC South desk  
 **Angle:** A healthy-looking Daniel Jones and a 10.29-win Model still cannot reconcile a market priced at 7.5  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (O -130 / U +110)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **7.5** (O -140 / U +115)
 **Sources (beat desk):** Stephen Holder (ESPN); Joel A. Erickson (Indianapolis Star); Mike Chappell (FOX59)
 
-Indianapolis presents the largest Model-to-market disagreement in the AFC South. The Kos Edge simulation makes the Colts a **10.29-win** team. DraftKings asks whether they can reach eight, and charges **-130** on the Over. A 2.79-win gap usually demands attention. Here it demands restraint.
+Indianapolis presents the largest Model-to-market disagreement in the AFC South. The Kos Edge simulation makes the Colts a **10.29-win** team. DraftKings asks whether they can reach eight, and the Aug. 31 SI stamp charges **-140** on the Over (**+115** Under). Show both the Model and the street — do not average. A 2.79-win gap usually demands attention. Here it demands restraint.
 
 The market opened Indianapolis at 8.5 in February and moved to 7.5 after the schedule release. It did not move back after Daniel Jones returned to full team work. That is important context. The current price is not simply a stale number waiting for confirmation that Jones can take a snap. It already makes the Over bettor pay a 56.5% raw break-even price for a team with a demanding opening month, an unsettled backup quarterback job and two primary targets still working through August injuries.
 
@@ -48,13 +48,13 @@ The Over path is visible: Jones remains available, Taylor controls neutral scrip
 
 ## A large edge can still be unusable
 
-The Model fair is **10.29**. The market is **7.5**, with the Over priced at -130. Those numbers should not be blended into an invented middle fair. Camp reporting has improved the medical view on Jones, but it has not explained a 2.79-win disagreement with a market that already moved down one full win.
+The Model fair is **10.29**. The market is **7.5**, with the Over priced at **-140**. Those numbers should not be blended into an invented middle fair. Camp reporting has improved the medical view on Jones, but it has not explained a 2.79-win disagreement with a market that already moved down one full win. Shrader as named kicker is special teams, not a number rewrite.
 
 Expected wins also do not tell us how much of the simulation distribution depends on uninterrupted quarterback availability. Without that reconciliation, calling Over 7.5 would convert model confidence into betting confidence without earning the step. The correct position is **Pass**, not a forced Over and not an injury-based Under.
 
 ## Betting Guide
 
-- **Win total 7.5 (O -130 / U +110):** Pass. Model fair is 10.29, but the disagreement with the market is too large and too quarterback-dependent to treat as a conventional edge.
+- **Win total 7.5 (O -140 / U +115):** Pass. Model fair is 10.29, but the disagreement with the market is too large and too quarterback-dependent to treat as a conventional edge. Show both; do not average.
 - **Early sides:** Indianapolis may be more useful as an underdog than as a season future during the Ravens-Chiefs-Texans opening run. Jones’ movement against live pressure is the relevant evidence.
 - **Usage watch:** Taylor’s workload is stable; Pierce’s return date and route volume determine whether the passing game has its intended vertical structure.
 - **Depth watch:** Richardson versus Leonard matters more to the win total than the order suggests. Any Jones interruption gives the winner immediate leverage over the season.
@@ -62,9 +62,9 @@ Expected wins also do not tell us how much of the simulation distribution depend
 
 **Handicapper’s Note**  
 Fair number: **10.29**  
-Market number: **7.5** (O -130 / U +110)  
+Market number: **7.5** (O -140 / U +115)
 Lean: **Pass**  
-Confidence: **1/5**  
+Confidence: **4/5**  
 Key risk: The Model sits 2.79 wins above market, but Jones’ durability, weak backup results and an early travel-heavy schedule prevent a defensible Over position.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

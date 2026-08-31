@@ -2,17 +2,17 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Detroit still owns an 11-win ceiling, but the market already charges for most of it  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire live widget · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (-110 / -112)  
+**Market (DK / RotoWire live widget, Aug 31 fact-check):** Win total **10.5** (-115 / -105)
 **Sources (beat desk):** Eric Woodyard (ESPN); Dave Birkett (Detroit Free Press); Tim Twentyman (DetroitLions.com)
 
 Detroit can be a genuine NFC contender without offering value Over **10.5**. That is the useful starting point.
 
 The Lions have Jared Goff, Jahmyr Gibbs, Amon-Ra St. Brown, Jameson Williams, Aidan Hutchinson and a staff that knows what winning football looks like. They also finished 9-8 last season, are installing another offensive system and will begin this one without the center signed to stabilize a rebuilt line. The market has not missed the stars. At 10.5, it has mostly priced them.
 
-The Kos Edge model projects **10.69 expected wins**, only 0.19 above the number. Over -110 asks for more than that thin difference can support. Under -112 is no bargain either. This is contender pricing with no threshold edge: **Pass**.
+The Kos Edge model projects **10.69 expected wins**, only 0.19 above the number. Over **-115** asks for more than that thin difference can support. Under **-105** is no bargain either. This is contender pricing with no threshold edge: **Pass**.
 
 ## The center injury reaches the entire offense
 
@@ -64,14 +64,14 @@ The market says the Lions are likely to live around 10 or 11 wins. Kos Edge agre
 
 ## Betting Guide
 
-- **Season wins 10.5:** Pass at Over -110 / Under -112. A 0.19-win model edge is below threshold.
+- **Season wins 10.5:** Pass at Over -115 / Under -105. A 0.19-win model edge is below threshold.
 - **Opening weeks:** Track the starting center and protection operation more closely than preseason point totals.
 - **Defense:** Joseph and Branch returning to full work would raise the weekly floor, but their ramps do not create retroactive value at 10.5.
 - **Late season:** Detroit’s three division road games in the final four weeks make December flexibility more useful than an August position.
 
 **Handicapper’s Note**  
 Fair number: **10.69 wins**  
-Market number: **10.5** (Over -110 / Under -112)  
+Market number: **10.5** (-115 / -105)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: The center and secondary timelines widen Detroit’s range, while the 0.19-win model edge is far too thin to pay near-even juice on either side.

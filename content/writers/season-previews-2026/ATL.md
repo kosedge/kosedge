@@ -2,15 +2,15 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** A nine-win model meets a quarterback decision camp still has not made  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI (RW still 6.5) · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **6.5** (-115 / -105)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **7.5** (+120 / -140)
 **Sources (beat desk):** Marc Raimondi (ESPN); D. Orlando Ledbetter (Atlanta Journal-Constitution); Tori McElhaney (AtlantaFalcons.com); Riley Nash (Kos Edge market desk)
 
 Atlanta has the largest model-to-market gap in the NFC South and the least settled answer at the sport’s most important position. That combination is not an automatic Over. It is a reason to wait.
 
-The Kos Edge simulation puts the Falcons at **9.03 expected wins**, a full **2.53 wins above** the DraftKings/RotoWire total of **6.5**. Ordinarily, that is enough separation to demand attention. This time, current reporting and the model’s clean season-level number are describing different degrees of certainty. Michael Penix Jr. and Tua Tagovailoa are still competing. Coach Kevin Stefanski has not named a Week 1 starter. Until he does, the correct position is **Pass**.
+The Kos Edge simulation puts the Falcons at **9.03 expected wins**, **1.53 wins above** the Aug. 31 SI DraftKings stamp of **7.5** (+120 / -140). RotoWire’s live widget still shows 6.5 — a split board, not a blended fair. Ordinarily, that separation would demand attention. This time, current reporting and the model’s clean season-level number are describing different degrees of certainty. Michael Penix Jr. and Tua Tagovailoa are still competing. Coach Kevin Stefanski has not named a Week 1 starter. Until he does, the correct position is **Pass**.
 
 ## Penix is cleared; the competition is not
 
@@ -38,27 +38,27 @@ The Falcons’ opponents had a .465 winning percentage in 2025, the fourth-lowes
 
 Atlanta opens at Pittsburgh, hosts division champion Carolina, then travels to Green Bay on a short week and New Orleans on Monday night before hosting Baltimore on Sunday night. That is a severe five-game test for a new staff and a quarterback who may have received only a small number of full-team reps. Later, the Falcons face Cincinnati in Madrid and host Kansas City before their Week 11 bye.
 
-The closing structure is friendlier to a division race: Tampa Bay, New Orleans and Carolina fill the final three weeks. Six NFC South games are a major reason the 6.5 looks low. They are not free wins. Atlanta, Carolina and Tampa Bay all finished 8-9 last season, and every team in the division went 3-3 inside the South.
+The closing structure is friendlier to a division race: Tampa Bay, New Orleans and Carolina fill the final three weeks. Six NFC South games are a major reason the street still looks soft relative to the Model. They are not free wins. Atlanta, Carolina and Tampa Bay all finished 8-9 last season, and every team in the division went 3-3 inside the South.
 
-Published boards have also been inconsistent. Atlanta opened at 6.5, some August DraftKings content displayed 7.5, and the August 26 desk snapshot through RotoWire is back at **6.5 (-115 Over / -105 Under)**. That is another reason to verify the exact ticket. The conclusion here remains Pass at either number until the quarterback information improves; the price of uncertainty is simply larger at 7.5.
+Published boards remain split. Atlanta opened at 6.5, the Aug. 31 SI DraftKings stamp is **7.5 (+120 / -140)**, and RotoWire’s live widget still shows **6.5**. Stamp the assigned SI board; do not average the widget. The conclusion remains Pass until the quarterback information improves; the price of uncertainty is simply larger at 7.5.
 
 ## What would change the call
 
 Starter clarity is the first trigger. A named quarterback with multiple full-team practices, no physical setback and an offense clearly organized around his strengths would make the 9.03 model fair easier to trust. Penix does not need to dominate the preseason finale, and Tagovailoa does not need to win camp by headline. Atlanta needs a stable plan.
 
-The second trigger is pass protection and pressure generation. Pittsburgh and Green Bay can expose a new quarterback operation quickly. On defense, Smith and the remaining edge rotation must show they can survive Walker’s loss and Pearce’s suspension. If both units look functional, 6.5 may become actionable before Week 1. On August 26, it is not.
+The second trigger is pass protection and pressure generation. Pittsburgh and Green Bay can expose a new quarterback operation quickly. On defense, Smith and the remaining edge rotation must show they can survive Walker’s loss and Pearce’s suspension. If both units look functional, the street may become actionable before Week 1. On August 31, it is not.
 
 ## Betting Guide
 
-- **Win total:** **Pass** at 6.5. Model 9.03 is materially higher, but QB1 is unset and the model-to-beat conflict is unresolved.
-- **Price discipline:** Do not chase an Over solely because 6.5 looks low. Recheck the number and juice after Stefanski names the starter.
+- **Win total:** **Pass** at 7.5. Model 9.03 is materially higher, but QB1 is unset and the model-to-beat conflict is unresolved.
+- **Price discipline:** Do not chase an Over solely because the street looks low versus the Model, and do not average SI 7.5 with the RW widget 6.5. Recheck the number and juice after Stefanski names the starter.
 - **Division:** Pass. A compressed four-team race can produce a division winner without producing nine wins.
 - **Early-season filter:** Treat the Pittsburgh-to-Baltimore opening stretch as a stress test for quarterback timing and the depleted edge room.
 - **Information to watch:** Penix’s response to consecutive 11-on-11 days, the preseason-finale rep plan and whether Atlanta commits first-team volume to one quarterback.
 
 **Handicapper’s Note**  
 Fair number: **9.03** (Kos Edge Model)  
-Market number: **6.5** (DK / RotoWire, -115 Over / -105 Under)  
+Market number: **7.5** (+120 / -140)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: A large model edge is not actionable while Penix and Tagovailoa remain in an unresolved, health-shaped Week 1 competition.

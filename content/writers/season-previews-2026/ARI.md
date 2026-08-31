@@ -2,10 +2,10 @@
 
 **By Morgan Hale** · Kos Edge Analytics · NFC West desk  
 **Angle:** A two-win model gap meets a basement total and an unfinished depth chart  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **4.5** (Over +125 / Under -150)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **4.5** (Over +125 / Under -150)
 **Sources (beat desk):** Josh Weinfuss (ESPN); Bo Brack (PHNX Sports); Darren Urban (AZCardinals.com)
 
 Arizona has the largest positive Model-to-market gap in the NFC West and the least stable case for turning that gap into a bet. The Kos Edge simulation puts the Cardinals at **6.55 expected wins**. DraftKings asks whether they can reach five. Ordinarily, a 2.05-win difference would start an Over discussion. Here it starts a model-audit discussion.
@@ -57,7 +57,7 @@ That profile may produce useful weekly underdog prices. It does not require a pr
 **Handicapper’s Note**  
 Fair number: **6.55**  
 Market number: **4.5**  
-Lean: **Pass — Model↔market basement conflict**  
+Lean: **Pass**  
 Confidence: 1/5  
 Key risk: The simulation may be correctly identifying Brissett’s stabilizing effect, but Arizona’s injured depth and six difficult division games can keep improvement from becoming five wins.
 

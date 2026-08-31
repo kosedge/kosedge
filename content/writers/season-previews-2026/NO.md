@@ -2,15 +2,15 @@
 
 **By Avery Cole** · Kos Edge Analytics · NFC South desk  
 **Angle:** The schedule and a settled quarterback support the model, but camp attrition caps conviction  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-120 / +100)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **7.5** (-120 / +100)
 **Sources (beat desk):** Katherine Terrell (ESPN); Mike Triplett (NewOrleans.Football); Nick Underhill (New Orleans local); Luke Johnson (The Times-Picayune/NOLA.com); Riley Nash (Kos Edge market desk)
 
 New Orleans is the one NFC South team whose model edge, quarterback plan and schedule point in the same direction. The injury report is the reason the conclusion stays soft.
 
-Kos Edge projects **8.96 wins**, giving the Saints a **1.46-win cushion** over the market total of **7.5**. DraftKings opened this Over near even money and the August 26 board charges **-120**, so part of the case has already been purchased by the market. At -120 or better, the remaining separation supports a **soft Over**. If the price gets worse, Pass.
+Kos Edge projects **8.96 wins**, giving the Saints a **1.46-win cushion** over the market total of **7.5**. DraftKings opened this Over near even money and the Aug. 31 SI stamp still charges **-120**. Show both the Model cushion and the taxed price — do not mint a dressed Over. The Aug. 31 stamp is **Pass**.
 
 ## Shough gives New Orleans a cleaner starting point
 
@@ -58,7 +58,7 @@ At **Over 7.5 (-120)**, Kos Edge still has enough model room to issue a soft lea
 
 ## Betting Guide
 
-- **Win total:** Soft **Over 7.5** at **-120 or better**. Pass if the price moves beyond -125 or the total rises to 8.5.
+- **Win total:** **Pass** at 7.5 (**-120 / +100**). Show the Model cushion and the taxed Over price together; no fake Over.
 - **Confidence control:** Keep conviction at 2/5 because Bresee is out for the season and Kamara and Tyson may miss the opening stretch.
 - **Schedule:** Do not overreact to road games at Detroit and Baltimore; judge the ticket against the full, favorable slate.
 - **Offense watch:** Shough’s pressure response matters more than clean-practice completion rates. Etienne’s lead role is established while Kamara recovers.
@@ -66,9 +66,9 @@ At **Over 7.5 (-120)**, Kos Edge still has enough model room to issue a soft lea
 
 **Handicapper’s Note**  
 Fair number: **8.96** (Kos Edge Model)  
-Market number: **7.5** (DK / RotoWire, -120 Over / +100 Under)  
-Lean: **Soft Over 7.5 at -120 or better**  
-Confidence: **2/5**  
+Market number: **7.5** (-120 / +100)
+Lean: **Pass**  
+Confidence: **1/5**  
 Key risk: A broad injury cluster, led by Bresee’s ACL and early absences for Kamara and Tyson, can overwhelm the schedule advantage.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

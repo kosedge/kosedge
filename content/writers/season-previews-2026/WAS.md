@@ -1,11 +1,11 @@
 # Washington Commanders 2026 Season Preview
 
-**By Jordan Vale** · Kos Edge Analytics · NFC East desk  
+**By Avery Cole** · Kos Edge Analytics · NFC East desk  
 **Angle:** Jayden Daniels supplies the ceiling, but an injury cluster in both lines makes 7.5 difficult to trust  
-**Date:** August 26, 2026
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **7.5** (-120 / +100)
+**Market (DK / SI, Aug 31 fact-check):** Win total **7.5** (-105 / -115)
 **Sources (beat desk):** John Keim (ESPN); Ben Standig (The Athletic / Last Man Standig); Washington Commanders schedule desk
 
 Washington's win total is a bet on recovery. Its camp has made recovery harder.
@@ -54,15 +54,15 @@ The season does not require Washington to dominate the opening block. It does re
 
 ## Market math and price discipline
 
-DraftKings opened Washington at **7.5** with both sides **-110**. The number held, but the Aug. 26 DK/RotoWire board moved the Over to **-120** and the Under to **+100**. The market has charged more for a rebound even as camp damaged two position groups.
+DraftKings opened Washington at **7.5** with both sides **-110**. The Aug. 31 SI stamp keeps **7.5** at **-105 / -115**. The Under is no longer even money, and camp has damaged two position groups.
 
-Kos Edge's **6.31** fair creates enough directional space to examine the Under, and the even-money price avoids the tax attached to Dallas or Philadelphia's low sides. The injury cluster supports the Model rather than contradicting it. That earns a small Under lean.
+Kos Edge's **6.31** fair still points Under, but the Aug. 31 SI Under at **-115** is juiced enough to kill the prior even-money lean. The injury cluster supports the Model direction without clearing the price. That is a **Pass**.
 
-It does not earn aggressive confidence. A healthy Daniels can outperform a mean projection, Tunsil may return late, and several lesser injuries could resolve before Week 1. If the Under moves off even money into meaningful juice, the value narrows and the proper answer becomes Pass.
+A healthy Daniels can still outperform a mean projection, and several lesser injuries could resolve before Week 1. The board already moved off the soft Under price that briefly cleared the desk.
 
 ## Betting Guide
 
-- **Win total 7.5:** **Small Under at +100; Pass if the Under becomes meaningfully juiced.** Model fair is **6.31**.
+- **Win total 7.5:** **Pass.** Model fair is **6.31**, but Under **-115** is no longer the even-money price that briefly cleared.
 - **Offensive-line checkpoint:** Tunsil is a long-term loss; Allegretti's calf and the center rotation determine whether Washington can protect Daniels without redesigning the offense.
 - **Health checkpoint:** White is managing a hamstring, Mariota is out for the rest of the preseason with an MCL sprain, and Newton is out for significant time after pectoral surgery.
 - **Schedule watch:** Philadelphia-Dallas-Seattle-London-New York-San Francisco is a demanding first six before an early bye.
@@ -71,8 +71,8 @@ It does not earn aggressive confidence. A healthy Daniels can outperform a mean 
 **Handicapper’s Note**  
 Fair number: **6.31**  
 Market number: **7.5**  
-Lean: **Soft Under 7.5 at +100 / Pass if price worsens**  
-Confidence: **2/5**  
+Lean: **Pass**  
+Confidence: **1/5**  
 Key risk: A healthy Daniels can erase protection mistakes, and Tunsil or other injured starters could return soon enough to lift Washington above the Model mean.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

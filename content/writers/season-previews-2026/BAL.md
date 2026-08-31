@@ -2,10 +2,10 @@
 
 **By Reese Quinn** · Kos Edge Analytics · AFC North desk  
 **Angle:** Baltimore is priced for a complete rebound while its offensive spine is still being rebuilt  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **11.5** (+115 / -140)  
+**Market (DK / RotoWire, Aug 31 fact-check):** Win total **11.5** (+115 / -140)
 **Sources (beat desk):** Jamison Hensley (ESPN); Jeff Zrebiec (The Athletic); Jonas Shaffer (The Baltimore Banner); Ryan Mink (BaltimoreRavens.com); Luke Jones (WNST)
 
 Baltimore does not need to prove it can contend. The Ravens need to prove that the market has not charged twice for the same comeback. DraftKings opened them at **10.5** in February and now lists **11.5**, the highest tier on the board, even after an 8-9 season and a complete change at the top of the coaching staff. Healthy-Lamar optimism is no longer an insight. It is the price.
@@ -62,7 +62,7 @@ Those inputs do not justify pretending the 2.52-win gap is clean value. They sho
 
 **Handicapper’s Note**  
 Fair number: **8.98** (Model SoT nfl-preseason-sim-2026-20260822T013711Z)  
-Market number: **11.5** (DK / RotoWire Aug 2026)  
+Market number: **11.5** (+115 / -140)
 Lean: **Pass**  
 Confidence: 1/5  
 Key risk: The Model is 2.52 wins below a market pricing a healthy Jackson and a fast staff transition; the unresolved conflict is larger than the actionable edge.

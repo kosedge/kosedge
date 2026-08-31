@@ -2,10 +2,10 @@
 
 **By Casey Voss** · Kos Edge Analytics · NFC North desk  
 **Angle:** Murray has the job, but 8.5 already reflects a competent quarterback outcome  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via RotoWire live widget · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **8.5** (-110 / -110)  
+**Market (DK / RotoWire live widget, Aug 31 fact-check):** Win total **8.5** (-120 / +100)
 **Sources (beat desk):** Kevin Seifert (ESPN); Andrew Krammer (Minnesota Star Tribune); Vikings.com
 
 The quarterback competition is over. The betting decision is not.
@@ -68,14 +68,14 @@ Calling the Under because 8.38 is below 8.5 would be false precision. Calling th
 
 ## Betting Guide
 
-- **Season wins 8.5:** Pass at -110 either way. Fair and market differ by only 0.12 wins.
+- **Season wins 8.5:** Pass at Over -120 / Under +100. Fair and market differ by only 0.12 wins.
 - **Quarterback watch:** Judge Murray on timing, turnover avoidance and command against Green Bay and Chicago; do not treat camp completion rates as a forecast.
 - **Depth watch:** McCarthy’s full-practice return and the safety rotation after Adams are floor variables, not standalone bets.
 - **Schedule:** The Weeks 8-11 travel block is a better place to reassess Minnesota than the preseason board.
 
 **Handicapper’s Note**  
 Fair number: **8.38 wins**  
-Market number: **8.5** (Over -110 / Under -110)  
+Market number: **8.5** (-120 / +100)
 Lean: **Pass**  
 Confidence: **1/5**  
 Key risk: Murray improves the offensive ceiling while quarterback depth and Adams’ season-ending injury widen the downside, leaving a 0.12-win gap with no actionable side.

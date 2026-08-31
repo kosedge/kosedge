@@ -1,11 +1,11 @@
 # Philadelphia Eagles 2026 Season Preview
 
-**By Jordan Vale** · Kos Edge Analytics · NFC East desk  
+**By Avery Cole** · Kos Edge Analytics · NFC East desk  
 **Angle:** Philadelphia remains the class of the East, but 10.5 is already a contender number and the Model edge is only 0.15 win  
-**Date:** August 26, 2026
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (+105 / -125)
+**Market (DK / SI, Aug 31 fact-check):** Win total **10.5** (+115 / -148)
 **Sources (beat desk):** Tim McManus (ESPN); Jeff McLane (Philadelphia Inquirer); Jimmy Kempski (PhillyVoice); Philadelphia Eagles schedule desk
 
 Philadelphia can be the best team in the NFC East and still offer no value at **10.5**.
@@ -40,7 +40,7 @@ Vic Fangio's unit enters its third year in the system, a meaningful contrast wit
 
 The Aug. 24 practice reflected that advantage. The defensive line generated repeated pressure, with Ojomo and Hunt among the standouts. Practice sacks are not a forecast by themselves, especially against an offense installing new protections. They do show why Philadelphia can survive uneven offensive stretches.
 
-That is the strongest Over argument. The Eagles do not need Mannion's system to be fully mature in September if the defense controls field position and the run game remains efficient. It is also why the Under at **-125** has little appeal. Betting against Philadelphia requires paying tax while fading the most stable unit on the roster.
+That is the strongest Over argument. The Eagles do not need Mannion's system to be fully mature in September if the defense controls field position and the run game remains efficient. It is also why the Under at **-148** has no appeal. Never dress an Under at that juice against the division’s deepest roster.
 
 ## Schedule relief comes with compression
 
@@ -52,16 +52,16 @@ The division is Philadelphia's stabilizer. Kos Edge gives the Eagles a **74.26%*
 
 ## Market math
 
-DraftKings opened Philadelphia at **10.5** in February with the same **+105 / -125** split carried on the Aug. 26 DK/RotoWire fact-check. Unlike Dallas, the headline number has not made a dramatic trip. The market started with the Eagles in contender territory and left them there.
+DraftKings opened Philadelphia at **10.5** in February. The Aug. 31 SI stamp keeps the number and now posts **+115 / -148**. Unlike Dallas, the headline total has not made a dramatic trip; the Under juice has. The market started with the Eagles in contender territory and left them there.
 
 The Kos Edge mean of **10.35** comes with a seven-to-14-win 10th-to-90th percentile band. Eleven wins is plainly reachable. So are the ordinary outcomes in which a new offense drops a close game, the line misses a starter, or a compressed stretch turns one favorite into a loss.
 
-The number is efficient. Taking Over requires Philadelphia to reach 11, and taking Under requires laying **-125** against the division's deepest roster. Neither side clears the threshold.
+The number is efficient. Taking Over requires Philadelphia to reach 11, and taking Under requires laying **-148** against the division's deepest roster. Neither side clears the threshold — and **-148** is never a dressed Under.
 
 ## Betting Guide
 
 - **Win total 10.5:** **Pass.** Model **10.35** and market 10.5 are effectively aligned.
-- **Do not dress up the Under:** The 0.15-win gap is too thin, especially at **-125**.
+- **Do not dress up the Under:** The 0.15-win gap is too thin, and **-148** is never a dressed Under.
 - **Offensive checkpoint:** Watch under-center early-down efficiency, not preseason aesthetics. Mannion's system must create easier throws without reducing what Hurts already does well.
 - **Depth checkpoint:** Bell, Lampkin, and Ojukwu matter because the starter-quality line needs a credible second layer over 17 games.
 - **Schedule watch:** London and the late Saturday-to-Thursday turnaround are more actionable than broad “easy schedule” labels.

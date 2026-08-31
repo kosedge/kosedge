@@ -2,10 +2,10 @@
 
 **By Taylor Brooks** · Kos Edge Analytics · AFC East desk  
 **Angle:** Allen keeps the ceiling high, but 10.5 leaves no room to ignore a bruised supporting cast  
-**Date:** August 26, 2026  
-**Market fact-check:** August 26, 2026 · DraftKings via RotoWire · Editor Riley Nash  
+**Date:** August 31, 2026
+**Market fact-check:** August 31, 2026 · DraftKings via SI · Editor Riley Nash
 **Model SoT:** nfl-preseason-sim-2026-20260822T013711Z (N=100000) expected_wins  
-**Market (DK / RotoWire, Aug 2026 fact-check):** Win total **10.5** (-120 / +100)  
+**Market (DK / SI, Aug 31 fact-check):** Win total **10.5** (-120 / +100)
 **Sources (beat desk):** Alaina Getzenberg (ESPN); Joe Buscaglia (The Athletic); Matt Parrino (Syracuse.com); Sal Maiorana (Democrat & Chronicle); Buffalo Bills communications
 
 Buffalo can be the best team in the AFC East and still fail to clear this number. That is the useful distinction at **10.5**, where the market asks for 11 wins and charges **-120** to take the Over. Josh Allen remains the division’s strongest weekly advantage, but the Kos Edge Model lands at **10.26 expected wins**. A quarter-win gap to the Under is not an edge. It is a reminder that admiration for the quarterback and value on the season total are separate questions.
@@ -54,7 +54,7 @@ The schedule’s shape matters as much as its opponent list. A short week before
 Fair number: **10.26**  
 Market number: **10.5**  
 Lean: **Pass**  
-Confidence: **1/5**  
+Confidence: **4/5**  
 Key risk: Allen can lift an unsettled supporting cast above the Model median, but the current injury cluster and demanding schedule leave no reason to pay Over juice.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
