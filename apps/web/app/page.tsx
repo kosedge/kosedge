@@ -192,9 +192,7 @@ export default function Home() {
                   <div className={["text-sm font-semibold", icon].join(" ")}>
                     ●
                   </div>
-                  <h3
-                    className={["mt-2 text-2xl font-bebas", title].join(" ")}
-                  >
+                  <h3 className={["mt-2 text-2xl font-bebas", title].join(" ")}>
                     {p.title}
                   </h3>
                   <p className="mt-2 text-sm text-gray-200/80 leading-relaxed">
@@ -221,8 +219,7 @@ export default function Home() {
                 What we avoid
               </h3>
               <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                Hype picks, “lock” talk, chasing, and gimmicks that don’t
-                scale.
+                Hype picks, “lock” talk, chasing, and gimmicks that don’t scale.
               </p>
             </div>
           </div>
