@@ -22,6 +22,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import os
 import re
 import sys
@@ -373,6 +374,37 @@ def talent_from_qb_stats(attempts: int, yards: int, tds: int, *, is_portal: bool
     return _clamp(base, 35.0, 96.0)
 
 
+# Phase 1E — low-sample attempts. Below N, three throws must not print ~50.
+# MICH (82) sits at/above N and stays on the stats path.
+QB_TALENT_LOWSAMPLE_ATTEMPTS = 80
+
+
+def resolve_qb_talent(
+    attempts: int,
+    yards: int,
+    tds: int,
+    *,
+    is_portal: bool,
+    recruiting_class_score: float,
+) -> float:
+    """Stats talent, blended to packaged recruiting when attempts are thin.
+
+    ``w = sqrt(att/N)`` — continuous; ``w(0)=0`` (all fallback), ``w(N)=1``
+    (all stats). Linear ``att/N`` reordered top-7 by over-lifting blue-blood
+    low samples (ALA/UGA); sqrt tightens the pull while still raising STAN.
+    Fallback field: ``roster.recruiting_class_score`` (already packaged).
+    """
+    stats = talent_from_qb_stats(
+        int(attempts), int(yards), int(tds), is_portal=bool(is_portal)
+    )
+    att = int(attempts or 0)
+    if att >= QB_TALENT_LOWSAMPLE_ATTEMPTS:
+        return stats
+    fallback = _clamp(float(recruiting_class_score))
+    w = math.sqrt(att / float(QB_TALENT_LOWSAMPLE_ATTEMPTS)) if att > 0 else 0.0
+    return _clamp((1.0 - w) * fallback + w * stats)
+
+
 def experience_index_from_roster(roster: Sequence[Mapping[str, Any]]) -> float:
     if not roster:
         return 50.0
@@ -659,11 +691,12 @@ def enrich_team(
             qb_room_size=len(qb_rows),
             competing_with_attempts=competing_attempts,
         )
-        qb_talent = talent_from_qb_stats(
+        qb_talent = resolve_qb_talent(
             int(starter.get("pass_attempts_2025") or 0),
             int(starter.get("pass_yards_2025") or 0),
             int(starter.get("pass_td_2025") or 0),
             is_portal=bool(starter.get("is_portal")),
+            recruiting_class_score=float(recruiting),
         )
         # Retain prior OL/weapons support if present (unit grades overwrite later).
         ol_support = float(prior_qb.get("ol_support", prior_groups.get("ol", 55)))
