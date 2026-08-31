@@ -1,0 +1,44 @@
+{
+  "as_of": "2026-08-31T23:32:07Z",
+  "store": "data/cfb_grades_2026.jsonl",
+  "n_rows": 178,
+  "by_week": {
+    "0": 12,
+    "1": 166
+  },
+  "by_market": {
+    "spread": 89,
+    "total": 89
+  },
+  "w1_tags": {
+    "LEAN": 9,
+    "PASS": 100,
+    "PLAY": 57
+  },
+  "w1_play_sides": 25,
+  "w1_fat_dog_play_sides": 9,
+  "n_ats_vs_kei_graded": 12,
+  "n_ats_vs_tag_graded": 0,
+  "ats_vs_kei_rate": 0.4166666666666667,
+  "ats_vs_tag_rate": null,
+  "mean_clv": null,
+  "n_clv": 0,
+  "mean_signed_error_kei": -6.059166666666666,
+  "n_signed_error": 12,
+  "error_by_bucket": {
+    "cupcake": {
+      "n": 2,
+      "mean": -7.8
+    },
+    "fav_60_75": {
+      "n": 8,
+      "mean": -3.935
+    },
+    "tossup": {
+      "n": 2,
+      "mean": -12.815000000000001
+    }
+  },
+  "pre_registered_question": "did tagged PLAY sides beat chance, and did fat-dog PLAY sides beat the rest?",
+  "note": "W1 close/final/ATS/CLV fill after Sat 9/5. W0 finals are filled; tag=n/a so ats_vs_tag stays null."
+}
