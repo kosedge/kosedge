@@ -8,6 +8,7 @@ import {
 } from "@/lib/cfb-season-engine-format";
 import {
   matchupLabel,
+  officialSlateWeekForMatchup,
   packagedOfficialWeekBoard,
 } from "@/lib/cfb-official-slate";
 import {
@@ -33,15 +34,29 @@ export default async function CfbProjectGamePage({
     | Record<string, SearchValue>;
 }) {
   const sp =
-    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
       ? await (searchParams as Promise<Record<string, SearchValue>>)
       : ((searchParams as Record<string, SearchValue>) ?? {});
 
   const status = await fetchCfbSeasonEngineStatus();
   const home = normalizeTeamCode(firstValue(sp.home) ?? "");
   const away = normalizeTeamCode(firstValue(sp.away) ?? "");
-  const weekRaw = Number(firstValue(sp.week) ?? 1);
-  const week = Number.isFinite(weekRaw) ? Math.max(0, Math.min(20, weekRaw)) : 1;
+  const defaultHome = home || "TCU";
+  const defaultAway = away || "UNC";
+  const weekParam = firstValue(sp.week);
+  const weekFromQuery =
+    weekParam != null && String(weekParam).trim() !== ""
+      ? Number(weekParam)
+      : NaN;
+  // Bare /pro/cfb/project-game defaults UNC@TCU — that matchup is Week 0 on the
+  // official slate. Never invent Week 1 when the slate already knows the week.
+  const weekFromSlate =
+    officialSlateWeekForMatchup(defaultHome, defaultAway) ??
+    officialSlateWeekForMatchup(home, away);
+  const week = Number.isFinite(weekFromQuery)
+    ? Math.max(0, Math.min(20, weekFromQuery))
+    : (weekFromSlate ?? 0);
   const neutral =
     firstValue(sp.neutral) === "1" || firstValue(sp.neutral) === "true";
   const codes = [
@@ -57,7 +72,11 @@ export default async function CfbProjectGamePage({
   const teams = teamOptionsFromCodes(codes);
   const slateRows = (packagedOfficialWeekBoard().games ?? []).map((g) => ({
     key: g.game_id || `${g.away}@${g.home}-${g.week}`,
-    label: `W${g.week} · ${g.away} @ ${g.home}`,
+    label: `W${g.week}${g.status === "final" ? " final" : ""} · ${g.away} @ ${g.home}${
+      g.away_score != null && g.home_score != null
+        ? ` (${g.away_score}–${g.home_score})`
+        : ""
+    }`,
     home: g.home.replace(/^fcs:/i, ""),
     away: g.away.replace(/^fcs:/i, ""),
     week: g.week,
@@ -75,9 +94,9 @@ export default async function CfbProjectGamePage({
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}
-      primaryHref="/pro/cfb/slate"
+      primaryHref="/pro/cfb/slate?week=1"
       primaryLabel="Official slate"
-      secondaryHref="/edge-board/cfb"
+      secondaryHref="/edge-board/cfb?week=1"
       secondaryLabel="Edge Board"
     >
       <div className="mt-2 mb-4 flex flex-wrap gap-3 text-xs">
@@ -105,8 +124,8 @@ export default async function CfbProjectGamePage({
 
       <CfbProjectGameClient
         teams={teams}
-        defaultHome={home || "TCU"}
-        defaultAway={away || "UNC"}
+        defaultHome={defaultHome}
+        defaultAway={defaultAway}
         defaultWeek={week}
         defaultNeutral={neutral}
         engineVersion={status.engine_version || undefined}

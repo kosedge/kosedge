@@ -1,13 +1,13 @@
 {
-  "slate_version": "cfb-official-slate-v2-dual-20260817",
+  "slate_version": "cfb-official-slate-v2-dual-20260831",
   "season": 2026,
-  "as_of": "2026-08-17",
+  "as_of": "2026-08-31",
   "official": true,
   "slate_complete": true,
   "source": "kosedge_official_slate",
   "primary_source": "espn_team_schedule_public",
   "factcheck_source": "the_odds_api_ncaaf_events",
-  "primary_as_of": "2026-08-13",
+  "primary_as_of": "2026-08-31",
   "used_in_spread": false,
   "kei": false,
   "weeks": [
@@ -160,8 +160,10 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
-      "status": "accepted",
-      "factcheck": "agree"
+      "status": "final",
+      "factcheck": "agree",
+      "away_score": 15,
+      "home_score": 10
     },
     {
       "week": 0,
@@ -179,8 +181,10 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
-      "status": "accepted",
-      "factcheck": "agree"
+      "status": "final",
+      "factcheck": "agree",
+      "away_score": 26,
+      "home_score": 42
     },
     {
       "week": 0,
@@ -198,8 +202,10 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
-      "status": "accepted",
-      "factcheck": "agree"
+      "status": "final",
+      "factcheck": "agree",
+      "away_score": 8,
+      "home_score": 34
     },
     {
       "week": 0,
@@ -255,8 +261,10 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
-      "status": "accepted",
-      "factcheck": "agree"
+      "status": "final",
+      "factcheck": "agree",
+      "away_score": 27,
+      "home_score": 37
     },
     {
       "week": 0,
@@ -274,8 +282,10 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
-      "status": "accepted",
-      "factcheck": "agree"
+      "status": "final",
+      "factcheck": "agree",
+      "away_score": 17,
+      "home_score": 34
     },
     {
       "week": 0,
@@ -293,8 +303,10 @@
       "fcs_home": false,
       "fcs_away": false,
       "fbs_vs_fbs": true,
-      "status": "accepted",
-      "factcheck": "agree"
+      "status": "final",
+      "factcheck": "agree",
+      "away_score": 27,
+      "home_score": 21
     },
     {
       "week": 1,

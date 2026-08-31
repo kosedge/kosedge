@@ -49,7 +49,8 @@ export default async function CfbFuturesPage({
     | Promise<Record<string, SearchValue>>;
 }) {
   const params =
-    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
       ? await (searchParams as Promise<Record<string, SearchValue>>)
       : ((searchParams as Record<string, SearchValue>) ?? {});
   const sortMarket = firstParam(params.sort).toLowerCase() === "market";
@@ -86,13 +87,15 @@ export default async function CfbFuturesPage({
 
   const nattyMatched = nattyRows.filter((r) => r.market).length;
   const cfpMatched = cfpRows.filter((r) => r.market).length;
-  const confShown = confs.reduce((n, [, list]) => n + list.slice(0, 6).length, 0);
+  const confShown = confs.reduce(
+    (n, [, list]) => n + list.slice(0, 6).length,
+    0,
+  );
   const confMatched = confs.reduce(
     (n, [, list]) =>
       n +
-      list
-        .slice(0, 6)
-        .filter((row) => cfbConfOddsForTeam(market, row.team)).length,
+      list.slice(0, 6).filter((row) => cfbConfOddsForTeam(market, row.team))
+        .length,
     0,
   );
 
@@ -106,7 +109,7 @@ export default async function CfbFuturesPage({
       honestyNote="Not advice. Missing book prices show —."
       primaryHref="/pro/cfb/projections"
       primaryLabel="Win totals"
-      secondaryHref="/edge-board/cfb"
+      secondaryHref="/edge-board/cfb?week=1"
       secondaryLabel="Edge Board"
     >
       <section className="rounded-2xl border border-kos-gold/25 bg-black/35 px-4 py-3 text-sm text-kos-text/80">

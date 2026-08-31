@@ -138,12 +138,12 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     primary: [
       { href: "/pro/cfb/overview", label: "Overview", primary: true },
       {
-        href: "/edge-board/cfb",
+        href: "/edge-board/cfb?week=1",
         label: "Edge Board",
         primary: true,
         emphasis: "green",
       },
-      { href: "/pro/cfb/slate", label: "Slate", primary: true },
+      { href: "/pro/cfb/slate?week=1", label: "Slate", primary: true },
       { href: "/pro/cfb/model", label: "Model", primary: true },
       { href: "/pro/cfb/project-game", label: "Project Game", primary: true },
       { href: "/pro/cfb/projections", label: "Projections", primary: true },
@@ -233,7 +233,9 @@ export function getSportOverviewHref(sportKey: string): string {
 }
 
 export function getSportEdgeBoardHref(sportKey: string): string {
-  return `/edge-board/${sportKey || "nfl"}`;
+  const key = sportKey || "nfl";
+  if (key === "cfb") return "/edge-board/cfb?week=1";
+  return `/edge-board/${key}`;
 }
 
 export function sportHubHref(sportKey: string): string {
@@ -256,7 +258,10 @@ export function isSportNavActive(
     );
   }
 
-  if (href === `/edge-board/${sportKey}`) {
+  if (
+    href === `/edge-board/${sportKey}` ||
+    href.startsWith(`/edge-board/${sportKey}?`)
+  ) {
     return (
       pathname === `/edge-board/${sportKey}` ||
       (sportKey === "nfl" && pathname === "/edge-board")
