@@ -16,11 +16,11 @@ The Kos Edge model projects **10.69 expected wins**, only 0.19 above the number.
 
 ## The center injury reaches the entire offense
 
-Cade Mays was taking virtually every first-team center rep before injuring his wrist in an August 9 practice. Dave Birkett of the Detroit Free Press reported that Dan Campbell expects Mays to miss a significant period, with an outside timetable of roughly eight to 10 weeks. He is likely to open the regular season on injured reserve.
+Cade Mays was taking virtually every first-team center rep before injuring his wrist in an August 9 practice. Dave Birkett of the Detroit Free Press reported that Dan Campbell expects Mays to miss a significant period, with an outside timetable of roughly eight to 10 weeks. The club placed him on Reserve/Injured in the Aug 30 cutdown (8:55pm ET); Twentyman’s 9:03pm ET initial-53 note says the wrist keeps him out for awhile. Do not name a Week 1 center.
 
 Mays was not a luxury signing. Detroit added him after a 2025 season in which line injuries and personnel changes repeatedly disrupted the offense. The Lions then released Taylor Decker and Graham Glasgow, shifted Penei Sewell to left tackle and drafted Blake Miller in the first round to play on the right. Losing the new center turns an already consequential rebuild into an early-season experiment.
 
-Juice Scruggs and Seth McLaughlin have been the primary alternatives, with Tate Ratledge able to snap if needed. Scruggs brings NFL experience at all three interior positions. McLaughlin has received first-team work but entered camp with little regular-season evidence. The problem is not that Detroit lacks options. It is that Goff, new coordinator Drew Petzing and a remade line now have to establish protection communication with a replacement in the middle.
+Juice Scruggs and Seth McLaughlin have been the primary alternatives, with Tate Ratledge able to snap if needed. Scruggs brings NFL experience at all three interior positions. McLaughlin is on the club’s initial 53 among nine offensive linemen, but do not crown him C1 — he entered camp with little regular-season evidence. The problem is not that Detroit lacks options. It is that Goff, new coordinator Drew Petzing and a remade line now have to establish protection communication with a replacement in the middle.
 
 That can affect the run game as much as the pocket. Gibbs is most dangerous when Detroit forces linebackers to fit the run and then makes them defend him in space. Interior leakage changes the timing of both. One missed call at center can erase an otherwise clean design.
 
@@ -38,7 +38,7 @@ The larger offensive question is continuity. Petzing is Goff’s third coordinat
 
 The strongest camp development has come from the pass rush. Tim Twentyman of DetroitLions.com tracked Hutchinson repeatedly disrupting team periods, while rookie Derrick Moore returned from a groin issue and produced multiple sacks in practice. Detroit has experimented with pressure fronts that put Moore, Hutchinson and other rushers on the field together.
 
-That matters because the back end may not be whole in September. Woodyard reported that safety Kerby Joseph’s knee rehab and Brian Branch’s recovery from a torn Achilles were progressing, but neither was expected to be ready for the opener on the early-August timetable. Detroit has since dealt with additional safety attrition in camp.
+That matters because the back end may not be whole in September. Woodyard reported that safety Kerby Joseph’s knee rehab and Brian Branch’s recovery from a torn Achilles were progressing on an early-August timetable; the club then started both on Reserve/PUP (Week 5 Arizona earliest; bye the week after). Detroit has since dealt with additional safety attrition in camp.
 
 A dominant front can shorten coverage and protect replacements. It can also become too important. If Hutchinson has to create the solution on every third down while Joseph and Branch ramp up, the defense becomes more volatile than an 11-win expectation prefers.
 
@@ -74,6 +74,6 @@ Fair number: **10.69 wins**
 Market number: **10.5** (-115 / -105)
 Lean: **Pass**  
 Confidence: **1/5**  
-Key risk: The center and secondary timelines widen Detroit’s range, while the 0.19-win model edge is far too thin to pay near-even juice on either side.
+Key risk: Club 53 posted. Mays Reserve/Injured. Branch and Joseph Reserve/PUP. Manu Reserve/NFI. McLaughlin on the 53 OL; do not crown C1. 0.19-win model edge still too thin. Pass.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

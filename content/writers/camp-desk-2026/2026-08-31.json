@@ -7,14 +7,14 @@
     "title": "Camp Desk — Monday, Aug 31",
     "bottom_line": "Cutdown weekend. Official 53s are the fact; beat lists are not. Two season-total leans only (DEN Over 2/5, LAC Under 2/5). Everything else Pass. Stamp at pull — do not chase the board.",
     "storylines": [
-      "Official 53s posted at Green Bay, Chicago, Minnesota, Washington, and others. Detroit still unposted Sunday night — do not invent a Lions 53.",
+      "Official 53s posted at Green Bay, Chicago, Minnesota, Washington, Detroit, and others. Lions: Mays Reserve/Injured, Branch and Joseph Reserve/PUP, Manu Reserve/NFI. Do not invent C1. Pass.",
       "Packers: Jacobs on the commissioner's exempt list (off the 53). Kaleb Johnson in for a 2028 sixth, pending physical. Parsons, Musgrave, and Riley start on Reserve/PUP. Do not mint a Jacobs-off house number.",
       "Bears sent DT Gervon Dexter Sr. to Atlanta for CB Clark Phillips III and a 2027 fifth, pending physicals. Gordon, Noah Sewell, and Shemar Turner start on Reserve/PUP.",
       "Commanders posted the official dump. Tunsil is not on tonight's IR. Good-Jones is out. Coleman is the LT plan. No named center.",
       "Falcons QB1 is still Penix vs Tua. Eagles QB2 is still McKee vs Dalton. Named jobs wait on the club.",
       "Broncos: Cooper is on the commissioner's exempt list (off the 53). Chargers: Biadasz is season IR and Branson Taylor is IR; Slaughter is the center option, not a new crown."
     ],
-    "what_to_watch": "Remaining official 53s (Detroit especially), named QB jobs in Atlanta and Philadelphia, and whether the Arizona 4.5 board blinks after a posted 53 / Conner designation.",
+    "what_to_watch": "Named QB jobs in Atlanta and Philadelphia, remaining unposted official 53s if any, and whether the Arizona 4.5 board blinks after a posted 53 / Conner designation.",
     "sources": [
       {
         "label": "Packers — initial 2026 roster / 53 (Aug 30)",
@@ -43,6 +43,14 @@
       {
         "label": "RotoWire — NFL team futures live widget (DK, pulled 6:02 p.m. ET Aug 30)",
         "href": "https://www.rotowire.com/betting/nfl/team-futures.php"
+      },
+      {
+        "label": "Lions — roster moves / cutdown (Aug 30, 8:55pm ET)",
+        "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
+      },
+      {
+        "label": "Lions — Twentyman initial 53 breakdown (Aug 30, 9:03pm ET)",
+        "href": "https://www.detroitlions.com/news/detroit-lions-nfl-breaking-down-the-initial-53-man-roster"
       }
     ]
   },
@@ -978,29 +986,29 @@
     {
       "team_id": "DET",
       "title": "Lions camp — Aug 31",
-      "bottom_line": "Mays remains a long-term center absence and McLaughlin entered concussion protocol. Official 53 is not posted. Pass.",
+      "bottom_line": "Official 53 is posted. Mays is Reserve/Injured. Branch and Joseph start on Reserve/PUP. Manu is Reserve/NFI. Pass.",
       "key_points": [
-        "Seth McLaughlin was diagnosed with a concussion and entered the league's five-step protocol after Saturday, per Nolan Bianchi of The Detroit News.",
-        "Cade Mays is still expected to miss roughly eight to 10 weeks. Do not name a Week 1 center.",
-        "WR Greg Dortch was released, per Tom Pelissero. EDGE Payton Turner is already on Reserve/Injured (official Aug. 27). Joseph and Branch remain on Active/PUP; detroitlions.com has no 08/30 53 dump as of 6:15pm ET Sunday."
+        "detroitlions.com 08/30 cutdown (8:55pm ET): C Cade Mays to Reserve/Injured. Club OL on the 53 includes Seth McLaughlin among nine. Twentyman notes the wrist keeps Mays out for awhile. Do not name a Week 1 center.",
+        "Club Reserve/PUP: DB Brian Branch and S Kerby Joseph (Week 5 Arizona earliest; bye the week after). OL Giovanni Manu to Reserve/Non-Football Injury. EDGE Payton Turner remains Reserve/Injured (08/27). LB Damone Clark remains Reserve/Injured (08/25).",
+        "Club released TE Tyler Conklin and WR Greg Dortch. Twentyman has Jackson Meeks over Conklin at TE (3) and only four WR on the initial 53 (St. Brown, Jameson Williams, Isaac TeSlaa, Tay Martin). Heavy at RB (5) with Pacheco injury uncertainty noted by club writer."
       ],
-      "what_to_watch": "The official 53, first-team center snaps, and whether Joseph and Branch start the year on Reserve/PUP.",
+      "what_to_watch": "Who actually snaps at center Week 1 with Mays on IR, and how the secondary holds until Branch and Joseph clear PUP.",
       "is_material_depth": true,
+      "sot_flag": "Mays is Reserve/Injured. Branch and Joseph are Reserve/PUP. Manu is Reserve/NFI. Do not invent C1 or nickel. Pass the win total.",
       "sources": [
         {
-          "label": "CBS Sports — McLaughlin concussion protocol, citing Bianchi (Aug 29)",
-          "href": "https://www.cbssports.com/fantasy/football/news/lions-seth-mclaughlin-enters-concussion-protocol/"
+          "label": "Lions — roster moves / cutdown (Aug 30, 8:55pm ET)",
+          "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
         },
         {
-          "label": "Yahoo — Dortch released, citing Pelissero (Aug 30)",
-          "href": "https://sports.yahoo.com/articles/detroit-lions-shocking-cut-roster-212636153.html"
+          "label": "Lions — Twentyman initial 53 breakdown (Aug 30, 9:03pm ET)",
+          "href": "https://www.detroitlions.com/news/detroit-lions-nfl-breaking-down-the-initial-53-man-roster"
         },
         {
-          "label": "Lions — transactions, Turner IR (Aug 27); no 08/30 53 dump",
+          "label": "Lions — transactions 2026 (08/30 cutdown, PUP/NFI/IR)",
           "href": "https://www.detroitlions.com/team/transactions/"
         }
-      ],
-      "sot_flag": "Mays remains a long-term center absence. McLaughlin is in concussion protocol. Keep the replacement open; do not invent C1."
+      ]
     }
   ],
   "preview_delta": [
@@ -1193,7 +1201,7 @@
     {
       "team_id": "DET",
       "fields": ["date", "bottom_line", "what_matters_most"],
-      "reason": "House 10.69 vs 10.5 (|diff| 0.19) ≤ 0.5. Pass.",
+      "reason": "Club 53 posted + Mays IR / Branch-Joseph PUP. House 10.69 vs 10.5 (|diff| 0.19) ≤ 0.5. Pass. Street unchanged.",
       "status": "touched"
     }
   ]
