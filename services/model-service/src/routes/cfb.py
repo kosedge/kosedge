@@ -98,7 +98,7 @@ def cfb_season_engine_status(
     demo: bool = Query(True, description="Packaged universe probe (default)"),
 ) -> Dict[str, Any]:
     """Describe CFB hierarchical engine layers, data sources, solid vs approximate."""
-    version = "cfb-season-engine-v0.9-inseason"
+    version = "cfb-season-engine-v0.15-power-sot"
     payload: Dict[str, Any]
     try:
         from src.services.cfb_season_engine import (
@@ -125,6 +125,16 @@ def cfb_season_engine_status(
     payload.setdefault("engine_version", version)
     payload.setdefault("used_in_spread", False)
     payload.setdefault("ok", "engine_status_warning" not in payload)
+    # Echo frozen Week-0 close as_of so live status shares the publisher clock.
+    try:
+        from src.services.cfb_season_engine.power_sot import load_packaged_power_sot
+
+        power_blob = load_packaged_power_sot()
+        payload.setdefault("power_as_of", power_blob.get("power_as_of"))
+        payload.setdefault("as_of", power_blob.get("power_as_of"))
+        payload.setdefault("power_version", power_blob.get("power_version"))
+    except Exception as exc:  # pragma: no cover
+        log.warning("cfb power SoT as_of attach skipped: %s", exc)
     try:
         from src.services.cfb_season_engine.product_desk import product_desk_payload
 

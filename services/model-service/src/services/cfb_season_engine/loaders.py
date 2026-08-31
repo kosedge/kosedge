@@ -444,7 +444,10 @@ def documentation() -> Dict[str, Any]:
         "packaged_schedule": str(PACKAGED_SCHEDULE),
         "packaged_real_roster": str(PACKAGED_REAL_ROSTER),
         "packaged_efficiency": str(PACKAGED_EFFICIENCY),
-        "schedule_policy": "seed sample + densify_schedule (not official FBS slate)",
+        "schedule_policy": (
+            "official ESPN FBS slate (cfb_official_schedule_2026.json) when present; "
+            "densify_schedule only as explicit fallback / tests"
+        ),
         "preference_order": "DB → packaged ESPN real-roster snapshot → legacy priors",
         "db_universe": "not_populated (packaged snapshot is the Railway-safe path)",
         "roster_source": meta.get("roster_source"),

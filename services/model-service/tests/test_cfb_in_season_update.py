@@ -134,4 +134,4 @@ def test_project_game_picks_up_inseason_delta(clean_state):
 
 
 def test_engine_version_bump():
-    assert "v0.9-inseason" in P.ENGINE_VERSION
+    assert "v0.15-power-sot" in P.ENGINE_VERSION

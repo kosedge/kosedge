@@ -38,7 +38,8 @@ from __future__ import annotations
 from typing import Any, Dict, Mapping
 
 # Bump when priors / architecture change in a material way.
-ENGINE_VERSION = "cfb-season-engine-v0.9-inseason"
+# Week-0 close publisher stamp — live API and frozen artifacts share this string.
+ENGINE_VERSION = "cfb-season-engine-v0.15-power-sot"
 CALIBRATION_TAG = "cfb-season-engine-priors-v0.8.1-hist-cal"
 
 # ---------------------------------------------------------------------------
