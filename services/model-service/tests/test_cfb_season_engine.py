@@ -1191,6 +1191,60 @@ def test_compute_qb_situation_index_class_gap() -> None:
     assert bd_inc["class_mult"] > bd_tf["class_mult"]
 
 
+def test_qb_situation_soft_ceiling_orders_elites_not_flat_80_4() -> None:
+    """Phase 1C: soft ceiling preserves OSU > HAW > TCU; no shared 80.4 bucket."""
+    from src.services.cfb_season_engine.loaders import build_packaged_universe
+    from src.services.cfb_season_engine.priors import (
+        QB_SITUATION_SOFT_KNEE,
+        QB_SITUATION_SOFT_TAU,
+    )
+    from src.services.cfb_season_engine.qb_situation import (
+        apply_qb_situation_soft_ceiling,
+    )
+
+    # Identity below the knee.
+    assert apply_qb_situation_soft_ceiling(1.10) == 1.10
+    assert apply_qb_situation_soft_ceiling(QB_SITUATION_SOFT_KNEE) == QB_SITUATION_SOFT_KNEE
+    # Ordered taper above the knee (paper unclamped elites).
+    pub_osu = apply_qb_situation_soft_ceiling(1.5771)
+    pub_haw = apply_qb_situation_soft_ceiling(1.5024)
+    pub_tcu = apply_qb_situation_soft_ceiling(1.4806)
+    assert pub_osu > pub_haw > pub_tcu
+    assert pub_osu < 1.5771  # compresses
+    assert QB_SITUATION_SOFT_TAU > 0
+
+    universe = build_packaged_universe(2026)
+    osu = universe.teams["OSU"].qb
+    haw = universe.teams["HAW"].qb
+    tcu = universe.teams["TCU"].qb
+    assert osu.qb_situation_index > haw.qb_situation_index > tcu.qb_situation_index
+    assert not (
+        abs(osu.qb_situation_score - 80.4) < 1e-6
+        and abs(haw.qb_situation_score - 80.4) < 1e-6
+        and abs(tcu.qb_situation_score - 80.4) < 1e-6
+    )
+    # Top-7 live power order frozen vs packaged board.
+    import json
+    from pathlib import Path
+
+    pack = json.loads(
+        (
+            Path(__file__).resolve().parents[1]
+            / "src/services/cfb_season_engine/data/cfb_power_sot_2026.json"
+        ).read_text(encoding="utf-8")
+    )
+    fbs = {r["team"] for r in pack["teams"] if r["team"] in universe.teams}
+    base7 = [r["team"] for r in pack["teams"][:7]]
+    live = sorted(
+        (
+            (t, 0.5 * (universe.teams[t].offense_index + universe.teams[t].defense_index))
+            for t in fbs
+        ),
+        key=lambda row: -row[1],
+    )
+    assert [t for t, _ in live[:7]] == base7
+
+
 def test_calibration_blue_blood_vs_g5_ordering() -> None:
     """UGA/TEX/OSU remain clear favorites vs BALL; spreads bettable, not absurd."""
     from src.services.cfb_season_engine.priors import (

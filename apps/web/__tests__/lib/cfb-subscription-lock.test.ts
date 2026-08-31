@@ -220,11 +220,12 @@ describe("cfb kei lines bundle", () => {
     expect(w0).toHaveLength(6);
   });
 
-  it("keeps BALL@OSU Week 1 KEI at −42.2 (cupcake saturation exhibit)", () => {
+  it("keeps BALL@OSU Week 1 KEI a cupcake (≤ −40, WP in the 90s)", () => {
     const ballOsu = getKeiLines("cfb").find(
       (g) => g.week === 1 && g.homeAbbr === "OSU" && g.awayAbbr === "BALL",
     );
     expect(ballOsu).toBeTruthy();
-    expect(ballOsu?.handicapSpreadHome).toBe(-42.2);
+    expect(ballOsu?.handicapSpreadHome).toBeLessThanOrEqual(-40);
+    expect(ballOsu?.handicapSpreadHome).toBe(-42.32);
   });
 });

@@ -8,6 +8,7 @@ field).
 
 from __future__ import annotations
 
+import math
 from typing import Any, Dict, Mapping, Optional, Tuple
 
 from src.services.cfb_season_engine import priors as P
@@ -57,6 +58,25 @@ def supporting_cast_score(ol_support: float, weapons_support: float) -> float:
     )
 
 
+def apply_qb_situation_soft_ceiling(raw: float) -> float:
+    """Global soft ceiling on raw QB situation index (Phase 1C).
+
+    Identity at/below ``QB_SITUATION_SOFT_KNEE`` (~1.25). Above the knee,
+    exponential taper toward asymptote ``knee + tau`` so unclamped elites
+    stay ordered (OSU > HAW > TCU) without publishing one flat 1.38/80.4
+    bucket. Hard ``QB_SITUATION_INDEX_CLAMP`` remains a safety rail only.
+    """
+    lo, hi = P.QB_SITUATION_INDEX_CLAMP
+    knee = float(P.QB_SITUATION_SOFT_KNEE)
+    tau = float(P.QB_SITUATION_SOFT_TAU)
+    x = float(raw)
+    if x <= knee:
+        published = x
+    else:
+        published = knee + tau * (1.0 - math.exp(-(x - knee) / tau))
+    return max(lo, min(hi, published))
+
+
 def compute_qb_situation_index(
     *,
     qb_class: QbClass,
@@ -65,10 +85,10 @@ def compute_qb_situation_index(
 ) -> Tuple[float, float, Dict[str, Any]]:
     """First-class QB lever → (index, 0–100 score, inspectable breakdown).
 
-    Index ≈ 0.62–1.38 (1.0 ≈ FBS-average situation). Class multiplier and
-    supporting cast are applied *after* talent so true_freshman vs incumbent
-    separates sharply even at equal talent. Clamped separately from team
-    STRENGTH_CLAMP so a hot talent proxy cannot invent P4 offense alone.
+    Index ≈ 0.62–1.55 with soft ceiling above 1.25 (1.0 ≈ FBS-average).
+    Class multiplier and supporting cast are applied *after* talent so
+    true_freshman vs incumbent separates sharply even at equal talent.
+    Soft-ceilinged separately from team STRENGTH_CLAMP.
     """
     talent = _clamp(qb_talent)
     cast = _clamp(supporting_cast)
@@ -76,8 +96,7 @@ def compute_qb_situation_index(
     class_mult = float(P.QB_CLASS_OFFENSE_MULT.get(qb_class, 0.94))
     cast_mult = 1.0 + P.QB_CAST_INDEX_SCALE * (cast - 50.0) / 50.0
     raw = talent_index * class_mult * cast_mult
-    lo, hi = P.QB_SITUATION_INDEX_CLAMP
-    index = max(lo, min(hi, raw))
+    index = apply_qb_situation_soft_ceiling(raw)
     score = _clamp(50.0 + (index - 1.0) * 80.0)
     breakdown = {
         "qb_talent": round(talent, 2),
@@ -86,8 +105,14 @@ def compute_qb_situation_index(
         "class_mult": round(class_mult, 4),
         "supporting_cast": round(cast, 2),
         "cast_mult": round(cast_mult, 4),
+        "qb_situation_raw": round(raw, 4),
         "qb_situation_index": round(index, 4),
         "qb_situation_score": round(score, 2),
+        "soft_ceiling": {
+            "knee": float(P.QB_SITUATION_SOFT_KNEE),
+            "tau": float(P.QB_SITUATION_SOFT_TAU),
+            "rail": list(P.QB_SITUATION_INDEX_CLAMP),
+        },
     }
     return index, score, breakdown
 
@@ -151,8 +176,7 @@ def build_qb_situation(
             supporting_cast=float(cast),
         )
     else:
-        lo, hi = P.QB_SITUATION_INDEX_CLAMP
-        index = max(lo, min(hi, float(index_override)))
+        index = apply_qb_situation_soft_ceiling(float(index_override))
         score = _clamp(p.get("qb_situation_score", 50.0 + (index - 1.0) * 80.0))
 
     fidelity = str(p.get("fidelity", "approximate"))
@@ -238,9 +262,13 @@ def documentation() -> Dict[str, Any]:
                 f"{P.QB_CAST_OL_WEIGHT}*ol_support + "
                 f"{P.QB_CAST_WEAPONS_WEIGHT}*weapons_support"
             ),
-            "qb_situation_index": (
+            "qb_situation_raw": (
                 "(1 + (qb_talent-50)/80) * class_mult * "
                 f"(1 + {P.QB_CAST_INDEX_SCALE}*(supporting_cast-50)/50)"
+            ),
+            "qb_situation_index": (
+                f"soft_ceiling(raw; knee={P.QB_SITUATION_SOFT_KNEE}, "
+                f"tau={P.QB_SITUATION_SOFT_TAU}, rail={list(P.QB_SITUATION_INDEX_CLAMP)})"
             ),
             "class_mult": dict(P.QB_CLASS_OFFENSE_MULT),
         },
