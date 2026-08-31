@@ -42,8 +42,8 @@ describe("cfb KEI + futures artifacts", () => {
     const lines = getKeiLines("cfb");
     expect(lines.length).toBeGreaterThanOrEqual(6);
     const tcu = lines.find((g) => g.homeAbbr === "TCU" && g.awayAbbr === "UNC");
-    expect(tcu?.handicapSpreadHome).toBe(-20.21);
-    expect(tcu?.modelSpreadHome).toBe(-19.01);
+    expect(tcu?.handicapSpreadHome).toBe(-19.93);
+    expect(tcu?.modelSpreadHome).toBe(-18.73);
     expect(tcu?.homeTeam).toBe("TCU Horned Frogs");
     expect(tcu?.awayTeam).toBe("North Carolina Tar Heels");
   });

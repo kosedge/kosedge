@@ -353,10 +353,21 @@ def classify_qb(
 
 
 def talent_from_qb_stats(attempts: int, yards: int, tds: int, *, is_portal: bool) -> float:
+    """Approximate QB talent prior from prior-season counting stats.
+
+    Attempt term (Phase 1D): ``min(22, attempts/22)`` — saturates at 484
+    attempts with a 22-pt cap. The prior ``min(28, attempts/18)`` let G5
+    volume (e.g. 430 att) print talent 80+ alongside P4 elites.
+    """
     if attempts <= 0:
         return 48.0 if not is_portal else 52.0
     ypa = yards / max(attempts, 1)
-    base = 42.0 + min(28.0, attempts / 18.0) + min(12.0, ypa * 1.1) + min(10.0, tds * 0.35)
+    base = (
+        42.0
+        + min(22.0, attempts / 22.0)
+        + min(12.0, ypa * 1.1)
+        + min(10.0, tds * 0.35)
+    )
     if is_portal:
         base += 2.0
     return _clamp(base, 35.0, 96.0)
