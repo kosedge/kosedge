@@ -1,0 +1,153 @@
+{
+  "map_id": "cfb-bucket-margin-map-v1-20260831",
+  "engine_start": "cfb-season-engine-v0.15-power-sot",
+  "train_seasons": [
+    2020,
+    2021,
+    2022,
+    2023,
+    2024
+  ],
+  "holdout_season": 2025,
+  "freeze_buckets": [
+    "pick",
+    "mid",
+    "long",
+    "cupcake"
+  ],
+  "freeze_reason": "mid/pick identity \u2014 hist proxy mid is short of close (OLS>1) while live W0 TCU is long (needs <1); one scale cannot fix both. long identity \u2014 OLS>1 would lengthen TCU (|raw|\u224819). cupcake identity \u2014 raw-bucket n=9 < min_n.",
+  "scales": {
+    "pick": 1.0,
+    "short": 1.1881656860678589,
+    "mid": 1.0,
+    "long": 1.0,
+    "cupcake": 1.0
+  },
+  "ols_uncapped": {
+    "pick": 1.4226906427148005,
+    "short": 1.1881656860678589,
+    "mid": 1.362411175428451,
+    "long": 1.5127642861430157,
+    "cupcake": 1.7853900121094477
+  },
+  "n_by_raw_bucket_train": {
+    "pick": 469,
+    "short": 449,
+    "mid": 336,
+    "long": 63,
+    "cupcake": 9
+  },
+  "holdout_identity": {
+    "pick": {
+      "n": 120,
+      "mae": 4.726333333333333,
+      "mean_residual": -0.8364999999999999
+    },
+    "short": {
+      "n": 195,
+      "mae": 4.853897435897436,
+      "mean_residual": -0.5186153846153846
+    },
+    "mid": {
+      "n": 189,
+      "mae": 7.163492063492064,
+      "mean_residual": 0.35513227513227513
+    },
+    "long": {
+      "n": 88,
+      "mae": 10.52590909090909,
+      "mean_residual": 4.914090909090909
+    },
+    "cupcake": {
+      "n": 88,
+      "mae": 17.20943181818182,
+      "mean_residual": 10.969204545454547
+    }
+  },
+  "holdout_fit": {
+    "pick": {
+      "n": 120,
+      "mae": 5.102021806041653,
+      "mean_residual": -0.9520180507718264
+    },
+    "short": {
+      "n": 195,
+      "mae": 5.0205824362900975,
+      "mean_residual": -0.5867217134495871
+    },
+    "mid": {
+      "n": 189,
+      "mae": 6.920341685445598,
+      "mean_residual": 0.24144635083550903
+    },
+    "long": {
+      "n": 88,
+      "mae": 10.21597027050527,
+      "mean_residual": 4.739588617727296
+    },
+    "cupcake": {
+      "n": 88,
+      "mae": 17.088449835025916,
+      "mean_residual": 10.955861887715189
+    }
+  },
+  "train_identity": {
+    "pick": {
+      "n": 255,
+      "mae": 3.780745098039216,
+      "mean_residual": -0.753921568627451
+    },
+    "short": {
+      "n": 348,
+      "mae": 4.7236206896551725,
+      "mean_residual": -1.0161494252873564
+    },
+    "mid": {
+      "n": 340,
+      "mae": 6.974264705882353,
+      "mean_residual": -0.46649999999999997
+    },
+    "long": {
+      "n": 201,
+      "mae": 11.893482587064677,
+      "mean_residual": 3.4577611940298505
+    },
+    "cupcake": {
+      "n": 182,
+      "mae": 17.818241758241758,
+      "mean_residual": 9.45912087912088
+    }
+  },
+  "train_fit": {
+    "pick": {
+      "n": 255,
+      "mae": 4.077286840235649,
+      "mean_residual": -0.7839173927006214
+    },
+    "short": {
+      "n": 348,
+      "mae": 4.898386083593502,
+      "mean_residual": -1.1544133551276214
+    },
+    "mid": {
+      "n": 340,
+      "mae": 6.771854571348447,
+      "mean_residual": -0.5319318501876558
+    },
+    "long": {
+      "n": 201,
+      "mae": 11.670595183104993,
+      "mean_residual": 3.300029669425007
+    },
+    "cupcake": {
+      "n": 182,
+      "mae": 17.664442156816182,
+      "mean_residual": 9.485215944595344
+    }
+  },
+  "win_prob_margin_sd_untouched": 15.2,
+  "used_in_spread_tanh": false,
+  "fit": true,
+  "holdout_mid_mae_delta": -0.2431503780464661,
+  "holdout_cupcake_mae_delta": -0.1209819831559038
+}

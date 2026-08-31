@@ -8,7 +8,7 @@
   "auto_bids": 5,
   "at_large": 7,
   "bye_seeds": 4,
-  "method": "P4 autos (ACC/B1G/B12/SEC) + one G6 auto by engine power + power-aware at-larges → neutral-site playoff WP from power gap. Sim-derived. Not book prices. Not an ESPN bracket copy.",
+  "method": "P4 autos (ACC/B1G/B12/SEC) + one G6 auto by engine power + power-aware at-larges \u2192 neutral-site playoff WP from power gap. Sim-derived. Not book prices. Not an ESPN bracket copy.",
   "assumptions": {
     "cfp_field": 12,
     "auto_bids": "ACC + Big Ten + Big 12 + SEC champs + one G6 auto by power",
@@ -4142,5 +4142,5 @@
   ],
   "n_games_scored": 740,
   "n_games_locked": 6,
-  "generated_at": "2026-08-31T01:55:14Z"
+  "generated_at": "2026-08-31T07:50:20Z"
 }

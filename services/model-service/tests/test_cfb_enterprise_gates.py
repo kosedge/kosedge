@@ -44,6 +44,23 @@ def test_cupcake_wp_saturation_reaches_nineties() -> None:
     assert P.WIN_PROB_MARGIN_SD == 15.2  # named scale not stretched for Vegas
 
 
+def test_bucket_margin_map_v1_short_only() -> None:
+    """Chapter 1 Phase 1B — short-bucket scale only; mid/long/cupcake identity."""
+    from src.services.cfb_season_engine.team_projection import apply_bucket_margin_map
+
+    assert P.BUCKET_MARGIN_MAP_ID == "cfb-bucket-margin-map-v1-20260831"
+    assert P.BUCKET_MARGIN_SCALE["short"] == 1.188
+    assert P.BUCKET_MARGIN_SCALE["mid"] == 1.0
+    assert P.BUCKET_MARGIN_SCALE["long"] == 1.0
+    assert P.BUCKET_MARGIN_SCALE["cupcake"] == 1.0
+    short = apply_bucket_margin_map(5.0)
+    assert short["bucket"] == "short"
+    assert abs(float(short["mapped_margin"]) - 5.0 * 1.188) < 1e-9
+    long = apply_bucket_margin_map(19.19)
+    assert long["bucket"] == "long"
+    assert float(long["mapped_margin"]) == 19.19  # TCU-class identity
+
+
 def test_usf_std_tighter_than_osu() -> None:
     proj = _load("cfb_season_projections_2026.json")
     by = {r["team"]: r for r in proj["teams"]}
