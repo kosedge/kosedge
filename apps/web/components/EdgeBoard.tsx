@@ -3,7 +3,7 @@
 import * as React from "react";
 import { useRouter } from "next/navigation";
 import SportsbookBadge from "@/components/SportsbookBadge";
-import { trustCfbMarket } from "@/lib/cfb-trusted-market";
+import { cfbAwayBookToHome, trustCfbMarket } from "@/lib/cfb-trusted-market";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
@@ -956,12 +956,18 @@ export function flatRowsToLegacy(
       // Negative => model likes Home more; positive => Away.
       const bestSpreadNum = parseSpread(bestLine.bottom.label);
       const keiSpreadNum = parseSpread(keiLine.bottom.label);
+      // CFB: board Open/Best are away-signed; KEI + bestLine.bottom are home.
+      // Convert book → home before trust (same helper as applyCfbTrustedMarketToRows).
+      const openHome = cfbAwayBookToHome(lineRow?.open);
+      const bestHome = cfbAwayBookToHome(lineRow?.best) ?? bestSpreadNum;
+      const cfbBookCount = openHome != null && bestHome != null ? 2 : 1;
       const cfbTrusted =
         String(sportKey).toLowerCase() !== "cfb" ||
         trustCfbMarket({
           kei: lineRow?.kei ?? keiSpreadNum,
-          best: lineRow?.best ?? bestSpreadNum,
-          open: lineRow?.open,
+          best: bestHome,
+          open: openHome,
+          bookCount: cfbBookCount,
         }).trusted;
       signedLineEdge =
         hasSportsbookLine &&

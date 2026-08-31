@@ -126,7 +126,7 @@ def num(v: Any) -> Optional[float]:
 def trust_cfb_market(
     kei: Any, best: Any, open_: Any, book_count: Optional[int] = None
 ) -> Dict[str, Any]:
-    """Verbatim port of trustCfbMarket in cfb-trusted-market.ts."""
+    """Port of trustCfbMarket. best/open must already be **home-signed**."""
     k = num(kei)
     b = num(best)
     o = num(open_)
@@ -153,6 +153,12 @@ def trust_cfb_market(
     if books < 2 and gap >= CFB_SINGLE_BOOK_ABSURD_PTS:
         return {"trusted": False, "market": None, "reason": "single_book_outlier"}
     return {"trusted": True, "market": candidate, "reason": reason}
+
+
+def away_book_to_home(away_signed: Any) -> Optional[float]:
+    """Mirror cfbAwayBookToHome — Odds away point → home."""
+    n = num(away_signed)
+    return None if n is None else -n
 
 
 def cfb_edge_tag(abs_edge: Optional[float]) -> str:
@@ -351,12 +357,14 @@ def main() -> int:
             trusted_reason = "no_feed"
             verdict = {"trusted": False, "market": None, "reason": "no_feed"}
             open_away = best_away = None
+            open_home = best_home = None
             open_tot = best_tot = None
             n_books = 0
         elif odds is None:
             trusted_reason = "no_market"
             verdict = {"trusted": False, "market": None, "reason": "no_market"}
             open_away = best_away = None
+            open_home = best_home = None
             open_tot = best_tot = None
             n_books = 0
         else:
@@ -365,22 +373,22 @@ def main() -> int:
             open_tot = odds["open_total"]
             best_tot = odds["best_total"]
             n_books = odds["n_books"]
-            # Board stores KEI as home-signed string and Open/Best as away-signed.
-            # trustCfbMarket is called with those raw row values (see applyCfbTrustedMarketToRows).
+            # Board stores Open/Best away-signed; KEI home. Convert at trust boundary
+            # (cfbAwayBookToHome / applyCfbTrustedMarketToRows).
+            open_home = away_book_to_home(open_away)
+            best_home = away_book_to_home(best_away)
             verdict = trust_cfb_market(
                 kei=kei_home,
-                best=best_away,
-                open_=open_away,
+                best=best_home,
+                open_=open_home,
                 book_count=n_books,
             )
             trusted_reason = verdict["reason"]
 
-        open_home = -open_away if open_away is not None else None
-        # Trusted market candidate is away-signed when passed raw; board edge uses home vs home.
+        # Trusted market candidate is home-signed after boundary convert.
         best_home_trusted = None
         if verdict["trusted"] and verdict["market"] is not None:
-            # candidate was away-signed → home = -away
-            best_home_trusted = -float(verdict["market"])
+            best_home_trusted = float(verdict["market"])
 
         edge_line = None
         if best_home_trusted is not None:
@@ -401,14 +409,14 @@ def main() -> int:
         ):
             fire = "CANDIDATE_ONLY"
 
-        # Measurement only: what trust would see on the same side (home).
-        # Does NOT change board behavior.
+        # Measurement: legacy raw gap (home KEI vs away Open) vs same-side gap.
         board_raw_gap = None
         if open_away is not None:
             board_raw_gap = round(abs(float(kei_home) - float(open_away)), 2)
         same_side_gap = None
         if open_home is not None:
             same_side_gap = round(abs(float(kei_home) - float(open_home)), 2)
+        # After home-sign fix, sign_mismatch_clear should be 0 (trust uses same-side).
         sign_mismatch_clear = (
             trusted_reason == "absurd_vs_kei"
             and same_side_gap is not None
@@ -469,9 +477,9 @@ def main() -> int:
             "SINGLE_BOOK": CFB_SINGLE_BOOK_ABSURD_PTS,
         },
         "note_sign": (
-            "Board Open/Best are away-signed; KEI is home-signed. "
-            "trustCfbMarket compares them raw (same as applyCfbTrustedMarketToRows). "
-            "open_spread_home / best_spread_home_trusted flip for residual reading."
+            "Board Open/Best remain away-signed in odds cache. "
+            "trustCfbMarket receives home via away_book_to_home / cfbAwayBookToHome. "
+            "Band unchanged (ABSURD=12). KEI untouched."
         ),
     }
     for r in rows:

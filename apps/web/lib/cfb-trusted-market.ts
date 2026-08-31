@@ -4,6 +4,11 @@
  * junk or wrong-game line (e.g. TCU KEI −20 vs a +8.5 stray).
  *
  * Thresholds live here and in data/ops/cfb-kei-rules-2026.md.
+ *
+ * Sign convention: KEI is home-signed (`kei_spread_home`). Odds-API board
+ * rows store Open/Best away-signed (`awayOutcome.point`). Convert book →
+ * home at this boundary via `cfbAwayBookToHome` before trust/edge. Do not
+ * rewrite the odds cache; do not flip the Python ledger `spread_home` path.
  */
 
 export const CFB_PLAY_EDGE_PTS = 4.0;
@@ -17,6 +22,7 @@ export const CFB_SINGLE_BOOK_ABSURD_PTS = 8;
 
 export type CfbTrustedMarket = {
   trusted: boolean;
+  /** Home-signed trusted market when trusted; else null. */
   market: number | null;
   reason: string;
 };
@@ -27,6 +33,19 @@ function num(v: unknown): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
+/**
+ * Flip Odds-API away-signed CFB spread → home (KEI convention).
+ * home = −away. Null/blank passthrough.
+ */
+export function cfbAwayBookToHome(awaySigned: unknown): number | null {
+  const n = num(awaySigned);
+  return n == null ? null : -n;
+}
+
+/**
+ * Trust gate. `best` / `open` must already be **home-signed**
+ * (callers convert with `cfbAwayBookToHome` when reading board rows).
+ */
 export function trustCfbMarket(input: {
   kei?: unknown;
   best?: unknown;
@@ -93,14 +112,23 @@ export function applyCfbTrustedMarketToRows<
 >(rows: T[]): T[] {
   return rows.map((row) => {
     if (String(row.market || "") !== "Spread") return row;
+    // Board Open/Best are away-signed; KEI is home. Compare home vs home.
+    const openHome = cfbAwayBookToHome(row.open);
+    const bestHome = cfbAwayBookToHome(row.best);
+    // Rows do not carry n_books (odds cache untouched). When both Open and
+    // Best are posted, do not treat open===best as a lone-book feed — that
+    // false-clears cupcakes (BALL@OSU ss 8.3) under SINGLE_BOOK=8.
+    const bookCount = openHome != null && bestHome != null ? 2 : 1;
     const verdict = trustCfbMarket({
       kei: row.kei,
-      best: row.best,
-      open: row.open,
+      best: bestHome,
+      open: openHome,
+      bookCount,
     });
     if (verdict.trusted) return row;
     // Preserve a desk-readable label when Best is cleared. UI used to swallow
     // these because Best="—" hid the book chip; keep enum-adjacent strings only.
+    // Row Open/Best storage stays away-signed (display still flipSpreads).
     return {
       ...row,
       best: "",
