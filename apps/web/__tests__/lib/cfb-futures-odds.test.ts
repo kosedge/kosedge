@@ -68,15 +68,23 @@ describe("cfb futures implied % + honesty", () => {
   });
 
   it("leaves sim Natty / CFP / conf % unchanged", () => {
+    // Honesty: loaders expose artifact sim % as-is (no market blend).
+    // Snapshot values move with Week-0 close re-sim; assert against the pack.
     const pack = loadCfbFuturesPack();
+    const osuRow = pack.teams.find((t) => t.team === "OSU");
+    const ndRow = pack.teams.find((t) => t.team === "ND");
     const osu = findCfbFutures("OSU");
     const nd = findCfbFutures("ND");
-    expect(osu?.natty_pct).toBe(17);
-    expect(osu?.cfp_make_pct).toBe(90.7);
-    expect(osu?.conf_title_pct).toBe(41.9);
-    expect(nd?.natty_pct).toBe(11.6);
-    expect(nd?.cfp_make_pct).toBe(95.4);
-    expect(nd?.conf_title_pct).toBeNull();
+    expect(osuRow).toBeTruthy();
+    expect(ndRow).toBeTruthy();
+    expect(osu?.natty_pct).toBe(osuRow?.natty_pct);
+    expect(osu?.cfp_make_pct).toBe(osuRow?.cfp_make_pct);
+    expect(osu?.conf_title_pct).toBe(osuRow?.conf_title_pct);
+    expect(nd?.natty_pct).toBe(ndRow?.natty_pct);
+    expect(nd?.cfp_make_pct).toBe(ndRow?.cfp_make_pct);
+    expect(nd?.conf_title_pct ?? null).toBe(ndRow?.conf_title_pct ?? null);
+    expect(osu?.natty_pct).toBeGreaterThan(0);
+    expect(osu?.cfp_make_pct).toBeGreaterThan(0);
     expect(pack.used_in_spread).toBe(false);
     expect(pack.kei).toBe(false);
   });
