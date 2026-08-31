@@ -51,7 +51,7 @@ The early travel is especially difficult for a new staff. Las Vegas and San Fran
 ## Betting Guide
 
 - **Win total — 3.5 (was 4.5):** Pass. The **6.14** Model fair points Over, but the roster teardown, quarterback uncertainty and schedule create a material conflict with that projection. Show both boards; do not average.
-- **Do not force the Under:** Miami needs only five wins to beat the number, and Achane gives the offense a real source of upset variance.
+- **Do not force the Under:** Miami needs only four wins to beat **3.5** (five to beat the old **4.5**), and Achane gives the offense a real source of upset variance.
 - **Early checkpoint:** Track Willis’ turnover-worthy mistakes and the health of Sieler, Grant and Brooks through the first two road games.
 - **Weekly sides:** Miami may be more useful as an underdog after the market reacts to an ugly start. Demand a healthy front and a price that reflects the opponent.
 - **Revisit point:** The Week 6 bye offers the first honest reassessment after five difficult opponents and four travel spots.

@@ -8,9 +8,9 @@
 **Market (DK / SI, Aug 31 fact-check):** Win total **8.5** (O -140 / U +116)
 **Sources (beat desk):** Michael DiRocco (ESPN); John Shipley (Jaguars Media / Jaguars on SI); Juston Lewis (Florida Times-Union)
 
-Jacksonville does not need to repeat 13-4 to reward an Over bettor. It needs nine wins, and the market is offering plus money for a roster led by Trevor Lawrence in Year 2 of Liam Coen’s offense.
+Jacksonville does not need to repeat 13-4 to clear eight wins. It needs nine, with Trevor Lawrence in Year 2 of Liam Coen’s offense — but the Aug. 31 SI stamp no longer pays plus money to buy that ask.
 
-That distinction is the case. DraftKings opened the Jaguars at 9.5 in February, then moved them to 8.5 after the schedule was released. The Kos Edge simulation lands at **9.77 expected wins**, 1.27 above the current total. At **+110**, the Over carries a 47.6% raw break-even price. The model gap clears the desk’s threshold, and the price does not consume it.
+DraftKings opened the Jaguars at 9.5 in February, then moved them to 8.5 after the schedule was released. The Kos Edge simulation lands at **9.77 expected wins**, 1.27 above the current total. At **O -140 / U +116**, the Over tax consumes the prior buy. The model gap remains; the price does not clear.
 
 This is no longer a soft Over on the Aug. 31 stamp — it is **Pass**, not an argument that Jacksonville established a permanent 13-win level last season. The first-place schedule is difficult, two starting receivers are dealing with late-August injuries, and the offensive line is only now settling on its best five. The prior Over case leaned on buying 8.5 rather than the opening 9.5; the current SI juice removes that buy.
 

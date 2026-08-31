@@ -54,12 +54,12 @@ That schedule also protects against an 0-2 start becoming a season verdict. Detr
 
 The number has held at 7.5 while the Over moved from approximately +100 at opening to -120 on the current desk board. That 20-cent tax matters. The market has recognized the late-2025 improvement and favorable schedule even as camp injuries accumulated.
 
-At **Over 7.5 (-120)**, Kos Edge still has enough model room to issue a soft lean at low confidence. At a materially worse price, the expected value narrows while the injury risk stays the same. At 8.5, the edge becomes too thin for this roster state. The recommendation is tied to both number and price.
+At **Over 7.5 (-120)**, the Model cushion and the taxed price should both be shown — not averaged into a dressed Over. Camp attrition and the injury cluster keep the Aug. 31 stamp at **Pass**. At a materially worse price or at 8.5, the case is thinner still.
 
 ## Betting Guide
 
 - **Win total:** **Pass** at 7.5 (**-120 / +100**). Show the Model cushion and the taxed Over price together; no fake Over.
-- **Confidence control:** Keep conviction at 2/5 because Bresee is out for the season and Kamara and Tyson may miss the opening stretch.
+- **Confidence control:** Confidence is **1/5** because Bresee is out for the season and Kamara and Tyson may miss the opening stretch.
 - **Schedule:** Do not overreact to road games at Detroit and Baltimore; judge the ticket against the full, favorable slate.
 - **Offense watch:** Shough’s pressure response matters more than clean-practice completion rates. Etienne’s lead role is established while Kamara recovers.
 - **Defense watch:** Broughton and the interior rotation must show they can replace enough of Bresee’s early-down and pass-rush value.

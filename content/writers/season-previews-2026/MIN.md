@@ -12,7 +12,7 @@ The quarterback competition is over. The betting decision is not.
 
 Kevin O’Connell named Kyler Murray the starter on August 11, giving him a full month of first-team work before Minnesota opens against Green Bay. That removes the largest piece of summer uncertainty. It does not create a free Over at **8.5**.
 
-The Kos Edge model projects **8.38 expected wins**, just 0.12 below the market. Both sides cost -110. The number already accounts for Minnesota having enough quarterback play, skill talent and defense to stay around .500. The model and market are effectively saying the same thing.
+The Kos Edge model projects **8.38 expected wins**, just 0.12 below the market. The Aug. 31 RW live-widget stamp is Over **-120** / Under **+100**. The number already accounts for Minnesota having enough quarterback play, skill talent and defense to stay around .500. The model and market are effectively saying the same thing.
 
 That makes this a full-season outlook with a simple betting conclusion: Murray raises the offense’s plausible ceiling, but the current total offers no measurable edge. **Pass**.
 
@@ -60,7 +60,7 @@ There are winnable games in that layout. There are also enough concentrated test
 
 ## Fair and market are separated by one eighth of a win
 
-The model’s **8.38** sits 0.12 below the market’s **8.5**. That is statistical alignment, not an Under signal. At -110, neither side offers a price-based reason to overlook the thin difference.
+The model’s **8.38** sits 0.12 below the market’s **8.5**. That is statistical alignment, not an Under signal. At **-120 / +100**, neither side offers a price-based reason to overlook the thin difference.
 
 Murray winning the job resolves the model-versus-depth-chart concern that complicated earlier versions of this market. The latest information is now simpler: QB1 is settled, QB2 has been banged up, Adams is out for the year and the defense still has a credible core. Those changes widen the distribution more than they move the mean.
 
