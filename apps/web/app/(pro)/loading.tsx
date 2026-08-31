@@ -10,9 +10,7 @@ export default function ProLoading() {
             <span>Kos</span> <span>Edge</span>
           </p>
           <p className="kos-boot__title">Opening Pro desk…</p>
-          <p className="kos-boot__msg">
-            Loading research tools. You should never see an empty black frame.
-          </p>
+          <p className="kos-boot__msg">Loading research tools…</p>
         </div>
       </div>
     </>

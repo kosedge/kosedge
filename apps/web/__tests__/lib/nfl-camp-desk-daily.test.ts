@@ -138,10 +138,16 @@ describe("Aug 17 live Camp Desk day", () => {
     expect(src).toContain("KosEdge daily desk");
     expect(src).toContain("camp-desk-wrap");
     expect(src).toContain("PRESEASON");
-    expect(src).toContain("Citation headlines (not the desk)");
-    expect(src).toContain("Beat map · all 32");
+    expect(src).toContain("CampDeskControls");
+    expect(src).toContain("call sheet");
     expect(src).toContain("Desk updating");
-    expect(src).toContain("Archive · prior desk days");
+    expect(src).not.toContain("Citation headlines (not the desk)");
+    expect(src).not.toContain("Beat map · all 32");
+    expect(src).not.toContain("Quiet-club pulse queue");
+    expect(src).not.toContain("queue the existing depth job");
+    expect(src).not.toContain(">Filter<");
+    expect(src).not.toContain('type="submit"');
+    expect(src).not.toContain("method=\"get\"");
     expect(src).not.toContain("Trusted X · beat map");
     expect(src).not.toContain("https://x.com/");
     expect(src).not.toContain("No KosEdge camp notes");
@@ -262,7 +268,7 @@ describe("Aug 21 live Camp Desk day", () => {
     ).toEqual([{ label: "AP", href: "https://apnews.com/article/example" }]);
   });
 
-  it("keeps Friday live on a 72h cliff and archives Monday", () => {
+  it("keeps Friday as the single live package and archives Monday", () => {
     const monday = JSON.parse(
       readFileSync(
         path.join(
@@ -278,9 +284,34 @@ describe("Aug 21 live Camp Desk day", () => {
       { now, inCamp: true },
     );
     expect(shelf.live[0]?.desk_date).toBe("2026-08-21");
+    expect(shelf.live.every((card) => card.desk_date === "2026-08-21")).toBe(
+      true,
+    );
+    expect(shelf.activeDeskDate).toBe("2026-08-21");
     expect(shelf.archive.some((card) => card.desk_date === "2026-08-17")).toBe(
       true,
     );
     expect(shelf.deskStale).toBe(false);
+  });
+
+  it("archive date control returns only that desk day", () => {
+    const monday = JSON.parse(
+      readFileSync(
+        path.join(
+          __dirname,
+          "../../../../content/writers/camp-desk-2026/2026-08-17.json",
+        ),
+        "utf8",
+      ),
+    ) as CampDeskDayFile;
+    const now = new Date("2026-08-21T16:00:00Z");
+    const shelf = partitionCampDeskShelf(
+      [...cardsFromDayFile(monday), ...cardsFromDayFile(live)],
+      { now, inCamp: true, deskDate: "2026-08-17" },
+    );
+    expect(shelf.live.every((card) => card.desk_date === "2026-08-17")).toBe(
+      true,
+    );
+    expect(shelf.activeDeskDate).toBe("2026-08-17");
   });
 });
