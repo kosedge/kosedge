@@ -10,7 +10,6 @@ export type GlanceItem = {
   body: string;
 };
 
-
 const GLANCE: Record<string, GlanceItem[]> = {
   ncaam: [
     {

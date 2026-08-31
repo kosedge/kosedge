@@ -102,9 +102,7 @@ describe("cfb official slate in-house SoT", () => {
       "utf8",
     );
     expect(src).toContain("officialSlateHrefForWeek");
-    expect(src).not.toMatch(
-      /w\s*===\s*0\s*\?\s*["']\/pro\/cfb\/slate["']/,
-    );
+    expect(src).not.toMatch(/w\s*===\s*0\s*\?\s*["']\/pro\/cfb\/slate["']/);
   });
   it("registers the missing production routes", () => {
     const root = path.join(__dirname, "../../app/(pro)/pro/cfb");
