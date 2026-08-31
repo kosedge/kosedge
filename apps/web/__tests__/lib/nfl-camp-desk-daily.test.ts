@@ -147,7 +147,7 @@ describe("Aug 17 live Camp Desk day", () => {
     expect(src).not.toContain("queue the existing depth job");
     expect(src).not.toContain(">Filter<");
     expect(src).not.toContain('type="submit"');
-    expect(src).not.toContain("method=\"get\"");
+    expect(src).not.toContain('method="get"');
     expect(src).not.toContain("Trusted X · beat map");
     expect(src).not.toContain("https://x.com/");
     expect(src).not.toContain("No KosEdge camp notes");

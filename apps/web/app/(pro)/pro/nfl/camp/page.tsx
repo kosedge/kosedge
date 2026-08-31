@@ -78,7 +78,9 @@ function CampNoteCard({ card }: { card: CampDeskCard }) {
       ) : null}
       {card.what_to_watch ? (
         <p className="mt-3 text-sm text-kos-text/75">
-          <span className="font-semibold text-kos-text/70">What to watch. </span>
+          <span className="font-semibold text-kos-text/70">
+            What to watch.{" "}
+          </span>
           {card.what_to_watch}
         </p>
       ) : null}
@@ -165,8 +167,8 @@ export default async function NflCampDeskPage({
             KosEdge daily desk
           </h1>
           <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-            Today&apos;s call sheet and team notes. Pass stays first-class —
-            we do not invent a lean from thin camp noise. {truth.period_line}.
+            Today&apos;s call sheet and team notes. Pass stays first-class — we
+            do not invent a lean from thin camp noise. {truth.period_line}.
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
@@ -203,7 +205,10 @@ export default async function NflCampDeskPage({
           </p>
         ) : null}
         {viewingArchive && desk.activeDeskDate ? (
-          <p className="text-xs text-kos-text/55" data-testid="camp-desk-archive-banner">
+          <p
+            className="text-xs text-kos-text/55"
+            data-testid="camp-desk-archive-banner"
+          >
             Archive · {formatCampDeskDayLabel(desk.activeDeskDate)}. Switch Desk
             day back to today for the live shelf.
           </p>

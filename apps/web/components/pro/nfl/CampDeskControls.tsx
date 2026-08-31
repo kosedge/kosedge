@@ -11,7 +11,11 @@ type CampDeskControlsProps = {
   deskDates: string[];
 };
 
-function buildCampHref(team: string | null, date: string | null, latest: string | null) {
+function buildCampHref(
+  team: string | null,
+  date: string | null,
+  latest: string | null,
+) {
   const params = new URLSearchParams();
   if (team) params.set("team", team);
   if (date && latest && date !== latest) params.set("date", date);
@@ -41,7 +45,9 @@ export default function CampDeskControls({
           className="mt-1 block min-h-11 min-w-[12rem] rounded-lg border border-white/15 bg-black/50 px-3 text-sm text-kos-text"
           onChange={(event) => {
             const next = event.target.value.trim().toUpperCase() || null;
-            router.push(buildCampHref(next, activeDate || null, latestDeskDate));
+            router.push(
+              buildCampHref(next, activeDate || null, latestDeskDate),
+            );
           }}
         >
           <option value="">All teams with notes</option>

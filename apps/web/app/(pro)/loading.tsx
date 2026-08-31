@@ -4,7 +4,12 @@ export default function ProLoading() {
   return (
     <>
       <BootShellStyles />
-      <div className="kos-boot" role="status" aria-live="polite" aria-busy="true">
+      <div
+        className="kos-boot"
+        role="status"
+        aria-live="polite"
+        aria-busy="true"
+      >
         <div className="kos-boot__card">
           <p className="kos-boot__brand">
             <span>Kos</span> <span>Edge</span>
