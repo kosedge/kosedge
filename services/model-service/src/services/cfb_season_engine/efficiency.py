@@ -27,9 +27,52 @@ PACKAGED_EFFICIENCY = DATA_DIR / "cfb_efficiency_snapshot_2025_carry_2026.json"
 
 _SNAPSHOT_CACHE: Optional[Dict[str, Any]] = None
 
+# 0–100 fields regressed toward league average by EFF_CARRY_SHRINK.
+_CARRY_SHRINK_FIELDS = (
+    "off_eff",
+    "def_eff",
+    "success_off",
+    "success_def",
+    "explosiveness",
+)
+
 
 def _clamp(value: float, low: float = 0.0, high: float = 100.0) -> float:
     return max(low, min(high, float(value)))
+
+
+def apply_eff_carry_shrink(value: float, shrink: Optional[float] = None) -> float:
+    """Regress a 0–100 efficiency score toward league 50.
+
+    ``eff' = 50 + shrink * (eff_2025 - 50)``. Shrink 1.0 = identity.
+    """
+    s = float(P.EFF_CARRY_SHRINK if shrink is None else shrink)
+    return 50.0 + s * (float(value) - 50.0)
+
+
+def _pack_carry_shrink(snap: Mapping[str, Any]) -> Optional[float]:
+    raw = snap.get("carry_shrink")
+    if raw is None:
+        return None
+    try:
+        return float(raw)
+    except (TypeError, ValueError):
+        return None
+
+
+def _row_needs_runtime_shrink(snap: Mapping[str, Any], row: Mapping[str, Any]) -> bool:
+    """Packaged snapshot is SoT post-shrink when carry_shrink matches priors.
+
+    Legacy / test rows without the stamp still get the live shrink so compose
+    cannot silently read a 2025 corpse floor/ceiling.
+    """
+    if str(row.get("source") or "").startswith("league_average"):
+        return False
+    pack_s = _pack_carry_shrink(snap)
+    if pack_s is None and row.get("carry_shrink") is None:
+        return True
+    stamped = pack_s if pack_s is not None else float(row.get("carry_shrink"))
+    return abs(stamped - float(P.EFF_CARRY_SHRINK)) > 1e-9
 
 
 def load_efficiency_snapshot() -> Dict[str, Any]:
@@ -63,6 +106,7 @@ def snapshot_meta(snap: Optional[Mapping[str, Any]] = None) -> Dict[str, Any]:
         "as_of": str(snap.get("as_of") or ""),
         "prior_season": snap.get("prior_season"),
         "carry_to_season": snap.get("carry_to_season"),
+        "carry_shrink": snap.get("carry_shrink", P.EFF_CARRY_SHRINK),
         "fidelity": str(snap.get("fidelity") or "approximate"),
         "metric_family": str(snap.get("metric_family") or ""),
         "team_count": len(teams),
@@ -87,11 +131,14 @@ def build_efficiency_profile(
     """
     team = str(team).upper()
     row: Dict[str, Any] = {}
+    snap: Mapping[str, Any] = {}
+    from_pack = False
     if payload:
         row = dict(payload)
     else:
         snap = load_efficiency_snapshot()
         row = dict((snap.get("teams") or {}).get(team) or {})
+        from_pack = bool(row)
 
     if not row:
         profile = EfficiencyProfile(
@@ -116,13 +163,38 @@ def build_efficiency_profile(
         if fidelity not in ("real", "approximate", "placeholder"):
             fidelity = "approximate"
 
+        off_eff = float(row.get("off_eff", 50.0))
+        def_eff = float(row.get("def_eff", 50.0))
+        success_off = float(row.get("success_off", row.get("off_eff", 50.0)))
+        success_def = float(row.get("success_def", row.get("def_eff", 50.0)))
+        explosiveness = float(row.get("explosiveness", 50.0))
+        # Explicit payloads are authored as-is; only packaged carry may need
+        # a runtime shrink when the on-disk pack predates EFF_CARRY_SHRINK.
+        if from_pack and _row_needs_runtime_shrink(snap, row):
+            off_eff = apply_eff_carry_shrink(off_eff)
+            def_eff = apply_eff_carry_shrink(def_eff)
+            success_off = apply_eff_carry_shrink(success_off)
+            success_def = apply_eff_carry_shrink(success_def)
+            explosiveness = apply_eff_carry_shrink(explosiveness)
+
+        shrink_note = f" EFF_CARRY_SHRINK={P.EFF_CARRY_SHRINK}."
+        base_notes = str(
+            row.get("notes")
+            or (
+                "Prior-year opponent-adjusted efficiency carry "
+                "(SP+); success/explosiveness are proxies."
+            )
+        )
+        if from_pack and "EFF_CARRY_SHRINK" not in base_notes:
+            base_notes = base_notes.rstrip() + shrink_note
+
         profile = EfficiencyProfile(
             team=team,
-            off_eff=_clamp(row.get("off_eff", 50.0)),
-            def_eff=_clamp(row.get("def_eff", 50.0)),
-            success_off=_clamp(row.get("success_off", row.get("off_eff", 50.0))),
-            success_def=_clamp(row.get("success_def", row.get("def_eff", 50.0))),
-            explosiveness=_clamp(row.get("explosiveness", 50.0)),
+            off_eff=_clamp(off_eff),
+            def_eff=_clamp(def_eff),
+            success_off=_clamp(success_off),
+            success_def=_clamp(success_def),
+            explosiveness=_clamp(explosiveness),
             sp_plus=float(row.get("sp_plus", 0.0) or 0.0),
             sp_offense=float(row.get("sp_offense", 0.0) or 0.0)
             if row.get("sp_offense") is not None
@@ -135,13 +207,7 @@ def build_efficiency_profile(
             carry_to_season=int(row.get("carry_to_season") or 2026),
             source=str(row.get("source") or default_source),
             fidelity=fidelity,  # type: ignore[arg-type]
-            notes=str(
-                row.get("notes")
-                or (
-                    "Prior-year opponent-adjusted efficiency carry "
-                    "(SP+); success/explosiveness are proxies."
-                )
-            ),
+            notes=base_notes,
         )
 
     if apply_inseason:
@@ -192,6 +258,7 @@ def efficiency_to_dict(profile: Optional[EfficiencyProfile]) -> Optional[Dict[st
                 "experience": P.WEIGHT_DEF_EXPERIENCE,
                 "eff_index_blend": P.EFF_DEF_INDEX_BLEND,
             },
+            "eff_carry_shrink": P.EFF_CARRY_SHRINK,
             "anti_double_count": (
                 "Unit grade weights + unit index blends reduced vs v0.7 so "
                 "SP+ efficiency and talent composites do not both fully drive "
@@ -223,7 +290,8 @@ def documentation() -> Dict[str, Any]:
         "real_vs_approximate": (
             "Structure is REAL (inspectable off_eff/def_eff + blend weights). "
             "Packaged values are APPROXIMATE final-2025 SP+ carry — not live "
-            "2026 PBP EPA. success/explosiveness are proxies."
+            f"2026 PBP EPA — regressed toward 50 by EFF_CARRY_SHRINK="
+            f"{P.EFF_CARRY_SHRINK}. success/explosiveness are proxies."
         ),
         "primary_role": (
             "Primary complementary driver of team O/D indices alongside "
@@ -238,6 +306,7 @@ def documentation() -> Dict[str, Any]:
             "sp_plus",
         ],
         "data": meta,
+        "eff_carry_shrink": P.EFF_CARRY_SHRINK,
         "blend_weights": {
             "offense": {
                 "efficiency": P.WEIGHT_OFF_EFF,
@@ -257,6 +326,7 @@ def documentation() -> Dict[str, Any]:
         "limitations": [
             "No full PBP store; not true EPA / success-rate / explosiveness from plays",
             "2026 preseason: prior-year carry + roster/QB update (labeled)",
+            f"Carry shrink EFF_CARRY_SHRINK={P.EFF_CARRY_SHRINK} toward league 50",
             "Some packaged codes lack SP+ rows (league-average placeholder)",
             "Not a live weekly SP+ refresh pipeline",
         ],
