@@ -38,3 +38,10 @@
 ## Fire-on (operator)
 
 Desk can be shown. Not a play card. PASS unless \|KEI − Best\| ≥ 4.0 **and** a named driver. OSU −42 vs book −35 is calibration, not a PLAY. No market ⇒ dashes.
+
+## Local verify (2026-08-31)
+
+- `http://127.0.0.1:3000/edge-board/cfb?week=1` → 200
+- Week 1 tab selected (82 rows); Week 0 tab still present (8)
+- BALL@OSU: KEI −42.2; Open from Odds/fallback (+50.5 away); **Best cleared `untrusted`** by trusted-market (absurd vs KEI) → no spread Edge/PLAY
+- Screenshots: `/opt/cursor/artifacts/cfb-edgeboard-week1-header.webp`, `cfb-edgeboard-week1-table.webp`
