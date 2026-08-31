@@ -1,0 +1,335 @@
+{
+  "asOf": "2026-08-31",
+  "season": 2026,
+  "purpose": "Sourced draft-board sits only. Does not retune VOR/ADP/production. Remove players who cannot play Week 1+ (IR / PUP / NFI / commissioner's exempt / suspended / similar).",
+  "sits": [
+    {
+      "playerName": "Josh Jacobs",
+      "team": "GB",
+      "position": "RB",
+      "status": "commissioner_exempt",
+      "reason": "NFL Commissioner's Exempt List — off the Packers 53; cannot practice or attend games.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "NFL.com — Jacobs commissioner's exempt (Aug 30)",
+          "href": "https://www.nfl.com/news/nfl-places-packers-rb-josh-jacobs-commissioner-exempt-list"
+        },
+        {
+          "label": "ESPN — Jacobs commissioner's exempt (Aug 30)",
+          "href": "https://www.espn.com/nfl/story/_/id/49774523/packers-rb-josh-jacobs-placed-commission-exempt-list"
+        }
+      ]
+    },
+    {
+      "playerName": "Luke Musgrave",
+      "team": "GB",
+      "position": "TE",
+      "status": "pup",
+      "reason": "Packers Reserve/PUP — first four games minimum.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Packers — roster moves / Musgrave Reserve/PUP (Aug 30)",
+          "href": "https://www.packers.com/news/packers-announce-roster-moves-aug-30-2026"
+        }
+      ]
+    },
+    {
+      "playerName": "Jayden Higgins",
+      "team": "HOU",
+      "position": "WR",
+      "status": "ir",
+      "reason": "Texans Reserve/Injured — season-ending ACL.",
+      "asOf": "2026-08-21",
+      "sources": [
+        {
+          "label": "Texans — Higgins Reserve/Injured (Aug 21)",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-21-2026"
+        },
+        {
+          "label": "NFL.com — Higgins torn ACL, out for 2026",
+          "href": "https://www.nfl.com/news/texans-wr-jayden-higgins-torn-acl-out-2026-season"
+        }
+      ]
+    },
+    {
+      "playerName": "Tank Dell",
+      "team": "HOU",
+      "position": "WR",
+      "status": "ir",
+      "reason": "Texans Reserve/Injured (designated for return) — miss at least first four.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Texans — Dell Reserve/Injured DTR (Aug 30)",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-8-30-2026"
+        }
+      ]
+    },
+    {
+      "playerName": "James Conner",
+      "team": "ARI",
+      "position": "RB",
+      "status": "ir",
+      "reason": "Cardinals Reserve/Injured (designated for return) — miss at least first four.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "PFT / NBC Sports — Conner IR among Cardinals 53 moves (Aug 30)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/cardinals-place-james-conner-on-ir-among-their-moves-to-53"
+        }
+      ]
+    },
+    {
+      "playerName": "Tip Reiman",
+      "team": "ARI",
+      "position": "TE",
+      "status": "pup",
+      "reason": "Cardinals Reserve/PUP — opens season unavailable.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "PFT / NBC Sports — Reiman Reserve/PUP (Aug 30)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/cardinals-place-james-conner-on-ir-among-their-moves-to-53"
+        }
+      ]
+    },
+    {
+      "playerName": "Dillon Gabriel",
+      "team": "CLE",
+      "position": "QB",
+      "status": "ir",
+      "reason": "Browns Reserve/Injured (back), designated for return.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Browns — initial 53 / Gabriel IR (Aug 30)",
+          "href": "https://www.clevelandbrowns.com/news/browns-announce-initial-53-man-roster-heading-into-the-2026-season"
+        }
+      ]
+    },
+    {
+      "playerName": "Joe Royer",
+      "team": "CLE",
+      "position": "TE",
+      "status": "nfi",
+      "reason": "Browns Reserve/Non-Football Illness, designated for return.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Browns — Royer Reserve/NFI (Aug 30)",
+          "href": "https://www.clevelandbrowns.com/news/browns-announce-initial-53-man-roster-heading-into-the-2026-season"
+        }
+      ]
+    },
+    {
+      "playerName": "Calvin Austin III",
+      "team": "NYG",
+      "position": "WR",
+      "status": "ir",
+      "reason": "Giants Reserve/Injured — season-ending ACL.",
+      "asOf": "2026-08-27",
+      "sources": [
+        {
+          "label": "Giants — Austin IR / torn ACL (Aug 27)",
+          "href": "https://www.giants.com/news/calvin-austin-iii-injury-status-roster-new-york-giants"
+        }
+      ]
+    },
+    {
+      "playerName": "Jordyn Tyson",
+      "team": "NO",
+      "position": "WR",
+      "status": "ir",
+      "reason": "Saints Injured Reserve / designated to return — miss at least first four.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Saints — 53 cut / Tyson IR-DTR (Aug 30)",
+          "href": "https://www.neworleanssaints.com/news/new-orleans-saints-53-man-roster-cut-transactions-august-30-2026-nfl-season"
+        }
+      ]
+    },
+    {
+      "playerName": "Devin Neal",
+      "team": "NO",
+      "position": "RB",
+      "status": "ir",
+      "reason": "Saints Injured Reserve — not available Week 1+.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Saints — 53 cut / Neal IR (Aug 30)",
+          "href": "https://www.neworleanssaints.com/news/new-orleans-saints-53-man-roster-cut-transactions-august-30-2026-nfl-season"
+        }
+      ]
+    },
+    {
+      "playerName": "Mason Tipton",
+      "team": "NO",
+      "position": "WR",
+      "status": "pup",
+      "reason": "Saints Reserve/PUP — opens season unavailable.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Saints — 53 cut / Tipton Reserve/PUP (Aug 30)",
+          "href": "https://www.neworleanssaints.com/news/new-orleans-saints-53-man-roster-cut-transactions-august-30-2026-nfl-season"
+        }
+      ]
+    },
+    {
+      "playerName": "Jeshaun Jones",
+      "team": "MIN",
+      "position": "WR",
+      "status": "suspended",
+      "reason": "Vikings Reserve/Suspended — not draftable while suspended.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Vikings — initial 53 / Jeshaun Jones Reserve/Suspended (Aug 30)",
+          "href": "https://www.vikings.com/news/53-man-roster-2026-nfl-initial"
+        }
+      ]
+    }
+  ],
+  "checkedNotOnBoard": [
+    {
+      "playerName": "Cade Mays",
+      "team": "DET",
+      "position": "C",
+      "status": "ir",
+      "reason": "Lions Reserve/Injured — not a fantasy skill-position board player.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Lions — roster moves (Aug 30)",
+          "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
+        }
+      ]
+    },
+    {
+      "playerName": "Brian Branch",
+      "team": "DET",
+      "position": "DB",
+      "status": "pup",
+      "reason": "Lions Reserve/PUP — not on standard fantasy draft board.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Lions — roster moves (Aug 30)",
+          "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
+        }
+      ]
+    },
+    {
+      "playerName": "Kerby Joseph",
+      "team": "DET",
+      "position": "S",
+      "status": "pup",
+      "reason": "Lions Reserve/PUP — not on standard fantasy draft board.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Lions — roster moves (Aug 30)",
+          "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
+        }
+      ]
+    },
+    {
+      "playerName": "Giovanni Manu",
+      "team": "DET",
+      "position": "OL",
+      "status": "nfi",
+      "reason": "Lions Reserve/NFI — not on standard fantasy draft board.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Lions — roster moves (Aug 30)",
+          "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
+        }
+      ]
+    },
+    {
+      "playerName": "Terrion Arnold",
+      "team": "SEA",
+      "position": "CB",
+      "status": "commissioner_exempt",
+      "reason": "NFL Commissioner's Exempt List after Seahawks signing — CB, not on standard fantasy draft board.",
+      "asOf": "2026-08-29",
+      "sources": [
+        {
+          "label": "NFL.com — Arnold commissioner's exempt (Aug 29)",
+          "href": "https://www.nfl.com/news/seahawks-sign-terrion-arnold-nfl-to-place-cb-on-commissioner-s-exempt-list"
+        }
+      ]
+    },
+    {
+      "playerName": "Jonathon Cooper",
+      "team": "DEN",
+      "position": "OLB",
+      "status": "commissioner_exempt",
+      "reason": "NFL Commissioner's Exempt List — IDP-only; not on standard skill board.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Camp desk / ESPN-TSN — Cooper exempt (Aug 30)",
+          "href": "https://www.tsn.ca/nfl/article/report-broncos-olb-cooper-placed-on-exempt-list-n1-49774684/"
+        }
+      ]
+    },
+    {
+      "playerName": "Micah Parsons",
+      "team": "GB",
+      "position": "EDGE",
+      "status": "pup",
+      "reason": "Packers Reserve/PUP — EDGE, not on standard fantasy draft board.",
+      "asOf": "2026-08-30",
+      "sources": [
+        {
+          "label": "Packers — Parsons Reserve/PUP (Aug 30)",
+          "href": "https://www.packers.com/news/packers-announce-roster-moves-aug-30-2026"
+        }
+      ]
+    }
+  ],
+  "leftUpNotes": [
+    {
+      "playerName": "Alvin Kamara",
+      "team": "NO",
+      "position": "RB",
+      "note": "Camp desk: MCL timeline without a posted IR/PUP designation as of Aug 31 — do not mint a sit."
+    },
+    {
+      "playerName": "Ashton Jeanty",
+      "team": "LV",
+      "position": "RB",
+      "note": "Camp desk: club counting on Week 1; kept off IR — left draftable."
+    },
+    {
+      "playerName": "Christian McCaffrey",
+      "team": "SF",
+      "position": "RB",
+      "note": "Camp desk: in team work on Day 17; 49ers 53 not yet a sit signal — left draftable."
+    },
+    {
+      "playerName": "George Kittle",
+      "team": "SF",
+      "position": "TE",
+      "note": "Activated off Active/PUP (NFL.com) — left draftable."
+    },
+    {
+      "playerName": "Alec Pierce",
+      "team": "IND",
+      "position": "WR",
+      "note": "Colts club: off Active/PUP Aug 27 — left draftable."
+    },
+    {
+      "playerName": "Jaydon Blue",
+      "team": "DAL",
+      "position": "RB",
+      "note": "Camp desk: waive is beat-only until club 53 posts it — do not sit on unverified cut."
+    }
+  ]
+}

@@ -60,9 +60,13 @@ export function buildRiskFlags(input: {
     "out",
     "ir",
     "pup",
+    "nfi",
     "suspended",
     "inactive",
     "waived",
+    "exempt",
+    "commissioner_exempt",
+    "commissioners_exempt",
   ].includes(injuryStatus);
 
   if (hardOut) {

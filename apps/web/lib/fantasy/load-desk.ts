@@ -6,6 +6,11 @@ import {
 } from "@/lib/fantasy/adp-fantasypros";
 import { matchAdpToDeskRows } from "@/lib/fantasy/adp-match";
 import { applyDeskRankPolicy } from "@/lib/fantasy/desk-rank-policy";
+import {
+  draftSitLimitation,
+  filterDraftableRows,
+  loadDraftAvailabilityBook,
+} from "@/lib/fantasy/draft-availability";
 import { enrichDraftRows, type EnrichableDraftRow } from "@/lib/fantasy/enrich";
 import {
   loadNfl2026DepthRows,
@@ -36,7 +41,7 @@ const LIMITATIONS_BASE = [
   "Draft advice (Builder suggestions + Mock on-the-clock + CPU) is ADP-aware: need + VOR − reach penalty when you would take a player before ADP. Same projections; different action scoring. Not an optimal-pick claim.",
   "Floor–med–ceiling from model quantiles when present; else a band around median.",
   "Schedule softness: W1–6 vs W14–17 opponent expected wins — not a full matchup sim.",
-  "No live injury feed. Builder is a private roster; Mock fills other seats (no league sync).",
+  "No live injury feed. Sourced IR/PUP/NFI/exempt/suspended sits remove unavailable players from this board. Builder is a private roster; Mock fills other seats (no league sync).",
   "Snake 1QB redraft only — no auction, Superflex, or dynasty.",
   "|modelRank − ADP| ≥ 8 with high ADP-match confidence is flagged High deviation as a data/role warning — not a bet slip.",
 ];
@@ -325,6 +330,16 @@ export async function loadFantasyDraftDesk(params: {
   enrichable = kdMerge.rows;
   if (kdMerge.note) {
     limitations = [...limitations, kdMerge.note];
+  }
+
+  // Sourced sits (IR / PUP / NFI / exempt / suspended) — remove from draftable
+  // board before ADP match + desk rank. Same board feeds mock. No VOR retune.
+  const sitBook = loadDraftAvailabilityBook(season);
+  const sitFilter = filterDraftableRows(enrichable, sitBook);
+  enrichable = sitFilter.draftable;
+  const sitNote = draftSitLimitation(sitFilter.sat, sitBook.asOf);
+  if (sitNote) {
+    limitations = [...limitations, sitNote];
   }
 
   const adpMatch = matchAdpToDeskRows(
