@@ -36,7 +36,8 @@ export function trustCfbMarket(input: {
   const kei = num(input.kei);
   const best = num(input.best);
   const open = num(input.open);
-  const books = input.bookCount ?? (best != null && open != null && best !== open ? 2 : 1);
+  const books =
+    input.bookCount ?? (best != null && open != null && best !== open ? 2 : 1);
 
   if (kei == null) {
     return { trusted: false, market: null, reason: "no_kei" };
@@ -48,7 +49,11 @@ export function trustCfbMarket(input: {
   let candidate = best ?? open;
   let reason = "best";
 
-  if (best != null && open != null && Math.abs(best - open) >= CFB_OUTLIER_VS_OPEN_PTS) {
+  if (
+    best != null &&
+    open != null &&
+    Math.abs(best - open) >= CFB_OUTLIER_VS_OPEN_PTS
+  ) {
     candidate = open;
     reason = "best_outlier_vs_open";
   }
