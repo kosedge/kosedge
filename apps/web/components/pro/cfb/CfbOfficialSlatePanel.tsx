@@ -52,7 +52,9 @@ export default function CfbOfficialSlatePanel({
     <section className="mt-6">
       <div className="flex flex-wrap items-end justify-between gap-2">
         <div>
-          <h2 className="text-lg font-semibold text-kos-text">Official Slate</h2>
+          <h2 className="text-lg font-semibold text-kos-text">
+            Official Slate
+          </h2>
           <p className="mt-1 text-xs leading-relaxed text-kos-text/60">
             {officialSlateAttribution(board)}
           </p>
@@ -63,7 +65,11 @@ export default function CfbOfficialSlatePanel({
             missing book listings show as unconfirmed, not invented
           </p>
         </div>
-        <div className="flex flex-wrap gap-2" role="tablist" aria-label="CFB official week">
+        <div
+          className="flex flex-wrap gap-2"
+          role="tablist"
+          aria-label="CFB official week"
+        >
           {weeks.map((w) => (
             <Link
               key={w}

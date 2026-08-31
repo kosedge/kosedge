@@ -203,9 +203,12 @@ export function matchupLabel(row: CfbWeekBoardGame): string {
   return `${away} @ ${home}`;
 }
 
-export function officialSlateAttribution(board: CfbWeekBoard = packagedOfficialWeekBoard()): string {
-  const fact = board.factcheck_source === "the_odds_api_ncaaf_events"
-    ? "The Odds API"
-    : board.factcheck_source || "second source";
+export function officialSlateAttribution(
+  board: CfbWeekBoard = packagedOfficialWeekBoard(),
+): string {
+  const fact =
+    board.factcheck_source === "the_odds_api_ncaaf_events"
+      ? "The Odds API"
+      : board.factcheck_source || "second source";
   return `Official slate · KosEdge · sourced from ESPN, fact-checked vs ${fact} · as_of ${board.as_of ?? "—"}`;
 }

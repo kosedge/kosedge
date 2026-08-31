@@ -1964,7 +1964,7 @@ export default function EdgeBoard({
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
               ? "We bet prices, not teams. Action = KEI vs Current (stakeable book when present). Edge magnitude and confidence stay separate. "
-                : isMlb
+              : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : String(sportKey).toLowerCase() === "cfb"
                   ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. No book ⇒ dashes. "

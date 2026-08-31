@@ -63,7 +63,8 @@ export default async function CfbSeasonModelHubPage({
     | Record<string, SearchValue>;
 }) {
   const sp =
-    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
       ? await (searchParams as Promise<Record<string, SearchValue>>)
       : ((searchParams as Record<string, SearchValue>) ?? {});
   const week = parseOfficialSlateWeek(firstValue(sp.week));
@@ -101,7 +102,9 @@ export default async function CfbSeasonModelHubPage({
             href={tool.href}
             className="min-h-11 rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50"
           >
-            <h2 className="text-sm font-semibold text-kos-gold">{tool.title}</h2>
+            <h2 className="text-sm font-semibold text-kos-gold">
+              {tool.title}
+            </h2>
             <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
               {tool.body}
             </p>
@@ -111,10 +114,9 @@ export default async function CfbSeasonModelHubPage({
           <h2 className="text-sm font-semibold text-kos-gold">Fidelity</h2>
           <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
             KosEdge official slate (ESPN + Odds API fact-check) + 136/136 roster
-            overlay. Named ESPN QBs:{" "}
-            {fidelity?.espn_named_qb ?? "—"} · warehouse fills labeled on Team
-            DNA (not silent 50/50). Returning snap% and portal-out still
-            proxies; coaching / HFA curated.
+            overlay. Named ESPN QBs: {fidelity?.espn_named_qb ?? "—"} ·
+            warehouse fills labeled on Team DNA (not silent 50/50). Returning
+            snap% and portal-out still proxies; coaching / HFA curated.
           </p>
         </div>
       </section>
@@ -219,7 +221,9 @@ export default async function CfbSeasonModelHubPage({
           Proxied through Next.js BFF routes — browser never calls Railway with
           secrets. Season simulate stays heavy/API-capped; use Project Game for
           interactive eval. Performance strip reads{" "}
-          <code className="text-kos-text/60">/cfb/season-engine/performance</code>
+          <code className="text-kos-text/60">
+            /cfb/season-engine/performance
+          </code>
           {performance.error ? (
             <span className="text-kos-text/40">
               {" "}
@@ -227,8 +231,10 @@ export default async function CfbSeasonModelHubPage({
             </span>
           ) : null}
           . In-season efficiency updates (v0.9 foundation) ingest via{" "}
-          <code className="text-kos-text/60">/cfb/season-engine/in-season/*</code>
-          {" "}— preseason baseline preserved; early weeks move more than late.
+          <code className="text-kos-text/60">
+            /cfb/season-engine/in-season/*
+          </code>{" "}
+          — preseason baseline preserved; early weeks move more than late.
         </p>
         {status.schedule_source ? (
           <p className="mt-2 text-xs text-kos-text/50">

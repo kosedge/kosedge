@@ -34,7 +34,8 @@ export default async function CfbProjectGamePage({
     | Record<string, SearchValue>;
 }) {
   const sp =
-    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
       ? await (searchParams as Promise<Record<string, SearchValue>>)
       : ((searchParams as Record<string, SearchValue>) ?? {});
 

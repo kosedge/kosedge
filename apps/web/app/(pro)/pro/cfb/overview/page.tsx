@@ -126,7 +126,9 @@ export default function CfbOverviewPage() {
       <section className="mt-6 grid gap-4 lg:grid-cols-2">
         <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
           <div className="flex flex-wrap items-end justify-between gap-2">
-            <h2 className="text-lg font-semibold text-kos-text">Power snapshot</h2>
+            <h2 className="text-lg font-semibold text-kos-text">
+              Power snapshot
+            </h2>
             <Link
               href="/pro/cfb/teams"
               className="text-xs font-semibold text-kos-gold hover:underline"
@@ -139,7 +141,10 @@ export default function CfbOverviewPage() {
           </p>
           <ol className="mt-3 space-y-2">
             {top.map((row) => (
-              <li key={row.team} className="flex items-center justify-between gap-3 text-sm">
+              <li
+                key={row.team}
+                className="flex items-center justify-between gap-3 text-sm"
+              >
                 <Link
                   href={`/pro/cfb/teams/${row.team.toLowerCase()}`}
                   className="font-medium text-kos-text hover:text-kos-gold"
@@ -166,8 +171,8 @@ export default function CfbOverviewPage() {
             </Link>
           </div>
           <p className="mt-1 text-xs text-kos-text/55">
-            KosEdge + date only. Research language. {teamPreviews.length} team
-            · {confPreviews.length} conference.
+            KosEdge + date only. Research language. {teamPreviews.length} team ·{" "}
+            {confPreviews.length} conference.
           </p>
           <ul className="mt-3 grid gap-2 sm:grid-cols-2">
             {teamPreviews.map((p) => (

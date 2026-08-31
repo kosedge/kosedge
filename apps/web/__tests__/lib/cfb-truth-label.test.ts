@@ -17,7 +17,9 @@ describe("cfb-truth-label", () => {
     expect(cfbModelDeskTruthStates(AUG_2026)).toEqual(["PRESEASON", "MODEL"]);
     expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/PRESEASON/);
     expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/MODEL research/);
-    expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(/KEI is the published line/);
+    expect(cfbModelDeskHonestyNote(AUG_2026)).toMatch(
+      /KEI is the published line/,
+    );
     expect(cfbModelDeskTruthStates(AUG_2026)).not.toContain("LIVE");
   });
 

@@ -65,8 +65,7 @@ export default async function EdgeBoardSportPage({
     sportKey === "nfl" ? normalizeNflEdgeBoardSlate(slateRaw) : "week1";
   const cfbWeekRaw = Array.isArray(sp.week) ? sp.week[0] : sp.week;
   // Live desk defaults to Week 1; Week 0 remains via ?week=0 (finals).
-  const cfbWeek =
-    sportKey === "cfb" ? (cfbWeekRaw === "0" ? 0 : 1) : 0;
+  const cfbWeek = sportKey === "cfb" ? (cfbWeekRaw === "0" ? 0 : 1) : 0;
 
   // NFL: one full assemble, then derive Week 1 (counts stay cheap; no double pull).
   let rows: EdgeBoardRow[] = [];

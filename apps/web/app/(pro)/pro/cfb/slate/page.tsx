@@ -26,7 +26,8 @@ export default async function CfbOfficialSlatePage({
     | Record<string, SearchValue>;
 }) {
   const sp =
-    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
       ? await (searchParams as Promise<Record<string, SearchValue>>)
       : ((searchParams as Record<string, SearchValue>) ?? {});
   const week = parseOfficialSlateWeek(firstValue(sp.week));
