@@ -85,6 +85,36 @@ describe("nfl surface integrity — web", () => {
     expect(flags.some((f) => f.label === "OUT")).toBe(true);
   });
 
+  it("zeros Jacobs when pack injury_status=commissioner_exempt", () => {
+    const depth: DepthRow[] = [
+      {
+        team: "GB",
+        position: "RB",
+        depthOrder: 1,
+        playerName: "Josh Jacobs",
+        roleConfidence: 0.9,
+        playerId: "00-0035700",
+        injuryStatus: "commissioner_exempt",
+      },
+    ];
+    const patched = applyPackInjuryToDraftRow(
+      baseRow({
+        playerId: "00-0035700",
+        playerName: "Josh Jacobs",
+        team: "GB",
+        position: "RB",
+        rushYardsTotal: 1200,
+        receivingYardsTotal: 300,
+        receptionsTotal: 30,
+        totalPoints: 250,
+      }),
+      depth,
+    );
+    expect(patched.gamesProjected).toBe(0);
+    expect(patched.rushYardsTotal).toBe(0);
+    expect(patched.totalPoints).toBe(0);
+  });
+
   it("recoupled season TDs land in integrity peak bands (not broken copy)", () => {
     // Stale CSV inputs (16.5 pass / 6.5 rec) must not be the answer.
     const rows = applySurfaceIntegrityToPlayerTotals(

@@ -18,9 +18,13 @@ const HARD_OUT = new Set([
   "out",
   "ir",
   "pup",
+  "nfi",
   "suspended",
   "inactive",
   "waived",
+  "exempt",
+  "commissioner_exempt",
+  "commissioners_exempt",
 ]);
 
 function normalizeName(name: string): string {
