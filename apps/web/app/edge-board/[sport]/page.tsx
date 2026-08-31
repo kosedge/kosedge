@@ -64,10 +64,13 @@ export default async function EdgeBoardSportPage({
   const slate =
     sportKey === "nfl" ? normalizeNflEdgeBoardSlate(slateRaw) : "week1";
   const cfbWeekRaw = Array.isArray(sp.week) ? sp.week[0] : sp.week;
-  const cfbWeek = sportKey === "cfb" && cfbWeekRaw === "1" ? 1 : 0;
+  // Live desk defaults to Week 1; Week 0 remains via ?week=0 (finals).
+  const cfbWeek =
+    sportKey === "cfb" ? (cfbWeekRaw === "0" ? 0 : 1) : 0;
 
   // NFL: one full assemble, then derive Week 1 (counts stay cheap; no double pull).
   let rows: EdgeBoardRow[] = [];
+  let week0Count = 0;
   let week1Count = 0;
   let fullCount = 0;
   if (sportKey === "nfl") {
@@ -84,8 +87,8 @@ export default async function EdgeBoardSportPage({
     rows = slate === "full" ? fullRows : week1Rows;
   } else if (sportKey === "cfb") {
     const all = stampCfbEdgeBoardWeek(await getRows("cfb", "week1"));
-    week1Count = gameCount(all.filter((r) => r.week === 0));
-    fullCount = gameCount(all.filter((r) => r.week === 1));
+    week0Count = gameCount(all.filter((r) => r.week === 0));
+    week1Count = gameCount(all.filter((r) => r.week === 1));
     rows = all.filter((r) => r.week === cfbWeek);
   } else {
     rows = await getRows(sportKey, "week1");
@@ -219,7 +222,7 @@ export default async function EdgeBoardSportPage({
                     : "bg-black/30 border border-white/12 text-gray-300"
                 }`}
               >
-                Week 0{week1Count ? ` (${week1Count})` : ""}
+                Week 0{week0Count ? ` (${week0Count})` : ""}
               </Link>
               <Link
                 href="/edge-board/cfb?week=1"
@@ -231,7 +234,7 @@ export default async function EdgeBoardSportPage({
                     : "bg-black/30 border border-white/12 text-gray-300"
                 }`}
               >
-                Week 1{fullCount ? ` (${fullCount})` : ""}
+                Week 1{week1Count ? ` (${week1Count})` : ""}
               </Link>
             </div>
             <p className="text-[11px] text-gray-500">
@@ -288,7 +291,9 @@ export default async function EdgeBoardSportPage({
           emptyHint={
             isNfl && slate === "week1"
               ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."
-              : undefined
+              : sportKey === "cfb"
+                ? "KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF — we do not invent book prices."
+                : undefined
           }
         />
 
@@ -299,7 +304,13 @@ export default async function EdgeBoardSportPage({
                   ? slate === "week1"
                     ? " · Week 1 REG"
                     : " · full slate"
-                  : ""
+                  : sportKey === "cfb"
+                    ? ` · Week ${cfbWeek}${
+                        rows.some((r) => r.best || r.open)
+                          ? ""
+                          : " · waiting on Odds API for Open/Best"
+                      }`
+                    : ""
               }`
             : isNfl && slate === "week1"
               ? "No Week 1 REG games yet — board stays empty (no silent full-slate fallthrough)."

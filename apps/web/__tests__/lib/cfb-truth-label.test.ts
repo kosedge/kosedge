@@ -46,7 +46,7 @@ describe("cfb truth-label wiring", () => {
     }
   });
 
-  it("CFB Edge Board publishes KEI vs market with Week 0/1 tabs", () => {
+  it("CFB Edge Board publishes KEI vs market with Week 0/1 tabs defaulting to Week 1", () => {
     const board = readFileSync(
       path.join(__dirname, "../../app/edge-board/[sport]/page.tsx"),
       "utf8",
@@ -54,5 +54,9 @@ describe("cfb truth-label wiring", () => {
     expect(board).toContain("stampCfbEdgeBoardWeek");
     expect(board).toContain("Tag = KEI vs trusted market");
     expect(board).toContain("/edge-board/cfb?week=0");
+    expect(board).toContain("/edge-board/cfb?week=1");
+    expect(board).toMatch(/cfbWeekRaw === "0" \? 0 : 1/);
+    expect(board).toContain("week0Count");
+    expect(board).toContain("waiting on Odds API");
   });
 });

@@ -24,6 +24,9 @@ export type CfbWeekBoardGame = {
   conference_game?: boolean;
   status?: string;
   factcheck?: string;
+  /** Finals only — never invent; null/omitted when unplayed. */
+  home_score?: number | null;
+  away_score?: number | null;
 };
 
 export type CfbWeekBoard = {
@@ -82,7 +85,15 @@ function asGame(row: unknown): CfbWeekBoardGame | null {
     conference_game: Boolean(r.conference_game),
     status: typeof r.status === "string" ? r.status : undefined,
     factcheck: typeof r.factcheck === "string" ? r.factcheck : undefined,
+    home_score: scoreOrNull(r.home_score),
+    away_score: scoreOrNull(r.away_score),
   };
+}
+
+function scoreOrNull(v: unknown): number | null | undefined {
+  if (v == null || v === "") return v === null ? null : undefined;
+  const n = typeof v === "number" ? v : Number(v);
+  return Number.isFinite(n) ? n : null;
 }
 
 export function packagedOfficialWeekBoard(): CfbWeekBoard {
@@ -129,10 +140,37 @@ export function officialSlateWeeks(): number[] {
   return weeks.length ? weeks : [0, 1];
 }
 
+/** Live desk defaults to Week 1 when present; Week 0 stays via ?week=0. */
 export function parseOfficialSlateWeek(raw?: string): number {
-  const n = Number(raw ?? 0);
   const weeks = officialSlateWeeks();
-  return weeks.includes(n) ? n : (weeks[0] ?? 0);
+  const fallback = weeks.includes(1) ? 1 : (weeks[0] ?? 0);
+  if (raw == null || String(raw).trim() === "") return fallback;
+  const n = Number(raw);
+  return weeks.includes(n) ? n : fallback;
+}
+
+/** Resolve project-game week from the official slate matchup — never invent. */
+export function officialSlateWeekForMatchup(
+  home: string,
+  away: string,
+): number | undefined {
+  const h = String(home || "")
+    .replace(/^fcs:/i, "")
+    .toUpperCase();
+  const a = String(away || "")
+    .replace(/^fcs:/i, "")
+    .toUpperCase();
+  if (!h || !a) return undefined;
+  const hit = (packagedOfficialWeekBoard().games ?? []).find((g) => {
+    const gh = String(g.home || "")
+      .replace(/^fcs:/i, "")
+      .toUpperCase();
+    const ga = String(g.away || "")
+      .replace(/^fcs:/i, "")
+      .toUpperCase();
+    return gh === h && ga === a;
+  });
+  return hit?.week;
 }
 
 export function projectGameHref(row: CfbWeekBoardGame): string {

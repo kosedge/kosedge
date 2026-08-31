@@ -106,7 +106,7 @@ export default async function CfbFuturesPage({
       honestyNote="Not advice. Missing book prices show —."
       primaryHref="/pro/cfb/projections"
       primaryLabel="Win totals"
-      secondaryHref="/edge-board/cfb"
+      secondaryHref="/edge-board/cfb?week=1"
       secondaryLabel="Edge Board"
     >
       <section className="rounded-2xl border border-kos-gold/25 bg-black/35 px-4 py-3 text-sm text-kos-text/80">

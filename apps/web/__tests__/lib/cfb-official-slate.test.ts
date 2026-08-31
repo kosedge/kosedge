@@ -5,6 +5,7 @@ import { cfbKeiGames } from "@/lib/cfb-kei-artifacts";
 import {
   gamesForWeek,
   officialSlateAttribution,
+  officialSlateWeekForMatchup,
   packagedOfficialWeekBoard,
   parseOfficialSlateWeek,
   resolveWeekBoard,
@@ -20,7 +21,8 @@ describe("cfb official slate in-house SoT", () => {
     expect(board.source).toBe("kosedge_official_slate");
     expect(board.primary_source).toBe("espn_team_schedule_public");
     expect(board.factcheck_source).toBe("the_odds_api_ncaaf_events");
-    expect(board.slate_version).toMatch(/cfb-official-slate/);
+    expect(board.as_of).toBe("2026-08-31");
+    expect(board.slate_version).toMatch(/cfb-official-slate.*20260831/);
     const w0 = gamesForWeek(board, 0);
     const w1 = gamesForWeek(board, 1);
     expect(w0.length).toBe(8);
@@ -32,6 +34,7 @@ describe("cfb official slate in-house SoT", () => {
     expect(w0.some((g) => g.home === "STAN" && g.away === "HAW")).toBe(true);
     expect(officialSlateAttribution(board)).toContain("ESPN");
     expect(officialSlateAttribution(board)).toContain("The Odds API");
+    expect(officialSlateAttribution(board)).toContain("2026-08-31");
   });
 
   it("keeps the KosEdge artifact when a remote board is present", () => {
@@ -42,10 +45,14 @@ describe("cfb official slate in-house SoT", () => {
     expect(remote.games?.some((g) => g.home === "AAA")).toBe(false);
   });
 
-  it("fact-checks W0 FBS–FBS and does not invent only-secondary games", () => {
+  it("closes Week 0 FBS–FBS finals without inventing scores", () => {
     const board = packagedOfficialWeekBoard();
     const w0Fbs = gamesForWeek(board, 0).filter((g) => g.fbs_vs_fbs);
-    expect(w0Fbs.every((g) => g.status === "accepted")).toBe(true);
+    expect(w0Fbs).toHaveLength(6);
+    expect(w0Fbs.every((g) => g.status === "final")).toBe(true);
+    const unc = w0Fbs.find((g) => g.home === "TCU" && g.away === "UNC");
+    expect(unc?.away_score).toBe(15);
+    expect(unc?.home_score).toBe(10);
     expect(board.factcheck?.conflicts).toEqual([]);
     expect(board.games?.some((g) => g.home === "AAA")).toBe(false);
   });
@@ -63,7 +70,7 @@ describe("cfb official slate in-house SoT", () => {
     }
   });
 
-  it("allows Week 0 project-game bodies", () => {
+  it("allows Week 0 project-game bodies and defaults desk week to 1", () => {
     expect(
       buildProjectGameBody({
         homeTeam: "TCU",
@@ -72,8 +79,12 @@ describe("cfb official slate in-house SoT", () => {
         neutralSite: true,
       }).week,
     ).toBe(0);
+    expect(parseOfficialSlateWeek(undefined)).toBe(1);
+    expect(parseOfficialSlateWeek("")).toBe(1);
     expect(parseOfficialSlateWeek("1")).toBe(1);
-    expect(parseOfficialSlateWeek("9")).toBe(0);
+    expect(parseOfficialSlateWeek("0")).toBe(0);
+    expect(parseOfficialSlateWeek("9")).toBe(1);
+    expect(officialSlateWeekForMatchup("TCU", "UNC")).toBe(0);
   });
 
   it("registers the missing production routes", () => {

@@ -43,7 +43,7 @@ export default async function CfbOfficialSlatePage({
       honestyNote={`${cfbModelDeskHonestyNote()} Slate identity is the KosEdge artifact (used_in_spread=false).`}
       primaryHref="/pro/cfb/project-game"
       primaryLabel="Project Game"
-      secondaryHref="/edge-board/cfb"
+      secondaryHref="/edge-board/cfb?week=1"
       secondaryLabel="Edge Board (markets)"
     >
       <CfbOfficialSlatePanel

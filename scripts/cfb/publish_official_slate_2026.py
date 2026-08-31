@@ -45,14 +45,12 @@ MS_OUT = (
     / "services/model-service/src/services/cfb_season_engine/data/cfb_official_slate_2026.json"
 )
 RAW_DIR = REPO / "data/cfb/raw"
-OPS_PATH = REPO / "data/ops/cfb-official-slate-20260817.md"
-
-SLATE_VERSION = "cfb-official-slate-v2-dual-20260817"
 PRIMARY_SOURCE = "espn_team_schedule_public"
 FACTCHECK_SOURCE = "the_odds_api_ncaaf_events"
 KICKOFF_TOLERANCE_SEC = 3 * 3600
 WEEKS = (0, 1)
-AS_OF = datetime.now(timezone.utc).strftime("%Y-%m-%d")
+# Stamp from engine schedule as_of when present so republish cannot regress to 2026-08-17.
+# Version suffix follows that desk date (not a hardcoded Aug 17 dual stamp).
 
 ALIASES = {
     "north carolina": "UNC",
@@ -201,6 +199,12 @@ def main() -> int:
     espn = load_json(ESPN_PATH)
     universe = load_json(UNIVERSE_PATH)
     index = build_name_index()
+    # Prefer engine schedule as_of (Week 0 close stamp) over wall-clock.
+    as_of = str(espn.get("as_of") or "").strip() or datetime.now(
+        timezone.utc
+    ).strftime("%Y-%m-%d")
+    slate_version = f"cfb-official-slate-v2-dual-{as_of.replace('-', '')}"
+    ops_path = REPO / f"data/ops/cfb-official-slate-{as_of.replace('-', '')}.md"
     primary = []
     for g in espn.get("games") or []:
         if not isinstance(g, dict):
@@ -231,7 +235,7 @@ def main() -> int:
     (RAW_DIR / "odds_api_ncaaf_events_2026.json").write_text(
         json.dumps(
             {
-                "as_of": AS_OF,
+                "as_of": as_of,
                 "source": FACTCHECK_SOURCE,
                 "n": len(events),
                 "error": factcheck_error,
@@ -308,6 +312,18 @@ def main() -> int:
         else:
             only_primary.append(f"{away} @ {home} (W{raw.get('week')})")
 
+        # Prefer engine final when scores exist — do not invent.
+        away_score = raw.get("away_score")
+        home_score = raw.get("home_score")
+        engine_final = (
+            str(raw.get("status") or "").lower() == "final"
+            or (
+                isinstance(away_score, (int, float))
+                and isinstance(home_score, (int, float))
+            )
+        )
+        row_status = "final" if engine_final else status
+
         published.append(
             {
                 "week": int(raw.get("week")),
@@ -325,7 +341,9 @@ def main() -> int:
                 "fcs_home": bool(raw.get("fcs_home")),
                 "fcs_away": bool(raw.get("fcs_away")),
                 "fbs_vs_fbs": (not raw.get("fcs_home")) and (not raw.get("fcs_away")),
-                "status": status,
+                "away_score": away_score if isinstance(away_score, (int, float)) else None,
+                "home_score": home_score if isinstance(home_score, (int, float)) else None,
+                "status": row_status,
                 "factcheck": fact,
             }
         )
@@ -340,9 +358,9 @@ def main() -> int:
     w0 = [g for g in published if g["week"] == 0]
     w1 = [g for g in published if g["week"] == 1]
     artifact = {
-        "slate_version": SLATE_VERSION,
+        "slate_version": slate_version,
         "season": 2026,
-        "as_of": AS_OF,
+        "as_of": as_of,
         "official": True,
         "slate_complete": True,
         "source": "kosedge_official_slate",
@@ -373,7 +391,8 @@ def main() -> int:
             "rule": (
                 "ESPN is primary. Odds API confirms matchup + day/time. "
                 "Conflicts keep ESPN and flag needs_review. "
-                "Only-secondary rows are not added."
+                "Only-secondary rows are not added. "
+                "Engine finals (home_score/away_score/status=final) pass through — never invented."
             ),
         },
         "games": published,
@@ -385,8 +404,8 @@ def main() -> int:
 
     ops = f"""# CFB Official Slate — in-house dual-source
 
-**Date:** {AS_OF}
-**Slate version:** `{SLATE_VERSION}`
+**Date:** {as_of}
+**Slate version:** `{slate_version}`
 **Desk SoT:** `apps/web/lib/data/cfb-official-slate-2026.json` (copy in model-service)
 
 ## Sources
@@ -410,6 +429,7 @@ def main() -> int:
 
 Secondary events pulled: {len(events)} · name-matched: {len(secondary)}
 Fact-check error: {factcheck_error or "none"}
+Week 0 finals (scores from engine schedule): {sum(1 for g in w0 if g.get("status")=="final")}
 
 ## Conflicts (needs_review, ESPN time kept)
 
@@ -431,16 +451,18 @@ ODDS_API_KEY=… python scripts/cfb/publish_official_slate_2026.py
 ```
 
 Re-run weekly (or when ESPN kickoffs move). Primary refresh still comes from the packaged ESPN season file; replace that file first if the team-schedule ingest is re-run.
+`as_of` / slate_version follow the engine schedule pack — never hardcode 2026-08-17.
 
 ## Doctrine
 
 KosEdge slate is desk SoT. Sources are inputs. Sim / KEI math is unchanged.
+Final scores pass through from the engine schedule when present. Never invent Open/Best.
 """
-    OPS_PATH.write_text(ops, encoding="utf-8")
+    ops_path.write_text(ops, encoding="utf-8")
 
     print(f"published {len(published)} games → {WEB_OUT.relative_to(REPO)}")
     print(f"agreed {agreed} conflicts {len(conflicts)} only_primary {len(only_primary)} only_secondary {len(only_secondary)}")
-    print(f"ops {OPS_PATH.relative_to(REPO)}")
+    print(f"ops {ops_path.relative_to(REPO)}")
     return 0
 
 

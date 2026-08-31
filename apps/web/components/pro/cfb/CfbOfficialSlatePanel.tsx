@@ -19,6 +19,19 @@ function typeLabel(row: CfbWeekBoardGame): string {
   return row.fbs_vs_fbs ? "FBS–FBS" : "FBS–FCS";
 }
 
+function scoreLabel(row: CfbWeekBoardGame): string {
+  if (row.away_score == null || row.home_score == null) return "—";
+  return `${row.away_score}–${row.home_score}`;
+}
+
+function statusLabel(row: CfbWeekBoardGame): string {
+  if (row.status === "final") return "Final";
+  if (row.status === "accepted") return "Scheduled";
+  if (row.status === "needs_review") return "Needs review";
+  if (row.status === "unconfirmed_secondary") return "Unconfirmed";
+  return row.status || "—";
+}
+
 export default function CfbOfficialSlatePanel({
   week,
   hrefForWeek,
@@ -30,7 +43,10 @@ export default function CfbOfficialSlatePanel({
   const weeks = officialSlateWeeks();
   const games = gamesForWeek(board, week);
   const fbs = games.filter((g) => g.fbs_vs_fbs).length;
-  const confirmed = games.filter((g) => g.status === "accepted").length;
+  const finals = games.filter((g) => g.status === "final").length;
+  const confirmed = games.filter(
+    (g) => g.status === "accepted" || g.status === "final",
+  ).length;
 
   return (
     <section className="mt-6">
@@ -42,8 +58,9 @@ export default function CfbOfficialSlatePanel({
           </p>
           <p className="mt-1 text-xs text-kos-text/50">
             {board.slate_version} · {games.length} Week {week} games ({fbs}{" "}
-            FBS–FBS) · {confirmed} fact-checked · missing book listings show as
-            unconfirmed, not invented
+            FBS–FBS)
+            {finals ? ` · ${finals} final` : ""} · {confirmed} desk-confirmed ·
+            missing book listings show as unconfirmed, not invented
           </p>
         </div>
         <div className="flex flex-wrap gap-2" role="tablist" aria-label="CFB official week">
@@ -60,6 +77,7 @@ export default function CfbOfficialSlatePanel({
               }`}
             >
               Week {w}
+              {w === 0 ? " (finals)" : ""}
             </Link>
           ))}
         </div>
@@ -79,7 +97,10 @@ export default function CfbOfficialSlatePanel({
               >
                 <p className="font-semibold text-kos-text">{matchupLabel(g)}</p>
                 <p className="mt-1 text-xs text-kos-text/60">
-                  {kickoffEtLabel(g.kickoff)} ET · {siteLabel(g)}
+                  {g.status === "final"
+                    ? `Final ${scoreLabel(g)}`
+                    : `${kickoffEtLabel(g.kickoff)} ET`}{" "}
+                  · {siteLabel(g)}
                   {g.conference ? ` · ${g.conference}` : ""} · {typeLabel(g)}
                 </p>
                 {g.venue ? (
@@ -96,11 +117,13 @@ export default function CfbOfficialSlatePanel({
           </ol>
 
           <div className="mt-4 hidden overflow-x-auto rounded-2xl border border-white/10 bg-black/30 sm:block">
-            <table className="w-full min-w-[40rem] text-left text-sm text-kos-text/80">
+            <table className="w-full min-w-[44rem] text-left text-sm text-kos-text/80">
               <thead>
                 <tr className="border-b border-white/10 text-[11px] uppercase tracking-[0.1em] text-kos-text/45">
                   <th className="px-3 py-2">Matchup</th>
                   <th className="px-3 py-2">Kickoff (ET)</th>
+                  <th className="px-3 py-2">Score</th>
+                  <th className="px-3 py-2">Status</th>
                   <th className="px-3 py-2">Site</th>
                   <th className="px-3 py-2">Conf</th>
                   <th className="px-3 py-2">Type</th>
@@ -118,6 +141,12 @@ export default function CfbOfficialSlatePanel({
                     </td>
                     <td className="px-3 py-2.5 text-xs text-kos-text/70">
                       {kickoffEtLabel(g.kickoff)}
+                    </td>
+                    <td className="px-3 py-2.5 text-xs font-semibold text-kos-text">
+                      {scoreLabel(g)}
+                    </td>
+                    <td className="px-3 py-2.5 text-xs text-kos-text/65">
+                      {statusLabel(g)}
                     </td>
                     <td className="px-3 py-2.5 text-xs">
                       {siteLabel(g)}

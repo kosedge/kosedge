@@ -103,7 +103,7 @@ export const DESK_NOTES: InsightArticle[] = [
       },
       {
         text: "Price the game on CFB Edge Board — don't survivor off vibes.",
-        link: { label: "CFB Edge Board", href: "/edge-board/cfb" },
+        link: { label: "CFB Edge Board", href: "/edge-board/cfb?week=1" },
       },
     ],
   },

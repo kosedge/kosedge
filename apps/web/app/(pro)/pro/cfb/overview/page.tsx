@@ -19,9 +19,9 @@ export const dynamic = "force-dynamic";
 const START_HERE = [
   {
     step: "1",
-    href: "/edge-board/cfb",
+    href: "/edge-board/cfb?week=1",
     title: "Edge Board",
-    body: "Week 0/1 KEI vs market. Model is the research column. PASS default.",
+    body: "Week 1 KEI vs market (Week 0 finals on the W0 tab). Model is research. PASS default.",
   },
   {
     step: "2",
@@ -46,6 +46,12 @@ const START_HERE = [
     href: "/pro/cfb/teams",
     title: "Teams / Power",
     body: "136 FBS rows, conference filter, next opponent → Project Game.",
+  },
+  {
+    step: "6",
+    href: "/pro/cfb/slate?week=1",
+    title: "Official slate",
+    body: "Week 1 unplayed by default. Week 0 shows finals.",
   },
 ] as const;
 

@@ -45,7 +45,7 @@ export default function CfbProError({
           Official slate
         </Link>
         <Link
-          href="/edge-board/cfb"
+          href="/edge-board/cfb?week=1"
           className="min-h-11 inline-flex items-center rounded-xl border border-white/15 px-4 text-sm font-semibold text-kos-text"
         >
           Edge Board

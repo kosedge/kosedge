@@ -1964,15 +1964,19 @@ export default function EdgeBoard({
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
               ? "We bet prices, not teams. Action = KEI vs Current (stakeable book when present). Edge magnitude and confidence stay separate. "
-              : isMlb
+                : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
-                : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
+                : String(sportKey).toLowerCase() === "cfb"
+                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. No book ⇒ dashes. "
+                  : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb
               ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
               : isNfl
                 ? `${keiCode} Edge column and Action use the same market input. Open is first capture — never copied from Current. `
-                : "Edge shows pts + side favored vs KEI handicap. ")}
+                : String(sportKey).toLowerCase() === "cfb"
+                  ? "Open/Best from The Odds API (americanfootball_ncaaf) or — when empty. Never invented. "
+                  : "Edge shows pts + side favored vs KEI handicap. ")}
           {!marketsOnly
             ? isNfl
               ? "Methods → Model transparency."
