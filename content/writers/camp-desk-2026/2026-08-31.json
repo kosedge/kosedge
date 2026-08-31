@@ -1006,321 +1006,193 @@
   "preview_delta": [
     {
       "team_id": "MIN",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Monday number pass + Jurgens IR-DFR. House 8.38 vs 8.5 (|diff| 0.12) ≤ 0.5. Pass.",
       "status": "touched"
     },
     {
       "team_id": "ATL",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Identity moved on the total; QB1 unnamed. Pass.",
       "status": "touched"
     },
     {
       "team_id": "CLE",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 8.59 vs 6.5 (2.09) is model Over vs beat-adjusted band ~6.3–6.7. House already Pass. Also-cover. Do not force the Model Over over Watson’s gap and the Garrett trade.",
       "status": "touched"
     },
     {
       "team_id": "WAS",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Price killed the prior +100 Under. Pass.",
       "status": "touched"
     },
     {
       "team_id": "HOU",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 10.34 vs 9.5 (|diff| 0.84). Over −146. Pass.",
       "status": "touched"
     },
     {
       "team_id": "NYJ",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 4.73 vs 5.5 (|diff| 0.77). Also-cover, no Handicapper’s Note lean. Pass.",
       "status": "touched"
     },
     {
       "team_id": "NYG",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "0.47-win gap. Thin. Pass.",
       "status": "touched"
     },
     {
       "team_id": "GB",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Club 53 posted + Jacobs exempt / Johnson / Parsons PUP. House 9.33 vs 9.5 (|diff| 0.17) ≤ 0.5. Did not mint a new GB number. Pass. GB@MIN Week 1 hold stands.",
       "status": "touched"
     },
     {
       "team_id": "DAL",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Model-market conflict material. Threshold Pass. Do not average.",
       "status": "touched"
     },
     {
       "team_id": "PHI",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "0.15-win gap. Never dress up the Under at -148.",
       "status": "touched"
     },
     {
       "team_id": "KC",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 9.31 vs 10.5 (1.19). House already Pass: model Under, but U -140 plus unresolved Mahomes game clearance. Also-cover.",
       "status": "touched"
     },
     {
       "team_id": "LAC",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 8.48 vs 9.5 (1.02). Under +110. Opened 10.5, now 9.5 — extra win off the old number is gone. Also-cover; house already 2/5. Key risk: Herbert / McDaniel / Slaughter can still get to 10.",
       "status": "touched"
     },
     {
       "team_id": "PIT",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 8.16 vs 8.5. |diff| 0.34 ≤ 0.5 and Under already -120.",
       "status": "touched"
     },
     {
       "team_id": "CIN",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 7.21 vs 9.5 (2.29). House already Pass (model Under vs healthy-Burrow + D rebuild). Over now -140. Also-cover.",
       "status": "touched"
     },
     {
       "team_id": "BAL",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 8.98 vs street 11.5 is a 2.52-win model/market conflict; house already sat; Under juiced to -140. Also-cover. Key risk: new staff / center / Madubuike is larger than any Under after juice.",
       "status": "touched"
     },
     {
       "team_id": "BUF",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 10.26 vs 10.5 (|diff| 0.24) ≤ 0.5. Pass. Key risk: club 53 still unposted.",
       "status": "touched"
     },
     {
       "team_id": "MIA",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 6.14 vs street 3.5 (|diff| 2.64). Identity 4.5→3.5. Pass, show both. Do not chase if the board bounces Monday.",
       "status": "touched"
     },
     {
       "team_id": "NE",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 9.98 vs 10.5 (|diff| 0.52). Under juiced to −140. Pass.",
       "status": "touched"
     },
     {
       "team_id": "IND",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 10.29 vs 7.5 (|diff| 2.79). Pass, show both. Over −140. Shrader is the named kicker — ST fact, not a number.",
       "status": "touched"
     },
     {
       "team_id": "JAX",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 9.77 vs 8.5 (|diff| 1.27). Over juice flipped to −140. Pass.",
       "status": "touched"
     },
     {
       "team_id": "TEN",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 5.88 vs 6.5 (|diff| 0.62). Club 53 unposted. Beat Levis/Volson stay off the card until club posts. Pass.",
       "status": "touched"
     },
     {
       "team_id": "DEN",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 10.51 vs 9.5 (|diff| 1.01). Street juice still playable at -115. Also-cover; house already capped 2/5. Key risk: Nix ankle + five-playoff-team open + Cooper unavailable while exempt.",
       "status": "touched"
     },
     {
       "team_id": "LV",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 6.07 vs 5.5 (0.57) is barely over a half-win; Over juiced to -146 and Jeanty Week 1 is coach-hope not clearance. Also-cover.",
       "status": "touched"
     },
     {
       "team_id": "ARI",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 6.55 vs DK 4.5 = 2.05-win conflict. Under −150 juiced. Do not average. Do not lean Over. Pass.",
       "status": "touched"
     },
     {
       "team_id": "LAR",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 11.07 vs street 11.5. Gap 0.43. Half-win rule. Over juice −125. Pass.",
       "status": "touched"
     },
     {
       "team_id": "SF",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 8.53 vs market 10.5 = ~1.97-win conflict. Under juiced to −145. Juice eats the lean. Do not lean Under. Thin file. Pass.",
       "status": "touched"
     },
     {
       "team_id": "SEA",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 10.81 vs street 10.5 = gap 0.31. Juice unchanged. No official 53-man, no new material IR. Thin. Pass.",
       "status": "touched"
     },
     {
       "team_id": "TB",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "0.13-win gap. Pass.",
       "status": "touched"
     },
     {
       "team_id": "CAR",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Under direction, juiced price. Pass.",
       "status": "touched"
     },
     {
       "team_id": "NO",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "Show both: house 8.96, street 7.5 -120. No new SoT. Pass rather than a fake lean.",
       "status": "touched"
     },
     {
       "team_id": "CHI",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 8.34 vs street 9.5 (|diff| 1.16). All four NFC North Pass. Did not force the model Under. Also-cover.",
       "status": "touched"
     },
     {
       "team_id": "DET",
-      "fields": [
-        "date",
-        "bottom_line",
-        "what_matters_most"
-      ],
+      "fields": ["date", "bottom_line", "what_matters_most"],
       "reason": "House 10.69 vs 10.5 (|diff| 0.19) ≤ 0.5. Pass.",
       "status": "touched"
     }
