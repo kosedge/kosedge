@@ -24,8 +24,13 @@ Tone cloned from `docs/NFL_ENTERPRISE_GATES.md`. CFB-only. Default posture: rese
 | 7   | Path allowlist — no NFL/CBB/MLB trees                                                                                                         | zero                                         | PR checklist                   |
 | 8   | Market not inside power / WP / shock / KEI math                                                                                               | zero                                         | PR `rg` checklist              |
 | 9   | Utah title % moved a lot off ~5% **or** blocker file exists                                                                                   | one of two                                   | scorecard                      |
+| 10  | Live engine stamp == frozen artifact `engine_version`                                                                                         | both `cfb-season-engine-v0.15-power-sot`     | `test_cfb_enterprise_gates.py` |
+| 11  | Live research default universe is official closed slate (not densify)                                                                         | `official_schedule=true`                     | `test_cfb_enterprise_gates.py` |
+| 12  | No `v0.9-inseason` on default research stamps                                                                                                 | zero on `ENGINE_VERSION` + artifact stamps   | `test_cfb_enterprise_gates.py` |
 
-## Manual PR checklist
+## Unify addendum (live == frozen)
+
+After the unify-live-API pass, gates 10–12 are mandatory. Do not retune WP / shock / power to clear them — write a blocker instead.
 
 ```bash
 # Surfaces share as_of

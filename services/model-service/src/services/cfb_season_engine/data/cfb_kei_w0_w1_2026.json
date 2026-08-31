@@ -1,7 +1,7 @@
 {
   "ok": true,
   "kei_version": "cfb-kei-v1.0-2026w0",
-  "engine_version": "cfb-season-engine-v0.9-inseason",
+  "engine_version": "cfb-season-engine-v0.15-power-sot",
   "as_of": "2026-08-31",
   "generated_at": "2026-08-31T01:55:12Z",
   "weeks": [
@@ -73,31 +73,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 0.9203) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.9203) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 61.79, away OL 59.75) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 61.79, away OL 59.75) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -109,7 +109,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -128,7 +128,7 @@
       "home": "USC",
       "away": "SJSU",
       "home_name": "USC Trojans",
-      "away_name": "San Jos\u00e9 State Spartans",
+      "away_name": "San José State Spartans",
       "kickoff": "2026-08-29T19:00Z",
       "neutral_site": false,
       "fcs_home": false,
@@ -163,31 +163,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1554) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1554) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 66.67, away OL 54.05) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 66.67, away OL 54.05) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': 'LA Coliseum', 'env_score': 62.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': 'LA Coliseum', 'env_score': 62.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -199,7 +199,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -253,31 +253,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2438, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2438, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 67.76, away OL 66.23) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 67.76, away OL 66.23) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -289,7 +289,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -303,7 +303,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.7224,
-            "reason": "short-favorite shrink 0.72 toward pick'em (|KEI| 6.0 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.72 toward pick'em (|KEI| 6.0 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -326,7 +326,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -346,7 +346,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -390,31 +390,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.8996, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.8996, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 63.16, away OL 54.01) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 63.16, away OL 54.01) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -426,7 +426,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_dog",
@@ -480,31 +480,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.1892, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.1892, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 64.97, away OL 57.56) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 64.97, away OL 57.56) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': True, 'continuity_score': 50.0, 'uncertainty_boost': 0.22, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': True, 'continuity_score': 50.0, 'uncertainty_boost': 0.22, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'Doak Campbell', 'env_score': 70.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'Doak Campbell', 'env_score': 70.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -516,7 +516,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -570,31 +570,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.1471, away idx 0.8597) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.1471, away idx 0.8597) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 57.69, away OL 64.57) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 57.69, away OL 64.57) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 58.8, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 58.8, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -606,7 +606,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -620,7 +620,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.6348,
-            "reason": "short-favorite shrink 0.63 toward pick'em (|KEI| 5.3 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.63 toward pick'em (|KEI| 5.3 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -667,31 +667,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2514, away idx 1.2631) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2514, away idx 1.2631) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 66.68, away OL 58.42) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 66.68, away OL 58.42) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 62.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 62.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -703,7 +703,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -733,7 +733,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -777,31 +777,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2067, away idx 1.305) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2067, away idx 1.305) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 61.0, away OL 59.51) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 61.0, away OL 59.51) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.05, 'baseline': 1.7, 'bucket': 'weak', 'bucket_points': 1.05, 'bucket_delta': -0.65, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 40.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.05, 'baseline': 1.7, 'bucket': 'weak', 'bucket_points': 1.05, 'bucket_delta': -0.65, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 40.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -813,7 +813,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -843,7 +843,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -863,7 +863,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -883,7 +883,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -903,7 +903,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -947,31 +947,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.1859, away idx 1.1906) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.1859, away idx 1.1906) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 62.1, away OL 74.45) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 62.1, away OL 74.45) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': False, 'continuity_score': 80.0, 'uncertainty_boost': 0.08, 'fidelity': 'approximate'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': False, 'continuity_score': 80.0, 'uncertainty_boost': 0.08, 'fidelity': 'approximate'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.8, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.8, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -983,7 +983,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -997,7 +997,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.7176,
-            "reason": "short-favorite shrink 0.72 toward pick'em (|KEI| 6.0 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.72 toward pick'em (|KEI| 6.0 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -1020,7 +1020,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -1040,7 +1040,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -1084,31 +1084,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.3661, away idx None) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.3661, away idx None) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 60.32, away OL None) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 60.32, away OL None) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1120,7 +1120,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1139,7 +1139,7 @@
       "home": "EMU",
       "away": "SJSU",
       "home_name": "Eastern Michigan Eagles",
-      "away_name": "San Jos\u00e9 State Spartans",
+      "away_name": "San José State Spartans",
       "kickoff": "2026-09-04T22:30Z",
       "neutral_site": false,
       "fcs_home": false,
@@ -1174,31 +1174,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.3339, away idx 1.1554) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.3339, away idx 1.1554) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 59.99, away OL 54.05) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 59.99, away OL 54.05) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 0.55, 'baseline': 1.7, 'bucket': 'poor', 'bucket_points': 0.55, 'bucket_delta': -1.15, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 26.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.55, 'baseline': 1.7, 'bucket': 'poor', 'bucket_points': 0.55, 'bucket_delta': -1.15, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 26.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1210,7 +1210,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1224,7 +1224,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.738,
-            "reason": "short-favorite shrink 0.74 toward pick'em (|KEI| 6.2 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.74 toward pick'em (|KEI| 6.2 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -1247,7 +1247,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -1267,7 +1267,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -1311,31 +1311,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.3512, away idx 1.2428) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.3512, away idx 1.2428) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 69.33, away OL 51.91) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 69.33, away OL 51.91) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Gaylord Family', 'env_score': 83.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Gaylord Family', 'env_score': 83.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1347,7 +1347,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1377,7 +1377,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -1421,31 +1421,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2692, away idx None) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2692, away idx None) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 62.81, away OL None) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 62.81, away OL None) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 62.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 62.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1457,7 +1457,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1511,31 +1511,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.8996, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.8996, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 63.16, away OL 68.74) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 63.16, away OL 68.74) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1547,7 +1547,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_dog",
@@ -1601,31 +1601,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 0.8753) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.8753) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 66.67, away OL 52.8) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 66.67, away OL 52.8) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': 'LA Coliseum', 'env_score': 62.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': 'LA Coliseum', 'env_score': 62.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1637,7 +1637,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1691,31 +1691,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.9469, away idx None) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.9469, away idx None) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 76.26, away OL None) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 76.26, away OL None) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Bryant-Denny', 'env_score': 77.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Bryant-Denny', 'env_score': 77.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1727,7 +1727,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1781,31 +1781,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.7664, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.7664, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 60.68, away OL 53.37) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 60.68, away OL 53.37) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1817,7 +1817,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1831,7 +1831,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.87,
-            "reason": "short-favorite shrink 0.87 toward pick'em (|KEI| 7.2 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.87 toward pick'em (|KEI| 7.2 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -1878,31 +1878,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2504, away idx 0.8312) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2504, away idx 0.8312) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 61.22, away OL 55.85) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 61.22, away OL 55.85) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -1914,7 +1914,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -1944,7 +1944,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -1988,31 +1988,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx None) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx None) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 60.17, away OL None) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 60.17, away OL None) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 65.2, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 65.2, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2024,7 +2024,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2078,31 +2078,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 67.95, away OL 53.29) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 67.95, away OL 53.29) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 2.3, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': True, 'continuity_score': 10.0, 'uncertainty_boost': 0.4, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 2.3, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': True, 'continuity_score': 10.0, 'uncertainty_boost': 0.4, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.4, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.4, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2114,7 +2114,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2144,7 +2144,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2164,7 +2164,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2184,7 +2184,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2228,31 +2228,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.8712, away idx 1.2081) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.8712, away idx 1.2081) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 56.85, away OL 55.08) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 56.85, away OL 55.08) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 59.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 59.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2264,7 +2264,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2318,31 +2318,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1388) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1388) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 61.35, away OL 53.36) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 61.35, away OL 53.36) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.1, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.1, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2354,7 +2354,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2408,31 +2408,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 0.8672) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.8672) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 70.98, away OL 52.27) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 70.98, away OL 52.27) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Ohio Stadium', 'env_score': 80.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Ohio Stadium', 'env_score': 80.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2444,7 +2444,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2498,31 +2498,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.3403) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.3403) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 67.76, away OL 50.64) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 67.76, away OL 50.64) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 65.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 65.5, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2534,7 +2534,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2564,7 +2564,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2584,7 +2584,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2604,7 +2604,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2624,7 +2624,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2644,7 +2644,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2688,31 +2688,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 70.02, away OL 68.84) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 70.02, away OL 68.84) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2724,7 +2724,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2754,7 +2754,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -2798,31 +2798,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 72.36, away OL 55.88) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 72.36, away OL 55.88) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'DKR', 'env_score': 74.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'DKR', 'env_score': 74.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2834,7 +2834,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2888,31 +2888,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 0.9072) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.9072) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 61.11, away OL 59.14) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 61.11, away OL 59.14) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -2924,7 +2924,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -2978,31 +2978,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 0.897) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 0.897) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 61.55, away OL 57.78) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 61.55, away OL 57.78) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 61.6, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3014,7 +3014,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3068,31 +3068,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 68.29, away OL 60.28) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 68.29, away OL 60.28) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Autzen Stadium', 'env_score': 90.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Autzen Stadium', 'env_score': 90.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3104,7 +3104,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3158,31 +3158,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.2337) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.2337) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 67.57, away OL 52.12) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 67.57, away OL 52.12) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 2.3, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': True, 'continuity_score': 10.0, 'uncertainty_boost': 0.4, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 2.3, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': True, 'continuity_score': 10.0, 'uncertainty_boost': 0.4, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Beaver Stadium', 'env_score': 88.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Beaver Stadium', 'env_score': 88.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3194,7 +3194,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3224,7 +3224,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3244,7 +3244,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3264,7 +3264,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3284,7 +3284,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3328,31 +3328,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2386, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2386, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 54.61, away OL 55.2) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 54.61, away OL 55.2) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3364,7 +3364,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3378,7 +3378,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.1464,
-            "reason": "short-favorite shrink 0.15 toward pick'em (|KEI| 1.2 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.15 toward pick'em (|KEI| 1.2 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -3401,7 +3401,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3445,31 +3445,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.9145, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.9145, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 67.19, away OL 49.67) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 67.19, away OL 49.67) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 66.7, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3481,7 +3481,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3511,7 +3511,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3555,31 +3555,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx None, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx None, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL None, away OL 52.64) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL None, away OL 52.64) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3591,7 +3591,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_dog",
@@ -3605,7 +3605,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": -0.3648,
-            "reason": "short-favorite shrink 0.36 toward pick'em (|KEI| 3.0 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.36 toward pick'em (|KEI| 3.0 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -3628,7 +3628,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3672,31 +3672,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1721) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1721) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 67.0, away OL 54.41) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 67.0, away OL 54.41) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 74.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 74.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3708,7 +3708,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3738,7 +3738,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3758,7 +3758,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3778,7 +3778,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3798,7 +3798,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3842,31 +3842,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.8597, away idx None) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.8597, away idx None) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 64.57, away OL None) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 64.57, away OL None) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.9, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.9, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3878,7 +3878,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -3908,7 +3908,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -3952,31 +3952,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.3119, away idx 1.17) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.3119, away idx 1.17) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 55.62, away OL 55.24) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 55.62, away OL 55.24) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -3988,7 +3988,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4018,7 +4018,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4038,7 +4038,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4058,7 +4058,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4078,7 +4078,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4122,31 +4122,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.2906, away idx 1.1816) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.2906, away idx 1.1816) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 60.45, away OL 60.25) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 60.45, away OL 60.25) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4158,7 +4158,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4212,31 +4212,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.1706, away idx 1.1703) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.1706, away idx 1.1703) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 71.0, away OL 74.83) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 71.0, away OL 74.83) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Tiger Stadium', 'env_score': 92.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Tiger Stadium', 'env_score': 92.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4248,7 +4248,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4262,7 +4262,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.30119999999999997,
-            "reason": "short-favorite shrink 0.30 toward pick'em (|KEI| 2.5 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.30 toward pick'em (|KEI| 2.5 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -4309,31 +4309,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.1813, away idx 1.3282) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.1813, away idx 1.3282) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 62.05, away OL 64.0) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 62.05, away OL 64.0) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.2, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 63.2, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4345,7 +4345,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4375,7 +4375,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4419,31 +4419,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.9497, away idx 1.185) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.9497, away idx 1.185) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 71.64, away OL 50.66) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 71.64, away OL 50.66) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': True, 'continuity_score': 70.0, 'uncertainty_boost': 0.14, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': True, 'continuity_score': 70.0, 'uncertainty_boost': 0.14, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Michigan Stadium', 'env_score': 76.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Michigan Stadium', 'env_score': 76.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4455,7 +4455,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4485,7 +4485,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4529,31 +4529,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 0.9087, away idx 1.0797) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 0.9087, away idx 1.0797) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 65.38, away OL 58.1) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 65.38, away OL 58.1) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Ben Hill Griffin', 'env_score': 86.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 3.1, 'baseline': 1.7, 'bucket': 'elite', 'bucket_points': 3.1, 'bucket_delta': 1.4, 'night_bump': 0.0, 'major_environment': True, 'venue': 'Ben Hill Griffin', 'env_score': 86.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4565,7 +4565,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4595,7 +4595,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4615,7 +4615,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4635,7 +4635,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4655,7 +4655,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4675,7 +4675,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4695,7 +4695,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4715,7 +4715,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4735,7 +4735,7 @@
         "used_in_spread": false,
         "fcs_opener": true,
         "tag": "PASS",
-        "reason": "FCS or unknown code \u2014 no FBS-equivalent KEI precision"
+        "reason": "FCS or unknown code — no FBS-equivalent KEI precision"
       }
     },
     {
@@ -4779,31 +4779,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1471) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.1471) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 54.01, away OL 57.69) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 54.01, away OL 57.69) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 52.75, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4815,7 +4815,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4829,7 +4829,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.33840000000000003,
-            "reason": "short-favorite shrink 0.34 toward pick'em (|KEI| 2.8 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.34 toward pick'em (|KEI| 2.8 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -4876,31 +4876,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx None, away idx 0.9188) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx None, away idx 0.9188) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL None, away OL 52.92) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL None, away OL 52.92) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -4912,7 +4912,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -4926,7 +4926,7 @@
             "applied": true,
             "version": "cfb-bias-guard-v1-histcal-20260805",
             "spread_pts": 0.7968000000000001,
-            "reason": "short-favorite shrink 0.80 toward pick'em (|KEI| 6.6 in 1.0-7.5) \u2014 do not fire thin favs"
+            "reason": "short-favorite shrink 0.80 toward pick'em (|KEI| 6.6 in 1.0-7.5) — do not fire thin favs"
           }
         ],
         "rules_doc": "data/ops/cfb-kei-rules-2026.md"
@@ -4973,31 +4973,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.265) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.265) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 60.6, away OL 65.72) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 60.6, away OL 65.72) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 1.1, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': False, 'continuity_score': 40.0, 'uncertainty_boost': 0.26, 'fidelity': 'approximate'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': -2.1, 'defense_penalty_points': 1.1, 'decay': 1.0, 'new_hc': True, 'new_oc': True, 'new_dc': False, 'continuity_score': 40.0, 'uncertainty_boost': 0.26, 'fidelity': 'approximate'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.4, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 60.4, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -5009,7 +5009,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -5063,31 +5063,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx None, away idx 1.2672) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx None, away idx 1.2672) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL None, away OL 54.72) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL None, away OL 54.72) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.0, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 1.7, 'baseline': 1.7, 'bucket': 'average', 'bucket_points': 1.7, 'bucket_delta': 0.0, 'night_bump': 0.0, 'major_environment': False, 'applied': True, 'reason': 'missing_profile_baseline', 'fidelity': 'placeholder'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -5099,7 +5099,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_dog",
@@ -5153,31 +5153,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 64.94, away OL 53.61) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 64.94, away OL 53.61) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 67.1, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': '', 'env_score': 67.1, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'roster_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -5189,7 +5189,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -5243,31 +5243,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.356) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.356) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 70.52, away OL 65.95) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 70.52, away OL 65.95) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -5279,7 +5279,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -5333,31 +5333,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.38, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 65.31, away OL 61.91) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 65.31, away OL 61.91) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 0.0, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': True, 'applied': False, 'reason': 'neutral_site', 'fidelity': 'approximate'}, neutral=True) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -5369,7 +5369,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_fav",
@@ -5423,31 +5423,31 @@
             "factor": "qb_situation",
             "applied": false,
             "in_model": true,
-            "reason": "QB situation in model compose (home idx 1.1892, away idx 1.38) \u2014 not restacked"
+            "reason": "QB situation in model compose (home idx 1.1892, away idx 1.38) — not restacked"
           },
           {
             "factor": "trench_ol",
             "applied": false,
             "in_model": true,
-            "reason": "OL / trench proxy in model units (home OL 64.97, away OL 64.18) \u2014 not restacked"
+            "reason": "OL / trench proxy in model units (home OL 64.97, away OL 64.18) — not restacked"
           },
           {
             "factor": "returning_production",
             "applied": false,
             "in_model": true,
-            "reason": "Returning production / portal / experience in roster_strength \u2014 not restacked"
+            "reason": "Returning production / portal / experience in roster_strength — not restacked"
           },
           {
             "factor": "coaching",
             "applied": false,
             "in_model": true,
-            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': True, 'continuity_score': 50.0, 'uncertainty_boost': 0.22, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) \u2014 not restacked"
+            "reason": "Coaching continuity in model (home adj {'own_scoring_adj': -0.75, 'defense_penalty_points': 1.2, 'decay': 1.0, 'new_hc': False, 'new_oc': True, 'new_dc': True, 'continuity_score': 50.0, 'uncertainty_boost': 0.22, 'fidelity': 'approximate'}, away adj {'own_scoring_adj': 0.15, 'defense_penalty_points': 0.0, 'decay': 1.0, 'new_hc': False, 'new_oc': False, 'new_dc': False, 'continuity_score': 100.0, 'uncertainty_boost': 0.0, 'fidelity': 'placeholder'}) — not restacked"
           },
           {
             "factor": "hfa",
             "applied": false,
             "in_model": true,
-            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'Doak Campbell', 'env_score': 70.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) \u2014 not restacked"
+            "reason": "Variable HFA in model (hfa={'hfa_points': 2.45, 'baseline': 1.7, 'bucket': 'strong', 'bucket_points': 2.45, 'bucket_delta': 0.75, 'night_bump': 0.0, 'major_environment': False, 'venue': 'Doak Campbell', 'env_score': 70.0, 'applied': True, 'reason': 'variable_hfa', 'fidelity': 'approximate', 'source': 'curated_venue_proxy'}, neutral=False) — not restacked"
           },
           {
             "factor": "rest_travel",
@@ -5459,7 +5459,7 @@
             "factor": "injury_current",
             "applied": false,
             "in_model": false,
-            "reason": "current outs not in stack \u2014 packaged depth only, not a live injury feed"
+            "reason": "current outs not in stack — packaged depth only, not a live injury feed"
           },
           {
             "factor": "bias_guard_home_dog",

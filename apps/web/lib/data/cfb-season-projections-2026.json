@@ -1,7 +1,7 @@
 {
   "ok": true,
   "artifact_id": "cfb-season-projections-v0.15-n10000-week0-close-20260831",
-  "engine_version": "cfb-season-engine-v0.9-inseason",
+  "engine_version": "cfb-season-engine-v0.15-power-sot",
   "power_version": "cfb-power-sot-v0.15-week0-close-20260831",
   "power_as_of": "2026-08-31",
   "as_of": "2026-08-31",

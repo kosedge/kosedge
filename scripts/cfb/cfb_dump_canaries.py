@@ -63,6 +63,20 @@ def main() -> None:
 
     print("=== CFB canary dump ===")
     print(f"git_sha={_git_sha()}")
+    try:
+        from src.services.cfb_season_engine.priors import ENGINE_VERSION as _EV
+    except Exception:
+        _EV = power.get("engine_version") or proj.get("engine_version")
+    print(f"ENGINE_VERSION={_EV}")
+    print(
+        "artifact engine stamps:",
+        {
+            "power": power.get("engine_version"),
+            "proj": proj.get("engine_version"),
+            "futures": futures.get("engine_version"),
+            "kei": kei.get("engine_version"),
+        },
+    )
     print(
         "as_of inventory:",
         {

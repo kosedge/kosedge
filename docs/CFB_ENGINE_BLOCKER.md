@@ -45,3 +45,7 @@ Change is noise (6.6 → 6.2), not “moved a lot” off the ~5% tail.
 ## Operator choice
 
 Accept this blocker and ship the WP/shock/`as_of`/gates work as-is, **or** open a separate approved futures-bracket investigation that does not stretch the WP scale. Do not beauty-pass Utah in this PR.
+
+## Not this pass (unify live API)
+
+`docs/CFB_ENGINE_UNIFY_LIVE_API_BRIEF.md` must **not** reopen Utah `natty_pct`, playoff logistic `2.1`, or `WIN_PROB_MARGIN_SD`. Stamp/universe only.

@@ -1,14 +1,14 @@
 {
   "ok": true,
   "futures_version": "cfb-futures-v1-cfp12-2026",
-  "engine_version": "cfb-season-engine-v0.9-inseason",
+  "engine_version": "cfb-season-engine-v0.15-power-sot",
   "as_of": "2026-08-31",
   "n_sims": 2500,
   "cfp_field": 12,
   "auto_bids": 5,
   "at_large": 7,
   "bye_seeds": 4,
-  "method": "P4 autos (ACC/B1G/B12/SEC) + one G6 auto by engine power + power-aware at-larges \u2192 neutral-site playoff WP from power gap. Sim-derived. Not book prices. Not an ESPN bracket copy.",
+  "method": "P4 autos (ACC/B1G/B12/SEC) + one G6 auto by engine power + power-aware at-larges → neutral-site playoff WP from power gap. Sim-derived. Not book prices. Not an ESPN bracket copy.",
   "assumptions": {
     "cfp_field": 12,
     "auto_bids": "ACC + Big Ten + Big 12 + SEC champs + one G6 auto by power",
