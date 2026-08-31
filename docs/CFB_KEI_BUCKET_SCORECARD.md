@@ -11,10 +11,10 @@
 
 **Flipped (opposite signs).**
 
-| Bucket | n | mean (KEI − close_home) | median |
-|--------|---:|------------------------:|-------:|
-| mid (7–14) | 1 | **−12.89** | −12.89 |
-| cupcake (≥28) | 2 | **+9.85** | +9.85 |
+| Bucket        |   n | mean (KEI − close_home) | median |
+| ------------- | --: | ----------------------: | -----: |
+| mid (7–14)    |   1 |              **−12.89** | −12.89 |
+| cupcake (≥28) |   2 |               **+9.85** |  +9.85 |
 
 Mid: KEI too long as favorite (more negative than close).  
 Cupcake: KEI too short vs book (less negative than close).
@@ -25,12 +25,12 @@ Cupcake: KEI too short vs book (less negative than close).
 
 **Two failure families on one curve.**
 
-| Game | Bucket | KEI | Close | Residual | Pattern |
-|------|--------|----:|------:|---------:|---------|
-| UNC@TCU | mid | −20.39 | −7.5 | **−12.89** | Mid favorite too long |
-| HAW@STAN | short | +10.90 | −4.5 | **+15.40** | Wrong side / polarity (KEI Hawaii, close Stanford) |
-| SJSU@USC | cupcake | −34.24 | −38.5 | **+4.26** | Cupcake KEI short of book |
-| NMSU@FSU | cupcake | −16.06 | −31.5 | **+15.44** | Cupcake KEI short of book |
+| Game     | Bucket  |    KEI | Close |   Residual | Pattern                                            |
+| -------- | ------- | -----: | ----: | ---------: | -------------------------------------------------- |
+| UNC@TCU  | mid     | −20.39 |  −7.5 | **−12.89** | Mid favorite too long                              |
+| HAW@STAN | short   | +10.90 |  −4.5 | **+15.40** | Wrong side / polarity (KEI Hawaii, close Stanford) |
+| SJSU@USC | cupcake | −34.24 | −38.5 |  **+4.26** | Cupcake KEI short of book                          |
+| NMSU@FSU | cupcake | −16.06 | −31.5 | **+15.44** | Cupcake KEI short of book                          |
 
 TCU and Hawaii are not the same bug as USC/FSU. Short/pick can still be tight (below).
 
@@ -38,9 +38,9 @@ TCU and Hawaii are not the same bug as USC/FSU. Short/pick can still be tight (b
 
 **Yes.**
 
-| Game | KEI | Current (live Odds, home) | Residual |
-|------|----:|--------------------------:|---------:|
-| BALL@OSU | −42.2 | −50.5 | **+8.3** |
+| Game     |   KEI | Current (live Odds, home) | Residual |
+| -------- | ----: | ------------------------: | -------: |
+| BALL@OSU | −42.2 |                     −50.5 | **+8.3** |
 
 Same cupcake-direction pattern as W0 USC/FSU: model not spending enough points into long favorites. (No W1 close yet — Current only.)
 
@@ -50,11 +50,11 @@ Same cupcake-direction pattern as W0 USC/FSU: model not spending enough points i
 
 **Short/pick are often close** (operator intuition confirmed):
 
-| Game | Bucket | Residual |
-|------|--------|---------:|
-| NCSU@UVA | short | −1.30 |
-| MEM@UNLV | short | −0.66 |
-| FAU@MD | pick | −0.82 |
+| Game     | Bucket | Residual |
+| -------- | ------ | -------: |
+| NCSU@UVA | short  |    −1.30 |
+| MEM@UNLV | short  |    −0.66 |
+| FAU@MD   | pick   |    −0.82 |
 
 ### 5. Recommend next chapter?
 
@@ -66,12 +66,12 @@ If an honest bucket fit still leaves TCU near −20 vs −7.5, write a **blocker
 
 ## Canaries (frozen for later chapters)
 
-| Canary | Value |
-|--------|------:|
-| BALL@OSU KEI | −42.2 |
-| UNC@TCU KEI | ≈ −20.39 |
-| HAW@STAN KEI | +10.90 (home) |
-| Top-7 power | unchanged this chapter |
+| Canary             |                  Value |
+| ------------------ | ---------------------: |
+| BALL@OSU KEI       |                  −42.2 |
+| UNC@TCU KEI        |               ≈ −20.39 |
+| HAW@STAN KEI       |          +10.90 (home) |
+| Top-7 power        | unchanged this chapter |
 | USF E[wins] vs OSU | unchanged this chapter |
 
 `python3 scripts/cfb/cfb_dump_kei_buckets.py --assert-canaries`

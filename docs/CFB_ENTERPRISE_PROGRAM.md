@@ -26,7 +26,7 @@ Still wrong (operator can see in 10 seconds): mid-band KEI too long or wrong sid
 
 ## Laws (every chapter)
 
-1. One spine. `v0.15-power-sot` until a chapter *names* a version bump.
+1. One spine. `v0.15-power-sot` until a chapter _names_ a version bump.
 2. Discovery audit with file:line before edits.
 3. No `if team == …`.
 4. No Week 0 power rebuild off 6 games.
