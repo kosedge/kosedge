@@ -32,10 +32,31 @@ describe("cfb trusted market", () => {
     ]);
     expect(rows[0]?.best).toBe("");
     expect(rows[0]?.book).toBe("untrusted");
+    expect(rows[0]?.bookKey).toBe("");
+  });
+
+  it("labels no_market as no book when Best is missing", () => {
+    const rows = applyCfbTrustedMarketToRows([
+      {
+        market: "Spread",
+        kei: "-7.5",
+        best: "",
+        open: "",
+        book: "",
+        bookKey: "",
+      },
+    ]);
+    expect(rows[0]?.best).toBe("");
+    expect(rows[0]?.book).toBe("no book");
   });
 
   it("keeps a normal multi-book number inside the KEI neighborhood", () => {
-    const ok = trustCfbMarket({ kei: -5.3, best: -3.5, open: -3.0, bookCount: 2 });
+    const ok = trustCfbMarket({
+      kei: -5.3,
+      best: -3.5,
+      open: -3.0,
+      bookCount: 2,
+    });
     expect(ok.trusted).toBe(true);
     expect(ok.market).toBe(-3.5);
     expect(cfbEdgeTag(Math.abs(-5.3 - -3.5))).toBe("PASS");
@@ -73,7 +94,17 @@ describe("cfb kei lines bundle", () => {
   it("publishes every W0 FBS KEI game with names the board can match", () => {
     const w0 = getKeiLines("cfb").filter((g) => g.week === 0);
     const homes = w0.map((g) => g.homeAbbr);
-    expect(homes).toEqual(expect.arrayContaining(["TCU", "USC", "STAN", "FSU", "UNLV", "UVA"]));
+    expect(homes).toEqual(
+      expect.arrayContaining(["TCU", "USC", "STAN", "FSU", "UNLV", "UVA"]),
+    );
     expect(w0).toHaveLength(6);
+  });
+
+  it("keeps BALL@OSU Week 1 KEI at −42.2 (cupcake saturation exhibit)", () => {
+    const ballOsu = getKeiLines("cfb").find(
+      (g) => g.week === 1 && g.homeAbbr === "OSU" && g.awayAbbr === "BALL",
+    );
+    expect(ballOsu).toBeTruthy();
+    expect(ballOsu?.handicapSpreadHome).toBe(-42.2);
   });
 });

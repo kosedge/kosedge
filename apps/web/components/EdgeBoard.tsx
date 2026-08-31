@@ -534,10 +534,12 @@ function PriceCell({
       {showBottomJuice ? (
         <div className="text-[11px] text-gray-400">({p.bottom.juice})</div>
       ) : null}
-      {!blank && book ? (
+      {!blank && book && book !== "untrusted" && book !== "no book" ? (
         <div className={`${topPad}`}>
           <SportsbookBadge book={book} compact />
         </div>
+      ) : blank && (book === "untrusted" || book === "no book") ? (
+        <div className={`${topPad} text-[10px] text-gray-400`}>{book}</div>
       ) : null}
     </div>
   );
@@ -1167,8 +1169,10 @@ export function flatRowsToLegacy(
       openLine,
       bestLine,
       bestOU,
-      bestLineBook: lineRow?.bookKey ?? lineRow?.book,
-      bestOUBook: totalRow?.bookKey ?? totalRow?.book,
+      // Prefer bookKey; fall through to book so CFB "untrusted"/"no book"
+      // survive after trusted-market clears bookKey.
+      bestLineBook: lineRow?.bookKey || lineRow?.book,
+      bestOUBook: totalRow?.bookKey || totalRow?.book,
       keiLine,
       keiOU,
       modelLine,
@@ -1472,7 +1476,12 @@ export default function EdgeBoard({
                   <div className="mt-2 text-[10px] text-gray-500">
                     Open {r.openLine.top.label} / {r.openOU.top.label}
                   </div>
-                  {r.bestLineBook ? (
+                  {r.bestLineBook === "untrusted" ||
+                  r.bestLineBook === "no book" ? (
+                    <div className="mt-2 text-[10px] text-gray-400">
+                      {r.bestLineBook}
+                    </div>
+                  ) : r.bestLineBook ? (
                     <div className="mt-2">
                       <SportsbookBadge book={r.bestLineBook} compact />
                     </div>
@@ -1967,7 +1976,7 @@ export default function EdgeBoard({
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : String(sportKey).toLowerCase() === "cfb"
-                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. No book ⇒ dashes. "
+                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. Cleared Best shows untrusted or no book — never invent Open. "
                   : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb
