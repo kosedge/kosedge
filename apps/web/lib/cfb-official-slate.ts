@@ -149,11 +149,11 @@ export function parseOfficialSlateWeek(raw?: string): number {
   return weeks.includes(n) ? n : fallback;
 }
 
-/** Resolve project-game week from the official slate matchup — never invent. */
-export function officialSlateWeekForMatchup(
+/** Resolve an official slate row for a matchup — never invent. */
+export function officialSlateGameForMatchup(
   home: string,
   away: string,
-): number | undefined {
+): CfbWeekBoardGame | undefined {
   const h = String(home || "")
     .replace(/^fcs:/i, "")
     .toUpperCase();
@@ -161,7 +161,7 @@ export function officialSlateWeekForMatchup(
     .replace(/^fcs:/i, "")
     .toUpperCase();
   if (!h || !a) return undefined;
-  const hit = (packagedOfficialWeekBoard().games ?? []).find((g) => {
+  return (packagedOfficialWeekBoard().games ?? []).find((g) => {
     const gh = String(g.home || "")
       .replace(/^fcs:/i, "")
       .toUpperCase();
@@ -170,7 +170,19 @@ export function officialSlateWeekForMatchup(
       .toUpperCase();
     return gh === h && ga === a;
   });
-  return hit?.week;
+}
+
+/** Resolve project-game week from the official slate matchup — never invent. */
+export function officialSlateWeekForMatchup(
+  home: string,
+  away: string,
+): number | undefined {
+  return officialSlateGameForMatchup(home, away)?.week;
+}
+
+/** Week tab hrefs — bare `/pro/cfb/slate` defaults to Week 1, so W0 must use `?week=0`. */
+export function officialSlateHrefForWeek(week: number): string {
+  return `/pro/cfb/slate?week=${week}`;
 }
 
 export function projectGameHref(row: CfbWeekBoardGame): string {

@@ -39,7 +39,7 @@ export default function CfbProError({
           Retry
         </button>
         <Link
-          href="/pro/cfb/slate"
+          href="/pro/cfb/slate?week=1"
           className="min-h-11 inline-flex items-center rounded-xl border border-white/15 px-4 text-sm font-semibold text-kos-text"
         >
           Official slate

@@ -2,6 +2,7 @@ import CfbOfficialSlatePanel from "@/components/pro/cfb/CfbOfficialSlatePanel";
 import SportHubShell from "@/components/pro/SportHubShell";
 import {
   officialSlateAttribution,
+  officialSlateHrefForWeek,
   parseOfficialSlateWeek,
 } from "@/lib/cfb-official-slate";
 import {
@@ -49,9 +50,7 @@ export default async function CfbOfficialSlatePage({
     >
       <CfbOfficialSlatePanel
         week={week}
-        hrefForWeek={(w) =>
-          w === 0 ? "/pro/cfb/slate" : `/pro/cfb/slate?week=${w}`
-        }
+        hrefForWeek={officialSlateHrefForWeek}
       />
     </SportHubShell>
   );

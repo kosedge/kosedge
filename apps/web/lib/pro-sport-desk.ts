@@ -353,7 +353,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       "CFB path: Edge Board (KEI vs market) → Project Game → Projections → Futures → Teams/Power.",
     cards: [
       {
-        href: "/pro/cfb/slate",
+        href: "/pro/cfb/slate?week=1",
         title: "Official Slate",
         description:
           "KosEdge W0/W1 slate (ESPN + Odds API fact-check). Open any FBS row in Project Game.",

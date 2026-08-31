@@ -5,6 +5,8 @@ import { cfbKeiGames } from "@/lib/cfb-kei-artifacts";
 import {
   gamesForWeek,
   officialSlateAttribution,
+  officialSlateGameForMatchup,
+  officialSlateHrefForWeek,
   officialSlateWeekForMatchup,
   packagedOfficialWeekBoard,
   parseOfficialSlateWeek,
@@ -85,8 +87,25 @@ describe("cfb official slate in-house SoT", () => {
     expect(parseOfficialSlateWeek("0")).toBe(0);
     expect(parseOfficialSlateWeek("9")).toBe(1);
     expect(officialSlateWeekForMatchup("TCU", "UNC")).toBe(0);
+    const unc = officialSlateGameForMatchup("TCU", "UNC");
+    expect(unc?.neutral_site).toBe(true);
+    expect(unc?.venue).toMatch(/Aviva/i);
+    expect(unc?.away_score).toBe(15);
+    expect(unc?.home_score).toBe(10);
+    expect(officialSlateHrefForWeek(0)).toBe("/pro/cfb/slate?week=0");
+    expect(officialSlateHrefForWeek(1)).toBe("/pro/cfb/slate?week=1");
   });
 
+  it("wires slate Week 0 tab to ?week=0 (bare slate defaults to Week 1)", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/cfb/slate/page.tsx"),
+      "utf8",
+    );
+    expect(src).toContain("officialSlateHrefForWeek");
+    expect(src).not.toMatch(
+      /w\s*===\s*0\s*\?\s*["']\/pro\/cfb\/slate["']/,
+    );
+  });
   it("registers the missing production routes", () => {
     const root = path.join(__dirname, "../../app/(pro)/pro/cfb");
     for (const page of ["slate", "projections", "teams", "futures"]) {

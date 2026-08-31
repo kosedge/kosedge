@@ -36,7 +36,7 @@ const GLANCE: Record<string, GlanceItem[]> = {
   ],
   cfb: [
     {
-      href: "/pro/cfb/slate",
+      href: "/pro/cfb/slate?week=1",
       title: "1. Official slate",
       body: "Week 0 / Week 1 ESPN board — open any FBS row in Project Game.",
     },

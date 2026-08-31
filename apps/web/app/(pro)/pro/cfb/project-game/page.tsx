@@ -8,7 +8,7 @@ import {
 } from "@/lib/cfb-season-engine-format";
 import {
   matchupLabel,
-  officialSlateWeekForMatchup,
+  officialSlateGameForMatchup,
   packagedOfficialWeekBoard,
 } from "@/lib/cfb-official-slate";
 import {
@@ -50,15 +50,22 @@ export default async function CfbProjectGamePage({
       ? Number(weekParam)
       : NaN;
   // Bare /pro/cfb/project-game defaults UNC@TCU — that matchup is Week 0 on the
-  // official slate. Never invent Week 1 when the slate already knows the week.
-  const weekFromSlate =
-    officialSlateWeekForMatchup(defaultHome, defaultAway) ??
-    officialSlateWeekForMatchup(home, away);
+  // official slate (neutral, Aviva). Never invent Week 1 when the slate knows.
+  const slateGame =
+    officialSlateGameForMatchup(defaultHome, defaultAway) ??
+    officialSlateGameForMatchup(home, away);
   const week = Number.isFinite(weekFromQuery)
     ? Math.max(0, Math.min(20, weekFromQuery))
-    : (weekFromSlate ?? 0);
-  const neutral =
-    firstValue(sp.neutral) === "1" || firstValue(sp.neutral) === "true";
+    : (slateGame?.week ?? 0);
+  const neutralParam = firstValue(sp.neutral);
+  const neutralFromQuery =
+    neutralParam === "1" ||
+    neutralParam === "true" ||
+    neutralParam === "0" ||
+    neutralParam === "false";
+  const neutral = neutralFromQuery
+    ? neutralParam === "1" || neutralParam === "true"
+    : Boolean(slateGame?.neutral_site);
   const codes = [
     ...(status.team_codes ?? []),
     ...(home ? [home] : []),
@@ -107,7 +114,7 @@ export default async function CfbProjectGamePage({
           ← Model hub
         </Link>
         <Link
-          href="/pro/cfb/slate"
+          href="/pro/cfb/slate?week=1"
           className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
         >
           Slate →
