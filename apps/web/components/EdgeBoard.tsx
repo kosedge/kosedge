@@ -200,63 +200,61 @@ const EMPTY_PAIR: PricePair = {
   bottom: { label: "—", juice: "—" },
 };
 
-const sampleMatchupCtx = buildMatchupContext({
-  gameId: "sample-duke-unc",
-  awayName: "Duke",
-  homeName: "UNC",
-  week: 8,
-  keiSpreadHome: -5.5,
-  marketSpreadHome: -5.0,
-  keiTotal: 150.5,
-  marketTotal: 149.5,
-});
-const sampleOverview = buildMatchupOverview(sampleMatchupCtx);
-const sampleStatDrop = buildStatDrop(sampleMatchupCtx);
-
-const sampleRows: LegacyEdgeBoardRow[] = [
+/**
+ * Homepage eye-catcher only — three stamped CFB Week 1 rows (2 PLAY + 1 PASS).
+ * Do not wire the full live board here (would dump huge dogs and break the mix).
+ */
+const homePreviewRows: LegacyEdgeBoardRow[] = [
   {
-    id: "sample-1",
-    time: "8:30pm",
-    teamA: {
-      name: "Duke",
-      keiRank: "12",
-      site: "Away",
-      record: "21-1",
-      confRecord: "10-0",
-    },
-    teamB: {
-      name: "UNC",
-      keiRank: "18",
-      site: "Home",
-      record: "18-4",
-      confRecord: "8-2",
-    },
-    openOU: {
-      top: { label: "o150.5", juice: "-110" },
-      bottom: { label: "u150.5", juice: "-110" },
-    },
-    openLine: {
-      top: { label: "+5.5", juice: "-110" },
-      bottom: { label: "-5.5", juice: "-110" },
-    },
+    id: "home-smu-fsu",
+    teamA: { name: "SMU", site: "Away" },
+    teamB: { name: "FSU", site: "Home" },
+    openOU: EMPTY_PAIR,
+    openLine: EMPTY_PAIR,
     bestLine: {
-      top: { label: "+6.5", juice: "-112" },
-      bottom: { label: "-5.0", juice: "-110" },
+      top: { label: "SMU -3", juice: "—" },
+      bottom: { label: "—", juice: "—" },
     },
     bestOU: {
-      top: { label: "o149.5", juice: "-110" },
-      bottom: { label: "u152.5", juice: "-112" },
+      top: { label: "o53.5", juice: "—" },
+      bottom: { label: "—", juice: "—" },
     },
-    overview: sampleOverview.text,
-    statDrop: sampleStatDrop,
-    edgeLineNum: 1.5,
-    edgeOUNum: 0.4,
-    edgeLineFavor: "Duke",
-    edgeOUFavor: "Under",
-    playLine: "Duke +6.5",
-    playOU: "Under 152.5",
-    tagLine: "LEAN",
-    tagOU: "PASS",
+    edgeLineNum: 5.4,
+    tagLine: "PLAY",
+  },
+  {
+    id: "home-unlv-hawaii",
+    teamA: { name: "UNLV", site: "Away" },
+    teamB: { name: "Hawaii", site: "Home" },
+    openOU: EMPTY_PAIR,
+    openLine: EMPTY_PAIR,
+    bestLine: {
+      top: { label: "HAW +2.5", juice: "—" },
+      bottom: { label: "—", juice: "—" },
+    },
+    bestOU: {
+      top: { label: "o58.5", juice: "—" },
+      bottom: { label: "—", juice: "—" },
+    },
+    edgeLineNum: 5.5,
+    tagLine: "PLAY",
+  },
+  {
+    id: "home-sjsu-emu",
+    teamA: { name: "SJSU", site: "Away" },
+    teamB: { name: "E. Michigan", site: "Home" },
+    openOU: EMPTY_PAIR,
+    openLine: EMPTY_PAIR,
+    bestLine: {
+      top: { label: "SJSU +3.5", juice: "—" },
+      bottom: { label: "—", juice: "—" },
+    },
+    bestOU: {
+      top: { label: "o56.5", juice: "—" },
+      bottom: { label: "—", juice: "—" },
+    },
+    edgeLineNum: 1.4,
+    tagLine: "PASS",
   },
 ];
 
@@ -1320,8 +1318,8 @@ export default function EdgeBoard({
   })();
   const legacy = hasRealData
     ? flatRowsToLegacy(safeRows, sportKey, inferredWeek)
-    : sampleRows;
-  const data = hasRealData ? legacy : sampleRows;
+    : [];
+  const data = hasRealData ? legacy : [];
   const isNfl = String(sportKey).toLowerCase() === "nfl";
   const isMlb = String(sportKey).toLowerCase() === "mlb";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
@@ -1333,55 +1331,54 @@ export default function EdgeBoard({
 
   if (variant === "home") {
     return (
-      <div className="lg:col-span-5">
-        <div className="relative">
-          <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
-          <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-3xl font-bebas text-edge-green">
-                Edge Board
-              </h2>
-              <span className="text-xs bg-white/5 px-2.5 py-1 rounded text-gray-400">
-                Sample
-              </span>
-            </div>
-            <div className="overflow-hidden rounded-2xl border border-white/10">
-              <table className="w-full text-sm sm:text-base">
-                <thead className="bg-white/5">
-                  <tr className="text-left text-gray-300">
-                    <th className="py-2.5 px-3">Game</th>
-                    <th className="py-2.5 px-3">
-                      {isMlb ? "Best Moneyline" : "Best Line"}
-                    </th>
-                    <th className="py-2.5 px-3">Best O/U</th>
-                    <th className="py-2.5 px-3">Edge</th>
-                    <th className="py-2.5 px-3">Tag</th>
+      <div className="relative mt-4">
+        <div className="absolute -inset-1 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
+        <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl">
+          <div className="mb-4">
+            <h2 className="text-3xl font-bebas text-edge-green">Edge Board</h2>
+          </div>
+          <div className="overflow-hidden rounded-2xl border border-white/10">
+            <div className="overflow-x-auto">
+            <table className="w-full min-w-[520px] text-sm sm:text-base">
+              <thead className="bg-white/5">
+                <tr className="text-left text-gray-300">
+                  <th className="py-2.5 px-3">Game</th>
+                  <th className="py-2.5 px-3">Best Line</th>
+                  <th className="py-2.5 px-3">Best O/U</th>
+                  <th className="py-2.5 px-3">Edge</th>
+                  <th className="py-2.5 px-3">Tag</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-white/10 text-gray-200">
+                {homePreviewRows.map((r) => (
+                  <tr key={r.id} className="hover:bg-white/5 transition">
+                    <td className="py-2.5 px-3">
+                      <div className="font-semibold">
+                        {r.teamA.name} @ {r.teamB.name}
+                      </div>
+                    </td>
+                    <td className="py-2.5 px-3 font-semibold">
+                      {r.bestLine.top.label}
+                    </td>
+                    <td className="py-2.5 px-3 font-semibold">
+                      {r.bestOU.top.label}
+                    </td>
+                    <td className="py-2.5 px-3 font-bold tabular-nums">
+                      {r.edgeLineNum != null ? r.edgeLineNum.toFixed(1) : "—"}
+                    </td>
+                    <td className="py-2.5 px-3">
+                      {r.tagLine ? (
+                        <span className={tagClassName(r.tagLine, true)}>
+                          {r.tagLine}
+                        </span>
+                      ) : (
+                        <span className="text-gray-500">—</span>
+                      )}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="divide-y divide-white/10 text-gray-200">
-                  {sampleRows.map((r) => (
-                    <tr key={r.id} className="hover:bg-white/5 transition">
-                      <td className="py-2.5 px-3">
-                        <div className="font-semibold">
-                          {r.teamA.name} vs {r.teamB.name}
-                        </div>
-                        <div className="text-[11px] text-gray-400">
-                          {r.teamA.name} ({r.teamA.keiRank ?? "—"}) •{" "}
-                          {r.teamB.name} ({r.teamB.keiRank ?? "—"})
-                        </div>
-                      </td>
-                      <td className="py-2.5 px-3">{r.bestLine.top.label}</td>
-                      <td className="py-2.5 px-3">{r.bestOU.top.label}</td>
-                      <td className="py-2.5 px-3 text-gray-500">—</td>
-                      <td className="py-2.5 px-3 text-gray-500">—</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-            <div className="mt-4 text-xs text-gray-400">
-              Sample data for illustrative purposes only.
-            </div>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
