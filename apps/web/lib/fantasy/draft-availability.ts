@@ -150,7 +150,10 @@ export function filterDraftableRows<
 
 /** One-line limitation for the desk / mock footer. */
 export function draftSitLimitation(
-  sat: Array<{ row: { playerName: string; team: string; position: string }; sit: DraftSitEntry }>,
+  sat: Array<{
+    row: { playerName: string; team: string; position: string };
+    sit: DraftSitEntry;
+  }>,
   asOf: string,
 ): string | null {
   if (!sat.length) return null;
