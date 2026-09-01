@@ -83,23 +83,13 @@ def test_skater_and_goalie_talent_tables_nonempty() -> None:
         assert len(goalies.get("by_season", {}).get(key) or []) > 20
 
 
-def test_no_shrink_or_prior_pack_shipped() -> None:
-    data = (
-        ROOT
-        / "services"
-        / "model-service"
-        / "src"
-        / "services"
-        / "nhl_season_engine"
-        / "data"
-    )
-    assert not (data / "nhl_team_prior_2026.json").exists()
+def test_fetcher_module_does_not_define_shrink() -> None:
+    """Fetcher stays ingest-only; Ch1 owns NHL_TEAM_CARRY_SHRINK in priors.py."""
     text = (ROOT / "services/model-service/src/services/nhl_data.py").read_text(
         encoding="utf-8"
     )
-    assert "NHL_TEAM_CARRY_SHRINK" not in text or "does_not" in text
-    # Module must not define a live shrink constant.
     assert "NHL_TEAM_CARRY_SHRINK =" not in text
+    assert "nhl_team_prior_2026" not in text or "does_not" in text
 
 
 def test_edge_board_nhl_kei_still_blank_in_code() -> None:
