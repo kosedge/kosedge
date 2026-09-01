@@ -194,8 +194,14 @@ jobs:
           cd services/model-service
           pytest -q tests/test_cfb_enterprise_gates.py tests/test_cfb_power_sot.py tests/test_cfb_futures.py tests/test_cfb_kei.py
 
+      - name: Run NBA season-engine tests
+        if: steps.paths.outputs.nba_ms == '1'
+        run: |
+          cd services/model-service
+          pytest -q tests/test_nba_team_prior_ch1.py
+
       - name: Run model-service DepthSot / NFL tests
-        if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1')
+        if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1')
         run: |
           cd services/model-service
           # Prefer targeted DepthSot / auth contract tests when present; fall back to full suite.
@@ -219,10 +225,10 @@ jobs:
           # Futures conservation C1–C6 + ceiling soft-pile guard
           python scripts/nfl/check_season_sim_conservation.py --n-path-replicates 500
 
-      - name: Skip NFL Truth Layer (CFB-only model-service)
+      - name: Skip NFL Truth Layer (CFB/NBA-only model-service)
         if: steps.paths.outputs.model_service == '1' && steps.paths.outputs.nfl_truth != '1'
         run: |
-          echo "CFB-only model-service diff — skipping NFL DepthSot/invariants (Law 7: do not touch NFL)."
+          echo "CFB/NBA-only model-service diff — skipping NFL DepthSot/invariants (Law 7: do not touch NFL)."
 
       - name: Comment PR with results
         if: always()
