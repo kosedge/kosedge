@@ -9,10 +9,17 @@ describe("loadEdgeBoardFallback", () => {
     expect(rows.some((r) => r.market === "Total")).toBe(true);
   });
 
-  it("loads shipped NHL, MLB, and WNBA snapshots", () => {
+  it("loads shipped NHL, MLB, WNBA, and NBA snapshots", () => {
     expect(loadEdgeBoardFallback("nhl").length).toBeGreaterThan(0);
     expect(loadEdgeBoardFallback("mlb").length).toBeGreaterThan(0);
     expect(loadEdgeBoardFallback("wnba").length).toBeGreaterThan(0);
+
+    const nba = loadEdgeBoardFallback("nba");
+    expect(nba.length).toBeGreaterThan(0);
+    expect(nba.some((r) => r.market === "Spread")).toBe(true);
+    expect(nba.some((r) => r.market === "Total")).toBe(true);
+    // Priced Odds pull — Open/Best present (unlike empty offseason stub).
+    expect(nba.some((r) => Boolean(r.open) && Boolean(r.best))).toBe(true);
   });
 
   it("loads NCAAM KEI skeleton fallback (no invented book prices)", () => {
@@ -23,9 +30,6 @@ describe("loadEdgeBoardFallback", () => {
   });
 
   it("returns empty for sports without snapshot rows", () => {
-    // NBA offseason: shipped file may exist with eventCount 0 / rows [].
-    expect(loadEdgeBoardFallback("nba")).toEqual([]);
     expect(loadEdgeBoardFallback("not-a-sport")).toEqual([]);
   });
 });
-
