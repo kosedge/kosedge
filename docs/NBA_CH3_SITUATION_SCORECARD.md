@@ -10,13 +10,13 @@
 
 ## Chosen coefficients (paper-sim)
 
-| Class | Coefficient (net) | Observed rate | Share-weighted |
-| --- | ---: | ---: | ---: |
-| Home | **+1.5** | 0.500 | +0.750 |
-| B2B / 3-in-4 (rest class) | **−2.0** | 0.316 | −0.632 |
-| Travel (`|Δtz| ≥ 2h`) | **−1.0** | 0.079 | −0.079 |
-| Altitude visitor (venue flag) | **−1.5** | 0.033 | −0.050 |
-| **Cap** | **`SITUATION_NET_CAP = 4.0`** | — | — |
+| Class                         |             Coefficient (net) | Observed rate | Share-weighted |
+| ----------------------------- | ----------------------------: | ------------: | -------------: | ----- | ------ |
+| Home                          |                      **+1.5** |         0.500 |         +0.750 |
+| B2B / 3-in-4 (rest class)     |                      **−2.0** |         0.316 |         −0.632 |
+| Travel (`                     |                           Δtz |        ≥ 2h`) |       **−1.0** | 0.079 | −0.079 |
+| Altitude visitor (venue flag) |                      **−1.5** |         0.033 |         −0.050 |
+| **Cap**                       | **`SITUATION_NET_CAP = 4.0`** |             — |              — |
 
 Paper-sim mean Δnet across team-games ≈ **−0.01** (league-neutral). Mean `|Δnet|` ≈ **0.99**.
 
@@ -24,14 +24,14 @@ Paper-sim mean Δnet across team-games ≈ **−0.01** (league-neutral). Mean `|
 
 ## Scenario board (league mean net after apply)
 
-| Scenario | Mean net | Min | Max |
-| --- | ---: | ---: | ---: |
-| Neutral baseline | ~Ch2 mean | — | — |
-| Home only | +1.5 vs baseline | — | — |
-| Away B2B | −2.0 vs baseline | — | — |
-| Away travel | −1.0 vs baseline | — | — |
-| Away altitude | −1.5 vs baseline | — | — |
-| Away B2B+travel+alt | capped at **−4.0** (raw −4.5) | — | — |
+| Scenario            |                      Mean net | Min | Max |
+| ------------------- | ----------------------------: | --: | --: |
+| Neutral baseline    |                     ~Ch2 mean |   — |   — |
+| Home only           |              +1.5 vs baseline |   — |   — |
+| Away B2B            |              −2.0 vs baseline |   — |   — |
+| Away travel         |              −1.0 vs baseline |   — |   — |
+| Away altitude       |              −1.5 vs baseline |   — |   — |
+| Away B2B+travel+alt | capped at **−4.0** (raw −4.5) |   — |   — |
 
 ORtg/DRtg move ± half the net delta so `ORtg − DRtg` tracks net. Band stays ~105–125.
 
@@ -52,15 +52,15 @@ PlayerProjection' = Ch5 copy-through; scale PTS/USG only if |ΣPTS − implied_p
 
 ## Gates
 
-| Gate | Result |
-| --- | --- |
-| 4 classes + cap registered | PASS |
-| Venue altitude flag (DEN/UTA venues) | PASS |
-| ORtg/DRtg league-sane after apply | PASS |
-| Σ PTS within residual cap | PASS |
-| No name-in-an-if in `situation.py` | PASS |
-| CFB BALL@OSU −40.5 | PASS |
-| Zero prop / Edge tags | PASS |
+| Gate                                 | Result |
+| ------------------------------------ | ------ |
+| 4 classes + cap registered           | PASS   |
+| Venue altitude flag (DEN/UTA venues) | PASS   |
+| ORtg/DRtg league-sane after apply    | PASS   |
+| Σ PTS within residual cap            | PASS   |
+| No name-in-an-if in `situation.py`   | PASS   |
+| CFB BALL@OSU −40.5                   | PASS   |
+| Zero prop / Edge tags                | PASS   |
 
 ---
 

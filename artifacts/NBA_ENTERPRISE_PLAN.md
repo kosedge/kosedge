@@ -35,10 +35,10 @@
 | `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50` | 2         |
 | `MINUTE_GRID_SUM`         | `240`                | 2 / 5     |
 | `SITUATION_HOME_NET`      | `+1.5`               | 3         |
-| `SITUATION_B2B_NET`        | `−2.0`               | 3         |
-| `SITUATION_TRAVEL_NET`     | `−1.0`               | 3         |
-| `SITUATION_ALTITUDE_NET`   | `−1.5`               | 3         |
-| `SITUATION_NET_CAP`        | `4.0`                | 3         |
+| `SITUATION_B2B_NET`       | `−2.0`               | 3         |
+| `SITUATION_TRAVEL_NET`    | `−1.0`               | 3         |
+| `SITUATION_ALTITUDE_NET`  | `−1.5`               | 3         |
+| `SITUATION_NET_CAP`       | `4.0`                | 3         |
 | `PROP_PLAY`               | `≥ 4.0 AND ≥ 0.6σ`   | 6         |
 | `PROP_PLAY_CAP_PER_SLATE` | `8`                  | 6         |
 | `ODDS_SPORT_KEY`          | `basketball_nba`     | 0 / 4 / 6 |

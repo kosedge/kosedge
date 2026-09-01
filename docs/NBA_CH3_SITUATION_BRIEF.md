@@ -25,15 +25,15 @@ PlayerProjection means stay talent×minutes; on-read copy-through scales PTS/USG
 
 ## Allowlist
 
-| Item | Path |
-| --- | --- |
-| Constants | `priors.py` (`SITUATION_*`) |
-| Reader / apply-on-read | `situation.py` |
-| Venue class pack | `…/data/nba_venues_2026.json` |
-| Schedule SoT + paper-sim | `…/data/nba_situation_2026.json` |
-| Builder | `scripts/nba/build_situation_ch3.py` |
-| Tests | `tests/test_nba_situation_ch3.py` (NBA-only CI) |
-| Docs | this brief + scorecard |
+| Item                     | Path                                            |
+| ------------------------ | ----------------------------------------------- |
+| Constants                | `priors.py` (`SITUATION_*`)                     |
+| Reader / apply-on-read   | `situation.py`                                  |
+| Venue class pack         | `…/data/nba_venues_2026.json`                   |
+| Schedule SoT + paper-sim | `…/data/nba_situation_2026.json`                |
+| Builder                  | `scripts/nba/build_situation_ch3.py`            |
+| Tests                    | `tests/test_nba_situation_ch3.py` (NBA-only CI) |
+| Docs                     | this brief + scorecard                          |
 
 ---
 
