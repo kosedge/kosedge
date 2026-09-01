@@ -1,4 +1,4 @@
-"""NBA season engine package (Ch1–Ch3 + Ch5 PlayerProjection)."""
+"""NBA season engine package (Ch1–Ch5 + Ch4 team KEI)."""
 
 from src.services.nba_season_engine.priors import (
     ENGINE_VERSION,
@@ -43,6 +43,15 @@ from src.services.nba_season_engine.situation import (
     load_venue_flags,
     situation_delta_pts,
 )
+from src.services.nba_season_engine.nba_kei import (
+    LEAN_EDGE_PTS,
+    PLAY_EDGE_PTS,
+    compute_game_kei,
+    documentation as nba_kei_documentation,
+    kei_lines_for_dates,
+    load_kei_pack,
+    tag_from_edge,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -53,6 +62,8 @@ __all__ = [
     "MINUTE_GRID_SUM",
     "PAPER_SIM_S_SET",
     "VECTOR_KEYS",
+    "PLAY_EDGE_PTS",
+    "LEAN_EDGE_PTS",
     "apply_team_carry_shrink",
     "get_team_prior",
     "load_team_prior_pack",
@@ -78,4 +89,9 @@ __all__ = [
     "apply_situation_team_line",
     "apply_situation_player_projections",
     "situation_documentation",
+    "compute_game_kei",
+    "load_kei_pack",
+    "kei_lines_for_dates",
+    "tag_from_edge",
+    "nba_kei_documentation",
 ]

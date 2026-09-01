@@ -39,6 +39,10 @@ import {
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { applyCfbTrustedMarketToRows } from "@/lib/cfb-trusted-market";
+import {
+  applyNbaTrustedMarketToRows,
+  isNbaPreseason,
+} from "@/lib/nba-trusted-market";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
 import {
   keiGamesFromNflFairLines,
@@ -213,5 +217,11 @@ export async function assembleEdgeBoardRows(
   const keiGames = await resolveKeiGames(sport);
   const seeded = ensureAllKeiGamesOnBoard(odds, sport, keiGames);
   const merged = mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);
-  return sport === "cfb" ? applyCfbTrustedMarketToRows(merged) : merged;
+  if (sport === "cfb") return applyCfbTrustedMarketToRows(merged);
+  if (sport === "nba") {
+    return applyNbaTrustedMarketToRows(merged, {
+      preseason: isNbaPreseason(),
+    });
+  }
+  return merged;
 }

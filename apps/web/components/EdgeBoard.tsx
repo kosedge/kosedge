@@ -4,6 +4,12 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import SportsbookBadge from "@/components/SportsbookBadge";
 import { cfbAwayBookToHome, trustCfbMarket } from "@/lib/cfb-trusted-market";
+import {
+  isNbaPreseason,
+  nbaAwayBookToHome,
+  nbaEdgeTag,
+  trustNbaMarket,
+} from "@/lib/nba-trusted-market";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
@@ -40,6 +46,10 @@ export type FlatEdgeBoardRow = {
   cfbTrustReason?: string;
   /** CFB footnote: `untrusted` | `no book` when not trusted. */
   cfbTrustLabel?: string;
+  /** NBA Ch4: trust flag; Best cleared when untrusted. */
+  nbaMarketTrusted?: boolean;
+  nbaTrustReason?: string;
+  nbaTrustLabel?: string;
   /** American odds juice for Open top (away / over). */
   openJuice?: string;
   /** American odds juice for Open bottom (home / under). */
@@ -616,6 +626,10 @@ function edgeToTag(
     if (edgeNum >= 2.5) return "LEAN";
     return "PASS";
   }
+  if (sport === "nba") {
+    // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 (trusted Best only; caller gates trust).
+    return nbaEdgeTag(edgeNum);
+  }
   if (sport === "mlb" && market === "line") {
     if (edgeNum >= 3.0) return "PLAY";
     if (edgeNum >= 1.5) return "LEAN";
@@ -974,25 +988,43 @@ export function flatRowsToLegacy(
       // Negative => model likes Home more; positive => Away.
       const bestSpreadNum = parseSpread(bestLine.bottom.label);
       const keiSpreadNum = parseSpread(keiLine.bottom.label);
-      // CFB: board Open/Best are away-signed; KEI + bestLine.bottom are home.
-      // Prefer assemble-time trust flag; else recompute (same helper).
-      const openHome = cfbAwayBookToHome(lineRow?.open);
-      const bestHome = cfbAwayBookToHome(lineRow?.best) ?? bestSpreadNum;
-      const cfbBookCount = openHome != null && bestHome != null ? 2 : 1;
-      const cfbTrusted =
-        String(sportKey).toLowerCase() !== "cfb"
-          ? true
-          : typeof lineRow?.cfbMarketTrusted === "boolean"
+      const sportLc = String(sportKey).toLowerCase();
+      // CFB/NBA: board Open/Best are away-signed; KEI + bestLine.bottom are home.
+      const openHome =
+        sportLc === "nba"
+          ? nbaAwayBookToHome(lineRow?.open)
+          : cfbAwayBookToHome(lineRow?.open);
+      const bestHome =
+        (sportLc === "nba"
+          ? nbaAwayBookToHome(lineRow?.best)
+          : cfbAwayBookToHome(lineRow?.best)) ?? bestSpreadNum;
+      const bookCount = openHome != null && bestHome != null ? 2 : 1;
+      let marketTrusted = true;
+      if (sportLc === "cfb") {
+        marketTrusted =
+          typeof lineRow?.cfbMarketTrusted === "boolean"
             ? lineRow.cfbMarketTrusted
             : trustCfbMarket({
                 kei: lineRow?.kei ?? keiSpreadNum,
                 best: bestHome,
                 open: openHome,
-                bookCount: cfbBookCount,
+                bookCount,
               }).trusted;
+      } else if (sportLc === "nba") {
+        marketTrusted =
+          typeof lineRow?.nbaMarketTrusted === "boolean"
+            ? lineRow.nbaMarketTrusted
+            : trustNbaMarket({
+                kei: lineRow?.kei ?? keiSpreadNum,
+                best: bestHome,
+                open: openHome,
+                bookCount,
+                preseason: isNbaPreseason(),
+              }).trusted;
+      }
       signedLineEdge =
         hasSportsbookLine &&
-        cfbTrusted &&
+        marketTrusted &&
         bestSpreadNum != null &&
         keiSpreadNum != null
           ? keiSpreadNum - bestSpreadNum
@@ -1007,7 +1039,7 @@ export function flatRowsToLegacy(
 
     const bestTotalNum = parseTotal(bestOU.top.label);
     const keiTotalNum = parseTotal(keiOU.top.label);
-    // CFB totals: same absurd / single-book gate as spreads (no sign flip).
+    // CFB/NBA totals: absurd / single-book gate (no sign flip).
     const openTotalNum =
       totalRow?.open != null && String(totalRow.open) !== ""
         ? parseTotal(String(totalRow.open))
@@ -1016,24 +1048,37 @@ export function flatRowsToLegacy(
       totalRow?.best != null && String(totalRow.best) !== ""
         ? parseTotal(String(totalRow.best))
         : null;
-    const cfbTotalBookCount =
+    const totalBookCount =
       openTotalNum != null && (bestTotalFromRow ?? bestTotalNum) != null
         ? 2
         : 1;
-    const cfbTotalTrusted =
-      String(sportKey).toLowerCase() !== "cfb"
-        ? true
-        : typeof totalRow?.cfbMarketTrusted === "boolean"
+    const sportLcTotal = String(sportKey).toLowerCase();
+    let totalTrusted = true;
+    if (sportLcTotal === "cfb") {
+      totalTrusted =
+        typeof totalRow?.cfbMarketTrusted === "boolean"
           ? totalRow.cfbMarketTrusted
           : trustCfbMarket({
               kei: totalRow?.kei ?? keiTotalNum,
               best: bestTotalFromRow ?? bestTotalNum,
               open: openTotalNum,
-              bookCount: cfbTotalBookCount,
+              bookCount: totalBookCount,
             }).trusted;
+    } else if (sportLcTotal === "nba") {
+      totalTrusted =
+        typeof totalRow?.nbaMarketTrusted === "boolean"
+          ? totalRow.nbaMarketTrusted
+          : trustNbaMarket({
+              kei: totalRow?.kei ?? keiTotalNum,
+              best: bestTotalFromRow ?? bestTotalNum,
+              open: openTotalNum,
+              bookCount: totalBookCount,
+              preseason: isNbaPreseason(),
+            }).trusted;
+    }
     const signedOUEdge =
       hasSportsbookTotal &&
-      cfbTotalTrusted &&
+      totalTrusted &&
       bestTotalNum != null &&
       keiTotalNum != null
         ? keiTotalNum - bestTotalNum
@@ -1094,13 +1139,19 @@ export function flatRowsToLegacy(
       totalRow?.publishTag,
     );
     // CFB Week 0 is the close tape — finals stay visible, never PLAY/LEAN.
+    // NBA preseason / untrusted Best → PASS.
     const rowWeek = Number(lineRow?.week ?? totalRow?.week);
     const cfbFinalTape =
       String(sportKey).toLowerCase() === "cfb" && rowWeek === 0;
-    const tagLine = cfbFinalTape ? ("PASS" as Tag) : tagLineRaw;
-    const tagOU = cfbFinalTape ? ("PASS" as Tag) : tagOURaw;
-    const playLineOut = cfbFinalTape ? undefined : playLine;
-    const playOUOut = cfbFinalTape ? undefined : playOU;
+    const nbaForcePass =
+      String(sportKey).toLowerCase() === "nba" &&
+      (isNbaPreseason() ||
+        lineRow?.nbaMarketTrusted === false ||
+        totalRow?.nbaMarketTrusted === false);
+    const tagLine = cfbFinalTape || nbaForcePass ? ("PASS" as Tag) : tagLineRaw;
+    const tagOU = cfbFinalTape || nbaForcePass ? ("PASS" as Tag) : tagOURaw;
+    const playLineOut = cfbFinalTape || nbaForcePass ? undefined : playLine;
+    const playOUOut = cfbFinalTape || nbaForcePass ? undefined : playOU;
 
     const src = (lineRow ?? totalRow) as FlatEdgeBoardRow | undefined;
     const srcSpread = entry.spread as FlatEdgeBoardRow | undefined;

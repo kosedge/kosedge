@@ -19,10 +19,7 @@
 
 import "server-only";
 
-import {
-  applyHandicapIdentity,
-  type KeiLineGame,
-} from "@/lib/kei-lines";
+import { applyHandicapIdentity, type KeiLineGame } from "@/lib/kei-lines";
 import { getKeiLines } from "@/lib/kei-lines";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import { keiGamesFromMlbFairLines } from "@/lib/mlb-kei-from-fair-lines";
@@ -123,7 +120,10 @@ export async function resolveKeiGames(
 
   if (sport === "nba") {
     try {
-      const board = await fetchNbaFairLines({ daysAhead: 5 });
+      const board = await fetchNbaFairLines({
+        daysAhead: 14,
+        source: "auto",
+      });
       if (board.lines.length > 0) {
         return keiGamesFromNbaFairLines(board.lines);
       }
