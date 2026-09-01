@@ -83,6 +83,7 @@ export async function fetchNbaFairLines(params?: {
   gameDate?: string;
   modelVersion?: string;
   daysAhead?: number;
+  source?: string;
 }): Promise<NbaFairLinesResponse> {
   const base = env.MODEL_SERVICE_URL;
   const fallbackDate =
@@ -106,6 +107,8 @@ export async function fetchNbaFairLines(params?: {
     url.searchParams.set("model_version", params.modelVersion);
   if (params?.daysAhead != null)
     url.searchParams.set("days_ahead", String(params.daysAhead));
+  // Chapter 4: prefer season-engine KEI on the Edge Board path.
+  url.searchParams.set("source", params?.source ?? "auto");
 
   try {
     const response = await upstreamFetch(url.toString(), {

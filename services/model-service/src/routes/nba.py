@@ -20,10 +20,76 @@ from src.services.nba_possession_simulator import (
 )
 from src.services.nba_publish_policy import board_publish_posture, publish_tag
 from src.services.nba_schema import ensure_nba_model_tables
+from src.services.nba_season_engine.nba_kei import (
+    KEI_VERSION,
+    kei_lines_for_dates,
+    load_kei_pack,
+)
 
 router = APIRouter(prefix="/nba", tags=["nba-model"])
 log = logging.getLogger(__name__)
 MODEL_STATE_KEY = "nba_active_model"
+
+
+def _is_nba_preseason(d: date) -> bool:
+    """Regular season window Oct–Jun; else preseason / offseason → PASS posture."""
+    return d.month not in {10, 11, 12, 1, 2, 3, 4, 5, 6}
+
+
+def _kei_pack_as_fair_lines(
+    *,
+    target_date: date,
+    days_ahead: int,
+    preseason: bool,
+) -> List[Dict[str, Any]]:
+    """Map Chapter 4 KEI pack rows into the fair-lines board shape."""
+    rows = kei_lines_for_dates(
+        game_date=target_date.isoformat(),
+        days_ahead=days_ahead,
+        limit=80,
+    )
+    out: List[Dict[str, Any]] = []
+    for g in rows:
+        spread = _to_float(g.get("kei_spread_home"))
+        total = _to_float(g.get("kei_total"))
+        wp = _to_float(g.get("kei_home_win_prob"))
+        out.append(
+            {
+                "game_id": g.get("game_id"),
+                "game_date": g.get("date") or target_date,
+                "start_time": None,
+                "home_team": g.get("home_team") or g.get("home"),
+                "away_team": g.get("away_team") or g.get("away"),
+                "home_win_prob": wp,
+                "fair_home_ml": None,
+                "total_mean": total,
+                "fair_total": total,
+                "fair_spread_home": spread,
+                "home_cover_prob": wp,
+                "margin_mean": None if spread is None else -spread,
+                "worker_build_id": KEI_VERSION,
+                "projected_at": None,
+                "kei_version": KEI_VERSION,
+                "source": "season_engine_ch4",
+                "publish": {
+                    "spread": publish_tag(
+                        "spread",
+                        model_line=spread,
+                        market_line=None,
+                        force_research_only=preseason,
+                        preseason=preseason,
+                    ),
+                    "total": publish_tag(
+                        "total",
+                        model_line=total,
+                        market_line=None,
+                        force_research_only=preseason,
+                        preseason=preseason,
+                    ),
+                },
+            }
+        )
+    return out
 
 
 def _to_float(v: Any) -> Optional[float]:
@@ -236,15 +302,41 @@ def nba_fair_lines(
     game_date: Optional[date] = Query(None, description="UTC date; defaults to today"),
     model_version: Optional[str] = Query(None),
     days_ahead: int = Query(3, ge=0, le=14),
+    source: str = Query(
+        "auto",
+        description="auto | possession_sim | season_engine (Ch4 KEI)",
+    ),
 ) -> Dict[str, Any]:
-    """Desk fair-lines board: ML, spread, total from latest possession sims.
+    """Desk fair-lines board.
 
-    Empty slate is honest in offseason — returns count=0 with slate_status label,
-    never invents prices.
+    Chapter 4: `source=season_engine` serves team KEI; `auto` falls back to Ch4
+    KEI when possession-sim slate is empty. Props stay dark.
     """
+    target_date = game_date or date.today()
+    preseason = _is_nba_preseason(target_date)
+    src = (source or "auto").strip().lower()
+
+    if src in {"season_engine", "kei", "ch4"}:
+        lines = _kei_pack_as_fair_lines(
+            target_date=target_date, days_ahead=days_ahead, preseason=preseason
+        )
+        pack = load_kei_pack()
+        return {
+            "game_date": target_date,
+            "model_version": pack.get("kei_version") or KEI_VERSION,
+            "worker_build_id": KEI_VERSION,
+            "count": len(lines),
+            "lines": lines,
+            "slate_status": "ok" if lines else ("offseason_empty" if preseason else "no_kei_for_date"),
+            "message": None if lines else "NBA Ch4 KEI pack has no games in this date window.",
+            "publish_posture": board_publish_posture(),
+            "source": "season_engine_ch4",
+            "features_mode": "season_engine_team_kei_ch4",
+            "phase": "ch4",
+        }
+
     session = SessionLocal()
     try:
-        # Match WNBA: never block the board on a long DDL/lock wait.
         try:
             session.execute(text("SET LOCAL lock_timeout = '2s'"))
             session.execute(text("SET LOCAL statement_timeout = '8s'"))
@@ -254,15 +346,11 @@ def nba_fair_lines(
             session.rollback()
 
         effective_model_version = model_version or _resolve_active_model_version(session)
-        target_date = game_date or date.today()
         lines: List[Dict[str, Any]] = []
         schema_ready = True
 
         try:
             session.execute(text("SET LOCAL statement_timeout = '8s'"))
-            # Require a joined game date in the window. Do NOT include
-            # orphan projections (g.game_date IS NULL) — that path scanned the
-            # full table and N+1'd projection JSON, hanging the Edge Board.
             if game_date is not None or days_ahead == 0:
                 rows = session.execute(
                     text(
@@ -342,7 +430,6 @@ def nba_fair_lines(
 
         for r in rows:
             m = dict(r._mapping)
-            # Prefer joined team names; fall back to projection JSON (no N+1 query).
             home_team = m.get("home_team")
             away_team = m.get("away_team")
             if not home_team or not away_team:
@@ -374,27 +461,93 @@ def nba_fair_lines(
                     "margin_mean": _to_float(m.get("margin_mean")),
                     "worker_build_id": m.get("worker_build_id"),
                     "projected_at": m.get("projected_at"),
-                    # Research-only until close-line ATS clears evidence floors.
+                    "source": "possession_sim",
                     "publish": {
                         "spread": publish_tag(
                             "spread",
                             model_line=fair_spread,
                             market_line=None,
                             force_research_only=True,
+                            preseason=preseason,
                         ),
                         "total": publish_tag(
                             "total",
                             model_line=fair_total,
                             market_line=None,
                             force_research_only=True,
+                            preseason=preseason,
                         ),
                     },
                 }
             )
 
-        # Offseason / empty-slate honesty (July 31 2026 is preseason build window).
-        month = target_date.month
-        in_regular_season_window = month in {10, 11, 12, 1, 2, 3, 4, 5, 6}
+        if not lines and src == "auto":
+            lines = _kei_pack_as_fair_lines(
+                target_date=target_date,
+                days_ahead=max(days_ahead, 14),
+                preseason=preseason,
+            )
+            if not lines:
+                # Preseason / off-window: still publish Ch4 KEI sample so the
+                # Edge Board can load KEI (not a copy of Best). Honest label.
+                pack_games = list((load_kei_pack().get("games") or [])[:30])
+                lines = []
+                for g in pack_games:
+                    spread = _to_float(g.get("kei_spread_home"))
+                    total = _to_float(g.get("kei_total"))
+                    wp = _to_float(g.get("kei_home_win_prob"))
+                    lines.append(
+                        {
+                            "game_id": g.get("game_id"),
+                            "game_date": g.get("date"),
+                            "start_time": None,
+                            "home_team": g.get("home_team") or g.get("home"),
+                            "away_team": g.get("away_team") or g.get("away"),
+                            "home_win_prob": wp,
+                            "fair_home_ml": None,
+                            "total_mean": total,
+                            "fair_total": total,
+                            "fair_spread_home": spread,
+                            "home_cover_prob": wp,
+                            "margin_mean": None if spread is None else -spread,
+                            "worker_build_id": KEI_VERSION,
+                            "projected_at": None,
+                            "kei_version": KEI_VERSION,
+                            "source": "season_engine_ch4_sample",
+                            "publish": {
+                                "spread": publish_tag(
+                                    "spread",
+                                    model_line=spread,
+                                    market_line=None,
+                                    force_research_only=True,
+                                    preseason=True,
+                                ),
+                                "total": publish_tag(
+                                    "total",
+                                    model_line=total,
+                                    market_line=None,
+                                    force_research_only=True,
+                                    preseason=True,
+                                ),
+                            },
+                        }
+                    )
+            if lines:
+                return {
+                    "game_date": target_date,
+                    "model_version": KEI_VERSION,
+                    "worker_build_id": KEI_VERSION,
+                    "count": len(lines),
+                    "lines": lines,
+                    "slate_status": "ok",
+                    "message": "Chapter 4 season-engine team KEI (possession-sim empty).",
+                    "publish_posture": board_publish_posture(),
+                    "source": "season_engine_ch4",
+                    "features_mode": "season_engine_team_kei_ch4",
+                    "phase": "ch4",
+                }
+
+        in_regular_season_window = not preseason
         if len(lines) == 0:
             slate_status = (
                 "offseason_empty"
@@ -415,7 +568,6 @@ def nba_fair_lines(
             slate_status = "ok"
             message = None
 
-        posture = board_publish_posture()
         return {
             "game_date": target_date,
             "model_version": effective_model_version,
@@ -424,16 +576,43 @@ def nba_fair_lines(
             "lines": lines,
             "slate_status": slate_status,
             "message": message,
-            "publish_posture": posture,
+            "publish_posture": board_publish_posture(),
+            "source": "possession_sim",
             "features_mode": (
                 "rolling_features_when_assembled"
                 if in_regular_season_window
                 else "offseason_honest_empty"
             ),
-            "phase": "phase3",
+            "phase": "ch4",
         }
     finally:
         session.close()
+
+
+@router.get("/kei-lines")
+def nba_kei_lines(
+    game_date: Optional[date] = Query(None, description="UTC date; defaults to today"),
+    days_ahead: int = Query(7, ge=0, le=30),
+) -> Dict[str, Any]:
+    """Chapter 4 team KEI board (--kei-only pack). Sides/totals; no props."""
+    target = game_date or date.today()
+    preseason = _is_nba_preseason(target)
+    pack = load_kei_pack()
+    lines = _kei_pack_as_fair_lines(
+        target_date=target, days_ahead=days_ahead, preseason=preseason
+    )
+    return {
+        "game_date": target,
+        "kei_version": pack.get("kei_version") or KEI_VERSION,
+        "engine_version": pack.get("engine_version"),
+        "count": len(lines),
+        "lines": lines,
+        "slate_status": "ok" if lines else ("offseason_empty" if preseason else "no_kei_for_date"),
+        "preseason": preseason,
+        "source": "season_engine_ch4",
+        "mode": "kei_only",
+        "does_not": pack.get("does_not") or [],
+    }
 
 
 @router.get("/props/board")

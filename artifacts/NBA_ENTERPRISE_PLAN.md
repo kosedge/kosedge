@@ -1,6 +1,6 @@
 # NBA Enterprise Plan
 
-**Status:** Chapters 0–2 + 5 merged. Chapter 3 situation apply-on-read (`SITUATION_TEAM_PTS_CAP=3.0`). No KEI / tags / props until Ch4/Ch6. `TEAM_CARRY_SHRINK=0.85` unchanged.  
+**Status:** Chapters 0–3 + 5 merged. Chapter 4 team KEI on Edge Board (sides/totals; trusted Best gate). Props dark until Ch6. `TEAM_CARRY_SHRINK=0.85` unchanged.  
 **Prod branch:** `deploy-vercel`  
 **Leave alone:** CFB · NFL · CBB  
 **One rule:** team line, props, and fantasy read the **same** `PlayerProjection`. That is the NFL miss. If that object isn’t real, you don’t get a props tab.

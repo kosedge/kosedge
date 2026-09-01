@@ -123,7 +123,10 @@ export async function resolveKeiGames(
 
   if (sport === "nba") {
     try {
-      const board = await fetchNbaFairLines({ daysAhead: 5 });
+      const board = await fetchNbaFairLines({
+        daysAhead: 14,
+        source: "auto",
+      });
       if (board.lines.length > 0) {
         return keiGamesFromNbaFairLines(board.lines);
       }
