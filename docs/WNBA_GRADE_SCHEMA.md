@@ -16,7 +16,9 @@ Side, total, and **each displayed prop** are **separate rows**.
 
 Freeze **at tip** (not at card stamp, not at close). First fill seeds schema example rows only; regular-season / playoff `close` / `final` stay empty on purpose until real games tip.
 
-Playoffs begin **Sep 27** — this PR is schema + empty store only so grading can start when tips land. **Not** a tag PR.
+Already-final 2026 games may appear as **schema examples only**. Do **not** backfill a fake grade book from Aug-1 leftover fair-lines / KEI (`401857105` / `401857106` stay ungraded leftovers — never blend as graded edges).
+
+Playoffs begin **Sep 27** — this PR is schema + empty store only so grading can start when tips land. **Not** a tag PR. After merge, WNBA is **parked** until the last week of RS / playoffs.
 
 ---
 
@@ -24,29 +26,29 @@ Playoffs begin **Sep 27** — this PR is schema + empty store only so grading ca
 
 One JSON object per line in `data/wnba_grades_2026.jsonl`.
 
-| Field          | Type                                        | Notes                                                                                              |
-| -------------- | ------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `season`       | int                                         | 2026                                                                                               |
-| `date`         | string \| null                              | Game date `YYYY-MM-DD` (tip local calendar day)                                                    |
-| `game_id`      | string \| null                              | Stable game id when known                                                                          |
-| `player_id`    | string \| null                              | Null on team side/total rows; set on prop rows                                                     |
-| `market`       | string                                      | `"spread"` \| `"total"` \| Odds-backed prop (`pts` \| `reb` \| `ast` \| `threes`)                  |
-| `kei`          | number \| null                              | Ch4 team KEI at tip (home-signed spread, or total). **Null on prop rows.**                         |
-| `proj`         | number \| null                              | Ch5 `PlayerProjection` mean for that prop. **Null on team side/total rows.**                       |
-| `open`         | number \| null                              | First trusted print (same sign convention as `best_kick`)                                          |
-| `best_kick`    | number \| null                              | Trusted Best **at tip** — home-signed spread / total points / prop line                            |
-| `book`         | string \| null                              | Book on Best                                                                                       |
-| `trusted`      | bool \| null                                | Trust gate; null when unknown                                                                      |
-| `tag`          | `"PASS"` \| `"LEAN"` \| `"PLAY"` \| `"n/a"` | Team rows: as printed (Ch4). **Prop rows: always `n/a` until a later tag PR.**                     |
-| `size_note`    | string \| null                              | Optional desk size flag; null until a size policy ships                                            |
-| `close`        | number \| null                              | Last trusted before tip + 5m (same sign as `best_kick`). Empty until real tips.                    |
-| `final`        | number \| null                              | Outcome for this row’s market (see below). Empty until real tips.                                  |
-| `ats_vs_kei`   | `"cover"` \| `"push"` \| `"miss"` \| null   | Team KEI line vs final. Null on props / when unfilled.                                             |
-| `ats_vs_tag`   | `"cover"` \| `"push"` \| `"miss"` \| null   | Tagged number vs final; null if PASS / n/a / unfilled                                              |
-| `clv`          | number \| null                              | Best_kick → close, signed with the tagged side                                                     |
-| `signed_error` | number \| null                              | See sign conventions                                                                               |
-| `source`       | string                                      | `schema_example` \| later tip writers                                                              |
-| `recorded_at`  | string                                      | ISO UTC when the line was appended                                                                 |
+| Field          | Type                                        | Notes                                                                             |
+| -------------- | ------------------------------------------- | --------------------------------------------------------------------------------- |
+| `season`       | int                                         | 2026                                                                              |
+| `date`         | string \| null                              | Game date `YYYY-MM-DD` (tip local calendar day)                                   |
+| `game_id`      | string \| null                              | Stable game id when known                                                         |
+| `player_id`    | string \| null                              | Null on team side/total rows; set on prop rows                                    |
+| `market`       | string                                      | `"spread"` \| `"total"` \| Odds-backed prop (`pts` \| `reb` \| `ast` \| `threes`) |
+| `kei`          | number \| null                              | Ch4 team KEI at tip (home-signed spread, or total). **Null on prop rows.**        |
+| `proj`         | number \| null                              | Ch5 `PlayerProjection` mean for that prop. **Null on team side/total rows.**      |
+| `open`         | number \| null                              | First trusted print (same sign convention as `best_kick`)                         |
+| `best_kick`    | number \| null                              | Trusted Best **at tip** — home-signed spread / total points / prop line           |
+| `book`         | string \| null                              | Book on Best                                                                      |
+| `trusted`      | bool \| null                                | Trust gate; null when unknown                                                     |
+| `tag`          | `"PASS"` \| `"LEAN"` \| `"PLAY"` \| `"n/a"` | Team rows: as printed (Ch4). **Prop rows: always `n/a` until a later tag PR.**    |
+| `size_note`    | string \| null                              | Optional desk size flag; null until a size policy ships                           |
+| `close`        | number \| null                              | Last trusted before tip + 5m (same sign as `best_kick`). Empty until real tips.   |
+| `final`        | number \| null                              | Outcome for this row’s market (see below). Empty until real tips.                 |
+| `ats_vs_kei`   | `"cover"` \| `"push"` \| `"miss"` \| null   | Team KEI line vs final. Null on props / when unfilled.                            |
+| `ats_vs_tag`   | `"cover"` \| `"push"` \| `"miss"` \| null   | Tagged number vs final; null if PASS / n/a / unfilled                             |
+| `clv`          | number \| null                              | Best_kick → close, signed with the tagged side                                    |
+| `signed_error` | number \| null                              | See sign conventions                                                              |
+| `source`       | string                                      | `schema_example` \| later tip writers                                             |
+| `recorded_at`  | string                                      | ISO UTC when the line was appended                                                |
 
 ### Markets
 
@@ -80,9 +82,9 @@ One JSON object per line in `data/wnba_grades_2026.jsonl`.
 
 ## Allowlist
 
-- This schema doc
+- This schema doc (`docs/WNBA_GRADE_SCHEMA.md`) — same NBA/CFB harness row contract; do not invent a second schema
 - `data/wnba_grades_2026.jsonl` (append-only)
-- `scripts/wnba/grade_harness.py` — seed + summarize + later tip close/final fill
+- `scripts/wnba/grade_harness.py` — writer stub + `seed` | `summary` | `status` (later tip close/final fill)
 - Read-only summary output under `data/ops/` (markdown/json)
 - WNBA-only CI
 
@@ -95,6 +97,7 @@ No publisher. No tag rewriter. No preview copy. No dashboard redesign for v0. No
 - KEI re-emit justified by the harness
 - Props PLAY / LEAN (tag PR later)
 - New means / minute-grid rewrite / Ch7 fantasy retune
+- Blending leftover fair-lines as graded edges
 - Preview copy / Chapter 8 chrome / 15 team previews
 - CFB/NBA/NFL grade files (except a shared helper if one already exists — none today)
 

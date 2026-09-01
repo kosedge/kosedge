@@ -1,6 +1,6 @@
 # WNBA grades summary (read-only)
 
-**as_of:** `2026-09-01T21:24:56Z`  
+**as_of:** `2026-09-01T21:26:54Z`  
 **stamp frozen:** `v0.1 · Ch2–Ch7`  
 **store:** `data/wnba_grades_2026.jsonl`  
 **n_rows:** 4  

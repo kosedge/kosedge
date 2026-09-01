@@ -125,6 +125,23 @@ def _base_row(**kwargs: Any) -> Dict[str, Any]:
     return row
 
 
+# Leftover fair-line ESPN ids — never seed as graded edges.
+FORBIDDEN_LEFTOVER_GAME_IDS = frozenset({"401857105", "401857106"})
+
+
+def write_tip_freeze(_payload: Dict[str, Any]) -> None:
+    """Writer stub — freeze at tip into the append-only store.
+
+    Live tip writers land later (last week of RS / playoffs). This stub exists so
+    the harness surface matches NBA/CFB (writer + seed | summary | status) without
+    inventing a second schema or backfilling Aug-1 leftover KEI as grades.
+    """
+    raise NotImplementedError(
+        "WNBA tip freeze writer is stubbed until last week of RS / playoffs. "
+        "Do not backfill leftover fair-lines as graded edges."
+    )
+
+
 def build_schema_example_rows() -> List[Dict[str, Any]]:
     """Illustrative rows only — not a real slate. close/final stay null."""
     # Deterministic recorded_at so seed is stable under --force.
@@ -144,7 +161,7 @@ def build_schema_example_rows() -> List[Dict[str, Any]]:
         size_note=None,
     )
 
-    # Team rows shaped like Ch4 CON@ATL (home-signed); illustrative only.
+    # Team rows Ch4-shaped (home-signed); illustrative only — not leftover fair-lines.
     spread = _base_row(
         **common,
         player_id=None,
@@ -217,12 +234,17 @@ def cmd_seed(*, force: bool = False) -> int:
     STORE.write_text("", encoding="utf-8")
 
     examples = build_schema_example_rows()
+    assert all(
+        str(r.get("game_id") or "") not in FORBIDDEN_LEFTOVER_GAME_IDS
+        for r in examples
+    ), "do not seed leftover fair-line ids as graded edges"
     n = _append_rows(examples)
     rows = _read_rows()
     print("=== WNBA grade harness seed ===")
     print(f"stamp:   {STAMP_FROZEN}")
     print(f"schema:  {SCHEMA}")
     print(f"store:   {STORE}")
+    print(f"writer:  stub (write_tip_freeze NotImplemented)")
     print(f"example rows: {n} (spread + total + pts + threes)")
     print(f"total:   {len(rows)}")
     assert all(r.get("close") is None and r.get("final") is None for r in rows)
@@ -336,6 +358,10 @@ def main() -> int:
     )
     sub.add_parser("summary", help="Read-only summary (n, mean error)")
     sub.add_parser("status", help="Store status")
+    sub.add_parser(
+        "write-tip",
+        help="Writer stub (NotImplemented until last week of RS / playoffs)",
+    )
 
     args = ap.parse_args()
     if args.cmd == "seed":
@@ -344,6 +370,13 @@ def main() -> int:
         return cmd_summary()
     if args.cmd == "status":
         return cmd_status()
+    if args.cmd == "write-tip":
+        try:
+            write_tip_freeze({})
+        except NotImplementedError as exc:
+            print(str(exc))
+            return 0
+        return 0
     return 2
 
 

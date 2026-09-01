@@ -84,6 +84,9 @@ def test_store_schema_example_first_fill() -> None:
     assert all(r.get("close") is None for r in rows)
     assert all(r.get("final") is None for r in rows)
     assert all(r.get("signed_error") is None for r in rows)
+    # Do not backfill Aug-1 leftover fair-lines as graded edges.
+    leftover = {"401857105", "401857106"}
+    assert all(str(r.get("game_id") or "") not in leftover for r in rows)
 
     markets = {r.get("market") for r in rows}
     assert "spread" in markets and "total" in markets
@@ -95,6 +98,44 @@ def test_store_schema_example_first_fill() -> None:
     assert all(r.get("kei") is not None and r.get("proj") is None for r in teams)
     assert all(r.get("proj") is not None and r.get("kei") is None for r in props)
     assert all(r.get("tag") == "n/a" for r in props)
+
+    required = {
+        "season",
+        "date",
+        "game_id",
+        "player_id",
+        "market",
+        "kei",
+        "proj",
+        "open",
+        "best_kick",
+        "book",
+        "trusted",
+        "tag",
+        "size_note",
+        "close",
+        "final",
+        "ats_vs_kei",
+        "ats_vs_tag",
+        "clv",
+        "signed_error",
+    }
+    for r in rows:
+        assert required.issubset(r.keys())
+
+
+def test_writer_stub_not_implemented() -> None:
+    import importlib.util
+
+    spec = importlib.util.spec_from_file_location("wnba_grade_harness", SCRIPT)
+    assert spec and spec.loader
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    try:
+        mod.write_tip_freeze({})
+        raise AssertionError("write_tip_freeze should be stubbed")
+    except NotImplementedError:
+        pass
 
 
 def test_status_and_summary_do_not_rewrite_packs() -> None:
