@@ -43,10 +43,10 @@ Early-season uncertainty widens **`margin_sd` only** — it does **not** haircut
 
 `apply_cfb_kei` (`cfb_kei.py`):
 
-| Field | Source |
-| --- | --- |
-| `model_total` | `proj.model_total` / `expected_total` |
-| `kei_total` | **`_round(model_total)` — identity** |
+| Field             | Source                                                |
+| ----------------- | ----------------------------------------------------- |
+| `model_total`     | `proj.model_total` / `expected_total`                 |
+| `kei_total`       | **`_round(model_total)` — identity**                  |
 | `kei_spread_home` | `model_spread` **+** `apply_bias_guard` (early weeks) |
 
 There is **no** totals branch in `apply_bias_guard`. Drivers logged for totals are empty of any total delta.
@@ -62,19 +62,19 @@ There is **no** totals branch in `apply_bias_guard`. Drivers logged for totals a
 
 **Yes, exactly.** On the W1 FBS pack (n=43): `max |model_total − kei_total| = 0`. Reproject through current universe reproduces pack totals to 0.00.
 
-**Why Model column shows "—":** UI only paints Model when `modelKei !== kei` (`EdgeBoard.tsx`). Spreads diverge (bias guard); totals never do. Page copy is correct: *"Tags never use Model vs market"* — for totals that is moot because they are the same number.
+**Why Model column shows "—":** UI only paints Model when `modelKei !== kei` (`EdgeBoard.tsx`). Spreads diverge (bias guard); totals never do. Page copy is correct: _"Tags never use Model vs market"_ — for totals that is moot because they are the same number.
 
 ---
 
 ## 2. Any totals bias guard / hist-cal / haircut on the live path?
 
-| Layer | Spreads | Totals |
-| --- | --- | --- |
-| `apply_bias_guard` (`cfb-bias-guard-v1-histcal-20260805`) | Yes (W0–2) | **No** |
-| `margin_calibration.apply_calibrated_scores` | Research / power-SoT Bernoulli path only; `used_in_spread=false`; **keeps midpoint** | Explicitly does not retarget totals |
-| `project_game` (KEI builder path) | Raw strength→scores | Raw strength→scores — **no margin cal** |
-| Trusted market `|market−KEI|≥12` | Yes (`applyCfbTrustedMarketToRows`, Spread only) | **No** |
-| NFL-style totals calibrator | n/a | **Not present for CFB** |
+| Layer                                                     | Spreads                                                                              | Totals                                  |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------- | ------------------------------------------------ | ------ |
+| `apply_bias_guard` (`cfb-bias-guard-v1-histcal-20260805`) | Yes (W0–2)                                                                           | **No**                                  |
+| `margin_calibration.apply_calibrated_scores`              | Research / power-SoT Bernoulli path only; `used_in_spread=false`; **keeps midpoint** | Explicitly does not retarget totals     |
+| `project_game` (KEI builder path)                         | Raw strength→scores                                                                  | Raw strength→scores — **no margin cal** |
+| Trusted market `                                          | market−KEI                                                                           | ≥12`                                    | Yes (`applyCfbTrustedMarketToRows`, Spread only) | **No** |
+| NFL-style totals calibrator                               | n/a                                                                                  | **Not present for CFB**                 |
 
 ### Since when?
 
@@ -89,14 +89,14 @@ There is **no** totals branch in `apply_bias_guard`. Drivers logged for totals a
 
 Ops card W1 totals with KEI + book (n=43):
 
-| Stat | Value |
-| --- | ---: |
-| Mean KEI total | 60.67 |
-| Mean market | 52.55 |
-| Mean KEI − market | **+8.12** |
-| Overs / Unders (sign of diff) | 37 / 6 |
-| Card tags | PLAY 32 · LEAN 5 · PASS 6 |
-| `|diff| ≥ 12` | **11**, all still **PLAY** |
+| Stat                          |                     Value |
+| ----------------------------- | ------------------------: | ----- | -------------------------- |
+| Mean KEI total                |                     60.67 |
+| Mean market                   |                     52.55 |
+| Mean KEI − market             |                 **+8.12** |
+| Overs / Unders (sign of diff) |                    37 / 6 |
+| Card tags                     | PLAY 32 · LEAN 5 · PASS 6 |
+| `                             |                      diff | ≥ 12` | **11**, all still **PLAY** |
 
 (Live board counts Ryan quoted — 33/3/1 Over tags — are the same failure mode; card is the in-repo stamp.)
 
@@ -104,15 +104,15 @@ Ops card W1 totals with KEI + book (n=43):
 
 Holding street mean fixed and zeroing one multiplicative term at a time:
 
-| Term neutralized | Mean gap vs street | Δ from +8.12 |
-| --- | ---: | ---: |
-| (actual) | +8.12 | — |
-| matchup ratio → 1 | **+2.16** | **−5.96** |
-| unit offense boost → 1 | +7.21 | −0.90 |
-| unit defense dampen → 1 | +9.12 | +1.00 (dampen was cooling) |
-| pace → 1 | +8.30 | +0.18 (pace slightly **cool**) |
-| HFA+coach+ST off | +5.75 | −2.37 add-ons |
-| `2 × LEAGUE_TEAM_PPG` | 51.8 | **−0.75 vs street** |
+| Term neutralized        | Mean gap vs street |                   Δ from +8.12 |
+| ----------------------- | -----------------: | -----------------------------: |
+| (actual)                |              +8.12 |                              — |
+| matchup ratio → 1       |          **+2.16** |                      **−5.96** |
+| unit offense boost → 1  |              +7.21 |                          −0.90 |
+| unit defense dampen → 1 |              +9.12 |     +1.00 (dampen was cooling) |
+| pace → 1                |              +8.30 | +0.18 (pace slightly **cool**) |
+| HFA+coach+ST off        |              +5.75 |                  −2.37 add-ons |
+| `2 × LEAGUE_TEAM_PPG`   |               51.8 |            **−0.75 vs street** |
 
 **Base PPG is not the problem.** Street ~52.6 ≈ `2×25.9`. The model gets hot after **(off/def)^response** lifts the favorite’s scoring more than it suppresses the dog.
 
@@ -125,40 +125,40 @@ Observed W1 matchup ratios (post soft-clamp, response already applied): home mea
 
 ### Roster/QB vs power-SoT fill
 
-| Slice | n | Mean KEI−mkt |
-| --- | ---: | ---: |
-| Both sides `hierarchical_compose` (roster/QB path) | 35 | **+8.46** |
-| Either side `power_sot_v0.15_fill` | 8 | +6.62 |
+| Slice                                              |   n | Mean KEI−mkt |
+| -------------------------------------------------- | --: | -----------: |
+| Both sides `hierarchical_compose` (roster/QB path) |  35 |    **+8.46** |
+| Either side `power_sot_v0.15_fill`                 |   8 |        +6.62 |
 
 Fill is **not** the Over-drunk story. All 11 `|diff|≥12` loud games are full compose (FIU@USF, MRSH@PSU, TULN@DUKE, BOISE@ORE, …).
 
 ### Cupcake vs peer
 
-| Bucket (`|model spread|`) | n | Mean diff |
-| --- | ---: | ---: |
-| Peer `<10` | 14 | +4.64 |
-| Mod 7–14 | 14 | +6.52 |
-| Big 14–21 | 10 | +12.10 |
-| Cupcake `≥21` | 12 | +9.96 |
-| Cupcake `|s|≥17` | 16 | +11.89 |
+| Bucket (`     | model spread |     `) | n   | Mean diff |
+| ------------- | -----------: | -----: | --- | --------- |
+| Peer `<10`    |           14 |  +4.64 |
+| Mod 7–14      |           14 |  +6.52 |
+| Big 14–21     |           10 | +12.10 |
+| Cupcake `≥21` |           12 |  +9.96 |
+| Cupcake `     |            s |   ≥17` | 16  | +11.89    |
 
 Mismatches amplify the gap, but **peers are still ~+4.5 Over**. CoS guess holds: missing totals calibration + no haircut, not "a couple of cupcake blowouts."
 
 ### Top movers (ops card)
 
-| Game | KEI | Mkt | Diff | Tag |
-| --- | ---: | ---: | ---: | --- |
-| FIU@USF | 72.5 | 52.5 | +20.0 | PLAY |
-| MRSH@PSU | 72.9 | 53.5 | +19.4 | PLAY |
+| Game      |  KEI |  Mkt |  Diff | Tag  |
+| --------- | ---: | ---: | ----: | ---- |
+| FIU@USF   | 72.5 | 52.5 | +20.0 | PLAY |
+| MRSH@PSU  | 72.9 | 53.5 | +19.4 | PLAY |
 | TULN@DUKE | 70.3 | 51.5 | +18.8 | PLAY |
 | BOISE@ORE | 68.0 | 51.5 | +16.5 | PLAY |
 | M-OH@PITT | 64.2 | 48.5 | +15.7 | PLAY |
-| TXST@TEX | 76.1 | 60.5 | +15.6 | PLAY |
+| TXST@TEX  | 76.1 | 60.5 | +15.6 | PLAY |
 | MOST@TAMU | 68.4 | 53.5 | +14.9 | PLAY |
-| BC@CIN | 64.3 | 49.5 | +14.8 | PLAY |
-| OHIO@NEB | 61.1 | 47.5 | +13.6 | PLAY |
-| UTEP@OU | 64.3 | 51.0 | +13.3 | PLAY |
-| MASS@RUT | 64.7 | 51.5 | +13.2 | PLAY |
+| BC@CIN    | 64.3 | 49.5 | +14.8 | PLAY |
+| OHIO@NEB  | 61.1 | 47.5 | +13.6 | PLAY |
+| UTEP@OU   | 64.3 | 51.0 | +13.3 | PLAY |
+| MASS@RUT  | 64.7 | 51.5 | +13.2 | PLAY |
 
 Only Under lean of note: FAU@UF ≈ −2.6 LEAN (card). Rest of Unders are PASS / thin.
 
@@ -172,15 +172,15 @@ Hist-cal graded seasons with **league-average roster/QB proxies**. Live 2026 use
 
 Checked and **discarded** as primary cause:
 
-| Hypothesis | Finding |
-| --- | --- |
-| PPG double-count | Unit boosts still apply after indices that already blend OL/skill; compose claims anti-double-count via **reduced** weights. Net boost×dampen ≈ 0.99 — not +8. |
-| Pace / explosiveness explosion | Mean pace &lt; 1; expl ~50. |
-| Power-SoT fill without roster | 8/43 games; cooler than compose mean. |
-| Home/away total sign | Totals are unsigned sums; OU edge = KEI − market. Correct. |
-| Units (per-team PPG summed wrong) | `total = home + away`; identity with scores. Correct. |
-| Garbage-time | Player-script knobs affect allocation only, not team scores. |
-| Wrong formula / missing clamp | Clamp (7,55)/side present; loud games sit inside it. |
+| Hypothesis                        | Finding                                                                                                                                                        |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| PPG double-count                  | Unit boosts still apply after indices that already blend OL/skill; compose claims anti-double-count via **reduced** weights. Net boost×dampen ≈ 0.99 — not +8. |
+| Pace / explosiveness explosion    | Mean pace &lt; 1; expl ~50.                                                                                                                                    |
+| Power-SoT fill without roster     | 8/43 games; cooler than compose mean.                                                                                                                          |
+| Home/away total sign              | Totals are unsigned sums; OU edge = KEI − market. Correct.                                                                                                     |
+| Units (per-team PPG summed wrong) | `total = home + away`; identity with scores. Correct.                                                                                                          |
+| Garbage-time                      | Player-script knobs affect allocation only, not team scores.                                                                                                   |
+| Wrong formula / missing clamp     | Clamp (7,55)/side present; loud games sit inside it.                                                                                                           |
 
 **Conclusion:** expected **uncalibrated** research totals published as KEI (`kei_total := model_total`), plus a **tagger hole** on `|12|`. Not a broken adder.
 
@@ -235,18 +235,18 @@ Until that exists, board honesty for Overs is: **PASS the absurd band in the tag
 
 ## File index (evidence)
 
-| Path | Role |
-| --- | --- |
-| `services/model-service/src/services/cfb_season_engine/team_projection.py` | `expected_team_points`, `project_game` total = home+away |
-| `services/model-service/src/services/cfb_season_engine/priors.py` | PPG, MATCHUP_RESPONSE, early soften / margin_sd |
-| `services/model-service/src/services/cfb_season_engine/cfb_kei.py` | `kei_total = model_total`; bias guard spread-only |
-| `services/model-service/src/services/cfb_season_engine/margin_calibration.py` | Margin only; totals untouched |
-| `scripts/cfb/build_cfb_kei_futures_2026.py` | Pack mint; `used_in_spread=true` |
-| `apps/web/lib/data/cfb-kei-w0-w1-2026.json` | Live KEI pack |
-| `apps/web/lib/kei-lines.ts` / `edge-board-kei.ts` / `build-edge-board-rows.ts` | Pack → board |
-| `apps/web/lib/cfb-trusted-market.ts` | Absurd gate; Spread **and** Total rows (totals unsigned) |
-| `apps/web/components/EdgeBoard.tsx` | OU edge/tag gated on cfbTrusted; Model hide-when-equal |
-| `data/ops/cfb-kei-rules-2026.md` | House rules (PLAY 4 / LEAN 2.5 / \|12\|) |
-| `data/ops/cfb-w1-handicap-card-20260831.json` | Stamped W1 KEI vs Best totals |
-| `data/ops/cfb-historical-calibration-20260805.md` | Hist totals bias; PPG cut; no KEI totals guard |
-| `data/ops/cfb-projection-calibration-20260804.md` | “coherent with scores but not market-calibrated” |
+| Path                                                                           | Role                                                     |
+| ------------------------------------------------------------------------------ | -------------------------------------------------------- |
+| `services/model-service/src/services/cfb_season_engine/team_projection.py`     | `expected_team_points`, `project_game` total = home+away |
+| `services/model-service/src/services/cfb_season_engine/priors.py`              | PPG, MATCHUP_RESPONSE, early soften / margin_sd          |
+| `services/model-service/src/services/cfb_season_engine/cfb_kei.py`             | `kei_total = model_total`; bias guard spread-only        |
+| `services/model-service/src/services/cfb_season_engine/margin_calibration.py`  | Margin only; totals untouched                            |
+| `scripts/cfb/build_cfb_kei_futures_2026.py`                                    | Pack mint; `used_in_spread=true`                         |
+| `apps/web/lib/data/cfb-kei-w0-w1-2026.json`                                    | Live KEI pack                                            |
+| `apps/web/lib/kei-lines.ts` / `edge-board-kei.ts` / `build-edge-board-rows.ts` | Pack → board                                             |
+| `apps/web/lib/cfb-trusted-market.ts`                                           | Absurd gate; Spread **and** Total rows (totals unsigned) |
+| `apps/web/components/EdgeBoard.tsx`                                            | OU edge/tag gated on cfbTrusted; Model hide-when-equal   |
+| `data/ops/cfb-kei-rules-2026.md`                                               | House rules (PLAY 4 / LEAN 2.5 / \|12\|)                 |
+| `data/ops/cfb-w1-handicap-card-20260831.json`                                  | Stamped W1 KEI vs Best totals                            |
+| `data/ops/cfb-historical-calibration-20260805.md`                              | Hist totals bias; PPG cut; no KEI totals guard           |
+| `data/ops/cfb-projection-calibration-20260804.md`                              | “coherent with scores but not market-calibrated”         |
