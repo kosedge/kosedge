@@ -198,25 +198,23 @@ Checked and **discarded** as primary cause:
 
 House rules (`data/ops/cfb-kei-rules-2026.md`) state absurd vs KEI → untrusted PASS for the board generally; implementation is **spread-scoped**.
 
-### Totals (gate missing)
+### Totals (gate was missing — fixed 2026-09-01)
+
+Was:
 
 ```text
 signedOUEdge = keiTotal − bestTotal   // no trustCfbMarket
-edgeOUNum    = |signedOUEdge|
-tagOU        = PLAY if ≥4.0 else LEAN if ≥2.5 else PASS
 ```
 
-No `|12|` check. No single-book outlier. Week 0 finals force PASS; Week 1 does not.
-
-So FIU@USF +20 clears PLAY the same as a +4.1 Over. That is a **tagger path bug / omission**, not a KEI mint.
+Now Total rows get the same absurd / single-book trust flags; Tag O/U requires `cfbTotalTrusted` (KEI + book still painted).
 
 ---
 
-## 6. Recommendations only (do not implement here)
+## 6. Recommendations
 
-### (a) Sit `|12|` as PASS on totals — tagger fix, no KEI change
+### (a) Sit `|12|` as PASS on totals — **implemented 2026-09-01**
 
-Extend the existing absurd gate to Total rows (same `CFB_ABSURD_VS_KEI_PTS=12`, optionally single-book 8). Edge/Tag PASS; still show KEI + book. Matches locked house rule. **No pack rebuild.**
+Tagger now applies `CFB_ABSURD_VS_KEI_PTS=12` (+ single-book 8) to Total rows in `cfb-trusted-market.ts`; `EdgeBoard` Tag O/U requires `cfbTrusted` like spreads. KEI pack unchanged — no haircut / recut.
 
 ### (b) Leave KEI totals stamped this week
 
@@ -246,8 +244,8 @@ Until that exists, board honesty for Overs is: **PASS the absurd band in the tag
 | `scripts/cfb/build_cfb_kei_futures_2026.py` | Pack mint; `used_in_spread=true` |
 | `apps/web/lib/data/cfb-kei-w0-w1-2026.json` | Live KEI pack |
 | `apps/web/lib/kei-lines.ts` / `edge-board-kei.ts` / `build-edge-board-rows.ts` | Pack → board |
-| `apps/web/lib/cfb-trusted-market.ts` | Absurd gate; **Spread rows only** |
-| `apps/web/components/EdgeBoard.tsx` | OU edge/tag without trust; Model hide-when-equal |
+| `apps/web/lib/cfb-trusted-market.ts` | Absurd gate; Spread **and** Total rows (totals unsigned) |
+| `apps/web/components/EdgeBoard.tsx` | OU edge/tag gated on cfbTrusted; Model hide-when-equal |
 | `data/ops/cfb-kei-rules-2026.md` | House rules (PLAY 4 / LEAN 2.5 / \|12\|) |
 | `data/ops/cfb-w1-handicap-card-20260831.json` | Stamped W1 KEI vs Best totals |
 | `data/ops/cfb-historical-calibration-20260805.md` | Hist totals bias; PPG cut; no KEI totals guard |

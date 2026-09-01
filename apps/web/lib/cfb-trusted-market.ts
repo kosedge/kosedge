@@ -1,14 +1,18 @@
 /**
  * CFB trusted-market guard.
  * Edge / Tag may only fire against a quality book number — never a lone
- * junk or wrong-game line (e.g. TCU KEI −20 vs a +8.5 stray).
+ * junk or wrong-game line (e.g. TCU KEI −20 vs a +8.5 stray, or
+ * FIU@USF KEI total 72.5 vs book 52.5).
  *
  * Thresholds live here and in data/ops/cfb-kei-rules-2026.md.
+ * Applies to **Spread and Total** rows. Moneyline is untouched.
  *
- * Sign convention: KEI is home-signed (`kei_spread_home`). Odds-API board
- * rows store Open/Best away-signed (`awayOutcome.point`). Convert book →
- * home at this boundary via `cfbAwayBookToHome` before trust/edge. Do not
- * rewrite the odds cache; do not flip the Python ledger `spread_home` path.
+ * Sign convention (spreads only): KEI is home-signed (`kei_spread_home`).
+ * Odds-API board rows store Open/Best away-signed (`awayOutcome.point`).
+ * Convert book → home at this boundary via `cfbAwayBookToHome` before
+ * trust/edge. Totals are unsigned levels — compare KEI total vs book total
+ * with no flip. Do not rewrite the odds cache; do not flip the Python
+ * ledger `spread_home` path.
  *
  * Display vs trust: Open/Best feed prices always stay on the row. Trust only
  * sets `cfbMarketTrusted` / `cfbTrustReason`. Edge/Tag use trusted Best only.
@@ -133,18 +137,23 @@ export function applyCfbTrustedMarketToRows<
   },
 >(rows: T[]): (T & CfbTrustRowFields)[] {
   return rows.map((row) => {
-    if (String(row.market || "") !== "Spread") return row;
-    // Board Open/Best are away-signed; KEI is home. Compare home vs home.
-    const openHome = cfbAwayBookToHome(row.open);
-    const bestHome = cfbAwayBookToHome(row.best);
+    const market = String(row.market || "");
+    if (market !== "Spread" && market !== "Total") return row;
+
+    // Spreads: board Open/Best are away-signed; KEI is home → flip.
+    // Totals: unsigned levels; compare KEI total vs book total as-is.
+    const openNum =
+      market === "Spread" ? cfbAwayBookToHome(row.open) : num(row.open);
+    const bestNum =
+      market === "Spread" ? cfbAwayBookToHome(row.best) : num(row.best);
     // Rows do not carry n_books (odds cache untouched). When both Open and
     // Best are posted, do not treat open===best as a lone-book feed — that
     // false-clears cupcakes (BALL@OSU ss 8.3) under SINGLE_BOOK=8.
-    const bookCount = openHome != null && bestHome != null ? 2 : 1;
+    const bookCount = openNum != null && bestNum != null ? 2 : 1;
     const verdict = trustCfbMarket({
       kei: row.kei,
-      best: bestHome,
-      open: openHome,
+      best: bestNum,
+      open: openNum,
       bookCount,
     });
     // Never blank feed Best/Open. Trust is a flag for Edge/Tag only.

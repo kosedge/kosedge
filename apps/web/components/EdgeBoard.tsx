@@ -145,6 +145,8 @@ export type LegacyEdgeBoardRow = {
   bestOUBook?: string;
   /** CFB: show beside Current when feed exists but trust failed. */
   bestLineTrustLabel?: string;
+  /** CFB totals: same untrusted / no book footnote as spreads. */
+  bestOUTrustLabel?: string;
   keiLine?: PricePair;
   keiOU?: PricePair;
   /** Optional Model (pre-blend) pair when it differs from KEI. */
@@ -1005,8 +1007,35 @@ export function flatRowsToLegacy(
 
     const bestTotalNum = parseTotal(bestOU.top.label);
     const keiTotalNum = parseTotal(keiOU.top.label);
+    // CFB totals: same absurd / single-book gate as spreads (no sign flip).
+    const openTotalNum =
+      totalRow?.open != null && String(totalRow.open) !== ""
+        ? parseTotal(String(totalRow.open))
+        : null;
+    const bestTotalFromRow =
+      totalRow?.best != null && String(totalRow.best) !== ""
+        ? parseTotal(String(totalRow.best))
+        : null;
+    const cfbTotalBookCount =
+      openTotalNum != null && (bestTotalFromRow ?? bestTotalNum) != null
+        ? 2
+        : 1;
+    const cfbTotalTrusted =
+      String(sportKey).toLowerCase() !== "cfb"
+        ? true
+        : typeof totalRow?.cfbMarketTrusted === "boolean"
+          ? totalRow.cfbMarketTrusted
+          : trustCfbMarket({
+              kei: totalRow?.kei ?? keiTotalNum,
+              best: bestTotalFromRow ?? bestTotalNum,
+              open: openTotalNum,
+              bookCount: cfbTotalBookCount,
+            }).trusted;
     const signedOUEdge =
-      hasSportsbookTotal && bestTotalNum != null && keiTotalNum != null
+      hasSportsbookTotal &&
+      cfbTotalTrusted &&
+      bestTotalNum != null &&
+      keiTotalNum != null
         ? keiTotalNum - bestTotalNum
         : null;
     const edgeOUNum = signedOUEdge != null ? Math.abs(signedOUEdge) : undefined;
@@ -1206,6 +1235,7 @@ export function flatRowsToLegacy(
       bestLineBook: lineRow?.bookKey || lineRow?.book,
       bestOUBook: totalRow?.bookKey || totalRow?.book,
       bestLineTrustLabel: lineRow?.cfbTrustLabel,
+      bestOUTrustLabel: totalRow?.cfbTrustLabel,
       keiLine,
       keiOU,
       modelLine,
@@ -1530,6 +1560,12 @@ export default function EdgeBoard({
                   r.bestLineTrustLabel === "no book" ? (
                     <div className="mt-2 text-[10px] text-gray-400">
                       {r.bestLineTrustLabel}
+                    </div>
+                  ) : null}
+                  {r.bestOUTrustLabel === "untrusted" ||
+                  r.bestOUTrustLabel === "no book" ? (
+                    <div className="mt-2 text-[10px] text-gray-400">
+                      O/U {r.bestOUTrustLabel}
                     </div>
                   ) : null}
                   {r.bestLineBook === "untrusted" ||
@@ -1896,6 +1932,7 @@ export default function EdgeBoard({
                           compact
                           valueClassName="text-gray-50 font-semibold"
                           book={r.bestOUBook}
+                          trustLabel={r.bestOUTrustLabel}
                         />
                       </td>
                       <td className={`${TD_DECISION} ${COL_MODEL}`}>

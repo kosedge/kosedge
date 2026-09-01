@@ -150,6 +150,121 @@ describe("cfb trusted market", () => {
     expect(rows[0]?.cfbMarketTrusted).toBe(false);
     expect(rows[0]?.cfbTrustLabel).toBe("untrusted");
   });
+
+  it("Total rows: |kei−market| ≥ 12 → untrusted PASS; feed Best kept", () => {
+    // FIU@USF-class: KEI 72.5 vs book 52.5 (+20) must not PLAY.
+    const gap = Math.abs(72.5 - 52.5);
+    expect(gap).toBeGreaterThanOrEqual(CFB_ABSURD_VS_KEI_PTS);
+    expect(cfbEdgeTag(gap)).toBe("PLAY"); // raw would fire
+
+    const rows = applyCfbTrustedMarketToRows([
+      {
+        market: "Total",
+        kei: "72.5",
+        best: "52.5",
+        open: "52.5",
+        book: "DraftKings",
+        bookKey: "draftkings",
+      },
+    ]);
+    expect(rows[0]?.best).toBe("52.5");
+    expect(rows[0]?.kei).toBe("72.5");
+    expect(rows[0]?.cfbMarketTrusted).toBe(false);
+    expect(rows[0]?.cfbTrustReason).toBe("absurd_vs_kei");
+    expect(rows[0]?.cfbTrustLabel).toBe("untrusted");
+    expect(cfbEdgeTag(null)).toBe("PASS");
+  });
+
+  it("Total rows: does not flip sign (52.5 stays 52.5, not −52.5)", () => {
+    const rows = applyCfbTrustedMarketToRows([
+      {
+        market: "Total",
+        kei: "56.6",
+        best: "52.5",
+        open: "52.0",
+        book: "DraftKings",
+        bookKey: "draftkings",
+      },
+    ]);
+    // If we wrongly applied cfbAwayBookToHome, gap would be |56.6−(−52.5)|≈109 → absurd.
+    expect(rows[0]?.cfbMarketTrusted).toBe(true);
+    expect(rows[0]?.cfbTrustLabel).toBeUndefined();
+    expect(cfbEdgeTag(Math.abs(56.6 - 52.5))).toBe("PLAY"); // +4.1
+  });
+
+  it("Total rows: +4.1 Over still PLAY; +3.0 Over still LEAN; under band PASS", () => {
+    expect(cfbEdgeTag(4.1)).toBe("PLAY");
+    expect(cfbEdgeTag(3.0)).toBe("LEAN");
+    expect(cfbEdgeTag(2.0)).toBe("PASS");
+
+    const playRows = applyCfbTrustedMarketToRows([
+      {
+        market: "Total",
+        kei: "56.6",
+        best: "52.5",
+        open: "52.5",
+        book: "DraftKings",
+        bookKey: "draftkings",
+      },
+    ]);
+    expect(playRows[0]?.cfbMarketTrusted).toBe(true);
+    expect(cfbEdgeTag(Math.abs(56.6 - 52.5))).toBe("PLAY");
+
+    const leanRows = applyCfbTrustedMarketToRows([
+      {
+        market: "Total",
+        kei: "55.5",
+        best: "52.5",
+        open: "52.5",
+        book: "FanDuel",
+        bookKey: "fanduel",
+      },
+    ]);
+    expect(leanRows[0]?.cfbMarketTrusted).toBe(true);
+    expect(cfbEdgeTag(Math.abs(55.5 - 52.5))).toBe("LEAN");
+  });
+
+  it("Total rows: single-book |gap| ≥ 8 → untrusted", () => {
+    const rows = applyCfbTrustedMarketToRows([
+      {
+        market: "Total",
+        kei: "60.0",
+        best: "51.5",
+        open: "",
+        book: "Hard Rock Bet",
+        bookKey: "hardrockbet",
+      },
+    ]);
+    expect(Math.abs(60.0 - 51.5)).toBeGreaterThanOrEqual(8);
+    expect(Math.abs(60.0 - 51.5)).toBeLessThan(CFB_ABSURD_VS_KEI_PTS);
+    expect(rows[0]?.best).toBe("51.5");
+    expect(rows[0]?.cfbMarketTrusted).toBe(false);
+    expect(rows[0]?.cfbTrustReason).toBe("single_book_outlier");
+  });
+
+  it("Spread rows still trust independently of Total siblings", () => {
+    const rows = applyCfbTrustedMarketToRows([
+      {
+        market: "Spread",
+        kei: "-5.3",
+        best: "+3.5",
+        open: "+3.0",
+        book: "DraftKings",
+        bookKey: "draftkings",
+      },
+      {
+        market: "Total",
+        kei: "72.5",
+        best: "52.5",
+        open: "52.5",
+        book: "DraftKings",
+        bookKey: "draftkings",
+      },
+    ]);
+    expect(rows[0]?.cfbMarketTrusted).toBe(true);
+    expect(rows[1]?.cfbMarketTrusted).toBe(false);
+    expect(rows[1]?.cfbTrustReason).toBe("absurd_vs_kei");
+  });
 });
 
 describe("cfb name match", () => {
