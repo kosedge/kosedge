@@ -1,0 +1,1124 @@
+{
+  "engine_version": "wnba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "season": "2026",
+  "MINUTE_GRID_SUM": 200,
+  "class_grid": {
+    "star_minutes": 32.0,
+    "starter_minutes": 27.0,
+    "rotation_n": 9,
+    "note": "star 30\u201334 mid=32; starter 24\u201330 mid=27; bench residual to 200 \u2014 not NBA classes"
+  },
+  "teams": {
+    "ATL": [
+      {
+        "player_id": "jonesbr01w",
+        "player_name": "Brionna Jones",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 6.92,
+        "expansion_only": false
+      },
+      {
+        "player_id": "reesean01w",
+        "player_name": "Angel Reese",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 4.44,
+        "expansion_only": false
+      },
+      {
+        "player_id": "howarrh01w",
+        "player_name": "Rhyne Howard",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 3.51,
+        "expansion_only": false
+      },
+      {
+        "player_id": "okotma01w",
+        "player_name": "Madina Okot",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 3.5,
+        "expansion_only": false
+      },
+      {
+        "player_id": "grayal01w",
+        "player_name": "Allisha Gray",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 3.06,
+        "expansion_only": false
+      },
+      {
+        "player_id": "canadjo01w",
+        "player_name": "Jordin Canada",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": 1.11,
+        "expansion_only": false
+      },
+      {
+        "player_id": "hillmna01w",
+        "player_name": "Naz Hillmon",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.15,
+        "expansion_only": false
+      },
+      {
+        "player_id": "paopate01w",
+        "player_name": "Te-Hina PaoPao",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -5.4625,
+        "expansion_only": false
+      },
+      {
+        "player_id": "walkesh01w",
+        "player_name": "Shatori Walker-Kimbrough",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -5.6,
+        "expansion_only": false
+      }
+    ],
+    "CHI": [
+      {
+        "player_id": "cardoka01w",
+        "player_name": "Kamilla Cardoso",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 5.79,
+        "expansion_only": false
+      },
+      {
+        "player_id": "diggisk01w",
+        "player_name": "Skylar Diggins",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 2.16,
+        "expansion_only": false
+      },
+      {
+        "player_id": "taylosy01w",
+        "player_name": "Sydney Taylor",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.2,
+        "expansion_only": false
+      },
+      {
+        "player_id": "steveaz01w",
+        "player_name": "Azura Stevens",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.83,
+        "expansion_only": false
+      },
+      {
+        "player_id": "vandeco01w",
+        "player_name": "Courtney Vandersloot",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.56,
+        "expansion_only": false
+      },
+      {
+        "player_id": "williel01w",
+        "player_name": "Elizabeth Williams",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": 0.03,
+        "expansion_only": false
+      },
+      {
+        "player_id": "cloudna01w",
+        "player_name": "Natasha Cloud",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.5,
+        "expansion_only": false
+      },
+      {
+        "player_id": "jacksri02w",
+        "player_name": "Rickea Jackson",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.5,
+        "expansion_only": false
+      },
+      {
+        "player_id": "couliai01w",
+        "player_name": "Aicha Coulibaly",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.5,
+        "expansion_only": false
+      }
+    ],
+    "CON": [
+      {
+        "player_id": "grinebr01w",
+        "player_name": "Brittney Griner",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 5.03,
+        "expansion_only": false
+      },
+      {
+        "player_id": "morroan02w",
+        "player_name": "Aneesah Morrow",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 1.625,
+        "expansion_only": false
+      },
+      {
+        "player_id": "nelsool01w",
+        "player_name": "Olivia Nelson-Ododa",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.58,
+        "expansion_only": false
+      },
+      {
+        "player_id": "edwaraa01w",
+        "player_name": "Aaliyah Edwards",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.38,
+        "expansion_only": false
+      },
+      {
+        "player_id": "lacanle01w",
+        "player_name": "Le\u00efla Lacan",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -0.7875,
+        "expansion_only": false
+      },
+      {
+        "player_id": "burkeke01w",
+        "player_name": "Kennedy Burke",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.62,
+        "expansion_only": false
+      },
+      {
+        "player_id": "beersra01w",
+        "player_name": "Raegan Beers",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -3.8,
+        "expansion_only": false
+      },
+      {
+        "player_id": "anglone01w",
+        "player_name": "Nell Angloma",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.1,
+        "expansion_only": false
+      },
+      {
+        "player_id": "riversa01w",
+        "player_name": "Saniya Rivers",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.15,
+        "expansion_only": false
+      }
+    ],
+    "DAL": [
+      {
+        "player_id": "bueckpa01w",
+        "player_name": "Paige Bueckers",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 7.35,
+        "expansion_only": false
+      },
+      {
+        "player_id": "shepaje01w",
+        "player_name": "Jessica Shepard",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 7.0375,
+        "expansion_only": false
+      },
+      {
+        "player_id": "siegrma01w",
+        "player_name": "Maddy Siegrist",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.01,
+        "expansion_only": false
+      },
+      {
+        "player_id": "ogunbar01w",
+        "player_name": "Arike Ogunbowale",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.41,
+        "expansion_only": false
+      },
+      {
+        "player_id": "kuieraw01w",
+        "player_name": "Awak Kuier",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.4,
+        "expansion_only": false
+      },
+      {
+        "player_id": "jamesaz01w",
+        "player_name": "Aziaha James",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": 0.25,
+        "expansion_only": false
+      },
+      {
+        "player_id": "smithal01w",
+        "player_name": "Alanna Smith",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.05,
+        "expansion_only": false
+      },
+      {
+        "player_id": "fuddaz01w",
+        "player_name": "Azzi Fudd",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.0,
+        "expansion_only": false
+      },
+      {
+        "player_id": "quinejj01w",
+        "player_name": "JJ Quinerly",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.8,
+        "expansion_only": false
+      }
+    ],
+    "GSV": [
+      {
+        "player_id": "burtove01w",
+        "player_name": "Veronica Burton",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 3.86,
+        "expansion_only": false
+      },
+      {
+        "player_id": "hayesti01w",
+        "player_name": "Tiffany Hayes",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 2.86,
+        "expansion_only": false
+      },
+      {
+        "player_id": "williga01w",
+        "player_name": "Gabby Williams",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.83,
+        "expansion_only": false
+      },
+      {
+        "player_id": "salauja01w",
+        "player_name": "Janelle Sala\u00fcn",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.5,
+        "expansion_only": false
+      },
+      {
+        "player_id": "amihela01w",
+        "player_name": "Laeticia Amihere",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -1.16,
+        "expansion_only": false
+      },
+      {
+        "player_id": "zandace01w",
+        "player_name": "Cecilia Zandalasini",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.98,
+        "expansion_only": false
+      },
+      {
+        "player_id": "charlka01w",
+        "player_name": "Kaila Charles",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.0125,
+        "expansion_only": false
+      },
+      {
+        "player_id": "thornka01w",
+        "player_name": "Kayla Thornton",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.86,
+        "expansion_only": false
+      },
+      {
+        "player_id": "chenka01w",
+        "player_name": "Kaitlyn Chen",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.2125,
+        "expansion_only": false
+      }
+    ],
+    "IND": [
+      {
+        "player_id": "bostoal01w",
+        "player_name": "Aliyah Boston",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 8.22,
+        "expansion_only": false
+      },
+      {
+        "player_id": "mitchke01w",
+        "player_name": "Kelsey Mitchell",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 6.41,
+        "expansion_only": false
+      },
+      {
+        "player_id": "clarkca02w",
+        "player_name": "Caitlin Clark",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 5.11,
+        "expansion_only": false
+      },
+      {
+        "player_id": "timpsma01w",
+        "player_name": "Makayla Timpson",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.675,
+        "expansion_only": false
+      },
+      {
+        "player_id": "billimo01w",
+        "player_name": "Monique Billings",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.67,
+        "expansion_only": false
+      },
+      {
+        "player_id": "hinesmy01w",
+        "player_name": "Myisha Hines-Allen",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.25,
+        "expansion_only": false
+      },
+      {
+        "player_id": "cunniso01w",
+        "player_name": "Sophie Cunningham",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.32,
+        "expansion_only": false
+      },
+      {
+        "player_id": "harrity01w",
+        "player_name": "Tyasha Harris",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.55,
+        "expansion_only": false
+      },
+      {
+        "player_id": "russeme01w",
+        "player_name": "Mercedes Russell",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.84,
+        "expansion_only": false
+      }
+    ],
+    "LA": [
+      {
+        "player_id": "ogwumnn01w",
+        "player_name": "Nneka Ogwumike",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 6.61,
+        "expansion_only": false
+      },
+      {
+        "player_id": "hambyde01w",
+        "player_name": "Dearica Hamby",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 5.53,
+        "expansion_only": false
+      },
+      {
+        "player_id": "plumke01w",
+        "player_name": "Kelsey Plum",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 4.42,
+        "expansion_only": false
+      },
+      {
+        "player_id": "brinkca01w",
+        "player_name": "Cameron Brink",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.27,
+        "expansion_only": false
+      },
+      {
+        "player_id": "cannoem01w",
+        "player_name": "Emma Cannon",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -1.4625,
+        "expansion_only": false
+      },
+      {
+        "player_id": "burrera01w",
+        "player_name": "Rae Burrell",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.53,
+        "expansion_only": false
+      },
+      {
+        "player_id": "atkinar01w",
+        "player_name": "Ariel Atkins",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.87,
+        "expansion_only": false
+      },
+      {
+        "player_id": "latsota01w",
+        "player_name": "Ta'Niya Latson",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.0,
+        "expansion_only": false
+      },
+      {
+        "player_id": "wheeler01w",
+        "player_name": "Erica Wheeler",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.09,
+        "expansion_only": false
+      }
+    ],
+    "LAS": [
+      {
+        "player_id": "wilsoa01w",
+        "player_name": "A'ja Wilson",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 18.0,
+        "expansion_only": false
+      },
+      {
+        "player_id": "cartech01w",
+        "player_name": "Chennedy Carter",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 8.5571,
+        "expansion_only": false
+      },
+      {
+        "player_id": "youngja01w",
+        "player_name": "Jackie Young",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 6.36,
+        "expansion_only": false
+      },
+      {
+        "player_id": "parkech01w",
+        "player_name": "Cheyenne Parker-Tyus",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 4.1571,
+        "expansion_only": false
+      },
+      {
+        "player_id": "smithna01w",
+        "player_name": "NaLyssa Smith",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.1,
+        "expansion_only": false
+      },
+      {
+        "player_id": "yamamma01w",
+        "player_name": "Mai Yamamoto",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.2,
+        "expansion_only": false
+      },
+      {
+        "player_id": "graych01w",
+        "player_name": "Chelsea Gray",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.43,
+        "expansion_only": false
+      },
+      {
+        "player_id": "loydje01w",
+        "player_name": "Jewell Loyd",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -3.49,
+        "expansion_only": false
+      },
+      {
+        "player_id": "pissoju01w",
+        "player_name": "Justine Pissott",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.8,
+        "expansion_only": false
+      }
+    ],
+    "MIN": [
+      {
+        "player_id": "collina01w",
+        "player_name": "Napheesa Collier",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 10.33,
+        "expansion_only": false
+      },
+      {
+        "player_id": "milesol01w",
+        "player_name": "Olivia Miles",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 7.8,
+        "expansion_only": false
+      },
+      {
+        "player_id": "howarna01w",
+        "player_name": "Natasha Howard",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 5.91,
+        "expansion_only": false
+      },
+      {
+        "player_id": "mcbrika01w",
+        "player_name": "Kayla McBride",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.96,
+        "expansion_only": false
+      },
+      {
+        "player_id": "willico01w",
+        "player_name": "Courtney Williams",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.44,
+        "expansion_only": false
+      },
+      {
+        "player_id": "kosuan01w",
+        "player_name": "Anastasiia Kosu",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": 0.1,
+        "expansion_only": false
+      },
+      {
+        "player_id": "hamzoel01w",
+        "player_name": "Eli\u0161ka Hamzov\u00e1",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.8,
+        "expansion_only": false
+      },
+      {
+        "player_id": "cechoem01w",
+        "player_name": "Emma \u010cechov\u00e1",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.1,
+        "expansion_only": false
+      },
+      {
+        "player_id": "mccowte01w",
+        "player_name": "Teaira McCowan",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.09,
+        "expansion_only": false
+      }
+    ],
+    "NY": [
+      {
+        "player_id": "stewabr01w",
+        "player_name": "Breanna Stewart",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 8.99,
+        "expansion_only": false
+      },
+      {
+        "player_id": "jonesjo01w",
+        "player_name": "Jonquel Jones",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 5.92,
+        "expansion_only": false
+      },
+      {
+        "player_id": "xuha01w",
+        "player_name": "Han Xu",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 3.6,
+        "expansion_only": false
+      },
+      {
+        "player_id": "sabalsa01w",
+        "player_name": "Satou Sabally",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.7,
+        "expansion_only": false
+      },
+      {
+        "player_id": "ionessa01w",
+        "player_name": "Sabrina Ionescu",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.37,
+        "expansion_only": false
+      },
+      {
+        "player_id": "astiepa01w",
+        "player_name": "Pauline Astier",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.4,
+        "expansion_only": false
+      },
+      {
+        "player_id": "gardnre01w",
+        "player_name": "Rebekah Gardner",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -0.9375,
+        "expansion_only": false
+      },
+      {
+        "player_id": "fiebile01w",
+        "player_name": "Leonie Fiebich",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.78,
+        "expansion_only": false
+      },
+      {
+        "player_id": "johanma01w",
+        "player_name": "Marine Johannes",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -3.025,
+        "expansion_only": false
+      }
+    ],
+    "PHX": [
+      {
+        "player_id": "thomaal01w",
+        "player_name": "Alyssa Thomas",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 6.27,
+        "expansion_only": false
+      },
+      {
+        "player_id": "mackna01w",
+        "player_name": "Natasha Mack",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 4.49,
+        "expansion_only": false
+      },
+      {
+        "player_id": "coppeka01w",
+        "player_name": "Kahleah Copper",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.5,
+        "expansion_only": false
+      },
+      {
+        "player_id": "bonnede01w",
+        "player_name": "DeWanna Bonner",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 0.42,
+        "expansion_only": false
+      },
+      {
+        "player_id": "nogicjo01w",
+        "player_name": "Jovana Nogi\u0107",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -1.4,
+        "expansion_only": false
+      },
+      {
+        "player_id": "ayayiva01w",
+        "player_name": "Valeriane Ayayi",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -3.2,
+        "expansion_only": false
+      },
+      {
+        "player_id": "akoamo01w",
+        "player_name": "Monique Akoa Makani",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.1125,
+        "expansion_only": false
+      },
+      {
+        "player_id": "linskky01w",
+        "player_name": "Kyara Linskens",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.4,
+        "expansion_only": false
+      },
+      {
+        "player_id": "brochno01w",
+        "player_name": "No\u00e9mie Brochant",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.8,
+        "expansion_only": false
+      }
+    ],
+    "POR": [
+      {
+        "player_id": "okonkam01w",
+        "player_name": "Amy Okonkwo",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 6.9,
+        "expansion_only": false
+      },
+      {
+        "player_id": "engstem01w",
+        "player_name": "Emily Engstler",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 2.2,
+        "expansion_only": false
+      },
+      {
+        "player_id": "leiteca01w",
+        "player_name": "Carla Leite",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.75,
+        "expansion_only": false
+      },
+      {
+        "player_id": "harrijo05w",
+        "player_name": "Jordan Harrison",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -0.5,
+        "expansion_only": true
+      },
+      {
+        "player_id": "gustame01w",
+        "player_name": "Megan DiLeo",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -0.93,
+        "expansion_only": false
+      },
+      {
+        "player_id": "carlebr01w",
+        "player_name": "Bridget Carleton",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.3,
+        "expansion_only": false
+      },
+      {
+        "player_id": "willise02w",
+        "player_name": "Serah Williams",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.6,
+        "expansion_only": true
+      },
+      {
+        "player_id": "buhnefr01w",
+        "player_name": "Frieda B\u00fchner",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -3.3,
+        "expansion_only": true
+      },
+      {
+        "player_id": "jonesha01w",
+        "player_name": "Haley Jones",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.01,
+        "expansion_only": false
+      }
+    ],
+    "SEA": [
+      {
+        "player_id": "malondo01w",
+        "player_name": "Dominique Malonga",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 5.875,
+        "expansion_only": false
+      },
+      {
+        "player_id": "hiedena01w",
+        "player_name": "Natisha Hiedeman",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 0.92,
+        "expansion_only": false
+      },
+      {
+        "player_id": "magbeez01w",
+        "player_name": "Ezi Magbegor",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -0.38,
+        "expansion_only": false
+      },
+      {
+        "player_id": "holmema01w",
+        "player_name": "Mackenzie Holmes",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -0.5,
+        "expansion_only": false
+      },
+      {
+        "player_id": "vanslgr01w",
+        "player_name": "Grace VanSlooten",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -0.8,
+        "expansion_only": false
+      },
+      {
+        "player_id": "johnsfl03w",
+        "player_name": "Flau'jae Johnson",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.0,
+        "expansion_only": false
+      },
+      {
+        "player_id": "famaw01w",
+        "player_name": "Awa Fam",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -1.3,
+        "expansion_only": false
+      },
+      {
+        "player_id": "horstjo02w",
+        "player_name": "Jordan Horston",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.1429,
+        "expansion_only": false
+      },
+      {
+        "player_id": "samueka02w",
+        "player_name": "Katie Lou Samuelson",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.4143,
+        "expansion_only": false
+      }
+    ],
+    "TOR": [
+      {
+        "player_id": "sabalny01w",
+        "player_name": "Nyara Sabally",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 3.15,
+        "expansion_only": false
+      },
+      {
+        "player_id": "riceki01w",
+        "player_name": "Kiki Rice",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 1.5,
+        "expansion_only": true
+      },
+      {
+        "player_id": "sykesbr01w",
+        "player_name": "Brittney Sykes",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.49,
+        "expansion_only": false
+      },
+      {
+        "player_id": "mabrema01w",
+        "player_name": "Marina Mabrey",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.24,
+        "expansion_only": false
+      },
+      {
+        "player_id": "harriis01w",
+        "player_name": "Isabelle Harrison",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 1.09,
+        "expansion_only": false
+      },
+      {
+        "player_id": "allemju01w",
+        "player_name": "Julie Allemand",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.1875,
+        "expansion_only": false
+      },
+      {
+        "player_id": "juskala01w",
+        "player_name": "Laura Ju\u0161kait\u0117",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -2.6,
+        "expansion_only": true
+      },
+      {
+        "player_id": "fagbete01w",
+        "player_name": "Temi Fagbenle",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -3.31,
+        "expansion_only": false
+      },
+      {
+        "player_id": "condema01w",
+        "player_name": "Maria Conde",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -5.5,
+        "expansion_only": true
+      }
+    ],
+    "WSH": [
+      {
+        "player_id": "austish01w",
+        "player_name": "Shakira Austin",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 4.22,
+        "expansion_only": false
+      },
+      {
+        "player_id": "iriafki01w",
+        "player_name": "Kiki Iriafen",
+        "role": "star",
+        "minutes": 32.0,
+        "talent": 3.8625,
+        "expansion_only": false
+      },
+      {
+        "player_id": "citroso01w",
+        "player_name": "Sonia Citron",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.9625,
+        "expansion_only": false
+      },
+      {
+        "player_id": "bettsla01w",
+        "player_name": "Lauren Betts",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": 2.3,
+        "expansion_only": false
+      },
+      {
+        "player_id": "dugalan01w",
+        "player_name": "Angela Dugali\u0107",
+        "role": "starter",
+        "minutes": 27.0,
+        "talent": -4.3,
+        "expansion_only": false
+      },
+      {
+        "player_id": "olsenlu01w",
+        "player_name": "Lucy Olsen",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -4.6625,
+        "expansion_only": false
+      },
+      {
+        "player_id": "onyenmi01w",
+        "player_name": "Michaela Onyenwere",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -5.73,
+        "expansion_only": false
+      },
+      {
+        "player_id": "mcmahco01w",
+        "player_name": "Cotie McMahon",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -5.9,
+        "expansion_only": false
+      },
+      {
+        "player_id": "floreal01w",
+        "player_name": "Alicia Fl\u00f3rez",
+        "role": "bench",
+        "minutes": 13.75,
+        "talent": -8.7,
+        "expansion_only": false
+      }
+    ]
+  }
+}
