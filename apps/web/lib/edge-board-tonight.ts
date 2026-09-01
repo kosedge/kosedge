@@ -1,8 +1,8 @@
 import type {
   FlatEdgeBoardRow,
   LegacyEdgeBoardRow,
-} from "@/components/EdgeBoard";
-import { flatRowsToLegacy } from "@/components/EdgeBoard";
+} from "@/lib/flat-rows-to-legacy";
+import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
 import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { getSport, SPORTS } from "@/lib/sports";
 
@@ -49,14 +49,20 @@ export async function getTonightGames(sport: string): Promise<TonightGame[]> {
   const valid = getSport(sport);
   if (!valid) return [];
 
-  const flat = await getEdgeBoardRows(sport);
-  const legacy = flatRowsToLegacy(flat);
-
-  return legacy.map((row) => ({
-    slug: tonightSlug(sport, row.teamA.name, row.teamB.name),
-    row,
-    sport,
-  }));
+  try {
+    const flat = await getEdgeBoardRows(sport);
+    const legacy = flatRowsToLegacy(Array.isArray(flat) ? flat : [], sport);
+    return legacy
+      .filter((row) => row?.teamA?.name && row?.teamB?.name)
+      .map((row) => ({
+        slug: tonightSlug(sport, row.teamA.name, row.teamB.name),
+        row,
+        sport,
+      }));
+  } catch {
+    // Overview / slate must empty-state — never throw into the error boundary.
+    return [];
+  }
 }
 
 const SPORT_PREFIXES = SPORTS.map((s) => ({

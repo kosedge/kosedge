@@ -234,37 +234,54 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     ],
   },
   nba: {
-    pathLabel: "Fair Lines → Edges → Props",
+    pathLabel: "Edge Board → Fantasy → Props dark",
     pathSubtitle:
-      "NBA desk path: Fair Lines → Edges → Props, with availability and pace into execution.",
+      "NBA desk path: Edge Board (Ch4 KEI) → Fantasy (Ch5/Ch7) → Props dark (Ch6). No props PLAY.",
     cards: [
-      stubFairLines("nba", "spread / total / ML"),
-      stubEdges(
-        "nba",
-        "Thresholded game edges once the NBA model board is connected.",
-      ),
-      stubThirdCard(
-        "nba",
-        "Props",
-        "Player props and alternates staged for launch once feeds clear validation.",
-      ),
+      {
+        href: "/edge-board/nba",
+        title: "Edge Board",
+        description:
+          "Open / Best / KEI for the posted slate. Tags stay PASS without trusted Best.",
+        cta: "Open edge board →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/nba/fantasy",
+        title: "Fantasy",
+        description:
+          "Season and slate ranks from Ch5 PlayerProjection — same means, scored.",
+        cta: "Open fantasy →",
+        accent: "green",
+        status: "active",
+      },
+      {
+        href: "/pro/nba/props",
+        title: "Props (dark)",
+        description:
+          "Proj vs trusted Best only. Zero PLAY / LEAN until a later tag PR.",
+        cta: "Open props →",
+        accent: "neutral",
+        status: "active",
+      },
     ],
     footerCards: [
       ...SHARED_FOOTER("nba"),
+      {
+        href: "/pro/nba/fair-lines",
+        title: "Fair Lines",
+        description: "Ch4 team KEI baselines for research — not a pick sheet.",
+        cta: "Open fair lines →",
+        accent: "gold",
+      },
       {
         href: "/odds/nba",
         title: "Compare Odds",
         description:
           "Side-by-side spreads and totals across books for the NBA slate.",
         cta: "Open odds compare →",
-        accent: "gold",
-      },
-      {
-        href: "/edge-board/nba",
-        title: "Public Edge Board",
-        description: "Open vs best prices with KEI and directional edge tags.",
-        cta: "Open edge board →",
-        accent: "green",
+        accent: "neutral",
       },
     ],
   },
