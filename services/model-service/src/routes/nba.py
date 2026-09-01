@@ -5,7 +5,7 @@ import logging
 import os
 from datetime import date, datetime, timezone
 from decimal import Decimal
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 from fastapi import APIRouter, HTTPException, Query
 from sqlalchemy import text
@@ -618,15 +618,129 @@ def nba_kei_lines(
 @router.get("/props/board")
 def nba_props_board(
     as_of_date: Optional[date] = Query(None),
-    model_version: str = Query("nba-player-props-v1"),
+    model_version: str = Query("nba-props-ch6-dark-v1"),
     market_key: Optional[str] = Query(None),
     team: Optional[str] = Query(None),
-    tag: Optional[str] = Query(None, description="PLAY | WATCH | PASS"),
+    tag: Optional[str] = Query(None, description="Dark board: PASS only"),
     limit: int = Query(250, ge=1, le=2000),
+    source: str = Query(
+        "season_engine",
+        description="season_engine (Ch6 dark / PlayerProjection) | stub (legacy phase3)",
+    ),
 ) -> Dict[str, Any]:
-    """Research-only NBA player props board (pts/reb/ast/threes)."""
+    """Chapter 6 dark props board — PlayerProjection vs line, zero PLAY."""
     from src.services.nba_prop_edge_policy import ou_balance_report
+    from src.services.nba_season_engine.nba_props import (
+        PROPS_VERSION,
+        build_dark_props_board,
+    )
 
+    src = (source or "season_engine").strip().lower()
+    target = as_of_date or date.today()
+
+    if src in {"season_engine", "ch6", "dark", "player_projection", "auto"}:
+        market_by_player: Dict[Tuple[str, str], Dict[str, Any]] = {}
+        session = SessionLocal()
+        try:
+            try:
+                ensure_nba_model_tables(session)
+                session.commit()
+                mrows = session.execute(
+                    text(
+                        """
+                        SELECT DISTINCT ON (player_id, player_name, market_key)
+                          lower(COALESCE(player_id, '')) AS pid,
+                          lower(COALESCE(player_name, '')) AS pname,
+                          market_key,
+                          line,
+                          over_price,
+                          under_price
+                        FROM player_prop_market_snapshots
+                        WHERE sport_key IN ('basketball_nba', 'nba')
+                          AND market_key IN ('pts', 'reb', 'ast', 'threes', 'pra')
+                        ORDER BY player_id, player_name, market_key,
+                                 captured_at DESC NULLS LAST
+                        """
+                    )
+                ).fetchall()
+                for mr in mrows:
+                    payload = {
+                        "line": mr[3],
+                        "over_price": mr[4],
+                        "under_price": mr[5],
+                        "book_count": 1,
+                    }
+                    if mr[0]:
+                        market_by_player[(str(mr[0]), str(mr[2] or ""))] = payload
+                    if mr[1]:
+                        market_by_player[(str(mr[1]), str(mr[2] or ""))] = payload
+            except Exception:
+                session.rollback()
+                market_by_player = {}
+        finally:
+            session.close()
+
+        board = build_dark_props_board(
+            market_key=market_key,
+            team=team,
+            limit=limit,
+            market_by_player=market_by_player,
+            best_trusted=True,
+            preseason=_is_nba_preseason(target),
+        )
+        lines = list(board.get("lines") or [])
+        tag_filter = (tag or "").strip().upper() or None
+        if tag_filter:
+            lines = [
+                r
+                for r in lines
+                if str((r.get("diagnostics") or {}).get("tag") or r.get("tag") or "PASS").upper()
+                == tag_filter
+            ]
+        # Hard clamp: dark board never ships PLAY/WATCH.
+        for r in lines:
+            diag = r.get("diagnostics") if isinstance(r.get("diagnostics"), dict) else {}
+            diag["tag"] = "PASS"
+            diag["tag_side"] = None
+            diag["dark_only"] = True
+            diag["stake_eligible"] = False
+            r["diagnostics"] = diag
+            r["tag"] = "PASS"
+            r["tag_side"] = None
+            r["stake_eligible"] = False
+            r["as_of_date"] = target.isoformat()
+            r["worker_build_id"] = PROPS_VERSION
+
+        balance = ou_balance_report(lines)
+        play_n = int(balance.get("play_n") or 0)
+        return {
+            "as_of_date": target.isoformat(),
+            "model_version": board.get("props_version") or PROPS_VERSION,
+            "worker_build_id": PROPS_VERSION,
+            "engine_version": board.get("engine_version"),
+            "count": len(lines),
+            "lines": lines,
+            "ou_balance": balance,
+            "play_n": play_n,
+            "lean_n": 0,
+            "suppressed_play_candidates": board.get("suppressed_play_candidates"),
+            "odds_backed_markets": board.get("odds_backed_markets"),
+            "odds_missing_vectors": board.get("odds_missing_vectors"),
+            "publish_posture": board_publish_posture(),
+            "phase": "ch6_dark",
+            "source": "season_engine_ch6_dark",
+            "dark_only": True,
+            "PROP_MINUTES_GATE": board.get("PROP_MINUTES_GATE"),
+            "does_not": board.get("does_not") or [],
+            "message": (
+                None
+                if lines
+                else board.get("message")
+                or "No Ch6 dark prop rows (minutes gate / missing PlayerProjection)."
+            ),
+        }
+
+    # Legacy stub path (phase3) — still force PASS on read (props stay dark).
     session = SessionLocal()
     try:
         try:
@@ -635,8 +749,12 @@ def nba_props_board(
         except Exception:
             session.rollback()
 
-        target = as_of_date or date.today()
         tag_filter = (tag or "").strip().upper() or None
+        stub_version = (
+            model_version
+            if model_version and model_version != PROPS_VERSION
+            else "nba-player-props-v1"
+        )
         rows = session.execute(
             text(
                 """
@@ -659,7 +777,7 @@ def nba_props_board(
             ),
             {
                 "as_of_date": target,
-                "model_version": model_version,
+                "model_version": stub_version,
                 "market_key": market_key,
                 "team": team.upper() if team else None,
                 "limit": limit,
@@ -676,7 +794,16 @@ def nba_props_board(
                     diag = {}
             if not isinstance(diag, dict):
                 diag = {}
-            row_tag = str(diag.get("tag") or "PASS").upper()
+            # Dark clamp — stub path also ships zero PLAY.
+            diag = {
+                **diag,
+                "tag": "PASS",
+                "tag_side": None,
+                "stake_eligible": False,
+                "dark_only": True,
+                "reason": diag.get("reason") or "dark_stub_path",
+            }
+            row_tag = "PASS"
             if tag_filter and row_tag != tag_filter:
                 continue
             lines.append(
@@ -703,23 +830,28 @@ def nba_props_board(
                     "worker_build_id": r[19],
                     "updated_at": r[20],
                     "stake_eligible": False,
+                    "tag": "PASS",
+                    "tag_side": None,
                 }
             )
 
         balance = ou_balance_report(lines)
         return {
             "as_of_date": target,
-            "model_version": model_version,
+            "model_version": stub_version,
             "worker_build_id": NBA_WORKER_BUILD_ID,
             "count": len(lines),
             "lines": lines,
             "ou_balance": balance,
+            "play_n": 0,
             "publish_posture": board_publish_posture(),
-            "phase": "phase3",
+            "phase": "ch6_dark_stub_fallback",
+            "source": "stub_phase3_dark_clamped",
+            "dark_only": True,
             "message": (
                 None
                 if lines
-                else "No NBA prop edges materialized for this date. Run phase3 props bootstrap."
+                else "No NBA stub prop edges materialized for this date."
             ),
         }
     except Exception as exc:

@@ -1,7 +1,7 @@
-"""NBA sides/totals publish policy (Phase 2+) + props posture (Phase 3).
+"""NBA sides/totals publish policy (Phase 2+) + props posture (Ch6 dark).
 
 Default tag is PASS / research_only until walkforward vs *real closes*
-clears evidence floors. Props board is research_only (never stake-eligible).
+clears evidence floors. Props board is Ch6 dark (proj vs line, zero PLAY).
 
 Mirrors NFL side/total discipline without copying NFL edge bands:
   - Full-slate PASS is the product default.
@@ -19,7 +19,7 @@ Market = Literal["spread", "total"]
 
 BREAKEVEN_ATS = 0.5238
 POLICY_VERSION = "nba_mainlines_phase2_research_v1"
-PROPS_POLICY_VERSION = "nba_props_phase3_research_v1"
+PROPS_POLICY_VERSION = "nba_props_ch6_dark_v1"
 
 # Chapter 4 team KEI tags vs trusted Best (pts).
 SPREAD_PLAY_MIN = 4.0
@@ -132,8 +132,9 @@ def board_publish_posture(*, n_with_close_lines: int = 0, ats: Optional[float] =
         "policy_version": POLICY_VERSION,
         "props_policy_version": PROPS_POLICY_VERSION,
         "mainlines": mainlines,
-        # Props board is live as research desk; stake tags stay off.
-        "props": "research_only",
+        # Ch6 dark: PlayerProjection desk, proj vs line, zero PLAY.
+        "props": "dark",
+        "props_dark_only": True,
         "force_research_only": mainlines == "research_only",
         "n_with_close_lines": n_with_close_lines,
         "ats": ats,

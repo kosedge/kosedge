@@ -1,4 +1,4 @@
-"""NBA season engine package (Ch1–Ch5 + Ch4 team KEI)."""
+"""NBA season engine package (Ch1–Ch5 + Ch4 team KEI + Ch6 props dark)."""
 
 from src.services.nba_season_engine.priors import (
     ENGINE_VERSION,
@@ -52,6 +52,16 @@ from src.services.nba_season_engine.nba_kei import (
     load_kei_pack,
     tag_from_edge,
 )
+from src.services.nba_season_engine.nba_props import (
+    PROP_MINUTES_GATE,
+    PROP_PLAY_ABS,
+    PROP_PLAY_CAP_PER_SLATE,
+    PROP_PLAY_SIGMA,
+    PROPS_VERSION,
+    build_dark_props_board,
+    documentation as nba_props_documentation,
+    evaluate_dark_prop,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -94,4 +104,12 @@ __all__ = [
     "kei_lines_for_dates",
     "tag_from_edge",
     "nba_kei_documentation",
+    "PROPS_VERSION",
+    "PROP_PLAY_ABS",
+    "PROP_PLAY_SIGMA",
+    "PROP_PLAY_CAP_PER_SLATE",
+    "PROP_MINUTES_GATE",
+    "build_dark_props_board",
+    "evaluate_dark_prop",
+    "nba_props_documentation",
 ]

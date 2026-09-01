@@ -7,18 +7,23 @@ export type NbaPropBoardRow = {
   playerName: string;
   team: string;
   marketKey: string;
+  /** Trusted Best only; cleared to null (UI —) when untrusted/missing. */
   line: number | null;
+  best: number | null;
   modelMean: number | null;
   modelStd: number | null;
+  /** mean − trusted Best; null when Best cleared. */
+  edge: number | null;
   overProb: number | null;
   underProb: number | null;
   edgeOver: number | null;
   edgeUnder: number | null;
   confidence: number | null;
-  tag: string;
-  tagSide: string | null;
+  tag: "PASS";
+  tagSide: null;
   reason: string | null;
   stakeEligible: false;
+  bestTrusted: boolean;
 };
 
 export type NbaPropsBoardResponse = {
@@ -35,6 +40,7 @@ export type NbaPropsBoardResponse = {
     balanced?: boolean;
   };
   phase?: string;
+  darkOnly?: boolean;
   message?: string;
   error?: string;
 };
@@ -49,6 +55,11 @@ function toNumberOrNull(value: unknown): number | null {
   return null;
 }
 
+/** Ch6 dark: never surface PLAY/LEAN even if upstream mis-tags. */
+function darkTag(_raw: unknown): "PASS" {
+  return "PASS";
+}
+
 export async function fetchNbaPropsBoard(options?: {
   marketKey?: string;
   tag?: string;
@@ -58,15 +69,17 @@ export async function fetchNbaPropsBoard(options?: {
   if (!base) {
     return {
       asOfDate: new Date().toISOString().slice(0, 10),
-      modelVersion: "nba-player-props-v1",
+      modelVersion: "nba-props-ch6-dark-v1",
       workerBuildId: "",
       count: 0,
       lines: [],
+      darkOnly: true,
       error: "MODEL_SERVICE_URL not configured",
     };
   }
 
   const params = new URLSearchParams();
+  params.set("source", "season_engine");
   if (options?.marketKey) params.set("market_key", options.marketKey);
   if (options?.tag) params.set("tag", options.tag);
   params.set("limit", String(options?.limit ?? 200));
@@ -82,10 +95,11 @@ export async function fetchNbaPropsBoard(options?: {
     if (!res.ok) {
       return {
         asOfDate: new Date().toISOString().slice(0, 10),
-        modelVersion: "nba-player-props-v1",
+        modelVersion: "nba-props-ch6-dark-v1",
         workerBuildId: "",
         count: 0,
         lines: [],
+        darkOnly: true,
         error: `props board HTTP ${res.status}`,
       };
     }
@@ -94,43 +108,60 @@ export async function fetchNbaPropsBoard(options?: {
     const lines: NbaPropBoardRow[] = linesRaw.map((row) => {
       const r = row as Record<string, unknown>;
       const diag = (r.diagnostics || {}) as Record<string, unknown>;
+      const bestTrusted = diag.best_trusted === true;
+      const best = bestTrusted ? toNumberOrNull(r.best ?? r.line) : null;
+      const mean = toNumberOrNull(r.model_mean);
+      const edge =
+        best != null && mean != null
+          ? mean - best
+          : toNumberOrNull(r.edge ?? diag.edge);
       return {
         playerId: String(r.player_id ?? ""),
         playerName: String(r.player_name ?? ""),
         team: String(r.team ?? ""),
         marketKey: String(r.market_key ?? ""),
-        line: toNumberOrNull(r.line),
-        modelMean: toNumberOrNull(r.model_mean),
+        line: best,
+        best,
+        modelMean: mean,
         modelStd: toNumberOrNull(r.model_std),
+        edge,
         overProb: toNumberOrNull(r.over_prob),
         underProb: toNumberOrNull(r.under_prob),
         edgeOver: toNumberOrNull(r.edge_over),
         edgeUnder: toNumberOrNull(r.edge_under),
         confidence: toNumberOrNull(r.confidence),
-        tag: String(diag.tag ?? "PASS"),
-        tagSide:
-          typeof diag.tag_side === "string" ? diag.tag_side : null,
+        tag: darkTag(diag.tag ?? r.tag),
+        tagSide: null,
         reason: typeof diag.reason === "string" ? diag.reason : null,
         stakeEligible: false,
+        bestTrusted,
       };
     });
     return {
       asOfDate: String(raw.as_of_date ?? "").slice(0, 10),
-      modelVersion: String(raw.model_version ?? "nba-player-props-v1"),
+      modelVersion: String(raw.model_version ?? "nba-props-ch6-dark-v1"),
       workerBuildId: String(raw.worker_build_id ?? ""),
       count: lines.length,
       lines,
-      ouBalance: (raw.ou_balance as NbaPropsBoardResponse["ouBalance"]) || undefined,
-      phase: typeof raw.phase === "string" ? raw.phase : undefined,
+      ouBalance: {
+        play_n: 0,
+        play_over: 0,
+        play_under: 0,
+        play_under_pct: null,
+        balanced: true,
+      },
+      phase: typeof raw.phase === "string" ? raw.phase : "ch6_dark",
+      darkOnly: true,
       message: typeof raw.message === "string" ? raw.message : undefined,
     };
   } catch (err) {
     return {
       asOfDate: new Date().toISOString().slice(0, 10),
-      modelVersion: "nba-player-props-v1",
+      modelVersion: "nba-props-ch6-dark-v1",
       workerBuildId: "",
       count: 0,
       lines: [],
+      darkOnly: true,
       error: err instanceof Error ? err.message : "props fetch failed",
     };
   }
