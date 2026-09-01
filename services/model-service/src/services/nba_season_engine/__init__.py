@@ -1,4 +1,4 @@
-"""NBA season engine package (Ch1 team prior shell + Ch2 roster×minutes)."""
+"""NBA season engine package (Ch1–Ch2 shell + Ch5 PlayerProjection)."""
 
 from src.services.nba_season_engine.priors import (
     ENGINE_VERSION,
@@ -23,6 +23,14 @@ from src.services.nba_season_engine.roster_minutes import (
     load_rebased_team_prior,
     load_transactions,
 )
+from src.services.nba_season_engine.player_projection import (
+    VECTOR_KEYS,
+    documentation as player_projection_documentation,
+    get_player_projection,
+    get_team_projections,
+    load_player_projection_pack,
+    team_pts_identity,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -31,6 +39,7 @@ __all__ = [
     "PLAYER_YEAR_WEIGHTS",
     "MINUTE_GRID_SUM",
     "PAPER_SIM_S_SET",
+    "VECTOR_KEYS",
     "apply_team_carry_shrink",
     "get_team_prior",
     "load_team_prior_pack",
@@ -42,4 +51,9 @@ __all__ = [
     "load_rebased_team_prior",
     "load_transactions",
     "roster_minutes_documentation",
+    "load_player_projection_pack",
+    "get_player_projection",
+    "get_team_projections",
+    "team_pts_identity",
+    "player_projection_documentation",
 ]
