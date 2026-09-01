@@ -11,9 +11,7 @@ import {
   nbaEdgeTag,
   trustNbaMarket,
 } from "@/lib/nba-trusted-market";
-import {
-  wnbaEdgeTag,
-} from "@/lib/wnba-trusted-market";
+import { wnbaEdgeTag } from "@/lib/wnba-trusted-market";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
 import {
