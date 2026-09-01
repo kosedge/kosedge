@@ -100,7 +100,7 @@ describe("desk-handicaps loader", () => {
       expect(notes[0]?.lean?.replace(/\*\*/g, "")).toMatch(/Pass/i);
       expect(notes[0]?.fairNumber).toMatch(/Ch2|house net/i);
       expect(notes[0]?.marketNumber).toMatch(
-        /18306835|UNLISTED|no market/i,
+        /18306835|UNLISTED|OTB|BetMGM|no (conference )?market/i,
       );
     }
 
