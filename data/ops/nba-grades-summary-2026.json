@@ -1,0 +1,23 @@
+{
+  "as_of": "2026-09-01T14:19:10Z",
+  "stamp_frozen": "v0.1 \u00b7 Ch2\u2013Ch7",
+  "store": "data/nba_grades_2026.jsonl",
+  "n_rows": 4,
+  "n_graded_final": 0,
+  "n_signed_error": 0,
+  "mean_signed_error": null,
+  "by_market": {
+    "spread": 1,
+    "total": 1,
+    "pts": 1,
+    "pra": 1
+  },
+  "by_source": {
+    "schema_example": 4
+  },
+  "by_tag": {
+    "PASS": 2,
+    "n/a": 2
+  },
+  "note": "Schema example seed only. Regular-season close/final empty until tip. mean_signed_error stays null until games are graded."
+}
