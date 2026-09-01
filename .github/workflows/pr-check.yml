@@ -50,6 +50,7 @@ jobs:
           CFB_MS=0
           NBA_MS=0
           WNBA_MS=0
+          NHL_MS=0
           NFL_MS=0
           NFL_SCRIPTS=0
           for f in "${ALL[@]:-}"; do
@@ -67,6 +68,10 @@ jobs:
                 MS=1
                 WNBA_MS=1
                 ;;
+              services/model-service/src/services/nhl_data.py|services/model-service/src/services/nhl_season_engine/*|services/model-service/tests/test_nhl_*|scripts/nhl/*|docs/NHL_*)
+                MS=1
+                NHL_MS=1
+                ;;
               services/model-service/src/services/nfl_*/*|services/model-service/tests/test_nfl_*|services/model-service/src/routes/nfl*)
                 MS=1
                 NFL_MS=1
@@ -77,9 +82,9 @@ jobs:
               scripts/nfl/*|data/ops/nfl*|content/writers/camp-desk-2026/*) NFL_SCRIPTS=1 ;;
             esac
           done
-          # CFB/NBA/WNBA-only model-service PRs must not be blocked by NFL DepthSot / camp desk
+          # CFB/NBA/WNBA/NHL-only model-service PRs must not be blocked by NFL DepthSot / camp desk
           # date coupling. NFL Truth Layer still runs when NFL paths (or nfl_ops) change.
-          if [ "$NFL_MS" = "0" ] && [ "$NFL_SCRIPTS" = "0" ] && { [ "$CFB_MS" = "1" ] || [ "$NBA_MS" = "1" ] || [ "$WNBA_MS" = "1" ]; }; then
+          if [ "$NFL_MS" = "0" ] && [ "$NFL_SCRIPTS" = "0" ] && { [ "$CFB_MS" = "1" ] || [ "$NBA_MS" = "1" ] || [ "$WNBA_MS" = "1" ] || [ "$NHL_MS" = "1" ]; }; then
             NFL_TRUTH=0
           elif [ "$MS" = "1" ] || [ "$NFL_SCRIPTS" = "1" ]; then
             NFL_TRUTH=1
@@ -91,10 +96,11 @@ jobs:
           echo "cfb_ms=$CFB_MS" >> "$GITHUB_OUTPUT"
           echo "nba_ms=$NBA_MS" >> "$GITHUB_OUTPUT"
           echo "wnba_ms=$WNBA_MS" >> "$GITHUB_OUTPUT"
+          echo "nhl_ms=$NHL_MS" >> "$GITHUB_OUTPUT"
           echo "nfl_ms=$NFL_MS" >> "$GITHUB_OUTPUT"
           echo "nfl_ops=$NFL_SCRIPTS" >> "$GITHUB_OUTPUT"
           echo "nfl_truth=$NFL_TRUTH" >> "$GITHUB_OUTPUT"
-          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS wnba_ms=$WNBA_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH (${#ALL[@]} files)"
+          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS wnba_ms=$WNBA_MS nhl_ms=$NHL_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH (${#ALL[@]} files)"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -212,8 +218,14 @@ jobs:
           cd services/model-service
           pytest -q tests/test_wnba_team_prior_ch1.py tests/test_wnba_roster_minutes_ch2.py tests/test_wnba_player_projection_ch5.py tests/test_wnba_situation_ch3.py tests/test_wnba_kei_ch4.py tests/test_wnba_props_ch6.py tests/test_wnba_fantasy_ch7.py tests/test_wnba_grade_harness.py
 
+      - name: Run NHL fetcher tests
+        if: steps.paths.outputs.nhl_ms == '1'
+        run: |
+          cd services/model-service
+          pytest -q tests/test_nhl_fetcher.py
+
       - name: Run model-service DepthSot / NFL tests
-        if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1')
+        if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1')
         run: |
           cd services/model-service
           # Prefer targeted DepthSot / auth contract tests when present; fall back to full suite.
