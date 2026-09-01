@@ -7,18 +7,23 @@ export type NbaPropBoardRow = {
   playerName: string;
   team: string;
   marketKey: string;
+  /** Trusted Best only; cleared to null (UI —) when untrusted/missing. */
   line: number | null;
+  best: number | null;
   modelMean: number | null;
   modelStd: number | null;
+  /** mean − trusted Best; null when Best cleared. */
+  edge: number | null;
   overProb: number | null;
   underProb: number | null;
   edgeOver: number | null;
   edgeUnder: number | null;
   confidence: number | null;
-  tag: string;
-  tagSide: string | null;
+  tag: "PASS";
+  tagSide: null;
   reason: string | null;
   stakeEligible: false;
+  bestTrusted: boolean;
 };
 
 export type NbaPropsBoardResponse = {
@@ -50,9 +55,8 @@ function toNumberOrNull(value: unknown): number | null {
   return null;
 }
 
-/** Ch6 dark: never surface PLAY/WATCH even if upstream mis-tags. */
-function darkTag(raw: unknown): "PASS" {
-  void raw;
+/** Ch6 dark: never surface PLAY/LEAN even if upstream mis-tags. */
+function darkTag(_raw: unknown): "PASS" {
   return "PASS";
 }
 
@@ -104,14 +108,23 @@ export async function fetchNbaPropsBoard(options?: {
     const lines: NbaPropBoardRow[] = linesRaw.map((row) => {
       const r = row as Record<string, unknown>;
       const diag = (r.diagnostics || {}) as Record<string, unknown>;
+      const bestTrusted = diag.best_trusted === true;
+      const best = bestTrusted ? toNumberOrNull(r.best ?? r.line) : null;
+      const mean = toNumberOrNull(r.model_mean);
+      const edge =
+        best != null && mean != null
+          ? mean - best
+          : toNumberOrNull(r.edge ?? diag.edge);
       return {
         playerId: String(r.player_id ?? ""),
         playerName: String(r.player_name ?? ""),
         team: String(r.team ?? ""),
         marketKey: String(r.market_key ?? ""),
-        line: toNumberOrNull(r.line),
-        modelMean: toNumberOrNull(r.model_mean),
+        line: best,
+        best,
+        modelMean: mean,
         modelStd: toNumberOrNull(r.model_std),
+        edge,
         overProb: toNumberOrNull(r.over_prob),
         underProb: toNumberOrNull(r.under_prob),
         edgeOver: toNumberOrNull(r.edge_over),
@@ -121,6 +134,7 @@ export async function fetchNbaPropsBoard(options?: {
         tagSide: null,
         reason: typeof diag.reason === "string" ? diag.reason : null,
         stakeEligible: false,
+        bestTrusted,
       };
     });
     return {

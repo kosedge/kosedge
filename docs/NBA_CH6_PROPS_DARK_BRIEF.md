@@ -1,27 +1,27 @@
 # NBA Chapter 6 — props dark brief
 
-**Phase:** Desk on Ch5 `PlayerProjection`. **Dark only** — proj vs line, **zero PLAY**.  
-**Depends on:** [#371](https://github.com/kosedge/kosedge/pull/371) on `deploy-vercel` (Ch4 screenshot gate)  
-**Stamp frozen:** `nba-season-engine-v0.1` · shrink `0.85` · Ch2 grids · Ch5 scorer · Ch3 coeffs · Ch4 KEI  
+**Phase:** Proj vs line. **Zero PLAY. Zero LEAN.**  
+**Reads:** Ch5 `PlayerProjection` only. Do **not** re-score.  
+**Stamp frozen:** shrink `0.85` · Ch2 grids · Ch3 coeffs · Ch4 team KEI  
 **Scorecard:** [`docs/NBA_CH6_PROPS_DARK_SCORECARD.md`](./NBA_CH6_PROPS_DARK_SCORECARD.md)
 
 ---
 
-## What this PR does
-
-Wire `/nba/props/board` (default `source=season_engine`) to Ch5 means:
+## Formula
 
 ```text
-mean  = PlayerProjection[PTS|REB|AST|3PM]
-σ_game = game-grain formula (Ch5 pack σ is season-rate — too tight for O/U)
-tag   = PASS always   # dark — register PROP_PLAY not emitted
+edge = PlayerProjection[market] − trusted_Best
 ```
 
-Hard minutes gate: `MIN < 12` omitted. Cap / PLAY thresholds registered, not fired.
+Markets, **only if** the Odds client already returns them:  
+`PTS REB AST 3PM PRA` (Odds keys → `pts reb ast threes pra`).  
+`PR` / `RA` exist on Ch5 but Odds has **no** key → **missing** (do not guess).
+
+Untrusted / missing Best → **—**. Tag always **PASS**.
 
 ---
 
-## Register (coded, dark-suppressed)
+## Register (still dark — not emitted)
 
 | Name                      | Value                        |
 | ------------------------- | ---------------------------- |
@@ -33,30 +33,31 @@ Hard minutes gate: `MIN < 12` omitted. Cap / PLAY thresholds registered, not fir
 
 ## Allowlist
 
-- `nba_props.py` (dark desk) + exports
-- `/nba/props/board` default → Ch6 dark; stub path still PASS-clamped
-- `/pro/nba/props` copy + board client
-- docs + NBA-only CI (`test_nba_props_ch6.py`)
+- Join Ch5 ↔ `basketball_nba` player props
+- Existing props surface: **proj, Best, edge, σ**
+- Untrusted Best → —
+- 10-row star scorecard
+- Register only (still dark)
+- NBA-only CI
 
 ---
 
 ## Forbidden (honored)
 
-- PLAY / WATCH tags · stake-eligible props · second scorer / stub rates as SoT
-- Rematerialize Ch1/Ch2/Ch5 · retune Ch3 · walk means to the book
-- Fantasy · CFB/NFL · ungate team Edge PLAY on props
+Tags on props · new player means · new grid · team if · retune Ch3/Ch4 · fantasy · alts / first basket / quarters · CFB/NFL
 
 ---
 
 ## Gates
 
-- Board means == Ch5 PlayerProjection (pts/reb/ast/threes)
-- `play_n == 0` even when abs edge would clear register
-- Minutes gate holds · CFB BALL@OSU still **−40.5**
-- Shrink `0.85` untouched
+- Displayed mean == Ch5 field
+- No fake book
+- No PLAY/LEAN string on a prop
+- Team board unchanged
+- CFB BALL@OSU **−40.5**
 
 ---
 
 ## Done
 
-Stop after dark desk. **Do not** ungate PLAY until Chapter 9 grade harness + stake policy.
+Stop after dark. Tags are a later PR. Chapter 7 fantasy is later and must read this same object.

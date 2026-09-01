@@ -13,7 +13,7 @@ import {
 } from "@/lib/sports";
 
 const SPORT_PROPS_COPY: Record<string, string> = {
-  nba: "NBA player props from PlayerProjection (Ch5 spine) vs joined book lines. Chapter 6 dark — proj vs line only; zero PLAY until grades + stake policy.",
+  nba: "NBA player props from PlayerProjection (Ch5) vs trusted Best. Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.",
   nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
   wnba: "WNBA player props (pts / reb / ast / threes) from usage stubs + team pace/ORtg. Research only — role-collapse Under refusal; never stake-eligible.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
@@ -93,13 +93,14 @@ export default async function PropsPage({
               {nbaBoard.error
                 ? `Board unavailable: ${nbaBoard.error}`
                 : nbaBoard.count > 0
-                  ? `${nbaBoard.count} prop rows · ${nbaBoard.modelVersion} · dark (zero PLAY) · PlayerProjection means`
+                  ? `${nbaBoard.count} prop rows · ${nbaBoard.modelVersion} · dark (zero PLAY / LEAN) · PlayerProjection means`
                   : nbaBoard.message ||
                     "No Ch6 dark prop rows yet — PlayerProjection pack required."}
             </p>
             {nbaBoard.phase === "ch6_dark" || nbaBoard.darkOnly ? (
               <p className="text-xs text-kos-text/50">
-                PLAY balance: 0 Over / 0 Under · dark desk (tags suppressed)
+                Tags: PASS only · Best cleared when untrusted · edge = proj −
+                Best
               </p>
             ) : nbaBoard.ouBalance ? (
               <p className="text-xs text-kos-text/50">
@@ -120,8 +121,10 @@ export default async function PropsPage({
                     <tr>
                       <th className="px-3 py-2">Player</th>
                       <th className="px-3 py-2">Mkt</th>
-                      <th className="px-3 py-2">Line</th>
-                      <th className="px-3 py-2">Model</th>
+                      <th className="px-3 py-2">Proj</th>
+                      <th className="px-3 py-2">Best</th>
+                      <th className="px-3 py-2">Edge</th>
+                      <th className="px-3 py-2">σ</th>
                       <th className="px-3 py-2">Tag</th>
                     </tr>
                   </thead>
@@ -142,20 +145,22 @@ export default async function PropsPage({
                         <td className="px-3 py-2 uppercase text-kos-text/70">
                           {row.marketKey}
                         </td>
-                        <td className="px-3 py-2 text-kos-text/70">
-                          {row.line ?? "—"}
-                        </td>
-                        <td className="px-3 py-2 text-kos-text/80">
+                        <td className="px-3 py-2 tabular-nums text-kos-text/80">
                           {row.modelMean?.toFixed(1) ?? "—"}
                         </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                          {row.best != null ? row.best.toFixed(1) : "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                          {row.edge != null
+                            ? `${row.edge > 0 ? "+" : ""}${row.edge.toFixed(1)}`
+                            : "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/50">
+                          {row.modelStd?.toFixed(1) ?? "—"}
+                        </td>
                         <td className="px-3 py-2">
-                          <span className="text-kos-gold">{row.tag}</span>
-                          {row.tagSide ? (
-                            <span className="text-kos-text/45">
-                              {" "}
-                              {row.tagSide}
-                            </span>
-                          ) : null}
+                          <span className="text-kos-gold">PASS</span>
                         </td>
                       </tr>
                     ))}

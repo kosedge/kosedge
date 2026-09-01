@@ -1,12 +1,13 @@
 """NBA Chapter 6 — props desk (dark only).
 
-Desk on Chapter 5 PlayerProjection. Not a second scorer.
-Shows proj vs joined line. Zero PLAY / WATCH tags (Ch9 grades first).
+Phase: proj vs trusted Best. Zero PLAY. Zero LEAN.
+Reads Ch5 PlayerProjection only — does not re-score.
 
-Registered (documented, not emitted in dark):
-  PROP_PLAY            ≥ 4.0 abs AND ≥ 0.6σ
-  PROP_PLAY_CAP_PER_SLATE = 8
-Hard minutes gate: MIN < PROP_MINUTES_GATE → row omitted.
+edge = PlayerProjection[market] − trusted_Best
+
+Odds-backed markets only (basketball_nba). Missing Odds key → missing
+(do not guess). Current Odds client keys: pts reb ast threes pra.
+PR / RA exist on Ch5 but Odds does not return them → not boarded.
 """
 
 from __future__ import annotations
@@ -22,22 +23,28 @@ from src.services.nba_season_engine.player_projection import (
 PROPS_VERSION = "nba-props-ch6-dark-v1"
 POLICY_VERSION = "nba_props_ch6_dark_v1"
 
-# Register (enterprise plan) — coded for gates/docs; dark mode never emits PLAY.
+# Register (enterprise plan) — coded for gates/docs; dark mode never emits PLAY/LEAN.
 PROP_PLAY_ABS = 4.0
 PROP_PLAY_SIGMA = 0.6
 PROP_PLAY_CAP_PER_SLATE = 8
 PROP_MINUTES_GATE = 12.0
 
-NBA_PROP_MARKETS = ("pts", "reb", "ast", "threes")
+# Odds client already maps these for basketball_nba (enterprise_training_pull).
+ODDS_BACKED_MARKETS = ("pts", "reb", "ast", "threes", "pra")
+# Ch5 vectors present but Odds client has no key → missing (not boarded).
+ODDS_MISSING_VECTORS = ("PR", "RA")
+
+NBA_PROP_MARKETS = ODDS_BACKED_MARKETS
 
 MARKET_TO_VECTOR = {
     "pts": "PTS",
     "reb": "REB",
     "ast": "AST",
     "threes": "3PM",
+    "pra": "PRA",
 }
 
-DARK_ONLY = True  # Ch6 phase — force PASS until Ch9 harness + stake policy
+DARK_ONLY = True
 
 
 def _clamp(v: float, lo: float, hi: float) -> float:
@@ -58,12 +65,45 @@ def game_level_std(market_key: str, mean: float) -> float:
         return _clamp(0.40 * math.sqrt(m) + 0.7, 0.9, 6.0)
     if mk == "reb":
         return _clamp(0.35 * math.sqrt(m) + 0.8, 1.0, 8.0)
+    if mk == "pra":
+        return _clamp(0.45 * math.sqrt(m) + 1.2, 2.0, 14.0)
     return _clamp(0.35 * math.sqrt(m) + 0.8, 1.2, 12.0)
 
 
 def would_clear_prop_play(*, abs_edge: float, z: float) -> bool:
     """Register check only — dark desk never uses this to tag."""
     return abs(float(abs_edge)) >= PROP_PLAY_ABS and abs(float(z)) >= PROP_PLAY_SIGMA
+
+
+def trust_prop_best(
+    *,
+    best: Optional[float],
+    model_mean: Optional[float] = None,
+    book_count: int = 1,
+    preseason: bool = False,
+) -> Dict[str, Any]:
+    """Trusted Best gate for props. Untrusted → Best cleared to None (UI shows —)."""
+    if preseason:
+        return {"trusted": False, "best": None, "reason": "preseason"}
+    if best is None:
+        return {"trusted": False, "best": None, "reason": "no_market"}
+    try:
+        best_f = float(best)
+    except (TypeError, ValueError):
+        return {"trusted": False, "best": None, "reason": "no_market"}
+    if not math.isfinite(best_f):
+        return {"trusted": False, "best": None, "reason": "no_market"}
+    if book_count < 1:
+        return {"trusted": False, "best": None, "reason": "no_book"}
+    # Absurd vs model: refuse fake books (same spirit as team ABSURD gate).
+    if model_mean is not None:
+        try:
+            gap = abs(float(model_mean) - best_f)
+            if gap > 40.0:
+                return {"trusted": False, "best": None, "reason": "absurd_vs_proj"}
+        except (TypeError, ValueError):
+            pass
+    return {"trusted": True, "best": best_f, "reason": "best"}
 
 
 def projection_mean_std(player: Dict[str, Any], market_key: str) -> Optional[Tuple[float, float]]:
@@ -75,7 +115,6 @@ def projection_mean_std(player: Dict[str, Any], market_key: str) -> Optional[Tup
     if mean_raw is None:
         return None
     mean = float(mean_raw)
-    # Prefer game-level σ for O/U; keep Ch5 σ in diagnostics.
     std = game_level_std(mk, mean)
     return mean, std
 
@@ -90,8 +129,10 @@ def evaluate_dark_prop(
     over_price: Optional[int] = None,
     under_price: Optional[int] = None,
     best_trusted: bool = False,
+    book_count: int = 1,
+    preseason: bool = False,
 ) -> Dict[str, Any]:
-    """Proj vs line math with forced PASS (dark)."""
+    """Proj vs trusted Best. edge = mean − Best. Tag always PASS (dark)."""
     mk = str(market_key).lower()
     mean = float(model_mean)
     std = max(0.35, float(model_std))
@@ -108,21 +149,35 @@ def evaluate_dark_prop(
             "market_joined": False,
             "model_mean": round(mean, 3),
             "model_std": round(std, 3),
+            "best": None,
+            "edge": None,
             "minutes": round(mins, 2),
         }
 
-    if line is None:
+    trust = trust_prop_best(
+        best=line,
+        model_mean=mean,
+        book_count=book_count,
+        preseason=preseason,
+    )
+    # Untrusted Best → cleared (—). Never invent a book.
+    best_f = trust["best"] if trust["trusted"] else None
+    trusted = bool(trust["trusted"]) and (best_trusted or trust["reason"] == "best")
+
+    if best_f is None:
         return {
             "tag": "PASS",
             "tag_side": None,
-            "reason": "no_market_line",
+            "reason": trust["reason"] if line is None else f"untrusted_{trust['reason']}",
             "stake_eligible": False,
             "policy_version": POLICY_VERSION,
             "dark_only": True,
             "market_joined": False,
             "model_mean": round(mean, 3),
             "model_std": round(std, 3),
-            "minutes": round(mins, 2),
+            "best": None,
+            "line": None,
+            "edge": None,
             "over_prob": None,
             "under_prob": None,
             "edge_over": None,
@@ -130,21 +185,23 @@ def evaluate_dark_prop(
             "z": None,
             "abs_edge": None,
             "would_clear_play": False,
+            "minutes": round(mins, 2),
+            "best_trusted": False,
+            "trust_reason": trust["reason"],
         }
 
-    line_f = float(line)
-    z = (mean - line_f) / std
+    # edge = PlayerProjection[market] − trusted_Best
+    edge = mean - best_f
+    z = edge / std
     if mk == "threes":
-        over_prob = 1.0 - _normal_cdf((line_f + 0.5 - mean) / std)
+        over_prob = 1.0 - _normal_cdf((best_f + 0.5 - mean) / std)
     else:
-        over_prob = 1.0 - _normal_cdf((line_f - mean) / std)
+        over_prob = 1.0 - _normal_cdf((best_f - mean) / std)
     over_prob = _clamp(over_prob, 0.02, 0.98)
     under_prob = 1.0 - over_prob
-    # Without reliable two-way prices, edge vs 50/50 is research display only.
     edge_over = over_prob - 0.5
     edge_under = under_prob - 0.5
     if over_price is not None and under_price is not None:
-        # Soft display only — still never PLAY in dark.
         try:
             from src.services.nba_prop_edge_policy import devig_two_way
 
@@ -155,16 +212,14 @@ def evaluate_dark_prop(
         except Exception:
             pass
 
-    abs_edge = abs(mean - line_f)
+    abs_edge = abs(edge)
     clears = would_clear_prop_play(abs_edge=abs_edge, z=z)
-    reason = "dark_proj_vs_line"
-    if not best_trusted:
-        reason = "dark_untrusted_or_no_best"
-    elif clears:
+    reason = "dark_proj_vs_best"
+    if clears:
         reason = "dark_would_clear_play_suppressed"
 
     return {
-        "tag": "PASS",  # dark — zero PLAY
+        "tag": "PASS",  # dark — zero PLAY / LEAN
         "tag_side": None,
         "reason": reason,
         "stake_eligible": False,
@@ -173,7 +228,9 @@ def evaluate_dark_prop(
         "market_joined": True,
         "model_mean": round(mean, 3),
         "model_std": round(std, 3),
-        "line": line_f,
+        "best": round(best_f, 3),
+        "line": round(best_f, 3),  # alias for existing board field
+        "edge": round(edge, 3),
         "z": round(z, 3),
         "abs_edge": round(abs_edge, 3),
         "over_prob": round(over_prob, 4),
@@ -186,6 +243,8 @@ def evaluate_dark_prop(
         "prop_play_sigma": PROP_PLAY_SIGMA,
         "market_over_price": over_price,
         "market_under_price": under_price,
+        "best_trusted": True,
+        "trust_reason": trust["reason"],
     }
 
 
@@ -195,7 +254,8 @@ def build_dark_props_board(
     team: Optional[str] = None,
     limit: int = 250,
     market_by_player: Optional[Dict[Tuple[str, str], Dict[str, Any]]] = None,
-    best_trusted: bool = False,
+    best_trusted: bool = True,
+    preseason: bool = False,
 ) -> Dict[str, Any]:
     """Build Ch6 dark board from PlayerProjection pack (on-read)."""
     pack = load_player_projection_pack()
@@ -207,6 +267,7 @@ def build_dark_props_board(
             "count": 0,
             "lines": [],
             "play_n": 0,
+            "lean_n": 0,
             "message": "PlayerProjection pack missing — Ch5 required",
         }
 
@@ -214,13 +275,16 @@ def build_dark_props_board(
     team_filter = (team or "").strip().upper() or None
     markets: Sequence[str] = (mk_filter,) if mk_filter else NBA_PROP_MARKETS
     if mk_filter and mk_filter not in NBA_PROP_MARKETS:
+        # Missing Odds key (e.g. pr/ra) → missing, do not guess.
         return {
             "present": True,
             "props_version": PROPS_VERSION,
             "count": 0,
             "lines": [],
             "play_n": 0,
-            "message": f"unsupported_market:{mk_filter}",
+            "lean_n": 0,
+            "message": f"missing_odds_key:{mk_filter}",
+            "odds_missing_vectors": list(ODDS_MISSING_VECTORS),
         }
 
     market_map = market_by_player or {}
@@ -230,7 +294,7 @@ def build_dark_props_board(
     players: Iterable[Dict[str, Any]] = (pack.get("players") or {}).values()
     ordered = sorted(
         players,
-        key=lambda r: (-float(r.get("MIN") or 0), str(r.get("player_name") or "")),
+        key=lambda r: (-float(r.get("MIN") or 0), -float(r.get("PTS") or 0), str(r.get("player_name") or "")),
     )
 
     for player in ordered:
@@ -252,9 +316,9 @@ def build_dark_props_board(
                 or market_map.get((pname.lower(), mk))
                 or {}
             )
-            line = mkt.get("line")
+            raw_line = mkt.get("line")
             try:
-                line_f = float(line) if line is not None else None
+                line_f = float(raw_line) if raw_line is not None else None
             except (TypeError, ValueError):
                 line_f = None
             over_price = mkt.get("over_price")
@@ -264,6 +328,7 @@ def build_dark_props_board(
                 under_i = int(under_price) if under_price is not None else None
             except (TypeError, ValueError):
                 over_i = under_i = None
+            book_count = int(mkt.get("book_count") or (1 if line_f is not None else 0))
 
             edge = evaluate_dark_prop(
                 market_key=mk,
@@ -273,12 +338,17 @@ def build_dark_props_board(
                 minutes=mins,
                 over_price=over_i,
                 under_price=under_i,
-                best_trusted=best_trusted and line_f is not None,
+                best_trusted=best_trusted,
+                book_count=book_count,
+                preseason=preseason,
             )
             if edge.get("would_clear_play"):
                 suppressed_play += 1
 
-            ch5_sigma = ((player.get("sigma") or {}).get(MARKET_TO_VECTOR[mk]))
+            ch5_sigma = (player.get("sigma") or {}).get(MARKET_TO_VECTOR[mk])
+            tag = "PASS"
+            # Hard ban: never emit PLAY/LEAN strings on a prop row.
+            assert tag not in {"PLAY", "LEAN"}
             rows.append(
                 {
                     "model_version": PROPS_VERSION,
@@ -286,9 +356,11 @@ def build_dark_props_board(
                     "player_name": pname,
                     "team": tk,
                     "market_key": mk,
-                    "line": line_f,
+                    "line": edge.get("best"),  # cleared when untrusted
+                    "best": edge.get("best"),
                     "model_mean": edge.get("model_mean"),
                     "model_std": edge.get("model_std"),
+                    "edge": edge.get("edge"),
                     "over_prob": edge.get("over_prob"),
                     "under_prob": edge.get("under_prob"),
                     "edge_over": edge.get("edge_over"),
@@ -301,12 +373,15 @@ def build_dark_props_board(
                         "stake_eligible": False,
                         "z": edge.get("z"),
                         "abs_edge": edge.get("abs_edge"),
+                        "edge": edge.get("edge"),
                         "minutes": mins,
                         "projection_source": "player_projection_ch5",
                         "ch5_sigma": ch5_sigma,
                         "policy_version": POLICY_VERSION,
                         "dark_only": True,
                         "would_clear_play": edge.get("would_clear_play"),
+                        "best_trusted": edge.get("best_trusted"),
+                        "trust_reason": edge.get("trust_reason"),
                     },
                     "stake_eligible": False,
                     "tag": "PASS",
@@ -314,18 +389,18 @@ def build_dark_props_board(
                 }
             )
 
-    # Sort: joined lines first by |mean−line|, then by minutes.
     def _sort_key(r: Dict[str, Any]) -> Tuple[int, float, float]:
-        line = r.get("line")
+        best = r.get("best")
         mean = float(r.get("model_mean") or 0)
-        if line is None:
+        if best is None:
             return (1, 0.0, -float((r.get("diagnostics") or {}).get("minutes") or 0))
-        return (0, -abs(mean - float(line)), -float((r.get("diagnostics") or {}).get("minutes") or 0))
+        return (0, -abs(mean - float(best)), -float((r.get("diagnostics") or {}).get("minutes") or 0))
 
     rows.sort(key=_sort_key)
     rows = rows[: max(1, int(limit))]
 
     play_n = sum(1 for r in rows if str(r.get("tag") or "").upper() == "PLAY")
+    lean_n = sum(1 for r in rows if str(r.get("tag") or "").upper() == "LEAN")
     return {
         "present": True,
         "props_version": PROPS_VERSION,
@@ -338,18 +413,23 @@ def build_dark_props_board(
         "PROP_PLAY_CAP_PER_SLATE": PROP_PLAY_CAP_PER_SLATE,
         "PROP_MINUTES_GATE": PROP_MINUTES_GATE,
         "TEAM_CARRY_SHRINK_unchanged": P.TEAM_CARRY_SHRINK,
+        "odds_backed_markets": list(ODDS_BACKED_MARKETS),
+        "odds_missing_vectors": list(ODDS_MISSING_VECTORS),
         "count": len(rows),
         "lines": rows,
         "play_n": play_n,
+        "lean_n": lean_n,
         "suppressed_play_candidates": suppressed_play,
         "does_not": [
-            "PLAY / WATCH tags (dark)",
+            "PLAY / LEAN tags (dark)",
             "stake-eligible props",
             "second scorer / stub rates as SoT",
+            "fake Odds keys (PR/RA)",
             "fantasy board",
             "walking means to the book",
             "CFB/NFL",
             "Ch1/Ch2/Ch5 rematerialize",
+            "Ch3/Ch4 retune",
         ],
     }
 
@@ -365,10 +445,13 @@ def documentation() -> Dict[str, Any]:
         "PROP_PLAY_CAP_PER_SLATE": PROP_PLAY_CAP_PER_SLATE,
         "PROP_MINUTES_GATE": PROP_MINUTES_GATE,
         "markets": list(NBA_PROP_MARKETS),
+        "odds_missing_vectors": list(ODDS_MISSING_VECTORS),
         "reads": "PlayerProjection (Ch5)",
+        "edge": "PlayerProjection[market] - trusted_Best",
         "does_not": [
-            "emit PLAY",
+            "emit PLAY or LEAN",
             "rescore player means",
+            "guess missing Odds keys",
             "fantasy",
             "CFB/NFL",
         ],

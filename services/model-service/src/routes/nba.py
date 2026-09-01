@@ -657,7 +657,7 @@ def nba_props_board(
                           under_price
                         FROM player_prop_market_snapshots
                         WHERE sport_key IN ('basketball_nba', 'nba')
-                          AND market_key IN ('pts', 'reb', 'ast', 'threes')
+                          AND market_key IN ('pts', 'reb', 'ast', 'threes', 'pra')
                         ORDER BY player_id, player_name, market_key,
                                  captured_at DESC NULLS LAST
                         """
@@ -668,6 +668,7 @@ def nba_props_board(
                         "line": mr[3],
                         "over_price": mr[4],
                         "under_price": mr[5],
+                        "book_count": 1,
                     }
                     if mr[0]:
                         market_by_player[(str(mr[0]), str(mr[2] or ""))] = payload
@@ -684,7 +685,8 @@ def nba_props_board(
             team=team,
             limit=limit,
             market_by_player=market_by_player,
-            best_trusted=False,  # dark — no trusted Best PLAY path yet
+            best_trusted=True,
+            preseason=_is_nba_preseason(target),
         )
         lines = list(board.get("lines") or [])
         tag_filter = (tag or "").strip().upper() or None
@@ -720,7 +722,10 @@ def nba_props_board(
             "lines": lines,
             "ou_balance": balance,
             "play_n": play_n,
+            "lean_n": 0,
             "suppressed_play_candidates": board.get("suppressed_play_candidates"),
+            "odds_backed_markets": board.get("odds_backed_markets"),
+            "odds_missing_vectors": board.get("odds_missing_vectors"),
             "publish_posture": board_publish_posture(),
             "phase": "ch6_dark",
             "source": "season_engine_ch6_dark",
