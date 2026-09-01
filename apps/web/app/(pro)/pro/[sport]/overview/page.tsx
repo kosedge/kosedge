@@ -15,10 +15,7 @@ import {
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
 import { getSportGlance } from "@/lib/sport-overview";
-import {
-  SPORT_DESK_SUBTITLE,
-  SPORT_TAGLINE,
-} from "@/lib/sport-pro-nav";
+import { SPORT_DESK_SUBTITLE, SPORT_TAGLINE } from "@/lib/sport-pro-nav";
 
 const tonightGamesEmpty: Awaited<ReturnType<typeof getTonightGames>> = [];
 
@@ -46,24 +43,37 @@ export default async function SportOverviewPage({
   const edgeBoardHref = `/edge-board/${sportKey || "nfl"}`;
   const content = buildSportOverviewContent(sportKey, sportName);
   const desk = getSportDeskConfig(sportKey);
-  const glance = getSportGlance(sportKey);
-  const tonightGames = await Promise.race([
-    getTonightGames(sportKey),
-    new Promise<typeof tonightGamesEmpty>((resolve) =>
-      setTimeout(() => resolve(tonightGamesEmpty), 8_000),
-    ),
-  ]);
+  const glance = getSportGlance(sportKey) ?? [];
+  let tonightGames: typeof tonightGamesEmpty = tonightGamesEmpty;
+  try {
+    tonightGames = await Promise.race([
+      getTonightGames(sportKey),
+      new Promise<typeof tonightGamesEmpty>((resolve) =>
+        setTimeout(() => resolve(tonightGamesEmpty), 8_000),
+      ),
+    ]);
+    if (!Array.isArray(tonightGames)) tonightGames = tonightGamesEmpty;
+  } catch {
+    tonightGames = tonightGamesEmpty;
+  }
 
   const isWeekly = sportKey === "cfb" || sportKey === "nfl";
   const slateLabel = isWeekly ? "Weekly Slate" : "Daily Slate";
+  // NBA Daily Slate lives at /slate/today; bare /slate 404s — prefer Edge Board CTA.
+  const slateHref = sportKey === "nba" ? edgeBoardHref : `${base}/slate/today`;
+  const slateCtaLabel =
+    sportKey === "nba" ? "Open Edge Board" : `Open ${slateLabel}`;
 
   // Elevate slate above; drop empty props walls for college sports.
-  const gridSections = buildSportOverviewSections({
-    sportKey,
-    base,
-    edgeBoardHref,
-    content,
-  }).filter((section) => {
+  const gridSections = (
+    buildSportOverviewSections({
+      sportKey,
+      base,
+      edgeBoardHref,
+      content,
+    }) ?? []
+  ).filter((section) => {
+    if (!section?.title) return false;
     if (section.title === "Weekly Slate") return false;
     if (
       (sportKey === "ncaam" || sportKey === "cfb") &&
@@ -74,10 +84,12 @@ export default async function SportOverviewPage({
     return true;
   });
 
+  const deskCards = Array.isArray(desk?.cards) ? desk.cards : [];
+  const footerCards = Array.isArray(desk?.footerCards) ? desk.footerCards : [];
   const footerCols =
-    desk.footerCards.length >= 5
+    footerCards.length >= 5
       ? "sm:grid-cols-2 lg:grid-cols-3"
-      : desk.footerCards.length >= 3
+      : footerCards.length >= 3
         ? "sm:grid-cols-2 lg:grid-cols-3"
         : "sm:grid-cols-2";
 
@@ -106,10 +118,10 @@ export default async function SportOverviewPage({
               Open Live Edgeboard
             </Link>
             <Link
-              href={`${base}/slate/today`}
+              href={slateHref}
               className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
             >
-              Open {slateLabel}
+              {slateCtaLabel}
             </Link>
           </div>
         </div>
@@ -122,22 +134,28 @@ export default async function SportOverviewPage({
             At a Glance
           </h2>
         </div>
-        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          {glance.map((item) => (
-            <Link
-              key={item.title}
-              href={item.href}
-              className="min-h-11 rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50"
-            >
-              <h3 className="text-sm font-semibold text-kos-gold">
-                {item.title}
-              </h3>
-              <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
-                {item.body}
-              </p>
-            </Link>
-          ))}
-        </div>
+        {glance.length > 0 ? (
+          <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {glance.map((item) => (
+              <Link
+                key={item.title}
+                href={item.href}
+                className="min-h-11 rounded-xl border border-white/10 bg-black/35 px-4 py-4 transition hover:border-kos-gold/40 hover:bg-black/50"
+              >
+                <h3 className="text-sm font-semibold text-kos-gold">
+                  {item.title}
+                </h3>
+                <p className="mt-1.5 text-xs leading-relaxed text-kos-text/70">
+                  {item.body}
+                </p>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-kos-text/60">
+            Desk links will appear here when this sport hub is wired.
+          </p>
+        )}
       </section>
 
       {/* Elevated Slate */}
@@ -148,26 +166,36 @@ export default async function SportOverviewPage({
               Primary research home
             </p>
             <h2 className="mt-2 text-xl font-semibold tracking-tight text-kos-text">
-              {slateLabel}
+              {sportKey === "nba" ? "Edge Board slate" : slateLabel}
             </h2>
             <p className="mt-2 text-sm text-kos-text/75">
-              Matchup cards and slate context — the desk home before you jump to
-              Edge Board. Times in ET.
+              {sportKey === "nba"
+                ? "Matchup cards from the live Edge Board (Ch4 KEI). Times in ET."
+                : "Matchup cards and slate context — the desk home before you jump to Edge Board. Times in ET."}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
             <Link
-              href={`${base}/slate/today`}
+              href={slateHref}
               className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2 text-sm font-semibold text-kos-gold hover:border-kos-gold/55 inline-flex items-center"
             >
-              Open {slateLabel} →
+              {slateCtaLabel} →
             </Link>
-            <Link
-              href={`${base}/teams`}
-              className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/35 inline-flex items-center"
-            >
-              Team Research
-            </Link>
+            {sportKey === "nba" ? (
+              <Link
+                href="/pro/nba/fantasy"
+                className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/35 inline-flex items-center"
+              >
+                Fantasy
+              </Link>
+            ) : (
+              <Link
+                href={`${base}/teams`}
+                className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/35 inline-flex items-center"
+              >
+                Team Research
+              </Link>
+            )}
           </div>
         </div>
         {tonightGames.length > 0 ? (
@@ -190,22 +218,31 @@ export default async function SportOverviewPage({
             Betting Desk
           </h2>
           <p className="mt-1 text-sm text-kos-text/70">
-            {desk.pathLabel} — research surfaces, not pick sheets.
+            {desk?.pathLabel ?? "Research path"} — research surfaces, not pick
+            sheets.
           </p>
         </div>
-        <div className="grid gap-4 sm:grid-cols-3">
-          {desk.cards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className={deskCardClassName(card.accent, card.status)}
-            >
-              <h3 className={deskTitleClass(card.accent)}>{card.title}</h3>
-              <p className="mt-2 text-sm text-kos-text/75">{card.description}</p>
-              <span className={deskCtaClass(card.accent)}>{card.cta}</span>
-            </Link>
-          ))}
-        </div>
+        {deskCards.length > 0 ? (
+          <div className="grid gap-4 sm:grid-cols-3">
+            {deskCards.map((card) => (
+              <Link
+                key={card.title}
+                href={card.href}
+                className={deskCardClassName(card.accent, card.status)}
+              >
+                <h3 className={deskTitleClass(card.accent)}>{card.title}</h3>
+                <p className="mt-2 text-sm text-kos-text/75">
+                  {card.description}
+                </p>
+                <span className={deskCtaClass(card.accent)}>{card.cta}</span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-kos-text/60">
+            No desk cards for this sport yet.
+          </p>
+        )}
       </section>
 
       {/* Team Intel / Governance (and Props only when supported) */}
@@ -215,7 +252,7 @@ export default async function SportOverviewPage({
             key={section.title}
             title={section.title}
             subtitle={section.subtitle}
-            links={section.links}
+            links={section.links ?? []}
           />
         ))}
         <Link
@@ -237,19 +274,31 @@ export default async function SportOverviewPage({
         <p className="mt-1 text-sm text-kos-text/65">
           Power ratings, odds compare, execution, and sport-specific desks.
         </p>
-        <div className={`mt-4 grid gap-4 ${footerCols}`}>
-          {desk.footerCards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className={footerCardClassName(card.accent)}
-            >
-              <h3 className={footerTitleClassName(card.accent)}>{card.title}</h3>
-              <p className="mt-2 text-sm text-kos-text/80">{card.description}</p>
-              <span className={footerCtaClassName(card.accent)}>{card.cta}</span>
-            </Link>
-          ))}
-        </div>
+        {footerCards.length > 0 ? (
+          <div className={`mt-4 grid gap-4 ${footerCols}`}>
+            {footerCards.map((card) => (
+              <Link
+                key={card.title}
+                href={card.href}
+                className={footerCardClassName(card.accent)}
+              >
+                <h3 className={footerTitleClassName(card.accent)}>
+                  {card.title}
+                </h3>
+                <p className="mt-2 text-sm text-kos-text/80">
+                  {card.description}
+                </p>
+                <span className={footerCtaClassName(card.accent)}>
+                  {card.cta}
+                </span>
+              </Link>
+            ))}
+          </div>
+        ) : (
+          <p className="mt-4 text-sm text-kos-text/60">
+            No research-tool cards for this sport yet.
+          </p>
+        )}
       </section>
     </main>
   );

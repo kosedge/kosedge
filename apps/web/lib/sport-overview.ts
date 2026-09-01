@@ -57,24 +57,24 @@ const GLANCE: Record<string, GlanceItem[]> = {
   ],
   nba: [
     {
-      href: "/pro/nba/fair-lines",
-      title: "Model vs Market",
-      body: "Spreads, totals, and MLs with pace-aware baselines.",
+      href: "/edge-board/nba",
+      title: "Edge Board",
+      body: "Open vs Best with Ch4 KEI — tags PASS until trusted Best clears.",
     },
     {
-      href: "/pro/nba/injuries",
-      title: "Availability",
-      body: "Injury and rest context that reshapes usage and pricing.",
+      href: "/pro/nba/fantasy",
+      title: "Fantasy",
+      body: "Ch5 PlayerProjection means scored into kos_default_points.",
     },
     {
       href: "/pro/nba/props",
-      title: "Props Research",
-      body: "Player markets after the game frame is set.",
+      title: "Props (dark)",
+      body: "Proj vs line only — zero PLAY / LEAN until a tag PR.",
     },
     {
-      href: "/pro/nba/teams",
-      title: "Team Research",
-      body: "Club hubs with pace, rest, and matchup angles.",
+      href: "/pro/nba/fair-lines",
+      title: "Fair Lines",
+      body: "Team KEI baselines beside the market board.",
     },
   ],
   mlb: [
