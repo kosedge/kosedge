@@ -1,4 +1,4 @@
-"""WNBA season engine package (Ch1–Ch6 dark props)."""
+"""WNBA season engine package (Ch1–Ch7 fantasy)."""
 
 from src.services.wnba_season_engine.priors import (
     ENGINE_VERSION,
@@ -60,6 +60,13 @@ from src.services.wnba_season_engine.wnba_props import (
     build_dark_props_board,
     documentation as props_documentation,
 )
+from src.services.wnba_season_engine.wnba_fantasy import (
+    FANTASY_VERSION,
+    SCORING_MAP,
+    build_fantasy_board,
+    fantasy_points_from_projection,
+    documentation as fantasy_documentation,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -108,4 +115,9 @@ __all__ = [
     "PROPS_VERSION",
     "build_dark_props_board",
     "props_documentation",
+    "FANTASY_VERSION",
+    "SCORING_MAP",
+    "build_fantasy_board",
+    "fantasy_points_from_projection",
+    "fantasy_documentation",
 ]
