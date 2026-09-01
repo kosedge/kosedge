@@ -32,12 +32,12 @@ No wrapper. No scraper. No ratings / prior JSON. No code edits to NBA / WNBA / C
 
 ## Register only (do not code)
 
-| Name | Value |
-| --- | --- |
-| `ODDS_SPORT_KEY` | `icehockey_nhl` |
-| `PLAYER_YEAR_WEIGHTS` | `0.20 / 0.30 / 0.50` |
-| `PROP_PLAY_CAP_PER_SLATE` | `6` |
-| `STARTER_GATE` | unknown starter → **no goalie PLAY**; total sized down |
+| Name                      | Value                                                  |
+| ------------------------- | ------------------------------------------------------ |
+| `ODDS_SPORT_KEY`          | `icehockey_nhl`                                        |
+| `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50`                                   |
+| `PROP_PLAY_CAP_PER_SLATE` | `6`                                                    |
+| `STARTER_GATE`            | unknown starter → **no goalie PLAY**; total sized down |
 
 ---
 
@@ -55,11 +55,11 @@ No wrapper. No scraper. No ratings / prior JSON. No code edits to NBA / WNBA / C
 
 ## Next PR (from audit)
 
-| Pick | Meaning |
-| --- | --- |
+| Pick  | Meaning                                                               |
+| ----- | --------------------------------------------------------------------- |
 | **A** | Market + stats exist → Chapter 1 NHL prior (own shrink, own filename) |
-| **B** | No stats path → fetcher, then Ch1 |
-| **C** | A hidden KEINHL leftover exists → document, don’t blend |
+| **B** | No stats path → fetcher, then Ch1                                     |
+| **C** | A hidden KEINHL leftover exists → document, don’t blend               |
 
 **Written pick:** **B** — see audit § Decision.
 
