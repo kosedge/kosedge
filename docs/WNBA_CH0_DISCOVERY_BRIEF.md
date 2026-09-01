@@ -3,7 +3,7 @@
 **Phase:** Audit. **No** pack, **no** tags, **no** new KEI emit.  
 **As of:** `2026-09-01` (midseason — RS ends Sep 24; playoffs Sep 27)  
 **Companion:** [`docs/WNBA_CH0_AUDIT.md`](./WNBA_CH0_AUDIT.md)  
-**Leave alone:** NBA v0.1 · CFB · NFL  
+**Leave alone:** NBA v0.1 · CFB · NFL
 
 Do **not** copy the NBA pack. Own shrink, own filename when Ch1 starts.
 
@@ -28,13 +28,13 @@ No wrapper. No scraper. No ratings / prior JSON. No code edits to NBA / CFB / NF
 
 ## Register only (do not code)
 
-| Name                      | Value                                      |
-| ------------------------- | ------------------------------------------ |
-| `MINUTE_GRID_SUM`         | `200` (40-min × 5)                         |
-| `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50` (2024 / 2025 / 2026) |
+| Name                      | Value                                                    |
+| ------------------------- | -------------------------------------------------------- |
+| `MINUTE_GRID_SUM`         | `200` (40-min × 5)                                       |
+| `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50` (2024 / 2025 / 2026)                |
 | `SITUATION_COEFFS`        | paper-sim on **WNBA** points — **not** NBA `+2.0 / −1.5` |
-| `PROP_PLAY_CAP_PER_SLATE` | `4`                                        |
-| `ODDS_SPORT_KEY`          | `basketball_wnba`                          |
+| `PROP_PLAY_CAP_PER_SLATE` | `4`                                                      |
+| `ODDS_SPORT_KEY`          | `basketball_wnba`                                        |
 
 ---
 
@@ -51,10 +51,10 @@ No wrapper. No scraper. No ratings / prior JSON. No code edits to NBA / CFB / NF
 
 ## Next PR (from audit)
 
-| Pick  | Meaning                                                              |
-| ----- | -------------------------------------------------------------------- |
-| **A** | Market + stats exist → Chapter 1 WNBA prior (own shrink, own file) |
-| **B** | No stats path → fetcher, then Ch1                                    |
+| Pick  | Meaning                                                                 |
+| ----- | ----------------------------------------------------------------------- |
+| **A** | Market + stats exist → Chapter 1 WNBA prior (own shrink, own file)      |
+| **B** | No stats path → fetcher, then Ch1                                       |
 | **C** | Board KEI is an unknown leftover → document, replace later, don’t blend |
 
 **Written pick:** **A** — see audit § Decision.
