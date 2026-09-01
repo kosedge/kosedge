@@ -1,4 +1,4 @@
-"""WNBA season engine package (Ch1–Ch5; Ch4 team KEI)."""
+"""WNBA season engine package (Ch1–Ch6 dark props)."""
 
 from src.services.wnba_season_engine.priors import (
     ENGINE_VERSION,
@@ -55,6 +55,11 @@ from src.services.wnba_season_engine.wnba_kei import (
     load_kei_pack,
     tag_from_edge,
 )
+from src.services.wnba_season_engine.wnba_props import (
+    PROPS_VERSION,
+    build_dark_props_board,
+    documentation as props_documentation,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -100,4 +105,7 @@ __all__ = [
     "load_kei_pack",
     "tag_from_edge",
     "kei_documentation",
+    "PROPS_VERSION",
+    "build_dark_props_board",
+    "props_documentation",
 ]

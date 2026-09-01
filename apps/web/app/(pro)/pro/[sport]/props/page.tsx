@@ -15,7 +15,7 @@ import {
 const SPORT_PROPS_COPY: Record<string, string> = {
   nba: "NBA player props from PlayerProjection (Ch5) vs trusted Best. Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.",
   nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
-  wnba: "WNBA player props (pts / reb / ast / threes) from usage stubs + team pace/ORtg. Research only — role-collapse Under refusal; never stake-eligible.",
+  wnba: "WNBA player props from PlayerProjection (Ch5) vs trusted Best. Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN. Odds-backed pts/reb/ast/threes only.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
   cfb: "College football props remain data-pending for soft launch.",
   ncaam: "College basketball props remain data-pending for soft launch.",
@@ -74,7 +74,7 @@ export default async function PropsPage({
           {sportKey === "nba"
             ? "NBA props dark board (Ch6)"
             : sportKey === "wnba"
-              ? "WNBA props research board"
+              ? "WNBA props dark board (Ch6)"
               : propsEnabled
                 ? "Props board pending"
                 : "Coming soon"}
@@ -176,20 +176,14 @@ export default async function PropsPage({
               {wnbaBoard.error
                 ? `Board unavailable: ${wnbaBoard.error}`
                 : wnbaBoard.count > 0
-                  ? `${wnbaBoard.count} prop rows · ${wnbaBoard.modelVersion} · ${wnbaBoard.workerBuildId || "canary"} · research only (no stake tags)`
+                  ? `${wnbaBoard.count} prop rows · ${wnbaBoard.modelVersion} · dark (zero PLAY / LEAN) · PlayerProjection means`
                   : wnbaBoard.message ||
-                    "No prop edges materialized yet — bootstrap Phase 3 on model-service."}
+                    "No Ch6 dark prop rows yet — PlayerProjection pack required."}
             </p>
-            {wnbaBoard.ouBalance ? (
+            {wnbaBoard.phase === "ch6_dark" || wnbaBoard.darkOnly ? (
               <p className="text-xs text-kos-text/50">
-                PLAY balance: {wnbaBoard.ouBalance.play_over ?? 0} Over /{" "}
-                {wnbaBoard.ouBalance.play_under ?? 0} Under
-                {wnbaBoard.ouBalance.play_under_pct != null
-                  ? ` (${Math.round(wnbaBoard.ouBalance.play_under_pct * 100)}% Under)`
-                  : ""}
-                {wnbaBoard.ouBalance.balanced === false
-                  ? " · imbalance flag"
-                  : ""}
+                Tags: PASS only · Best cleared when untrusted · edge = proj −
+                Best · PRA/PR/RA missing (Odds has no key)
               </p>
             ) : null}
             {wnbaBoard.lines.length > 0 ? (
@@ -199,8 +193,10 @@ export default async function PropsPage({
                     <tr>
                       <th className="px-3 py-2">Player</th>
                       <th className="px-3 py-2">Mkt</th>
-                      <th className="px-3 py-2">Line</th>
-                      <th className="px-3 py-2">Model</th>
+                      <th className="px-3 py-2">Proj</th>
+                      <th className="px-3 py-2">Best</th>
+                      <th className="px-3 py-2">Edge</th>
+                      <th className="px-3 py-2">σ</th>
                       <th className="px-3 py-2">Tag</th>
                     </tr>
                   </thead>
@@ -221,20 +217,22 @@ export default async function PropsPage({
                         <td className="px-3 py-2 uppercase text-kos-text/70">
                           {row.marketKey}
                         </td>
-                        <td className="px-3 py-2 text-kos-text/70">
-                          {row.line ?? "—"}
-                        </td>
-                        <td className="px-3 py-2 text-kos-text/80">
+                        <td className="px-3 py-2 tabular-nums text-kos-text/80">
                           {row.modelMean?.toFixed(1) ?? "—"}
                         </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                          {row.best != null ? row.best.toFixed(1) : "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                          {row.edge != null
+                            ? `${row.edge > 0 ? "+" : ""}${row.edge.toFixed(1)}`
+                            : "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/50">
+                          {row.modelStd?.toFixed(1) ?? "—"}
+                        </td>
                         <td className="px-3 py-2">
-                          <span className="text-kos-gold">{row.tag}</span>
-                          {row.tagSide ? (
-                            <span className="text-kos-text/45">
-                              {" "}
-                              {row.tagSide}
-                            </span>
-                          ) : null}
+                          <span className="text-kos-gold">PASS</span>
                         </td>
                       </tr>
                     ))}
