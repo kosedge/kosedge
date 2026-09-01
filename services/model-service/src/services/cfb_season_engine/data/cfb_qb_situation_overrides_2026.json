@@ -30,9 +30,9 @@
       "is_true_freshman": false,
       "starter_name": "Ashton Daniels",
       "starter_key": "4838679",
-      "unconfirmed_starter": true,
-      "reason": "Ashton Daniels named starter 2026-04-21 and is on the ESPN roster. Pack heuristic ranked Dean DeNobile (347 Lafayette att) over Daniels (119). Name aligned to Daniels; situation stays open/high-σ until multi-week confirmation — not incumbent.",
-      "evidence": "roster-refresh conflict table 2026-08-12; ESPN roster contains Daniels (portal=true)"
+      "unconfirmed_starter": false,
+      "reason": "Ashton Daniels named starter 2026-04-21 and is on the ESPN roster. Pack heuristic ranked Dean DeNobile (347 Lafayette att) over Daniels (119). W1 confirmation join locks identity to Daniels; class stays open/high-σ (not incumbent) — talent still pack-composite until a later authorized rematerialize.",
+      "evidence": "roster-refresh conflict table 2026-08-12; W1 confirm book 2026-09-01; ESPN roster contains Daniels (portal=true)"
     },
     "LSU": {
       "qb_class": "open_competition",
@@ -41,9 +41,9 @@
       "is_true_freshman": false,
       "starter_name": "Sam Leavitt",
       "starter_key": "5078810",
-      "unconfirmed_starter": true,
-      "reason": "Sam Leavitt is the public QB1 and is on the ESPN roster. Pack heuristic ranked Landen Clark (277 Elon att) over Leavitt (239). Name aligned to Leavitt; situation stays open/high-σ until multi-week confirmation — not incumbent.",
-      "evidence": "roster-refresh conflict table 2026-08-12; ESPN roster contains Leavitt (portal=true)"
+      "unconfirmed_starter": false,
+      "reason": "Sam Leavitt is the public QB1 and is on the ESPN roster. Pack heuristic ranked Landen Clark (277 Elon att) over Leavitt (239). W1 confirmation join locks identity to Leavitt; class stays open/high-σ (not incumbent) — talent still pack-composite until a later authorized rematerialize.",
+      "evidence": "roster-refresh conflict table 2026-08-12; W1 confirm book 2026-09-01; ESPN roster contains Leavitt (portal=true)"
     },
     "ALA": {
       "qb_class": "open_competition",

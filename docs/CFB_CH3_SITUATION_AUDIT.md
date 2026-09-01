@@ -76,7 +76,8 @@ If not, the HC lever is too thin/curated to be Chapter 3’s global situation le
 ### Does 1C–1E consume W1 depth charts?
 
 - **Offline:** heuristic ESPN roster depth (snapshot notes: camp battles unresolved; official depth charts still listed as a gap).
-- **Runtime compose:** **no** re-read of `depth[]` / playing-time shares — only packaged `qb` / roster / position groups.
+- **Runtime compose:** **no** re-read of live `depth[]` / playing-time shares — only packaged `qb` / roster / position groups.
+- **W1 confirmation join (post–Phase 0):** week-scoped identity SoT `qb_confirmed_starters` applied **after** expert override on the **same** path (`loaders` / preseason prior). Not a second QB knob. See [`CFB_CH3_CONFIRMATION_JOIN_AUDIT.md`](./CFB_CH3_CONFIRMATION_JOIN_AUDIT.md).
 
 ### What it already moves
 
