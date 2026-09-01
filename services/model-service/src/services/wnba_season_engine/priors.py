@@ -26,8 +26,14 @@ MINUTE_GRID_SUM = 200  # 40-min × 5 — not NBA 240
 # Cap |ch1_net − player_net| when rebasing. Ch1 shrink is residual, not a second prior.
 WNBA_TEAM_REBASE_RESIDUAL_CAP = 3.0
 
+# Chapter 3 — situation Δ on team implied_ppg. Same magnitude as residual so
+# situation ≠ a second prior. Do not retune Ch1 shrink or Ch2 residual for Ch3.
+SITUATION_TEAM_PTS_CAP = 3.0
+
 PROP_PLAY_CAP_PER_SLATE = 4
 ODDS_SPORT_KEY = "basketball_wnba"
 
 # Implied PPG′ neighborhood for Ch2 scorecard (WNBA, not NBA 111–120).
 PPG_BAND = (75.0, 91.0)
+# After situation Δ (±cap), keep PPG′ in a slightly wider WNBA-sane band.
+PPG_BAND_AFTER_SITUATION = (72.0, 94.0)

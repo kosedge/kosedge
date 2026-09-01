@@ -1,0 +1,122 @@
+{
+  "engine_version": "wnba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "season_schedule": "2025",
+  "schedule_note": "Paper-sim on 2025 RS (gid 102*). 2026 CDN schedule 403 in build env; coeffs are WNBA-point, not copied from nba_situation_coeffs_v0.",
+  "n_team_games": 572,
+  "SITUATION_TEAM_PTS_CAP": 3.0,
+  "grids": {
+    "home": [
+      1.5,
+      2.0,
+      2.25,
+      2.5
+    ],
+    "b2b": [
+      -1.0,
+      -1.25,
+      -1.5,
+      -2.0
+    ],
+    "travel": [
+      -0.5,
+      -0.75,
+      -1.0,
+      -1.25
+    ],
+    "altitude": [
+      0.5,
+      0.75,
+      1.0
+    ]
+  },
+  "travel_thresholds": {
+    "miles": 1000.0,
+    "tz": 2
+  },
+  "chosen": {
+    "home": 1.5,
+    "b2b": -1.5,
+    "travel": -0.5,
+    "altitude": 0.5
+  },
+  "top5": [
+    {
+      "coeffs": {
+        "home": 1.5,
+        "b2b": -1.5,
+        "travel": -0.5,
+        "altitude": 0.5
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.7684,
+      "mean_signed_raw": 0.4956,
+      "max_abs_raw": 2.0,
+      "score": 0.216871
+    },
+    {
+      "coeffs": {
+        "home": 1.5,
+        "b2b": -1.5,
+        "travel": -0.5,
+        "altitude": 0.75
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.7684,
+      "mean_signed_raw": 0.4956,
+      "max_abs_raw": 2.0,
+      "score": 0.216871
+    },
+    {
+      "coeffs": {
+        "home": 1.5,
+        "b2b": -1.5,
+        "travel": -0.5,
+        "altitude": 1.0
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.7684,
+      "mean_signed_raw": 0.4956,
+      "max_abs_raw": 2.0,
+      "score": 0.216871
+    },
+    {
+      "coeffs": {
+        "home": 1.5,
+        "b2b": -1.5,
+        "travel": -0.75,
+        "altitude": 0.5
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.7815,
+      "mean_signed_raw": 0.4301,
+      "max_abs_raw": 2.25,
+      "score": 0.216871
+    },
+    {
+      "coeffs": {
+        "home": 1.5,
+        "b2b": -1.5,
+        "travel": -0.75,
+        "altitude": 0.75
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.7815,
+      "mean_signed_raw": 0.4301,
+      "max_abs_raw": 2.25,
+      "score": 0.216871
+    }
+  ],
+  "prevalence": {
+    "home": 0.5,
+    "b2b": 0.08216783216783216,
+    "travel": 0.26223776223776224,
+    "altitude": 0.0,
+    "three_in_four": 0.06118881118881119
+  },
+  "ppg_adj_range": [
+    81.55,
+    92.1
+  ],
+  "ortg_drtg_note": "Situation \u0394 is team points on the Ch2 implied_ppg line; ORtg/DRtg remain Ch2 rebased; \u0394 does not invent a second net prior."
+}
