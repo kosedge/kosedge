@@ -85,6 +85,6 @@ def documentation() -> Dict[str, Any]:
             "change TEAM_CARRY_SHRINK",
             "situation / B2B (Ch3)",
             "DARKO/EPM/CTG",
-            "PlayerProjection object (Ch5)",
+            "props desk / Edge tags (Ch6)",
         ],
     }
