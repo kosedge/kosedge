@@ -10,4 +10,5 @@ def test_default_research_only() -> None:
 def test_board_posture() -> None:
     p = board_publish_posture(n_with_close_lines=0, ats=None)
     assert p["mainlines"] == "research_only"
-    assert p["props"] == "research_only"
+    assert p["props"] == "dark"
+    assert p["props_dark_only"] is True

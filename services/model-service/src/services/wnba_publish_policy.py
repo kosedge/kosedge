@@ -15,7 +15,7 @@ Market = Literal["spread", "total"]
 
 BREAKEVEN_ATS = 0.5238
 POLICY_VERSION = "wnba_mainlines_ch4_kei_v1"
-PROPS_POLICY_VERSION = "wnba_props_phase3_research_v1"
+PROPS_POLICY_VERSION = "wnba_props_ch6_dark_v1"
 
 # Chapter 4 team KEI tags vs trusted Best (pts).
 SPREAD_PLAY_MIN = 4.0
@@ -134,7 +134,9 @@ def board_publish_posture(
         "policy_version": POLICY_VERSION,
         "props_policy_version": PROPS_POLICY_VERSION,
         "mainlines": mainlines,
-        "props": "research_only",
+        # Ch6 dark: PlayerProjection desk, proj vs line, zero PLAY.
+        "props": "dark",
+        "props_dark_only": True,
         "force_research_only": mainlines == "research_only",
         "n_with_close_lines": n_with_close_lines,
         "ats": ats,
