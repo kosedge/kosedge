@@ -134,7 +134,10 @@ export async function resolveKeiGames(
 
   if (sport === "wnba") {
     try {
-      const board = await fetchWnbaFairLines({ daysAhead: 5 });
+      const board = await fetchWnbaFairLines({
+        daysAhead: 30,
+        source: "auto",
+      });
       if (board.lines.length > 0) {
         return keiGamesFromWnbaFairLines(board.lines);
       }

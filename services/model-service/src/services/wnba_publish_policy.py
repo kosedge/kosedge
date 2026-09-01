@@ -1,7 +1,8 @@
-"""WNBA sides/totals publish policy (Phase 2+) + props posture (Phase 3).
+"""WNBA sides/totals publish policy (Ch4 team KEI) + props posture (Phase 3).
 
-Default tag is PASS / research_only until walkforward vs *real closes*
-clears evidence floors. Props board is research_only (never stake-eligible).
+Chapter 4 tags vs trusted Best: LEAN ≥ 2.5 / PLAY ≥ 4.0.
+Default force_research_only until walkforward vs *real closes* clears floors.
+Props board stays research_only (never stake-eligible). Ch6 dark is later.
 """
 
 from __future__ import annotations
@@ -13,18 +14,20 @@ Tag = Literal["PLAY", "LEAN", "PASS"]
 Market = Literal["spread", "total"]
 
 BREAKEVEN_ATS = 0.5238
-POLICY_VERSION = "wnba_mainlines_phase2_research_v1"
+POLICY_VERSION = "wnba_mainlines_ch4_kei_v1"
 PROPS_POLICY_VERSION = "wnba_props_phase3_research_v1"
 
-SPREAD_PLAY_MIN = 2.5
-SPREAD_PLAY_MAX = 7.5
-SPREAD_LEAN_MIN = 1.5
-SPREAD_LEAN_ENABLED = False
+# Chapter 4 team KEI tags vs trusted Best (pts).
+SPREAD_PLAY_MIN = 4.0
+SPREAD_PLAY_MAX = 99.0
+SPREAD_LEAN_MIN = 2.5
+SPREAD_LEAN_ENABLED = True
 
-TOTAL_PLAY_MIN = 3.5
-TOTAL_PLAY_MAX = 9.0
-TOTAL_PLAY_ENABLED = False
-TOTAL_LEAN_ENABLED = False
+TOTAL_PLAY_MIN = 4.0
+TOTAL_PLAY_MAX = 99.0
+TOTAL_PLAY_ENABLED = True
+TOTAL_LEAN_ENABLED = True
+TOTAL_LEAN_MIN = 2.5
 
 MIN_CLOSE_JOIN_N = 30  # shorter season than NBA
 MIN_SEGMENT_N = 45
@@ -55,15 +58,15 @@ DEFAULT_SEGMENT_EVIDENCE: Dict[str, WnbaSegmentEvidence] = {
 def candidate_tag(market: Market, abs_edge: float) -> Tag:
     e = abs(float(abs_edge))
     if market == "spread":
-        if SPREAD_PLAY_MIN <= e < SPREAD_PLAY_MAX:
+        if e >= SPREAD_PLAY_MIN:
             return "PLAY"
         if SPREAD_LEAN_ENABLED and e >= SPREAD_LEAN_MIN:
             return "LEAN"
         return "PASS"
-    if not TOTAL_PLAY_ENABLED:
-        return "PASS"
-    if TOTAL_PLAY_MIN <= e < TOTAL_PLAY_MAX:
+    if e >= TOTAL_PLAY_MIN and TOTAL_PLAY_ENABLED:
         return "PLAY"
+    if TOTAL_LEAN_ENABLED and e >= TOTAL_LEAN_MIN:
+        return "LEAN"
     return "PASS"
 
 
@@ -74,7 +77,18 @@ def publish_tag(
     market_line: Optional[float],
     evidence: Optional[WnbaSegmentEvidence] = None,
     force_research_only: bool = True,
+    already_final: bool = False,
 ) -> Dict[str, Any]:
+    if already_final:
+        return {
+            "tag": "PASS",
+            "market": market,
+            "policy_version": POLICY_VERSION,
+            "reason": "already_final",
+            "abs_edge": None
+            if model_line is None or market_line is None
+            else abs(float(model_line) - float(market_line)),
+        }
     if force_research_only or model_line is None or market_line is None:
         return {
             "tag": "PASS",

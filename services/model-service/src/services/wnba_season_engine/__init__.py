@@ -1,4 +1,4 @@
-"""WNBA season engine package (Ch1–Ch2 + Ch5 PlayerProjection)."""
+"""WNBA season engine package (Ch1–Ch5; Ch4 team KEI)."""
 
 from src.services.wnba_season_engine.priors import (
     ENGINE_VERSION,
@@ -7,7 +7,9 @@ from src.services.wnba_season_engine.priors import (
     PAPER_SIM_S_SET,
     PLAYER_YEAR_WEIGHTS,
     PPG_BAND,
+    PPG_BAND_AFTER_SITUATION,
     PROP_PLAY_CAP_PER_SLATE,
+    SITUATION_TEAM_PTS_CAP,
     WNBA_TEAM_CARRY_SHRINK,
     WNBA_TEAM_REBASE_RESIDUAL_CAP,
     YTD_SEASON,
@@ -34,19 +36,43 @@ from src.services.wnba_season_engine.player_projection import (
     load_player_projection_pack,
     team_pts_identity,
 )
+from src.services.wnba_season_engine.situation import (
+    apply_situation_player_projections,
+    apply_situation_team_line,
+    documentation as situation_documentation,
+    load_paper_sim,
+    load_schedule_pack,
+    load_situation_coeffs,
+    load_venue_flags,
+    situation_delta_pts,
+)
+from src.services.wnba_season_engine.wnba_kei import (
+    KEI_VERSION,
+    LEAN_EDGE_PTS,
+    PLAY_EDGE_PTS,
+    compute_game_kei,
+    documentation as kei_documentation,
+    load_kei_pack,
+    tag_from_edge,
+)
 
 __all__ = [
     "ENGINE_VERSION",
     "WNBA_TEAM_CARRY_SHRINK",
     "WNBA_TEAM_REBASE_RESIDUAL_CAP",
+    "SITUATION_TEAM_PTS_CAP",
     "YTD_SEASON",
     "PAPER_SIM_S_SET",
     "PLAYER_YEAR_WEIGHTS",
     "MINUTE_GRID_SUM",
     "PPG_BAND",
+    "PPG_BAND_AFTER_SITUATION",
     "PROP_PLAY_CAP_PER_SLATE",
     "ODDS_SPORT_KEY",
     "VECTOR_KEYS",
+    "KEI_VERSION",
+    "PLAY_EDGE_PTS",
+    "LEAN_EDGE_PTS",
     "apply_wnba_team_carry_shrink",
     "get_team_prior",
     "load_team_prior_pack",
@@ -62,4 +88,16 @@ __all__ = [
     "load_player_projection_pack",
     "team_pts_identity",
     "player_projection_documentation",
+    "apply_situation_team_line",
+    "apply_situation_player_projections",
+    "situation_delta_pts",
+    "load_situation_coeffs",
+    "load_schedule_pack",
+    "load_venue_flags",
+    "load_paper_sim",
+    "situation_documentation",
+    "compute_game_kei",
+    "load_kei_pack",
+    "tag_from_edge",
+    "kei_documentation",
 ]

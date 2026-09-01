@@ -26,10 +26,87 @@ from src.services.wnba_possession_simulator import (
 )
 from src.services.wnba_publish_policy import board_publish_posture, publish_tag
 from src.services.wnba_schema import ensure_wnba_model_tables
+from src.services.wnba_season_engine.wnba_kei import (
+    FORBIDDEN_LEFTOVER_FAIR_LINE_GAME_IDS,
+    KEI_VERSION,
+    kei_lines_for_dates,
+    load_kei_pack,
+)
 
 router = APIRouter(prefix="/wnba", tags=["wnba-model"])
 log = logging.getLogger(__name__)
 MODEL_STATE_KEY = "wnba_active_model"
+
+
+def _is_wnba_regular_season(d: date) -> bool:
+    return d.month in {5, 6, 7, 8, 9, 10}
+
+
+def _kei_pack_as_fair_lines(
+    *,
+    target_date: date,
+    days_ahead: int,
+) -> List[Dict[str, Any]]:
+    """Map Chapter 4 KEI pack rows into the fair-lines board shape.
+
+    Always drops Aug-1 leftover fair-line ids from the live KEI column.
+    """
+    rows = kei_lines_for_dates(
+        game_date=target_date.isoformat(),
+        days_ahead=days_ahead,
+        limit=80,
+        include_live_remainder=True,
+    )
+    out: List[Dict[str, Any]] = []
+    for g in rows:
+        gid = str(g.get("game_id") or "")
+        if gid in FORBIDDEN_LEFTOVER_FAIR_LINE_GAME_IDS:
+            continue
+        status = str(g.get("status") or "")
+        already_final = status.lower() == "final"
+        spread = _to_float(g.get("kei_spread_home"))
+        total = _to_float(g.get("kei_total"))
+        wp = _to_float(g.get("kei_home_win_prob"))
+        out.append(
+            {
+                "game_id": g.get("game_id"),
+                "game_date": g.get("date") or target_date,
+                "start_time": None,
+                "home_team": g.get("home_team") or g.get("home"),
+                "away_team": g.get("away_team") or g.get("away"),
+                "home_abbr": g.get("home"),
+                "away_abbr": g.get("away"),
+                "home_win_prob": wp,
+                "fair_home_ml": None,
+                "total_mean": total,
+                "fair_total": total,
+                "fair_spread_home": spread,
+                "home_cover_prob": wp,
+                "margin_mean": None if spread is None else -spread,
+                "worker_build_id": KEI_VERSION,
+                "projected_at": None,
+                "kei_version": KEI_VERSION,
+                "source": "season_engine_ch4",
+                "status": status or None,
+                "publish": {
+                    "spread": publish_tag(
+                        "spread",
+                        model_line=spread,
+                        market_line=None,
+                        force_research_only=True,
+                        already_final=already_final,
+                    ),
+                    "total": publish_tag(
+                        "total",
+                        model_line=total,
+                        market_line=None,
+                        force_research_only=True,
+                        already_final=already_final,
+                    ),
+                },
+            }
+        )
+    return out
 
 
 def _to_float(v: Any) -> Optional[float]:
@@ -254,13 +331,47 @@ def wnba_health() -> Dict[str, Any]:
 def wnba_fair_lines(
     game_date: Optional[date] = Query(None, description="UTC date; defaults to today"),
     model_version: Optional[str] = Query(None),
-    days_ahead: int = Query(3, ge=0, le=14),
+    days_ahead: int = Query(3, ge=0, le=60),
+    source: str = Query(
+        "auto",
+        description="auto | season_engine (Ch4 KEI) | possession_sim",
+    ),
 ) -> Dict[str, Any]:
-    """Desk fair-lines board: ML, spread, total from latest possession sims.
+    """Desk fair-lines board.
 
-    Empty slate is honest in offseason — returns count=0 with slate_status label,
-    never invents prices.
+    Chapter 4: `source=season_engine` / `auto` serves team KEI and drops Aug-1
+    leftover ids `401857105` / `401857106`. Possession-sim is opt-in only.
     """
+    target_date = game_date or date.today()
+    src = (source or "auto").strip().lower()
+    in_regular_season_window = _is_wnba_regular_season(target_date)
+
+    if src in {"auto", "season_engine", "kei", "ch4"}:
+        # Ch4 replaces Aug-1 leftovers on the live KEI column.
+        ahead = max(int(days_ahead), 30) if src == "auto" else int(days_ahead)
+        lines = _kei_pack_as_fair_lines(target_date=target_date, days_ahead=ahead)
+        pack = load_kei_pack()
+        return {
+            "game_date": target_date,
+            "model_version": pack.get("kei_version") or KEI_VERSION,
+            "worker_build_id": KEI_VERSION,
+            "count": len(lines),
+            "lines": lines,
+            "slate_status": "ok" if lines else (
+                "offseason_empty" if not in_regular_season_window else "no_kei_for_date"
+            ),
+            "message": None
+            if lines
+            else "WNBA Ch4 KEI pack has no games in this date window.",
+            "publish_posture": board_publish_posture(),
+            "source": "season_engine_ch4",
+            "features_mode": "season_engine_team_kei_ch4",
+            "phase": "ch4",
+            "forbidden_leftover_fair_line_game_ids": list(
+                FORBIDDEN_LEFTOVER_FAIR_LINE_GAME_IDS
+            ),
+        }
+
     session = SessionLocal()
     try:
         try:
@@ -271,7 +382,6 @@ def wnba_fair_lines(
             session.rollback()
 
         effective_model_version = model_version or _resolve_active_model_version(session)
-        target_date = game_date or date.today()
         lines: List[Dict[str, Any]] = []
         schema_ready = True
 
@@ -355,7 +465,10 @@ def wnba_fair_lines(
 
         for r in rows:
             m = dict(r._mapping)
-            # Prefer joined team names; fall back to projection JSON.
+            gid = str(m.get("game_id") or "")
+            # Never serve Aug-1 leftovers on the live KEI column.
+            if gid in FORBIDDEN_LEFTOVER_FAIR_LINE_GAME_IDS:
+                continue
             home_team = m.get("home_team")
             away_team = m.get("away_team")
             if not home_team or not away_team:
@@ -401,7 +514,7 @@ def wnba_fair_lines(
                     "margin_mean": _to_float(m.get("margin_mean")),
                     "worker_build_id": m.get("worker_build_id"),
                     "projected_at": m.get("projected_at"),
-                    # Research-only until close-line ATS clears evidence floors.
+                    "source": "possession_sim",
                     "publish": {
                         "spread": publish_tag(
                             "spread",
@@ -419,9 +532,6 @@ def wnba_fair_lines(
                 }
             )
 
-        # Offseason / empty-slate honesty (July 31 2026 is preseason build window).
-        month = target_date.month
-        in_regular_season_window = month in {5, 6, 7, 8, 9, 10}
         if len(lines) == 0:
             slate_status = (
                 "offseason_empty"
@@ -452,15 +562,47 @@ def wnba_fair_lines(
             "slate_status": slate_status,
             "message": message,
             "publish_posture": posture,
+            "source": "possession_sim",
             "features_mode": (
                 "rolling_features_when_assembled"
                 if in_regular_season_window
                 else "offseason_honest_empty"
             ),
             "phase": "phase3",
+            "forbidden_leftover_fair_line_game_ids": list(
+                FORBIDDEN_LEFTOVER_FAIR_LINE_GAME_IDS
+            ),
         }
     finally:
         session.close()
+
+
+@router.get("/kei-lines")
+def wnba_kei_lines(
+    game_date: Optional[date] = Query(None, description="UTC date; defaults to today"),
+    days_ahead: int = Query(30, ge=0, le=60),
+) -> Dict[str, Any]:
+    """Chapter 4 team KEI board (sides/totals/WP). Drops Aug-1 leftovers."""
+    target_date = game_date or date.today()
+    lines = _kei_pack_as_fair_lines(
+        target_date=target_date, days_ahead=int(days_ahead)
+    )
+    pack = load_kei_pack()
+    return {
+        "game_date": target_date,
+        "model_version": pack.get("kei_version") or KEI_VERSION,
+        "worker_build_id": KEI_VERSION,
+        "count": len(lines),
+        "lines": lines,
+        "slate_status": "ok" if lines else "no_kei_for_date",
+        "source": "season_engine_ch4",
+        "features_mode": "season_engine_team_kei_ch4",
+        "phase": "ch4",
+        "forbidden_leftover_fair_line_game_ids": list(
+            FORBIDDEN_LEFTOVER_FAIR_LINE_GAME_IDS
+        ),
+        "publish_posture": board_publish_posture(),
+    }
 
 
 @router.get("/props/board")

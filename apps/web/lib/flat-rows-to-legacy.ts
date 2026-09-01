@@ -11,6 +11,7 @@ import {
   nbaEdgeTag,
   trustNbaMarket,
 } from "@/lib/nba-trusted-market";
+import { wnbaEdgeTag } from "@/lib/wnba-trusted-market";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
 import {
@@ -45,6 +46,10 @@ export type FlatEdgeBoardRow = {
   nbaMarketTrusted?: boolean;
   nbaTrustReason?: string;
   nbaTrustLabel?: string;
+  /** WNBA Ch4: trust flag; Best cleared when untrusted. */
+  wnbaMarketTrusted?: boolean;
+  wnbaTrustReason?: string;
+  wnbaTrustLabel?: string;
   /** American odds juice for Open top (away / over). */
   openJuice?: string;
   /** American odds juice for Open bottom (home / under). */
@@ -255,6 +260,10 @@ function edgeToTag(
   if (sport === "nba") {
     // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 (trusted Best only; caller gates trust).
     return nbaEdgeTag(edgeNum);
+  }
+  if (sport === "wnba") {
+    // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 (trusted Best only; caller gates trust).
+    return wnbaEdgeTag(edgeNum);
   }
   if (sport === "mlb" && market === "line") {
     if (edgeNum >= 3.0) return "PLAY";
@@ -668,6 +677,7 @@ export function flatRowsToLegacy(
     );
     // CFB Week 0 is the close tape — finals stay visible, never PLAY/LEAN.
     // NBA preseason / untrusted Best → PASS.
+    // WNBA untrusted Best / Aug-1 leftovers → PASS.
     const rowWeek = Number(lineRow?.week ?? totalRow?.week);
     const cfbFinalTape =
       String(sportKey).toLowerCase() === "cfb" && rowWeek === 0;
@@ -676,10 +686,15 @@ export function flatRowsToLegacy(
       (isNbaPreseason() ||
         lineRow?.nbaMarketTrusted === false ||
         totalRow?.nbaMarketTrusted === false);
-    const tagLine = cfbFinalTape || nbaForcePass ? ("PASS" as Tag) : tagLineRaw;
-    const tagOU = cfbFinalTape || nbaForcePass ? ("PASS" as Tag) : tagOURaw;
-    const playLineOut = cfbFinalTape || nbaForcePass ? undefined : playLine;
-    const playOUOut = cfbFinalTape || nbaForcePass ? undefined : playOU;
+    const wnbaForcePass =
+      String(sportKey).toLowerCase() === "wnba" &&
+      (lineRow?.wnbaMarketTrusted === false ||
+        totalRow?.wnbaMarketTrusted === false);
+    const forcePass = cfbFinalTape || nbaForcePass || wnbaForcePass;
+    const tagLine = forcePass ? ("PASS" as Tag) : tagLineRaw;
+    const tagOU = forcePass ? ("PASS" as Tag) : tagOURaw;
+    const playLineOut = forcePass ? undefined : playLine;
+    const playOUOut = forcePass ? undefined : playOU;
 
     const src = (lineRow ?? totalRow) as FlatEdgeBoardRow | undefined;
     const srcSpread = entry.spread as FlatEdgeBoardRow | undefined;

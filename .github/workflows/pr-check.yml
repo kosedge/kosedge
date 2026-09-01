@@ -63,7 +63,7 @@ jobs:
                 MS=1
                 NBA_MS=1
                 ;;
-              services/model-service/src/services/wnba_season_engine/*|services/model-service/tests/test_wnba_*|scripts/wnba/build_team_prior_ch1.py|scripts/wnba/build_roster_minutes_ch2.py|scripts/wnba/build_player_projection_ch5.py|docs/WNBA_CH*)
+              services/model-service/src/services/wnba_season_engine/*|services/model-service/tests/test_wnba_*|services/model-service/src/routes/wnba.py|scripts/wnba/build_team_prior_ch1.py|scripts/wnba/build_roster_minutes_ch2.py|scripts/wnba/build_player_projection_ch5.py|scripts/wnba/build_situation_ch3.py|scripts/wnba/build_kei_ch4.py|docs/WNBA_CH*)
                 MS=1
                 WNBA_MS=1
                 ;;
@@ -210,7 +210,7 @@ jobs:
         if: steps.paths.outputs.wnba_ms == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_wnba_team_prior_ch1.py tests/test_wnba_roster_minutes_ch2.py tests/test_wnba_player_projection_ch5.py
+          pytest -q tests/test_wnba_team_prior_ch1.py tests/test_wnba_roster_minutes_ch2.py tests/test_wnba_player_projection_ch5.py tests/test_wnba_situation_ch3.py tests/test_wnba_kei_ch4.py
 
       - name: Run model-service DepthSot / NFL tests
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1')
