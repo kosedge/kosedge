@@ -93,7 +93,9 @@ describe("sport-pro-nav", () => {
     expect(nflTools).not.toContain("Props");
     expect(nflTools).not.toContain("Sport Tracking");
 
-    for (const sport of SPORTS.filter((s) => s.key !== "nfl" && s.key !== "cfb")) {
+    for (const sport of SPORTS.filter(
+      (s) => s.key !== "nfl" && s.key !== "cfb",
+    )) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
       const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
       expect(tools).not.toContain("Wall Chart");
@@ -110,7 +112,9 @@ describe("sport-pro-nav", () => {
 
     // NBA Ch7 fantasy desks live under tools (not primary — NFL-only Fantasy primary).
     expect(getSportToolNav("nba").map((i) => i.label)).toContain("Fantasy");
-    expect(getSportPrimaryNav("nba").map((i) => i.label)).not.toContain("Fantasy");
+    expect(getSportPrimaryNav("nba").map((i) => i.label)).not.toContain(
+      "Fantasy",
+    );
 
     // CFB season model desks are primary (not tools overflow).
     const cfbTools = getSportToolNav("cfb").map((i) => i.label);
@@ -163,13 +167,13 @@ describe("sport-pro-nav", () => {
   });
 
   it("marks overview and edge board active correctly", () => {
-    expect(isSportNavActive("/pro/nba/overview", "/pro/nba/overview", "nba")).toBe(
+    expect(
+      isSportNavActive("/pro/nba/overview", "/pro/nba/overview", "nba"),
+    ).toBe(true);
+    expect(isSportNavActive("/pro/nba", "/pro/nba/overview", "nba")).toBe(true);
+    expect(isSportNavActive("/edge-board/nba", "/edge-board/nba", "nba")).toBe(
       true,
     );
-    expect(isSportNavActive("/pro/nba", "/pro/nba/overview", "nba")).toBe(true);
-    expect(
-      isSportNavActive("/edge-board/nba", "/edge-board/nba", "nba"),
-    ).toBe(true);
     expect(
       isSportNavActive("/pro/nba/fair-lines", "/pro/nba/fair-lines", "nba"),
     ).toBe(true);
@@ -182,9 +186,9 @@ describe("sport-pro-nav", () => {
       true,
     );
     expect(isSportNavActive("/pro/nfl/fantasy/mock", href, "nfl")).toBe(true);
-    expect(
-      isSportNavActive("/pro/nfl/fantasy/player/abc", href, "nfl"),
-    ).toBe(true);
+    expect(isSportNavActive("/pro/nfl/fantasy/player/abc", href, "nfl")).toBe(
+      true,
+    );
     expect(isSportNavActive("/pro/nfl/fantasy/guillotine", href, "nfl")).toBe(
       true,
     );
