@@ -1,0 +1,33 @@
+{
+  "engine_version": "nba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "chapter": 3,
+  "SITUATION_TEAM_PTS_CAP": 3.0,
+  "TEAM_CARRY_SHRINK_unchanged": 0.85,
+  "TEAM_REBASE_RESIDUAL_CAP": 3.0,
+  "coefficients": {
+    "home": 2.0,
+    "b2b": -1.5,
+    "travel": -0.5,
+    "altitude": 1.0
+  },
+  "units": "team_points_on_implied_ppg",
+  "classes": {
+    "home": "designated home side",
+    "b2b": "rest_days==1 OR 3 games in 4 calendar days",
+    "travel": "prior venue \u22651000 mi OR |\u0394tz|\u22652",
+    "altitude": "venue in nba_venue_flags altitude list; +coeff home / \u2212coeff visitor"
+  },
+  "formula": "\u0394_raw = \u03a3 class_coeff; \u0394 = clip(\u0394_raw, \u00b1SITUATION_TEAM_PTS_CAP)",
+  "apply": "on_read_team_line; PlayerProjection PTS copy-through only when \u0394\u22600",
+  "does_not": [
+    "team if",
+    "new player means",
+    "new minute grid",
+    "Edge PLAY",
+    "props tab",
+    "CFB/NFL",
+    "change TEAM_CARRY_SHRINK"
+  ],
+  "paper_sim": "nba_situation_paper_sim_ch3.json"
+}

@@ -1,0 +1,17 @@
+{
+  "engine_version": "nba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "note": "Altitude is a venue flag (arena/city/state), not if team ==.",
+  "altitude_venues": [
+    {
+      "arena": "Ball Arena",
+      "city": "Denver",
+      "state": "CO"
+    },
+    {
+      "arena": "Delta Center",
+      "city": "Salt Lake City",
+      "state": "UT"
+    }
+  ]
+}
