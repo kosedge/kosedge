@@ -43,6 +43,7 @@ import {
   applyNbaTrustedMarketToRows,
   isNbaPreseason,
 } from "@/lib/nba-trusted-market";
+import { applyWnbaTrustedMarketToRows } from "@/lib/wnba-trusted-market";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
 import {
   keiGamesFromNflFairLines,
@@ -222,6 +223,9 @@ export async function assembleEdgeBoardRows(
     return applyNbaTrustedMarketToRows(merged, {
       preseason: isNbaPreseason(),
     });
+  }
+  if (sport === "wnba") {
+    return applyWnbaTrustedMarketToRows(merged);
   }
   return merged;
 }

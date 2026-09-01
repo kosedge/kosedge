@@ -83,6 +83,8 @@ export async function fetchWnbaFairLines(params?: {
   gameDate?: string;
   modelVersion?: string;
   daysAhead?: number;
+  /** auto | season_engine | possession_sim — Ch4 defaults to auto (KEI). */
+  source?: string;
 }): Promise<WnbaFairLinesResponse> {
   const base = env.MODEL_SERVICE_URL;
   const fallbackDate =
@@ -106,6 +108,7 @@ export async function fetchWnbaFairLines(params?: {
     url.searchParams.set("model_version", params.modelVersion);
   if (params?.daysAhead != null)
     url.searchParams.set("days_ahead", String(params.daysAhead));
+  url.searchParams.set("source", params?.source ?? "auto");
 
   try {
     const response = await upstreamFetch(url.toString(), {
