@@ -108,6 +108,10 @@ describe("sport-pro-nav", () => {
       expect(primary).not.toContain("Season Model");
     }
 
+    // NBA Ch7 fantasy desks live under tools (not primary — NFL-only Fantasy primary).
+    expect(getSportToolNav("nba").map((i) => i.label)).toContain("Fantasy");
+    expect(getSportPrimaryNav("nba").map((i) => i.label)).not.toContain("Fantasy");
+
     // CFB season model desks are primary (not tools overflow).
     const cfbTools = getSportToolNav("cfb").map((i) => i.label);
     const cfbPrimary = getSportPrimaryNav("cfb").map((i) => i.label);
