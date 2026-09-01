@@ -59,4 +59,4 @@ New box stats · minute-grid rewrite · props PLAY · DFS optimizer · team if �
 
 ## Done
 
-Stop. Chapter 9 grades (schema + empty store) before playoffs Sep 27. **Not** a tag PR. **Not** 15 team previews this week.
+Stop. Chapter 9 grades schema + empty store ships separately (`docs/WNBA_GRADE_SCHEMA.md`) before playoffs Sep 27. **Not** a tag PR. **Not** 15 team previews this week.
