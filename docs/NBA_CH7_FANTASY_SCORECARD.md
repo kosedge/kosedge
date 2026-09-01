@@ -24,13 +24,13 @@ cats   = {PTS, REB, AST, STL, BLK, TOV, 3PM} unweighted
 | 1   | Victor Wembanyama       | SAS  | 34.0 | 26.5 | 12.6 | 3.9 | 60.4 |   4952 | **PASS**   |
 | 2   | Nikola Jokić            | DEN  | 34.0 | 22.8 | 12.2 | 9.8 | 56.1 |   4599 | **PASS**   |
 | 3   | Giannis Antetokounmpo   | MIA  | 34.0 | 28.3 | 11.9 | 6.6 | 55.4 |   4544 | **PASS**   |
-| 4   | Luka Dončić             | LAL  | 34.0 | 29.5 |  7.6 | 7.9 | 54.4 |   4464 | **PASS**   |
+| 4   | Luka Dončić             | LAL  | 34.0 | 29.4 |  7.6 | 7.9 | 54.4 |   4464 | **PASS**   |
 | 5   | Shai Gilgeous-Alexander | OKC  | 34.0 | 30.1 |  4.8 | 6.5 | 51.7 |   4243 | **PASS**   |
-| 6   | Anthony Davis           | DAL  | 34.0 | 21.7 | 11.0 | 3.4 | 49.2 |   4037 | **PASS**   |
-| 7   | Cade Cunningham         | DET  | 34.0 | 23.5 |  5.8 | 8.7 | 46.5 |   3816 | **PASS**   |
+| 6   | Anthony Davis           | DAL  | 34.0 | 21.7 | 12.2 | 3.3 | 49.2 |   4037 | **PASS**   |
+| 7   | Cade Cunningham         | DET  | 34.0 | 23.5 |  5.4 | 9.1 | 46.5 |   3816 | **PASS**   |
 | 8   | Jayson Tatum            | BOS  | 34.0 | 23.9 |  8.8 | 5.2 | 45.8 |   3759 | **PASS**   |
-| 9   | LaMelo Ball             | CHA  | 34.0 | 23.1 |  5.2 | 7.8 | 45.4 |   3726 | **PASS**   |
-| 10  | Joel Embiid             | PHI  | 34.0 | 23.6 |  9.6 | 4.3 | 45.2 |   3708 | **PASS**   |
+| 9   | LaMelo Ball             | CHA  | 34.0 | 23.1 |  5.4 | 8.2 | 45.4 |   3726 | **PASS**   |
+| 10  | Joel Embiid             | PHI  | 34.0 | 23.6 |  9.1 | 4.8 | 45.2 |   3708 | **PASS**   |
 
 Team column follows Ch2 grid / transaction map.
 
