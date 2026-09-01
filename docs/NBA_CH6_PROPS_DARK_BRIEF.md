@@ -23,11 +23,11 @@ Hard minutes gate: `MIN < 12` omitted. Cap / PLAY thresholds registered, not fir
 
 ## Register (coded, dark-suppressed)
 
-| Name                      | Value              |
-| ------------------------- | ------------------ |
+| Name                      | Value                        |
+| ------------------------- | ---------------------------- |
 | `PROP_PLAY`               | `≥ 4.0` abs **and** `≥ 0.6σ` |
-| `PROP_PLAY_CAP_PER_SLATE` | `8`                |
-| `PROP_MINUTES_GATE`       | `12.0`             |
+| `PROP_PLAY_CAP_PER_SLATE` | `8`                          |
+| `PROP_MINUTES_GATE`       | `12.0`                       |
 
 ---
 
@@ -42,8 +42,8 @@ Hard minutes gate: `MIN < 12` omitted. Cap / PLAY thresholds registered, not fir
 
 ## Forbidden (honored)
 
-- PLAY / WATCH tags · stake-eligible props · second scorer / stub rates as SoT  
-- Rematerialize Ch1/Ch2/Ch5 · retune Ch3 · walk means to the book  
+- PLAY / WATCH tags · stake-eligible props · second scorer / stub rates as SoT
+- Rematerialize Ch1/Ch2/Ch5 · retune Ch3 · walk means to the book
 - Fantasy · CFB/NFL · ungate team Edge PLAY on props
 
 ---

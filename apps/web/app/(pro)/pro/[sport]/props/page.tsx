@@ -46,8 +46,7 @@ export default async function PropsPage({
     sportKey === "mlb" || sportKey === "nba" || sportKey === "wnba"
       ? []
       : await getTonightGames(sportKey || "nba");
-  const mlbBoard =
-    sportKey === "mlb" ? await fetchMlbFairLines() : null;
+  const mlbBoard = sportKey === "mlb" ? await fetchMlbFairLines() : null;
   const nbaBoard =
     sportKey === "nba" ? await fetchNbaPropsBoard({ limit: 120 }) : null;
   const wnbaBoard =

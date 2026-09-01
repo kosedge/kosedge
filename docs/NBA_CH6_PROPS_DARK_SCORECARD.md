@@ -22,26 +22,26 @@ Minutes gate: omit `MIN < PROP_MINUTES_GATE` (12.0).
 
 ## Register (suppressed)
 
-| Gate                        | Value                         | Dark behavior      |
-| --------------------------- | ----------------------------- | ------------------ |
-| `PROP_PLAY`                 | `≥ 4.0` abs and `≥ 0.6σ`      | counted, not tagged |
-| `PROP_PLAY_CAP_PER_SLATE`   | `8`                           | unused (play_n=0)  |
-| `PROP_MINUTES_GATE`         | `12.0`                        | enforced           |
+| Gate                      | Value                    | Dark behavior       |
+| ------------------------- | ------------------------ | ------------------- |
+| `PROP_PLAY`               | `≥ 4.0` abs and `≥ 0.6σ` | counted, not tagged |
+| `PROP_PLAY_CAP_PER_SLATE` | `8`                      | unused (play_n=0)   |
+| `PROP_MINUTES_GATE`       | `12.0`                   | enforced            |
 
 ---
 
 ## Gates
 
-| Gate                                         | Result   |
-| -------------------------------------------- | -------- |
-| Means from Ch5 (not stub rates)              | **PASS** |
-| `play_n == 0` on dark board                  | **PASS** |
-| Huge gap still PASS (`would_clear_play`)     | **PASS** |
-| Minutes gate                                 | **PASS** |
-| Publish posture `props=dark`                 | **PASS** |
-| CFB BALL@OSU −40.5                           | **PASS** |
-| `TEAM_CARRY_SHRINK` 0.85                     | **PASS** |
-| No Ch1/Ch2/Ch5 rematerialize                 | **PASS** |
+| Gate                                     | Result   |
+| ---------------------------------------- | -------- |
+| Means from Ch5 (not stub rates)          | **PASS** |
+| `play_n == 0` on dark board              | **PASS** |
+| Huge gap still PASS (`would_clear_play`) | **PASS** |
+| Minutes gate                             | **PASS** |
+| Publish posture `props=dark`             | **PASS** |
+| CFB BALL@OSU −40.5                       | **PASS** |
+| `TEAM_CARRY_SHRINK` 0.85                 | **PASS** |
+| No Ch1/Ch2/Ch5 rematerialize             | **PASS** |
 
 ---
 
