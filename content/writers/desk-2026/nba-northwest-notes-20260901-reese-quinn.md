@@ -12,6 +12,7 @@
 Bottom line: Four of five made the 2026 playoffs. Only Portland changed coaches. Two All-Star guards changed zip codes. The two opener-killers are DiVincenzo’s Achilles and Sharpe’s meniscus. Street already has OKC 60.5 and San Antonio 60.5 as the league’s top totals. Pass on a division number — no house division print.
 
 Notes
+
 1. Nori is the only new voice. Hired June 23 from Finch’s bench, one year plus two team options (NBA.com; Oregonian). Finch, Daigneault, Adelman, Hardy retained. Splitter took Chicago.
 2. Two point guards left the building next door. Morant to Portland June 29 (Grant and Kris Murray to Memphis). Ball to Minnesota July 10 (Randle to Brooklyn, Reid and the pick capital to Charlotte). The division imported creation and exported the body.
 3. Two bigs left the division. Kessler to the Lakers July 8. Reid to Charlotte in the Ball deal. Love is unsigned. The Jazz five beats expect (Keyonte / Bailey-or-Peterson / Markkanen / JJJ / Nurkić) has one shared game.
