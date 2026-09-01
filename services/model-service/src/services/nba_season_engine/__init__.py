@@ -1,12 +1,18 @@
-"""NBA season engine package (Ch1–Ch2 shell + Ch5 PlayerProjection)."""
+"""NBA season engine package (Ch1–Ch3 + Ch5 PlayerProjection)."""
 
 from src.services.nba_season_engine.priors import (
     ENGINE_VERSION,
     MINUTE_GRID_SUM,
     PAPER_SIM_S_SET,
     PLAYER_YEAR_WEIGHTS,
+    SITUATION_ALTITUDE_NET,
+    SITUATION_B2B_NET,
+    SITUATION_HOME_NET,
+    SITUATION_NET_CAP,
+    SITUATION_TRAVEL_NET,
     TEAM_CARRY_SHRINK,
     TEAM_REBASE_RESIDUAL_CAP,
+    TRAVEL_TZ_BAND_MIN_HOURS,
 )
 from src.services.nba_season_engine.team_prior import (
     apply_team_carry_shrink,
@@ -31,6 +37,15 @@ from src.services.nba_season_engine.player_projection import (
     load_player_projection_pack,
     team_pts_identity,
 )
+from src.services.nba_season_engine.situation import (
+    apply_situation_for_game,
+    apply_situation_to_player_projections,
+    apply_situation_to_team,
+    coefficients as situation_coefficients,
+    documentation as situation_documentation,
+    load_situation_pack,
+    load_venues_pack,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -39,6 +54,12 @@ __all__ = [
     "PLAYER_YEAR_WEIGHTS",
     "MINUTE_GRID_SUM",
     "PAPER_SIM_S_SET",
+    "SITUATION_HOME_NET",
+    "SITUATION_B2B_NET",
+    "SITUATION_TRAVEL_NET",
+    "SITUATION_ALTITUDE_NET",
+    "SITUATION_NET_CAP",
+    "TRAVEL_TZ_BAND_MIN_HOURS",
     "VECTOR_KEYS",
     "apply_team_carry_shrink",
     "get_team_prior",
@@ -56,4 +77,11 @@ __all__ = [
     "get_team_projections",
     "team_pts_identity",
     "player_projection_documentation",
+    "load_venues_pack",
+    "load_situation_pack",
+    "apply_situation_to_team",
+    "apply_situation_to_player_projections",
+    "apply_situation_for_game",
+    "situation_coefficients",
+    "situation_documentation",
 ]

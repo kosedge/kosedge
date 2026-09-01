@@ -1,0 +1,188 @@
+{
+  "engine_version": "nba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "note": "Venue class pack for Ch3 situation. altitude_class is a venue flag (Ball Arena / Delta Center), not a team-if.",
+  "travel_tz_band_min_hours": 2,
+  "venues": {
+    "ATL": {
+      "name": "State Farm Arena",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "ATL"
+    },
+    "BOS": {
+      "name": "TD Garden",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "BOS"
+    },
+    "BKN": {
+      "name": "Barclays Center",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "BKN"
+    },
+    "CHA": {
+      "name": "Spectrum Center",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "CHA"
+    },
+    "CHI": {
+      "name": "United Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "CHI"
+    },
+    "CLE": {
+      "name": "Rocket Mortgage FieldHouse",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "CLE"
+    },
+    "DAL": {
+      "name": "American Airlines Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "DAL"
+    },
+    "DEN": {
+      "name": "Ball Arena",
+      "tz_utc_offset_hours": -7,
+      "altitude_class": true,
+      "venue_team": "DEN"
+    },
+    "DET": {
+      "name": "Little Caesars Arena",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "DET"
+    },
+    "GSW": {
+      "name": "Chase Center",
+      "tz_utc_offset_hours": -8,
+      "altitude_class": false,
+      "venue_team": "GSW"
+    },
+    "HOU": {
+      "name": "Toyota Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "HOU"
+    },
+    "IND": {
+      "name": "Gainbridge Fieldhouse",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "IND"
+    },
+    "LAC": {
+      "name": "Crypto.com Arena",
+      "tz_utc_offset_hours": -8,
+      "altitude_class": false,
+      "venue_team": "LAC"
+    },
+    "LAL": {
+      "name": "Crypto.com Arena",
+      "tz_utc_offset_hours": -8,
+      "altitude_class": false,
+      "venue_team": "LAL"
+    },
+    "MEM": {
+      "name": "FedExForum",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "MEM"
+    },
+    "MIA": {
+      "name": "Kaseya Center",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "MIA"
+    },
+    "MIL": {
+      "name": "Fiserv Forum",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "MIL"
+    },
+    "MIN": {
+      "name": "Target Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "MIN"
+    },
+    "NOP": {
+      "name": "Smoothie King Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "NOP"
+    },
+    "NYK": {
+      "name": "Madison Square Garden",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "NYK"
+    },
+    "OKC": {
+      "name": "Paycom Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "OKC"
+    },
+    "ORL": {
+      "name": "Kia Center",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "ORL"
+    },
+    "PHI": {
+      "name": "Wells Fargo Center",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "PHI"
+    },
+    "PHX": {
+      "name": "Footprint Center",
+      "tz_utc_offset_hours": -7,
+      "altitude_class": false,
+      "venue_team": "PHX"
+    },
+    "POR": {
+      "name": "Moda Center",
+      "tz_utc_offset_hours": -8,
+      "altitude_class": false,
+      "venue_team": "POR"
+    },
+    "SAC": {
+      "name": "Golden 1 Center",
+      "tz_utc_offset_hours": -8,
+      "altitude_class": false,
+      "venue_team": "SAC"
+    },
+    "SAS": {
+      "name": "Frost Bank Center",
+      "tz_utc_offset_hours": -6,
+      "altitude_class": false,
+      "venue_team": "SAS"
+    },
+    "TOR": {
+      "name": "Scotiabank Arena",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "TOR"
+    },
+    "UTA": {
+      "name": "Delta Center",
+      "tz_utc_offset_hours": -7,
+      "altitude_class": true,
+      "venue_team": "UTA"
+    },
+    "WAS": {
+      "name": "Capital One Arena",
+      "tz_utc_offset_hours": -5,
+      "altitude_class": false,
+      "venue_team": "WAS"
+    }
+  }
+}

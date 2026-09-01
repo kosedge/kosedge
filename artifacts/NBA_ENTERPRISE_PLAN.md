@@ -1,6 +1,6 @@
 # NBA Enterprise Plan
 
-**Status:** Chapter 0–2 merged. Chapter 5 `PlayerProjection` pack on disk (opening-night). No props tags / fantasy UI until Ch6/Ch7. `TEAM_CARRY_SHRINK=0.85` unchanged.  
+**Status:** Chapter 0–3 + Chapter 5 merged path. Situation classes on-read (capped). No props tags / fantasy UI until Ch6/Ch7. `TEAM_CARRY_SHRINK=0.85` unchanged.  
 **Prod branch:** `deploy-vercel`  
 **Leave alone:** CFB · NFL · CBB  
 **One rule:** team line, props, and fantasy read the **same** `PlayerProjection`. That is the NFL miss. If that object isn’t real, you don’t get a props tab.
@@ -34,6 +34,11 @@
 | ------------------------- | -------------------- | --------- |
 | `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50` | 2         |
 | `MINUTE_GRID_SUM`         | `240`                | 2 / 5     |
+| `SITUATION_HOME_NET`      | `+1.5`               | 3         |
+| `SITUATION_B2B_NET`        | `−2.0`               | 3         |
+| `SITUATION_TRAVEL_NET`     | `−1.0`               | 3         |
+| `SITUATION_ALTITUDE_NET`   | `−1.5`               | 3         |
+| `SITUATION_NET_CAP`        | `4.0`                | 3         |
 | `PROP_PLAY`               | `≥ 4.0 AND ≥ 0.6σ`   | 6         |
 | `PROP_PLAY_CAP_PER_SLATE` | `8`                  | 6         |
 | `ODDS_SPORT_KEY`          | `basketball_nba`     | 0 / 4 / 6 |
