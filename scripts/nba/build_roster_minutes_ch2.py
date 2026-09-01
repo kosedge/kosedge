@@ -60,6 +60,8 @@ TEAM_CODES = {
     "WAS",
 }
 BR_ALIAS = {"BRK": "BKN", "CHO": "CHA", "PHO": "PHX"}
+# Basketball-Reference multi-stint totals use 2TM/3TM/4TM (legacy pages used TOT).
+COMBINED_TEAM_MARKERS = frozenset({"TOT", "2TM", "3TM", "4TM"})
 
 # One transaction map — star / accompanying movers for 2026 offseason.
 # Applied after 2025-26 primary team assignment. Not compose ifs.
@@ -134,16 +136,43 @@ def parse_advanced(html: str, season: str) -> list[dict]:
     return rows
 
 
+def _is_combined_team(team: str) -> bool:
+    if team in COMBINED_TEAM_MARKERS:
+        return True
+    # Future-proof: 5TM, etc.
+    return bool(re.fullmatch(r"[2-9]TM", team or ""))
+
+
 def season_player_row(rows_for_player: list[dict]) -> dict:
-    tot = [r for r in rows_for_player if r["team"] == "TOT"]
-    if tot:
-        return tot[0]
-    if len(rows_for_player) == 1:
-        return rows_for_player[0]
-    mp = sum(r["mp"] for r in rows_for_player) or 1.0
-    bpm = sum(r["bpm"] * r["mp"] for r in rows_for_player) / mp
-    base = max(rows_for_player, key=lambda r: r["mp"])
-    return {**base, "bpm": bpm, "mp": mp, "g": sum(r["g"] for r in rows_for_player), "team": "MIX"}
+    """Pick one season row — prefer BR combined total; never sum splits + total."""
+    combined = [r for r in rows_for_player if _is_combined_team(r["team"])]
+    if combined:
+        # Prefer higher-N combined if multiple (shouldn't happen).
+        return max(combined, key=lambda r: r["mp"])
+    real = [r for r in rows_for_player if r["team"] in TEAM_CODES]
+    if not real:
+        real = list(rows_for_player)
+    if len(real) == 1:
+        return real[0]
+    # Rare: splits without a combined marker — MP-weight BPM, do not double-count.
+    mp = sum(r["mp"] for r in real) or 1.0
+    bpm = sum(r["bpm"] * r["mp"] for r in real) / mp
+    base = max(real, key=lambda r: r["mp"])
+    return {
+        **base,
+        "bpm": bpm,
+        "mp": mp,
+        "g": sum(r["g"] for r in real),
+        "team": "MIX",
+    }
+
+
+def _primary_team_from_rows(rows: list[dict]) -> str | None:
+    """Most-minutes real franchise among a season's rows (ignore 2TM/TOT)."""
+    real = [r for r in rows if r["team"] in TEAM_CODES]
+    if not real:
+        return None
+    return max(real, key=lambda r: r["mp"])["team"]
 
 
 def main() -> None:
@@ -190,13 +219,43 @@ def main() -> None:
         roster_team[pid] = home
         from_team_25[pid] = home
 
+    # Carry: contracted / injured players who missed 2025-26 entirely but logged
+    # MIN_SEASON_MP in 2024-25 stay on last known franchise (class rule, not team-if).
+    # Example: Tyrese Haliburton → IND. Does not pull 2023-24-only retirees.
+    by_p_2425: dict[str, list] = defaultdict(list)
+    for r in by_season["2024-25"]:
+        by_p_2425[r["player_id"]].append(r)
+    carry_ids: list[str] = []
+    for pid, plist in by_p_2425.items():
+        if pid in roster_team:
+            continue
+        season_row = season_player_row(plist)
+        if float(season_row["mp"]) < MIN_SEASON_MP:
+            continue
+        home = _primary_team_from_rows(plist)
+        if not home:
+            continue
+        roster_team[pid] = home
+        from_team_25[pid] = home  # last known club before absence
+        carry_ids.append(pid)
+
     tx_applied = []
     for tx in TRANSACTIONS:
         pid = tx["player_id"]
-        if pid not in roster_team:
+        if pid not in players:
             continue
-        fr = roster_team[pid]
+        fr = roster_team.get(pid) or from_team_25.get(pid)
+        if fr is None:
+            # Fall back to most recent real team across the pack window.
+            for season in ("2025-26", "2024-25", "2023-24"):
+                rows = [r for r in by_season[season] if r["player_id"] == pid]
+                fr = _primary_team_from_rows(rows)
+                if fr:
+                    break
+        if fr is None:
+            continue
         roster_team[pid] = tx["to_team"]
+        from_team_25.setdefault(pid, fr)
         tx_applied.append({**tx, "from_team": fr, "player_name": players[pid]["name"]})
 
     talent_pack_players = {}
@@ -216,7 +275,8 @@ def main() -> None:
             "player_id": pid,
             "player_name": players[pid]["name"],
             "team_2026_27": team,
-            "team_2025_26": from_team_25.get(pid),
+            "team_2025_26": from_team_25.get(pid) if pid not in carry_ids else None,
+            "roster_carry": pid in carry_ids,
             "talent_bpm": round(num / den, 4),
             "weight_mass": round(den, 4),
             "seasons": detail,
@@ -303,6 +363,11 @@ def main() -> None:
         "metric": "bpm",
         "PLAYER_YEAR_WEIGHTS": WEIGHTS,
         "source": "basketball-reference.com leagues NBA_{2024,2025,2026}_advanced.html",
+        "notes": [
+            "Season rows prefer BR combined markers TOT/2TM/3TM/4TM (never sum with splits).",
+            "Roster = 2025-26 primary team + carry of 2024-25 players who missed 2025-26 (≥MIN_SEASON_MP).",
+        ],
+        "roster_carry_count": len(carry_ids),
         "player_count": len(talent_pack_players),
         "players": talent_pack_players,
     }
@@ -363,8 +428,8 @@ def main() -> None:
     )
 
     print(
-        f"wrote talent={len(talent_pack_players)} grids=30 rebased=30 "
-        f"tx={len(tx_applied)} residual_cap={RESIDUAL_CAP}"
+        f"wrote talent={len(talent_pack_players)} carry={len(carry_ids)} "
+        f"grids=30 rebased=30 tx={len(tx_applied)} residual_cap={RESIDUAL_CAP}"
     )
 
 

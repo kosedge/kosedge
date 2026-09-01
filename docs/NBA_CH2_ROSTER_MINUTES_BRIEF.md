@@ -34,6 +34,9 @@
 
 Minute grid v0 is a **class grid** (star 32–36 mid 34, starter 28–32 mid 30, bench residual). Offseason movers are **one transaction map**, not `if team ==`.
 
+**Season rows:** prefer BR combined markers (`TOT` / `2TM` / `3TM` / `4TM`); never sum splits with the total.  
+**Roster carry:** 2025–26 primary team + players who logged ≥ `MIN_SEASON_MP` in 2024–25 but missed 2025–26 entirely (injury / absence) → last-known franchise. Class rule, not team-if (Haliburton → IND).
+
 ---
 
 ## Forbidden (honored)

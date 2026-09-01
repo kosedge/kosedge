@@ -126,3 +126,24 @@ def test_get_rebased_team_okc() -> None:
     okc = get_rebased_team("OKC")
     assert okc is not None
     assert okc["net_rating"] > 0
+
+
+def test_no_multi_stint_minute_double_count() -> None:
+    """BR 2TM/3TM/4TM totals must not be summed with team splits."""
+    talent = load_player_talent_pack()["players"]
+    for pid, row in talent.items():
+        for season, s in row["seasons"].items():
+            assert float(s["mp"]) <= 3500.0, (pid, season, s["mp"])
+            assert float(s["g"]) <= 100.0, (pid, season, s["g"])
+
+
+def test_injury_carry_haliburton_on_ind_grid() -> None:
+    """Stars who missed 2025-26 still land on last-known 2026-27 roster."""
+    talent = load_player_talent_pack()["players"]
+    hali = talent["halibty01"]
+    assert hali["roster_carry"] is True
+    assert hali["team_2026_27"] == "IND"
+    assert hali["talent_bpm"] > 5.0
+    ind = get_team_minutes("IND")
+    assert any(p["player_id"] == "halibty01" for p in ind)
+    assert ind[0]["player_id"] == "halibty01"

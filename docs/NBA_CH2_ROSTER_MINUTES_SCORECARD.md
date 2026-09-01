@@ -19,6 +19,10 @@ team_net = player_net + residual
 
 Minute grid v0 class: star×2 @ 34, starter×3 @ 30, bench×4 residual → **240**.
 
+Season rows prefer Basketball-Reference combined markers (`TOT` / `2TM` / `3TM` / `4TM`) — never sum splits with the total.
+
+Roster seed = 2025–26 primary team **+** carry of 2024–25 players who missed 2025–26 (≥ `MIN_SEASON_MP`) onto last-known franchise (e.g. Haliburton → IND).
+
 ---
 
 ## Transaction map (stars move with the map)
@@ -40,22 +44,24 @@ Minute grid v0 class: star×2 @ 34, starter×3 @ 30, bench×4 residual → **240
 
 Rotation note: Klay Thompson is on the MIA **roster** via the map but outside the 9-man class grid (talent BPM < rotation cut). He does **not** appear on DAL.
 
+Injury carry (examples on grid): Tyrese Haliburton → IND star; Kyrie Irving → DAL; Damian Lillard → MIL.
+
 ---
 
 ## Top movers vs Ch1 shell (|Δ net|)
 
 | Team | Ch1 net | Player net | Residual | Rebased net |     Δ |
 | ---- | ------: | ---------: | -------: | ----------: | ----: |
-| WAS  |  -10.06 |      -0.88 |    -3.00 |       -3.88 | +6.18 |
-| BKN  |   -8.73 |      -0.40 |    -3.00 |       -3.40 | +5.33 |
-| SAC  |   -8.56 |      -0.36 |    -3.00 |       -3.36 | +5.20 |
-| IND  |   -6.77 |       0.64 |    -3.00 |       -2.36 | +4.41 |
-| UTA  |   -6.98 |       0.35 |    -3.00 |       -2.65 | +4.32 |
-| MEM  |   -5.01 |       1.71 |    -3.00 |       -1.29 | +3.73 |
-| MIL  |   -5.52 |       0.22 |    -3.00 |       -2.78 | +2.73 |
+| WAS  |  -10.06 |      -0.46 |    -3.00 |       -3.46 | +6.61 |
+| BKN  |   -8.73 |      -0.07 |    -3.00 |       -3.07 | +5.66 |
+| IND  |   -6.77 |       1.60 |    -3.00 |       -1.40 | +5.37 |
+| SAC  |   -8.56 |      -0.19 |    -3.00 |       -3.19 | +5.37 |
+| UTA  |   -6.98 |       0.34 |    -3.00 |       -2.66 | +4.32 |
+| MEM  |   -5.01 |       1.71 |    -3.00 |       -1.29 | +3.72 |
+| DAL  |   -4.62 |       1.84 |    -3.00 |       -1.16 | +3.46 |
+| MIL  |   -5.52 |       0.85 |    -3.00 |       -2.15 | +3.37 |
 | OKC  |    9.39 |       3.78 |     3.00 |        6.78 | -2.61 |
-| DAL  |   -4.62 |       0.76 |    -3.00 |       -2.24 | +2.38 |
-| DET  |    7.00 |       1.92 |     3.00 |        4.92 | -2.07 |
+| DET  |    7.00 |       1.93 |     3.00 |        4.93 | -2.07 |
 
 ---
 
@@ -65,9 +71,9 @@ Rotation note: Klay Thompson is on the MIA **roster** via the map but outside th
 | --: | ---- | ----: | ----: | ----: | ----: | ----: | ----: |
 |   1 | OKC  |  6.78 | 119.2 | 112.5 |  99.3 | 118.4 |   240 |
 |   2 | BOS  |  5.31 | 118.5 | 113.2 |  95.5 | 113.2 |   240 |
-|   3 | SAS  |  5.14 | 118.4 | 113.3 |  99.8 | 118.2 |   240 |
-|   4 | DET  |  4.92 | 118.3 | 113.4 |  99.3 | 117.5 |   240 |
-|   5 | NYK  |  4.64 | 118.2 | 113.5 |  97.2 | 114.8 |   240 |
+|   3 | SAS  |  5.15 | 118.4 | 113.3 |  99.8 | 118.2 |   240 |
+|   4 | DET  |  4.93 | 118.3 | 113.4 |  99.3 | 117.5 |   240 |
+|   5 | NYK  |  4.63 | 118.2 | 113.5 |  97.2 | 114.8 |   240 |
 |   6 | HOU  |  4.58 | 118.1 | 113.6 |  96.6 | 114.1 |   240 |
 |   7 | DEN  |  4.39 | 118.0 | 113.6 |  98.5 | 116.3 |   240 |
 |   8 | CHA  |  4.28 | 118.0 | 113.7 |  97.2 | 114.7 |   240 |
@@ -83,18 +89,18 @@ Rotation note: Klay Thompson is on the MIA **roster** via the map but outside th
 |  18 | PHI  | -0.14 | 115.8 | 115.9 |  99.4 | 115.1 |   240 |
 |  19 | POR  | -0.14 | 115.8 | 115.9 | 100.3 | 116.2 |   240 |
 |  20 | GSW  | -0.47 | 115.6 | 116.1 |  99.1 | 114.5 |   240 |
-|  21 | MEM  | -1.29 | 115.2 | 116.5 | 101.0 | 116.4 |   240 |
-|  22 | DAL  | -2.24 | 114.7 | 117.0 | 101.3 | 116.3 |   240 |
-|  23 | IND  | -2.36 | 114.7 | 117.0 | 100.8 | 115.5 |   240 |
-|  24 | NOP  | -2.38 | 114.7 | 117.0 | 100.2 | 114.8 |   240 |
-|  25 | CHI  | -2.57 | 114.6 | 117.1 | 102.0 | 116.9 |   240 |
-|  26 | UTA  | -2.65 | 114.5 | 117.2 | 101.9 | 116.6 |   240 |
-|  27 | MIL  | -2.78 | 114.5 | 117.2 |  97.9 | 112.0 |   240 |
-|  28 | SAC  | -3.36 | 114.2 | 117.5 |  99.2 | 113.3 |   240 |
-|  29 | BKN  | -3.40 | 114.1 | 117.5 |  97.4 | 111.2 |   240 |
-|  30 | WAS  | -3.88 | 113.9 | 117.8 | 101.1 | 115.2 |   240 |
+|  21 | DAL  | -1.16 | 115.3 | 116.4 | 101.3 | 116.8 |   240 |
+|  22 | MEM  | -1.29 | 115.2 | 116.5 | 101.0 | 116.4 |   240 |
+|  23 | IND  | -1.40 | 115.1 | 116.5 | 100.8 | 116.0 |   240 |
+|  24 | MIL  | -2.15 | 114.8 | 116.9 |  97.9 | 112.3 |   240 |
+|  25 | NOP  | -2.38 | 114.7 | 117.0 | 100.2 | 114.8 |   240 |
+|  26 | CHI  | -2.58 | 114.6 | 117.1 | 102.0 | 116.9 |   240 |
+|  27 | UTA  | -2.66 | 114.5 | 117.2 | 101.9 | 116.6 |   240 |
+|  28 | BKN  | -3.07 | 114.3 | 117.4 |  97.4 | 111.4 |   240 |
+|  29 | SAC  | -3.19 | 114.2 | 117.4 |  99.2 | 113.4 |   240 |
+|  30 | WAS  | -3.46 | 114.1 | 117.6 | 101.1 | 115.4 |   240 |
 
-Implied PPG range: **111.22–120.03** (no 140-possession ghosts).
+Implied PPG range: **111.38–120.03** (no 140-possession ghosts).
 
 ---
 
@@ -106,6 +112,8 @@ Implied PPG range: **111.22–120.03** (no 140-possession ghosts).
 | PPG sanity                       | **PASS** |
 | Residual ≤ ±3.0                  | **PASS** |
 | Movers leave old grid            | **PASS** |
+| No 2TM/split double-count        | **PASS** |
+| Injury carry (Haliburton → IND)  | **PASS** |
 | TEAM_CARRY_SHRINK unchanged 0.85 | **PASS** |
 | CFB BALL@OSU −40.5               | **PASS** |
 | No futures / tags / props        | **PASS** |
