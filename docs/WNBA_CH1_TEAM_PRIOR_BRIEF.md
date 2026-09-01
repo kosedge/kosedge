@@ -26,13 +26,13 @@ This is a **shell**. Chapter 2 is 3y player × 2026 minutes (grid sums to **200*
 
 ## Allowlist (this PR)
 
-| Item | Path |
-| ---- | ---- |
+| Item                              | Path                                                                                 |
+| --------------------------------- | ------------------------------------------------------------------------------------ |
 | `WNBA_TEAM_CARRY_SHRINK` + reader | `services/model-service/src/services/wnba_season_engine/priors.py` · `team_prior.py` |
-| 2026 YTD snapshot pack | `…/wnba_season_engine/data/wnba_team_prior_2026.json` |
-| Rebuild script | `scripts/wnba/build_team_prior_ch1.py` |
-| Tests + CI | `tests/test_wnba_team_prior_ch1.py` · WNBA-only path in `pr-check.yml` |
-| Docs | this brief + scorecard |
+| 2026 YTD snapshot pack            | `…/wnba_season_engine/data/wnba_team_prior_2026.json`                                |
+| Rebuild script                    | `scripts/wnba/build_team_prior_ch1.py`                                               |
+| Tests + CI                        | `tests/test_wnba_team_prior_ch1.py` · WNBA-only path in `pr-check.yml`               |
+| Docs                              | this brief + scorecard                                                               |
 
 ---
 
