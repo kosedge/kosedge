@@ -187,6 +187,17 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
       premium: true,
       status: "active",
     },
+    ...(sportKey === "nba"
+      ? [
+          {
+            href: "/pro/nba/fantasy",
+            label: "Fantasy ranks",
+            hint: "Season + slate from PlayerProjection — same means as props; scoring map only.",
+            premium: true,
+            status: "active" as const,
+          },
+        ]
+      : []),
     {
       href: "/pro/props-center",
       label: "Cross-sport props center",

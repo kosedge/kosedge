@@ -163,7 +163,10 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     slateLabel: "Daily Slate",
     primary: corePrimary("nba", {
       slateLabel: "Daily Slate",
-      deskExtras: [{ href: "/pro/nba/props", label: "Props" }],
+      deskExtras: [
+        { href: "/pro/nba/props", label: "Props" },
+        { href: "/pro/nba/fantasy", label: "Fantasy" },
+      ],
     }),
     tools: [
       ...sharedTools("nba"),

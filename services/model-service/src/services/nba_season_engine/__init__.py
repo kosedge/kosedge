@@ -1,4 +1,4 @@
-"""NBA season engine package (Ch1–Ch5 + Ch4 team KEI + Ch6 props dark)."""
+"""NBA season engine package (Ch1–Ch7: KEI, props dark, fantasy)."""
 
 from src.services.nba_season_engine.priors import (
     ENGINE_VERSION,
@@ -62,6 +62,14 @@ from src.services.nba_season_engine.nba_props import (
     documentation as nba_props_documentation,
     evaluate_dark_prop,
 )
+from src.services.nba_season_engine.nba_fantasy import (
+    FANTASY_VERSION,
+    SCORING_MAP,
+    SCORING_PROFILE,
+    build_fantasy_board,
+    documentation as nba_fantasy_documentation,
+    fantasy_points_from_projection,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -112,4 +120,10 @@ __all__ = [
     "build_dark_props_board",
     "evaluate_dark_prop",
     "nba_props_documentation",
+    "FANTASY_VERSION",
+    "SCORING_PROFILE",
+    "SCORING_MAP",
+    "build_fantasy_board",
+    "fantasy_points_from_projection",
+    "nba_fantasy_documentation",
 ]
