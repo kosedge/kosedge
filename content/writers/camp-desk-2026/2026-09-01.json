@@ -1,0 +1,290 @@
+{
+  "desk_date": "2026-09-01",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Tuesday, Sep 1",
+    "bottom_line": "Waiver and IR day, not a 32-card dump. Named IR and named jobs matter. Existing LAC Under 2/5 stands. Everything else Pass.",
+    "storylines": [
+      "Commanders: Club reversed Sunday — Tunsil and Newton are IR after Amos/McNichols took the cutdown DTR slots. Moreau and Tuttle signed back. Coleman remains the LT plan, not a crowned Week 1.",
+      "Cowboys: Howell is the named QB2 after Milton was waived for Demercado. Steele vs Broderick Jones at RT; Jones stays right; Guyton locked LT. Pass on crowning a tackle.",
+      "Bears: Bryant and Large to IR; Lynch and Sanborn signed. Dexter–Phillips still pending physicals. Gordon, Noah Sewell, and Shemar Turner remain PUP.",
+      "49ers: Bosa DNP Monday open; Kittle on an individual ramp. Shanahan wants both in team drills across three practices before Wednesday’s Australia departure — Kittle could stay home. Hobbs (groin) and Martin (hamstring) IR; Davis and Waitman re-signed; Patterson in from Houston for a 2027 seventh.",
+      "Chargers: Perryman IR-return (≥4) on top of Biadasz season IR. The ILB spot next to Henley is vacant — Harbaugh did not name it. Monday’s Under 2/5 stamp stands; Pass on a new number.",
+      "Dolphins: Seven claims plus FA Herring, with a corresponding 53 purge. Cook is a roster QB, not a starter. Do not crown EDGE1 or WR.",
+      "Patriots: Claimed Latu and Muasau; released Britt and Brown; IR for Baringer and Khalil Jacobs. Wishnowsky is PS punter insurance, not a crowned starter.",
+      "Jets: Grupe and Wallace awarded; Sanders released then to the PS; Levao waived; Meredith in (2027 seventh from LV for a 2027 sixth). Grupe is the 53 kicker — do not invent an OL starter."
+    ],
+    "what_to_watch": "Named IR language that sticks, who actually dresses Week 1 after claims settle, 49ers Tue–Wed team drills before Australia, and whether anyone next to Henley gets a club naming. LAC Under 2/5 and DEN Over 2/5 stand — no chase.",
+    "sources": [
+      {
+        "label": "Commanders — Tunsil + Newton IR; Moreau + Tuttle signed",
+        "href": "https://www.commanders.com/news/commanders-place-tunsil-newton-on-ir-sign-moreau-tuttle"
+      },
+      {
+        "label": "CBS — Tunsil IR (≥4; likely longer)",
+        "href": "https://www.cbssports.com/fantasy/football/news/commanders-laremy-tunsil-placed-on-injured-reserve/"
+      },
+      {
+        "label": "Cowboys — waive Milton",
+        "href": "https://www.dallascowboys.com/news/cowboys-waive-quarterback-joe-milton"
+      },
+      {
+        "label": "Bears — Bryant/Large IR + practice squad (Sep 1, 2:00pm ET)",
+        "href": "https://www.chicagobears.com/news/chicago-bears-announce-roster-moves-practice-squad-2026"
+      },
+      {
+        "label": "49ers — Davis/Waitman re-sign; Hobbs/Martin IR",
+        "href": "https://www.49ers.com/news/49ers-sign-s-ashtyn-davis-to-one-year-deal-place-cb-nate-hobbs-on-the-injured-reserve-list"
+      },
+      {
+        "label": "Chargers — practice squad / Scott + Perryman IR",
+        "href": "https://www.chargers.com/news/practice-squad-2026"
+      },
+      {
+        "label": "Dolphins — seven claims + Herring (x8672)",
+        "href": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x8672"
+      },
+      {
+        "label": "Patriots — Latu / Muasau analysis",
+        "href": "https://www.patriots.com/news/analysis-patriots-claim-te-cameron-latu-and-lb-darius-muasau-off-waivers-begin-filling-out-practice-squad"
+      },
+      {
+        "label": "Jets — Grupe + Wallace awarded",
+        "href": "https://www.newyorkjets.com/news/jets-awarded-blake-grupe-trevin-wallace-off-waivers-08-31-2026"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "WAS",
+      "title": "Commanders camp — Sep 1",
+      "bottom_line": "Club reversed Sunday. Tunsil and Newton are IR. Coleman is still the LT plan, not a crowned Week 1. Pass.",
+      "key_points": [
+        "Official Monday: Tunsil and Newton to IR. Sunday’s dump used the DTR slots on Amos and McNichols, so the club waited a day to park the longer absences.",
+        "Corresponding signings: Fabian Moreau and Shy Tuttle back onto the 53.",
+        "CBS: Tunsil (triceps) IR ≥4 and likely longer; Coleman remains the LT plan — availability flag, not a starter crown."
+      ],
+      "what_to_watch": "LT1 Week 1; DT rotation with Newton out; whether Tunsil is a four-week ramp or a 2026 write-off.",
+      "is_material_depth": true,
+      "sot_flag": "Tunsil and Newton IR. Flag LT and DT — Coleman is the LT plan, not a crowned Week 1.",
+      "sources": [
+        {
+          "label": "Commanders — Tunsil + Newton IR; Moreau + Tuttle signed",
+          "href": "https://www.commanders.com/news/commanders-place-tunsil-newton-on-ir-sign-moreau-tuttle"
+        },
+        {
+          "label": "CBS — Tunsil IR (≥4; likely longer)",
+          "href": "https://www.cbssports.com/fantasy/football/news/commanders-laremy-tunsil-placed-on-injured-reserve/"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys camp — Sep 1",
+      "bottom_line": "Howell named QB2. RT Steele vs Jones. Demercado in. Pass on crowning a tackle.",
+      "key_points": [
+        "Club claimed Emari Demercado and waived Joe Milton as the corresponding move.",
+        "ESPN: Sam Howell is Dak’s backup on the two-QB 53.",
+        "Schottenheimer: Steele vs Broderick Jones at RT; Jones stays on the right; Guyton locked at LT."
+      ],
+      "what_to_watch": "RT ones vs the Giants; whether Milton lands on the PS; Demercado’s early usage.",
+      "is_material_depth": true,
+      "sot_flag": "Howell named QB2. Do not crown RT1 from Steele vs Jones.",
+      "sources": [
+        {
+          "label": "Cowboys — waive Milton",
+          "href": "https://www.dallascowboys.com/news/cowboys-waive-quarterback-joe-milton"
+        },
+        {
+          "label": "ESPN — Howell named Dak backup",
+          "href": "https://www.espn.com/nfl/story/_/id/49786242/cowboys-waive-joe-milton-iii-name-sam-howell-backup-qb"
+        },
+        {
+          "label": "Cowboys — Steele vs Broderick Jones at RT",
+          "href": "https://www.dallascowboys.com/news/terence-steele-broderick-jones-to-compete-for-starting-right-tackle-job"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears camp — Sep 1",
+      "bottom_line": "Bryant off the 53. Bryant + Large IR, Lynch + Sanborn signed. Pass.",
+      "key_points": [
+        "Club Sep 1, 2:00pm ET (chicago-bears-announce-roster-moves-practice-squad-2026 — not the generic roster-moves URL): Bryant and Hayden Large to IR; James Lynch and Jack Sanborn signed to the 53.",
+        "Dexter–Phillips remains pending physicals. Do not write Dexter as an official Falcon yet.",
+        "Gordon, Noah Sewell, and Shemar Turner stay on Reserve/PUP from the cutdown dump."
+      ],
+      "what_to_watch": "Nickel snaps with Bryant now IR; close the Dexter–Phillips physicals before writing either as official.",
+      "is_material_depth": true,
+      "sot_flag": "Bryant now IR. Flag nickel / DB depth — do not invent a replacement starter.",
+      "sources": [
+        {
+          "label": "Bears — Bryant/Large IR + practice squad (Sep 1, 2:00pm ET)",
+          "href": "https://www.chicagobears.com/news/chicago-bears-announce-roster-moves-practice-squad-2026"
+        },
+        {
+          "label": "Bears — transactions 2026",
+          "href": "https://www.chicagobears.com/team/transactions/2026"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers camp — Sep 1",
+      "bottom_line": "Bosa DNP Monday open; Kittle individual ramp; Shanahan wants both in team drills across three practices before Wednesday Australia departure; Kittle could stay home; both eyed Sep 11 vs LAR. Hobbs (groin) Martin (hamstring) IR. Davis + Waitman re-signed. Patterson from HOU for a 2027 7th. Australia clock is the watch, not a number. Pass.",
+      "key_points": [
+        "AP / club: Bosa DNP in Monday’s open period; Kittle in individual / non-competitive work. Shanahan wants both in team drills across the three practices before Wednesday’s Australia departure — Kittle could stay home if the ramp stalls; both are still eyed for Sep 11 vs LAR.",
+        "Hobbs (groin) and Martin (hamstring) to IR; Ashtyn Davis and Corliss Waitman re-signed in corresponding moves.",
+        "Club traded for Jarrett Patterson from Houston for a 2027 seventh. Australia availability is the watch item — not a win-total rewrite."
+      ],
+      "what_to_watch": "Tue–Wed team drills for Bosa and Kittle before the plane; no sit/crown from one Monday DNP.",
+      "is_material_depth": true,
+      "sot_flag": "Hobbs/Martin IR. Do not sit or crown Bosa/Kittle from one DNP — wait on club Week 1 language.",
+      "sources": [
+        {
+          "label": "49ers — Davis/Waitman re-sign; Hobbs/Martin IR",
+          "href": "https://www.49ers.com/news/49ers-sign-s-ashtyn-davis-to-one-year-deal-place-cb-nate-hobbs-on-the-injured-reserve-list"
+        },
+        {
+          "label": "49ers — Patterson trade (2027 7th to HOU)",
+          "href": "https://www.49ers.com/news/49ers-announce-trade-for-ol-jarrett-patterson-x1875"
+        },
+        {
+          "label": "AP — Bosa DNP / Kittle ramp ahead of Australia",
+          "href": "https://apnews.com/article/49ers-injuries-bosa-kittle-3ce81516e006f70d1da9b6191d0fe9a6"
+        },
+        {
+          "label": "The Athletic — Bosa / Kittle still eyeing opener",
+          "href": "https://www.nytimes.com/athletic/7553562/2026/08/31/nick-bosa-george-kittle-injury-updates-49ers/"
+        },
+        {
+          "label": "49ers — 5 takeaways Shanahan / Lynch ahead of Australia",
+          "href": "https://www.49ers.com/news/5-takeaways-from-john-lynch-and-kyle-shanahan-ahead-of-australia"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers camp — Sep 1",
+      "bottom_line": "Perryman IR-return (≥4) on top of Biadasz season IR. ILB next to Henley vacant; Harbaugh did not name it. Pass on a new number. Monday Under 2/5 stays stamped.",
+      "key_points": [
+        "Club: JK Scott signed back; Denzel Perryman to IR designated to return (minimum four). PFT confirms the Scott / Perryman pairing.",
+        "Vacant next to Daiyan Henley — Dye / Phillips / Wax mix on the 53; Colson and Barton on the PS. Do not crown an ILB1.",
+        "Biadasz remains season IR; Slaughter is taking center — one context line, not a fresh naming."
+      ],
+      "what_to_watch": "Week 1 snaps next to Henley. Under 2/5 stands — do not mint or chase juice.",
+      "is_material_depth": true,
+      "sot_flag": "Perryman IR ≥4 on top of Biadasz season IR. Flag ILB next to Henley — do not invent a starter.",
+      "sources": [
+        {
+          "label": "Chargers — practice squad 2026 / Scott + Perryman",
+          "href": "https://www.chargers.com/news/practice-squad-2026"
+        },
+        {
+          "label": "Chargers — Harbaugh / Hortiz roster-moves takeaways",
+          "href": "https://www.chargers.com/news/roster-moves-jim-harbaugh-joe-hortiz"
+        },
+        {
+          "label": "PFT — Scott re-signed / Perryman IR",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/chargers-re-sign-p-jk-scott-place-lb-denzel-perryman-on-ir"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins camp — Sep 1",
+      "bottom_line": "Seven claims + FA Herring, corresponding 53 purge. Cook roster QB not starter. Do not crown EDGE1/WR. Pass.",
+      "key_points": [
+        "Club (x8672): signed Malik Herring and claimed Brady Cook, Marcellas Dial Jr., Chukwuebuka Godrick, Justin Joly, Jarrett Kingston, Reese Taylor, and Julius Wood.",
+        "Corresponding purge: released Clelin Ferrell and A.J. Green III; waived Ethan Bonner, Marques Cox, AJ Henning, Max Llewellyn, and Josh Priebe; waive/injured Ben Sims.",
+        "Cook is a roster QB behind the named starter picture — depth math, not a starter claim. Do not crown EDGE1 or WR from the claim list."
+      ],
+      "what_to_watch": "Who actually dresses Week 1 after the claim churn settles.",
+      "is_material_depth": false,
+      "sources": [
+        {
+          "label": "Dolphins — roster moves x8672",
+          "href": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x8672"
+        }
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots camp — Sep 1",
+      "bottom_line": "Claim Latu + Muasau; release Britt/Brown; IR Baringer + Khalil Jacobs. Wishnowsky PS punter insurance not crowned starter. Pass.",
+      "key_points": [
+        "Club analysis + transactions: claimed TE Cameron Latu and LB Darius Muasau; released LB K.J. Britt and C Ben Brown.",
+        "Placed P Bryce Baringer and LB Khalil Jacobs on injured reserve.",
+        "Mitch Wishnowsky signed to the practice squad as punter insurance — not a crowned Week 1 starter."
+      ],
+      "what_to_watch": "Baringer IR timeline vs Wishnowsky’s path to the 53.",
+      "is_material_depth": true,
+      "sot_flag": "Baringer and Khalil Jacobs IR. Wishnowsky is PS insurance — do not crown a punter.",
+      "sources": [
+        {
+          "label": "Patriots — Latu / Muasau analysis",
+          "href": "https://www.patriots.com/news/analysis-patriots-claim-te-cameron-latu-and-lb-darius-muasau-off-waivers-begin-filling-out-practice-squad"
+        },
+        {
+          "label": "Patriots — transactions 2026",
+          "href": "https://www.patriots.com/team/transactions/2026"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets camp — Sep 1",
+      "bottom_line": "Grupe + Wallace awarded; Sanders released then to PS; Levao waived; Meredith in. Grupe is 53 kicker. Do not invent OL starter. Pass.",
+      "key_points": [
+        "Club: awarded K Blake Grupe and LB Trevin Wallace off waivers; released Jason Sanders (then to the PS); waived OL Kohl Levao.",
+        "Club transactions log: Jordan Meredith + a 2027 seventh from Las Vegas for a 2027 sixth (not a 2029 seventh).",
+        "Grupe is the 53 kicker. Meredith is OL depth — do not invent a starter from the trade."
+      ],
+      "what_to_watch": "Grupe’s Week 1 kicks; Meredith’s actual snaps — no invented OL crown.",
+      "is_material_depth": true,
+      "sot_flag": "Grupe is the 53 kicker; Meredith is in. Do not invent an OL starter.",
+      "sources": [
+        {
+          "label": "Jets — Grupe + Wallace awarded",
+          "href": "https://www.newyorkjets.com/news/jets-awarded-blake-grupe-trevin-wallace-off-waivers-08-31-2026"
+        },
+        {
+          "label": "Jets — Meredith trade",
+          "href": "https://www.newyorkjets.com/news/jets-trade-for-center-jordan-meredith-from-raiders-08-30-2026"
+        },
+        {
+          "label": "Jets — team transactions",
+          "href": "https://www.newyorkjets.com/team/transactions/"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "WAS",
+      "fields": ["bottom_line"],
+      "reason": "Tunsil + Newton IR after Sunday’s DTR slots were used. Coleman remains LT plan — Pass on crowning Week 1.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line"],
+      "reason": "Bryant now IR (with Large). Nickel / DB depth flag; Dexter–Phillips still pending physicals.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["bottom_line"],
+      "reason": "Perryman IR ≥4 on top of Biadasz. Under 2/5 stands — Pass on a new number; do not crown ILB next to Henley.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "SF",
+      "fields": ["bottom_line"],
+      "reason": "Hobbs/Martin IR; Bosa DNP / Kittle ramp into Australia window. Do not sit or crown from one Monday DNP.",
+      "status": "flagged"
+    }
+  ]
+}
