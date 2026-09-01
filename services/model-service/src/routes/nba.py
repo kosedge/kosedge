@@ -860,6 +860,41 @@ def nba_props_board(
         session.close()
 
 
+@router.get("/fantasy/board")
+def nba_fantasy_board(
+    view: str = Query("season", description="season | slate"),
+    team: Optional[str] = Query(None),
+    limit: int = Query(250, ge=1, le=500),
+) -> Dict[str, Any]:
+    """Chapter 7 fantasy board — scores Ch5 PlayerProjection only."""
+    from src.services.nba_season_engine.nba_fantasy import (
+        FANTASY_VERSION,
+        SCORING_MAP,
+        SCORING_PROFILE,
+        build_fantasy_board,
+    )
+
+    board = build_fantasy_board(view=view, team=team, limit=limit)
+    return {
+        "fantasy_version": board.get("fantasy_version") or FANTASY_VERSION,
+        "engine_version": board.get("engine_version"),
+        "object": "PlayerProjection",
+        "scoring_profile": board.get("scoring_profile") or SCORING_PROFILE,
+        "scoring_map": board.get("scoring_map") or dict(SCORING_MAP),
+        "view": board.get("view"),
+        "count": board.get("count") or 0,
+        "rows": board.get("rows") or [],
+        "season_games": board.get("season_games"),
+        "max_team_pts_drift": board.get("max_team_pts_drift"),
+        "TEAM_REBASE_RESIDUAL_CAP": board.get("TEAM_REBASE_RESIDUAL_CAP"),
+        "TEAM_CARRY_SHRINK_unchanged": board.get("TEAM_CARRY_SHRINK_unchanged"),
+        "does_not": board.get("does_not") or [],
+        "phase": "ch7_fantasy",
+        "source": "season_engine_ch7",
+        "message": board.get("message"),
+    }
+
+
 @router.get("/ops/inventory")
 def nba_ops_inventory() -> Dict[str, Any]:
     """Live Postgres truth for NBA games/odds/model tables."""

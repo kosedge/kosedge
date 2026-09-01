@@ -198,7 +198,7 @@ jobs:
         if: steps.paths.outputs.nba_ms == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_nba_team_prior_ch1.py tests/test_nba_roster_minutes_ch2.py tests/test_nba_player_projection_ch5.py tests/test_nba_situation_ch3.py tests/test_nba_kei_ch4.py tests/test_nba_props_ch6.py
+          pytest -q tests/test_nba_team_prior_ch1.py tests/test_nba_roster_minutes_ch2.py tests/test_nba_player_projection_ch5.py tests/test_nba_situation_ch3.py tests/test_nba_kei_ch4.py tests/test_nba_props_ch6.py tests/test_nba_fantasy_ch7.py
 
       - name: Run model-service DepthSot / NFL tests
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1')

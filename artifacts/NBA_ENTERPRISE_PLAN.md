@@ -1,6 +1,6 @@
 # NBA Enterprise Plan
 
-**Status:** Chapters 0–5 + Ch4 team KEI merged. Chapter 6 props **dark** (proj vs line, zero PLAY). `TEAM_CARRY_SHRINK=0.85` unchanged.  
+**Status:** Chapters 0–6 merged (props dark). Chapter 7 fantasy scores the same `PlayerProjection`. `TEAM_CARRY_SHRINK=0.85` unchanged.  
 **Prod branch:** `deploy-vercel`  
 **Leave alone:** CFB · NFL · CBB  
 **One rule:** team line, props, and fantasy read the **same** `PlayerProjection`. That is the NFL miss. If that object isn’t real, you don’t get a props tab.
