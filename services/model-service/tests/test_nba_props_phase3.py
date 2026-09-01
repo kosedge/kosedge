@@ -89,4 +89,4 @@ def test_ou_balance_and_publish_posture():
     assert bal["play_n"] == 2
     assert bal["balanced"] is True
     posture = board_publish_posture(n_with_close_lines=79, ats=0.506)
-    assert posture["props"] == "research_only"
+    assert posture["props"] == "dark"

@@ -13,7 +13,7 @@ import {
 } from "@/lib/sports";
 
 const SPORT_PROPS_COPY: Record<string, string> = {
-  nba: "NBA player props (pts / reb / ast / threes) from possession-aware usage stubs. Research only — PLAY tags are never stake-eligible until holdout clears.",
+  nba: "NBA player props from PlayerProjection (Ch5 spine) vs joined book lines. Chapter 6 dark — proj vs line only; zero PLAY until grades + stake policy.",
   nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
   wnba: "WNBA player props (pts / reb / ast / threes) from usage stubs + team pace/ORtg. Research only — role-collapse Under refusal; never stake-eligible.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
@@ -73,7 +73,7 @@ export default async function PropsPage({
       <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-6 sm:p-8">
         <p className="text-sm font-semibold text-kos-gold">
           {sportKey === "nba"
-            ? "NBA props research board"
+            ? "NBA props dark board (Ch6)"
             : sportKey === "wnba"
               ? "WNBA props research board"
               : propsEnabled
@@ -94,11 +94,15 @@ export default async function PropsPage({
               {nbaBoard.error
                 ? `Board unavailable: ${nbaBoard.error}`
                 : nbaBoard.count > 0
-                  ? `${nbaBoard.count} prop rows · ${nbaBoard.modelVersion} · ${nbaBoard.workerBuildId || "canary"} · research only (no stake tags)`
+                  ? `${nbaBoard.count} prop rows · ${nbaBoard.modelVersion} · dark (zero PLAY) · PlayerProjection means`
                   : nbaBoard.message ||
-                    "No prop edges materialized yet — bootstrap Phase 3 on model-service."}
+                    "No Ch6 dark prop rows yet — PlayerProjection pack required."}
             </p>
-            {nbaBoard.ouBalance ? (
+            {nbaBoard.phase === "ch6_dark" || nbaBoard.darkOnly ? (
+              <p className="text-xs text-kos-text/50">
+                PLAY balance: 0 Over / 0 Under · dark desk (tags suppressed)
+              </p>
+            ) : nbaBoard.ouBalance ? (
               <p className="text-xs text-kos-text/50">
                 PLAY balance: {nbaBoard.ouBalance.play_over ?? 0} Over /{" "}
                 {nbaBoard.ouBalance.play_under ?? 0} Under
