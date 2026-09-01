@@ -44,13 +44,12 @@ export type FlatEdgeBoardRow = {
   /** CFB: trust flag for Edge/Tag only — feed Best stays painted. */
   cfbMarketTrusted?: boolean;
   cfbTrustReason?: string;
+  /** CFB footnote: `untrusted` | `no book` when not trusted. */
   cfbTrustLabel?: string;
   /** NBA Ch4: trust flag; Best cleared when untrusted. */
   nbaMarketTrusted?: boolean;
   nbaTrustReason?: string;
   nbaTrustLabel?: string;
-  /** CFB footnote: `untrusted` | `no book` when not trusted. */
-  cfbTrustLabel?: string;
   /** American odds juice for Open top (away / over). */
   openJuice?: string;
   /** American odds juice for Open bottom (home / under). */
@@ -1151,8 +1150,7 @@ export function flatRowsToLegacy(
         totalRow?.nbaMarketTrusted === false);
     const tagLine = cfbFinalTape || nbaForcePass ? ("PASS" as Tag) : tagLineRaw;
     const tagOU = cfbFinalTape || nbaForcePass ? ("PASS" as Tag) : tagOURaw;
-    const playLineOut =
-      cfbFinalTape || nbaForcePass ? undefined : playLine;
+    const playLineOut = cfbFinalTape || nbaForcePass ? undefined : playLine;
     const playOUOut = cfbFinalTape || nbaForcePass ? undefined : playOU;
 
     const src = (lineRow ?? totalRow) as FlatEdgeBoardRow | undefined;

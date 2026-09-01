@@ -19,10 +19,7 @@
 
 import "server-only";
 
-import {
-  applyHandicapIdentity,
-  type KeiLineGame,
-} from "@/lib/kei-lines";
+import { applyHandicapIdentity, type KeiLineGame } from "@/lib/kei-lines";
 import { getKeiLines } from "@/lib/kei-lines";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import { keiGamesFromMlbFairLines } from "@/lib/mlb-kei-from-fair-lines";
