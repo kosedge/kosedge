@@ -1,4 +1,4 @@
-"""WNBA season engine package (Ch1 team prior shell + Ch2 roster×minutes)."""
+"""WNBA season engine package (Ch1–Ch2 + Ch5 PlayerProjection)."""
 
 from src.services.wnba_season_engine.priors import (
     ENGINE_VERSION,
@@ -26,6 +26,14 @@ from src.services.wnba_season_engine.roster_minutes import (
     load_player_talent_pack,
     load_rebased_team_prior,
 )
+from src.services.wnba_season_engine.player_projection import (
+    VECTOR_KEYS,
+    documentation as player_projection_documentation,
+    get_player_projection,
+    get_team_projections,
+    load_player_projection_pack,
+    team_pts_identity,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -38,6 +46,7 @@ __all__ = [
     "PPG_BAND",
     "PROP_PLAY_CAP_PER_SLATE",
     "ODDS_SPORT_KEY",
+    "VECTOR_KEYS",
     "apply_wnba_team_carry_shrink",
     "get_team_prior",
     "load_team_prior_pack",
@@ -48,4 +57,9 @@ __all__ = [
     "load_player_talent_pack",
     "load_rebased_team_prior",
     "roster_minutes_documentation",
+    "get_player_projection",
+    "get_team_projections",
+    "load_player_projection_pack",
+    "team_pts_identity",
+    "player_projection_documentation",
 ]
