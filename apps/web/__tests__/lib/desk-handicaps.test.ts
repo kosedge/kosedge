@@ -94,28 +94,39 @@ describe("desk-handicaps loader", () => {
       const article = getDeskHandicap(slug);
       expect(article, slug).not.toBeNull();
       expect(article!.sport).toBe("WNBA");
+      expect(article!.category).toBe("Current-state");
       expect(article!.byline).toMatch(/^(Avery Cole|Reese Quinn)$/);
       const notes = extractHandicappersNotes(article!.bodyMarkdown);
       expect(notes[0]?.lean?.replace(/\*\*/g, "")).toMatch(/Pass/i);
-      expect(notes[0]?.fairNumber).toMatch(/Ch2/i);
-      expect(notes[0]?.marketNumber).toMatch(/18306835|OTB|NO MARKET/i);
-      expect(notes[0]?.marketNumber).not.toMatch(/Aug 27 BetMGM blog last dated MIN/i);
+      expect(notes[0]?.fairNumber).toMatch(/Ch2|house net/i);
+      expect(notes[0]?.marketNumber).toMatch(
+        /18306835|UNLISTED|no market/i,
+      );
     }
 
     const min = getDeskHandicap("wnba-min-current-20260901-avery-cole")!;
     const minNotes = extractHandicappersNotes(min.bodyMarkdown);
     expect(min.byline).toBe("Avery Cole");
-    expect(minNotes[0]?.marketNumber).toMatch(/MIN.*−115|MIN \*\*−115\*/);
+    expect(minNotes[0]?.marketNumber).toMatch(/MIN −115|MIN \*\*−115\*/);
+    expect(minNotes[0]?.fairNumber).toMatch(/7\.03/);
     expect(minNotes[0]?.marketNumber).not.toMatch(/−125/);
+
+    const lva = getDeskHandicap("wnba-lva-current-20260901-avery-cole")!;
+    const lvaNotes = extractHandicappersNotes(lva.bodyMarkdown);
+    expect(lvaNotes[0]?.fairNumber).toMatch(/4\.34/);
+    expect(lva.bodyMarkdown).not.toMatch(/LAS 4\.34/);
 
     const west = getDeskHandicap("wnba-west-notes-20260901-avery-cole")!;
     const westNotes = extractHandicappersNotes(west.bodyMarkdown);
-    expect(westNotes[0]?.marketNumber).toMatch(/OTB/i);
+    expect(westNotes[0]?.marketNumber).toMatch(/UNLISTED/i);
+    expect(westNotes[0]?.fairNumber).toMatch(/LA −1\.41/);
+    expect(west.bodyMarkdown).not.toMatch(/LAS 4\.34/);
 
     const east = getDeskHandicap("wnba-east-notes-20260901-reese-quinn")!;
     const eastNotes = extractHandicappersNotes(east.bodyMarkdown);
     expect(east.byline).toBe("Reese Quinn");
-    expect(eastNotes[0]?.marketNumber).toMatch(/NO MARKET/i);
+    expect(eastNotes[0]?.marketNumber).toMatch(/18306835/);
+    expect(eastNotes[0]?.marketNumber).toMatch(/no market/i);
   });
 
   it("keeps Casey and Taylor dual Handicapper's Notes", () => {

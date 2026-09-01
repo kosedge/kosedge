@@ -2,26 +2,26 @@
 
 **By Avery Cole** · Kos Edge Analytics · WNBA Western desk
 **Sport:** WNBA
-**Category:** Desk handicap
-**Angle:** Four out clubs, FIBA absences, Horston sit without diagnosis; group Pass on an OTB Aug 27 board
+**Category:** Current-state
 **Date:** September 1, 2026
 **Timestamp:** September 1, 2026 · 5:45 p.m. ET
-**Market fact-check:** 2026-09-01 · 5:45 p.m. ET · BetMGM login CDS fixture 18306835 `2026 WNBA: Futures` → WNBA Finals winner · OPEN · 8 teams · Editor Riley Nash
-**Market:** BetMGM login CDS 18306835 WNBA Finals winner · West outs **OTB** · OPEN 8 · 5:45 p.m. ET · East/West championship NO MARKET · DK/ESPN BET title pages NO MARKET, sit · House: Ch2 clipped nets POR **−2.27** / LAS **−1.41** / PHX **−2.48** / SEA **−2.89** (wnba-season-engine-v0.1, as_of 2026-09-01)
-**Sources:** Basketball-Reference / house board, USA / FIBA national-team lists, Mercury / Storm reporting
+**Market fact-check:** September 1, 2026 · 5:45 p.m. ET · BetMGM WNBA Finals winner 8-team board; lottery four UNLISTED (fixture 18306835) · Editor Riley Nash
 
-Not four essays. Four clubs that are out, stamped once.
+Not four essays. Lottery is set. House nets below are Ch2 rebased, as_of 2026-09-01. UNLISTED on the live 8-team Finals board. Pass.
 
-Portland is 16-24. House Ch2 clipped −2.27. Leite is with France. Two left against Golden State. Los Angeles is 15-25 at −1.41; Park is with Korea only. Phoenix is 14-26 at −2.48. Plum is shut down for the remainder of the WNBA season and is not at FIBA. Copper is on USA. Bonner was waived. Seattle is 8-32 at −2.89. Malonga, Magbegor, Melbourne, and Fam are at FIBA. Horston left Aug 30 with an apparent injury — no official diagnosis. Do not invent one.
+**Portland Fire 16-24.** Eliminated Aug 25 when Dallas beat them. Expansion year, 8 games behind the 8-seed with 4 left. House net **−2.27** (clipped; Ch1 was −4.84). FIBA: six names, headed by Carla Leite (15.9 ppg, 28.6 USG, France). Resume spoiler: two games vs Golden State (Sep 18, 22).
 
-Group Pass. Confidence 1/5. The Aug 27 board is OTB.
+**Los Angeles Sparks 15-25.** Missed. L10 3-7, W2 into the break (Nneka 23/12 at Seattle Aug 30). House net **−1.41**. FIBA: Jihyun Park (Korea) only. Resume: @DAL, POR, @LVA, GSV — three vs playoff clubs.
 
-**Handicapper’s Note**
-Fair number: Ch2 clipped nets POR **−2.27** / LAS **−1.41** / PHX **−2.48** / SEA **−2.89** (wnba-season-engine-v0.1, as_of 2026-09-01)
-Market number: West outs **OTB** on BetMGM login CDS 18306835 WNBA Finals winner · 5:45 p.m. ET
-Aug 27 BetMGM blog leftovers sat as last dated, not the stamp (MIN −125 / LVA +550 / GSV +850 / IND +900 / ATL +900 / NYL +1300 / DAL +8000 / WAS +6600). Mismatch vs live except ATL/NYL.
+**Phoenix Mercury 14-26.** Missed. Waived DeWanna Bonner after elimination. Kelsey Plum **shut down for the remainder of the WNBA season** (calf/lower leg; GM Nick U'Ren via ESPN) and is **not** at FIBA. Kahleah Copper **is** (USA) — 32.9 mpg, 29.5 USG. House net **−2.48**. Resume spoils Dallas twice and Las Vegas once.
+
+**Seattle Storm 8-32.** Worst record in the league. West mark 1-18. House net **−2.89**. FIBA: Malonga (France, 17.0/9.0, 30.3 USG), Magbegor and Melbourne (Australia), Fam (Spain). Toughest remaining slate (Aces twice, Valkyries, Wings). Horston left Aug 30 with an apparent injury; no official diagnosis — do not invent one.
+
+**Handicapper’s Note** (group)
+Fair: house nets POR −2.27 / LA −1.41 / PHX −2.48 / SEA −2.89 (Ch2 rebased). No expected-wins print.
+Market: UNLISTED on live BetMGM 8-team WNBA Finals winner board · 5:45 p.m. ET Sep 1 · fixture 18306835. East/West championship NO MARKET.
 Lean: **Pass**
 Confidence: **1/5**
-Key risk: An Aug 27 OTB board and four eliminated clubs invite invention; Horston’s Aug 30 exit has no diagnosis yet
+Key risk: spoiler minutes vs GSV/LVA/DAL in the last four, not a futures ticket.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
