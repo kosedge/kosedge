@@ -23,7 +23,7 @@ describe("nba-trusted-market", () => {
     expect(nbaEdgeTag(2.5, { trusted: true })).toBe("LEAN");
   });
 
-  it("clears Best when untrusted", () => {
+  it("keeps Best for display when untrusted; tags stay PASS", () => {
     const rows = applyNbaTrustedMarketToRows(
       [
         {
@@ -36,7 +36,19 @@ describe("nba-trusted-market", () => {
       { preseason: false },
     );
     expect(rows[0].nbaMarketTrusted).toBe(false);
-    expect(rows[0].best).toBe("—");
+    expect(rows[0].best).toBe("+22.5");
+    expect(rows[0].open).toBe("+20.5");
+    expect(rows[0].nbaTrustLabel).toBe("untrusted");
+  });
+
+  it("preseason keeps book lines; tags untrusted", () => {
+    const rows = applyNbaTrustedMarketToRows(
+      [{ market: "Total", kei: "224.5", open: "225.5", best: "226.0" }],
+      { preseason: true },
+    );
+    expect(rows[0].nbaMarketTrusted).toBe(false);
+    expect(rows[0].best).toBe("226.0");
+    expect(rows[0].open).toBe("225.5");
   });
 
   it("keeps Best when trusted", () => {

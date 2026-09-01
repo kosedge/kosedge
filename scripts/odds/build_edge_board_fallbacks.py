@@ -248,6 +248,26 @@ def main() -> int:
         data = json.loads(raw_path.read_text())
         events = data.get("events") or []
         rows = events_to_rows(events, sport)
+
+        # Preserve prior Open when rebuilding (first capture wins; Current/Best updates).
+        out = OUT / f"edge_board_fallback_{sport}.json"
+        prior_open: dict[tuple[str, str], str] = {}
+        if out.exists():
+            try:
+                prior = json.loads(out.read_text())
+                for pr in prior.get("rows") or []:
+                    game = str(pr.get("game") or "")
+                    market = str(pr.get("market") or "")
+                    open_v = pr.get("open")
+                    if game and market and open_v not in (None, "", "—"):
+                        prior_open[(game, market)] = str(open_v)
+            except Exception:
+                prior_open = {}
+        for row in rows:
+            key = (str(row.get("game") or ""), str(row.get("market") or ""))
+            if key in prior_open:
+                row["open"] = prior_open[key]
+
         payload = {
             "sport": sport,
             "source": "odds-api-live-pull",
@@ -259,7 +279,10 @@ def main() -> int:
             payload["note"] = (
                 "Odds API basketball_nba returned 0 events (offseason / no posted board)."
             )
-        out = OUT / f"edge_board_fallback_{sport}.json"
+        elif sport == "nba" and rows:
+            payload["note"] = (
+                "Open preserved from first capture when present; Best/Current from this pull."
+            )
         out.write_text(json.dumps(payload, indent=2) + "\n")
         print(f"{sport}: events={len(events)} rows={len(rows)} -> {out.name}")
     return 0

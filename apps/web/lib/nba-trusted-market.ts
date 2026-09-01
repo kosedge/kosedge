@@ -2,7 +2,8 @@
  * NBA trusted-market gate (Chapter 4).
  * Tag = KEI vs trusted Best only. LEAN ≥ 2.5 / PLAY ≥ 4.0.
  * PASS if Best missing, untrusted, or preseason.
- * Best is cleared on the row when untrusted (unlike CFB display-keep).
+ * Open + Current (Best) stay on the row for display (like CFB).
+ * Trust flags drive Edge/Tag only — do not blank book columns.
  *
  * Sport key: basketball_nba via odds SPORT_KEY_MAP.nba.
  */
@@ -131,8 +132,9 @@ export function applyNbaTrustedMarketToRows<
     });
     return {
       ...row,
-      // Clear Best when untrusted (Ch4 gate).
-      best: verdict.trusted ? row.best : "—",
+      // Keep Open + Current for display. Trust flags drive tags only (CFB-style).
+      best: row.best ?? "—",
+      open: row.open ?? "—",
       nbaMarketTrusted: verdict.trusted,
       nbaTrustReason: verdict.reason,
       nbaTrustLabel: verdict.trusted
