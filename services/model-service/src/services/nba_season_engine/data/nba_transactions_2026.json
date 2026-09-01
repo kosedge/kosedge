@@ -1,0 +1,92 @@
+{
+  "engine_version": "nba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "season": "2026-27",
+  "note": "Single offseason transaction map applied after 2025-26 primary team. Not compose ifs.",
+  "transactions": [
+    {
+      "player_id": "jamesle01",
+      "to_team": "PHI",
+      "note": "FA: LeBron James \u2192 76ers",
+      "from_team": "LAL",
+      "player_name": "LeBron James"
+    },
+    {
+      "player_id": "antetgi01",
+      "to_team": "MIA",
+      "note": "Trade: Giannis Bucks \u2192 Heat",
+      "from_team": "MIL",
+      "player_name": "Giannis Antetokounmpo"
+    },
+    {
+      "player_id": "portibo01",
+      "to_team": "MIA",
+      "note": "Trade: Portis with Giannis \u2192 Heat",
+      "from_team": "MIL",
+      "player_name": "Bobby Portis"
+    },
+    {
+      "player_id": "brownja02",
+      "to_team": "PHI",
+      "note": "Trade: Jaylen Brown Celtics \u2192 76ers",
+      "from_team": "BOS",
+      "player_name": "Jaylen Brown"
+    },
+    {
+      "player_id": "georgpa01",
+      "to_team": "BOS",
+      "note": "Trade: Paul George in Brown deal \u2192 Celtics",
+      "from_team": "PHI",
+      "player_name": "Paul George"
+    },
+    {
+      "player_id": "leonaka01",
+      "to_team": "TOR",
+      "note": "Trade: Kawhi Clippers \u2192 Raptors",
+      "from_team": "LAC",
+      "player_name": "Kawhi Leonard"
+    },
+    {
+      "player_id": "kesslwa01",
+      "to_team": "LAL",
+      "note": "S&T: Walker Kessler Jazz \u2192 Lakers",
+      "from_team": "UTA",
+      "player_name": "Walker Kessler"
+    },
+    {
+      "player_id": "herroty01",
+      "to_team": "MIL",
+      "note": "Trade return: Herro Heat \u2192 Bucks",
+      "from_team": "MIA",
+      "player_name": "Tyler Herro"
+    },
+    {
+      "player_id": "wareke01",
+      "to_team": "MIL",
+      "note": "Trade return: Ware Heat \u2192 Bucks",
+      "from_team": "MIA",
+      "player_name": "Kel'el Ware"
+    },
+    {
+      "player_id": "jaqueja01",
+      "to_team": "MIL",
+      "note": "Trade return: Jaquez Heat \u2192 Bucks",
+      "from_team": "MIA",
+      "player_name": "Jaime Jaquez Jr."
+    },
+    {
+      "player_id": "derozde01",
+      "to_team": "DEN",
+      "note": "FA: DeMar DeRozan \u2192 Nuggets",
+      "from_team": "SAC",
+      "player_name": "DeMar DeRozan"
+    },
+    {
+      "player_id": "thompkl01",
+      "to_team": "MIA",
+      "note": "FA: Klay Thompson \u2192 Heat",
+      "from_team": "DAL",
+      "player_name": "Klay Thompson"
+    }
+  ]
+}

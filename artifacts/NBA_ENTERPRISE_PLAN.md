@@ -1,6 +1,6 @@
 # NBA Enterprise Plan
 
-**Status:** Chapter 0 merged (#363). Chapter 1 team prior shell = `TEAM_CARRY_SHRINK=0.85` / `nba-season-engine-v0.1`. No KEI / tags / props until later chapters.  
+**Status:** Chapter 0–1 merged. Chapter 2 roster×minutes rebased (`TEAM_REBASE_RESIDUAL_CAP=3.0`). No KEI / tags / props until Ch5 `PlayerProjection`. `TEAM_CARRY_SHRINK=0.85` unchanged.  
 **Prod branch:** `deploy-vercel`  
 **Leave alone:** CFB · NFL · CBB  
 **One rule:** team line, props, and fantasy read the **same** `PlayerProjection`. That is the NFL miss. If that object isn’t real, you don’t get a props tab.
