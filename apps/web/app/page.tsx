@@ -134,121 +134,132 @@ export default function Home() {
 
       {/* HERO */}
       <main className="relative z-10 max-w-7xl mx-auto px-5 sm:px-6 pt-10 sm:pt-14 pb-16 sm:pb-20">
-        <div>
-          <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bebas tracking-tight leading-[0.95]">
-            Built on <span className="text-white">Data</span>, Driven by{" "}
-            <span className="text-kos-gold">Edge</span>.
-          </h1>
+        {/* Hero row grows with the taller Edge Board; clear gap before lower block */}
+        <div className="grid lg:grid-cols-12 gap-8 lg:gap-10 items-start">
+          <div className="lg:col-span-7">
+            <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bebas tracking-tight leading-[0.95]">
+              Built on <span className="text-white">Data</span>, Driven by{" "}
+              <span className="text-kos-gold">Edge</span>.
+            </h1>
 
-          <p className="mt-5 sm:mt-6 text-lg sm:text-xl text-gray-200/90 max-w-2xl">
-            Data-driven sports betting built around best-line shopping, strict
-            thresholds, bankroll tools, and tracking that respects the long
-            game.
-          </p>
-
-          <p className="mt-3 text-base sm:text-lg text-kos-gold font-semibold italic">
-            Sharper Data. Smarter Bets.
-          </p>
-
-          <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
-            <Link
-              href="/edge-board"
-              className="px-7 py-4 rounded-xl bg-kos-gold text-black font-bebas text-2xl text-center shadow-2xl shadow-kos-gold/35 hover:brightness-110 hover:scale-[1.02] transition"
-            >
-              Today&apos;s Edge Board
-            </Link>
-
-            <Link
-              href="/methodology"
-              className="px-7 py-4 rounded-xl bg-black/30 border border-white/15 text-white font-semibold text-center hover:border-kos-gold/35 hover:bg-black/40 transition"
-            >
-              How the Model Works
-            </Link>
-          </div>
-
-          <div className="mt-5 text-sm text-gray-400">
-            Threshold-based. Long-term focused. Built for disciplined bettors.
-          </div>
-        </div>
-
-        <div className="mt-10 sm:mt-12 space-y-6 lg:space-y-8">
-          <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
-            {pillars.map((p) => {
-              const isGold = p.accent === "gold";
-              const ringGlow = isGold
-                ? "hover:border-kos-gold/60 hover:shadow-kos-gold/25 shadow-kos-gold/20"
-                : "hover:border-kos-green/60 hover:shadow-kos-green/25 shadow-kos-green/20";
-              const title = isGold ? "text-kos-gold" : "text-kos-green";
-              const icon = isGold ? "text-kos-gold" : "text-kos-green";
-
-              return (
-                <div
-                  key={p.title}
-                  className={[
-                    "bg-black/30 border border-white/12 rounded-2xl p-5 backdrop-blur-xl shadow-xl transition",
-                    ringGlow,
-                  ].join(" ")}
-                >
-                  <div className={["text-sm font-semibold", icon].join(" ")}>
-                    ●
-                  </div>
-                  <h3 className={["mt-2 text-2xl font-bebas", title].join(" ")}>
-                    {p.title}
-                  </h3>
-                  <p className="mt-2 text-sm text-gray-200/80 leading-relaxed">
-                    {p.desc}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
-            <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-              <h3 className="text-2xl font-bebas text-kos-gold">
-                What you get
-              </h3>
-              <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                Best lines, edge thresholds, disciplined sizing, and clean
-                tracking that fits a serious workflow.
-              </p>
-            </div>
-
-            <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-              <h3 className="text-2xl font-bebas text-red-400">
-                What we avoid
-              </h3>
-              <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
-                Hype picks, “lock” talk, chasing, and gimmicks that don’t scale.
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
-            <h3 className="text-2xl font-bebas text-kos-gold">
-              One board. Every sport.
-            </h3>
-            <p className="mt-2 text-sm text-gray-200/85 leading-relaxed max-w-3xl">
-              Behind the scenes, each sport has its own model. Up front,
-              everything flows into the same Edge Board so your workflow stays
-              consistent.
+            <p className="mt-5 sm:mt-6 text-lg sm:text-xl text-gray-200/90 max-w-2xl">
+              Data-driven sports betting built around best-line shopping, strict
+              thresholds, bankroll tools, and tracking that respects the long
+              game.
             </p>
 
-            <EdgeBoard variant="home" />
+            <p className="mt-3 text-base sm:text-lg text-kos-gold font-semibold italic">
+              Sharper Data. Smarter Bets.
+            </p>
 
-            <div className="mt-4 flex flex-col sm:flex-row gap-3">
+            <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link
                 href="/edge-board"
-                className="px-4 py-3 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
+                className="px-7 py-4 rounded-xl bg-kos-gold text-black font-bebas text-2xl text-center shadow-2xl shadow-kos-gold/35 hover:brightness-110 hover:scale-[1.02] transition"
               >
-                View the Edge Board
+                Today&apos;s Edge Board
               </Link>
+
               <Link
-                href="/pro/nfl/overview"
-                className="px-4 py-3 rounded-xl bg-kos-gold text-black hover:brightness-110 transition text-center font-semibold shadow-lg shadow-kos-gold/20"
+                href="/methodology"
+                className="px-7 py-4 rounded-xl bg-black/30 border border-white/15 text-white font-semibold text-center hover:border-kos-gold/35 hover:bg-black/40 transition"
               >
-                Pro
+                How the Model Works
               </Link>
+            </div>
+
+            <div className="mt-5 text-sm text-gray-400">
+              Threshold-based. Long-term focused. Built for disciplined bettors.
+            </div>
+          </div>
+
+          {/* Homepage visual: Edge Board card (stamped CFB Week 1 rows) */}
+          <EdgeBoard variant="home" />
+        </div>
+
+        <div className="mt-16 sm:mt-20 lg:mt-24 grid lg:grid-cols-12 gap-6 lg:gap-8">
+          <div className="lg:col-span-7 space-y-6">
+            <div className="grid sm:grid-cols-3 gap-4 sm:gap-5">
+              {pillars.map((p) => {
+                const isGold = p.accent === "gold";
+                const ringGlow = isGold
+                  ? "hover:border-kos-gold/60 hover:shadow-kos-gold/25 shadow-kos-gold/20"
+                  : "hover:border-kos-green/60 hover:shadow-kos-green/25 shadow-kos-green/20";
+                const title = isGold ? "text-kos-gold" : "text-kos-green";
+                const icon = isGold ? "text-kos-gold" : "text-kos-green";
+
+                return (
+                  <div
+                    key={p.title}
+                    className={[
+                      "bg-black/30 border border-white/12 rounded-2xl p-5 backdrop-blur-xl shadow-xl transition",
+                      ringGlow,
+                    ].join(" ")}
+                  >
+                    <div className={["text-sm font-semibold", icon].join(" ")}>
+                      ●
+                    </div>
+                    <h3
+                      className={["mt-2 text-2xl font-bebas", title].join(" ")}
+                    >
+                      {p.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-gray-200/80 leading-relaxed">
+                      {p.desc}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 sm:gap-5">
+              <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
+                <h3 className="text-2xl font-bebas text-kos-gold">
+                  What you get
+                </h3>
+                <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
+                  Best lines, edge thresholds, disciplined sizing, and clean
+                  tracking that fits a serious workflow.
+                </p>
+              </div>
+
+              <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
+                <h3 className="text-2xl font-bebas text-red-400">
+                  What we avoid
+                </h3>
+                <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
+                  Hype picks, “lock” talk, chasing, and gimmicks that don’t
+                  scale.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="lg:col-span-5">
+            <div className="bg-black/30 border border-white/12 rounded-2xl p-6 backdrop-blur-xl shadow-xl">
+              <h3 className="text-2xl font-bebas text-kos-gold">
+                One board. Every sport.
+              </h3>
+              <p className="mt-2 text-sm text-gray-200/85 leading-relaxed">
+                Behind the scenes, each sport has its own model. Up front,
+                everything flows into the same Edge Board so your workflow stays
+                consistent.
+              </p>
+
+              <div className="mt-4 flex flex-col sm:flex-row gap-3">
+                <Link
+                  href="/edge-board"
+                  className="px-4 py-3 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 hover:bg-white/10 transition text-center font-semibold"
+                >
+                  View the Edge Board
+                </Link>
+                <Link
+                  href="/pro/nfl/overview"
+                  className="px-4 py-3 rounded-xl bg-kos-gold text-black hover:brightness-110 transition text-center font-semibold shadow-lg shadow-kos-gold/20"
+                >
+                  Pro
+                </Link>
+              </div>
             </div>
           </div>
         </div>
