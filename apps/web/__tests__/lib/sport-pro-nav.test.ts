@@ -110,9 +110,13 @@ describe("sport-pro-nav", () => {
       expect(primary).not.toContain("Season Model");
     }
 
-    // NBA Ch7 fantasy desks live under tools (not primary — NFL-only Fantasy primary).
+    // NBA/WNBA Ch7 fantasy desks live under tools (not primary — NFL-only Fantasy primary).
     expect(getSportToolNav("nba").map((i) => i.label)).toContain("Fantasy");
     expect(getSportPrimaryNav("nba").map((i) => i.label)).not.toContain(
+      "Fantasy",
+    );
+    expect(getSportToolNav("wnba").map((i) => i.label)).toContain("Fantasy");
+    expect(getSportPrimaryNav("wnba").map((i) => i.label)).not.toContain(
       "Fantasy",
     );
 

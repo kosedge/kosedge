@@ -111,7 +111,7 @@ const SPORT_COPY: Record<string, SportCopyOverride> = {
   wnba: {
     heroBadge: "Pro WNBA intelligence hub",
     heroSummary:
-      "WNBA premium workflow for the betting desk (Fair Lines → Edges → Props), usage concentration, travel context, and market-aware matchup briefs.",
+      "WNBA premium workflow: Edge Board (Ch4 KEI) → Fantasy (Ch5/Ch7) → Props dark (Ch6). Usage concentration, travel context, and market-aware matchup briefs.",
     articleToneBadge: "WNBA analyst desk",
     sectionTitles: {
       market: "Betting Desk",
@@ -187,10 +187,10 @@ function propsLinks(sportKey: string, base: string): OverviewSectionLink[] {
       premium: true,
       status: "active",
     },
-    ...(sportKey === "nba"
+    ...(sportKey === "nba" || sportKey === "wnba"
       ? [
           {
-            href: "/pro/nba/fantasy",
+            href: `/pro/${sportKey}/fantasy`,
             label: "Fantasy ranks",
             hint: "Season + slate from PlayerProjection — same means as props; scoring map only.",
             premium: true,

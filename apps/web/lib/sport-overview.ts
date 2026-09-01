@@ -123,24 +123,24 @@ const GLANCE: Record<string, GlanceItem[]> = {
   ],
   wnba: [
     {
-      href: "/pro/wnba/fair-lines",
-      title: "Model vs Market",
-      body: "Spreads, totals, and MLs with usage-aware baselines.",
+      href: "/edge-board/wnba",
+      title: "Edge Board",
+      body: "Open vs Best with Ch4 KEI — tags PASS until trusted Best clears.",
+    },
+    {
+      href: "/pro/wnba/fantasy",
+      title: "Fantasy",
+      body: "Ch5 PlayerProjection means scored into kos_default_points.",
     },
     {
       href: "/pro/wnba/props",
-      title: "Props Research",
-      body: "Player markets after travel and rest frames are set.",
+      title: "Props (dark)",
+      body: "Proj vs line only — zero PLAY / LEAN until a tag PR.",
     },
     {
-      href: "/pro/wnba/injuries",
-      title: "Availability",
-      body: "Injury, rest, and travel context for pricing.",
-    },
-    {
-      href: "/pro/wnba/teams",
-      title: "Team Research",
-      body: "Club hubs with pace and usage angles.",
+      href: "/pro/wnba/fair-lines",
+      title: "Fair Lines",
+      body: "Team KEI baselines beside the market board.",
     },
   ],
 };

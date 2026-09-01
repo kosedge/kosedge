@@ -322,31 +322,47 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     ],
   },
   wnba: {
-    pathLabel: "Fair Lines → Edges → Props",
+    pathLabel: "Edge Board → Fantasy → Props dark",
     pathSubtitle:
-      "WNBA desk path: Fair Lines → Edges → Props, with usage and travel into execution.",
+      "WNBA desk path: Edge Board (Ch4 KEI) → Fantasy (Ch5/Ch7) → Props dark (Ch6). No props PLAY.",
     cards: [
       {
-        href: "/pro/wnba/fair-lines",
-        title: "Fair Lines",
+        href: "/edge-board/wnba",
+        title: "Edge Board",
         description:
-          "Possession-sim ML / spread / total reference board — research only. Harmonic-mean pace, 40-min scaling.",
-        cta: "Open fair lines →",
+          "Open / Best / KEI for the posted slate. Tags stay PASS without trusted Best.",
+        cta: "Open edge board →",
         accent: "gold",
         status: "active",
       },
-      stubEdges(
-        "wnba",
-        "Thresholded game edges from WNBA fair lines vs live books.",
-      ),
-      stubThirdCard(
-        "wnba",
-        "Props",
-        "Player props (pts/reb/ast/threes) research board — role-collapse Under refusal; never stake-eligible.",
-      ),
+      {
+        href: "/pro/wnba/fantasy",
+        title: "Fantasy",
+        description:
+          "Season and slate ranks from Ch5 PlayerProjection — same means, scored.",
+        cta: "Open fantasy →",
+        accent: "green",
+        status: "active",
+      },
+      {
+        href: "/pro/wnba/props",
+        title: "Props (dark)",
+        description:
+          "Proj vs trusted Best only. Zero PLAY / LEAN until a later tag PR.",
+        cta: "Open props →",
+        accent: "neutral",
+        status: "active",
+      },
     ],
     footerCards: [
       ...SHARED_FOOTER("wnba"),
+      {
+        href: "/pro/wnba/fair-lines",
+        title: "Fair Lines",
+        description: "Ch4 team KEI baselines for research — not a pick sheet.",
+        cta: "Open fair lines →",
+        accent: "gold",
+      },
       {
         href: "/odds/wnba",
         title: "Compare Odds",

@@ -209,6 +209,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     }),
     tools: [
       ...sharedTools("wnba"),
+      { href: "/pro/wnba/fantasy", label: "Fantasy" },
       { href: "/pro/wnba/injuries", label: "Injuries & News" },
       { href: "/pro/wnba/standings", label: "Standings" },
       { href: "/pro/wnba/stats", label: "Pace / Usage" },

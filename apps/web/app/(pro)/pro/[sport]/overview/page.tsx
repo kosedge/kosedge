@@ -181,9 +181,9 @@ export default async function SportOverviewPage({
             >
               {slateCtaLabel} →
             </Link>
-            {sportKey === "nba" ? (
+            {sportKey === "nba" || sportKey === "wnba" ? (
               <Link
-                href="/pro/nba/fantasy"
+                href={`/pro/${sportKey}/fantasy`}
                 className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm font-semibold text-kos-text hover:border-kos-gold/35 inline-flex items-center"
               >
                 Fantasy
