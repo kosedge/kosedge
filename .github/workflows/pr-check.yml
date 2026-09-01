@@ -48,6 +48,7 @@ jobs:
           WEB=0
           MS=0
           CFB_MS=0
+          NBA_MS=0
           NFL_MS=0
           NFL_SCRIPTS=0
           for f in "${ALL[@]:-}"; do
@@ -56,6 +57,10 @@ jobs:
               services/model-service/src/services/cfb_*/*|services/model-service/tests/test_cfb_*|services/model-service/src/routes/cfb.py)
                 MS=1
                 CFB_MS=1
+                ;;
+              services/model-service/src/services/nba_*/*|services/model-service/tests/test_nba_*|services/model-service/src/routes/nba.py|scripts/nba/*)
+                MS=1
+                NBA_MS=1
                 ;;
               services/model-service/src/services/nfl_*/*|services/model-service/tests/test_nfl_*|services/model-service/src/routes/nfl*)
                 MS=1
@@ -67,9 +72,9 @@ jobs:
               scripts/nfl/*|data/ops/nfl*|content/writers/camp-desk-2026/*) NFL_SCRIPTS=1 ;;
             esac
           done
-          # CFB-only model-service PRs must not be blocked by NFL DepthSot / camp desk
+          # CFB/NBA-only model-service PRs must not be blocked by NFL DepthSot / camp desk
           # date coupling. NFL Truth Layer still runs when NFL paths (or nfl_ops) change.
-          if [ "$NFL_MS" = "0" ] && [ "$NFL_SCRIPTS" = "0" ] && [ "$CFB_MS" = "1" ]; then
+          if [ "$NFL_MS" = "0" ] && [ "$NFL_SCRIPTS" = "0" ] && { [ "$CFB_MS" = "1" ] || [ "$NBA_MS" = "1" ]; }; then
             NFL_TRUTH=0
           elif [ "$MS" = "1" ] || [ "$NFL_SCRIPTS" = "1" ]; then
             NFL_TRUTH=1
@@ -79,10 +84,11 @@ jobs:
           echo "web=$WEB" >> "$GITHUB_OUTPUT"
           echo "model_service=$MS" >> "$GITHUB_OUTPUT"
           echo "cfb_ms=$CFB_MS" >> "$GITHUB_OUTPUT"
+          echo "nba_ms=$NBA_MS" >> "$GITHUB_OUTPUT"
           echo "nfl_ms=$NFL_MS" >> "$GITHUB_OUTPUT"
           echo "nfl_ops=$NFL_SCRIPTS" >> "$GITHUB_OUTPUT"
           echo "nfl_truth=$NFL_TRUTH" >> "$GITHUB_OUTPUT"
-          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH (${#ALL[@]} files)"
+          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH (${#ALL[@]} files)"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
