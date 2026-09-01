@@ -218,11 +218,11 @@ jobs:
           cd services/model-service
           pytest -q tests/test_wnba_team_prior_ch1.py tests/test_wnba_roster_minutes_ch2.py tests/test_wnba_player_projection_ch5.py tests/test_wnba_situation_ch3.py tests/test_wnba_kei_ch4.py tests/test_wnba_props_ch6.py tests/test_wnba_fantasy_ch7.py tests/test_wnba_grade_harness.py
 
-      - name: Run NHL fetcher tests
+      - name: Run NHL fetcher / season-engine tests
         if: steps.paths.outputs.nhl_ms == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_nhl_fetcher.py
+          pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py
 
       - name: Run model-service DepthSot / NFL tests
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1')
