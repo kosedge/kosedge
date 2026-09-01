@@ -11,7 +11,7 @@ The rebuild story is half-right. Washington is the youngest roster in the league
 
 Sydney Johnson. Shakira Austin stays home — she dropped 31 in the Aug 23 clincher at Portland. Sonia Citron and Kiki Iriafen were added to USA on Aug 31 when Wilson and Plum came off (health). Late add, tightest re-entry on the East board: they open Sep 17, four nights after a possible Sep 13 final. No club return date. Inference: medal-game players are a sit/load-manage risk Sep 17; Sep 20 at Indiana is the first realistic maybe; Sep 27 is when they’re back. Austin’s right knee was questionable Aug 23 and she played. No Sep 1 IR. Thin, not a clean bill.
 
-They win the glass (club: 37 rebound-wins, a WNBA single-season record). Iriafen’s 20th double-double is a franchise first. Offense is 13th. House net −0.249, the only minus among the four East playoff clubs. Easiest remaining slate of the East four. BetMGM title +8000. Pass.
+They win the glass (club: 37 rebound-wins, a WNBA single-season record). Iriafen’s 20th double-double is a franchise first. Offense is 13th. House net −0.249. BetMGM title +8000. Pass.
 
 **Handicapper’s Note**
 Fair: Ch2 net −0.249 (`wnba-season-engine-v0.1`, as_of 2026-09-01). Code WSH.

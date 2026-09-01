@@ -20,7 +20,7 @@
 
 **Handicapper’s Note** (East field)
 Fair: Ch2 nets as above. No season KEI tags. CON@ATL Sep 17 Ch4 KEI −8.49 is a game line, not this card.
-Market: BetMGM Finals winner 18306835, 5:45 p.m. ET Sep 1 (IND +850 · ATL +900 · NYL +1300 · WAS +8000). East/West championship: no market. Aug 27 leftovers sit as last dated, not this stamp.
+Market: same board (18306835, 5:45 p.m. ET Sep 1). East/West championship: no market.
 Lean: Pass
 Confidence: 2/5
 Key risk: treating a pause snapshot as a bracket.
