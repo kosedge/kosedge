@@ -1,0 +1,5687 @@
+{
+  "engine_version": "wnba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "metric": "per_minus_15",
+  "metric_note": "BPM not on BR WNBA advanced; talent = PER \u2212 15 (centered). Same Advanced path concepts as stats.wnba.com.",
+  "PLAYER_YEAR_WEIGHTS": {
+    "2024": 0.2,
+    "2025": 0.3,
+    "2026": 0.5
+  },
+  "MIN_SEASON_MP": 50.0,
+  "source": "basketball-reference.com/wnba/years/{2024,2025,2026}_advanced.html",
+  "notes": [
+    "Season rows prefer BR combined markers TOT/2TM/3TM/4TM (never sum with splits).",
+    "Roster seed = 2026 YTD primary team (midseason).",
+    "Expansion TOR/POR: players with only 2026 seasons stay expansion_only; weights renormalize.",
+    "Does not blend Aug-1 leftover fair-lines 401857105/401857106."
+  ],
+  "player_count": 208,
+  "expansion_only_count": 13,
+  "players": {
+    "allemju01w": {
+      "player_id": "allemju01w",
+      "player_name": "Julie Allemand",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": -2.1875,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -3.5,
+          "per": 11.5,
+          "mp": 963.0,
+          "g": 34,
+          "team": "LA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 831.0,
+          "g": 29,
+          "team": "TOR",
+          "pos": "G"
+        }
+      }
+    },
+    "allenre01w": {
+      "player_id": "allenre01w",
+      "player_name": "Rebecca Allen",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -5.3,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -4.1,
+          "per": 10.9,
+          "mp": 447.0,
+          "g": 18,
+          "team": "PHX",
+          "pos": "F-G"
+        },
+        "2025": {
+          "talent": -7.1,
+          "per": 7.9,
+          "mp": 821.0,
+          "g": 44,
+          "team": "CHI",
+          "pos": "F-G"
+        },
+        "2026": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 459.0,
+          "g": 25,
+          "team": "NY",
+          "pos": "F-G"
+        }
+      }
+    },
+    "amihela01w": {
+      "player_id": "amihela01w",
+      "player_name": "Laeticia Amihere",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -1.16,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -11.5,
+          "per": 3.5,
+          "mp": 83.0,
+          "g": 16,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 3.3,
+          "per": 18.3,
+          "mp": 385.0,
+          "g": 29,
+          "team": "GSV",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 0.3,
+          "per": 15.3,
+          "mp": 403.0,
+          "g": 35,
+          "team": "GSV",
+          "pos": "F"
+        }
+      }
+    },
+    "amoorge01w": {
+      "player_id": "amoorge01w",
+      "player_name": "Georgia Amoore",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -8.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -8.8,
+          "per": 6.2,
+          "mp": 919.0,
+          "g": 40,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "anglone01w": {
+      "player_id": "anglone01w",
+      "player_name": "Nell Angloma",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -4.1,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.1,
+          "per": 10.9,
+          "mp": 418.0,
+          "g": 36,
+          "team": "CON",
+          "pos": "F"
+        }
+      }
+    },
+    "astiepa01w": {
+      "player_id": "astiepa01w",
+      "player_name": "Pauline Astier",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -0.4,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -0.4,
+          "per": 14.6,
+          "mp": 933.0,
+          "g": 40,
+          "team": "NY",
+          "pos": "G"
+        }
+      }
+    },
+    "atkinar01w": {
+      "player_id": "atkinar01w",
+      "player_name": "Ariel Atkins",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -1.87,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.9,
+          "per": 15.9,
+          "mp": 1196.0,
+          "g": 40,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 1.0,
+          "per": 16.0,
+          "mp": 970.0,
+          "g": 34,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 1033.0,
+          "g": 38,
+          "team": "LA",
+          "pos": "G"
+        }
+      }
+    },
+    "austish01w": {
+      "player_id": "austish01w",
+      "player_name": "Shakira Austin",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": 4.22,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.5,
+          "per": 17.5,
+          "mp": 238.0,
+          "g": 12,
+          "team": "WSH",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 3.4,
+          "per": 18.4,
+          "mp": 874.0,
+          "g": 38,
+          "team": "WSH",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 5.4,
+          "per": 20.4,
+          "mp": 1154.0,
+          "g": 39,
+          "team": "WSH",
+          "pos": "C"
+        }
+      }
+    },
+    "ayayiva01w": {
+      "player_id": "ayayiva01w",
+      "player_name": "Valeriane Ayayi",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -3.2,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -3.2,
+          "per": 11.8,
+          "mp": 543.0,
+          "g": 33,
+          "team": "PHX",
+          "pos": "F"
+        }
+      }
+    },
+    "banhara01w": {
+      "player_id": "banhara01w",
+      "player_name": "Rachel Banham",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -5.93,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.3,
+          "per": 9.7,
+          "mp": 586.0,
+          "g": 37,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 1081.0,
+          "g": 44,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -7.1,
+          "per": 7.9,
+          "mp": 476.0,
+          "g": 36,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "bankoor01w": {
+      "player_id": "bankoor01w",
+      "player_name": "Ornella Bankole",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": -6.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -6.0,
+          "per": 9.0,
+          "mp": 135.0,
+          "g": 10,
+          "team": "TOR",
+          "pos": "F"
+        }
+      }
+    },
+    "barkesa01w": {
+      "player_id": "barkesa01w",
+      "player_name": "Sarah Ashlee Barker",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": -4.3375,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -10.9,
+          "per": 4.1,
+          "mp": 481.0,
+          "g": 34,
+          "team": "LA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -0.4,
+          "per": 14.6,
+          "mp": 642.0,
+          "g": 26,
+          "team": "POR",
+          "pos": "G"
+        }
+      }
+    },
+    "beersra01w": {
+      "player_id": "beersra01w",
+      "player_name": "Raegan Beers",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -3.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -3.8,
+          "per": 11.2,
+          "mp": 396.0,
+          "g": 34,
+          "team": "CON",
+          "pos": "F"
+        }
+      }
+    },
+    "bellki01w": {
+      "player_id": "bellki01w",
+      "player_name": "Kierstan Bell",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -8.1375,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 427.0,
+          "g": 35,
+          "team": "LAS",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -10.2,
+          "per": 4.8,
+          "mp": 265.0,
+          "g": 26,
+          "team": "LAS",
+          "pos": "F"
+        }
+      }
+    },
+    "bettsla01w": {
+      "player_id": "bettsla01w",
+      "player_name": "Lauren Betts",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": 2.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 2.3,
+          "per": 17.3,
+          "mp": 684.0,
+          "g": 40,
+          "team": "WSH",
+          "pos": "C"
+        }
+      }
+    },
+    "billimo01w": {
+      "player_id": "billimo01w",
+      "player_name": "Monique Billings",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": 0.67,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.5,
+          "per": 12.5,
+          "mp": 843.0,
+          "g": 37,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 1.9,
+          "per": 16.9,
+          "mp": 474.0,
+          "g": 26,
+          "team": "GSV",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 1.2,
+          "per": 16.2,
+          "mp": 765.0,
+          "g": 39,
+          "team": "IND",
+          "pos": "F"
+        }
+      }
+    },
+    "borlais01w": {
+      "player_id": "borlais01w",
+      "player_name": "Isobel Borlase",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -6.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -6.3,
+          "per": 8.7,
+          "mp": 515.0,
+          "g": 40,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "bostoal01w": {
+      "player_id": "bostoal01w",
+      "player_name": "Aliyah Boston",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": 8.22,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 5.4,
+          "per": 20.4,
+          "mp": 1236.0,
+          "g": 40,
+          "team": "IND",
+          "pos": "C-F"
+        },
+        "2025": {
+          "talent": 7.8,
+          "per": 22.8,
+          "mp": 1327.0,
+          "g": 44,
+          "team": "IND",
+          "pos": "C-F"
+        },
+        "2026": {
+          "talent": 9.6,
+          "per": 24.6,
+          "mp": 993.0,
+          "g": 36,
+          "team": "IND",
+          "pos": "C-F"
+        }
+      }
+    },
+    "brinkca01w": {
+      "player_id": "brinkca01w",
+      "player_name": "Cameron Brink",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": 0.27,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.1,
+          "per": 12.9,
+          "mp": 329.0,
+          "g": 15,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 0.3,
+          "per": 15.3,
+          "mp": 244.0,
+          "g": 19,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 1.2,
+          "per": 16.2,
+          "mp": 571.0,
+          "g": 30,
+          "team": "LA",
+          "pos": "F"
+        }
+      }
+    },
+    "brochno01w": {
+      "player_id": "brochno01w",
+      "player_name": "No\u00e9mie Brochant",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -4.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.8,
+          "per": 10.2,
+          "mp": 895.0,
+          "g": 39,
+          "team": "PHX",
+          "pos": "F-G"
+        }
+      }
+    },
+    "brownle02w": {
+      "player_id": "brownle02w",
+      "player_name": "Lexie Brown",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -6.54,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.7,
+          "per": 9.3,
+          "mp": 379.0,
+          "g": 16,
+          "team": "LA",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -6.5,
+          "per": 8.5,
+          "mp": 227.0,
+          "g": 24,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -6.9,
+          "per": 8.1,
+          "mp": 148.0,
+          "g": 10,
+          "team": "SEA",
+          "pos": "G"
+        }
+      }
+    },
+    "bueckpa01w": {
+      "player_id": "bueckpa01w",
+      "player_name": "Paige Bueckers",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": 7.35,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 7.1,
+          "per": 22.1,
+          "mp": 1199.0,
+          "g": 36,
+          "team": "DAL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 7.5,
+          "per": 22.5,
+          "mp": 1256.0,
+          "g": 38,
+          "team": "DAL",
+          "pos": "G"
+        }
+      }
+    },
+    "buhnefr01w": {
+      "player_id": "buhnefr01w",
+      "player_name": "Frieda B\u00fchner",
+      "team_2026": "POR",
+      "expansion_only": true,
+      "talent": -3.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -3.3,
+          "per": 11.7,
+          "mp": 522.0,
+          "g": 35,
+          "team": "POR",
+          "pos": "F-C"
+        }
+      }
+    },
+    "burkeke01w": {
+      "player_id": "burkeke01w",
+      "player_name": "Kennedy Burke",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -2.62,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.2,
+          "per": 9.8,
+          "mp": 459.0,
+          "g": 38,
+          "team": "NY",
+          "pos": "G-F"
+        },
+        "2025": {
+          "talent": -1.1,
+          "per": 13.9,
+          "mp": 779.0,
+          "g": 36,
+          "team": "NY",
+          "pos": "G-F"
+        },
+        "2026": {
+          "talent": -2.5,
+          "per": 12.5,
+          "mp": 881.0,
+          "g": 37,
+          "team": "CON",
+          "pos": "G-F"
+        }
+      }
+    },
+    "burrera01w": {
+      "player_id": "burrera01w",
+      "player_name": "Rae Burrell",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -1.53,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.4,
+          "per": 12.6,
+          "mp": 579.0,
+          "g": 37,
+          "team": "LA",
+          "pos": "G-F"
+        },
+        "2025": {
+          "talent": -2.0,
+          "per": 13.0,
+          "mp": 515.0,
+          "g": 28,
+          "team": "LA",
+          "pos": "G-F"
+        },
+        "2026": {
+          "talent": -0.9,
+          "per": 14.1,
+          "mp": 1129.0,
+          "g": 39,
+          "team": "LA",
+          "pos": "G-F"
+        }
+      }
+    },
+    "burtove01w": {
+      "player_id": "burtove01w",
+      "player_name": "Veronica Burton",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": 3.86,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 393.0,
+          "g": 31,
+          "team": "CON",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 4.3,
+          "per": 19.3,
+          "mp": 1292.0,
+          "g": 44,
+          "team": "GSV",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 5.7,
+          "per": 20.7,
+          "mp": 1137.0,
+          "g": 40,
+          "team": "GSV",
+          "pos": "G"
+        }
+      }
+    },
+    "caldwma01w": {
+      "player_id": "caldwma01w",
+      "player_name": "Maya Caldwell",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -3.85,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -4.3,
+          "per": 10.7,
+          "mp": 405.0,
+          "g": 25,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -2.3,
+          "per": 12.7,
+          "mp": 760.0,
+          "g": 41,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.6,
+          "per": 10.4,
+          "mp": 551.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "G"
+        }
+      }
+    },
+    "canadjo01w": {
+      "player_id": "canadjo01w",
+      "player_name": "Jordin Canada",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": 1.11,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -0.2,
+          "per": 14.8,
+          "mp": 624.0,
+          "g": 20,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 1.5,
+          "per": 16.5,
+          "mp": 783.0,
+          "g": 28,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 1.4,
+          "per": 16.4,
+          "mp": 1230.0,
+          "g": 39,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "cannoem01w": {
+      "player_id": "cannoem01w",
+      "player_name": "Emma Cannon",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -1.4625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 213.0,
+          "g": 21,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -1.5,
+          "per": 13.5,
+          "mp": 110.0,
+          "g": 16,
+          "team": "LA",
+          "pos": "F"
+        }
+      }
+    },
+    "cardoka01w": {
+      "player_id": "cardoka01w",
+      "player_name": "Kamilla Cardoso",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": 5.79,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.5,
+          "per": 17.5,
+          "mp": 876.0,
+          "g": 32,
+          "team": "CHI",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 4.8,
+          "per": 19.8,
+          "mp": 1102.0,
+          "g": 40,
+          "team": "CHI",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 7.7,
+          "per": 22.7,
+          "mp": 1040.0,
+          "g": 39,
+          "team": "CHI",
+          "pos": "C"
+        }
+      }
+    },
+    "carlebr01w": {
+      "player_id": "carlebr01w",
+      "player_name": "Bridget Carleton",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": -1.3,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.5,
+          "per": 13.5,
+          "mp": 1164.0,
+          "g": 39,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -5.0,
+          "per": 10.0,
+          "mp": 1227.0,
+          "g": 44,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 1.0,
+          "per": 16.0,
+          "mp": 1195.0,
+          "g": 39,
+          "team": "POR",
+          "pos": "F"
+        }
+      }
+    },
+    "carrera01w": {
+      "player_id": "carrera01w",
+      "player_name": "Raquel Carrera Quintana",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -4.9,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.9,
+          "per": 10.1,
+          "mp": 120.0,
+          "g": 22,
+          "team": "NY",
+          "pos": "C"
+        }
+      }
+    },
+    "carridi01w": {
+      "player_id": "carridi01w",
+      "player_name": "DiJonai Carrington",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -3.34,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -0.9,
+          "per": 14.1,
+          "mp": 1155.0,
+          "g": 39,
+          "team": "CON",
+          "pos": "G-F"
+        },
+        "2025": {
+          "talent": -2.2,
+          "per": 12.8,
+          "mp": 680.0,
+          "g": 31,
+          "team": "TOT",
+          "pos": "G-F"
+        },
+        "2026": {
+          "talent": -5.0,
+          "per": 10.0,
+          "mp": 178.0,
+          "g": 11,
+          "team": "CHI",
+          "pos": "G-F"
+        }
+      }
+    },
+    "cartech01w": {
+      "player_id": "cartech01w",
+      "player_name": "Chennedy Carter",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": 8.5571,
+      "weight_mass": 0.7,
+      "seasons": {
+        "2024": {
+          "talent": 6.2,
+          "per": 21.2,
+          "mp": 858.0,
+          "g": 33,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 9.5,
+          "per": 24.5,
+          "mp": 220.0,
+          "g": 13,
+          "team": "LAS",
+          "pos": "G"
+        }
+      }
+    },
+    "cartesh01w": {
+      "player_id": "cartesh01w",
+      "player_name": "Sha Carter",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -11.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -11.0,
+          "per": 4.0,
+          "mp": 81.0,
+          "g": 13,
+          "team": "PHX",
+          "pos": "F"
+        }
+      }
+    },
+    "cechoem01w": {
+      "player_id": "cechoem01w",
+      "player_name": "Emma \u010cechov\u00e1",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -1.1,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -1.1,
+          "per": 13.9,
+          "mp": 52.0,
+          "g": 3,
+          "team": "MIN",
+          "pos": "C"
+        }
+      }
+    },
+    "charlka01w": {
+      "player_id": "charlka01w",
+      "player_name": "Kaila Charles",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -2.0125,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -1.2,
+          "per": 13.8,
+          "mp": 616.0,
+          "g": 35,
+          "team": "TOT",
+          "pos": "G-F"
+        },
+        "2026": {
+          "talent": -2.5,
+          "per": 12.5,
+          "mp": 786.0,
+          "g": 40,
+          "team": "GSV",
+          "pos": "G-F"
+        }
+      }
+    },
+    "chenka01w": {
+      "player_id": "chenka01w",
+      "player_name": "Kaitlyn Chen",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -4.2125,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -10.4,
+          "per": 4.6,
+          "mp": 247.0,
+          "g": 24,
+          "team": "GSV",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -0.5,
+          "per": 14.5,
+          "mp": 590.0,
+          "g": 40,
+          "team": "GSV",
+          "pos": "G"
+        }
+      }
+    },
+    "citroso01w": {
+      "player_id": "citroso01w",
+      "player_name": "Sonia Citron",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": 2.9625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 1.4,
+          "per": 16.4,
+          "mp": 1415.0,
+          "g": 44,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 3.9,
+          "per": 18.9,
+          "mp": 1228.0,
+          "g": 37,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "clarkal01w": {
+      "player_id": "clarkal01w",
+      "player_name": "Alysha Clark",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -8.15,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.9,
+          "per": 9.1,
+          "mp": 972.0,
+          "g": 40,
+          "team": "LAS",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -7.9,
+          "per": 7.1,
+          "mp": 828.0,
+          "g": 42,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -9.2,
+          "per": 5.8,
+          "mp": 309.0,
+          "g": 27,
+          "team": "DAL",
+          "pos": "F"
+        }
+      }
+    },
+    "clarkca02w": {
+      "player_id": "clarkca02w",
+      "player_name": "Caitlin Clark",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": 5.11,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.8,
+          "per": 18.8,
+          "mp": 1416.0,
+          "g": 40,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 1.5,
+          "per": 16.5,
+          "mp": 404.0,
+          "g": 13,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 7.8,
+          "per": 22.8,
+          "mp": 1126.0,
+          "g": 36,
+          "team": "IND",
+          "pos": "G"
+        }
+      }
+    },
+    "cloudna01w": {
+      "player_id": "cloudna01w",
+      "player_name": "Natasha Cloud",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -0.5,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -0.8,
+          "per": 14.2,
+          "mp": 1265.0,
+          "g": 38,
+          "team": "PHX",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -0.8,
+          "per": 14.2,
+          "mp": 1191.0,
+          "g": 41,
+          "team": "NY",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -0.2,
+          "per": 14.8,
+          "mp": 1113.0,
+          "g": 39,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "coffeni01w": {
+      "player_id": "coffeni01w",
+      "player_name": "Nia Coffey",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -2.46,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -7.7,
+          "per": 7.3,
+          "mp": 534.0,
+          "g": 40,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -0.9,
+          "per": 14.1,
+          "mp": 455.0,
+          "g": 44,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -1.3,
+          "per": 13.7,
+          "mp": 919.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "F"
+        }
+      }
+    },
+    "collina01w": {
+      "player_id": "collina01w",
+      "player_name": "Napheesa Collier",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": 10.33,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 10.1,
+          "per": 25.1,
+          "mp": 1181.0,
+          "g": 34,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 15.2,
+          "per": 30.2,
+          "mp": 1065.0,
+          "g": 33,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 7.5,
+          "per": 22.5,
+          "mp": 365.0,
+          "g": 12,
+          "team": "MIN",
+          "pos": "F"
+        }
+      }
+    },
+    "condema01w": {
+      "player_id": "condema01w",
+      "player_name": "Maria Conde",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": -5.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.5,
+          "per": 9.5,
+          "mp": 888.0,
+          "g": 33,
+          "team": "TOR",
+          "pos": "F"
+        }
+      }
+    },
+    "cookezi01w": {
+      "player_id": "cookezi01w",
+      "player_name": "Zia Cooke",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -7.45,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -9.9,
+          "per": 5.1,
+          "mp": 257.0,
+          "g": 29,
+          "team": "LA",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -9.4,
+          "per": 5.6,
+          "mp": 261.0,
+          "g": 26,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -5.3,
+          "per": 9.7,
+          "mp": 604.0,
+          "g": 40,
+          "team": "SEA",
+          "pos": "G"
+        }
+      }
+    },
+    "coppeka01w": {
+      "player_id": "coppeka01w",
+      "player_name": "Kahleah Copper",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": 0.5,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 1.4,
+          "per": 16.4,
+          "mp": 1197.0,
+          "g": 37,
+          "team": "PHX",
+          "pos": "G-F"
+        },
+        "2025": {
+          "talent": -0.6,
+          "per": 14.4,
+          "mp": 752.0,
+          "g": 28,
+          "team": "PHX",
+          "pos": "G-F"
+        },
+        "2026": {
+          "talent": 0.8,
+          "per": 15.8,
+          "mp": 1252.0,
+          "g": 38,
+          "team": "PHX",
+          "pos": "G-F"
+        }
+      }
+    },
+    "couliai01w": {
+      "player_id": "couliai01w",
+      "player_name": "Aicha Coulibaly",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -2.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -2.5,
+          "per": 12.5,
+          "mp": 377.0,
+          "g": 28,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "cunniso01w": {
+      "player_id": "cunniso01w",
+      "player_name": "Sophie Cunningham",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -2.32,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.3,
+          "per": 12.7,
+          "mp": 1109.0,
+          "g": 40,
+          "team": "PHX",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -2.2,
+          "per": 12.8,
+          "mp": 756.0,
+          "g": 30,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -2.4,
+          "per": 12.6,
+          "mp": 884.0,
+          "g": 39,
+          "team": "IND",
+          "pos": "G"
+        }
+      }
+    },
+    "dantada01w": {
+      "player_id": "dantada01w",
+      "player_name": "Damiris Dantas",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -5.89,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.3,
+          "per": 13.7,
+          "mp": 210.0,
+          "g": 20,
+          "team": "IND",
+          "pos": "C-F"
+        },
+        "2025": {
+          "talent": -6.6,
+          "per": 8.4,
+          "mp": 439.0,
+          "g": 38,
+          "team": "IND",
+          "pos": "C-F"
+        },
+        "2026": {
+          "talent": -7.3,
+          "per": 7.7,
+          "mp": 98.0,
+          "g": 12,
+          "team": "IND",
+          "pos": "C-F"
+        }
+      }
+    },
+    "delaean01w": {
+      "player_id": "delaean01w",
+      "player_name": "Antonia Delaere",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -5.1,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.1,
+          "per": 9.9,
+          "mp": 423.0,
+          "g": 37,
+          "team": "MIN",
+          "pos": "G"
+        }
+      }
+    },
+    "diggisk01w": {
+      "player_id": "diggisk01w",
+      "player_name": "Skylar Diggins",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": 2.16,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.6,
+          "per": 18.6,
+          "mp": 1262.0,
+          "g": 40,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 3.8,
+          "per": 18.8,
+          "mp": 1343.0,
+          "g": 43,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 0.6,
+          "per": 15.6,
+          "mp": 553.0,
+          "g": 19,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "dolsost01w": {
+      "player_id": "dolsost01w",
+      "player_name": "Stefanie Dolson",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -5.73,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 1013.0,
+          "g": 39,
+          "team": "WSH",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": -6.5,
+          "per": 8.5,
+          "mp": 653.0,
+          "g": 43,
+          "team": "WSH",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": -7.0,
+          "per": 8.0,
+          "mp": 605.0,
+          "g": 40,
+          "team": "SEA",
+          "pos": "C"
+        }
+      }
+    },
+    "dugalan01w": {
+      "player_id": "dugalan01w",
+      "player_name": "Angela Dugali\u0107",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -4.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.3,
+          "per": 10.7,
+          "mp": 321.0,
+          "g": 34,
+          "team": "WSH",
+          "pos": "F"
+        }
+      }
+    },
+    "edwaraa01w": {
+      "player_id": "edwaraa01w",
+      "player_name": "Aaliyah Edwards",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": 0.38,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.6,
+          "per": 13.4,
+          "mp": 741.0,
+          "g": 34,
+          "team": "WSH",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -2.0,
+          "per": 13.0,
+          "mp": 534.0,
+          "g": 36,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 2.6,
+          "per": 17.6,
+          "mp": 528.0,
+          "g": 26,
+          "team": "CON",
+          "pos": "F"
+        }
+      }
+    },
+    "engstem01w": {
+      "player_id": "engstem01w",
+      "player_name": "Emily Engstler",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": 2.2,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 6.7,
+          "per": 21.7,
+          "mp": 464.0,
+          "g": 32,
+          "team": "WSH",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -0.3,
+          "per": 14.7,
+          "mp": 512.0,
+          "g": 40,
+          "team": "WSH",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 1.9,
+          "per": 16.9,
+          "mp": 980.0,
+          "g": 40,
+          "team": "POR",
+          "pos": "F"
+        }
+      }
+    },
+    "evansda02w": {
+      "player_id": "evansda02w",
+      "player_name": "Dana Evans",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -8.78,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -3.6,
+          "per": 11.4,
+          "mp": 743.0,
+          "g": 39,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -4.2,
+          "per": 10.8,
+          "mp": 777.0,
+          "g": 44,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -13.6,
+          "per": 1.4,
+          "mp": 182.0,
+          "g": 11,
+          "team": "LAS",
+          "pos": "G"
+        }
+      }
+    },
+    "fagbete01w": {
+      "player_id": "fagbete01w",
+      "player_name": "Temi Fagbenle",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": -3.31,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.4,
+          "per": 12.6,
+          "mp": 415.0,
+          "g": 22,
+          "team": "IND",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": -2.1,
+          "per": 12.9,
+          "mp": 925.0,
+          "g": 39,
+          "team": "GSV",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 398.0,
+          "g": 23,
+          "team": "TOR",
+          "pos": "C"
+        }
+      }
+    },
+    "famaw01w": {
+      "player_id": "famaw01w",
+      "player_name": "Awa Fam",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -1.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -1.3,
+          "per": 13.7,
+          "mp": 911.0,
+          "g": 33,
+          "team": "SEA",
+          "pos": "C"
+        }
+      }
+    },
+    "fauthma01w": {
+      "player_id": "fauthma01w",
+      "player_name": "Marine Fauthoux",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -6.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -6.8,
+          "per": 8.2,
+          "mp": 235.0,
+          "g": 18,
+          "team": "NY",
+          "pos": "G"
+        }
+      }
+    },
+    "feagisa01w": {
+      "player_id": "feagisa01w",
+      "player_name": "Sania Feagin",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -14.8,
+      "weight_mass": 0.3,
+      "seasons": {
+        "2025": {
+          "talent": -14.8,
+          "per": 0.2,
+          "mp": 77.0,
+          "g": 16,
+          "team": "LA",
+          "pos": "F"
+        }
+      }
+    },
+    "fiebile01w": {
+      "player_id": "fiebile01w",
+      "player_name": "Leonie Fiebich",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -2.78,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.3,
+          "per": 13.7,
+          "mp": 837.0,
+          "g": 40,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -2.9,
+          "per": 12.1,
+          "mp": 1041.0,
+          "g": 37,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -3.3,
+          "per": 11.7,
+          "mp": 503.0,
+          "g": 17,
+          "team": "NY",
+          "pos": "F"
+        }
+      }
+    },
+    "floreal01w": {
+      "player_id": "floreal01w",
+      "player_name": "Alicia Fl\u00f3rez",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -8.7,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -8.7,
+          "per": 6.3,
+          "mp": 376.0,
+          "g": 31,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "fuddaz01w": {
+      "player_id": "fuddaz01w",
+      "player_name": "Azzi Fudd",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -1.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -1.0,
+          "per": 14.0,
+          "mp": 950.0,
+          "g": 30,
+          "team": "DAL",
+          "pos": "G"
+        }
+      }
+    },
+    "gardnre01w": {
+      "player_id": "gardnre01w",
+      "player_name": "Rebekah Gardner",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -0.9375,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -2.5,
+          "per": 12.5,
+          "mp": 502.0,
+          "g": 41,
+          "team": "NY",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 0.0,
+          "per": 15.0,
+          "mp": 570.0,
+          "g": 38,
+          "team": "NY",
+          "pos": "G"
+        }
+      }
+    },
+    "geiselu01w": {
+      "player_id": "geiselu01w",
+      "player_name": "Luisa Geisels\u00f6der",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": -6.875,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -3.0,
+          "per": 12.0,
+          "mp": 628.0,
+          "g": 28,
+          "team": "DAL",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": -9.2,
+          "per": 5.8,
+          "mp": 348.0,
+          "g": 21,
+          "team": "POR",
+          "pos": "C"
+        }
+      }
+    },
+    "grayal01w": {
+      "player_id": "grayal01w",
+      "player_name": "Allisha Gray",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": 3.06,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 1.0,
+          "per": 16.0,
+          "mp": 1327.0,
+          "g": 40,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 4.7,
+          "per": 19.7,
+          "mp": 1451.0,
+          "g": 42,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 2.9,
+          "per": 17.9,
+          "mp": 1318.0,
+          "g": 40,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "graych01w": {
+      "player_id": "graych01w",
+      "player_name": "Chelsea Gray",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -0.43,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.0,
+          "per": 14.0,
+          "mp": 702.0,
+          "g": 27,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 0.4,
+          "per": 15.4,
+          "mp": 1368.0,
+          "g": 44,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -0.7,
+          "per": 14.3,
+          "mp": 1283.0,
+          "g": 39,
+          "team": "LAS",
+          "pos": "G"
+        }
+      }
+    },
+    "graych02w": {
+      "player_id": "graych02w",
+      "player_name": "Chance Gray",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -7.7,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -7.7,
+          "per": 7.3,
+          "mp": 417.0,
+          "g": 37,
+          "team": "LA",
+          "pos": "G"
+        }
+      }
+    },
+    "grinebr01w": {
+      "player_id": "grinebr01w",
+      "player_name": "Brittney Griner",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": 5.03,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 11.0,
+          "per": 26.0,
+          "mp": 861.0,
+          "g": 30,
+          "team": "PHX",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 1.1,
+          "per": 16.1,
+          "mp": 810.0,
+          "g": 39,
+          "team": "ATL",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 5.0,
+          "per": 20.0,
+          "mp": 455.0,
+          "g": 18,
+          "team": "CON",
+          "pos": "C"
+        }
+      }
+    },
+    "gustame01w": {
+      "player_id": "gustame01w",
+      "player_name": "Megan DiLeo",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": -0.93,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.3,
+          "per": 12.7,
+          "mp": 405.0,
+          "g": 38,
+          "team": "LAS",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": -9.4,
+          "per": 5.6,
+          "mp": 226.0,
+          "g": 20,
+          "team": "LAS",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 4.7,
+          "per": 19.7,
+          "mp": 912.0,
+          "g": 38,
+          "team": "POR",
+          "pos": "C"
+        }
+      }
+    },
+    "hambyde01w": {
+      "player_id": "hambyde01w",
+      "player_name": "Dearica Hamby",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": 5.53,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 4.2,
+          "per": 19.2,
+          "mp": 1346.0,
+          "g": 40,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 8.8,
+          "per": 23.8,
+          "mp": 1374.0,
+          "g": 44,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.1,
+          "per": 19.1,
+          "mp": 1153.0,
+          "g": 40,
+          "team": "LA",
+          "pos": "F"
+        }
+      }
+    },
+    "hamzoel01w": {
+      "player_id": "hamzoel01w",
+      "player_name": "Eli\u0161ka Hamzov\u00e1",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -0.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -0.8,
+          "per": 14.2,
+          "mp": 112.0,
+          "g": 21,
+          "team": "MIN",
+          "pos": "G"
+        }
+      }
+    },
+    "harmoro01w": {
+      "player_id": "harmoro01w",
+      "player_name": "Rori Harmon",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -13.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -13.3,
+          "per": 1.7,
+          "mp": 70.0,
+          "g": 12,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "harriis01w": {
+      "player_id": "harriis01w",
+      "player_name": "Isabelle Harrison",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": 1.09,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -3.1,
+          "per": 11.9,
+          "mp": 587.0,
+          "g": 36,
+          "team": "CHI",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 2.2,
+          "per": 17.2,
+          "mp": 360.0,
+          "g": 34,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 2.1,
+          "per": 17.1,
+          "mp": 657.0,
+          "g": 28,
+          "team": "TOR",
+          "pos": "F"
+        }
+      }
+    },
+    "harrijo05w": {
+      "player_id": "harrijo05w",
+      "player_name": "Jordan Harrison",
+      "team_2026": "POR",
+      "expansion_only": true,
+      "talent": -0.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -0.5,
+          "per": 14.5,
+          "mp": 153.0,
+          "g": 12,
+          "team": "POR",
+          "pos": "G"
+        }
+      }
+    },
+    "harrity01w": {
+      "player_id": "harrity01w",
+      "player_name": "Tyasha Harris",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -2.55,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.8,
+          "per": 13.2,
+          "mp": 1125.0,
+          "g": 39,
+          "team": "CON",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -1.3,
+          "per": 13.7,
+          "mp": 82.0,
+          "g": 5,
+          "team": "DAL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -3.6,
+          "per": 11.4,
+          "mp": 489.0,
+          "g": 35,
+          "team": "IND",
+          "pos": "G"
+        }
+      }
+    },
+    "hayesti01w": {
+      "player_id": "hayesti01w",
+      "player_name": "Tiffany Hayes",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": 2.86,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.9,
+          "per": 17.9,
+          "mp": 708.0,
+          "g": 33,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -0.9,
+          "per": 14.1,
+          "mp": 700.0,
+          "g": 26,
+          "team": "GSV",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 5.1,
+          "per": 20.1,
+          "mp": 631.0,
+          "g": 38,
+          "team": "GSV",
+          "pos": "G"
+        }
+      }
+    },
+    "hiedena01w": {
+      "player_id": "hiedena01w",
+      "player_name": "Natisha Hiedeman",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": 0.92,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -3.5,
+          "per": 11.5,
+          "mp": 607.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 2.9,
+          "per": 17.9,
+          "mp": 833.0,
+          "g": 44,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 1.5,
+          "per": 16.5,
+          "mp": 1073.0,
+          "g": 36,
+          "team": "SEA",
+          "pos": "G"
+        }
+      }
+    },
+    "hillmna01w": {
+      "player_id": "hillmna01w",
+      "player_name": "Naz Hillmon",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -2.15,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -0.7,
+          "per": 14.3,
+          "mp": 868.0,
+          "g": 40,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 0.8,
+          "per": 15.8,
+          "mp": 1122.0,
+          "g": 44,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -4.5,
+          "per": 10.5,
+          "mp": 1145.0,
+          "g": 39,
+          "team": "ATL",
+          "pos": "F"
+        }
+      }
+    },
+    "hinesmy01w": {
+      "player_id": "hinesmy01w",
+      "player_name": "Myisha Hines-Allen",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -2.25,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.3,
+          "per": 17.3,
+          "mp": 746.0,
+          "g": 40,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -1.2,
+          "per": 13.8,
+          "mp": 882.0,
+          "g": 40,
+          "team": "DAL",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 463.0,
+          "g": 34,
+          "team": "IND",
+          "pos": "F"
+        }
+      }
+    },
+    "holmejo02w": {
+      "player_id": "holmejo02w",
+      "player_name": "Joyner Holmes",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -4.5,
+      "weight_mass": 0.2,
+      "seasons": {
+        "2024": {
+          "talent": -4.5,
+          "per": 10.5,
+          "mp": 231.0,
+          "g": 27,
+          "team": "SEA",
+          "pos": "F"
+        }
+      }
+    },
+    "holmema01w": {
+      "player_id": "holmema01w",
+      "player_name": "Mackenzie Holmes",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -0.5,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -1.0,
+          "per": 14.0,
+          "mp": 58.0,
+          "g": 10,
+          "team": "SEA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -0.2,
+          "per": 14.8,
+          "mp": 242.0,
+          "g": 25,
+          "team": "SEA",
+          "pos": "F"
+        }
+      }
+    },
+    "horstjo02w": {
+      "player_id": "horstjo02w",
+      "player_name": "Jordan Horston",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -4.1429,
+      "weight_mass": 0.7,
+      "seasons": {
+        "2024": {
+          "talent": -1.5,
+          "per": 13.5,
+          "mp": 871.0,
+          "g": 39,
+          "team": "SEA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -5.2,
+          "per": 9.8,
+          "mp": 609.0,
+          "g": 35,
+          "team": "SEA",
+          "pos": "F"
+        }
+      }
+    },
+    "howarna01w": {
+      "player_id": "howarna01w",
+      "player_name": "Natasha Howard",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": 5.91,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.1,
+          "per": 18.1,
+          "mp": 825.0,
+          "g": 27,
+          "team": "DAL",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 4.3,
+          "per": 19.3,
+          "mp": 1060.0,
+          "g": 44,
+          "team": "IND",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 8.0,
+          "per": 23.0,
+          "mp": 1174.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "F"
+        }
+      }
+    },
+    "howarrh01w": {
+      "player_id": "howarrh01w",
+      "player_name": "Rhyne Howard",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": 3.51,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.5,
+          "per": 17.5,
+          "mp": 1018.0,
+          "g": 30,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 3.2,
+          "per": 18.2,
+          "mp": 1151.0,
+          "g": 33,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 4.1,
+          "per": 19.1,
+          "mp": 1348.0,
+          "g": 39,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "hullle01w": {
+      "player_id": "hullle01w",
+      "player_name": "Lexie Hull",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -5.38,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 671.0,
+          "g": 34,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -4.5,
+          "per": 10.5,
+          "mp": 1189.0,
+          "g": 44,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -6.3,
+          "per": 8.7,
+          "mp": 766.0,
+          "g": 40,
+          "team": "IND",
+          "pos": "G"
+        }
+      }
+    },
+    "ionessa01w": {
+      "player_id": "ionessa01w",
+      "player_name": "Sabrina Ionescu",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": 2.37,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 4.5,
+          "per": 19.5,
+          "mp": 1221.0,
+          "g": 38,
+          "team": "NY",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 5.4,
+          "per": 20.4,
+          "mp": 1194.0,
+          "g": 38,
+          "team": "NY",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -0.3,
+          "per": 14.7,
+          "mp": 820.0,
+          "g": 27,
+          "team": "NY",
+          "pos": "G"
+        }
+      }
+    },
+    "iriafki01w": {
+      "player_id": "iriafki01w",
+      "player_name": "Kiki Iriafen",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": 3.8625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 2.3,
+          "per": 17.3,
+          "mp": 1185.0,
+          "g": 44,
+          "team": "WSH",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.8,
+          "per": 19.8,
+          "mp": 1051.0,
+          "g": 37,
+          "team": "WSH",
+          "pos": "F"
+        }
+      }
+    },
+    "jacksas01w": {
+      "player_id": "jacksas01w",
+      "player_name": "Ashlon Jackson",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -11.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -11.8,
+          "per": 3.2,
+          "mp": 171.0,
+          "g": 15,
+          "team": "CON",
+          "pos": "G"
+        }
+      }
+    },
+    "jacksri02w": {
+      "player_id": "jacksri02w",
+      "player_name": "Rickea Jackson",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -0.5,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.2,
+          "per": 13.8,
+          "mp": 1152.0,
+          "g": 40,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -2.7,
+          "per": 12.3,
+          "mp": 1173.0,
+          "g": 38,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 1.1,
+          "per": 16.1,
+          "mp": 118.0,
+          "g": 4,
+          "team": "CHI",
+          "pos": "F"
+        }
+      }
+    },
+    "jamesaz01w": {
+      "player_id": "jamesaz01w",
+      "player_name": "Aziaha James",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": 0.25,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -2.5,
+          "per": 12.5,
+          "mp": 673.0,
+          "g": 38,
+          "team": "DAL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 1.9,
+          "per": 16.9,
+          "mp": 406.0,
+          "g": 35,
+          "team": "DAL",
+          "pos": "G"
+        }
+      }
+    },
+    "jaquega01w": {
+      "player_id": "jaquega01w",
+      "player_name": "Gabriela Jaquez",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -5.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.6,
+          "per": 9.4,
+          "mp": 663.0,
+          "g": 35,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "jocytju01w": {
+      "player_id": "jocytju01w",
+      "player_name": "Just\u0117 Jocyt\u0117",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -11.3,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -11.3,
+          "per": 3.7,
+          "mp": 98.0,
+          "g": 14,
+          "team": "GSV",
+          "pos": "G-F"
+        }
+      }
+    },
+    "johanma01w": {
+      "player_id": "johanma01w",
+      "player_name": "Marine Johannes",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -3.025,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 803.0,
+          "g": 44,
+          "team": "NY",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -2.2,
+          "per": 12.8,
+          "mp": 769.0,
+          "g": 37,
+          "team": "NY",
+          "pos": "G"
+        }
+      }
+    },
+    "johnsfl03w": {
+      "player_id": "johnsfl03w",
+      "player_name": "Flau'jae Johnson",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -1.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -1.0,
+          "per": 14.0,
+          "mp": 1071.0,
+          "g": 38,
+          "team": "SEA",
+          "pos": "G"
+        }
+      }
+    },
+    "johnsra04w": {
+      "player_id": "johnsra04w",
+      "player_name": "Raven Johnson",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -6.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -6.6,
+          "per": 8.4,
+          "mp": 361.0,
+          "g": 35,
+          "team": "IND",
+          "pos": "G"
+        }
+      }
+    },
+    "jonesbr01w": {
+      "player_id": "jonesbr01w",
+      "player_name": "Brionna Jones",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": 6.92,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 6.2,
+          "per": 21.2,
+          "mp": 1087.0,
+          "g": 40,
+          "team": "CON",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 7.6,
+          "per": 22.6,
+          "mp": 1169.0,
+          "g": 44,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 6.8,
+          "per": 21.8,
+          "mp": 152.0,
+          "g": 9,
+          "team": "ATL",
+          "pos": "F"
+        }
+      }
+    },
+    "jonesjo01w": {
+      "player_id": "jonesjo01w",
+      "player_name": "Jonquel Jones",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": 5.92,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 6.4,
+          "per": 21.4,
+          "mp": 1164.0,
+          "g": 39,
+          "team": "NY",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 5.3,
+          "per": 20.3,
+          "mp": 830.0,
+          "g": 31,
+          "team": "NY",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 6.1,
+          "per": 21.1,
+          "mp": 1109.0,
+          "g": 39,
+          "team": "NY",
+          "pos": "C"
+        }
+      }
+    },
+    "juhasdo01w": {
+      "player_id": "juhasdo01w",
+      "player_name": "Dorka Juh\u00e1sz",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -3.0286,
+      "weight_mass": 0.7,
+      "seasons": {
+        "2024": {
+          "talent": -1.6,
+          "per": 13.4,
+          "mp": 547.0,
+          "g": 34,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -3.6,
+          "per": 11.4,
+          "mp": 245.0,
+          "g": 17,
+          "team": "MIN",
+          "pos": "F"
+        }
+      }
+    },
+    "juskala01w": {
+      "player_id": "juskala01w",
+      "player_name": "Laura Ju\u0161kait\u0117",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": -2.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -2.6,
+          "per": 12.4,
+          "mp": 997.0,
+          "g": 40,
+          "team": "TOR",
+          "pos": "F"
+        }
+      }
+    },
+    "keyte01w": {
+      "player_id": "keyte01w",
+      "player_name": "Teonni Key",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": -7.4,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -7.4,
+          "per": 7.6,
+          "mp": 350.0,
+          "g": 35,
+          "team": "TOR",
+          "pos": "F"
+        }
+      }
+    },
+    "kingli01w": {
+      "player_id": "kingli01w",
+      "player_name": "Liatu King",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -2.85,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -6.6,
+          "per": 8.4,
+          "mp": 136.0,
+          "g": 14,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -0.6,
+          "per": 14.4,
+          "mp": 74.0,
+          "g": 9,
+          "team": "MIN",
+          "pos": "F"
+        }
+      }
+    },
+    "kneepgi01w": {
+      "player_id": "kneepgi01w",
+      "player_name": "Gianna Kneepkens",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -7.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -7.0,
+          "per": 8.0,
+          "mp": 283.0,
+          "g": 32,
+          "team": "CON",
+          "pos": "G"
+        }
+      }
+    },
+    "konesi01w": {
+      "player_id": "konesi01w",
+      "player_name": "Sika Kon\u00e9",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -7.01,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.7,
+          "per": 15.7,
+          "mp": 217.0,
+          "g": 27,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -8.0,
+          "per": 7.0,
+          "mp": 85.0,
+          "g": 19,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -9.5,
+          "per": 5.5,
+          "mp": 160.0,
+          "g": 32,
+          "team": "ATL",
+          "pos": "F"
+        }
+      }
+    },
+    "kosuan01w": {
+      "player_id": "kosuan01w",
+      "player_name": "Anastasiia Kosu",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": 0.1,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 80.0,
+          "g": 21,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 1.0,
+          "per": 16.0,
+          "mp": 307.0,
+          "g": 30,
+          "team": "MIN",
+          "pos": "F"
+        }
+      }
+    },
+    "kuieraw01w": {
+      "player_id": "kuieraw01w",
+      "player_name": "Awak Kuier",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": 0.4,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 0.4,
+          "per": 15.4,
+          "mp": 655.0,
+          "g": 37,
+          "team": "DAL",
+          "pos": "F"
+        }
+      }
+    },
+    "lacanle01w": {
+      "player_id": "lacanle01w",
+      "player_name": "Le\u00efla Lacan",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -0.7875,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 0.9,
+          "per": 15.9,
+          "mp": 665.0,
+          "g": 25,
+          "team": "CON",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -1.8,
+          "per": 13.2,
+          "mp": 766.0,
+          "g": 27,
+          "team": "CON",
+          "pos": "G"
+        }
+      }
+    },
+    "legerch01w": {
+      "player_id": "legerch01w",
+      "player_name": "Charlisse Leger-Walker",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -5.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.8,
+          "per": 9.2,
+          "mp": 944.0,
+          "g": 40,
+          "team": "CON",
+          "pos": "G"
+        }
+      }
+    },
+    "leiteca01w": {
+      "player_id": "leiteca01w",
+      "player_name": "Carla Leite",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": 1.75,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -3.5,
+          "per": 11.5,
+          "mp": 637.0,
+          "g": 37,
+          "team": "GSV",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 4.9,
+          "per": 19.9,
+          "mp": 933.0,
+          "g": 36,
+          "team": "POR",
+          "pos": "G"
+        }
+      }
+    },
+    "linskky01w": {
+      "player_id": "linskky01w",
+      "player_name": "Kyara Linskens",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -4.4,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 202.0,
+          "g": 19,
+          "team": "PHX",
+          "pos": "C"
+        }
+      }
+    },
+    "loydje01w": {
+      "player_id": "loydje01w",
+      "player_name": "Jewell Loyd",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -3.49,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.2,
+          "per": 17.2,
+          "mp": 1246.0,
+          "g": 37,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -1.6,
+          "per": 13.4,
+          "mp": 1245.0,
+          "g": 44,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -6.9,
+          "per": 8.1,
+          "mp": 1000.0,
+          "g": 38,
+          "team": "LAS",
+          "pos": "G"
+        }
+      }
+    },
+    "mabrema01w": {
+      "player_id": "mabrema01w",
+      "player_name": "Marina Mabrey",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": 1.24,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.3,
+          "per": 15.3,
+          "mp": 1235.0,
+          "g": 40,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -3.9,
+          "per": 11.1,
+          "mp": 1103.0,
+          "g": 35,
+          "team": "CON",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 4.7,
+          "per": 19.7,
+          "mp": 944.0,
+          "g": 32,
+          "team": "TOR",
+          "pos": "G"
+        }
+      }
+    },
+    "mackna01w": {
+      "player_id": "mackna01w",
+      "player_name": "Natasha Mack",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": 4.49,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.2,
+          "per": 18.2,
+          "mp": 619.0,
+          "g": 40,
+          "team": "PHX",
+          "pos": "F-C"
+        },
+        "2025": {
+          "talent": 4.5,
+          "per": 19.5,
+          "mp": 623.0,
+          "g": 34,
+          "team": "PHX",
+          "pos": "F-C"
+        },
+        "2026": {
+          "talent": 5.0,
+          "per": 20.0,
+          "mp": 711.0,
+          "g": 32,
+          "team": "PHX",
+          "pos": "F-C"
+        }
+      }
+    },
+    "magbeez01w": {
+      "player_id": "magbeez01w",
+      "player_name": "Ezi Magbegor",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -0.38,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 4.2,
+          "per": 19.2,
+          "mp": 1135.0,
+          "g": 37,
+          "team": "SEA",
+          "pos": "F-C"
+        },
+        "2025": {
+          "talent": 1.1,
+          "per": 16.1,
+          "mp": 1203.0,
+          "g": 44,
+          "team": "SEA",
+          "pos": "F-C"
+        },
+        "2026": {
+          "talent": -3.1,
+          "per": 11.9,
+          "mp": 286.0,
+          "g": 14,
+          "team": "SEA",
+          "pos": "F-C"
+        }
+      }
+    },
+    "malondo01w": {
+      "player_id": "malondo01w",
+      "player_name": "Dominique Malonga",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": 5.875,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 5.0,
+          "per": 20.0,
+          "mp": 600.0,
+          "g": 42,
+          "team": "SEA",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 6.4,
+          "per": 21.4,
+          "mp": 820.0,
+          "g": 31,
+          "team": "SEA",
+          "pos": "C"
+        }
+      }
+    },
+    "marshra02w": {
+      "player_id": "marshra02w",
+      "player_name": "Rayah Marshall",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -7.9,
+      "weight_mass": 0.3,
+      "seasons": {
+        "2025": {
+          "talent": -7.9,
+          "per": 7.1,
+          "mp": 90.0,
+          "g": 15,
+          "team": "CON",
+          "pos": "C-F"
+        }
+      }
+    },
+    "martika01w": {
+      "player_id": "martika01w",
+      "player_name": "Kate Martin",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -5.6,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -8.6,
+          "per": 6.4,
+          "mp": 392.0,
+          "g": 34,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -5.6,
+          "per": 9.4,
+          "mp": 687.0,
+          "g": 42,
+          "team": "GSV",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 120.0,
+          "g": 17,
+          "team": "LA",
+          "pos": "G"
+        }
+      }
+    },
+    "mcbrika01w": {
+      "player_id": "mcbrika01w",
+      "player_name": "Kayla McBride",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": 2.96,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 1.8,
+          "per": 16.8,
+          "mp": 1237.0,
+          "g": 39,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 1.0,
+          "per": 16.0,
+          "mp": 1220.0,
+          "g": 39,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 4.6,
+          "per": 19.6,
+          "mp": 1303.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "G"
+        }
+      }
+    },
+    "mccowte01w": {
+      "player_id": "mccowte01w",
+      "player_name": "Teaira McCowan",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": -2.09,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 5.6,
+          "per": 20.6,
+          "mp": 983.0,
+          "g": 39,
+          "team": "DAL",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 5.3,
+          "per": 20.3,
+          "mp": 219.0,
+          "g": 17,
+          "team": "DAL",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": -9.6,
+          "per": 5.4,
+          "mp": 68.0,
+          "g": 10,
+          "team": "MIN",
+          "pos": "C"
+        }
+      }
+    },
+    "mcmahco01w": {
+      "player_id": "mcmahco01w",
+      "player_name": "Cotie McMahon",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -5.9,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.9,
+          "per": 9.1,
+          "mp": 748.0,
+          "g": 38,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "melboja01w": {
+      "player_id": "melboja01w",
+      "player_name": "Jade Melbourne",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -4.56,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.4,
+          "per": 9.6,
+          "mp": 525.0,
+          "g": 37,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -7.6,
+          "per": 7.4,
+          "mp": 1008.0,
+          "g": 43,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -2.4,
+          "per": 12.6,
+          "mp": 978.0,
+          "g": 39,
+          "team": "SEA",
+          "pos": "G"
+        }
+      }
+    },
+    "milesol01w": {
+      "player_id": "milesol01w",
+      "player_name": "Olivia Miles",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": 7.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 7.8,
+          "per": 22.8,
+          "mp": 1175.0,
+          "g": 38,
+          "team": "MIN",
+          "pos": "G"
+        }
+      }
+    },
+    "milicni01w": {
+      "player_id": "milicni01w",
+      "player_name": "Nikolina Milic",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": -9.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -9.6,
+          "per": 5.4,
+          "mp": 63.0,
+          "g": 7,
+          "team": "TOR",
+          "pos": "C"
+        }
+      }
+    },
+    "milledi03w": {
+      "player_id": "milledi03w",
+      "player_name": "Diamond Miller",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -7.73,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -11.9,
+          "per": 3.1,
+          "mp": 213.0,
+          "g": 21,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -6.5,
+          "per": 8.5,
+          "mp": 434.0,
+          "g": 40,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -6.8,
+          "per": 8.2,
+          "mp": 903.0,
+          "g": 40,
+          "team": "CON",
+          "pos": "F"
+        }
+      }
+    },
+    "mitchke01w": {
+      "player_id": "mitchke01w",
+      "player_name": "Kelsey Mitchell",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": 6.41,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.2,
+          "per": 18.2,
+          "mp": 1280.0,
+          "g": 40,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 4.9,
+          "per": 19.9,
+          "mp": 1381.0,
+          "g": 44,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 8.6,
+          "per": 23.6,
+          "mp": 1314.0,
+          "g": 40,
+          "team": "IND",
+          "pos": "G"
+        }
+      }
+    },
+    "morgato01w": {
+      "player_id": "morgato01w",
+      "player_name": "Tonie Morgan",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -5.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.6,
+          "per": 9.4,
+          "mp": 118.0,
+          "g": 8,
+          "team": "LA",
+          "pos": "G"
+        }
+      }
+    },
+    "nelsool01w": {
+      "player_id": "nelsool01w",
+      "player_name": "Olivia Nelson-Ododa",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": 1.58,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -4.4,
+          "per": 10.6,
+          "mp": 437.0,
+          "g": 37,
+          "team": "CON",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 2.2,
+          "per": 17.2,
+          "mp": 800.0,
+          "g": 37,
+          "team": "CON",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 3.6,
+          "per": 18.6,
+          "mp": 684.0,
+          "g": 32,
+          "team": "CON",
+          "pos": "C"
+        }
+      }
+    },
+    "nivarin01w": {
+      "player_id": "nivarin01w",
+      "player_name": "Indya Nivar",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -7.1,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -7.1,
+          "per": 7.9,
+          "mp": 61.0,
+          "g": 20,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "nogicjo01w": {
+      "player_id": "nogicjo01w",
+      "player_name": "Jovana Nogi\u0107",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -1.4,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 323.0,
+          "g": 16,
+          "team": "PHX",
+          "pos": "G"
+        }
+      }
+    },
+    "nurseki01w": {
+      "player_id": "nurseki01w",
+      "player_name": "Kia Nurse",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": -5.82,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -6.0,
+          "per": 9.0,
+          "mp": 810.0,
+          "g": 40,
+          "team": "LA",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -7.9,
+          "per": 7.1,
+          "mp": 962.0,
+          "g": 44,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.5,
+          "per": 10.5,
+          "mp": 531.0,
+          "g": 39,
+          "team": "TOR",
+          "pos": "G"
+        }
+      }
+    },
+    "nyeaa01w": {
+      "player_id": "nyeaa01w",
+      "player_name": "Aaliyah Nye",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -9.3,
+      "weight_mass": 0.3,
+      "seasons": {
+        "2025": {
+          "talent": -9.3,
+          "per": 5.7,
+          "mp": 671.0,
+          "g": 44,
+          "team": "LAS",
+          "pos": "G-F"
+        }
+      }
+    },
+    "oblakte01w": {
+      "player_id": "oblakte01w",
+      "player_name": "Teja Oblak",
+      "team_2026": "POR",
+      "expansion_only": true,
+      "talent": -5.1,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.1,
+          "per": 9.9,
+          "mp": 388.0,
+          "g": 29,
+          "team": "POR",
+          "pos": "G"
+        }
+      }
+    },
+    "ogunbar01w": {
+      "player_id": "ogunbar01w",
+      "player_name": "Arike Ogunbowale",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": 0.41,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.6,
+          "per": 18.6,
+          "mp": 1465.0,
+          "g": 38,
+          "team": "DAL",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -1.7,
+          "per": 13.3,
+          "mp": 966.0,
+          "g": 29,
+          "team": "DAL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 0.4,
+          "per": 15.4,
+          "mp": 1192.0,
+          "g": 40,
+          "team": "DAL",
+          "pos": "G"
+        }
+      }
+    },
+    "ogwumnn01w": {
+      "player_id": "ogwumnn01w",
+      "player_name": "Nneka Ogwumike",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": 6.61,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 7.6,
+          "per": 22.6,
+          "mp": 1177.0,
+          "g": 37,
+          "team": "SEA",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 6.8,
+          "per": 21.8,
+          "mp": 1359.0,
+          "g": 44,
+          "team": "SEA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 6.1,
+          "per": 21.1,
+          "mp": 1208.0,
+          "g": 39,
+          "team": "LA",
+          "pos": "F"
+        }
+      }
+    },
+    "okotma01w": {
+      "player_id": "okotma01w",
+      "player_name": "Madina Okot",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": 3.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 3.5,
+          "per": 18.5,
+          "mp": 358.0,
+          "g": 39,
+          "team": "ATL",
+          "pos": "C"
+        }
+      }
+    },
+    "olsenlu01w": {
+      "player_id": "olsenlu01w",
+      "player_name": "Lucy Olsen",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -4.6625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -4.6,
+          "per": 10.4,
+          "mp": 508.0,
+          "g": 41,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 138.0,
+          "g": 19,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "onyenmi01w": {
+      "player_id": "onyenmi01w",
+      "player_name": "Michaela Onyenwere",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -5.73,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -6.6,
+          "per": 8.4,
+          "mp": 636.0,
+          "g": 34,
+          "team": "CHI",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -7.2,
+          "per": 7.8,
+          "mp": 711.0,
+          "g": 42,
+          "team": "CHI",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -4.5,
+          "per": 10.5,
+          "mp": 906.0,
+          "g": 36,
+          "team": "WSH",
+          "pos": "F"
+        }
+      }
+    },
+    "paopate01w": {
+      "player_id": "paopate01w",
+      "player_name": "Te-Hina PaoPao",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -5.4625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -1.9,
+          "per": 13.1,
+          "mp": 720.0,
+          "g": 43,
+          "team": "ATL",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -7.6,
+          "per": 7.4,
+          "mp": 347.0,
+          "g": 31,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "parkech01w": {
+      "player_id": "parkech01w",
+      "player_name": "Cheyenne Parker-Tyus",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": 4.1571,
+      "weight_mass": 0.7,
+      "seasons": {
+        "2024": {
+          "talent": 0.3,
+          "per": 15.3,
+          "mp": 492.0,
+          "g": 25,
+          "team": "ATL",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 5.7,
+          "per": 20.7,
+          "mp": 289.0,
+          "g": 27,
+          "team": "LAS",
+          "pos": "F"
+        }
+      }
+    },
+    "parkji02w": {
+      "player_id": "parkji02w",
+      "player_name": "Jihyun Park",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -7.7,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -7.7,
+          "per": 7.3,
+          "mp": 300.0,
+          "g": 33,
+          "team": "LA",
+          "pos": "G"
+        }
+      }
+    },
+    "pilial01w": {
+      "player_id": "pilial01w",
+      "player_name": "Alissa Pili",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -5.64,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2024": {
+          "talent": -10.2,
+          "per": 4.8,
+          "mp": 138.0,
+          "g": 22,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -2.6,
+          "per": 12.4,
+          "mp": 99.0,
+          "g": 19,
+          "team": "TOT",
+          "pos": "F"
+        }
+      }
+    },
+    "pissoju01w": {
+      "player_id": "pissoju01w",
+      "player_name": "Justine Pissott",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -4.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.8,
+          "per": 10.2,
+          "mp": 84.0,
+          "g": 9,
+          "team": "LAS",
+          "pos": "G-F"
+        }
+      }
+    },
+    "pouyeti01w": {
+      "player_id": "pouyeti01w",
+      "player_name": "Tima Pouye",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": -8.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -8.8,
+          "per": 6.2,
+          "mp": 178.0,
+          "g": 19,
+          "team": "TOR",
+          "pos": "G"
+        }
+      }
+    },
+    "prospca01w": {
+      "player_id": "prospca01w",
+      "player_name": "Cassandre Prosper",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -13.9,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -13.9,
+          "per": 1.1,
+          "mp": 349.0,
+          "g": 35,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "puochny01w": {
+      "player_id": "puochny01w",
+      "player_name": "Nyadiew Puoch",
+      "team_2026": "POR",
+      "expansion_only": true,
+      "talent": -9.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -9.0,
+          "per": 6.0,
+          "mp": 689.0,
+          "g": 39,
+          "team": "POR",
+          "pos": "F"
+        }
+      }
+    },
+    "quinejj01w": {
+      "player_id": "quinejj01w",
+      "player_name": "JJ Quinerly",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -1.8,
+      "weight_mass": 0.3,
+      "seasons": {
+        "2025": {
+          "talent": -1.8,
+          "per": 13.2,
+          "mp": 539.0,
+          "g": 34,
+          "team": "DAL",
+          "pos": "G"
+        }
+      }
+    },
+    "reesean01w": {
+      "player_id": "reesean01w",
+      "player_name": "Angel Reese",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": 4.44,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.6,
+          "per": 17.6,
+          "mp": 1104.0,
+          "g": 34,
+          "team": "CHI",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 4.9,
+          "per": 19.9,
+          "mp": 947.0,
+          "g": 30,
+          "team": "CHI",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.9,
+          "per": 19.9,
+          "mp": 1231.0,
+          "g": 39,
+          "team": "ATL",
+          "pos": "F"
+        }
+      }
+    },
+    "riceki01w": {
+      "player_id": "riceki01w",
+      "player_name": "Kiki Rice",
+      "team_2026": "TOR",
+      "expansion_only": true,
+      "talent": 1.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 1.5,
+          "per": 16.5,
+          "mp": 639.0,
+          "g": 24,
+          "team": "TOR",
+          "pos": "G"
+        }
+      }
+    },
+    "riversa01w": {
+      "player_id": "riversa01w",
+      "player_name": "Saniya Rivers",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -4.15,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 1097.0,
+          "g": 42,
+          "team": "CON",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -5.8,
+          "per": 9.2,
+          "mp": 817.0,
+          "g": 36,
+          "team": "CON",
+          "pos": "G"
+        }
+      }
+    },
+    "russeme01w": {
+      "player_id": "russeme01w",
+      "player_name": "Mercedes Russell",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": -4.84,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2024": {
+          "talent": -4.0,
+          "per": 11.0,
+          "mp": 583.0,
+          "g": 37,
+          "team": "SEA",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": -5.4,
+          "per": 9.6,
+          "mp": 163.0,
+          "g": 20,
+          "team": "LA",
+          "pos": "C"
+        }
+      }
+    },
+    "sabalny01w": {
+      "player_id": "sabalny01w",
+      "player_name": "Nyara Sabally",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": 3.15,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 6.0,
+          "per": 21.0,
+          "mp": 352.0,
+          "g": 26,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -1.5,
+          "per": 13.5,
+          "mp": 305.0,
+          "g": 17,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.8,
+          "per": 19.8,
+          "mp": 573.0,
+          "g": 24,
+          "team": "TOR",
+          "pos": "F"
+        }
+      }
+    },
+    "sabalsa01w": {
+      "player_id": "sabalsa01w",
+      "player_name": "Satou Sabally",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": 2.7,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 4.5,
+          "per": 19.5,
+          "mp": 512.0,
+          "g": 15,
+          "team": "DAL",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 4.5,
+          "per": 19.5,
+          "mp": 1039.0,
+          "g": 39,
+          "team": "PHX",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 0.9,
+          "per": 15.9,
+          "mp": 218.0,
+          "g": 13,
+          "team": "NY",
+          "pos": "F"
+        }
+      }
+    },
+    "salauja01w": {
+      "player_id": "salauja01w",
+      "player_name": "Janelle Sala\u00fcn",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": 1.5,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -3.0,
+          "per": 12.0,
+          "mp": 973.0,
+          "g": 36,
+          "team": "GSV",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.2,
+          "per": 19.2,
+          "mp": 849.0,
+          "g": 38,
+          "team": "GSV",
+          "pos": "F"
+        }
+      }
+    },
+    "samueka01w": {
+      "player_id": "samueka01w",
+      "player_name": "Karlie Samuelson",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": -5.21,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -2.0,
+          "per": 13.0,
+          "mp": 711.0,
+          "g": 29,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -8.2,
+          "per": 6.8,
+          "mp": 228.0,
+          "g": 16,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 428.0,
+          "g": 28,
+          "team": "POR",
+          "pos": "G"
+        }
+      }
+    },
+    "samueka02w": {
+      "player_id": "samueka02w",
+      "player_name": "Katie Lou Samuelson",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -4.4143,
+      "weight_mass": 0.7,
+      "seasons": {
+        "2024": {
+          "talent": -6.2,
+          "per": 8.8,
+          "mp": 674.0,
+          "g": 37,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -3.7,
+          "per": 11.3,
+          "mp": 491.0,
+          "g": 32,
+          "team": "SEA",
+          "pos": "G"
+        }
+      }
+    },
+    "sheldja01w": {
+      "player_id": "sheldja01w",
+      "player_name": "Jacy Sheldon",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -5.59,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -8.2,
+          "per": 6.8,
+          "mp": 931.0,
+          "g": 40,
+          "team": "DAL",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -3.0,
+          "per": 12.0,
+          "mp": 708.0,
+          "g": 30,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -6.1,
+          "per": 8.9,
+          "mp": 827.0,
+          "g": 40,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "shepaje01w": {
+      "player_id": "shepaje01w",
+      "player_name": "Jessica Shepard",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": 7.0375,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 6.1,
+          "per": 21.1,
+          "mp": 835.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 7.6,
+          "per": 22.6,
+          "mp": 1210.0,
+          "g": 38,
+          "team": "DAL",
+          "pos": "F"
+        }
+      }
+    },
+    "sherrja01w": {
+      "player_id": "sherrja01w",
+      "player_name": "Jaylyn Sherrod",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -6.0375,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -9.6,
+          "per": 5.4,
+          "mp": 142.0,
+          "g": 26,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -3.9,
+          "per": 11.1,
+          "mp": 71.0,
+          "g": 10,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "siegrma01w": {
+      "player_id": "siegrma01w",
+      "player_name": "Maddy Siegrist",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": 2.01,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.2,
+          "per": 15.2,
+          "mp": 644.0,
+          "g": 27,
+          "team": "DAL",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 2.4,
+          "per": 17.4,
+          "mp": 702.0,
+          "g": 26,
+          "team": "DAL",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 2.5,
+          "per": 17.5,
+          "mp": 527.0,
+          "g": 37,
+          "team": "DAL",
+          "pos": "F"
+        }
+      }
+    },
+    "simsod01w": {
+      "player_id": "simsod01w",
+      "player_name": "Odyssey Sims",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -3.47,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 2.2,
+          "per": 17.2,
+          "mp": 700.0,
+          "g": 24,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -3.2,
+          "per": 11.8,
+          "mp": 671.0,
+          "g": 24,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -5.9,
+          "per": 9.1,
+          "mp": 453.0,
+          "g": 31,
+          "team": "DAL",
+          "pos": "G"
+        }
+      }
+    },
+    "smithal01w": {
+      "player_id": "smithal01w",
+      "player_name": "Alanna Smith",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -0.05,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.1,
+          "per": 18.1,
+          "mp": 1035.0,
+          "g": 39,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 3.1,
+          "per": 18.1,
+          "mp": 1114.0,
+          "g": 42,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -3.2,
+          "per": 11.8,
+          "mp": 572.0,
+          "g": 32,
+          "team": "DAL",
+          "pos": "F"
+        }
+      }
+    },
+    "smithna01w": {
+      "player_id": "smithna01w",
+      "player_name": "NaLyssa Smith",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": 2.1,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 1.1,
+          "per": 16.1,
+          "mp": 990.0,
+          "g": 40,
+          "team": "IND",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -1.9,
+          "per": 13.1,
+          "mp": 956.0,
+          "g": 45,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.9,
+          "per": 19.9,
+          "mp": 925.0,
+          "g": 38,
+          "team": "LAS",
+          "pos": "F"
+        }
+      }
+    },
+    "steveaz01w": {
+      "player_id": "steveaz01w",
+      "player_name": "Azura Stevens",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": 0.83,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -0.9,
+          "per": 14.1,
+          "mp": 493.0,
+          "g": 20,
+          "team": "LA",
+          "pos": "F-C"
+        },
+        "2025": {
+          "talent": 5.2,
+          "per": 20.2,
+          "mp": 1249.0,
+          "g": 44,
+          "team": "LA",
+          "pos": "F-C"
+        },
+        "2026": {
+          "talent": -1.1,
+          "per": 13.9,
+          "mp": 763.0,
+          "g": 31,
+          "team": "CHI",
+          "pos": "F-C"
+        }
+      }
+    },
+    "stewabr01w": {
+      "player_id": "stewabr01w",
+      "player_name": "Breanna Stewart",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": 8.99,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 11.4,
+          "per": 26.4,
+          "mp": 1243.0,
+          "g": 38,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 8.7,
+          "per": 23.7,
+          "mp": 948.0,
+          "g": 31,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 8.2,
+          "per": 23.2,
+          "mp": 1287.0,
+          "g": 39,
+          "team": "NY",
+          "pos": "F"
+        }
+      }
+    },
+    "stokeki01w": {
+      "player_id": "stokeki01w",
+      "player_name": "Kiah Stokes",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -5.33,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -7.7,
+          "per": 7.3,
+          "mp": 716.0,
+          "g": 39,
+          "team": "LAS",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": -7.8,
+          "per": 7.2,
+          "mp": 514.0,
+          "g": 40,
+          "team": "LAS",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": -2.9,
+          "per": 12.1,
+          "mp": 855.0,
+          "g": 39,
+          "team": "GSV",
+          "pos": "C"
+        }
+      }
+    },
+    "suarema01w": {
+      "player_id": "suarema01w",
+      "player_name": "Marta Su\u00e1rez",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -5.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -5.5,
+          "per": 9.5,
+          "mp": 136.0,
+          "g": 15,
+          "team": "PHX",
+          "pos": "F"
+        }
+      }
+    },
+    "sykesbr01w": {
+      "player_id": "sykesbr01w",
+      "player_name": "Brittney Sykes",
+      "team_2026": "TOR",
+      "expansion_only": false,
+      "talent": 1.49,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.1,
+          "per": 15.1,
+          "mp": 419.0,
+          "g": 18,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -1.6,
+          "per": 13.4,
+          "mp": 1194.0,
+          "g": 39,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 3.9,
+          "per": 18.9,
+          "mp": 500.0,
+          "g": 17,
+          "team": "TOR",
+          "pos": "G"
+        }
+      }
+    },
+    "talbost01w": {
+      "player_id": "talbost01w",
+      "player_name": "Stephanie Talbot",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -5.92,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -4.9,
+          "per": 10.1,
+          "mp": 600.0,
+          "g": 37,
+          "team": "LA",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": -5.8,
+          "per": 9.2,
+          "mp": 541.0,
+          "g": 38,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -6.4,
+          "per": 8.6,
+          "mp": 676.0,
+          "g": 40,
+          "team": "LAS",
+          "pos": "F"
+        }
+      }
+    },
+    "taylosy01w": {
+      "player_id": "taylosy01w",
+      "player_name": "Sydney Taylor",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": 1.2,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 1.2,
+          "per": 16.2,
+          "mp": 670.0,
+          "g": 33,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "thierta01w": {
+      "player_id": "thierta01w",
+      "player_name": "Taylor Thierry",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -4.7,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.7,
+          "per": 10.3,
+          "mp": 77.0,
+          "g": 13,
+          "team": "SEA",
+          "pos": "G-F"
+        }
+      }
+    },
+    "thomaal01w": {
+      "player_id": "thomaal01w",
+      "player_name": "Alyssa Thomas",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": 6.27,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 4.8,
+          "per": 19.8,
+          "mp": 1296.0,
+          "g": 40,
+          "team": "CON",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 10.2,
+          "per": 25.2,
+          "mp": 1221.0,
+          "g": 39,
+          "team": "PHX",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 4.5,
+          "per": 19.5,
+          "mp": 1273.0,
+          "g": 38,
+          "team": "PHX",
+          "pos": "F"
+        }
+      }
+    },
+    "thornka01w": {
+      "player_id": "thornka01w",
+      "player_name": "Kayla Thornton",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -2.86,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.2,
+          "per": 9.8,
+          "mp": 809.0,
+          "g": 40,
+          "team": "NY",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 0.1,
+          "per": 15.1,
+          "mp": 662.0,
+          "g": 22,
+          "team": "GSV",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -3.7,
+          "per": 11.3,
+          "mp": 963.0,
+          "g": 40,
+          "team": "GSV",
+          "pos": "F"
+        }
+      }
+    },
+    "timpsma01w": {
+      "player_id": "timpsma01w",
+      "player_name": "Makayla Timpson",
+      "team_2026": "IND",
+      "expansion_only": false,
+      "talent": 0.675,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 2.8,
+          "per": 17.8,
+          "mp": 219.0,
+          "g": 31,
+          "team": "IND",
+          "pos": "F-C"
+        },
+        "2026": {
+          "talent": -0.6,
+          "per": 14.4,
+          "mp": 750.0,
+          "g": 39,
+          "team": "IND",
+          "pos": "F-C"
+        }
+      }
+    },
+    "turnebr01w": {
+      "player_id": "turnebr01w",
+      "player_name": "Brianna Turner",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -8.0,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -6.0,
+          "per": 9.0,
+          "mp": 253.0,
+          "g": 27,
+          "team": "CHI",
+          "pos": "F-C"
+        },
+        "2025": {
+          "talent": -7.5,
+          "per": 7.5,
+          "mp": 233.0,
+          "g": 27,
+          "team": "IND",
+          "pos": "F-C"
+        },
+        "2026": {
+          "talent": -9.1,
+          "per": 5.9,
+          "mp": 478.0,
+          "g": 37,
+          "team": "LAS",
+          "pos": "F-C"
+        }
+      }
+    },
+    "vandeco01w": {
+      "player_id": "vandeco01w",
+      "player_name": "Courtney Vandersloot",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": 0.56,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.8,
+          "per": 13.2,
+          "mp": 691.0,
+          "g": 31,
+          "team": "NY",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 0.4,
+          "per": 15.4,
+          "mp": 191.0,
+          "g": 7,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 1.6,
+          "per": 16.6,
+          "mp": 506.0,
+          "g": 23,
+          "team": "CHI",
+          "pos": "G"
+        }
+      }
+    },
+    "vanliha01w": {
+      "player_id": "vanliha01w",
+      "player_name": "Hailey Van Lith",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": -5.8375,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -9.4,
+          "per": 5.6,
+          "mp": 361.0,
+          "g": 29,
+          "team": "CHI",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -3.7,
+          "per": 11.3,
+          "mp": 288.0,
+          "g": 19,
+          "team": "CON",
+          "pos": "G"
+        }
+      }
+    },
+    "vanloju01w": {
+      "player_id": "vanloju01w",
+      "player_name": "Julie Vanloo",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -4.53,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -8.4,
+          "per": 6.6,
+          "mp": 926.0,
+          "g": 40,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -11.5,
+          "per": 3.5,
+          "mp": 449.0,
+          "g": 35,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 1.2,
+          "per": 16.2,
+          "mp": 81.0,
+          "g": 5,
+          "team": "NY",
+          "pos": "G"
+        }
+      }
+    },
+    "wheeler01w": {
+      "player_id": "wheeler01w",
+      "player_name": "Erica Wheeler",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -4.09,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -6.5,
+          "per": 8.5,
+          "mp": 546.0,
+          "g": 39,
+          "team": "IND",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -1.8,
+          "per": 13.2,
+          "mp": 1126.0,
+          "g": 44,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.5,
+          "per": 10.5,
+          "mp": 1054.0,
+          "g": 39,
+          "team": "LA",
+          "pos": "G"
+        }
+      }
+    },
+    "whitcsa01w": {
+      "player_id": "whitcsa01w",
+      "player_name": "Sami Whitcomb",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -5.45,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -5.1,
+          "per": 9.9,
+          "mp": 611.0,
+          "g": 40,
+          "team": "SEA",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -3.6,
+          "per": 11.4,
+          "mp": 1027.0,
+          "g": 43,
+          "team": "PHX",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -6.7,
+          "per": 8.3,
+          "mp": 281.0,
+          "g": 17,
+          "team": "PHX",
+          "pos": "G"
+        }
+      }
+    },
+    "willico01w": {
+      "player_id": "willico01w",
+      "player_name": "Courtney Williams",
+      "team_2026": "MIN",
+      "expansion_only": false,
+      "talent": 1.44,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.1,
+          "per": 15.1,
+          "mp": 1061.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 2.9,
+          "per": 17.9,
+          "mp": 1260.0,
+          "g": 44,
+          "team": "MIN",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 1.1,
+          "per": 16.1,
+          "mp": 1192.0,
+          "g": 39,
+          "team": "MIN",
+          "pos": "G"
+        }
+      }
+    },
+    "williel01w": {
+      "player_id": "williel01w",
+      "player_name": "Elizabeth Williams",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": 0.03,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.6,
+          "per": 18.6,
+          "mp": 249.0,
+          "g": 9,
+          "team": "CHI",
+          "pos": "C-F"
+        },
+        "2025": {
+          "talent": 2.2,
+          "per": 17.2,
+          "mp": 906.0,
+          "g": 43,
+          "team": "CHI",
+          "pos": "C-F"
+        },
+        "2026": {
+          "talent": -2.7,
+          "per": 12.3,
+          "mp": 655.0,
+          "g": 40,
+          "team": "CHI",
+          "pos": "C-F"
+        }
+      }
+    },
+    "williga01w": {
+      "player_id": "williga01w",
+      "player_name": "Gabby Williams",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": 1.83,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 1.0,
+          "per": 16.0,
+          "mp": 351.0,
+          "g": 12,
+          "team": "SEA",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 0.6,
+          "per": 15.6,
+          "mp": 1391.0,
+          "g": 44,
+          "team": "SEA",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 2.9,
+          "per": 17.9,
+          "mp": 917.0,
+          "g": 37,
+          "team": "GSV",
+          "pos": "F"
+        }
+      }
+    },
+    "willise02w": {
+      "player_id": "willise02w",
+      "player_name": "Serah Williams",
+      "team_2026": "POR",
+      "expansion_only": true,
+      "talent": -2.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -2.6,
+          "per": 12.4,
+          "mp": 445.0,
+          "g": 35,
+          "team": "POR",
+          "pos": "F"
+        }
+      }
+    },
+    "wilsoa01w": {
+      "player_id": "wilsoa01w",
+      "player_name": "A'ja Wilson",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": 18.0,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 19.9,
+          "per": 34.9,
+          "mp": 1308.0,
+          "g": 38,
+          "team": "LAS",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": 18.4,
+          "per": 33.4,
+          "mp": 1247.0,
+          "g": 40,
+          "team": "LAS",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": 17.0,
+          "per": 32.0,
+          "mp": 1185.0,
+          "g": 37,
+          "team": "LAS",
+          "pos": "C"
+        }
+      }
+    },
+    "wilsoal01w": {
+      "player_id": "wilsoal01w",
+      "player_name": "Ally Wilson",
+      "team_2026": "WSH",
+      "expansion_only": false,
+      "talent": -11.5,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -11.5,
+          "per": 3.5,
+          "mp": 58.0,
+          "g": 4,
+          "team": "WSH",
+          "pos": "G"
+        }
+      }
+    },
+    "winteho01w": {
+      "player_id": "winteho01w",
+      "player_name": "Holly Winterburn",
+      "team_2026": "POR",
+      "expansion_only": true,
+      "talent": -4.1,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.1,
+          "per": 10.9,
+          "mp": 278.0,
+          "g": 27,
+          "team": "POR",
+          "pos": "G"
+        }
+      }
+    },
+    "xuha01w": {
+      "player_id": "xuha01w",
+      "player_name": "Han Xu",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": 3.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": 3.6,
+          "per": 18.6,
+          "mp": 558.0,
+          "g": 40,
+          "team": "NY",
+          "pos": "C"
+        }
+      }
+    },
+    "yamamma01w": {
+      "player_id": "yamamma01w",
+      "player_name": "Mai Yamamoto",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": -0.2,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -0.2,
+          "per": 14.8,
+          "mp": 152.0,
+          "g": 10,
+          "team": "LAS",
+          "pos": "G"
+        }
+      }
+    },
+    "youngja01w": {
+      "player_id": "youngja01w",
+      "player_name": "Jackie Young",
+      "team_2026": "LAS",
+      "expansion_only": false,
+      "talent": 6.36,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 3.1,
+          "per": 18.1,
+          "mp": 1205.0,
+          "g": 37,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 7.3,
+          "per": 22.3,
+          "mp": 1336.0,
+          "g": 44,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 7.1,
+          "per": 22.1,
+          "mp": 1262.0,
+          "g": 39,
+          "team": "LAS",
+          "pos": "G"
+        }
+      }
+    },
+    "yueruli01w": {
+      "player_id": "yueruli01w",
+      "player_name": "Li Yueru",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -2.95,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -1.9,
+          "per": 13.1,
+          "mp": 546.0,
+          "g": 38,
+          "team": "LA",
+          "pos": "C"
+        },
+        "2025": {
+          "talent": -1.4,
+          "per": 13.6,
+          "mp": 519.0,
+          "g": 31,
+          "team": "TOT",
+          "pos": "C"
+        },
+        "2026": {
+          "talent": -4.3,
+          "per": 10.7,
+          "mp": 299.0,
+          "g": 29,
+          "team": "DAL",
+          "pos": "C"
+        }
+      }
+    },
+    "zandace01w": {
+      "player_id": "zandace01w",
+      "player_name": "Cecilia Zandalasini",
+      "team_2026": "GSV",
+      "expansion_only": false,
+      "talent": -1.98,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -3.8,
+          "per": 11.2,
+          "mp": 487.0,
+          "g": 40,
+          "team": "MIN",
+          "pos": "F"
+        },
+        "2025": {
+          "talent": 0.6,
+          "per": 15.6,
+          "mp": 450.0,
+          "g": 19,
+          "team": "GSV",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -2.8,
+          "per": 12.2,
+          "mp": 670.0,
+          "g": 35,
+          "team": "GSV",
+          "pos": "F"
+        }
+      }
+    },
+    "akoamo01w": {
+      "player_id": "akoamo01w",
+      "player_name": "Monique Akoa Makani",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -4.1125,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -2.8,
+          "per": 12.2,
+          "mp": 881.0,
+          "g": 41,
+          "team": "PHX",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -4.9,
+          "per": 10.1,
+          "mp": 568.0,
+          "g": 26,
+          "team": "TOT",
+          "pos": "G"
+        }
+      }
+    },
+    "bibbych01w": {
+      "player_id": "bibbych01w",
+      "player_name": "Chloe Bibby",
+      "team_2026": "CHI",
+      "expansion_only": false,
+      "talent": -3.8125,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 0.0,
+          "per": 15.0,
+          "mp": 154.0,
+          "g": 14,
+          "team": "TOT",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -6.1,
+          "per": 8.9,
+          "mp": 70.0,
+          "g": 7,
+          "team": "TOT",
+          "pos": "F"
+        }
+      }
+    },
+    "bonnede01w": {
+      "player_id": "bonnede01w",
+      "player_name": "DeWanna Bonner",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": 0.42,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 1.8,
+          "per": 16.8,
+          "mp": 1271.0,
+          "g": 40,
+          "team": "CON",
+          "pos": "F-G"
+        },
+        "2025": {
+          "talent": 0.2,
+          "per": 15.2,
+          "mp": 778.0,
+          "g": 33,
+          "team": "TOT",
+          "pos": "F-G"
+        },
+        "2026": {
+          "talent": 0.0,
+          "per": 15.0,
+          "mp": 1038.0,
+          "g": 38,
+          "team": "TOT",
+          "pos": "F-G"
+        }
+      }
+    },
+    "heldle01w": {
+      "player_id": "heldle01w",
+      "player_name": "Lexi Held",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -5.95,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -5.2,
+          "per": 9.8,
+          "mp": 471.0,
+          "g": 32,
+          "team": "PHX",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -6.4,
+          "per": 8.6,
+          "mp": 572.0,
+          "g": 38,
+          "team": "TOT",
+          "pos": "G"
+        }
+      }
+    },
+    "jonesha01w": {
+      "player_id": "jonesha01w",
+      "player_name": "Haley Jones",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": -4.01,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -9.9,
+          "per": 5.1,
+          "mp": 712.0,
+          "g": 40,
+          "team": "ATL",
+          "pos": "F-G"
+        },
+        "2025": {
+          "talent": -3.6,
+          "per": 11.4,
+          "mp": 594.0,
+          "g": 28,
+          "team": "TOT",
+          "pos": "F-G"
+        },
+        "2026": {
+          "talent": -1.9,
+          "per": 13.1,
+          "mp": 67.0,
+          "g": 8,
+          "team": "TOT",
+          "pos": "F-G"
+        }
+      }
+    },
+    "laneybe01w": {
+      "player_id": "laneybe01w",
+      "player_name": "Betnijah Laney-Hamilton",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -5.5571,
+      "weight_mass": 0.7,
+      "seasons": {
+        "2024": {
+          "talent": -1.2,
+          "per": 13.8,
+          "mp": 848.0,
+          "g": 28,
+          "team": "NY",
+          "pos": "G-F"
+        },
+        "2026": {
+          "talent": -7.3,
+          "per": 7.7,
+          "mp": 431.0,
+          "g": 26,
+          "team": "TOT",
+          "pos": "G-F"
+        }
+      }
+    },
+    "latsota01w": {
+      "player_id": "latsota01w",
+      "player_name": "Ta'Niya Latson",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -4.0,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -4.0,
+          "per": 11.0,
+          "mp": 100.0,
+          "g": 17,
+          "team": "TOT",
+          "pos": "G"
+        }
+      }
+    },
+    "maleyan01w": {
+      "player_id": "maleyan01w",
+      "player_name": "Anneli Maley",
+      "team_2026": "NY",
+      "expansion_only": false,
+      "talent": -14.2,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -14.2,
+          "per": 0.8,
+          "mp": 70.0,
+          "g": 9,
+          "team": "TOT",
+          "pos": "F"
+        }
+      }
+    },
+    "morroan02w": {
+      "player_id": "morroan02w",
+      "player_name": "Aneesah Morrow",
+      "team_2026": "CON",
+      "expansion_only": false,
+      "talent": 1.625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": 0.0,
+          "per": 15.0,
+          "mp": 775.0,
+          "g": 41,
+          "team": "CON",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": 2.6,
+          "per": 17.6,
+          "mp": 599.0,
+          "g": 27,
+          "team": "TOT",
+          "pos": "F"
+        }
+      }
+    },
+    "okonkam01w": {
+      "player_id": "okonkam01w",
+      "player_name": "Amy Okonkwo",
+      "team_2026": "POR",
+      "expansion_only": false,
+      "talent": 6.9,
+      "weight_mass": 0.3,
+      "seasons": {
+        "2025": {
+          "talent": 6.9,
+          "per": 21.9,
+          "mp": 157.0,
+          "g": 8,
+          "team": "DAL",
+          "pos": "F"
+        }
+      }
+    },
+    "plumke01w": {
+      "player_id": "plumke01w",
+      "player_name": "Kelsey Plum",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": 4.42,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": 0.2,
+          "per": 15.2,
+          "mp": 1291.0,
+          "g": 38,
+          "team": "LAS",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": 3.1,
+          "per": 18.1,
+          "mp": 1508.0,
+          "g": 43,
+          "team": "LA",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": 6.9,
+          "per": 21.9,
+          "mp": 519.0,
+          "g": 17,
+          "team": "TOT",
+          "pos": "G"
+        }
+      }
+    },
+    "suttosu01w": {
+      "player_id": "suttosu01w",
+      "player_name": "Sug Sutton",
+      "team_2026": "DAL",
+      "expansion_only": false,
+      "talent": -5.18,
+      "weight_mass": 1.0,
+      "seasons": {
+        "2024": {
+          "talent": -9.6,
+          "per": 5.4,
+          "mp": 379.0,
+          "g": 29,
+          "team": "TOT",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -5.2,
+          "per": 9.8,
+          "mp": 1122.0,
+          "g": 43,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -3.4,
+          "per": 11.6,
+          "mp": 257.0,
+          "g": 25,
+          "team": "TOT",
+          "pos": "G"
+        }
+      }
+    },
+    "vanslgr01w": {
+      "player_id": "vanslgr01w",
+      "player_name": "Grace VanSlooten",
+      "team_2026": "SEA",
+      "expansion_only": false,
+      "talent": -0.8,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2026": {
+          "talent": -0.8,
+          "per": 14.2,
+          "mp": 84.0,
+          "g": 18,
+          "team": "TOT",
+          "pos": "F"
+        }
+      }
+    },
+    "walkesh01w": {
+      "player_id": "walkesh01w",
+      "player_name": "Shatori Walker-Kimbrough",
+      "team_2026": "ATL",
+      "expansion_only": false,
+      "talent": -5.6,
+      "weight_mass": 0.5,
+      "seasons": {
+        "2024": {
+          "talent": -3.2,
+          "per": 11.8,
+          "mp": 883.0,
+          "g": 40,
+          "team": "WSH",
+          "pos": "G"
+        },
+        "2025": {
+          "talent": -7.2,
+          "per": 7.8,
+          "mp": 354.0,
+          "g": 41,
+          "team": "ATL",
+          "pos": "G"
+        }
+      }
+    },
+    "westbma01w": {
+      "player_id": "westbma01w",
+      "player_name": "Maddy Westbeld",
+      "team_2026": "PHX",
+      "expansion_only": false,
+      "talent": -8.4125,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -4.6,
+          "per": 10.4,
+          "mp": 354.0,
+          "g": 26,
+          "team": "CHI",
+          "pos": "F"
+        },
+        "2026": {
+          "talent": -10.7,
+          "per": 4.3,
+          "mp": 76.0,
+          "g": 6,
+          "team": "TOT",
+          "pos": "F"
+        }
+      }
+    },
+    "williki02w": {
+      "player_id": "williki02w",
+      "player_name": "Kiana Williams",
+      "team_2026": "LA",
+      "expansion_only": false,
+      "talent": -7.1625,
+      "weight_mass": 0.8,
+      "seasons": {
+        "2025": {
+          "talent": -3.1,
+          "per": 11.9,
+          "mp": 107.0,
+          "g": 11,
+          "team": "PHX",
+          "pos": "G"
+        },
+        "2026": {
+          "talent": -9.6,
+          "per": 5.4,
+          "mp": 310.0,
+          "g": 24,
+          "team": "TOT",
+          "pos": "G"
+        }
+      }
+    }
+  }
+}
