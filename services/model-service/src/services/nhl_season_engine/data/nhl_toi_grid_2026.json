@@ -1,0 +1,7366 @@
+{
+  "engine_version": "nhl-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "object": "toi_grid",
+  "season_target": "2026-27",
+  "source": "nhl_skater_box_2023_2025.json",
+  "PLAYER_YEAR_WEIGHTS": {
+    "2023": 0.2,
+    "2024": 0.3,
+    "2025": 0.5
+  },
+  "PLAYER_YEAR_WEIGHTS_BY_SEASON_ID": {
+    "20232024": 0.2,
+    "20242025": 0.3,
+    "20252026": 0.5
+  },
+  "NHL_TOI_GRID_SKATER_MINUTES": 300.0,
+  "skaters_per_team": 18,
+  "NHL_TEAM_CARRY_SHRINK_unchanged": 0.85,
+  "formula": "toi_sec_w = \u03a3 w_y \u00b7 toi_per_game_y (renormalized); keep top 18 by toi_sec_w; toi_share = toi_sec_w / \u03a3_18; toi_min = share \u00d7 300",
+  "team_count": 32,
+  "teams": {
+    "ANA": [
+      {
+        "player_id": "8474590",
+        "player_name": "John Carlson",
+        "position": "D",
+        "toi_share": 0.07332216,
+        "toi_min": 21.9966,
+        "toi_sec_w": 1429.6643,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481605",
+        "player_name": "Jackson LaCombe",
+        "position": "D",
+        "toi_share": 0.06982001,
+        "toi_min": 20.946,
+        "toi_sec_w": 1361.3778,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476885",
+        "player_name": "Jacob Trouba",
+        "position": "D",
+        "toi_share": 0.06713836,
+        "toi_min": 20.1415,
+        "toi_sec_w": 1309.0899,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475798",
+        "player_name": "Mikael Granlund",
+        "position": "C",
+        "toi_share": 0.05931976,
+        "toi_min": 17.7959,
+        "toi_sec_w": 1156.6398,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478873",
+        "player_name": "Troy Terry",
+        "position": "R",
+        "toi_share": 0.05688458,
+        "toi_min": 17.0654,
+        "toi_sec_w": 1109.1577,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483490",
+        "player_name": "Pavel Mintyukov",
+        "position": "D",
+        "toi_share": 0.0561915,
+        "toi_min": 16.8575,
+        "toi_sec_w": 1095.6438,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484153",
+        "player_name": "Leo Carlsson",
+        "position": "C",
+        "toi_share": 0.05560164,
+        "toi_min": 16.6805,
+        "toi_sec_w": 1084.1425,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482803",
+        "player_name": "Olen Zellweger",
+        "position": "D",
+        "toi_share": 0.05548911,
+        "toi_min": 16.6467,
+        "toi_sec_w": 1081.9482,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475462",
+        "player_name": "Radko Gudas",
+        "position": "D",
+        "toi_share": 0.05524185,
+        "toi_min": 16.5726,
+        "toi_sec_w": 1077.1271,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484762",
+        "player_name": "Beckett Sennecke",
+        "position": "R",
+        "toi_share": 0.05368173,
+        "toi_min": 16.1045,
+        "toi_sec_w": 1046.7073,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475184",
+        "player_name": "Chris Kreider",
+        "position": "L",
+        "toi_share": 0.05325794,
+        "toi_min": 15.9774,
+        "toi_sec_w": 1038.4441,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473986",
+        "player_name": "Alex Killorn",
+        "position": "L",
+        "toi_share": 0.05317868,
+        "toi_min": 15.9536,
+        "toi_sec_w": 1036.8987,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481563",
+        "player_name": "Drew Helleson",
+        "position": "D",
+        "toi_share": 0.05149547,
+        "toi_min": 15.4486,
+        "toi_sec_w": 1004.0788,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482745",
+        "player_name": "Mason McTavish",
+        "position": "C",
+        "toi_share": 0.04916634,
+        "toi_min": 14.7499,
+        "toi_sec_w": 958.6645,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483445",
+        "player_name": "Cutter Gauthier",
+        "position": "L",
+        "toi_share": 0.04909043,
+        "toi_min": 14.7271,
+        "toi_sec_w": 957.1843,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482731",
+        "player_name": "Tyson Hinds",
+        "position": "D",
+        "toi_share": 0.04805525,
+        "toi_min": 14.4166,
+        "toi_sec_w": 937.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480184",
+        "player_name": "Gustav Lindstr\u00f6m",
+        "position": "D",
+        "toi_share": 0.04738853,
+        "toi_min": 14.2166,
+        "toi_sec_w": 924.0,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8478366",
+        "player_name": "Frank Vatrano",
+        "position": "R",
+        "toi_share": 0.04567666,
+        "toi_min": 13.703,
+        "toi_sec_w": 890.6214,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "BOS": [
+      {
+        "player_id": "8479325",
+        "player_name": "Charlie McAvoy",
+        "position": "D",
+        "toi_share": 0.07673278,
+        "toi_min": 23.0198,
+        "toi_sec_w": 1455.9057,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476854",
+        "player_name": "Hampus Lindholm",
+        "position": "D",
+        "toi_share": 0.0687026,
+        "toi_min": 20.6108,
+        "toi_sec_w": 1303.5437,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477956",
+        "player_name": "David Pastrnak",
+        "position": "R",
+        "toi_share": 0.06441417,
+        "toi_min": 19.3243,
+        "toi_sec_w": 1222.1761,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477507",
+        "player_name": "Nikita Zadorov",
+        "position": "D",
+        "toi_share": 0.06360023,
+        "toi_min": 19.0801,
+        "toi_sec_w": 1206.7326,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479369",
+        "player_name": "Andrew Peeke",
+        "position": "D",
+        "toi_share": 0.0586744,
+        "toi_min": 17.6023,
+        "toi_sec_w": 1113.2714,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477496",
+        "player_name": "Elias Lindholm",
+        "position": "C",
+        "toi_share": 0.0578798,
+        "toi_min": 17.3639,
+        "toi_sec_w": 1098.1949,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480035",
+        "player_name": "Henri Jokiharju",
+        "position": "D",
+        "toi_share": 0.05706624,
+        "toi_min": 17.1199,
+        "toi_sec_w": 1082.7585,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478401",
+        "player_name": "Pavel Zacha",
+        "position": "C",
+        "toi_share": 0.05617177,
+        "toi_min": 16.8515,
+        "toi_sec_w": 1065.7872,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482511",
+        "player_name": "Mason Lohrei",
+        "position": "D",
+        "toi_share": 0.05597981,
+        "toi_min": 16.7939,
+        "toi_sec_w": 1062.145,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479987",
+        "player_name": "Morgan Geekie",
+        "position": "C",
+        "toi_share": 0.05331833,
+        "toi_min": 15.9955,
+        "toi_sec_w": 1011.6469,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481219",
+        "player_name": "Jonathan Aspirot",
+        "position": "D",
+        "toi_share": 0.05293604,
+        "toi_min": 15.8808,
+        "toi_sec_w": 1004.3934,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479999",
+        "player_name": "Casey Mittelstadt",
+        "position": "C",
+        "toi_share": 0.05137509,
+        "toi_min": 15.4125,
+        "toi_sec_w": 974.7763,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474031",
+        "player_name": "Kevin Shattenkirk",
+        "position": "D",
+        "toi_share": 0.04990078,
+        "toi_min": 14.9702,
+        "toi_sec_w": 946.8032,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8480070",
+        "player_name": "Ian Mitchell",
+        "position": "D",
+        "toi_share": 0.04896166,
+        "toi_min": 14.6885,
+        "toi_sec_w": 928.9846,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8478042",
+        "player_name": "Viktor Arvidsson",
+        "position": "L",
+        "toi_share": 0.04786665,
+        "toi_min": 14.36,
+        "toi_sec_w": 908.2083,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8485395",
+        "player_name": "James Hagens",
+        "position": "C",
+        "toi_share": 0.04601102,
+        "toi_min": 13.8033,
+        "toi_sec_w": 873.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483017",
+        "player_name": "Frederic Brunet",
+        "position": "D",
+        "toi_share": 0.04548397,
+        "toi_min": 13.6452,
+        "toi_sec_w": 863.0,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8480887",
+        "player_name": "Jordan Harris",
+        "position": "D",
+        "toi_share": 0.04492466,
+        "toi_min": 13.4774,
+        "toi_sec_w": 852.3878,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "BUF": [
+      {
+        "player_id": "8480839",
+        "player_name": "Rasmus Dahlin",
+        "position": "D",
+        "toi_share": 0.07770306,
+        "toi_min": 23.3109,
+        "toi_sec_w": 1466.8816,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481524",
+        "player_name": "Bowen Byram",
+        "position": "D",
+        "toi_share": 0.07007559,
+        "toi_min": 21.0227,
+        "toi_sec_w": 1322.89,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482671",
+        "player_name": "Owen Power",
+        "position": "D",
+        "toi_share": 0.06929915,
+        "toi_min": 20.7897,
+        "toi_sec_w": 1308.2323,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480807",
+        "player_name": "Mattias Samuelsson",
+        "position": "D",
+        "toi_share": 0.06771475,
+        "toi_min": 20.3144,
+        "toi_sec_w": 1278.3218,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477949",
+        "player_name": "Alex Tuch",
+        "position": "R",
+        "toi_share": 0.06094057,
+        "toi_min": 18.2822,
+        "toi_sec_w": 1150.4386,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479420",
+        "player_name": "Tage Thompson",
+        "position": "C",
+        "toi_share": 0.05998185,
+        "toi_min": 17.9946,
+        "toi_sec_w": 1132.34,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479982",
+        "player_name": "Conor Timmins",
+        "position": "D",
+        "toi_share": 0.05613463,
+        "toi_min": 16.8404,
+        "toi_sec_w": 1059.712,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480064",
+        "player_name": "Josh Norris",
+        "position": "C",
+        "toi_share": 0.05386415,
+        "toi_min": 16.1592,
+        "toi_sec_w": 1016.8496,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480802",
+        "player_name": "Ryan McLeod",
+        "position": "C",
+        "toi_share": 0.05308516,
+        "toi_min": 15.9255,
+        "toi_sec_w": 1002.1439,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479378",
+        "player_name": "Logan Stanley",
+        "position": "D",
+        "toi_share": 0.05014505,
+        "toi_min": 15.0435,
+        "toi_sec_w": 946.6403,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483468",
+        "player_name": "Jiri Kulich",
+        "position": "C",
+        "toi_share": 0.04957008,
+        "toi_min": 14.871,
+        "toi_sec_w": 935.786,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482097",
+        "player_name": "Jack Quinn",
+        "position": "R",
+        "toi_share": 0.04899505,
+        "toi_min": 14.6985,
+        "toi_sec_w": 924.9305,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484145",
+        "player_name": "Zach Benson",
+        "position": "L",
+        "toi_share": 0.04860602,
+        "toi_min": 14.5818,
+        "toi_sec_w": 917.5866,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480891",
+        "player_name": "Michael Kesselring",
+        "position": "D",
+        "toi_share": 0.04818882,
+        "toi_min": 14.4566,
+        "toi_sec_w": 909.7106,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475722",
+        "player_name": "Jason Zucker",
+        "position": "L",
+        "toi_share": 0.04807447,
+        "toi_min": 14.4223,
+        "toi_sec_w": 907.5519,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8474568",
+        "player_name": "Luke Schenn",
+        "position": "D",
+        "toi_share": 0.04657855,
+        "toi_min": 13.9736,
+        "toi_sec_w": 879.3119,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482659",
+        "player_name": "Josh Doan",
+        "position": "R",
+        "toi_share": 0.0459284,
+        "toi_min": 13.7785,
+        "toi_sec_w": 867.0383,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478413",
+        "player_name": "Jordan Greenway",
+        "position": "L",
+        "toi_share": 0.04511465,
+        "toi_min": 13.5344,
+        "toi_sec_w": 851.6764,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "CGY": [
+      {
+        "player_id": "8480860",
+        "player_name": "Kevin Bahl",
+        "position": "D",
+        "toi_share": 0.06643026,
+        "toi_min": 19.9291,
+        "toi_sec_w": 1252.1889,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482165",
+        "player_name": "Yan Kuznetsov",
+        "position": "D",
+        "toi_share": 0.06393149,
+        "toi_min": 19.1794,
+        "toi_sec_w": 1205.0877,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480727",
+        "player_name": "Zach Whitecloud",
+        "position": "D",
+        "toi_share": 0.06025009,
+        "toi_min": 18.075,
+        "toi_sec_w": 1135.6946,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474150",
+        "player_name": "Mikael Backlund",
+        "position": "C",
+        "toi_share": 0.05870314,
+        "toi_min": 17.6109,
+        "toi_sec_w": 1106.5351,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476456",
+        "player_name": "Jonathan Huberdeau",
+        "position": "L",
+        "toi_share": 0.05860896,
+        "toi_min": 17.5827,
+        "toi_sec_w": 1104.7597,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484768",
+        "player_name": "Zayne Parekh",
+        "position": "D",
+        "toi_share": 0.05859499,
+        "toi_min": 17.5785,
+        "toi_sec_w": 1104.4966,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482624",
+        "player_name": "Daniil Miromanov",
+        "position": "D",
+        "toi_share": 0.05843064,
+        "toi_min": 17.5292,
+        "toi_sec_w": 1101.3985,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476874",
+        "player_name": "Olli Maatta",
+        "position": "D",
+        "toi_share": 0.05628956,
+        "toi_min": 16.8869,
+        "toi_sec_w": 1061.0399,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476399",
+        "player_name": "Blake Coleman",
+        "position": "L",
+        "toi_share": 0.05537418,
+        "toi_min": 16.6123,
+        "toi_sec_w": 1043.7853,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484150",
+        "player_name": "Hunter Brzustewicz",
+        "position": "D",
+        "toi_share": 0.05405305,
+        "toi_min": 16.2159,
+        "toi_sec_w": 1018.8823,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475197",
+        "player_name": "Tyson Barrie",
+        "position": "D",
+        "toi_share": 0.05350612,
+        "toi_min": 16.0518,
+        "toi_sec_w": 1008.5729,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8481068",
+        "player_name": "Yegor Sharangovich",
+        "position": "C",
+        "toi_share": 0.05246491,
+        "toi_min": 15.7395,
+        "toi_sec_w": 988.9465,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480797",
+        "player_name": "Joel Farabee",
+        "position": "L",
+        "toi_share": 0.05147015,
+        "toi_min": 15.441,
+        "toi_sec_w": 970.1956,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482679",
+        "player_name": "Matt Coronato",
+        "position": "R",
+        "toi_share": 0.05131755,
+        "toi_min": 15.3953,
+        "toi_sec_w": 967.319,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481537",
+        "player_name": "Nikita Okhotiuk",
+        "position": "D",
+        "toi_share": 0.05065074,
+        "toi_min": 15.1952,
+        "toi_sec_w": 954.75,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8479402",
+        "player_name": "Jake Bean",
+        "position": "D",
+        "toi_share": 0.05019467,
+        "toi_min": 15.0584,
+        "toi_sec_w": 946.1531,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477810",
+        "player_name": "Joel Hanley",
+        "position": "D",
+        "toi_share": 0.04993654,
+        "toi_min": 14.981,
+        "toi_sec_w": 941.2874,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480028",
+        "player_name": "Morgan Frost",
+        "position": "C",
+        "toi_share": 0.04979296,
+        "toi_min": 14.9379,
+        "toi_sec_w": 938.5812,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "CAR": [
+      {
+        "player_id": "8480817",
+        "player_name": "K'Andre Miller",
+        "position": "D",
+        "toi_share": 0.06919015,
+        "toi_min": 20.757,
+        "toi_sec_w": 1325.5714,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476958",
+        "player_name": "Jaccob Slavin",
+        "position": "D",
+        "toi_share": 0.06674882,
+        "toi_min": 20.0246,
+        "toi_sec_w": 1278.7991,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480336",
+        "player_name": "Sean Walker",
+        "position": "D",
+        "toi_share": 0.06201734,
+        "toi_min": 18.6052,
+        "toi_sec_w": 1188.1517,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478427",
+        "player_name": "Sebastian Aho",
+        "position": "C",
+        "toi_share": 0.06188979,
+        "toi_min": 18.5669,
+        "toi_sec_w": 1185.7079,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481562",
+        "player_name": "Domenick Fensore",
+        "position": "D",
+        "toi_share": 0.06029999,
+        "toi_min": 18.09,
+        "toi_sec_w": 1155.25,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482093",
+        "player_name": "Seth Jarvis",
+        "position": "R",
+        "toi_share": 0.05949325,
+        "toi_min": 17.848,
+        "toi_sec_w": 1139.7941,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476906",
+        "player_name": "Shayne Gostisbehere",
+        "position": "D",
+        "toi_share": 0.05947263,
+        "toi_min": 17.8418,
+        "toi_sec_w": 1139.3992,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482100",
+        "player_name": "Alexander Nikishin",
+        "position": "D",
+        "toi_share": 0.05694959,
+        "toi_min": 17.0849,
+        "toi_sec_w": 1091.0617,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475744",
+        "player_name": "Evgeny Kuznetsov",
+        "position": "C",
+        "toi_share": 0.05496952,
+        "toi_min": 16.4909,
+        "toi_sec_w": 1053.1269,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8478970",
+        "player_name": "Jalen Chatfield",
+        "position": "D",
+        "toi_share": 0.05451066,
+        "toi_min": 16.3532,
+        "toi_sec_w": 1044.3358,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8480830",
+        "player_name": "Andrei Svechnikov",
+        "position": "R",
+        "toi_share": 0.053311,
+        "toi_min": 15.9933,
+        "toi_sec_w": 1021.3523,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477940",
+        "player_name": "Nikolaj Ehlers",
+        "position": "L",
+        "toi_share": 0.05076975,
+        "toi_min": 15.2309,
+        "toi_sec_w": 972.666,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473533",
+        "player_name": "Jordan Staal",
+        "position": "C",
+        "toi_share": 0.04948455,
+        "toi_min": 14.8454,
+        "toi_sec_w": 948.0437,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480291",
+        "player_name": "Skyler Brind'Amour",
+        "position": "C",
+        "toi_share": 0.04886896,
+        "toi_min": 14.6607,
+        "toi_sec_w": 936.25,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476422",
+        "player_name": "Mike Reilly",
+        "position": "D",
+        "toi_share": 0.04843067,
+        "toi_min": 14.5292,
+        "toi_sec_w": 927.853,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482809",
+        "player_name": "Jackson Blake",
+        "position": "R",
+        "toi_share": 0.04842791,
+        "toi_min": 14.5284,
+        "toi_sec_w": 927.8003,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482187",
+        "player_name": "Ronan Seeley",
+        "position": "D",
+        "toi_share": 0.04760319,
+        "toi_min": 14.281,
+        "toi_sec_w": 912.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482702",
+        "player_name": "Logan Stankoven",
+        "position": "C",
+        "toi_share": 0.04756223,
+        "toi_min": 14.2687,
+        "toi_sec_w": 911.2151,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "CHI": [
+      {
+        "player_id": "8481568",
+        "player_name": "Alex Vlasic",
+        "position": "D",
+        "toi_share": 0.06729705,
+        "toi_min": 20.1891,
+        "toi_sec_w": 1310.4566,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484144",
+        "player_name": "Connor Bedard",
+        "position": "C",
+        "toi_share": 0.06309032,
+        "toi_min": 18.9271,
+        "toi_sec_w": 1228.5402,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483506",
+        "player_name": "Sam Rinzel",
+        "position": "D",
+        "toi_share": 0.06218159,
+        "toi_min": 18.6545,
+        "toi_sec_w": 1210.8448,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484783",
+        "player_name": "Artyom Levshunov",
+        "position": "D",
+        "toi_share": 0.06117954,
+        "toi_min": 18.3539,
+        "toi_sec_w": 1191.3321,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474166",
+        "player_name": "Alec Martinez",
+        "position": "D",
+        "toi_share": 0.05809586,
+        "toi_min": 17.4288,
+        "toi_sec_w": 1131.2845,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8482176",
+        "player_name": "Wyatt Kaiser",
+        "position": "D",
+        "toi_share": 0.0576323,
+        "toi_min": 17.2897,
+        "toi_sec_w": 1122.2578,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482807",
+        "player_name": "Ethan Del Mastro",
+        "position": "D",
+        "toi_share": 0.0567422,
+        "toi_min": 17.0227,
+        "toi_sec_w": 1104.925,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8476891",
+        "player_name": "Matt Grzelcyk",
+        "position": "D",
+        "toi_share": 0.05604304,
+        "toi_min": 16.8129,
+        "toi_sec_w": 1091.3104,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474673",
+        "player_name": "TJ Brodie",
+        "position": "D",
+        "toi_share": 0.05567143,
+        "toi_min": 16.7014,
+        "toi_sec_w": 1084.0743,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8485391",
+        "player_name": "Anton Frondell",
+        "position": "C",
+        "toi_share": 0.05451643,
+        "toi_min": 16.3549,
+        "toi_sec_w": 1061.5833,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476882",
+        "player_name": "Teuvo Teravainen",
+        "position": "C",
+        "toi_share": 0.05323119,
+        "toi_min": 15.9694,
+        "toi_sec_w": 1036.556,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477479",
+        "player_name": "Tyler Bertuzzi",
+        "position": "L",
+        "toi_share": 0.05310109,
+        "toi_min": 15.9303,
+        "toi_sec_w": 1034.0228,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483493",
+        "player_name": "Frank Nazar",
+        "position": "C",
+        "toi_share": 0.05284401,
+        "toi_min": 15.8532,
+        "toi_sec_w": 1029.0167,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481806",
+        "player_name": "Louis Crevier",
+        "position": "D",
+        "toi_share": 0.05204508,
+        "toi_min": 15.6135,
+        "toi_sec_w": 1013.4592,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481624",
+        "player_name": "Ilya Mikheyev",
+        "position": "R",
+        "toi_share": 0.05013886,
+        "toi_min": 15.0417,
+        "toi_sec_w": 976.34,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479458",
+        "player_name": "Nikita Zaitsev",
+        "position": "D",
+        "toi_share": 0.04908621,
+        "toi_min": 14.7259,
+        "toi_sec_w": 955.8421,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8483466",
+        "player_name": "Kevin Korchinski",
+        "position": "D",
+        "toi_share": 0.04889533,
+        "toi_min": 14.6686,
+        "toi_sec_w": 952.1252,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475797",
+        "player_name": "Jarred Tinordi",
+        "position": "D",
+        "toi_share": 0.04820847,
+        "toi_min": 14.4625,
+        "toi_sec_w": 938.75,
+        "seasons_used": [
+          20232024
+        ]
+      }
+    ],
+    "COL": [
+      {
+        "player_id": "8480069",
+        "player_name": "Cale Makar",
+        "position": "D",
+        "toi_share": 0.07701938,
+        "toi_min": 23.1058,
+        "toi_sec_w": 1505.5555,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478038",
+        "player_name": "Devon Toews",
+        "position": "D",
+        "toi_share": 0.07135479,
+        "toi_min": 21.4064,
+        "toi_sec_w": 1394.8254,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477492",
+        "player_name": "Nathan MacKinnon",
+        "position": "C",
+        "toi_share": 0.06914923,
+        "toi_min": 20.7448,
+        "toi_sec_w": 1351.7118,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480039",
+        "player_name": "Martin Necas",
+        "position": "C",
+        "toi_share": 0.06114213,
+        "toi_min": 18.3426,
+        "toi_sec_w": 1195.191,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8470613",
+        "player_name": "Brent Burns",
+        "position": "D",
+        "toi_share": 0.06033233,
+        "toi_min": 18.0997,
+        "toi_sec_w": 1179.3612,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475754",
+        "player_name": "Brock Nelson",
+        "position": "C",
+        "toi_share": 0.05867818,
+        "toi_min": 17.6035,
+        "toi_sec_w": 1147.0262,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477501",
+        "player_name": "Valeri Nichushkin",
+        "position": "R",
+        "toi_share": 0.05848614,
+        "toi_min": 17.5458,
+        "toi_sec_w": 1143.2723,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477476",
+        "player_name": "Artturi Lehkonen",
+        "position": "L",
+        "toi_share": 0.05847068,
+        "toi_min": 17.5412,
+        "toi_sec_w": 1142.9702,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475172",
+        "player_name": "Nazem Kadri",
+        "position": "C",
+        "toi_share": 0.05834452,
+        "toi_min": 17.5034,
+        "toi_sec_w": 1140.504,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476312",
+        "player_name": "Josh Manson",
+        "position": "D",
+        "toi_share": 0.0548232,
+        "toi_min": 16.447,
+        "toi_sec_w": 1071.67,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483565",
+        "player_name": "Nick Blankenburg",
+        "position": "D",
+        "toi_share": 0.05472816,
+        "toi_min": 16.4184,
+        "toi_sec_w": 1069.8122,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483569",
+        "player_name": "Wyatt Aamodt",
+        "position": "D",
+        "toi_share": 0.05253802,
+        "toi_min": 15.7614,
+        "toi_sec_w": 1027.0,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8484258",
+        "player_name": "Sam Malinski",
+        "position": "D",
+        "toi_share": 0.05045938,
+        "toi_min": 15.1378,
+        "toi_sec_w": 986.3671,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478462",
+        "player_name": "Nicolas Roy",
+        "position": "C",
+        "toi_share": 0.04525489,
+        "toi_min": 13.5765,
+        "toi_sec_w": 884.6311,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473446",
+        "player_name": "Erik Johnson",
+        "position": "D",
+        "toi_share": 0.0447764,
+        "toi_min": 13.4329,
+        "toi_sec_w": 875.2777,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475793",
+        "player_name": "Ryan Johansen",
+        "position": "C",
+        "toi_share": 0.04187548,
+        "toi_min": 12.5626,
+        "toi_sec_w": 818.5714,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8480835",
+        "player_name": "Jack Drury",
+        "position": "C",
+        "toi_share": 0.04165506,
+        "toi_min": 12.4965,
+        "toi_sec_w": 814.2625,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479525",
+        "player_name": "Ross Colton",
+        "position": "C",
+        "toi_share": 0.04091203,
+        "toi_min": 12.2736,
+        "toi_sec_w": 799.738,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "CBJ": [
+      {
+        "player_id": "8478460",
+        "player_name": "Zach Werenski",
+        "position": "D",
+        "toi_share": 0.08029047,
+        "toi_min": 24.0871,
+        "toi_sec_w": 1573.2586,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478500",
+        "player_name": "Ivan Provorov",
+        "position": "D",
+        "toi_share": 0.0730177,
+        "toi_min": 21.9053,
+        "toi_sec_w": 1430.7512,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476923",
+        "player_name": "Damon Severson",
+        "position": "D",
+        "toi_share": 0.06271815,
+        "toi_min": 18.8154,
+        "toi_sec_w": 1228.9358,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476346",
+        "player_name": "Johnny Gaudreau",
+        "position": "L",
+        "toi_share": 0.05760663,
+        "toi_min": 17.282,
+        "toi_sec_w": 1128.7777,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8483485",
+        "player_name": "Denton Mateychuk",
+        "position": "D",
+        "toi_share": 0.05742659,
+        "toi_min": 17.228,
+        "toi_sec_w": 1125.25,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480893",
+        "player_name": "Kirill Marchenko",
+        "position": "R",
+        "toi_share": 0.05612432,
+        "toi_min": 16.8373,
+        "toi_sec_w": 1099.7325,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475790",
+        "player_name": "Erik Gudbranson",
+        "position": "D",
+        "toi_share": 0.05557305,
+        "toi_min": 16.6719,
+        "toi_sec_w": 1088.9306,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477497",
+        "player_name": "Sean Monahan",
+        "position": "C",
+        "toi_share": 0.0547672,
+        "toi_min": 16.4302,
+        "toi_sec_w": 1073.1403,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484166",
+        "player_name": "Adam Fantilli",
+        "position": "C",
+        "toi_share": 0.05461698,
+        "toi_min": 16.3851,
+        "toi_sec_w": 1070.1968,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479371",
+        "player_name": "Dante Fabbro",
+        "position": "D",
+        "toi_share": 0.0545709,
+        "toi_min": 16.3713,
+        "toi_sec_w": 1069.2939,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475745",
+        "player_name": "Charlie Coyle",
+        "position": "C",
+        "toi_share": 0.05438175,
+        "toi_min": 16.3145,
+        "toi_sec_w": 1065.5877,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476432",
+        "player_name": "Boone Jenner",
+        "position": "C",
+        "toi_share": 0.05344735,
+        "toi_min": 16.0342,
+        "toi_sec_w": 1047.2784,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478856",
+        "player_name": "Conor Garland",
+        "position": "R",
+        "toi_share": 0.05236121,
+        "toi_min": 15.7084,
+        "toi_sec_w": 1025.9959,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478975",
+        "player_name": "Mason Marchment",
+        "position": "L",
+        "toi_share": 0.04991082,
+        "toi_min": 14.9732,
+        "toi_sec_w": 977.9816,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482705",
+        "player_name": "Cole Sillinger",
+        "position": "C",
+        "toi_share": 0.0487129,
+        "toi_min": 14.6139,
+        "toi_sec_w": 954.5088,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481178",
+        "player_name": "Egor Zamula",
+        "position": "D",
+        "toi_share": 0.04501794,
+        "toi_min": 13.5054,
+        "toi_sec_w": 882.1078,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481716",
+        "player_name": "Dmitri Voronkov",
+        "position": "L",
+        "toi_share": 0.04500463,
+        "toi_min": 13.5014,
+        "toi_sec_w": 881.8468,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482660",
+        "player_name": "Kent Johnson",
+        "position": "C",
+        "toi_share": 0.04445141,
+        "toi_min": 13.3354,
+        "toi_sec_w": 871.0068,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "DAL": [
+      {
+        "player_id": "8480036",
+        "player_name": "Miro Heiskanen",
+        "position": "D",
+        "toi_share": 0.07805215,
+        "toi_min": 23.4156,
+        "toi_sec_w": 1511.5588,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481581",
+        "player_name": "Thomas Harley",
+        "position": "D",
+        "toi_share": 0.07047274,
+        "toi_min": 21.1418,
+        "toi_sec_w": 1364.7761,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476902",
+        "player_name": "Esa Lindell",
+        "position": "D",
+        "toi_share": 0.06929432,
+        "toi_min": 20.7883,
+        "toi_sec_w": 1341.9549,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478420",
+        "player_name": "Mikko Rantanen",
+        "position": "R",
+        "toi_share": 0.06519804,
+        "toi_min": 19.5594,
+        "toi_sec_w": 1262.6263,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474574",
+        "player_name": "Tyler Myers",
+        "position": "D",
+        "toi_share": 0.06130083,
+        "toi_min": 18.3902,
+        "toi_sec_w": 1187.1527,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482740",
+        "player_name": "Wyatt Johnston",
+        "position": "C",
+        "toi_share": 0.0592995,
+        "toi_min": 17.7899,
+        "toi_sec_w": 1148.3951,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480027",
+        "player_name": "Jason Robertson",
+        "position": "L",
+        "toi_share": 0.05926733,
+        "toi_min": 17.7802,
+        "toi_sec_w": 1147.7719,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478449",
+        "player_name": "Roope Hintz",
+        "position": "C",
+        "toi_share": 0.0532461,
+        "toi_min": 15.9738,
+        "toi_sec_w": 1031.1648,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8470794",
+        "player_name": "Joe Pavelski",
+        "position": "C",
+        "toi_share": 0.05207891,
+        "toi_min": 15.6237,
+        "toi_sec_w": 1008.5609,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8475168",
+        "player_name": "Matt Duchene",
+        "position": "C",
+        "toi_share": 0.05189795,
+        "toi_min": 15.5694,
+        "toi_sec_w": 1005.0564,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480950",
+        "player_name": "Ilya Lyubushkin",
+        "position": "D",
+        "toi_share": 0.05115549,
+        "toi_min": 15.3466,
+        "toi_sec_w": 990.678,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475794",
+        "player_name": "Tyler Seguin",
+        "position": "C",
+        "toi_share": 0.05107409,
+        "toi_min": 15.3222,
+        "toi_sec_w": 989.1016,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480878",
+        "player_name": "Nils Lundkvist",
+        "position": "D",
+        "toi_share": 0.04822452,
+        "toi_min": 14.4674,
+        "toi_sec_w": 933.9168,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483425",
+        "player_name": "Lian Bichsel",
+        "position": "D",
+        "toi_share": 0.0476372,
+        "toi_min": 14.2912,
+        "toi_sec_w": 922.5427,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478047",
+        "player_name": "Michael Bunting",
+        "position": "L",
+        "toi_share": 0.04652578,
+        "toi_min": 13.9577,
+        "toi_sec_w": 901.019,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479351",
+        "player_name": "Sam Steel",
+        "position": "C",
+        "toi_share": 0.04622993,
+        "toi_min": 13.869,
+        "toi_sec_w": 895.2896,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475755",
+        "player_name": "Alexander Petrovic",
+        "position": "D",
+        "toi_share": 0.04486791,
+        "toi_min": 13.4604,
+        "toi_sec_w": 868.9126,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473994",
+        "player_name": "Jamie Benn",
+        "position": "L",
+        "toi_share": 0.04417721,
+        "toi_min": 13.2532,
+        "toi_sec_w": 855.5365,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "DET": [
+      {
+        "player_id": "8481542",
+        "player_name": "Moritz Seider",
+        "position": "D",
+        "toi_share": 0.07736719,
+        "toi_min": 23.2102,
+        "toi_sec_w": 1489.6073,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475753",
+        "player_name": "Justin Faulk",
+        "position": "D",
+        "toi_share": 0.068972,
+        "toi_min": 20.6916,
+        "toi_sec_w": 1327.9684,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482762",
+        "player_name": "Simon Edvinsson",
+        "position": "D",
+        "toi_share": 0.06595751,
+        "toi_min": 19.7873,
+        "toi_sec_w": 1269.9284,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475279",
+        "player_name": "Ben Chiarot",
+        "position": "D",
+        "toi_share": 0.0646426,
+        "toi_min": 19.3928,
+        "toi_sec_w": 1244.6115,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477946",
+        "player_name": "Dylan Larkin",
+        "position": "C",
+        "toi_share": 0.06279086,
+        "toi_min": 18.8373,
+        "toi_sec_w": 1208.9586,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482078",
+        "player_name": "Lucas Raymond",
+        "position": "L",
+        "toi_share": 0.05791644,
+        "toi_min": 17.3749,
+        "toi_sec_w": 1115.1078,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479337",
+        "player_name": "Alex DeBrincat",
+        "position": "R",
+        "toi_share": 0.05668466,
+        "toi_min": 17.0054,
+        "toi_sec_w": 1091.3914,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474141",
+        "player_name": "Patrick Kane",
+        "position": "R",
+        "toi_share": 0.0558335,
+        "toi_min": 16.75,
+        "toi_sec_w": 1075.0033,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476979",
+        "player_name": "Erik Gustafsson",
+        "position": "D",
+        "toi_share": 0.05529383,
+        "toi_min": 16.5881,
+        "toi_sec_w": 1064.6126,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477456",
+        "player_name": "J.T. Compher",
+        "position": "L",
+        "toi_share": 0.0520906,
+        "toi_min": 15.6272,
+        "toi_sec_w": 1002.9385,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484223",
+        "player_name": "Axel Sandin-Pellikka",
+        "position": "D",
+        "toi_share": 0.05051732,
+        "toi_min": 15.1552,
+        "toi_sec_w": 972.647,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481607",
+        "player_name": "Albert Johansson",
+        "position": "D",
+        "toi_share": 0.05016506,
+        "toi_min": 15.0495,
+        "toi_sec_w": 965.8648,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477429",
+        "player_name": "Andrew Copp",
+        "position": "C",
+        "toi_share": 0.0497114,
+        "toi_min": 14.9134,
+        "toi_sec_w": 957.1302,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484471",
+        "player_name": "Emmitt Finnie",
+        "position": "C",
+        "toi_share": 0.04830232,
+        "toi_min": 14.4907,
+        "toi_sec_w": 930.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474612",
+        "player_name": "Travis Hamonic",
+        "position": "D",
+        "toi_share": 0.04754279,
+        "toi_min": 14.2628,
+        "toi_sec_w": 915.3762,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478021",
+        "player_name": "William Lagesson",
+        "position": "D",
+        "toi_share": 0.04568598,
+        "toi_min": 13.7058,
+        "toi_sec_w": 879.6257,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8480879",
+        "player_name": "Jacob Bernard-Docker",
+        "position": "D",
+        "toi_share": 0.04558605,
+        "toi_min": 13.6758,
+        "toi_sec_w": 877.7017,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478891",
+        "player_name": "Mason Appleton",
+        "position": "C",
+        "toi_share": 0.04493989,
+        "toi_min": 13.482,
+        "toi_sec_w": 865.2606,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "EDM": [
+      {
+        "player_id": "8480803",
+        "player_name": "Evan Bouchard",
+        "position": "D",
+        "toi_share": 0.07280421,
+        "toi_min": 21.8413,
+        "toi_sec_w": 1438.5447,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478402",
+        "player_name": "Connor McDavid",
+        "position": "C",
+        "toi_share": 0.06794016,
+        "toi_min": 20.382,
+        "toi_sec_w": 1342.4356,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477498",
+        "player_name": "Darnell Nurse",
+        "position": "D",
+        "toi_share": 0.06551569,
+        "toi_min": 19.6547,
+        "toi_sec_w": 1294.5303,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477934",
+        "player_name": "Leon Draisaitl",
+        "position": "C",
+        "toi_share": 0.0649277,
+        "toi_min": 19.4783,
+        "toi_sec_w": 1282.9121,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475218",
+        "player_name": "Mattias Ekholm",
+        "position": "D",
+        "toi_share": 0.06426872,
+        "toi_min": 19.2806,
+        "toi_sec_w": 1269.8914,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478013",
+        "player_name": "Jake Walman",
+        "position": "D",
+        "toi_share": 0.0612191,
+        "toi_min": 18.3657,
+        "toi_sec_w": 1209.6337,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475786",
+        "player_name": "Zach Hyman",
+        "position": "L",
+        "toi_share": 0.05938479,
+        "toi_min": 17.8154,
+        "toi_sec_w": 1173.3893,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476454",
+        "player_name": "Ryan Nugent-Hopkins",
+        "position": "C",
+        "toi_share": 0.05813788,
+        "toi_min": 17.4414,
+        "toi_sec_w": 1148.7515,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476473",
+        "player_name": "Connor Murphy",
+        "position": "D",
+        "toi_share": 0.05745529,
+        "toi_min": 17.2366,
+        "toi_sec_w": 1135.2642,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476967",
+        "player_name": "Brett Kulak",
+        "position": "D",
+        "toi_share": 0.0560999,
+        "toi_min": 16.83,
+        "toi_sec_w": 1108.4829,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8479341",
+        "player_name": "Cam Dineen",
+        "position": "D",
+        "toi_share": 0.05219117,
+        "toi_min": 15.6574,
+        "toi_sec_w": 1031.25,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8480834",
+        "player_name": "Ty Emberson",
+        "position": "D",
+        "toi_share": 0.04859765,
+        "toi_min": 14.5793,
+        "toi_sec_w": 960.2452,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481056",
+        "player_name": "Spencer Stastney",
+        "position": "D",
+        "toi_share": 0.04798136,
+        "toi_min": 14.3944,
+        "toi_sec_w": 948.068,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477450",
+        "player_name": "Jason Dickinson",
+        "position": "C",
+        "toi_share": 0.04793909,
+        "toi_min": 14.3817,
+        "toi_sec_w": 947.2328,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478458",
+        "player_name": "Jack Roslovic",
+        "position": "C",
+        "toi_share": 0.04598072,
+        "toi_min": 13.7942,
+        "toi_sec_w": 908.5371,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480831",
+        "player_name": "Alec Regula",
+        "position": "D",
+        "toi_share": 0.04393613,
+        "toi_min": 13.1808,
+        "toi_sec_w": 868.1379,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474641",
+        "player_name": "Adam Henrique",
+        "position": "C",
+        "toi_share": 0.04366939,
+        "toi_min": 13.1008,
+        "toi_sec_w": 862.8674,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481617",
+        "player_name": "Vasily Podkolzin",
+        "position": "R",
+        "toi_share": 0.04195105,
+        "toi_min": 12.5853,
+        "toi_sec_w": 828.9145,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "FLA": [
+      {
+        "player_id": "8477495",
+        "player_name": "Seth Jones",
+        "position": "D",
+        "toi_share": 0.07146794,
+        "toi_min": 21.4404,
+        "toi_sec_w": 1460.3018,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478055",
+        "player_name": "Gustav Forsling",
+        "position": "D",
+        "toi_share": 0.06644287,
+        "toi_min": 19.9329,
+        "toi_sec_w": 1357.625,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477932",
+        "player_name": "Aaron Ekblad",
+        "position": "D",
+        "toi_share": 0.06596786,
+        "toi_min": 19.7904,
+        "toi_sec_w": 1347.9191,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477933",
+        "player_name": "Sam Reinhart",
+        "position": "C",
+        "toi_share": 0.06123637,
+        "toi_min": 18.3709,
+        "toi_sec_w": 1251.2409,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483687",
+        "player_name": "Marek Alscher",
+        "position": "D",
+        "toi_share": 0.05978084,
+        "toi_min": 17.9343,
+        "toi_sec_w": 1221.5,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478859",
+        "player_name": "Niko Mikkola",
+        "position": "D",
+        "toi_share": 0.05944354,
+        "toi_min": 17.8331,
+        "toi_sec_w": 1214.6079,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477493",
+        "player_name": "Aleksander Barkov",
+        "position": "C",
+        "toi_share": 0.05875645,
+        "toi_min": 17.6269,
+        "toi_sec_w": 1200.5687,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8479314",
+        "player_name": "Matthew Tkachuk",
+        "position": "L",
+        "toi_share": 0.05387989,
+        "toi_min": 16.164,
+        "toi_sec_w": 1100.926,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473419",
+        "player_name": "Brad Marchand",
+        "position": "L",
+        "toi_share": 0.05339925,
+        "toi_min": 16.0198,
+        "toi_sec_w": 1091.1052,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475179",
+        "player_name": "Dmitry Kulikov",
+        "position": "D",
+        "toi_share": 0.0531479,
+        "toi_min": 15.9444,
+        "toi_sec_w": 1085.9694,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477935",
+        "player_name": "Sam Bennett",
+        "position": "C",
+        "toi_share": 0.05228111,
+        "toi_min": 15.6843,
+        "toi_sec_w": 1068.2583,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477409",
+        "player_name": "Carter Verhaeghe",
+        "position": "C",
+        "toi_share": 0.05214991,
+        "toi_min": 15.645,
+        "toi_sec_w": 1065.5775,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482113",
+        "player_name": "Anton Lundell",
+        "position": "C",
+        "toi_share": 0.05187215,
+        "toi_min": 15.5616,
+        "toi_sec_w": 1059.9019,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483712",
+        "player_name": "Ludvig Jansson",
+        "position": "D",
+        "toi_share": 0.05071461,
+        "toi_min": 15.2144,
+        "toi_sec_w": 1036.25,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482107",
+        "player_name": "Mike Benning",
+        "position": "D",
+        "toi_share": 0.04963112,
+        "toi_min": 14.8893,
+        "toi_sec_w": 1014.1111,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478542",
+        "player_name": "Evan Rodrigues",
+        "position": "C",
+        "toi_share": 0.04726423,
+        "toi_min": 14.1793,
+        "toi_sec_w": 965.7485,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480185",
+        "player_name": "Eetu Luostarinen",
+        "position": "C",
+        "toi_share": 0.04716177,
+        "toi_min": 14.1485,
+        "toi_sec_w": 963.655,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484304",
+        "player_name": "Uvis Balinskis",
+        "position": "D",
+        "toi_share": 0.04540219,
+        "toi_min": 13.6207,
+        "toi_sec_w": 927.7016,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "LAK": [
+      {
+        "player_id": "8474563",
+        "player_name": "Drew Doughty",
+        "position": "D",
+        "toi_share": 0.07527494,
+        "toi_min": 22.5825,
+        "toi_sec_w": 1436.5722,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479998",
+        "player_name": "Mikey Anderson",
+        "position": "D",
+        "toi_share": 0.06670951,
+        "toi_min": 20.0129,
+        "toi_sec_w": 1273.1066,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478550",
+        "player_name": "Artemi Panarin",
+        "position": "L",
+        "toi_share": 0.06416031,
+        "toi_min": 19.2481,
+        "toi_sec_w": 1224.4568,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477960",
+        "player_name": "Adrian Kempe",
+        "position": "R",
+        "toi_share": 0.06032051,
+        "toi_min": 18.0962,
+        "toi_sec_w": 1151.1769,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471685",
+        "player_name": "Anze Kopitar",
+        "position": "C",
+        "toi_share": 0.06029784,
+        "toi_min": 18.0894,
+        "toi_sec_w": 1150.7442,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476879",
+        "player_name": "Cody Ceci",
+        "position": "D",
+        "toi_share": 0.06020918,
+        "toi_min": 18.0628,
+        "toi_sec_w": 1149.0521,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476441",
+        "player_name": "Joel Edmundson",
+        "position": "D",
+        "toi_share": 0.05894684,
+        "toi_min": 17.6841,
+        "toi_sec_w": 1124.9611,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477942",
+        "player_name": "Kevin Fiala",
+        "position": "L",
+        "toi_share": 0.05886053,
+        "toi_min": 17.6582,
+        "toi_sec_w": 1123.3141,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482124",
+        "player_name": "Quinton Byfield",
+        "position": "R",
+        "toi_share": 0.05855103,
+        "toi_min": 17.5653,
+        "toi_sec_w": 1117.4074,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475208",
+        "player_name": "Brian Dumoulin",
+        "position": "D",
+        "toi_share": 0.05703691,
+        "toi_min": 17.1111,
+        "toi_sec_w": 1088.5115,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482730",
+        "player_name": "Brandt Clarke",
+        "position": "D",
+        "toi_share": 0.0550656,
+        "toi_min": 16.5197,
+        "toi_sec_w": 1050.8904,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479675",
+        "player_name": "Trevor Moore",
+        "position": "L",
+        "toi_share": 0.05352069,
+        "toi_min": 16.0562,
+        "toi_sec_w": 1021.4067,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482155",
+        "player_name": "Alex Laferriere",
+        "position": "R",
+        "toi_share": 0.05268853,
+        "toi_min": 15.8066,
+        "toi_sec_w": 1005.5256,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483808",
+        "player_name": "Andrei Kuzmenko",
+        "position": "L",
+        "toi_share": 0.04754806,
+        "toi_min": 14.2644,
+        "toi_sec_w": 907.4232,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476872",
+        "player_name": "Scott Laughton",
+        "position": "C",
+        "toi_share": 0.04617902,
+        "toi_min": 13.8537,
+        "toi_sec_w": 881.2959,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476469",
+        "player_name": "Joel Armia",
+        "position": "R",
+        "toi_share": 0.04537299,
+        "toi_min": 13.6119,
+        "toi_sec_w": 865.9134,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478472",
+        "player_name": "Mathieu Joseph",
+        "position": "R",
+        "toi_share": 0.04043245,
+        "toi_min": 12.1297,
+        "toi_sec_w": 771.6263,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477335",
+        "player_name": "Kyle Burroughs",
+        "position": "D",
+        "toi_share": 0.03882506,
+        "toi_min": 11.6475,
+        "toi_sec_w": 740.9504,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      }
+    ],
+    "MIN": [
+      {
+        "player_id": "8480800",
+        "player_name": "Quinn Hughes",
+        "position": "D",
+        "toi_share": 0.07826409,
+        "toi_min": 23.4792,
+        "toi_sec_w": 1591.4729,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482122",
+        "player_name": "Brock Faber",
+        "position": "D",
+        "toi_share": 0.07373879,
+        "toi_min": 22.1216,
+        "toi_sec_w": 1499.4527,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478864",
+        "player_name": "Kirill Kaprizov",
+        "position": "L",
+        "toi_share": 0.06529414,
+        "toi_min": 19.5882,
+        "toi_sec_w": 1327.7338,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476463",
+        "player_name": "Jonas Brodin",
+        "position": "D",
+        "toi_share": 0.06404099,
+        "toi_min": 19.2123,
+        "toi_sec_w": 1302.2513,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8486166",
+        "player_name": "Viking Gustafsson Nyberg",
+        "position": "D",
+        "toi_share": 0.06282379,
+        "toi_min": 18.8471,
+        "toi_sec_w": 1277.5,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474716",
+        "player_name": "Jared Spurgeon",
+        "position": "D",
+        "toi_share": 0.06077293,
+        "toi_min": 18.2319,
+        "toi_sec_w": 1235.7963,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481557",
+        "player_name": "Matt Boldy",
+        "position": "L",
+        "toi_share": 0.05946467,
+        "toi_min": 17.8394,
+        "toi_sec_w": 1209.1934,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478493",
+        "player_name": "Joel Eriksson Ek",
+        "position": "C",
+        "toi_share": 0.05775829,
+        "toi_min": 17.3275,
+        "toi_sec_w": 1174.4947,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478136",
+        "player_name": "Jacob Middleton",
+        "position": "D",
+        "toi_share": 0.05687887,
+        "toi_min": 17.0637,
+        "toi_sec_w": 1156.6121,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475692",
+        "player_name": "Mats Zuccarello",
+        "position": "R",
+        "toi_share": 0.05605474,
+        "toi_min": 16.8164,
+        "toi_sec_w": 1139.8537,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473507",
+        "player_name": "Jeff Petry",
+        "position": "D",
+        "toi_share": 0.04959707,
+        "toi_min": 14.8791,
+        "toi_sec_w": 1008.5393,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477451",
+        "player_name": "Ryan Hartman",
+        "position": "R",
+        "toi_share": 0.04770239,
+        "toi_min": 14.3107,
+        "toi_sec_w": 970.0116,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475149",
+        "player_name": "Marcus Johansson",
+        "position": "L",
+        "toi_share": 0.04663011,
+        "toi_min": 13.989,
+        "toi_sec_w": 948.2071,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474567",
+        "player_name": "Zach Bogosian",
+        "position": "D",
+        "toi_share": 0.04600134,
+        "toi_min": 13.8004,
+        "toi_sec_w": 935.4213,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475765",
+        "player_name": "Vladimir Tarasenko",
+        "position": "R",
+        "toi_share": 0.04440943,
+        "toi_min": 13.3228,
+        "toi_sec_w": 903.0504,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471274",
+        "player_name": "Alex Goligoski",
+        "position": "D",
+        "toi_share": 0.04369389,
+        "toi_min": 13.1082,
+        "toi_sec_w": 888.5,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8481553",
+        "player_name": "Bobby Brink",
+        "position": "R",
+        "toi_share": 0.0436324,
+        "toi_min": 13.0897,
+        "toi_sec_w": 887.2496,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473422",
+        "player_name": "Nick Foligno",
+        "position": "L",
+        "toi_share": 0.04324207,
+        "toi_min": 12.9726,
+        "toi_sec_w": 879.3125,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "MTL": [
+      {
+        "player_id": "8476875",
+        "player_name": "Mike Matheson",
+        "position": "D",
+        "toi_share": 0.07754314,
+        "toi_min": 23.2629,
+        "toi_sec_w": 1482.9892,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483457",
+        "player_name": "Lane Hutson",
+        "position": "D",
+        "toi_share": 0.07293965,
+        "toi_min": 21.8819,
+        "toi_sec_w": 1394.9487,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480865",
+        "player_name": "Noah Dobson",
+        "position": "D",
+        "toi_share": 0.07255162,
+        "toi_min": 21.7655,
+        "toi_sec_w": 1387.5278,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480018",
+        "player_name": "Nick Suzuki",
+        "position": "C",
+        "toi_share": 0.06488335,
+        "toi_min": 19.465,
+        "toi_sec_w": 1240.8744,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482087",
+        "player_name": "Kaiden Guhle",
+        "position": "D",
+        "toi_share": 0.06354385,
+        "toi_min": 19.0632,
+        "toi_sec_w": 1215.2568,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478851",
+        "player_name": "Alexandre Carrier",
+        "position": "D",
+        "toi_share": 0.06110775,
+        "toi_min": 18.3323,
+        "toi_sec_w": 1168.6672,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481540",
+        "player_name": "Cole Caufield",
+        "position": "R",
+        "toi_share": 0.05772226,
+        "toi_min": 17.3167,
+        "toi_sec_w": 1103.9208,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483515",
+        "player_name": "Juraj Slafkovsk\u00fd",
+        "position": "L",
+        "toi_share": 0.05666077,
+        "toi_min": 16.9982,
+        "toi_sec_w": 1083.62,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475233",
+        "player_name": "David Savard",
+        "position": "D",
+        "toi_share": 0.05662884,
+        "toi_min": 16.9887,
+        "toi_sec_w": 1083.0093,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8476479",
+        "player_name": "Phillip Danault",
+        "position": "C",
+        "toi_share": 0.05235955,
+        "toi_min": 15.7079,
+        "toi_sec_w": 1001.3605,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478133",
+        "player_name": "Jake Evans",
+        "position": "C",
+        "toi_share": 0.04877863,
+        "toi_min": 14.6336,
+        "toi_sec_w": 932.8765,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481618",
+        "player_name": "Alex Newhook",
+        "position": "C",
+        "toi_share": 0.04758403,
+        "toi_min": 14.2752,
+        "toi_sec_w": 910.0301,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484984",
+        "player_name": "Ivan Demidov",
+        "position": "R",
+        "toi_share": 0.04651556,
+        "toi_min": 13.9547,
+        "toi_sec_w": 889.596,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481593",
+        "player_name": "Jayden Struble",
+        "position": "D",
+        "toi_share": 0.04617409,
+        "toi_min": 13.8522,
+        "toi_sec_w": 883.0655,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476981",
+        "player_name": "Josh Anderson",
+        "position": "R",
+        "toi_share": 0.04517651,
+        "toi_min": 13.553,
+        "toi_sec_w": 863.987,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481523",
+        "player_name": "Kirby Dach",
+        "position": "C",
+        "toi_share": 0.04434307,
+        "toi_min": 13.3029,
+        "toi_sec_w": 848.0477,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479339",
+        "player_name": "Patrik Laine",
+        "position": "L",
+        "toi_share": 0.04279048,
+        "toi_min": 12.8371,
+        "toi_sec_w": 818.3549,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480074",
+        "player_name": "Alexandre Texier",
+        "position": "L",
+        "toi_share": 0.04269685,
+        "toi_min": 12.8091,
+        "toi_sec_w": 816.5642,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "NSH": [
+      {
+        "player_id": "8474600",
+        "player_name": "Roman Josi",
+        "position": "D",
+        "toi_share": 0.07897077,
+        "toi_min": 23.6912,
+        "toi_sec_w": 1496.1331,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476869",
+        "player_name": "Brady Skjei",
+        "position": "D",
+        "toi_share": 0.06855241,
+        "toi_min": 20.5657,
+        "toi_sec_w": 1298.753,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475158",
+        "player_name": "Ryan O'Reilly",
+        "position": "C",
+        "toi_share": 0.06285572,
+        "toi_min": 18.8567,
+        "toi_sec_w": 1190.827,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476887",
+        "player_name": "Filip Forsberg",
+        "position": "L",
+        "toi_share": 0.05958019,
+        "toi_min": 17.8741,
+        "toi_sec_w": 1128.7707,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479980",
+        "player_name": "Nicolas Hague",
+        "position": "D",
+        "toi_share": 0.05898332,
+        "toi_min": 17.695,
+        "toi_sec_w": 1117.4627,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478468",
+        "player_name": "Jeremy Lauzon",
+        "position": "D",
+        "toi_share": 0.05772881,
+        "toi_min": 17.3186,
+        "toi_sec_w": 1093.6955,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8474564",
+        "player_name": "Steven Stamkos",
+        "position": "C",
+        "toi_share": 0.05687719,
+        "toi_min": 17.0632,
+        "toi_sec_w": 1077.5613,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482482",
+        "player_name": "Adam Wilsby",
+        "position": "D",
+        "toi_share": 0.05516008,
+        "toi_min": 16.548,
+        "toi_sec_w": 1045.0299,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480246",
+        "player_name": "Nick Perbix",
+        "position": "D",
+        "toi_share": 0.05503521,
+        "toi_min": 16.5106,
+        "toi_sec_w": 1042.6643,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476539",
+        "player_name": "Jonathan Marchessault",
+        "position": "R",
+        "toi_share": 0.05487037,
+        "toi_min": 16.4611,
+        "toi_sec_w": 1039.5413,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475857",
+        "player_name": "Kevin Gravel",
+        "position": "D",
+        "toi_share": 0.05404015,
+        "toi_min": 16.212,
+        "toi_sec_w": 1023.8125,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481743",
+        "player_name": "Marc Del Gaizo",
+        "position": "D",
+        "toi_share": 0.05268533,
+        "toi_min": 15.8056,
+        "toi_sec_w": 998.1449,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475287",
+        "player_name": "Erik Haula",
+        "position": "L",
+        "toi_share": 0.05106412,
+        "toi_min": 15.3192,
+        "toi_sec_w": 967.4303,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482111",
+        "player_name": "Justin Barron",
+        "position": "D",
+        "toi_share": 0.05092532,
+        "toi_min": 15.2776,
+        "toi_sec_w": 964.8007,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482146",
+        "player_name": "Luke Evangelista",
+        "position": "R",
+        "toi_share": 0.04834028,
+        "toi_min": 14.5021,
+        "toi_sec_w": 915.826,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477851",
+        "player_name": "Jordan Oesterle",
+        "position": "D",
+        "toi_share": 0.04715918,
+        "toi_min": 14.1478,
+        "toi_sec_w": 893.4496,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482715",
+        "player_name": "Ryan Ufko",
+        "position": "D",
+        "toi_share": 0.046027,
+        "toi_min": 13.8081,
+        "toi_sec_w": 872.0,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481585",
+        "player_name": "Egor Afanasyev",
+        "position": "L",
+        "toi_share": 0.04114455,
+        "toi_min": 12.3434,
+        "toi_sec_w": 779.5,
+        "seasons_used": [
+          20232024
+        ]
+      }
+    ],
+    "NJD": [
+      {
+        "player_id": "8482684",
+        "player_name": "Luke Hughes",
+        "position": "D",
+        "toi_share": 0.06776938,
+        "toi_min": 20.3308,
+        "toi_sec_w": 1328.8648,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481559",
+        "player_name": "Jack Hughes",
+        "position": "C",
+        "toi_share": 0.06463321,
+        "toi_min": 19.39,
+        "toi_sec_w": 1267.3688,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476462",
+        "player_name": "Dougie Hamilton",
+        "position": "D",
+        "toi_share": 0.06397721,
+        "toi_min": 19.1932,
+        "toi_sec_w": 1254.5054,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477488",
+        "player_name": "Brett Pesce",
+        "position": "D",
+        "toi_share": 0.06397356,
+        "toi_min": 19.1921,
+        "toi_sec_w": 1254.434,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8480002",
+        "player_name": "Nico Hischier",
+        "position": "C",
+        "toi_share": 0.06233326,
+        "toi_min": 18.7,
+        "toi_sec_w": 1222.2699,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478399",
+        "player_name": "Jonas Siegenthaler",
+        "position": "D",
+        "toi_share": 0.05962843,
+        "toi_min": 17.8885,
+        "toi_sec_w": 1169.2319,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479407",
+        "player_name": "Jesper Bratt",
+        "position": "L",
+        "toi_share": 0.05791617,
+        "toi_min": 17.3749,
+        "toi_sec_w": 1135.6568,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475455",
+        "player_name": "Brenden Dillon",
+        "position": "D",
+        "toi_share": 0.05605612,
+        "toi_min": 16.8168,
+        "toi_sec_w": 1099.1838,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483495",
+        "player_name": "Simon Nemec",
+        "position": "D",
+        "toi_share": 0.05599937,
+        "toi_min": 16.7998,
+        "toi_sec_w": 1098.071,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480192",
+        "player_name": "Johnathan Kovacevic",
+        "position": "D",
+        "toi_share": 0.0556322,
+        "toi_min": 16.6897,
+        "toi_sec_w": 1090.8712,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478414",
+        "player_name": "Timo Meier",
+        "position": "R",
+        "toi_share": 0.05549479,
+        "toi_min": 16.6484,
+        "toi_sec_w": 1088.1769,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482110",
+        "player_name": "Dawson Mercer",
+        "position": "C",
+        "toi_share": 0.05483934,
+        "toi_min": 16.4518,
+        "toi_sec_w": 1075.3243,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483429",
+        "player_name": "Seamus Casey",
+        "position": "D",
+        "toi_share": 0.04894665,
+        "toi_min": 14.684,
+        "toi_sec_w": 959.7768,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477015",
+        "player_name": "Connor Brown",
+        "position": "R",
+        "toi_share": 0.04754522,
+        "toi_min": 14.2636,
+        "toi_sec_w": 932.2966,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482873",
+        "player_name": "Topias Vilen",
+        "position": "D",
+        "toi_share": 0.0473006,
+        "toi_min": 14.1902,
+        "toi_sec_w": 927.5,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481721",
+        "player_name": "Arseny Gritsyuk",
+        "position": "R",
+        "toi_share": 0.04643131,
+        "toi_min": 13.9294,
+        "toi_sec_w": 910.4545,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479415",
+        "player_name": "Michael McLeod",
+        "position": "C",
+        "toi_share": 0.046339,
+        "toi_min": 13.9017,
+        "toi_sec_w": 908.6444,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8479984",
+        "player_name": "Cal Foote",
+        "position": "D",
+        "toi_share": 0.04518418,
+        "toi_min": 13.5553,
+        "toi_sec_w": 886.0,
+        "seasons_used": [
+          20232024
+        ]
+      }
+    ],
+    "NYI": [
+      {
+        "player_id": "8485366",
+        "player_name": "Matthew Schaefer",
+        "position": "D",
+        "toi_share": 0.07530689,
+        "toi_min": 22.5921,
+        "toi_sec_w": 1480.9634,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477506",
+        "player_name": "Ryan Pulock",
+        "position": "D",
+        "toi_share": 0.06480868,
+        "toi_min": 19.4426,
+        "toi_sec_w": 1274.5088,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476917",
+        "player_name": "Adam Pelech",
+        "position": "D",
+        "toi_share": 0.06356997,
+        "toi_min": 19.071,
+        "toi_sec_w": 1250.1488,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481014",
+        "player_name": "Alexander Romanov",
+        "position": "D",
+        "toi_share": 0.0627985,
+        "toi_min": 18.8395,
+        "toi_sec_w": 1234.9771,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478445",
+        "player_name": "Mathew Barzal",
+        "position": "C",
+        "toi_share": 0.06241344,
+        "toi_min": 18.724,
+        "toi_sec_w": 1227.4046,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477500",
+        "player_name": "Bo Horvat",
+        "position": "C",
+        "toi_share": 0.06215579,
+        "toi_min": 18.6467,
+        "toi_sec_w": 1222.3378,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477950",
+        "player_name": "Tony DeAngelo",
+        "position": "D",
+        "toi_share": 0.05931525,
+        "toi_min": 17.7946,
+        "toi_sec_w": 1166.4766,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475151",
+        "player_name": "Kyle Palmieri",
+        "position": "C",
+        "toi_share": 0.05625168,
+        "toi_min": 16.8755,
+        "toi_sec_w": 1106.2293,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475170",
+        "player_name": "Brayden Schenn",
+        "position": "C",
+        "toi_share": 0.05250411,
+        "toi_min": 15.7512,
+        "toi_sec_w": 1032.5308,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477369",
+        "player_name": "Carson Soucy",
+        "position": "D",
+        "toi_share": 0.05226741,
+        "toi_min": 15.6802,
+        "toi_sec_w": 1027.8759,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476429",
+        "player_name": "Scott Mayfield",
+        "position": "D",
+        "toi_share": 0.05213747,
+        "toi_min": 15.6412,
+        "toi_sec_w": 1025.3205,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480222",
+        "player_name": "Sebastian Aho",
+        "position": "D",
+        "toi_share": 0.05001002,
+        "toi_min": 15.003,
+        "toi_sec_w": 983.4827,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8476419",
+        "player_name": "Jean-Gabriel Pageau",
+        "position": "C",
+        "toi_share": 0.04916256,
+        "toi_min": 14.7488,
+        "toi_sec_w": 966.8168,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481601",
+        "player_name": "Simon Holmstrom",
+        "position": "R",
+        "toi_share": 0.04908344,
+        "toi_min": 14.725,
+        "toi_sec_w": 965.2607,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475314",
+        "player_name": "Anders Lee",
+        "position": "L",
+        "toi_share": 0.04896978,
+        "toi_min": 14.6909,
+        "toi_sec_w": 963.0256,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481059",
+        "player_name": "Scott Perunovich",
+        "position": "D",
+        "toi_share": 0.04794045,
+        "toi_min": 14.3821,
+        "toi_sec_w": 942.783,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8485388",
+        "player_name": "Victor Eklund",
+        "position": "R",
+        "toi_share": 0.04729043,
+        "toi_min": 14.1871,
+        "toi_sec_w": 930.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480871",
+        "player_name": "Adam Boqvist",
+        "position": "D",
+        "toi_share": 0.04401413,
+        "toi_min": 13.2042,
+        "toi_sec_w": 865.5693,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "NYR": [
+      {
+        "player_id": "8479323",
+        "player_name": "Adam Fox",
+        "position": "D",
+        "toi_share": 0.07398574,
+        "toi_min": 22.1957,
+        "toi_sec_w": 1399.6039,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8478882",
+        "player_name": "Vladislav Gavrikov",
+        "position": "D",
+        "toi_share": 0.07267018,
+        "toi_min": 21.8011,
+        "toi_sec_w": 1374.7172,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476389",
+        "player_name": "Vincent Trocheck",
+        "position": "C",
+        "toi_share": 0.06627695,
+        "toi_min": 19.8831,
+        "toi_sec_w": 1253.7751,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476459",
+        "player_name": "Mika Zibanejad",
+        "position": "C",
+        "toi_share": 0.06351755,
+        "toi_min": 19.0553,
+        "toi_sec_w": 1201.575,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476468",
+        "player_name": "J.T. Miller",
+        "position": "C",
+        "toi_share": 0.0616291,
+        "toi_min": 18.4887,
+        "toi_sec_w": 1165.8507,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482073",
+        "player_name": "Braden Schneider",
+        "position": "D",
+        "toi_share": 0.05950414,
+        "toi_min": 17.8512,
+        "toi_sec_w": 1125.6525,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478840",
+        "player_name": "William Borgen",
+        "position": "D",
+        "toi_share": 0.05602172,
+        "toi_min": 16.8065,
+        "toi_sec_w": 1059.7748,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481525",
+        "player_name": "Matthew Robertson",
+        "position": "D",
+        "toi_share": 0.05547408,
+        "toi_min": 16.6422,
+        "toi_sec_w": 1049.4149,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482109",
+        "player_name": "Alexis Lafreni\u00e8re",
+        "position": "L",
+        "toi_share": 0.05504272,
+        "toi_min": 16.5128,
+        "toi_sec_w": 1041.2548,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482666",
+        "player_name": "Scott Morrow",
+        "position": "D",
+        "toi_share": 0.05154174,
+        "toi_min": 15.4625,
+        "toi_sec_w": 975.0261,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481708",
+        "player_name": "Zac Jones",
+        "position": "D",
+        "toi_share": 0.05139379,
+        "toi_min": 15.4181,
+        "toi_sec_w": 972.2273,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475177",
+        "player_name": "Calvin de Haan",
+        "position": "D",
+        "toi_share": 0.04958793,
+        "toi_min": 14.8764,
+        "toi_sec_w": 938.0655,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8484210",
+        "player_name": "Gabe Perreault",
+        "position": "R",
+        "toi_share": 0.04886105,
+        "toi_min": 14.6583,
+        "toi_sec_w": 924.3148,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480001",
+        "player_name": "Urho Vaakanainen",
+        "position": "D",
+        "toi_share": 0.04867354,
+        "toi_min": 14.6021,
+        "toi_sec_w": 920.7676,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482157",
+        "player_name": "Will Cuylle",
+        "position": "L",
+        "toi_share": 0.04813677,
+        "toi_min": 14.441,
+        "toi_sec_w": 910.6134,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484169",
+        "player_name": "Drew Fortescue",
+        "position": "D",
+        "toi_share": 0.04707647,
+        "toi_min": 14.1229,
+        "toi_sec_w": 890.5555,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482067",
+        "player_name": "Connor Mackey",
+        "position": "D",
+        "toi_share": 0.04605065,
+        "toi_min": 13.8152,
+        "toi_sec_w": 871.15,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482861",
+        "player_name": "Vincent Iorio",
+        "position": "D",
+        "toi_share": 0.04455588,
+        "toi_min": 13.3668,
+        "toi_sec_w": 842.873,
+        "seasons_used": [
+          20232024,
+          20252026
+        ]
+      }
+    ],
+    "OTT": [
+      {
+        "player_id": "8482105",
+        "player_name": "Jake Sanderson",
+        "position": "D",
+        "toi_share": 0.07674717,
+        "toi_min": 23.0242,
+        "toi_sec_w": 1463.7568,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478469",
+        "player_name": "Thomas Chabot",
+        "position": "D",
+        "toi_share": 0.07174457,
+        "toi_min": 21.5234,
+        "toi_sec_w": 1368.3446,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482245",
+        "player_name": "Artem Zub",
+        "position": "D",
+        "toi_share": 0.06540266,
+        "toi_min": 19.6208,
+        "toi_sec_w": 1247.389,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482116",
+        "player_name": "Tim St\u00fctzle",
+        "position": "C",
+        "toi_share": 0.06386597,
+        "toi_min": 19.1598,
+        "toi_sec_w": 1218.0804,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475324",
+        "player_name": "Nick Jensen",
+        "position": "D",
+        "toi_share": 0.05818779,
+        "toi_min": 17.4563,
+        "toi_sec_w": 1109.7837,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481596",
+        "player_name": "Shane Pinto",
+        "position": "C",
+        "toi_share": 0.05739644,
+        "toi_min": 17.2189,
+        "toi_sec_w": 1094.6906,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480801",
+        "player_name": "Brady Tkachuk",
+        "position": "L",
+        "toi_share": 0.05593353,
+        "toi_min": 16.7801,
+        "toi_sec_w": 1066.7895,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480208",
+        "player_name": "Drake Batherson",
+        "position": "R",
+        "toi_share": 0.05584997,
+        "toi_min": 16.755,
+        "toi_sec_w": 1065.1957,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473512",
+        "player_name": "Claude Giroux",
+        "position": "R",
+        "toi_share": 0.05546578,
+        "toi_min": 16.6397,
+        "toi_sec_w": 1057.8682,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481606",
+        "player_name": "Jordan Spence",
+        "position": "D",
+        "toi_share": 0.0543759,
+        "toi_min": 16.3128,
+        "toi_sec_w": 1037.0815,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481528",
+        "player_name": "Dylan Cozens",
+        "position": "C",
+        "toi_share": 0.05374188,
+        "toi_min": 16.1226,
+        "toi_sec_w": 1024.9892,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482092",
+        "player_name": "Ridly Greig",
+        "position": "C",
+        "toi_share": 0.05165392,
+        "toi_min": 15.4962,
+        "toi_sec_w": 985.1667,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482095",
+        "player_name": "Tyler Kleven",
+        "position": "D",
+        "toi_share": 0.04890013,
+        "toi_min": 14.67,
+        "toi_sec_w": 932.6453,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478020",
+        "player_name": "Michael Amadio",
+        "position": "R",
+        "toi_share": 0.04832469,
+        "toi_min": 14.4974,
+        "toi_sec_w": 921.6701,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480188",
+        "player_name": "Fabian Zetterlund",
+        "position": "L",
+        "toi_share": 0.04759323,
+        "toi_min": 14.278,
+        "toi_sec_w": 907.7194,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484759",
+        "player_name": "Carter Yakemchuk",
+        "position": "D",
+        "toi_share": 0.0457204,
+        "toi_min": 13.7161,
+        "toi_sec_w": 872.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477998",
+        "player_name": "Warren Foegele",
+        "position": "L",
+        "toi_share": 0.04572001,
+        "toi_min": 13.716,
+        "toi_sec_w": 871.9926,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481679",
+        "player_name": "Maxence Guenette",
+        "position": "D",
+        "toi_share": 0.04337596,
+        "toi_min": 13.0128,
+        "toi_sec_w": 827.2857,
+        "seasons_used": [
+          20232024
+        ]
+      }
+    ],
+    "PHI": [
+      {
+        "player_id": "8477948",
+        "player_name": "Travis Sanheim",
+        "position": "D",
+        "toi_share": 0.07556751,
+        "toi_min": 22.6703,
+        "toi_sec_w": 1453.259,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481546",
+        "player_name": "Cam York",
+        "position": "D",
+        "toi_share": 0.06872149,
+        "toi_min": 20.6164,
+        "toi_sec_w": 1321.6014,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482142",
+        "player_name": "Jamie Drysdale",
+        "position": "D",
+        "toi_share": 0.06450963,
+        "toi_min": 19.3529,
+        "toi_sec_w": 1240.6019,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477499",
+        "player_name": "Rasmus Ristolainen",
+        "position": "D",
+        "toi_share": 0.06298638,
+        "toi_min": 18.8959,
+        "toi_sec_w": 1211.3079,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478439",
+        "player_name": "Travis Konecny",
+        "position": "R",
+        "toi_share": 0.06144351,
+        "toi_min": 18.4331,
+        "toi_sec_w": 1181.6367,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481533",
+        "player_name": "Trevor Zegras",
+        "position": "C",
+        "toi_share": 0.05581178,
+        "toi_min": 16.7435,
+        "toi_sec_w": 1073.3312,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476372",
+        "player_name": "Nick Seeler",
+        "position": "D",
+        "toi_share": 0.05433835,
+        "toi_min": 16.3015,
+        "toi_sec_w": 1044.9953,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482159",
+        "player_name": "Tyson Foerster",
+        "position": "R",
+        "toi_share": 0.05354212,
+        "toi_min": 16.0626,
+        "toi_sec_w": 1029.6829,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476461",
+        "player_name": "Sean Couturier",
+        "position": "C",
+        "toi_share": 0.05328392,
+        "toi_min": 15.9852,
+        "toi_sec_w": 1024.7174,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8485406",
+        "player_name": "Porter Martone",
+        "position": "R",
+        "toi_share": 0.05316573,
+        "toi_min": 15.9497,
+        "toi_sec_w": 1022.4444,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477989",
+        "player_name": "Christian Dvorak",
+        "position": "C",
+        "toi_share": 0.05275477,
+        "toi_min": 15.8264,
+        "toi_sec_w": 1014.5411,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480015",
+        "player_name": "Owen Tippett",
+        "position": "R",
+        "toi_share": 0.05159178,
+        "toi_min": 15.4775,
+        "toi_sec_w": 992.1753,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484148",
+        "player_name": "Oliver Bonk",
+        "position": "D",
+        "toi_share": 0.05137467,
+        "toi_min": 15.4124,
+        "toi_sec_w": 988.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480220",
+        "player_name": "Noah Cates",
+        "position": "L",
+        "toi_share": 0.04880891,
+        "toi_min": 14.6427,
+        "toi_sec_w": 938.6572,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484387",
+        "player_name": "Matvei Michkov",
+        "position": "R",
+        "toi_share": 0.0484581,
+        "toi_min": 14.5374,
+        "toi_sec_w": 931.9107,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482126",
+        "player_name": "Emil Andrae",
+        "position": "D",
+        "toi_share": 0.04827149,
+        "toi_min": 14.4814,
+        "toi_sec_w": 928.3219,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481521",
+        "player_name": "Ronald Attard",
+        "position": "D",
+        "toi_share": 0.04799909,
+        "toi_min": 14.3997,
+        "toi_sec_w": 923.0833,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8483760",
+        "player_name": "Hunter McDonald",
+        "position": "D",
+        "toi_share": 0.04737077,
+        "toi_min": 14.2112,
+        "toi_sec_w": 911.0,
+        "seasons_used": [
+          20252026
+        ]
+      }
+    ],
+    "PIT": [
+      {
+        "player_id": "8486169",
+        "player_name": "Jake Livanavage",
+        "position": "D",
+        "toi_share": 0.07723268,
+        "toi_min": 23.1698,
+        "toi_sec_w": 1514.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474578",
+        "player_name": "Erik Karlsson",
+        "position": "D",
+        "toi_share": 0.07230892,
+        "toi_min": 21.6927,
+        "toi_sec_w": 1417.4791,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471724",
+        "player_name": "Kris Letang",
+        "position": "D",
+        "toi_share": 0.06989669,
+        "toi_min": 20.969,
+        "toi_sec_w": 1370.192,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475810",
+        "player_name": "Bryan Rust",
+        "position": "R",
+        "toi_share": 0.06064268,
+        "toi_min": 18.1928,
+        "toi_sec_w": 1188.7847,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471675",
+        "player_name": "Sidney Crosby",
+        "position": "C",
+        "toi_share": 0.06043484,
+        "toi_min": 18.1305,
+        "toi_sec_w": 1184.7104,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479398",
+        "player_name": "Samuel Girard",
+        "position": "D",
+        "toi_share": 0.05870868,
+        "toi_min": 17.6126,
+        "toi_sec_w": 1150.8722,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478450",
+        "player_name": "Parker Wotherspoon",
+        "position": "D",
+        "toi_share": 0.05827328,
+        "toi_min": 17.482,
+        "toi_sec_w": 1142.337,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476483",
+        "player_name": "Rickard Rakell",
+        "position": "R",
+        "toi_share": 0.05682786,
+        "toi_min": 17.0484,
+        "toi_sec_w": 1114.0024,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471215",
+        "player_name": "Evgeni Malkin",
+        "position": "C",
+        "toi_share": 0.05463252,
+        "toi_min": 16.3898,
+        "toi_sec_w": 1070.9668,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478854",
+        "player_name": "Ryan Shea",
+        "position": "D",
+        "toi_share": 0.05198972,
+        "toi_min": 15.5969,
+        "toi_sec_w": 1019.1597,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477365",
+        "player_name": "Connor Clifton",
+        "position": "D",
+        "toi_share": 0.05052855,
+        "toi_min": 15.1586,
+        "toi_sec_w": 990.5162,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476856",
+        "player_name": "Mathew Dumba",
+        "position": "D",
+        "toi_share": 0.04898628,
+        "toi_min": 14.6959,
+        "toi_sec_w": 960.283,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481030",
+        "player_name": "Jack St. Ivany",
+        "position": "D",
+        "toi_share": 0.04840149,
+        "toi_min": 14.5204,
+        "toi_sec_w": 948.8193,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484839",
+        "player_name": "Harrison Brunicke",
+        "position": "D",
+        "toi_share": 0.04809896,
+        "toi_min": 14.4297,
+        "toi_sec_w": 942.8888,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477435",
+        "player_name": "Ryan Graves",
+        "position": "D",
+        "toi_share": 0.04648094,
+        "toi_min": 13.9443,
+        "toi_sec_w": 911.1707,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8485414",
+        "player_name": "Ben Kindel",
+        "position": "C",
+        "toi_share": 0.04610455,
+        "toi_min": 13.8314,
+        "toi_sec_w": 903.7922,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478452",
+        "player_name": "Caleb Jones",
+        "position": "D",
+        "toi_share": 0.04529328,
+        "toi_min": 13.588,
+        "toi_sec_w": 887.8888,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482758",
+        "player_name": "Ville Koivunen",
+        "position": "R",
+        "toi_share": 0.04515808,
+        "toi_min": 13.5474,
+        "toi_sec_w": 885.2384,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "SJS": [
+      {
+        "player_id": "8479983",
+        "player_name": "Mario Ferraro",
+        "position": "D",
+        "toi_share": 0.06440992,
+        "toi_min": 19.323,
+        "toi_sec_w": 1290.5078,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484801",
+        "player_name": "Macklin Celebrini",
+        "position": "C",
+        "toi_share": 0.06211746,
+        "toi_min": 18.6352,
+        "toi_sec_w": 1244.5766,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475200",
+        "player_name": "Dmitry Orlov",
+        "position": "D",
+        "toi_share": 0.06007164,
+        "toi_min": 18.0215,
+        "toi_sec_w": 1203.5868,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475906",
+        "player_name": "John Klingberg",
+        "position": "D",
+        "toi_share": 0.05844547,
+        "toi_min": 17.5336,
+        "toi_sec_w": 1171.0052,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477505",
+        "player_name": "Alexander Wennberg",
+        "position": "C",
+        "toi_share": 0.05834418,
+        "toi_min": 17.5033,
+        "toi_sec_w": 1168.9756,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479523",
+        "player_name": "Lucas Carlsson",
+        "position": "D",
+        "toi_share": 0.0579845,
+        "toi_min": 17.3954,
+        "toi_sec_w": 1161.7692,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475181",
+        "player_name": "Nick Leddy",
+        "position": "D",
+        "toi_share": 0.05692375,
+        "toi_min": 17.0771,
+        "toi_sec_w": 1140.5161,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482667",
+        "player_name": "William Eklund",
+        "position": "L",
+        "toi_share": 0.05650508,
+        "toi_min": 16.9515,
+        "toi_sec_w": 1132.1278,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474053",
+        "player_name": "Logan Couture",
+        "position": "C",
+        "toi_share": 0.05615765,
+        "toi_min": 16.8473,
+        "toi_sec_w": 1125.1666,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8480172",
+        "player_name": "Jan Rutta",
+        "position": "D",
+        "toi_share": 0.0546278,
+        "toi_min": 16.3883,
+        "toi_sec_w": 1094.5149,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8482166",
+        "player_name": "Shakir Mukhamadullin",
+        "position": "D",
+        "toi_share": 0.0545695,
+        "toi_min": 16.3708,
+        "toi_sec_w": 1093.3466,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484152",
+        "player_name": "Luca Cagnoni",
+        "position": "D",
+        "toi_share": 0.05355294,
+        "toi_min": 16.0659,
+        "toi_sec_w": 1072.9791,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481812",
+        "player_name": "Nikolai Knyzhov",
+        "position": "D",
+        "toi_share": 0.05283028,
+        "toi_min": 15.8491,
+        "toi_sec_w": 1058.5,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8484227",
+        "player_name": "Will Smith",
+        "position": "C",
+        "toi_share": 0.05183465,
+        "toi_min": 15.5504,
+        "toi_sec_w": 1038.5517,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480884",
+        "player_name": "Calen Addison",
+        "position": "D",
+        "toi_share": 0.05170106,
+        "toi_min": 15.5103,
+        "toi_sec_w": 1035.875,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8479576",
+        "player_name": "Vincent Desharnais",
+        "position": "D",
+        "toi_share": 0.05093856,
+        "toi_min": 15.2816,
+        "toi_sec_w": 1020.5978,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484806",
+        "player_name": "Sam Dickinson",
+        "position": "D",
+        "toi_share": 0.05017809,
+        "toi_min": 15.0534,
+        "toi_sec_w": 1005.3611,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484911",
+        "player_name": "Collin Graf",
+        "position": "R",
+        "toi_share": 0.04880747,
+        "toi_min": 14.6422,
+        "toi_sec_w": 977.8995,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "SEA": [
+      {
+        "player_id": "8477986",
+        "player_name": "Brandon Montour",
+        "position": "D",
+        "toi_share": 0.0720098,
+        "toi_min": 21.6029,
+        "toi_sec_w": 1371.7261,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478407",
+        "player_name": "Vince Dunn",
+        "position": "D",
+        "toi_share": 0.06952207,
+        "toi_min": 20.8566,
+        "toi_sec_w": 1324.337,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476457",
+        "player_name": "Adam Larsson",
+        "position": "D",
+        "toi_share": 0.06813317,
+        "toi_min": 20.44,
+        "toi_sec_w": 1297.8797,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476905",
+        "player_name": "Chandler Stephenson",
+        "position": "C",
+        "toi_share": 0.06060225,
+        "toi_min": 18.1807,
+        "toi_sec_w": 1154.4219,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479324",
+        "player_name": "Ryan Lindgren",
+        "position": "D",
+        "toi_share": 0.05968931,
+        "toi_min": 17.9068,
+        "toi_sec_w": 1137.0313,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482665",
+        "player_name": "Matty Beniers",
+        "position": "C",
+        "toi_share": 0.05933268,
+        "toi_min": 17.7998,
+        "toi_sec_w": 1130.2377,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482858",
+        "player_name": "Ryker Evans",
+        "position": "D",
+        "toi_share": 0.05852984,
+        "toi_min": 17.559,
+        "toi_sec_w": 1114.9444,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476467",
+        "player_name": "Jamieson Oleksiak",
+        "position": "D",
+        "toi_share": 0.05677744,
+        "toi_min": 17.0332,
+        "toi_sec_w": 1081.5625,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474586",
+        "player_name": "Jordan Eberle",
+        "position": "R",
+        "toi_share": 0.05545483,
+        "toi_min": 16.6364,
+        "toi_sec_w": 1056.3679,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477955",
+        "player_name": "Jared McCann",
+        "position": "L",
+        "toi_share": 0.05270288,
+        "toi_min": 15.8109,
+        "toi_sec_w": 1003.9456,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475768",
+        "player_name": "Jaden Schwartz",
+        "position": "L",
+        "toi_share": 0.05262475,
+        "toi_min": 15.7874,
+        "toi_sec_w": 1002.4573,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474602",
+        "player_name": "Justin Schultz",
+        "position": "D",
+        "toi_share": 0.05188605,
+        "toi_min": 15.5658,
+        "toi_sec_w": 988.3857,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8477919",
+        "player_name": "Freddy Gaudreau",
+        "position": "C",
+        "toi_share": 0.04900609,
+        "toi_min": 14.7018,
+        "toi_sec_w": 933.5248,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480009",
+        "player_name": "Eeli Tolvanen",
+        "position": "R",
+        "toi_share": 0.0486493,
+        "toi_min": 14.5948,
+        "toi_sec_w": 926.7282,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477467",
+        "player_name": "Gustav Olofsson",
+        "position": "D",
+        "toi_share": 0.04708869,
+        "toi_min": 14.1266,
+        "toi_sec_w": 897.0,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8479985",
+        "player_name": "Cale Fleury",
+        "position": "D",
+        "toi_share": 0.0463259,
+        "toi_min": 13.8978,
+        "toi_sec_w": 882.4696,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482259",
+        "player_name": "Bobby McMann",
+        "position": "C",
+        "toi_share": 0.04606986,
+        "toi_min": 13.821,
+        "toi_sec_w": 877.5922,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479372",
+        "player_name": "Josh Mahura",
+        "position": "D",
+        "toi_share": 0.04559509,
+        "toi_min": 13.6785,
+        "toi_sec_w": 868.5482,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "STL": [
+      {
+        "player_id": "8476892",
+        "player_name": "Colton Parayko",
+        "position": "D",
+        "toi_share": 0.07186688,
+        "toi_min": 21.5601,
+        "toi_sec_w": 1379.7657,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476792",
+        "player_name": "Torey Krug",
+        "position": "D",
+        "toi_share": 0.06863281,
+        "toi_min": 20.5898,
+        "toi_sec_w": 1317.6753,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8475764",
+        "player_name": "Cam Fowler",
+        "position": "D",
+        "toi_share": 0.0684012,
+        "toi_min": 20.5204,
+        "toi_sec_w": 1313.2285,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481598",
+        "player_name": "Philip Broberg",
+        "position": "D",
+        "toi_share": 0.06297964,
+        "toi_min": 18.8939,
+        "toi_sec_w": 1209.1406,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480023",
+        "player_name": "Robert Thomas",
+        "position": "C",
+        "toi_share": 0.06152934,
+        "toi_min": 18.4588,
+        "toi_sec_w": 1181.2964,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8470600",
+        "player_name": "Ryan Suter",
+        "position": "D",
+        "toi_share": 0.06018697,
+        "toi_min": 18.0561,
+        "toi_sec_w": 1155.5243,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8477402",
+        "player_name": "Pavel Buchnevich",
+        "position": "L",
+        "toi_share": 0.05825927,
+        "toi_min": 17.4778,
+        "toi_sec_w": 1118.5146,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477494",
+        "player_name": "Jonathan Drouin",
+        "position": "L",
+        "toi_share": 0.05476919,
+        "toi_min": 16.4308,
+        "toi_sec_w": 1051.5088,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482733",
+        "player_name": "Logan Mailloux",
+        "position": "D",
+        "toi_share": 0.05466809,
+        "toi_min": 16.4004,
+        "toi_sec_w": 1049.5678,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479385",
+        "player_name": "Jordan Kyrou",
+        "position": "R",
+        "toi_share": 0.05242951,
+        "toi_min": 15.7289,
+        "toi_sec_w": 1006.5894,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482077",
+        "player_name": "Dylan Holloway",
+        "position": "L",
+        "toi_share": 0.05140483,
+        "toi_min": 15.4214,
+        "toi_sec_w": 986.9167,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480459",
+        "player_name": "Pius Suter",
+        "position": "C",
+        "toi_share": 0.05078128,
+        "toi_min": 15.2344,
+        "toi_sec_w": 974.9453,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483516",
+        "player_name": "Jimmy Snuggerud",
+        "position": "R",
+        "toi_share": 0.05073669,
+        "toi_min": 15.221,
+        "toi_sec_w": 974.0892,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484188",
+        "player_name": "Theo Lindstein",
+        "position": "D",
+        "toi_share": 0.04925524,
+        "toi_min": 14.7766,
+        "toi_sec_w": 945.647,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482089",
+        "player_name": "Jake Neighbours",
+        "position": "L",
+        "toi_share": 0.04851805,
+        "toi_min": 14.5554,
+        "toi_sec_w": 931.4937,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475718",
+        "player_name": "Justin Holl",
+        "position": "D",
+        "toi_share": 0.04778432,
+        "toi_min": 14.3353,
+        "toi_sec_w": 917.407,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481461",
+        "player_name": "Corey Schueneman",
+        "position": "D",
+        "toi_share": 0.04390874,
+        "toi_min": 13.1726,
+        "toi_sec_w": 843.0,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8481006",
+        "player_name": "Tyler Tucker",
+        "position": "D",
+        "toi_share": 0.04388795,
+        "toi_min": 13.1664,
+        "toi_sec_w": 842.6008,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "TBL": [
+      {
+        "player_id": "8475167",
+        "player_name": "Victor Hedman",
+        "position": "D",
+        "toi_share": 0.0654317,
+        "toi_min": 19.6295,
+        "toi_sec_w": 1279.1019,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476453",
+        "player_name": "Nikita Kucherov",
+        "position": "R",
+        "toi_share": 0.06401918,
+        "toi_min": 19.2058,
+        "toi_sec_w": 1251.4888,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482655",
+        "player_name": "J.J. Moser",
+        "position": "D",
+        "toi_share": 0.06309178,
+        "toi_min": 18.9275,
+        "toi_sec_w": 1233.3593,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478178",
+        "player_name": "Darren Raddysh",
+        "position": "D",
+        "toi_share": 0.0624809,
+        "toi_min": 18.7443,
+        "toi_sec_w": 1221.4176,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477404",
+        "player_name": "Jake Guentzel",
+        "position": "C",
+        "toi_share": 0.0617686,
+        "toi_min": 18.5306,
+        "toi_sec_w": 1207.493,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474151",
+        "player_name": "Ryan McDonagh",
+        "position": "D",
+        "toi_share": 0.06168251,
+        "toi_min": 18.5048,
+        "toi_sec_w": 1205.8101,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479542",
+        "player_name": "Brandon Hagel",
+        "position": "L",
+        "toi_share": 0.06124477,
+        "toi_min": 18.3734,
+        "toi_sec_w": 1197.2528,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478010",
+        "player_name": "Brayden Point",
+        "position": "C",
+        "toi_share": 0.05825634,
+        "toi_min": 17.4769,
+        "toi_sec_w": 1138.8331,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480426",
+        "player_name": "Charle-Edouard D'Astous",
+        "position": "D",
+        "toi_share": 0.05755529,
+        "toi_min": 17.2666,
+        "toi_sec_w": 1125.1285,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478416",
+        "player_name": "Erik Cernak",
+        "position": "D",
+        "toi_share": 0.05562473,
+        "toi_min": 16.6874,
+        "toi_sec_w": 1087.3885,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478519",
+        "player_name": "Anthony Cirelli",
+        "position": "C",
+        "toi_share": 0.05515047,
+        "toi_min": 16.5451,
+        "toi_sec_w": 1078.1175,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481547",
+        "player_name": "Simon Lundmark",
+        "position": "D",
+        "toi_share": 0.05141019,
+        "toi_min": 15.4231,
+        "toi_sec_w": 1005.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476826",
+        "player_name": "Yanni Gourde",
+        "position": "C",
+        "toi_share": 0.05060199,
+        "toi_min": 15.1806,
+        "toi_sec_w": 989.2007,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482929",
+        "player_name": "Emil Lilleberg",
+        "position": "D",
+        "toi_share": 0.05057977,
+        "toi_min": 15.1739,
+        "toi_sec_w": 988.7664,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481719",
+        "player_name": "Max Crozier",
+        "position": "D",
+        "toi_share": 0.04787942,
+        "toi_min": 14.3638,
+        "toi_sec_w": 935.9782,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477426",
+        "player_name": "Nick Paul",
+        "position": "L",
+        "toi_share": 0.04673061,
+        "toi_min": 14.0192,
+        "toi_sec_w": 913.5206,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477416",
+        "player_name": "Oliver Bjorkstrand",
+        "position": "R",
+        "toi_share": 0.04480882,
+        "toi_min": 13.4426,
+        "toi_sec_w": 875.9522,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483398",
+        "player_name": "Declan Carlile",
+        "position": "D",
+        "toi_share": 0.04168293,
+        "toi_min": 12.5049,
+        "toi_sec_w": 814.8452,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "TOR": [
+      {
+        "player_id": "8476931",
+        "player_name": "Jake McCabe",
+        "position": "D",
+        "toi_share": 0.06742834,
+        "toi_min": 20.2285,
+        "toi_sec_w": 1307.2504,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476853",
+        "player_name": "Morgan Rielly",
+        "position": "D",
+        "toi_share": 0.06726027,
+        "toi_min": 20.1781,
+        "toi_sec_w": 1303.9921,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479318",
+        "player_name": "Auston Matthews",
+        "position": "C",
+        "toi_share": 0.06417683,
+        "toi_min": 19.2531,
+        "toi_sec_w": 1244.2127,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475171",
+        "player_name": "Oliver Ekman-Larsson",
+        "position": "D",
+        "toi_share": 0.06281643,
+        "toi_min": 18.8449,
+        "toi_sec_w": 1217.8382,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477939",
+        "player_name": "William Nylander",
+        "position": "R",
+        "toi_share": 0.06048327,
+        "toi_min": 18.145,
+        "toi_sec_w": 1172.6045,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478443",
+        "player_name": "Brandon Carlo",
+        "position": "D",
+        "toi_share": 0.05983355,
+        "toi_min": 17.9501,
+        "toi_sec_w": 1160.0083,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475690",
+        "player_name": "Chris Tanev",
+        "position": "D",
+        "toi_share": 0.05833085,
+        "toi_min": 17.4993,
+        "toi_sec_w": 1130.8751,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475166",
+        "player_name": "John Tavares",
+        "position": "C",
+        "toi_share": 0.05610712,
+        "toi_min": 16.8321,
+        "toi_sec_w": 1087.7631,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482720",
+        "player_name": "Matthew Knies",
+        "position": "L",
+        "toi_share": 0.05473519,
+        "toi_min": 16.4206,
+        "toi_sec_w": 1061.165,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479442",
+        "player_name": "Troy Stecher",
+        "position": "D",
+        "toi_share": 0.05378634,
+        "toi_min": 16.1359,
+        "toi_sec_w": 1042.7695,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482174",
+        "player_name": "William Villeneuve",
+        "position": "D",
+        "toi_share": 0.05362629,
+        "toi_min": 16.0879,
+        "toi_sec_w": 1039.6666,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481122",
+        "player_name": "Simon Benoit",
+        "position": "D",
+        "toi_share": 0.05279013,
+        "toi_min": 15.837,
+        "toi_sec_w": 1023.4557,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481567",
+        "player_name": "Henry Thrun",
+        "position": "D",
+        "toi_share": 0.05163784,
+        "toi_min": 15.4914,
+        "toi_sec_w": 1001.116,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8470966",
+        "player_name": "Mark Giordano",
+        "position": "D",
+        "toi_share": 0.05142666,
+        "toi_min": 15.428,
+        "toi_sec_w": 997.0217,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8475825",
+        "player_name": "Jani Hakanp\u00e4\u00e4",
+        "position": "D",
+        "toi_share": 0.04923402,
+        "toi_min": 14.7702,
+        "toi_sec_w": 954.5125,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8484158",
+        "player_name": "Easton Cowan",
+        "position": "R",
+        "toi_share": 0.04552819,
+        "toi_min": 13.6585,
+        "toi_sec_w": 882.6666,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480870",
+        "player_name": "Bo Groulx",
+        "position": "C",
+        "toi_share": 0.04546665,
+        "toi_min": 13.64,
+        "toi_sec_w": 881.4735,
+        "seasons_used": [
+          20232024,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481711",
+        "player_name": "Matias Maccelli",
+        "position": "L",
+        "toi_share": 0.04533203,
+        "toi_min": 13.5996,
+        "toi_sec_w": 878.8637,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "UTA": [
+      {
+        "player_id": "8479410",
+        "player_name": "Mikhail Sergachev",
+        "position": "D",
+        "toi_share": 0.07486801,
+        "toi_min": 22.4604,
+        "toi_sec_w": 1451.6462,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477346",
+        "player_name": "MacKenzie Weegar",
+        "position": "D",
+        "toi_share": 0.07137865,
+        "toi_min": 21.4136,
+        "toi_sec_w": 1383.9897,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478507",
+        "player_name": "John Marino",
+        "position": "D",
+        "toi_share": 0.06387854,
+        "toi_min": 19.1636,
+        "toi_sec_w": 1238.5671,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480434",
+        "player_name": "Sean Durzi",
+        "position": "D",
+        "toi_share": 0.06303068,
+        "toi_min": 18.9092,
+        "toi_sec_w": 1222.1275,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477951",
+        "player_name": "Nick Schmaltz",
+        "position": "C",
+        "toi_share": 0.059642,
+        "toi_min": 17.8926,
+        "toi_sec_w": 1156.4231,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479343",
+        "player_name": "Clayton Keller",
+        "position": "R",
+        "toi_share": 0.05918942,
+        "toi_min": 17.7568,
+        "toi_sec_w": 1147.6478,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474013",
+        "player_name": "Ian Cole",
+        "position": "D",
+        "toi_share": 0.05866176,
+        "toi_min": 17.5985,
+        "toi_sec_w": 1137.4169,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477220",
+        "player_name": "Nate Schmidt",
+        "position": "D",
+        "toi_share": 0.05623073,
+        "toi_min": 16.8692,
+        "toi_sec_w": 1090.2805,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479976",
+        "player_name": "Juuso V\u00e4lim\u00e4ki",
+        "position": "D",
+        "toi_share": 0.05436806,
+        "toi_min": 16.3104,
+        "toi_sec_w": 1054.1645,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8483431",
+        "player_name": "Logan Cooley",
+        "position": "C",
+        "toi_share": 0.05317931,
+        "toi_min": 15.9538,
+        "toi_sec_w": 1031.1153,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482699",
+        "player_name": "Dylan Guenther",
+        "position": "R",
+        "toi_share": 0.05277044,
+        "toi_min": 15.8311,
+        "toi_sec_w": 1023.1876,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482175",
+        "player_name": "John-Jason Peterka",
+        "position": "R",
+        "toi_share": 0.05175774,
+        "toi_min": 15.5273,
+        "toi_sec_w": 1003.5519,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480849",
+        "player_name": "Barrett Hayton",
+        "position": "C",
+        "toi_share": 0.04887595,
+        "toi_min": 14.6628,
+        "toi_sec_w": 947.6758,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478474",
+        "player_name": "Lawson Crouse",
+        "position": "L",
+        "toi_share": 0.04883314,
+        "toi_min": 14.6499,
+        "toi_sec_w": 946.8456,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483472",
+        "player_name": "Maveric Lamoureux",
+        "position": "D",
+        "toi_share": 0.04705146,
+        "toi_min": 14.1154,
+        "toi_sec_w": 912.3,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484386",
+        "player_name": "Dmitri Simashev",
+        "position": "D",
+        "toi_share": 0.04675048,
+        "toi_min": 14.0251,
+        "toi_sec_w": 906.4642,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480084",
+        "player_name": "Nick DeSimone",
+        "position": "D",
+        "toi_share": 0.04479988,
+        "toi_min": 13.44,
+        "toi_sec_w": 868.6431,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477021",
+        "player_name": "Alexander Kerfoot",
+        "position": "C",
+        "toi_share": 0.04473375,
+        "toi_min": 13.4201,
+        "toi_sec_w": 867.3609,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "VAN": [
+      {
+        "player_id": "8479425",
+        "player_name": "Filip Hronek",
+        "position": "D",
+        "toi_share": 0.07927412,
+        "toi_min": 23.7822,
+        "toi_sec_w": 1461.5637,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477969",
+        "player_name": "Marcus Pettersson",
+        "position": "D",
+        "toi_share": 0.07084013,
+        "toi_min": 21.252,
+        "toi_sec_w": 1306.0673,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484798",
+        "player_name": "Zeev Buium",
+        "position": "D",
+        "toi_share": 0.06370901,
+        "toi_min": 19.1127,
+        "toi_sec_w": 1174.5921,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480012",
+        "player_name": "Elias Pettersson",
+        "position": "C",
+        "toi_share": 0.06186188,
+        "toi_min": 18.5586,
+        "toi_sec_w": 1140.5369,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478444",
+        "player_name": "Brock Boeser",
+        "position": "R",
+        "toi_share": 0.06084187,
+        "toi_min": 18.2526,
+        "toi_sec_w": 1121.7312,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482079",
+        "player_name": "Marco Rossi",
+        "position": "C",
+        "toi_share": 0.05713749,
+        "toi_min": 17.1412,
+        "toi_sec_w": 1053.4341,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484240",
+        "player_name": "Tom Willander",
+        "position": "D",
+        "toi_share": 0.05528995,
+        "toi_min": 16.587,
+        "toi_sec_w": 1019.3714,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478498",
+        "player_name": "Jake DeBrusk",
+        "position": "L",
+        "toi_share": 0.05465175,
+        "toi_min": 16.3955,
+        "toi_sec_w": 1007.6049,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475169",
+        "player_name": "Evander Kane",
+        "position": "L",
+        "toi_share": 0.05375729,
+        "toi_min": 16.1272,
+        "toi_sec_w": 991.1139,
+        "seasons_used": [
+          20232024,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478465",
+        "player_name": "Guillaume Brisebois",
+        "position": "D",
+        "toi_share": 0.0514369,
+        "toi_min": 15.4311,
+        "toi_sec_w": 948.3333,
+        "seasons_used": [
+          20242025
+        ]
+      },
+      {
+        "player_id": "8475762",
+        "player_name": "Derek Forbort",
+        "position": "D",
+        "toi_share": 0.05094984,
+        "toi_min": 15.285,
+        "toi_sec_w": 939.3535,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480073",
+        "player_name": "Erik Brannstrom",
+        "position": "D",
+        "toi_share": 0.05076089,
+        "toi_min": 15.2283,
+        "toi_sec_w": 935.8699,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8476927",
+        "player_name": "Teddy Blueger",
+        "position": "C",
+        "toi_share": 0.05056681,
+        "toi_min": 15.17,
+        "toi_sec_w": 932.2916,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483467",
+        "player_name": "Kirill Kudryavtsev",
+        "position": "D",
+        "toi_share": 0.04904585,
+        "toi_min": 14.7138,
+        "toi_sec_w": 904.25,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480078",
+        "player_name": "Filip Chytil",
+        "position": "C",
+        "toi_share": 0.04878741,
+        "toi_min": 14.6362,
+        "toi_sec_w": 899.4851,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482055",
+        "player_name": "Drew O'Connor",
+        "position": "L",
+        "toi_share": 0.04810711,
+        "toi_min": 14.4321,
+        "toi_sec_w": 886.9425,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483768",
+        "player_name": "Victor Mancini",
+        "position": "D",
+        "toi_share": 0.04661447,
+        "toi_min": 13.9843,
+        "toi_sec_w": 859.423,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480058",
+        "player_name": "Pierre-Olivier Joseph",
+        "position": "D",
+        "toi_share": 0.04636723,
+        "toi_min": 13.9102,
+        "toi_sec_w": 854.8648,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "VGK": [
+      {
+        "player_id": "8478397",
+        "player_name": "Rasmus Andersson",
+        "position": "D",
+        "toi_share": 0.07097745,
+        "toi_min": 21.2932,
+        "toi_sec_w": 1413.6981,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474565",
+        "player_name": "Alex Pietrangelo",
+        "position": "D",
+        "toi_share": 0.06888647,
+        "toi_min": 20.6659,
+        "toi_sec_w": 1372.051,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8478396",
+        "player_name": "Noah Hanifin",
+        "position": "D",
+        "toi_share": 0.0677466,
+        "toi_min": 20.324,
+        "toi_sec_w": 1349.3477,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477447",
+        "player_name": "Shea Theodore",
+        "position": "D",
+        "toi_share": 0.06757898,
+        "toi_min": 20.2737,
+        "toi_sec_w": 1346.0091,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478403",
+        "player_name": "Jack Eichel",
+        "position": "C",
+        "toi_share": 0.06285249,
+        "toi_min": 18.8557,
+        "toi_sec_w": 1251.869,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478483",
+        "player_name": "Mitch Marner",
+        "position": "R",
+        "toi_share": 0.06214237,
+        "toi_min": 18.6427,
+        "toi_sec_w": 1237.725,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475188",
+        "player_name": "Brayden McNabb",
+        "position": "D",
+        "toi_share": 0.06074926,
+        "toi_min": 18.2248,
+        "toi_sec_w": 1209.9776,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475913",
+        "player_name": "Mark Stone",
+        "position": "R",
+        "toi_share": 0.05803484,
+        "toi_min": 17.4105,
+        "toi_sec_w": 1155.9129,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476881",
+        "player_name": "Tomas Hertl",
+        "position": "C",
+        "toi_share": 0.05346999,
+        "toi_min": 16.041,
+        "toi_sec_w": 1064.9923,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482141",
+        "player_name": "Lukas Cormier",
+        "position": "D",
+        "toi_share": 0.05206458,
+        "toi_min": 15.6194,
+        "toi_sec_w": 1037.0,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8481604",
+        "player_name": "Pavel Dorofeyev",
+        "position": "R",
+        "toi_share": 0.04945043,
+        "toi_min": 14.8351,
+        "toi_sec_w": 984.9325,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477964",
+        "player_name": "Ivan Barbashev",
+        "position": "L",
+        "toi_share": 0.04935264,
+        "toi_min": 14.8058,
+        "toi_sec_w": 982.9846,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476448",
+        "player_name": "William Karlsson",
+        "position": "C",
+        "toi_share": 0.04879448,
+        "toi_min": 14.6383,
+        "toi_sec_w": 971.8675,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481527",
+        "player_name": "Kaedan Korczak",
+        "position": "D",
+        "toi_share": 0.04761757,
+        "toi_min": 14.2853,
+        "toi_sec_w": 948.4264,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479639",
+        "player_name": "Dylan Coghlan",
+        "position": "D",
+        "toi_share": 0.04738613,
+        "toi_min": 14.2158,
+        "toi_sec_w": 943.8166,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475343",
+        "player_name": "Nic Dowd",
+        "position": "C",
+        "toi_share": 0.04477753,
+        "toi_min": 13.4333,
+        "toi_sec_w": 891.8595,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475191",
+        "player_name": "Reilly Smith",
+        "position": "R",
+        "toi_share": 0.04428443,
+        "toi_min": 13.2853,
+        "toi_sec_w": 882.0382,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479353",
+        "player_name": "Brett Howden",
+        "position": "C",
+        "toi_share": 0.04383376,
+        "toi_min": 13.1501,
+        "toi_sec_w": 873.062,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "WPG": [
+      {
+        "player_id": "8477504",
+        "player_name": "Josh Morrissey",
+        "position": "D",
+        "toi_share": 0.07818218,
+        "toi_min": 23.4547,
+        "toi_sec_w": 1470.834,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480145",
+        "player_name": "Neal Pionk",
+        "position": "D",
+        "toi_share": 0.07060702,
+        "toi_min": 21.1821,
+        "toi_sec_w": 1328.323,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476331",
+        "player_name": "Dylan DeMelo",
+        "position": "D",
+        "toi_share": 0.06867932,
+        "toi_min": 20.6038,
+        "toi_sec_w": 1292.0573,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476460",
+        "player_name": "Mark Scheifele",
+        "position": "C",
+        "toi_share": 0.06672368,
+        "toi_min": 20.0171,
+        "toi_sec_w": 1255.266,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478398",
+        "player_name": "Kyle Connor",
+        "position": "L",
+        "toi_share": 0.06639003,
+        "toi_min": 19.917,
+        "toi_sec_w": 1248.9893,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480049",
+        "player_name": "Dylan Samberg",
+        "position": "D",
+        "toi_share": 0.06498913,
+        "toi_min": 19.4967,
+        "toi_sec_w": 1222.6342,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480014",
+        "player_name": "Gabriel Vilardi",
+        "position": "C",
+        "toi_share": 0.05808402,
+        "toi_min": 17.4252,
+        "toi_sec_w": 1092.7291,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8483510",
+        "player_name": "Elias Salomonsson",
+        "position": "D",
+        "toi_share": 0.05728781,
+        "toi_min": 17.1863,
+        "toi_sec_w": 1077.75,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476392",
+        "player_name": "Adam Lowry",
+        "position": "C",
+        "toi_share": 0.04890802,
+        "toi_min": 14.6724,
+        "toi_sec_w": 920.1018,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8482149",
+        "player_name": "Cole Perfetti",
+        "position": "C",
+        "toi_share": 0.04811278,
+        "toi_min": 14.4338,
+        "toi_sec_w": 905.141,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477938",
+        "player_name": "Haydn Fleury",
+        "position": "D",
+        "toi_share": 0.04773315,
+        "toi_min": 14.3199,
+        "toi_sec_w": 897.9991,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8474679",
+        "player_name": "Gustav Nyquist",
+        "position": "R",
+        "toi_share": 0.04766069,
+        "toi_min": 14.2982,
+        "toi_sec_w": 896.6359,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480113",
+        "player_name": "Alex Iafallo",
+        "position": "L",
+        "toi_share": 0.04733805,
+        "toi_min": 14.2014,
+        "toi_sec_w": 890.5661,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476525",
+        "player_name": "Colin Miller",
+        "position": "D",
+        "toi_share": 0.046672,
+        "toi_min": 14.0016,
+        "toi_sec_w": 878.0358,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8473604",
+        "player_name": "Jonathan Toews",
+        "position": "C",
+        "toi_share": 0.0462105,
+        "toi_min": 13.8631,
+        "toi_sec_w": 869.3536,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8475799",
+        "player_name": "Nino Niederreiter",
+        "position": "R",
+        "toi_share": 0.04571275,
+        "toi_min": 13.7138,
+        "toi_sec_w": 859.9895,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476480",
+        "player_name": "Vladislav Namestnikov",
+        "position": "C",
+        "toi_share": 0.04563453,
+        "toi_min": 13.6904,
+        "toi_sec_w": 858.5179,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481572",
+        "player_name": "Ville Heinola",
+        "position": "D",
+        "toi_share": 0.04507434,
+        "toi_min": 13.5223,
+        "toi_sec_w": 847.9791,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      }
+    ],
+    "WSH": [
+      {
+        "player_id": "8479345",
+        "player_name": "Jakob Chychrun",
+        "position": "D",
+        "toi_share": 0.07050202,
+        "toi_min": 21.1506,
+        "toi_sec_w": 1348.0584,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478911",
+        "player_name": "Matt Roy",
+        "position": "D",
+        "toi_share": 0.06416332,
+        "toi_min": 19.249,
+        "toi_sec_w": 1226.8574,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480043",
+        "player_name": "Timothy Liljegren",
+        "position": "D",
+        "toi_share": 0.06155806,
+        "toi_min": 18.4674,
+        "toi_sec_w": 1177.0426,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480796",
+        "player_name": "Martin Fehervary",
+        "position": "D",
+        "toi_share": 0.06046258,
+        "toi_min": 18.1388,
+        "toi_sec_w": 1156.0961,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480873",
+        "player_name": "Rasmus Sandin",
+        "position": "D",
+        "toi_share": 0.06023938,
+        "toi_min": 18.0718,
+        "toi_sec_w": 1151.8284,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8476880",
+        "player_name": "Tom Wilson",
+        "position": "R",
+        "toi_share": 0.05985285,
+        "toi_min": 17.9559,
+        "toi_sec_w": 1144.4375,
+        "seasons_used": [
+          20232024,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471214",
+        "player_name": "Alex Ovechkin",
+        "position": "L",
+        "toi_share": 0.05612421,
+        "toi_min": 16.8373,
+        "toi_sec_w": 1073.1428,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8478440",
+        "player_name": "Dylan Strome",
+        "position": "C",
+        "toi_share": 0.05593048,
+        "toi_min": 16.7791,
+        "toi_sec_w": 1069.4385,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484873",
+        "player_name": "Cole Hutson",
+        "position": "D",
+        "toi_share": 0.05477938,
+        "toi_min": 16.4338,
+        "toi_sec_w": 1047.4285,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8477845",
+        "player_name": "Trevor van Riemsdyk",
+        "position": "D",
+        "toi_share": 0.0538164,
+        "toi_min": 16.1449,
+        "toi_sec_w": 1029.0154,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8471698",
+        "player_name": "T.J. Oshie",
+        "position": "R",
+        "toi_share": 0.05293355,
+        "toi_min": 15.8801,
+        "toi_sec_w": 1012.1346,
+        "seasons_used": [
+          20232024
+        ]
+      },
+      {
+        "player_id": "8481656",
+        "player_name": "Aliaksei Protas",
+        "position": "L",
+        "toi_share": 0.05273038,
+        "toi_min": 15.8191,
+        "toi_sec_w": 1008.2499,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8479400",
+        "player_name": "Pierre-Luc Dubois",
+        "position": "C",
+        "toi_share": 0.0525325,
+        "toi_min": 15.7597,
+        "toi_sec_w": 1004.4661,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8481580",
+        "player_name": "Connor McMichael",
+        "position": "L",
+        "toi_share": 0.05238153,
+        "toi_min": 15.7145,
+        "toi_sec_w": 1001.5795,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8484999",
+        "player_name": "Ilya Protas",
+        "position": "L",
+        "toi_share": 0.04986702,
+        "toi_min": 14.9601,
+        "toi_sec_w": 953.5,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480990",
+        "player_name": "Declan Chisholm",
+        "position": "D",
+        "toi_share": 0.04790507,
+        "toi_min": 14.3715,
+        "toi_sec_w": 915.9858,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      {
+        "player_id": "8480823",
+        "player_name": "Alexander Alexeyev",
+        "position": "D",
+        "toi_share": 0.0474486,
+        "toi_min": 14.2346,
+        "toi_sec_w": 907.2577,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      {
+        "player_id": "8478451",
+        "player_name": "Ethan Bear",
+        "position": "D",
+        "toi_share": 0.04677267,
+        "toi_min": 14.0318,
+        "toi_sec_w": 894.3333,
+        "seasons_used": [
+          20232024
+        ]
+      }
+    ]
+  },
+  "does_not": [
+    "emit KEI / fill KEINHL",
+    "retune NHL_TEAM_CARRY_SHRINK",
+    "rebase nhl_team_prior_2026.json",
+    "xG",
+    "situation",
+    "NBA/WNBA minute copy"
+  ]
+}

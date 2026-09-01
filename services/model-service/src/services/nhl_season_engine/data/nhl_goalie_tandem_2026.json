@@ -1,0 +1,3639 @@
+{
+  "engine_version": "nhl-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "object": "goalie_tandem",
+  "season_target": "2026-27",
+  "source": "nhl_goalie_box_2023_2025.json",
+  "PLAYER_YEAR_WEIGHTS": {
+    "2023": 0.2,
+    "2024": 0.3,
+    "2025": 0.5
+  },
+  "PLAYER_YEAR_WEIGHTS_BY_SEASON_ID": {
+    "20232024": 0.2,
+    "20242025": 0.3,
+    "20252026": 0.5
+  },
+  "NHL_GOALIE_TANDEM_SHARE_SUM": 1.0,
+  "NHL_TEAM_CARRY_SHRINK_unchanged": 0.85,
+  "STARTER_GATE": "unknown",
+  "formula": "gs_w = \u03a3 w_y \u00b7 gs_y (renormalized); gs_share = gs_w / \u03a3_team; roles starter/backup/residual",
+  "team_count": 32,
+  "teams": {
+    "ANA": {
+      "team": "ANA",
+      "starter": {
+        "player_id": "8480843",
+        "player_name": "Lukas Dostal",
+        "role": "starter",
+        "gs_share": 0.54013015,
+        "gs_w": 49.8,
+        "gp_w": 53.0,
+        "toi_w": 180949.5,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8475852",
+        "player_name": "Petr Mrazek",
+        "role": "backup",
+        "gs_share": 0.28199566,
+        "gs_w": 26.0,
+        "gp_w": 27.6,
+        "toi_w": 90750.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8478024",
+          "player_name": "Ville Husso",
+          "role": "residual",
+          "gs_share": 0.17787419,
+          "gs_w": 16.4,
+          "gp_w": 17.7,
+          "toi_w": 58039.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8480843",
+          "player_name": "Lukas Dostal",
+          "role": "starter",
+          "gs_share": 0.54013015,
+          "gs_w": 49.8,
+          "gp_w": 53.0,
+          "toi_w": 180949.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475852",
+          "player_name": "Petr Mrazek",
+          "role": "backup",
+          "gs_share": 0.28199566,
+          "gs_w": 26.0,
+          "gp_w": 27.6,
+          "toi_w": 90750.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478024",
+          "player_name": "Ville Husso",
+          "role": "residual",
+          "gs_share": 0.17787419,
+          "gs_w": 16.4,
+          "gp_w": 17.7,
+          "toi_w": 58039.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "BOS": {
+      "team": "BOS",
+      "starter": {
+        "player_id": "8480280",
+        "player_name": "Jeremy Swayman",
+        "role": "starter",
+        "gs_share": 0.63095238,
+        "gs_w": 53.0,
+        "gp_w": 53.7,
+        "toi_w": 188879.2,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8476914",
+        "player_name": "Joonas Korpisalo",
+        "role": "backup",
+        "gs_share": 0.36904762,
+        "gs_w": 31.0,
+        "gp_w": 34.6,
+        "toi_w": 115892.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8480280",
+          "player_name": "Jeremy Swayman",
+          "role": "starter",
+          "gs_share": 0.63095238,
+          "gs_w": 53.0,
+          "gp_w": 53.7,
+          "toi_w": 188879.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476914",
+          "player_name": "Joonas Korpisalo",
+          "role": "backup",
+          "gs_share": 0.36904762,
+          "gs_w": 31.0,
+          "gp_w": 34.6,
+          "toi_w": 115892.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "BUF": {
+      "team": "BUF",
+      "starter": {
+        "player_id": "8480045",
+        "player_name": "Ukko-Pekka Luukkonen",
+        "role": "starter",
+        "gs_share": 0.41898369,
+        "gs_w": 43.7,
+        "gp_w": 44.8,
+        "toi_w": 154907.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8479312",
+        "player_name": "Alex Lyon",
+        "role": "backup",
+        "gs_share": 0.32023011,
+        "gs_w": 33.4,
+        "gp_w": 35.8,
+        "toi_w": 117820.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8481551",
+          "player_name": "Colten Ellis",
+          "role": "residual",
+          "gs_share": 0.13422819,
+          "gs_w": 14.0,
+          "gp_w": 16.0,
+          "toi_w": 54680.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482221",
+          "player_name": "Devon Levi",
+          "role": "residual",
+          "gs_share": 0.12655801,
+          "gs_w": 13.2,
+          "gp_w": 14.6,
+          "toi_w": 48380.4,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8480045",
+          "player_name": "Ukko-Pekka Luukkonen",
+          "role": "starter",
+          "gs_share": 0.41898369,
+          "gs_w": 43.7,
+          "gp_w": 44.8,
+          "toi_w": 154907.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8479312",
+          "player_name": "Alex Lyon",
+          "role": "backup",
+          "gs_share": 0.32023011,
+          "gs_w": 33.4,
+          "gp_w": 35.8,
+          "toi_w": 117820.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481551",
+          "player_name": "Colten Ellis",
+          "role": "residual",
+          "gs_share": 0.13422819,
+          "gs_w": 14.0,
+          "gp_w": 16.0,
+          "toi_w": 54680.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482221",
+          "player_name": "Devon Levi",
+          "role": "residual",
+          "gs_share": 0.12655801,
+          "gs_w": 13.2,
+          "gp_w": 14.6,
+          "toi_w": 48380.4,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ]
+    },
+    "CGY": {
+      "team": "CGY",
+      "starter": {
+        "player_id": "8481692",
+        "player_name": "Dustin Wolf",
+        "role": "starter",
+        "gs_share": 0.68552131,
+        "gs_w": 46.4,
+        "gp_w": 47.8,
+        "toi_w": 163165.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8482445",
+        "player_name": "Devin Cooley",
+        "role": "backup",
+        "gs_share": 0.29970452,
+        "gs_w": 20.2857,
+        "gp_w": 23.8571,
+        "toi_w": 78796.86,
+        "seasons_used": [
+          20232024,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482949",
+          "player_name": "Arsenii Sergeev",
+          "role": "residual",
+          "gs_share": 0.01477417,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8481692",
+          "player_name": "Dustin Wolf",
+          "role": "starter",
+          "gs_share": 0.68552131,
+          "gs_w": 46.4,
+          "gp_w": 47.8,
+          "toi_w": 163165.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482445",
+          "player_name": "Devin Cooley",
+          "role": "backup",
+          "gs_share": 0.29970452,
+          "gs_w": 20.2857,
+          "gp_w": 23.8571,
+          "toi_w": 78796.86,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482949",
+          "player_name": "Arsenii Sergeev",
+          "role": "residual",
+          "gs_share": 0.01477417,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ]
+    },
+    "CAR": {
+      "team": "CAR",
+      "starter": {
+        "player_id": "8483548",
+        "player_name": "Brandon Bussi",
+        "role": "starter",
+        "gs_share": 0.32939189,
+        "gs_w": 39.0,
+        "gp_w": 39.0,
+        "toi_w": 141649.0,
+        "seasons_used": [
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8475883",
+        "player_name": "Frederik Andersen",
+        "role": "backup",
+        "gs_share": 0.23057432,
+        "gs_w": 27.3,
+        "gp_w": 27.3,
+        "toi_w": 97761.9,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8481611",
+          "player_name": "Pyotr Kochetkov",
+          "role": "residual",
+          "gs_share": 0.22043919,
+          "gs_w": 26.1,
+          "gp_w": 27.0,
+          "toi_w": 93394.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477293",
+          "player_name": "Antti Raanta",
+          "role": "residual",
+          "gs_share": 0.16891892,
+          "gs_w": 20.0,
+          "gp_w": 24.0,
+          "toi_w": 75911.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8474682",
+          "player_name": "Dustin Tokarski",
+          "role": "residual",
+          "gs_share": 0.05067568,
+          "gs_w": 6.0,
+          "gp_w": 6.0,
+          "toi_w": 21499.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8483548",
+          "player_name": "Brandon Bussi",
+          "role": "starter",
+          "gs_share": 0.32939189,
+          "gs_w": 39.0,
+          "gp_w": 39.0,
+          "toi_w": 141649.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475883",
+          "player_name": "Frederik Andersen",
+          "role": "backup",
+          "gs_share": 0.23057432,
+          "gs_w": 27.3,
+          "gp_w": 27.3,
+          "toi_w": 97761.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481611",
+          "player_name": "Pyotr Kochetkov",
+          "role": "residual",
+          "gs_share": 0.22043919,
+          "gs_w": 26.1,
+          "gp_w": 27.0,
+          "toi_w": 93394.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477293",
+          "player_name": "Antti Raanta",
+          "role": "residual",
+          "gs_share": 0.16891892,
+          "gs_w": 20.0,
+          "gp_w": 24.0,
+          "toi_w": 75911.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8474682",
+          "player_name": "Dustin Tokarski",
+          "role": "residual",
+          "gs_share": 0.05067568,
+          "gs_w": 6.0,
+          "gp_w": 6.0,
+          "toi_w": 21499.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ]
+    },
+    "CHI": {
+      "team": "CHI",
+      "starter": {
+        "player_id": "8481519",
+        "player_name": "Spencer Knight",
+        "role": "starter",
+        "gs_share": 0.61516222,
+        "gs_w": 47.875,
+        "gp_w": 48.625,
+        "toi_w": 173061.0,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8482821",
+        "player_name": "Arvid Soderblom",
+        "role": "backup",
+        "gs_share": 0.35592676,
+        "gs_w": 27.7,
+        "gp_w": 30.2,
+        "toi_w": 102727.5,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482123",
+          "player_name": "Drew Commesso",
+          "role": "residual",
+          "gs_share": 0.02891102,
+          "gs_w": 2.25,
+          "gp_w": 2.625,
+          "toi_w": 8419.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8481519",
+          "player_name": "Spencer Knight",
+          "role": "starter",
+          "gs_share": 0.61516222,
+          "gs_w": 47.875,
+          "gp_w": 48.625,
+          "toi_w": 173061.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482821",
+          "player_name": "Arvid Soderblom",
+          "role": "backup",
+          "gs_share": 0.35592676,
+          "gs_w": 27.7,
+          "gp_w": 30.2,
+          "toi_w": 102727.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482123",
+          "player_name": "Drew Commesso",
+          "role": "residual",
+          "gs_share": 0.02891102,
+          "gs_w": 2.25,
+          "gp_w": 2.625,
+          "toi_w": 8419.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "COL": {
+      "team": "COL",
+      "starter": {
+        "player_id": "8478406",
+        "player_name": "Mackenzie Blackwood",
+        "role": "starter",
+        "gs_share": 0.42163245,
+        "gs_w": 42.1,
+        "gp_w": 45.1,
+        "toi_w": 151941.5,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8475809",
+        "player_name": "Scott Wedgewood",
+        "role": "backup",
+        "gs_share": 0.33750626,
+        "gs_w": 33.7,
+        "gp_w": 36.1,
+        "toi_w": 122657.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8478039",
+          "player_name": "Kaapo Kahkonen",
+          "role": "residual",
+          "gs_share": 0.13820731,
+          "gs_w": 13.8,
+          "gp_w": 15.4,
+          "toi_w": 48038.8,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8481031",
+          "player_name": "Ivan Prosvetov",
+          "role": "residual",
+          "gs_share": 0.08012018,
+          "gs_w": 8.0,
+          "gp_w": 11.0,
+          "toi_w": 29651.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8481529",
+          "player_name": "Trent Miner",
+          "role": "residual",
+          "gs_share": 0.0225338,
+          "gs_w": 2.25,
+          "gp_w": 3.25,
+          "toi_w": 10933.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478406",
+          "player_name": "Mackenzie Blackwood",
+          "role": "starter",
+          "gs_share": 0.42163245,
+          "gs_w": 42.1,
+          "gp_w": 45.1,
+          "toi_w": 151941.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475809",
+          "player_name": "Scott Wedgewood",
+          "role": "backup",
+          "gs_share": 0.33750626,
+          "gs_w": 33.7,
+          "gp_w": 36.1,
+          "toi_w": 122657.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478039",
+          "player_name": "Kaapo Kahkonen",
+          "role": "residual",
+          "gs_share": 0.13820731,
+          "gs_w": 13.8,
+          "gp_w": 15.4,
+          "toi_w": 48038.8,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8481031",
+          "player_name": "Ivan Prosvetov",
+          "role": "residual",
+          "gs_share": 0.08012018,
+          "gs_w": 8.0,
+          "gp_w": 11.0,
+          "toi_w": 29651.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8481529",
+          "player_name": "Trent Miner",
+          "role": "residual",
+          "gs_share": 0.0225338,
+          "gs_w": 2.25,
+          "gp_w": 3.25,
+          "toi_w": 10933.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "CBJ": {
+      "team": "CBJ",
+      "starter": {
+        "player_id": "8478007",
+        "player_name": "Elvis Merzlikins",
+        "role": "starter",
+        "gs_share": 0.54042553,
+        "gs_w": 38.1,
+        "gp_w": 39.1,
+        "toi_w": 134539.0,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8482982",
+        "player_name": "Jet Greaves",
+        "role": "backup",
+        "gs_share": 0.44539007,
+        "gs_w": 31.4,
+        "gp_w": 32.6,
+        "toi_w": 116355.2,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8476876",
+          "player_name": "Malcolm Subban",
+          "role": "residual",
+          "gs_share": 0.0141844,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478007",
+          "player_name": "Elvis Merzlikins",
+          "role": "starter",
+          "gs_share": 0.54042553,
+          "gs_w": 38.1,
+          "gp_w": 39.1,
+          "toi_w": 134539.0,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482982",
+          "player_name": "Jet Greaves",
+          "role": "backup",
+          "gs_share": 0.44539007,
+          "gs_w": 31.4,
+          "gp_w": 32.6,
+          "toi_w": 116355.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476876",
+          "player_name": "Malcolm Subban",
+          "role": "residual",
+          "gs_share": 0.0141844,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ]
+    },
+    "DAL": {
+      "team": "DAL",
+      "starter": {
+        "player_id": "8479979",
+        "player_name": "Jake Oettinger",
+        "role": "starter",
+        "gs_share": 0.66585956,
+        "gs_w": 55.0,
+        "gp_w": 55.2,
+        "toi_w": 194221.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8479193",
+        "player_name": "Casey DeSmith",
+        "role": "backup",
+        "gs_share": 0.3220339,
+        "gs_w": 26.6,
+        "gp_w": 28.9,
+        "toi_w": 99692.8,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8483575",
+          "player_name": "Matt Murray",
+          "role": "residual",
+          "gs_share": 0.01210654,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8479979",
+          "player_name": "Jake Oettinger",
+          "role": "starter",
+          "gs_share": 0.66585956,
+          "gs_w": 55.0,
+          "gp_w": 55.2,
+          "toi_w": 194221.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8479193",
+          "player_name": "Casey DeSmith",
+          "role": "backup",
+          "gs_share": 0.3220339,
+          "gs_w": 26.6,
+          "gp_w": 28.9,
+          "toi_w": 99692.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8483575",
+          "player_name": "Matt Murray",
+          "role": "residual",
+          "gs_share": 0.01210654,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ]
+    },
+    "DET": {
+      "team": "DET",
+      "starter": {
+        "player_id": "8476434",
+        "player_name": "John Gibson",
+        "role": "starter",
+        "gs_share": 0.5539394,
+        "gs_w": 45.7,
+        "gp_w": 46.4,
+        "toi_w": 154293.5,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8475660",
+        "player_name": "Cam Talbot",
+        "role": "backup",
+        "gs_share": 0.43393939,
+        "gs_w": 35.8,
+        "gp_w": 41.9,
+        "toi_w": 137457.9,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8474636",
+          "player_name": "Michael Hutchinson",
+          "role": "residual",
+          "gs_share": 0.01212121,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3468.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8476434",
+          "player_name": "John Gibson",
+          "role": "starter",
+          "gs_share": 0.5539394,
+          "gs_w": 45.7,
+          "gp_w": 46.4,
+          "toi_w": 154293.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475660",
+          "player_name": "Cam Talbot",
+          "role": "backup",
+          "gs_share": 0.43393939,
+          "gs_w": 35.8,
+          "gp_w": 41.9,
+          "toi_w": 137457.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8474636",
+          "player_name": "Michael Hutchinson",
+          "role": "residual",
+          "gs_share": 0.01212121,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3468.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ]
+    },
+    "EDM": {
+      "team": "EDM",
+      "starter": {
+        "player_id": "8477465",
+        "player_name": "Tristan Jarry",
+        "role": "starter",
+        "gs_share": 0.37772926,
+        "gs_w": 34.6,
+        "gp_w": 37.5,
+        "toi_w": 122454.3,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8478971",
+        "player_name": "Connor Ingram",
+        "role": "backup",
+        "gs_share": 0.34061135,
+        "gs_w": 31.2,
+        "gp_w": 32.6,
+        "toi_w": 108764.3,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8475717",
+          "player_name": "Calvin Pickard",
+          "role": "residual",
+          "gs_share": 0.21615721,
+          "gs_w": 19.8,
+          "gp_w": 23.4,
+          "toi_w": 75351.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475789",
+          "player_name": "Jack Campbell",
+          "role": "residual",
+          "gs_share": 0.05458515,
+          "gs_w": 5.0,
+          "gp_w": 5.0,
+          "toi_w": 16007.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8480885",
+          "player_name": "Olivier Rodrigue",
+          "role": "residual",
+          "gs_share": 0.01091703,
+          "gs_w": 1.0,
+          "gp_w": 2.0,
+          "toi_w": 4645.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8477465",
+          "player_name": "Tristan Jarry",
+          "role": "starter",
+          "gs_share": 0.37772926,
+          "gs_w": 34.6,
+          "gp_w": 37.5,
+          "toi_w": 122454.3,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478971",
+          "player_name": "Connor Ingram",
+          "role": "backup",
+          "gs_share": 0.34061135,
+          "gs_w": 31.2,
+          "gp_w": 32.6,
+          "toi_w": 108764.3,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475717",
+          "player_name": "Calvin Pickard",
+          "role": "residual",
+          "gs_share": 0.21615721,
+          "gs_w": 19.8,
+          "gp_w": 23.4,
+          "toi_w": 75351.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475789",
+          "player_name": "Jack Campbell",
+          "role": "residual",
+          "gs_share": 0.05458515,
+          "gs_w": 5.0,
+          "gp_w": 5.0,
+          "toi_w": 16007.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8480885",
+          "player_name": "Olivier Rodrigue",
+          "role": "residual",
+          "gs_share": 0.01091703,
+          "gs_w": 1.0,
+          "gp_w": 2.0,
+          "toi_w": 4645.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ]
+    },
+    "FLA": {
+      "team": "FLA",
+      "starter": {
+        "player_id": "8475683",
+        "player_name": "Sergei Bobrovsky",
+        "role": "starter",
+        "gs_share": 0.67383059,
+        "gs_w": 53.3,
+        "gp_w": 53.8,
+        "toi_w": 188860.0,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8480193",
+        "player_name": "Daniil Tarasov",
+        "role": "backup",
+        "gs_share": 0.32616941,
+        "gs_w": 25.8,
+        "gp_w": 27.3,
+        "toi_w": 93495.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8475683",
+          "player_name": "Sergei Bobrovsky",
+          "role": "starter",
+          "gs_share": 0.67383059,
+          "gs_w": 53.3,
+          "gp_w": 53.8,
+          "toi_w": 188860.0,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480193",
+          "player_name": "Daniil Tarasov",
+          "role": "backup",
+          "gs_share": 0.32616941,
+          "gs_w": 25.8,
+          "gp_w": 27.3,
+          "toi_w": 93495.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "LAK": {
+      "team": "LAK",
+      "starter": {
+        "player_id": "8475311",
+        "player_name": "Darcy Kuemper",
+        "role": "starter",
+        "gs_share": 0.58748404,
+        "gs_w": 46.0,
+        "gp_w": 46.6,
+        "toi_w": 162561.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8476341",
+        "player_name": "Anton Forsberg",
+        "role": "backup",
+        "gs_share": 0.37292465,
+        "gs_w": 29.2,
+        "gp_w": 33.0,
+        "toi_w": 109977.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8477831",
+          "player_name": "Pheonix Copley",
+          "role": "residual",
+          "gs_share": 0.02681992,
+          "gs_w": 2.1,
+          "gp_w": 2.4,
+          "toi_w": 7487.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481707",
+          "player_name": "Erik Portillo",
+          "role": "residual",
+          "gs_share": 0.01277139,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3517.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8475311",
+          "player_name": "Darcy Kuemper",
+          "role": "starter",
+          "gs_share": 0.58748404,
+          "gs_w": 46.0,
+          "gp_w": 46.6,
+          "toi_w": 162561.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476341",
+          "player_name": "Anton Forsberg",
+          "role": "backup",
+          "gs_share": 0.37292465,
+          "gs_w": 29.2,
+          "gp_w": 33.0,
+          "toi_w": 109977.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477831",
+          "player_name": "Pheonix Copley",
+          "role": "residual",
+          "gs_share": 0.02681992,
+          "gs_w": 2.1,
+          "gp_w": 2.4,
+          "toi_w": 7487.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481707",
+          "player_name": "Erik Portillo",
+          "role": "residual",
+          "gs_share": 0.01277139,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3517.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ]
+    },
+    "MIN": {
+      "team": "MIN",
+      "starter": {
+        "player_id": "8479406",
+        "player_name": "Filip Gustavsson",
+        "role": "starter",
+        "gs_share": 0.52713987,
+        "gs_w": 50.5,
+        "gp_w": 51.4,
+        "toi_w": 180980.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8470594",
+        "player_name": "Marc-Andre Fleury",
+        "role": "backup",
+        "gs_share": 0.28810021,
+        "gs_w": 27.6,
+        "gp_w": 31.6,
+        "toi_w": 103633.6,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482661",
+          "player_name": "Jesper Wallstedt",
+          "role": "residual",
+          "gs_share": 0.18475992,
+          "gs_w": 17.7,
+          "gp_w": 18.7,
+          "toi_w": 64164.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8479406",
+          "player_name": "Filip Gustavsson",
+          "role": "starter",
+          "gs_share": 0.52713987,
+          "gs_w": 50.5,
+          "gp_w": 51.4,
+          "toi_w": 180980.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8470594",
+          "player_name": "Marc-Andre Fleury",
+          "role": "backup",
+          "gs_share": 0.28810021,
+          "gs_w": 27.6,
+          "gp_w": 31.6,
+          "toi_w": 103633.6,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8482661",
+          "player_name": "Jesper Wallstedt",
+          "role": "residual",
+          "gs_share": 0.18475992,
+          "gs_w": 17.7,
+          "gp_w": 18.7,
+          "toi_w": 64164.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "MTL": {
+      "team": "MTL",
+      "starter": {
+        "player_id": "8478470",
+        "player_name": "Samuel Montembeault",
+        "role": "starter",
+        "gs_share": 0.4341534,
+        "gs_w": 37.5,
+        "gp_w": 39.3,
+        "toi_w": 135302.9,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8482487",
+        "player_name": "Jakub Dobes",
+        "role": "backup",
+        "gs_share": 0.36903039,
+        "gs_w": 31.875,
+        "gp_w": 32.875,
+        "toi_w": 114392.0,
+        "seasons_used": [
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8484170",
+          "player_name": "Jacob Fowler",
+          "role": "residual",
+          "gs_share": 0.19681621,
+          "gs_w": 17.0,
+          "gp_w": 17.0,
+          "toi_w": 60642.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478470",
+          "player_name": "Samuel Montembeault",
+          "role": "starter",
+          "gs_share": 0.4341534,
+          "gs_w": 37.5,
+          "gp_w": 39.3,
+          "toi_w": 135302.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482487",
+          "player_name": "Jakub Dobes",
+          "role": "backup",
+          "gs_share": 0.36903039,
+          "gs_w": 31.875,
+          "gp_w": 32.875,
+          "toi_w": 114392.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8484170",
+          "player_name": "Jacob Fowler",
+          "role": "residual",
+          "gs_share": 0.19681621,
+          "gs_w": 17.0,
+          "gp_w": 17.0,
+          "toi_w": 60642.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ]
+    },
+    "NSH": {
+      "team": "NSH",
+      "starter": {
+        "player_id": "8477424",
+        "player_name": "Juuse Saros",
+        "role": "starter",
+        "gs_share": 0.7253949,
+        "gs_w": 59.7,
+        "gp_w": 59.7,
+        "toi_w": 206912.8,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8481020",
+        "player_name": "Justus Annunen",
+        "role": "backup",
+        "gs_share": 0.2746051,
+        "gs_w": 22.6,
+        "gp_w": 27.0,
+        "toi_w": 86845.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8477424",
+          "player_name": "Juuse Saros",
+          "role": "starter",
+          "gs_share": 0.7253949,
+          "gs_w": 59.7,
+          "gp_w": 59.7,
+          "toi_w": 206912.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481020",
+          "player_name": "Justus Annunen",
+          "role": "backup",
+          "gs_share": 0.2746051,
+          "gs_w": 22.6,
+          "gp_w": 27.0,
+          "toi_w": 86845.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "NJD": {
+      "team": "NJD",
+      "starter": {
+        "player_id": "8474593",
+        "player_name": "Jacob Markstrom",
+        "role": "starter",
+        "gs_share": 0.53379953,
+        "gs_w": 45.8,
+        "gp_w": 46.3,
+        "toi_w": 162548.2,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8474596",
+        "player_name": "Jake Allen",
+        "role": "backup",
+        "gs_share": 0.38811189,
+        "gs_w": 33.3,
+        "gp_w": 34.6,
+        "toi_w": 120726.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482076",
+          "player_name": "Nico Daws",
+          "role": "residual",
+          "gs_share": 0.07808858,
+          "gs_w": 6.7,
+          "gp_w": 7.5,
+          "toi_w": 23957.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8474593",
+          "player_name": "Jacob Markstrom",
+          "role": "starter",
+          "gs_share": 0.53379953,
+          "gs_w": 45.8,
+          "gp_w": 46.3,
+          "toi_w": 162548.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8474596",
+          "player_name": "Jake Allen",
+          "role": "backup",
+          "gs_share": 0.38811189,
+          "gs_w": 33.3,
+          "gp_w": 34.6,
+          "toi_w": 120726.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482076",
+          "player_name": "Nico Daws",
+          "role": "residual",
+          "gs_share": 0.07808858,
+          "gs_w": 6.7,
+          "gp_w": 7.5,
+          "toi_w": 23957.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "NYI": {
+      "team": "NYI",
+      "starter": {
+        "player_id": "8478009",
+        "player_name": "Ilya Sorokin",
+        "role": "starter",
+        "gs_share": 0.53017752,
+        "gs_w": 56.0,
+        "gp_w": 57.0,
+        "toi_w": 199676.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8479496",
+        "player_name": "David Rittich",
+        "role": "backup",
+        "gs_share": 0.26224852,
+        "gs_w": 27.7,
+        "gp_w": 30.0,
+        "toi_w": 99403.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8473575",
+          "player_name": "Semyon Varlamov",
+          "role": "residual",
+          "gs_share": 0.15905325,
+          "gs_w": 16.8,
+          "gp_w": 17.2,
+          "toi_w": 59960.0,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8477405",
+          "player_name": "Marcus Hogberg",
+          "role": "residual",
+          "gs_share": 0.03905325,
+          "gs_w": 4.125,
+          "gp_w": 6.25,
+          "toi_w": 16890.5,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480819",
+          "player_name": "Jakub Skarek",
+          "role": "residual",
+          "gs_share": 0.00946746,
+          "gs_w": 1.0,
+          "gp_w": 2.0,
+          "toi_w": 4569.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478009",
+          "player_name": "Ilya Sorokin",
+          "role": "starter",
+          "gs_share": 0.53017752,
+          "gs_w": 56.0,
+          "gp_w": 57.0,
+          "toi_w": 199676.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8479496",
+          "player_name": "David Rittich",
+          "role": "backup",
+          "gs_share": 0.26224852,
+          "gs_w": 27.7,
+          "gp_w": 30.0,
+          "toi_w": 99403.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8473575",
+          "player_name": "Semyon Varlamov",
+          "role": "residual",
+          "gs_share": 0.15905325,
+          "gs_w": 16.8,
+          "gp_w": 17.2,
+          "toi_w": 59960.0,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8477405",
+          "player_name": "Marcus Hogberg",
+          "role": "residual",
+          "gs_share": 0.03905325,
+          "gs_w": 4.125,
+          "gp_w": 6.25,
+          "toi_w": 16890.5,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480819",
+          "player_name": "Jakub Skarek",
+          "role": "residual",
+          "gs_share": 0.00946746,
+          "gs_w": 1.0,
+          "gp_w": 2.0,
+          "toi_w": 4569.0,
+          "seasons_used": [
+            20242025
+          ]
+        }
+      ]
+    },
+    "NYR": {
+      "team": "NYR",
+      "starter": {
+        "player_id": "8478048",
+        "player_name": "Igor Shesterkin",
+        "role": "starter",
+        "gs_share": 0.61366182,
+        "gs_w": 54.8,
+        "gp_w": 54.8,
+        "toi_w": 193144.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8471734",
+        "player_name": "Jonathan Quick",
+        "role": "backup",
+        "gs_share": 0.25979843,
+        "gs_w": 23.2,
+        "gp_w": 25.1,
+        "toi_w": 85395.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8477484",
+          "player_name": "Spencer Martin",
+          "role": "residual",
+          "gs_share": 0.08174692,
+          "gs_w": 7.3,
+          "gp_w": 9.5,
+          "toi_w": 29073.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482193",
+          "player_name": "Dylan Garand",
+          "role": "residual",
+          "gs_share": 0.03359462,
+          "gs_w": 3.0,
+          "gp_w": 3.0,
+          "toi_w": 11100.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475839",
+          "player_name": "Louis Domingue",
+          "role": "residual",
+          "gs_share": 0.01119821,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478048",
+          "player_name": "Igor Shesterkin",
+          "role": "starter",
+          "gs_share": 0.61366182,
+          "gs_w": 54.8,
+          "gp_w": 54.8,
+          "toi_w": 193144.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8471734",
+          "player_name": "Jonathan Quick",
+          "role": "backup",
+          "gs_share": 0.25979843,
+          "gs_w": 23.2,
+          "gp_w": 25.1,
+          "toi_w": 85395.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477484",
+          "player_name": "Spencer Martin",
+          "role": "residual",
+          "gs_share": 0.08174692,
+          "gs_w": 7.3,
+          "gp_w": 9.5,
+          "toi_w": 29073.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482193",
+          "player_name": "Dylan Garand",
+          "role": "residual",
+          "gs_share": 0.03359462,
+          "gs_w": 3.0,
+          "gp_w": 3.0,
+          "toi_w": 11100.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475839",
+          "player_name": "Louis Domingue",
+          "role": "residual",
+          "gs_share": 0.01119821,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3600.0,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ]
+    },
+    "OTT": {
+      "team": "OTT",
+      "starter": {
+        "player_id": "8476999",
+        "player_name": "Linus Ullmark",
+        "role": "starter",
+        "gs_share": 0.55871447,
+        "gs_w": 45.2,
+        "gp_w": 45.7,
+        "toi_w": 159716.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8473503",
+        "player_name": "James Reimer",
+        "role": "backup",
+        "gs_share": 0.20766378,
+        "gs_w": 16.8,
+        "gp_w": 19.2,
+        "toi_w": 65293.3,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482447",
+          "player_name": "Leevi Meril\u00e4inen",
+          "role": "residual",
+          "gs_share": 0.19777503,
+          "gs_w": 16.0,
+          "gp_w": 17.0,
+          "toi_w": 55960.25,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481544",
+          "player_name": "Mads Sogaard",
+          "role": "residual",
+          "gs_share": 0.02224969,
+          "gs_w": 1.8,
+          "gp_w": 2.8,
+          "toi_w": 7349.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482411",
+          "player_name": "Hunter Shepard",
+          "role": "residual",
+          "gs_share": 0.01359703,
+          "gs_w": 1.1,
+          "gp_w": 1.6,
+          "toi_w": 5091.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8476999",
+          "player_name": "Linus Ullmark",
+          "role": "starter",
+          "gs_share": 0.55871447,
+          "gs_w": 45.2,
+          "gp_w": 45.7,
+          "toi_w": 159716.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8473503",
+          "player_name": "James Reimer",
+          "role": "backup",
+          "gs_share": 0.20766378,
+          "gs_w": 16.8,
+          "gp_w": 19.2,
+          "toi_w": 65293.3,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482447",
+          "player_name": "Leevi Meril\u00e4inen",
+          "role": "residual",
+          "gs_share": 0.19777503,
+          "gs_w": 16.0,
+          "gp_w": 17.0,
+          "toi_w": 55960.25,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481544",
+          "player_name": "Mads Sogaard",
+          "role": "residual",
+          "gs_share": 0.02224969,
+          "gs_w": 1.8,
+          "gp_w": 2.8,
+          "toi_w": 7349.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482411",
+          "player_name": "Hunter Shepard",
+          "role": "residual",
+          "gs_share": 0.01359703,
+          "gs_w": 1.1,
+          "gp_w": 1.6,
+          "toi_w": 5091.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "PHI": {
+      "team": "PHI",
+      "starter": {
+        "player_id": "8478435",
+        "player_name": "Dan Vladar",
+        "role": "starter",
+        "gs_share": 0.36635335,
+        "gs_w": 38.0,
+        "gp_w": 39.0,
+        "toi_w": 135457.3,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8481035",
+        "player_name": "Samuel Ersson",
+        "role": "backup",
+        "gs_share": 0.36442516,
+        "gs_w": 37.8,
+        "gp_w": 40.8,
+        "toi_w": 136543.2,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8478905",
+          "player_name": "Ivan Fedotov",
+          "role": "residual",
+          "gs_share": 0.14268498,
+          "gs_w": 14.8,
+          "gp_w": 16.8,
+          "toi_w": 54352.2,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8482783",
+          "player_name": "Aleksei Kolosov",
+          "role": "residual",
+          "gs_share": 0.05905037,
+          "gs_w": 6.125,
+          "gp_w": 8.875,
+          "toi_w": 24793.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477361",
+          "player_name": "Calvin Petersen",
+          "role": "residual",
+          "gs_share": 0.03856351,
+          "gs_w": 4.0,
+          "gp_w": 5.0,
+          "toi_w": 16615.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8478433",
+          "player_name": "Felix Sandstrom",
+          "role": "residual",
+          "gs_share": 0.02892263,
+          "gs_w": 3.0,
+          "gp_w": 5.0,
+          "toi_w": 15809.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478435",
+          "player_name": "Dan Vladar",
+          "role": "starter",
+          "gs_share": 0.36635335,
+          "gs_w": 38.0,
+          "gp_w": 39.0,
+          "toi_w": 135457.3,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481035",
+          "player_name": "Samuel Ersson",
+          "role": "backup",
+          "gs_share": 0.36442516,
+          "gs_w": 37.8,
+          "gp_w": 40.8,
+          "toi_w": 136543.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478905",
+          "player_name": "Ivan Fedotov",
+          "role": "residual",
+          "gs_share": 0.14268498,
+          "gs_w": 14.8,
+          "gp_w": 16.8,
+          "toi_w": 54352.2,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8482783",
+          "player_name": "Aleksei Kolosov",
+          "role": "residual",
+          "gs_share": 0.05905037,
+          "gs_w": 6.125,
+          "gp_w": 8.875,
+          "toi_w": 24793.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477361",
+          "player_name": "Calvin Petersen",
+          "role": "residual",
+          "gs_share": 0.03856351,
+          "gs_w": 4.0,
+          "gp_w": 5.0,
+          "toi_w": 16615.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8478433",
+          "player_name": "Felix Sandstrom",
+          "role": "residual",
+          "gs_share": 0.02892263,
+          "gs_w": 3.0,
+          "gp_w": 5.0,
+          "toi_w": 15809.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ]
+    },
+    "PIT": {
+      "team": "PIT",
+      "starter": {
+        "player_id": "8479973",
+        "player_name": "Stuart Skinner",
+        "role": "starter",
+        "gs_share": 0.56545655,
+        "gs_w": 51.4,
+        "gp_w": 52.1,
+        "toi_w": 180958.8,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8481668",
+        "player_name": "Arturs Silovs",
+        "role": "backup",
+        "gs_share": 0.24752475,
+        "gs_w": 22.5,
+        "gp_w": 23.3,
+        "toi_w": 80080.4,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482446",
+          "player_name": "Joel Blomqvist",
+          "role": "residual",
+          "gs_share": 0.1320132,
+          "gs_w": 12.0,
+          "gp_w": 15.0,
+          "toi_w": 46347.0,
+          "seasons_used": [
+            20242025
+          ]
+        },
+        {
+          "player_id": "8483703",
+          "player_name": "Sergei Murashov",
+          "role": "residual",
+          "gs_share": 0.0440044,
+          "gs_w": 4.0,
+          "gp_w": 5.0,
+          "toi_w": 16877.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476433",
+          "player_name": "Magnus Hellberg",
+          "role": "residual",
+          "gs_share": 0.0110011,
+          "gs_w": 1.0,
+          "gp_w": 3.0,
+          "toi_w": 7193.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8479973",
+          "player_name": "Stuart Skinner",
+          "role": "starter",
+          "gs_share": 0.56545655,
+          "gs_w": 51.4,
+          "gp_w": 52.1,
+          "toi_w": 180958.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481668",
+          "player_name": "Arturs Silovs",
+          "role": "backup",
+          "gs_share": 0.24752475,
+          "gs_w": 22.5,
+          "gp_w": 23.3,
+          "toi_w": 80080.4,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482446",
+          "player_name": "Joel Blomqvist",
+          "role": "residual",
+          "gs_share": 0.1320132,
+          "gs_w": 12.0,
+          "gp_w": 15.0,
+          "toi_w": 46347.0,
+          "seasons_used": [
+            20242025
+          ]
+        },
+        {
+          "player_id": "8483703",
+          "player_name": "Sergei Murashov",
+          "role": "residual",
+          "gs_share": 0.0440044,
+          "gs_w": 4.0,
+          "gp_w": 5.0,
+          "toi_w": 16877.0,
+          "seasons_used": [
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476433",
+          "player_name": "Magnus Hellberg",
+          "role": "residual",
+          "gs_share": 0.0110011,
+          "gs_w": 1.0,
+          "gp_w": 3.0,
+          "toi_w": 7193.0,
+          "seasons_used": [
+            20232024
+          ]
+        }
+      ]
+    },
+    "SJS": {
+      "team": "SJS",
+      "starter": {
+        "player_id": "8480382",
+        "player_name": "Alexandar Georgiev",
+        "role": "starter",
+        "gs_share": 0.39849623,
+        "gs_w": 53.0,
+        "gp_w": 54.6,
+        "toi_w": 183495.6,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      "backup": {
+        "player_id": "8477968",
+        "player_name": "Alex Nedeljkovic",
+        "role": "backup",
+        "gs_share": 0.25639098,
+        "gs_w": 34.1,
+        "gp_w": 39.0,
+        "toi_w": 131779.9,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8482137",
+          "player_name": "Yaroslav Askarov",
+          "role": "residual",
+          "gs_share": 0.20526316,
+          "gs_w": 27.3,
+          "gp_w": 27.8,
+          "toi_w": 91776.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480992",
+          "player_name": "Magnus Chrona",
+          "role": "residual",
+          "gs_share": 0.06015038,
+          "gs_w": 8.0,
+          "gp_w": 9.0,
+          "toi_w": 28275.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8476316",
+          "player_name": "Laurent Brossoit",
+          "role": "residual",
+          "gs_share": 0.05263158,
+          "gs_w": 7.0,
+          "gp_w": 7.2857,
+          "toi_w": 25695.57,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8484312",
+          "player_name": "Georgii Romanov",
+          "role": "residual",
+          "gs_share": 0.02706767,
+          "gs_w": 3.6,
+          "gp_w": 5.6,
+          "toi_w": 16431.6,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8480382",
+          "player_name": "Alexandar Georgiev",
+          "role": "starter",
+          "gs_share": 0.39849623,
+          "gs_w": 53.0,
+          "gp_w": 54.6,
+          "toi_w": 183495.6,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8477968",
+          "player_name": "Alex Nedeljkovic",
+          "role": "backup",
+          "gs_share": 0.25639098,
+          "gs_w": 34.1,
+          "gp_w": 39.0,
+          "toi_w": 131779.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482137",
+          "player_name": "Yaroslav Askarov",
+          "role": "residual",
+          "gs_share": 0.20526316,
+          "gs_w": 27.3,
+          "gp_w": 27.8,
+          "toi_w": 91776.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480992",
+          "player_name": "Magnus Chrona",
+          "role": "residual",
+          "gs_share": 0.06015038,
+          "gs_w": 8.0,
+          "gp_w": 9.0,
+          "toi_w": 28275.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8476316",
+          "player_name": "Laurent Brossoit",
+          "role": "residual",
+          "gs_share": 0.05263158,
+          "gs_w": 7.0,
+          "gp_w": 7.2857,
+          "toi_w": 25695.57,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8484312",
+          "player_name": "Georgii Romanov",
+          "role": "residual",
+          "gs_share": 0.02706767,
+          "gs_w": 3.6,
+          "gp_w": 5.6,
+          "toi_w": 16431.6,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ]
+    },
+    "SEA": {
+      "team": "SEA",
+      "starter": {
+        "player_id": "8478916",
+        "player_name": "Joey Daccord",
+        "role": "starter",
+        "gs_share": 0.56595003,
+        "gs_w": 48.7,
+        "gp_w": 50.6,
+        "toi_w": 174104.4,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8475831",
+        "player_name": "Philipp Grubauer",
+        "role": "backup",
+        "gs_share": 0.3323649,
+        "gs_w": 28.6,
+        "gp_w": 31.0,
+        "toi_w": 103980.9,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8476899",
+          "player_name": "Matt Murray",
+          "role": "residual",
+          "gs_share": 0.03776874,
+          "gs_w": 3.25,
+          "gp_w": 3.875,
+          "toi_w": 10802.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476904",
+          "player_name": "Chris Driedger",
+          "role": "residual",
+          "gs_share": 0.0232423,
+          "gs_w": 2.0,
+          "gp_w": 2.0,
+          "toi_w": 7175.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8483668",
+          "player_name": "Nikke Kokko",
+          "role": "residual",
+          "gs_share": 0.02178966,
+          "gs_w": 1.875,
+          "gp_w": 2.25,
+          "toi_w": 7337.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478848",
+          "player_name": "Ales Stezka",
+          "role": "residual",
+          "gs_share": 0.01162115,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3500.0,
+          "seasons_used": [
+            20242025
+          ]
+        },
+        {
+          "player_id": "8484910",
+          "player_name": "Victor Ostman",
+          "role": "residual",
+          "gs_share": 0.00726322,
+          "gs_w": 0.625,
+          "gp_w": 1.0,
+          "toi_w": 2593.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478916",
+          "player_name": "Joey Daccord",
+          "role": "starter",
+          "gs_share": 0.56595003,
+          "gs_w": 48.7,
+          "gp_w": 50.6,
+          "toi_w": 174104.4,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8475831",
+          "player_name": "Philipp Grubauer",
+          "role": "backup",
+          "gs_share": 0.3323649,
+          "gs_w": 28.6,
+          "gp_w": 31.0,
+          "toi_w": 103980.9,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476899",
+          "player_name": "Matt Murray",
+          "role": "residual",
+          "gs_share": 0.03776874,
+          "gs_w": 3.25,
+          "gp_w": 3.875,
+          "toi_w": 10802.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476904",
+          "player_name": "Chris Driedger",
+          "role": "residual",
+          "gs_share": 0.0232423,
+          "gs_w": 2.0,
+          "gp_w": 2.0,
+          "toi_w": 7175.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8483668",
+          "player_name": "Nikke Kokko",
+          "role": "residual",
+          "gs_share": 0.02178966,
+          "gs_w": 1.875,
+          "gp_w": 2.25,
+          "toi_w": 7337.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478848",
+          "player_name": "Ales Stezka",
+          "role": "residual",
+          "gs_share": 0.01162115,
+          "gs_w": 1.0,
+          "gp_w": 1.0,
+          "toi_w": 3500.0,
+          "seasons_used": [
+            20242025
+          ]
+        },
+        {
+          "player_id": "8484910",
+          "player_name": "Victor Ostman",
+          "role": "residual",
+          "gs_share": 0.00726322,
+          "gs_w": 0.625,
+          "gp_w": 1.0,
+          "toi_w": 2593.75,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "STL": {
+      "team": "STL",
+      "starter": {
+        "player_id": "8476412",
+        "player_name": "Jordan Binnington",
+        "role": "starter",
+        "gs_share": 0.5695122,
+        "gs_w": 46.7,
+        "gp_w": 48.7,
+        "toi_w": 167033.5,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8480981",
+        "player_name": "Joel Hofer",
+        "role": "backup",
+        "gs_share": 0.4304878,
+        "gs_w": 35.3,
+        "gp_w": 38.3,
+        "toi_w": 128502.0,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8476412",
+          "player_name": "Jordan Binnington",
+          "role": "starter",
+          "gs_share": 0.5695122,
+          "gs_w": 46.7,
+          "gp_w": 48.7,
+          "toi_w": 167033.5,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480981",
+          "player_name": "Joel Hofer",
+          "role": "backup",
+          "gs_share": 0.4304878,
+          "gs_w": 35.3,
+          "gp_w": 38.3,
+          "toi_w": 128502.0,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "TBL": {
+      "team": "TBL",
+      "starter": {
+        "player_id": "8476883",
+        "player_name": "Andrei Vasilevskiy",
+        "role": "starter",
+        "gs_share": 0.67011494,
+        "gs_w": 58.3,
+        "gp_w": 58.3,
+        "toi_w": 207052.4,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8477992",
+        "player_name": "Jonas Johansson",
+        "role": "backup",
+        "gs_share": 0.24942529,
+        "gs_w": 21.7,
+        "gp_w": 23.4,
+        "toi_w": 80419.8,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8477035",
+          "player_name": "Matt Tomkins",
+          "role": "residual",
+          "gs_share": 0.06896552,
+          "gs_w": 6.0,
+          "gp_w": 6.0,
+          "toi_w": 21613.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8477990",
+          "player_name": "Brandon Halverson",
+          "role": "residual",
+          "gs_share": 0.01149425,
+          "gs_w": 1.0,
+          "gp_w": 1.625,
+          "toi_w": 3437.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8476883",
+          "player_name": "Andrei Vasilevskiy",
+          "role": "starter",
+          "gs_share": 0.67011494,
+          "gs_w": 58.3,
+          "gp_w": 58.3,
+          "toi_w": 207052.4,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477992",
+          "player_name": "Jonas Johansson",
+          "role": "backup",
+          "gs_share": 0.24942529,
+          "gs_w": 21.7,
+          "gp_w": 23.4,
+          "toi_w": 80419.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477035",
+          "player_name": "Matt Tomkins",
+          "role": "residual",
+          "gs_share": 0.06896552,
+          "gs_w": 6.0,
+          "gp_w": 6.0,
+          "toi_w": 21613.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8477990",
+          "player_name": "Brandon Halverson",
+          "role": "residual",
+          "gs_share": 0.01149425,
+          "gs_w": 1.0,
+          "gp_w": 1.625,
+          "toi_w": 3437.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    },
+    "TOR": {
+      "team": "TOR",
+      "starter": {
+        "player_id": "8479361",
+        "player_name": "Joseph Woll",
+        "role": "starter",
+        "gs_share": 0.3488824,
+        "gs_w": 35.9,
+        "gp_w": 37.1,
+        "toi_w": 128523.8,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8476932",
+        "player_name": "Anthony Stolarz",
+        "role": "backup",
+        "gs_share": 0.26433431,
+        "gs_w": 27.2,
+        "gp_w": 28.6,
+        "toi_w": 95519.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8474889",
+          "player_name": "Martin Jones",
+          "role": "residual",
+          "gs_share": 0.18464529,
+          "gs_w": 19.0,
+          "gp_w": 22.0,
+          "toi_w": 70180.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8483710",
+          "player_name": "Dennis Hildeby",
+          "role": "residual",
+          "gs_share": 0.1068999,
+          "gs_w": 11.0,
+          "gp_w": 14.75,
+          "toi_w": 45945.87,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480051",
+          "player_name": "Cayden Primeau",
+          "role": "residual",
+          "gs_share": 0.07580175,
+          "gs_w": 7.8,
+          "gp_w": 9.4,
+          "toi_w": 30768.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482515",
+          "player_name": "Artur Akhtyamov",
+          "role": "residual",
+          "gs_share": 0.01943635,
+          "gs_w": 2.0,
+          "gp_w": 3.0,
+          "toi_w": 7560.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8479361",
+          "player_name": "Joseph Woll",
+          "role": "starter",
+          "gs_share": 0.3488824,
+          "gs_w": 35.9,
+          "gp_w": 37.1,
+          "toi_w": 128523.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8476932",
+          "player_name": "Anthony Stolarz",
+          "role": "backup",
+          "gs_share": 0.26433431,
+          "gs_w": 27.2,
+          "gp_w": 28.6,
+          "toi_w": 95519.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8474889",
+          "player_name": "Martin Jones",
+          "role": "residual",
+          "gs_share": 0.18464529,
+          "gs_w": 19.0,
+          "gp_w": 22.0,
+          "toi_w": 70180.0,
+          "seasons_used": [
+            20232024
+          ]
+        },
+        {
+          "player_id": "8483710",
+          "player_name": "Dennis Hildeby",
+          "role": "residual",
+          "gs_share": 0.1068999,
+          "gs_w": 11.0,
+          "gp_w": 14.75,
+          "toi_w": 45945.87,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480051",
+          "player_name": "Cayden Primeau",
+          "role": "residual",
+          "gs_share": 0.07580175,
+          "gs_w": 7.8,
+          "gp_w": 9.4,
+          "toi_w": 30768.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482515",
+          "player_name": "Artur Akhtyamov",
+          "role": "residual",
+          "gs_share": 0.01943635,
+          "gs_w": 2.0,
+          "gp_w": 3.0,
+          "toi_w": 7560.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ]
+    },
+    "UTA": {
+      "team": "UTA",
+      "starter": {
+        "player_id": "8478872",
+        "player_name": "Karel Vejmelka",
+        "role": "starter",
+        "gs_share": 0.66504263,
+        "gs_w": 54.6,
+        "gp_w": 57.0,
+        "toi_w": 195894.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8477970",
+        "player_name": "Vitek Vanecek",
+        "role": "backup",
+        "gs_share": 0.27405603,
+        "gs_w": 22.5,
+        "gp_w": 24.9,
+        "toi_w": 82774.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8483530",
+          "player_name": "Jaxson Stauber",
+          "role": "residual",
+          "gs_share": 0.04872107,
+          "gs_w": 4.0,
+          "gp_w": 6.0,
+          "toi_w": 18791.0,
+          "seasons_used": [
+            20242025
+          ]
+        },
+        {
+          "player_id": "8480191",
+          "player_name": "Matt Villalta",
+          "role": "residual",
+          "gs_share": 0.01218027,
+          "gs_w": 1.0,
+          "gp_w": 1.4,
+          "toi_w": 3887.2,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478872",
+          "player_name": "Karel Vejmelka",
+          "role": "starter",
+          "gs_share": 0.66504263,
+          "gs_w": 54.6,
+          "gp_w": 57.0,
+          "toi_w": 195894.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477970",
+          "player_name": "Vitek Vanecek",
+          "role": "backup",
+          "gs_share": 0.27405603,
+          "gs_w": 22.5,
+          "gp_w": 24.9,
+          "toi_w": 82774.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8483530",
+          "player_name": "Jaxson Stauber",
+          "role": "residual",
+          "gs_share": 0.04872107,
+          "gs_w": 4.0,
+          "gp_w": 6.0,
+          "toi_w": 18791.0,
+          "seasons_used": [
+            20242025
+          ]
+        },
+        {
+          "player_id": "8480191",
+          "player_name": "Matt Villalta",
+          "role": "residual",
+          "gs_share": 0.01218027,
+          "gs_w": 1.0,
+          "gp_w": 1.4,
+          "toi_w": 3887.2,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        }
+      ]
+    },
+    "VAN": {
+      "team": "VAN",
+      "starter": {
+        "player_id": "8480947",
+        "player_name": "Kevin Lankinen",
+        "role": "starter",
+        "gs_share": 0.49212196,
+        "gs_w": 39.6,
+        "gp_w": 43.6,
+        "toi_w": 146423.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8477967",
+        "player_name": "Thatcher Demko",
+        "role": "backup",
+        "gs_share": 0.33678044,
+        "gs_w": 27.1,
+        "gp_w": 27.1,
+        "toi_w": 93102.0,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8484268",
+          "player_name": "Nikita Tolopilo",
+          "role": "residual",
+          "gs_share": 0.14446762,
+          "gs_w": 11.625,
+          "gp_w": 13.875,
+          "toi_w": 44845.25,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480238",
+          "player_name": "Jiri Patera",
+          "role": "residual",
+          "gs_share": 0.02662998,
+          "gs_w": 2.1429,
+          "gp_w": 2.4286,
+          "toi_w": 7865.29,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8480947",
+          "player_name": "Kevin Lankinen",
+          "role": "starter",
+          "gs_share": 0.49212196,
+          "gs_w": 39.6,
+          "gp_w": 43.6,
+          "toi_w": 146423.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477967",
+          "player_name": "Thatcher Demko",
+          "role": "backup",
+          "gs_share": 0.33678044,
+          "gs_w": 27.1,
+          "gp_w": 27.1,
+          "toi_w": 93102.0,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8484268",
+          "player_name": "Nikita Tolopilo",
+          "role": "residual",
+          "gs_share": 0.14446762,
+          "gs_w": 11.625,
+          "gp_w": 13.875,
+          "toi_w": 44845.25,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8480238",
+          "player_name": "Jiri Patera",
+          "role": "residual",
+          "gs_share": 0.02662998,
+          "gs_w": 2.1429,
+          "gp_w": 2.4286,
+          "toi_w": 7865.29,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        }
+      ]
+    },
+    "VGK": {
+      "team": "VGK",
+      "starter": {
+        "player_id": "8478499",
+        "player_name": "Adin Hill",
+        "role": "starter",
+        "gs_share": 0.30789245,
+        "gs_w": 35.5,
+        "gp_w": 35.5,
+        "toi_w": 121484.2,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8478492",
+        "player_name": "Ilya Samsonov",
+        "role": "backup",
+        "gs_share": 0.2896791,
+        "gs_w": 33.4,
+        "gp_w": 33.4,
+        "toi_w": 118056.4,
+        "seasons_used": [
+          20232024,
+          20242025
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8479394",
+          "player_name": "Carter Hart",
+          "role": "residual",
+          "gs_share": 0.17346054,
+          "gs_w": 20.0,
+          "gp_w": 20.2857,
+          "toi_w": 68651.0,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481033",
+          "player_name": "Akira Schmid",
+          "role": "residual",
+          "gs_share": 0.15958369,
+          "gs_w": 18.4,
+          "gp_w": 22.3,
+          "toi_w": 74229.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482761",
+          "player_name": "Carl Lindbom",
+          "role": "residual",
+          "gs_share": 0.06938422,
+          "gs_w": 8.0,
+          "gp_w": 8.0,
+          "toi_w": 28840.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8478499",
+          "player_name": "Adin Hill",
+          "role": "starter",
+          "gs_share": 0.30789245,
+          "gs_w": 35.5,
+          "gp_w": 35.5,
+          "toi_w": 121484.2,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8478492",
+          "player_name": "Ilya Samsonov",
+          "role": "backup",
+          "gs_share": 0.2896791,
+          "gs_w": 33.4,
+          "gp_w": 33.4,
+          "toi_w": 118056.4,
+          "seasons_used": [
+            20232024,
+            20242025
+          ]
+        },
+        {
+          "player_id": "8479394",
+          "player_name": "Carter Hart",
+          "role": "residual",
+          "gs_share": 0.17346054,
+          "gs_w": 20.0,
+          "gp_w": 20.2857,
+          "toi_w": 68651.0,
+          "seasons_used": [
+            20232024,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8481033",
+          "player_name": "Akira Schmid",
+          "role": "residual",
+          "gs_share": 0.15958369,
+          "gs_w": 18.4,
+          "gp_w": 22.3,
+          "toi_w": 74229.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8482761",
+          "player_name": "Carl Lindbom",
+          "role": "residual",
+          "gs_share": 0.06938422,
+          "gs_w": 8.0,
+          "gp_w": 8.0,
+          "toi_w": 28840.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ]
+    },
+    "WPG": {
+      "team": "WPG",
+      "starter": {
+        "player_id": "8476945",
+        "player_name": "Connor Hellebuyck",
+        "role": "starter",
+        "gs_share": 0.73782772,
+        "gs_w": 59.1,
+        "gp_w": 59.4,
+        "toi_w": 212196.1,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8477480",
+        "player_name": "Eric Comrie",
+        "role": "backup",
+        "gs_share": 0.24968789,
+        "gs_w": 20.0,
+        "gp_w": 20.5,
+        "toi_w": 68915.7,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8483114",
+          "player_name": "Thomas Milic",
+          "role": "residual",
+          "gs_share": 0.01248439,
+          "gs_w": 1.0,
+          "gp_w": 3.0,
+          "toi_w": 8318.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8476945",
+          "player_name": "Connor Hellebuyck",
+          "role": "starter",
+          "gs_share": 0.73782772,
+          "gs_w": 59.1,
+          "gp_w": 59.4,
+          "toi_w": 212196.1,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8477480",
+          "player_name": "Eric Comrie",
+          "role": "backup",
+          "gs_share": 0.24968789,
+          "gs_w": 20.0,
+          "gp_w": 20.5,
+          "toi_w": 68915.7,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8483114",
+          "player_name": "Thomas Milic",
+          "role": "residual",
+          "gs_share": 0.01248439,
+          "gs_w": 1.0,
+          "gp_w": 3.0,
+          "toi_w": 8318.0,
+          "seasons_used": [
+            20252026
+          ]
+        }
+      ]
+    },
+    "WSH": {
+      "team": "WSH",
+      "starter": {
+        "player_id": "8480313",
+        "player_name": "Logan Thompson",
+        "role": "starter",
+        "gs_share": 0.59612518,
+        "gs_w": 50.0,
+        "gp_w": 51.1,
+        "toi_w": 180729.8,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "backup": {
+        "player_id": "8479292",
+        "player_name": "Charlie Lindgren",
+        "role": "backup",
+        "gs_share": 0.36959762,
+        "gs_w": 31.0,
+        "gp_w": 32.2,
+        "toi_w": 112775.6,
+        "seasons_used": [
+          20232024,
+          20242025,
+          20252026
+        ]
+      },
+      "residual": [
+        {
+          "player_id": "8483532",
+          "player_name": "Clay Stevenson",
+          "role": "residual",
+          "gs_share": 0.0342772,
+          "gs_w": 2.875,
+          "gp_w": 2.875,
+          "toi_w": 10340.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ],
+      "gs_share_sum": 1.0,
+      "goalies": [
+        {
+          "player_id": "8480313",
+          "player_name": "Logan Thompson",
+          "role": "starter",
+          "gs_share": 0.59612518,
+          "gs_w": 50.0,
+          "gp_w": 51.1,
+          "toi_w": 180729.8,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8479292",
+          "player_name": "Charlie Lindgren",
+          "role": "backup",
+          "gs_share": 0.36959762,
+          "gs_w": 31.0,
+          "gp_w": 32.2,
+          "toi_w": 112775.6,
+          "seasons_used": [
+            20232024,
+            20242025,
+            20252026
+          ]
+        },
+        {
+          "player_id": "8483532",
+          "player_name": "Clay Stevenson",
+          "role": "residual",
+          "gs_share": 0.0342772,
+          "gs_w": 2.875,
+          "gp_w": 2.875,
+          "toi_w": 10340.0,
+          "seasons_used": [
+            20242025,
+            20252026
+          ]
+        }
+      ]
+    }
+  },
+  "does_not": [
+    "emit KEI / fill KEINHL",
+    "goalie PLAY tags (STARTER_GATE=unknown)",
+    "retune NHL_TEAM_CARRY_SHRINK",
+    "xG",
+    "situation"
+  ]
+}

@@ -86,4 +86,4 @@ Affine shrink with `s∈(0,1]` preserves rank order. No lottery club (worst-10 b
 | CFB BALL@OSU still −40.5                    | **PASS** (`kei_spread_home=-40.51`)      |
 | No Edge tags / xG / player tables           | **PASS**                                 |
 
-**Stop.** Chapter 2 is TOI grid + goalie tandem. Not emit.
+**Stop.** Chapter 2 is TOI grid + goalie tandem (`docs/NHL_CH2_TOI_GRID_BRIEF.md`). Not emit.
