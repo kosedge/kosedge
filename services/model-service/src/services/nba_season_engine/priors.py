@@ -28,3 +28,7 @@ MINUTE_GRID_SUM = 240
 
 # Cap |ch1_net − player_net| when rebasing. Ch1 is residual, not a second full prior.
 TEAM_REBASE_RESIDUAL_CAP = 3.0
+
+# Chapter 3 — situation Δ on team implied_ppg (points). Separate constant; same
+# magnitude as residual so situation cannot become a second prior.
+SITUATION_TEAM_PTS_CAP = 3.0

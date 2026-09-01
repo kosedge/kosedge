@@ -1,0 +1,118 @@
+{
+  "engine_version": "nba-season-engine-v0.1",
+  "as_of": "2026-09-01",
+  "season_schedule": "2025-26",
+  "n_team_games": 2400,
+  "SITUATION_TEAM_PTS_CAP": 3.0,
+  "grids": {
+    "home": [
+      1.5,
+      2.0,
+      2.5
+    ],
+    "b2b": [
+      -1.0,
+      -1.5,
+      -2.0
+    ],
+    "travel": [
+      -0.5,
+      -1.0,
+      -1.5
+    ],
+    "altitude": [
+      0.5,
+      1.0,
+      1.5
+    ]
+  },
+  "travel_thresholds": {
+    "miles": 1000.0,
+    "tz": 2
+  },
+  "chosen": {
+    "home": 2.0,
+    "b2b": -1.5,
+    "travel": -0.5,
+    "altitude": 1.0
+  },
+  "top5": [
+    {
+      "coeffs": {
+        "home": 2.0,
+        "b2b": -1.5,
+        "travel": -0.5,
+        "altitude": 1.0
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 1.0921,
+      "mean_signed_raw": 0.4417,
+      "max_abs_raw": 3.0,
+      "score": 0.234208
+    },
+    {
+      "coeffs": {
+        "home": 2.0,
+        "b2b": -1.5,
+        "travel": -1.0,
+        "altitude": 0.5
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 1.0942,
+      "mean_signed_raw": 0.3571,
+      "max_abs_raw": 3.0,
+      "score": 0.234417
+    },
+    {
+      "coeffs": {
+        "home": 2.0,
+        "b2b": -1.5,
+        "travel": -1.0,
+        "altitude": 1.0
+      },
+      "clip_rate": 0.001667,
+      "mean_abs_raw": 1.1275,
+      "mean_signed_raw": 0.3571,
+      "max_abs_raw": 3.5,
+      "score": 0.279417
+    },
+    {
+      "coeffs": {
+        "home": 2.0,
+        "b2b": -1.5,
+        "travel": -0.5,
+        "altitude": 0.5
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 1.0588,
+      "mean_signed_raw": 0.4417,
+      "max_abs_raw": 2.5,
+      "score": 0.355875
+    },
+    {
+      "coeffs": {
+        "home": 2.0,
+        "b2b": -1.0,
+        "travel": -1.0,
+        "altitude": 1.0
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 1.1142,
+      "mean_signed_raw": 0.515,
+      "max_abs_raw": 3.0,
+      "score": 0.361417
+    }
+  ],
+  "prevalence": {
+    "home": 0.5,
+    "b2b": 0.31583333333333335,
+    "travel": 0.16916666666666666,
+    "altitude": 0.06666666666666667,
+    "three_in_four": 0.27
+  },
+  "ppg_adj_range": [
+    108.88,
+    122.03
+  ],
+  "ortg_drtg_note": "Situation \u0394 is team points on the Ch2 implied_ppg line; ORtg/DRtg remain Ch2 rebased; \u0394 does not invent a second net prior."
+}
