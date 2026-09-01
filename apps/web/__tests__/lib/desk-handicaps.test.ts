@@ -107,7 +107,7 @@ describe("desk-handicaps loader", () => {
     const min = getDeskHandicap("wnba-min-current-20260901-avery-cole")!;
     const minNotes = extractHandicappersNotes(min.bodyMarkdown);
     expect(min.byline).toBe("Avery Cole");
-    expect(minNotes[0]?.marketNumber).toMatch(/MIN −115|MIN \*\*−115\*/);
+    expect(minNotes[0]?.marketNumber).toMatch(/BetMGM −115/);
     expect(minNotes[0]?.fairNumber).toMatch(/7\.03/);
     expect(minNotes[0]?.marketNumber).not.toMatch(/−125/);
 
@@ -118,7 +118,8 @@ describe("desk-handicaps loader", () => {
 
     const west = getDeskHandicap("wnba-west-notes-20260901-avery-cole")!;
     const westNotes = extractHandicappersNotes(west.bodyMarkdown);
-    expect(westNotes[0]?.marketNumber).toMatch(/UNLISTED/i);
+    expect(westNotes[0]?.marketNumber).toMatch(/OTB/i);
+    expect(westNotes[0]?.marketNumber).toMatch(/no conference market/i);
     expect(westNotes[0]?.fairNumber).toMatch(/LA −1\.41/);
     expect(west.bodyMarkdown).not.toMatch(/LAS 4\.34/);
 

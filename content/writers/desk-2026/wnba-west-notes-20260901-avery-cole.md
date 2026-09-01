@@ -19,9 +19,9 @@ Not four essays. Lottery is set. House nets below are Ch2 rebased, as_of 2026-09
 
 **Handicapper’s Note** (group)
 Fair: house nets POR −2.27 / LA −1.41 / PHX −2.48 / SEA −2.89 (Ch2 rebased). No expected-wins print.
-Market: UNLISTED on live BetMGM 8-team WNBA Finals winner board · 5:45 p.m. ET Sep 1 · fixture 18306835. East/West championship NO MARKET.
-Lean: **Pass**
-Confidence: **1/5**
+Market: no conference market · OTB on this finals fixture
+Lean: Pass
+Confidence: 1/5
 Key risk: spoiler minutes vs GSV/LVA/DAL in the last four, not a futures ticket.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

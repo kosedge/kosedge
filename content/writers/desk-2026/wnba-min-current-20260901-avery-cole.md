@@ -21,10 +21,10 @@ Emma Čechová is already season-ending (torn right ACL, May). Do not invent a s
 House net is 7.03 (Ch2 rebased, as_of Sep 1), first on the 15-team board. There is no expected-wins print. Live BetMGM Finals winner is **−115** (5:45 p.m. ET Sep 1). Pass.
 
 **Handicapper’s Note**
-Fair: house net **7.03** (Ch2 rebased, `wnba-season-engine-v0.1`, as_of 2026-09-01). No expected-wins print.
-Market: BetMGM WNBA Finals winner **MIN −115** · 5:45 p.m. ET Sep 1 · fixture 18306835. DK/FD/ESPN BET NO MARKET. East/West championship NO MARKET.
-Lean: **Pass**
-Confidence: **2/5**
+Fair: house net 7.03
+Market: BetMGM −115 · 5:45 p.m. ET Sep 1
+Lean: Pass
+Confidence: 2/5
 Key risk: Collier lands from Berlin on a 4–5 day turn into a four-game week; 1-seed math is still live if the Lynx sleepwalk the remaining four.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

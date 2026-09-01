@@ -17,10 +17,10 @@ Wilson is **not** in Berlin. USA Basketball added Citron and Iriafen on Aug 31. 
 House net is 4.34 (Ch2 rebased), third among these four, **ahead of Golden State’s clipped 3.61**. Observed YTD net is +5.1. No expected-wins print. Live BetMGM Finals winner is **+650** (5:45 p.m. ET Sep 1). Pass rather than a “Wilson’s resting so fade the 3-seed” ticket.
 
 **Handicapper’s Note**
-Fair: house net **4.34** (Ch2 rebased, `wnba-season-engine-v0.1`, as_of 2026-09-01). No expected-wins print.
-Market: BetMGM WNBA Finals winner **LVA +650** · 5:45 p.m. ET Sep 1 · fixture 18306835. DK/FD/ESPN BET NO MARKET. East/West championship NO MARKET.
-Lean: **Pass**
-Confidence: **2/5**
+Fair: house net 4.34
+Market: BetMGM +650 · 5:45 p.m. ET Sep 1
+Lean: Pass
+Confidence: 2/5
 Key risk: Wilson’s back is a real ESPN report, not a vacation. Gray/Young land from a gold-medal game into @Seattle on Sep 17 with four days’ rest. Frontcourt is already minus Smith.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

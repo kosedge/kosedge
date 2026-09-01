@@ -17,10 +17,10 @@ Those three are in Berlin. Club site, not a rumor. Williams and Salaün on Franc
 House vs the table is a conflict. Observed YTD net is +9.6, second. Ch2 rebased net that feeds KEI is **3.61**, because the residual clipped at +3.0 (raw +7.56). Player-net on the grid is 0.61. Do not average 9.6 and 3.61 into a fake fair. Do not dress a 2-seed as a title ticket off live BetMGM **+800**. Pass.
 
 **Handicapper’s Note**
-Fair: house net **3.61** (Ch2 rebased, clipped; observed YTD **+9.6**). Show both. Do not average. `wnba-season-engine-v0.1`, as_of 2026-09-01.
-Market: BetMGM WNBA Finals winner **GSV +800** · 5:45 p.m. ET Sep 1 · fixture 18306835. DK/FD/ESPN BET NO MARKET. East/West championship NO MARKET.
-Lean: **Pass**
-Confidence: **2/5**
+Fair: house net 3.61 (clipped; observed YTD +9.6, do not average)
+Market: BetMGM +800 · 5:45 p.m. ET Sep 1
+Lean: Pass
+Confidence: 2/5
 Key risk: France or Italy goes deep and Williams/Salaün/Zandalasini land on a four- or five-day turn into a back-to-back. The 2-seed is still loseable if they go 0-4 and Las Vegas runs the table.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.

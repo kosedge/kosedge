@@ -17,10 +17,10 @@ Paige Bueckers is the load: 33.1 minutes, fourth in the league, 25.8 usage, 20.5
 USA likely goes deep. Gold medal Sep 13, Dallas opens Sep 17 vs the Sparks. Four days. That is the tightness. The remaining schedule is a seeding ladder, not a strength test. House net is 4.00 (Ch2 rebased), basically tied with Las Vegas on the model and a long way from a title board. Live BetMGM Finals winner is **+6600** (5:45 p.m. ET Sep 1). Pass.
 
 **Handicapper’s Note**
-Fair: house net **4.00** (Ch2 rebased, `wnba-season-engine-v0.1`, as_of 2026-09-01). No expected-wins print.
-Market: BetMGM WNBA Finals winner **DAL +6600** · 5:45 p.m. ET Sep 1 · fixture 18306835. DK/FD/ESPN BET NO MARKET. East/West championship NO MARKET.
-Lean: **Pass**
-Confidence: **2/5**
+Fair: house net 4.00
+Market: BetMGM +6600 · 5:45 p.m. ET Sep 1
+Lean: Pass
+Confidence: 2/5
 Key risk: Bueckers’ four-day turn from Berlin into a four-game week with Fudd already out. 8-seed can still slide if NYL/WAS win out and Dallas does not.
 
 This analysis is for informational and educational purposes only. Sports betting involves risk. Please bet responsibly. Past performance does not guarantee future results. Kos Edge Analytics is not responsible for any financial losses.
