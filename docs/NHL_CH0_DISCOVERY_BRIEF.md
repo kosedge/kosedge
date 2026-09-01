@@ -29,12 +29,12 @@ No wrapper. No scraper. No ratings / prior JSON. No code edits to NBA / WNBA / C
 
 ## Register only (do not code)
 
-| Name                      | Value                                                    |
-| ------------------------- | -------------------------------------------------------- |
-| `ODDS_SPORT_KEY`          | `icehockey_nhl`                                          |
-| `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50`                                     |
-| `PROP_PLAY_CAP_PER_SLATE` | `6`                                                      |
-| `STARTER_GATE`            | `unknown` → **no goalie PLAY**                           |
+| Name                      | Value                          |
+| ------------------------- | ------------------------------ |
+| `ODDS_SPORT_KEY`          | `icehockey_nhl`                |
+| `PLAYER_YEAR_WEIGHTS`     | `0.20 / 0.30 / 0.50`           |
+| `PROP_PLAY_CAP_PER_SLATE` | `6`                            |
+| `STARTER_GATE`            | `unknown` → **no goalie PLAY** |
 
 Ch1 names (next chapter, not this PR): `NHL_TEAM_CARRY_SHRINK`, `nhl_team_prior_2026.json` — own constants, own file.
 
