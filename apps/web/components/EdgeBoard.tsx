@@ -1330,18 +1330,19 @@ export default function EdgeBoard({
   const edgeLineLabel = isMlb ? "ML edge" : "Spread edge";
 
   if (variant === "home") {
-    // Compact pills so PLAY/PASS fit inside the col-span-5 card (wider than "—").
+    // Compact-but-readable pills — must stay inside Tag track (wider than "—").
     const homeTagClass = (tag: Tag) => {
       const base =
-        "inline-flex px-2 py-0.5 rounded-md text-[11px] font-bold tracking-wide";
+        "inline-flex px-2.5 py-0.5 rounded-md text-xs font-bold tracking-wide";
       if (tag === "PLAY") return `${base} bg-edge-green text-black`;
       if (tag === "LEAN") return `${base} bg-amber-500 text-black`;
       return `${base} bg-white/10 text-gray-400`;
     };
     // CSS grid (not <table>) so fr tracks honor minmax(0,…) and Tag never
     // spills past the card — table-fixed still let cell content paint outside.
+    // Tag track a bit wider so text-xs PLAY/PASS keep a few px inside the border.
     const homeGrid =
-      "grid w-full grid-cols-[minmax(0,1.35fr)_minmax(0,0.95fr)_minmax(0,0.75fr)_minmax(0,0.55fr)_minmax(0,0.7fr)] gap-x-1.5 text-sm";
+      "grid w-full grid-cols-[minmax(0,1.25fr)_minmax(0,0.9fr)_minmax(0,0.7fr)_minmax(0,0.55fr)_minmax(0,0.85fr)] gap-x-2 text-[15px]";
     return (
       <div className="lg:col-span-5 self-start min-w-0">
         {/*
@@ -1351,19 +1352,19 @@ export default function EdgeBoard({
         */}
         <div className="relative p-3 sm:p-4 min-w-0">
           <div className="pointer-events-none absolute inset-0 rounded-3xl bg-linear-to-r from-kos-gold/25 via-kos-green/15 to-kos-gold/25 blur-2xl opacity-80" />
-          <div className="relative bg-black/40 border border-white/12 rounded-3xl p-4 sm:p-5 backdrop-blur-xl shadow-2xl min-w-0">
-            <div className="mb-4">
+          <div className="relative bg-black/40 border border-white/12 rounded-3xl p-5 sm:p-6 backdrop-blur-xl shadow-2xl min-w-0">
+            <div className="mb-5">
               <h2 className="text-3xl font-bebas text-edge-green">
                 Edge Board
               </h2>
             </div>
             <div className="rounded-2xl border border-white/10 min-w-0">
               <div className={`${homeGrid} bg-white/5 text-left text-gray-300`}>
-                <div className="py-2.5 pl-2.5 pr-1 font-medium">Game</div>
-                <div className="py-2.5 px-1 font-medium">Best Line</div>
-                <div className="py-2.5 px-1 font-medium">Best O/U</div>
-                <div className="py-2.5 px-1 font-medium">Edge</div>
-                <div className="py-2.5 pl-1 pr-2.5 font-medium">Tag</div>
+                <div className="py-3 pl-3 pr-1.5 font-medium">Game</div>
+                <div className="py-3 px-1.5 font-medium">Best Line</div>
+                <div className="py-3 px-1.5 font-medium">Best O/U</div>
+                <div className="py-3 px-1.5 font-medium">Edge</div>
+                <div className="py-3 pl-1.5 pr-3 font-medium">Tag</div>
               </div>
               <div className="divide-y divide-white/10 text-gray-200">
                 {homePreviewRows.map((r) => (
@@ -1371,19 +1372,19 @@ export default function EdgeBoard({
                     key={r.id}
                     className={`${homeGrid} hover:bg-white/5 transition`}
                   >
-                    <div className="py-3 pl-2.5 pr-1 font-semibold leading-snug break-words">
+                    <div className="py-3.5 pl-3 pr-1.5 font-semibold leading-snug break-words">
                       {r.teamA.name} @ {r.teamB.name}
                     </div>
-                    <div className="py-3 px-1 font-semibold leading-snug">
+                    <div className="py-3.5 px-1.5 font-semibold leading-snug">
                       {r.bestLine.top.label}
                     </div>
-                    <div className="py-3 px-1 font-semibold leading-snug">
+                    <div className="py-3.5 px-1.5 font-semibold leading-snug">
                       {r.bestOU.top.label}
                     </div>
-                    <div className="py-3 px-1 font-bold tabular-nums">
+                    <div className="py-3.5 px-1.5 font-bold tabular-nums">
                       {r.edgeLineNum != null ? r.edgeLineNum.toFixed(1) : "—"}
                     </div>
-                    <div className="py-3 pl-1 pr-2.5 min-w-0">
+                    <div className="py-3.5 pl-1.5 pr-3 min-w-0">
                       {r.tagLine ? (
                         <span className={homeTagClass(r.tagLine)}>
                           {r.tagLine}
