@@ -53,4 +53,4 @@ Slate view = same players, same means, same sort.
 
 New scorer · props tags · DFS optimizer · team if · Ch3/Ch4 retune · NBA/CFB/NFL · 15 team previews
 
-**Stop.** Chapter 9 grades (schema + empty store) before playoffs Sep 27 — **not** a tag PR.
+**Stop.** Chapter 9 grades schema + empty store (`docs/WNBA_GRADE_SCHEMA.md`) before playoffs Sep 27 — **not** a tag PR.
