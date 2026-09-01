@@ -33,4 +33,3 @@ describe("loadEdgeBoardFallback", () => {
     expect(loadEdgeBoardFallback("not-a-sport")).toEqual([]);
   });
 });
-
