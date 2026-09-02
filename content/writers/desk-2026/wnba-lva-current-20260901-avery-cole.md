@@ -14,7 +14,7 @@ This is a Wilson club. 33.0 usage, first in the league. 32.0 minutes, 26.0 point
 
 Wilson is **not** in Berlin. USA Basketball added Citron and Iriafen on Aug 31. Official reason: health reasons. ESPN (source close): not 100 percent for some time, back issue on the report twice last week, played through it, 30 minutes Friday. CBS: fully healthy, fatigue, two-plus weeks at home while Gray and Young make the flights. **Do not pick one.** Stamp the conflict. She is the only title-tier star sitting this tournament. That is the rest edge. It is not a full-roster rest edge — Gray and Young, the 32-minute creators, are still on USA’s 12, plus Talbot (Australia) and Yamamoto (Japan).
 
-House net is 4.34 (Ch2 rebased), third among these four, **ahead of Golden State’s clipped 3.61**. Observed YTD net is +5.1. No expected-wins print. Live BetMGM Finals winner is **+650** (5:45 p.m. ET Sep 1). Pass rather than a “Wilson’s resting so fade the 3-seed” ticket.
+House net is 4.34 (Ch2 rebased), second among these four, **ahead of Golden State’s clipped 3.61**. Observed YTD net is +5.1. No expected-wins print. Live BetMGM Finals winner is **+650** (5:45 p.m. ET Sep 1). Pass rather than a “Wilson’s resting so fade the 3-seed” ticket.
 
 **Handicapper’s Note**
 Fair: house net 4.34
