@@ -84,6 +84,32 @@ const nextConfig: NextConfig = {
     "/pro/nfl/news/[slug]": ["../../content/writers/news-breaks-2026/**/*"],
     "/pro/desk": ["../../content/writers/desk-2026/**/*"],
     "/pro/desk/[slug]": ["../../content/writers/desk-2026/**/*"],
+    // Fantasy desk: depth SoT for colliding abbrevs (Bijan vs Brian Robinson).
+    // Static import of lib/fantasy/data also bundles; NFT include covers FS reads.
+    "/pro/nfl/fantasy": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
+    "/pro/nfl/fantasy/mock": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
+    "/pro/nfl/fantasy/builder": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
+    "/pro/nfl/fantasy/sleepers": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
+    "/pro/nfl/fantasy/guillotine": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
+    "/pro/nfl/fantasy/player/[playerId]": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
   },
 
   async redirects() {

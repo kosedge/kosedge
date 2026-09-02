@@ -2,6 +2,7 @@ import { readFileSync, existsSync } from "node:fs";
 import path from "node:path";
 import type { ScheduleGame } from "@/lib/fantasy/schedule-context";
 import type { DepthRow } from "@/lib/fantasy/risk-signals";
+import packagedDepth2026 from "@/lib/fantasy/data/nfl-depth-chart-2026-w1.json";
 
 function findRepoRoot(): string | null {
   let current = process.cwd();
@@ -31,6 +32,37 @@ function normalizeTeam(raw: string): string {
   if (t === "LAR") return "LA";
   if (t === "WSH") return "WAS";
   return t;
+}
+
+type PackagedDepthFile = {
+  snapshot_id?: string;
+  rows?: Array<{
+    team?: string;
+    position?: string;
+    depth_order?: number;
+    player_name?: string;
+    player_id?: string | null;
+    role_confidence?: number;
+    injury_status?: string | null;
+  }>;
+};
+
+function mapDepthRows(
+  rows: NonNullable<PackagedDepthFile["rows"]>,
+  snapshotId?: string,
+): DepthRow[] {
+  return rows.map((row) => ({
+    team: normalizeTeam(String(row.team ?? "")),
+    position: String(row.position ?? "").toUpperCase(),
+    depthOrder: Number(row.depth_order) || 99,
+    playerName: String(row.player_name ?? ""),
+    roleConfidence: Number(row.role_confidence) || 0.5,
+    playerId: row.player_id ? String(row.player_id) : undefined,
+    snapshotId: snapshotId || undefined,
+    injuryStatus: row.injury_status
+      ? String(row.injury_status).trim().toLowerCase()
+      : undefined,
+  }));
 }
 
 /**
@@ -106,41 +138,51 @@ export function loadNfl2026ScheduleGames(): ScheduleGame[] {
   }
 }
 
+/**
+ * Depth SoT for fantasy desk identity + risk flags.
+ *
+ * Prefer the live monorepo pack when present (local / full checkout). On
+ * Vercel the serverless NFT historically omitted
+ * `services/model-service/.../nfl_depth_chart_*.json`, which left colliding
+ * ATL B.Robinson rows abbreviated and ADP-blank after the matcher refused
+ * the Jr. short-name hole. Packaged JSON under `lib/fantasy/data/` is always
+ * bundled with the web app as the production fallback.
+ */
 export function loadNfl2026DepthRows(): DepthRow[] {
   try {
     const root = findRepoRoot();
-    if (!root) return [];
-    const depthPath = path.join(
-      root,
-      "services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
-    );
-    if (!existsSync(depthPath)) return [];
-    const parsed = JSON.parse(readFileSync(depthPath, "utf8")) as {
-      snapshot_id?: string;
-      rows?: Array<{
-        team: string;
-        position: string;
-        depth_order: number;
-        player_name: string;
-        player_id?: string;
-        role_confidence: number;
-        injury_status?: string;
-      }>;
-    };
-    const snapshotId = String(parsed.snapshot_id ?? "");
-    return (parsed.rows ?? []).map((row) => ({
-      team: normalizeTeam(row.team),
-      position: String(row.position ?? "").toUpperCase(),
-      depthOrder: Number(row.depth_order) || 99,
-      playerName: String(row.player_name ?? ""),
-      roleConfidence: Number(row.role_confidence) || 0.5,
-      playerId: row.player_id ? String(row.player_id) : undefined,
-      snapshotId: snapshotId || undefined,
-      injuryStatus: row.injury_status
-        ? String(row.injury_status).trim().toLowerCase()
-        : undefined,
-    }));
+    const candidates = [
+      root
+        ? path.join(
+            root,
+            "services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+          )
+        : null,
+      // When cwd is apps/web (Vercel / next start)
+      path.join(process.cwd(), "lib/fantasy/data/nfl-depth-chart-2026-w1.json"),
+      root
+        ? path.join(
+            root,
+            "apps/web/lib/fantasy/data/nfl-depth-chart-2026-w1.json",
+          )
+        : null,
+    ].filter(Boolean) as string[];
+
+    for (const depthPath of candidates) {
+      if (!existsSync(depthPath)) continue;
+      const parsed = JSON.parse(
+        readFileSync(depthPath, "utf8"),
+      ) as PackagedDepthFile;
+      if (!parsed.rows?.length) continue;
+      return mapDepthRows(parsed.rows, String(parsed.snapshot_id ?? ""));
+    }
   } catch {
-    return [];
+    // fall through to packaged import
   }
+
+  const packaged = packagedDepth2026 as PackagedDepthFile;
+  if (packaged.rows?.length) {
+    return mapDepthRows(packaged.rows, String(packaged.snapshot_id ?? ""));
+  }
+  return [];
 }

@@ -541,19 +541,18 @@ function matchAgainstIndex(
   return hit;
 }
 
-function boardInitialLastKey(target: AdpMatchTarget): string | null {
-  const parts = parseNameParts(target.playerName);
-  if (!parts.firstInitial || !parts.lastName) return null;
+/** Identical abbreviated labels on the same team/pos (two "B.Robinson"). */
+function boardExactLabelKey(target: AdpMatchTarget): string {
   return indexKey([
-    parts.firstInitial,
-    parts.lastName,
+    normalizePlayerName(target.playerName),
     normalizeTeam(target.team),
     target.position.toUpperCase(),
   ]);
 }
 
 function adpClaimKey(hit: AdpMatchResult): string {
-  return `${hit.matchedName.toLowerCase()}|${hit.adp}|${hit.matchKind}`;
+  // Identity of the market row — ignore matchKind so one ADP can't be claimed twice.
+  return `${hit.matchedName.toLowerCase()}|${hit.adp}`;
 }
 
 export function matchAdpToDeskRows(
@@ -578,15 +577,16 @@ export function matchAdpToDeskRows(
     idx: buildIndex(pool.players),
   }));
 
-  // Board-side collisions (two ATL B.Robinson): abbreviated keys are unsafe.
-  const boardKeyCounts = new Map<string, number>();
+  // Board-side collisions: only identical labels (two ATL "B.Robinson") force
+  // high-precision matching. After depth expands to Bijan vs Brian, labels
+  // differ — full-name ADP attach is allowed even though initial+last collides.
+  const boardLabelCounts = new Map<string, number>();
   for (const target of targets) {
-    const key = boardInitialLastKey(target);
-    if (!key) continue;
-    boardKeyCounts.set(key, (boardKeyCounts.get(key) ?? 0) + 1);
+    const key = boardExactLabelKey(target);
+    boardLabelCounts.set(key, (boardLabelCounts.get(key) ?? 0) + 1);
   }
-  const ambiguousBoardKeys = new Set(
-    [...boardKeyCounts.entries()].filter(([, n]) => n > 1).map(([k]) => k),
+  const ambiguousBoardLabels = new Set(
+    [...boardLabelCounts.entries()].filter(([, n]) => n > 1).map(([k]) => k),
   );
 
   // Prefer higher model ranks when two rows compete for one ADP claim.
@@ -604,10 +604,8 @@ export function matchAdpToDeskRows(
   let matchedCrossFormat = 0;
 
   for (const target of ordered) {
-    const boardKey = boardInitialLastKey(target);
-    const highPrecisionOnly = Boolean(
-      boardKey && ambiguousBoardKeys.has(boardKey),
-    );
+    const labelKey = boardExactLabelKey(target);
+    const highPrecisionOnly = ambiguousBoardLabels.has(labelKey);
 
     let hit = matchAgainstIndex(target, primaryIdx, "high", undefined, {
       highPrecisionOnly,
