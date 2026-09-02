@@ -31,9 +31,9 @@ describe("nhl-trusted-market", () => {
   });
 
   it("rejects missing Best / absurd gaps", () => {
-    expect(
-      trustNhlMarket({ kei: -0.94, best: null, open: null }).trusted,
-    ).toBe(false);
+    expect(trustNhlMarket({ kei: -0.94, best: null, open: null }).trusted).toBe(
+      false,
+    );
     expect(
       trustNhlMarket({
         kei: -0.94,

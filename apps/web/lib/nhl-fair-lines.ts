@@ -65,10 +65,8 @@ function normalizeFairLine(
     startTime: toIsoOrNull(raw.start_time),
     homeTeam: String(raw.home_team ?? "Home"),
     awayTeam: String(raw.away_team ?? "Away"),
-    homeAbbr:
-      typeof raw.home_abbr === "string" ? raw.home_abbr : null,
-    awayAbbr:
-      typeof raw.away_abbr === "string" ? raw.away_abbr : null,
+    homeAbbr: typeof raw.home_abbr === "string" ? raw.home_abbr : null,
+    awayAbbr: typeof raw.away_abbr === "string" ? raw.away_abbr : null,
     homeWinProb: toNumberOrNull(raw.home_win_prob),
     fairHomeMl,
     fairAwayMl: fairAwayFromHome(fairHomeMl),

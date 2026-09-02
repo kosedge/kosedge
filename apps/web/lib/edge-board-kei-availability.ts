@@ -15,7 +15,9 @@ const KEI_SOURCE_SPORTS = new Set([
 ]);
 
 /** Sports with published KEI from fair-lines or kei_lines_*.json. */
-export function sportHasKeiSource(sportKey: string | null | undefined): boolean {
+export function sportHasKeiSource(
+  sportKey: string | null | undefined,
+): boolean {
   const sport = String(sportKey ?? "")
     .trim()
     .toLowerCase();

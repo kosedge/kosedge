@@ -4,10 +4,7 @@
  * Published fair_* → handicap (KEI). model_* identity until pre_blend exists.
  */
 
-import {
-  applyHandicapIdentity,
-  type KeiLineGame,
-} from "@/lib/kei-lines";
+import { applyHandicapIdentity, type KeiLineGame } from "@/lib/kei-lines";
 import type { NhlFairLineRow } from "@/lib/nhl-fair-lines-format";
 
 export function keiGamesFromNhlFairLines(
