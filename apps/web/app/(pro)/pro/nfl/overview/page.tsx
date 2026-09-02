@@ -72,8 +72,8 @@ export default async function NflOverviewPage() {
               Weekly Slate
             </h2>
             <p className="mt-2 text-sm text-kos-text/75">
-              Matchup briefs, slate snapshot, and game cards — the weekly desk
-              home before you jump to Edge Board.
+              Slate snapshot and game cards — matchup briefs pending (research
+              links only). Weekly desk home before you jump to Edge Board.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

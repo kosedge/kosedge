@@ -279,7 +279,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/awards",
           label: "MVP/Awards",
-          hint: "Live award races from season-sim production rates — no placeholder tabs.",
+          hint: "Model award-score board (MVP/OPOY) — last materialize snapshot; player award odds not joined yet.",
           premium: true,
           status: "active",
         },
@@ -288,7 +288,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Fantasy",
       subtitle:
-        "Draft desk, guillotine stay-alive desk, late-round sleepers, and weekly ATS pick’em.",
+        "Draft desk, educational guillotine stay-alive lists, late-round sleepers, and weekly ATS pick’em.",
       links: [
         {
           href: "/pro/nfl/fantasy",
@@ -299,15 +299,22 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         },
         {
           href: "/pro/nfl/weekly-fantasy",
-          label: "Weekly Fantasy Projections",
-          hint: "Weekly leaders and player fantasy totals with scoring filters.",
+          label: "Weekly Fantasy",
+          hint: "Season-rate PPG from the player-production spine — not week-specific projections.",
+          premium: true,
+          status: "active",
+        },
+        {
+          href: "/pro/nfl/dfs",
+          label: "DFS Board",
+          hint: "Season-rate proj research shell — no live slate, salaries, or ownership until feeds join.",
           premium: true,
           status: "active",
         },
         {
           href: "/pro/nfl/fantasy/guillotine",
           label: "Guillotine League",
-          hint: "Stay-alive desk — ranks, schedule softness, safe floor / upside lists.",
+          hint: "Educational stay-alive lists from season ranks — not a weekly elimination or waiver tool.",
           premium: true,
           status: "active",
         },
