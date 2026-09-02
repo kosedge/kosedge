@@ -55,9 +55,13 @@ def test_overlay_replaces_mc_median_with_spine_mean_maye() -> None:
     assert hit == 1, "overlay_count must be >0 for Maye NE@SEA"
     assert players[0]["point_estimate"]["pass_yards"] == 216.2
     assert players[0]["point_estimate"]["rush_yards"] == 17.4
-    assert players[0]["distributions"]["pass_yards"]["mean"] == 216.2
-    # p50 remains research band; headline uses point_estimate / mean.
-    assert players[0]["distributions"]["pass_yards"]["p50"] == 160.0
+    pass_dist = players[0]["distributions"]["pass_yards"]
+    assert pass_dist["mean"] == 216.2
+    # Typical range must contain the overlayed spine mean (Alex Rourke FAIL).
+    assert pass_dist["p10"] <= pass_dist["mean"] <= pass_dist["p90"]
+    assert pass_dist["p10"] <= pass_dist["p50"] <= pass_dist["p90"]
+    # Location-shifted: delta = 216.2 - 198.0 = 18.2
+    assert abs(pass_dist["p50"] - 178.2) < 1e-9
     assert players[0]["spine_version"] == PRODUCTION_VERSION
 
 
@@ -160,6 +164,48 @@ def test_overlay_hits_player_key_ne_qb1_drakemaye() -> None:
     hit = overlay_spine_means_on_players(players, spine)
     assert hit == 1, "overlay_count must be >0 for NE-QB1-DrakeMaye"
     assert abs(float(players[0]["point_estimate"]["pass_yards"]) - 216.164) < 0.05
+    dist = players[0]["distributions"]["pass_yards"]
+    assert dist["p10"] <= dist["mean"] <= dist["p90"]
+
+
+def test_overlayed_maye_mean_cannot_exceed_p90() -> None:
+    """Live FAIL lock: spine mean ~216 must sit inside typical range, not above p90 208."""
+    players = [
+        {
+            "player_key": "NE-QB1-DrakeMaye",
+            "player_name": "Drake Maye",
+            "team": "NE",
+            "position": "QB",
+            "point_estimate": {"pass_yards": 160.048},
+            "distributions": {
+                "pass_yards": {
+                    "mean": 160.048,
+                    "std": 38.762,
+                    "p10": 110.58,
+                    "p50": 159.67,
+                    "p90": 208.16,
+                }
+            },
+        }
+    ]
+    spine = {
+        k: {"pass_yards": 216.164, "rush_yards": 17.4, "receiving_yards": 0.0, "receptions": 0.0}
+        for k in _index_keys_for_player(
+            team="NE", player_name="D.Maye", player_key="NE-QB1-DrakeMaye"
+        )
+    }
+    hit = overlay_spine_means_on_players(players, spine)
+    assert hit == 1
+    dist = players[0]["distributions"]["pass_yards"]
+    mean = float(dist["mean"])
+    assert abs(mean - 216.164) < 0.05
+    assert float(dist["p10"]) < mean < float(dist["p90"]), (
+        f"mean {mean} must sit inside typical range "
+        f"[{dist['p10']}, {dist['p90']}] after spine overlay"
+    )
+    assert float(dist["p10"]) <= float(dist["p50"]) <= float(dist["p90"])
+    # Preserve MC width (~97.58) via location shift, not a collapse to mean±0.
+    assert abs((float(dist["p90"]) - float(dist["p10"])) - (208.16 - 110.58)) < 0.05
 
 
 def test_props_edges_fallback_does_not_zero_missing_markets() -> None:
@@ -298,5 +344,8 @@ def test_maye_ne_sea_overlay_count_must_not_be_zero() -> None:
     assert meta["overlay_count"] == 1
     assert meta["rows"] == 1
     assert abs(float(payload["players"][0]["point_estimate"]["pass_yards"]) - 216.164) < 0.05
+    dist = payload["players"][0]["distributions"]["pass_yards"]
+    assert float(dist["p10"]) < float(dist["mean"]) < float(dist["p90"])
     assert payload["spine_version"] == PRODUCTION_VERSION
     assert payload["notes"]["yards_headline"] == "spine_mean"
+    assert payload["notes"]["yards_range"] == "mc_typical_range_spine_anchored"
