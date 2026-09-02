@@ -138,6 +138,20 @@ describe("pro sport IA", () => {
     expect(byLabel.Sleepers).toBe("/pro/nfl/fantasy/sleepers");
     expect(byLabel["Pick’em"]).toBe("/pro/nfl/fantasy/pickem");
     expect(byLabel["DFS Board"]).toBeUndefined();
+
+    const fantasy = sections.find((section) => section.title === "Fantasy");
+    expect(fantasy?.subtitle).toMatch(/weekly ATS pick/i);
+    expect(fantasy?.subtitle).not.toMatch(/\bSU\b/);
+    const pickem = fantasy?.links.find((link) => link.label === "Pick’em");
+    expect(pickem?.hint).toMatch(/Weekly ATS card/i);
+    expect(pickem?.hint).not.toMatch(/\bSU\b/);
+    // Unfinished tools stay visible — copy-match only; do not hide tiles.
+    expect(fantasy?.links.map((link) => link.label)).toEqual(
+      NFL_SECTION_STRUCTURE.Fantasy,
+    );
+    expect(
+      fantasy?.links.every((link) => link.status === "active"),
+    ).toBe(true);
     expect(byLabel["Team Research Hub"]).toBe("/pro/nfl/teams");
     expect(byLabel["Power Ratings"]).toBe("/pro/power-ratings/nfl");
     expect(byLabel.Standings).toBe("/pro/nfl/standings");
