@@ -101,24 +101,24 @@ const GLANCE: Record<string, GlanceItem[]> = {
   ],
   nhl: [
     {
-      href: "/pro/nhl/fair-lines",
-      title: "Model vs Market",
-      body: "Moneylines, totals, and puck-line framing.",
+      href: "/edge-board/nhl",
+      title: "Edge Board",
+      body: "Open vs Best with Ch4 KEI — tags PASS until trusted Best clears.",
+    },
+    {
+      href: "/pro/nhl/fantasy",
+      title: "Fantasy",
+      body: "Ch5 PlayerProjection means scored into kos_default_points.",
+    },
+    {
+      href: "/pro/nhl/props",
+      title: "Props (dark)",
+      body: "Proj vs line only — zero PLAY / LEAN until a tag PR.",
     },
     {
       href: "/pro/nhl/goalies",
       title: "Goalie Desk",
       body: "Starter confirmation sensitivity for totals and ML.",
-    },
-    {
-      href: "/pro/nhl/edges",
-      title: "Key Edges",
-      body: "Thresholded ML and total separations.",
-    },
-    {
-      href: "/pro/nhl/teams",
-      title: "Team Research",
-      body: "Club hubs with goalie and five-on-five context.",
     },
   ],
   wnba: [

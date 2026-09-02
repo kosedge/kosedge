@@ -1,4 +1,4 @@
-"""NHL season engine package (Ch1–Ch5 + Ch4 team KEI)."""
+"""NHL season engine package (Ch1–Ch7: priors → fantasy)."""
 
 from src.services.nhl_season_engine.priors import (
     ENGINE_VERSION,
@@ -62,6 +62,14 @@ from src.services.nhl_season_engine.nhl_props import (
     build_dark_props_board,
     documentation as props_documentation,
 )
+from src.services.nhl_season_engine.nhl_fantasy import (
+    FANTASY_VERSION,
+    SCORING_MAP,
+    SCORING_PROFILE,
+    build_fantasy_board,
+    documentation as fantasy_documentation,
+    fantasy_points_from_projection,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -112,4 +120,10 @@ __all__ = [
     "PROPS_VERSION",
     "build_dark_props_board",
     "props_documentation",
+    "FANTASY_VERSION",
+    "SCORING_MAP",
+    "SCORING_PROFILE",
+    "build_fantasy_board",
+    "fantasy_points_from_projection",
+    "fantasy_documentation",
 ]

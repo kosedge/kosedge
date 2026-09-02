@@ -196,6 +196,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     }),
     tools: [
       ...sharedTools("nhl"),
+      { href: "/pro/nhl/fantasy", label: "Fantasy" },
       { href: "/pro/nhl/injuries", label: "Injuries & News" },
       { href: "/pro/nhl/standings", label: "Standings" },
       { href: "/pro/nhl/props", label: "Limited Props" },
