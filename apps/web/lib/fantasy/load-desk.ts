@@ -347,11 +347,16 @@ export async function loadFantasyDraftDesk(params: {
   }
 
   // Two ATL B.Robinson (Bijan vs Brian): expand colliding abbrevs via depth
-  // player_id before ADP match so full-name identity wins and the board
-  // shows distinct names. Matcher also refuses ambiguous short/initial keys.
+  // player_id BEFORE ADP match so full-name identity wins and the board
+  // shows distinct names. Packaged depth under lib/fantasy/data ships on
+  // Vercel (monorepo pack path is often missing from the serverless NFT).
   const nameOverrides = expandCollidingBoardNames(enrichable, depthRows);
   if (nameOverrides.size > 0) {
     enrichable = applyBoardNameOverrides(enrichable, nameOverrides);
+    limitations = [
+      ...limitations,
+      `Board identity: expanded ${nameOverrides.size} colliding abbreviated name(s) via depth player_id (e.g. Bijan vs Brian Robinson).`,
+    ];
   }
 
   const adpMatch = matchAdpToDeskRows(
