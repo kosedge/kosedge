@@ -86,6 +86,15 @@ def test_sf_lar_kei_reprice_from_sourced_card_no_la_same_coast() -> None:
     assert "SoFi" not in chips
     assert "Melbourne" in chips
     assert "74F" not in chips  # LA desktop weather string from screenshots
+    travel_chip = next(
+        (
+            e
+            for e in (log.get("applied_factors") or [])
+            + (log.get("considered_not_applied") or [])
+            if e.get("factor") == "travel"
+        ),
+        None,
+    )
     weather_chip = next(
         (
             e
@@ -95,6 +104,9 @@ def test_sf_lar_kei_reprice_from_sourced_card_no_la_same_coast() -> None:
         ),
         None,
     )
+    assert travel_chip is not None
+    assert "Melbourne" in str(travel_chip.get("reason") or "")
+    assert "Cricket Ground" in str(travel_chip.get("reason") or "")
     assert weather_chip is not None
     assert "Melbourne" in str(weather_chip.get("reason") or "")
 
@@ -126,19 +138,13 @@ def test_sf_lar_legacy_path_blocked_when_card_present() -> None:
         game_card=card,
     )
     considered = log.get("considered_not_applied") or []
-    # Game-card path emits timezone_shift (not legacy "travel") for same-coast.
-    travel = next(
-        (
-            e
-            for e in considered
-            if e.get("factor") in {"travel", "timezone_shift"}
-        ),
-        None,
-    )
+    # Fair-lines page HONEST_FACTORS only renders travel/weather (not timezone_shift).
+    travel = next((e for e in considered if e.get("factor") == "travel"), None)
     weather = next((e for e in considered if e.get("factor") == "weather"), None)
     assert travel is not None
     assert "Melbourne" in str(travel.get("reason") or "")
     assert "same-coast (SF → LA)" not in str(travel.get("reason") or "")
+    assert "Cricket Ground" in str(travel.get("reason") or "")
     assert weather is not None
     assert "Melbourne" in str(weather.get("reason") or "")
     assert "visual_crossing" not in str(weather.get("reason") or "").lower()

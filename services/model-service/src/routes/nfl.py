@@ -4030,8 +4030,15 @@ def nfl_fair_lines(
         # Canonical kickoff wins over odds/DB commence (Melbourne 8:35 ET, NE@SEA 8:20).
         _canonical_kickoff = week1_kickoffs.get((home_abbr, away_abbr))
         _line_start_time = _canonical_kickoff or mapped.get("start_time")
+        _game_card = week1_game_cards.get((home_abbr, away_abbr))
+        _venue = None
+        _location = None
+        _international = False
+        if isinstance(_game_card, dict):
+            _venue = _game_card.get("_venue")
+            _location = _game_card.get("_location")
+            _international = bool(_game_card.get("_international"))
         try:
-            _game_card = week1_game_cards.get((home_abbr, away_abbr))
             handicap_markets, kei_reprice_log = apply_week1_kei_reprice(
                 handicap=handicap_markets,
                 home_abbr=home_abbr,
@@ -4217,6 +4224,11 @@ def nfl_fair_lines(
                 "away_team": away_display,
                 "home_abbr": home_abbr,
                 "away_abbr": away_abbr,
+                # Venue SoT for KEI Lines (match Edge Board Melbourne / neutral).
+                "venue": _venue,
+                "location": _location,
+                "neutral_site": bool(_international),
+                "international": bool(_international),
                 # Top-level published = KEI handicap
                 "home_win_prob": round(home_win_prob, 4) if home_win_prob is not None else None,
                 "away_win_prob": round(away_win_prob, 4) if away_win_prob is not None else None,

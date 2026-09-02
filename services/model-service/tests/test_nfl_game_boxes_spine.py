@@ -11,6 +11,7 @@ from src.services.nfl_game_boxes_spine import (
     _index_keys_for_player,
     apply_spine_overlay_to_game_boxes_payload,
     load_spine_means_for_game,
+    name_from_player_key,
     overlay_spine_means_on_players,
 )
 from src.services.nfl_player_production import PRODUCTION_VERSION
@@ -128,6 +129,39 @@ def test_load_spine_uses_text_array_cast() -> None:
     assert captured["params"]["teams"] == ["NE", "SEA"]
 
 
+def test_overlay_hits_player_key_ne_qb1_drakemaye() -> None:
+    """Alex live dump: box player_key is NE-QB1-DrakeMaye — overlay must hit it."""
+    assert name_from_player_key("NE-QB1-DrakeMaye") == "Drake Maye"
+    players = [
+        {
+            "player_key": "NE-QB1-DrakeMaye",
+            "player_name": "Drake Maye",
+            "team": "NE",
+            "position": "QB",
+            "point_estimate": {"pass_yards": 160.048},
+            "distributions": {
+                "pass_yards": {"mean": 160.048, "p50": 159.67, "p10": 110.58, "p90": 208.16}
+            },
+        }
+    ]
+    # Index only via baseline abbrev — join through player_key / identity keys.
+    spine = {
+        k: {"pass_yards": 216.164, "rush_yards": 17.4, "receiving_yards": 0.0, "receptions": 0.0}
+        for k in _index_keys_for_player(team="NE", player_name="D.Maye")
+    }
+    # Also ensure pk index from baseline side.
+    for k in _index_keys_for_player(
+        team="NE", player_name="D.Maye", player_key="NE-QB1-DrakeMaye"
+    ):
+        spine.setdefault(
+            k,
+            {"pass_yards": 216.164, "rush_yards": 17.4, "receiving_yards": 0.0, "receptions": 0.0},
+        )
+    hit = overlay_spine_means_on_players(players, spine)
+    assert hit == 1, "overlay_count must be >0 for NE-QB1-DrakeMaye"
+    assert abs(float(players[0]["point_estimate"]["pass_yards"]) - 216.164) < 0.05
+
+
 def test_maye_ne_sea_overlay_count_must_not_be_zero() -> None:
     """Live FAIL lock: Maye NE@SEA must overlay; overlay_count==0 is a hard fail."""
     maye_row = SimpleNamespace(
@@ -156,6 +190,7 @@ def test_maye_ne_sea_overlay_count_must_not_be_zero() -> None:
         "notes": {},
         "players": [
             {
+                "player_key": "NE-QB1-DrakeMaye",
                 "player_name": "Drake Maye",
                 "team": "NE",
                 "position": "QB",

@@ -1300,7 +1300,9 @@ def apply_week1_kei_reprice(
             applied.append(fe)
         for e in rw.considered_not_applied:
             reason = e.reason
+            factor_name = e.factor
             # Neutral / international sites are not home-stadium same-coast trips.
+            # Emit factor="travel" so KEI Lines page chips (HONEST_FACTORS) show it.
             if (
                 isinstance(game_card, Mapping)
                 and game_card.get("_international")
@@ -1313,9 +1315,10 @@ def apply_week1_kei_reprice(
                     f"neutral · {loc} ({venue}) — travel not applied "
                     "(international; no home HFA)"
                 )
+                factor_name = "travel"
             considered.append(
                 _entry(
-                    factor=e.factor,
+                    factor=factor_name,
                     applied=False,
                     reason=reason,
                 )
@@ -1326,6 +1329,21 @@ def apply_week1_kei_reprice(
         if isinstance(game_card, Mapping) and game_card.get("_international"):
             loc = str(game_card.get("_location") or "neutral site")
             venue = str(game_card.get("_venue") or loc)
+            # Ensure a travel chip exists for the fair-lines page driver line.
+            has_travel_chip = any(
+                e.factor == "travel" for e in applied + considered
+            )
+            if not has_travel_chip:
+                considered.append(
+                    _entry(
+                        factor="travel",
+                        applied=False,
+                        reason=(
+                            f"neutral · {loc} ({venue}) — travel not applied "
+                            "(international; no home HFA)"
+                        ),
+                    )
+                )
             # Applied weather: keep magnitudes, rewrite reason to Melbourne/neutral.
             for e in applied:
                 if e.factor == "weather":
