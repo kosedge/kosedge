@@ -194,6 +194,7 @@ def load_spine_means_for_game(
     row_count = 0
 
     try:
+        # Baselines have pass/rush/rec_tds_mean — NOT total_tds_mean (box sims only).
         # CAST AS text[] — bare ANY(:teams) returns 0 rows under psycopg (live FAIL).
         rows = session.execute(
             text(
@@ -201,7 +202,6 @@ def load_spine_means_for_game(
                 SELECT player_name, player_uid, team, position,
                        pass_yards_mean, rush_yards_mean, receiving_yards_mean,
                        receptions_mean, pass_tds_mean, rush_tds_mean, rec_tds_mean,
-                       total_tds_mean,
                        pass_yards_std, rush_yards_std, receiving_yards_std, receptions_std
                 FROM nfl_player_projection_baselines
                 WHERE season = :season
@@ -213,6 +213,10 @@ def load_spine_means_for_game(
         ).fetchall()
     except Exception as exc:
         meta["error"] = f"baseline_query_failed:{type(exc).__name__}:{exc}"
+        try:
+            session.rollback()
+        except Exception:
+            pass
         rows = []
 
     for row in rows or []:
@@ -258,9 +262,13 @@ def load_spine_means_for_game(
                 },
             ).fetchall()
         except Exception as exc:
+            try:
+                session.rollback()
+            except Exception:
+                pass
             meta["error"] = (
-                meta.get("error")
-                or f"props_edges_fallback_failed:{type(exc).__name__}:{exc}"
+                f"{meta.get('error') or 'baseline_empty'};"
+                f"props_edges_fallback_failed:{type(exc).__name__}:{exc}"
             )
             edge_rows = []
 

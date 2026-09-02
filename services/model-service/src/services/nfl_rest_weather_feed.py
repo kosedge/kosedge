@@ -58,7 +58,11 @@ _MOUNTAIN = frozenset({"DEN"})
 _CENTRAL = frozenset({"CHI", "DAL", "HOU", "MIN", "GB", "TEN", "NO", "KC"})
 
 _REPO_ROOT = Path(__file__).resolve().parents[4]
+_MODULE_DATA = Path(__file__).resolve().parent / "nfl_season_engine" / "data"
 _CANONICAL_SCHEDULE_CANDIDATES = (
+    # Railway image: model-service only (no apps/web). Prefer in-tree copy.
+    _MODULE_DATA / "nfl-canonical-schedule-2026.json",
+    Path(__file__).resolve().parent / "data" / "nfl-canonical-schedule-2026.json",
     _REPO_ROOT / "apps" / "web" / "lib" / "nfl-canonical-schedule-2026.json",
     Path("apps/web/lib/nfl-canonical-schedule-2026.json"),
 )
