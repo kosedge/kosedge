@@ -2,7 +2,8 @@
 
 Game Boxes MC medians (p50) must not silently diverge from Props ``model_mean``.
 Published yards / receptions headline = spine baselines (same vector as Props).
-MC p10/p90 remain research range bands.
+When the overlay rewrites a dist mean, MC p10/p50/p90 are location-shifted so
+the typical range (p10–p90) still contains the spine mean.
 
 Join must bridge nflverse abbrev baselines (``D.Maye``) to engine full names
 (``Drake Maye``) and box ``player_key`` (``NE-QB1-DrakeMaye``). If the overlay
@@ -20,6 +21,9 @@ from src.services.nfl_player_production import (
     PRODUCTION_VERSION,
     production_from_baseline_row,
 )
+
+# ≈ Φ⁻¹(0.9) — rebuild p10/p90 from mean±z·std when a shifted band is still inconsistent.
+_NORM_P90_Z = 1.2815515655446004
 
 # Season-engine box keys → baseline / spine fields (yards + receptions only).
 # TD headlines stay P(TD) from MC; do not overwrite with raw TD means.
@@ -305,6 +309,76 @@ def load_spine_means_for_game(
     return out, meta
 
 
+def _as_float(value: Any) -> Optional[float]:
+    if value is None:
+        return None
+    try:
+        out = float(value)
+    except (TypeError, ValueError):
+        return None
+    if out != out:  # NaN
+        return None
+    return out
+
+
+def _rebuild_band_from_mean_std(dist: MutableMapping[str, Any], mean: float) -> None:
+    """Rebuild p10/p50/p90 from mean + dist.std (fallback half-width if std missing)."""
+    std = _as_float(dist.get("std"))
+    if std is not None and std > 0:
+        half = _NORM_P90_Z * std
+    else:
+        p10 = _as_float(dist.get("p10"))
+        p90 = _as_float(dist.get("p90"))
+        if p10 is not None and p90 is not None and p90 > p10:
+            half = 0.5 * (p90 - p10)
+        else:
+            half = max(abs(mean) * 0.25, 1.0)
+    dist["p10"] = max(0.0, mean - half)
+    dist["p50"] = max(0.0, mean)
+    dist["p90"] = max(0.0, mean + half)
+
+
+def realign_distribution_to_overlay_mean(
+    dist: MutableMapping[str, Any],
+    new_mean: float,
+) -> None:
+    """Keep typical-range percentiles consistent with an overlayed spine mean.
+
+    Location-shifts existing MC p10/p50/p90 by ``new_mean - old_anchor`` so the
+    research band width/skew is preserved while ``p10 ≤ mean ≤ p90``. If the
+    band is still inconsistent (or percentiles are missing), rebuild from std.
+    """
+    mean = float(new_mean)
+    old_anchor = _as_float(dist.get("mean"))
+    if old_anchor is None:
+        old_anchor = _as_float(dist.get("p50"))
+
+    dist["mean"] = mean
+
+    if old_anchor is not None and abs(mean - old_anchor) > 1e-12:
+        delta = mean - old_anchor
+        for key in ("p10", "p50", "p90"):
+            cur = _as_float(dist.get(key))
+            if cur is None:
+                continue
+            dist[key] = max(0.0, cur + delta)
+
+    p10 = _as_float(dist.get("p10"))
+    p50 = _as_float(dist.get("p50"))
+    p90 = _as_float(dist.get("p90"))
+
+    # Missing band or mean outside p10–p90 → rebuild so UI "typical range" holds.
+    needs_rebuild = p10 is None or p90 is None or not (p10 <= mean <= p90)
+    if needs_rebuild:
+        _rebuild_band_from_mean_std(dist, mean)
+        return
+
+    if p50 is None:
+        dist["p50"] = max(0.0, mean)
+    elif not (p10 <= p50 <= p90):
+        dist["p50"] = max(0.0, min(p90, max(p10, mean)))
+
+
 def overlay_spine_means_on_players(
     players: Sequence[MutableMapping[str, Any]],
     spine_by_key: Mapping[str, Mapping[str, float]],
@@ -338,10 +412,10 @@ def overlay_spine_means_on_players(
             if val is None:
                 continue
             point[box_stat] = float(val)
-            # Align distribution mean so mean-preferring UI matches Props.
+            # Align dist mean + typical-range percentiles with Props spine mean.
             dist = dists.get(box_stat)
             if isinstance(dist, dict):
-                dist["mean"] = float(val)
+                realign_distribution_to_overlay_mean(dist, float(val))
             changed = True
         if changed:
             player["point_estimate"] = point
@@ -377,7 +451,8 @@ def apply_spine_overlay_to_game_boxes_payload(
 
     notes = dict(payload.get("notes") or {})
     notes["spine_overlay"] = meta
-    notes["yards_range"] = "mc_typical_range"
+    # MC width/skew preserved; percentiles location-shifted onto spine mean.
+    notes["yards_range"] = "mc_typical_range_spine_anchored"
 
     skill_n = 0
     if isinstance(players, list):
