@@ -15881,7 +15881,13 @@ def materialize_nfl_player_props_edges(
                     box_total_tds, _, _ = _box_dist_moments(box.total_tds_dist)
 
             projection_source = NFL_PLAYER_PRODUCTION_VERSION
-            atd_mean = anytime_td_prob_from_td_mean(prod.total_tds)
+            # Anytime TD scorer markets exclude passing TDs. QBs → rush only;
+            # skill → rush + receiving. Never map pass_tds into anytime_td.
+            if str(position).upper() == "QB":
+                atd_td_mean = float(prod.rush_tds)
+            else:
+                atd_td_mean = float(prod.rush_tds) + float(prod.rec_tds)
+            atd_mean = anytime_td_prob_from_td_mean(atd_td_mean)
             atd_std = max(0.08, math.sqrt(max(atd_mean * (1.0 - atd_mean), 1e-4)))
 
             role_conf, avail_conf = role_by_player.get(
@@ -15969,8 +15975,18 @@ def materialize_nfl_player_props_edges(
                         raw_model_mean=float(spine_mean),
                     )
                     if line is None:
-                        # Projection-only row: no book to beat.
-                        edge = {**edge, "tag": "PASS", "reason": "no_market_line"}
+                        # Projection-only row: no book to beat — honest empty fair juice.
+                        edge = {
+                            **edge,
+                            "tag": "PASS",
+                            "reason": "no_market_line",
+                            "fair_over_price": None,
+                            "fair_under_price": None,
+                            "edge_over": None,
+                            "edge_under": None,
+                            "over_prob": None,
+                            "under_prob": None,
+                        }
                 if edge.get("tag") == "PLAY":
                     play_tagged += 1
                 elif edge.get("tag") == "WATCH":

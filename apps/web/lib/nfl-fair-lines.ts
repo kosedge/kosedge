@@ -150,6 +150,10 @@ export type NflFairLineRow = {
 export type NflFairLinesResponse = {
   season: number;
   modelVersion: string;
+  /** Board generation / request stamp (UTC ISO). Prefer over stale odds_captured_at. */
+  asOf: string | null;
+  /** Latest market snapshot capture when books joined; may lag asOf. */
+  oddsAsOf: string | null;
   currentWeek: number;
   count: number;
   lines: NflFairLineRow[];
@@ -191,9 +195,7 @@ function toIsoOrNull(value: unknown): string | null {
   return null;
 }
 
-function normalizePublishTag(
-  value: unknown,
-): "PLAY" | "LEAN" | "PASS" | null {
+function normalizePublishTag(value: unknown): "PLAY" | "LEAN" | "PASS" | null {
   if (value == null) return null;
   const token = String(value).trim().toUpperCase();
   if (!token) return null;
@@ -239,9 +241,7 @@ function normalizeConfidence(raw: unknown): NflDecisionConfidence | null {
       o.factors && typeof o.factors === "object"
         ? (o.factors as Record<string, unknown>)
         : {},
-    unresolvedFlags: Array.isArray(flags)
-      ? flags.map((f) => String(f))
-      : [],
+    unresolvedFlags: Array.isArray(flags) ? flags.map((f) => String(f)) : [],
   };
 }
 
@@ -315,11 +315,15 @@ function normalizeDecisionResult(
   return {
     market,
     actionLabel,
-    pointGrade: String(o.point_grade ?? o.pointGrade ?? "PASS") as DecisionResult["pointGrade"],
+    pointGrade: String(
+      o.point_grade ?? o.pointGrade ?? "PASS",
+    ) as DecisionResult["pointGrade"],
     edgeMagnitude: toNumber(o.edge_magnitude ?? o.edgeMagnitude, 0),
     modelConfidence: conf,
     coverProb: toNumberOrNull(o.cover_prob ?? o.coverProb),
-    coverGrade: (o.cover_grade ?? o.coverGrade ?? null) as DecisionResult["coverGrade"],
+    coverGrade: (o.cover_grade ??
+      o.coverGrade ??
+      null) as DecisionResult["coverGrade"],
     playTo: playToRaw
       ? {
           sideOrTotal: String(
@@ -453,10 +457,14 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
       raw.model_total_mean ?? raw.handicap_total_mean ?? raw.total_mean,
     ),
     modelHomeWinProb: toNumberOrNull(
-      raw.model_home_win_prob ?? raw.handicap_home_win_prob ?? raw.home_win_prob,
+      raw.model_home_win_prob ??
+        raw.handicap_home_win_prob ??
+        raw.home_win_prob,
     ),
     modelAwayWinProb: toNumberOrNull(
-      raw.model_away_win_prob ?? raw.handicap_away_win_prob ?? raw.away_win_prob,
+      raw.model_away_win_prob ??
+        raw.handicap_away_win_prob ??
+        raw.away_win_prob,
     ),
     modelHomeMl: toNumberOrNull(
       raw.model_fair_home_ml ?? raw.handicap_fair_home_ml ?? raw.fair_home_ml,
@@ -478,9 +486,7 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
       raw.open_spread_home ?? raw.opening_spread_home,
     ),
     openTotal: toNumberOrNull(raw.open_total ?? raw.opening_total),
-    oddsCapturedAt: toIsoOrNull(
-      raw.odds_captured_at ?? raw.market_captured_at,
-    ),
+    oddsCapturedAt: toIsoOrNull(raw.odds_captured_at ?? raw.market_captured_at),
     bestSpreadHome: toNumberOrNull(raw.best_spread_home),
     bestTotal: toNumberOrNull(raw.best_total),
     bestSpreadBook:
@@ -545,6 +551,8 @@ export async function fetchNflFairLines(params: {
     return {
       season: params.season,
       modelVersion: "",
+      asOf: null,
+      oddsAsOf: null,
       currentWeek: 1,
       count: 0,
       lines: [],
@@ -592,6 +600,8 @@ export async function fetchNflFairLines(params: {
       return {
         season: params.season,
         modelVersion: "",
+        asOf: null,
+        oddsAsOf: null,
         currentWeek: 1,
         count: 0,
         lines: [],
@@ -607,6 +617,8 @@ export async function fetchNflFairLines(params: {
     const payload = (await response.json()) as {
       season?: number;
       model_version?: string;
+      as_of?: string;
+      odds_as_of?: string;
       current_week?: number;
       count?: number;
       slate_status?: string;
@@ -634,12 +646,13 @@ export async function fetchNflFairLines(params: {
     const apiSlateStatus =
       typeof payload.slate_status === "string" ? payload.slate_status : null;
     const slateStatus =
-      apiSlateStatus ??
-      (lines.length === 0 ? "no_slate" : "ok");
+      apiSlateStatus ?? (lines.length === 0 ? "no_slate" : "ok");
     return {
       season:
         typeof payload.season === "number" ? payload.season : params.season,
       modelVersion: String(payload.model_version ?? ""),
+      asOf: toIsoOrNull(payload.as_of) ?? new Date().toISOString(),
+      oddsAsOf: toIsoOrNull(payload.odds_as_of),
       currentWeek: toNumber(
         payload.current_week ?? payload.diagnostics?.current_week,
         1,
@@ -688,6 +701,8 @@ export async function fetchNflFairLines(params: {
     return {
       season: params.season,
       modelVersion: "",
+      asOf: null,
+      oddsAsOf: null,
       currentWeek: 1,
       count: 0,
       lines: [],

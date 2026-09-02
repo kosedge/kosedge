@@ -29,6 +29,19 @@ PACK_PATH = (
     / "src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json"
 )
 CAMP_DIR = Path(__file__).resolve().parents[3] / "content/writers/camp-desk-2026"
+# Hermetic desk day for accept/reject SLA tests (newer weekdays must not steal
+# latest_desk_only — Sep 1+ desks would hide CLE/HOU/ARI/BAL Aug 26 flags).
+CAMP_DESK_FIXTURE_DATE = "2026-08-26"
+
+
+def _camp_dir_aug26(tmp_path: Path) -> Path:
+    """Copy only the Aug 26 desk so scan_camp_sot_flags is date-stable."""
+    src = CAMP_DIR / f"{CAMP_DESK_FIXTURE_DATE}.json"
+    assert src.is_file(), f"missing fixture desk {src}"
+    dest = tmp_path / "camp-desk-fixture"
+    dest.mkdir(parents=True, exist_ok=True)
+    (dest / src.name).write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
+    return dest
 
 
 def _pre_accept_pack_bytes() -> str:
@@ -77,7 +90,7 @@ def test_note_text_cannot_change_means(tmp_path: Path) -> None:
     pack_copy.write_text(PACK_PATH.read_text(encoding="utf-8"), encoding="utf-8")
     before = pack_copy.read_text(encoding="utf-8")
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
@@ -94,7 +107,7 @@ def test_proposed_patch_never_auto_applies(tmp_path: Path) -> None:
     pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
     before = json.loads(before_text := pack_copy.read_text(encoding="utf-8"))
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
@@ -112,7 +125,7 @@ def test_queue_idempotent_no_duplicate_open_items(tmp_path: Path) -> None:
     qdir = tmp_path / "queue"
     log = tmp_path / "accepted.jsonl"
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=PACK_PATH,
         proposed_dir=qdir,
         accepted_log=log,
@@ -136,7 +149,7 @@ def test_dry_run_previews_without_writing(tmp_path: Path) -> None:
     before = pack_copy.read_text(encoding="utf-8")
 
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=qdir,
         accepted_log=log,
@@ -174,7 +187,7 @@ def test_accept_writes_pack_then_remats_once(tmp_path: Path) -> None:
     pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
 
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=qdir,
         accepted_log=log,
@@ -236,7 +249,7 @@ def test_remat_fail_rolls_back_and_is_not_accepted(tmp_path: Path) -> None:
     before = pack_copy.read_text(encoding="utf-8")
 
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=qdir,
         accepted_log=log,
@@ -274,7 +287,7 @@ def test_reject_and_no_change_write_nothing(tmp_path: Path) -> None:
     before = pack_copy.read_text(encoding="utf-8")
 
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=qdir,
         accepted_log=log,
@@ -300,7 +313,7 @@ def test_reject_and_no_change_write_nothing(tmp_path: Path) -> None:
 
 def test_scan_tiers_and_kei_deadline(tmp_path: Path) -> None:
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=PACK_PATH,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
@@ -320,7 +333,7 @@ def test_scan_tiers_and_kei_deadline(tmp_path: Path) -> None:
 
 def test_bal_season_ending_is_t1(tmp_path: Path) -> None:
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=PACK_PATH,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
@@ -332,7 +345,7 @@ def test_bal_season_ending_is_t1(tmp_path: Path) -> None:
 
 def test_never_drafts_depth_order(tmp_path: Path) -> None:
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=PACK_PATH,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
@@ -351,7 +364,7 @@ def test_never_drafts_depth_order(tmp_path: Path) -> None:
 def test_named_starter_and_committee_guards(tmp_path: Path) -> None:
     pack_copy = _write_pre_accept_pack(tmp_path / "pack.json")
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=pack_copy,
         proposed_dir=tmp_path / "queue",
         accepted_log=tmp_path / "accepted.jsonl",
@@ -379,12 +392,12 @@ def test_classify_tier_helpers() -> None:
     assert classify_tier(sot_flag="monitor bubble battle", proposed_patch=[]) == "T2"
 
 
-def test_proposal_schema() -> None:
+def test_proposal_schema(tmp_path: Path) -> None:
     flags = scan_camp_sot_flags(
-        camp_dir=CAMP_DIR,
+        camp_dir=_camp_dir_aug26(tmp_path),
         pack_path=PACK_PATH,
-        proposed_dir=Path("/tmp/unused-q"),
-        accepted_log=Path("/tmp/unused-a.jsonl"),
+        proposed_dir=tmp_path / "unused-q",
+        accepted_log=tmp_path / "unused-a.jsonl",
         now=datetime(2026, 8, 27, 20, 0, tzinfo=timezone.utc),
     )
     doc = proposal_doc_for_flag(flags[0])

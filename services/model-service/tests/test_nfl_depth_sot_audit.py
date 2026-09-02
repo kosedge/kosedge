@@ -61,8 +61,8 @@ def test_coaching_covers_32_named_hc() -> None:
 def test_known_conflicts_match_desk() -> None:
     rows, _ = load_packaged_depth_chart(2026)
     starters = _starters([r for r in rows if r["position"] == "QB"])
-    assert starters[("MIN", "QB")]["player_name"] == "Kyler Murray"
-    assert starters[("ARI", "QB")]["player_name"] == "Jacoby Brissett"
+    assert starters[("MIN", "QB")]["player_name"] == "J.J. McCarthy"
+    assert starters[("ARI", "QB")]["player_name"] == "Kyler Murray"
     assert starters[("ATL", "QB")]["player_name"] == "Tua Tagovailoa"
     assert starters[("MIA", "QB")]["player_name"] == "Malik Willis"
     assert starters[("WAS", "QB")]["player_name"] == "Jayden Daniels"
@@ -70,7 +70,7 @@ def test_known_conflicts_match_desk() -> None:
     assert starters[("SF", "QB")]["player_name"] == "Brock Purdy"
 
     kyler = [r for r in rows if r["player_name"] == "Kyler Murray"]
-    assert len(kyler) == 1 and kyler[0]["team"] == "MIN"
+    assert len(kyler) == 1 and kyler[0]["team"] == "ARI"
     tua = [r for r in rows if r["player_name"] == "Tua Tagovailoa"]
     assert len(tua) == 1 and tua[0]["team"] == "ATL"
     willis = [r for r in rows if r["player_name"] == "Malik Willis"]
@@ -140,7 +140,7 @@ def test_engine_intel_continuity_agree_on_min() -> None:
     min_qb1 = next(
         r for r in universe.rosters["MIN"] if r.position == "QB" and r.depth_order == 1
     )
-    assert min_qb1.player_name == "Kyler Murray"
+    assert min_qb1.player_name == "J.J. McCarthy"
     intel, meta = packaged_depth_intel_rows(season=2026, week=1, team="MIN")
     assert meta["roster_source"] == ROSTER_SOURCE_PACKAGED
     intel_qb1 = next(
@@ -148,7 +148,8 @@ def test_engine_intel_continuity_agree_on_min() -> None:
     )
     assert intel_qb1["player_name"] == min_qb1.player_name
     qb1_map = fetch_current_qb1(None, season=2026, as_of_week=1)
-    assert qb1_map["MIN"][1] == "Kyler Murray"
+    assert qb1_map["MIN"][1] == "J.J. McCarthy"
+    assert qb1_map["ARI"][1] == "Kyler Murray"
     assert qb1_map["ATL"][1] == "Tua Tagovailoa"
     assert qb1_map["MIA"][1] == "Malik Willis"
 
@@ -191,7 +192,7 @@ def test_smoke_min_box_uses_pack_qb1() -> None:
         for p in min_players
         if p.get("usage_role") == "QB1" or p.get("position") == "QB"
     )
-    assert qb["player_name"] == "Kyler Murray"
+    assert qb["player_name"] == "J.J. McCarthy"
     assert proj.notes.get("schedule_match") == "on_loaded_schedule"
 
 

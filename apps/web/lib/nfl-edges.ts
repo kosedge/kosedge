@@ -164,13 +164,51 @@ export function deskEdgeFromPropRow(
 
   const over = row.edgeOver;
   const under = row.edgeUnder;
-  const overAbs = over !== null ? Math.abs(over) : -1;
-  const underAbs = under !== null ? Math.abs(under) : -1;
-  if (overAbs < minProbEdge && underAbs < minProbEdge) return null;
+  // Lean follows model − line: positive Over edge → Over; positive Under → Under.
+  // Never pick Over on a symmetric abs-tie when the model is below the book.
+  const overPos = over !== null && over > 0 ? over : -1;
+  const underPos = under !== null && under > 0 ? under : -1;
+  if (overPos < minProbEdge && underPos < minProbEdge) {
+    // Fallback: signed model vs line when edge probs are tied/missing.
+    if (
+      row.modelMean !== null &&
+      row.line !== null &&
+      Math.abs(row.modelMean - row.line) >= 1e-9
+    ) {
+      const takeOver = row.modelMean > row.line;
+      const signed =
+        takeOver && over !== null
+          ? over
+          : !takeOver && under !== null
+            ? under
+            : row.modelMean - row.line;
+      if (Math.abs(signed) < minProbEdge) return null;
+      const kickoff =
+        lookupCanonicalNflGameForTeam({
+          week: row.week,
+          teamAbbr: row.team,
+        })?.kickoff_utc ?? null;
+      return {
+        id: `${row.playerId ?? row.playerName}-${row.marketKey}-${row.week}`,
+        marketType: "props",
+        matchupOrPlayer: row.playerName,
+        detail: `${propMarketLabel(row.marketKey)} · ${row.team}`,
+        kosedgeLine: formatPropNumber(row.modelMean),
+        marketLine: formatPropNumber(row.line),
+        edge: signed,
+        edgeDisplay: formatEdgeProb(signed),
+        side: takeOver ? "Over" : "Under",
+        confidence: row.confidence,
+        kickoff,
+        source: "props",
+      };
+    }
+    return null;
+  }
 
-  const takeOver = overAbs >= underAbs;
+  const takeOver = overPos >= underPos && overPos > 0;
   const edge = takeOver ? (over ?? 0) : (under ?? 0);
-  if (Math.abs(edge) < minProbEdge) return null;
+  if (edge <= 0 || Math.abs(edge) < minProbEdge) return null;
 
   const kickoff =
     lookupCanonicalNflGameForTeam({

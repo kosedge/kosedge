@@ -329,8 +329,8 @@ export default function SeasonEngineGameBoxesClient({
             {pending ? "Simulating…" : "Project box scores"}
           </button>
           <p className="text-xs text-kos-text/55">
-            Yards median + {TYPICAL_RANGE_LABEL.toLowerCase()} · TDs as P(TD) +
-            expected rate
+            Yards: model mean + {TYPICAL_RANGE_LABEL.toLowerCase()} · TDs as
+            P(TD) + expected rate
           </p>
         </div>
       </section>
@@ -614,8 +614,8 @@ function TeamBoxTable({
           <div>
             <h3 className="text-sm font-semibold text-kos-text">{title}</h3>
             <p className="mt-0.5 text-[11px] text-kos-text/45">
-              Yards: median + {TYPICAL_RANGE_LABEL.toLowerCase()}. TDs: P(TD) +
-              expected rate (not median tails).{" "}
+              Yards: model mean (production spine) +{" "}
+              {TYPICAL_RANGE_LABEL.toLowerCase()}. TDs: P(TD) + expected rate.{" "}
               {formatDepthBadge(nReplicates ?? NFL_DEFAULT_N_GAME_BOX)}.
             </p>
           </div>
@@ -701,8 +701,12 @@ function TeamBoxTable({
                                   </div>
                                 );
                               }
+                              // Spine mean (point_estimate) is SoT with Props.
+                              // MC p50 is research-only — never a silent second number.
                               const value =
-                                dist?.p50 ?? p.point_estimate?.[stat];
+                                p.point_estimate?.[stat] ??
+                                dist?.mean ??
+                                dist?.p50;
                               return (
                                 <div key={stat}>
                                   {formatStatNumber(value ?? 0)}

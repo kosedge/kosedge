@@ -24,23 +24,22 @@ def _qb_depth(rows, team: str):
     )
 
 
-def test_packaged_depth_sot_kyler_on_min_not_ari() -> None:
+def test_packaged_depth_sot_kyler_on_ari_mccarthy_min() -> None:
     rows, meta = load_packaged_depth_chart(2026)
     assert meta["roster_source"] == ROSTER_SOURCE_PACKAGED
 
     kyler = [r for r in rows if "Kyler Murray" in str(r.get("player_name") or "")]
     assert len(kyler) == 1
-    assert kyler[0]["team"] == "MIN"
+    assert kyler[0]["team"] == "ARI"
     assert int(kyler[0]["depth_order"]) == 1
 
     ari_qbs = _qb_depth(rows, "ARI")
     assert ari_qbs
-    assert ari_qbs[0]["player_name"] == "Jacoby Brissett"
-    assert all("Kyler" not in r["player_name"] for r in ari_qbs)
+    assert ari_qbs[0]["player_name"] == "Kyler Murray"
 
     min_qbs = _qb_depth(rows, "MIN")
-    assert min_qbs[0]["player_name"] == "Kyler Murray"
-    assert min_qbs[1]["player_name"] == "J.J. McCarthy"
+    assert min_qbs[0]["player_name"] == "J.J. McCarthy"
+    assert all("Kyler" not in r["player_name"] for r in min_qbs)
 
 
 def test_engine_universe_reads_sot_qb_assignments() -> None:
@@ -54,12 +53,12 @@ def test_engine_universe_reads_sot_qb_assignments() -> None:
     ari_qb1 = next(
         r for r in universe.rosters["ARI"] if r.position == "QB" and r.depth_order == 1
     )
-    assert min_qb1.player_name == "Kyler Murray"
+    assert min_qb1.player_name == "J.J. McCarthy"
     assert min_qb1.team == "MIN"
-    assert ari_qb1.player_name == "Jacoby Brissett"
+    assert ari_qb1.player_name == "Kyler Murray"
     assert ari_qb1.team == "ARI"
     assert not any(
-        "Kyler" in r.player_name for r in universe.rosters["ARI"] if r.position == "QB"
+        "Kyler" in r.player_name for r in universe.rosters["MIN"] if r.position == "QB"
     )
 
 
@@ -69,11 +68,11 @@ def test_resolve_season_universe_offline_uses_packaged_sot() -> None:
     min_qb1 = next(
         r for r in universe.rosters["MIN"] if r.position == "QB" and r.depth_order == 1
     )
-    assert min_qb1.player_name == "Kyler Murray"
+    assert min_qb1.player_name == "J.J. McCarthy"
 
 
 def test_db_loader_prefers_packaged_sot_over_stale_weekly(monkeypatch) -> None:
-    """Stale DB weekly Kyler→ARI must not win when packaged SoT exists."""
+    """Stale DB weekly Kyler→MIN must not win when packaged SoT has ARI."""
 
     class _Row:
         def __init__(self, mapping):
@@ -99,12 +98,12 @@ def test_db_loader_prefers_packaged_sot_over_stale_weekly(monkeypatch) -> None:
         def execute(self, statement, params=None):
             sql = str(statement)
             if "nfl_dp_depth_chart_weekly" in sql and "DISTINCT ON" in sql:
-                # Deliberately wrong: Kyler on ARI (pre-SoT hygiene regression).
+                # Deliberately wrong vs current SoT: Kyler on MIN.
                 return _Result(
                     [
                         _Row(
                             {
-                                "team": "ARI",
+                                "team": "MIN",
                                 "player_name": "Kyler Murray",
                                 "position": "QB",
                                 "depth_order": 1,
@@ -114,12 +113,12 @@ def test_db_loader_prefers_packaged_sot_over_stale_weekly(monkeypatch) -> None:
                         ),
                         _Row(
                             {
-                                "team": "MIN",
-                                "player_name": "J.J. McCarthy",
+                                "team": "ARI",
+                                "player_name": "Jacoby Brissett",
                                 "position": "QB",
                                 "depth_order": 1,
                                 "role_confidence": 0.9,
-                                "player_id": "00-0039923",
+                                "player_id": "00-0033119",
                             }
                         ),
                     ]
@@ -150,8 +149,8 @@ def test_db_loader_prefers_packaged_sot_over_stale_weekly(monkeypatch) -> None:
     ari_qb1 = next(
         r for r in universe.rosters["ARI"] if r.position == "QB" and r.depth_order == 1
     )
-    assert min_qb1.player_name == "Kyler Murray"
-    assert ari_qb1.player_name == "Jacoby Brissett"
+    assert min_qb1.player_name == "J.J. McCarthy"
+    assert ari_qb1.player_name == "Kyler Murray"
 
 
 def test_intel_depth_matches_engine_sot() -> None:
@@ -160,13 +159,13 @@ def test_intel_depth_matches_engine_sot() -> None:
     qb1 = next(
         r for r in depth_rows if r["position"] == "QB" and int(r["depth_order"]) == 1
     )
-    assert qb1["player_name"] == "Kyler Murray"
+    assert qb1["player_name"] == "J.J. McCarthy"
 
     ari_rows, _ = packaged_depth_intel_rows(season=2026, week=1, team="ARI")
     ari_qb1 = next(
         r for r in ari_rows if r["position"] == "QB" and int(r["depth_order"]) == 1
     )
-    assert ari_qb1["player_name"] == "Jacoby Brissett"
+    assert ari_qb1["player_name"] == "Kyler Murray"
 
 
 def test_was_daily_intel_20260809_depth_sot() -> None:
