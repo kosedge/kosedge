@@ -123,18 +123,6 @@ def _index_keys_for_player(
     return out
 
 
-def _empty_means() -> Dict[str, float]:
-    return {
-        "pass_yards": 0.0,
-        "rush_yards": 0.0,
-        "receiving_yards": 0.0,
-        "receptions": 0.0,
-        "pass_tds": 0.0,
-        "rush_tds": 0.0,
-        "rec_tds": 0.0,
-    }
-
-
 def _index_means(
     out: Dict[str, Dict[str, float]],
     *,
@@ -194,6 +182,7 @@ def load_spine_means_for_game(
     row_count = 0
 
     try:
+        # Baselines have pass/rush/rec_tds_mean — NOT total_tds_mean (box sims only).
         # CAST AS text[] — bare ANY(:teams) returns 0 rows under psycopg (live FAIL).
         rows = session.execute(
             text(
@@ -201,7 +190,6 @@ def load_spine_means_for_game(
                 SELECT player_name, player_uid, team, position,
                        pass_yards_mean, rush_yards_mean, receiving_yards_mean,
                        receptions_mean, pass_tds_mean, rush_tds_mean, rec_tds_mean,
-                       total_tds_mean,
                        pass_yards_std, rush_yards_std, receiving_yards_std, receptions_std
                 FROM nfl_player_projection_baselines
                 WHERE season = :season
@@ -213,6 +201,10 @@ def load_spine_means_for_game(
         ).fetchall()
     except Exception as exc:
         meta["error"] = f"baseline_query_failed:{type(exc).__name__}:{exc}"
+        try:
+            session.rollback()
+        except Exception:
+            pass
         rows = []
 
     for row in rows or []:
@@ -258,13 +250,20 @@ def load_spine_means_for_game(
                 },
             ).fetchall()
         except Exception as exc:
+            try:
+                session.rollback()
+            except Exception:
+                pass
             meta["error"] = (
-                meta.get("error")
-                or f"props_edges_fallback_failed:{type(exc).__name__}:{exc}"
+                f"{meta.get('error') or 'baseline_empty'};"
+                f"props_edges_fallback_failed:{type(exc).__name__}:{exc}"
             )
             edge_rows = []
 
+        # Sparse means only — never seed missing markets at 0.0 (that would
+        # wipe live box yards/recs for stats not present in props edges).
         by_player: Dict[Tuple[str, str], Dict[str, float]] = {}
+        uids: Dict[Tuple[str, str], Optional[str]] = {}
         for erow in edge_rows or []:
             team = _norm_team(getattr(erow, "team", None))
             name = str(getattr(erow, "player_name", None) or "")
@@ -273,23 +272,23 @@ def load_spine_means_for_game(
             if not field or not name:
                 continue
             key = (team, name)
-            bucket = by_player.setdefault(key, _empty_means())
             try:
-                bucket[field] = float(getattr(erow, "model_mean"))
+                by_player.setdefault(key, {})[field] = float(getattr(erow, "model_mean"))
             except (TypeError, ValueError):
                 continue
             uid = getattr(erow, "player_uid", None)
             if uid is not None:
-                bucket["_uid"] = str(uid)  # type: ignore[assignment]
+                uids[key] = str(uid)
 
         for (team, name), means in by_player.items():
-            uid = means.pop("_uid", None)  # type: ignore[arg-type]
+            if not means:
+                continue
             row_count += 1
             _index_means(
                 out,
                 team=team,
                 player_name=name,
-                player_uid=uid,
+                player_uid=uids.get((team, name)),
                 means=means,
             )
         if row_count > 0:
@@ -332,7 +331,10 @@ def overlay_spine_means_on_players(
         for box_stat, spine_field in _SPINE_STAT_MAP.items():
             if box_stat not in point and box_stat not in dists:
                 continue
-            val = spine.get(spine_field)
+            # Absent key = market never loaded; do not treat as 0.0 overwrite.
+            if spine_field not in spine:
+                continue
+            val = spine[spine_field]
             if val is None:
                 continue
             point[box_stat] = float(val)

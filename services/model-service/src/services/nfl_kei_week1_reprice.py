@@ -1282,6 +1282,32 @@ def apply_week1_kei_reprice(
     # Remat game-card path: deterministic modifiers from explicit fields only.
     # Missing weather ⇒ no KEI weather change. Notes cannot write these fields.
     weather_clear = True
+    # Fail-closed: known international matchups never take the legacy LA/SoFi path.
+    if game_card is None:
+        try:
+            from src.services.nfl_week1_game_cards import (
+                WEEK1_INTERNATIONAL_SITES,
+                _empty_card,
+                _norm_product_abbr,
+                _with_venue,
+            )
+
+            home_p = _norm_product_abbr(home_abbr)
+            away_p = _norm_product_abbr(away_abbr)
+            for site in WEEK1_INTERNATIONAL_SITES:
+                if (
+                    _norm_product_abbr(site["home_abbr"]) == home_p
+                    and _norm_product_abbr(site["away_abbr"]) == away_p
+                ):
+                    game_card = _with_venue(
+                        _empty_card(roof="outdoor"),
+                        venue=str(site["venue"]),
+                        location=str(site["location"]),
+                        international=True,
+                    )
+                    break
+        except Exception:
+            pass
     if game_card is not None:
         card = parse_game_card(game_card)
         rw = apply_rest_weather_game_card(card=card)

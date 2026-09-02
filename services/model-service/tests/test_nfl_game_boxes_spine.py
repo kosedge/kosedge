@@ -162,6 +162,89 @@ def test_overlay_hits_player_key_ne_qb1_drakemaye() -> None:
     assert abs(float(players[0]["point_estimate"]["pass_yards"]) - 216.164) < 0.05
 
 
+def test_props_edges_fallback_does_not_zero_missing_markets() -> None:
+    """Bugbot: sparse edges must not seed rush/rec at 0.0 and wipe live box stats."""
+    edge_pass = SimpleNamespace(
+        player_name="D.Maye",
+        player_uid=None,
+        team="NE",
+        market_key="pass_yds",
+        model_mean=216.2,
+    )
+    payload = {
+        "season": 2026,
+        "week": 1,
+        "home_team": "SEA",
+        "away_team": "NE",
+        "notes": {},
+        "players": [
+            {
+                "player_key": "NE-QB1-DrakeMaye",
+                "player_name": "Drake Maye",
+                "team": "NE",
+                "position": "QB",
+                "point_estimate": {
+                    "pass_yards": 160.0,
+                    "rush_yards": 15.8,
+                    "rec_yards": 0.0,
+                    "receptions": 0.0,
+                },
+                "distributions": {
+                    "pass_yards": {"mean": 160.0, "p50": 160.0},
+                    "rush_yards": {"mean": 15.8, "p50": 15.8},
+                },
+            }
+        ],
+    }
+
+    class _Session:
+        def __init__(self) -> None:
+            self.calls = 0
+
+        def execute(self, *_a, **_k):
+            self.calls += 1
+            # First call: baselines empty → fallback to props edges.
+            if self.calls == 1:
+                return SimpleNamespace(fetchall=lambda: [])
+            return SimpleNamespace(fetchall=lambda: [edge_pass])
+
+        def rollback(self) -> None:
+            return None
+
+    meta = apply_spine_overlay_to_game_boxes_payload(payload, _Session())
+    assert meta["source"] == "nfl_player_prop_model_edges"
+    assert meta["overlay_count"] == 1
+    pe = payload["players"][0]["point_estimate"]
+    assert pe["pass_yards"] == 216.2
+    # Missing rush_yds / rec markets must leave live box values alone.
+    assert pe["rush_yards"] == 15.8
+    assert pe["receptions"] == 0.0
+    assert payload["spine_version"] == PRODUCTION_VERSION
+
+
+def test_overlay_skips_absent_spine_fields() -> None:
+    players = [
+        {
+            "player_name": "Drake Maye",
+            "team": "NE",
+            "position": "QB",
+            "point_estimate": {"pass_yards": 160.0, "rush_yards": 15.8},
+            "distributions": {
+                "pass_yards": {"mean": 160.0, "p50": 160.0},
+                "rush_yards": {"mean": 15.8, "p50": 15.8},
+            },
+        }
+    ]
+    spine = {
+        k: {"pass_yards": 216.2}  # rush intentionally absent — not 0.0
+        for k in _index_keys_for_player(team="NE", player_name="Drake Maye")
+    }
+    hit = overlay_spine_means_on_players(players, spine)
+    assert hit == 1
+    assert players[0]["point_estimate"]["pass_yards"] == 216.2
+    assert players[0]["point_estimate"]["rush_yards"] == 15.8
+
+
 def test_maye_ne_sea_overlay_count_must_not_be_zero() -> None:
     """Live FAIL lock: Maye NE@SEA must overlay; overlay_count==0 is a hard fail."""
     maye_row = SimpleNamespace(

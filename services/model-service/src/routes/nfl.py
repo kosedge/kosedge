@@ -3832,105 +3832,35 @@ def nfl_fair_lines(
     except Exception:
         week1_pack = None
     # Week-1 rest/weather cards from canonical venue (Melbourne ≠ SoFi).
-    # Never fall through to legacy same-coast / home-stadium Visual Crossing when
-    # the card source throws — retry without weather, then schedule-only stubs.
+    # Railway image lacks apps/web — build_week1_game_cards bakes Melbourne and
+    # indexes (LAR, SF) the same way this loop looks up cards. Never legacy LA.
     week1_game_cards: Dict[Tuple[str, str], Dict[str, Any]] = {}
     week1_kickoffs: Dict[Tuple[str, str], str] = {}
     week1_card_source = "missing"
-
-    def _store_week1_card(g: Any, card: Dict[str, Any]) -> None:
-        home_k = _nfl_team_to_abbr(getattr(g, "home_team", None)) or str(
-            getattr(g, "home_team", "") or ""
-        )
-        away_k = _nfl_team_to_abbr(getattr(g, "away_team", None)) or str(
-            getattr(g, "away_team", "") or ""
-        )
-        if not home_k or not away_k:
-            return
-        # Honest international label for travel chips (not SF→LA same-coast).
-        venue = getattr(g, "venue", None) or card.get("_venue")
-        location = getattr(g, "location", None) or card.get("_location")
-        if venue and location:
-            card["_venue"] = str(venue)
-            card["_location"] = str(location)
-            card["_international"] = bool(
-                str(location).lower()
-                in {
-                    "melbourne",
-                    "london",
-                    "rio de janeiro",
-                    "munich",
-                    "mexico city",
-                    "sao paulo",
-                    "frankfurt",
-                }
-                or "cricket" in str(venue).lower()
-                or "wembley" in str(venue).lower()
-                or "tottenham" in str(venue).lower()
-            )
-        week1_game_cards[(home_k, away_k)] = card
-        if home_k in {"LA", "LAR"}:
-            week1_game_cards[("LAR" if home_k == "LA" else "LA", away_k)] = card
-        kickoff = getattr(g, "kickoff_utc", None)
-        if kickoff:
-            week1_kickoffs[(home_k, away_k)] = str(kickoff)
-            if home_k in {"LA", "LAR"}:
-                week1_kickoffs[("LAR" if home_k == "LA" else "LA", away_k)] = str(
-                    kickoff
-                )
-
     try:
-        from src.services.nfl_rest_weather_feed import (
-            load_schedule_games,
-            source_week_game_cards,
-        )
+        from src.services.nfl_week1_game_cards import build_week1_game_cards
 
-        _cards = []
-        try:
-            _cards, _card_meta = source_week_game_cards(
-                week=1, season=int(season), fetch_weather=True
+        _w1_index = build_week1_game_cards(season=int(season), fetch_weather=True)
+        week1_game_cards = dict(_w1_index.cards)
+        week1_kickoffs = dict(_w1_index.kickoffs)
+        week1_card_source = str(_w1_index.source)
+        if _w1_index.errors:
+            log.warning(
+                "NFL Week 1 game-card errors source=%s errors=%s",
+                week1_card_source,
+                _w1_index.errors[:5],
             )
-            week1_card_source = "schedule+weather"
-        except Exception:
-            log.exception(
-                "NFL Week 1 game-card weather fetch failed; retrying without weather"
-            )
-            _cards, _card_meta = source_week_game_cards(
-                week=1, season=int(season), fetch_weather=False
-            )
-            week1_card_source = "schedule_no_weather"
-        for sourced in _cards:
-            _store_week1_card(sourced.game, dict(sourced.card))
     except Exception:
-        log.exception(
-            "NFL Week 1 game-card source failed; building schedule-only cards "
-            "(no legacy same-coast / LA weather)"
-        )
+        log.exception("NFL Week 1 game-card index failed; injecting Melbourne bake-in")
         try:
-            from src.services.nfl_rest_weather_feed import load_schedule_games
-            from src.services.nfl_stadium_roof_table import resolve_roof
+            from src.services.nfl_week1_game_cards import build_week1_game_cards
 
-            _games, _ = load_schedule_games(int(season))
-            for g in _games:
-                if int(g.week) != 1:
-                    continue
-                roof = resolve_roof(home=g.home_team, venue=g.venue)
-                _store_week1_card(
-                    g,
-                    {
-                        "days_rest_home": None,
-                        "days_rest_away": None,
-                        "short_week": None,
-                        "timezone_shift": 0.0,
-                        "roof": roof,
-                        "wind_mph": None,
-                        "precip": None,
-                        "temp_f": None,
-                    },
-                )
-            week1_card_source = "schedule_stub"
+            _w1_index = build_week1_game_cards(season=int(season), fetch_weather=False)
+            week1_game_cards = dict(_w1_index.cards)
+            week1_kickoffs = dict(_w1_index.kickoffs)
+            week1_card_source = str(_w1_index.source)
         except Exception:
-            log.exception("NFL Week 1 schedule-only card stub failed")
+            log.exception("NFL Week 1 bake-in failed")
             week1_card_source = "failed"
     kei_reprice_applied_games = 0
     for row in rows:
