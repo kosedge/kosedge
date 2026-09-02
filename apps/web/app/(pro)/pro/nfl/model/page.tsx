@@ -10,7 +10,7 @@ const TOOLS = [
   {
     href: "/pro/nfl/game-boxes",
     title: "Game Boxes",
-    body: "Projected QB/RB/WR/TE boxes for a selected matchup — median with typical range (low–high), optional star-out scenario.",
+    body: "Projected QB/RB/WR/TE boxes for a selected matchup — model mean with typical range (low–high), optional star-out scenario.",
   },
   {
     href: "/pro/nfl/survivor",

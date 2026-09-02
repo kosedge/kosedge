@@ -21,7 +21,7 @@ export default async function NflGameBoxesPage() {
       sportName="NFL"
       base="/pro/nfl"
       title="Game Boxes"
-      summary="Projected skill-player boxes for a matchup — median with typical range."
+      summary="Projected skill-player boxes for a matchup — model mean with typical range."
       badge="Game Boxes"
       primaryHref="/pro/nfl/survivor"
       primaryLabel="Open Survivor"
