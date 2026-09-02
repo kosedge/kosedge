@@ -286,38 +286,55 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
     ],
   },
   nhl: {
-    pathLabel: "Fair Lines → Edges → Goalie Desk",
+    pathLabel: "Edge Board → Fantasy → Props dark",
     pathSubtitle:
-      "NHL desk path: Fair Lines → Edges → Goalie confirmation, then totals execution.",
+      "NHL desk path: Edge Board (Ch4 KEI) → Fantasy (Ch5/Ch7) → Props dark (Ch6). No props PLAY.",
     cards: [
-      stubFairLines("nhl", "moneyline / total"),
-      stubEdges(
-        "nhl",
-        "ML and total edges once the NHL model board is connected.",
-      ),
-      stubThirdCard(
-        "nhl",
-        "Goalie Desk",
-        "Starter confirmation and total sensitivity for ML and totals research.",
-        "/pro/nhl/goalies",
-      ),
+      {
+        href: "/edge-board/nhl",
+        title: "Edge Board",
+        description:
+          "Open / Best / KEI for the posted slate. Tags stay PASS without trusted Best.",
+        cta: "Open edge board →",
+        accent: "gold",
+        status: "active",
+      },
+      {
+        href: "/pro/nhl/fantasy",
+        title: "Fantasy",
+        description:
+          "Season and slate ranks from Ch5 PlayerProjection — same means, scored.",
+        cta: "Open fantasy →",
+        accent: "green",
+        status: "active",
+      },
+      {
+        href: "/pro/nhl/props",
+        title: "Props (dark)",
+        description:
+          "Proj vs trusted Best only. Zero PLAY / LEAN until a later tag PR.",
+        cta: "Open props →",
+        accent: "neutral",
+        status: "active",
+      },
     ],
     footerCards: [
       ...SHARED_FOOTER("nhl"),
+      {
+        href: "/pro/nhl/goalies",
+        title: "Goalie Desk",
+        description:
+          "Starter confirmation and total sensitivity for ML and totals research.",
+        cta: "Open goalie desk →",
+        accent: "gold",
+      },
       {
         href: "/odds/nhl",
         title: "Compare Odds",
         description:
           "Side-by-side moneylines and totals across books for the NHL slate.",
         cta: "Open odds compare →",
-        accent: "gold",
-      },
-      {
-        href: "/edge-board/nhl",
-        title: "Public Edge Board",
-        description: "Open vs best prices with KEI and directional edge tags.",
-        cta: "Open edge board →",
-        accent: "green",
+        accent: "neutral",
       },
     ],
   },
