@@ -113,10 +113,7 @@ function needScore(
   }
 
   if ((needs[pos] ?? 0) > 0) return 34 + (needs[pos] ?? 0) * 6;
-  if (
-    (needs.FLEX ?? 0) > 0 &&
-    ["RB", "WR", "TE"].includes(pos)
-  ) {
+  if ((needs.FLEX ?? 0) > 0 && ["RB", "WR", "TE"].includes(pos)) {
     return 20;
   }
 
@@ -180,7 +177,8 @@ export function scoreCpuCandidate(input: {
         : market <= overall + 24
           ? 8
           : 0;
-  const reachPenalty = market > overall + 35 ? -18 : market > overall + 22 ? -8 : 0;
+  const reachPenalty =
+    market > overall + 35 ? -18 : market > overall + 22 ? -8 : 0;
 
   const qbCount = countPos(roster, "QB");
 
@@ -237,9 +235,7 @@ export function chooseCpuPlayer(input: {
 
   // Score a bounded pool for speed — top ~80 by model rank among remaining.
   // Hard-filter absurd ADP reaches before scoring so lottery names never win ties.
-  const byRank = [...available].sort(
-    (a, b) => a.rankOverall - b.rankOverall,
-  );
+  const byRank = [...available].sort((a, b) => a.rankOverall - b.rankOverall);
   const topPool = byRank.slice(0, 80);
 
   // K/DST (and any other required hole) sit at board end — keep them eligible
@@ -273,10 +269,7 @@ export function chooseCpuPlayer(input: {
       }),
   );
 
-  const scoringPool =
-    pool.length > 0
-      ? pool
-      : byRank.slice(0, 20);
+  const scoringPool = pool.length > 0 ? pool : byRank.slice(0, 20);
 
   let best: FantasyDeskRow | null = null;
   let bestScore = -Infinity;

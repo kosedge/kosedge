@@ -186,12 +186,7 @@ describe("value-aware recommendations", () => {
       expect(scored.timing).toBe("reach");
       expect(scored.timingHint).toMatch(/Reach/i);
 
-      const fullReachPenalty = reachPenalty(
-        eliteTe,
-        24,
-        0,
-        0,
-      );
+      const fullReachPenalty = reachPenalty(eliteTe, 24, 0, 0);
       const reducedReach = reachPenalty(
         eliteTe,
         24,

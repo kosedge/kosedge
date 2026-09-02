@@ -167,7 +167,21 @@ describe("mock draft engine", () => {
         ...r,
         playerId: `u${i}`,
         medianPoints: 220 - i,
-        position: ["QB", "RB", "RB", "WR", "WR", "TE", "WR", "RB", "WR", "RB", "QB", "TE", "WR"][i]!,
+        position: [
+          "QB",
+          "RB",
+          "RB",
+          "WR",
+          "WR",
+          "TE",
+          "WR",
+          "RB",
+          "WR",
+          "RB",
+          "QB",
+          "TE",
+          "WR",
+        ][i]!,
       }),
     );
 

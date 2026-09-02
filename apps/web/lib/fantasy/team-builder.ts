@@ -59,9 +59,7 @@ export function rosterNeeds(
   }
 
   const wantK =
-    board == null || boardHasPosition(board, "K")
-      ? DEFAULT_ROSTER_NEEDS.K!
-      : 0;
+    board == null || boardHasPosition(board, "K") ? DEFAULT_ROSTER_NEEDS.K! : 0;
   const wantDst =
     board == null || boardHasPosition(board, "DST")
       ? DEFAULT_ROSTER_NEEDS.DST!

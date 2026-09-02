@@ -161,7 +161,9 @@ describe("team builder", () => {
       row({ playerId: "dst", position: "DST", medianPoints: 110 }),
     ];
     // Full skill starters, missing only K + DST — historically inflated to B.
-    const almostFull = board.filter((r) => r.position !== "K" && r.position !== "DST");
+    const almostFull = board.filter(
+      (r) => r.position !== "K" && r.position !== "DST",
+    );
     const needs = rosterNeeds(almostFull, board);
     expect(needs.K).toBe(1);
     expect(needs.DST).toBe(1);

@@ -106,7 +106,9 @@ function vorTerm(row: FantasyDeskRow): number {
 }
 
 function needTerm(row: FantasyDeskRow, needs: Record<string, number>): number {
-  return positionalNeedScore(row, needs) * VALUE_AWARE_WEIGHTS.needPointsPerSlot;
+  return (
+    positionalNeedScore(row, needs) * VALUE_AWARE_WEIGHTS.needPointsPerSlot
+  );
 }
 
 function modelAheadReachPenalty(row: FantasyDeskRow): number {
@@ -126,10 +128,7 @@ function positionalNeedScore(
   const pos = row.position.toUpperCase();
   const direct = needs[pos] ?? 0;
   if (direct > 0) return direct;
-  if (
-    (needs.FLEX ?? 0) > 0 &&
-    ["RB", "WR", "TE"].includes(pos)
-  ) {
+  if ((needs.FLEX ?? 0) > 0 && ["RB", "WR", "TE"].includes(pos)) {
     return 1;
   }
   return 0;
@@ -306,11 +305,7 @@ export function computeTiming(
 
   // Wait can fire past the ±12 take/reach cap — that's the whole point of
   // "model 18 / ADP 35". Lottery ADP (beyond three rounds) stays unlabeled.
-  if (
-    row.valueDelta != null &&
-    row.valueDelta >= 8 &&
-    inWaitHorizon
-  ) {
+  if (row.valueDelta != null && row.valueDelta >= 8 && inWaitHorizon) {
     return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
   }
 
@@ -371,7 +366,9 @@ export function computeTiming(
 }
 
 /** Reach badge / desk tag — model behind ADP by ≥8 (same as valueLabel). */
-export function isReachTagged(row: Pick<FantasyDeskRow, "valueDelta">): boolean {
+export function isReachTagged(
+  row: Pick<FantasyDeskRow, "valueDelta">,
+): boolean {
   return (
     row.valueDelta != null &&
     Number.isFinite(row.valueDelta) &&
@@ -459,10 +456,7 @@ export function draftAdviceClass(timing: SuggestionTiming): string {
  * Builder/Mock keep the full scorer (need + pick number).
  */
 export function deskDraftAdvice(
-  row: Pick<
-    FantasyDeskRow,
-    "adp" | "valueDelta" | "adpMatchConfidence"
-  >,
+  row: Pick<FantasyDeskRow, "adp" | "valueDelta" | "adpMatchConfidence">,
 ): { timing: SuggestionTiming; label: string } {
   if (
     row.adp == null ||
