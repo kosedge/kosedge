@@ -110,7 +110,9 @@ describe("desk-handicaps loader", () => {
     expect(sam.bodyMarkdown).toMatch(/PLAY TXST \+30\.5/);
     expect(sam.bodyMarkdown).toMatch(/LEAN MRSH \+24\.5/);
     expect(sam.bodyMarkdown).not.toMatch(/64\.94/);
-    expect(sam.bodyMarkdown).not.toMatch(/sit(?:ting)? Toledo|SIT TOL|Toledo 0\.00/i);
+    expect(sam.bodyMarkdown).not.toMatch(
+      /sit(?:ting)? Toledo|SIT TOL|Toledo 0\.00/i,
+    );
     expect(sam.bodyMarkdown).toMatch(/No Toledo sit/i);
     const samNotes = extractHandicappersNotes(sam.bodyMarkdown);
     const samRut = samNotes.find((n) =>
