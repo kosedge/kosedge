@@ -1,8 +1,9 @@
-"""NHL season engine package (Ch1–Ch2 + Ch5 PlayerProjection)."""
+"""NHL season engine package (Ch1–Ch3 + Ch5 PlayerProjection)."""
 
 from src.services.nhl_season_engine.priors import (
     ENGINE_VERSION,
     NHL_GOALIE_TANDEM_SHARE_SUM,
+    NHL_SITUATION_GOAL_CAP,
     NHL_TEAM_CARRY_SHRINK,
     NHL_TEAM_REBASE_RESIDUAL_CAP,
     NHL_TOI_GRID_SKATER_MINUTES,
@@ -37,11 +38,23 @@ from src.services.nhl_season_engine.player_projection import (
     load_player_projection_pack,
     team_g_identity,
 )
+from src.services.nhl_season_engine.situation import (
+    apply_situation_player_projections,
+    apply_situation_team_line,
+    documentation as situation_documentation,
+    get_team_game_flags,
+    load_paper_sim,
+    load_schedule_pack,
+    load_situation_coeffs,
+    load_venue_flags,
+    situation_delta_goals,
+)
 
 __all__ = [
     "ENGINE_VERSION",
     "NHL_TEAM_CARRY_SHRINK",
     "NHL_TEAM_REBASE_RESIDUAL_CAP",
+    "NHL_SITUATION_GOAL_CAP",
     "NHL_TOI_GRID_SKATER_MINUTES",
     "NHL_GOALIE_TANDEM_SHARE_SUM",
     "PAPER_SIM_S_SET",
@@ -68,4 +81,13 @@ __all__ = [
     "get_team_goalies",
     "team_g_identity",
     "player_projection_documentation",
+    "load_situation_coeffs",
+    "load_schedule_pack",
+    "load_venue_flags",
+    "load_paper_sim",
+    "get_team_game_flags",
+    "situation_delta_goals",
+    "apply_situation_team_line",
+    "apply_situation_player_projections",
+    "situation_documentation",
 ]

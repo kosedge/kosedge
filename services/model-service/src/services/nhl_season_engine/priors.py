@@ -1,9 +1,10 @@
-"""NHL season-engine priors (Ch1–Ch2 + Ch5 residual cap).
+"""NHL season-engine priors (Ch1–Ch5 + Ch3 situation cap).
 
 NHL_TEAM_CARRY_SHRINK is NHL-named — do not import or alias NBA/WNBA shrink.
 Ch1 shrinks 2025–26 team GF/GA. Ch2 builds TOI grid + goalie tandem — no emit.
 Ch5 PlayerProjection uses NHL_TEAM_REBASE_RESIDUAL_CAP for ΣG identity.
-Do not retune NHL_TEAM_CARRY_SHRINK in Ch2/Ch5.
+Ch3 situation uses NHL_SITUATION_GOAL_CAP (goal units; not NBA/WNBA pts).
+Do not retune NHL_TEAM_CARRY_SHRINK in Ch2/Ch3/Ch5.
 """
 
 from __future__ import annotations
@@ -38,6 +39,10 @@ NHL_GOALIE_TANDEM_SHARE_SUM = 1.0
 # Ch5 — |Σ skater G − team GF/G| after identity scale (per-game).
 # ~3% of league GF/G (~3.1) ≈ 0.10; pad to 0.15. Do not retune 0.85 for this.
 NHL_TEAM_REBASE_RESIDUAL_CAP = 0.15
+
+# Ch3 — clip |Σ class Δ| on team GF/G so situation ≠ second prior.
+# Goal units; paper-sim chooses coeffs (not NBA +2.0 / WNBA +1.5).
+NHL_SITUATION_GOAL_CAP = 0.35
 
 PROP_PLAY_CAP_PER_SLATE = 6
 ODDS_SPORT_KEY = "icehockey_nhl"

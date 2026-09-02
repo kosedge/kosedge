@@ -1,0 +1,16 @@
+{
+  "engine_version": "nhl-season-engine-v0.1",
+  "as_of": "2026-09-02",
+  "note": "Altitude is a venue flag (venue name), not if team ==.",
+  "altitude_venues": [
+    {
+      "venue": "Ball Arena"
+    },
+    {
+      "venue": "Delta Center"
+    },
+    {
+      "venue": "Rice-Eccles Stadium"
+    }
+  ]
+}
