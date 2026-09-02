@@ -129,21 +129,10 @@ def test_no_silent_remap_guardrail_queues_conflict(monkeypatch) -> None:
     assert len(queued) == 1
 
 
-class _Result:
-    def __init__(self, rows=None, row=None):
-        self._rows = rows or []
-        self._row = row
-
-    def fetchall(self):
-        return self._rows
-
-    def fetchone(self):
-        return self._row
-
-
 class _PropsSession:
     def __init__(self):
         self.inserts = []
+        self.deletes = []
         self.committed = False
 
     def execute(self, sql, params=None):
@@ -151,6 +140,8 @@ class _PropsSession:
         if "SELECT COALESCE(MAX(week), 1)::int AS week" in query:
             return _Result(row=(1,))
         if "FROM nfl_player_projection_features_weekly" in query and "role_confidence" in query:
+            return _Result(rows=[])
+        if "FROM nfl_dp_depth_chart_weekly" in query:
             return _Result(rows=[])
         if "FROM nfl_player_game_box_score_sims" in query:
             return _Result(rows=[])
@@ -195,6 +186,9 @@ class _PropsSession:
             return _Result(rows=[row])
         if "UPDATE nfl_player_projection_baselines" in query:
             return _Result()
+        if "DELETE FROM nfl_player_prop_model_edges" in query:
+            self.deletes.append(dict(params or {}))
+            return _Result(rowcount=0)
         if "INSERT INTO nfl_player_prop_model_edges" in query:
             self.inserts.append(dict(params or {}))
             return _Result()
@@ -210,6 +204,19 @@ class _PropsSession:
 
     def close(self):
         return None
+
+
+class _Result:
+    def __init__(self, rows=None, row=None, rowcount=0):
+        self._rows = rows or []
+        self._row = row
+        self.rowcount = rowcount
+
+    def fetchall(self):
+        return self._rows
+
+    def fetchone(self):
+        return self._row
 
 
 def test_prop_player_match_keys_bridge_abbrev_and_full_names() -> None:
@@ -288,11 +295,16 @@ def test_props_materialization_joins_full_name_snapshot_to_abbrev_baseline(monke
                         SimpleNamespace(
                             player_id="p-maye",
                             team="NE",
+                            position="QB",
                             role_confidence=0.85,
                             availability_confidence=0.9,
+                            target_proxy=0.0,
+                            rush_share=0.08,
                         )
                     ]
                 )
+            if "FROM nfl_dp_depth_chart_weekly" in query:
+                return _Result(rows=[])
             if "FROM nfl_player_game_box_score_sims" in query:
                 return _Result(rows=[])
             if "FROM nfl_player_projection_baselines" in query and "model_version" in query:

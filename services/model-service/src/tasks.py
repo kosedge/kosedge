@@ -15626,6 +15626,7 @@ def materialize_nfl_player_props_edges(
     session = SessionLocal()
     target_week = None
     upserted = 0
+    cleared_non_investable = 0
     box_research_rows = 0
     spine_sourced = 0
     play_tagged = 0
@@ -15909,6 +15910,33 @@ def materialize_nfl_player_props_edges(
                     model_mean=float(spine_mean) if spine_mean is not None else None,
                     role_confidence=role_conf,
                 ):
+                    # Hole fix: skipping upsert must not leave a prior investable
+                    # row (e.g. QB ATD still holding pass-TD-inflated 0.8–0.9 after
+                    # rush-only remat falls under the floor). Delete so Edges/board
+                    # no longer serve the stale mean. Do not lower floors.
+                    cleared = session.execute(
+                        text(
+                            """
+                            DELETE FROM nfl_player_prop_model_edges
+                            WHERE season = :season
+                              AND week = :week
+                              AND model_version = :model_version
+                              AND player_name = :player_name
+                              AND market_key = :market_key
+                            """
+                        ),
+                        {
+                            "season": int(row.season),
+                            "week": int(row.week),
+                            "model_version": model_version,
+                            "player_name": row.player_name,
+                            "market_key": market_key,
+                        },
+                    )
+                    try:
+                        cleared_non_investable += int(cleared.rowcount or 0)
+                    except (TypeError, AttributeError, ValueError):
+                        pass
                     continue
                 market = select_prop_market_for_player(
                     market_lookup,
@@ -16158,6 +16186,7 @@ def materialize_nfl_player_props_edges(
                 "metrics": json.dumps(
                     {
                         "prop_edges_upserted": upserted,
+                        "prop_edges_cleared_non_investable": cleared_non_investable,
                         "play_tagged": play_tagged,
                         "watch_tagged": watch_tagged,
                         "spine_sourced_players": spine_sourced,
@@ -16172,6 +16201,7 @@ def materialize_nfl_player_props_edges(
             "week": int(target_week),
             "model_version": model_version,
             "prop_edges_upserted": upserted,
+            "prop_edges_cleared_non_investable": cleared_non_investable,
             "play_tagged": play_tagged,
             "watch_tagged": watch_tagged,
             "spine_sourced_players": spine_sourced,
