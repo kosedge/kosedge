@@ -3831,6 +3831,45 @@ def nfl_fair_lines(
         week1_pack = load_week1_pack(int(season))
     except Exception:
         week1_pack = None
+    # Week-1 rest/weather cards from canonical venue (Melbourne ≠ SoFi).
+    week1_game_cards: Dict[Tuple[str, str], Dict[str, Any]] = {}
+    try:
+        from src.services.nfl_rest_weather_feed import source_week_game_cards
+
+        _cards, _card_meta = source_week_game_cards(
+            week=1, season=int(season), fetch_weather=True
+        )
+        for sourced in _cards:
+            g = sourced.game
+            home_k = _nfl_team_to_abbr(g.home_team) or str(g.home_team or "")
+            away_k = _nfl_team_to_abbr(g.away_team) or str(g.away_team or "")
+            if home_k and away_k:
+                card = dict(sourced.card)
+                # Honest international label for travel chips (not SF→LA same-coast).
+                if g.venue and g.location:
+                    card["_venue"] = str(g.venue)
+                    card["_location"] = str(g.location)
+                    card["_international"] = bool(
+                        str(g.location).lower()
+                        in {
+                            "melbourne",
+                            "london",
+                            "rio de janeiro",
+                            "munich",
+                            "mexico city",
+                            "sao paulo",
+                            "frankfurt",
+                        }
+                        or "cricket" in str(g.venue).lower()
+                        or "wembley" in str(g.venue).lower()
+                        or "tottenham" in str(g.venue).lower()
+                    )
+                week1_game_cards[(home_k, away_k)] = card
+                # LA / LAR alias
+                if home_k in {"LA", "LAR"}:
+                    week1_game_cards[("LAR" if home_k == "LA" else "LA", away_k)] = card
+    except Exception:
+        log.exception("NFL Week 1 game-card source failed; legacy rest/weather path")
     kei_reprice_applied_games = 0
     for row in rows:
         mapped = dict(row._mapping)
@@ -3927,6 +3966,7 @@ def nfl_fair_lines(
         )
         # Gate B: KEI = Model + Week 1 desk factors. Model stays frozen.
         try:
+            _game_card = week1_game_cards.get((home_abbr, away_abbr))
             handicap_markets, kei_reprice_log = apply_week1_kei_reprice(
                 handicap=handicap_markets,
                 home_abbr=home_abbr,
@@ -3937,6 +3977,7 @@ def nfl_fair_lines(
                 projection=mapped.get("projection"),
                 start_time=mapped.get("start_time"),
                 pack=week1_pack,
+                game_card=_game_card,
             )
         except Exception:
             log.exception("NFL Week 1 KEI reprice failed; using identity handicap")
@@ -6443,6 +6484,19 @@ def _run_season_engine_game_boxes(
         "players": proj.players,
         "kicking": getattr(proj, "kicking", None) or {},
     }
+    # One production spine: headline yards = baselines mean (Props), range = MC.
+    try:
+        from src.services.nfl_game_boxes_spine import (
+            apply_spine_overlay_to_game_boxes_payload,
+        )
+
+        _spine_session = SessionLocal()
+        try:
+            apply_spine_overlay_to_game_boxes_payload(payload, _spine_session)
+        finally:
+            _spine_session.close()
+    except Exception:
+        log.exception("NFL game-boxes spine overlay failed; MC means unchanged")
     if include_diagnostics:
         payload["diagnostics"] = proj.diagnostics
     try:

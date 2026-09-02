@@ -41,7 +41,7 @@ def test_qb_named_starter_logs_zero_spread() -> None:
                     "team": "MIN",
                     "position": "QB",
                     "depth_order": 1,
-                    "player_name": "Kyler Murray",
+                    "player_name": "J.J. McCarthy",
                     "competition_status": "named_starter",
                 }
             ],
@@ -60,9 +60,9 @@ def test_qb_named_starter_logs_zero_spread() -> None:
     assert new_h["spread_home"] == -3.0
     assert log["qb_clear"] is True
     reasons = " ".join(e["reason"] for e in log["applied_factors"])
-    assert "Kyler Murray" in reasons
+    assert "McCarthy" in reasons
     assert "Jordan Love" in reasons
-
+    assert "Kyler" not in reasons and "Murray" not in reasons
 
 def test_open_competition_widens_uncertainty_not_fake_spread() -> None:
     pack = Week1Pack(
@@ -417,7 +417,8 @@ def test_week1_sot_smoke_model_neq_kei() -> None:
 
     minn = by_game["GB @MIN"]
     min_text = " ".join(minn["factors"] + minn["not_applied"])
-    assert "Kyler" in min_text or "Murray" in min_text
+    assert "Kyler" not in min_text and "Murray" not in min_text
+    assert "McCarthy" in min_text or "Love" in min_text or "named_starter" in min_text
 
     cle = by_game["CLE @JAX"]
     cle_text = " ".join(cle["factors"] + cle["not_applied"])

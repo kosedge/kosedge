@@ -150,6 +150,10 @@ export type NflFairLineRow = {
 export type NflFairLinesResponse = {
   season: number;
   modelVersion: string;
+  /** Board generation / request stamp (UTC ISO). Prefer over stale odds_captured_at. */
+  asOf: string | null;
+  /** Latest market snapshot capture when books joined; may lag asOf. */
+  oddsAsOf: string | null;
   currentWeek: number;
   count: number;
   lines: NflFairLineRow[];
@@ -545,6 +549,8 @@ export async function fetchNflFairLines(params: {
     return {
       season: params.season,
       modelVersion: "",
+      asOf: null,
+      oddsAsOf: null,
       currentWeek: 1,
       count: 0,
       lines: [],
@@ -592,6 +598,8 @@ export async function fetchNflFairLines(params: {
       return {
         season: params.season,
         modelVersion: "",
+        asOf: null,
+        oddsAsOf: null,
         currentWeek: 1,
         count: 0,
         lines: [],
@@ -607,6 +615,8 @@ export async function fetchNflFairLines(params: {
     const payload = (await response.json()) as {
       season?: number;
       model_version?: string;
+      as_of?: string;
+      odds_as_of?: string;
       current_week?: number;
       count?: number;
       slate_status?: string;
@@ -640,6 +650,8 @@ export async function fetchNflFairLines(params: {
       season:
         typeof payload.season === "number" ? payload.season : params.season,
       modelVersion: String(payload.model_version ?? ""),
+      asOf: toIsoOrNull(payload.as_of) ?? new Date().toISOString(),
+      oddsAsOf: toIsoOrNull(payload.odds_as_of),
       currentWeek: toNumber(
         payload.current_week ?? payload.diagnostics?.current_week,
         1,
@@ -688,6 +700,8 @@ export async function fetchNflFairLines(params: {
     return {
       season: params.season,
       modelVersion: "",
+      asOf: null,
+      oddsAsOf: null,
       currentWeek: 1,
       count: 0,
       lines: [],

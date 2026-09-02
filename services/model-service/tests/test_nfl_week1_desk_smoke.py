@@ -33,6 +33,12 @@ def test_week1_desk_smoke_gate_a_b() -> None:
     mia = " ".join(by_game["MIA @LV"]["factors"])
     assert "Willis" in mia or "named_starter" in mia
     minn = " ".join(by_game["GB @MIN"]["factors"])
-    assert "Kyler" in minn or "Murray" in minn
+    assert "Kyler" not in minn and "Murray" not in minn
+    assert "McCarthy" in minn or "Love" in minn or "named_starter" in minn or "QB1" in minn
     cle = " ".join(by_game["CLE @JAX"]["factors"] + by_game["CLE @JAX"]["not_applied"])
-    assert "open_competition" in cle
+    # Desk accept closed Watson as named_starter; open_competition may be historical.
+    assert (
+        "open_competition" in cle
+        or "Watson" in cle
+        or "named_starter" in cle
+    )

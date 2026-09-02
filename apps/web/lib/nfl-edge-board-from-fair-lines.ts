@@ -393,6 +393,27 @@ export function syncEdgeBoardActionsWithCurrent(
 }
 
 /**
+ * Prefer a live board stamp over a stale odds snapshot (e.g. Aug 21 stuck).
+ * Market juice may still reflect the older snap — stamp honesty is separate.
+ */
+export function resolveEdgeBoardLinesAsOf(opts: {
+  oddsCapturedAt?: string | null;
+  boardAsOf?: string | null;
+  maxAgeMs?: number;
+}): string | undefined {
+  const maxAge = opts.maxAgeMs ?? 6 * 60 * 60 * 1000;
+  const board = opts.boardAsOf?.trim() || null;
+  const market = opts.oddsCapturedAt?.trim() || null;
+  const now = Date.now();
+  if (market) {
+    const ts = Date.parse(market);
+    if (Number.isFinite(ts) && now - ts <= maxAge) return market;
+  }
+  if (board) return board;
+  return new Date(now).toISOString();
+}
+
+/**
  * One Spread + one Total row per fair-line game.
  * KEI always set from Kosedge.
  * Open = first-captured open when available (never invented as current).
@@ -400,8 +421,10 @@ export function syncEdgeBoardActionsWithCurrent(
  */
 export function fairLinesToEdgeBoardRows(
   lines: NflFairLineRow[],
+  opts?: { boardAsOf?: string | null },
 ): EdgeBoardRow[] {
   const rows: EdgeBoardRow[] = [];
+  const boardAsOf = opts?.boardAsOf ?? null;
 
   for (const line of lines) {
     const game = `${line.awayTeam} @ ${line.homeTeam}`;
@@ -474,7 +497,10 @@ export function fairLinesToEdgeBoardRows(
       line.openTotal != null
         ? String(Math.round(line.openTotal * 10) / 10)
         : undefined;
-    const linesAsOf = line.oddsCapturedAt ?? undefined;
+    const linesAsOf = resolveEdgeBoardLinesAsOf({
+      oddsCapturedAt: line.oddsCapturedAt,
+      boardAsOf,
+    });
 
     const week = coerceNflWeek(line.week) ?? undefined;
     const seasonType = line.seasonType ?? undefined;
@@ -898,11 +924,10 @@ export function overlayOddsOntoFairLineRows(
       if (src.openJuice) tgt.openJuice = src.openJuice;
       if (src.openJuiceHome) tgt.openJuiceHome = src.openJuiceHome;
     }
-    if (odds.time) tgt.time = odds.time;
-    if (odds.commenceTime) tgt.commenceTime = odds.commenceTime;
-    if (src.kickoffDate) tgt.kickoffDate = src.kickoffDate;
-    if (src.kickoffTime) tgt.kickoffTime = src.kickoffTime;
-    if (src.linesAsOf) tgt.linesAsOf = src.linesAsOf;
+    // Canonical pack already stamped kickoff on fair-line rows. Odds commence
+    // (often 8:15 vs official 8:20) must not overwrite display clock.
+    // Prices only — leave time / commenceTime / kickoffDate / kickoffTime alone.
+    if (src.linesAsOf && !tgt.linesAsOf) tgt.linesAsOf = src.linesAsOf;
   }
 
   // Do not append odds-only extras (PRE noise, unmatched books). NFL board is

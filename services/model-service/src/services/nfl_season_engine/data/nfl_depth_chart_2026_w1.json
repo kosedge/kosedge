@@ -29,13 +29,14 @@
     "Preseason/camp depth \u2014 roles can shift; rookies and free-agent landings may be incomplete or volatile.",
     "AUTHORITATIVE player-to-team SoT for the season engine and intel depth/roster surfaces.",
     "DB weekly/official must not override these identities when this pack is present.",
-    "QB SoT 20260809: Kyler\u2192MIN1, Brissett\u2192ARI1, McCarthy\u2192MIN2, Penix\u2192ATL1, Tua\u2192MIA1, Willis\u2192ATL2",
+    "QB SoT 20260902: Kyler→ARI1, McCarthy→MIN1, Brissett→ARI2 (GB@MIN attribution fix; prior MIN=Murray desk note superseded).",
+    "QB SoT archive 20260809 (superseded): Kyler→MIN1, Brissett→ARI1, McCarthy→MIN2, Penix→ATL1, Tua→MIA1, Willis→ATL2",
     "Daily roster/injury intel 20260809: WAS camp flashpoint applied (Tunsil/Allegretti/Bates/Diggs).",
     "Optional row fields: injury_status, injury_window, injury_note, injury_sources.",
     "ol_roles tracks OL starter/backup/out for SoT + KEI; engine usage allocation remains skill-only.",
-    "injury_paths[] applied by engine when non-empty (week windows required \u2014 no invented IR lengths).",
+    "injury_paths[] applied by engine when non-empty (week windows required — no invented IR lengths).",
     "Data integrity gate 20260809: snapshot_id effective-dated; Diggs player_id corrected to GSIS 00-0031588 (was Adams collision).",
-    "Go-mode SoT audit 20260813: Tua\u2192ATL (open_competition vs Penix); Willis\u2192MIA1; CLE QB open_competition (Watson/Sanders); MIN Murray named starter (desk 2026-08-12). Demo fill blocked when pack present.",
+    "Go-mode SoT audit 20260813 (partially superseded 20260902 on MIN/ARI QB): Tua→ATL open vs Penix; Willis→MIA1; CLE open.",
     "Skill SoT 2026-08-13T15:33Z: Walker\u2192SEA RB1, Charbonnet\u2192SEA RB2, KC RB1 Emmett Johnson (Pacheco-on-DET flagged, not auto-moved).",
     "Skill SoT 2026-08-13T17:25Z: HOTFIX Walker\u2192KC RB1 (2026 FA; pack-as-SoT was wrong). Charbonnet\u2192SEA RB1. Johnson KC RB2.",
     "Daily intel 2026-08-26: 1 override(s) applied",
@@ -50,28 +51,29 @@
       "team": "ARI",
       "position": "QB",
       "depth_order": 1,
-      "player_id": "00-0033119",
-      "player_name": "Jacoby Brissett",
+      "player_id": "00-0035228",
+      "player_name": "Kyler Murray",
       "depth_slot": "starter",
       "role_confidence": 0.85,
       "competition_status": "named_starter",
-      "injury_note": "ARI QB1 post-Kyler move. Kyler is MIN."
+      "injury_note": "ARI QB1 restored 2026-09-02 — Kyler on Cardinals; MIN is McCarthy (GB@MIN attribution fix)."
     },
     {
       "team": "ARI",
       "position": "QB",
       "depth_order": 2,
-      "player_id": "00-0035289",
-      "player_name": "Gardner Minshew II",
+      "player_id": "00-0033119",
+      "player_name": "Jacoby Brissett",
       "depth_slot": "backup",
-      "role_confidence": 0.65
+      "role_confidence": 0.65,
+      "competition_status": "named_backup"
     },
     {
       "team": "ARI",
       "position": "QB",
       "depth_order": 3,
-      "player_id": "00-0041561",
-      "player_name": "Carson Beck",
+      "player_id": "00-0035289",
+      "player_name": "Gardner Minshew II",
       "depth_slot": "rotation",
       "role_confidence": 0.5
     },
@@ -2227,19 +2229,19 @@
       "team": "MIN",
       "position": "QB",
       "depth_order": 1,
-      "player_id": "00-0035228",
-      "player_name": "Kyler Murray",
+      "player_id": "00-0039923",
+      "player_name": "J.J. McCarthy",
       "depth_slot": "starter",
       "role_confidence": 0.85,
       "competition_status": "named_starter",
-      "injury_note": "Kevin O'Connell named Kyler Murray the starter 2026-08-11 (Star Tribune / Camp Desk 2026-08-12). McCarthy is QB2."
+      "injury_note": "MIN QB1 restored 2026-09-02 — McCarthy starter; Kyler Murray is ARI (not GB@MIN)."
     },
     {
       "team": "MIN",
       "position": "QB",
       "depth_order": 2,
-      "player_id": "00-0039923",
-      "player_name": "J.J. McCarthy",
+      "player_id": "00-0032950",
+      "player_name": "Carson Wentz",
       "depth_slot": "backup",
       "role_confidence": 0.65,
       "competition_status": "named_backup"
@@ -2248,8 +2250,8 @@
       "team": "MIN",
       "position": "QB",
       "depth_order": 3,
-      "player_id": "00-0032950",
-      "player_name": "Carson Wentz",
+      "player_id": "00-0038102",
+      "player_name": "Nick Mullens",
       "depth_slot": "rotation",
       "role_confidence": 0.5
     },
@@ -3898,21 +3900,29 @@
         "summary": "Healthy 1st team."
       },
       {
-        "team": "MIN",
+        "team": "ARI",
         "player_name": "Kyler Murray",
+        "topic": "QB1 restored to Cardinals",
+        "severity": "identity_fix",
+        "summary": "2026-09-02 desk fix: Kyler is ARI QB1. Prior MIN=Murray camp note was wrong-team attribution on GB@MIN KEI Lines. McCarthy is MIN QB1.",
+        "sources": [
+          "content/writers/camp-desk-2026/2026-09-02-qb-attribution-fix.md"
+        ]
+      },
+      {
+        "team": "MIN",
+        "player_name": "J.J. McCarthy",
         "topic": "Named QB1",
         "severity": "resolved",
-        "summary": "O'Connell named Murray starter 2026-08-11 after 10 camp practices. McCarthy is QB2. Pack already had this identity; as_of refreshed.",
-        "sources": [
-          "https://www.startribune.com/minnesota-vikings-kyler-murray-jj-mccarthy-qb-battle-nfl-training-camp-2026-kevin-oconnell-offense/601877581"
-        ]
+        "summary": "MIN QB1 restored — McCarthy starter for GB@MIN. Prior Kyler-on-MIN desk note superseded 2026-09-02.",
+        "sources": []
       },
       {
         "team": "ATL",
         "player_name": "Tua Tagovailoa",
         "topic": "Wrong-team SoT repair + open competition",
         "severity": "identity_fix",
-        "summary": "Tua signed ATL in FA; was incorrectly packed as MIA QB1 (Kyler-class dual map). Penix limited (ACL). Dual unresolved \u2014 open_competition, Tua listed 1 as availability favorite not a crown.",
+        "summary": "Tua signed ATL in FA; was incorrectly packed as MIA QB1 (Kyler-class dual map). Penix limited (ACL). Dual unresolved — open_competition, Tua listed 1 as availability favorite not a crown.",
         "sources": [
           "https://www.cbssports.com/nfl/news/tua-tagovailoa-injury-update-falcons-sign-cooper-rush/",
           "content/writers/season-previews-2026/ATL.md",

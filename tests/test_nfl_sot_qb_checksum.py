@@ -16,9 +16,10 @@ def test_depth_pack_qb1_is_post_swap_sot() -> None:
     depth = _depth_qb1(2026)
     assert "Tua" in depth["ATL"]
     assert "Willis" in depth["MIA"]
-    assert "Kyler" in depth["MIN"] or "Murray" in depth["MIN"]
-    assert "Kyler" not in depth.get("ARI", "")
-
+    # 2026-09-02: Kyler restored to ARI; McCarthy is MIN (GB@MIN attribution).
+    assert "Kyler" in depth["ARI"] or "Murray" in depth["ARI"]
+    assert "Kyler" not in depth.get("MIN", "")
+    assert "McCarthy" in depth["MIN"] or "J.J" in depth["MIN"]
 
 def test_published_bundle_checksum_when_present() -> None:
     bundle = ROOT / "data/ops/nfl-preseason-sim-2026-20260813T132801Z"

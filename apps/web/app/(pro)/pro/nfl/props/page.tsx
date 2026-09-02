@@ -441,10 +441,10 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
         {formatBand(row.modelCeiling)}
       </td>
       <td className="px-3 py-3 text-kos-text/90">
-        {formatAmericanOdds(row.fairOverPrice)}
+        {row.line == null ? "—" : formatAmericanOdds(row.fairOverPrice)}
       </td>
       <td className="px-3 py-3 text-kos-text/90">
-        {formatAmericanOdds(row.fairUnderPrice)}
+        {row.line == null ? "—" : formatAmericanOdds(row.fairUnderPrice)}
       </td>
       <td className="px-3 py-3 text-kos-text/70">
         {row.marketJoined ? (

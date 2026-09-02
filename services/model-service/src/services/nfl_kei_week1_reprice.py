@@ -1299,14 +1299,56 @@ def apply_week1_kei_reprice(
             net_total += e.total_pts
             applied.append(fe)
         for e in rw.considered_not_applied:
+            reason = e.reason
+            # Neutral / international sites are not home-stadium same-coast trips.
+            if (
+                isinstance(game_card, Mapping)
+                and game_card.get("_international")
+                and e.factor in {"timezone_shift", "travel"}
+                and "same-coast" in str(reason or "")
+            ):
+                loc = str(game_card.get("_location") or "neutral site")
+                venue = str(game_card.get("_venue") or loc)
+                reason = (
+                    f"neutral · {loc} ({venue}) — travel not applied "
+                    "(international; no home HFA / same-coast)"
+                )
             considered.append(
                 _entry(
                     factor=e.factor,
                     applied=False,
-                    reason=e.reason,
+                    reason=reason,
                 )
             )
         weather_clear = True
+        # When international and weather missing, say so honestly (never LA SoFi).
+        if isinstance(game_card, Mapping) and game_card.get("_international"):
+            loc = str(game_card.get("_location") or "neutral site")
+            has_weather_chip = any(
+                e.factor == "weather" for e in applied + considered
+            )
+            if not has_weather_chip:
+                considered.append(
+                    _entry(
+                        factor="weather",
+                        applied=False,
+                        reason=(
+                            f"weather not applied (neutral · {loc} — "
+                            "no home-stadium forecast)"
+                        ),
+                    )
+                )
+            else:
+                # Rewrite any home-stadium weather chip that leaked.
+                for e in considered:
+                    if e.factor == "weather" and (
+                        "visual_crossing" in str(e.reason)
+                        or "SoFi" in str(e.reason)
+                        or "same-coast" in str(e.reason)
+                    ):
+                        e.reason = (
+                            f"weather not applied (neutral · {loc})"
+                        )
     else:
         # Legacy Week 1 path (TZ from teams + optional weather_obs / fetch).
         skip_travel = model_already_has_travel(projection)
