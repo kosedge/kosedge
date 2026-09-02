@@ -222,7 +222,7 @@ jobs:
         if: steps.paths.outputs.nhl_ms == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py
+          pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py tests/test_nhl_toi_grid_ch2.py
 
       - name: Run model-service DepthSot / NFL tests
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1')

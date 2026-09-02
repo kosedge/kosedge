@@ -59,4 +59,4 @@ This is a **shell**. Chapter 2 is TOI grid + goalie tandem. Not emit.
 ## Done
 
 One `s` chosen, pack on disk.  
-**Stop.** Chapter 2 is TOI grid + goalie tandem. Not emit.
+**Stop.** Chapter 2 is TOI grid + goalie tandem (`docs/NHL_CH2_TOI_GRID_BRIEF.md`). Not emit.
