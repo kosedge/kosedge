@@ -22,7 +22,7 @@ Week 1 surfaces disagreed: Props spine mean vs Game Boxes MC median (Maye 216.2 
 
 ## Flagged (P3, not fixed)
 
-**B.Robinson ADP dual on ATL** — abbreviated `B.Robinson` can collide Bijan (ADP 2) vs Brian (rank ~174). Matcher already refuses ambiguous `initial_last` when length≠1; remaining risk is identity in depth pack / sportsdata_id. Left for a follow-up identity pass.
+~~**B.Robinson ADP dual on ATL**~~ — **fixed 2026-09-02** (`data/ops/nfl-fantasy-robinson-identity-20260902.md`): depth expands colliding abbrevs; matcher refuses Jr. short-name artifact.
 
 ## Rematerialize after merge
 

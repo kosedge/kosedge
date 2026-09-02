@@ -219,6 +219,140 @@ describe("adp name matching polish", () => {
     expect(matched).toBe(0);
   });
 
+  it("does not give both ATL B.Robinson rows Bijan's ADP (Jr. short-name hole)", () => {
+    // Live bug 2026-09-02: board had two "B.Robinson" ATL RB rows; FP short
+    // names "B. Robinson" vs "B. Robinson Jr." made Bijan's short unique, so
+    // Brian (model ~#174) inherited ADP 2. initial_last was already ambiguous.
+    const { byPlayerId, unmatchedRows } = matchAdpToDeskRows(
+      [
+        {
+          playerId: "00-0038542",
+          playerName: "B.Robinson",
+          team: "ATL",
+          position: "RB",
+          rankOverall: 3,
+        },
+        {
+          playerId: "00-0037746",
+          playerName: "B.Robinson",
+          team: "ATL",
+          position: "RB",
+          rankOverall: 166,
+        },
+      ],
+      [
+        fp({
+          playerId: "23133",
+          playerName: "Bijan Robinson",
+          shortName: "B. Robinson",
+          team: "ATL",
+          position: "RB",
+          adp: 1.67,
+          ecr: 2,
+          sportsdataId: "f78d68c2-f9da-48e7-b954-26b69efd828d",
+        }),
+        fp({
+          playerId: "20094",
+          playerName: "Brian Robinson Jr.",
+          shortName: "B. Robinson Jr.",
+          team: "ATL",
+          position: "RB",
+          adp: 142.33,
+          ecr: 134,
+          sportsdataId: "795f636e-6f7f-4bc7-a346-2862272abead",
+        }),
+      ],
+    );
+
+    // Abbreviated board collision → no abbreviated ADP attach.
+    expect(byPlayerId.has("00-0038542")).toBe(false);
+    expect(byPlayerId.has("00-0037746")).toBe(false);
+    expect(unmatchedRows).toHaveLength(2);
+
+    // After depth expands to full names, each keeps his own ADP.
+    const { byPlayerId: afterExpand } = matchAdpToDeskRows(
+      [
+        {
+          playerId: "00-0038542",
+          playerName: "Bijan Robinson",
+          team: "ATL",
+          position: "RB",
+          rankOverall: 3,
+        },
+        {
+          playerId: "00-0037746",
+          playerName: "Brian Robinson Jr.",
+          team: "ATL",
+          position: "RB",
+          rankOverall: 166,
+        },
+      ],
+      [
+        fp({
+          playerId: "23133",
+          playerName: "Bijan Robinson",
+          shortName: "B. Robinson",
+          team: "ATL",
+          position: "RB",
+          adp: 1.67,
+          ecr: 2,
+        }),
+        fp({
+          playerId: "20094",
+          playerName: "Brian Robinson Jr.",
+          shortName: "B. Robinson Jr.",
+          team: "ATL",
+          position: "RB",
+          adp: 142.33,
+          ecr: 134,
+        }),
+      ],
+    );
+    expect(afterExpand.get("00-0038542")?.adp).toBe(1.67);
+    expect(afterExpand.get("00-0038542")?.matchedName).toBe("Bijan Robinson");
+    expect(afterExpand.get("00-0037746")?.adp).toBe(142.33);
+    expect(afterExpand.get("00-0037746")?.matchedName).toBe(
+      "Brian Robinson Jr.",
+    );
+    // Neither row shares the other's ADP.
+    expect(afterExpand.get("00-0037746")?.adp).not.toBe(1.67);
+    expect(afterExpand.get("00-0038542")?.adp).not.toBe(142.33);
+  });
+
+  it("refuses unique short_name when ADP initial+last is ambiguous (Jr. artifact)", () => {
+    // Single board B.Robinson must not steal Bijan solely because Brian's
+    // FantasyPros short name carries Jr.
+    const { matched, byPlayerId } = matchAdpToDeskRows(
+      [
+        {
+          playerId: "maybe-brian",
+          playerName: "B.Robinson",
+          team: "ATL",
+          position: "RB",
+          rankOverall: 166,
+        },
+      ],
+      [
+        fp({
+          playerName: "Bijan Robinson",
+          shortName: "B. Robinson",
+          team: "ATL",
+          position: "RB",
+          adp: 2,
+        }),
+        fp({
+          playerName: "Brian Robinson Jr.",
+          shortName: "B. Robinson Jr.",
+          team: "ATL",
+          position: "RB",
+          adp: 142,
+        }),
+      ],
+    );
+    expect(matched).toBe(0);
+    expect(byPlayerId.size).toBe(0);
+  });
+
   it("accepts LAR/LA team aliases", () => {
     const { matchedHigh } = matchAdpToDeskRows(
       [

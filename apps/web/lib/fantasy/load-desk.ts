@@ -5,6 +5,10 @@ import {
   formatAdpFreshness,
 } from "@/lib/fantasy/adp-fantasypros";
 import { matchAdpToDeskRows } from "@/lib/fantasy/adp-match";
+import {
+  applyBoardNameOverrides,
+  expandCollidingBoardNames,
+} from "@/lib/fantasy/board-identity";
 import { applyDeskRankPolicy } from "@/lib/fantasy/desk-rank-policy";
 import {
   draftSitLimitation,
@@ -342,6 +346,14 @@ export async function loadFantasyDraftDesk(params: {
     limitations = [...limitations, sitNote];
   }
 
+  // Two ATL B.Robinson (Bijan vs Brian): expand colliding abbrevs via depth
+  // player_id before ADP match so full-name identity wins and the board
+  // shows distinct names. Matcher also refuses ambiguous short/initial keys.
+  const nameOverrides = expandCollidingBoardNames(enrichable, depthRows);
+  if (nameOverrides.size > 0) {
+    enrichable = applyBoardNameOverrides(enrichable, nameOverrides);
+  }
+
   const adpMatch = matchAdpToDeskRows(
     enrichable.map((row) => ({
       playerId: row.playerId,
@@ -381,7 +393,7 @@ export async function loadFantasyDraftDesk(params: {
     ...limitations,
     ...adpFeed.limitations,
     `ADP match coverage: ${adpMatch.matched}/${enrichable.length} linked (${adpMatch.matchedHigh} same-format high-confidence for Value Δ; ${adpMatch.matchedCrossFormat} cross-format ADP display only; ${adpMatch.unmatched} unmatched → —).`,
-    "Matching uses deterministic rules (ids, suffix-stripped names, short names, initial+last, unique team/pos keys, then team-agnostic unique keys for roster moves). No fuzzy edit-distance guesses.",
+    "Matching uses deterministic rules (ids, suffix-stripped names, short names only when initial+last is unique, initial+last, unique team/pos keys, then team-agnostic unique keys for roster moves). Colliding board abbrevs (two ATL B.Robinson) expand via depth player_id. No fuzzy edit-distance guesses.",
     ...(unmatchedPreview
       ? [
           `Unmatched sample: ${unmatchedPreview}${adpMatch.unmatched > 12 ? "…" : ""}`,

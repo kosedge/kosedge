@@ -4,11 +4,20 @@
  * Deterministic, reviewable rules (no fuzzy edit-distance guesses):
  * 1. sportsdata id
  * 2. full / core name + team + pos (Jr/Sr/II/III stripped)
- * 3. short name (compact) + team + pos
- * 4. first-initial + last + team + pos
+ * 3. short name (compact) + team + pos — refused when ADP initial+last
+ *    for the same team+pos is ambiguous (Jr. suffix artifact: "B. Robinson"
+ *    vs "B. Robinson Jr." must not uniquely claim Bijan for every board
+ *    B.Robinson)
+ * 4. first-initial + last + team + pos (unique only)
  * 5. unique last + team + pos
  * 6. team-agnostic unique variants of 2–4 (roster moves)
  * 7. same rules against secondary scoring panels (cross-format ADP only)
+ *
+ * Board-side: when multiple desk rows share initial+last+team+pos
+ * (two ATL B.Robinson), abbreviated keys are refused — expand via depth
+ * player_id first (see expandCollidingBoardNames).
+ *
+ * One ADP entry → at most one desk row (higher model rank wins the claim).
  *
  * Value Δ should use confidence === "high" only.
  */
@@ -321,11 +330,99 @@ function takeCompatible(
   return toResult(compatible[0]!, kind, confidence, scoringProfile);
 }
 
+/** True when ADP has exactly one player for initial+last(+team)+pos. */
+function adpInitialLastUnique(
+  idx: PlayerIndex,
+  firstInitial: string,
+  lastName: string,
+  team: string,
+  pos: string,
+  teamScoped: boolean,
+): boolean {
+  if (teamScoped) {
+    const list = idx.byInitialLastTeamPos.get(
+      indexKey([firstInitial, lastName, team, pos]),
+    );
+    const compatible = (list ?? []).filter((e) => teamsCompatible(team, e.team));
+    return compatible.length === 1;
+  }
+  const list = idx.byInitialLastPos.get(
+    indexKey([firstInitial, lastName, pos]),
+  );
+  return (list?.length ?? 0) === 1;
+}
+
+/**
+ * Short-name uniqueness can be a Jr./Sr. artifact ("B. Robinson" vs
+ * "B. Robinson Jr.") while initial+last collapses both. Refuse short hits
+ * whenever the initial+last bucket for the same scope is ambiguous.
+ */
+function takeShortIfInitialLastUnique(
+  idx: PlayerIndex,
+  parts: ReturnType<typeof parseNameParts>,
+  team: string,
+  pos: string,
+  boardShort: string,
+  boardCompact: string,
+  confidence: AdpMatchConfidence,
+  scoringProfile: FantasyScoringProfile | undefined,
+  teamScoped: boolean,
+): AdpMatchResult | null {
+  const shortHit = teamScoped
+    ? takeCompatible(
+        idx.byShortTeamPos.get(indexKey([boardShort, team, pos])),
+        team,
+        "short_name",
+        confidence,
+        scoringProfile,
+      ) ||
+      takeCompatible(
+        idx.byCompactShortTeamPos.get(indexKey([boardCompact, team, pos])),
+        team,
+        "short_name",
+        confidence,
+        scoringProfile,
+      )
+    : takeUnique(
+        idx.byShortPos.get(indexKey([boardShort, pos])),
+        "short_name_pos",
+        confidence,
+        scoringProfile,
+      ) ||
+      takeUnique(
+        idx.byCompactShortPos.get(indexKey([boardCompact, pos])),
+        "short_name_pos",
+        confidence,
+        scoringProfile,
+      );
+
+  if (!shortHit) return null;
+  if (parts.firstInitial && parts.lastName) {
+    if (
+      !adpInitialLastUnique(
+        idx,
+        parts.firstInitial,
+        parts.lastName,
+        team,
+        pos,
+        teamScoped,
+      )
+    ) {
+      return null;
+    }
+  }
+  return shortHit;
+}
+
 function matchAgainstIndex(
   target: AdpMatchTarget,
   idx: PlayerIndex,
   confidence: AdpMatchConfidence,
-  scoringProfile?: FantasyScoringProfile,
+  scoringProfile: FantasyScoringProfile | undefined,
+  options?: {
+    /** When true, skip abbreviated / last-only keys (board collision). */
+    highPrecisionOnly?: boolean;
+  },
 ): AdpMatchResult | null {
   const uid = target.playerUid?.trim();
   if (uid && idx.bySportsdata.has(uid)) {
@@ -342,6 +439,7 @@ function matchAgainstIndex(
   const pos = target.position.toUpperCase();
   const boardShort = normalizePlayerName(target.playerName);
   const boardCompact = parts.compact;
+  const highPrecisionOnly = Boolean(options?.highPrecisionOnly);
 
   // Same-team (alias-aware) high-precision keys
   let hit =
@@ -358,23 +456,23 @@ function matchAgainstIndex(
       "core_name",
       confidence,
       scoringProfile,
-    ) ||
-    takeCompatible(
-      idx.byShortTeamPos.get(indexKey([boardShort, team, pos])),
-      team,
-      "short_name",
-      confidence,
-      scoringProfile,
-    ) ||
-    takeCompatible(
-      idx.byCompactShortTeamPos.get(indexKey([boardCompact, team, pos])),
-      team,
-      "short_name",
-      confidence,
-      scoringProfile,
     );
 
-  if (!hit && parts.firstInitial && parts.lastName) {
+  if (!hit && !highPrecisionOnly) {
+    hit = takeShortIfInitialLastUnique(
+      idx,
+      parts,
+      team,
+      pos,
+      boardShort,
+      boardCompact,
+      confidence,
+      scoringProfile,
+      true,
+    );
+  }
+
+  if (!hit && !highPrecisionOnly && parts.firstInitial && parts.lastName) {
     hit = takeCompatible(
       idx.byInitialLastTeamPos.get(
         indexKey([parts.firstInitial, parts.lastName, team, pos]),
@@ -386,7 +484,7 @@ function matchAgainstIndex(
     );
   }
 
-  if (!hit && parts.lastName) {
+  if (!hit && !highPrecisionOnly && parts.lastName) {
     hit = takeCompatible(
       idx.byLastTeamPos.get(indexKey([parts.lastName, team, pos])),
       team,
@@ -410,22 +508,24 @@ function matchAgainstIndex(
         "core_name_pos",
         confidence,
         scoringProfile,
-      ) ||
-      takeUnique(
-        idx.byShortPos.get(indexKey([boardShort, pos])),
-        "short_name_pos",
-        confidence,
-        scoringProfile,
-      ) ||
-      takeUnique(
-        idx.byCompactShortPos.get(indexKey([boardCompact, pos])),
-        "short_name_pos",
-        confidence,
-        scoringProfile,
       );
   }
 
-  if (!hit && parts.firstInitial && parts.lastName) {
+  if (!hit && !highPrecisionOnly) {
+    hit = takeShortIfInitialLastUnique(
+      idx,
+      parts,
+      team,
+      pos,
+      boardShort,
+      boardCompact,
+      confidence,
+      scoringProfile,
+      false,
+    );
+  }
+
+  if (!hit && !highPrecisionOnly && parts.firstInitial && parts.lastName) {
     hit = takeUnique(
       idx.byInitialLastPos.get(
         indexKey([parts.firstInitial, parts.lastName, pos]),
@@ -437,6 +537,21 @@ function matchAgainstIndex(
   }
 
   return hit;
+}
+
+function boardInitialLastKey(target: AdpMatchTarget): string | null {
+  const parts = parseNameParts(target.playerName);
+  if (!parts.firstInitial || !parts.lastName) return null;
+  return indexKey([
+    parts.firstInitial,
+    parts.lastName,
+    normalizeTeam(target.team),
+    target.position.toUpperCase(),
+  ]);
+}
+
+function adpClaimKey(hit: AdpMatchResult): string {
+  return `${hit.matchedName.toLowerCase()}|${hit.adp}|${hit.matchKind}`;
 }
 
 export function matchAdpToDeskRows(
@@ -461,13 +576,42 @@ export function matchAdpToDeskRows(
     idx: buildIndex(pool.players),
   }));
 
+  // Board-side collisions (two ATL B.Robinson): abbreviated keys are unsafe.
+  const boardKeyCounts = new Map<string, number>();
+  for (const target of targets) {
+    const key = boardInitialLastKey(target);
+    if (!key) continue;
+    boardKeyCounts.set(key, (boardKeyCounts.get(key) ?? 0) + 1);
+  }
+  const ambiguousBoardKeys = new Set(
+    [...boardKeyCounts.entries()]
+      .filter(([, n]) => n > 1)
+      .map(([k]) => k),
+  );
+
+  // Prefer higher model ranks when two rows compete for one ADP claim.
+  const ordered = [...targets].sort((a, b) => {
+    const ra = a.rankOverall ?? Number.POSITIVE_INFINITY;
+    const rb = b.rankOverall ?? Number.POSITIVE_INFINITY;
+    if (ra !== rb) return ra - rb;
+    return a.playerId.localeCompare(b.playerId);
+  });
+
   const byPlayerId = new Map<string, AdpMatchResult>();
   const unmatchedRows: AdpUnmatchedRow[] = [];
+  const claimedAdp = new Set<string>();
   let matchedHigh = 0;
   let matchedCrossFormat = 0;
 
-  for (const target of targets) {
-    let hit = matchAgainstIndex(target, primaryIdx, "high");
+  for (const target of ordered) {
+    const boardKey = boardInitialLastKey(target);
+    const highPrecisionOnly = Boolean(
+      boardKey && ambiguousBoardKeys.has(boardKey),
+    );
+
+    let hit = matchAgainstIndex(target, primaryIdx, "high", undefined, {
+      highPrecisionOnly,
+    });
 
     if (!hit) {
       for (const pool of secondary) {
@@ -476,8 +620,19 @@ export function matchAdpToDeskRows(
           pool.idx,
           "cross_format",
           pool.scoringProfile,
+          { highPrecisionOnly },
         );
         if (hit) break;
+      }
+    }
+
+    if (hit) {
+      const claim = adpClaimKey(hit);
+      // One ADP entry → one desk row (Bijan must not be worn by Brian too).
+      if (claimedAdp.has(claim)) {
+        hit = null;
+      } else {
+        claimedAdp.add(claim);
       }
     }
 
@@ -485,15 +640,18 @@ export function matchAdpToDeskRows(
       byPlayerId.set(target.playerId, hit);
       if (hit.confidence === "high") matchedHigh += 1;
       else matchedCrossFormat += 1;
-    } else {
-      unmatchedRows.push({
-        playerId: target.playerId,
-        playerName: target.playerName,
-        team: target.team,
-        position: target.position,
-        rankOverall: target.rankOverall ?? null,
-      });
     }
+  }
+
+  for (const target of targets) {
+    if (byPlayerId.has(target.playerId)) continue;
+    unmatchedRows.push({
+      playerId: target.playerId,
+      playerName: target.playerName,
+      team: target.team,
+      position: target.position,
+      rankOverall: target.rankOverall ?? null,
+    });
   }
 
   if (options?.logUnmatched && unmatchedRows.length > 0) {
