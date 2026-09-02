@@ -100,14 +100,12 @@ export default async function NflPropsBoardPage({
 
   const hasRows = board.rows.length > 0;
   const filteredEmpty =
-    !board.error &&
-    !hasRows &&
-    (board.diagnostics.eligibilityDropped ?? 0) > 0;
+    !board.error && !hasRows && (board.diagnostics.eligibilityDropped ?? 0) > 0;
   const activeQuery = {
     season: String(season),
     week: String(week),
-            market: market === "all" ? undefined : market,
-            team: team || undefined,
+    market: market === "all" ? undefined : market,
+    team: team || undefined,
     limit: String(limit),
   };
 
@@ -287,7 +285,9 @@ export default async function NflPropsBoardPage({
 
           <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
             <div className="flex items-baseline justify-between gap-3">
-              <h2 className="text-xl font-semibold text-kos-text">Props Board</h2>
+              <h2 className="text-xl font-semibold text-kos-text">
+                Props Board
+              </h2>
               <p className="text-xs text-kos-text/60">
                 {board.count} prop{board.count === 1 ? "" : "s"}
               </p>
@@ -299,44 +299,44 @@ export default async function NflPropsBoardPage({
               </p>
             ) : (
               <>
-            {/* Mobile cards */}
-            <ul className="mt-4 space-y-3 md:hidden">
-              {board.rows.map((row, index) => (
-                <PropCard
-                  key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
-                  row={row}
-                />
-              ))}
-            </ul>
-
-            {/* Desktop table */}
-            <div className="mt-4 hidden overflow-x-auto md:block">
-              <table className="min-w-full text-left text-sm">
-                <thead className="text-xs uppercase tracking-wide text-kos-text/55">
-                  <tr className="border-b border-white/10">
-                    <th className="px-3 py-2 font-semibold">Player</th>
-                    <th className="px-3 py-2 font-semibold">Market</th>
-                    <th className="px-3 py-2 font-semibold">Line</th>
-                    <th className="px-3 py-2 font-semibold">Model mean</th>
-                    <th className="px-3 py-2 font-semibold">Floor</th>
-                    <th className="px-3 py-2 font-semibold">Ceiling</th>
-                    <th className="px-3 py-2 font-semibold">Fair over</th>
-                    <th className="px-3 py-2 font-semibold">Fair under</th>
-                    <th className="px-3 py-2 font-semibold">Edge over</th>
-                    <th className="px-3 py-2 font-semibold">Edge under</th>
-                    <th className="px-3 py-2 font-semibold">Confidence</th>
-                  </tr>
-                </thead>
-                <tbody>
+                {/* Mobile cards */}
+                <ul className="mt-4 space-y-3 md:hidden">
                   {board.rows.map((row, index) => (
-                    <PropRow
+                    <PropCard
                       key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
                       row={row}
                     />
                   ))}
-                </tbody>
-              </table>
-            </div>
+                </ul>
+
+                {/* Desktop table */}
+                <div className="mt-4 hidden overflow-x-auto md:block">
+                  <table className="min-w-full text-left text-sm">
+                    <thead className="text-xs uppercase tracking-wide text-kos-text/55">
+                      <tr className="border-b border-white/10">
+                        <th className="px-3 py-2 font-semibold">Player</th>
+                        <th className="px-3 py-2 font-semibold">Market</th>
+                        <th className="px-3 py-2 font-semibold">Line</th>
+                        <th className="px-3 py-2 font-semibold">Model mean</th>
+                        <th className="px-3 py-2 font-semibold">Floor</th>
+                        <th className="px-3 py-2 font-semibold">Ceiling</th>
+                        <th className="px-3 py-2 font-semibold">Fair over</th>
+                        <th className="px-3 py-2 font-semibold">Fair under</th>
+                        <th className="px-3 py-2 font-semibold">Edge over</th>
+                        <th className="px-3 py-2 font-semibold">Edge under</th>
+                        <th className="px-3 py-2 font-semibold">Confidence</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {board.rows.map((row, index) => (
+                        <PropRow
+                          key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
+                          row={row}
+                        />
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               </>
             )}
 

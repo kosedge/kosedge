@@ -235,8 +235,7 @@ describe("Week 1 desk agreement", () => {
     // Mirrors SeasonEngineGameBoxesClient: point_estimate ?? mean ?? p50
     const point_estimate = { pass_yards: 216.2, rush_yards: 17.4 };
     const dist = { mean: 210.0, p50: 160.0, p10: 111, p90: 278 };
-    const value =
-      point_estimate.pass_yards ?? dist.mean ?? dist.p50;
+    const value = point_estimate.pass_yards ?? dist.mean ?? dist.p50;
     expect(value).toBeCloseTo(216.2, 1);
     expect(value).not.toBe(160);
   });
