@@ -38,14 +38,14 @@ Does **not** rewrite Ch2 TOI/tandem. Does **not** retune `NHL_TEAM_CARRY_SHRINK`
 
 ## Allowlist
 
-| Item       | Path                                                              |
-| ---------- | ----------------------------------------------------------------- |
-| Residual   | `nhl_season_engine/priors.py` (`NHL_TEAM_REBASE_RESIDUAL_CAP`)    |
-| Reader     | `nhl_season_engine/player_projection.py`                          |
-| Pack       | `nhl_player_projection_2026.json`                                 |
-| Rebuild    | `scripts/nhl/build_player_projection_ch5.py`                      |
-| Tests + CI | `tests/test_nhl_player_projection_ch5.py` · NHL-only CI           |
-| Docs       | this brief + scorecard                                            |
+| Item       | Path                                                           |
+| ---------- | -------------------------------------------------------------- |
+| Residual   | `nhl_season_engine/priors.py` (`NHL_TEAM_REBASE_RESIDUAL_CAP`) |
+| Reader     | `nhl_season_engine/player_projection.py`                       |
+| Pack       | `nhl_player_projection_2026.json`                              |
+| Rebuild    | `scripts/nhl/build_player_projection_ch5.py`                   |
+| Tests + CI | `tests/test_nhl_player_projection_ch5.py` · NHL-only CI        |
+| Docs       | this brief + scorecard                                         |
 
 ---
 
