@@ -14,7 +14,7 @@
  * - NBA / WNBA: published fair lines → handicap; model_* identity until API exposes split.
  * - NCAAM: kei_lines_ncaam.json → handicap (identity).
  * - CFB: kei_lines_cfb.json — handicap = published KEI; model_* = research fair.
- * - NHL: **markets-only** — resolveKeiGames returns [].
+ * - NHL: Ch4 team KEI via model-service /nhl/fair-lines (puck + total).
  */
 
 import "server-only";
@@ -25,6 +25,8 @@ import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import { keiGamesFromMlbFairLines } from "@/lib/mlb-kei-from-fair-lines";
 import { fetchNbaFairLines } from "@/lib/nba-fair-lines";
 import { keiGamesFromNbaFairLines } from "@/lib/nba-kei-from-fair-lines";
+import { fetchNhlFairLines } from "@/lib/nhl-fair-lines";
+import { keiGamesFromNhlFairLines } from "@/lib/nhl-kei-from-fair-lines";
 import { fetchNflFairLines, type NflFairLineRow } from "@/lib/nfl-fair-lines";
 import { fetchWnbaFairLines } from "@/lib/wnba-fair-lines";
 import { keiGamesFromWnbaFairLines } from "@/lib/wnba-kei-from-fair-lines";
@@ -87,11 +89,6 @@ export async function resolveKeiGames(
 ): Promise<KeiLineGame[]> {
   const sport = sportKey.toLowerCase();
 
-  // Markets-only: NHL has no KEI source yet.
-  if (sport === "nhl") {
-    return [];
-  }
-
   if (sport === "nfl") {
     try {
       const board = await fetchNflFairLines({
@@ -140,6 +137,21 @@ export async function resolveKeiGames(
       });
       if (board.lines.length > 0) {
         return keiGamesFromWnbaFairLines(board.lines);
+      }
+    } catch {
+      // fall through to file export
+    }
+  }
+
+  if (sport === "nhl") {
+    try {
+      const board = await fetchNhlFairLines({
+        // Reach opening night (e.g. Sep 29) from early-Sep desks.
+        daysAhead: 60,
+        source: "auto",
+      });
+      if (board.lines.length > 0) {
+        return keiGamesFromNhlFairLines(board.lines);
       }
     } catch {
       // fall through to file export

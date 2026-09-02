@@ -22,6 +22,7 @@ from src.routes import (
     mlb_router,
     nba_router,
     nfl_router,
+    nhl_router,
     proof_router,
     wnba_router,
 )
@@ -302,6 +303,7 @@ app.include_router(cfb_router)
 app.include_router(proof_router)
 app.include_router(mlb_router)
 app.include_router(nba_router)
+app.include_router(nhl_router)
 app.include_router(nfl_router)
 app.include_router(wnba_router)
 

@@ -92,11 +92,12 @@ def test_fetcher_module_does_not_define_shrink() -> None:
     assert "nhl_team_prior_2026" not in text or "does_not" in text
 
 
-def test_edge_board_nhl_kei_still_blank_in_code() -> None:
+def test_edge_board_nhl_kei_source_wired() -> None:
+    # Fetcher chapter does not emit KEI; Ch4 wires the source. Helper remains.
     text = EDGE_KEI_AVAIL.read_text(encoding="utf-8")
     assert "sportIsMarketsOnlyEdgeBoard" in text
-    assert 'return sport === "nhl"' in text or "sport === \"nhl\"" in text
-    assert '"nhl"' not in text.split("KEI_SOURCE_SPORTS")[1].split("]")[0]
+    assert "sportHasKeiSource" in text
+    assert '"nhl"' in text
 
 
 def test_nba_wnba_cfb_untouched() -> None:

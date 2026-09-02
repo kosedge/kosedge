@@ -1,4 +1,4 @@
-"""NHL season engine package (Ch1–Ch3 + Ch5 PlayerProjection)."""
+"""NHL season engine package (Ch1–Ch5 + Ch4 team KEI)."""
 
 from src.services.nhl_season_engine.priors import (
     ENGINE_VERSION,
@@ -49,6 +49,14 @@ from src.services.nhl_season_engine.situation import (
     load_venue_flags,
     situation_delta_goals,
 )
+from src.services.nhl_season_engine.nhl_kei import (
+    KEI_VERSION,
+    compute_game_kei,
+    documentation as kei_documentation,
+    emit_kei_for_schedule,
+    load_kei_pack,
+    tag_from_edge,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -90,4 +98,10 @@ __all__ = [
     "apply_situation_team_line",
     "apply_situation_player_projections",
     "situation_documentation",
+    "KEI_VERSION",
+    "load_kei_pack",
+    "emit_kei_for_schedule",
+    "compute_game_kei",
+    "tag_from_edge",
+    "kei_documentation",
 ]

@@ -30,12 +30,7 @@ describe("sport-pro-nav", () => {
         expect(labels).toContain("Edges");
         expect(labels).toContain("Power Ratings");
         if (sport.key !== "nfl") {
-          if (sport.key === "nhl") {
-            expect(labels).toContain("Fair Lines");
-            expect(labels).not.toContain("KEI Lines");
-          } else {
-            expect(labels).toContain("KEI Lines");
-          }
+          expect(labels).toContain("KEI Lines");
         }
       }
     }

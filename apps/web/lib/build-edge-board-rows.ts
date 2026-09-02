@@ -7,11 +7,8 @@
  * Legacy aliases: `live` → week1, `all` → full.
  * KEI = published fair line (identity — no fake Model vs KEI split).
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
- * NBA/WNBA: fair-lines → KEI handicap (model_* identity until pre_blend exists).
+ * NBA/WNBA/NHL: fair-lines → KEI handicap (model_* identity until pre_blend exists).
  * NCAAM: Odds + kei_lines_ncaam.json.
- * NHL: **markets-only** until a KEI model ships — Odds/fallback only;
- *   resolveKeiGames returns [] (do not invent KEI). UI banners via
- *   sportIsMarketsOnlyEdgeBoard.
  * Never invents sportsbook or KEI prices; empty offseason boards stay empty honestly.
  */
 
@@ -43,6 +40,10 @@ import {
   applyNbaTrustedMarketToRows,
   isNbaPreseason,
 } from "@/lib/nba-trusted-market";
+import {
+  applyNhlTrustedMarketToRows,
+  isNhlPreseason,
+} from "@/lib/nhl-trusted-market";
 import { applyWnbaTrustedMarketToRows } from "@/lib/wnba-trusted-market";
 import { getKeiLines, type KeiLineGame } from "@/lib/kei-lines";
 import {
@@ -226,6 +227,11 @@ export async function assembleEdgeBoardRows(
   }
   if (sport === "wnba") {
     return applyWnbaTrustedMarketToRows(merged);
+  }
+  if (sport === "nhl") {
+    return applyNhlTrustedMarketToRows(merged, {
+      preseason: isNhlPreseason(),
+    });
   }
   return merged;
 }

@@ -79,8 +79,10 @@ def test_documentation_forbids_emit_and_shrink_retune() -> None:
 
 
 def test_keinhl_still_blank() -> None:
+    # Ch2 does not emit board KEI; availability helper still exists for other sports.
     text = EDGE_KEI_AVAIL.read_text(encoding="utf-8")
-    assert 'return sport === "nhl"' in text
+    assert "sportIsMarketsOnlyEdgeBoard" in text
+    assert "sportHasKeiSource" in text
 
 
 def test_nba_wnba_cfb_untouched() -> None:

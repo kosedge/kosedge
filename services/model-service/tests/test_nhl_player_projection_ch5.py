@@ -23,7 +23,6 @@ REPO = ROOT.parents[1]
 CFB_KEI = ROOT / "src/services/cfb_season_engine/data/cfb_kei_w0_w1_2026.json"
 NBA_PRIORS = ROOT / "src/services/nba_season_engine/priors.py"
 WNBA_PRIORS = ROOT / "src/services/wnba_season_engine/priors.py"
-EDGE_KEI_AVAIL = REPO / "apps/web/lib/edge-board-kei-availability.ts"
 CH1 = ROOT / "src/services/nhl_season_engine/data/nhl_team_prior_2026.json"
 CH2_TOI = ROOT / "src/services/nhl_season_engine/data/nhl_toi_grid_2026.json"
 CH2_TANDEM = ROOT / "src/services/nhl_season_engine/data/nhl_goalie_tandem_2026.json"
@@ -126,8 +125,7 @@ def test_ch2_packs_not_rewritten() -> None:
 
 
 def test_keinhl_still_blank() -> None:
-    text = EDGE_KEI_AVAIL.read_text(encoding="utf-8")
-    assert 'return sport === "nhl"' in text
+    # Ch5 pack itself does not emit board KEI; Ch4 owns the fill.
     pack = load_player_projection_pack()
     blob = " ".join(pack.get("does_not") or []).lower()
     assert "kei" in blob or "keinhl" in blob
