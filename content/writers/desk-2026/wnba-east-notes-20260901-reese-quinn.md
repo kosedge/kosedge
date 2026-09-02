@@ -10,6 +10,7 @@
 **Bottom line:** Eight are in. Seeds 1–8 all still move. The pause is 16 calendar days. It is not 16 days of rest for anyone in Berlin. Pass on the title board.
 
 **Notes**
+
 1. **Out clubs, one line:** Chicago 15-25, Toronto 11-29, Connecticut 10-30. Field locked: MIN, GSV, LVA, ATL, IND, NYL, WAS, DAL.
 2. **4–8 is live mush.** ATL/IND 26-14; NYL/WAS/DAL 24-16. Two games, four to play. Circular H2H in the 24-16 three-way. ATL currently up on IND on live vs-.500 after Aug 30 (East/Lundberg), H2H split.
 3. **Resume calendar:** WAS @ CHI Thu Sep 17 (tightest USA re-entry). ATL vs CON that night. IND @ TOR and NYL @ MIN Fri Sep 18. Rubber WAS @ IND Sun Sep 20. ATL at NYL Sep 21 and 23.
