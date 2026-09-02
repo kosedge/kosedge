@@ -31,7 +31,6 @@ NBA_PRIORS = ROOT / "src/services/nba_season_engine/priors.py"
 WNBA_PRIORS = ROOT / "src/services/wnba_season_engine/priors.py"
 NBA_COEFFS = ROOT / "src/services/nba_season_engine/data/nba_situation_coeffs_v0.json"
 WNBA_COEFFS = ROOT / "src/services/wnba_season_engine/data/wnba_situation_coeffs_v0.json"
-EDGE_KEI_AVAIL = REPO / "apps/web/lib/edge-board-kei-availability.ts"
 SITUATION_PY = ROOT / "src/services/nhl_season_engine/situation.py"
 BUILDER_PY = REPO / "scripts/nhl/build_situation_ch3.py"
 CH1 = ROOT / "src/services/nhl_season_engine/data/nhl_team_prior_2026.json"
@@ -153,8 +152,7 @@ def test_ch1_ch2_ch5_packs_not_rewritten() -> None:
 
 
 def test_keinhl_still_blank() -> None:
-    text = EDGE_KEI_AVAIL.read_text(encoding="utf-8")
-    assert 'return sport === "nhl"' in text
+    # Ch3 does not emit KEI; Ch4 owns the board fill. Coeffs still forbid props.
     coeffs = load_situation_coeffs()
     blob = " ".join(coeffs.get("does_not") or []).lower()
     assert "kei" in blob or "keinhl" in blob

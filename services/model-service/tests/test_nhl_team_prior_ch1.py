@@ -111,10 +111,11 @@ def test_documentation_forbids_board_emit() -> None:
     assert "nba" in blob or "wnba" in blob
 
 
-def test_keinhl_still_blank_in_code() -> None:
+def test_keinhl_availability_helper_present() -> None:
+    # Ch1 does not emit board KEI; helper module still exists (Ch4 fills).
     text = EDGE_KEI_AVAIL.read_text(encoding="utf-8")
     assert "sportIsMarketsOnlyEdgeBoard" in text
-    assert 'return sport === "nhl"' in text
+    assert "sportHasKeiSource" in text
 
 
 def test_cfb_ball_osu_untouched() -> None:

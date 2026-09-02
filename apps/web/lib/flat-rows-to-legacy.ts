@@ -11,6 +11,11 @@ import {
   nbaEdgeTag,
   trustNbaMarket,
 } from "@/lib/nba-trusted-market";
+import {
+  isNhlPreseason,
+  nhlAwayBookToHome,
+  nhlEdgeTag,
+} from "@/lib/nhl-trusted-market";
 import { wnbaEdgeTag } from "@/lib/wnba-trusted-market";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
 import { nflPublishTag } from "@/lib/nfl-publish-policy";
@@ -50,6 +55,10 @@ export type FlatEdgeBoardRow = {
   wnbaMarketTrusted?: boolean;
   wnbaTrustReason?: string;
   wnbaTrustLabel?: string;
+  /** NHL Ch4: trust flag; Best cleared when untrusted. */
+  nhlMarketTrusted?: boolean;
+  nhlTrustReason?: string;
+  nhlTrustLabel?: string;
   /** American odds juice for Open top (away / over). */
   openJuice?: string;
   /** American odds juice for Open bottom (home / under). */
@@ -264,6 +273,10 @@ function edgeToTag(
   if (sport === "wnba") {
     // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 (trusted Best only; caller gates trust).
     return wnbaEdgeTag(edgeNum);
+  }
+  if (sport === "nhl") {
+    // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 goal units (trusted Best only).
+    return nhlEdgeTag(edgeNum);
   }
   if (sport === "mlb" && market === "line") {
     if (edgeNum >= 3.0) return "PLAY";
@@ -526,15 +539,19 @@ export function flatRowsToLegacy(
       const bestSpreadNum = parseSpread(bestLine.bottom.label);
       const keiSpreadNum = parseSpread(keiLine.bottom.label);
       const sportLc = String(sportKey).toLowerCase();
-      // CFB/NBA: board Open/Best are away-signed; KEI + bestLine.bottom are home.
+      // CFB/NBA/NHL: board Open/Best are away-signed; KEI + bestLine.bottom are home.
       const openHome =
         sportLc === "nba"
           ? nbaAwayBookToHome(lineRow?.open)
-          : cfbAwayBookToHome(lineRow?.open);
+          : sportLc === "nhl"
+            ? nhlAwayBookToHome(lineRow?.open)
+            : cfbAwayBookToHome(lineRow?.open);
       const bestHome =
         (sportLc === "nba"
           ? nbaAwayBookToHome(lineRow?.best)
-          : cfbAwayBookToHome(lineRow?.best)) ?? bestSpreadNum;
+          : sportLc === "nhl"
+            ? nhlAwayBookToHome(lineRow?.best)
+            : cfbAwayBookToHome(lineRow?.best)) ?? bestSpreadNum;
       const bookCount = openHome != null && bestHome != null ? 2 : 1;
       let marketTrusted = true;
       if (sportLc === "cfb") {
@@ -558,6 +575,11 @@ export function flatRowsToLegacy(
                 bookCount,
                 preseason: isNbaPreseason(),
               }).trusted;
+      } else if (sportLc === "nhl") {
+        marketTrusted =
+          typeof lineRow?.nhlMarketTrusted === "boolean"
+            ? lineRow.nhlMarketTrusted
+            : true;
       }
       signedLineEdge =
         hasSportsbookLine &&
@@ -612,6 +634,11 @@ export function flatRowsToLegacy(
               bookCount: totalBookCount,
               preseason: isNbaPreseason(),
             }).trusted;
+    } else if (sportLcTotal === "nhl") {
+      totalTrusted =
+        typeof totalRow?.nhlMarketTrusted === "boolean"
+          ? totalRow.nhlMarketTrusted
+          : true;
     }
     const signedOUEdge =
       hasSportsbookTotal &&
@@ -678,6 +705,7 @@ export function flatRowsToLegacy(
     // CFB Week 0 is the close tape — finals stay visible, never PLAY/LEAN.
     // NBA preseason / untrusted Best → PASS.
     // WNBA untrusted Best / Aug-1 leftovers → PASS.
+    // NHL preseason / untrusted Best → PASS.
     const rowWeek = Number(lineRow?.week ?? totalRow?.week);
     const cfbFinalTape =
       String(sportKey).toLowerCase() === "cfb" && rowWeek === 0;
@@ -690,7 +718,13 @@ export function flatRowsToLegacy(
       String(sportKey).toLowerCase() === "wnba" &&
       (lineRow?.wnbaMarketTrusted === false ||
         totalRow?.wnbaMarketTrusted === false);
-    const forcePass = cfbFinalTape || nbaForcePass || wnbaForcePass;
+    const nhlForcePass =
+      String(sportKey).toLowerCase() === "nhl" &&
+      (isNhlPreseason() ||
+        lineRow?.nhlMarketTrusted === false ||
+        totalRow?.nhlMarketTrusted === false);
+    const forcePass =
+      cfbFinalTape || nbaForcePass || wnbaForcePass || nhlForcePass;
     const tagLine = forcePass ? ("PASS" as Tag) : tagLineRaw;
     const tagOU = forcePass ? ("PASS" as Tag) : tagOURaw;
     const playLineOut = forcePass ? undefined : playLine;
