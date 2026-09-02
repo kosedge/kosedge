@@ -42,15 +42,15 @@ Goalies appear on the board via SAVES (not as skaters); they do not crack this t
 
 ## Gates
 
-| Gate                                      | Result   |
-| ----------------------------------------- | -------- |
-| Box stats == Ch5 fields                   | **PASS** |
-| Goalie start_share Σ ≈ 1.0 / team         | **PASS** |
-| Team Σ G max drift ≤ 0.15 (~0.0003)       | **PASS** |
-| Props still dark (no PLAY/LEAN)           | **PASS** |
-| KEINHL FLA@CAR puck −0.94 · total 6.71    | **PASS** |
-| `NHL_TEAM_CARRY_SHRINK` 0.85              | **PASS** |
-| NBA / WNBA fantasy versions unchanged     | **PASS** |
+| Gate                                   | Result   |
+| -------------------------------------- | -------- |
+| Box stats == Ch5 fields                | **PASS** |
+| Goalie start_share Σ ≈ 1.0 / team      | **PASS** |
+| Team Σ G max drift ≤ 0.15 (~0.0003)    | **PASS** |
+| Props still dark (no PLAY/LEAN)        | **PASS** |
+| KEINHL FLA@CAR puck −0.94 · total 6.71 | **PASS** |
+| `NHL_TEAM_CARRY_SHRINK` 0.85           | **PASS** |
+| NBA / WNBA fantasy versions unchanged  | **PASS** |
 
 ---
 
