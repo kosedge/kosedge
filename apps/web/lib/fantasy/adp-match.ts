@@ -343,7 +343,9 @@ function adpInitialLastUnique(
     const list = idx.byInitialLastTeamPos.get(
       indexKey([firstInitial, lastName, team, pos]),
     );
-    const compatible = (list ?? []).filter((e) => teamsCompatible(team, e.team));
+    const compatible = (list ?? []).filter((e) =>
+      teamsCompatible(team, e.team),
+    );
     return compatible.length === 1;
   }
   const list = idx.byInitialLastPos.get(
@@ -584,9 +586,7 @@ export function matchAdpToDeskRows(
     boardKeyCounts.set(key, (boardKeyCounts.get(key) ?? 0) + 1);
   }
   const ambiguousBoardKeys = new Set(
-    [...boardKeyCounts.entries()]
-      .filter(([, n]) => n > 1)
-      .map(([k]) => k),
+    [...boardKeyCounts.entries()].filter(([, n]) => n > 1).map(([k]) => k),
   );
 
   // Prefer higher model ranks when two rows compete for one ADP claim.

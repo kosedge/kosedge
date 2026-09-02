@@ -109,7 +109,9 @@ describe("adp name matching polish", () => {
     );
     expect(byPlayerId.get("penix")?.adp).toBe(239.5);
     expect(byPlayerId.get("btj")?.adp).toBe(72.67);
-    expect(byPlayerId.get("strong")?.matchKind).toMatch(/core_name|initial_last/);
+    expect(byPlayerId.get("strong")?.matchKind).toMatch(
+      /core_name|initial_last/,
+    );
     expect(isHighConfidenceAdp(byPlayerId.get("strong"))).toBe(true);
   });
 
