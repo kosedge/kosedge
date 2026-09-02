@@ -1,9 +1,10 @@
-"""NHL season engine package (Ch1 team prior + Ch2 TOI/tandem)."""
+"""NHL season engine package (Ch1–Ch2 + Ch5 PlayerProjection)."""
 
 from src.services.nhl_season_engine.priors import (
     ENGINE_VERSION,
     NHL_GOALIE_TANDEM_SHARE_SUM,
     NHL_TEAM_CARRY_SHRINK,
+    NHL_TEAM_REBASE_RESIDUAL_CAP,
     NHL_TOI_GRID_SKATER_MINUTES,
     ODDS_SPORT_KEY,
     PAPER_SIM_S_SET,
@@ -25,10 +26,22 @@ from src.services.nhl_season_engine.toi_grid import (
     load_goalie_tandem,
     load_toi_grid,
 )
+from src.services.nhl_season_engine.player_projection import (
+    GOALIE_VECTOR_KEYS,
+    SKATER_VECTOR_KEYS,
+    documentation as player_projection_documentation,
+    get_goalie_projection,
+    get_skater_projection,
+    get_team_goalies,
+    get_team_skaters,
+    load_player_projection_pack,
+    team_g_identity,
+)
 
 __all__ = [
     "ENGINE_VERSION",
     "NHL_TEAM_CARRY_SHRINK",
+    "NHL_TEAM_REBASE_RESIDUAL_CAP",
     "NHL_TOI_GRID_SKATER_MINUTES",
     "NHL_GOALIE_TANDEM_SHARE_SUM",
     "PAPER_SIM_S_SET",
@@ -46,4 +59,13 @@ __all__ = [
     "get_team_toi",
     "get_team_goalie_tandem",
     "toi_grid_documentation",
+    "SKATER_VECTOR_KEYS",
+    "GOALIE_VECTOR_KEYS",
+    "load_player_projection_pack",
+    "get_skater_projection",
+    "get_goalie_projection",
+    "get_team_skaters",
+    "get_team_goalies",
+    "team_g_identity",
+    "player_projection_documentation",
 ]
