@@ -57,6 +57,11 @@ from src.services.nhl_season_engine.nhl_kei import (
     load_kei_pack,
     tag_from_edge,
 )
+from src.services.nhl_season_engine.nhl_props import (
+    PROPS_VERSION,
+    build_dark_props_board,
+    documentation as props_documentation,
+)
 
 __all__ = [
     "ENGINE_VERSION",
@@ -104,4 +109,7 @@ __all__ = [
     "compute_game_kei",
     "tag_from_edge",
     "kei_documentation",
+    "PROPS_VERSION",
+    "build_dark_props_board",
+    "props_documentation",
 ]

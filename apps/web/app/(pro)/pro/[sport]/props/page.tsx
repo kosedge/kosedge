@@ -4,6 +4,7 @@ import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
 import { fetchMlbFairLines } from "@/lib/mlb-fair-lines";
 import { fetchNbaPropsBoard } from "@/lib/nba-props-board";
+import { fetchNhlPropsBoard } from "@/lib/nhl-props-board";
 import { fetchWnbaPropsBoard } from "@/lib/wnba-props-board";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import {
@@ -14,7 +15,7 @@ import {
 
 const SPORT_PROPS_COPY: Record<string, string> = {
   nba: "NBA player props from PlayerProjection (Ch5) vs trusted Best. Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.",
-  nhl: "NHL skater and goalie props stage here once shot and save feeds clear validation. Game slate below is market context only.",
+  nhl: "NHL player props from PlayerProjection (Ch5) vs trusted Best. Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN. Odds-backed goals/assists/pts/sog; starter-unknown goalie SAVES stay —.",
   wnba: "WNBA player props from PlayerProjection (Ch5) vs trusted Best. Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN. Odds-backed pts/reb/ast/threes only.",
   mlb: "MLB props models exist server-side; play-stake eligibility stays gated off for soft launch. Use Fair Lines and Edges for game-level research.",
   cfb: "College football props remain data-pending for soft launch.",
@@ -43,7 +44,10 @@ export default async function PropsPage({
     `${sportName} props are staged for this hub pending model feed validation.`;
 
   const boardGames =
-    sportKey === "mlb" || sportKey === "nba" || sportKey === "wnba"
+    sportKey === "mlb" ||
+    sportKey === "nba" ||
+    sportKey === "wnba" ||
+    sportKey === "nhl"
       ? []
       : await getTonightGames(sportKey || "nba");
   const mlbBoard = sportKey === "mlb" ? await fetchMlbFairLines() : null;
@@ -51,6 +55,8 @@ export default async function PropsPage({
     sportKey === "nba" ? await fetchNbaPropsBoard({ limit: 120 }) : null;
   const wnbaBoard =
     sportKey === "wnba" ? await fetchWnbaPropsBoard({ limit: 120 }) : null;
+  const nhlBoard =
+    sportKey === "nhl" ? await fetchNhlPropsBoard({ limit: 120 }) : null;
 
   return (
     <SportHubShell
@@ -75,9 +81,11 @@ export default async function PropsPage({
             ? "NBA props dark board (Ch6)"
             : sportKey === "wnba"
               ? "WNBA props dark board (Ch6)"
-              : propsEnabled
-                ? "Props board pending"
-                : "Coming soon"}
+              : sportKey === "nhl"
+                ? "NHL props dark board (Ch6)"
+                : propsEnabled
+                  ? "Props board pending"
+                  : "Coming soon"}
         </p>
         <p className="mt-2 text-sm text-kos-text/70 sm:text-base">{detail}</p>
         {sportKey === "mlb" && mlbBoard ? (
@@ -212,6 +220,80 @@ export default async function PropsPage({
                           </div>
                           <div className="text-xs text-kos-text/45">
                             {row.team}
+                          </div>
+                        </td>
+                        <td className="px-3 py-2 uppercase text-kos-text/70">
+                          {row.marketKey}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/80">
+                          {row.modelMean?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                          {row.best != null ? row.best.toFixed(1) : "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                          {row.edge != null
+                            ? `${row.edge > 0 ? "+" : ""}${row.edge.toFixed(1)}`
+                            : "—"}
+                        </td>
+                        <td className="px-3 py-2 tabular-nums text-kos-text/50">
+                          {row.modelStd?.toFixed(1) ?? "—"}
+                        </td>
+                        <td className="px-3 py-2">
+                          <span className="text-kos-gold">PASS</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            ) : null}
+          </div>
+        ) : null}
+        {sportKey === "nhl" && nhlBoard ? (
+          <div className="mt-4 space-y-3">
+            <p className="text-sm text-kos-text/60">
+              {nhlBoard.error
+                ? `Board unavailable: ${nhlBoard.error}`
+                : nhlBoard.count > 0
+                  ? `${nhlBoard.count} prop rows · ${nhlBoard.modelVersion} · dark (zero PLAY / LEAN) · PlayerProjection means`
+                  : nhlBoard.message ||
+                    "No Ch6 dark prop rows yet — PlayerProjection pack required."}
+            </p>
+            {nhlBoard.phase === "ch6_dark" || nhlBoard.darkOnly ? (
+              <p className="text-xs text-kos-text/50">
+                Tags: PASS only · Best cleared when untrusted · starter-unknown
+                goalie SAVES stay — · edge = proj − Best · Odds-backed
+                goals/assists/pts/sog
+              </p>
+            ) : null}
+            {nhlBoard.lines.length > 0 ? (
+              <div className="overflow-x-auto rounded-xl border border-white/10">
+                <table className="min-w-full text-left text-sm">
+                  <thead className="bg-white/5 text-xs uppercase tracking-wide text-kos-text/50">
+                    <tr>
+                      <th className="px-3 py-2">Player</th>
+                      <th className="px-3 py-2">Mkt</th>
+                      <th className="px-3 py-2">Proj</th>
+                      <th className="px-3 py-2">Best</th>
+                      <th className="px-3 py-2">Edge</th>
+                      <th className="px-3 py-2">σ</th>
+                      <th className="px-3 py-2">Tag</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {nhlBoard.lines.slice(0, 40).map((row) => (
+                      <tr
+                        key={`${row.playerId}-${row.marketKey}-${row.playerType}`}
+                        className="border-t border-white/5"
+                      >
+                        <td className="px-3 py-2">
+                          <div className="font-medium text-kos-text">
+                            {row.playerName}
+                          </div>
+                          <div className="text-xs text-kos-text/45">
+                            {row.team}
+                            {row.playerType === "goalie" ? " · G" : ""}
                           </div>
                         </td>
                         <td className="px-3 py-2 uppercase text-kos-text/70">
