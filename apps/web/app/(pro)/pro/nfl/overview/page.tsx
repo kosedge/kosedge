@@ -11,7 +11,11 @@ import {
 } from "@/lib/pro-sport-ia";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
-import { NFL_DESK_SUBTITLE, NFL_TAGLINE, NFL_WEEK1_POSTURE } from "@/lib/nfl-pro-nav";
+import {
+  NFL_DESK_SUBTITLE,
+  NFL_TAGLINE,
+  NFL_WEEK1_POSTURE,
+} from "@/lib/nfl-pro-nav";
 
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
@@ -120,9 +124,15 @@ export default async function NflOverviewPage() {
               href={card.href}
               className={footerCardClassName(card.accent)}
             >
-              <h3 className={footerTitleClassName(card.accent)}>{card.title}</h3>
-              <p className="mt-2 text-sm text-kos-text/80">{card.description}</p>
-              <span className={footerCtaClassName(card.accent)}>{card.cta}</span>
+              <h3 className={footerTitleClassName(card.accent)}>
+                {card.title}
+              </h3>
+              <p className="mt-2 text-sm text-kos-text/80">
+                {card.description}
+              </p>
+              <span className={footerCtaClassName(card.accent)}>
+                {card.cta}
+              </span>
             </Link>
           ))}
         </div>
