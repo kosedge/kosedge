@@ -1,0 +1,129 @@
+{
+  "engine_version": "nhl-season-engine-v0.1",
+  "as_of": "2026-09-02",
+  "season_schedule": "2026-27",
+  "n_team_games": 2688,
+  "NHL_SITUATION_GOAL_CAP": 0.35,
+  "units": "goals_per_game_on_team_gf",
+  "grids": {
+    "home": [
+      0.1,
+      0.15,
+      0.2,
+      0.25
+    ],
+    "b2b": [
+      -0.1,
+      -0.15,
+      -0.2
+    ],
+    "travel": [
+      -0.05,
+      -0.08,
+      -0.1
+    ],
+    "altitude": [
+      0.08,
+      0.12,
+      0.15,
+      0.2
+    ]
+  },
+  "travel_thresholds": {
+    "miles": 1000.0,
+    "tz": 2
+  },
+  "chosen": {
+    "home": 0.1,
+    "b2b": -0.15,
+    "travel": -0.08,
+    "altitude": 0.12
+  },
+  "top5": [
+    {
+      "coeffs": {
+        "home": 0.1,
+        "b2b": -0.15,
+        "travel": -0.08,
+        "altitude": 0.12
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.0756,
+      "mean_signed_raw": 0.0034,
+      "max_abs_raw": 0.35,
+      "score": 0.176131
+    },
+    {
+      "coeffs": {
+        "home": 0.1,
+        "b2b": -0.1,
+        "travel": -0.08,
+        "altitude": 0.12
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.065,
+      "mean_signed_raw": 0.0145,
+      "max_abs_raw": 0.3,
+      "score": 0.180089
+    },
+    {
+      "coeffs": {
+        "home": 0.1,
+        "b2b": -0.15,
+        "travel": -0.05,
+        "altitude": 0.12
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.0741,
+      "mean_signed_raw": 0.0084,
+      "max_abs_raw": 0.32,
+      "score": 0.180647
+    },
+    {
+      "coeffs": {
+        "home": 0.1,
+        "b2b": -0.15,
+        "travel": -0.08,
+        "altitude": 0.08
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.0732,
+      "mean_signed_raw": 0.0034,
+      "max_abs_raw": 0.31,
+      "score": 0.181369
+    },
+    {
+      "coeffs": {
+        "home": 0.15,
+        "b2b": -0.15,
+        "travel": -0.08,
+        "altitude": 0.12
+      },
+      "clip_rate": 0.0,
+      "mean_abs_raw": 0.0919,
+      "mean_signed_raw": 0.0284,
+      "max_abs_raw": 0.35,
+      "score": 0.183735
+    }
+  ],
+  "not_copied": {
+    "nba_home": 2.0,
+    "wnba_home": 1.5
+  },
+  "prevalence": {
+    "home": 0.5,
+    "b2b": 0.22172619047619047,
+    "travel": 0.16703869047619047,
+    "altitude": 0.0625,
+    "three_in_four": 0.16889880952380953
+  },
+  "gf_pg_adj_range": [
+    2.3966,
+    3.8195
+  ],
+  "gf_pg_band": [
+    2.0,
+    4.5
+  ],
+  "ga_note": "Situation \u0394 is goals on the Ch1 GF/G line; GA remains Ch1 shrunk; \u0394 does not invent a second net prior."
+}

@@ -1,0 +1,34 @@
+{
+  "engine_version": "nhl-season-engine-v0.1",
+  "as_of": "2026-09-02",
+  "chapter": 3,
+  "NHL_SITUATION_GOAL_CAP": 0.35,
+  "NHL_TEAM_CARRY_SHRINK_unchanged": 0.85,
+  "NHL_TEAM_REBASE_RESIDUAL_CAP": 0.15,
+  "coefficients": {
+    "home": 0.1,
+    "b2b": -0.15,
+    "travel": -0.08,
+    "altitude": 0.12
+  },
+  "units": "goals_per_game_on_team_gf",
+  "classes": {
+    "home": "designated home side",
+    "b2b": "rest_days==1 OR 3 games in 4 calendar days (Rest / B2B)",
+    "travel": "prior venue \u22651000 mi OR |\u0394tz|\u22652 (official schedule metros)",
+    "altitude": "venue in nhl_venue_flags altitude list; +coeff home / \u2212coeff visitor"
+  },
+  "formula": "\u0394_raw = \u03a3 class_coeff; \u0394 = clip(\u0394_raw, \u00b1NHL_SITUATION_GOAL_CAP); gf_pg' = Ch1_gf/gp + \u0394",
+  "apply": "on_read_team_line; skater G / goalie SA copy-through only when \u0394\u22600",
+  "does_not": [
+    "team if",
+    "new player means",
+    "new TOI grid",
+    "fill KEINHL / board emit",
+    "props PLAY",
+    "change NHL_TEAM_CARRY_SHRINK 0.85",
+    "NBA/WNBA/CFB/NFL",
+    "copy NBA +2.0 or WNBA +1.5"
+  ],
+  "paper_sim": "nhl_situation_paper_sim_ch3.json"
+}
