@@ -234,6 +234,9 @@ jobs:
           else
             pytest -q
           fi
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          INTERNAL_API_SECRET: test-internal-secret
 
       - name: NFL Truth Layer invariants (block publish)
         if: steps.paths.outputs.nfl_truth == '1'
