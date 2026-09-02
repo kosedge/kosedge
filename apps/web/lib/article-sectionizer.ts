@@ -103,8 +103,9 @@ function parseHandicappersNoteInner(
 
   return {
     label: opts.label,
-    fairNumber: pick("Fair number"),
-    marketNumber: pick("Market number"),
+    // Locked Riley packets may use Fair:/Market: (without "number").
+    fairNumber: pick("Fair number") ?? pick("Fair"),
+    marketNumber: pick("Market number") ?? pick("Market"),
     lean: pick("Lean"),
     confidence: pick("Confidence"),
     keyRisk: pick("Key risk"),
