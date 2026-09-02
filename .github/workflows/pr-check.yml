@@ -68,7 +68,7 @@ jobs:
                 MS=1
                 WNBA_MS=1
                 ;;
-              services/model-service/src/services/nhl_data.py|services/model-service/src/services/nhl_season_engine/*|services/model-service/tests/test_nhl_*|scripts/nhl/*|docs/NHL_*)
+              services/model-service/src/services/nhl_data.py|services/model-service/src/services/nhl_season_engine/*|services/model-service/tests/test_nhl_*|scripts/nhl/*|docs/NHL_*|docs/NHL_GRADE*|data/nhl_grades*|data/ops/nhl-grades-summary*)
                 MS=1
                 NHL_MS=1
                 ;;
@@ -222,7 +222,7 @@ jobs:
         if: steps.paths.outputs.nhl_ms == '1'
         run: |
           cd services/model-service
-          pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py tests/test_nhl_toi_grid_ch2.py tests/test_nhl_player_projection_ch5.py tests/test_nhl_situation_ch3.py tests/test_nhl_kei_ch4.py tests/test_nhl_props_ch6.py tests/test_nhl_fantasy_ch7.py
+          pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py tests/test_nhl_toi_grid_ch2.py tests/test_nhl_player_projection_ch5.py tests/test_nhl_situation_ch3.py tests/test_nhl_kei_ch4.py tests/test_nhl_props_ch6.py tests/test_nhl_fantasy_ch7.py tests/test_nhl_grade_harness.py
 
       - name: Run model-service DepthSot / NFL tests
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1')
