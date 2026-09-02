@@ -149,9 +149,7 @@ describe("pro sport IA", () => {
     expect(fantasy?.links.map((link) => link.label)).toEqual(
       NFL_SECTION_STRUCTURE.Fantasy,
     );
-    expect(
-      fantasy?.links.every((link) => link.status === "active"),
-    ).toBe(true);
+    expect(fantasy?.links.every((link) => link.status === "active")).toBe(true);
     expect(byLabel["Team Research Hub"]).toBe("/pro/nfl/teams");
     expect(byLabel["Power Ratings"]).toBe("/pro/power-ratings/nfl");
     expect(byLabel.Standings).toBe("/pro/nfl/standings");
