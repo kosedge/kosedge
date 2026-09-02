@@ -476,9 +476,13 @@ def build_dark_props_board(
     skater_rows = [r for r in rows if r.get("player_type") != "goalie"]
     goalie_rows = [r for r in rows if r.get("player_type") == "goalie"]
     skater_rows.sort(key=_sort_key)
-    # Keep starter-unknown goalie dash rows visible (Best stays —).
-    goalie_cap = min(16, len(goalie_rows), max(0, int(limit)))
-    sk_cap = max(0, int(limit) - goalie_cap)
+    # Keep starter-unknown goalie dash rows visible (Best stays —),
+    # but never crowd out the skater desk on small limits.
+    lim = max(1, int(limit))
+    goalie_cap = min(16, len(goalie_rows), max(0, lim // 4))
+    if lim >= 40:
+        goalie_cap = min(16, len(goalie_rows), max(goalie_cap, 8))
+    sk_cap = max(0, lim - goalie_cap)
     rows = skater_rows[:sk_cap] + goalie_rows[:goalie_cap]
 
     play_n = sum(1 for r in rows if str(r.get("tag") or "").upper() == "PLAY")
