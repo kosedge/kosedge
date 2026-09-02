@@ -1311,7 +1311,7 @@ def apply_week1_kei_reprice(
                 venue = str(game_card.get("_venue") or loc)
                 reason = (
                     f"neutral · {loc} ({venue}) — travel not applied "
-                    "(international; no home HFA / same-coast)"
+                    "(international; no home HFA)"
                 )
             considered.append(
                 _entry(
