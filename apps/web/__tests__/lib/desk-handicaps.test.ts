@@ -7,6 +7,8 @@ import {
 import { extractHandicappersNotes } from "@/lib/article-sectionizer";
 
 const EXPECTED_SLUGS = [
+  "cfb-week1-g5-20260831-sam-reyes",
+  "cfb-week1-p4-20260831-jordan-ellison",
   "cin-chc-aug30-taylor-brooks",
   "col-points-2026-morgan-hale",
   "den-wins-2026-reese-quinn",
@@ -28,6 +30,11 @@ const EXPECTED_SLUGS = [
   "wnba-nyl-current-20260901-reese-quinn",
   "wnba-was-current-20260901-reese-quinn",
   "wnba-west-notes-20260901-avery-cole",
+] as const;
+
+const CFB_WEEK1_SLUGS = [
+  "cfb-week1-g5-20260831-sam-reyes",
+  "cfb-week1-p4-20260831-jordan-ellison",
 ] as const;
 
 const REESE_NORTHWEST_SLUGS = [
@@ -64,8 +71,65 @@ describe("desk-handicaps loader", () => {
       expect(article!.byline.length).toBeGreaterThan(0);
       expect(article!.bylineFull).toMatch(/^By /);
       expect(article!.noteCount).toBeGreaterThanOrEqual(1);
-      expect(article!.sport).toMatch(/^(NFL|WNBA|MLB|NBA|NHL)$/);
+      expect(article!.sport).toMatch(/^(NFL|WNBA|MLB|NBA|NHL|CFB)$/);
       expect(article!.href).toBe(`/pro/desk/${slug}`);
+    }
+  });
+
+  it("parses CFB Week 1 Jordan + Sam slate notes with stamped PLAY / Pass discipline", () => {
+    const jordan = getDeskHandicap("cfb-week1-p4-20260831-jordan-ellison")!;
+    expect(jordan.byline).toBe("Jordan Ellison");
+    expect(jordan.sport).toBe("CFB");
+    expect(jordan.category).toBe("Desk handicap");
+    expect(jordan.bodyMarkdown).toMatch(/PLAY MSU −10/);
+    expect(jordan.bodyMarkdown).toMatch(/PLAY USC −22\.5/);
+    expect(jordan.bodyMarkdown).toMatch(/PLAY Duke −8\.5/);
+    expect(jordan.bodyMarkdown).toMatch(/−15\.84/);
+    expect(jordan.bodyMarkdown).toMatch(/−27\.36/);
+    expect(jordan.bodyMarkdown).not.toMatch(/64\.94/);
+    expect(jordan.bodyMarkdown).toMatch(/Lean:\s*\*\*Pass\*\*/);
+    const jordanNotes = extractHandicappersNotes(jordan.bodyMarkdown);
+    const rutNote = jordanNotes.find((n) =>
+      (n.label ?? "").toLowerCase().includes("mass"),
+    );
+    expect(rutNote?.lean?.replace(/\*\*/g, "")).toMatch(/Pass/i);
+    const totalsNote = jordanNotes.find((n) =>
+      (n.label ?? "").toLowerCase().includes("total"),
+    );
+    expect(totalsNote?.lean?.replace(/\*\*/g, "")).toMatch(/Pass/i);
+    expect(jordan.bodyMarkdown).not.toMatch(/Lean:\s*\*\*PLAY.*Over/i);
+
+    const sam = getDeskHandicap("cfb-week1-g5-20260831-sam-reyes")!;
+    expect(sam.byline).toBe("Sam Reyes");
+    expect(sam.sport).toBe("CFB");
+    expect(sam.bodyMarkdown).toMatch(/PLAY JMU −6\.5/);
+    expect(sam.bodyMarkdown).toMatch(/PLAY USF −13\.5/);
+    expect(sam.bodyMarkdown).toMatch(/PLAY HAW \+3/);
+    expect(sam.bodyMarkdown).toMatch(/PLAY ORST \+20\.5/);
+    expect(sam.bodyMarkdown).toMatch(/PLAY WSU \+23\.5/);
+    expect(sam.bodyMarkdown).toMatch(/PLAY TXST \+30\.5/);
+    expect(sam.bodyMarkdown).toMatch(/LEAN MRSH \+24\.5/);
+    expect(sam.bodyMarkdown).not.toMatch(/64\.94/);
+    expect(sam.bodyMarkdown).not.toMatch(
+      /sit(?:ting)? Toledo|SIT TOL|Toledo 0\.00/i,
+    );
+    expect(sam.bodyMarkdown).toMatch(/No Toledo sit/i);
+    const samNotes = extractHandicappersNotes(sam.bodyMarkdown);
+    const samRut = samNotes.find((n) =>
+      (n.label ?? "").toLowerCase().includes("mass"),
+    );
+    expect(samRut?.lean?.replace(/\*\*/g, "")).toMatch(/Pass/i);
+    const samTotals = samNotes.find((n) =>
+      (n.label ?? "").toLowerCase().includes("total"),
+    );
+    expect(samTotals?.lean?.replace(/\*\*/g, "")).toMatch(/Pass/i);
+    expect(sam.bodyMarkdown).toMatch(/Total is Pass/i);
+
+    for (const slug of CFB_WEEK1_SLUGS) {
+      const article = getDeskHandicap(slug);
+      expect(article, slug).not.toBeNull();
+      expect(article!.sport).toBe("CFB");
+      expect(article!.noteCount).toBeGreaterThanOrEqual(1);
     }
   });
 

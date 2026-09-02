@@ -6,7 +6,7 @@ import {
   extractInlineSources,
 } from "@/lib/article-sectionizer";
 
-export type DeskSport = "NFL" | "WNBA" | "MLB" | "NBA" | "NHL";
+export type DeskSport = "NFL" | "WNBA" | "MLB" | "NBA" | "NHL" | "CFB";
 
 export type DeskHandicapMeta = {
   slug: string;
