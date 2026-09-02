@@ -1321,9 +1321,19 @@ def apply_week1_kei_reprice(
                 )
             )
         weather_clear = True
-        # When international and weather missing, say so honestly (never LA SoFi).
+        # When international, rewrite ALL travel/weather chips to the neutral site
+        # (never LA same-coast / SoFi / visual_crossing home-stadium strings).
         if isinstance(game_card, Mapping) and game_card.get("_international"):
             loc = str(game_card.get("_location") or "neutral site")
+            venue = str(game_card.get("_venue") or loc)
+            # Applied weather: keep magnitudes, rewrite reason to Melbourne/neutral.
+            for e in applied:
+                if e.factor == "weather":
+                    e.reason = (
+                        f"weather applied (neutral · {loc} / {venue}) — {e.reason}"
+                        if e.reason
+                        else f"weather applied (neutral · {loc} / {venue})"
+                    )
             has_weather_chip = any(
                 e.factor == "weather" for e in applied + considered
             )
@@ -1339,15 +1349,25 @@ def apply_week1_kei_reprice(
                     )
                 )
             else:
-                # Rewrite any home-stadium weather chip that leaked.
                 for e in considered:
-                    if e.factor == "weather" and (
-                        "visual_crossing" in str(e.reason)
-                        or "SoFi" in str(e.reason)
-                        or "same-coast" in str(e.reason)
+                    if e.factor != "weather":
+                        continue
+                    reason_l = str(e.reason or "").lower()
+                    # Rewrite any home-stadium / LA / Visual Crossing chip.
+                    if (
+                        "visual_crossing" in reason_l
+                        or "sofi" in reason_l
+                        or "same-coast" in reason_l
+                        or "home-stadium" in reason_l
+                        or "open-meteo" in reason_l
+                        or "nws" in reason_l
+                        or "below kei" in reason_l
+                        or "wind" in reason_l
+                        or "temp" in reason_l
+                        or loc.lower() not in reason_l
                     ):
                         e.reason = (
-                            f"weather not applied (neutral · {loc})"
+                            f"weather not applied (neutral · {loc} / {venue})"
                         )
     else:
         # Legacy Week 1 path (TZ from teams + optional weather_obs / fetch).

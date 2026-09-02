@@ -239,4 +239,19 @@ describe("Week 1 desk agreement", () => {
     expect(value).toBeCloseTo(216.2, 1);
     expect(value).not.toBe(160);
   });
+
+  it("SF@LAR canonical kickoff is 8:35 PM ET (Melbourne), not 4:00 PM ET", () => {
+    const packed = canonicalKickoffForMatchup({
+      season: 2026,
+      week: 1,
+      awayAbbr: "SF",
+      homeAbbr: "LAR",
+    });
+    expect(packed.found).toBe(true);
+    expect(packed.kickoffUtc).toBe("2026-09-11T00:35:00.000Z");
+    expect(packed.game?.venue).toBe("Melbourne Cricket Ground");
+    expect(packed.game?.location).toBe("Melbourne");
+    // Odds/DB 2026-09-10T20:00:00Z (= 4pm ET) must not win.
+    expect(packed.kickoffUtc).not.toBe("2026-09-10T20:00:00Z");
+  });
 });

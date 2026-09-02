@@ -398,13 +398,17 @@ def _read_cache(path: Path, *, ttl_sec: float) -> Optional[Dict[str, Any]]:
 
 
 def _write_cache(path: Path, payload: Mapping[str, Any]) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    body = dict(payload)
-    # as_of = cache write time (TTL clock). Preserve provider timestamp separately.
-    if body.get("fetched_at") is None and body.get("as_of"):
-        body["fetched_at"] = body["as_of"]
-    body["as_of"] = _utc_now_iso()
-    path.write_text(json.dumps(body, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        body = dict(payload)
+        # as_of = cache write time (TTL clock). Preserve provider timestamp separately.
+        if body.get("fetched_at") is None and body.get("as_of"):
+            body["fetched_at"] = body["as_of"]
+        body["as_of"] = _utc_now_iso()
+        path.write_text(json.dumps(body, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    except OSError:
+        # Read-only / ephemeral FS must not kill week card sourcing.
+        return
 
 
 def _extract_open_meteo_hour(
@@ -759,25 +763,32 @@ def source_game_card(
         if geo is None:
             weather_meta["skipped_reason"] = "venue geo missing"
         else:
-            result = fetch_weather_cached(
-                game_id=game.game_id,
-                lat=float(geo["lat"]),
-                lon=float(geo["lon"]),
-                kickoff=kickoff,
-                cache_dir=cache_dir,
-                timeout_sec=timeout_sec,
-                provider=weather_provider,
-                session=session,
-                fetch_fn=fetch_fn,
-            )
-            weather_meta = result.as_dict()
-            weather_meta["fetched"] = True
-            if result.available:
-                # Never invent — only copy real readings (may still be partial).
-                card["wind_mph"] = result.wind_mph
-                card["precip"] = result.precip
-                card["temp_f"] = result.temp_f
-            # available=False → leave weather fields None → no KEI weather mod
+            try:
+                result = fetch_weather_cached(
+                    game_id=game.game_id,
+                    lat=float(geo["lat"]),
+                    lon=float(geo["lon"]),
+                    kickoff=kickoff,
+                    cache_dir=cache_dir,
+                    timeout_sec=timeout_sec,
+                    provider=weather_provider,
+                    session=session,
+                    fetch_fn=fetch_fn,
+                )
+                weather_meta = result.as_dict()
+                weather_meta["fetched"] = True
+                if result.available:
+                    # Never invent — only copy real readings (may still be partial).
+                    card["wind_mph"] = result.wind_mph
+                    card["precip"] = result.precip
+                    card["temp_f"] = result.temp_f
+                # available=False → leave weather fields None → no KEI weather mod
+            except Exception as exc:
+                weather_meta = {
+                    "fetched": False,
+                    "skipped_reason": f"weather_fetch_error:{type(exc).__name__}",
+                    "available": False,
+                }
 
     # Guard: notes still cannot write these fields.
     assert NOTES_CANNOT_WRITE_GAME_CARD_FIELDS is True
@@ -811,19 +822,43 @@ def source_week_game_cards(
 ) -> Tuple[List[SourcedGameCard], Dict[str, Any]]:
     games, meta = load_schedule_games(season)
     week_games = [g for g in games if int(g.week) == int(week)]
-    cards = [
-        source_game_card(
-            g,
-            games,
-            fetch_weather=fetch_weather,
-            cache_dir=cache_dir,
-            timeout_sec=timeout_sec,
-            weather_provider=weather_provider,
-            session=session,
-            fetch_fn=fetch_fn,
-        )
-        for g in week_games
-    ]
+    cards: List[SourcedGameCard] = []
+    errors: List[str] = []
+    for g in week_games:
+        try:
+            cards.append(
+                source_game_card(
+                    g,
+                    games,
+                    fetch_weather=fetch_weather,
+                    cache_dir=cache_dir,
+                    timeout_sec=timeout_sec,
+                    weather_provider=weather_provider,
+                    session=session,
+                    fetch_fn=fetch_fn,
+                )
+            )
+        except Exception as exc:
+            # Per-game isolation: one weather/cache failure must not drop Melbourne.
+            errors.append(f"{g.game_id}:{type(exc).__name__}")
+            try:
+                cards.append(
+                    source_game_card(
+                        g,
+                        games,
+                        fetch_weather=False,
+                        cache_dir=cache_dir,
+                        timeout_sec=timeout_sec,
+                        weather_provider=weather_provider,
+                        session=session,
+                        fetch_fn=fetch_fn,
+                    )
+                )
+            except Exception as exc2:
+                errors.append(f"{g.game_id}:fallback:{type(exc2).__name__}")
+    meta = dict(meta)
+    meta["week_card_errors"] = errors
+    meta["week_card_count"] = len(cards)
     return cards, meta
 
 

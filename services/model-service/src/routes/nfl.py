@@ -3832,44 +3832,106 @@ def nfl_fair_lines(
     except Exception:
         week1_pack = None
     # Week-1 rest/weather cards from canonical venue (Melbourne ≠ SoFi).
+    # Never fall through to legacy same-coast / home-stadium Visual Crossing when
+    # the card source throws — retry without weather, then schedule-only stubs.
     week1_game_cards: Dict[Tuple[str, str], Dict[str, Any]] = {}
-    try:
-        from src.services.nfl_rest_weather_feed import source_week_game_cards
+    week1_kickoffs: Dict[Tuple[str, str], str] = {}
+    week1_card_source = "missing"
 
-        _cards, _card_meta = source_week_game_cards(
-            week=1, season=int(season), fetch_weather=True
+    def _store_week1_card(g: Any, card: Dict[str, Any]) -> None:
+        home_k = _nfl_team_to_abbr(getattr(g, "home_team", None)) or str(
+            getattr(g, "home_team", "") or ""
         )
+        away_k = _nfl_team_to_abbr(getattr(g, "away_team", None)) or str(
+            getattr(g, "away_team", "") or ""
+        )
+        if not home_k or not away_k:
+            return
+        # Honest international label for travel chips (not SF→LA same-coast).
+        venue = getattr(g, "venue", None) or card.get("_venue")
+        location = getattr(g, "location", None) or card.get("_location")
+        if venue and location:
+            card["_venue"] = str(venue)
+            card["_location"] = str(location)
+            card["_international"] = bool(
+                str(location).lower()
+                in {
+                    "melbourne",
+                    "london",
+                    "rio de janeiro",
+                    "munich",
+                    "mexico city",
+                    "sao paulo",
+                    "frankfurt",
+                }
+                or "cricket" in str(venue).lower()
+                or "wembley" in str(venue).lower()
+                or "tottenham" in str(venue).lower()
+            )
+        week1_game_cards[(home_k, away_k)] = card
+        if home_k in {"LA", "LAR"}:
+            week1_game_cards[("LAR" if home_k == "LA" else "LA", away_k)] = card
+        kickoff = getattr(g, "kickoff_utc", None)
+        if kickoff:
+            week1_kickoffs[(home_k, away_k)] = str(kickoff)
+            if home_k in {"LA", "LAR"}:
+                week1_kickoffs[("LAR" if home_k == "LA" else "LA", away_k)] = str(
+                    kickoff
+                )
+
+    try:
+        from src.services.nfl_rest_weather_feed import (
+            load_schedule_games,
+            source_week_game_cards,
+        )
+
+        _cards = []
+        try:
+            _cards, _card_meta = source_week_game_cards(
+                week=1, season=int(season), fetch_weather=True
+            )
+            week1_card_source = "schedule+weather"
+        except Exception:
+            log.exception(
+                "NFL Week 1 game-card weather fetch failed; retrying without weather"
+            )
+            _cards, _card_meta = source_week_game_cards(
+                week=1, season=int(season), fetch_weather=False
+            )
+            week1_card_source = "schedule_no_weather"
         for sourced in _cards:
-            g = sourced.game
-            home_k = _nfl_team_to_abbr(g.home_team) or str(g.home_team or "")
-            away_k = _nfl_team_to_abbr(g.away_team) or str(g.away_team or "")
-            if home_k and away_k:
-                card = dict(sourced.card)
-                # Honest international label for travel chips (not SF→LA same-coast).
-                if g.venue and g.location:
-                    card["_venue"] = str(g.venue)
-                    card["_location"] = str(g.location)
-                    card["_international"] = bool(
-                        str(g.location).lower()
-                        in {
-                            "melbourne",
-                            "london",
-                            "rio de janeiro",
-                            "munich",
-                            "mexico city",
-                            "sao paulo",
-                            "frankfurt",
-                        }
-                        or "cricket" in str(g.venue).lower()
-                        or "wembley" in str(g.venue).lower()
-                        or "tottenham" in str(g.venue).lower()
-                    )
-                week1_game_cards[(home_k, away_k)] = card
-                # LA / LAR alias
-                if home_k in {"LA", "LAR"}:
-                    week1_game_cards[("LAR" if home_k == "LA" else "LA", away_k)] = card
+            _store_week1_card(sourced.game, dict(sourced.card))
     except Exception:
-        log.exception("NFL Week 1 game-card source failed; legacy rest/weather path")
+        log.exception(
+            "NFL Week 1 game-card source failed; building schedule-only cards "
+            "(no legacy same-coast / LA weather)"
+        )
+        try:
+            from src.services.nfl_rest_weather_feed import load_schedule_games
+            from src.services.nfl_stadium_roof_table import resolve_roof
+
+            _games, _ = load_schedule_games(int(season))
+            for g in _games:
+                if int(g.week) != 1:
+                    continue
+                roof = resolve_roof(home=g.home_team, venue=g.venue)
+                _store_week1_card(
+                    g,
+                    {
+                        "days_rest_home": None,
+                        "days_rest_away": None,
+                        "short_week": None,
+                        "timezone_shift": 0.0,
+                        "roof": roof,
+                        "wind_mph": None,
+                        "precip": None,
+                        "temp_f": None,
+                    },
+                )
+            week1_card_source = "schedule_stub"
+        except Exception:
+            log.exception("NFL Week 1 schedule-only card stub failed")
+            week1_card_source = "failed"
     kei_reprice_applied_games = 0
     for row in rows:
         mapped = dict(row._mapping)
@@ -3965,6 +4027,9 @@ def nfl_fair_lines(
             fair_away_ml=mapped.get("fair_away_ml"),
         )
         # Gate B: KEI = Model + Week 1 desk factors. Model stays frozen.
+        # Canonical kickoff wins over odds/DB commence (Melbourne 8:35 ET, NE@SEA 8:20).
+        _canonical_kickoff = week1_kickoffs.get((home_abbr, away_abbr))
+        _line_start_time = _canonical_kickoff or mapped.get("start_time")
         try:
             _game_card = week1_game_cards.get((home_abbr, away_abbr))
             handicap_markets, kei_reprice_log = apply_week1_kei_reprice(
@@ -3975,7 +4040,7 @@ def nfl_fair_lines(
                 season=int(mapped.get("season") or season),
                 season_type=str(mapped.get("season_type") or "REG"),
                 projection=mapped.get("projection"),
-                start_time=mapped.get("start_time"),
+                start_time=_line_start_time,
                 pack=week1_pack,
                 game_card=_game_card,
             )
@@ -4146,7 +4211,7 @@ def nfl_fair_lines(
                 "season": int(mapped.get("season") or season),
                 "week": int(week_val) if week_val is not None else None,
                 "season_type": _season_type,
-                "start_time": mapped.get("start_time"),
+                "start_time": _line_start_time,
                 "game_date": mapped.get("game_date"),
                 "home_team": home_display,
                 "away_team": away_display,
@@ -4315,7 +4380,11 @@ def nfl_fair_lines(
         "current_week": current_week,
         "count": len(lines),
         "lines": lines,
-        "kickoff_source": "games.start_time",
+        "kickoff_source": (
+            "canonical_schedule+games.start_time"
+            if week1_kickoffs
+            else "games.start_time"
+        ),
         "odds_as_of": odds_as_of if market_events else snapshot_as_of,
         "as_of": odds_as_of,
         "active_run_id": season_run.get("active_run_id"),
@@ -4359,6 +4428,8 @@ def nfl_fair_lines(
             "odds_as_of": odds_as_of if market_events else snapshot_as_of,
             "kei_week1_reprice": {
                 "applied_games": kei_reprice_applied_games,
+                "game_card_source": week1_card_source,
+                "game_card_count": len(week1_game_cards),
                 "doctrine": "KEI = model + Week 1 desk factors; Edge/Tag = KEI vs market",
             },
         },
@@ -6485,18 +6556,38 @@ def _run_season_engine_game_boxes(
         "kicking": getattr(proj, "kicking", None) or {},
     }
     # One production spine: headline yards = baselines mean (Props), range = MC.
-    try:
-        from src.services.nfl_game_boxes_spine import (
-            apply_spine_overlay_to_game_boxes_payload,
-        )
+    # Overlay miss must FAIL the request — never stamp spine_version on MC medians.
+    from src.services.nfl_game_boxes_spine import (
+        SpineOverlayMissError,
+        apply_spine_overlay_to_game_boxes_payload,
+    )
 
-        _spine_session = SessionLocal()
-        try:
-            apply_spine_overlay_to_game_boxes_payload(payload, _spine_session)
-        finally:
-            _spine_session.close()
-    except Exception:
-        log.exception("NFL game-boxes spine overlay failed; MC means unchanged")
+    _spine_session = SessionLocal()
+    try:
+        apply_spine_overlay_to_game_boxes_payload(payload, _spine_session)
+    except SpineOverlayMissError as exc:
+        log.error("NFL game-boxes spine overlay miss: %s meta=%s", exc, exc.meta)
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "nfl_game_boxes_spine_overlay_miss",
+                "message": str(exc),
+                "spine_overlay": exc.meta,
+            },
+        ) from exc
+    except HTTPException:
+        raise
+    except Exception as exc:
+        log.exception("NFL game-boxes spine overlay failed")
+        raise HTTPException(
+            status_code=503,
+            detail={
+                "code": "nfl_game_boxes_spine_overlay_error",
+                "message": f"spine overlay failed: {type(exc).__name__}",
+            },
+        ) from exc
+    finally:
+        _spine_session.close()
     if include_diagnostics:
         payload["diagnostics"] = proj.diagnostics
     try:
