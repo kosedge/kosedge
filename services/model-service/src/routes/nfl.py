@@ -19,6 +19,8 @@ from sqlalchemy.exc import OperationalError, ProgrammingError, SQLAlchemyError
 from src.celery_app import QUEUE_MODELS, celery_app
 from src.db import SessionLocal
 from src.nfl_remat_policy import (
+    NFL_REGULAR_SEASON_MAX_WEEK,
+    NFL_REGULAR_SEASON_MIN_WEEK,
     decode_celery_message,
     is_poison_remat,
     resolve_remat_weeks,
@@ -5421,6 +5423,91 @@ def nfl_trigger_player_props_materialization(
         "season": season,
         "week": target_week,
         "model_version": model_version,
+    }
+
+
+def _resolve_in_process_props_week(
+    *,
+    week: Optional[int],
+    weeks: Optional[str],
+) -> int:
+    """Week-1-only in-process remat: explicit single REG week=1; never bare season=."""
+    week_list: Optional[List[int]] = None
+    if weeks is not None and str(weeks).strip():
+        try:
+            week_list = sorted({int(part.strip()) for part in str(weeks).split(",") if part.strip()})
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail="weeks must be integers") from exc
+        if not week_list:
+            week_list = None
+
+    if week is None and not week_list:
+        raise HTTPException(
+            status_code=400,
+            detail="week or weeks is required; bare season= remat is refused on this endpoint",
+        )
+    if week_list is not None and len(week_list) > 1:
+        raise HTTPException(
+            status_code=400,
+            detail="weeks must contain exactly one week; multi-week in-process remat is refused",
+        )
+
+    if week_list is not None:
+        target = int(week_list[0])
+        if week is not None and int(week) != target:
+            raise HTTPException(status_code=400, detail="week and weeks disagree")
+    else:
+        target = int(week)  # type: ignore[arg-type]
+
+    if target < NFL_REGULAR_SEASON_MIN_WEEK or target > NFL_REGULAR_SEASON_MAX_WEEK:
+        raise HTTPException(
+            status_code=400,
+            detail="week must be regular season 1–18; MAX/postseason weeks refused",
+        )
+    if target != 1:
+        raise HTTPException(
+            status_code=400,
+            detail="this endpoint accepts week=1 (or weeks=1) only",
+        )
+    return 1
+
+
+@router.post("/ops/materialize-player-props-in-process")
+def nfl_materialize_player_props_in_process(
+    request: Request,
+    season: int = Query(..., ge=2010, le=2100),
+    week: Optional[int] = Query(None, ge=1, le=25),
+    weeks: Optional[str] = Query(
+        None,
+        description="Single week only; must be 1. Multi-week and bare season= refused.",
+    ),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, Any]:
+    """Run materialize_nfl_player_props_edges on the API process (no Celery).
+
+    Week-1-only escape hatch when the models queue is buried. Does not enqueue
+    ``send_task`` / ``_enqueue_models``. Does not rebuild features/baselines/box.
+    Auth matches DepthSot (x-kosedge-secret).
+    """
+    _require_kosedge_internal(request)
+    target_week = _resolve_in_process_props_week(week=week, weeks=weeks)
+    # Lazy import — same function the Celery task wraps (ATD = QB rush_tds only).
+    from src.tasks import materialize_nfl_player_props_edges
+
+    result = materialize_nfl_player_props_edges(
+        season=int(season),
+        week=int(target_week),
+        model_version=model_version,
+    )
+    return {
+        "mode": "in_process",
+        "task_name": TASK_NFL_PLAYER_PROPS,
+        "season": int(season),
+        "week": int(target_week),
+        "weeks": [int(target_week)],
+        "model_version": model_version,
+        "queue": None,
+        "result": result,
     }
 
 

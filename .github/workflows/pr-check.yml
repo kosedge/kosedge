@@ -228,12 +228,15 @@ jobs:
         if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1')
         run: |
           cd services/model-service
-          # Prefer targeted DepthSot / auth contract tests when present; fall back to full suite.
+          # Prefer targeted DepthSot / auth / week-1 in-process remat contracts; fall back to full suite.
           if ls tests/test_nfl_camp_sot_queue.py tests/test_nfl_depth_sot_ops_auth.py >/dev/null 2>&1; then
-            pytest -q tests/test_nfl_camp_sot_queue.py tests/test_nfl_depth_sot_ops_auth.py
+            pytest -q tests/test_nfl_camp_sot_queue.py tests/test_nfl_depth_sot_ops_auth.py tests/test_nfl_props_in_process_remat_ops.py
           else
             pytest -q
           fi
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
+          INTERNAL_API_SECRET: test-internal-secret
 
       - name: NFL Truth Layer invariants (block publish)
         if: steps.paths.outputs.nfl_truth == '1'
