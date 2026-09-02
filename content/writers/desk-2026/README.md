@@ -1,6 +1,6 @@
 # Desk handicaps 2026
 
-Bylined multi-sport handicaps for `/pro/desk` and `/pro/desk/[slug]`.
+Bylined multi-sport handicaps for `/pro/desk` and `/pro/desk/[slug]` (NFL, CFB, WNBA, MLB, NBA, NHL).
 
 ## LOCKED — House vs Street (2026-08-30 — Ryan)
 

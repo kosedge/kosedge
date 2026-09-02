@@ -23,8 +23,8 @@ export default function DeskHandicapsIndexPage() {
           Desk handicaps
         </h1>
         <p className="mt-3 text-sm leading-relaxed text-kos-text/75">
-          Bylined first-live handicaps across NFL, WNBA, MLB, NBA, and NHL. Thin
-          edges stay Pass.
+          Bylined first-live handicaps across NFL, CFB, WNBA, MLB, NBA, and NHL.
+          Thin edges stay Pass.
         </p>
       </header>
 
