@@ -286,8 +286,9 @@ export function computeTiming(
     if (row.valueDelta != null && row.valueDelta >= 8) {
       return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
     }
+    // Reach-tagged (model behind ADP) — never a Take CTA in builder mode.
     if (row.valueDelta != null && row.valueDelta <= -8) {
-      return { timing: "take_now", timingHint: DRAFT_ADVICE_COPY.takeAligned };
+      return { timing: "reach", timingHint: DRAFT_ADVICE_COPY.reach };
     }
     return { timing: "fair", timingHint: null };
   }
@@ -369,13 +370,24 @@ export function computeTiming(
   return { timing: "fair", timingHint: null };
 }
 
+/** Reach badge / desk tag — model behind ADP by ≥8 (same as valueLabel). */
+export function isReachTagged(row: Pick<FantasyDeskRow, "valueDelta">): boolean {
+  return (
+    row.valueDelta != null &&
+    Number.isFinite(row.valueDelta) &&
+    row.valueDelta <= -8
+  );
+}
+
 function rankSuggestions(
   available: FantasyDeskRow[],
   ctx: ValueAwareContext,
   limit: number,
+  opts?: { excludeReachTiming?: boolean },
 ): ValueAwareSuggestion[] {
   return available
     .map((row) => scoreValueAwarePlayer(row, ctx))
+    .filter((s) => !(opts?.excludeReachTiming && s.timing === "reach"))
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       return a.row.rankOverall - b.row.rankOverall;
@@ -389,10 +401,11 @@ export function bestAvailableByValueAware(
   ctx: ValueAwareContext,
   limit = 5,
 ): ValueAwareSuggestion[] {
+  // Value list must not recommend Reach-tagged players (model behind ADP).
   const pool = available.filter(
-    (row) => row.adp != null || row.rankOverall > 0,
+    (row) => (row.adp != null || row.rankOverall > 0) && !isReachTagged(row),
   );
-  return rankSuggestions(pool, ctx, limit);
+  return rankSuggestions(pool, ctx, limit, { excludeReachTiming: true });
 }
 
 /** Value-aware need-first — fills roster holes then ranks by value-aware score. */

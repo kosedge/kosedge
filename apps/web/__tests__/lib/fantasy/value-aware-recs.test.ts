@@ -5,6 +5,7 @@ import {
   bestAvailableByValueAware,
   computeTiming,
   deskDraftAdvice,
+  isReachTagged,
   MAX_RECOMMEND_RANK_DELTA,
   reachPenalty,
   scoreValueAwarePlayer,
@@ -444,5 +445,74 @@ describe("value-aware recommendations", () => {
         adpMatchConfidence: null,
       }).label,
     ).toBe("—");
+  });
+
+  describe("ADP-aware value list excludes Reach-tagged players", () => {
+    it("isReachTagged matches valueLabel reach threshold (Δ ≤ −8)", () => {
+      expect(isReachTagged({ valueDelta: -8 })).toBe(true);
+      expect(isReachTagged({ valueDelta: -15 })).toBe(true);
+      expect(isReachTagged({ valueDelta: -7 })).toBe(false);
+      expect(isReachTagged({ valueDelta: 8 })).toBe(false);
+      expect(isReachTagged({ valueDelta: null })).toBe(false);
+    });
+
+    it("bestAvailableByValueAware never returns Reach-tagged rows", () => {
+      const reach = row({
+        playerId: "reach-val",
+        playerName: "Reach Tagged",
+        position: "RB",
+        rankOverall: 45,
+        adp: 25,
+        valueOverReplacement: 120,
+      });
+      expect(reach.valueDelta).toBeLessThanOrEqual(-8);
+      expect(isReachTagged(reach)).toBe(true);
+
+      const value = row({
+        playerId: "value-val",
+        playerName: "True Value",
+        position: "WR",
+        rankOverall: 30,
+        adp: 42,
+        valueOverReplacement: 80,
+      });
+      expect(value.valueDelta).toBeGreaterThanOrEqual(8);
+
+      const fair = row({
+        playerId: "fair-val",
+        playerName: "Fair",
+        position: "TE",
+        rankOverall: 50,
+        adp: 52,
+        valueOverReplacement: 40,
+      });
+
+      const available = [reach, value, fair];
+      const suggestions = bestAvailableByValueAware(
+        available,
+        emptyCtx(available, []),
+        5,
+      );
+      expect(suggestions.every((s) => !isReachTagged(s.row))).toBe(true);
+      expect(suggestions.every((s) => s.timing !== "reach")).toBe(true);
+      expect(suggestions.map((s) => s.row.playerId)).not.toContain("reach-val");
+      expect(suggestions.map((s) => s.row.playerId)).toContain("value-val");
+    });
+
+    it("builder static mode labels model-behind-ADP as reach, not take_now", () => {
+      const reach = row({
+        playerId: "static-reach",
+        playerName: "Static Reach",
+        position: "RB",
+        rankOverall: 35,
+        adp: 25,
+      });
+      // |Δ| ≤ 12 so overCap does not swallow the label.
+      expect(Math.abs(reach.valueDelta!)).toBeLessThanOrEqual(12);
+      expect(reach.valueDelta).toBeLessThanOrEqual(-8);
+      const scored = scoreValueAwarePlayer(reach, emptyCtx([reach], []));
+      expect(scored.timing).toBe("reach");
+      expect(scored.timingHint).toMatch(/Reach/i);
+    });
   });
 });
