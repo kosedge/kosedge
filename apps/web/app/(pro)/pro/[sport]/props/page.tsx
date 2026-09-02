@@ -282,42 +282,57 @@ export default async function PropsPage({
                     </tr>
                   </thead>
                   <tbody>
-                    {nhlBoard.lines.slice(0, 40).map((row) => (
-                      <tr
-                        key={`${row.playerId}-${row.marketKey}-${row.playerType}`}
-                        className="border-t border-white/5"
-                      >
-                        <td className="px-3 py-2">
-                          <div className="font-medium text-kos-text">
-                            {row.playerName}
-                          </div>
-                          <div className="text-xs text-kos-text/45">
-                            {row.team}
-                            {row.playerType === "goalie" ? " · G" : ""}
-                          </div>
-                        </td>
-                        <td className="px-3 py-2 uppercase text-kos-text/70">
-                          {row.marketKey}
-                        </td>
-                        <td className="px-3 py-2 tabular-nums text-kos-text/80">
-                          {row.modelMean?.toFixed(1) ?? "—"}
-                        </td>
-                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
-                          {row.best != null ? row.best.toFixed(1) : "—"}
-                        </td>
-                        <td className="px-3 py-2 tabular-nums text-kos-text/70">
-                          {row.edge != null
-                            ? `${row.edge > 0 ? "+" : ""}${row.edge.toFixed(1)}`
-                            : "—"}
-                        </td>
-                        <td className="px-3 py-2 tabular-nums text-kos-text/50">
-                          {row.modelStd?.toFixed(1) ?? "—"}
-                        </td>
-                        <td className="px-3 py-2">
-                          <span className="text-kos-gold">PASS</span>
-                        </td>
-                      </tr>
-                    ))}
+                    {(() => {
+                      // Keep starter-unknown goalie SAVES — in the first paint
+                      // (API appends goalies after skaters; a flat slice(0,40)
+                      // would hide them on a full dark board).
+                      const skaters = nhlBoard.lines.filter(
+                        (r) => r.playerType !== "goalie",
+                      );
+                      const goalies = nhlBoard.lines.filter(
+                        (r) => r.playerType === "goalie",
+                      );
+                      const rows = [
+                        ...skaters.slice(0, 32),
+                        ...goalies.slice(0, 8),
+                      ];
+                      return rows.map((row) => (
+                        <tr
+                          key={`${row.playerId}-${row.marketKey}-${row.playerType}`}
+                          className="border-t border-white/5"
+                        >
+                          <td className="px-3 py-2">
+                            <div className="font-medium text-kos-text">
+                              {row.playerName}
+                            </div>
+                            <div className="text-xs text-kos-text/45">
+                              {row.team}
+                              {row.playerType === "goalie" ? " · G" : ""}
+                            </div>
+                          </td>
+                          <td className="px-3 py-2 uppercase text-kos-text/70">
+                            {row.marketKey}
+                          </td>
+                          <td className="px-3 py-2 tabular-nums text-kos-text/80">
+                            {row.modelMean?.toFixed(1) ?? "—"}
+                          </td>
+                          <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                            {row.best != null ? row.best.toFixed(1) : "—"}
+                          </td>
+                          <td className="px-3 py-2 tabular-nums text-kos-text/70">
+                            {row.edge != null
+                              ? `${row.edge > 0 ? "+" : ""}${row.edge.toFixed(1)}`
+                              : "—"}
+                          </td>
+                          <td className="px-3 py-2 tabular-nums text-kos-text/50">
+                            {row.modelStd?.toFixed(1) ?? "—"}
+                          </td>
+                          <td className="px-3 py-2">
+                            <span className="text-kos-gold">PASS</span>
+                          </td>
+                        </tr>
+                      ));
+                    })()}
                   </tbody>
                 </table>
               </div>
