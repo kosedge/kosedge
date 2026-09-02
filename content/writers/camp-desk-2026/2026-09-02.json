@@ -1,0 +1,169 @@
+{
+  "desk_date": "2026-09-02",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Wednesday, Sep 2",
+    "bottom_line": "Named starter (Cousins) + Australia travel (Kittle/Bosa) + TB WR practice status. Not a 32-card dump. Existing LAC Under 2/5 and DEN Over 2/5 stand. Everything else Pass.",
+    "storylines": [
+      "49ers: Kittle and Bosa are on the Wednesday plane to Australia. Kittle logged two positive practice days and is trending toward Week 1 vs LAR in Melbourne; Bosa is still ramping the knee — trip ≠ active. Availability is up vs Monday’s sit risk. Pass on crowning TE1/EDGE1.",
+      "Raiders: Kubiak named Kirk Cousins the Week 1 starter Wednesday (over Mendoza / O’Connell). Cousins’ Wednesday DNP was a planned vet rest day, not an injury. Jeanty (ankle) still on the mend with Kubiak optimistic for Week 1 vs MIA. DE Keyron Crawford is out for the 2026 season (Achilles). Pass on inventing QB2.",
+      "Bucs: Claimed CB Kevin Knowles off Chiefs waivers Tuesday evening (Fordham waived). Tue practice: Egbuka (toe) and McMillan (knee) DNP; Bain (shoulder) returned. Bowles day-to-day / “feel better when I see next week”; NFL.com Wed roundup paraphrases the WRs as “headed in the right direction” for Week 1 at CIN — hopeful language, still not practicing. Fallback if both sit: Godwin / Hurst / Tez Johnson. Pass on crowning WR1/EDGE.",
+      "Vikings: Kyle Van Noy signed to the practice squad Wednesday; Pelissero: ramp on the PS, then elevate to the 53. Also PS: Brosmer, DeeJay Dallas, Dillon Bell. Depth intel only — Pass on an EDGE crown."
+    ],
+    "what_to_watch": "Melbourne practice for Kittle/Bosa; Jeanty ankle into Week 1; TB WR participation next week; Van Noy elevation clock. LAC Under 2/5 and DEN Over 2/5 stand — no chase.",
+    "sources": [
+      {
+        "label": "PFT — Kittle + Bosa traveling to Australia",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/report-george-kittle-nick-bosa-will-travel-to-australia"
+      },
+      {
+        "label": "NFL.com — Wednesday roundup (SF / LV / TB / MIN)",
+        "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-2"
+      },
+      {
+        "label": "Raiders — Cousins named Week 1 starter",
+        "href": "https://www.raiders.com/news/kirk-cousins-named-raiders-starting-quarterback"
+      },
+      {
+        "label": "PFT — Bucs claim CB Kevin Knowles",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/bucs-claim-cb-kevin-knowles-off-waivers"
+      },
+      {
+        "label": "NFL.com — Kyle Van Noy to Vikings PS",
+        "href": "https://www.nfl.com/news/kyle-van-noy-vikings-signing"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "SF",
+      "title": "49ers camp — Sep 2",
+      "bottom_line": "Kittle and Bosa traveling to Australia Wednesday. Kittle trending toward Week 1 vs LAR after two positive practices; Bosa still ramping knee. Trip ≠ active. Availability up vs Sep 1 sit risk. Pass on crowning TE1/EDGE1.",
+      "key_points": [
+        "PFT / Rapoport: Kittle and Bosa will travel with the club Wednesday ahead of the Melbourne opener vs LAR. Sep 1 card had Kittle could stay home / Bosa DNP Monday — this is the Australia-clock update.",
+        "Kittle practiced the last two days and is trending in the right direction to play Week 1; Shanahan had said he’d prefer not to take him if the ramp stalled. Making the trip is encouraging, not a clearance.",
+        "Bosa still ramping after the knee; Lynch has eyed him for the opener. Pass on crowning Week 1 TE1 or EDGE1 off travel alone."
+      ],
+      "what_to_watch": "Melbourne practice reps for Kittle and Bosa before Week 1 vs LAR — trip does not equal active.",
+      "is_material_depth": true,
+      "sot_flag": "Kittle/Bosa Australia travel — Week 1 availability trending up vs Sep 1 sit risk. Do not crown TE1/EDGE1 from the plane.",
+      "sources": [
+        {
+          "label": "PFT — Kittle + Bosa traveling to Australia",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/report-george-kittle-nick-bosa-will-travel-to-australia"
+        },
+        {
+          "label": "NFL.com — Wednesday roundup (SF)",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-2"
+        },
+        {
+          "label": "CBS — Kittle / Bosa Australia travel",
+          "href": "https://www.cbssports.com/nfl/news/george-kittle-nick-bosa-49ers-rams-australia/"
+        }
+      ]
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders camp — Sep 2",
+      "bottom_line": "Cousins named Week 1 starter. Wednesday DNP was a planned vet rest day. Jeanty ankle Week 1 flag; Crawford season loss (Achilles). Pass — no new win-total stamp.",
+      "key_points": [
+        "Club / Kubiak Wednesday: Kirk Cousins is the Week 1 starter over Mendoza and O’Connell — “he’s earned it.” Kubiak did not name QB2; do not invent one.",
+        "Las Vegas Sun / Kubiak: Cousins’ Wednesday absence was “by design for a rest day, a vet day” — not an injury framing. PFT noted he appeared later in a red jersey/hat while Mendoza took early first-team work.",
+        "NFL.com Wed roundup: Jeanty (ankle) remains on the mend with Kubiak optimistic for Week 1 vs MIA; DE Keyron Crawford out for the 2026 season (Achilles)."
+      ],
+      "what_to_watch": "Jeanty ankle participation into Week 1 vs MIA; whether Kubiak ever names QB2 behind Cousins.",
+      "is_material_depth": true,
+      "sot_flag": "Cousins named Week 1 starter. Flag Jeanty Week 1; Crawford season loss. Do not invent QB2.",
+      "sources": [
+        {
+          "label": "Raiders — Cousins named Week 1 starter",
+          "href": "https://www.raiders.com/news/kirk-cousins-named-raiders-starting-quarterback"
+        },
+        {
+          "label": "PFT — Cousins / Jeanty not in Wednesday practice",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/kirk-cousins-ashton-jeanty-not-participating-in-wednesdays-practice"
+        },
+        {
+          "label": "NFL.com — Wednesday roundup (LV injuries)",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-2"
+        },
+        {
+          "label": "Las Vegas Sun — Cousins anointed starter; vet rest day",
+          "href": "https://lasvegassun.com/news/2026/sep/02/kirk-cousins-officially-anointed-raiders-starting/"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers camp — Sep 2",
+      "bottom_line": "Knowles claimed off Chiefs waivers; Fordham waived. Egbuka + McMillan still DNP; Bain returned. Hopeful Week 1 WR language + still not practicing. Pass on crowning WR1/EDGE.",
+      "key_points": [
+        "PFT (Tue ~5:57pm ET, after Sep 1 package): Bucs claimed CB Kevin Knowles off Chiefs waivers; corresponding waive of LB Caden Fordham. Not in Sep 1 team_notes — include.",
+        "Pewter after Tue practice: Egbuka (toe) and McMillan (knee) DNP; Bain (shoulder) returned. Bowles: day-to-day / “feel better when I see next week.”",
+        "NFL.com Wed roundup paraphrases the WRs as “headed in the right direction” for Week 1 at CIN — reconcile honestly: hopeful coach language while both still sat. Fallback if both sit: Godwin / Hurst / Tez Johnson (Pewter)."
+      ],
+      "what_to_watch": "WR participation next week before CIN; Bain snaps after the shoulder return. No WR1/EDGE crown.",
+      "is_material_depth": true,
+      "sot_flag": "Knowles claimed; Egbuka/McMillan Week 1 availability flag. Do not crown WR1 or EDGE from hopeful language.",
+      "sources": [
+        {
+          "label": "PFT — Bucs claim CB Kevin Knowles",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/bucs-claim-cb-kevin-knowles-off-waivers"
+        },
+        {
+          "label": "Pewter — Bain returns; Egbuka / McMillan DNP",
+          "href": "https://www.pewterreport.com/rueben-bain-jr-emeka-egbuka-bucs-injury/"
+        },
+        {
+          "label": "NFL.com — Wednesday roundup (TB)",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-2"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings camp — Sep 2",
+      "bottom_line": "Van Noy to the practice squad with a ramp-then-elevate plan. Also PS: Brosmer, DeeJay Dallas, Dillon Bell. Pass — no starter crown.",
+      "key_points": [
+        "NFL.com / club: Kyle Van Noy signed to the Vikings practice squad Wednesday.",
+        "Pelissero: ramp on the PS, then elevate to the 53 — depth intel, not a Week 1 EDGE crown.",
+        "NFL.com Wed roundup also lists Max Brosmer, DeeJay Dallas, and Dillon Bell on the PS; corresponding PS cuts include Joshua Gray, Gavin Gerhardt, Tristan Leigh, and Cam’Ron Stewart."
+      ],
+      "what_to_watch": "Van Noy elevation clock onto the 53 — do not invent snaps before he’s up.",
+      "is_material_depth": true,
+      "sot_flag": "Van Noy PS with elevation plan. Flag EDGE depth only — do not crown a starter.",
+      "sources": [
+        {
+          "label": "NFL.com — Kyle Van Noy to Vikings PS",
+          "href": "https://www.nfl.com/news/kyle-van-noy-vikings-signing"
+        },
+        {
+          "label": "NFL.com — Wednesday roundup (MIN)",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-wednesday-sept-2"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "SF",
+      "fields": ["bottom_line"],
+      "reason": "Kittle/Bosa Australia travel — Week 1 availability trending up vs Sep 1 sit risk. Pass on crowning TE1/EDGE1; no new win-total stamp.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "LV",
+      "fields": ["bottom_line"],
+      "reason": "Cousins named Week 1 starter; Jeanty Week 1 flag; Crawford season loss. Pass on new win-total; LAC Under 2/5 and DEN Over 2/5 stand.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "TB",
+      "fields": ["bottom_line"],
+      "reason": "Knowles claim + Egbuka/McMillan still DNP with hopeful Week 1 language. WR availability flag only — Pass on crowning WR1/EDGE.",
+      "status": "flagged"
+    }
+  ]
+}
