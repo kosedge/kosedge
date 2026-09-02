@@ -288,7 +288,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Fantasy",
       subtitle:
-        "Draft desk, guillotine stay-alive desk, late-round sleepers, and weekly SU pick’em.",
+        "Draft desk, guillotine stay-alive desk, late-round sleepers, and weekly ATS pick’em.",
       links: [
         {
           href: "/pro/nfl/fantasy",
@@ -321,7 +321,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/fantasy/pickem",
           label: "Pick’em",
-          hint: "Weekly SU card ranked 1–N. PLAY / LEAN first, then the rest of the slate.",
+          hint: "Weekly ATS card ranked 1–N. PLAY / LEAN first; fill the rest vs the stake line.",
           premium: true,
           status: "active",
         },
