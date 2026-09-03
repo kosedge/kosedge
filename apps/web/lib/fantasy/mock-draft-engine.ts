@@ -15,7 +15,10 @@ import {
   type MockTeamCount,
 } from "@/lib/fantasy/mock-types";
 import { boardHasPosition, mockRosterNeeds } from "@/lib/fantasy/mock-roster";
-import { projectedStarterPoints } from "@/lib/fantasy/team-builder";
+import {
+  letterGradeFromStarters,
+  projectedStarterPoints,
+} from "@/lib/fantasy/team-builder";
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
 export { boardHasPosition, mockRosterNeeds };
@@ -275,13 +278,8 @@ export function buildPostDraftReport(
     .filter(([, n]) => n > 0)
     .map(([pos]) => pos);
 
-  let gradeLetter = "C";
-  if (starterPoints >= 1400 && holes.length === 0) gradeLetter = "A";
-  else if (starterPoints >= 1250 && holes.length <= 1) gradeLetter = "B+";
-  else if (starterPoints >= 1100 && holes.length <= 2) gradeLetter = "B";
-  else if (starterPoints >= 950) gradeLetter = "C+";
-  else if (starterPoints >= 800) gradeLetter = "C";
-  else gradeLetter = "D";
+  // Incomplete roster (incl. required K/DST) is never a B — shared with Builder.
+  const gradeLetter = letterGradeFromStarters(starterPoints, holes);
 
   const detail =
     holes.length === 0
@@ -345,13 +343,14 @@ export function buildPostDraftReport(
       (p) =>
         `${p.playerName}: model #${p.modelRank} vs ADP ~${p.adp?.toFixed(0) ?? "—"} (+${p.valueDelta!.toFixed(0)})`,
     );
+  // Same math as Notable values: model rank vs ADP (valueDelta), not pick vs ADP.
   const reaches = userPicks
     .filter((p) => p.valueDelta != null && p.valueDelta <= -8)
     .sort((a, b) => (a.valueDelta ?? 0) - (b.valueDelta ?? 0))
     .slice(0, 4)
     .map(
       (p) =>
-        `${p.playerName}: took at pick ${p.overall} while ADP ~${p.adp?.toFixed(0) ?? "—"} (${p.valueDelta!.toFixed(0)})`,
+        `${p.playerName}: model #${p.modelRank} vs ADP ~${p.adp?.toFixed(0) ?? "—"} (${p.valueDelta!.toFixed(0)})`,
     );
 
   return {

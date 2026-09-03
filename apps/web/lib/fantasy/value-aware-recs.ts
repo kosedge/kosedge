@@ -106,7 +106,9 @@ function vorTerm(row: FantasyDeskRow): number {
 }
 
 function needTerm(row: FantasyDeskRow, needs: Record<string, number>): number {
-  return positionalNeedScore(row, needs) * VALUE_AWARE_WEIGHTS.needPointsPerSlot;
+  return (
+    positionalNeedScore(row, needs) * VALUE_AWARE_WEIGHTS.needPointsPerSlot
+  );
 }
 
 function modelAheadReachPenalty(row: FantasyDeskRow): number {
@@ -126,10 +128,7 @@ function positionalNeedScore(
   const pos = row.position.toUpperCase();
   const direct = needs[pos] ?? 0;
   if (direct > 0) return direct;
-  if (
-    (needs.FLEX ?? 0) > 0 &&
-    ["RB", "WR", "TE"].includes(pos)
-  ) {
+  if ((needs.FLEX ?? 0) > 0 && ["RB", "WR", "TE"].includes(pos)) {
     return 1;
   }
   return 0;
@@ -286,8 +285,9 @@ export function computeTiming(
     if (row.valueDelta != null && row.valueDelta >= 8) {
       return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
     }
+    // Reach-tagged (model behind ADP) — never a Take CTA in builder mode.
     if (row.valueDelta != null && row.valueDelta <= -8) {
-      return { timing: "take_now", timingHint: DRAFT_ADVICE_COPY.takeAligned };
+      return { timing: "reach", timingHint: DRAFT_ADVICE_COPY.reach };
     }
     return { timing: "fair", timingHint: null };
   }
@@ -305,11 +305,7 @@ export function computeTiming(
 
   // Wait can fire past the ±12 take/reach cap — that's the whole point of
   // "model 18 / ADP 35". Lottery ADP (beyond three rounds) stays unlabeled.
-  if (
-    row.valueDelta != null &&
-    row.valueDelta >= 8 &&
-    inWaitHorizon
-  ) {
+  if (row.valueDelta != null && row.valueDelta >= 8 && inWaitHorizon) {
     return { timing: "wait", timingHint: DRAFT_ADVICE_COPY.wait };
   }
 
@@ -369,13 +365,26 @@ export function computeTiming(
   return { timing: "fair", timingHint: null };
 }
 
+/** Reach badge / desk tag — model behind ADP by ≥8 (same as valueLabel). */
+export function isReachTagged(
+  row: Pick<FantasyDeskRow, "valueDelta">,
+): boolean {
+  return (
+    row.valueDelta != null &&
+    Number.isFinite(row.valueDelta) &&
+    row.valueDelta <= -8
+  );
+}
+
 function rankSuggestions(
   available: FantasyDeskRow[],
   ctx: ValueAwareContext,
   limit: number,
+  opts?: { excludeReachTiming?: boolean },
 ): ValueAwareSuggestion[] {
   return available
     .map((row) => scoreValueAwarePlayer(row, ctx))
+    .filter((s) => !(opts?.excludeReachTiming && s.timing === "reach"))
     .sort((a, b) => {
       if (b.score !== a.score) return b.score - a.score;
       return a.row.rankOverall - b.row.rankOverall;
@@ -389,10 +398,11 @@ export function bestAvailableByValueAware(
   ctx: ValueAwareContext,
   limit = 5,
 ): ValueAwareSuggestion[] {
+  // Value list must not recommend Reach-tagged players (model behind ADP).
   const pool = available.filter(
-    (row) => row.adp != null || row.rankOverall > 0,
+    (row) => (row.adp != null || row.rankOverall > 0) && !isReachTagged(row),
   );
-  return rankSuggestions(pool, ctx, limit);
+  return rankSuggestions(pool, ctx, limit, { excludeReachTiming: true });
 }
 
 /** Value-aware need-first — fills roster holes then ranks by value-aware score. */
@@ -446,10 +456,7 @@ export function draftAdviceClass(timing: SuggestionTiming): string {
  * Builder/Mock keep the full scorer (need + pick number).
  */
 export function deskDraftAdvice(
-  row: Pick<
-    FantasyDeskRow,
-    "adp" | "valueDelta" | "adpMatchConfidence"
-  >,
+  row: Pick<FantasyDeskRow, "adp" | "valueDelta" | "adpMatchConfidence">,
 ): { timing: SuggestionTiming; label: string } {
   if (
     row.adp == null ||
