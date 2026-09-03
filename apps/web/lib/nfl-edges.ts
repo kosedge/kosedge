@@ -23,6 +23,7 @@ import {
   nflPropsSurfaceState,
   type NflPropsSurfaceState,
 } from "@/lib/nfl-props-surface";
+import { pickLatestIso } from "@/lib/market-asof-stamp";
 
 export type DeskMarketType = "all" | "ml" | "spread" | "total" | "props";
 
@@ -53,6 +54,10 @@ export type NflEdgesDeskResponse = {
     minConfidence: number;
   };
   propsSurface: NflPropsSurfaceState;
+  /** Joined market capture from fair-lines (null when upstream omitted). */
+  marketAsOf: string | null;
+  /** Book keys from fair-lines diagnostics when joined. */
+  marketBooks: string[];
   diagnostics: {
     gameCandidates: number;
     propCandidates: number;
@@ -376,6 +381,13 @@ export async function fetchNflEdgesDesk(params: {
 
   const allRows = filterDeskRows([...mergedGame, ...propEdges], market);
 
+  const marketAsOf =
+    fairBoard.oddsAsOf?.trim() ||
+    fairBoard.asOf?.trim() ||
+    boardAsOfFromProps(propsBoard.rows) ||
+    null;
+  const marketBooks = (fairBoard.diagnostics.bookmakers ?? []).filter(Boolean);
+
   return {
     season: params.season,
     week: params.week,
@@ -383,6 +395,8 @@ export async function fetchNflEdgesDesk(params: {
     rows: allRows,
     filters: { market, minProbEdge, minLineEdge, minConfidence },
     propsSurface: propSurface,
+    marketAsOf,
+    marketBooks,
     diagnostics: {
       gameCandidates: mergedGame.length,
       propCandidates: propEdges.length,
@@ -391,6 +405,12 @@ export async function fetchNflEdgesDesk(params: {
       propsError: propsBoard.error,
     },
   };
+}
+
+function boardAsOfFromProps(
+  rows: Array<{ updatedAt: string | null }>,
+): string | null {
+  return pickLatestIso(...rows.map((r) => r.updatedAt));
 }
 
 export {

@@ -316,10 +316,98 @@ describe("odds-api edge board markets", () => {
       ]),
     );
 
-    const rows = await fetchOddsComparison("mlb", "fake-key");
-    expect(rows[0]?.spread?.draftkings).toMatchObject({
+    const result = await fetchOddsComparison("mlb", "fake-key");
+    expect(result.rows[0]?.spread?.draftkings).toMatchObject({
       away: "ALT +5.5",
       home: "ALT -5.5",
     });
+    // No last_update on bookmakers → honest null (do not invent fetch time).
+    expect(result.asOf).toBeNull();
+    expect(result.bookAsOf).toEqual([
+      { key: "draftkings", label: "DraftKings", asOf: null },
+    ]);
+  });
+
+  it("plumbs book last_update into Compare Odds asOf (no fabricated clock)", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "game-asof",
+          sport_key: "americanfootball_nfl",
+          commence_time: "2026-09-10T00:20:00Z",
+          away_team: "New England Patriots",
+          home_team: "Seattle Seahawks",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-02T16:00:00Z",
+              markets: [
+                {
+                  key: "spreads",
+                  last_update: "2026-09-02T16:05:00Z",
+                  outcomes: [
+                    { name: "New England Patriots", point: 3.0, price: -110 },
+                    { name: "Seattle Seahawks", point: -3.0, price: -110 },
+                  ],
+                },
+                {
+                  key: "totals",
+                  outcomes: [
+                    { name: "Over", point: 43.5, price: -110 },
+                    { name: "Under", point: 43.5, price: -110 },
+                  ],
+                },
+                {
+                  key: "h2h",
+                  outcomes: [
+                    { name: "New England Patriots", price: 150 },
+                    { name: "Seattle Seahawks", price: -175 },
+                  ],
+                },
+              ],
+            },
+            {
+              key: "fanduel",
+              title: "FanDuel",
+              last_update: "2026-09-02T17:00:00Z",
+              markets: [
+                {
+                  key: "spreads",
+                  outcomes: [
+                    { name: "New England Patriots", point: 3.5, price: -115 },
+                    { name: "Seattle Seahawks", point: -3.5, price: -105 },
+                  ],
+                },
+                {
+                  key: "totals",
+                  outcomes: [
+                    { name: "Over", point: 44.0, price: -108 },
+                    { name: "Under", point: 44.0, price: -112 },
+                  ],
+                },
+                {
+                  key: "h2h",
+                  outcomes: [
+                    { name: "New England Patriots", price: 145 },
+                    { name: "Seattle Seahawks", price: -170 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const result = await fetchOddsComparison("nfl", "fake-key");
+    expect(result.rows).toHaveLength(1);
+    expect(result.asOf).toBe("2026-09-02T17:00:00Z");
+    expect(result.bookAsOf.find((b) => b.key === "draftkings")?.asOf).toBe(
+      "2026-09-02T16:05:00Z",
+    );
+    expect(result.bookAsOf.find((b) => b.key === "fanduel")?.asOf).toBe(
+      "2026-09-02T17:00:00Z",
+    );
   });
 });

@@ -243,6 +243,35 @@ describe("pro sport IA", () => {
     );
   });
 
+  it("keeps Guillotine destination honest: educational lists, not weekly elimination/waiver", () => {
+    const src = readFileSync(
+      path.join(
+        __dirname,
+        "../../app/(pro)/pro/nfl/fantasy/guillotine/page.tsx",
+      ),
+      "utf8",
+    );
+    expect(src).toMatch(/Educational stay-alive lists from season ranks/i);
+    expect(src).toMatch(/not a weekly\s+elimination or waiver tool/i);
+    expect(src).not.toMatch(
+      /Last place is eliminated each week — waivers and adds matter as much as your draft/,
+    );
+    expect(src).not.toMatch(/Each week, the lowest-scoring team is cut/);
+    expect(src).not.toMatch(/Waivers and opportunistic adds matter weekly/);
+  });
+
+  it("keeps Weekly Fantasy destination H1 honest: season-rate PPG, not week projections", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/nfl/weekly-fantasy/page.tsx"),
+      "utf8",
+    );
+    expect(src).toMatch(/Season-rate PPG/i);
+    expect(src).toMatch(/not week-specific projections/i);
+    expect(src).toMatch(/Season-rate PPG leaders/);
+    expect(src).not.toMatch(/Weekly Fantasy Projections/);
+    expect(src).not.toMatch(/>Weekly leaders</);
+  });
+
   it("keeps Team Intel free of betting-desk / props duplicates", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({

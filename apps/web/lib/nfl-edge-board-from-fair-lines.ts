@@ -410,7 +410,8 @@ export function resolveEdgeBoardLinesAsOf(opts: {
     if (Number.isFinite(ts) && now - ts <= maxAge) return market;
   }
   if (board) return board;
-  return new Date(now).toISOString();
+  // Honest: do not mint "now" when both market and board stamps are blank.
+  return undefined;
 }
 
 /**

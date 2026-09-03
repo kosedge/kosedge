@@ -10,6 +10,9 @@ import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
+import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
+import { bookDisplay } from "@/lib/odds-api";
+import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
 const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
@@ -111,6 +114,10 @@ export default async function NflEdgesDeskPage({
       ? desk.diagnostics.fairLinesError
       : undefined;
   const propsCopy = nflPropsSurfaceCopy(desk.propsSurface);
+  const headerAsOf = marketAsOfHeaderSuffix({
+    asOf: desk.marketAsOf,
+    kind: "market",
+  });
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -118,7 +125,7 @@ export default async function NflEdgesDeskPage({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              Week {week} · {season} · Research desk
+              Week {week} · {season} · {headerAsOf}
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               Model vs Market Edges
@@ -127,6 +134,13 @@ export default async function NflEdgesDeskPage({
               Separations between KosEdge lines and the joined market. Empty
               when nothing clears the cut.
             </p>
+            <MarketAsOfStamp
+              className="mt-3"
+              asOf={desk.marketAsOf}
+              books={desk.marketBooks.map((k) => bookDisplay(k))}
+              kind="market"
+              data-testid="edges-desk-asof"
+            />
           </div>
           <div className="grid gap-2 sm:min-w-48">
             <Link
@@ -232,7 +246,7 @@ export default async function NflEdgesDeskPage({
       <section className="mt-6 rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <div className="flex items-baseline justify-between gap-3">
           <h2 className="text-xl font-semibold text-kos-text">
-            Edges · Week {week} · {season}
+            Edges · Week {week} · {season} · {headerAsOf}
           </h2>
         </div>
 
