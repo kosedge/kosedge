@@ -22,16 +22,15 @@ import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
-import { formatNflWeekLabel } from "@/lib/nfl-truth-label";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { boardAsOfFromUpdatedAts } from "@/lib/market-asof-stamp";
+import { formatNflPropsBoardPeriod } from "@/lib/nfl-props-header";
 
 /** Soft-launch default: current season board — never archive-week CTAs. */
 const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
 const MARKET_TABS = ["ALL", ...PRIMARY_BOARD_MARKETS] as const;
 const LIMIT_OPTIONS = [100, 250, 500] as const;
-const KOSEDGE_DATE = "August 11, 2026";
 
 type SearchValue = string | string[] | undefined;
 
@@ -50,7 +49,8 @@ function buildHref(base: Record<string, string | undefined>): string {
 }
 
 function propsBoardAsOf(rows: NflPropBoardRow[]): string | null {
-  // Honest: never fall back to editorial KOSEDGE_DATE when updatedAt is blank.
+  // Honest: never fall back to an editorial launch date when updatedAt is blank.
+  // updated_at is board/model vintage — not game start time.
   return boardAsOfFromUpdatedAts(rows.map((r) => r.updatedAt));
 }
 
@@ -113,9 +113,11 @@ export default async function NflPropsBoardPage({
               Weekly player means from the production spine, with bands and
               market edge when a book is joined. Research rows — not a bet card.
             </p>
-            <p className="mt-2 text-xs text-kos-text/55">
-              Date: {KOSEDGE_DATE}
-              {` · ${season} ${formatNflWeekLabel(week, { season })}`}
+            <p
+              className="mt-2 text-xs text-kos-text/55"
+              data-testid="props-board-period"
+            >
+              {formatNflPropsBoardPeriod(season, week)}
             </p>
             <MarketAsOfStamp
               className="mt-2"
