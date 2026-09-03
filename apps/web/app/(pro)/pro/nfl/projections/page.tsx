@@ -35,6 +35,7 @@ import {
   SHOW_PERCENTILES_LABEL,
   formatPercentileReveal,
 } from "@/lib/nfl-range-ux";
+import { NFL_FUTURES_SOURCE_STAMP } from "@/lib/nfl-surface-honesty";
 
 type SearchValue = string | string[] | undefined;
 
@@ -284,6 +285,19 @@ export default async function NflProjectionsPage({
               {oddsBundle.asOfUtc
                 ? ` • Odds as of ${new Date(oddsBundle.asOfUtc).toLocaleString()}`
                 : ""}
+            </p>
+            <p
+              className="mt-2 text-xs text-kos-gold/85"
+              data-testid="nfl-futures-source-stamp"
+            >
+              {NFL_FUTURES_SOURCE_STAMP}{" "}
+              <Link
+                href="/pro/nfl/awards"
+                className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
+              >
+                Awards
+              </Link>{" "}
+              uses its own board.
             </p>
             <CurrentYtdHint className="mt-1" />
           </div>

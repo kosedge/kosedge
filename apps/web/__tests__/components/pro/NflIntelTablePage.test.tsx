@@ -125,7 +125,9 @@ describe("NflIntelTablePage", () => {
     render(page);
 
     expect(
-      screen.getByText("ARCHIVE · showing 2025 finals (as-of) — not 2026 current"),
+      screen.getByText(
+        "ARCHIVE · showing 2025 finals (as-of) — not 2026 current",
+      ),
     ).toBeInTheDocument();
     expect(screen.getByText(/Season 2025 · finals/)).toBeInTheDocument();
     expect(screen.queryByText(/W22/)).not.toBeInTheDocument();
@@ -157,6 +159,10 @@ describe("NflIntelTablePage", () => {
       title: "NFL Depth Charts",
       description: "Depth",
       emptyHint: "No data",
+      sourceHonesty:
+        "Source: packaged / model depth chart — not live Camp Desk.",
+      sourceHonestyTestId: "nfl-depth-source-stamp",
+      campHref: "/pro/nfl/camp",
       columns: [
         { key: "team", label: "Team" },
         { key: "player_name", label: "Player" },
@@ -165,10 +171,25 @@ describe("NflIntelTablePage", () => {
 
     render(page);
 
-    expect(screen.getByText(/Season 2026 · Preseason/)).toBeInTheDocument();
-    expect(screen.getByTestId("nfl-truth-state")).toHaveTextContent("PRESEASON");
+    expect(
+      screen.getAllByText(/Season 2026 · Preseason/).length,
+    ).toBeGreaterThan(0);
+    expect(screen.getByTestId("nfl-truth-state")).toHaveTextContent(
+      "PRESEASON",
+    );
     expect(screen.queryByText(/Week 18/)).not.toBeInTheDocument();
     expect(screen.queryByText(/2026 W18/)).not.toBeInTheDocument();
+    expect(screen.getByTestId("nfl-depth-source-stamp")).toHaveTextContent(
+      /not live Camp Desk/i,
+    );
+    expect(screen.getByTestId("nfl-depth-source-stamp")).toHaveTextContent(
+      /As-of: Season 2026 · Preseason/i,
+    );
+    expect(screen.getByRole("link", { name: "Camp Desk" })).toHaveAttribute(
+      "href",
+      "/pro/nfl/camp",
+    );
+    expect(screen.getByText("Stafford")).toBeInTheDocument();
     vi.useRealTimers();
   });
 });
