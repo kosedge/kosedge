@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import {
   buildSportOverviewContent,
@@ -48,7 +50,8 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
   ],
   Fantasy: [
     "Fantasy Draft Desk",
-    "Weekly Fantasy Projections",
+    "Weekly Fantasy",
+    "DFS Board",
     "Guillotine League",
     "Sleepers",
     "Pick’em",
@@ -131,13 +134,11 @@ describe("pro sport IA", () => {
     expect(byLabel.Futures).toBe("/pro/nfl/projections");
     expect(byLabel["Player Props Board"]).toBeUndefined();
     expect(byLabel["Fantasy Draft Desk"]).toBe("/pro/nfl/fantasy");
-    expect(byLabel["Weekly Fantasy Projections"]).toBe(
-      "/pro/nfl/weekly-fantasy",
-    );
+    expect(byLabel["Weekly Fantasy"]).toBe("/pro/nfl/weekly-fantasy");
+    expect(byLabel["DFS Board"]).toBe("/pro/nfl/dfs");
     expect(byLabel["Guillotine League"]).toBe("/pro/nfl/fantasy/guillotine");
     expect(byLabel.Sleepers).toBe("/pro/nfl/fantasy/sleepers");
     expect(byLabel["Pick’em"]).toBe("/pro/nfl/fantasy/pickem");
-    expect(byLabel["DFS Board"]).toBeUndefined();
 
     const fantasy = sections.find((section) => section.title === "Fantasy");
     expect(fantasy?.subtitle).toMatch(/weekly ATS pick/i);
@@ -170,6 +171,76 @@ describe("pro sport IA", () => {
         .flatMap((section) => section.links)
         .every((link) => link.href && link.status === "active"),
     ).toBe(true);
+  });
+
+  it("keeps unfinished NFL Overview catalog tiles active with honest marketing copy", () => {
+    const content = buildSportOverviewContent("nfl", "NFL");
+    const sections = buildSportOverviewSections({
+      sportKey: "nfl",
+      base: "/pro/nfl",
+      edgeBoardHref: "/edge-board/nfl",
+      content,
+    });
+    const byLabel = Object.fromEntries(
+      sections.flatMap((section) =>
+        section.links.map((link) => [link.label, link]),
+      ),
+    );
+
+    const requiredActive = [
+      "Weekly Fantasy",
+      "DFS Board",
+      "Guillotine League",
+      "MVP/Awards",
+      "Depth Charts",
+      "Performance",
+    ] as const;
+    for (const label of requiredActive) {
+      expect(byLabel[label]?.status).toBe("active");
+      expect(byLabel[label]?.href).toBeTruthy();
+    }
+
+    const weeklyFantasy = byLabel["Weekly Fantasy"]!;
+    expect(weeklyFantasy.hint).toMatch(/season-rate/i);
+    expect(weeklyFantasy.hint).toMatch(/not week-specific/i);
+    expect(weeklyFantasy.label).not.toMatch(/projections/i);
+    expect(weeklyFantasy.hint.toLowerCase()).not.toContain(
+      "weekly leaders and player fantasy totals",
+    );
+
+    const dfs = byLabel["DFS Board"]!;
+    expect(dfs.hint).toMatch(/no live slate/i);
+    expect(dfs.hint).toMatch(/salaries/i);
+    expect(dfs.hint).toMatch(/ownership/i);
+    expect(dfs.hint.toLowerCase()).not.toMatch(
+      /salary, projection, value, and ownership/,
+    );
+
+    const awards = byLabel["MVP/Awards"]!;
+    expect(awards.hint).not.toMatch(/live award races/i);
+    expect(awards.hint).toMatch(/snapshot|odds not joined/i);
+
+    const guillotine = byLabel["Guillotine League"]!;
+    expect(guillotine.hint).toMatch(/educational stay-alive/i);
+    expect(guillotine.hint).toMatch(/not a weekly elimination/i);
+
+    const performance = byLabel.Performance!;
+    expect(performance.hint).toMatch(/Performance page TBD/i);
+    expect(performance.href).toBe("/pro/model-transparency");
+
+    const fantasy = sections.find((section) => section.title === "Fantasy");
+    expect(fantasy?.subtitle).toMatch(/educational guillotine/i);
+  });
+
+  it("labels NFL Overview matchup briefs as pending (not a finished brief desk)", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/nfl/overview/page.tsx"),
+      "utf8",
+    );
+    expect(src).toMatch(/matchup briefs pending/i);
+    expect(src).not.toMatch(
+      /Matchup briefs, slate snapshot, and game cards — the weekly desk/,
+    );
   });
 
   it("keeps Team Intel free of betting-desk / props duplicates", () => {
