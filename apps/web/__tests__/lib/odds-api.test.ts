@@ -3,6 +3,8 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   ALLOWED_BOOKS,
   bookDisplay,
+  bookFeedStatusForSport,
+  cfbBookFeedStatus,
   fetchEdgeBoard,
   fetchOddsComparison,
   nflBookFeedStatus,
@@ -10,6 +12,7 @@ import {
   pickBestSpreadEntry,
   pickBestTotalEntry,
   requestBooksForSport,
+  sportUsesDesignatedBookFeedHonesty,
 } from "@/lib/odds-api";
 
 function jsonResponse(body: unknown) {
@@ -458,6 +461,114 @@ describe("odds-api edge board markets", () => {
     expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("theScore");
     expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("thescore");
     expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("espnbet");
+  });
+
+  it("CFB (ncaaf) reuses NFL carried vs not_carried inventory", () => {
+    expect(sportUsesDesignatedBookFeedHonesty("cfb")).toBe(true);
+    expect(sportUsesDesignatedBookFeedHonesty("nfl")).toBe(true);
+    expect(sportUsesDesignatedBookFeedHonesty("nba")).toBe(false);
+
+    expect(cfbBookFeedStatus("bet365")).toBe("not_carried");
+    expect(cfbBookFeedStatus("circa")).toBe("not_carried");
+    expect(cfbBookFeedStatus("betr")).toBe("not_carried");
+    expect(cfbBookFeedStatus("draftkings")).toBe("carried");
+    expect(bookFeedStatusForSport("cfb", "circa")).toBe("not_carried");
+    expect(bookFeedStatusForSport("nba", "circa")).toBe("carried");
+
+    expect(requestBooksForSport("cfb")).toEqual([
+      "draftkings",
+      "fanduel",
+      "betmgm",
+      "betrivers",
+      "hardrockbet",
+      "fanatics",
+      "bovada",
+      "williamhill_us",
+      "betonlineag",
+    ]);
+    expect(requestBooksForSport("cfb")).not.toContain("bet365");
+    expect(requestBooksForSport("cfb")).not.toContain("circa");
+    expect(requestBooksForSport("cfb")).not.toContain("betr");
+  });
+
+  it("requests CFB odds across carried books only (not dead keys)", async () => {
+    const fetchSpy = vi
+      .spyOn(globalThis, "fetch")
+      .mockResolvedValue(jsonResponse([]));
+
+    await fetchEdgeBoard("cfb", "fake-key");
+
+    const url = String(fetchSpy.mock.calls[0]?.[0] ?? "");
+    expect(url).toContain("americanfootball_ncaaf");
+    expect(url).toContain("regions=us,us2");
+    expect(url).toContain(
+      `bookmakers=${encodeURIComponent(
+        "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bovada,williamhill_us,betonlineag",
+      )}`,
+    );
+    expect(url).not.toContain("bet365");
+    expect(url).not.toContain("circa");
+    expect(url).not.toContain(",betr");
+  });
+
+  it("CFB Compare Odds emits not_carried columns for bet365/circa/betr", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "cfb-cmp",
+          sport_key: "americanfootball_ncaaf",
+          commence_time: "2026-09-05T16:00:00Z",
+          away_team: "Team A",
+          home_team: "Team B",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-03T12:00:00Z",
+              markets: [
+                {
+                  key: "spreads",
+                  outcomes: [
+                    { name: "Team A", point: 7, price: -110 },
+                    { name: "Team B", point: -7, price: -110 },
+                  ],
+                },
+                {
+                  key: "h2h",
+                  outcomes: [
+                    { name: "Team A", price: 240 },
+                    { name: "Team B", price: -300 },
+                  ],
+                },
+                {
+                  key: "totals",
+                  outcomes: [
+                    { name: "Over", point: 52.5, price: -110 },
+                    { name: "Under", point: 52.5, price: -110 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const result = await fetchOddsComparison("cfb", "fake-key");
+    expect(result.bookAsOf).toHaveLength(12);
+    expect(result.bookAsOf.find((b) => b.key === "bet365")?.feedStatus).toBe(
+      "not_carried",
+    );
+    expect(result.bookAsOf.find((b) => b.key === "circa")?.feedStatus).toBe(
+      "not_carried",
+    );
+    expect(result.bookAsOf.find((b) => b.key === "betr")?.feedStatus).toBe(
+      "not_carried",
+    );
+    expect(result.bookAsOf.find((b) => b.key === "draftkings")?.feedStatus).toBe(
+      "carried",
+    );
+    expect(result.asOf).toBe("2026-09-03T12:00:00Z");
   });
 
   it("pickBestSpreadEntry prefers fresher stamp when point+juice tie", () => {

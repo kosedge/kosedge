@@ -106,13 +106,15 @@ export async function GET(
         }),
       );
       const rows = all.filter((r) => r.week === cfbWeek);
+      // Same honesty as NFL: book last_update / row linesAsOf — never GET clock.
+      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
       return pageDataJsonResponse({
         rows,
         week0Count: gameCount(all.filter((r) => r.week === 0)),
         week1Count: gameCount(all.filter((r) => r.week === 1)),
         fullCount: 0,
         weeks: [],
-        linesAsOf: null,
+        linesAsOf,
         games: gameCount(rows),
       });
     }

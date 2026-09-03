@@ -89,6 +89,28 @@ export function nflBookFeedStatus(bookKey: string): BookFeedStatus {
   return "not_carried";
 }
 
+/**
+ * CFB (americanfootball_ncaaf) shares NFL's Odds API us/us2 inventory:
+ * bet365 / circa / betr are designated columns only — never invent quotes.
+ */
+export function cfbBookFeedStatus(bookKey: string): BookFeedStatus {
+  return nflBookFeedStatus(bookKey);
+}
+
+/** NFL + CFB: designated columns stay honest (carried vs not_carried). */
+export function sportUsesDesignatedBookFeedHonesty(sportKey: string): boolean {
+  const s = sportKey.trim().toLowerCase();
+  return s === "nfl" || s === "cfb";
+}
+
+export function bookFeedStatusForSport(
+  sportKey: string,
+  bookKey: string,
+): BookFeedStatus {
+  if (!sportUsesDesignatedBookFeedHonesty(sportKey)) return "carried";
+  return nflBookFeedStatus(bookKey);
+}
+
 const BOOK_DISPLAY: Record<string, string> = {
   draftkings: "DraftKings",
   fanduel: "FanDuel",
@@ -149,6 +171,17 @@ function bookmakerAsOf(book: {
   return best;
 }
 
+/** Prefer this market's last_update, else book-level — never invent. */
+function marketAsOfMs(
+  book: { last_update?: string },
+  market: { last_update?: string } | undefined,
+): number | null {
+  const raw = market?.last_update?.trim() || book.last_update?.trim() || null;
+  if (!raw) return null;
+  const ms = Date.parse(raw);
+  return Number.isFinite(ms) ? ms : null;
+}
+
 /** Odds API commence_time is UTC. Format in Eastern (US sports standard). */
 const ET = "America/New_York";
 const MLB_CANONICAL_RUN_LINE_MAX = 2.5;
@@ -198,11 +231,11 @@ export function configuredBooksForSport(sportKey: string): string[] {
 
 /**
  * Bookmaker keys to send to The Odds API.
- * NFL: only keys the provider carries in us/us2 (never invent / never send dead keys).
+ * NFL + CFB: only keys the provider carries in us/us2 (never invent / never send dead keys).
  */
 export function requestBooksForSport(sportKey: string): string[] {
   const designated = configuredBooksForSport(sportKey);
-  if (sportKey.toLowerCase() !== "nfl") {
+  if (!sportUsesDesignatedBookFeedHonesty(sportKey)) {
     return designated;
   }
   const carried = designated.filter(
@@ -212,7 +245,25 @@ export function requestBooksForSport(sportKey: string): string[] {
 }
 
 function regionsForSport(sportKey: string): string {
-  return sportKey.toLowerCase() === "nfl" ? NFL_ODDS_REGIONS : "us,us2";
+  // hardrockbet lives in us2; NFL + CFB both need both regions.
+  return sportUsesDesignatedBookFeedHonesty(sportKey)
+    ? NFL_ODDS_REGIONS
+    : "us,us2";
+}
+
+/** Latest book last_update among entry stamps → ISO for linesAsOf (never invent). */
+function linesAsOfFromEntryMs(
+  ...stamps: Array<number | null | undefined>
+): string | undefined {
+  let bestMs = Number.NEGATIVE_INFINITY;
+  for (const ms of stamps) {
+    if (ms == null || !Number.isFinite(ms)) continue;
+    if (ms >= bestMs) bestMs = ms;
+  }
+  if (!Number.isFinite(bestMs) || bestMs === Number.NEGATIVE_INFINITY) {
+    return undefined;
+  }
+  return new Date(bestMs).toISOString();
 }
 
 function filterBooksBySport<T extends { key?: string }>(
@@ -446,7 +497,7 @@ export async function fetchEdgeBoard(
         const away = formatJuice(awayOutcome.price);
         const home = formatJuice(homeOutcome.price);
         if (!away || !home) return [];
-        const snapMs = Date.parse(bookmakerAsOf(b) ?? "");
+        const asOfMs = marketAsOfMs(b, m);
         return [
           {
             book: b.key,
@@ -454,7 +505,7 @@ export async function fetchEdgeBoard(
             home,
             awayPrice: awayOutcome.price,
             homePrice: homeOutcome.price,
-            asOfMs: Number.isFinite(snapMs) ? snapMs : null,
+            asOfMs,
           } satisfies MoneylineBookEntry,
         ];
       });
@@ -465,6 +516,10 @@ export async function fetchEdgeBoard(
       const bestMlBookKey = bestMlEntry?.book;
       const bestMlBook = bestMlBookKey ? bookDisplay(bestMlBookKey) : undefined;
 
+      const mlAsOf = linesAsOfFromEntryMs(
+        openMlEntry?.asOfMs,
+        bestMlEntry?.asOfMs,
+      );
       rows.push({
         id: `${ev.id}-moneyline`,
         game,
@@ -480,6 +535,7 @@ export async function fetchEdgeBoard(
         openJuiceHome: openMlEntry?.home,
         bestJuice: bestMlEntry?.away ?? openMlEntry?.away,
         bestJuiceHome: bestMlEntry?.home ?? openMlEntry?.home,
+        ...(mlAsOf ? { linesAsOf: mlAsOf } : {}),
       });
     } else {
       const spreadData = bookmakers.flatMap((b) => {
@@ -493,7 +549,7 @@ export async function fetchEdgeBoard(
         const line = formatSpreadDisplay(pt, normalizedSport, {
           markAlternate: false,
         });
-        const snapMs = Date.parse(bookmakerAsOf(b) ?? "");
+        const asOfMs = marketAsOfMs(b, m);
         return [
           {
             book: b.key,
@@ -502,7 +558,7 @@ export async function fetchEdgeBoard(
             canonical,
             juiceAway: formatJuice(awayOutcome.price),
             juiceHome: formatJuice(homeOutcome?.price),
-            asOfMs: Number.isFinite(snapMs) ? snapMs : null,
+            asOfMs,
           },
         ];
       });
@@ -518,6 +574,10 @@ export async function fetchEdgeBoard(
       const bestSpreadBook = bestSpreadBookKey
         ? bookDisplay(bestSpreadBookKey)
         : undefined;
+      const spreadAsOf = linesAsOfFromEntryMs(
+        openSpreadEntry?.asOfMs,
+        bestSpreadEntry?.asOfMs,
+      );
 
       rows.push({
         id: `${ev.id}-spread`,
@@ -533,6 +593,7 @@ export async function fetchEdgeBoard(
         openJuiceHome: openSpreadEntry?.juiceHome,
         bestJuice: bestSpreadEntry?.juiceAway ?? openSpreadEntry?.juiceAway,
         bestJuiceHome: bestSpreadEntry?.juiceHome ?? openSpreadEntry?.juiceHome,
+        ...(spreadAsOf ? { linesAsOf: spreadAsOf } : {}),
       });
     }
 
@@ -543,7 +604,7 @@ export async function fetchEdgeBoard(
       const under = m.outcomes?.find((o) => o.name === "Under");
       const point = over?.point ?? m.outcomes?.[0]?.point;
       if (point == null) return [];
-      const snapMs = Date.parse(bookmakerAsOf(b) ?? "");
+      const asOfMs = marketAsOfMs(b, m);
       return [
         {
           book: b.key,
@@ -551,7 +612,7 @@ export async function fetchEdgeBoard(
           point,
           juiceOver: formatJuice(over?.price),
           juiceUnder: formatJuice(under?.price),
-          asOfMs: Number.isFinite(snapMs) ? snapMs : null,
+          asOfMs,
         },
       ];
     });
@@ -565,6 +626,10 @@ export async function fetchEdgeBoard(
     const bestTotalBook = bestTotalBookKey
       ? bookDisplay(bestTotalBookKey)
       : undefined;
+    const totalAsOf = linesAsOfFromEntryMs(
+      openTotalEntry?.asOfMs,
+      bestTotalEntry?.asOfMs,
+    );
 
     rows.push({
       id: `${ev.id}-total`,
@@ -580,6 +645,7 @@ export async function fetchEdgeBoard(
       openJuiceHome: openTotalEntry?.juiceUnder,
       bestJuice: bestTotalEntry?.juiceOver ?? openTotalEntry?.juiceOver,
       bestJuiceHome: bestTotalEntry?.juiceUnder ?? openTotalEntry?.juiceUnder,
+      ...(totalAsOf ? { linesAsOf: totalAsOf } : {}),
     });
   }
 
@@ -641,8 +707,8 @@ export type OddsComparisonBookAsOf = {
   /** Book/market last_update from Odds API; null when upstream omitted it. */
   asOf: string | null;
   /**
-   * NFL: not_carried = designated column our provider cannot supply (not an
-   * empty cell implying the book declined to post).
+   * NFL / CFB: not_carried = designated column our provider cannot supply
+   * (not an empty cell implying the book declined to post).
    */
   feedStatus?: BookFeedStatus;
 };
@@ -741,7 +807,7 @@ export async function fetchOddsComparison(
   const sportBooks = configuredBooksForSport(normalizedSport);
   const requestBooks = requestBooksForSport(normalizedSport);
   const regions = regionsForSport(normalizedSport);
-  const isNfl = normalizedSport === "nfl";
+  const usesFeedHonesty = sportUsesDesignatedBookFeedHonesty(normalizedSport);
 
   const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=spreads,h2h,totals&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
   const res = await upstreamFetch(url, {
@@ -902,14 +968,14 @@ export async function fetchOddsComparison(
     });
   }
 
-  // NFL: always emit designated columns (incl. not_carried) so UI stays honest.
+  // NFL / CFB: always emit designated columns (incl. not_carried) so UI stays honest.
   // Other sports: only books that appeared in the pull (prior behavior).
-  const bookAsOf: OddsComparisonBookAsOf[] = isNfl
+  const bookAsOf: OddsComparisonBookAsOf[] = usesFeedHonesty
     ? sportBooks.map((key) => ({
         key,
         label: bookDisplay(key),
         asOf: bookAsOfMap.get(key) ?? null,
-        feedStatus: nflBookFeedStatus(key),
+        feedStatus: bookFeedStatusForSport(normalizedSport, key),
       }))
     : sportBooks
         .filter((key) => bookAsOfMap.has(key))

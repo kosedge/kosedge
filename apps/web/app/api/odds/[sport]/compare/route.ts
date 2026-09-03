@@ -5,8 +5,8 @@ import { getSport } from "@/lib/sports";
 import {
   fetchOddsComparison,
   bookDisplay,
+  bookFeedStatusForSport,
   configuredBooksForSport,
-  nflBookFeedStatus,
   slimOddsComparisonForBoard,
   SPORT_KEY_MAP,
   type OddsCompareBoardPayload,
@@ -30,8 +30,7 @@ function booksForSport(sport: string): ComparePayload["books"] {
   return configuredBooksForSport(sport).map((k) => ({
     key: k,
     label: bookDisplay(k),
-    feedStatus:
-      sport.toLowerCase() === "nfl" ? nflBookFeedStatus(k) : "carried",
+    feedStatus: bookFeedStatusForSport(sport, k),
   }));
 }
 

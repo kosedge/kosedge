@@ -97,7 +97,7 @@ describe("Compare Odds fat-payload fix", () => {
     );
     expect(route).toContain("slimOddsComparisonForBoard");
     expect(route).toContain("odds:${sport}:compare:v8");
-    expect(route).toContain("nflBookFeedStatus");
+    expect(route).toContain("bookFeedStatusForSport");
   });
 
   it("Compare Odds UI labels not-carried feed columns", () => {
