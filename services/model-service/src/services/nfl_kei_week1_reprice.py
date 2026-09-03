@@ -41,6 +41,7 @@ from src.services.nfl_rest_weather_game_card import (
 from src.services.nfl_unit_shock_table import (
     collect_shock_table_v1,
     row_covered_by_shock_table,
+    row_covered_by_skill_research,
 )
 
 # ---------------------------------------------------------------------------
@@ -514,11 +515,12 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
         team=team,
         ol_rows=pack.ol(team),
         defense_rows=pack.defense(team),
+        skill_rows=pack.skill(team),
     )
     # Index pack rows for confirmation scaling (shock table itself untouched).
     pack_rows_by_name = {
         str(r.get("player_name") or ""): r
-        for r in list(pack.ol(team)) + list(pack.defense(team))
+        for r in list(pack.ol(team)) + list(pack.defense(team)) + list(pack.skill(team))
         if isinstance(r, Mapping)
     }
     for shock in shocks.role_shocks:
@@ -556,6 +558,19 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
                 spread_pts=0.0,
                 total_pts=0.0,
                 reason=skip.reason(),
+            )
+        )
+    # Player-value dictionary research roles — log only (kei_live=false).
+    for hit in shocks.research_hits:
+        considered.append(
+            _entry(
+                factor="player_value_dictionary",
+                applied=False,
+                team=team,
+                direction="none",
+                spread_pts=float(hit.spread_pts),
+                total_pts=float(hit.total_pts),
+                reason=hit.reason(),
             )
         )
 
@@ -709,6 +724,9 @@ def _injury_factors(team: str, pack: Week1Pack) -> Tuple[List[FactorEntry], bool
         if pos in QB_POSITIONS:
             continue  # QB handled in _qb_factor
         if pos not in SKILL_POSITIONS:
+            continue
+        # WR1/TE1/RB1 dictionary research — logged above; do not also flat-apply.
+        if row_covered_by_skill_research(row, shocks):
             continue
         inj = _status(row.get("injury_status"))
         order = int(row.get("depth_order") or 99)

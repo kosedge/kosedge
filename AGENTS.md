@@ -2,6 +2,8 @@
 
 **NFL tag lock:** `/NFL_SPREAD_PLAY_LOCKED.md` (Ryan Kos, 2026-09-03) — spread PLAY only in `spread_play_v2_cap7`; totals/prop PLAY sat; publish≡action after remap.
 
+**NFL player value dictionary:** `/NFL_PLAYER_VALUE_DICTIONARY.md` — pts of KEI vs replacement (not WAR/DVOA); v1 live keystones only; v2 research log-only.
+
 ## Production contract (one branch, three platforms)
 
 Daily subscription ships go through **`deploy-vercel` only**. Do not mix branches.
