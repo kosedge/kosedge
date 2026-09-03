@@ -332,3 +332,49 @@ def test_nfl_fair_lines_rejects_snapshot_avg_garbage(monkeypatch) -> None:
     spread = decision.get("spread") or {}
     assert spread.get("market_line") is None
     assert spread.get("reason") == "missing_fair_or_market"
+
+
+def test_nfl_fair_lines_persist_0_skips_odds_snapshots_write(monkeypatch) -> None:
+    """Subscriber/page-data reads pass persist=0 — no odds_snapshots write on GET."""
+    monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _Session())
+
+    events = [
+        {
+            "id": "evt-1",
+            "sport_key": "americanfootball_nfl",
+            "home_team": "Seattle Seahawks",
+            "away_team": "New England Patriots",
+            "commence_time": "2026-09-07T17:00:00Z",
+            "bookmakers": [],
+        }
+    ]
+    monkeypatch.setattr(nfl_routes, "fetch_odds", lambda **_kwargs: events)
+
+    calls: list[Any] = []
+
+    def _persist(market_events: Any) -> Dict[str, int]:
+        calls.append(market_events)
+        return {"events_persisted": 1, "snapshots_inserted": 2, "history_upserted": 0}
+
+    monkeypatch.setattr(nfl_routes, "_persist_nfl_odds_events_for_training", _persist)
+
+    client = TestClient(app)
+    skipped = client.get(
+        "/nfl/fair-lines",
+        params={"season": 2026, "days_ahead": 120, "persist": "0"},
+    )
+    assert skipped.status_code == 200
+    assert calls == []
+    assert skipped.json()["diagnostics"]["odds_persisted"] == {
+        "events_persisted": 0,
+        "snapshots_inserted": 0,
+        "history_upserted": 0,
+    }
+
+    default = client.get(
+        "/nfl/fair-lines",
+        params={"season": 2026, "days_ahead": 120},
+    )
+    assert default.status_code == 200
+    assert len(calls) == 1
+    assert default.json()["diagnostics"]["odds_persisted"]["events_persisted"] == 1

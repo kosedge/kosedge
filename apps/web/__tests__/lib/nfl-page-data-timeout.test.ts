@@ -25,6 +25,7 @@ describe("NFL page-data upstream budget (Alex fair-lines timeout)", () => {
       expect(src).toContain("UPSTREAM_TIMEOUT_MS.pageData");
       expect(src).toContain("throwOnTransportError: true");
       expect(src).toContain("pageDataUpstreamErrorResponse");
+      expect(src).toContain("pageDataJsonResponse");
     }
 
     // Overview / SSR board paths must keep the short board cap — do not raise

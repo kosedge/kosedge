@@ -3692,6 +3692,14 @@ def nfl_fair_lines(
         None,
         description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
     ),
+    persist: bool = Query(
+        True,
+        description=(
+            "When true (default), land pulled Odds API events into odds_snapshots "
+            "for training. Subscriber/page-data reads should pass persist=0; "
+            "beat/worker scheduled pull_odds_snapshot remains the write path."
+        ),
+    ),
 ) -> Dict[str, Any]:
     """Kosedge fair-lines board for an upcoming (and optionally recent) slate.
 
@@ -3724,12 +3732,18 @@ def nfl_fair_lines(
         odds_feed_error = _redact_odds_api_error(exc)
         log.warning("NFL odds feed unavailable for fair-lines endpoint: %s", odds_feed_error)
 
-    # Always land pulled odds in Postgres for model training / CLV history.
-    if market_events:
+    # Training snaps: default on for direct/ops callers; web page-data sends persist=0.
+    # Beat/worker pull_odds_snapshot remains the scheduled write path.
+    if market_events and persist:
         try:
             odds_persist = _persist_nfl_odds_events_for_training(market_events)
         except Exception as exc:
             log.warning("NFL odds persist skipped after fair-lines pull: %s", str(exc)[:300])
+    elif market_events and not persist:
+        log.info(
+            "NFL fair-lines read-only: skipped odds_snapshots persist (%s events)",
+            len(market_events),
+        )
 
     current_week = 1
     open_by_game_id: Dict[str, Dict[str, Any]] = {}

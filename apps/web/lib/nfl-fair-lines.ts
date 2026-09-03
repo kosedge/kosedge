@@ -550,6 +550,12 @@ export async function fetchNflFairLines(params: {
    * client gets 503/504 and retries — not a fake empty slate.
    */
   throwOnTransportError?: boolean;
+  /**
+   * When false (default), send persist=0 so model-service skips odds_snapshots
+   * writes on this subscriber/page-data read. Beat/worker scheduled persist stays.
+   * Pass true only for rare ops paths that intentionally land training snaps.
+   */
+  persistOdds?: boolean;
 }): Promise<NflFairLinesResponse> {
   const base = env.MODEL_SERVICE_URL;
   const emptyDiagnostics = {
@@ -595,6 +601,9 @@ export async function fetchNflFairLines(params: {
   if (params.bookmakers) {
     url.searchParams.set("bookmakers", params.bookmakers);
   }
+  // Default read-only: page-data / SSR must not write odds_snapshots on GET.
+  const persistOdds = params.persistOdds === true;
+  url.searchParams.set("persist", persistOdds ? "1" : "0");
 
   try {
     const response = await upstreamFetch(url.toString(), {

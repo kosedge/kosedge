@@ -13,6 +13,10 @@ import {
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
+import {
+  pageDataCacheHeaders,
+  pageDataJsonResponse,
+} from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { getSport } from "@/lib/sports";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
@@ -27,6 +31,7 @@ export const maxDuration = 30;
  * model-service / Odds (Alex: SSR wait waterfall, not download).
  * No INTERNAL_API_SECRET — same rows the public /edge-board page already shows.
  * NFL fair-lines transport failures → 503/504 (not partial KEI pack without vintage).
+ * Cache-Control s-maxage=45 on non-empty 200 only (never 503/504/games=0).
  */
 function gameCount(rows: EdgeBoardRow[]): number {
   return new Set(rows.map((r) => r.game).filter(Boolean)).size;
@@ -41,7 +46,7 @@ export async function GET(
   if (!getSport(sport)) {
     return NextResponse.json(
       { error: "Unknown sport", sport },
-      { status: 400 },
+      { status: 400, headers: pageDataCacheHeaders({ cacheable: false }) },
     );
   }
 
@@ -82,7 +87,7 @@ export async function GET(
         ),
       ].sort((a, b) => a - b);
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
-      return NextResponse.json({
+      return pageDataJsonResponse({
         rows,
         week1Count: gameCount(week1Rows),
         fullCount: gameCount(fullRows),
@@ -101,7 +106,7 @@ export async function GET(
         }),
       );
       const rows = all.filter((r) => r.week === cfbWeek);
-      return NextResponse.json({
+      return pageDataJsonResponse({
         rows,
         week0Count: gameCount(all.filter((r) => r.week === 0)),
         week1Count: gameCount(all.filter((r) => r.week === 1)),
@@ -116,7 +121,7 @@ export async function GET(
       slate: "week1",
       ...assembleOpts,
     });
-    return NextResponse.json({
+    return pageDataJsonResponse({
       rows,
       week0Count: 0,
       week1Count: 0,
