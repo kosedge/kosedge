@@ -11,7 +11,12 @@
     "market_for_tag": "SDV espn_cfb_betting close (home_team_spread), home-signed",
     "ats_definition": "Tag side vs close: home covers if actual_margin + close_spread > 0; push when cover_margin\u22480 excluded from ATS/ROI",
     "roi_definition": "unit stake at \u2212110: win +100/110, lose \u22121",
-    "clv_definition": "movement-CLV+: owned open\u2260close favoring Tag side; unavailable when only close exists"
+    "clv_definition": "movement-CLV+: owned open\u2260close favoring Tag side; unavailable when only close exists",
+    "play_band_splits": {
+      "PLAY_4_7": "[4.0, 7.0) inclusive 4 exclusive 7",
+      "PLAY_ge_7": ">=7.0",
+      "PLAY_4_10": "[4.0, 10.0) optional third slice"
+    }
   },
   "honesty": {
     "reconstruction": "Hist-cal proxy: prior-year cfb_ratings + league-avg roster/QB \u2014 not live 2026 roster/SP+ KEI. Bias guard applied (published path).",
@@ -69,6 +74,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 170,
+        "n_ats": 170,
+        "n_push": 0,
+        "ats_hit_rate": 0.4941,
+        "ats_wins": 84,
+        "ats_losses": 86,
+        "roi_minus_110": -0.0567,
+        "pnl_units_minus_110": -9.6364,
+        "mean_abs_edge": 5.4739,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 179,
+        "n_ats": 179,
+        "n_push": 0,
+        "ats_hit_rate": 0.4804,
+        "ats_wins": 86,
+        "ats_losses": 93,
+        "roi_minus_110": -0.0828,
+        "pnl_units_minus_110": -14.8182,
+        "mean_abs_edge": 9.4874,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 87,
         "n_ats": 87,
@@ -81,6 +114,21 @@
         "mean_abs_edge": 3.2254,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 278,
+        "n_ats": 278,
+        "n_push": 0,
+        "ats_hit_rate": 0.482,
+        "ats_wins": 134,
+        "ats_losses": 144,
+        "roi_minus_110": -0.0798,
+        "pnl_units_minus_110": -22.1818,
+        "mean_abs_edge": 6.6725,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     },
     "contaminated": {
@@ -97,6 +145,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 319,
+        "n_ats": 319,
+        "n_push": 0,
+        "ats_hit_rate": 0.4953,
+        "ats_wins": 158,
+        "ats_losses": 161,
+        "roi_minus_110": -0.0544,
+        "pnl_units_minus_110": -17.3636,
+        "mean_abs_edge": 5.4643,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 380,
+        "n_ats": 380,
+        "n_push": 0,
+        "ats_hit_rate": 0.5263,
+        "ats_wins": 200,
+        "ats_losses": 180,
+        "roi_minus_110": 0.0048,
+        "pnl_units_minus_110": 1.8182,
+        "mean_abs_edge": 9.2824,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 173,
         "n_ats": 173,
@@ -109,6 +185,21 @@
         "mean_abs_edge": 3.2235,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 577,
+        "n_ats": 577,
+        "n_push": 0,
+        "ats_hit_rate": 0.513,
+        "ats_wins": 296,
+        "ats_losses": 281,
+        "roi_minus_110": -0.0206,
+        "pnl_units_minus_110": -11.9091,
+        "mean_abs_edge": 6.8129,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     },
     "confirmatory": {
@@ -125,6 +216,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 0,
+        "n_ats": 0,
+        "n_push": 0,
+        "ats_hit_rate": null,
+        "ats_wins": 0,
+        "ats_losses": 0,
+        "roi_minus_110": null,
+        "pnl_units_minus_110": null,
+        "mean_abs_edge": null,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 0,
+        "n_ats": 0,
+        "n_push": 0,
+        "ats_hit_rate": null,
+        "ats_wins": 0,
+        "ats_losses": 0,
+        "roi_minus_110": null,
+        "pnl_units_minus_110": null,
+        "mean_abs_edge": null,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 0,
         "n_ats": 0,
@@ -137,6 +256,21 @@
         "mean_abs_edge": null,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 0,
+        "n_ats": 0,
+        "n_push": 0,
+        "ats_hit_rate": null,
+        "ats_wins": 0,
+        "ats_losses": 0,
+        "roi_minus_110": null,
+        "pnl_units_minus_110": null,
+        "mean_abs_edge": null,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     },
     "all_seasons_in_run": {
@@ -153,6 +287,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 489,
+        "n_ats": 489,
+        "n_push": 0,
+        "ats_hit_rate": 0.4949,
+        "ats_wins": 242,
+        "ats_losses": 247,
+        "roi_minus_110": -0.0552,
+        "pnl_units_minus_110": -27.0,
+        "mean_abs_edge": 5.4676,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 559,
+        "n_ats": 559,
+        "n_push": 0,
+        "ats_hit_rate": 0.5116,
+        "ats_wins": 286,
+        "ats_losses": 273,
+        "roi_minus_110": -0.0233,
+        "pnl_units_minus_110": -13.0,
+        "mean_abs_edge": 9.3481,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 260,
         "n_ats": 260,
@@ -165,6 +327,21 @@
         "mean_abs_edge": 3.2241,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 855,
+        "n_ats": 855,
+        "n_push": 0,
+        "ats_hit_rate": 0.5029,
+        "ats_wins": 430,
+        "ats_losses": 425,
+        "roi_minus_110": -0.0399,
+        "pnl_units_minus_110": -34.0909,
+        "mean_abs_edge": 6.7673,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     }
   },
@@ -184,6 +361,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 170,
+        "n_ats": 170,
+        "n_push": 0,
+        "ats_hit_rate": 0.4765,
+        "ats_wins": 81,
+        "ats_losses": 89,
+        "roi_minus_110": -0.0904,
+        "pnl_units_minus_110": -15.3636,
+        "mean_abs_edge": 5.4829,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 181,
+        "n_ats": 181,
+        "n_push": 0,
+        "ats_hit_rate": 0.5359,
+        "ats_wins": 97,
+        "ats_losses": 84,
+        "roi_minus_110": 0.0231,
+        "pnl_units_minus_110": 4.1818,
+        "mean_abs_edge": 9.2083,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 93,
         "n_ats": 93,
@@ -196,6 +401,21 @@
         "mean_abs_edge": 3.1995,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 298,
+        "n_ats": 298,
+        "n_push": 0,
+        "ats_hit_rate": 0.4933,
+        "ats_wins": 147,
+        "ats_losses": 151,
+        "roi_minus_110": -0.0583,
+        "pnl_units_minus_110": -17.3636,
+        "mean_abs_edge": 6.7561,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     },
     "2024": {
@@ -213,6 +433,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 149,
+        "n_ats": 149,
+        "n_push": 0,
+        "ats_hit_rate": 0.5168,
+        "ats_wins": 77,
+        "ats_losses": 72,
+        "roi_minus_110": -0.0134,
+        "pnl_units_minus_110": -2.0,
+        "mean_abs_edge": 5.4432,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 199,
+        "n_ats": 199,
+        "n_push": 0,
+        "ats_hit_rate": 0.5176,
+        "ats_wins": 103,
+        "ats_losses": 96,
+        "roi_minus_110": -0.0119,
+        "pnl_units_minus_110": -2.3636,
+        "mean_abs_edge": 9.3498,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 80,
         "n_ats": 80,
@@ -225,6 +473,21 @@
         "mean_abs_edge": 3.2514,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 279,
+        "n_ats": 279,
+        "n_push": 0,
+        "ats_hit_rate": 0.5341,
+        "ats_wins": 149,
+        "ats_losses": 130,
+        "roi_minus_110": 0.0196,
+        "pnl_units_minus_110": 5.4545,
+        "mean_abs_edge": 6.8736,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     },
     "2025": {
@@ -242,6 +505,34 @@
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
       },
+      "PLAY_4_7": {
+        "n": 170,
+        "n_ats": 170,
+        "n_push": 0,
+        "ats_hit_rate": 0.4941,
+        "ats_wins": 84,
+        "ats_losses": 86,
+        "roi_minus_110": -0.0567,
+        "pnl_units_minus_110": -9.6364,
+        "mean_abs_edge": 5.4739,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 7.0)"
+      },
+      "PLAY_ge_7": {
+        "n": 179,
+        "n_ats": 179,
+        "n_push": 0,
+        "ats_hit_rate": 0.4804,
+        "ats_wins": 86,
+        "ats_losses": 93,
+        "roi_minus_110": -0.0828,
+        "pnl_units_minus_110": -14.8182,
+        "mean_abs_edge": 9.4874,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": ">=7.0"
+      },
       "LEAN": {
         "n": 87,
         "n_ats": 87,
@@ -254,6 +545,21 @@
         "mean_abs_edge": 3.2254,
         "clv_plus_rate": null,
         "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+      },
+      "PLAY_4_10": {
+        "n": 278,
+        "n_ats": 278,
+        "n_push": 0,
+        "ats_hit_rate": 0.482,
+        "ats_wins": 134,
+        "ats_losses": 144,
+        "roi_minus_110": -0.0798,
+        "pnl_units_minus_110": -22.1818,
+        "mean_abs_edge": 6.6725,
+        "clv_plus_rate": null,
+        "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)",
+        "band": "[4.0, 10.0)",
+        "optional": true
       }
     }
   }

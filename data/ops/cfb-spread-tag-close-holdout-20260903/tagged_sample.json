@@ -13,6 +13,7 @@
     "edge_home": 8.56,
     "abs_edge": 8.56,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 3.0
@@ -31,6 +32,7 @@
     "edge_home": -6.0,
     "abs_edge": 6.0,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 7.0
@@ -49,6 +51,7 @@
     "edge_home": -7.07,
     "abs_edge": 7.07,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 35.0
@@ -67,6 +70,7 @@
     "edge_home": -7.54,
     "abs_edge": 7.54,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -13.0
@@ -85,6 +89,7 @@
     "edge_home": -6.39,
     "abs_edge": 6.39,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 20.0
@@ -103,6 +108,7 @@
     "edge_home": 10.93,
     "abs_edge": 10.93,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 30.0
@@ -121,6 +127,7 @@
     "edge_home": -7.65,
     "abs_edge": 7.65,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 3.0
@@ -139,6 +146,7 @@
     "edge_home": 7.02,
     "abs_edge": 7.02,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 4.0
@@ -157,6 +165,7 @@
     "edge_home": 7.92,
     "abs_edge": 7.92,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -26.0
@@ -175,6 +184,7 @@
     "edge_home": -6.12,
     "abs_edge": 6.12,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 14.0
@@ -193,6 +203,7 @@
     "edge_home": 8.93,
     "abs_edge": 8.93,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -25.0
@@ -211,6 +222,7 @@
     "edge_home": 9.32,
     "abs_edge": 9.32,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -21.0
@@ -229,6 +241,7 @@
     "edge_home": 5.12,
     "abs_edge": 5.12,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": -7.0
@@ -247,6 +260,7 @@
     "edge_home": 5.99,
     "abs_edge": 5.99,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -8.0
@@ -265,6 +279,7 @@
     "edge_home": -6.24,
     "abs_edge": 6.24,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 29.0
@@ -283,6 +298,7 @@
     "edge_home": -5.2,
     "abs_edge": 5.2,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 17.0
@@ -301,6 +317,7 @@
     "edge_home": 7.71,
     "abs_edge": 7.71,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 9.0
@@ -319,6 +336,7 @@
     "edge_home": 10.44,
     "abs_edge": 10.44,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -17.0
@@ -337,6 +355,7 @@
     "edge_home": 4.09,
     "abs_edge": 4.09,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": -1.0
@@ -355,6 +374,7 @@
     "edge_home": 7.49,
     "abs_edge": 7.49,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -7.0
@@ -373,6 +393,7 @@
     "edge_home": 5.06,
     "abs_edge": 5.06,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 31.0
@@ -391,6 +412,7 @@
     "edge_home": 4.31,
     "abs_edge": 4.31,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -13.0
@@ -409,6 +431,7 @@
     "edge_home": -10.72,
     "abs_edge": 10.72,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 7.0
@@ -427,6 +450,7 @@
     "edge_home": -4.79,
     "abs_edge": 4.79,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -18.0
@@ -445,6 +469,7 @@
     "edge_home": -11.01,
     "abs_edge": 11.01,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 14.0
@@ -463,6 +488,7 @@
     "edge_home": 8.64,
     "abs_edge": 8.64,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 7.0
@@ -481,6 +507,7 @@
     "edge_home": 5.72,
     "abs_edge": 5.72,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": -2.0
@@ -499,6 +526,7 @@
     "edge_home": -4.72,
     "abs_edge": 4.72,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 2.0
@@ -517,6 +545,7 @@
     "edge_home": 7.05,
     "abs_edge": 7.05,
     "tag": "PLAY",
+    "play_band": "PLAY_ge_7",
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -27.0
@@ -535,6 +564,7 @@
     "edge_home": -6.37,
     "abs_edge": 6.37,
     "tag": "PLAY",
+    "play_band": "PLAY_4_7",
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 18.0
@@ -553,6 +583,7 @@
     "edge_home": 3.99,
     "abs_edge": 3.99,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 10.0
@@ -571,6 +602,7 @@
     "edge_home": -2.65,
     "abs_edge": 2.65,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -10.0
@@ -589,6 +621,7 @@
     "edge_home": 3.94,
     "abs_edge": 3.94,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 15.0
@@ -607,6 +640,7 @@
     "edge_home": -3.04,
     "abs_edge": 3.04,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 7.0
@@ -625,6 +659,7 @@
     "edge_home": -2.86,
     "abs_edge": 2.86,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 29.0
@@ -643,6 +678,7 @@
     "edge_home": 3.71,
     "abs_edge": 3.71,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": -4.0
@@ -661,6 +697,7 @@
     "edge_home": -2.64,
     "abs_edge": 2.64,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 18.0
@@ -679,6 +716,7 @@
     "edge_home": 3.67,
     "abs_edge": 3.67,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 3.0
@@ -697,6 +735,7 @@
     "edge_home": -2.56,
     "abs_edge": 2.56,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -7.0
@@ -715,6 +754,7 @@
     "edge_home": -3.04,
     "abs_edge": 3.04,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -13.0
@@ -733,6 +773,7 @@
     "edge_home": 2.89,
     "abs_edge": 2.89,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 3.0
@@ -751,6 +792,7 @@
     "edge_home": -2.84,
     "abs_edge": 2.84,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 6.0
@@ -769,6 +811,7 @@
     "edge_home": 3.9,
     "abs_edge": 3.9,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -22.0
@@ -787,6 +830,7 @@
     "edge_home": 3.65,
     "abs_edge": 3.65,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 13.0
@@ -805,6 +849,7 @@
     "edge_home": -2.8,
     "abs_edge": 2.8,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -14.0
@@ -823,6 +868,7 @@
     "edge_home": -3.45,
     "abs_edge": 3.45,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -7.0
@@ -841,6 +887,7 @@
     "edge_home": -2.81,
     "abs_edge": 2.81,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 3.0
@@ -859,6 +906,7 @@
     "edge_home": 2.57,
     "abs_edge": 2.57,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 22.0
@@ -877,6 +925,7 @@
     "edge_home": 2.53,
     "abs_edge": 2.53,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": -3.0
@@ -895,6 +944,7 @@
     "edge_home": -2.69,
     "abs_edge": 2.69,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 21.0
@@ -913,6 +963,7 @@
     "edge_home": -3.66,
     "abs_edge": 3.66,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 11.0
@@ -931,6 +982,7 @@
     "edge_home": -3.57,
     "abs_edge": 3.57,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 24.0
@@ -949,6 +1001,7 @@
     "edge_home": -3.88,
     "abs_edge": 3.88,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -21.0
@@ -967,6 +1020,7 @@
     "edge_home": -3.21,
     "abs_edge": 3.21,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 38.0
@@ -985,6 +1039,7 @@
     "edge_home": 2.88,
     "abs_edge": 2.88,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 5.0
@@ -1003,6 +1058,7 @@
     "edge_home": -3.06,
     "abs_edge": 3.06,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": 11.0
@@ -1021,6 +1077,7 @@
     "edge_home": 2.73,
     "abs_edge": 2.73,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": true,
     "actual_margin": 24.0
@@ -1039,6 +1096,7 @@
     "edge_home": -3.3,
     "abs_edge": 3.3,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": false,
     "actual_margin": 14.0
@@ -1057,6 +1115,7 @@
     "edge_home": 3.86,
     "abs_edge": 3.86,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "home",
     "ats_hit": false,
     "actual_margin": -48.0
@@ -1075,6 +1134,7 @@
     "edge_home": -2.58,
     "abs_edge": 2.58,
     "tag": "LEAN",
+    "play_band": null,
     "tag_side": "away",
     "ats_hit": true,
     "actual_margin": -4.0

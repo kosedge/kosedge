@@ -113,6 +113,42 @@ def summarize_band(rows: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
     }
 
 
+def play_band_key(abs_edge: float) -> Optional[str]:
+    """PLAY sub-band labels for Task 2c split (same Tag join)."""
+    if abs_edge < PLAY_EDGE_PTS:
+        return None
+    if abs_edge < 7.0:
+        return "PLAY_4_7"
+    return "PLAY_ge_7"
+
+
+def summarize_play_splits(subset: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+    """PLAY all + [4,7) + ≥7 + optional [4,10) when n allows."""
+    plays = [x for x in subset if x["tag"] == "PLAY"]
+    b47 = [x for x in plays if 4.0 <= float(x["abs_edge"]) < 7.0]
+    bge7 = [x for x in plays if float(x["abs_edge"]) >= 7.0]
+    b410 = [x for x in plays if 4.0 <= float(x["abs_edge"]) < 10.0]
+    out: Dict[str, Any] = {
+        "PLAY": summarize_band(plays),
+        "PLAY_4_7": {
+            **summarize_band(b47),
+            "band": "[4.0, 7.0)",
+        },
+        "PLAY_ge_7": {
+            **summarize_band(bge7),
+            "band": ">=7.0",
+        },
+        "LEAN": summarize_band([x for x in subset if x["tag"] == "LEAN"]),
+    }
+    # Optional third slice — always compute; consumers can ignore if thin.
+    out["PLAY_4_10"] = {
+        **summarize_band(b410),
+        "band": "[4.0, 10.0)",
+        "optional": True,
+    }
+    return out
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description="CFB spread Tag vs close holdout")
     ap.add_argument("--seasons", default="2023,2024,2025")
@@ -193,6 +229,7 @@ def main() -> int:
                 "edge_home": round(edge, 4),
                 "abs_edge": round(abs_edge, 4),
                 "tag": tag,
+                "play_band": play_band_key(abs_edge) if tag == "PLAY" else None,
                 "tag_side": "home" if edge > 0 else "away",
                 "ats_hit": ats_hit,
                 "actual_margin": actual_margin,
@@ -201,10 +238,7 @@ def main() -> int:
 
     def _block(pred) -> Dict[str, Any]:
         subset = [x for x in tagged if pred(x)]
-        return {
-            "PLAY": summarize_band([x for x in subset if x["tag"] == "PLAY"]),
-            "LEAN": summarize_band([x for x in subset if x["tag"] == "LEAN"]),
-        }
+        return summarize_play_splits(subset)
 
     by_label = {
         "unused": _block(lambda x: x["year_label"] == "unused"),
@@ -241,6 +275,11 @@ def main() -> int:
                 "movement-CLV+: owned open≠close favoring Tag side; "
                 "unavailable when only close exists"
             ),
+            "play_band_splits": {
+                "PLAY_4_7": "[4.0, 7.0) inclusive 4 exclusive 7",
+                "PLAY_ge_7": ">=7.0",
+                "PLAY_4_10": "[4.0, 10.0) optional third slice",
+            },
         },
         "honesty": {
             "reconstruction": (
