@@ -6,6 +6,7 @@ import SportsbookBadge from "@/components/SportsbookBadge";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
+import { formatGameConfidenceLabel } from "@/lib/display-honesty-core";
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
 import type { StatDrop } from "@/lib/edge-board-stat-drop";
 
@@ -122,17 +123,6 @@ function actionLabelClassName(label: ActionLabel, compact = false): string {
   return `${base} bg-white/10 text-gray-400`;
 }
 
-function formatConfidenceLabel(
-  band?: ConfidenceBand,
-  score?: number,
-  tierConstant?: boolean,
-): string | null {
-  if (!band) return null;
-  // Tier-constant 0.72/MEDIUM (and penalty landings) are bands — not calibrated %.
-  if (tierConstant || score == null) return `Conf ${band}`;
-  return `Conf ${band} ${Math.round(score * 100)}%`;
-}
-
 function fmtSignedHalf(n: number): string {
   if (Object.is(n, -0) || n === 0) return "+0";
   return n > 0 ? `+${n}` : String(n);
@@ -154,6 +144,7 @@ function ActionDecisionCell({
   coverProb,
   compact = false,
   caution = false,
+  suppressGameConfidenceBand = false,
 }: {
   actionLabel?: ActionLabel;
   publishTag?: Tag;
@@ -171,14 +162,17 @@ function ActionDecisionCell({
   coverProb?: number;
   compact?: boolean;
   caution?: boolean;
+  /** Display-honesty: hide game confidence band (show Conf —). */
+  suppressGameConfidenceBand?: boolean;
 }) {
   if (!actionLabel && !publishTag) {
     return <span className="text-gray-500">—</span>;
   }
-  const confLabel = formatConfidenceLabel(
+  const confLabel = formatGameConfidenceLabel(
     confidenceBand,
     confidenceScore,
     confidenceTierConstant,
+    { suppressed: suppressGameConfidenceBand },
   );
   const showLadder =
     actionLabel === "PLAY" ||
@@ -517,6 +511,7 @@ export default function EdgeBoard({
   sportKey = "ncaam",
   slateWeek = null,
   emptyHint,
+  suppressGameConfidenceBand = false,
 }: {
   variant?: Variant;
   rows?: FlatEdgeBoardRow[] | null;
@@ -526,6 +521,8 @@ export default function EdgeBoard({
   slateWeek?: number | null;
   /** Optional empty-state copy (e.g. honest Week 1 empty). */
   emptyHint?: string;
+  /** Display-honesty kill switch for game confidence band chrome. */
+  suppressGameConfidenceBand?: boolean;
 }) {
   const router = useRouter();
   const safeRows = Array.isArray(rows) ? rows : [];
@@ -744,6 +741,7 @@ export default function EdgeBoard({
                     confidenceScore={r.modelConfidenceScore}
                     confidenceTierConstant={r.modelConfidenceTierConstant}
                     coverProb={r.coverProbLine}
+                    suppressGameConfidenceBand={suppressGameConfidenceBand}
                     compact
                   />
                 ) : (
@@ -860,6 +858,7 @@ export default function EdgeBoard({
                       confidenceScore={r.modelConfidenceScore}
                       confidenceTierConstant={r.modelConfidenceTierConstant}
                       coverProb={r.coverProbOU}
+                      suppressGameConfidenceBand={suppressGameConfidenceBand}
                       compact
                       caution={r.edgeOUCaution}
                     />
@@ -1225,6 +1224,9 @@ export default function EdgeBoard({
                               r.modelConfidenceTierConstant
                             }
                             coverProb={r.coverProbLine}
+                            suppressGameConfidenceBand={
+                              suppressGameConfidenceBand
+                            }
                           />
                         ) : (
                           <TagPlayCell tag={r.tagLine} play={r.playLine} />
@@ -1248,6 +1250,9 @@ export default function EdgeBoard({
                               r.modelConfidenceTierConstant
                             }
                             coverProb={r.coverProbOU}
+                            suppressGameConfidenceBand={
+                              suppressGameConfidenceBand
+                            }
                             caution={r.edgeOUCaution}
                           />
                         ) : (

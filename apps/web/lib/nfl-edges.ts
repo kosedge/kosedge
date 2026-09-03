@@ -22,6 +22,11 @@ import {
   edgesMayShowPropRows,
   nflPropsSurfaceState,
 } from "@/lib/nfl-props-surface";
+import {
+  displayConfidenceForProps,
+  isPropsConfidenceDisplayOff,
+  loadDisplayHonestyFlags,
+} from "@/lib/display-honesty";
 
 export type {
   DeskEdgeRow,
@@ -331,6 +336,16 @@ export async function fetchNflEdgesDesk(params: {
   const minConfidence = params.minConfidence ?? 0;
   const daysAhead = params.daysAhead ?? 120;
 
+  // Display-honesty: when props confidence is suppressed (global or market
+  // subset), fetch without server min_confidence so suppressed rows survive,
+  // then null confidence locally for the desk filter (display-only).
+  const displayFlags = await loadDisplayHonestyFlags();
+  const propsSuppressActive =
+    isPropsConfidenceDisplayOff(displayFlags) ||
+    displayFlags.nfl_props_confidence_display_off_markets.length > 0;
+  const propsMinConfidence =
+    propsSuppressActive || !(minConfidence > 0) ? undefined : minConfidence;
+
   const [fairBoard, todayBoard, propsBoard] = await Promise.all([
     fetchNflFairLines({
       season: params.season,
@@ -346,7 +361,7 @@ export async function fetchNflEdgesDesk(params: {
       season: params.season,
       week: params.week,
       minAbsEdge: minProbEdge,
-      minConfidence: minConfidence > 0 ? minConfidence : undefined,
+      minConfidence: propsMinConfidence,
       limit: params.propLimit ?? 500,
     }),
   ]);
@@ -371,10 +386,20 @@ export async function fetchNflEdgesDesk(params: {
   const propSurface = nflPropsSurfaceState(propsBoard);
   const propEdges = edgesMayShowPropRows(propSurface)
     ? propsBoard.rows
-        .map((row) => deskEdgeFromPropRow(row, { minProbEdge, minConfidence }))
+        .map((row) => {
+          // Null suppressed confidence so minConfidence filter keeps the row.
+          const confidence = displayConfidenceForProps(
+            row.confidence,
+            row.marketKey,
+            displayFlags,
+          );
+          return deskEdgeFromPropRow(
+            { ...row, confidence },
+            { minProbEdge, minConfidence },
+          );
+        })
         .filter((row): row is DeskEdgeRow => row !== null)
     : [];
-
   const allRows = filterDeskRows([...mergedGame, ...propEdges], market);
 
   // Model odds_as_of only (Aug 21 stored capture is honest; never request clock).

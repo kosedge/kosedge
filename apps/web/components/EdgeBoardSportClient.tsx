@@ -21,6 +21,11 @@ type AssemblePayload = {
   linesAsOf: string | null;
   games: number;
   error?: string;
+  displayHonesty?: {
+    nfl_game_confidence_band_display?: "on" | "off";
+    display_suppression_note?: string | null;
+    suppressGameConfidenceBand?: boolean;
+  };
 };
 
 type Props = {
@@ -79,6 +84,7 @@ export default function EdgeBoardSportClient({
             weeks: Array.isArray(data.weeks) ? data.weeks : [],
             linesAsOf: data.linesAsOf ?? null,
             games: data.games ?? 0,
+            displayHonesty: data.displayHonesty,
           },
         });
       } catch {
@@ -107,6 +113,14 @@ export default function EdgeBoardSportClient({
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
   const nflLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
+  const suppressGameConfidenceBand =
+    state.status === "ready"
+      ? Boolean(state.data.displayHonesty?.suppressGameConfidenceBand)
+      : false;
+  const displayHonestyNote =
+    state.status === "ready"
+      ? (state.data.displayHonesty?.display_suppression_note ?? null)
+      : null;
   const headerAsOf = isNfl
     ? state.status === "loading"
       ? "…"
@@ -275,6 +289,15 @@ export default function EdgeBoardSportClient({
         />
       ) : null}
 
+      {displayHonestyNote && suppressGameConfidenceBand ? (
+        <p
+          className="mt-3 text-xs text-kos-text/60"
+          data-testid="display-honesty-note"
+        >
+          {displayHonestyNote}
+        </p>
+      ) : null}
+
       {state.status === "loading" ? (
         <div
           className="mt-6 rounded-2xl border border-white/12 bg-black/30 p-12 text-center text-gray-400"
@@ -297,6 +320,7 @@ export default function EdgeBoardSportClient({
             rows={rows}
             sportKey={sportKey}
             slateWeek={slate === "week1" ? 1 : (nflWeeks[0] ?? null)}
+            suppressGameConfidenceBand={suppressGameConfidenceBand}
             emptyHint={
               isNfl && slate === "week1"
                 ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."
