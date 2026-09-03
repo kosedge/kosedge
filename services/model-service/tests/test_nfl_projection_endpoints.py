@@ -278,6 +278,10 @@ def test_nfl_fair_lines_uses_snapshot_current_when_odds_401(monkeypatch) -> None
     hygiene = diag.get("current_hygiene") or {}
     assert hygiene.get("kept_spread") == 1
     assert hygiene.get("rejected_spread") == 0
+    # Stored snapshot capture — never request datetime.now().
+    assert payload.get("odds_as_of") == "2026-08-21T13:42:55+00:00"
+    assert payload.get("as_of") == "2026-08-21T13:42:55+00:00"
+    assert line.get("odds_captured_at") == "2026-08-21T13:42:55+00:00"
 
 
 def test_nfl_fair_lines_rejects_snapshot_avg_garbage(monkeypatch) -> None:

@@ -18,7 +18,7 @@ import {
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { bookDisplay } from "@/lib/odds-api";
-import { marketAsOfHeaderSuffix, pickLatestIso } from "@/lib/market-asof-stamp";
+import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
 const DEFAULT_SEASON = 2026;
 /** Wide fetch window; UI slate tabs decide what to show. */
@@ -115,7 +115,9 @@ export default async function NflFairLinesPage({
     slateStatus: board.slateStatus,
   });
 
-  const marketAsOf = pickLatestIso(board.oddsAsOf, board.asOf);
+  // Model odds_as_of only (stored capture / book last_update).
+  // Do NOT pickLatestIso row clocks — those can be fresher pull noise or invent.
+  const marketAsOf = board.oddsAsOf?.trim() || null;
   const marketBooks = (board.diagnostics.bookmakers ?? [])
     .map((k) => bookDisplay(k))
     .filter(Boolean);

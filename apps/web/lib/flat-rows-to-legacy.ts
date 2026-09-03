@@ -27,6 +27,7 @@ import {
 import { buildMatchupContext } from "@/lib/edge-board-matchup-context";
 import { buildMatchupOverview } from "@/lib/edge-board-matchup-overview";
 import { buildStatDrop, type StatDrop } from "@/lib/edge-board-stat-drop";
+import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -836,7 +837,10 @@ export function flatRowsToLegacy(
       : "Home";
     const awaySiteLabel: "Away" | "Home" = "Away";
 
-    const linesAsOf = lineRow?.linesAsOf ?? totalRow?.linesAsOf ?? undefined;
+    const linesAsOf =
+      sanitizeMarketCaptureIso(
+        lineRow?.linesAsOf ?? totalRow?.linesAsOf ?? undefined,
+      ) ?? undefined;
     result.push({
       id: String(lineRow?.id ?? total?.id ?? gameKey),
       time,

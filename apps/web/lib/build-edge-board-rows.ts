@@ -147,7 +147,8 @@ async function assembleNflEdgeBoardRows(
   if (fair.lines.length > 0) {
     keiGames = keiGamesFromNflFairLines(fair.lines);
     rows = fairLinesToEdgeBoardRows(fair.lines, {
-      boardAsOf: fair.asOf ?? fair.oddsAsOf,
+      // Market vintage only — never fair.asOf (request/board clock).
+      boardAsOf: fair.oddsAsOf,
     });
     rows = overlayOddsOntoFairLineRows(rows, odds);
     // Odds/Current may arrive after fair-lines decision graded Mkt —; sync Action.

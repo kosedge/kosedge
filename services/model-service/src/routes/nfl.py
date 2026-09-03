@@ -399,6 +399,42 @@ def _redact_odds_api_error(exc: BaseException | str) -> str:
     return re.sub(r"(apiKey=)[^&\s]+", r"\1REDACTED", str(exc), flags=re.IGNORECASE)[:500]
 
 
+def _max_odds_api_last_update(market_events: Optional[List[Dict[str, Any]]]) -> Optional[str]:
+    """
+    Latest Odds API book/market last_update across a pull.
+    Never invents datetime.now() — blank upstream stays blank.
+    """
+    best: Optional[str] = None
+    best_ms: Optional[float] = None
+    for event in market_events or []:
+        if not isinstance(event, dict):
+            continue
+        for book in event.get("bookmakers") or []:
+            if not isinstance(book, dict):
+                continue
+            candidates = [book.get("last_update")]
+            for market in book.get("markets") or []:
+                if isinstance(market, dict):
+                    candidates.append(market.get("last_update"))
+            for raw in candidates:
+                if not raw or not str(raw).strip():
+                    continue
+                stamp = str(raw).strip()
+                try:
+                    parsed = datetime.fromisoformat(stamp.replace("Z", "+00:00"))
+                    ms = parsed.timestamp()
+                except (TypeError, ValueError):
+                    continue
+                if best_ms is None or ms >= best_ms:
+                    best_ms = ms
+                    best = stamp
+    return best
+
+
+def _event_odds_last_update(event: Dict[str, Any]) -> Optional[str]:
+    return _max_odds_api_last_update([event])
+
+
 def _merge_snapshot_current_into_live(
     live: Dict[str, Any],
     snap: Dict[str, Any],
@@ -3822,6 +3858,7 @@ def nfl_fair_lines(
             **market_snap,
             "odds_home_team": event.get("home_team"),
             "odds_away_team": event.get("away_team"),
+            "odds_last_update": _event_odds_last_update(event),
         }
 
     lines: List[Dict[str, Any]] = []
@@ -4209,7 +4246,11 @@ def nfl_fair_lines(
                     if _open_snap
                     else "missing"
                 ),
-                "odds_captured_at": _open_snap.get("odds_captured_at"),
+                "odds_captured_at": (
+                    market.get("odds_last_update")
+                    if market.get("odds_last_update")
+                    else _open_snap.get("odds_captured_at")
+                ),
                 "best_spread_home": best_spread_home,
                 "best_total": best_total,
                 "best_spread_book": best_spread_book,
@@ -4293,12 +4334,24 @@ def nfl_fair_lines(
         # Lineage pointer must never take down the KEI / fair-lines board.
         log.exception("NFL fair-lines: active-run pointer load failed")
         season_run = {}
-    odds_as_of = datetime.now(timezone.utc).isoformat()
+    # Market vintage only — Odds API last_update or stored snapshot capture.
+    # NEVER datetime.now() / request clock (that was minting Edge Board as-of).
+    live_odds_as_of = _max_odds_api_last_update(market_events)
     snapshot_as_of = None
     for snap in open_by_game_id.values():
         captured = snap.get("odds_captured_at")
         if captured and (snapshot_as_of is None or str(captured) > str(snapshot_as_of)):
-            snapshot_as_of = captured
+            snapshot_as_of = (
+                captured.isoformat() if hasattr(captured, "isoformat") else str(captured)
+            )
+    for row in lines:
+        captured = row.get("odds_captured_at")
+        if captured and (snapshot_as_of is None or str(captured) > str(snapshot_as_of)):
+            snapshot_as_of = (
+                captured.isoformat() if hasattr(captured, "isoformat") else str(captured)
+            )
+    odds_as_of = live_odds_as_of or snapshot_as_of
+    request_generated_at = datetime.now(timezone.utc).isoformat()
     if snapshot_current_count and market_joined_count > snapshot_current_count:
         current_source = "mixed"
     elif snapshot_current_count:
@@ -4329,13 +4382,14 @@ def nfl_fair_lines(
             if week1_kickoffs
             else "games.start_time"
         ),
-        "odds_as_of": odds_as_of if market_events else snapshot_as_of,
+        # odds_as_of + as_of: market capture only (null when unknown — never request time).
+        "odds_as_of": odds_as_of,
         "as_of": odds_as_of,
         "active_run_id": season_run.get("active_run_id"),
         "lineage": {
             "run_id": season_run.get("active_run_id") or effective_model_version,
             "engine_version": season_run.get("engine_version") or effective_model_version,
-            "generated_at": season_run.get("generated_at") or odds_as_of,
+            "generated_at": season_run.get("generated_at") or request_generated_at,
             "kind": "KEI",
         },
         "window": {
@@ -4369,7 +4423,7 @@ def nfl_fair_lines(
             "kosedge_only": market_joined_count == 0,
             "odds_persisted": odds_persist,
             "current_week": current_week,
-            "odds_as_of": odds_as_of if market_events else snapshot_as_of,
+            "odds_as_of": odds_as_of,
             "kei_week1_reprice": {
                 "applied_games": kei_reprice_applied_games,
                 "game_card_source": week1_card_source,
