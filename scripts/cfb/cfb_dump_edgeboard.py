@@ -37,6 +37,8 @@ CFB_LEAN_EDGE_PTS = 2.5
 CFB_OUTLIER_VS_OPEN_PTS = 3.5
 CFB_ABSURD_VS_KEI_PTS = 12.0
 CFB_SINGLE_BOOK_ABSURD_PTS = 8.0
+# Totals PLAY sit — mirror CFB_TOTALS_PLAY_ELIGIBLE (docs/CFB_TOTALS_PLAY_SIT.md).
+CFB_TOTALS_PLAY_ELIGIBLE = False
 
 # From apps/web/lib/odds-api.ts
 SPORT_KEY = "americanfootball_ncaaf"
@@ -193,12 +195,16 @@ def away_book_to_home(away_signed: Any) -> Optional[float]:
     return None if n is None else -n
 
 
-def cfb_edge_tag(abs_edge: Optional[float]) -> str:
+def cfb_edge_tag(abs_edge: Optional[float], market: str = "spread") -> str:
+    """Mirror apps/web/lib/cfb-trusted-market.ts cfbEdgeTag."""
     if abs_edge is None:
         return "PASS"
-    if abs_edge >= CFB_PLAY_EDGE_PTS:
+    e = abs(float(abs_edge))
+    if e >= CFB_PLAY_EDGE_PTS:
+        if market == "total" and not CFB_TOTALS_PLAY_ELIGIBLE:
+            return "PASS"
         return "PLAY"
-    if abs_edge >= CFB_LEAN_EDGE_PTS:
+    if e >= CFB_LEAN_EDGE_PTS:
         return "LEAN"
     return "PASS"
 
@@ -436,13 +442,28 @@ def main() -> int:
         edge_line = None
         if best_home_trusted is not None:
             edge_line = round(float(kei_home) - best_home_trusted, 2)
-        tag_line = cfb_edge_tag(abs(edge_line) if edge_line is not None else None)
+        tag_line = cfb_edge_tag(
+            abs(edge_line) if edge_line is not None else None, "spread"
+        )
 
         kei_tot = kei_obj.get("kei_total")
+        # Totals trust gate (same as applyCfbTrustedMarketToRows / flat-rows).
+        tot_books = 2 if (open_tot is not None and best_tot is not None) else 1
+        tot_verdict = (
+            trust_cfb_market(kei_tot, best_tot, open_tot, tot_books)
+            if kei_tot is not None
+            else {"trusted": False, "market": None, "reason": "no_kei"}
+        )
         edge_ou = None
-        if kei_tot is not None and best_tot is not None:
+        if (
+            tot_verdict.get("trusted")
+            and kei_tot is not None
+            and best_tot is not None
+        ):
             edge_ou = round(float(kei_tot) - float(best_tot), 2)
-        tag_ou = cfb_edge_tag(abs(edge_ou) if edge_ou is not None else None)
+        tag_ou = cfb_edge_tag(
+            abs(edge_ou) if edge_ou is not None else None, "total"
+        )
 
         fire = "NO"
         if (
@@ -499,8 +520,7 @@ def main() -> int:
             }
         )
 
-    # Note: totals are not cleared by applyCfbTrustedMarketToRows (Spread only).
-    # edge_ou/tag_ou above still report vs raw best total for operator visibility.
+    # Totals: trust gate + PLAY sit (mirror web cfbEdgeTag market=total).
 
     summary = {
         "slate_as_of": slate.get("as_of"),
@@ -522,11 +542,13 @@ def main() -> int:
             "PLAY": CFB_PLAY_EDGE_PTS,
             "ABSURD_VS_KEI": CFB_ABSURD_VS_KEI_PTS,
             "SINGLE_BOOK": CFB_SINGLE_BOOK_ABSURD_PTS,
+            "TOTALS_PLAY_ELIGIBLE": CFB_TOTALS_PLAY_ELIGIBLE,
         },
         "note_sign": (
             "Board Open/Best remain away-signed in odds cache. "
             "trustCfbMarket receives home via away_book_to_home / cfbAwayBookToHome. "
-            "Band unchanged (ABSURD=12). KEI untouched."
+            "Band unchanged (ABSURD=12). KEI untouched. "
+            "Totals PLAY sat (CFB_TOTALS_PLAY_ELIGIBLE=false); LEAN ≥2.5 still fires."
         ),
     }
     for r in rows:

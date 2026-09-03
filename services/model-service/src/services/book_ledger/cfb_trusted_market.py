@@ -2,11 +2,20 @@
 
 from __future__ import annotations
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, Literal, Optional
 
 OUTLIER_VS_OPEN_PTS = 3.5
 ABSURD_VS_KEI_PTS = 12.0
 SINGLE_BOOK_ABSURD_PTS = 8.0
+
+PLAY_EDGE_PTS = 4.0
+LEAN_EDGE_PTS = 2.5
+# Totals PLAY sits until unused close holdout greens + Ryan/CoS flip.
+# See docs/CFB_TOTALS_PLAY_SIT.md — mirror of CFB_TOTALS_PLAY_ELIGIBLE.
+TOTALS_PLAY_ELIGIBLE = False
+
+CfbEdgeMarket = Literal["spread", "total"]
+CfbEdgeTag = Literal["PLAY", "LEAN", "PASS"]
 
 
 def _f(v: Any) -> Optional[float]:
@@ -53,3 +62,33 @@ def trust_cfb_market(
         return {"trusted": False, "market": None, "reason": "single_book_outlier"}
 
     return {"trusted": True, "market": candidate, "reason": reason}
+
+
+def cfb_edge_tag(
+    abs_edge: Optional[float],
+    market: CfbEdgeMarket = "spread",
+) -> CfbEdgeTag:
+    """Port of apps/web/lib/cfb-trusted-market.ts `cfbEdgeTag`."""
+    if abs_edge is None:
+        return "PASS"
+    try:
+        e = abs(float(abs_edge))
+    except (TypeError, ValueError):
+        return "PASS"
+    if e != e:  # NaN
+        return "PASS"
+    if e >= PLAY_EDGE_PTS:
+        if market == "total" and not TOTALS_PLAY_ELIGIBLE:
+            return "PASS"
+        return "PLAY"
+    if e >= LEAN_EDGE_PTS:
+        return "LEAN"
+    return "PASS"
+
+
+def cfb_publish_tag_from_edge(
+    abs_edge: Optional[float],
+    market: CfbEdgeMarket = "spread",
+) -> CfbEdgeTag:
+    """Publish ≡ display after totals PLAY sit remap."""
+    return cfb_edge_tag(abs_edge, market)
