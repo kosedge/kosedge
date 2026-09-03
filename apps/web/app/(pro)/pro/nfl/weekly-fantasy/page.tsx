@@ -68,14 +68,14 @@ export default async function NflWeeklyFantasyPage({
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
       <section className="rounded-2xl border border-kos-gold/20 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-5 sm:p-7">
         <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-          Week · player-production spine
+          Fantasy · player-production spine
         </p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
-          Weekly Fantasy Projections
+          Weekly Fantasy
         </h1>
         <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-          Season-rate fantasy points from the shared player-production spine
-          (same board as fantasy draft rankings), expressed per game. Research
+          Season-rate PPG from the shared player-production spine (same board as
+          fantasy draft rankings) — not week-specific projections. Research
           surface — not a start/sit service.
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
@@ -121,7 +121,8 @@ export default async function NflWeeklyFantasyPage({
           >
             <p>
               No spine fantasy rankings (or CSV fallback) are available in this
-              environment — weekly leaders stay empty until the board loads.
+              environment — season-rate leaders stay empty until the board
+              loads.
             </p>
           </HonestStatusBanner>
         </div>
@@ -170,7 +171,9 @@ export default async function NflWeeklyFantasyPage({
       </section>
 
       <section className="mt-6">
-        <h2 className="text-lg font-semibold text-kos-text">Weekly leaders</h2>
+        <h2 className="text-lg font-semibold text-kos-text">
+          Season-rate PPG leaders
+        </h2>
         <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {leaders.map((p, i) => (
             <div

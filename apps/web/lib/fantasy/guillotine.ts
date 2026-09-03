@@ -1,6 +1,6 @@
 import type { FantasyDeskRow } from "@/lib/fantasy/types";
 
-/** High floor — stay-alive names for weekly elimination formats. */
+/** High floor — educational stay-alive names from season ranks. */
 export function selectGuillotineSafeFloor(
   rows: FantasyDeskRow[],
   limit = 8,
@@ -16,7 +16,7 @@ export function selectGuillotineSafeFloor(
     .slice(0, limit);
 }
 
-/** High upside — waiver / add targets when chasing ceiling weeks. */
+/** High upside — educational ceiling-chase names from season ranks. */
 export function selectGuillotineHighUpside(
   rows: FantasyDeskRow[],
   limit = 8,

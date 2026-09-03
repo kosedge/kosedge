@@ -55,9 +55,9 @@ export default async function NflGuillotinePage({
               Guillotine League
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-              Last place is eliminated each week — waivers and adds matter as
-              much as your draft. Use season-long ranks and schedule softness to
-              stay alive; a fuller weekly guillotine tool can deepen later.
+              Educational stay-alive lists from season ranks — not a weekly
+              elimination or waiver tool. Use floor and ceiling bands from the
+              shared fantasy board to think about roster survival formats.
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
@@ -92,8 +92,8 @@ export default async function NflGuillotinePage({
           <HonestStatusBanner title="Preseason sim board" tone="sky">
             <p>
               Safe-floor and upside lists below are labeled preseason sim —
-              useful for draft and early-season thinking, not a locked weekly
-              guillotine waiver engine.
+              season-rank research for stay-alive thinking, not a live weekly
+              cut or add engine.
             </p>
           </HonestStatusBanner>
         </div>
@@ -106,12 +106,12 @@ export default async function NflGuillotinePage({
           </h2>
           <ul className="mt-3 space-y-2 text-sm text-kos-text/75">
             <li>
-              Each week, the lowest-scoring team is cut — roster survival beats
-              season-long points races.
+              Guillotine leagues reward roster survival — floor matters as much
+              as peak scoring.
             </li>
             <li>
-              Waivers and opportunistic adds matter weekly; dead weight gets you
-              eliminated.
+              These lists are educational research from season ranks, not a
+              weekly cut tracker or add board.
             </li>
             <li>
               Think Survivor-style pathing: maximize stay-alive probability,
@@ -129,7 +129,7 @@ export default async function NflGuillotinePage({
             </li>
             <li>
               Schedule softness (early vs playoff windows) for who to lean on
-              week to week.
+              across the season.
             </li>
             <li>
               Survivor-style path thinking on the Season Model — stay alive
@@ -171,8 +171,8 @@ export default async function NflGuillotinePage({
             title="Safe floor"
             subtitle={
               isPreseason
-                ? "Preseason sim — higher floor bands for stay-alive weeks"
-                : "Higher floor bands for stay-alive weeks"
+                ? "Preseason sim — higher floor bands for stay-alive research"
+                : "Higher floor bands for stay-alive research"
             }
             rows={safeFloor}
           />
@@ -180,8 +180,8 @@ export default async function NflGuillotinePage({
             title="High upside"
             subtitle={
               isPreseason
-                ? "Preseason sim — ceiling chase / waiver-style adds"
-                : "Ceiling chase / waiver-style adds"
+                ? "Preseason sim — ceiling chase from season ranks"
+                : "Ceiling chase from season ranks"
             }
             rows={highUpside}
           />
@@ -190,7 +190,7 @@ export default async function NflGuillotinePage({
         <div className="mt-6">
           <HonestStatusBanner title="Fantasy board unavailable" tone="neutral">
             <p>
-              Open the Draft Desk once rankings load — guillotine lists pull
+              Open the Draft Desk once rankings load — stay-alive lists pull
               from the same board.
             </p>
             <Link
