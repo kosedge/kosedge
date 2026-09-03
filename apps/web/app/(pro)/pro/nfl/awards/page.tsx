@@ -31,7 +31,6 @@ import { CURRENT_YTD_TOOLTIP } from "@/lib/nfl-player-futures";
 import { NFL_AWARDS_SOURCE_STAMP } from "@/lib/nfl-surface-honesty";
 
 const DEFAULT_SEASON = 2026;
-const KOSEDGE_DATE = "August 11, 2026";
 
 /** Only races the award engine actually materializes — never placeholder tabs. */
 const LIVE_AWARD_META: {
@@ -121,10 +120,6 @@ export default async function NflAwardsPage() {
               Contenders from the player + season model — Award Score (relative
               index, not a probability), Current (2026 YTD), and Current odds on
               every row.
-            </p>
-            <p className="mt-2 text-xs text-kos-text/55">
-              Date: {KOSEDGE_DATE}
-              {lineage ? ` · ${lineage}` : null}
             </p>
             <p
               className="mt-2 text-xs text-kos-gold/85"
