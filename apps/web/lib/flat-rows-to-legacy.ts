@@ -4,7 +4,11 @@
  * can assemble tonight games without crossing the client boundary.
  */
 
-import { cfbAwayBookToHome, trustCfbMarket } from "@/lib/cfb-trusted-market";
+import {
+  cfbAwayBookToHome,
+  cfbEdgeTag,
+  trustCfbMarket,
+} from "@/lib/cfb-trusted-market";
 import {
   isNbaPreseason,
   nbaAwayBookToHome,
@@ -263,9 +267,8 @@ function edgeToTag(
   }
   if (edgeNum == null) return undefined;
   if (sport === "cfb") {
-    if (edgeNum >= 4.0) return "PLAY";
-    if (edgeNum >= 2.5) return "LEAN";
-    return "PASS";
+    // SoT: cfbEdgeTag (totals PLAY sat via CFB_TOTALS_PLAY_ELIGIBLE).
+    return cfbEdgeTag(edgeNum, market === "total" ? "total" : "spread");
   }
   if (sport === "nba") {
     // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 (trusted Best only; caller gates trust).

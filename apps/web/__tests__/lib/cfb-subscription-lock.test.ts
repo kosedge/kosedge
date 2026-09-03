@@ -155,7 +155,9 @@ describe("cfb trusted market", () => {
     // FIU@USF-class: KEI 72.5 vs book 52.5 (+20) must not PLAY.
     const gap = Math.abs(72.5 - 52.5);
     expect(gap).toBeGreaterThanOrEqual(CFB_ABSURD_VS_KEI_PTS);
-    expect(cfbEdgeTag(gap)).toBe("PLAY"); // raw would fire
+    // Raw magnitude is PLAY-band; totals sit + trust both block PLAY.
+    expect(cfbEdgeTag(gap, "total")).toBe("PASS");
+    expect(cfbEdgeTag(gap, "spread")).toBe("PLAY"); // totals-only sit
 
     const rows = applyCfbTrustedMarketToRows([
       {
@@ -172,7 +174,7 @@ describe("cfb trusted market", () => {
     expect(rows[0]?.cfbMarketTrusted).toBe(false);
     expect(rows[0]?.cfbTrustReason).toBe("absurd_vs_kei");
     expect(rows[0]?.cfbTrustLabel).toBe("untrusted");
-    expect(cfbEdgeTag(null)).toBe("PASS");
+    expect(cfbEdgeTag(null, "total")).toBe("PASS");
   });
 
   it("Total rows: does not flip sign (52.5 stays 52.5, not −52.5)", () => {
@@ -189,13 +191,16 @@ describe("cfb trusted market", () => {
     // If we wrongly applied cfbAwayBookToHome, gap would be |56.6−(−52.5)|≈109 → absurd.
     expect(rows[0]?.cfbMarketTrusted).toBe(true);
     expect(rows[0]?.cfbTrustLabel).toBeUndefined();
-    expect(cfbEdgeTag(Math.abs(56.6 - 52.5))).toBe("PLAY"); // +4.1
+    // +4.1 was PLAY; totals PLAY now sat → PASS.
+    expect(cfbEdgeTag(Math.abs(56.6 - 52.5), "total")).toBe("PASS");
   });
 
-  it("Total rows: +4.1 Over still PLAY; +3.0 Over still LEAN; under band PASS", () => {
-    expect(cfbEdgeTag(4.1)).toBe("PLAY");
-    expect(cfbEdgeTag(3.0)).toBe("LEAN");
-    expect(cfbEdgeTag(2.0)).toBe("PASS");
+  it("Total rows: PLAY-band sat to PASS; LEAN still LEAN; under band PASS", () => {
+    expect(cfbEdgeTag(4.1, "total")).toBe("PASS");
+    expect(cfbEdgeTag(3.0, "total")).toBe("LEAN");
+    expect(cfbEdgeTag(2.0, "total")).toBe("PASS");
+    // Spreads still PLAY at +4.1.
+    expect(cfbEdgeTag(4.1, "spread")).toBe("PLAY");
 
     const playRows = applyCfbTrustedMarketToRows([
       {
@@ -208,7 +213,7 @@ describe("cfb trusted market", () => {
       },
     ]);
     expect(playRows[0]?.cfbMarketTrusted).toBe(true);
-    expect(cfbEdgeTag(Math.abs(56.6 - 52.5))).toBe("PLAY");
+    expect(cfbEdgeTag(Math.abs(56.6 - 52.5), "total")).toBe("PASS");
 
     const leanRows = applyCfbTrustedMarketToRows([
       {
@@ -221,7 +226,7 @@ describe("cfb trusted market", () => {
       },
     ]);
     expect(leanRows[0]?.cfbMarketTrusted).toBe(true);
-    expect(cfbEdgeTag(Math.abs(55.5 - 52.5))).toBe("LEAN");
+    expect(cfbEdgeTag(Math.abs(55.5 - 52.5), "total")).toBe("LEAN");
   });
 
   it("Total rows: single-book |gap| ≥ 8 → untrusted", () => {
