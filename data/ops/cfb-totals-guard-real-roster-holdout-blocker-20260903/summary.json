@@ -1,0 +1,52 @@
+{
+  "stamp": "20260903",
+  "verdict": "STOP",
+  "reason": "2023-24 real roster/SP+ (live-style units/QB) not reconstructable; refuse mix with proxy-fit lambda",
+  "product": {
+    "apply_cfb_kei": false,
+    "totals_guard_flag": "OFF",
+    "kei_total": "identity",
+    "play_flip": false,
+    "pack_recut": false,
+    "w1_lambda_retune": false,
+    "global_matchup_response_cut": false,
+    "clv_minted": false
+  },
+  "protocol": {
+    "fit_seasons": [2023, 2024],
+    "eval_seasons": [2025],
+    "primary_window": "W0-2",
+    "candidates": ["identity", "b_matchup_inflation_dampen", "a_level_offset"],
+    "c_exploratory_only": true,
+    "same_roster_path_required": true,
+    "forbid_proxy_lambda_on_real_roster_eval": true
+  },
+  "exists": {
+    "real_roster_snapshot_years": [2026],
+    "efficiency_sp_plus_carry_packs": ["2025_carry_2026"],
+    "hist_cal_proxy_path": true,
+    "proxy_totals_guard_holdout_pr": 442,
+    "warehouse_games_odds_pbp": true,
+    "warehouse_historical_rosters_materialized": false
+  },
+  "missing": {
+    "real_roster_snapshot_years": [2023, 2024, 2025],
+    "efficiency_sp_plus_carry_packs": [
+      "2022_carry_2023",
+      "2023_carry_2024",
+      "2024_carry_2025"
+    ],
+    "cfbd_api_key_in_environment": false,
+    "public_sp_plus_year_archives_in_repo": false
+  },
+  "probes": {
+    "espn_site_roster_season_param_2023_to_2025": "empty_athletes",
+    "espn_core_season_athletes_2023_to_2025": "ref_lists_exist_not_packaged",
+    "cfbupdate_sp_ratings": "current_2026_only",
+    "cfbd_ratings_sp_without_key": "401",
+    "hist_cal_ops_20260805": "documented_no_packaged_hist_roster_qb"
+  },
+  "eval_table": null,
+  "coefficients": null,
+  "message": "STOP — do not invent a mix; do not retune from 2025; identity stays live; no apply_cfb_kei."
+}
