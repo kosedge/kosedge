@@ -95,6 +95,7 @@ export default function EdgeBoardSportClient({
   }, [sportKey, slate, cfbWeek]);
 
   const isNfl = sportKey === "nfl";
+  const usesMarketAsOf = sportKey === "nfl" || sportKey === "cfb";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
   const keiCode = getKeiCode(sportKey);
   const slateLabel =
@@ -106,11 +107,11 @@ export default function EdgeBoardSportClient({
   const fullCount = state.status === "ready" ? state.data.fullCount : 0;
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
-  const nflLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
-  const headerAsOf = isNfl
+  const boardLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
+  const headerAsOf = usesMarketAsOf
     ? state.status === "loading"
       ? "…"
-      : marketAsOfHeaderSuffix({ asOf: nflLinesAsOf, kind: "lines" })
+      : marketAsOfHeaderSuffix({ asOf: boardLinesAsOf, kind: "lines" })
     : null;
 
   return (
@@ -122,7 +123,7 @@ export default function EdgeBoardSportClient({
             {marketsOnly
               ? "Markets only"
               : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}
-            {isNfl ? <> · {headerAsOf}</> : <> · ET</>}
+            {usesMarketAsOf ? <> · {headerAsOf}</> : <> · ET</>}
           </div>
           {marketsOnly ? (
             <div className="mt-2">
@@ -266,10 +267,10 @@ export default function EdgeBoardSportClient({
         </div>
       ) : null}
 
-      {isNfl && state.status === "ready" ? (
+      {usesMarketAsOf && state.status === "ready" ? (
         <MarketAsOfStamp
           className="mt-3"
-          asOf={nflLinesAsOf}
+          asOf={boardLinesAsOf}
           kind="lines"
           data-testid="edge-board-asof"
         />

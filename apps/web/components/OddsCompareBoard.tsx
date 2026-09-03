@@ -96,9 +96,10 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
   const stampBooks = bookAsOf
     .filter((b) => b.asOf && b.feedStatus !== "not_carried")
     .map((b) => b.label);
-  // NFL always stamps; other sports stamp when rows loaded.
+  // NFL + CFB always stamp; other sports stamp when rows loaded.
   const showMarketStamp =
-    state.status === "ready" && (sportKey === "nfl" || rows.length > 0);
+    state.status === "ready" &&
+    (sportKey === "nfl" || sportKey === "cfb" || rows.length > 0);
   const headerAsOf =
     state.status === "loading"
       ? "…"
