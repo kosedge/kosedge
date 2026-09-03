@@ -22,7 +22,10 @@ import {
   toFiniteNumber,
   type NflMarketLineKind,
 } from "@/lib/nfl-market-line-hygiene";
-import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
+import {
+  pickLatestIso,
+  sanitizeMarketCaptureIso,
+} from "@/lib/market-asof-stamp";
 
 const ET = "America/New_York";
 
@@ -394,21 +397,41 @@ export function syncEdgeBoardActionsWithCurrent(
 }
 
 /**
- * Prefer Odds API / stored market capture for Edge Board linesAsOf.
- * Never fall back to board/request asOf (that was minting fetch-time clocks).
- * Stale market stamps still return — UI marks stale; blank/invent → undefined.
+ * Market vintage for Edge Board linesAsOf — same sources as fair-lines.
+ * pickLatestIso(row oddsCapturedAt, payload odds_as_of/oddsAsOf).
+ * Never uses board generation / request clock (boardAsOf ignored — invent-now).
+ * sanitizeMarketCaptureIso rejects Python datetime.now() µs near request.
+ * Blank sources → undefined (honest unavailable). Never Date.now().
  */
 export function resolveEdgeBoardLinesAsOf(opts: {
   oddsCapturedAt?: string | null;
-  /** Ignored for market vintage — board generation is not book last_update. */
+  /** Payload-level Odds API / stored market vintage (odds_as_of). */
+  oddsAsOf?: string | null;
+  /** Ignored — often request/board generation now(); not book last_update. */
   boardAsOf?: string | null;
   maxAgeMs?: number;
 }): string | undefined {
-  const market = sanitizeMarketCaptureIso(opts.oddsCapturedAt) ?? undefined;
-  // Explicitly ignore boardAsOf — even if present it is often request now().
   void opts.boardAsOf;
   void opts.maxAgeMs;
-  return market;
+  return pickLatestIso(opts.oddsCapturedAt, opts.oddsAsOf) ?? undefined;
+}
+
+/**
+ * Board-level as-of: latest among row stamps + payload odds_as_of.
+ * Same market vintage contract as fair-lines; never invents a clock.
+ * Accepts EdgeBoardRow-shaped objects (`[x: string]: unknown` + optional fields).
+ */
+export function resolveEdgeBoardBoardLinesAsOf(
+  rows: ReadonlyArray<{
+    [key: string]: unknown;
+    linesAsOf?: string | null;
+  }>,
+  payloadOddsAsOf?: string | null,
+): string | null {
+  return pickLatestIso(
+    ...rows.map((r) => (typeof r.linesAsOf === "string" ? r.linesAsOf : null)),
+    payloadOddsAsOf,
+  );
 }
 
 /**
@@ -419,9 +442,11 @@ export function resolveEdgeBoardLinesAsOf(opts: {
  */
 export function fairLinesToEdgeBoardRows(
   lines: NflFairLineRow[],
-  opts?: { boardAsOf?: string | null },
+  opts?: { oddsAsOf?: string | null; boardAsOf?: string | null },
 ): EdgeBoardRow[] {
   const rows: EdgeBoardRow[] = [];
+  const oddsAsOf = opts?.oddsAsOf ?? null;
+  // boardAsOf retained for call-site compat; resolve ignores it (invent-now).
   const boardAsOf = opts?.boardAsOf ?? null;
 
   for (const line of lines) {
@@ -497,6 +522,7 @@ export function fairLinesToEdgeBoardRows(
         : undefined;
     const linesAsOf = resolveEdgeBoardLinesAsOf({
       oddsCapturedAt: line.oddsCapturedAt,
+      oddsAsOf,
       boardAsOf,
     });
 
