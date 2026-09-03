@@ -6,25 +6,25 @@ edge + historical ATS/CLV evidence.
 
 ## Status vocabulary
 
-| Status | Meaning |
-| --- | --- |
-| **GREEN** | Clears the bar for that check |
+| Status     | Meaning                                                      |
+| ---------- | ------------------------------------------------------------ |
+| **GREEN**  | Clears the bar for that check                                |
 | **YELLOW** | Partial / sample thin — ship cautiously, no full-slate claim |
-| **RED** | Failed — do not claim betting-product ready on that axis |
+| **RED**    | Failed — do not claim betting-product ready on that axis     |
 
 Overall **betting-product ready** requires GREEN on ATS, CLV sample, and
 supervised holdout; MAE vs market at least YELLOW; props stake-off.
 
 ## Product-level floors
 
-| Gate | Floor |
-| --- | --- |
-| Full-slate ATS hit rate | ≥ 52.38% (−110 breakeven), n ≥ 200 |
-| CLV spread +rate | ≥ 55%, **n ≥ 200** (hundreds+) |
+| Gate                                | Floor                                                                    |
+| ----------------------------------- | ------------------------------------------------------------------------ |
+| Full-slate ATS hit rate             | ≥ 52.38% (−110 breakeven), n ≥ 200                                       |
+| CLV spread +rate                    | ≥ 55%, **n ≥ 200** (hundreds+)                                           |
 | **PLAY-only unused holdout (2025)** | Spread PLAY ATS ≥ 52.38% (n ≥ 60); CLV+ ≥ 55% with **n ≥ 200** for GREEN |
-| Model MAE vs market close | model ≤ market on spread and/or total |
-| Supervised chronological holdout | Brier ≤ 0.22, margin MAE ≤ 9.5, total MAE ≤ 10.5, schema ≥ v3 + KAV |
-| Props stake | must remain `PLAY_STAKE_ELIGIBLE=False` |
+| Model MAE vs market close           | model ≤ market on spread and/or total                                    |
+| Supervised chronological holdout    | Brier ≤ 0.22, margin MAE ≤ 9.5, total MAE ≤ 10.5, schema ≥ v3 + KAV      |
+| Props stake                         | must remain `PLAY_STAKE_ELIGIBLE=False`                                  |
 
 **Selective subscription claim** requires PLAY-only holdout GREEN (not full-slate ATS).
 Scope claim to **2024+ confirmatory** (2020–22 clears −110 ATS but fails movement-CLV).
@@ -66,16 +66,16 @@ ungate totals/prop PLAY without a new unused holdout and an explicit flip.
 **Freeze date: 2026-08-25** — no new factor promotion into the Week-1 product path
 without a fresh confirmatory holdout + explicit unfreeze.
 
-| Factor | Default | Status |
-| --- | --- | --- |
-| KAV v3 | ON | Locked product core |
-| H travel×weather | ON | Promoted (ablation) |
-| D error-regime | ON | Promoted (uncertainty only) |
-| E info velocity | OFF | Killed (ATS −3.5pp) |
-| B personnel | OFF | Killed (unmaterializable) |
-| A coach aggression | OFF | Killed (regress) |
-| Market blend weight | locked | No retune without holdout |
-| PLAY band | `spread_play_v2_cap7` | Do not widen |
+| Factor              | Default               | Status                      |
+| ------------------- | --------------------- | --------------------------- |
+| KAV v3              | ON                    | Locked product core         |
+| H travel×weather    | ON                    | Promoted (ablation)         |
+| D error-regime      | ON                    | Promoted (uncertainty only) |
+| E info velocity     | OFF                   | Killed (ATS −3.5pp)         |
+| B personnel         | OFF                   | Killed (unmaterializable)   |
+| A coach aggression  | OFF                   | Killed (regress)            |
+| Market blend weight | locked                | No retune without holdout   |
+| PLAY band           | `spread_play_v2_cap7` | Do not widen                |
 
 See `data/ops/nfl-factor-freeze-aug25.md` and
 `data/ops/nfl-factor-freeze-operator-checklist.md`.
