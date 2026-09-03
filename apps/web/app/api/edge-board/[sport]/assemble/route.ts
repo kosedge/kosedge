@@ -68,7 +68,11 @@ export async function GET(
             ),
         ),
       ].sort((a, b) => a - b);
-      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
+      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(
+        rows.map((r) => ({
+          linesAsOf: (r as { linesAsOf?: string }).linesAsOf,
+        })),
+      );
       return NextResponse.json({
         rows,
         week1Count: gameCount(week1Rows),

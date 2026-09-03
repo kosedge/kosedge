@@ -164,9 +164,13 @@ describe("Edge Board market as-of — inherit odds_as_of, no invent now()", () =
   });
 
   it("near-now microsecond invent fingerprint still rejected", () => {
+    // Python datetime.now() µs fingerprint within sanitize's 30m window of wall clock.
+    const inventMs = Date.now() - 5_000;
+    const inventNearNow = `${new Date(inventMs).toISOString().slice(0, 19)}.841551+00:00`;
+
     expect(
       resolveEdgeBoardLinesAsOf({
-        oddsCapturedAt: requestClock,
+        oddsCapturedAt: inventNearNow,
         oddsAsOf: null,
         boardAsOf: null,
       }),
@@ -175,18 +179,18 @@ describe("Edge Board market as-of — inherit odds_as_of, no invent now()", () =
     expect(
       resolveEdgeBoardLinesAsOf({
         oddsCapturedAt: null,
-        oddsAsOf: requestClock,
+        oddsAsOf: inventNearNow,
         boardAsOf: null,
       }),
     ).toBeUndefined();
 
     const rows = fairLinesToEdgeBoardRows(
       [fairLine({ oddsCapturedAt: null })],
-      { oddsAsOf: requestClock },
+      { oddsAsOf: inventNearNow },
     );
     for (const r of rows) {
       expect((r as { linesAsOf?: string }).linesAsOf).toBeUndefined();
     }
-    expect(resolveEdgeBoardBoardLinesAsOf(rows, requestClock)).toBeNull();
+    expect(resolveEdgeBoardBoardLinesAsOf(rows, inventNearNow)).toBeNull();
   });
 });
