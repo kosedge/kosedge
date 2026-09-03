@@ -6,7 +6,8 @@
 **Evidence packs:** `apps/web/lib/data/cfb-kei-w0-w1-2026.json`, `data/ops/cfb-w1-handicap-card-20260831.json`  
 **Not done:** no KEI recut, no haircut, no retune, no Edge Board / tagger code change, no merge.
 
-**Follow-up (2026-09-03):** Totals PLAY is sat on the tagger only — see `docs/CFB_TOTALS_PLAY_SIT.md`. This audit remains the diagnosis of the Over-drunk shape; the sit does not haircut KEI.
+**Follow-up (2026-09-03):** Totals PLAY is sat on the tagger only — see `docs/CFB_TOTALS_PLAY_SIT.md`. This audit remains the diagnosis of the Over-drunk shape; the sit does not haircut KEI.  
+**Design (2026-09-03):** Totals-first KEI calibrator (versioned `kei_total` guard; no pack recut) — see `docs/CFB_KEI_CALIBRATOR_DESIGN.md`.
 
 ---
 
