@@ -83,45 +83,58 @@ jobs:
           pip install -r services/model-service/requirements.txt
           python scripts/db/migrate.py check-integrity
 
-      # Read-only status gate. Never auto-apply. Closes the quiet-pending trap when
-      # infra/db/*.sql changes without a warehouse URL to confirm currency.
-      - name: SQL migration status gate (read-only)
+      # Live status gate is DISABLED by default so the first merge (runner only)
+      # can deploy without a circular dependency on an unbaselined warehouse.
+      # Enable GitHub Actions variable MIGRATION_STATUS_GATE_ENABLED=true ONLY AFTER:
+      #   1) this runner is deployed to Railway, AND
+      #   2) production baseline --through 054 (with confirmation tokens) succeeds.
+      # Never auto-apply DDL. Absent WAREHOUSE_DATABASE_URL is stated honestly.
+      - name: SQL migration status gate (read-only; opt-in after cutover)
         env:
           WAREHOUSE_DATABASE_URL: ${{ secrets.WAREHOUSE_DATABASE_URL }}
+          MIGRATION_STATUS_GATE_ENABLED: ${{ vars.MIGRATION_STATUS_GATE_ENABLED }}
         run: |
           set -euo pipefail
+          GATE="$(printf '%s' "${MIGRATION_STATUS_GATE_ENABLED:-false}" | tr '[:upper:]' '[:lower:]' | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
+          if [ "${GATE}" != "true" ]; then
+            echo "Migration status gate DISABLED (cutover / first-merge safe)."
+            echo "Repo check-integrity already ran. Live status --require-current is NOT enforced."
+            echo "Enable Actions variable MIGRATION_STATUS_GATE_ENABLED=true ONLY AFTER"
+            echo "runner deploy + production baseline through 054. CI will not auto-apply DDL."
+            exit 0
+          fi
+
           BEFORE="${{ github.event.before }}"
           SHA="${{ github.sha }}"
+          EVENT="${{ github.event_name }}"
           SQL_CHANGED=0
-          if [ -n "${BEFORE}" ] && [ "${BEFORE}" != "0000000000000000000000000000000000000000" ]; then
-            if git diff --name-only "${BEFORE}" "${SHA}" | grep -q '^infra/db/.*\.sql$'; then
-              SQL_CHANGED=1
-            fi
-          else
-            # workflow_dispatch / first push — treat any tracked SQL as in-scope
-            if git ls-files 'infra/db/*.sql' | grep -q .; then
-              SQL_CHANGED=0
-            fi
+          if [ "${EVENT}" = "workflow_dispatch" ]; then
+            # Fail closed for manual runs once the gate is enabled.
+            SQL_CHANGED=1
+            echo "workflow_dispatch: treating SQL scope as in-scope (fail closed)."
+          elif [ -z "${BEFORE}" ] || [ "${BEFORE}" = "0000000000000000000000000000000000000000" ]; then
+            # First push / missing before SHA — fail closed once enabled.
+            SQL_CHANGED=1
+            echo "missing/zero before SHA: treating SQL scope as in-scope (fail closed)."
+          elif git diff --name-only "${BEFORE}" "${SHA}" | grep -q '^infra/db/.*\.sql$'; then
+            SQL_CHANGED=1
           fi
 
           URL="$(printf '%s' "${WAREHOUSE_DATABASE_URL:-}" | tr -d '\r\n' | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
           if [ -z "${URL}" ]; then
-            echo "::warning::WAREHOUSE_DATABASE_URL secret is not set."
+            echo "::error::MIGRATION_STATUS_GATE_ENABLED=true but WAREHOUSE_DATABASE_URL is unset."
             echo "CI cannot verify live warehouse migration status and will NOT auto-apply DDL."
-            echo "Operators must baseline/apply out-of-band (see infra/db/README.md)."
-            if [ "${SQL_CHANGED}" = "1" ]; then
-              echo "::error::This push changed infra/db/*.sql but CI has no read-only warehouse URL."
-              echo "Add GitHub secret WAREHOUSE_DATABASE_URL (read-only preferred) for status --require-current,"
-              echo "or apply/baseline manually before merging SQL that must be live."
-              exit 1
-            fi
-            echo "No infra/db/*.sql file changes in this push; integrity check only."
-            exit 0
+            echo "Set a read-only WAREHOUSE_DATABASE_URL secret, or disable the gate variable."
+            exit 1
           fi
 
           echo "::add-mask::${URL}"
           export DATABASE_URL="${URL}"
+          # Always require-current when gate enabled (closes quiet-pending trap).
           python scripts/db/migrate.py status --require-current
+          if [ "${SQL_CHANGED}" = "1" ]; then
+            echo "SQL scope in-scope for this event; status --require-current passed."
+          fi
 
       - name: Install Railway CLI
         run: npm install -g @railway/cli@5.2.0
@@ -217,6 +230,6 @@ jobs:
             echo "- **401-with-secret:** Railway var ≠ GH Actions INTERNAL_API_SECRET (do not rotate a new key mid-cutover)"
             echo "- **git_sha:** baked into image as \`.deploy-git-sha\` (railway up does not inject commit)"
             echo "- **Note:** \`railway up --detach\` is upload-only and is not a pass"
-            echo "- **Migrations:** repo \`check-integrity\` always; live \`status --require-current\` only if \`WAREHOUSE_DATABASE_URL\` is set (never auto-apply DDL)"
+            echo "- **Migrations:** repo \`check-integrity\` always; live \`status --require-current\` only when \`MIGRATION_STATUS_GATE_ENABLED=true\` AND \`WAREHOUSE_DATABASE_URL\` is set (never auto-apply DDL; gate off for first-merge cutover)"
             echo "- **Staged SQL:** \`scripts/db/stage_migrations_into_model_service.sh\` → \`/app/infra/db\`"
           } >> "$GITHUB_STEP_SUMMARY"

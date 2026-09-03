@@ -8,10 +8,13 @@ from pathlib import Path
 
 from .discovery import discover_migrations
 from .errors import (
+    BaselineConfirmationError,
     BaselineRequiredError,
     ChecksumDriftError,
+    HistoryIntegrityError,
     MigrationApplyError,
     MigrationError,
+    MigrationLockError,
     MigrationSequenceError,
 )
 from .paths import require_database_url, resolve_migrations_dir
@@ -26,6 +29,7 @@ def _connect(database_url: str):
             "psycopg is required (model-service dependency). "
             "pip install -r services/model-service/requirements.txt"
         ) from exc
+    # autocommit=False so DDL + tracking row share a transaction per migration.
     return psycopg.connect(database_url)
 
 
@@ -34,18 +38,14 @@ def build_parser() -> argparse.ArgumentParser:
         prog="python -m src.db_migrations",
         description=(
             "Tracked raw-SQL migrations for infra/db. "
-            "schema_migrations is bootstrapped by this runner (not a numbered file)."
+            "schema_migrations is bootstrapped by this runner (not a numbered file). "
+            "DATABASE_URL must come from the environment (no --database-url)."
         ),
     )
     parser.add_argument(
         "--migrations-dir",
         default=None,
         help="Path to infra/db (default: auto-detect / KOSEDGE_MIGRATIONS_DIR)",
-    )
-    parser.add_argument(
-        "--database-url",
-        default=None,
-        help="Postgres URL (default: DATABASE_URL env). Never commit credentials.",
     )
 
     sub = parser.add_subparsers(dest="command", required=True)
@@ -55,9 +55,9 @@ def build_parser() -> argparse.ArgumentParser:
         "--require-current",
         action="store_true",
         help=(
-            "Exit 1 if any migration is pending or drifted, or if the DB is an "
-            "unbaselined legacy warehouse. Read-only; never applies DDL beyond "
-            "ensuring the tracking table exists for status reads when already present."
+            "Exit 1 if any migration is pending or drifted, history is invalid, "
+            "or the DB is an unbaselined legacy warehouse. Read-only regarding "
+            "numbered SQL; never stamps or applies migrations."
         ),
     )
     status.add_argument(
@@ -75,17 +75,47 @@ def build_parser() -> argparse.ArgumentParser:
         action="store_true",
         help="Print pending migrations without executing SQL",
     )
+    apply.add_argument(
+        "--lock-timeout-seconds",
+        type=int,
+        default=30,
+        help="Advisory lock wait bound before failing loudly (default 30)",
+    )
 
     baseline = sub.add_parser(
         "baseline",
         aliases=["stamp"],
-        help="Stamp migrations through VERSION without executing SQL (explicit only)",
+        help=(
+            "Stamp migrations 1..THROUGH without executing SQL. "
+            "Initial baseline only (empty tracker). Requires confirmation tokens."
+        ),
     )
     baseline.add_argument(
         "--through",
         type=int,
         required=True,
         help="Highest version to stamp (e.g. 054 for current KosEdge warehouse cutover)",
+    )
+    baseline.add_argument(
+        "--confirm-baseline",
+        type=int,
+        required=True,
+        help="Must exactly equal --through (deliberate confirmation token)",
+    )
+    baseline.add_argument(
+        "--expect-database",
+        type=str,
+        required=True,
+        help=(
+            "Must exactly equal current_database() on the server "
+            "(DB identity check; never pass a URL here)"
+        ),
+    )
+    baseline.add_argument(
+        "--lock-timeout-seconds",
+        type=int,
+        default=30,
+        help="Advisory lock wait bound before failing loudly (default 30)",
     )
 
     sub.add_parser(
@@ -109,21 +139,21 @@ def cmd_status(
     require_current: bool,
     bootstrap_tracking: bool,
 ) -> int:
-    # Status is read-oriented. We only create the tracking table when asked, or
-    # when it already exists we just read. For require-current against a legacy
-    # DB we must not silently bootstrap+look empty.
     unbaselined = False
-    if runner.tracking_table_exists():
-        unbaselined = runner.is_unbaselined_legacy()
-        rows = runner.status_rows()
-    elif bootstrap_tracking:
-        runner.ensure_tracking_table()
-        unbaselined = runner.is_unbaselined_legacy()
-        rows = runner.status_rows()
-    else:
-        # No tracker yet: treat all files as pending and detect legacy tables.
-        unbaselined = runner.public_user_table_count(exclude_tracking=False) > 0
-        rows = runner.status_rows()  # tracking missing → all pending
+    try:
+        if runner.tracking_table_exists():
+            unbaselined = runner.is_unbaselined_legacy()
+            rows = runner.status_rows()  # validates history when nonempty
+        elif bootstrap_tracking:
+            runner.ensure_tracking_table()
+            unbaselined = runner.is_unbaselined_legacy()
+            rows = runner.status_rows()
+        else:
+            unbaselined = runner.non_system_user_object_count(exclude_tracking=False) > 0
+            rows = runner.status_rows()
+    except (HistoryIntegrityError, ChecksumDriftError) as exc:
+        print(f"history FAILED: {exc}", file=sys.stderr)
+        return 1 if require_current else 1  # always fail closed on bad history
 
     print(format_status(rows, unbaselined_legacy=unbaselined))
 
@@ -155,7 +185,7 @@ def cmd_apply(runner: MigrationRunner, *, dry_run: bool) -> int:
                 "dry-run: apply would refuse (unbaselined legacy database)"
             )
         if runner.tracking_table_exists():
-            runner.assert_no_checksum_drift()
+            runner.validate_applied_history()
         pending = [
             r for r in runner.status_rows() if r.state is MigrationState.PENDING
         ]
@@ -177,14 +207,28 @@ def cmd_apply(runner: MigrationRunner, *, dry_run: bool) -> int:
     return 0
 
 
-def cmd_baseline(runner: MigrationRunner, *, through: int) -> int:
-    stamped = runner.baseline(through=through)
+def cmd_baseline(
+    runner: MigrationRunner,
+    *,
+    through: int,
+    confirm_baseline: int,
+    expect_database: str,
+) -> int:
+    stamped = runner.baseline(
+        through=through,
+        confirm_baseline=confirm_baseline,
+        expect_database=expect_database,
+    )
     if not stamped:
         print(f"ok: baseline already covered through {through:03d}")
         return 0
     for mig in stamped:
         print(f"stamped: {mig.version:03d}  {mig.filename}  checksum={mig.checksum}")
     print(f"ok: baselined {len(stamped)} migration(s) through {through:03d}")
+    print(
+        "note: baseline is operator attestation of applied history; "
+        "it does not inspect whether each historical DDL effect exists."
+    )
     return 0
 
 
@@ -206,14 +250,19 @@ def main(argv: list[str] | None = None) -> int:
             return 1
 
     try:
-        database_url = require_database_url(args.database_url)
+        database_url = require_database_url()
     except RuntimeError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
     try:
         with _connect(database_url) as conn:
-            runner = MigrationRunner(conn, migrations_dir)
+            lock_timeout = getattr(args, "lock_timeout_seconds", 30)
+            runner = MigrationRunner(
+                conn,
+                migrations_dir,
+                lock_timeout_seconds=lock_timeout,
+            )
             if args.command == "status":
                 return cmd_status(
                     runner,
@@ -223,15 +272,29 @@ def main(argv: list[str] | None = None) -> int:
             if args.command in ("apply", "up"):
                 return cmd_apply(runner, dry_run=args.dry_run)
             if args.command in ("baseline", "stamp"):
-                return cmd_baseline(runner, through=args.through)
+                return cmd_baseline(
+                    runner,
+                    through=args.through,
+                    confirm_baseline=args.confirm_baseline,
+                    expect_database=args.expect_database,
+                )
             parser.error(f"unknown command: {args.command}")
             return 2
     except BaselineRequiredError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 3
+    except BaselineConfirmationError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 3
     except ChecksumDriftError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 4
+    except HistoryIntegrityError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 4
+    except MigrationLockError as exc:
+        print(f"error: {exc}", file=sys.stderr)
+        return 6
     except MigrationApplyError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 5

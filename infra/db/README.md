@@ -13,9 +13,12 @@ CLI (from `services/model-service`):
 python -m src.db_migrations check-integrity
 DATABASE_URL='…' python -m src.db_migrations status
 DATABASE_URL='…' python -m src.db_migrations apply   # alias: up
-DATABASE_URL='…' python -m src.db_migrations baseline --through 054
-DATABASE_URL='…' python -m src.db_migrations stamp --through 054   # alias
+DATABASE_URL='…' python -m src.db_migrations baseline \
+  --through 054 --confirm-baseline 054 --expect-database "$DBNAME"
 ```
+
+`DATABASE_URL` is **environment-only** — there is no `--database-url` flag.
+Never commit credentials; never log the URL.
 
 From monorepo root:
 
@@ -23,44 +26,50 @@ From monorepo root:
 python scripts/db/migrate.py check-integrity
 DATABASE_URL='…' python scripts/db/migrate.py status
 # KosEdge prod cutover (054 already live — stamp only, do not re-apply):
-# DATABASE_URL='…' python scripts/db/migrate.py baseline --through 054
+# DBNAME=$(psql "$DATABASE_URL" -Atc 'select current_database()')
+# DATABASE_URL='…' python scripts/db/migrate.py baseline \
+#   --through 054 --confirm-baseline 054 --expect-database "$DBNAME"
 # DATABASE_URL='…' python scripts/db/migrate.py status --require-current
 ```
 
-Uses the model-service `psycopg` dependency. Pass the URL via env or
-`--database-url`. **Never commit credentials.**
-
-### Tracking table
-
-Bootstrapped by the runner (not a numbered migration — that would be a
-chicken-and-egg dependency):
+### Tracking table (bootstrap DDL — not a numbered migration)
 
 ```sql
 CREATE TABLE IF NOT EXISTS schema_migrations (
   version integer PRIMARY KEY,
-  filename text NOT NULL UNIQUE,
-  checksum text NOT NULL,          -- SHA-256 hex of file bytes
+  filename text NOT NULL,
+  checksum text NOT NULL,
   applied_at timestamptz NOT NULL DEFAULT now(),
-  duration_ms integer NOT NULL     -- 0 when stamped via baseline
+  duration_ms integer NOT NULL,
+  CONSTRAINT schema_migrations_filename_unique UNIQUE (filename),
+  CONSTRAINT schema_migrations_checksum_sha256
+    CHECK (checksum ~ '^[0-9a-f]{64}$'),
+  CONSTRAINT schema_migrations_duration_nonneg
+    CHECK (duration_ms >= 0)
 );
 ```
 
 ### Behavior
 
-| Command                          | Effect                                                                   |
-| -------------------------------- | ------------------------------------------------------------------------ |
-| `check-integrity`                | Repo-only: refuse duplicate/gap/unparseable names. No DB.                |
-| `status`                         | List applied / pending / drifted. Optional `--require-current`.          |
-| `apply` / `up`                   | Apply pending in numeric order; stop on first failure; no-op if current. |
-| `baseline` / `stamp --through N` | Record versions `<= N` **without executing SQL**. Explicit only.         |
+| Command                                                            | Effect                                                                  |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------------- |
+| `check-integrity`                                                  | Repo-only: refuse duplicate/gap/unparseable names. No DB.               |
+| `status`                                                           | List applied / pending / drifted; validates history when nonempty.      |
+| `apply` / `up`                                                     | Advisory-locked; apply pending in order; stop on first failure.         |
+| `baseline --through N --confirm-baseline N --expect-database NAME` | Stamp `1..N` without SQL. Empty tracker only. Explicit tokens required. |
 
 Hard rules:
 
 - Numeric order by integer version (`9` before `10` before `054`).
 - Sequence must be contiguous `1..N` (no gaps, no duplicates).
-- Checksum drift on an applied row → refuse apply (do not rewrite history).
-- **Unbaselined legacy DB** (public tables present, no tracking rows) →
-  `apply` **loudly refuses**. Never baseline implicitly.
+- Mutating commands take a stable Postgres advisory lock (bounded timeout, then fail).
+- Nonempty tracking history must be an exact contiguous prefix `001..N` matching
+  disk on **version + filename + checksum**. A tracker with only `054` refuses
+  apply (does not execute `001`–`053`).
+- Checksum/filename drift, missing files, rogue rows, or holes → refuse.
+- **Unbaselined legacy DB** (any non-system user object: table/view/matview/sequence
+  in any schema, with empty/missing tracker) → `apply` **loudly refuses**.
+- Baseline never fills holes; never runs implicitly.
 
 ## Adding a migration
 
@@ -78,9 +87,9 @@ DATABASE_URL='…' python scripts/db/migrate.py status
 DATABASE_URL='…' python scripts/db/migrate.py status --require-current
 ```
 
-`--require-current` exits non-zero on pending, drifted, or unbaselined legacy.
-It does not apply DDL (optional `--bootstrap-tracking` only creates the empty
-tracker table when you explicitly ask).
+`--require-current` exits non-zero on pending, drifted, invalid history, or
+unbaselined legacy. `status` always runs the same history validation when the
+tracker is nonempty.
 
 ## Applying
 
@@ -96,58 +105,61 @@ Fresh empty database: runner bootstraps `schema_migrations`, then applies
 
 ## Baselining an existing database (production cutover)
 
+**Baseline proves migration history by operator attestation.** It does **not**
+inspect whether each historical DDL effect exists on the database.
+
 Production already had numbered SQL applied by hand with **no** tracker,
 including migration `054` (nullable `confidence` on
 `nfl_player_prop_model_edges`). Verified ~2026-09-03: `is_nullable=YES`,
-`column_default=NULL`; `schema_migrations` absent; do **not** re-apply 054.
+`column_default=NULL`; `schema_migrations` absent; ~85,388 edge rows; do
+**not** re-apply 054.
 
 Exact cutover for **this** warehouse:
 
 ```bash
-# 1) Inspect / confirm high-water mark (what is already live).
-#    Expect objects through 054, including nullable confidence without default.
-#    Expect schema_migrations to be missing.
+# 1) Confirm high-water mark (054 already live; tracker missing).
+DBNAME=$(psql "$DATABASE_URL" -Atc 'select current_database()')
 
-# 2) Explicit baseline through 054 (stamps only — no SQL replay, no apply).
-DATABASE_URL='…' python scripts/db/migrate.py baseline --through 054
+# 2) Explicit baseline through 054 (stamps only — no SQL replay).
+#    --confirm-baseline must equal --through; --expect-database must equal DBNAME.
+DATABASE_URL='…' python scripts/db/migrate.py baseline \
+  --through 054 --confirm-baseline 054 --expect-database "$DBNAME"
 
 # 3) Confirm current (nothing pending). Do NOT run apply for 054 again.
 DATABASE_URL='…' python scripts/db/migrate.py status --require-current
-
-# Optional sanity (already verified in prod — re-check only if unsure):
-# SELECT is_nullable, column_default
-# FROM information_schema.columns
-# WHERE table_schema = 'public'
-#   AND table_name = 'nfl_player_prop_model_edges'
-#   AND column_name = 'confidence';
-# Pass: is_nullable = YES AND column_default IS NULL.
 ```
+
+Initial baseline is only allowed when `schema_migrations` is empty. Hole-filling
+of partial history is refused (needs a separate explicitly guarded repair path).
 
 Never run a normal `apply` against an untracked nonempty DB — it will refuse
 rather than replay `001`–`054`. After baselining through 054, `apply` is a
 clean no-op until a future `055+` lands.
 
-## Checksum drift response
+## Checksum / history drift response
 
-If `status` shows `drifted` or apply raises checksum drift:
+If `status` fails history validation or apply raises drift/integrity errors:
 
-1. **Do not** “fix” by editing the old SQL file to match production.
-2. Restore the file bytes from git history to the recorded checksum, **or**
-3. Add a **new** forward migration that performs the intended schema change.
-4. If someone rewrote history on purpose, treat it as an incident: reconcile
-   file vs database, then re-baseline only with explicit operator approval.
+1. **Do not** “fix” by editing old SQL files or deleting tracking rows casually.
+2. Restore file bytes from git to match recorded checksums, **or**
+3. Add a **new** forward migration for intended schema changes.
+4. Treat rewritten history as an incident; do not use `baseline` to fill holes.
 
 ## Deploy / CI — what is and is not verified
 
-| Check                                          | Where                                                             | Connects to prod? | DDL?                                     |
-| ---------------------------------------------- | ----------------------------------------------------------------- | ----------------- | ---------------------------------------- |
-| Sequence + discoverability (`check-integrity`) | PR Checks / Deploy Railway                                        | No                | No                                       |
-| Live `status --require-current`                | Deploy Railway **only if** secret `WAREHOUSE_DATABASE_URL` is set | Read-only URL     | No (status gate)                         |
-| Auto-apply on deploy                           | **Never**                                                         | —                 | CI must not get arbitrary production DDL |
+| Check                                          | Where                                                             | Connects to prod? | DDL? |
+| ---------------------------------------------- | ----------------------------------------------------------------- | ----------------- | ---- |
+| Sequence + discoverability (`check-integrity`) | PR Checks / Deploy                                                | No                | No   |
+| Unit + disposable-Postgres integration tests   | PR Checks (service)                                               | No                | No   |
+| Live `status --require-current`                | Deploy Railway **only when** `MIGRATION_STATUS_GATE_ENABLED=true` | Read-only URL     | No   |
+| Auto-apply on deploy                           | **Never**                                                         | —                 | —    |
 
-If `WAREHOUSE_DATABASE_URL` is unset and the push changes `infra/db/*.sql`,
-Deploy Railway **fails loudly** so a deploy cannot quietly leave SQL pending.
-CI cannot invent live schema validation without that URL — it will say so.
+**Cutover phase (first merge):** leave `MIGRATION_STATUS_GATE_ENABLED` unset/false
+so Deploy Railway can ship the runner without circular dependency on an
+unbaselined warehouse. After runner deploy + production baseline through 054,
+set the Actions variable to `true` and configure read-only
+`WAREHOUSE_DATABASE_URL`. If the URL is absent while the gate is enabled, CI
+fails honestly — it does not fake live schema validation.
 
 Railway images stage a copy via
 `scripts/db/stage_migrations_into_model_service.sh` (`/app/infra/db`) so

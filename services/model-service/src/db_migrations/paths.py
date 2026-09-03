@@ -39,7 +39,6 @@ def resolve_migrations_dir(explicit: str | Path | None = None) -> Path:
         Path.cwd().parent / "infra" / "db",
         Path.cwd().parent.parent / "infra" / "db",
     ]
-    # Also walk parents for infra/db (robust to package moves).
     for parent in here.parents:
         candidates.append(parent / "infra" / "db")
     for candidate in candidates:
@@ -65,11 +64,13 @@ def normalize_database_url(url: str) -> str:
     return raw
 
 
-def require_database_url(explicit: str | None = None) -> str:
-    url = (explicit or os.environ.get("DATABASE_URL") or "").strip()
+def require_database_url() -> str:
+    """Read DATABASE_URL from the environment only. Never accept CLI secrets."""
+    url = (os.environ.get("DATABASE_URL") or "").strip()
     if not url:
         raise RuntimeError(
-            "DATABASE_URL is required (or pass --database-url). "
-            "Do not embed credentials in code or docs."
+            "DATABASE_URL environment variable is required. "
+            "Pass credentials via the environment only — there is no --database-url flag. "
+            "Do not embed credentials in code, docs, or logs."
         )
     return normalize_database_url(url)

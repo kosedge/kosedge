@@ -5,10 +5,12 @@ Usage (from monorepo root)::
 
     python scripts/db/migrate.py check-integrity
     DATABASE_URL=... python scripts/db/migrate.py status
-    DATABASE_URL=... python scripts/db/migrate.py baseline --through 054
+    DATABASE_URL=... python scripts/db/migrate.py baseline \\
+      --through 054 --confirm-baseline 054 --expect-database "$DBNAME"
     DATABASE_URL=... python scripts/db/migrate.py status --require-current
 
-Never commit credentials. This script does not connect unless a subcommand needs it.
+Never commit credentials. DATABASE_URL is environment-only (no --database-url).
+This script does not connect unless a subcommand needs it.
 """
 
 from __future__ import annotations
