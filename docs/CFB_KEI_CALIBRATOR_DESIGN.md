@@ -178,6 +178,8 @@ Script pointer: `scripts/cfb/run_spread_tag_close_holdout.py` (spread Tag). Tota
 
 Hist-cal proxy understates live Over-drunk. Live 2026 uses real ESPN roster + QB + units + SP+ carry, which widens O/D ratios. Unused 2025 GREEN on proxy is a **necessary** gate, not a claim that live W1 will look identical. Live will be hotter; that is why we do not chase this week’s street and why PLAY stays sat until a separate stricter bar.
 
+**Real-roster twin (2026-09-03 STOP):** Fit+eval must share the same live-style roster/SP+ path. 2023–24 packaged real-roster + prior-year SP+ carries are **not reconstructable** in-repo today (only `cfb_real_roster_snapshot_2026` + `…_2025_carry_2026`; warehouse did not materialize hist rosters; CFBD SP+ keyed). Do **not** mix proxy-fit λ onto a real-roster eval. Ops: `data/ops/cfb-totals-guard-real-roster-holdout-blocker-20260903.md`.
+
 ### Fit / eval years
 
 | Label                  | Years         | Role                                                                          |
