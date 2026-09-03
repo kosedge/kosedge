@@ -115,6 +115,12 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        // Pipeline stub — live NFL KEI board is fair-lines (do not mint kei_lines_nfl.json).
+        source: "/pro/kei-lines/nfl",
+        destination: "/pro/nfl/fair-lines",
+        permanent: false,
+      },
+      {
         source: "/pro/nfl/odds",
         destination: "/odds/nfl",
         permanent: false,

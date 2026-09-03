@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { SPORTS } from "@/lib/sports";
+import { getKeiLinesBoardHref } from "@/lib/sport-pro-nav";
 
 export default function KeiLinesHubPage() {
   return (
@@ -23,7 +24,7 @@ export default function KeiLinesHubPage() {
         {SPORTS.map((s) => (
           <Link
             key={s.key}
-            href={`/pro/kei-lines/${s.key}`}
+            href={getKeiLinesBoardHref(s.key)}
             className="rounded-2xl border border-kos-border bg-kos-surface/40 p-6 hover:border-kos-gold/40 transition"
           >
             <h2 className="text-xl font-semibold text-kos-text">

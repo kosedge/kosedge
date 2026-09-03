@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import {
+  getKeiLinesBoardHref,
   getSportPrimaryNav,
   getSportToolNav,
   isSportNavActive,
@@ -66,10 +67,15 @@ describe("sport-pro-nav", () => {
   });
 
   it("keeps Wall Chart as NFL-only tool; Fantasy on primary; demoted desks in tools", () => {
-    const nflTools = getSportToolNav("nfl").map((i) => i.label);
+    const nflToolItems = getSportToolNav("nfl");
+    const nflTools = nflToolItems.map((i) => i.label);
     expect(nflTools).toContain("Wall Chart");
     expect(nflTools).toContain("Weekly Fantasy");
     expect(nflTools).toContain("KEI Lines");
+    // Live board — never the /pro/kei-lines/nfl pipeline stub.
+    expect(nflToolItems.find((i) => i.label === "KEI Lines")?.href).toBe(
+      "/pro/nfl/fair-lines",
+    );
     expect(nflTools).toContain("Season Model");
     expect(nflTools).toContain("Game Boxes");
     expect(nflTools).toContain("Model Transparency");
@@ -163,6 +169,14 @@ describe("sport-pro-nav", () => {
   it("resolves hub hrefs to overview", () => {
     expect(sportHubHref("nfl")).toBe("/pro/nfl/overview");
     expect(sportHubHref("nba")).toBe("/pro/nba/overview");
+  });
+
+  it("routes live KEI boards away from the NFL pipeline stub", () => {
+    expect(getKeiLinesBoardHref("nfl")).toBe("/pro/nfl/fair-lines");
+    expect(getKeiLinesBoardHref("mlb")).toBe("/pro/mlb/fair-lines");
+    expect(getKeiLinesBoardHref("nba")).toBe("/pro/nba/fair-lines");
+    expect(getKeiLinesBoardHref("wnba")).toBe("/pro/wnba/fair-lines");
+    expect(getKeiLinesBoardHref("cfb")).toBe("/pro/kei-lines/cfb");
   });
 
   it("marks overview and edge board active correctly", () => {

@@ -2,12 +2,11 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import SportProHeader from "@/components/pro/SportProHeader";
+import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import {
-  resolveSportKey,
-  sportDisplayLabel,
-  SPORTS,
-} from "@/lib/sports";
-import { getSportOverviewHref } from "@/lib/sport-pro-nav";
+  getKeiLinesBoardHref,
+  getSportOverviewHref,
+} from "@/lib/sport-pro-nav";
 import type { OddsComparisonRow } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
@@ -112,7 +111,7 @@ export default async function OddsComparePage({
               Edge Board
             </Link>
             <Link
-              href={`/pro/${sportKey}/fair-lines`}
+              href={getKeiLinesBoardHref(sportKey)}
               className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
             >
               KEI Lines
@@ -250,7 +249,10 @@ export default async function OddsComparePage({
                             r.bestMlAwayBook === b.key ||
                             r.bestMlHomeBook === b.key;
                           return [
-                            <BookCell key={`${b.key}-s`} highlight={isBestSpread}>
+                            <BookCell
+                              key={`${b.key}-s`}
+                              highlight={isBestSpread}
+                            >
                               <div className="text-[12px] leading-tight">
                                 {spread?.away ?? "—"}
                               </div>
@@ -272,7 +274,10 @@ export default async function OddsComparePage({
                                 {ml ? ml.home : ""}
                               </div>
                             </BookCell>,
-                            <BookCell key={`${b.key}-t`} highlight={isBestTotal}>
+                            <BookCell
+                              key={`${b.key}-t`}
+                              highlight={isBestTotal}
+                            >
                               <div className="text-[12px] leading-tight">
                                 {total?.line ? `o${total.line}` : "—"}
                               </div>
@@ -299,8 +304,8 @@ export default async function OddsComparePage({
             </div>
           </div>
           <p className="mt-3 text-xs text-gray-500">
-            Best spread = highest away number (better juice wins ties). Best ML =
-            highest American price for that side. Best O/U = highest total
+            Best spread = highest away number (better juice wins ties). Best ML
+            = highest American price for that side. Best O/U = highest total
             (better Over juice wins ties).
           </p>
         </section>
