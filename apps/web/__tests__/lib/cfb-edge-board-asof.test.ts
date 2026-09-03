@@ -22,10 +22,7 @@ afterEach(() => {
 describe("CFB Edge Board market as-of honesty", () => {
   it("assemble resolves linesAsOf from rows (not hardcoded null)", () => {
     const assemble = readFileSync(
-      path.join(
-        process.cwd(),
-        "app/api/edge-board/[sport]/assemble/route.ts",
-      ),
+      path.join(process.cwd(), "app/api/edge-board/[sport]/assemble/route.ts"),
       "utf8",
     );
     expect(assemble).toContain('sport === "cfb"');
@@ -49,7 +46,9 @@ describe("CFB Edge Board market as-of honesty", () => {
     expect(client).toContain("usesMarketAsOf");
     expect(client).toContain('data-testid="edge-board-asof"');
     // Bare ET only for sports without market as-of wiring.
-    expect(client).toContain("usesMarketAsOf ? <> · {headerAsOf}</> : <> · ET</>");
+    expect(client).toContain(
+      "usesMarketAsOf ? <> · {headerAsOf}</> : <> · ET</>",
+    );
   });
 
   it("blank board as-of → unavailable copy (no empty · ET)", () => {
@@ -115,12 +114,12 @@ describe("CFB Edge Board market as-of honesty", () => {
       rows as Array<{ linesAsOf?: string }>,
     );
     expect(boardAsOf).toBe("2026-09-03T18:45:00.000Z");
-    expect(
-      marketAsOfHeaderSuffix({ asOf: boardAsOf, kind: "lines" }),
-    ).toMatch(/^as of /);
-    expect(
-      marketAsOfHeaderSuffix({ asOf: boardAsOf, kind: "lines" }),
-    ).not.toBe("as-of unavailable");
+    expect(marketAsOfHeaderSuffix({ asOf: boardAsOf, kind: "lines" })).toMatch(
+      /^as of /,
+    );
+    expect(marketAsOfHeaderSuffix({ asOf: boardAsOf, kind: "lines" })).not.toBe(
+      "as-of unavailable",
+    );
   });
 
   it("missing book last_update → no invented linesAsOf", async () => {
@@ -162,6 +161,8 @@ describe("CFB Edge Board market as-of honesty", () => {
     for (const r of rows) {
       expect((r as { linesAsOf?: string }).linesAsOf).toBeUndefined();
     }
-    expect(resolveEdgeBoardBoardLinesAsOf(rows as Array<{ linesAsOf?: string }>)).toBeNull();
+    expect(
+      resolveEdgeBoardBoardLinesAsOf(rows as Array<{ linesAsOf?: string }>),
+    ).toBeNull();
   });
 });

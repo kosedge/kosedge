@@ -107,8 +107,7 @@ export default function EdgeBoardSportClient({
   const fullCount = state.status === "ready" ? state.data.fullCount : 0;
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
-  const boardLinesAsOf =
-    state.status === "ready" ? state.data.linesAsOf : null;
+  const boardLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
   const headerAsOf = usesMarketAsOf
     ? state.status === "loading"
       ? "…"

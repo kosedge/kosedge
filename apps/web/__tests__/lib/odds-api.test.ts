@@ -565,9 +565,9 @@ describe("odds-api edge board markets", () => {
     expect(result.bookAsOf.find((b) => b.key === "betr")?.feedStatus).toBe(
       "not_carried",
     );
-    expect(result.bookAsOf.find((b) => b.key === "draftkings")?.feedStatus).toBe(
-      "carried",
-    );
+    expect(
+      result.bookAsOf.find((b) => b.key === "draftkings")?.feedStatus,
+    ).toBe("carried");
     expect(result.asOf).toBe("2026-09-03T12:00:00Z");
   });
 
