@@ -1,14 +1,16 @@
 # Agent instructions — Kos Edge
 
+**NFL tag lock:** `/NFL_SPREAD_PLAY_LOCKED.md` (Ryan Kos, 2026-09-03) — spread PLAY only in `spread_play_v2_cap7`; totals/prop PLAY sat; publish≡action after remap.
+
 ## Production contract (one branch, three platforms)
 
 Daily subscription ships go through **`deploy-vercel` only**. Do not mix branches.
 
-| Platform | Production branch | How it ships |
-|----------|-------------------|--------------|
-| **Vercel** project `kosedge` (www.kosedge.com) | **`deploy-vercel`** | Git integration; Root Directory `apps/web`. |
-| **Railway** model-service (`brave-art`, api/worker/beat) | **`deploy-vercel`** | `.github/workflows/deploy-railway.yml` on model-service path changes. |
-| **GitHub** | PRs **into `deploy-vercel`** | Production Gate must be green before merge. |
+| Platform                                                 | Production branch            | How it ships                                                          |
+| -------------------------------------------------------- | ---------------------------- | --------------------------------------------------------------------- |
+| **Vercel** project `kosedge` (www.kosedge.com)           | **`deploy-vercel`**          | Git integration; Root Directory `apps/web`.                           |
+| **Railway** model-service (`brave-art`, api/worker/beat) | **`deploy-vercel`**          | `.github/workflows/deploy-railway.yml` on model-service path changes. |
+| **GitHub**                                               | PRs **into `deploy-vercel`** | Production Gate must be green before merge.                           |
 
 **Critical:** Never set the Vercel Production Branch to `restore-working-ui`. That branch is a thinner UI shell. Shipping it makes hubs look empty / “coming soon”.
 

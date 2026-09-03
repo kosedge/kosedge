@@ -400,7 +400,7 @@ describe("decideGame sample output", () => {
     expect(game.actionLabelTotal).toBeTruthy();
   });
 
-  it("decideTotal grades overs with week1 tighter band", () => {
+  it("decideTotal grades overs with week1 tighter band; totals PLAY stays sat", () => {
     const week1 = decideTotal({
       fairTotal: 47.2,
       marketTotal: 44.5,
@@ -417,6 +417,9 @@ describe("decideGame sample output", () => {
       week: 6,
       confidence: assessConfidence({ baseScore: 0.8 }),
     });
-    expect(["PLAY", "BEST VALUE"]).toContain(week6.actionLabel);
+    // Totals PLAY sat (Ryan lock) — would have been PLAY under point bands alone.
+    expect(week6.actionLabel).not.toBe("PLAY");
+    expect(week6.actionLabel).not.toBe("BEST VALUE");
+    expect(["LEAN", "PASS", "ALERT", "STAY AWAY"]).toContain(week6.actionLabel);
   });
 });

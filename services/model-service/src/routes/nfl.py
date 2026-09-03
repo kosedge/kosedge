@@ -65,6 +65,7 @@ from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as n
 from src.services.nfl_side_total_publish_policy import (
     is_market_side_disagreement,
     publish_tag as nfl_publish_tag,
+    publish_tag_from_action_label as nfl_publish_tag_from_action,
 )
 from src.services.nfl_decision_engine import (
     assess_confidence as nfl_assess_confidence,
@@ -4263,6 +4264,40 @@ def nfl_fair_lines(
             confidence=_decision_conf,
             price_still_available_spread=_decision_market_spread is not None,
             price_still_available_total=_decision_market_total is not None,
+        )
+        # One SoT (Ryan lock 2026-09-03): publish tags follow subscriber action labels
+        # after dead-tier remap. No publish=PASS while badge says PLAY.
+        # Preserve preseason info-desk PASS (season PLAY never ships on PRE).
+        _action_spread = _decision.get("action_label_spread")
+        _action_total = _decision.get("action_label_total")
+        _aligned_spread = nfl_publish_tag_from_action(_action_spread)
+        _aligned_total = nfl_publish_tag_from_action(_action_total)
+        if spread_pub.get("reason") != "preseason_info_desk" and _aligned_spread != spread_pub.get(
+            "tag"
+        ):
+            spread_pub = {
+                **spread_pub,
+                "tag": _aligned_spread,
+                "stake_eligible": _aligned_spread == "PLAY" and _gate != "RED",
+                "reason": "aligned_with_action_label_sot",
+            }
+        if total_pub.get("reason") != "preseason_info_desk" and _aligned_total != total_pub.get(
+            "tag"
+        ):
+            total_pub = {
+                **total_pub,
+                "tag": _aligned_total,
+                "stake_eligible": False,  # totals PLAY sat
+                "reason": "aligned_with_action_label_sot",
+            }
+        # Recompute ML after spread publish may have aligned.
+        ml_pub = nfl_publish_moneyline_tag(
+            spread_tag=str(spread_pub.get("tag") or "PASS"),
+            spread_stake_eligible=bool(spread_pub.get("stake_eligible")),
+            model_win_prob=ml_model_wp,
+            offered_american=float(ml_offered) if ml_offered is not None else None,
+            product_gate_status=_gate,
+            season_type=_season_type,
         )
         lines.append(
             {

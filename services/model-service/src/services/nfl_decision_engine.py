@@ -45,6 +45,11 @@ from src.services.nfl_tag_policy import (
     total_thresholds_for_week,
     week_regime,
 )
+from src.services.nfl_side_total_publish_policy import (
+    SPREAD_PLAY_MAX,
+    SPREAD_PLAY_MIN,
+    TOTAL_PLAY_ENABLED,
+)
 
 # Re-export policy constants for existing imports / tests.
 __all__ = [
@@ -598,6 +603,43 @@ def _major_uncertainty(conf: ConfidenceAssessment) -> bool:
     )
 
 
+def _spread_edge_in_play_band(abs_edge: float) -> bool:
+    """Locked holdout band spread_play_v2_cap7: 2.5 ≤ |edge| < 7.0."""
+    e = abs(float(abs_edge))
+    return SPREAD_PLAY_MIN <= e < SPREAD_PLAY_MAX
+
+
+def _apply_spread_play_holdout_band(
+    label: ActionLabel, abs_edge: float, reason: str
+) -> Tuple[ActionLabel, str, bool]:
+    """Never emit PLAY/BEST VALUE outside the locked holdout band.
+
+    See NFL_SPREAD_PLAY_LOCKED.md (Ryan Kos 2026-09-03).
+    """
+    if label not in ("PLAY", "BEST VALUE"):
+        return label, reason, label == "BEST VALUE"
+    if _spread_edge_in_play_band(abs_edge):
+        return label, reason, label == "BEST VALUE"
+    e = abs(float(abs_edge))
+    tagged = f"{reason}|outside_spread_play_v2_cap7"
+    if e >= SPREAD_PLAY_MAX:
+        return "PASS", tagged, False
+    if e >= 1.0:
+        return "LEAN", tagged, False
+    return "PASS", tagged, False
+
+
+def _apply_totals_play_sat(
+    label: ActionLabel, reason: str
+) -> Tuple[ActionLabel, str, bool]:
+    """Totals PLAY stays sat until a new unused holdout greens."""
+    if TOTAL_PLAY_ENABLED:
+        return label, reason, label == "BEST VALUE"
+    if label not in ("PLAY", "BEST VALUE"):
+        return label, reason, False
+    return "LEAN", f"{reason}|totals_play_sat", False
+
+
 def decide_side(
     *,
     fair_spread_home: Optional[float],
@@ -736,6 +778,8 @@ def decide_side(
     if model_warning and label in ("PLAY", "BEST VALUE", "LEAN"):
         reason = f"{reason}|model_warning_60pct_plus_ats"
 
+    label, reason, is_bb = _apply_spread_play_holdout_band(label, abs_edge, reason)
+
     return DecisionResult(
         market="spread",
         action_label=label,
@@ -746,7 +790,7 @@ def decide_side(
         cover_grade=cover_grade,
         play_to=out_ladder,
         market_confirmation=mc,
-        is_best_bet=label == "BEST VALUE",
+        is_best_bet=is_bb,
         model_warning=model_warning,
         key_number_cross=key_cross,
         price_still_available=price_ok,
@@ -888,6 +932,8 @@ def decide_total(
         reason = "partial_play_requirements"
         out_ladder = ladder
 
+    label, reason, is_bb = _apply_totals_play_sat(label, reason)
+
     return DecisionResult(
         market="total",
         action_label=label,
@@ -898,7 +944,7 @@ def decide_total(
         cover_grade=cover_grade,
         play_to=out_ladder,
         market_confirmation=mc,
-        is_best_bet=label == "BEST VALUE",
+        is_best_bet=is_bb,
         model_warning=model_warning,
         key_number_cross=key_cross,
         price_still_available=price_ok,

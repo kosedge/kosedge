@@ -53,6 +53,12 @@ import {
   weekRegime,
   type WeekRegime,
 } from "./nfl-tag-policy";
+import {
+  SPREAD_PLAY_MAX,
+  SPREAD_PLAY_MIN,
+  TOTAL_PLAY_ENABLED,
+  spreadEdgeInPlayBand,
+} from "./nfl-spread-play-lock";
 
 export type ActionLabel =
   | "PASS"
@@ -156,7 +162,8 @@ export function assessConfidence(
     extraFlags?: string[];
   } = {},
 ): ConfidenceAssessment {
-  let score = args.baseScore == null ? CONFIDENCE_TIER_BASE : Number(args.baseScore);
+  let score =
+    args.baseScore == null ? CONFIDENCE_TIER_BASE : Number(args.baseScore);
   const flags: string[] = [];
   if (args.schemeStable === false) {
     score -= 0.12;
@@ -488,11 +495,11 @@ export function evaluateBestBet(args: {
     args.priceAvailable && !args.marketConfirmation.weakensThesis;
   return Boolean(
     largeEdge &&
-      highConf &&
-      favorableNumber &&
-      limitedUnresolved &&
-      args.matchupSupport &&
-      args.liquidityOk,
+    highConf &&
+    favorableNumber &&
+    limitedUnresolved &&
+    args.matchupSupport &&
+    args.liquidityOk,
   );
 }
 
@@ -512,6 +519,62 @@ function majorUncertainty(conf: ConfidenceAssessment): boolean {
       "conflicting_inputs",
     ].includes(f),
   );
+}
+
+/**
+ * Locked spread PLAY holdout (`spread_play_v2_cap7`): never emit PLAY / BEST VALUE
+ * outside 2.5 ≤ |edge| < 7.0 — covers early playMin, key-cross, and cover-prob paths.
+ * See `NFL_SPREAD_PLAY_LOCKED.md`.
+ */
+function applySpreadPlayHoldoutBand(
+  label: ActionLabel,
+  absEdge: number,
+  reason: string,
+): { label: ActionLabel; reason: string; isBestBet: boolean } {
+  if (label !== "PLAY" && label !== "BEST VALUE") {
+    return { label, reason, isBestBet: false };
+  }
+  if (spreadEdgeInPlayBand(absEdge)) {
+    return { label, reason, isBestBet: label === "BEST VALUE" };
+  }
+  if (absEdge >= SPREAD_PLAY_MAX) {
+    return {
+      label: "PASS",
+      reason: `${reason}|outside_spread_play_v2_cap7`,
+      isBestBet: false,
+    };
+  }
+  // Below 2.5: LEAN (or PASS only when magnitude is tiny).
+  if (absEdge < SPREAD_PLAY_MIN && absEdge >= 1.0) {
+    return {
+      label: "LEAN",
+      reason: `${reason}|outside_spread_play_v2_cap7`,
+      isBestBet: false,
+    };
+  }
+  return {
+    label: "PASS",
+    reason: `${reason}|outside_spread_play_v2_cap7`,
+    isBestBet: false,
+  };
+}
+
+/** Totals PLAY sat until a new unused holdout greens (Ryan lock 2026-09-03). */
+function applyTotalsPlaySat(
+  label: ActionLabel,
+  reason: string,
+): { label: ActionLabel; reason: string; isBestBet: boolean } {
+  if (TOTAL_PLAY_ENABLED) {
+    return { label, reason, isBestBet: label === "BEST VALUE" };
+  }
+  if (label !== "PLAY" && label !== "BEST VALUE") {
+    return { label, reason, isBestBet: false };
+  }
+  return {
+    label: "LEAN",
+    reason: `${reason}|totals_play_sat`,
+    isBestBet: false,
+  };
 }
 
 export function decideSide(args: {
@@ -599,8 +662,7 @@ export function decideSide(args: {
     ladder,
   });
   if (pastPlayTo && pointRank(effective) >= pointRank("PLAY")) {
-    effective =
-      pointRank(pointGrade) < pointRank("PLAY") ? pointGrade : "LEAN";
+    effective = pointRank(pointGrade) < pointRank("PLAY") ? pointGrade : "LEAN";
   }
   const priceOk = args.priceStillAvailable !== false && !pastPlayTo;
 
@@ -649,8 +711,7 @@ export function decideSide(args: {
     reason = isBb ? "best_bet_strict_cleared" : "play_triple_cleared";
     playTo = ladder;
   } else if (numericalEdge && !priceOk) {
-    actionLabel =
-      pointRank(pointGrade) >= pointRank("PLAY") ? "ALERT" : "LEAN";
+    actionLabel = pointRank(pointGrade) >= pointRank("PLAY") ? "ALERT" : "LEAN";
     reason = pastPlayTo
       ? "edge_but_price_gone|past_play_to"
       : "edge_but_price_gone";
@@ -674,6 +735,10 @@ export function decideSide(args: {
     reason = `${reason}|model_warning_60pct_plus_ats`;
   }
 
+  const holdout = applySpreadPlayHoldoutBand(actionLabel, absEdge, reason);
+  actionLabel = holdout.label;
+  reason = holdout.reason;
+
   return {
     market: "spread",
     actionLabel,
@@ -684,7 +749,7 @@ export function decideSide(args: {
     coverGrade,
     playTo,
     marketConfirmation: mc,
-    isBestBet: actionLabel === "BEST VALUE",
+    isBestBet: holdout.isBestBet,
     modelWarning,
     keyNumberCross: keyCross,
     priceStillAvailable: priceOk,
@@ -777,8 +842,7 @@ export function decideTotal(args: {
     ladder,
   });
   if (pastPlayTo && pointRank(effective) >= pointRank("PLAY")) {
-    effective =
-      pointRank(pointGrade) < pointRank("PLAY") ? pointGrade : "LEAN";
+    effective = pointRank(pointGrade) < pointRank("PLAY") ? pointGrade : "LEAN";
   }
   const priceOk = args.priceStillAvailable !== false && !pastPlayTo;
 
@@ -788,8 +852,7 @@ export function decideTotal(args: {
     effective,
   );
   const confidenceOk = confidenceOkForPlay(conf);
-  const uncertain =
-    majorUncertainty(conf) && conf.score < CONFIDENCE_PLAY_MIN;
+  const uncertain = majorUncertainty(conf) && conf.score < CONFIDENCE_PLAY_MIN;
 
   let actionLabel: ActionLabel;
   let reason: string;
@@ -828,8 +891,7 @@ export function decideTotal(args: {
     reason = isBb ? "best_bet_strict_cleared" : "play_triple_cleared";
     playTo = ladder;
   } else if (numericalEdge && !priceOk) {
-    actionLabel =
-      pointRank(pointGrade) >= pointRank("PLAY") ? "ALERT" : "LEAN";
+    actionLabel = pointRank(pointGrade) >= pointRank("PLAY") ? "ALERT" : "LEAN";
     reason = pastPlayTo
       ? "edge_but_price_gone|past_play_to"
       : "edge_but_price_gone";
@@ -844,6 +906,10 @@ export function decideTotal(args: {
     playTo = ladder;
   }
 
+  const totalsSat = applyTotalsPlaySat(actionLabel, reason);
+  actionLabel = totalsSat.label;
+  reason = totalsSat.reason;
+
   return {
     market: "total",
     actionLabel,
@@ -854,7 +920,7 @@ export function decideTotal(args: {
     coverGrade,
     playTo,
     marketConfirmation: mc,
-    isBestBet: actionLabel === "BEST VALUE",
+    isBestBet: totalsSat.isBestBet,
     modelWarning,
     keyNumberCross: keyCross,
     priceStillAvailable: priceOk,
@@ -945,7 +1011,9 @@ export function decideGame(args: {
 }
 
 /** Serialize DecisionResult for Edge Board / API passthrough (snake_case). */
-export function decisionResultToApi(d: DecisionResult): Record<string, unknown> {
+export function decisionResultToApi(
+  d: DecisionResult,
+): Record<string, unknown> {
   return {
     market: d.market,
     action_label: d.actionLabel,

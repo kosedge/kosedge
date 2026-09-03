@@ -40,6 +40,7 @@ POLICY_VERSION = "spread_play_v2_cap7"
 # Locked by 2024–25 true-close holdout (nfl-path-steam-edge-holdout.json):
 # PLAY ATS 63.9% / +21.9% ROI vs kickoff-safe DK/FD close. Do not loosen the
 # cap, add steam, or retune blend. Prior ~72% was last-path-snap, not close.
+# Ryan Kos product lock 2026-09-03: see NFL_SPREAD_PLAY_LOCKED.md — do not hunt PLAY.
 
 # Research registrations (publish path still uses SPREAD_PLAY_* above).
 # Selected on 2023 CLV+; confirmed once on 2024–25. Do not swap product without GREEN n_clv≥200.
@@ -165,6 +166,30 @@ def candidate_tag(market: Market, abs_edge: float) -> Tag:
     if TOTAL_PLAY_MIN <= e < TOTAL_PLAY_MAX:
         return "PLAY"
     if TOTAL_LEAN_ENABLED and e >= TOTAL_LEAN_MIN:
+        return "LEAN"
+    return "PASS"
+
+
+def display_action_label(action_label: Optional[str]) -> Optional[str]:
+    """Mirror web dead-tier remap: unreachable BEST VALUE → PLAY."""
+    if action_label is None:
+        return None
+    label = str(action_label)
+    # CONFIDENCE_TIER_BASE (0.72) < CONFIDENCE_BEST_BET_MIN (0.75) → BEST VALUE dead.
+    if label == "BEST VALUE":
+        return "PLAY"
+    return label
+
+
+def publish_tag_from_action_label(action_label: Optional[str]) -> Tag:
+    """One SoT: publish tag matches subscriber-facing action after dead-tier remap.
+
+    STAY AWAY / ALERT collapse to PASS (publish vocabulary is PLAY|LEAN|PASS).
+    """
+    shown = display_action_label(action_label)
+    if shown in ("PLAY", "BEST VALUE"):
+        return "PLAY"
+    if shown == "LEAN":
         return "LEAN"
     return "PASS"
 

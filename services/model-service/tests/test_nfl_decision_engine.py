@@ -284,8 +284,9 @@ def test_play_requires_numerical_edge_confidence_and_price():
 
 
 def test_low_confidence_big_edge_is_alert_not_play():
+    # |edge| 6.5 inside holdout band — low confidence still blocks PLAY.
     out = decide_side(
-        fair_spread_home=-10.0,
+        fair_spread_home=-9.5,
         market_spread_home=-3.0,
         week=8,
         confidence=assess_confidence(base_score=0.4),
@@ -299,7 +300,7 @@ def test_low_confidence_big_edge_is_alert_not_play():
 
 def test_best_bet_rejects_raw_discrepancy_alone():
     out = decide_side(
-        fair_spread_home=-10.0,
+        fair_spread_home=-9.5,
         market_spread_home=-3.0,
         week=8,
         confidence=assess_confidence(base_score=0.6, injury_clear=False),
@@ -426,7 +427,8 @@ def test_decide_total_and_game_bundle():
         week=8,
         confidence=assess_confidence(base_score=0.8),
     )
-    assert total.action_label in ("PLAY", "BEST VALUE")
+    # Totals PLAY sat (Ryan lock 2026-09-03) — LEAN/PASS/STAY AWAY only.
+    assert total.action_label not in ("PLAY", "BEST VALUE")
     assert total.play_to is not None
 
     game = decide_game(
@@ -443,6 +445,63 @@ def test_decide_total_and_game_bundle():
     assert game["week_regime"] == "inseason"
     assert game["spread"]["play_to"] is not None
     assert game["total"]["play_to"] is not None
+
+
+def test_spread_play_holdout_band_lock():
+    """Ryan lock: 2.19 never PLAY; 2.5 may PLAY; 7.0 never PLAY; totals never PLAY."""
+    conf = assess_confidence(base_score=0.72)
+    under = decide_side(
+        fair_spread_home=-7.81,
+        market_spread_home=-10.0,
+        week=1,
+        cover_prob=0.55,
+        confidence=conf,
+        price_still_available=True,
+    )
+    assert under.edge_magnitude == pytest.approx(2.19, abs=0.01)
+    assert under.action_label not in ("PLAY", "BEST VALUE")
+
+    at_floor = decide_side(
+        fair_spread_home=-6.5,
+        market_spread_home=-4.0,
+        week=1,
+        confidence=conf,
+        price_still_available=True,
+    )
+    assert at_floor.edge_magnitude == pytest.approx(2.5)
+    assert at_floor.action_label in ("PLAY", "BEST VALUE")
+
+    at_cap = decide_side(
+        fair_spread_home=-10.0,
+        market_spread_home=-3.0,
+        week=8,
+        confidence=conf,
+        price_still_available=True,
+    )
+    assert at_cap.edge_magnitude == pytest.approx(7.0)
+    assert at_cap.action_label not in ("PLAY", "BEST VALUE")
+    assert "outside_spread_play_v2_cap7" in at_cap.reason
+
+    total = decide_total(
+        fair_total=50.0,
+        market_total=44.0,
+        week=8,
+        confidence=assess_confidence(base_score=0.8),
+    )
+    assert total.action_label not in ("PLAY", "BEST VALUE")
+
+
+def test_publish_tag_from_action_label_sot():
+    from src.services.nfl_side_total_publish_policy import (
+        publish_tag_from_action_label,
+    )
+
+    assert publish_tag_from_action_label("PLAY") == "PLAY"
+    assert publish_tag_from_action_label("BEST VALUE") == "PLAY"
+    assert publish_tag_from_action_label("LEAN") == "LEAN"
+    assert publish_tag_from_action_label("PASS") == "PASS"
+    assert publish_tag_from_action_label("STAY AWAY") == "PASS"
+    assert publish_tag_from_action_label("ALERT") == "PASS"
 
 
 def test_same_game_different_price_different_action():
