@@ -26,9 +26,11 @@ Policy: `spread_play_v2_cap7` — spread PLAY `2.5 ≤ |edge| < 7.0`
 | spread | 227 | 0.7313 | 4.463 | 0.3961 | 206 | 0.6117 | **GREEN** |
 | total | 52 | 0.6154 | 2.752 | 0.1748 | 43 | 0.3488 | **RED** |
 
-**Selective ready:** `True` · overall gate `GREEN`
+# Selective ready: `True` · overall gate `GREEN`
 
 Confirmatory 2024–25 spread PLAY (v2 band) clears ATS + movement-CLV. Primary 2025 alone is YELLOW (CLV n often short of 200).
+
+**Product lock (Ryan Kos, 2026-09-03):** spread PLAY may fire only in this band; totals PLAY stays sat; prop PLAY stays sat. See `/NFL_SPREAD_PLAY_LOCKED.md`.
 
 ## Clean-era check (2020–2022)
 

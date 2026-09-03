@@ -1,5 +1,7 @@
 # Agent instructions — Kos Edge
 
+**NFL tag lock:** `/NFL_SPREAD_PLAY_LOCKED.md` (Ryan Kos, 2026-09-03) — spread PLAY only in `spread_play_v2_cap7`; totals/prop PLAY sat; publish≡action after remap.
+
 ## Production contract (one branch, three platforms)
 
 Daily subscription ships go through **`deploy-vercel` only**. Do not mix branches.

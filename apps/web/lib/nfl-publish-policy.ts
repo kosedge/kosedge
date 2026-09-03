@@ -3,22 +3,48 @@
  * nfl_side_total_publish_policy.py + nfl_moneyline_publish_policy.py).
  *
  * Default PASS. PLAY only when edge is in a historically productive band.
- * Spread LEAN band is disabled (settled ROI −14% in edge-bucket study).
- * Spread PLAY v2: [2.5, 7.0). Totals: sides-only launch (TOTAL_PLAY_ENABLED=false).
+ * Spread PLAY v2: [2.5, 7.0) — locked Ryan 2026-09-03 (`NFL_SPREAD_PLAY_LOCKED.md`).
+ * Totals: sides-only launch (TOTAL_PLAY_ENABLED=false).
  * ML PLAY: requires spread PLAY + vig-aware EV ≥ 2%.
  * Preseason: NFL_PRESEASON_MODE=info blocks season PLAY on PRE games.
  */
 
+import type { ActionLabel } from "@/lib/nfl-decision-engine";
+import { displayActionLabel } from "@/lib/nfl-dead-tiers";
+import {
+  SPREAD_PLAY_MAX,
+  SPREAD_PLAY_MIN,
+  SPREAD_PLAY_POLICY,
+  TOTAL_PLAY_ENABLED,
+  spreadEdgeInPlayBand,
+} from "@/lib/nfl-spread-play-lock";
+
 export type NflPublishTag = "PLAY" | "LEAN" | "PASS";
 export type NflPublishMarket = "spread" | "total";
 
-export const SPREAD_PLAY_MIN = 2.5;
-/** Half-open upper bound — |edge| ≥ 7 is PASS (mega-edge size-down). */
-export const SPREAD_PLAY_MAX = 7.0;
+export {
+  SPREAD_PLAY_MAX,
+  SPREAD_PLAY_MIN,
+  SPREAD_PLAY_POLICY,
+  TOTAL_PLAY_ENABLED,
+  spreadEdgeInPlayBand,
+};
+
 export const TOTAL_PLAY_MIN = 2.5;
 export const TOTAL_PLAY_MAX = 3.0;
-/** Week-1 launch: confirmatory totals CLV RED — sides-only product. */
-export const TOTAL_PLAY_ENABLED = false;
+
+/**
+ * One SoT: publish tag must match subscriber-facing action after dead-tier remap.
+ * STAY AWAY / ALERT collapse to PASS (publish vocabulary).
+ */
+export function publishTagFromActionLabel(
+  actionLabel: ActionLabel | null | undefined,
+): NflPublishTag {
+  const shown = displayActionLabel(actionLabel);
+  if (shown === "PLAY" || shown === "BEST VALUE") return "PLAY";
+  if (shown === "LEAN") return "LEAN";
+  return "PASS";
+}
 export const ML_MIN_EV = 0.02;
 export const ML_POLICY_VERSION = "ml_from_spread_play_v1";
 

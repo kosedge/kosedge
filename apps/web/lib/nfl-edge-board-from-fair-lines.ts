@@ -11,6 +11,8 @@ import {
   decisionResultToApi,
   isTierConstantConfidence,
 } from "@/lib/nfl-decision-engine";
+import { displayActionLabel } from "@/lib/nfl-dead-tiers";
+import { publishTagFromActionLabel } from "@/lib/nfl-publish-policy";
 import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
 import { coerceNflWeek } from "@/lib/nfl-edge-board-week";
 import { NFL_TEAM_DIRECTORY } from "@/lib/nfl-team-intel";
@@ -528,8 +530,8 @@ export function fairLinesToEdgeBoardRows(
 
     const week = coerceNflWeek(line.week) ?? undefined;
     const seasonType = line.seasonType ?? undefined;
-    const publishTagSpread = line.publishTagSpread ?? undefined;
-    const publishTagTotal = line.publishTagTotal ?? undefined;
+    let publishTagSpread = line.publishTagSpread ?? undefined;
+    let publishTagTotal = line.publishTagTotal ?? undefined;
 
     // Single market input for Edge/Action: stake → DK/FD → consensus → Current.
     // Garbage Current (3.8 / −3.58) is not a market — Action stays honest —.
@@ -620,6 +622,16 @@ export function fairLinesToEdgeBoardRows(
       totalDecision?.actionLabel ??
       null;
 
+    // Ryan lock SoT: publish tags match subscriber-facing action after dead-tier remap.
+    const shownSpread = displayActionLabel(actionLabelSpread);
+    const shownTotal = displayActionLabel(actionLabelTotal);
+    if (shownSpread != null) {
+      publishTagSpread = publishTagFromActionLabel(actionLabelSpread);
+    }
+    if (shownTotal != null) {
+      publishTagTotal = publishTagFromActionLabel(actionLabelTotal);
+    }
+
     const sharedMatchup = {
       awayAbbr: line.awayAbbr,
       homeAbbr: line.homeAbbr,
@@ -660,7 +672,7 @@ export function fairLinesToEdgeBoardRows(
       seasonType,
       linesAsOf,
       publishTag: publishTagSpread,
-      actionLabel: actionLabelSpread ?? undefined,
+      actionLabel: shownSpread ?? actionLabelSpread ?? undefined,
       decision: spreadDecision
         ? decisionResultToApi(spreadDecision)
         : undefined,
@@ -710,7 +722,7 @@ export function fairLinesToEdgeBoardRows(
       seasonType,
       linesAsOf,
       publishTag: publishTagTotal,
-      actionLabel: actionLabelTotal ?? undefined,
+      actionLabel: shownTotal ?? actionLabelTotal ?? undefined,
       decision: totalDecision ? decisionResultToApi(totalDecision) : undefined,
       edgeMagnitude:
         totalDecision?.marketLine == null &&

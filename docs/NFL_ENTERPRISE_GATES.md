@@ -57,6 +57,10 @@ Rules (v2 `spread_play_v2_cap7` — see `nfl-play-only-holdout.json`):
 9. Product CLV+ uses **movement sample** (open≠close, n_snaps≥2).
 10. **Preseason** (`NFL_PRESEASON_MODE=info`): PRE games never receive season PLAY tags.
 
+**Owner lock (2026-09-03):** Ryan Kos locked the band + SoT rules in
+`/NFL_SPREAD_PLAY_LOCKED.md`. Agents must not hunt PLAY, retune floors, or
+ungate totals/prop PLAY without a new unused holdout and an explicit flip.
+
 ## Factor freeze (Aug 25, 2026)
 
 **Freeze date: 2026-08-25** — no new factor promotion into the Week-1 product path

@@ -53,6 +53,12 @@ import {
   weekRegime,
   type WeekRegime,
 } from "./nfl-tag-policy";
+import {
+  SPREAD_PLAY_MAX,
+  SPREAD_PLAY_MIN,
+  TOTAL_PLAY_ENABLED,
+  spreadEdgeInPlayBand,
+} from "./nfl-spread-play-lock";
 
 export type ActionLabel =
   | "PASS"
@@ -514,6 +520,62 @@ function majorUncertainty(conf: ConfidenceAssessment): boolean {
   );
 }
 
+/**
+ * Locked spread PLAY holdout (`spread_play_v2_cap7`): never emit PLAY / BEST VALUE
+ * outside 2.5 ≤ |edge| < 7.0 — covers early playMin, key-cross, and cover-prob paths.
+ * See `NFL_SPREAD_PLAY_LOCKED.md`.
+ */
+function applySpreadPlayHoldoutBand(
+  label: ActionLabel,
+  absEdge: number,
+  reason: string,
+): { label: ActionLabel; reason: string; isBestBet: boolean } {
+  if (label !== "PLAY" && label !== "BEST VALUE") {
+    return { label, reason, isBestBet: label === "BEST VALUE" };
+  }
+  if (spreadEdgeInPlayBand(absEdge)) {
+    return { label, reason, isBestBet: label === "BEST VALUE" };
+  }
+  if (absEdge >= SPREAD_PLAY_MAX) {
+    return {
+      label: "PASS",
+      reason: `${reason}|outside_spread_play_v2_cap7`,
+      isBestBet: false,
+    };
+  }
+  // Below 2.5: LEAN (or PASS only when magnitude is tiny).
+  if (absEdge < SPREAD_PLAY_MIN && absEdge >= 1.0) {
+    return {
+      label: "LEAN",
+      reason: `${reason}|outside_spread_play_v2_cap7`,
+      isBestBet: false,
+    };
+  }
+  return {
+    label: "PASS",
+    reason: `${reason}|outside_spread_play_v2_cap7`,
+    isBestBet: false,
+  };
+}
+
+/** Totals PLAY sat until a new unused holdout greens (Ryan lock 2026-09-03). */
+function applyTotalsPlaySat(
+  label: ActionLabel,
+  reason: string,
+): { label: ActionLabel; reason: string; isBestBet: boolean } {
+  if (TOTAL_PLAY_ENABLED) {
+    return { label, reason, isBestBet: label === "BEST VALUE" };
+  }
+  if (label !== "PLAY" && label !== "BEST VALUE") {
+    return { label, reason, isBestBet: false };
+  }
+  return {
+    label: "LEAN",
+    reason: `${reason}|totals_play_sat`,
+    isBestBet: false,
+  };
+}
+
 export function decideSide(args: {
   fairSpreadHome: number | null | undefined;
   marketSpreadHome: number | null | undefined;
@@ -674,6 +736,10 @@ export function decideSide(args: {
     reason = `${reason}|model_warning_60pct_plus_ats`;
   }
 
+  const holdout = applySpreadPlayHoldoutBand(actionLabel, absEdge, reason);
+  actionLabel = holdout.label;
+  reason = holdout.reason;
+
   return {
     market: "spread",
     actionLabel,
@@ -684,7 +750,7 @@ export function decideSide(args: {
     coverGrade,
     playTo,
     marketConfirmation: mc,
-    isBestBet: actionLabel === "BEST VALUE",
+    isBestBet: holdout.isBestBet,
     modelWarning,
     keyNumberCross: keyCross,
     priceStillAvailable: priceOk,
@@ -844,6 +910,10 @@ export function decideTotal(args: {
     playTo = ladder;
   }
 
+  const totalsSat = applyTotalsPlaySat(actionLabel, reason);
+  actionLabel = totalsSat.label;
+  reason = totalsSat.reason;
+
   return {
     market: "total",
     actionLabel,
@@ -854,7 +924,7 @@ export function decideTotal(args: {
     coverGrade,
     playTo,
     marketConfirmation: mc,
-    isBestBet: actionLabel === "BEST VALUE",
+    isBestBet: totalsSat.isBestBet,
     modelWarning,
     keyNumberCross: keyCross,
     priceStillAvailable: priceOk,
