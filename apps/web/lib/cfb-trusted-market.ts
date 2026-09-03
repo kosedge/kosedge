@@ -29,10 +29,16 @@ export const CFB_SINGLE_BOOK_ABSURD_PTS = 8;
 
 /**
  * Totals PLAY sits until an unused close holdout greens and Ryan/CoS flips.
- * LEAN ≥2.5 still fires. Spreads unchanged (PLAY ≥4.0 / LEAN ≥2.5).
- * Doctrine: `docs/CFB_TOTALS_PLAY_SIT.md`
+ * LEAN ≥2.5 still fires. Doctrine: `docs/CFB_TOTALS_PLAY_SIT.md`
  */
 export const CFB_TOTALS_PLAY_ELIGIBLE = false;
+
+/**
+ * Spread PLAY sits until an unused close holdout greens and Ryan/CoS flips.
+ * PLAY-band edges → PASS (not demoted to LEAN). LEAN ≥2.5 still fires.
+ * Doctrine: `docs/CFB_SPREAD_PLAY_SIT.md`
+ */
+export const CFB_SPREAD_PLAY_ELIGIBLE = false;
 
 export type CfbEdgeMarket = "spread" | "total";
 export type CfbEdgeTag = "PLAY" | "LEAN" | "PASS";
@@ -182,6 +188,8 @@ export function applyCfbTrustedMarketToRows<
  * CFB Edge / Tag O/U SoT. One tagger for board + publish/display.
  * Totals never emit PLAY while `CFB_TOTALS_PLAY_ELIGIBLE` is false
  * (PLAY-band edges become PASS; LEAN band still LEAN).
+ * Spreads never emit PLAY while `CFB_SPREAD_PLAY_ELIGIBLE` is false
+ * (same remap: PLAY-band → PASS; LEAN ≥2.5 stays).
  */
 export function cfbEdgeTag(
   absEdge: number | null | undefined,
@@ -191,6 +199,7 @@ export function cfbEdgeTag(
   const e = Math.abs(Number(absEdge));
   if (e >= CFB_PLAY_EDGE_PTS) {
     if (market === "total" && !CFB_TOTALS_PLAY_ELIGIBLE) return "PASS";
+    if (market === "spread" && !CFB_SPREAD_PLAY_ELIGIBLE) return "PASS";
     return "PLAY";
   }
   if (e >= CFB_LEAN_EDGE_PTS) return "LEAN";
@@ -198,7 +207,7 @@ export function cfbEdgeTag(
 }
 
 /**
- * Publish vocabulary ≡ display tag after totals PLAY sit remap.
+ * Publish vocabulary ≡ display tag after PLAY sit remap.
  * CFB has no dead-tier chrome; identity is the tagger output itself.
  */
 export function cfbPublishTagFromEdge(

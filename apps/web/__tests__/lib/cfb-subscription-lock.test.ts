@@ -19,7 +19,7 @@ describe("cfb trusted market", () => {
     });
     expect(before.trusted).toBe(false);
     expect(before.reason).toBe("absurd_vs_kei");
-    expect(cfbEdgeTag(Math.abs(-20.39 - 8.5))).toBe("PLAY"); // raw would fire
+    expect(cfbEdgeTag(Math.abs(-20.39 - 8.5))).toBe("PASS"); // PLAY-band sat
     expect(cfbEdgeTag(before.market == null ? null : 28)).toBe("PASS");
 
     const rows = applyCfbTrustedMarketToRows([
@@ -155,9 +155,9 @@ describe("cfb trusted market", () => {
     // FIU@USF-class: KEI 72.5 vs book 52.5 (+20) must not PLAY.
     const gap = Math.abs(72.5 - 52.5);
     expect(gap).toBeGreaterThanOrEqual(CFB_ABSURD_VS_KEI_PTS);
-    // Raw magnitude is PLAY-band; totals sit + trust both block PLAY.
+    // Raw magnitude is PLAY-band; totals + spread sit both block PLAY.
     expect(cfbEdgeTag(gap, "total")).toBe("PASS");
-    expect(cfbEdgeTag(gap, "spread")).toBe("PLAY"); // totals-only sit
+    expect(cfbEdgeTag(gap, "spread")).toBe("PASS");
 
     const rows = applyCfbTrustedMarketToRows([
       {
@@ -199,8 +199,9 @@ describe("cfb trusted market", () => {
     expect(cfbEdgeTag(4.1, "total")).toBe("PASS");
     expect(cfbEdgeTag(3.0, "total")).toBe("LEAN");
     expect(cfbEdgeTag(2.0, "total")).toBe("PASS");
-    // Spreads still PLAY at +4.1.
-    expect(cfbEdgeTag(4.1, "spread")).toBe("PLAY");
+    // Spreads also sat at +4.1 → PASS; LEAN band still LEAN.
+    expect(cfbEdgeTag(4.1, "spread")).toBe("PASS");
+    expect(cfbEdgeTag(3.0, "spread")).toBe("LEAN");
 
     const playRows = applyCfbTrustedMarketToRows([
       {

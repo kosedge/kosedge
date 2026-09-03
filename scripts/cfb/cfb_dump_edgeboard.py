@@ -39,6 +39,8 @@ CFB_ABSURD_VS_KEI_PTS = 12.0
 CFB_SINGLE_BOOK_ABSURD_PTS = 8.0
 # Totals PLAY sit — mirror CFB_TOTALS_PLAY_ELIGIBLE (docs/CFB_TOTALS_PLAY_SIT.md).
 CFB_TOTALS_PLAY_ELIGIBLE = False
+# Spread PLAY sit — mirror CFB_SPREAD_PLAY_ELIGIBLE (docs/CFB_SPREAD_PLAY_SIT.md).
+CFB_SPREAD_PLAY_ELIGIBLE = False
 
 # From apps/web/lib/odds-api.ts
 SPORT_KEY = "americanfootball_ncaaf"
@@ -202,6 +204,8 @@ def cfb_edge_tag(abs_edge: Optional[float], market: str = "spread") -> str:
     e = abs(float(abs_edge))
     if e >= CFB_PLAY_EDGE_PTS:
         if market == "total" and not CFB_TOTALS_PLAY_ELIGIBLE:
+            return "PASS"
+        if market == "spread" and not CFB_SPREAD_PLAY_ELIGIBLE:
             return "PASS"
         return "PLAY"
     if e >= CFB_LEAN_EDGE_PTS:
@@ -467,7 +471,8 @@ def main() -> int:
 
         fire = "NO"
         if (
-            verdict["trusted"]
+            CFB_SPREAD_PLAY_ELIGIBLE
+            and verdict["trusted"]
             and edge_line is not None
             and abs(edge_line) >= CFB_PLAY_EDGE_PTS
         ):
@@ -543,12 +548,14 @@ def main() -> int:
             "ABSURD_VS_KEI": CFB_ABSURD_VS_KEI_PTS,
             "SINGLE_BOOK": CFB_SINGLE_BOOK_ABSURD_PTS,
             "TOTALS_PLAY_ELIGIBLE": CFB_TOTALS_PLAY_ELIGIBLE,
+            "SPREAD_PLAY_ELIGIBLE": CFB_SPREAD_PLAY_ELIGIBLE,
         },
         "note_sign": (
             "Board Open/Best remain away-signed in odds cache. "
             "trustCfbMarket receives home via away_book_to_home / cfbAwayBookToHome. "
             "Band unchanged (ABSURD=12). KEI untouched. "
-            "Totals PLAY sat (CFB_TOTALS_PLAY_ELIGIBLE=false); LEAN ≥2.5 still fires."
+            "Totals PLAY sat (CFB_TOTALS_PLAY_ELIGIBLE=false); "
+            "Spread PLAY sat (CFB_SPREAD_PLAY_ELIGIBLE=false); LEAN ≥2.5 still fires."
         ),
     }
     for r in rows:

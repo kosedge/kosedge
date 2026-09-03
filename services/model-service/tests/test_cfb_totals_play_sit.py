@@ -58,7 +58,7 @@ def test_named_w1_play_overs_become_pass():
         assert abs(edge) >= PLAY_EDGE_PTS
         assert cfb_edge_tag(abs(edge), "total") == "PASS", pair
         assert cfb_publish_tag_from_edge(abs(edge), "total") == "PASS", pair
-        assert cfb_edge_tag(abs(edge), "spread") == "PLAY", pair
+        assert cfb_edge_tag(abs(edge), "spread") == "PASS", pair
 
 
 def test_leans_preserved():
@@ -84,7 +84,7 @@ def test_publish_equals_display():
             assert cfb_publish_tag_from_edge(edge, market) == cfb_edge_tag(edge, market)
 
 
-def test_spread_unchanged():
-    assert cfb_edge_tag(4.0, "spread") == "PLAY"
+def test_spread_also_sat():
+    assert cfb_edge_tag(4.0, "spread") == "PASS"
     assert cfb_edge_tag(3.0, "spread") == "LEAN"
     assert cfb_edge_tag(2.0, "spread") == "PASS"
