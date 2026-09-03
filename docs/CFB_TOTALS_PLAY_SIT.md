@@ -19,11 +19,11 @@ CFB **Total** rows may be **LEAN / PASS / untrusted** — **never PLAY** until a
 
 ## Flag
 
-| Surface | Constant | Value |
-| ------- | -------- | ----- |
-| Web | `CFB_TOTALS_PLAY_ELIGIBLE` in `apps/web/lib/cfb-trusted-market.ts` | `false` |
-| Model-service | `TOTALS_PLAY_ELIGIBLE` in `book_ledger/cfb_trusted_market.py` | `False` |
-| Dump twin | `CFB_TOTALS_PLAY_ELIGIBLE` in `scripts/cfb/cfb_dump_edgeboard.py` | `False` |
+| Surface       | Constant                                                           | Value   |
+| ------------- | ------------------------------------------------------------------ | ------- |
+| Web           | `CFB_TOTALS_PLAY_ELIGIBLE` in `apps/web/lib/cfb-trusted-market.ts` | `false` |
+| Model-service | `TOTALS_PLAY_ELIGIBLE` in `book_ledger/cfb_trusted_market.py`      | `False` |
+| Dump twin     | `CFB_TOTALS_PLAY_ELIGIBLE` in `scripts/cfb/cfb_dump_edgeboard.py`  | `False` |
 
 Tagger behavior when false: totals `|edge| ≥ 4.0` → **PASS** (not demoted to LEAN). Totals `|edge| ≥ 2.5` and `< 4.0` → **LEAN**.
 
