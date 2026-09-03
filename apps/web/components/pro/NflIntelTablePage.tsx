@@ -31,6 +31,9 @@ export default async function NflIntelTablePage({
   season,
   week,
   team,
+  sourceHonesty,
+  sourceHonestyTestId,
+  campHref,
 }: {
   endpoint: IntelEndpoint;
   title: string;
@@ -40,6 +43,10 @@ export default async function NflIntelTablePage({
   season?: number;
   week?: number;
   team?: string;
+  /** Optional source/as-of honesty stamp (copy only — never hides rows). */
+  sourceHonesty?: string;
+  sourceHonestyTestId?: string;
+  campHref?: string;
 }) {
   const data = await fetchNflIntel(endpoint, { season, week, team });
   const rows = data.rows as NflIntelResponseRow[];
@@ -97,7 +104,30 @@ export default async function NflIntelTablePage({
             </p>
           </div>
           {showFallbackHint && truth.honesty_note ? (
-            <p className="mt-1 text-xs text-kos-gold/80">{truth.honesty_note}</p>
+            <p className="mt-1 text-xs text-kos-gold/80">
+              {truth.honesty_note}
+            </p>
+          ) : null}
+          {sourceHonesty ? (
+            <p
+              className="mt-2 max-w-3xl text-xs text-kos-gold/85"
+              data-testid={sourceHonestyTestId ?? "nfl-intel-source-stamp"}
+            >
+              {sourceHonesty}
+              {` As-of: ${truth.period_line}.`}
+              {campHref ? (
+                <>
+                  {" "}
+                  <Link
+                    href={campHref}
+                    className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
+                  >
+                    Camp Desk
+                  </Link>{" "}
+                  stays the live roster SoT.
+                </>
+              ) : null}
+            </p>
           ) : null}
         </div>
         <Link

@@ -28,6 +28,7 @@ import {
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
 import { CURRENT_YTD_TOOLTIP } from "@/lib/nfl-player-futures";
+import { NFL_AWARDS_SOURCE_STAMP } from "@/lib/nfl-surface-honesty";
 
 const DEFAULT_SEASON = 2026;
 const KOSEDGE_DATE = "August 11, 2026";
@@ -118,12 +119,28 @@ export default async function NflAwardsPage() {
             </h1>
             <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
               Contenders from the player + season model — Award Score (relative
-              index, not a probability), Current (2026 YTD), and Current odds
-              on every row.
+              index, not a probability), Current (2026 YTD), and Current odds on
+              every row.
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
               {lineage ? ` · ${lineage}` : null}
+            </p>
+            <p
+              className="mt-2 text-xs text-kos-gold/85"
+              data-testid="nfl-awards-source-stamp"
+            >
+              {NFL_AWARDS_SOURCE_STAMP}
+              {lineage
+                ? ` As-of: ${lineage}.`
+                : " As-of: last award materialize."}{" "}
+              <Link
+                href="/pro/nfl/projections"
+                className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
+              >
+                Futures
+              </Link>{" "}
+              keeps its own source stamp.
             </p>
             <CurrentYtdHint className="mt-1" />
           </div>
@@ -209,10 +226,12 @@ export default async function NflAwardsPage() {
         <section className="mt-6 text-sm text-kos-text/55">
           <p>
             Award Score is a 0–100 research index, not P(award). Missing odds
-            stay —.{" "}
-            <ModelTransparencyLink hrefSuffix="#game-boxes" />
+            stay —. <ModelTransparencyLink hrefSuffix="#game-boxes" />
           </p>
-          <p className="mt-2 text-xs text-kos-text/45" title={CURRENT_YTD_TOOLTIP}>
+          <p
+            className="mt-2 text-xs text-kos-text/45"
+            title={CURRENT_YTD_TOOLTIP}
+          >
             {oddsBundle.note}
           </p>
         </section>
@@ -243,11 +262,7 @@ function AwardBoard({
       {/* Mobile cards */}
       <ol className="mt-4 space-y-3 sm:hidden">
         {rows.map((row) => {
-          const odds = awardOddsForPlayer(
-            oddsBundle,
-            award,
-            row.playerName,
-          );
+          const odds = awardOddsForPlayer(oddsBundle, award, row.playerName);
           return (
             <li
               key={`${row.award}-${row.playerId}`}
