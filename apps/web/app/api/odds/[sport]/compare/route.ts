@@ -6,9 +6,9 @@ import {
   fetchOddsComparison,
   bookDisplay,
   configuredBooksForSport,
+  slimOddsComparisonForBoard,
   SPORT_KEY_MAP,
-  type OddsComparisonBookAsOf,
-  type OddsComparisonRow,
+  type OddsCompareBoardPayload,
 } from "@/lib/odds-api";
 import { getCache, setCache } from "@/lib/cache/redis";
 
@@ -19,17 +19,11 @@ const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
 };
 
-type ComparePayload = {
-  rows: OddsComparisonRow[];
-  books: { key: string; label: string }[];
-  /** Max book/market last_update; null when upstream omitted stamps. */
-  asOf: string | null;
-  bookAsOf: OddsComparisonBookAsOf[];
-};
+type ComparePayload = OddsCompareBoardPayload;
 
 const compareCache = new Map<string, { data: ComparePayload; ts: number }>();
-/** v6: include honest market asOf / bookAsOf (no fabricated fetch clock). */
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v6`;
+/** v7: slim board rows (no unused book fields) + honest asOf / bookAsOf. */
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v7`;
 
 function emptyPayload(sport: string): ComparePayload {
   return {
@@ -110,7 +104,7 @@ export async function GET(
       label: bookDisplay(k),
     }));
     const data: ComparePayload = {
-      rows: comparison.rows,
+      rows: slimOddsComparisonForBoard(comparison.rows),
       books,
       asOf: comparison.asOf,
       bookAsOf: comparison.bookAsOf,

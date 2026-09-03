@@ -49,16 +49,37 @@ describe("cfb truth-label wiring", () => {
   });
 
   it("CFB Edge Board publishes KEI vs market with Week 0/1 tabs defaulting to Week 1", () => {
-    const board = readFileSync(
+    // Board build moved off the SSR page (Alex waterfall) — stamp lives on
+    // the assemble API; Week 0/1 tabs stay on the client shell.
+    const page = readFileSync(
       path.join(__dirname, "../../app/edge-board/[sport]/page.tsx"),
       "utf8",
     );
-    expect(board).toContain("stampCfbEdgeBoardWeek");
-    expect(board).toContain("Tag = KEI vs trusted market");
-    expect(board).toContain("/edge-board/cfb?week=0");
-    expect(board).toContain("/edge-board/cfb?week=1");
-    expect(board).toMatch(/cfbWeekRaw === "0" \? 0 : 1/);
-    expect(board).toContain("week0Count");
-    expect(board).toContain("waiting on Odds API");
+    const assemble = readFileSync(
+      path.join(
+        __dirname,
+        "../../app/api/edge-board/[sport]/assemble/route.ts",
+      ),
+      "utf8",
+    );
+    const client = readFileSync(
+      path.join(__dirname, "../../components/EdgeBoardSportClient.tsx"),
+      "utf8",
+    );
+
+    expect(assemble).toContain("stampCfbEdgeBoardWeek");
+    expect(assemble).toMatch(
+      /week === ["']0["'] \? 0 : 1|get\("week"\) === "0" \? 0 : 1/,
+    );
+
+    expect(page).toContain("EdgeBoardSportClient");
+    expect(page).toMatch(/cfbWeekRaw === "0" \? 0 : 1/);
+    expect(page).not.toContain("loadAssembledEdgeBoardRows");
+
+    expect(client).toContain("Tag = KEI vs trusted market");
+    expect(client).toContain("/edge-board/cfb?week=0");
+    expect(client).toContain("/edge-board/cfb?week=1");
+    expect(client).toContain("week0Count");
+    expect(client).toContain("waiting on Odds API");
   });
 });
