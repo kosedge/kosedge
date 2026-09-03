@@ -155,7 +155,7 @@ async function assembleNflEdgeBoardRows(
   // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
   const [pulledOdds, fair] = await Promise.all([
     pullOddsRows("nfl"),
-    // Fair-lines pull also persists Odds API events into odds_snapshots for training.
+    // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
     fetchNflFairLines({
       season: NFL_EDGE_BOARD_SEASON,
       daysAhead: 200,

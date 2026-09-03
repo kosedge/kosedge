@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
 import { fetchNflEdgesDesk, type DeskMarketType } from "@/lib/nfl-edges";
+import {
+  pageDataCacheHeaders,
+  pageDataJsonResponse,
+} from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 
@@ -21,11 +25,15 @@ const MIN_CONF_OPTIONS = [0, 0.4, 0.6, 0.75] as const;
  * Desk already Promise.all's fair-lines ∥ edges/today ∥ props/board.
  * Client-fetch so HTML is not held open on that waterfall (Alex).
  * Uses pageData timeout (25s); fair-lines transport failures → 503/504.
+ * Cache-Control s-maxage=45 on non-empty 200 only (never 503/504/count=0).
  */
 export async function GET(req: Request) {
   const access = await getProAccessState();
   if (access !== "authorized") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401, headers: pageDataCacheHeaders({ cacheable: false }) },
+    );
   }
 
   const url = new URL(req.url);
@@ -66,7 +74,7 @@ export async function GET(req: Request) {
       timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
       throwOnTransportError: true,
     });
-    return NextResponse.json(desk);
+    return pageDataJsonResponse(desk);
   } catch (err) {
     return pageDataUpstreamErrorResponse(err);
   }

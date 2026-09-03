@@ -1,6 +1,10 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
+import {
+  pageDataCacheHeaders,
+  pageDataJsonResponse,
+} from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 
@@ -16,11 +20,16 @@ const PAST_WEEK_DAYS = 7;
  * Page-data for /pro/nfl/fair-lines.
  * Client-fetch so HTML completion is not blocked on model-service (Alex).
  * Uses pageData timeout (25s); transport failures → 503/504 (not fake empty 200).
+ * Cache-Control s-maxage=45 on non-empty 200 only (never 503/504/count=0).
+ * Upstream persist=0 — subscriber reads must not write odds_snapshots.
  */
 export async function GET(req: Request) {
   const access = await getProAccessState();
   if (access !== "authorized") {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    return NextResponse.json(
+      { error: "Unauthorized" },
+      { status: 401, headers: pageDataCacheHeaders({ cacheable: false }) },
+    );
   }
 
   const url = new URL(req.url);
@@ -42,8 +51,10 @@ export async function GET(req: Request) {
       includePastDays,
       timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
       throwOnTransportError: true,
+      // Read-only subscriber path — beat/worker owns odds_snapshots persist.
+      persistOdds: false,
     });
-    return NextResponse.json(board);
+    return pageDataJsonResponse(board);
   } catch (err) {
     return pageDataUpstreamErrorResponse(err);
   }
