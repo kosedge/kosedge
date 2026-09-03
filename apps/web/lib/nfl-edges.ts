@@ -21,51 +21,19 @@ import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
 import {
   edgesMayShowPropRows,
   nflPropsSurfaceState,
-  type NflPropsSurfaceState,
 } from "@/lib/nfl-props-surface";
 import { pickLatestIso } from "@/lib/market-asof-stamp";
 
-export type DeskMarketType = "all" | "ml" | "spread" | "total" | "props";
-
-export type DeskEdgeRow = {
-  id: string;
-  marketType: Exclude<DeskMarketType, "all">;
-  matchupOrPlayer: string;
-  detail: string;
-  kosedgeLine: string;
-  marketLine: string;
-  edge: number;
-  edgeDisplay: string;
-  side: string;
-  confidence: number | null;
-  kickoff: string | null;
-  source: "fair-lines" | "edges-today" | "props";
-};
-
-export type NflEdgesDeskResponse = {
-  season: number;
-  week: number;
-  count: number;
-  rows: DeskEdgeRow[];
-  filters: {
-    market: DeskMarketType;
-    minProbEdge: number;
-    minLineEdge: number;
-    minConfidence: number;
-  };
-  propsSurface: NflPropsSurfaceState;
-  /** Joined market capture from fair-lines (null when upstream omitted). */
-  marketAsOf: string | null;
-  /** Book keys from fair-lines diagnostics when joined. */
-  marketBooks: string[];
-  diagnostics: {
-    gameCandidates: number;
-    propCandidates: number;
-    fairLinesError?: string;
-    edgesTodayError?: string;
-    propsError?: string;
-  };
-};
+export type {
+  DeskEdgeRow,
+  DeskMarketType,
+  NflEdgesDeskResponse,
+} from "@/lib/nfl-edges-desk-types";
+import type {
+  DeskEdgeRow,
+  DeskMarketType,
+  NflEdgesDeskResponse,
+} from "@/lib/nfl-edges-desk-types";
 
 function toNumberOrNull(value: unknown): number | null {
   if (value === null || value === undefined) return null;
