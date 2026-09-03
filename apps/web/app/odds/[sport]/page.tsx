@@ -6,6 +6,7 @@ import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
 import type { OddsComparisonBookAsOf, OddsComparisonRow } from "@/lib/odds-api";
+import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
 export const dynamic = "force-dynamic";
 
@@ -78,6 +79,10 @@ export default async function OddsComparePage({
   const stampBooks = (bookAsOf ?? []).filter((b) => b.asOf).map((b) => b.label);
   // NFL always stamps; other sports stamp when rows loaded.
   const showMarketStamp = sportKey === "nfl" || rows.length > 0;
+  const headerAsOf = marketAsOfHeaderSuffix({
+    asOf: asOf ?? null,
+    kind: "odds",
+  });
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
@@ -91,7 +96,7 @@ export default async function OddsComparePage({
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between sm:gap-6">
           <div>
             <div className="text-sm text-gray-400">
-              {sportName} · Market research · ET
+              {sportName} · Market research · {headerAsOf}
             </div>
             <h1 className="text-3xl sm:text-5xl font-semibold tracking-tight text-kos-gold">
               Compare Odds

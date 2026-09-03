@@ -1,12 +1,28 @@
 import { describe, expect, it } from "vitest";
 
-import { marketAsOfStamp } from "@/lib/market-asof-stamp";
+import {
+  marketAsOfHeaderSuffix,
+  marketAsOfStamp,
+} from "@/lib/market-asof-stamp";
 
 /**
  * Surface contracts: Compare Odds + at least one other NFL market table
  * must expose honest as-of / stale copy (never invent a clock).
  */
 describe("NFL market as-of surface copy", () => {
+  it("Compare Odds header bit is as of / as-of unavailable (not orphan ET)", () => {
+    expect(marketAsOfHeaderSuffix({ asOf: null, kind: "odds" })).toBe(
+      "as-of unavailable",
+    );
+    expect(
+      marketAsOfHeaderSuffix({
+        asOf: "2026-09-02T17:00:00.000Z",
+        kind: "odds",
+        nowMs: Date.parse("2026-09-02T18:00:00.000Z"),
+      }),
+    ).toMatch(/^as of /);
+  });
+
   it("Compare Odds stamp includes Odds as of + books when source present", () => {
     const stamp = marketAsOfStamp({
       asOf: "2026-09-02T17:00:00.000Z",
@@ -38,6 +54,13 @@ describe("NFL market as-of surface copy", () => {
     const missing = marketAsOfStamp({ asOf: "", kind: "market" });
     expect(missing.text).toBe("Market as-of unavailable");
     expect(missing.text).not.toMatch(/August 11/);
+
+    expect(marketAsOfHeaderSuffix({ asOf: null, kind: "lines" })).toBe(
+      "as-of unavailable",
+    );
+    expect(marketAsOfHeaderSuffix({ asOf: null, kind: "market" })).toBe(
+      "as-of unavailable",
+    );
   });
 
   it("Props board refuses editorial date when updatedAt is blank", () => {

@@ -18,7 +18,7 @@ import {
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { bookDisplay } from "@/lib/odds-api";
-import { pickLatestIso } from "@/lib/market-asof-stamp";
+import { marketAsOfHeaderSuffix, pickLatestIso } from "@/lib/market-asof-stamp";
 
 const DEFAULT_SEASON = 2026;
 /** Wide fetch window; UI slate tabs decide what to show. */
@@ -119,6 +119,10 @@ export default async function NflFairLinesPage({
   const marketBooks = (board.diagnostics.bookmakers ?? [])
     .map((k) => bookDisplay(k))
     .filter(Boolean);
+  const headerAsOf = marketAsOfHeaderSuffix({
+    asOf: marketAsOf,
+    kind: "lines",
+  });
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
@@ -126,7 +130,7 @@ export default async function NflFairLinesPage({
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="max-w-4xl">
             <p className="inline-flex items-center rounded-full border border-kos-gold/35 bg-kos-gold/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-wide text-kos-gold">
-              KEI Lines · {season} · {weekChip}
+              KEI Lines · {season} · {weekChip} · {headerAsOf}
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               KEI Lines
@@ -262,7 +266,7 @@ export default async function NflFairLinesPage({
                     {row.awayAbbr} @ {row.homeAbbr}
                   </div>
                   <p className="mt-1 text-xs text-kos-text/55">
-                    {formatKickoff(row.startTime)} · ET
+                    {formatKickoff(row.startTime)}
                   </p>
                   {keiRepriceDriverLine(row.keiReprice) ? (
                     <p className="mt-1 text-[11px] text-kos-text/45">

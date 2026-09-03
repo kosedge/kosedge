@@ -124,6 +124,18 @@ export function marketAsOfStamp(
   };
 }
 
+/**
+ * Compact header bit for "Sport · Desk · {bit}".
+ * Replaces orphan "ET" chrome — never invents a clock.
+ * Examples: "as of Sep 2, 2026, 1:05 PM EDT" | "as-of unavailable"
+ */
+export function marketAsOfHeaderSuffix(input: MarketAsOfStampInput): string {
+  const stamp = marketAsOfStamp(input);
+  if (stamp.missing || !stamp.asOfIso) return "as-of unavailable";
+  const staleBit = stamp.stale ? " · stale" : "";
+  return `as of ${formatMarketAsOfDisplay(stamp.asOfIso)}${staleBit}`;
+}
+
 /** Props / board helper: max updatedAt across rows, or null (never invent). */
 export function boardAsOfFromUpdatedAts(
   stamps: Array<string | null | undefined>,

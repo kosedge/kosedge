@@ -18,7 +18,7 @@ import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
-import { pickLatestIso } from "@/lib/market-asof-stamp";
+import { marketAsOfHeaderSuffix, pickLatestIso } from "@/lib/market-asof-stamp";
 
 export const dynamic = "force-dynamic";
 
@@ -108,6 +108,12 @@ export default async function EdgeBoardSportPage({
 
   const isNfl = sportKey === "nfl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
+  const nflLinesAsOf = isNfl
+    ? pickLatestIso(...rows.map((r) => (r as { linesAsOf?: string }).linesAsOf))
+    : null;
+  const headerAsOf = isNfl
+    ? marketAsOfHeaderSuffix({ asOf: nflLinesAsOf, kind: "lines" })
+    : null;
 
   const slateLabel =
     sportKey === "nfl" || sportKey === "cfb" ? "Weekly Slate" : "Daily Slate";
@@ -137,8 +143,8 @@ export default async function EdgeBoardSportPage({
               {sportName} ·{" "}
               {marketsOnly
                 ? "Markets only"
-                : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}{" "}
-              · ET
+                : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}
+              {isNfl ? <> · {headerAsOf}</> : <> · ET</>}
             </div>
             {marketsOnly ? (
               <div className="mt-2">
@@ -287,9 +293,7 @@ export default async function EdgeBoardSportPage({
         {isNfl ? (
           <MarketAsOfStamp
             className="mt-3"
-            asOf={pickLatestIso(
-              ...rows.map((r) => (r as { linesAsOf?: string }).linesAsOf),
-            )}
+            asOf={nflLinesAsOf}
             kind="lines"
             data-testid="edge-board-asof"
           />

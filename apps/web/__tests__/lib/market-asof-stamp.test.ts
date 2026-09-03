@@ -4,6 +4,7 @@ import {
   MARKET_ASOF_STALE_MS,
   boardAsOfFromUpdatedAts,
   formatMarketAsOfDisplay,
+  marketAsOfHeaderSuffix,
   marketAsOfStamp,
   pickLatestIso,
 } from "@/lib/market-asof-stamp";
@@ -75,5 +76,22 @@ describe("market-asof-stamp", () => {
     const label = formatMarketAsOfDisplay("2026-09-02T18:00:00.000Z");
     expect(label).toMatch(/Sep/);
     expect(label).toMatch(/2026/);
+  });
+
+  it("header suffix replaces orphan ET — never invents a clock", () => {
+    expect(marketAsOfHeaderSuffix({ asOf: null })).toBe("as-of unavailable");
+    expect(marketAsOfHeaderSuffix({ asOf: "" })).toBe("as-of unavailable");
+    expect(
+      marketAsOfHeaderSuffix({
+        asOf: "2026-09-02T18:00:00.000Z",
+        nowMs: Date.parse("2026-09-02T19:00:00.000Z"),
+      }),
+    ).toMatch(/^as of /);
+    expect(
+      marketAsOfHeaderSuffix({
+        asOf: "2026-09-01T12:00:00.000Z",
+        nowMs: Date.parse("2026-09-02T00:00:00.000Z"),
+      }),
+    ).toContain("stale");
   });
 });
