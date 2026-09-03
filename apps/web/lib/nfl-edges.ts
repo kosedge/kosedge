@@ -23,7 +23,6 @@ import {
   nflPropsSurfaceState,
   type NflPropsSurfaceState,
 } from "@/lib/nfl-props-surface";
-import { pickLatestIso } from "@/lib/market-asof-stamp";
 
 export type DeskMarketType = "all" | "ml" | "spread" | "total" | "props";
 
@@ -381,11 +380,8 @@ export async function fetchNflEdgesDesk(params: {
 
   const allRows = filterDeskRows([...mergedGame, ...propEdges], market);
 
-  const marketAsOf =
-    fairBoard.oddsAsOf?.trim() ||
-    fairBoard.asOf?.trim() ||
-    boardAsOfFromProps(propsBoard.rows) ||
-    null;
+  // Model odds_as_of only (Aug 21 stored capture is honest; never request clock).
+  const marketAsOf = fairBoard.oddsAsOf?.trim() || null;
   const marketBooks = (fairBoard.diagnostics.bookmakers ?? []).filter(Boolean);
 
   return {
@@ -405,12 +401,6 @@ export async function fetchNflEdgesDesk(params: {
       propsError: propsBoard.error,
     },
   };
-}
-
-function boardAsOfFromProps(
-  rows: Array<{ updatedAt: string | null }>,
-): string | null {
-  return pickLatestIso(...rows.map((r) => r.updatedAt));
 }
 
 export {

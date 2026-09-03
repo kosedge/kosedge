@@ -2,7 +2,7 @@
  * Week 1 betting desk agreement — success criteria lock.
  * 1) Lean Under when model < line (Holani)
  * 2) NE@SEA kickoff 8:20 survives odds overlay
- * 3) Edge Board as-of is not stuck on 2026-08-21
+ * 3) Edge Board as-of = market capture only (never request now())
  * 4) Props fair O/U empty when Line blank
  * 5) Maye Boxes/Props share spine mean preference
  */
@@ -192,31 +192,41 @@ describe("Week 1 desk agreement", () => {
     expect(String(after.time)).not.toMatch(/8:15/);
   });
 
-  it("Edge Board as-of is not stuck on 2026-08-21 when board stamp is current", () => {
+  it("Edge Board as-of uses market capture only — never board/request clock", () => {
+    // Stale market still stamps (UI marks stale); boardAsOf is ignored.
     const asOf = resolveEdgeBoardLinesAsOf({
       oddsCapturedAt: "2026-08-21T13:42:55+00:00",
-      boardAsOf: "2026-09-02T15:00:00.000Z",
+      boardAsOf: "2026-09-03T01:29:52.841551+00:00", // request now() — must not win
     });
-    expect(asOf).toBe("2026-09-02T15:00:00.000Z");
-    expect(asOf).not.toMatch(/^2026-08-21/);
+    expect(asOf).toBe("2026-08-21T13:42:55+00:00");
+    expect(asOf).not.toMatch(/01:29:52/);
 
-    const rows = fairLinesToEdgeBoardRows([fairLine()], {
-      boardAsOf: "2026-09-02T15:00:00.000Z",
-    });
+    const rows = fairLinesToEdgeBoardRows(
+      [fairLine({ oddsCapturedAt: "2026-08-21T13:42:55+00:00" })],
+      { boardAsOf: "2026-09-03T01:29:52.841551+00:00" },
+    );
     for (const r of rows) {
       expect((r as { linesAsOf?: string }).linesAsOf).toBe(
-        "2026-09-02T15:00:00.000Z",
+        "2026-08-21T13:42:55+00:00",
       );
     }
   });
 
-  it("Edge Board as-of stays blank when market and board stamps are missing", () => {
+  it("Edge Board as-of stays blank when market stamp missing (no wall clock)", () => {
     expect(
       resolveEdgeBoardLinesAsOf({
         oddsCapturedAt: null,
-        boardAsOf: null,
+        boardAsOf: "2026-09-03T01:29:52.841551+00:00",
       }),
     ).toBeUndefined();
+
+    const rows = fairLinesToEdgeBoardRows(
+      [fairLine({ oddsCapturedAt: null })],
+      { boardAsOf: "2026-09-03T01:29:52.841551+00:00" },
+    );
+    for (const r of rows) {
+      expect((r as { linesAsOf?: string }).linesAsOf).toBeUndefined();
+    }
   });
 
   it("Props does not show fair over/under juice when Line is blank", () => {

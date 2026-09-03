@@ -46,15 +46,40 @@ export function pickLatestIso(
   let best: string | null = null;
   let bestMs = Number.NEGATIVE_INFINITY;
   for (const raw of candidates) {
-    if (raw == null || String(raw).trim() === "") continue;
-    const ms = Date.parse(String(raw));
+    const clean = sanitizeMarketCaptureIso(raw);
+    if (!clean) continue;
+    const ms = Date.parse(clean);
     if (!Number.isFinite(ms)) continue;
     if (ms >= bestMs) {
       bestMs = ms;
-      best = String(raw).trim();
+      best = clean;
     }
   }
   return best;
+}
+
+/**
+ * Reject invent-now fingerprints (Python datetime.now().isoformat with µs)
+ * when the stamp is near wall clock. Odds API last_update is second-resolution.
+ * Never returns a fabricated clock — blank/invalid → null.
+ */
+export function sanitizeMarketCaptureIso(
+  iso: string | null | undefined,
+  nowMs: number = Date.now(),
+): string | null {
+  const raw = iso?.trim() || null;
+  if (!raw) return null;
+  const ms = Date.parse(raw);
+  if (!Number.isFinite(ms)) return null;
+  // Live invent fingerprint: Python datetime.now() µs (6 digits) near request.
+  // Do NOT reject `.000Z` (JS toISOString) or second-resolution Odds API stamps.
+  if (
+    /\.\d{6}([+-]\d{2}:\d{2}|Z)$/.test(raw) &&
+    Math.abs(nowMs - ms) < 30 * 60 * 1000
+  ) {
+    return null;
+  }
+  return raw;
 }
 
 export function formatMarketAsOfDisplay(
@@ -97,7 +122,7 @@ export function marketAsOfStamp(
   input: MarketAsOfStampInput,
 ): MarketAsOfStampResult {
   const kind = input.kind ?? "market";
-  const raw = input.asOf?.trim() || null;
+  const raw = sanitizeMarketCaptureIso(input.asOf, input.nowMs);
   const ms = raw ? Date.parse(raw) : Number.NaN;
   if (!raw || !Number.isFinite(ms)) {
     return {
