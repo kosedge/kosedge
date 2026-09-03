@@ -1,9 +1,13 @@
+import { readFileSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
   marketAsOfHeaderSuffix,
   marketAsOfStamp,
 } from "@/lib/market-asof-stamp";
+
+const webRoot = path.join(__dirname, "../..");
 
 /**
  * Surface contracts: Compare Odds + at least one other NFL market table
@@ -69,5 +73,17 @@ describe("NFL market as-of surface copy", () => {
     expect(stamp.text).toBe("Market as-of unavailable");
     // Former props asOfLabel fell back to KOSEDGE_DATE — must not reappear.
     expect(stamp.text).not.toContain("August 11, 2026");
+  });
+
+  it("Props page keeps board as-of only — no dual editorial Date chrome", () => {
+    const page = readFileSync(
+      path.join(webRoot, "app/(pro)/pro/nfl/props/page.tsx"),
+      "utf8",
+    );
+    expect(page).toContain("MarketAsOfStamp");
+    expect(page).toContain("boardAsOfFromUpdatedAts");
+    expect(page).not.toContain("August 11, 2026");
+    expect(page).not.toMatch(/\bconst KOSEDGE_DATE\b/);
+    expect(page).not.toMatch(/Date:\s*\{/);
   });
 });
