@@ -47,12 +47,12 @@ CREATE TABLE IF NOT EXISTS schema_migrations (
 
 ### Behavior
 
-| Command | Effect |
-| --- | --- |
-| `check-integrity` | Repo-only: refuse duplicate/gap/unparseable names. No DB. |
-| `status` | List applied / pending / drifted. Optional `--require-current`. |
-| `apply` / `up` | Apply pending in numeric order; stop on first failure; no-op if current. |
-| `baseline` / `stamp --through N` | Record versions `<= N` **without executing SQL**. Explicit only. |
+| Command                          | Effect                                                                   |
+| -------------------------------- | ------------------------------------------------------------------------ |
+| `check-integrity`                | Repo-only: refuse duplicate/gap/unparseable names. No DB.                |
+| `status`                         | List applied / pending / drifted. Optional `--require-current`.          |
+| `apply` / `up`                   | Apply pending in numeric order; stop on first failure; no-op if current. |
+| `baseline` / `stamp --through N` | Record versions `<= N` **without executing SQL**. Explicit only.         |
 
 Hard rules:
 
@@ -139,11 +139,11 @@ If `status` shows `drifted` or apply raises checksum drift:
 
 ## Deploy / CI — what is and is not verified
 
-| Check | Where | Connects to prod? | DDL? |
-| --- | --- | --- | --- |
-| Sequence + discoverability (`check-integrity`) | PR Checks / Deploy Railway | No | No |
-| Live `status --require-current` | Deploy Railway **only if** secret `WAREHOUSE_DATABASE_URL` is set | Read-only URL | No (status gate) |
-| Auto-apply on deploy | **Never** | — | CI must not get arbitrary production DDL |
+| Check                                          | Where                                                             | Connects to prod? | DDL?                                     |
+| ---------------------------------------------- | ----------------------------------------------------------------- | ----------------- | ---------------------------------------- |
+| Sequence + discoverability (`check-integrity`) | PR Checks / Deploy Railway                                        | No                | No                                       |
+| Live `status --require-current`                | Deploy Railway **only if** secret `WAREHOUSE_DATABASE_URL` is set | Read-only URL     | No (status gate)                         |
+| Auto-apply on deploy                           | **Never**                                                         | —                 | CI must not get arbitrary production DDL |
 
 If `WAREHOUSE_DATABASE_URL` is unset and the push changes `infra/db/*.sql`,
 Deploy Railway **fails loudly** so a deploy cannot quietly leave SQL pending.
