@@ -147,4 +147,30 @@ describe("team builder", () => {
     expect(needs.K).toBe(1);
     expect(needs.DST).toBe(1);
   });
+
+  it("incomplete roster with K/DST holes is never a B (even with high points)", () => {
+    const board = [
+      row({ playerId: "qb", position: "QB", medianPoints: 320 }),
+      row({ playerId: "rb1", position: "RB", medianPoints: 280 }),
+      row({ playerId: "rb2", position: "RB", medianPoints: 260 }),
+      row({ playerId: "wr1", position: "WR", medianPoints: 250 }),
+      row({ playerId: "wr2", position: "WR", medianPoints: 240 }),
+      row({ playerId: "te", position: "TE", medianPoints: 200 }),
+      row({ playerId: "flex", position: "WR", medianPoints: 190 }),
+      row({ playerId: "k", position: "K", medianPoints: 120 }),
+      row({ playerId: "dst", position: "DST", medianPoints: 110 }),
+    ];
+    // Full skill starters, missing only K + DST — historically inflated to B.
+    const almostFull = board.filter(
+      (r) => r.position !== "K" && r.position !== "DST",
+    );
+    const needs = rosterNeeds(almostFull, board);
+    expect(needs.K).toBe(1);
+    expect(needs.DST).toBe(1);
+    const grade = teamGrade(almostFull, board);
+    expect(grade.grade).not.toMatch(/^A|^B/);
+    expect(["C+", "C", "D"]).toContain(grade.grade);
+    expect(grade.detail).toMatch(/\bK\b/);
+    expect(grade.detail).toContain("DST");
+  });
 });

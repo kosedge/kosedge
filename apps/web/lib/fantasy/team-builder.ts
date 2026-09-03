@@ -59,9 +59,7 @@ export function rosterNeeds(
   }
 
   const wantK =
-    board == null || boardHasPosition(board, "K")
-      ? DEFAULT_ROSTER_NEEDS.K!
-      : 0;
+    board == null || boardHasPosition(board, "K") ? DEFAULT_ROSTER_NEEDS.K! : 0;
   const wantDst =
     board == null || boardHasPosition(board, "DST")
       ? DEFAULT_ROSTER_NEEDS.DST!
@@ -117,6 +115,28 @@ export function projectedStarterPoints(rows: FantasyDeskRow[]): number {
   return starters.reduce((sum, row) => sum + row.medianPoints, 0);
 }
 
+/**
+ * Letter grade for Builder / Mock post-draft.
+ * Incomplete rosters (any required hole, including K/DST when the format
+ * has them) never get B or above — points alone are not enough.
+ */
+export function letterGradeFromStarters(
+  starterPoints: number,
+  holes: string[],
+): string {
+  if (holes.length > 0) {
+    if (starterPoints >= 950) return "C+";
+    if (starterPoints >= 800) return "C";
+    return "D";
+  }
+  if (starterPoints >= 1400) return "A";
+  if (starterPoints >= 1250) return "B+";
+  if (starterPoints >= 1100) return "B";
+  if (starterPoints >= 950) return "C+";
+  if (starterPoints >= 800) return "C";
+  return "D";
+}
+
 export function teamGrade(
   rows: FantasyDeskRow[],
   board?: FantasyDeskRow[],
@@ -131,13 +151,7 @@ export function teamGrade(
     .filter(([, n]) => n > 0)
     .map(([pos]) => pos);
 
-  let grade = "C";
-  if (starterPoints >= 1400 && holes.length === 0) grade = "A";
-  else if (starterPoints >= 1250 && holes.length <= 1) grade = "B+";
-  else if (starterPoints >= 1100) grade = "B";
-  else if (starterPoints >= 950) grade = "C+";
-  else if (starterPoints >= 800) grade = "C";
-  else grade = "D";
+  const grade = letterGradeFromStarters(starterPoints, holes);
 
   const detail =
     holes.length === 0

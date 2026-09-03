@@ -98,8 +98,13 @@ function needScore(
   if (pos === "QB" && qbCount >= 1 && round < 11) return -70;
   if (pos === "QB" && qbCount >= 1 && round < 14) return -48;
   if (pos === "QB" && qbCount >= 2) return -90;
-  if ((pos === "K" || pos === "DST") && round < 12) return -55;
-  if ((pos === "K" || pos === "DST") && round < 14) return -20;
+  if (pos === "K" || pos === "DST") {
+    // Never early. From R12 on, fill required K/DST before more bench.
+    if (round < 12) return -55;
+    if ((needs[pos] ?? 0) > 0) return 40 + (needs[pos] ?? 0) * 6;
+    if (round < 14) return -20;
+    return 2;
+  }
   if (pos === "QB" && qbCount === 0) {
     if (round <= 2) return 2;
     if (round <= 4) return 10;
@@ -108,10 +113,7 @@ function needScore(
   }
 
   if ((needs[pos] ?? 0) > 0) return 34 + (needs[pos] ?? 0) * 6;
-  if (
-    (needs.FLEX ?? 0) > 0 &&
-    ["RB", "WR", "TE"].includes(pos)
-  ) {
+  if ((needs.FLEX ?? 0) > 0 && ["RB", "WR", "TE"].includes(pos)) {
     return 20;
   }
 
@@ -175,7 +177,8 @@ export function scoreCpuCandidate(input: {
         : market <= overall + 24
           ? 8
           : 0;
-  const reachPenalty = market > overall + 35 ? -18 : market > overall + 22 ? -8 : 0;
+  const reachPenalty =
+    market > overall + 35 ? -18 : market > overall + 22 ? -8 : 0;
 
   const qbCount = countPos(roster, "QB");
 
@@ -224,30 +227,49 @@ export function chooseCpuPlayer(input: {
   weights: CpuWeights;
   teamIndex: number;
 }): FantasyDeskRow | null {
-  const { available, overall, teamCount } = input;
+  const { available, overall, teamCount, roster, board } = input;
   if (available.length === 0) return null;
 
   const round = Math.ceil(overall / teamCount);
+  const needs = mockRosterNeeds(roster, board);
 
   // Score a bounded pool for speed — top ~80 by model rank among remaining.
   // Hard-filter absurd ADP reaches before scoring so lottery names never win ties.
-  const pool = [...available]
-    .sort((a, b) => a.rankOverall - b.rankOverall)
-    .slice(0, 80)
-    .filter(
-      (row) =>
-        !isCpuReachHardBlocked({
-          marketAdp: marketPickNumber(row),
-          overall,
-          teamCount,
-          position: row.position,
-          round,
-        }),
-    );
+  const byRank = [...available].sort((a, b) => a.rankOverall - b.rankOverall);
+  const topPool = byRank.slice(0, 80);
 
-  const scoringPool = pool.length > 0 ? pool : [...available]
-    .sort((a, b) => a.rankOverall - b.rankOverall)
-    .slice(0, 20);
+  // K/DST (and any other required hole) sit at board end — keep them eligible
+  // when the roster still needs that slot, or auto-complete never fills them.
+  const needPositions = Object.entries(needs)
+    .filter(([pos, n]) => n > 0 && pos !== "FLEX")
+    .map(([pos]) => pos);
+  const needExtras =
+    needPositions.length === 0
+      ? []
+      : available.filter((row) =>
+          needPositions.includes(row.position.toUpperCase()),
+        );
+
+  const seen = new Set<string>();
+  const merged: FantasyDeskRow[] = [];
+  for (const row of [...topPool, ...needExtras]) {
+    if (seen.has(row.playerId)) continue;
+    seen.add(row.playerId);
+    merged.push(row);
+  }
+
+  const pool = merged.filter(
+    (row) =>
+      !isCpuReachHardBlocked({
+        marketAdp: marketPickNumber(row),
+        overall,
+        teamCount,
+        position: row.position,
+        round,
+      }),
+  );
+
+  const scoringPool = pool.length > 0 ? pool : byRank.slice(0, 20);
 
   let best: FantasyDeskRow | null = null;
   let bestScore = -Infinity;
