@@ -6,7 +6,13 @@ import os
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
 
-from src.routes.nfl import _extract_book_market_prices
+from src.routes.nfl import (
+    NFL_DEFAULT_ODDS_BOOKMAKERS,
+    NFL_ODDS_API_CARRIED_BOOKMAKERS,
+    NFL_ODDS_REGIONS,
+    _extract_book_market_prices,
+    _resolve_nfl_odds_bookmakers_for_request,
+)
 from src.services.nfl_market_close import stake_close_spread
 
 
@@ -173,4 +179,24 @@ def test_extract_best_ignores_not_carried_books_and_prefers_fresher_tie() -> Non
     out = _extract_book_market_prices(event)
     assert out["best_spread_home"] == -3.5
     assert out["best_spread_book"] == "fanduel"
+
+
+def test_nfl_odds_request_carried_nine_excludes_not_carried() -> None:
+    """Request path pulls nine carried keys; bet365/circa/betr stay UI-only."""
+    request_books = _resolve_nfl_odds_bookmakers_for_request(None).split(",")
+    carried = [b.strip() for b in NFL_ODDS_API_CARRIED_BOOKMAKERS.split(",") if b.strip()]
+    designated = [b.strip() for b in NFL_DEFAULT_ODDS_BOOKMAKERS.split(",") if b.strip()]
+    assert len(designated) == 12
+    assert len(carried) == 9
+    assert request_books == carried
+    assert "bovada" in request_books
+    assert "williamhill_us" in request_books
+    assert "betonlineag" in request_books
+    assert "bet365" not in request_books
+    assert "circa" not in request_books
+    assert "betr" not in request_books
+    assert NFL_ODDS_REGIONS == "us,us2"
+    assert "theScore" not in NFL_DEFAULT_ODDS_BOOKMAKERS
+    assert "thescore" not in NFL_DEFAULT_ODDS_BOOKMAKERS.lower()
+    assert "espnbet" not in NFL_DEFAULT_ODDS_BOOKMAKERS
 

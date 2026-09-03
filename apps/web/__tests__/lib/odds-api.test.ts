@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   ALLOWED_BOOKS,
+  bookDisplay,
   fetchEdgeBoard,
   fetchOddsComparison,
   nflBookFeedStatus,
@@ -36,14 +37,17 @@ describe("odds-api edge board markets", () => {
     expect(url).toContain("regions=us,us2");
     expect(url).toContain(
       `bookmakers=${encodeURIComponent(
-        "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics",
+        "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bovada,williamhill_us,betonlineag",
       )}`,
     );
     expect(url).not.toContain("bet365");
     expect(url).not.toContain("circa");
     expect(url).not.toContain(",betr");
+    expect(url).not.toContain("theScore");
+    expect(url).not.toContain("thescore");
+    expect(url).not.toContain("espnbet");
     expect(url).toContain("markets=spreads,totals");
-    expect(ALLOWED_BOOKS).toHaveLength(9);
+    expect(ALLOWED_BOOKS).toHaveLength(12);
   });
 
   it("requests MLB h2h+totals (moneyline board, not run line)", async () => {
@@ -426,14 +430,20 @@ describe("odds-api edge board markets", () => {
     expect(result.bookAsOf.find((b) => b.key === "betr")?.feedStatus).toBe(
       "not_carried",
     );
-    expect(result.bookAsOf).toHaveLength(9);
+    expect(result.bookAsOf).toHaveLength(12);
   });
 
-  it("marks bet365/circa/betr not_carried and requests only six keys", () => {
+  it("marks bet365/circa/betr not_carried and requests only nine carried keys", () => {
     expect(nflBookFeedStatus("bet365")).toBe("not_carried");
     expect(nflBookFeedStatus("circa")).toBe("not_carried");
     expect(nflBookFeedStatus("betr")).toBe("not_carried");
     expect(nflBookFeedStatus("hardrockbet")).toBe("carried");
+    expect(nflBookFeedStatus("bovada")).toBe("carried");
+    expect(nflBookFeedStatus("williamhill_us")).toBe("carried");
+    expect(nflBookFeedStatus("betonlineag")).toBe("carried");
+    expect(bookDisplay("williamhill_us")).toBe("Caesars");
+    expect(bookDisplay("betonlineag")).toBe("BetOnline");
+    expect(bookDisplay("bovada")).toBe("Bovada");
     expect(requestBooksForSport("nfl")).toEqual([
       "draftkings",
       "fanduel",
@@ -441,7 +451,13 @@ describe("odds-api edge board markets", () => {
       "betrivers",
       "hardrockbet",
       "fanatics",
+      "bovada",
+      "williamhill_us",
+      "betonlineag",
     ]);
+    expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("theScore");
+    expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("thescore");
+    expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("espnbet");
   });
 
   it("pickBestSpreadEntry prefers fresher stamp when point+juice tie", () => {

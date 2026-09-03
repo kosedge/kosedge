@@ -3,6 +3,7 @@ import path from "node:path";
 import { describe, expect, it } from "vitest";
 
 import {
+  ALLOWED_BOOKS,
   slimOddsComparisonForBoard,
   type OddsComparisonRow,
 } from "@/lib/odds-api";
@@ -106,5 +107,22 @@ describe("Compare Odds fat-payload fix", () => {
     );
     expect(board).toContain("not on feed");
     expect(board).toContain('feedStatus === "not_carried"');
+  });
+
+  it("designated NFL compare columns include carried adds and honest not-carried", () => {
+    expect(ALLOWED_BOOKS).toHaveLength(12);
+    expect(ALLOWED_BOOKS).toEqual(
+      expect.arrayContaining([
+        "bovada",
+        "williamhill_us",
+        "betonlineag",
+        "bet365",
+        "circa",
+        "betr",
+      ]),
+    );
+    expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("theScore");
+    expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("thescore");
+    expect(JSON.stringify(ALLOWED_BOOKS)).not.toContain("espnbet");
   });
 });

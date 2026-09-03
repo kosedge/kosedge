@@ -105,10 +105,12 @@ TASK_NFL_DECOMPOSITION_DRIFT = "src.tasks.run_nfl_decomposition_drift_monitor"
 # Multi-book default so fair-lines / edge-board pulls capture a real Best Line
 # and persist richer snapshots for training (override via NFL_ODDS_BOOKMAKERS).
 NFL_DEFAULT_ODDS_BOOKMAKERS = (
-    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr"
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,"
+    "bovada,williamhill_us,betonlineag,bet365,circa,betr"
 )
 NFL_ODDS_API_CARRIED_BOOKMAKERS = (
-    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics"
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,"
+    "bovada,williamhill_us,betonlineag"
 )
 NFL_ODDS_REGIONS = "us,us2"
 

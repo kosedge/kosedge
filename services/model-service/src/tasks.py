@@ -275,12 +275,14 @@ MODEL_STATE_KEY = "mlb_active_model"
 NFL_MODEL_STATE_KEY = "nfl_active_model"
 
 NFL_DEFAULT_ODDS_BOOKMAKERS = (
-    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr"
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,"
+    "bovada,williamhill_us,betonlineag,bet365,circa,betr"
 )
-# Keys The Odds API actually returns for NFL in us/us2 (hardrockbet=us2, fanatics=paid us).
+# Keys The Odds API actually returns for NFL in us/us2 (hardrockbet=us2; fanatics/williamhill_us paid us).
 # bet365/circa/betr stay designated for UI honesty but are never requested.
 NFL_ODDS_API_CARRIED_BOOKMAKERS = (
-    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics"
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,"
+    "bovada,williamhill_us,betonlineag"
 )
 NFL_ODDS_REGIONS = "us,us2"
 

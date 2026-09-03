@@ -2,7 +2,7 @@
  * Odds API (the-odds-api.com) fetcher.
  * Supports: NCAAM, NBA, NFL, MLB, NHL, CFB, WNBA.
  * Designated books: DraftKings, FanDuel, BetMGM, BetRivers, Hard Rock Bet,
- * Fanatics, Bet365, Circa, Betr — see NFL feed coverage below.
+ * Fanatics, Bovada, Caesars, BetOnline, Bet365, Circa, Betr — see NFL feed coverage below.
  */
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
@@ -27,7 +27,7 @@ export const SPORT_KEY_MAP: Record<string, string> = {
 
 /**
  * Designated Compare Odds columns (Ryan). Order = open preference + compare columns.
- * Matches model-service NFL_DEFAULT_ODDS_BOOKMAKERS (9 books). Keep all nine —
+ * Matches model-service NFL_DEFAULT_ODDS_BOOKMAKERS (12 books). Keep all twelve —
  * do not silently drop columns the provider cannot supply.
  */
 export const ALLOWED_BOOKS = [
@@ -37,6 +37,9 @@ export const ALLOWED_BOOKS = [
   "betrivers",
   "hardrockbet",
   "fanatics",
+  "bovada",
+  "williamhill_us",
+  "betonlineag",
   "bet365",
   "circa",
   "betr",
@@ -53,6 +56,9 @@ export const NFL_ODDS_API_CARRIED_BOOKS = [
   "betrivers",
   "hardrockbet",
   "fanatics",
+  "bovada",
+  "williamhill_us",
+  "betonlineag",
 ] as const;
 
 /**
@@ -93,6 +99,9 @@ const BOOK_DISPLAY: Record<string, string> = {
   fanatics: "Fanatics",
   betrivers: "BetRivers",
   betr: "Betr",
+  bovada: "Bovada",
+  williamhill_us: "Caesars",
+  betonlineag: "BetOnline",
 };
 
 export function bookDisplay(key: string): string {
