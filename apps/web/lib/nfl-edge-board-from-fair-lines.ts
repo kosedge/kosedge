@@ -419,12 +419,19 @@ export function resolveEdgeBoardLinesAsOf(opts: {
 /**
  * Board-level as-of: latest among row stamps + payload odds_as_of.
  * Same market vintage contract as fair-lines; never invents a clock.
+ * Accepts EdgeBoardRow-shaped objects (`[x: string]: unknown` + optional fields).
  */
 export function resolveEdgeBoardBoardLinesAsOf(
-  rows: Array<{ linesAsOf?: string | null }>,
+  rows: ReadonlyArray<{
+    [key: string]: unknown;
+    linesAsOf?: string | null;
+  }>,
   payloadOddsAsOf?: string | null,
 ): string | null {
-  return pickLatestIso(...rows.map((r) => r.linesAsOf), payloadOddsAsOf);
+  return pickLatestIso(
+    ...rows.map((r) => (typeof r.linesAsOf === "string" ? r.linesAsOf : null)),
+    payloadOddsAsOf,
+  );
 }
 
 /**
