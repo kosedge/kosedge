@@ -534,6 +534,72 @@ export type OddsComparisonResult = {
   bookAsOf: OddsComparisonBookAsOf[];
 };
 
+/**
+ * Board-facing compare row: only fields the Compare Odds UI renders.
+ * Drops unused home spread / under / numeric point mirrors and commenceTime
+ * so the JSON (and any accidental SSR) stays lean.
+ */
+export type OddsCompareBoardRow = {
+  id: string;
+  game: string;
+  time: string;
+  spread: Record<string, { away: string; awayJuice?: string }>;
+  moneyline: Record<string, { away: string; home: string }>;
+  total: Record<string, { line: string; overJuice?: string }>;
+  bestSpreadBook?: string;
+  bestTotalBook?: string;
+  bestMlAwayBook?: string;
+  bestMlHomeBook?: string;
+};
+
+export type OddsCompareBoardPayload = {
+  rows: OddsCompareBoardRow[];
+  books: { key: string; label: string }[];
+  asOf: string | null;
+  bookAsOf: OddsComparisonBookAsOf[];
+};
+
+/** Strip unused book fields before shipping Compare Odds over the wire. */
+export function slimOddsComparisonForBoard(
+  rows: OddsComparisonRow[],
+): OddsCompareBoardRow[] {
+  return rows.map((r) => {
+    const spread: OddsCompareBoardRow["spread"] = {};
+    for (const [key, entry] of Object.entries(r.spread ?? {})) {
+      if (!entry) continue;
+      spread[key] = {
+        away: entry.away,
+        ...(entry.awayJuice ? { awayJuice: entry.awayJuice } : {}),
+      };
+    }
+    const moneyline: OddsCompareBoardRow["moneyline"] = {};
+    for (const [key, entry] of Object.entries(r.moneyline ?? {})) {
+      if (!entry) continue;
+      moneyline[key] = { away: entry.away, home: entry.home };
+    }
+    const total: OddsCompareBoardRow["total"] = {};
+    for (const [key, entry] of Object.entries(r.total ?? {})) {
+      if (!entry) continue;
+      total[key] = {
+        line: entry.line,
+        ...(entry.overJuice ? { overJuice: entry.overJuice } : {}),
+      };
+    }
+    return {
+      id: r.id,
+      game: r.game,
+      time: r.time,
+      spread,
+      moneyline,
+      total,
+      bestSpreadBook: r.bestSpreadBook,
+      bestTotalBook: r.bestTotalBook,
+      bestMlAwayBook: r.bestMlAwayBook,
+      bestMlHomeBook: r.bestMlHomeBook,
+    };
+  });
+}
+
 export async function fetchOddsComparison(
   sportKey: string,
   apiKey: string,

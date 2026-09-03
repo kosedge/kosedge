@@ -22,13 +22,13 @@ describe("NFL KEI Lines live board (not pipeline stub)", () => {
   });
 
   it("Compare Odds KEI Lines control uses getKeiLinesBoardHref", () => {
-    const oddsPage = readFileSync(
-      path.join(process.cwd(), "app/odds/[sport]/page.tsx"),
+    const oddsBoard = readFileSync(
+      path.join(process.cwd(), "components/OddsCompareBoard.tsx"),
       "utf8",
     );
-    expect(oddsPage).toContain("getKeiLinesBoardHref");
-    expect(oddsPage).not.toMatch(/href=\{`\/pro\/kei-lines\/\$\{/);
-    expect(oddsPage).not.toContain("/pro/kei-lines/nfl");
+    expect(oddsBoard).toContain("getKeiLinesBoardHref");
+    expect(oddsBoard).not.toMatch(/href=\{`\/pro\/kei-lines\/\$\{/);
+    expect(oddsBoard).not.toContain("/pro/kei-lines/nfl");
   });
 
   it("redirects /pro/kei-lines/nfl away from the pipeline stub", () => {
