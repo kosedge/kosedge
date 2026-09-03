@@ -19,7 +19,12 @@
     "model": "hist-cal proxy project_game expected_total"
   },
   "honesty": {
-    "reconstruction": "Hist-cal proxy: prior-year cfb_ratings + league-avg roster/QB \u2014 not live 2026 roster/SP+ KEI. Understates live Over-drunk.",
+    "cos_locks": {
+      "no_play_unsat_on_ats_alone": "Do not unsat totals PLAY on ATS-vs-close alone. NFL totals hit ~61% ATS with ~35% CLV \u2014 CFB PLAY stays sat until movement-CLV or a second unused year. CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4%.",
+      "w0_2_first_window_no_w1_retune": "W0\u20132 is the first enable window only. Proxy \u03bb under-corrects live 2026 roster ratios \u2014 do not retune \u03bb on W1 street.",
+      "candidate_order_no_global_response_cut": "(b) primary matchup-inflation dampen on the sum; (a) level offset fallback; (c) mismatch-bucket offsets exploratory only. No global MATCHUP_RESPONSE cut."
+    },
+    "reconstruction": "Hist-cal proxy: prior-year cfb_ratings + league-avg roster/QB \u2014 not live 2026 roster/SP+ KEI. Understates live Over-drunk. Proxy \u03bb under-corrects live 2026 roster ratios \u2014 do not retune on W1.",
     "year_split": {
       "fit_contaminated": [
         2023,
@@ -28,14 +33,22 @@
       "unused_eval": [
         2025
       ],
-      "note": "Fit 2023\u20132024 only; eval unused 2025; do not retune from 2025; W0\u20132 first window \u2014 do not retune \u03bb on W1"
+      "note": "Fit 2023\u20132024 only; eval unused 2025; do not retune from 2025; W0\u20132 first enable window only \u2014 do not retune \u03bb on W1"
+    },
+    "candidates": {
+      "b_primary": "matchup-inflation \u03bb dampen on the sum (preserves spread)",
+      "a_fallback": "additive level offset",
+      "c_exploratory": "mismatch-bucket offsets \u2014 not fit in this harness",
+      "no_global_matchup_response_cut": true
     },
     "product": {
       "writes_pack": false,
       "edits_apply_cfb_kei": false,
       "enables_kei_total_divergence": false,
+      "product_flag_on": false,
       "unsats_totals_play": false,
-      "note": "Harness does not enable kei_total divergence or unsat PLAY. GREEN bars are design divergence gates only. PLAY unsat needs CLV or second unused year (ATS-only insufficient)."
+      "cfb_totals_play_eligible": false,
+      "note": "Harness does not enable kei_total divergence or unsat PLAY. If (b) GREEN on \u00a74 divergence bars \u2192 STOP and report; do NOT implement into apply_cfb_kei. CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4% (need movement-CLV or second unused year; NFL ~61% ATS / ~35% CLV). MAE cupcake rule reports peer vs cupcake split without auto-killing (b) or loosening the bar."
     },
     "clv": "CLV unavailable \u2014 labeled; not minted"
   },
@@ -86,9 +99,20 @@
   "coefficients": {
     "lambda_b_fit_w0_2": 0.542555,
     "level_offset_a_fit_w0_2": 0.515771,
-    "fit_n_w0_2": 253
+    "fit_n_w0_2": 253,
+    "c_mismatch_buckets": "exploratory_not_fit"
   },
   "margin_preserved_on_all_rows_b": true,
+  "stop_report_b_w0_2": {
+    "window": "W0-2",
+    "b_all_green": false,
+    "stop": false,
+    "implement_apply_cfb_kei": false,
+    "product_flag_on": false,
+    "pack_recut": false,
+    "play_flip": false,
+    "message": "(b) not all-GREEN on W0-2 \u2014 continue research; still no apply_cfb_kei edit, flag OFF, no pack recut, no PLAY flip."
+  },
   "windows": {
     "W0_2": {
       "week_max": 2,
@@ -138,6 +162,179 @@
           "clv_plus_rate": null,
           "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
         },
+        "peer_cupcake_split": {
+          "identity": {
+            "peer_lt_10": {
+              "n": 119,
+              "mean_kei_minus_close": 0.0947,
+              "mae": 5.0307,
+              "over_sign_bias": 0.0504,
+              "over_n": 62,
+              "under_n": 56,
+              "push_n": 1,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 5,
+              "mean_kei_minus_close": 3.08,
+              "mae": 5.532,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 2,
+              "mean_kei_minus_close": 3.015,
+              "mae": 3.015,
+              "over_sign_bias": 1.0,
+              "over_n": 2,
+              "under_n": 0,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "b_matchup_dampen": {
+            "peer_lt_10": {
+              "n": 119,
+              "mean_kei_minus_close": 1.1192,
+              "mae": 4.6628,
+              "over_sign_bias": 0.1429,
+              "over_n": 68,
+              "under_n": 51,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 5,
+              "mean_kei_minus_close": 1.8236,
+              "mae": 4.2072,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 2,
+              "mean_kei_minus_close": 2.6772,
+              "mae": 2.6772,
+              "over_sign_bias": 1.0,
+              "over_n": 2,
+              "under_n": 0,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "a_level_offset": {
+            "peer_lt_10": {
+              "n": 119,
+              "mean_kei_minus_close": 0.6105,
+              "mae": 5.0664,
+              "over_sign_bias": 0.0924,
+              "over_n": 65,
+              "under_n": 54,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 5,
+              "mean_kei_minus_close": 3.5958,
+              "mae": 5.8415,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 2,
+              "mean_kei_minus_close": 3.5308,
+              "mae": 3.5308,
+              "over_sign_bias": 1.0,
+              "over_n": 2,
+              "under_n": 0,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          }
+        },
+        "cupcake_mae_rule_b": {
+          "triggered": false,
+          "bias_killed": false,
+          "cupcake_mae_worse_than_0_3": false,
+          "cupcake_mae_delta": -1.3248,
+          "action": "no cupcake-MAE exception triggered",
+          "peer_identity": {
+            "n": 119,
+            "mean_kei_minus_close": 0.0947,
+            "mae": 5.0307,
+            "over_sign_bias": 0.0504,
+            "over_n": 62,
+            "under_n": 56,
+            "push_n": 1,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_candidate": {
+            "n": 119,
+            "mean_kei_minus_close": 1.1192,
+            "mae": 4.6628,
+            "over_sign_bias": 0.1429,
+            "over_n": 68,
+            "under_n": 51,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_identity": {
+            "n": 5,
+            "mean_kei_minus_close": 3.08,
+            "mae": 5.532,
+            "over_sign_bias": 0.6,
+            "over_n": 4,
+            "under_n": 1,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_candidate": {
+            "n": 5,
+            "mean_kei_minus_close": 1.8236,
+            "mae": 4.2072,
+            "over_sign_bias": 0.6,
+            "over_n": 4,
+            "under_n": 1,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        },
         "green_b_vs_identity": {
           "level_ok": false,
           "mae_ok": true,
@@ -148,7 +345,8 @@
             "mae_not_worse_by": 0.3,
             "mean_gap_not_gt": 2.0
           },
-          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+          "stop_do_not_implement_apply_cfb_kei": false,
+          "note": "GREEN = divergence research gate only. STOP and report \u2014 do NOT implement into apply_cfb_kei from this harness. Does NOT unsat totals PLAY: CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4% (need movement-CLV or a second unused year; NFL ~61% ATS / ~35% CLV)."
         },
         "green_a_vs_identity": {
           "level_ok": true,
@@ -160,7 +358,18 @@
             "mae_not_worse_by": 0.3,
             "mean_gap_not_gt": 2.0
           },
-          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+          "stop_do_not_implement_apply_cfb_kei": true,
+          "note": "GREEN = divergence research gate only. STOP and report \u2014 do NOT implement into apply_cfb_kei from this harness. Does NOT unsat totals PLAY: CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4% (need movement-CLV or a second unused year; NFL ~61% ATS / ~35% CLV)."
+        },
+        "stop_report_b": {
+          "window": "W0-2",
+          "b_all_green": false,
+          "stop": false,
+          "implement_apply_cfb_kei": false,
+          "product_flag_on": false,
+          "pack_recut": false,
+          "play_flip": false,
+          "message": "(b) not all-GREEN on W0-2 \u2014 continue research; still no apply_cfb_kei edit, flag OFF, no pack recut, no PLAY flip."
         }
       },
       "contaminated_2023_2024": {
@@ -196,6 +405,179 @@
           "push_n": 0,
           "clv_plus_rate": null,
           "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "peer_cupcake_split": {
+          "identity": {
+            "peer_lt_10": {
+              "n": 197,
+              "mean_kei_minus_close": -0.7392,
+              "mae": 5.7229,
+              "over_sign_bias": -0.0863,
+              "over_n": 90,
+              "under_n": 107,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 7,
+              "mean_kei_minus_close": 2.3786,
+              "mae": 3.97,
+              "over_sign_bias": 0.1429,
+              "over_n": 4,
+              "under_n": 3,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 4,
+              "mean_kei_minus_close": 1.0525,
+              "mae": 2.1075,
+              "over_sign_bias": 0.0,
+              "over_n": 2,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "b_matchup_dampen": {
+            "peer_lt_10": {
+              "n": 197,
+              "mean_kei_minus_close": 0.5098,
+              "mae": 5.4666,
+              "over_sign_bias": 0.0761,
+              "over_n": 106,
+              "under_n": 91,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 7,
+              "mean_kei_minus_close": 2.0916,
+              "mae": 3.015,
+              "over_sign_bias": 0.4286,
+              "over_n": 5,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 4,
+              "mean_kei_minus_close": 0.6268,
+              "mae": 1.2782,
+              "over_sign_bias": 0.5,
+              "over_n": 3,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "a_level_offset": {
+            "peer_lt_10": {
+              "n": 197,
+              "mean_kei_minus_close": -0.2234,
+              "mae": 5.6905,
+              "over_sign_bias": -0.0355,
+              "over_n": 95,
+              "under_n": 102,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 7,
+              "mean_kei_minus_close": 2.8944,
+              "mae": 4.1596,
+              "over_sign_bias": 0.4286,
+              "over_n": 5,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 4,
+              "mean_kei_minus_close": 1.5683,
+              "mae": 2.3104,
+              "over_sign_bias": 0.5,
+              "over_n": 3,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          }
+        },
+        "cupcake_mae_rule_b": {
+          "triggered": false,
+          "bias_killed": false,
+          "cupcake_mae_worse_than_0_3": false,
+          "cupcake_mae_delta": -0.955,
+          "action": "no cupcake-MAE exception triggered",
+          "peer_identity": {
+            "n": 197,
+            "mean_kei_minus_close": -0.7392,
+            "mae": 5.7229,
+            "over_sign_bias": -0.0863,
+            "over_n": 90,
+            "under_n": 107,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_candidate": {
+            "n": 197,
+            "mean_kei_minus_close": 0.5098,
+            "mae": 5.4666,
+            "over_sign_bias": 0.0761,
+            "over_n": 106,
+            "under_n": 91,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_identity": {
+            "n": 7,
+            "mean_kei_minus_close": 2.3786,
+            "mae": 3.97,
+            "over_sign_bias": 0.1429,
+            "over_n": 4,
+            "under_n": 3,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_candidate": {
+            "n": 7,
+            "mean_kei_minus_close": 2.0916,
+            "mae": 3.015,
+            "over_sign_bias": 0.4286,
+            "over_n": 5,
+            "under_n": 2,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
         }
       },
       "by_season": {
@@ -233,6 +615,179 @@
             "push_n": 0,
             "clv_plus_rate": null,
             "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_cupcake_split": {
+            "identity": {
+              "peer_lt_10": {
+                "n": 92,
+                "mean_kei_minus_close": -0.7392,
+                "mae": 5.9732,
+                "over_sign_bias": -0.1522,
+                "over_n": 39,
+                "under_n": 53,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 2,
+                "mean_kei_minus_close": -1.785,
+                "mae": 1.785,
+                "over_sign_bias": -1.0,
+                "over_n": 0,
+                "under_n": 2,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 1,
+                "mean_kei_minus_close": -0.11,
+                "mae": 0.11,
+                "over_sign_bias": -1.0,
+                "over_n": 0,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "b_matchup_dampen": {
+              "peer_lt_10": {
+                "n": 92,
+                "mean_kei_minus_close": 0.2058,
+                "mae": 5.8162,
+                "over_sign_bias": 0.0217,
+                "over_n": 47,
+                "under_n": 45,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 2,
+                "mean_kei_minus_close": -0.4225,
+                "mae": 1.5066,
+                "over_sign_bias": 0.0,
+                "over_n": 1,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 1,
+                "mean_kei_minus_close": 1.0841,
+                "mae": 1.0841,
+                "over_sign_bias": 1.0,
+                "over_n": 1,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "a_level_offset": {
+              "peer_lt_10": {
+                "n": 92,
+                "mean_kei_minus_close": -0.2234,
+                "mae": 5.906,
+                "over_sign_bias": -0.1087,
+                "over_n": 41,
+                "under_n": 51,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 2,
+                "mean_kei_minus_close": -1.2692,
+                "mae": 1.675,
+                "over_sign_bias": 0.0,
+                "over_n": 1,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 1,
+                "mean_kei_minus_close": 0.4058,
+                "mae": 0.4058,
+                "over_sign_bias": 1.0,
+                "over_n": 1,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            }
+          },
+          "cupcake_mae_rule_b": {
+            "triggered": false,
+            "bias_killed": false,
+            "cupcake_mae_worse_than_0_3": false,
+            "cupcake_mae_delta": -0.2784,
+            "action": "no cupcake-MAE exception triggered",
+            "peer_identity": {
+              "n": 92,
+              "mean_kei_minus_close": -0.7392,
+              "mae": 5.9732,
+              "over_sign_bias": -0.1522,
+              "over_n": 39,
+              "under_n": 53,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "peer_candidate": {
+              "n": 92,
+              "mean_kei_minus_close": 0.2058,
+              "mae": 5.8162,
+              "over_sign_bias": 0.0217,
+              "over_n": 47,
+              "under_n": 45,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_identity": {
+              "n": 2,
+              "mean_kei_minus_close": -1.785,
+              "mae": 1.785,
+              "over_sign_bias": -1.0,
+              "over_n": 0,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_candidate": {
+              "n": 2,
+              "mean_kei_minus_close": -0.4225,
+              "mae": 1.5066,
+              "over_sign_bias": 0.0,
+              "over_n": 1,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            }
           }
         },
         "2024": {
@@ -269,6 +824,179 @@
             "push_n": 0,
             "clv_plus_rate": null,
             "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_cupcake_split": {
+            "identity": {
+              "peer_lt_10": {
+                "n": 105,
+                "mean_kei_minus_close": -0.7392,
+                "mae": 5.5036,
+                "over_sign_bias": -0.0286,
+                "over_n": 51,
+                "under_n": 54,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 5,
+                "mean_kei_minus_close": 4.044,
+                "mae": 4.844,
+                "over_sign_bias": 0.6,
+                "over_n": 4,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 3,
+                "mean_kei_minus_close": 1.44,
+                "mae": 2.7733,
+                "over_sign_bias": 0.3333,
+                "over_n": 2,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "b_matchup_dampen": {
+              "peer_lt_10": {
+                "n": 105,
+                "mean_kei_minus_close": 0.7761,
+                "mae": 5.1603,
+                "over_sign_bias": 0.1238,
+                "over_n": 59,
+                "under_n": 46,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 5,
+                "mean_kei_minus_close": 3.0972,
+                "mae": 3.6184,
+                "over_sign_bias": 0.6,
+                "over_n": 4,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 3,
+                "mean_kei_minus_close": 0.4743,
+                "mae": 1.3429,
+                "over_sign_bias": 0.3333,
+                "over_n": 2,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "a_level_offset": {
+              "peer_lt_10": {
+                "n": 105,
+                "mean_kei_minus_close": -0.2234,
+                "mae": 5.5016,
+                "over_sign_bias": 0.0286,
+                "over_n": 54,
+                "under_n": 51,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 5,
+                "mean_kei_minus_close": 4.5598,
+                "mae": 5.1535,
+                "over_sign_bias": 0.6,
+                "over_n": 4,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 3,
+                "mean_kei_minus_close": 1.9558,
+                "mae": 2.9453,
+                "over_sign_bias": 0.3333,
+                "over_n": 2,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            }
+          },
+          "cupcake_mae_rule_b": {
+            "triggered": false,
+            "bias_killed": false,
+            "cupcake_mae_worse_than_0_3": false,
+            "cupcake_mae_delta": -1.2256,
+            "action": "no cupcake-MAE exception triggered",
+            "peer_identity": {
+              "n": 105,
+              "mean_kei_minus_close": -0.7392,
+              "mae": 5.5036,
+              "over_sign_bias": -0.0286,
+              "over_n": 51,
+              "under_n": 54,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "peer_candidate": {
+              "n": 105,
+              "mean_kei_minus_close": 0.7761,
+              "mae": 5.1603,
+              "over_sign_bias": 0.1238,
+              "over_n": 59,
+              "under_n": 46,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_identity": {
+              "n": 5,
+              "mean_kei_minus_close": 4.044,
+              "mae": 4.844,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_candidate": {
+              "n": 5,
+              "mean_kei_minus_close": 3.0972,
+              "mae": 3.6184,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            }
           }
         },
         "2025": {
@@ -305,6 +1033,179 @@
             "push_n": 0,
             "clv_plus_rate": null,
             "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_cupcake_split": {
+            "identity": {
+              "peer_lt_10": {
+                "n": 119,
+                "mean_kei_minus_close": 0.0947,
+                "mae": 5.0307,
+                "over_sign_bias": 0.0504,
+                "over_n": 62,
+                "under_n": 56,
+                "push_n": 1,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 5,
+                "mean_kei_minus_close": 3.08,
+                "mae": 5.532,
+                "over_sign_bias": 0.6,
+                "over_n": 4,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 2,
+                "mean_kei_minus_close": 3.015,
+                "mae": 3.015,
+                "over_sign_bias": 1.0,
+                "over_n": 2,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "b_matchup_dampen": {
+              "peer_lt_10": {
+                "n": 119,
+                "mean_kei_minus_close": 1.1192,
+                "mae": 4.6628,
+                "over_sign_bias": 0.1429,
+                "over_n": 68,
+                "under_n": 51,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 5,
+                "mean_kei_minus_close": 1.8236,
+                "mae": 4.2072,
+                "over_sign_bias": 0.6,
+                "over_n": 4,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 2,
+                "mean_kei_minus_close": 2.6772,
+                "mae": 2.6772,
+                "over_sign_bias": 1.0,
+                "over_n": 2,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "a_level_offset": {
+              "peer_lt_10": {
+                "n": 119,
+                "mean_kei_minus_close": 0.6105,
+                "mae": 5.0664,
+                "over_sign_bias": 0.0924,
+                "over_n": 65,
+                "under_n": 54,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 5,
+                "mean_kei_minus_close": 3.5958,
+                "mae": 5.8415,
+                "over_sign_bias": 0.6,
+                "over_n": 4,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 2,
+                "mean_kei_minus_close": 3.5308,
+                "mae": 3.5308,
+                "over_sign_bias": 1.0,
+                "over_n": 2,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            }
+          },
+          "cupcake_mae_rule_b": {
+            "triggered": false,
+            "bias_killed": false,
+            "cupcake_mae_worse_than_0_3": false,
+            "cupcake_mae_delta": -1.3248,
+            "action": "no cupcake-MAE exception triggered",
+            "peer_identity": {
+              "n": 119,
+              "mean_kei_minus_close": 0.0947,
+              "mae": 5.0307,
+              "over_sign_bias": 0.0504,
+              "over_n": 62,
+              "under_n": 56,
+              "push_n": 1,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "peer_candidate": {
+              "n": 119,
+              "mean_kei_minus_close": 1.1192,
+              "mae": 4.6628,
+              "over_sign_bias": 0.1429,
+              "over_n": 68,
+              "under_n": 51,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_identity": {
+              "n": 5,
+              "mean_kei_minus_close": 3.08,
+              "mae": 5.532,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_candidate": {
+              "n": 5,
+              "mean_kei_minus_close": 1.8236,
+              "mae": 4.2072,
+              "over_sign_bias": 0.6,
+              "over_n": 4,
+              "under_n": 1,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            }
           }
         }
       }
@@ -357,6 +1258,179 @@
           "clv_plus_rate": null,
           "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
         },
+        "peer_cupcake_split": {
+          "identity": {
+            "peer_lt_10": {
+              "n": 194,
+              "mean_kei_minus_close": -0.153,
+              "mae": 5.0066,
+              "over_sign_bias": 0.0258,
+              "over_n": 99,
+              "under_n": 94,
+              "push_n": 1,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 8,
+              "mean_kei_minus_close": 2.0787,
+              "mae": 4.5113,
+              "over_sign_bias": 0.5,
+              "over_n": 6,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 4,
+              "mean_kei_minus_close": 2.715,
+              "mae": 2.715,
+              "over_sign_bias": 1.0,
+              "over_n": 4,
+              "under_n": 0,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "b_matchup_dampen": {
+            "peer_lt_10": {
+              "n": 194,
+              "mean_kei_minus_close": 0.9264,
+              "mae": 4.5982,
+              "over_sign_bias": 0.1649,
+              "over_n": 113,
+              "under_n": 81,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 8,
+              "mean_kei_minus_close": 1.2938,
+              "mae": 3.0804,
+              "over_sign_bias": 0.5,
+              "over_n": 6,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 4,
+              "mean_kei_minus_close": 1.9436,
+              "mae": 1.9436,
+              "over_sign_bias": 1.0,
+              "over_n": 4,
+              "under_n": 0,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "a_level_offset": {
+            "peer_lt_10": {
+              "n": 194,
+              "mean_kei_minus_close": 0.3628,
+              "mae": 5.0306,
+              "over_sign_bias": 0.0722,
+              "over_n": 104,
+              "under_n": 90,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 8,
+              "mean_kei_minus_close": 2.5946,
+              "mae": 4.7692,
+              "over_sign_bias": 0.5,
+              "over_n": 6,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 4,
+              "mean_kei_minus_close": 3.2308,
+              "mae": 3.2308,
+              "over_sign_bias": 1.0,
+              "over_n": 4,
+              "under_n": 0,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          }
+        },
+        "cupcake_mae_rule_b": {
+          "triggered": false,
+          "bias_killed": false,
+          "cupcake_mae_worse_than_0_3": false,
+          "cupcake_mae_delta": -1.4309,
+          "action": "no cupcake-MAE exception triggered",
+          "peer_identity": {
+            "n": 194,
+            "mean_kei_minus_close": -0.153,
+            "mae": 5.0066,
+            "over_sign_bias": 0.0258,
+            "over_n": 99,
+            "under_n": 94,
+            "push_n": 1,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_candidate": {
+            "n": 194,
+            "mean_kei_minus_close": 0.9264,
+            "mae": 4.5982,
+            "over_sign_bias": 0.1649,
+            "over_n": 113,
+            "under_n": 81,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_identity": {
+            "n": 8,
+            "mean_kei_minus_close": 2.0787,
+            "mae": 4.5113,
+            "over_sign_bias": 0.5,
+            "over_n": 6,
+            "under_n": 2,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_candidate": {
+            "n": 8,
+            "mean_kei_minus_close": 1.2938,
+            "mae": 3.0804,
+            "over_sign_bias": 0.5,
+            "over_n": 6,
+            "under_n": 2,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        },
         "green_b_vs_identity": {
           "level_ok": true,
           "mae_ok": true,
@@ -367,7 +1441,8 @@
             "mae_not_worse_by": 0.3,
             "mean_gap_not_gt": 2.0
           },
-          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+          "stop_do_not_implement_apply_cfb_kei": true,
+          "note": "GREEN = divergence research gate only. STOP and report \u2014 do NOT implement into apply_cfb_kei from this harness. Does NOT unsat totals PLAY: CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4% (need movement-CLV or a second unused year; NFL ~61% ATS / ~35% CLV)."
         },
         "green_a_vs_identity": {
           "level_ok": true,
@@ -379,7 +1454,18 @@
             "mae_not_worse_by": 0.3,
             "mean_gap_not_gt": 2.0
           },
-          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+          "stop_do_not_implement_apply_cfb_kei": true,
+          "note": "GREEN = divergence research gate only. STOP and report \u2014 do NOT implement into apply_cfb_kei from this harness. Does NOT unsat totals PLAY: CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4% (need movement-CLV or a second unused year; NFL ~61% ATS / ~35% CLV)."
+        },
+        "stop_report_b": {
+          "window": "W0-4",
+          "b_all_green": true,
+          "stop": true,
+          "implement_apply_cfb_kei": false,
+          "product_flag_on": false,
+          "pack_recut": false,
+          "play_flip": false,
+          "message": "STOP: (b) GREEN on W0-4 divergence bars \u2014 report only; do NOT implement into apply_cfb_kei; flag OFF; no pack recut; no PLAY flip."
         }
       },
       "contaminated_2023_2024": {
@@ -415,6 +1501,179 @@
           "push_n": 0,
           "clv_plus_rate": null,
           "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "peer_cupcake_split": {
+          "identity": {
+            "peer_lt_10": {
+              "n": 375,
+              "mean_kei_minus_close": -0.6244,
+              "mae": 6.23,
+              "over_sign_bias": -0.0507,
+              "over_n": 178,
+              "under_n": 197,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 15,
+              "mean_kei_minus_close": 2.8673,
+              "mae": 5.5633,
+              "over_sign_bias": 0.0667,
+              "over_n": 8,
+              "under_n": 7,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 7,
+              "mean_kei_minus_close": -1.3671,
+              "mae": 3.1729,
+              "over_sign_bias": -0.4286,
+              "over_n": 2,
+              "under_n": 5,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "b_matchup_dampen": {
+            "peer_lt_10": {
+              "n": 375,
+              "mean_kei_minus_close": 0.5785,
+              "mae": 5.8493,
+              "over_sign_bias": 0.136,
+              "over_n": 213,
+              "under_n": 162,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 15,
+              "mean_kei_minus_close": 1.9548,
+              "mae": 5.0472,
+              "over_sign_bias": 0.0667,
+              "over_n": 8,
+              "under_n": 7,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 7,
+              "mean_kei_minus_close": -2.0952,
+              "mae": 3.1837,
+              "over_sign_bias": -0.1429,
+              "over_n": 3,
+              "under_n": 4,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          },
+          "a_level_offset": {
+            "peer_lt_10": {
+              "n": 375,
+              "mean_kei_minus_close": -0.1086,
+              "mae": 6.2138,
+              "over_sign_bias": -0.008,
+              "over_n": 186,
+              "under_n": 189,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_17": {
+              "n": 15,
+              "mean_kei_minus_close": 3.3831,
+              "mae": 5.6518,
+              "over_sign_bias": 0.2,
+              "over_n": 9,
+              "under_n": 6,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_ge_21": {
+              "n": 7,
+              "mean_kei_minus_close": -0.8513,
+              "mae": 3.0677,
+              "over_sign_bias": -0.1429,
+              "over_n": 3,
+              "under_n": 4,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "bucket_defs": {
+              "peer": "|model_spread| < 10.0",
+              "cupcake_primary": "|model_spread| >= 17.0",
+              "cupcake_alt": "|model_spread| >= 21"
+            }
+          }
+        },
+        "cupcake_mae_rule_b": {
+          "triggered": false,
+          "bias_killed": false,
+          "cupcake_mae_worse_than_0_3": false,
+          "cupcake_mae_delta": -0.5161,
+          "action": "no cupcake-MAE exception triggered",
+          "peer_identity": {
+            "n": 375,
+            "mean_kei_minus_close": -0.6244,
+            "mae": 6.23,
+            "over_sign_bias": -0.0507,
+            "over_n": 178,
+            "under_n": 197,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_candidate": {
+            "n": 375,
+            "mean_kei_minus_close": 0.5785,
+            "mae": 5.8493,
+            "over_sign_bias": 0.136,
+            "over_n": 213,
+            "under_n": 162,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_identity": {
+            "n": 15,
+            "mean_kei_minus_close": 2.8673,
+            "mae": 5.5633,
+            "over_sign_bias": 0.0667,
+            "over_n": 8,
+            "under_n": 7,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "cupcake_candidate": {
+            "n": 15,
+            "mean_kei_minus_close": 1.9548,
+            "mae": 5.0472,
+            "over_sign_bias": 0.0667,
+            "over_n": 8,
+            "under_n": 7,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
         }
       },
       "by_season": {
@@ -452,6 +1711,179 @@
             "push_n": 0,
             "clv_plus_rate": null,
             "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_cupcake_split": {
+            "identity": {
+              "peer_lt_10": {
+                "n": 185,
+                "mean_kei_minus_close": -0.4301,
+                "mae": 5.8665,
+                "over_sign_bias": -0.1351,
+                "over_n": 80,
+                "under_n": 105,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 8,
+                "mean_kei_minus_close": 4.1125,
+                "mae": 6.14,
+                "over_sign_bias": 0.0,
+                "over_n": 4,
+                "under_n": 4,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 2,
+                "mean_kei_minus_close": -1.89,
+                "mae": 1.89,
+                "over_sign_bias": -1.0,
+                "over_n": 0,
+                "under_n": 2,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "b_matchup_dampen": {
+              "peer_lt_10": {
+                "n": 185,
+                "mean_kei_minus_close": 0.6878,
+                "mae": 5.3547,
+                "over_sign_bias": 0.0811,
+                "over_n": 100,
+                "under_n": 85,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 8,
+                "mean_kei_minus_close": 2.8249,
+                "mae": 6.1066,
+                "over_sign_bias": 0.0,
+                "over_n": 4,
+                "under_n": 4,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 2,
+                "mean_kei_minus_close": -3.6631,
+                "mae": 4.7472,
+                "over_sign_bias": 0.0,
+                "over_n": 1,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "a_level_offset": {
+              "peer_lt_10": {
+                "n": 185,
+                "mean_kei_minus_close": 0.0857,
+                "mae": 5.8073,
+                "over_sign_bias": -0.0919,
+                "over_n": 84,
+                "under_n": 101,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 8,
+                "mean_kei_minus_close": 4.6283,
+                "mae": 6.2415,
+                "over_sign_bias": 0.25,
+                "over_n": 5,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 2,
+                "mean_kei_minus_close": -1.3742,
+                "mae": 1.78,
+                "over_sign_bias": 0.0,
+                "over_n": 1,
+                "under_n": 1,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            }
+          },
+          "cupcake_mae_rule_b": {
+            "triggered": false,
+            "bias_killed": false,
+            "cupcake_mae_worse_than_0_3": false,
+            "cupcake_mae_delta": -0.0334,
+            "action": "no cupcake-MAE exception triggered",
+            "peer_identity": {
+              "n": 185,
+              "mean_kei_minus_close": -0.4301,
+              "mae": 5.8665,
+              "over_sign_bias": -0.1351,
+              "over_n": 80,
+              "under_n": 105,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "peer_candidate": {
+              "n": 185,
+              "mean_kei_minus_close": 0.6878,
+              "mae": 5.3547,
+              "over_sign_bias": 0.0811,
+              "over_n": 100,
+              "under_n": 85,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_identity": {
+              "n": 8,
+              "mean_kei_minus_close": 4.1125,
+              "mae": 6.14,
+              "over_sign_bias": 0.0,
+              "over_n": 4,
+              "under_n": 4,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_candidate": {
+              "n": 8,
+              "mean_kei_minus_close": 2.8249,
+              "mae": 6.1066,
+              "over_sign_bias": 0.0,
+              "over_n": 4,
+              "under_n": 4,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            }
           }
         },
         "2024": {
@@ -488,6 +1920,179 @@
             "push_n": 0,
             "clv_plus_rate": null,
             "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_cupcake_split": {
+            "identity": {
+              "peer_lt_10": {
+                "n": 190,
+                "mean_kei_minus_close": -0.8135,
+                "mae": 6.5838,
+                "over_sign_bias": 0.0316,
+                "over_n": 98,
+                "under_n": 92,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 7,
+                "mean_kei_minus_close": 1.4443,
+                "mae": 4.9043,
+                "over_sign_bias": 0.1429,
+                "over_n": 4,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 5,
+                "mean_kei_minus_close": -1.158,
+                "mae": 3.686,
+                "over_sign_bias": -0.2,
+                "over_n": 2,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "b_matchup_dampen": {
+              "peer_lt_10": {
+                "n": 190,
+                "mean_kei_minus_close": 0.472,
+                "mae": 6.3308,
+                "over_sign_bias": 0.1895,
+                "over_n": 113,
+                "under_n": 77,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 7,
+                "mean_kei_minus_close": 0.9604,
+                "mae": 3.8364,
+                "over_sign_bias": 0.1429,
+                "over_n": 4,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 5,
+                "mean_kei_minus_close": -1.468,
+                "mae": 2.5584,
+                "over_sign_bias": -0.2,
+                "over_n": 2,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "a_level_offset": {
+              "peer_lt_10": {
+                "n": 190,
+                "mean_kei_minus_close": -0.2977,
+                "mae": 6.6097,
+                "over_sign_bias": 0.0737,
+                "over_n": 102,
+                "under_n": 88,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 7,
+                "mean_kei_minus_close": 1.9601,
+                "mae": 4.978,
+                "over_sign_bias": 0.1429,
+                "over_n": 4,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 5,
+                "mean_kei_minus_close": -0.6422,
+                "mae": 3.5828,
+                "over_sign_bias": -0.2,
+                "over_n": 2,
+                "under_n": 3,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            }
+          },
+          "cupcake_mae_rule_b": {
+            "triggered": false,
+            "bias_killed": false,
+            "cupcake_mae_worse_than_0_3": false,
+            "cupcake_mae_delta": -1.0679,
+            "action": "no cupcake-MAE exception triggered",
+            "peer_identity": {
+              "n": 190,
+              "mean_kei_minus_close": -0.8135,
+              "mae": 6.5838,
+              "over_sign_bias": 0.0316,
+              "over_n": 98,
+              "under_n": 92,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "peer_candidate": {
+              "n": 190,
+              "mean_kei_minus_close": 0.472,
+              "mae": 6.3308,
+              "over_sign_bias": 0.1895,
+              "over_n": 113,
+              "under_n": 77,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_identity": {
+              "n": 7,
+              "mean_kei_minus_close": 1.4443,
+              "mae": 4.9043,
+              "over_sign_bias": 0.1429,
+              "over_n": 4,
+              "under_n": 3,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_candidate": {
+              "n": 7,
+              "mean_kei_minus_close": 0.9604,
+              "mae": 3.8364,
+              "over_sign_bias": 0.1429,
+              "over_n": 4,
+              "under_n": 3,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            }
           }
         },
         "2025": {
@@ -524,6 +2129,179 @@
             "push_n": 0,
             "clv_plus_rate": null,
             "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "peer_cupcake_split": {
+            "identity": {
+              "peer_lt_10": {
+                "n": 194,
+                "mean_kei_minus_close": -0.153,
+                "mae": 5.0066,
+                "over_sign_bias": 0.0258,
+                "over_n": 99,
+                "under_n": 94,
+                "push_n": 1,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 8,
+                "mean_kei_minus_close": 2.0787,
+                "mae": 4.5113,
+                "over_sign_bias": 0.5,
+                "over_n": 6,
+                "under_n": 2,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 4,
+                "mean_kei_minus_close": 2.715,
+                "mae": 2.715,
+                "over_sign_bias": 1.0,
+                "over_n": 4,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "b_matchup_dampen": {
+              "peer_lt_10": {
+                "n": 194,
+                "mean_kei_minus_close": 0.9264,
+                "mae": 4.5982,
+                "over_sign_bias": 0.1649,
+                "over_n": 113,
+                "under_n": 81,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 8,
+                "mean_kei_minus_close": 1.2938,
+                "mae": 3.0804,
+                "over_sign_bias": 0.5,
+                "over_n": 6,
+                "under_n": 2,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 4,
+                "mean_kei_minus_close": 1.9436,
+                "mae": 1.9436,
+                "over_sign_bias": 1.0,
+                "over_n": 4,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            },
+            "a_level_offset": {
+              "peer_lt_10": {
+                "n": 194,
+                "mean_kei_minus_close": 0.3628,
+                "mae": 5.0306,
+                "over_sign_bias": 0.0722,
+                "over_n": 104,
+                "under_n": 90,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_17": {
+                "n": 8,
+                "mean_kei_minus_close": 2.5946,
+                "mae": 4.7692,
+                "over_sign_bias": 0.5,
+                "over_n": 6,
+                "under_n": 2,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "cupcake_ge_21": {
+                "n": 4,
+                "mean_kei_minus_close": 3.2308,
+                "mae": 3.2308,
+                "over_sign_bias": 1.0,
+                "over_n": 4,
+                "under_n": 0,
+                "push_n": 0,
+                "clv_plus_rate": null,
+                "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+              },
+              "bucket_defs": {
+                "peer": "|model_spread| < 10.0",
+                "cupcake_primary": "|model_spread| >= 17.0",
+                "cupcake_alt": "|model_spread| >= 21"
+              }
+            }
+          },
+          "cupcake_mae_rule_b": {
+            "triggered": false,
+            "bias_killed": false,
+            "cupcake_mae_worse_than_0_3": false,
+            "cupcake_mae_delta": -1.4309,
+            "action": "no cupcake-MAE exception triggered",
+            "peer_identity": {
+              "n": 194,
+              "mean_kei_minus_close": -0.153,
+              "mae": 5.0066,
+              "over_sign_bias": 0.0258,
+              "over_n": 99,
+              "under_n": 94,
+              "push_n": 1,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "peer_candidate": {
+              "n": 194,
+              "mean_kei_minus_close": 0.9264,
+              "mae": 4.5982,
+              "over_sign_bias": 0.1649,
+              "over_n": 113,
+              "under_n": 81,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_identity": {
+              "n": 8,
+              "mean_kei_minus_close": 2.0787,
+              "mae": 4.5113,
+              "over_sign_bias": 0.5,
+              "over_n": 6,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            },
+            "cupcake_candidate": {
+              "n": 8,
+              "mean_kei_minus_close": 1.2938,
+              "mae": 3.0804,
+              "over_sign_bias": 0.5,
+              "over_n": 6,
+              "under_n": 2,
+              "push_n": 0,
+              "clv_plus_rate": null,
+              "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+            }
           }
         }
       }

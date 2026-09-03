@@ -155,6 +155,7 @@ def test_summarize_and_green_bars() -> None:
     green = green_bars_vs_identity(candidate=cand, identity=ident)
     assert green["all_green"] is True
     assert green["level_ok"] is True
+    assert green["stop_do_not_implement_apply_cfb_kei"] is True
 
     still_hot = summarize_kei_vs_close(
         [{"kei_total": 55.0, "close_total": 50.0}, {"kei_total": 54.0, "close_total": 50.0}]
@@ -162,3 +163,72 @@ def test_summarize_and_green_bars() -> None:
     red = green_bars_vs_identity(candidate=still_hot, identity=ident)
     assert red["direction_ok"] is False or red["level_ok"] is False
     assert red["all_green"] is False
+    assert red["stop_do_not_implement_apply_cfb_kei"] is False
+
+
+def test_stop_report_if_b_green() -> None:
+    from src.services.cfb_season_engine.totals_guard_holdout import stop_report_if_b_green
+
+    stop = stop_report_if_b_green(green_b={"all_green": True}, window="W0-2")
+    assert stop["stop"] is True
+    assert stop["implement_apply_cfb_kei"] is False
+    assert stop["product_flag_on"] is False
+    assert stop["play_flip"] is False
+    assert "STOP" in stop["message"]
+
+    go = stop_report_if_b_green(green_b={"all_green": False}, window="W0-2")
+    assert go["stop"] is False
+    assert go["implement_apply_cfb_kei"] is False
+
+
+def test_mismatch_bucket_and_cupcake_mae_rule() -> None:
+    from src.services.cfb_season_engine.totals_guard_holdout import (
+        cupcake_mae_rule,
+        mismatch_bucket,
+        peer_cupcake_mae_split,
+    )
+
+    assert mismatch_bucket(5.0) == "peer"
+    assert mismatch_bucket(12.0) == "mod"
+    assert mismatch_bucket(15.0) == "big"
+    assert mismatch_bucket(18.0) == "cupcake"
+    assert mismatch_bucket(-22.0) == "cupcake"
+
+    rows = [
+        {"model_spread_home": -5.0, "kei_total": 60.0, "close_total": 50.0},  # peer hot
+        {"model_spread_home": -6.0, "kei_total": 58.0, "close_total": 52.0},
+        {"model_spread_home": -20.0, "kei_total": 70.0, "close_total": 52.0},  # cupcake
+        {"model_spread_home": -19.0, "kei_total": 68.0, "close_total": 50.0},
+    ]
+    cand = [
+        {"model_spread_home": -5.0, "kei_total": 51.0, "close_total": 50.0},
+        {"model_spread_home": -6.0, "kei_total": 52.0, "close_total": 52.0},
+        # cupcake MAE worse: gaps 10 and 12 vs identity 18 and 18 — wait we need MAE worse
+        {"model_spread_home": -20.0, "kei_total": 40.0, "close_total": 52.0},  # |gap|=12
+        {"model_spread_home": -19.0, "kei_total": 35.0, "close_total": 50.0},  # |gap|=15
+    ]
+    # identity cupcake MAE = (18+18)/2 = 18; cand = (12+15)/2 = 13.5 — better, not worse
+    # Make cand cupcake MAE worse: overshoot under
+    cand_worse = [
+        {"model_spread_home": -5.0, "kei_total": 50.5, "close_total": 50.0},
+        {"model_spread_home": -6.0, "kei_total": 52.0, "close_total": 52.0},
+        {"model_spread_home": -20.0, "kei_total": 30.0, "close_total": 52.0},  # 22
+        {"model_spread_home": -19.0, "kei_total": 28.0, "close_total": 50.0},  # 22
+    ]
+    i_split = peer_cupcake_mae_split(rows, kei_key="kei_total")
+    c_split = peer_cupcake_mae_split(cand_worse, kei_key="kei_total")
+    i_overall = summarize_kei_vs_close(rows)
+    c_overall = summarize_kei_vs_close(cand_worse)
+    rule = cupcake_mae_rule(
+        identity_overall=i_overall,
+        candidate_overall=c_overall,
+        identity_split=i_split,
+        candidate_split=c_split,
+    )
+    assert rule["bias_killed"] is True
+    assert rule["cupcake_mae_worse_than_0_3"] is True
+    assert rule["triggered"] is True
+    assert "auto-kill" in rule["action"].lower() or "REPORT" in rule["action"]
+    # Must not loosen bar / must report split payloads
+    assert rule["peer_identity"]["n"] == 2
+    assert rule["cupcake_candidate"]["mae"] > rule["cupcake_identity"]["mae"] + 0.3

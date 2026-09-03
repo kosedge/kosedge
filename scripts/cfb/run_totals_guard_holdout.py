@@ -39,6 +39,7 @@ from src.services.cfb_season_engine.historical_calibration import (  # noqa: E40
 )
 from src.services.cfb_season_engine.team_projection import project_game  # noqa: E402
 from src.services.cfb_season_engine.totals_guard_holdout import (  # noqa: E402
+    COS_LOCKS,
     FIT_SEASONS,
     OPTIONAL_WEEK_MAX,
     PRIMARY_WEEK_MAX,
@@ -46,12 +47,16 @@ from src.services.cfb_season_engine.totals_guard_holdout import (  # noqa: E402
     apply_level_offset,
     apply_matchup_inflation_dampen,
     assert_no_eval_leakage_in_fit,
+    cupcake_mae_rule,
     filter_eval_rows,
     filter_fit_rows,
     fit_lambda_ols,
     fit_level_offset,
     green_bars_vs_identity,
     matchup_inflation_on_sum,
+    mismatch_bucket,
+    peer_cupcake_mae_split,
+    stop_report_if_b_green,
     summarize_kei_vs_close,
     year_label,
 )
@@ -145,6 +150,8 @@ def _project_totals_rows(
                 "total_neutral": round(total_neutral, 4),
                 "matchup_inflation": round(inflation, 4),
                 "st_nudge": st_nudge,
+                "mismatch_bucket": mismatch_bucket(model_spread),
+                "abs_model_spread": round(abs(model_spread), 4),
             }
         )
 
@@ -212,13 +219,27 @@ def _window_block(
     ]
 
     def _metrics(subset: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
+        ident = summarize_kei_vs_close(subset, kei_key="kei_total_identity")
+        b = summarize_kei_vs_close(subset, kei_key="kei_total_b_dampen")
+        a = summarize_kei_vs_close(subset, kei_key="kei_total_a_offset")
+        ident_split = peer_cupcake_mae_split(subset, kei_key="kei_total_identity")
+        b_split = peer_cupcake_mae_split(subset, kei_key="kei_total_b_dampen")
         return {
-            "identity": summarize_kei_vs_close(subset, kei_key="kei_total_identity"),
-            "b_matchup_dampen": summarize_kei_vs_close(
-                subset, kei_key="kei_total_b_dampen"
-            ),
-            "a_level_offset": summarize_kei_vs_close(
-                subset, kei_key="kei_total_a_offset"
+            "identity": ident,
+            "b_matchup_dampen": b,
+            "a_level_offset": a,
+            "peer_cupcake_split": {
+                "identity": ident_split,
+                "b_matchup_dampen": b_split,
+                "a_level_offset": peer_cupcake_mae_split(
+                    subset, kei_key="kei_total_a_offset"
+                ),
+            },
+            "cupcake_mae_rule_b": cupcake_mae_rule(
+                identity_overall=ident,
+                candidate_overall=b,
+                identity_split=ident_split,
+                candidate_split=b_split,
             ),
         }
 
@@ -230,6 +251,9 @@ def _window_block(
     green_a = green_bars_vs_identity(
         candidate=unused_m["a_level_offset"],
         identity=unused_m["identity"],
+    )
+    stop_b = stop_report_if_b_green(
+        green_b=green_b, window=f"W0-{week_max}"
     )
     return {
         "week_max": week_max,
@@ -246,6 +270,7 @@ def _window_block(
             **unused_m,
             "green_b_vs_identity": green_b,
             "green_a_vs_identity": green_a,
+            "stop_report_b": stop_b,
         },
         "contaminated_2023_2024": _metrics(contaminated),
         "by_season": {
@@ -271,6 +296,12 @@ def _fmt_row(label: str, m: Mapping[str, Any]) -> str:
     )
 
 
+def _fmt_split_row(label: str, m: Mapping[str, Any]) -> str:
+    return (
+        f"| {label} | {m.get('n')} | {m.get('mean_kei_minus_close')} | {m.get('mae')} |"
+    )
+
+
 def _render_md(report: Mapping[str, Any], out_path: Path) -> None:
     w02 = report["windows"]["W0_2"]
     w04 = report["windows"]["W0_4"]
@@ -278,6 +309,10 @@ def _render_md(report: Mapping[str, Any], out_path: Path) -> None:
     contam = w02["contaminated_2023_2024"]
     lam = report["coefficients"]["lambda_b_fit_w0_2"]
     offset = report["coefficients"]["level_offset_a_fit_w0_2"]
+    stop_b = unused.get("stop_report_b") or {}
+    cupcake_rule = unused.get("cupcake_mae_rule_b") or {}
+    split_i = (unused.get("peer_cupcake_split") or {}).get("identity") or {}
+    split_b = (unused.get("peer_cupcake_split") or {}).get("b_matchup_dampen") or {}
     lines = [
         f"# CFB totals-guard unused holdout ({report['stamp']})",
         "",
@@ -287,32 +322,50 @@ def _render_md(report: Mapping[str, Any], out_path: Path) -> None:
         "**Design SoT:** `docs/CFB_KEI_CALIBRATOR_DESIGN.md` (Task 5; may land via PR 441)",
         "**Spine:** `scripts/cfb/run_spread_tag_close_holdout.py` · "
         "`data/ops/cfb-spread-tag-close-holdout-20260903.md`",
-        "**Product change:** none (read-only harness). No `apply_cfb_kei` edit, no pack remat,",
-        "no `kei_total` divergence enabled, no PLAY unsat.",
+        "**Product change:** none (read-only harness). Flag **OFF**. No `apply_cfb_kei` edit,",
+        "no pack remat, no `kei_total` divergence enabled, no PLAY flip.",
+        "",
+        "## CoS locks (signed)",
+        "",
+        "1. **No PLAY unsat on ATS-vs-close alone.** NFL totals hit ~61% ATS with ~35% CLV — "
+        "CFB PLAY stays sat until movement-CLV or a second unused year. "
+        "`CFB_TOTALS_PLAY_ELIGIBLE` stays **false** even if unused ATS clears 52.4%.",
+        "2. **W0–2 is the first enable window only.** Proxy λ under-corrects live 2026 roster "
+        "ratios — do **not** retune λ on W1 street.",
+        "3. **(b) primary**, **(a) fallback**, **(c) exploratory** (mismatch-bucket offsets; "
+        "not fit here). **No global `MATCHUP_RESPONSE` cut.**",
         "",
         "## Honesty",
         "",
         "- Join = hist-cal proxy model totals + SDV close (same honesty as spread Tag holdout).",
         "- Fit **2023–2024** only; eval **unused 2025**. Do **not** retune λ / offset from 2025.",
-        "- W0–2 is the first GREEN window — do **not** retune λ on live W1 street.",
         "- CLV **unavailable** (close-only SDV). Labeled; not minted.",
-        "- Proxy KEI understates live 2026 Over-drunk (league-avg roster/QB). Unused GREEN on",
-        "  proxy is a necessary gate, not a claim live W1 will match.",
-        "- This harness does **not** enable `kei_total` divergence or unsat PLAY.",
-        "- GREEN bars below are design §4 divergence gates only. PLAY unsat needs CLV or a",
-        "  second unused year (ATS-only vs close is insufficient).",
+        "- Proxy KEI understates live 2026 Over-drunk (league-avg roster/QB).",
+        "- If (b) GREEN on §4 divergence bars → **STOP and report** — do **not** implement "
+        "into `apply_cfb_kei`.",
+        "- MAE cupcake rule: if (b) kills Over bias but cupcake MAE worsens >0.3 vs identity → "
+        "report peer vs cupcake split; do **not** auto-kill (b); do **not** silently loosen the bar.",
         f"- Mapped games projected: **{report['n_games_projected']}**. "
         f"Margin preserved under (b) even-split on all rows: "
         f"**{report['margin_preserved_on_all_rows_b']}**.",
+        "",
+        "## STOP report — candidate (b)",
+        "",
+        f"- **b_all_green (W0–2):** `{stop_b.get('b_all_green')}`",
+        f"- **stop:** `{stop_b.get('stop')}`",
+        f"- **implement_apply_cfb_kei:** `{stop_b.get('implement_apply_cfb_kei')}` "
+        "(always false from this harness)",
+        f"- **message:** {stop_b.get('message')}",
         "",
         "## Coefficients (locked from fit 2023–2024 W0–2)",
         "",
         f"| Candidate | Coefficient | fit n |",
         f"| --- | ---: | ---: |",
-        f"| (b) λ matchup-inflation dampen | {lam} | {report['coefficients']['fit_n_w0_2']} |",
-        f"| (a) level offset | {offset} | {report['coefficients']['fit_n_w0_2']} |",
+        f"| (b) λ matchup-inflation dampen (**primary**) | {lam} | {report['coefficients']['fit_n_w0_2']} |",
+        f"| (a) level offset (**fallback**) | {offset} | {report['coefficients']['fit_n_w0_2']} |",
+        f"| (c) mismatch-bucket offsets | exploratory only — **not fit** | — |",
         "",
-        "W0–4 tables reuse these locked coefficients (no retune on the wider window).",
+        "W0–4 tables reuse these locked coefficients (no retune on the wider window / W1).",
         "",
         "## Results — unused 2025 W0–2 (PRIMARY)",
         "",
@@ -338,6 +391,30 @@ def _render_md(report: Mapping[str, Any], out_path: Path) -> None:
             f"({unused['identity']['mean_kei_minus_close']}). Live 2026 roster path is hotter; "
             "do not ship divergence from this proxy table alone.",
             "",
+            "### Peer vs cupcake MAE split (unused 2025 W0–2)",
+            "",
+            "| Slice | n | mean(KEI−close) | MAE |",
+            "| --- | ---: | ---: | ---: |",
+            _fmt_split_row(
+                "peer (|s|<10) · identity",
+                split_i.get("peer_lt_10") or {},
+            ),
+            _fmt_split_row(
+                "peer (|s|<10) · (b)",
+                split_b.get("peer_lt_10") or {},
+            ),
+            _fmt_split_row(
+                "cupcake (|s|≥17) · identity",
+                split_i.get("cupcake_ge_17") or {},
+            ),
+            _fmt_split_row(
+                "cupcake (|s|≥17) · (b)",
+                split_b.get("cupcake_ge_17") or {},
+            ),
+            "",
+            f"**Cupcake MAE rule triggered:** `{cupcake_rule.get('triggered')}` — "
+            f"{cupcake_rule.get('action')}",
+            "",
             "## Results — contaminated 2023–2024 W0–2 (fit / confirmatory)",
             "",
             "| Path | n | mean(KEI−close) | MAE | Over-sign bias | CLV+ |",
@@ -356,7 +433,7 @@ def _render_md(report: Mapping[str, Any], out_path: Path) -> None:
             "",
             f"W0–4 GREEN (b): `{w04['unused_2025']['green_b_vs_identity']['all_green']}` · "
             f"(a): `{w04['unused_2025']['green_a_vs_identity']['all_green']}` "
-            "(still not a PLAY unlock; coefficients not retuned).",
+            "(still not a PLAY unlock; coefficients not retuned; flag OFF).",
             "",
             "## Reproduce",
             "",
@@ -370,8 +447,9 @@ def _render_md(report: Mapping[str, Any], out_path: Path) -> None:
             "",
             "## CoS one-liner",
             "",
-            "**Harness only: identity vs (b)/(a) on unused 2025 W0–2; coefficients locked on "
-            "2023–24; no product KEI path change; PLAY stays sat until CLV/second-year bar.**",
+            "**Harness only: identity vs (b)/(a) on unused 2025 W0–2; λ locked on 2023–24; "
+            "flag OFF; if (b) GREEN → STOP/report (no apply_cfb_kei); PLAY stays sat until "
+            "CLV/second year; no W1 λ retune; no global MATCHUP_RESPONSE cut.**",
             "",
         ]
     )
@@ -487,27 +565,40 @@ def main() -> int:
             "model": "hist-cal proxy project_game expected_total",
         },
         "honesty": {
+            "cos_locks": COS_LOCKS,
             "reconstruction": (
                 "Hist-cal proxy: prior-year cfb_ratings + league-avg roster/QB — "
-                "not live 2026 roster/SP+ KEI. Understates live Over-drunk."
+                "not live 2026 roster/SP+ KEI. Understates live Over-drunk. "
+                "Proxy λ under-corrects live 2026 roster ratios — do not retune on W1."
             ),
             "year_split": {
                 "fit_contaminated": sorted(FIT_SEASONS),
                 "unused_eval": sorted(UNUSED_EVAL_SEASONS),
                 "note": (
                     "Fit 2023–2024 only; eval unused 2025; do not retune from 2025; "
-                    "W0–2 first window — do not retune λ on W1"
+                    "W0–2 first enable window only — do not retune λ on W1"
                 ),
+            },
+            "candidates": {
+                "b_primary": "matchup-inflation λ dampen on the sum (preserves spread)",
+                "a_fallback": "additive level offset",
+                "c_exploratory": "mismatch-bucket offsets — not fit in this harness",
+                "no_global_matchup_response_cut": True,
             },
             "product": {
                 "writes_pack": False,
                 "edits_apply_cfb_kei": False,
                 "enables_kei_total_divergence": False,
+                "product_flag_on": False,
                 "unsats_totals_play": False,
+                "cfb_totals_play_eligible": False,
                 "note": (
                     "Harness does not enable kei_total divergence or unsat PLAY. "
-                    "GREEN bars are design divergence gates only. PLAY unsat needs "
-                    "CLV or second unused year (ATS-only insufficient)."
+                    "If (b) GREEN on §4 divergence bars → STOP and report; do NOT "
+                    "implement into apply_cfb_kei. CFB_TOTALS_PLAY_ELIGIBLE stays false "
+                    "even if unused ATS clears 52.4% (need movement-CLV or second unused "
+                    "year; NFL ~61% ATS / ~35% CLV). MAE cupcake rule reports peer vs "
+                    "cupcake split without auto-killing (b) or loosening the bar."
                 ),
             },
             "clv": "CLV unavailable — labeled; not minted",
@@ -520,8 +611,10 @@ def main() -> int:
             "lambda_b_fit_w0_2": round(lam, 6),
             "level_offset_a_fit_w0_2": round(offset, 6),
             "fit_n_w0_2": len(fit_primary),
+            "c_mismatch_buckets": "exploratory_not_fit",
         },
         "margin_preserved_on_all_rows_b": margin_ok,
+        "stop_report_b_w0_2": windows["W0_2"]["unused_2025"]["stop_report_b"],
         "windows": windows,
     }
 

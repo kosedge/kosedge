@@ -25,8 +25,29 @@ GREEN_MAE_WORSE_THAN_IDENTITY = 0.3
 GREEN_OVER_DRUNK_MEAN = 2.0  # mean gap must not stay > +2
 
 # Primary eval window mirrors spread bias-guard early weeks.
-PRIMARY_WEEK_MAX = 2  # W0–2 inclusive
+PRIMARY_WEEK_MAX = 2  # W0–2 inclusive — FIRST enable window only
 OPTIONAL_WEEK_MAX = 4  # W0–4 confirmatory table
+
+# Mismatch buckets (audit CFB_TOTALS_HOT_AUDIT.md): peer vs cupcake MAE split.
+PEER_ABS_SPREAD_LT = 10.0
+CUPCAKE_ABS_SPREAD_GE = 17.0  # loud cupcake band (|s|≥17); ≥21 also reported
+
+# CoS locks (harness honesty — not product flips).
+COS_LOCKS = {
+    "no_play_unsat_on_ats_alone": (
+        "Do not unsat totals PLAY on ATS-vs-close alone. NFL totals hit ~61% ATS "
+        "with ~35% CLV — CFB PLAY stays sat until movement-CLV or a second unused "
+        "year. CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4%."
+    ),
+    "w0_2_first_window_no_w1_retune": (
+        "W0–2 is the first enable window only. Proxy λ under-corrects live 2026 "
+        "roster ratios — do not retune λ on W1 street."
+    ),
+    "candidate_order_no_global_response_cut": (
+        "(b) primary matchup-inflation dampen on the sum; (a) level offset fallback; "
+        "(c) mismatch-bucket offsets exploratory only. No global MATCHUP_RESPONSE cut."
+    ),
+}
 
 
 def year_label(season: int) -> str:
@@ -252,6 +273,111 @@ def summarize_kei_vs_close(
     }
 
 
+def mismatch_bucket(abs_model_spread: float) -> str:
+    """Peer / mod / big / cupcake from |model_spread| (audit buckets)."""
+    a = abs(float(abs_model_spread))
+    if a < PEER_ABS_SPREAD_LT:
+        return "peer"
+    if a < 14.0:
+        return "mod"
+    if a < CUPCAKE_ABS_SPREAD_GE:
+        return "big"
+    return "cupcake"
+
+
+def peer_cupcake_mae_split(
+    rows: Sequence[Mapping[str, Any]],
+    *,
+    kei_key: str,
+    close_key: str = "close_total",
+    spread_key: str = "model_spread_home",
+) -> Dict[str, Any]:
+    """MAE / mean-gap split: peer (|s|<10) vs cupcake (|s|≥17)."""
+    peer = [
+        r
+        for r in rows
+        if abs(float(r[spread_key])) < PEER_ABS_SPREAD_LT
+    ]
+    cupcake = [
+        r
+        for r in rows
+        if abs(float(r[spread_key])) >= CUPCAKE_ABS_SPREAD_GE
+    ]
+    cupcake_21 = [
+        r
+        for r in rows
+        if abs(float(r[spread_key])) >= 21.0
+    ]
+    return {
+        "peer_lt_10": summarize_kei_vs_close(peer, kei_key=kei_key, close_key=close_key),
+        "cupcake_ge_17": summarize_kei_vs_close(
+            cupcake, kei_key=kei_key, close_key=close_key
+        ),
+        "cupcake_ge_21": summarize_kei_vs_close(
+            cupcake_21, kei_key=kei_key, close_key=close_key
+        ),
+        "bucket_defs": {
+            "peer": f"|model_spread| < {PEER_ABS_SPREAD_LT}",
+            "cupcake_primary": f"|model_spread| >= {CUPCAKE_ABS_SPREAD_GE}",
+            "cupcake_alt": "|model_spread| >= 21",
+        },
+    }
+
+
+def cupcake_mae_rule(
+    *,
+    identity_overall: Mapping[str, Any],
+    candidate_overall: Mapping[str, Any],
+    identity_split: Mapping[str, Any],
+    candidate_split: Mapping[str, Any],
+) -> Dict[str, Any]:
+    """If (b) kills Over bias but cupcake MAE worsens >0.3: report split; do not auto-kill.
+
+    Does not loosen the overall MAE GREEN bar. Does not reject (b) solely on cupcakes.
+    """
+    i_mean = identity_overall.get("mean_kei_minus_close")
+    c_mean = candidate_overall.get("mean_kei_minus_close")
+    i_cup = (identity_split.get("cupcake_ge_17") or {}).get("mae")
+    c_cup = (candidate_split.get("cupcake_ge_17") or {}).get("mae")
+    bias_killed = False
+    if i_mean is not None and c_mean is not None:
+        # "Kills the +8-ish bias": candidate mean gap much closer to 0 / not Over-drunk.
+        bias_killed = (
+            float(i_mean) > GREEN_OVER_DRUNK_MEAN
+            and float(c_mean) <= GREEN_OVER_DRUNK_MEAN
+        ) or (
+            float(i_mean) > GREEN_ABS_MEAN_GAP
+            and abs(float(c_mean)) <= GREEN_ABS_MEAN_GAP
+        ) or (
+            float(i_mean) - float(c_mean) >= 4.0  # large Over haircut vs identity
+            and float(c_mean) <= GREEN_OVER_DRUNK_MEAN
+        )
+    cupcake_mae_worse = None
+    cupcake_mae_delta = None
+    if i_cup is not None and c_cup is not None:
+        cupcake_mae_delta = float(c_cup) - float(i_cup)
+        cupcake_mae_worse = cupcake_mae_delta > GREEN_MAE_WORSE_THAN_IDENTITY
+    triggered = bool(bias_killed and cupcake_mae_worse)
+    return {
+        "triggered": triggered,
+        "bias_killed": bias_killed,
+        "cupcake_mae_worse_than_0_3": cupcake_mae_worse,
+        "cupcake_mae_delta": round(cupcake_mae_delta, 4)
+        if cupcake_mae_delta is not None
+        else None,
+        "action": (
+            "REPORT peer vs cupcake MAE split — do not auto-kill (b); "
+            "do not silently loosen overall MAE bar"
+            if triggered
+            else "no cupcake-MAE exception triggered"
+        ),
+        "peer_identity": identity_split.get("peer_lt_10"),
+        "peer_candidate": candidate_split.get("peer_lt_10"),
+        "cupcake_identity": identity_split.get("cupcake_ge_17"),
+        "cupcake_candidate": candidate_split.get("cupcake_ge_17"),
+    }
+
+
 def green_bars_vs_identity(
     *,
     candidate: Mapping[str, Any],
@@ -273,22 +399,55 @@ def green_bars_vs_identity(
                 "mean_gap_not_gt": GREEN_OVER_DRUNK_MEAN,
             },
             "note": "insufficient n / null metrics",
+            "stop_do_not_implement_apply_cfb_kei": False,
         }
     level_ok = abs(float(c_mean)) <= GREEN_ABS_MEAN_GAP
     mae_ok = float(c_mae) <= float(i_mae) + GREEN_MAE_WORSE_THAN_IDENTITY
     direction_ok = float(c_mean) <= GREEN_OVER_DRUNK_MEAN
+    all_green = bool(level_ok and mae_ok and direction_ok)
     return {
         "level_ok": level_ok,
         "mae_ok": mae_ok,
         "direction_ok": direction_ok,
-        "all_green": bool(level_ok and mae_ok and direction_ok),
+        "all_green": all_green,
         "bars": {
             "abs_mean_gap_le": GREEN_ABS_MEAN_GAP,
             "mae_not_worse_by": GREEN_MAE_WORSE_THAN_IDENTITY,
             "mean_gap_not_gt": GREEN_OVER_DRUNK_MEAN,
         },
+        # CoS: if (b) GREEN on divergence bars → STOP and report; do not edit apply_cfb_kei.
+        "stop_do_not_implement_apply_cfb_kei": all_green,
         "note": (
-            "GREEN enables kei_total divergence research only; "
-            "does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+            "GREEN = divergence research gate only. STOP and report — do NOT implement "
+            "into apply_cfb_kei from this harness. Does NOT unsat totals PLAY: "
+            "CFB_TOTALS_PLAY_ELIGIBLE stays false even if unused ATS clears 52.4% "
+            "(need movement-CLV or a second unused year; NFL ~61% ATS / ~35% CLV)."
+        ),
+    }
+
+
+def stop_report_if_b_green(
+    *,
+    green_b: Mapping[str, Any],
+    window: str = "W0-2",
+) -> Dict[str, Any]:
+    """Explicit CoS stop gate when (b) clears §4 divergence bars."""
+    all_green = bool(green_b.get("all_green"))
+    return {
+        "window": window,
+        "b_all_green": all_green,
+        "stop": all_green,
+        "implement_apply_cfb_kei": False,  # never from this harness
+        "product_flag_on": False,
+        "pack_recut": False,
+        "play_flip": False,
+        "message": (
+            f"STOP: (b) GREEN on {window} divergence bars — report only; "
+            "do NOT implement into apply_cfb_kei; flag OFF; no pack recut; no PLAY flip."
+            if all_green
+            else (
+                f"(b) not all-GREEN on {window} — continue research; still no "
+                "apply_cfb_kei edit, flag OFF, no pack recut, no PLAY flip."
+            )
         ),
     }
