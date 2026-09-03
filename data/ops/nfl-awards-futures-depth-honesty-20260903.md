@@ -17,6 +17,32 @@
 
 Shared constants: `apps/web/lib/nfl-surface-honesty.ts` (page strings = subscriber English; engineering doctrine stays in file comments / ops note only).
 
+## Live audit quotes (2026-09-03) — why the stamps matter
+
+Do **not** put these as engineering notes on the page. They are the proof cases the stamps must keep honest.
+
+### Depth vs Camp / fair-lines (ATL crown disagreement)
+
+| Surface | What a subscriber sees |
+|---------|------------------------|
+| `/pro/nfl/depth-charts` | **ATL QB1 = Tua Tagovailoa**, QB2 = Penix |
+| `/pro/nfl/fair-lines` | ATL: `open_competition Tua Tagovailoa, Michael Penix Jr. — no crown` |
+| Camp Desk `2026-09-02` | Does **not** crown ATL QB1 |
+| Contrast | **LV Cousins** on depth **does** match camp |
+
+Stamp job: make that class of disagreement obvious (packaged model depth ≠ live Camp Desk) without merging names or rewriting camp.
+
+### Awards vs Futures (different vintage)
+
+| Surface | As-of / source the page already shows |
+|---------|----------------------------------------|
+| `/pro/nfl/awards` | Date **August 11, 2026** · `nfl-player-v1` **as of Jul 19, 2026** |
+| `/pro/nfl/projections` | **Generated 8/22/2026** |
+| Awards MVP board | e.g. **J.Hurts** ~**3324** pass yds (award-score vintage) |
+| Futures yards leaders | e.g. **D.Prescott** ~**4445** (spine / sim vintage) |
+
+Same product family, different boards — keep each page’s own as-of visible. Do **not** reconcile numbers or mint a combined ranking.
+
 ## Explicit non-goals
 
 - Do **not** silently reconcile Awards ↔ Futures numbers or mint a combined ranking (engineering rule — not on-page copy)
