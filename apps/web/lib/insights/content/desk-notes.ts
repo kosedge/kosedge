@@ -46,7 +46,7 @@ export const DESK_NOTES: InsightArticle[] = [
       },
       {
         text: "Cross-check KEI for the same slate.",
-        link: { label: "NFL KEI Lines", href: "/pro/kei-lines/nfl" },
+        link: { label: "NFL KEI Lines", href: "/pro/nfl/fair-lines" },
       },
       {
         text: "Refresh on threshold rules before sizing.",

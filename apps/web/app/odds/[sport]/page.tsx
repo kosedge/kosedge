@@ -4,7 +4,10 @@ import type { ReactNode } from "react";
 import SportProHeader from "@/components/pro/SportProHeader";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
-import { getSportOverviewHref } from "@/lib/sport-pro-nav";
+import {
+  getKeiLinesBoardHref,
+  getSportOverviewHref,
+} from "@/lib/sport-pro-nav";
 import type { OddsComparisonBookAsOf, OddsComparisonRow } from "@/lib/odds-api";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
@@ -121,7 +124,7 @@ export default async function OddsComparePage({
               Edge Board
             </Link>
             <Link
-              href={`/pro/${sportKey}/fair-lines`}
+              href={getKeiLinesBoardHref(sportKey)}
               className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
             >
               KEI Lines

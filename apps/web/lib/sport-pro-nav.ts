@@ -235,6 +235,19 @@ export function getSportOverviewHref(sportKey: string): string {
   return `/pro/${sportKey || "nfl"}/overview`;
 }
 
+/**
+ * Live KEI Lines board URL for a sport.
+ * NFL never uses /pro/kei-lines/nfl (pipeline stub / missing kei_lines_nfl.json).
+ */
+export function getKeiLinesBoardHref(sportKey: string): string {
+  const key = (sportKey || "nfl").toLowerCase();
+  if (key === "nfl") return "/pro/nfl/fair-lines";
+  if (key === "mlb") return "/pro/mlb/fair-lines";
+  if (key === "nba") return "/pro/nba/fair-lines";
+  if (key === "wnba") return "/pro/wnba/fair-lines";
+  return `/pro/kei-lines/${key}`;
+}
+
 export function getSportEdgeBoardHref(sportKey: string): string {
   const key = sportKey || "nfl";
   if (key === "cfb") return "/edge-board/cfb?week=1";
