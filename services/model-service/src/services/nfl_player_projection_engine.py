@@ -940,6 +940,10 @@ def evaluate_prop_edge(
     role_confidence: float | None = None,
     availability_confidence: float | None = None,
     raw_model_mean: float | None = None,
+    market_shrink: float | None = None,
+    calibration_source: str | None = None,
+    fallback_used: bool = False,
+    joined_book_count: int = 0,
 ) -> Dict[str, Any]:
     # De-vig + PLAY/WATCH tags live in nfl_prop_edge_policy (enterprise path).
     from .nfl_prop_edge_policy import evaluate_prop_edge as _evaluate_prop_edge
@@ -955,6 +959,10 @@ def evaluate_prop_edge(
         role_confidence=role_confidence,
         availability_confidence=availability_confidence,
         raw_model_mean=raw_model_mean,
+        market_shrink=market_shrink,
+        calibration_source=calibration_source,
+        fallback_used=fallback_used,
+        joined_book_count=joined_book_count,
     )
 
 

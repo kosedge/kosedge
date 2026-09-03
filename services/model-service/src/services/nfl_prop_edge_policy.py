@@ -62,6 +62,17 @@ ROLE_COLLAPSE_MIN_LINE = {
     "receptions": 3.5,
 }
 
+# Reliability confidence — independent of edge magnitude (see ConfidenceAssessment).
+# Base must stay at or below CONFIDENCE_PLAY_MIN (0.55) before coverage credit.
+PROP_RELIABILITY_BASE = 0.48
+PROP_PENALTY_FALLBACK = 0.18
+PROP_PENALTY_LOW_ROLE = 0.14
+PROP_PENALTY_LOW_AVAILABILITY = 0.12
+PROP_PENALTY_HIGH_SHRINK = 0.08
+PROP_SHRINK_PENALTY_FLOOR = 0.20
+PROP_COVERAGE_MAX = 0.07
+PROP_COVERAGE_BOOK_FULL = 2
+
 
 def _clamp(value: float, low: float, high: float) -> float:
     return max(low, min(high, value))
@@ -116,6 +127,60 @@ def anytime_td_prob_from_td_mean(total_tds_mean: float) -> float:
     return _clamp(1.0 - math.exp(-mu), 0.01, 0.95)
 
 
+def _prop_coverage_bonus(*, joined_book_count: int, two_way: bool) -> float:
+    """Gradient book-coverage credit — replaces the flat +0.30 both_sides cliff."""
+    if not two_way:
+        return 0.0
+    books = max(1, int(joined_book_count))
+    scale = min(1.0, books / float(PROP_COVERAGE_BOOK_FULL))
+    return PROP_COVERAGE_MAX * scale
+
+
+def assess_prop_reliability(
+    *,
+    market_key: str,
+    market_joined: bool,
+    two_way: bool,
+    role_confidence: Optional[float] = None,
+    availability_confidence: Optional[float] = None,
+    market_shrink: Optional[float] = None,
+    calibration_source: Optional[str] = None,
+    fallback_used: bool = False,
+    joined_book_count: int = 0,
+) -> Optional[float]:
+    """Model-input reliability for props — never uses z or edge magnitude."""
+    if not market_joined:
+        return None
+    if str(market_key or "") == "anytime_td" and not two_way:
+        return None
+    if role_confidence is None or availability_confidence is None:
+        return None
+
+    score = float(PROP_RELIABILITY_BASE)
+    if fallback_used:
+        score -= PROP_PENALTY_FALLBACK
+
+    role = float(role_confidence)
+    if role < MIN_ROLE_CONFIDENCE_PLAY:
+        shortfall = (MIN_ROLE_CONFIDENCE_PLAY - role) / MIN_ROLE_CONFIDENCE_PLAY
+        score -= PROP_PENALTY_LOW_ROLE * _clamp(shortfall, 0.0, 1.0)
+
+    avail = float(availability_confidence)
+    if avail < MIN_AVAILABILITY_CONFIDENCE_PLAY:
+        shortfall = (MIN_AVAILABILITY_CONFIDENCE_PLAY - avail) / MIN_AVAILABILITY_CONFIDENCE_PLAY
+        score -= PROP_PENALTY_LOW_AVAILABILITY * _clamp(shortfall, 0.0, 1.0)
+
+    if market_shrink is not None and float(market_shrink) >= PROP_SHRINK_PENALTY_FLOOR:
+        score -= PROP_PENALTY_HIGH_SHRINK
+
+    source = str(calibration_source or "").strip().lower()
+    if source and source not in {"frozen", "structure"}:
+        score -= 0.05
+
+    score += _prop_coverage_bonus(joined_book_count=joined_book_count, two_way=two_way)
+    return round(_clamp(score, 0.0, 0.99), 4)
+
+
 def evaluate_prop_edge(
     *,
     model_mean: float,
@@ -128,6 +193,10 @@ def evaluate_prop_edge(
     role_confidence: Optional[float] = None,
     availability_confidence: Optional[float] = None,
     raw_model_mean: Optional[float] = None,
+    market_shrink: Optional[float] = None,
+    calibration_source: Optional[str] = None,
+    fallback_used: bool = False,
+    joined_book_count: int = 0,
 ) -> Dict[str, Any]:
     """Model CDF vs de-vigged market mid, plus PLAY/WATCH/PASS tag."""
     bounded_std = max(0.65, float(model_std))
@@ -146,7 +215,18 @@ def evaluate_prop_edge(
     edge_under = (under_prob - market_under_ref) if market_under_ref is not None else None
 
     both_sides = market_over_ref is not None and market_under_ref is not None
-    confidence = _clamp((abs(z_over) / 2.6) + (0.30 if both_sides else 0.0), 0.05, 0.99)
+    market_joined = both_sides or market_over_ref is not None or market_under_ref is not None
+    confidence = assess_prop_reliability(
+        market_key=market_key,
+        market_joined=market_joined,
+        two_way=both_sides,
+        role_confidence=role_confidence,
+        availability_confidence=availability_confidence,
+        market_shrink=market_shrink,
+        calibration_source=calibration_source,
+        fallback_used=fallback_used,
+        joined_book_count=joined_book_count,
+    )
 
     tag_payload = classify_prop_tag(
         market_key=market_key,
@@ -154,7 +234,7 @@ def evaluate_prop_edge(
         z_over=z_over,
         edge_over=edge_over,
         edge_under=edge_under,
-        market_joined=both_sides or market_over_ref is not None or market_under_ref is not None,
+        market_joined=market_joined,
         model_mean=float(model_mean),
         line=float(line),
         role_confidence=role_confidence,
@@ -169,7 +249,7 @@ def evaluate_prop_edge(
         "fair_under_price": fair_price_from_prob(under_prob),
         "edge_over": round(edge_over, 4) if edge_over is not None else None,
         "edge_under": round(edge_under, 4) if edge_under is not None else None,
-        "confidence": round(confidence, 4),
+        "confidence": confidence,
         "z_over": round(z_over, 4),
         "market_vig": vig,
         "market_over_fair": round(fair_mkt_over, 4) if fair_mkt_over is not None else None,

@@ -4952,7 +4952,11 @@ def nfl_props_board(
                   AND model_version = :model_version
                   AND (CAST(:market_key AS text) IS NULL OR market_key = CAST(:market_key AS text))
                   AND (CAST(:team AS text) IS NULL OR team = CAST(:team AS text))
-                  AND confidence >= :min_confidence
+                  AND (
+                    :min_confidence <= 0
+                    OR confidence IS NULL
+                    OR confidence >= :min_confidence
+                  )
                   AND GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) >= :min_abs_edge
                   AND (
                     CAST(:tag_filter AS text) IS NULL

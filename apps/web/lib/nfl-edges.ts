@@ -44,6 +44,23 @@ function toNumberOrNull(value: unknown): number | null {
   return null;
 }
 
+function fairLineDeskConfidence(
+  row: NflFairLineRow,
+  market: "ml" | "spread" | "total",
+): number | null {
+  const decision = row.decision;
+  if (!decision) return null;
+  const perMarket =
+    market === "spread"
+      ? decision.spread?.modelConfidence?.score
+      : market === "total"
+        ? decision.total?.modelConfidence?.score
+        : null;
+  if (perMarket != null && Number.isFinite(perMarket)) return perMarket;
+  const rowLevel = decision.modelConfidence?.score;
+  return rowLevel != null && Number.isFinite(rowLevel) ? rowLevel : null;
+}
+
 /** Pure: turn a fair-lines row into zero or more actionable desk edges. */
 export function deskEdgesFromFairLine(
   row: NflFairLineRow,
@@ -79,7 +96,7 @@ export function deskEdgesFromFairLine(
       edge: row.mlEdgeProb,
       edgeDisplay: formatEdgeProb(row.mlEdgeProb),
       side: homeSide ? "Home" : "Away",
-      confidence: null,
+      confidence: fairLineDeskConfidence(row, "ml"),
       kickoff,
       source: "fair-lines",
     });
@@ -98,7 +115,7 @@ export function deskEdgesFromFairLine(
       edge: row.spreadEdge,
       edgeDisplay: `${row.spreadEdge > 0 ? "+" : ""}${row.spreadEdge.toFixed(1)} pts`,
       side: leanHome ? "Home" : "Away",
-      confidence: null,
+      confidence: fairLineDeskConfidence(row, "spread"),
       kickoff,
       source: "fair-lines",
     });
@@ -116,7 +133,7 @@ export function deskEdgesFromFairLine(
       edge: row.totalEdge,
       edgeDisplay: `${row.totalEdge > 0 ? "+" : ""}${row.totalEdge.toFixed(1)} pts`,
       side: over ? "Over" : "Under",
-      confidence: null,
+      confidence: fairLineDeskConfidence(row, "total"),
       kickoff,
       source: "fair-lines",
     });
