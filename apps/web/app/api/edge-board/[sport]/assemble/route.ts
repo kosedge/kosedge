@@ -4,13 +4,15 @@ import {
   loadAssembledEdgeBoardRows,
   normalizeNflEdgeBoardSlate,
 } from "@/lib/build-edge-board-rows";
-import { filterNflStrictWeekRows } from "@/lib/nfl-edge-board-from-fair-lines";
+import {
+  filterNflStrictWeekRows,
+  resolveEdgeBoardBoardLinesAsOf,
+} from "@/lib/nfl-edge-board-from-fair-lines";
 import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
-import { pickLatestIso } from "@/lib/market-asof-stamp";
 import { getSport } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -66,9 +68,7 @@ export async function GET(
             ),
         ),
       ].sort((a, b) => a - b);
-      const linesAsOf = pickLatestIso(
-        ...rows.map((r) => (r as { linesAsOf?: string }).linesAsOf),
-      );
+      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
       return NextResponse.json({
         rows,
         week1Count: gameCount(week1Rows),

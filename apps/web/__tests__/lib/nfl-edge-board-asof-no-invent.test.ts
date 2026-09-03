@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   fairLinesToEdgeBoardRows,
+  resolveEdgeBoardBoardLinesAsOf,
   resolveEdgeBoardLinesAsOf,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import type { NflFairLineRow } from "@/lib/nfl-fair-lines";
@@ -83,13 +84,39 @@ function fairLine(partial: Partial<NflFairLineRow> = {}): NflFairLineRow {
   };
 }
 
-describe("Edge Board market as-of — no invent now()", () => {
+describe("Edge Board market as-of — inherit odds_as_of, no invent now()", () => {
   const requestClock = "2026-09-03T01:29:52.841551+00:00";
+  const liveOddsAsOf = "2026-09-03T01:52:14Z";
 
-  it("blank oddsCapturedAt → unavailable (boardAsOf request clock ignored)", () => {
+  it("blank oddsCapturedAt + payload odds_as_of → stamp is odds_as_of (not unavailable, not now)", () => {
     expect(
       resolveEdgeBoardLinesAsOf({
         oddsCapturedAt: null,
+        oddsAsOf: liveOddsAsOf,
+        boardAsOf: requestClock,
+      }),
+    ).toBe(liveOddsAsOf);
+
+    const rows = fairLinesToEdgeBoardRows(
+      [fairLine({ oddsCapturedAt: null })],
+      { oddsAsOf: liveOddsAsOf, boardAsOf: requestClock },
+    );
+    expect(rows.length).toBeGreaterThan(0);
+    for (const r of rows) {
+      expect((r as { linesAsOf?: string }).linesAsOf).toBe(liveOddsAsOf);
+      expect((r as { linesAsOf?: string }).linesAsOf).not.toBe(requestClock);
+    }
+
+    const board = resolveEdgeBoardBoardLinesAsOf(rows, liveOddsAsOf);
+    expect(board).toBe(liveOddsAsOf);
+    expect(board).not.toMatch(/01:29:52/);
+  });
+
+  it("blank oddsCapturedAt + blank odds_as_of → unavailable (boardAsOf request clock ignored)", () => {
+    expect(
+      resolveEdgeBoardLinesAsOf({
+        oddsCapturedAt: null,
+        oddsAsOf: null,
         boardAsOf: requestClock,
       }),
     ).toBeUndefined();
@@ -97,6 +124,7 @@ describe("Edge Board market as-of — no invent now()", () => {
     const rows = fairLinesToEdgeBoardRows(
       [fairLine({ oddsCapturedAt: null })],
       {
+        oddsAsOf: null,
         boardAsOf: requestClock,
       },
     );
@@ -104,6 +132,8 @@ describe("Edge Board market as-of — no invent now()", () => {
     for (const r of rows) {
       expect((r as { linesAsOf?: string }).linesAsOf).toBeUndefined();
     }
+
+    expect(resolveEdgeBoardBoardLinesAsOf(rows, null)).toBeNull();
 
     const header = marketAsOfHeaderSuffix({ asOf: null, kind: "lines" });
     expect(header).toBe("as-of unavailable");
@@ -118,13 +148,14 @@ describe("Edge Board market as-of — no invent now()", () => {
     expect(
       resolveEdgeBoardLinesAsOf({
         oddsCapturedAt: market,
+        oddsAsOf: liveOddsAsOf,
         boardAsOf: requestClock,
       }),
-    ).toBe(market);
+    ).toBe(liveOddsAsOf); // pickLatestIso prefers later of row + payload
 
     const rows = fairLinesToEdgeBoardRows(
       [fairLine({ oddsCapturedAt: market })],
-      { boardAsOf: requestClock },
+      { oddsAsOf: null, boardAsOf: requestClock },
     );
     for (const r of rows) {
       expect((r as { linesAsOf?: string }).linesAsOf).toBe(market);
@@ -132,12 +163,30 @@ describe("Edge Board market as-of — no invent now()", () => {
     }
   });
 
-  it("near-now microsecond invent on oddsCapturedAt → unavailable", () => {
+  it("near-now microsecond invent fingerprint still rejected", () => {
     expect(
       resolveEdgeBoardLinesAsOf({
         oddsCapturedAt: requestClock,
+        oddsAsOf: null,
         boardAsOf: null,
       }),
     ).toBeUndefined();
+
+    expect(
+      resolveEdgeBoardLinesAsOf({
+        oddsCapturedAt: null,
+        oddsAsOf: requestClock,
+        boardAsOf: null,
+      }),
+    ).toBeUndefined();
+
+    const rows = fairLinesToEdgeBoardRows(
+      [fairLine({ oddsCapturedAt: null })],
+      { oddsAsOf: requestClock },
+    );
+    for (const r of rows) {
+      expect((r as { linesAsOf?: string }).linesAsOf).toBeUndefined();
+    }
+    expect(resolveEdgeBoardBoardLinesAsOf(rows, requestClock)).toBeNull();
   });
 });

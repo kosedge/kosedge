@@ -192,8 +192,8 @@ describe("Week 1 desk agreement", () => {
     expect(String(after.time)).not.toMatch(/8:15/);
   });
 
-  it("Edge Board as-of uses market capture only — never board/request clock", () => {
-    // Stale market still stamps (UI marks stale); boardAsOf is ignored.
+  it("Edge Board as-of uses market capture / odds_as_of — never board/request clock", () => {
+    // Stale market still stamps (UI marks stale); boardAsOf request clock ignored.
     const asOf = resolveEdgeBoardLinesAsOf({
       oddsCapturedAt: "2026-08-21T13:42:55+00:00",
       boardAsOf: "2026-09-03T01:29:52.841551+00:00", // request now() — must not win
@@ -212,10 +212,30 @@ describe("Week 1 desk agreement", () => {
     }
   });
 
-  it("Edge Board as-of stays blank when market stamp missing (no wall clock)", () => {
+  it("Edge Board as-of inherits payload odds_as_of when row capture blank", () => {
+    const oddsAsOf = "2026-09-03T01:52:14Z";
     expect(
       resolveEdgeBoardLinesAsOf({
         oddsCapturedAt: null,
+        oddsAsOf,
+        boardAsOf: "2026-09-03T01:29:52.841551+00:00",
+      }),
+    ).toBe(oddsAsOf);
+
+    const rows = fairLinesToEdgeBoardRows(
+      [fairLine({ oddsCapturedAt: null })],
+      { oddsAsOf, boardAsOf: "2026-09-03T01:29:52.841551+00:00" },
+    );
+    for (const r of rows) {
+      expect((r as { linesAsOf?: string }).linesAsOf).toBe(oddsAsOf);
+    }
+  });
+
+  it("Edge Board as-of stays blank when market stamp + odds_as_of missing (no wall clock)", () => {
+    expect(
+      resolveEdgeBoardLinesAsOf({
+        oddsCapturedAt: null,
+        oddsAsOf: null,
         boardAsOf: "2026-09-03T01:29:52.841551+00:00",
       }),
     ).toBeUndefined();

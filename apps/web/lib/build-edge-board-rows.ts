@@ -26,6 +26,7 @@ import {
   filterNflProjectionBackedRows,
   filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
+  resolveEdgeBoardLinesAsOf,
   sortNflEdgeBoardRows,
   syncEdgeBoardActionsWithCurrent,
 } from "@/lib/nfl-edge-board-from-fair-lines";
@@ -54,6 +55,23 @@ import { getNflPowerRatingsBoard } from "@/lib/power-ratings";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 
 const NFL_EDGE_BOARD_SEASON = 2026;
+
+/** Backfill sanitized payload odds_as_of onto rows missing linesAsOf. */
+function applyPayloadOddsAsOfToRows(
+  rows: EdgeBoardRow[],
+  payloadOddsAsOf: string | null,
+): EdgeBoardRow[] {
+  const stamp = resolveEdgeBoardLinesAsOf({
+    oddsCapturedAt: null,
+    oddsAsOf: payloadOddsAsOf,
+  });
+  if (!stamp) return rows;
+  for (const r of rows) {
+    const row = r as EdgeBoardRow & { linesAsOf?: string };
+    if (!row.linesAsOf) row.linesAsOf = stamp;
+  }
+  return rows;
+}
 
 /** NFL Edge Board slate tabs. `live`/`all` kept as aliases. */
 export type NflEdgeBoardSlate = "week1" | "full" | "live" | "all";
@@ -143,12 +161,15 @@ async function assembleNflEdgeBoardRows(
 
   let keiGames: KeiLineGame[] = [];
   let rows: EdgeBoardRow[] = [];
+  /** Payload odds_as_of — same market vintage as fair-lines; never request clock. */
+  const payloadOddsAsOf = fair.oddsAsOf ?? null;
 
   if (fair.lines.length > 0) {
     keiGames = keiGamesFromNflFairLines(fair.lines);
     rows = fairLinesToEdgeBoardRows(fair.lines, {
-      // Market vintage only — never fair.asOf (request/board clock).
-      boardAsOf: fair.oddsAsOf,
+      // Same market vintage as fair-lines (payload odds_as_of).
+      // Never fair.asOf / board generation / request clock.
+      oddsAsOf: payloadOddsAsOf,
     });
     rows = overlayOddsOntoFairLineRows(rows, odds);
     // Odds/Current may arrive after fair-lines decision graded Mkt —; sync Action.
@@ -181,6 +202,10 @@ async function assembleNflEdgeBoardRows(
   // Schedule-driven Week 1 membership (no silent drop when KEI/odds missing).
   rows = ensureNflScheduleWeekOnBoard(rows, 1);
   rows = sortNflEdgeBoardRows(rows);
+
+  // Schedule-padded rows may lack per-row capture — inherit payload odds_as_of
+  // (sanitized) so board-level as-of matches fair-lines. Never invent now().
+  rows = applyPayloadOddsAsOfToRows(rows, payloadOddsAsOf);
 
   if (slate === "week1") {
     // Strict Week 1 REG — count must match schedule pack (normally 16).

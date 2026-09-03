@@ -70,6 +70,7 @@ describe("NFL market page waterfall / RSC fat payload (Alex)", () => {
     );
 
     expect(assemble).toContain("loadAssembledEdgeBoardRows");
+    expect(assemble).toContain("resolveEdgeBoardBoardLinesAsOf");
     expect(edgesApi).toContain("fetchNflEdgesDesk");
     expect(fairApi).toContain("fetchNflFairLines");
     expect(deskLib).toMatch(
