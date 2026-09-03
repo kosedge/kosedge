@@ -1,0 +1,532 @@
+{
+  "stamp": "20260903",
+  "branch": "cursor/cfb-totals-guard-holdout-2896",
+  "rule": {
+    "identity": "kei_total = model_total (live today)",
+    "candidate_b": "kei_total = model_total - (1-\u03bb)*matchup_inflation (sum-only)",
+    "candidate_a": "kei_total = model_total + level_offset",
+    "fit_seasons": [
+      2023,
+      2024
+    ],
+    "unused_eval_seasons": [
+      2025
+    ],
+    "primary_window": "W0-2",
+    "optional_window": "W0-4",
+    "clv_definition": "movement-CLV+: owned open\u2260close; unavailable when only close exists",
+    "market": "SDV espn_cfb_betting over_under (close)",
+    "model": "hist-cal proxy project_game expected_total"
+  },
+  "honesty": {
+    "reconstruction": "Hist-cal proxy: prior-year cfb_ratings + league-avg roster/QB \u2014 not live 2026 roster/SP+ KEI. Understates live Over-drunk.",
+    "year_split": {
+      "fit_contaminated": [
+        2023,
+        2024
+      ],
+      "unused_eval": [
+        2025
+      ],
+      "note": "Fit 2023\u20132024 only; eval unused 2025; do not retune from 2025; W0\u20132 first window \u2014 do not retune \u03bb on W1"
+    },
+    "product": {
+      "writes_pack": false,
+      "edits_apply_cfb_kei": false,
+      "enables_kei_total_divergence": false,
+      "unsats_totals_play": false,
+      "note": "Harness does not enable kei_total divergence or unsat PLAY. GREEN bars are design divergence gates only. PLAY unsat needs CLV or second unused year (ATS-only insufficient)."
+    },
+    "clv": "CLV unavailable \u2014 labeled; not minted"
+  },
+  "load": {
+    "seasons": [
+      2023,
+      2024,
+      2025
+    ],
+    "source": "sportsdataverse espn_cfb_betting + team_box + linescores",
+    "skipped": {
+      "missing_line": 29,
+      "missing_score": 1,
+      "unmapped_team": 421,
+      "fcs_or_unknown": 0
+    },
+    "mapped_games": 2384,
+    "skipped_proj": 0
+  },
+  "efficiency": {
+    "2023": {
+      "prior_ratings_year": 2022,
+      "teams_with_efficiency": 121,
+      "universe_teams": 138
+    },
+    "2024": {
+      "prior_ratings_year": 2023,
+      "teams_with_efficiency": 122,
+      "universe_teams": 137
+    },
+    "2025": {
+      "prior_ratings_year": 2024,
+      "teams_with_efficiency": 123,
+      "universe_teams": 138
+    }
+  },
+  "priors_snapshot": {
+    "ENGINE_VERSION": "cfb-season-engine-v0.15-power-sot",
+    "CALIBRATION_TAG": "cfb-season-engine-priors-v0.8.1-hist-cal",
+    "LEAGUE_TEAM_PPG": 25.9,
+    "MATCHUP_RESPONSE": 1.4,
+    "EXPECTED_POINTS_CLAMP": [
+      7.0,
+      55.0
+    ]
+  },
+  "n_games_projected": 2384,
+  "coefficients": {
+    "lambda_b_fit_w0_2": 0.542555,
+    "level_offset_a_fit_w0_2": 0.515771,
+    "fit_n_w0_2": 253
+  },
+  "margin_preserved_on_all_rows_b": true,
+  "windows": {
+    "W0_2": {
+      "week_max": 2,
+      "window": "W0-2",
+      "fit_n": 253,
+      "coefficients_locked_from_fit": {
+        "lambda_b": 0.5425553966329675,
+        "level_offset_a": 0.5157707509881422,
+        "fit_seasons": [
+          2023,
+          2024
+        ],
+        "fit_week_max": 2,
+        "note": "Coefficients fit on contaminated W0\u2013week_max only; unused eval does not retune"
+      },
+      "unused_2025": {
+        "identity": {
+          "n": 146,
+          "mean_kei_minus_close": 0.2028,
+          "mae": 4.9047,
+          "over_sign_bias": 0.0616,
+          "over_n": 77,
+          "under_n": 68,
+          "push_n": 1,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "b_matchup_dampen": {
+          "n": 146,
+          "mean_kei_minus_close": 1.0558,
+          "mae": 4.6064,
+          "over_sign_bias": 0.1507,
+          "over_n": 84,
+          "under_n": 62,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "a_level_offset": {
+          "n": 146,
+          "mean_kei_minus_close": 0.7186,
+          "mae": 4.9445,
+          "over_sign_bias": 0.1096,
+          "over_n": 81,
+          "under_n": 65,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "green_b_vs_identity": {
+          "level_ok": false,
+          "mae_ok": true,
+          "direction_ok": true,
+          "all_green": false,
+          "bars": {
+            "abs_mean_gap_le": 1.0,
+            "mae_not_worse_by": 0.3,
+            "mean_gap_not_gt": 2.0
+          },
+          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+        },
+        "green_a_vs_identity": {
+          "level_ok": true,
+          "mae_ok": true,
+          "direction_ok": true,
+          "all_green": true,
+          "bars": {
+            "abs_mean_gap_le": 1.0,
+            "mae_not_worse_by": 0.3,
+            "mean_gap_not_gt": 2.0
+          },
+          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+        }
+      },
+      "contaminated_2023_2024": {
+        "identity": {
+          "n": 253,
+          "mean_kei_minus_close": -0.5158,
+          "mae": 5.6173,
+          "over_sign_bias": -0.0514,
+          "over_n": 120,
+          "under_n": 133,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "b_matchup_dampen": {
+          "n": 253,
+          "mean_kei_minus_close": 0.4571,
+          "mae": 5.2621,
+          "over_sign_bias": 0.0751,
+          "over_n": 136,
+          "under_n": 117,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "a_level_offset": {
+          "n": 253,
+          "mean_kei_minus_close": 0.0,
+          "mae": 5.6041,
+          "over_sign_bias": 0.004,
+          "over_n": 127,
+          "under_n": 126,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        }
+      },
+      "by_season": {
+        "2023": {
+          "year_label": "contaminated",
+          "identity": {
+            "n": 115,
+            "mean_kei_minus_close": -0.5806,
+            "mae": 5.886,
+            "over_sign_bias": -0.1478,
+            "over_n": 49,
+            "under_n": 66,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "b_matchup_dampen": {
+            "n": 115,
+            "mean_kei_minus_close": 0.1946,
+            "mae": 5.6501,
+            "over_sign_bias": 0.0087,
+            "over_n": 58,
+            "under_n": 57,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "a_level_offset": {
+            "n": 115,
+            "mean_kei_minus_close": -0.0648,
+            "mae": 5.8275,
+            "over_sign_bias": -0.0783,
+            "over_n": 53,
+            "under_n": 62,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        },
+        "2024": {
+          "year_label": "contaminated",
+          "identity": {
+            "n": 138,
+            "mean_kei_minus_close": -0.4617,
+            "mae": 5.3933,
+            "over_sign_bias": 0.029,
+            "over_n": 71,
+            "under_n": 67,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "b_matchup_dampen": {
+            "n": 138,
+            "mean_kei_minus_close": 0.6758,
+            "mae": 4.9388,
+            "over_sign_bias": 0.1304,
+            "over_n": 78,
+            "under_n": 60,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "a_level_offset": {
+            "n": 138,
+            "mean_kei_minus_close": 0.0541,
+            "mae": 5.418,
+            "over_sign_bias": 0.0725,
+            "over_n": 74,
+            "under_n": 64,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        },
+        "2025": {
+          "year_label": "unused",
+          "identity": {
+            "n": 146,
+            "mean_kei_minus_close": 0.2028,
+            "mae": 4.9047,
+            "over_sign_bias": 0.0616,
+            "over_n": 77,
+            "under_n": 68,
+            "push_n": 1,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "b_matchup_dampen": {
+            "n": 146,
+            "mean_kei_minus_close": 1.0558,
+            "mae": 4.6064,
+            "over_sign_bias": 0.1507,
+            "over_n": 84,
+            "under_n": 62,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "a_level_offset": {
+            "n": 146,
+            "mean_kei_minus_close": 0.7186,
+            "mae": 4.9445,
+            "over_sign_bias": 0.1096,
+            "over_n": 81,
+            "under_n": 65,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        }
+      }
+    },
+    "W0_4": {
+      "week_max": 4,
+      "window": "W0-4",
+      "fit_n": 477,
+      "coefficients_locked_from_fit": {
+        "lambda_b": 0.5425553966329675,
+        "level_offset_a": 0.5157707509881422,
+        "fit_seasons": [
+          2023,
+          2024
+        ],
+        "fit_week_max": 2,
+        "note": "\u03bb/offset locked from W0\u20132 fit only; W0\u20134 is confirmatory table \u2014 do not retune \u03bb on W1 or on the wider window"
+      },
+      "unused_2025": {
+        "identity": {
+          "n": 245,
+          "mean_kei_minus_close": 0.026,
+          "mae": 4.8387,
+          "over_sign_bias": 0.0408,
+          "over_n": 127,
+          "under_n": 117,
+          "push_n": 1,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "b_matchup_dampen": {
+          "n": 245,
+          "mean_kei_minus_close": 0.923,
+          "mae": 4.4659,
+          "over_sign_bias": 0.1755,
+          "over_n": 144,
+          "under_n": 101,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "a_level_offset": {
+          "n": 245,
+          "mean_kei_minus_close": 0.5418,
+          "mae": 4.871,
+          "over_sign_bias": 0.0939,
+          "over_n": 134,
+          "under_n": 111,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "green_b_vs_identity": {
+          "level_ok": true,
+          "mae_ok": true,
+          "direction_ok": true,
+          "all_green": true,
+          "bars": {
+            "abs_mean_gap_le": 1.0,
+            "mae_not_worse_by": 0.3,
+            "mean_gap_not_gt": 2.0
+          },
+          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+        },
+        "green_a_vs_identity": {
+          "level_ok": true,
+          "mae_ok": true,
+          "direction_ok": true,
+          "all_green": true,
+          "bars": {
+            "abs_mean_gap_le": 1.0,
+            "mae_not_worse_by": 0.3,
+            "mean_gap_not_gt": 2.0
+          },
+          "note": "GREEN enables kei_total divergence research only; does NOT unsat totals PLAY (needs CLV or second unused year / ATS bar)"
+        }
+      },
+      "contaminated_2023_2024": {
+        "identity": {
+          "n": 477,
+          "mean_kei_minus_close": -0.3651,
+          "mae": 6.1006,
+          "over_sign_bias": -0.0231,
+          "over_n": 233,
+          "under_n": 244,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "b_matchup_dampen": {
+          "n": 477,
+          "mean_kei_minus_close": 0.5898,
+          "mae": 5.6744,
+          "over_sign_bias": 0.1321,
+          "over_n": 270,
+          "under_n": 207,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        },
+        "a_level_offset": {
+          "n": 477,
+          "mean_kei_minus_close": 0.1507,
+          "mae": 6.0986,
+          "over_sign_bias": 0.0189,
+          "over_n": 243,
+          "under_n": 234,
+          "push_n": 0,
+          "clv_plus_rate": null,
+          "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+        }
+      },
+      "by_season": {
+        "2023": {
+          "year_label": "contaminated",
+          "identity": {
+            "n": 233,
+            "mean_kei_minus_close": -0.2102,
+            "mae": 5.751,
+            "over_sign_bias": -0.1159,
+            "over_n": 103,
+            "under_n": 130,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "b_matchup_dampen": {
+            "n": 233,
+            "mean_kei_minus_close": 0.6544,
+            "mae": 5.2519,
+            "over_sign_bias": 0.0815,
+            "over_n": 126,
+            "under_n": 107,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "a_level_offset": {
+            "n": 233,
+            "mean_kei_minus_close": 0.3056,
+            "mae": 5.7038,
+            "over_sign_bias": -0.0644,
+            "over_n": 109,
+            "under_n": 124,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        },
+        "2024": {
+          "year_label": "contaminated",
+          "identity": {
+            "n": 244,
+            "mean_kei_minus_close": -0.513,
+            "mae": 6.4343,
+            "over_sign_bias": 0.0656,
+            "over_n": 130,
+            "under_n": 114,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "b_matchup_dampen": {
+            "n": 244,
+            "mean_kei_minus_close": 0.5281,
+            "mae": 6.0778,
+            "over_sign_bias": 0.1803,
+            "over_n": 144,
+            "under_n": 100,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "a_level_offset": {
+            "n": 244,
+            "mean_kei_minus_close": 0.0028,
+            "mae": 6.4757,
+            "over_sign_bias": 0.0984,
+            "over_n": 134,
+            "under_n": 110,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        },
+        "2025": {
+          "year_label": "unused",
+          "identity": {
+            "n": 245,
+            "mean_kei_minus_close": 0.026,
+            "mae": 4.8387,
+            "over_sign_bias": 0.0408,
+            "over_n": 127,
+            "under_n": 117,
+            "push_n": 1,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "b_matchup_dampen": {
+            "n": 245,
+            "mean_kei_minus_close": 0.923,
+            "mae": 4.4659,
+            "over_sign_bias": 0.1755,
+            "over_n": 144,
+            "under_n": 101,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          },
+          "a_level_offset": {
+            "n": 245,
+            "mean_kei_minus_close": 0.5418,
+            "mae": 4.871,
+            "over_sign_bias": 0.0939,
+            "over_n": 134,
+            "under_n": 111,
+            "push_n": 0,
+            "clv_plus_rate": null,
+            "clv_note": "CLV unavailable \u2014 SDV betting has close only (no owned open\u2260close)"
+          }
+        }
+      }
+    }
+  }
+}
