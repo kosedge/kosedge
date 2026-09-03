@@ -4998,7 +4998,10 @@ def nfl_props_board(
     model_version: str = Query("nfl-player-v1"),
     market_key: Optional[str] = Query(None),
     team: Optional[str] = Query(None),
-    tag: Optional[str] = Query(None, description="PLAY | WATCH | PASS | STAKE (PLAY only)"),
+    tag: Optional[str] = Query(
+        None,
+        description="WATCH | PASS | LEAN (PLAY/STAKE hidden while PLAY_STAKE_ELIGIBLE=false)",
+    ),
     min_confidence: float = Query(0.0, ge=0.0, le=1.0),
     min_abs_edge: float = Query(0.0, ge=0.0, le=0.5),
     limit: int = Query(250, ge=1, le=2000),
@@ -5045,8 +5048,7 @@ def nfl_props_board(
                     WHEN 'LEAN' THEN 1
                     ELSE 2
                   END,
-                  confidence DESC NULLS LAST,
-                  GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) DESC
+                  GREATEST(ABS(edge_over), ABS(edge_under)) DESC NULLS LAST
                 LIMIT :limit
                 """
             ),

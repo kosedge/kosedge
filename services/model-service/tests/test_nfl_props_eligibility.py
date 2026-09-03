@@ -102,6 +102,7 @@ def test_filter_drops_junk_keeps_desk_rows() -> None:
                 "model_mean": 81.0,
                 "line": 74.5,
                 "market_over_price": -110,
+                "confidence": 0.08,
                 "diagnostics": {"position": "WR", "role_confidence": 0.88},
             },
         ]
@@ -109,3 +110,14 @@ def test_filter_drops_junk_keeps_desk_rows() -> None:
     assert dropped == 1
     assert len(kept) == 1
     assert kept[0]["diagnostics"]["position"] == "WR"
+
+
+def test_low_reliability_does_not_drop_joined_investable() -> None:
+    assert is_investable_prop(
+        market_key="rec_yds",
+        position="WR",
+        model_mean=72.0,
+        line=68.5,
+        confidence=0.05,
+        market_joined=True,
+    )

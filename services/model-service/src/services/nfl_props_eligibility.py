@@ -78,7 +78,8 @@ MEAN_FLOORS: Mapping[str, Mapping[str, float]] = {
 STARTER_ROLE_CONFIDENCE = 0.55
 # Absolute zero / placeholder: never show even for starters.
 ZERO_MEAN_EPS = 1e-6
-PLACEHOLDER_CONFIDENCE_MAX = 0.12
+# Reliability `confidence` is independent of edge (PR 428). Do not use it as a
+# placeholder signal — involvement floors + market join already gate junk.
 
 
 def canonicalize_position(position: Optional[str]) -> str:
@@ -175,14 +176,8 @@ def is_investable_prop(
     if volume + 1e-9 < need:
         return False
 
-    if (
-        confidence is not None
-        and float(confidence) <= PLACEHOLDER_CONFIDENCE_MAX
-        and volume <= need
-        and not (market_joined is True)
-    ):
-        return False
-
+    # confidence / market_joined stay in the signature for callers, but reliability
+    # confidence must not eligibility-drop (PR 428 — independent of edge).
     return True
 
 

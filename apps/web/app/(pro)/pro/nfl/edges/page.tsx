@@ -1,4 +1,5 @@
 import NflEdgesDeskClient from "@/components/pro/nfl/NflEdgesDeskClient";
+import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import type { DeskMarketType } from "@/lib/nfl-edges-desk-types";
 
 export const dynamic = "force-dynamic";
@@ -7,7 +8,7 @@ const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
 const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];
 const MIN_EDGE_OPTIONS_LEN = 3;
-const MIN_CONF_OPTIONS = [0, 0.4, 0.6, 0.75] as const;
+const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
 type SearchValue = string | string[] | undefined;
 

@@ -136,6 +136,7 @@ function normalizePropRow(raw: Record<string, unknown>): NflPropBoardRow {
     marketJoined: marketOver !== null || marketUnder !== null,
     // LIVE ships means/bands/edge only. PLAY_STAKE_ELIGIBLE stays false
     // server-side; never promote API research tags as board chrome.
+    // See nfl-dead-tiers.ts — PROP_PLAY_TIER_REACHABLE mirrors the stake gate.
     tag: null,
     tagSide: null,
     tagAction: null,
