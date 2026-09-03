@@ -4976,7 +4976,7 @@ def nfl_props_board(
                     WHEN 'LEAN' THEN 1
                     ELSE 2
                   END,
-                  confidence DESC,
+                  confidence DESC NULLS LAST,
                   GREATEST(ABS(COALESCE(edge_over, 0)), ABS(COALESCE(edge_under, 0))) DESC
                 LIMIT :limit
                 """
