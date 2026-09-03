@@ -3,6 +3,7 @@ import {
   PAGE_DATA_CACHE_CONTROL,
   PAGE_DATA_NO_STORE,
   isPageDataCountCacheable,
+  pageDataBoardOccupancy,
   pageDataCacheHeaders,
   pageDataJsonResponse,
 } from "@/lib/page-data-cache";
@@ -43,14 +44,44 @@ describe("page-data cache headers (45s band)", () => {
     const fairBody = (await fair.json()) as { oddsAsOf?: string };
     expect(fairBody.oddsAsOf).toBe("2026-09-03T14:00:00Z");
 
+    // Assemble shape: week1Count / fullCount / rows — not count or games.
+    expect(
+      pageDataBoardOccupancy({
+        week1Count: 16,
+        fullCount: 48,
+        rows: [{ game: "BUF@MIA" }],
+      }),
+    ).toBe(48);
     const assemble = pageDataJsonResponse({
-      games: 16,
+      week1Count: 16,
+      fullCount: 48,
+      week0Count: 0,
+      weeks: [1],
       linesAsOf: "2026-09-03T14:00:00Z",
-      rows: [],
+      rows: [{ game: "BUF@MIA" }],
     });
     expect(assemble.headers.get("Cache-Control")).toBe(PAGE_DATA_CACHE_CONTROL);
     const assembleBody = (await assemble.json()) as { linesAsOf?: string };
     expect(assembleBody.linesAsOf).toBe("2026-09-03T14:00:00Z");
+  });
+
+  it("caches assemble when only rows.length is non-zero", () => {
+    const res = pageDataJsonResponse({
+      week1Count: 0,
+      fullCount: 0,
+      rows: [{ game: "KC@BAL" }],
+    });
+    expect(res.headers.get("Cache-Control")).toBe(PAGE_DATA_CACHE_CONTROL);
+  });
+
+  it("never caches true-empty assemble (all occupancy signals 0)", () => {
+    const res = pageDataJsonResponse({
+      week1Count: 0,
+      fullCount: 0,
+      rows: [],
+      linesAsOf: null,
+    });
+    expect(res.headers.get("Cache-Control")).toBe(PAGE_DATA_NO_STORE);
   });
 
   it("never caches 503/504 transport errors", async () => {
