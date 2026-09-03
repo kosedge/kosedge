@@ -707,8 +707,12 @@ export default function EdgeBoard({
                     {r.teamA.site} / {r.teamB.site}
                   </p>
                 )}
-                {r.linesStale && r.linesAsOf ? (
-                  <p className="mt-1 text-[10px] text-amber-300/80">
+                {r.linesAsOf ? (
+                  <p
+                    className={`mt-1 text-[10px] ${
+                      r.linesStale ? "text-amber-300/80" : "text-gray-500"
+                    }`}
+                  >
                     Lines as of{" "}
                     {new Date(r.linesAsOf).toLocaleString("en-US", {
                       month: "2-digit",
@@ -716,6 +720,11 @@ export default function EdgeBoard({
                       hour: "numeric",
                       minute: "2-digit",
                     })}
+                    {r.linesStale ? " · stale" : ""}
+                  </p>
+                ) : isNfl ? (
+                  <p className="mt-1 text-[10px] text-amber-200/80">
+                    Market as-of unavailable
                   </p>
                 ) : null}
               </div>
@@ -1093,8 +1102,14 @@ export default function EdgeBoard({
                           kickoffTime={r.kickoffTime}
                           time={r.time}
                         />
-                        {r.linesStale && r.linesAsOf ? (
-                          <div className="mt-1 text-[10px] text-amber-300/80">
+                        {r.linesAsOf ? (
+                          <div
+                            className={`mt-1 text-[10px] ${
+                              r.linesStale
+                                ? "text-amber-300/80"
+                                : "text-gray-500"
+                            }`}
+                          >
                             as of{" "}
                             {new Date(r.linesAsOf).toLocaleString("en-US", {
                               month: "2-digit",
@@ -1102,6 +1117,11 @@ export default function EdgeBoard({
                               hour: "numeric",
                               minute: "2-digit",
                             })}
+                            {r.linesStale ? " · stale" : ""}
+                          </div>
+                        ) : isNfl ? (
+                          <div className="mt-1 text-[10px] text-amber-200/80">
+                            Market as-of unavailable
                           </div>
                         ) : null}
                         <button

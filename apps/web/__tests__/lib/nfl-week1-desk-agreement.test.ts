@@ -210,6 +210,15 @@ describe("Week 1 desk agreement", () => {
     }
   });
 
+  it("Edge Board as-of stays blank when market and board stamps are missing", () => {
+    expect(
+      resolveEdgeBoardLinesAsOf({
+        oddsCapturedAt: null,
+        boardAsOf: null,
+      }),
+    ).toBeUndefined();
+  });
+
   it("Props does not show fair over/under juice when Line is blank", () => {
     const blank = propRow({
       line: null,

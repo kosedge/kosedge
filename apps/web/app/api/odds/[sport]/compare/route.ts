@@ -7,6 +7,8 @@ import {
   bookDisplay,
   configuredBooksForSport,
   SPORT_KEY_MAP,
+  type OddsComparisonBookAsOf,
+  type OddsComparisonRow,
 } from "@/lib/odds-api";
 import { getCache, setCache } from "@/lib/cache/redis";
 
@@ -16,12 +18,30 @@ const ODDS_CACHE_TTL_MS = 6 * 60 * 60 * 1000;
 const CACHE_HEADERS = {
   "cache-control": "public, s-maxage=21600, stale-while-revalidate=3600",
 };
-const compareCache = new Map<
-  string,
-  { data: { rows: unknown[]; books: unknown[] }; ts: number }
->();
-/** v5: bust empty rows cached after Odds API credit failures. */
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v5`;
+
+type ComparePayload = {
+  rows: OddsComparisonRow[];
+  books: { key: string; label: string }[];
+  /** Max book/market last_update; null when upstream omitted stamps. */
+  asOf: string | null;
+  bookAsOf: OddsComparisonBookAsOf[];
+};
+
+const compareCache = new Map<string, { data: ComparePayload; ts: number }>();
+/** v6: include honest market asOf / bookAsOf (no fabricated fetch clock). */
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v6`;
+
+function emptyPayload(sport: string): ComparePayload {
+  return {
+    rows: [],
+    books: configuredBooksForSport(sport).map((k) => ({
+      key: k,
+      label: bookDisplay(k),
+    })),
+    asOf: null,
+    bookAsOf: [],
+  };
+}
 
 export async function GET(
   _req: Request,
@@ -38,10 +58,7 @@ export async function GET(
 
   const keys = getOddsApiKeys();
   if (!keys.length || !SPORT_KEY_MAP[sport]) {
-    return NextResponse.json(
-      { rows: [], books: [] },
-      { headers: CACHE_HEADERS },
-    );
+    return NextResponse.json(emptyPayload(sport), { headers: CACHE_HEADERS });
   }
 
   const now = Date.now();
@@ -54,7 +71,7 @@ export async function GET(
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   const distributed = await getCache<{
-    data: { rows: unknown[]; books: unknown[] };
+    data: ComparePayload;
     ts: number;
   }>(compareCacheKeyForSport(sport));
   if (
@@ -66,12 +83,16 @@ export async function GET(
     return NextResponse.json(distributed.data, { headers: CACHE_HEADERS });
   }
 
-  let rows: Awaited<ReturnType<typeof fetchOddsComparison>> = [];
+  let comparison: Awaited<ReturnType<typeof fetchOddsComparison>> = {
+    rows: [],
+    asOf: null,
+    bookAsOf: [],
+  };
   let fetchErrors = 0;
   for (const key of keys) {
     try {
-      rows = await fetchOddsComparison(sport, key);
-      if (rows.length > 0) break;
+      comparison = await fetchOddsComparison(sport, key);
+      if (comparison.rows.length > 0) break;
     } catch (e) {
       fetchErrors += 1;
       logError(e instanceof Error ? e : new Error(String(e)), {
@@ -80,7 +101,7 @@ export async function GET(
       });
     }
   }
-  if (rows.length === 0 && cached && cached.data.rows.length > 0) {
+  if (comparison.rows.length === 0 && cached && cached.data.rows.length > 0) {
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   try {
@@ -88,11 +109,16 @@ export async function GET(
       key: k,
       label: bookDisplay(k),
     }));
-    const data = { rows, books };
+    const data: ComparePayload = {
+      rows: comparison.rows,
+      books,
+      asOf: comparison.asOf,
+      bookAsOf: comparison.bookAsOf,
+    };
     const payload = { data, ts: now };
     // Never persist empty payloads after API failures — that froze Compare Odds
     // for the full 6h TTL when the primary key was out of credits.
-    if (rows.length > 0 || fetchErrors === 0) {
+    if (comparison.rows.length > 0 || fetchErrors === 0) {
       compareCache.set(sport, payload);
       await setCache(
         compareCacheKeyForSport(sport),
@@ -108,9 +134,6 @@ export async function GET(
     });
     if (cached && cached.data.rows.length > 0)
       return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
-    return NextResponse.json(
-      { rows: [], books: [] },
-      { headers: CACHE_HEADERS },
-    );
+    return NextResponse.json(emptyPayload(sport), { headers: CACHE_HEADERS });
   }
 }

@@ -23,6 +23,8 @@ import {
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
 import { formatNflWeekLabel } from "@/lib/nfl-truth-label";
+import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
+import { boardAsOfFromUpdatedAts } from "@/lib/market-asof-stamp";
 
 /** Soft-launch default: current season board — never archive-week CTAs. */
 const DEFAULT_SEASON = 2026;
@@ -47,22 +49,9 @@ function buildHref(base: Record<string, string | undefined>): string {
   return query ? `/pro/nfl/props?${query}` : "/pro/nfl/props";
 }
 
-function asOfLabel(rows: NflPropBoardRow[]): string {
-  const stamps = rows
-    .map((r) => r.updatedAt)
-    .filter((v): v is string => Boolean(v))
-    .map((v) => Date.parse(v))
-    .filter((n) => Number.isFinite(n));
-  if (stamps.length === 0) return KOSEDGE_DATE;
-  const latest = new Date(Math.max(...stamps));
-  return latest.toLocaleString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  });
+function propsBoardAsOf(rows: NflPropBoardRow[]): string | null {
+  // Honest: never fall back to editorial KOSEDGE_DATE when updatedAt is blank.
+  return boardAsOfFromUpdatedAts(rows.map((r) => r.updatedAt));
 }
 
 export default async function NflPropsBoardPage({
@@ -126,9 +115,14 @@ export default async function NflPropsBoardPage({
             </p>
             <p className="mt-2 text-xs text-kos-text/55">
               Date: {KOSEDGE_DATE}
-              {hasRows ? ` · Board as of ${asOfLabel(board.rows)}` : null}
               {` · ${season} ${formatNflWeekLabel(week, { season })}`}
             </p>
+            <MarketAsOfStamp
+              className="mt-2"
+              asOf={hasRows ? propsBoardAsOf(board.rows) : null}
+              kind="board"
+              data-testid="props-board-asof"
+            />
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link

@@ -651,7 +651,7 @@ export async function fetchNflFairLines(params: {
       season:
         typeof payload.season === "number" ? payload.season : params.season,
       modelVersion: String(payload.model_version ?? ""),
-      asOf: toIsoOrNull(payload.as_of) ?? new Date().toISOString(),
+      asOf: toIsoOrNull(payload.as_of),
       oddsAsOf: toIsoOrNull(payload.odds_as_of),
       currentWeek: toNumber(
         payload.current_week ?? payload.diagnostics?.current_week,
