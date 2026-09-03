@@ -85,7 +85,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--through",
         type=int,
         required=True,
-        help="Highest version to stamp (e.g. 053 for current production cutover)",
+        help="Highest version to stamp (e.g. 054 for current KosEdge warehouse cutover)",
     )
 
     sub.add_parser(

@@ -5,8 +5,8 @@ Usage (from monorepo root)::
 
     python scripts/db/migrate.py check-integrity
     DATABASE_URL=... python scripts/db/migrate.py status
-    DATABASE_URL=... python scripts/db/migrate.py baseline --through 053
-    DATABASE_URL=... python scripts/db/migrate.py apply
+    DATABASE_URL=... python scripts/db/migrate.py baseline --through 054
+    DATABASE_URL=... python scripts/db/migrate.py status --require-current
 
 Never commit credentials. This script does not connect unless a subcommand needs it.
 """

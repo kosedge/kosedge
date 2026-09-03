@@ -93,23 +93,25 @@ Fresh empty database: runner bootstraps `schema_migrations`, then applies
 
 ## Baselining an existing database (production cutover)
 
-Production already had `001`–`053` applied by hand with **no** tracker.
-Migration `054` is in the repo but **not** yet applied.
+Production already had numbered SQL applied by hand with **no** tracker,
+including migration `054` (nullable `confidence` on
+`nfl_player_prop_model_edges`). Verified ~2026-09-03: `is_nullable=YES`,
+`column_default=NULL`; `schema_migrations` absent; do **not** re-apply 054.
 
-Exact cutover:
+Exact cutover for **this** warehouse:
 
 ```bash
 # 1) Inspect / confirm high-water mark (what is already live).
-#    Expect warehouse objects through 053; confidence column still NOT NULL
-#    with DEFAULT until 054 runs.
+#    Expect objects through 054, including nullable confidence without default.
+#    Expect schema_migrations to be missing.
 
-# 2) Explicit baseline through 053 (stamps only — no SQL replay).
-DATABASE_URL='…' python scripts/db/migrate.py baseline --through 053
+# 2) Explicit baseline through 054 (stamps only — no SQL replay, no apply).
+DATABASE_URL='…' python scripts/db/migrate.py baseline --through 054
 
-# 3) Apply pending (054).
-DATABASE_URL='…' python scripts/db/migrate.py apply
+# 3) Confirm current (nothing pending). Do NOT run apply for 054 again.
+DATABASE_URL='…' python scripts/db/migrate.py status --require-current
 
-# 4) Verify 054 (nullable confidence, no default):
+# Optional sanity (already verified in prod — re-check only if unsure):
 # SELECT is_nullable, column_default
 # FROM information_schema.columns
 # WHERE table_schema = 'public'
@@ -119,7 +121,8 @@ DATABASE_URL='…' python scripts/db/migrate.py apply
 ```
 
 Never run a normal `apply` against an untracked nonempty DB — it will refuse
-rather than replay `001`–`054`.
+rather than replay `001`–`054`. After baselining through 054, `apply` is a
+clean no-op until a future `055+` lands.
 
 ## Checksum drift response
 

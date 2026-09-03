@@ -41,17 +41,15 @@ After `RAILWAY_TOKEN` is set, any push to `deploy-vercel` that touches `services
 On the **prod** Postgres (public URL or `railway ssh` into model-service), use the
 tracked migration runner — not ad-hoc `psql` for new work. See `infra/db/README.md`.
 
-**Current cutover (tracker + 054):** production already has hand-applied SQL through
-`053` with **no** `schema_migrations` rows; `054` is in the repo but not applied.
+**Current cutover (tracker only):** production already has hand-applied SQL through
+`054` (nullable `nfl_player_prop_model_edges.confidence`, no default) with **no**
+`schema_migrations` rows. Verified 2026-09-03. Do **not** re-apply 054.
 
 ```bash
-# Explicit baseline (stamps only — never implicit), then apply pending 054
-DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline --through 053
-DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py apply
+# Explicit baseline through 054 (stamps only — never implicit). No apply.
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline --through 054
 DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status --require-current
-
-# Verify 054: nfl_player_prop_model_edges.confidence is nullable, no default
-# is_nullable=YES AND column_default IS NULL
+# After stamp: apply is a no-op until a future 055+. Never replay 054.
 ```
 
 Historical (pre-runner) note — these were applied once by hand / one-off scripts:

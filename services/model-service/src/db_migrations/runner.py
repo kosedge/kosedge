@@ -271,8 +271,8 @@ class MigrationRunner:
                 "no schema_migrations history. Replaying 001..N would be unsafe. "
                 "Inspect the high-water mark of SQL already applied by hand, then "
                 "run an explicit baseline/stamp (never implicit), e.g.:\n"
-                "  python -m src.db_migrations baseline --through 053\n"
-                "  python -m src.db_migrations apply\n"
+                "  python -m src.db_migrations baseline --through 054\n"
+                "  python -m src.db_migrations status --require-current\n"
                 "See infra/db/README.md (production cutover)."
             )
 

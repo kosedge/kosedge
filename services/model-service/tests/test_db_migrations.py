@@ -323,8 +323,22 @@ def test_fresh_empty_db_apply_bootstraps_and_runs(tmp_path: Path) -> None:
     assert 1 in conn.migrations
 
 
+def test_baseline_through_high_water_then_apply_noop(tmp_path: Path) -> None:
+    """Production-shaped cutover: stamp through already-live max; apply is no-op."""
+    _write_migration(tmp_path, 1, "old", "SELECT 1;")
+    _write_migration(tmp_path, 2, "also_live", "ALTER TABLE t DROP NOT NULL;")
+    conn = FakeConnection()
+    conn.tables.add("t")
+    runner = MigrationRunner(conn, tmp_path)
+    with pytest.raises(BaselineRequiredError):
+        runner.apply()
+    runner.baseline(through=2)
+    assert conn.executed_migration_sql == []
+    assert runner.apply() == []
+
+
 def test_baseline_then_apply_remaining(tmp_path: Path) -> None:
-    """Production cutover shape: baseline through N-1, then apply N."""
+    """When high-water is N-1 and N is new: baseline then apply only N."""
     _write_migration(tmp_path, 1, "old", "SELECT 1;")
     _write_migration(tmp_path, 2, "old2", "SELECT 2;")
     _write_migration(tmp_path, 3, "new", "ALTER TABLE t DROP NOT NULL;")

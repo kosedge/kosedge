@@ -32,10 +32,13 @@ SQL; baseline first if `schema_migrations` is empty on a nonempty warehouse.
 
 ```bash
 DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status
-# If unbaselined legacy: stamp through the last version already live, then apply.
-# DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline --through 053
-DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py apply
+# If unbaselined legacy: stamp through the last version already live, then status.
+# Current KosEdge warehouse high-water mark is 054 (already applied by hand) —
+# baseline --through 054 only; do not re-apply 054.
+# DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline --through 054
 DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status --require-current
+# apply only when a *new* pending migration exists after baseline
+# DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py apply
 ```
 
 Historical (pre-runner) note — `039` + `040` were originally applied with:
