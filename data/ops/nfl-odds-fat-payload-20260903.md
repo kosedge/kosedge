@@ -20,7 +20,7 @@ Agent re-check (www, same day): odds ~4.6MB / ~22,281 `className`; edge-board/ed
 
 1. `/odds/[sport]` SSR shell only; `OddsCompareBoard` client-fetches `/api/odds/{sport}/compare`
 2. Slim unused book fields (`slimOddsComparisonForBoard`, cache `v7`)
-3. Keep PR 416 as-of stamps after fetch
+3. Keep PR 416 as-of stamps after fetch; Fair-lines/Edges stamp **model `oddsAsOf` only** per #422 (no invent-now / no pickLatestIso of row clocks)
 
 ### Edge Board / Edges / Fair-lines — don’t block HTML on serial SSR waits
 

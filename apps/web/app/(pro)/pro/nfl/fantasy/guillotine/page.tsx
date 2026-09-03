@@ -11,8 +11,6 @@ import type {
   FantasyScoringProfile,
 } from "@/lib/fantasy/types";
 
-const KOSEDGE_DATE = "August 11, 2026";
-
 type SearchValue = string | string[] | undefined;
 
 function firstValue(value: SearchValue): string | undefined {
@@ -58,9 +56,6 @@ export default async function NflGuillotinePage({
               Educational stay-alive lists from season ranks — not a weekly
               elimination or waiver tool. Use floor and ceiling bands from the
               shared fantasy board to think about roster survival formats.
-            </p>
-            <p className="mt-2 text-xs text-kos-text/55">
-              Date: {KOSEDGE_DATE}
             </p>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">

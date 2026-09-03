@@ -1759,7 +1759,15 @@ def _persist_odds_events(
             if not book_key:
                 continue
             sportsbook_id = _get_or_create_sportsbook(session, book_key, cache=hierarchy_cache)
-            captured_at = _parse_iso_datetime(book.get("last_update")) or _now_utc()
+            captured_at = _parse_iso_datetime(book.get("last_update"))
+            if captured_at is None:
+                for market in book.get("markets") or []:
+                    captured_at = _parse_iso_datetime((market or {}).get("last_update"))
+                    if captured_at is not None:
+                        break
+            if captured_at is None:
+                # Do not invent datetime.now() as book vintage.
+                continue
 
             for market in (book.get("markets") or []):
                 market_key = market.get("key")

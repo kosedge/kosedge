@@ -16,7 +16,7 @@ function firstValue(value: SearchValue): string | undefined {
 /**
  * KEI Lines — SSR shell parses filters only.
  * Board client-fetches /api/nfl/fair-lines so HTML is not held open on
- * model-service (Alex waterfall).
+ * model-service (Alex waterfall). As-of = model oddsAsOf only (#422).
  */
 export default async function NflFairLinesPage({
   searchParams,

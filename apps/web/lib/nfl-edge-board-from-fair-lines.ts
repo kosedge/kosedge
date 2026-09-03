@@ -22,6 +22,7 @@ import {
   toFiniteNumber,
   type NflMarketLineKind,
 } from "@/lib/nfl-market-line-hygiene";
+import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
 
 const ET = "America/New_York";
 
@@ -393,25 +394,21 @@ export function syncEdgeBoardActionsWithCurrent(
 }
 
 /**
- * Prefer a live board stamp over a stale odds snapshot (e.g. Aug 21 stuck).
- * Market juice may still reflect the older snap — stamp honesty is separate.
+ * Prefer Odds API / stored market capture for Edge Board linesAsOf.
+ * Never fall back to board/request asOf (that was minting fetch-time clocks).
+ * Stale market stamps still return — UI marks stale; blank/invent → undefined.
  */
 export function resolveEdgeBoardLinesAsOf(opts: {
   oddsCapturedAt?: string | null;
+  /** Ignored for market vintage — board generation is not book last_update. */
   boardAsOf?: string | null;
   maxAgeMs?: number;
 }): string | undefined {
-  const maxAge = opts.maxAgeMs ?? 6 * 60 * 60 * 1000;
-  const board = opts.boardAsOf?.trim() || null;
-  const market = opts.oddsCapturedAt?.trim() || null;
-  const now = Date.now();
-  if (market) {
-    const ts = Date.parse(market);
-    if (Number.isFinite(ts) && now - ts <= maxAge) return market;
-  }
-  if (board) return board;
-  // Honest: do not mint "now" when both market and board stamps are blank.
-  return undefined;
+  const market = sanitizeMarketCaptureIso(opts.oddsCapturedAt) ?? undefined;
+  // Explicitly ignore boardAsOf — even if present it is often request now().
+  void opts.boardAsOf;
+  void opts.maxAgeMs;
+  return market;
 }
 
 /**
@@ -928,7 +925,9 @@ export function overlayOddsOntoFairLineRows(
     // Canonical pack already stamped kickoff on fair-line rows. Odds commence
     // (often 8:15 vs official 8:20) must not overwrite display clock.
     // Prices only — leave time / commenceTime / kickoffDate / kickoffTime alone.
-    if (src.linesAsOf && !tgt.linesAsOf) tgt.linesAsOf = src.linesAsOf;
+    // Never copy invent-now clocks from odds overlay onto fair-line rows.
+    const overlayAsOf = sanitizeMarketCaptureIso(src.linesAsOf);
+    if (overlayAsOf && !tgt.linesAsOf) tgt.linesAsOf = overlayAsOf;
   }
 
   // Do not append odds-only extras (PRE noise, unmatched books). NFL board is

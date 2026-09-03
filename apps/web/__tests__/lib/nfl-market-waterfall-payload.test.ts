@@ -99,5 +99,7 @@ describe("NFL market page waterfall / RSC fat payload (Alex)", () => {
     expect(edge).toContain("edge-board-asof");
     expect(edges).toContain("edges-desk-asof");
     expect(fair).toContain("kei-lines-asof");
+    expect(fair).toContain("oddsAsOf");
+    expect(fair).not.toMatch(/pickLatestIso\(board\.oddsAsOf,\s*board\.asOf\)/);
   });
 });

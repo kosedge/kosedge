@@ -7,6 +7,7 @@ import {
   marketAsOfHeaderSuffix,
   marketAsOfStamp,
   pickLatestIso,
+  sanitizeMarketCaptureIso,
 } from "@/lib/market-asof-stamp";
 
 describe("market-asof-stamp", () => {
@@ -93,5 +94,26 @@ describe("market-asof-stamp", () => {
         nowMs: Date.parse("2026-09-02T00:00:00.000Z"),
       }),
     ).toContain("stale");
+  });
+
+  it("rejects near-now microsecond invent clocks", () => {
+    const invent = "2026-09-03T01:36:14.123456+00:00";
+    expect(
+      sanitizeMarketCaptureIso(invent, Date.parse("2026-09-03T01:36:20.000Z")),
+    ).toBeNull();
+    expect(
+      marketAsOfStamp({
+        asOf: invent,
+        kind: "lines",
+        nowMs: Date.parse("2026-09-03T01:36:20.000Z"),
+      }).text,
+    ).toBe("Market as-of unavailable");
+    // Second-resolution stored capture (Aug 21) still stamps.
+    expect(
+      sanitizeMarketCaptureIso(
+        "2026-08-21T13:42:55+00:00",
+        Date.parse("2026-09-03T01:36:20.000Z"),
+      ),
+    ).toBe("2026-08-21T13:42:55+00:00");
   });
 });

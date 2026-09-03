@@ -150,9 +150,12 @@ export type NflFairLineRow = {
 export type NflFairLinesResponse = {
   season: number;
   modelVersion: string;
-  /** Board generation / request stamp (UTC ISO). Prefer over stale odds_captured_at. */
+  /**
+   * Market capture stamp (Odds API last_update / stored odds_captured_at).
+   * Null when unknown — never request/fetch time. Same honesty as oddsAsOf.
+   */
   asOf: string | null;
-  /** Latest market snapshot capture when books joined; may lag asOf. */
+  /** Latest market snapshot capture when books joined. */
   oddsAsOf: string | null;
   currentWeek: number;
   count: number;

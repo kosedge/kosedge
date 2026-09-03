@@ -258,6 +258,10 @@ describe("pro sport IA", () => {
     );
     expect(src).not.toMatch(/Each week, the lowest-scoring team is cut/);
     expect(src).not.toMatch(/Waivers and opportunistic adds matter weekly/);
+    // Same stale editorial launch date killed on props (PR 419).
+    expect(src).not.toMatch(/\bKOSEDGE_DATE\b/);
+    expect(src).not.toContain("August 11, 2026");
+    expect(src).not.toMatch(/Date:\s*\{/);
   });
 
   it("keeps Weekly Fantasy destination H1 honest: season-rate PPG, not week projections", () => {
@@ -270,6 +274,9 @@ describe("pro sport IA", () => {
     expect(src).toMatch(/Season-rate PPG leaders/);
     expect(src).not.toMatch(/Weekly Fantasy Projections/);
     expect(src).not.toMatch(/>Weekly leaders</);
+    // Weekly Fantasy never had editorial Aug 11 chrome — keep it gone.
+    expect(src).not.toMatch(/\bKOSEDGE_DATE\b/);
+    expect(src).not.toContain("August 11, 2026");
   });
 
   it("keeps Team Intel free of betting-desk / props duplicates", () => {

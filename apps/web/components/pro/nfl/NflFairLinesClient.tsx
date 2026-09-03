@@ -23,7 +23,7 @@ import {
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { bookDisplay } from "@/lib/odds-api";
-import { marketAsOfHeaderSuffix, pickLatestIso } from "@/lib/market-asof-stamp";
+import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 
 const PAST_WEEK_DAYS = 7;
 
@@ -162,8 +162,10 @@ export default function NflFairLinesClient({
     slateStatus: board.slateStatus,
   });
 
+  // Model odds_as_of only (stored capture / book last_update) — PR #422.
+  // Do NOT pickLatestIso row clocks — those can be fresher pull noise or invent.
   const marketAsOf =
-    state.status === "ready" ? pickLatestIso(board.oddsAsOf, board.asOf) : null;
+    state.status === "ready" ? board.oddsAsOf?.trim() || null : null;
   const marketBooks = (board.diagnostics.bookmakers ?? [])
     .map((k) => bookDisplay(k))
     .filter(Boolean);
