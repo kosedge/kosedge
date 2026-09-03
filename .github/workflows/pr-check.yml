@@ -53,6 +53,7 @@ jobs:
           NHL_MS=0
           NFL_MS=0
           NFL_SCRIPTS=0
+          DB_MIG=0
           for f in "${ALL[@]:-}"; do
             case "$f" in
               apps/web/*|packages/*) WEB=1 ;;
@@ -76,15 +77,23 @@ jobs:
                 MS=1
                 NFL_MS=1
                 ;;
+              services/model-service/src/db_migrations/*|services/model-service/tests/test_db_migrations.py|scripts/db/*|infra/db/*)
+                MS=1
+                DB_MIG=1
+                ;;
               services/model-service/*)
                 MS=1
                 ;;
               scripts/nfl/*|data/ops/nfl*|content/writers/camp-desk-2026/*) NFL_SCRIPTS=1 ;;
+              infra/db/*|scripts/db/*)
+                DB_MIG=1
+                ;;
             esac
           done
           # CFB/NBA/WNBA/NHL-only model-service PRs must not be blocked by NFL DepthSot / camp desk
           # date coupling. NFL Truth Layer still runs when NFL paths (or nfl_ops) change.
-          if [ "$NFL_MS" = "0" ] && [ "$NFL_SCRIPTS" = "0" ] && { [ "$CFB_MS" = "1" ] || [ "$NBA_MS" = "1" ] || [ "$WNBA_MS" = "1" ] || [ "$NHL_MS" = "1" ]; }; then
+          # DB migration-only changes skip NFL truth (no model/edge changes).
+          if [ "$NFL_MS" = "0" ] && [ "$NFL_SCRIPTS" = "0" ] && { [ "$CFB_MS" = "1" ] || [ "$NBA_MS" = "1" ] || [ "$WNBA_MS" = "1" ] || [ "$NHL_MS" = "1" ] || [ "$DB_MIG" = "1" ]; }; then
             NFL_TRUTH=0
           elif [ "$MS" = "1" ] || [ "$NFL_SCRIPTS" = "1" ]; then
             NFL_TRUTH=1
@@ -100,7 +109,8 @@ jobs:
           echo "nfl_ms=$NFL_MS" >> "$GITHUB_OUTPUT"
           echo "nfl_ops=$NFL_SCRIPTS" >> "$GITHUB_OUTPUT"
           echo "nfl_truth=$NFL_TRUTH" >> "$GITHUB_OUTPUT"
-          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS wnba_ms=$WNBA_MS nhl_ms=$NHL_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH (${#ALL[@]} files)"
+          echo "db_mig=$DB_MIG" >> "$GITHUB_OUTPUT"
+          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS wnba_ms=$WNBA_MS nhl_ms=$NHL_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH db_mig=$DB_MIG (${#ALL[@]} files)"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -187,7 +197,7 @@ jobs:
           AUTH_SECRET: test-secret-key-at-least-32-characters-long-for-testing
 
       - name: Setup Python
-        if: steps.paths.outputs.model_service == '1' || steps.paths.outputs.nfl_ops == '1'
+        if: steps.paths.outputs.model_service == '1' || steps.paths.outputs.nfl_ops == '1' || steps.paths.outputs.db_mig == '1'
         uses: actions/setup-python@v5
         with:
           python-version: "3.11"
@@ -195,10 +205,19 @@ jobs:
       # Always install when nfl_ops or model-service changes — invariants need numpy
       # even if DepthSot pytest is skipped (ops-doc-only PRs were failing KICKOFF_SMOKE).
       - name: Install model-service Python deps
-        if: steps.paths.outputs.model_service == '1' || steps.paths.outputs.nfl_ops == '1'
+        if: steps.paths.outputs.model_service == '1' || steps.paths.outputs.nfl_ops == '1' || steps.paths.outputs.db_mig == '1'
         run: |
           python -m pip install --upgrade pip
           pip install -r services/model-service/requirements.txt pytest
+
+      - name: SQL migration integrity + runner tests (no production DB)
+        if: steps.paths.outputs.db_mig == '1' || steps.paths.outputs.model_service == '1'
+        run: |
+          python scripts/db/migrate.py check-integrity
+          cd services/model-service
+          pytest -q tests/test_db_migrations.py
+        env:
+          DATABASE_URL: postgresql://test:test@localhost:5432/test
 
       - name: Run CFB enterprise / season-engine tests
         if: steps.paths.outputs.cfb_ms == '1'
@@ -225,7 +244,7 @@ jobs:
           pytest -q tests/test_nhl_fetcher.py tests/test_nhl_team_prior_ch1.py tests/test_nhl_toi_grid_ch2.py tests/test_nhl_player_projection_ch5.py tests/test_nhl_situation_ch3.py tests/test_nhl_kei_ch4.py tests/test_nhl_props_ch6.py tests/test_nhl_fantasy_ch7.py tests/test_nhl_grade_harness.py
 
       - name: Run model-service DepthSot / NFL tests
-        if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1')
+        if: steps.paths.outputs.nfl_ms == '1' || (steps.paths.outputs.model_service == '1' && steps.paths.outputs.cfb_ms != '1' && steps.paths.outputs.nba_ms != '1' && steps.paths.outputs.wnba_ms != '1' && steps.paths.outputs.nhl_ms != '1' && steps.paths.outputs.db_mig != '1')
         run: |
           cd services/model-service
           # Prefer targeted DepthSot / auth / week-1 in-process remat contracts; fall back to full suite.

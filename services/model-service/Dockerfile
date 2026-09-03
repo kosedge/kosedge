@@ -26,6 +26,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Build context = services/model-service via: railway up services/model-service --path-as-root
 # NFL K/DST publish JSON must live under data/ops/artifacts/ in THIS context
 # (repo-root data/ops is outside the upload). See nfl_kdst_publish.py.
+# SQL migrations: stage with scripts/db/stage_migrations_into_model_service.sh → infra/db/
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 

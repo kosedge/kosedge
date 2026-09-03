@@ -3,3 +3,7 @@
 data/mlb/statcast_cache/**/pitches_*.csv
 data/mlb/statcast_cache/**/pitches_*.meta.json
 data/mlb/statcast_cache/**/pitcher_raw_counts.json
+
+# Staged copy of repo-root infra/db for Railway path-as-root uploads.
+# Source of truth remains /infra/db; see scripts/db/stage_migrations_into_model_service.sh
+/infra/db/

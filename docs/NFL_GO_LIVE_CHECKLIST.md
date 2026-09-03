@@ -38,15 +38,32 @@ After `RAILWAY_TOKEN` is set, any push to `deploy-vercel` that touches `services
 
 ### 3) Production warehouse
 
-On the **prod** Postgres (public URL or `railway ssh` into model-service):
+On the **prod** Postgres (public URL or `railway ssh` into model-service), use the
+tracked migration runner — not ad-hoc `psql` for new work. See `infra/db/README.md`.
+
+**Current cutover (tracker + 054):** production already has hand-applied SQL through
+`053` with **no** `schema_migrations` rows; `054` is in the repo but not applied.
 
 ```bash
-# apply SQL migrations through 038 (snap GSIS bridge)
-psql "$PROD_DATABASE_URL" -f infra/db/037_nfl_data_resilience.sql
-psql "$PROD_DATABASE_URL" -f infra/db/038_nfl_snap_usage_bridge.sql
-# or: railway ssh -s model-service -- python scripts/nfl/apply_038_prod.py
-# then ingest / restore owned NFL data (or restore the verified local dump)
+# Explicit baseline (stamps only — never implicit), then apply pending 054
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline --through 053
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py apply
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status --require-current
+
+# Verify 054: nfl_player_prop_model_edges.confidence is nullable, no default
+# is_nullable=YES AND column_default IS NULL
 ```
+
+Historical (pre-runner) note — these were applied once by hand / one-off scripts:
+
+```bash
+# historical: snap GSIS bridge era
+# psql "$PROD_DATABASE_URL" -f infra/db/037_nfl_data_resilience.sql
+# psql "$PROD_DATABASE_URL" -f infra/db/038_nfl_snap_usage_bridge.sql
+# or: railway ssh -s model-service -- python scripts/nfl/apply_038_prod.py
+```
+
+Then ingest / restore owned NFL data (or restore the verified local dump) as needed.
 
 Freshness is wired; current prod blocker is `dr_backup:missing_timestamp` (offseason degraded is expected until DR backup lands).
 
