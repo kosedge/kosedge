@@ -1,0 +1,171 @@
+{
+  "desk_date": "2026-09-03",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Thursday, Sep 3",
+    "bottom_line": "Named QB2 (Richardson) + Flowers back at practice + Henderson still out + Pacheco IR catch-up. Not a 32-card dump. Existing LAC Under 2/5 and DEN Over 2/5 stand. Everything else Pass.",
+    "storylines": [
+      "Colts: Steichen named Anthony Richardson Sr. the Week 1 QB2 on Thursday, beating Riley Leonard. Jones remains the starter. Pass on a new win-total — this is the backup job, not a starter change.",
+      "Ravens: Flowers practiced Thursday for the first time since the Vikings joints (Aug 19–20). Madubuike joined team drills and is day-to-day for Week 1 at IND, per Minter / NFL.com. Upgrade vs a two-week sit. Pass on crowning WR1/DT1 off one practice.",
+      "Patriots: TreVeyon Henderson (ankle, since Aug 24) was still off the field Thursday. PFT: if he is still out when official reports start next week, Week 2 is in play. Stevenson and Kiner are the other 53 backs. Pass — do not invent a Week 1 RB1.",
+      "Lions: Pacheco (back) IR Tuesday evening never made the Sep 2 file. Misses at least Weeks 1–4 (earliest return Oct 11 vs ARI). Conklin corresponding 53. Gibbs is already the lead back; Campbell is comfortable with Saylors as the spell. Pass on a new number."
+    ],
+    "what_to_watch": "Henderson participation when official Week 1 reports open; Flowers/Madubuike next-week workload before IND; Pacheco IR-return clock. LAC Under 2/5 and DEN Over 2/5 stand — no chase.",
+    "sources": [
+      {
+        "label": "Colts — Richardson named backup QB",
+        "href": "https://www.colts.com/news/anthony-richardson-sr-named-colts-backup-quarterback"
+      },
+      {
+        "label": "NFL.com — Thursday roundup (IND / BAL)",
+        "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-thursday-sept-3"
+      },
+      {
+        "label": "Ravens — Flowers returns to practice",
+        "href": "https://www.baltimoreravens.com/news/zay-flowers-returns-ravens-practice-wide-receiver-injury"
+      },
+      {
+        "label": "PFT — Henderson remains out of Patriots practice",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/treveyon-henderson-remains-out-of-patriots-practice"
+      },
+      {
+        "label": "CBS — Lions place Pacheco on IR",
+        "href": "https://www.cbssports.com/fantasy/football/news/lions-isiah-pacheco-moving-to-injured-reserve/"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "IND",
+      "title": "Colts camp — Sep 3",
+      "bottom_line": "Steichen named Richardson the Week 1 QB2 on Thursday. Leonard is QB3. Jones remains the starter. Pass — backup job, not a new win-total.",
+      "key_points": [
+        "Club / Steichen Thursday: Anthony Richardson Sr. is the backup behind Daniel Jones. Riley Leonard opens as QB3. Ends the camp/preseason split of second- and third-team reps.",
+        "Richardson requested a trade in February and stayed. Preseason: 21-of-33, 249 yards, 1 INT, plus 68 rush yards and a TD across three games. Do not treat QB2 as a starter change.",
+        "Keenan Allen met the media on the DUI case; club says he plays Week 1 and any team discipline stays in-house. Not a number. Pass on inventing a WR sit."
+      ],
+      "what_to_watch": "Whether Jones’ Achilles ramp holds into Sep 13 vs BAL — do not mint a Colts number off the backup announcement.",
+      "is_material_depth": true,
+      "sot_flag": "Richardson named Week 1 QB2. Jones remains starter. Pass on a new win-total.",
+      "sources": [
+        {
+          "label": "Colts — Richardson named backup QB",
+          "href": "https://www.colts.com/news/anthony-richardson-sr-named-colts-backup-quarterback"
+        },
+        {
+          "label": "NFL.com — Thursday roundup (IND)",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-thursday-sept-3"
+        },
+        {
+          "label": "Yahoo — Richardson named Colts backup",
+          "href": "https://sports.yahoo.com/articles/anthony-richardson-named-colts-backup-153701197.html"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens camp — Sep 3",
+      "bottom_line": "Flowers practiced Thursday for the first time since the Vikings joints. Madubuike in team drills and day-to-day for Week 1 at IND. Upgrade vs a two-week sit. Pass on crowning WR1/DT1.",
+      "key_points": [
+        "Club / Mink: Flowers was back Thursday after a minor issue that sat him since the Aug 19–20 Vikings joints. Minter had framed it as Week 1 health over camp reps. Wednesday was running drills only.",
+        "NFL.com Thursday roundup: Madubuike (neck) has started participating in team drills and is considered day-to-day for Week 1 at IND, per Minter. Not on IR at cuts — that was already the early-season path, not a new sit.",
+        "Mink: only Raven not spotted in the early Thursday period was WR Devontez Walker. Do not crown a WR2 from one absence. Pass on a new number."
+      ],
+      "what_to_watch": "Flowers and Madubuike workload next week before IND — one Thursday practice is not a Week 1 active.",
+      "is_material_depth": true,
+      "sot_flag": "Flowers back at practice; Madubuike team drills / DTD Week 1. Do not crown WR1 or DT1.",
+      "sources": [
+        {
+          "label": "Ravens — Flowers returns to practice",
+          "href": "https://www.baltimoreravens.com/news/zay-flowers-returns-ravens-practice-wide-receiver-injury"
+        },
+        {
+          "label": "NFL.com — Thursday roundup (BAL)",
+          "href": "https://www.nfl.com/news/nfl-news-roundup-latest-league-updates-from-thursday-sept-3"
+        },
+        {
+          "label": "NBC Sports — Flowers returned to practice Thursday",
+          "href": "https://www.nbcsports.com/nfl/zay-flowers/8491/news"
+        }
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots camp — Sep 3",
+      "bottom_line": "Henderson (ankle, since Aug 24) still out Thursday. PFT: if he stays out when official reports open, Week 2 is in play. Stevenson and Kiner are the other 53 backs. Pass — do not invent Week 1 RB1.",
+      "key_points": [
+        "PFT / Alper Thursday 3:28pm ET: TreVeyon Henderson remained off the field. He has not practiced since the Aug 24 ankle. Not in the Sep 1 NE card (that was Latu/Muasau claims + Baringer/Jacobs IR).",
+        "Club will start official practice designations closer to Wednesday’s opener vs SEA. PFT: remaining out at the start of next week may push his debut to at least Week 2.",
+        "Other 53 backs: Rhamondre Stevenson and Corey Kiner. Haskins and Lan Larison are on the PS. Do not crown a starter from the DNP — flag the Week 1 RB availability."
+      ],
+      "what_to_watch": "Henderson’s first official Week 1 practice report — consecutive DNPs into Monday would make Week 2 the live question.",
+      "is_material_depth": true,
+      "sot_flag": "Henderson still out (ankle since Aug 24). Week 1 RB flag. Do not invent a starter.",
+      "sources": [
+        {
+          "label": "PFT — Henderson remains out of Patriots practice",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/treveyon-henderson-remains-out-of-patriots-practice"
+        },
+        {
+          "label": "ESPN injury report — Henderson absent Thursday (Lazar)",
+          "href": "https://www.espn.com/nfl/injuries"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions camp — Sep 3",
+      "bottom_line": "Pacheco (back) IR Tuesday never made the Sep 2 file. Out at least Weeks 1–4. Conklin corresponding 53. Gibbs already the lead back; Campbell comfortable with Saylors as the spell. Pass.",
+      "key_points": [
+        "Club / CBS / Freep: Lions placed Isiah Pacheco on IR Tuesday, Sep 1 (back). He had an early-August MCL that Campbell said was healed; the back kept him ‘touch and go.’ Earliest return Oct 11 vs ARI (misses NO, BUF, NYJ, CAR).",
+        "Corresponding 53: TE Tyler Conklin re-signed. Remaining backs behind Gibbs: Jacob Saylors, Sione Vaki, Jabari Small. Campbell after the Colts preseason game: comfortable with Saylors as the primary spell — ‘a guy in our system.’",
+        "This is a catch-up card. Tuesday IR landed after the Sep 1 package and was scanned Wed but not filed. Gibbs was already the bell-cow; IR of the change-of-pace does not mint a Lions number."
+      ],
+      "what_to_watch": "Pacheco IR-return window around Week 5 vs ARI — do not write him back before the four-game sit.",
+      "is_material_depth": true,
+      "sot_flag": "Pacheco IR (back), miss Weeks 1–4. Gibbs lead back. Pass on a new win-total.",
+      "sources": [
+        {
+          "label": "CBS — Lions place Pacheco on IR",
+          "href": "https://www.cbssports.com/fantasy/football/news/lions-isiah-pacheco-moving-to-injured-reserve/"
+        },
+        {
+          "label": "Freep via Yahoo — Pacheco IR, miss first four",
+          "href": "https://sports.yahoo.com/articles/lions-rb-isiah-pacheco-miss-203754642.html"
+        },
+        {
+          "label": "TSN / ESPN Woodyard — Lions place Pacheco on IR",
+          "href": "https://www.tsn.ca/nfl/article/lions-place-rb-pacheco-on-injured-reserve-n1-49796729/"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "IND",
+      "fields": ["bottom_line"],
+      "reason": "Richardson named Week 1 QB2. Jones remains starter. Pass on a new win-total; LAC Under 2/5 and DEN Over 2/5 stand.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line"],
+      "reason": "Flowers back at practice after a two-week sit; Madubuike team drills / DTD Week 1. Availability up. Pass on crowning WR1/DT1 or a new win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NE",
+      "fields": ["bottom_line"],
+      "reason": "Henderson still out (ankle since Aug 24); Week 1 RB availability flag. Pass on inventing RB1 or a new win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "DET",
+      "fields": ["bottom_line"],
+      "reason": "Pacheco IR catch-up (back, miss Weeks 1–4). Gibbs already the lead back. Pass on a new win-total.",
+      "status": "flagged"
+    }
+  ]
+}
