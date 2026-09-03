@@ -60,8 +60,8 @@ describe("CFB totals PLAY sit (tagger only)", () => {
       expect(Math.abs(edge), pair).toBeGreaterThanOrEqual(CFB_PLAY_EDGE_PTS);
       expect(cfbEdgeTag(Math.abs(edge), "total"), pair).toBe("PASS");
       expect(cfbPublishTagFromEdge(Math.abs(edge), "total"), pair).toBe("PASS");
-      // Raw spread-market path would still PLAY — sit is totals-only.
-      expect(cfbEdgeTag(Math.abs(edge), "spread"), pair).toBe("PLAY");
+      // Spreads also sat — PLAY-band → PASS on both markets.
+      expect(cfbEdgeTag(Math.abs(edge), "spread"), pair).toBe("PASS");
     }
   });
 
@@ -111,9 +111,9 @@ describe("CFB totals PLAY sit (tagger only)", () => {
     }
   });
 
-  it("spread PLAY/LEAN unchanged", () => {
-    expect(cfbEdgeTag(4.0, "spread")).toBe("PLAY");
-    expect(cfbEdgeTag(11.5, "spread")).toBe("PLAY");
+  it("spread PLAY also sat; LEAN unchanged", () => {
+    expect(cfbEdgeTag(4.0, "spread")).toBe("PASS");
+    expect(cfbEdgeTag(11.5, "spread")).toBe("PASS");
     expect(cfbEdgeTag(3.0, "spread")).toBe("LEAN");
     expect(cfbEdgeTag(2.0, "spread")).toBe("PASS");
   });
@@ -184,7 +184,7 @@ describe("CFB totals PLAY sit (tagger only)", () => {
     expect(leanRows[0]?.tagOU).toBe("LEAN");
     expect(leanRows[0]?.edgeOUNum).toBeCloseTo(3.8, 5);
 
-    // Spread PLAY still fires on a trusted large edge.
+    // Spread PLAY sat — trusted large edge tags PASS.
     const spreadPlay = flatRowsToLegacy(
       [
         {
@@ -213,7 +213,7 @@ describe("CFB totals PLAY sit (tagger only)", () => {
       "cfb",
       1,
     );
-    expect(spreadPlay[0]?.tagLine).toBe("PLAY");
+    expect(spreadPlay[0]?.tagLine).toBe("PASS");
     expect(spreadPlay[0]?.tagOU).toBe("PASS");
   });
 

@@ -13,6 +13,9 @@ LEAN_EDGE_PTS = 2.5
 # Totals PLAY sits until unused close holdout greens + Ryan/CoS flip.
 # See docs/CFB_TOTALS_PLAY_SIT.md — mirror of CFB_TOTALS_PLAY_ELIGIBLE.
 TOTALS_PLAY_ELIGIBLE = False
+# Spread PLAY sits until unused close holdout greens + Ryan/CoS flip.
+# See docs/CFB_SPREAD_PLAY_SIT.md — mirror of CFB_SPREAD_PLAY_ELIGIBLE.
+SPREAD_PLAY_ELIGIBLE = False
 
 CfbEdgeMarket = Literal["spread", "total"]
 CfbEdgeTag = Literal["PLAY", "LEAN", "PASS"]
@@ -80,6 +83,8 @@ def cfb_edge_tag(
     if e >= PLAY_EDGE_PTS:
         if market == "total" and not TOTALS_PLAY_ELIGIBLE:
             return "PASS"
+        if market == "spread" and not SPREAD_PLAY_ELIGIBLE:
+            return "PASS"
         return "PLAY"
     if e >= LEAN_EDGE_PTS:
         return "LEAN"
@@ -90,5 +95,5 @@ def cfb_publish_tag_from_edge(
     abs_edge: Optional[float],
     market: CfbEdgeMarket = "spread",
 ) -> CfbEdgeTag:
-    """Publish ≡ display after totals PLAY sit remap."""
+    """Publish ≡ display after PLAY sit remap."""
     return cfb_edge_tag(abs_edge, market)

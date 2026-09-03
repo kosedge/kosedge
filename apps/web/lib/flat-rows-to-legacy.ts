@@ -267,7 +267,7 @@ function edgeToTag(
   }
   if (edgeNum == null) return undefined;
   if (sport === "cfb") {
-    // SoT: cfbEdgeTag (totals PLAY sat via CFB_TOTALS_PLAY_ELIGIBLE).
+    // SoT: cfbEdgeTag (PLAY sit via CFB_*_PLAY_ELIGIBLE flags).
     return cfbEdgeTag(edgeNum, market === "total" ? "total" : "spread");
   }
   if (sport === "nba") {

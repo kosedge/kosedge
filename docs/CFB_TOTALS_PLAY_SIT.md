@@ -3,7 +3,7 @@
 **Date:** 2026-09-03  
 **Owner lock:** Ryan / CoS  
 **Related audit:** `docs/CFB_TOTALS_HOT_AUDIT.md` (why Overs look hot — KEI total ≡ model total)  
-**Out of scope:** KEI pack, haircut, remat, mint, engine retune. Spreads untouched.
+**Out of scope:** KEI pack, haircut, remat, mint, engine retune. Spreads have a separate sit — see `docs/CFB_SPREAD_PLAY_SIT.md`.
 
 ---
 
@@ -12,7 +12,7 @@
 CFB **Total** rows may be **LEAN / PASS / untrusted** — **never PLAY** until an **unused close holdout** greens **and** Ryan/CoS explicitly flips eligibility.
 
 - LEAN ≥ 2.5 still fires (do **not** sit LEAN).
-- Spreads unchanged: PLAY ≥ 4.0 / LEAN ≥ 2.5 / `|12|` trust (`CFB_ABSURD_VS_KEI_PTS`).
+- Spreads: see `docs/CFB_SPREAD_PLAY_SIT.md` (PLAY sat separately; LEAN ≥ 2.5 / `|12|` trust unchanged).
 - One SoT: Edge Board Tag O/U and publish/display tag agree after remap (`cfbEdgeTag` ≡ `cfbPublishTagFromEdge`).
 
 ---
