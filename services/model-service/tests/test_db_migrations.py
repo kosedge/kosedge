@@ -444,3 +444,124 @@ def test_existing_migration_files_are_not_modified() -> None:
     from src.db_migrations.discovery import sha256_file
 
     assert re.fullmatch(r"[0-9a-f]{64}", sha256_file(path))
+
+
+# --- migrations dir auto-detect (Railway shallow install) ---
+
+
+def test_candidates_no_indexerror_on_shallow_railway_path() -> None:
+    """``/app/src/db_migrations`` only has parents[0..3]; must not IndexError."""
+    from src.db_migrations.paths import migrations_dir_candidates
+
+    here = Path("/app/src/db_migrations/paths.py")
+    assert len(here.parents) == 4  # indices 0..3 only; parents[4] would IndexError
+    candidates = migrations_dir_candidates(here)
+    assert candidates[0] == Path("/app/infra/db")
+    assert Path("/app/infra/db") in candidates
+    # Must not synthesize broken absolute paths from missing parents.
+    assert not any(str(c).startswith("//") for c in candidates)
+
+
+def test_candidates_include_repo_root_when_deep_enough() -> None:
+    from src.db_migrations.paths import migrations_dir_candidates
+
+    here = Path(
+        "/Users/example/kosedge/services/model-service/src/db_migrations/paths.py"
+    )
+    candidates = migrations_dir_candidates(here)
+    assert any(str(c).endswith("kosedge/infra/db") for c in candidates), candidates
+    assert any(
+        str(c).endswith("model-service/infra/db") for c in candidates
+    ), candidates
+
+
+def test_resolve_finds_staged_infra_db_on_shallow_package_layout(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Container layout: package at <root>/src/db_migrations → <root>/infra/db."""
+    from src.db_migrations import paths as paths_mod
+    from src.db_migrations.paths import migrations_dir_candidates
+
+    monkeypatch.delenv("KOSEDGE_MIGRATIONS_DIR", raising=False)
+    # Skip hard-coded /app/infra/db so the tmp layout exercises parent walk.
+    _orig_candidates = migrations_dir_candidates
+    monkeypatch.setattr(
+        paths_mod,
+        "migrations_dir_candidates",
+        lambda here=None: [
+            c for c in _orig_candidates(here) if c != Path("/app/infra/db")
+        ],
+    )
+
+    pkg = tmp_path / "src" / "db_migrations"
+    pkg.mkdir(parents=True)
+    migrations = tmp_path / "infra" / "db"
+    migrations.mkdir(parents=True)
+    (migrations / "001_init.sql").write_text("-- test\n", encoding="utf-8")
+    here = pkg / "paths.py"
+    here.write_text("# stub\n", encoding="utf-8")
+
+    found = paths_mod.resolve_migrations_dir(here=here)
+    assert found == migrations.resolve()
+
+
+def test_resolve_prefers_hardcoded_app_infra_db_without_env(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """When /app/infra/db exists, auto-detect returns it with no env/CLI."""
+    from src.db_migrations import paths as paths_mod
+
+    monkeypatch.delenv("KOSEDGE_MIGRATIONS_DIR", raising=False)
+    monkeypatch.setattr(
+        paths_mod,
+        "migrations_dir_candidates",
+        lambda here=None: [
+            Path("/app/infra/db"),
+            Path("/tmp/should_not_win_infra_db"),
+        ],
+    )
+
+    checked: list[str] = []
+    real_is_dir = Path.is_dir
+
+    def _is_dir(self: Path) -> bool:
+        checked.append(str(self))
+        if str(self) in {"/app/infra/db", "/tmp/should_not_win_infra_db"}:
+            return True
+        return real_is_dir(self)
+
+    monkeypatch.setattr(Path, "is_dir", _is_dir)
+
+    found = paths_mod.resolve_migrations_dir(
+        here=Path("/app/src/db_migrations/paths.py")
+    )
+    assert checked[0] == "/app/infra/db"
+    assert found == Path("/app/infra/db").resolve()
+
+
+def test_resolve_env_override_still_wins(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.db_migrations.paths import resolve_migrations_dir
+
+    env_dir = tmp_path / "from_env"
+    env_dir.mkdir()
+    other = tmp_path / "infra" / "db"
+    other.mkdir(parents=True)
+    monkeypatch.setenv("KOSEDGE_MIGRATIONS_DIR", str(env_dir))
+    assert resolve_migrations_dir(
+        here=tmp_path / "src" / "db_migrations" / "x.py"
+    ) == env_dir.resolve()
+
+
+def test_resolve_explicit_cli_still_wins(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from src.db_migrations.paths import resolve_migrations_dir
+
+    cli_dir = tmp_path / "from_cli"
+    cli_dir.mkdir()
+    env_dir = tmp_path / "from_env"
+    env_dir.mkdir()
+    monkeypatch.setenv("KOSEDGE_MIGRATIONS_DIR", str(env_dir))
+    assert resolve_migrations_dir(cli_dir) == cli_dir.resolve()

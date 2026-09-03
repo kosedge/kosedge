@@ -6,7 +6,46 @@ import os
 from pathlib import Path
 
 
-def resolve_migrations_dir(explicit: str | Path | None = None) -> Path:
+def migrations_dir_candidates(here: Path | None = None) -> list[Path]:
+    """Build ordered candidate paths for ``infra/db`` without unsafe parent indexing.
+
+    Railway images install the package at ``/app/src/db_migrations/...`` (only
+    parents[0..3] exist). Indexing ``parents[4]`` must never raise while building
+    this list — otherwise even the hard-coded ``/app/infra/db`` candidate is skipped.
+    """
+    base = (here or Path(__file__)).resolve()
+    candidates: list[Path] = [
+        Path("/app/infra/db"),  # Docker/Railway staged copy (prefer first)
+    ]
+    # parents[2] = service root (…/model-service or /app); parents[4] = monorepo root
+    # when deep enough. Length-check so shallow installs cannot IndexError.
+    for idx in (2, 4):
+        if len(base.parents) > idx:
+            candidates.append(base.parents[idx] / "infra" / "db")
+    candidates.extend(
+        [
+            Path.cwd() / "infra" / "db",
+            Path.cwd().parent / "infra" / "db",
+            Path.cwd().parent.parent / "infra" / "db",
+        ]
+    )
+    for parent in base.parents:
+        candidates.append(parent / "infra" / "db")
+
+    seen: set[Path] = set()
+    uniq: list[Path] = []
+    for path in candidates:
+        if path not in seen:
+            seen.add(path)
+            uniq.append(path)
+    return uniq
+
+
+def resolve_migrations_dir(
+    explicit: str | Path | None = None,
+    *,
+    here: Path | None = None,
+) -> Path:
     """Locate ``infra/db`` SQL migrations.
 
     Search order:
@@ -30,18 +69,7 @@ def resolve_migrations_dir(explicit: str | Path | None = None) -> Path:
             )
         return path
 
-    here = Path(__file__).resolve()
-    candidates = [
-        Path("/app/infra/db"),
-        here.parents[2] / "infra" / "db",  # services/model-service/infra/db (staged)
-        here.parents[4] / "infra" / "db",  # repo-root/infra/db from src/db_migrations
-        Path.cwd() / "infra" / "db",
-        Path.cwd().parent / "infra" / "db",
-        Path.cwd().parent.parent / "infra" / "db",
-    ]
-    for parent in here.parents:
-        candidates.append(parent / "infra" / "db")
-    for candidate in candidates:
+    for candidate in migrations_dir_candidates(here):
         if candidate.is_dir():
             return candidate.resolve()
 
