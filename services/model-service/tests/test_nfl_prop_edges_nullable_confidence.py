@@ -9,10 +9,12 @@ from __future__ import annotations
 
 import os
 from datetime import datetime, timezone
+from pathlib import Path
 from types import SimpleNamespace
 from typing import Any, Dict, List, Optional
 
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine, text
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
 
@@ -461,3 +463,48 @@ def test_placeholder_confidence_gate_does_not_drop_null_confidence() -> None:
         role_confidence=0.85,
         market_joined=False,
     )
+
+
+def test_migration_drops_confidence_not_null_and_default() -> None:
+    migration = (
+        Path(__file__).resolve().parents[3]
+        / "infra/db/054_nfl_prop_edges_nullable_confidence.sql"
+    )
+    body = migration.read_text(encoding="utf-8")
+    assert "DROP NOT NULL" in body
+    assert "DROP DEFAULT" in body
+
+
+def test_insert_omitting_confidence_yields_null_not_zero() -> None:
+    """Post-054 schema: omitted column must be NULL, not DEFAULT 0.0 (fake 0%)."""
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    with engine.begin() as conn:
+        conn.execute(
+            text(
+                """
+                CREATE TABLE nfl_player_prop_model_edges (
+                  season INTEGER NOT NULL,
+                  week INTEGER NOT NULL,
+                  model_version TEXT NOT NULL,
+                  player_name TEXT NOT NULL,
+                  market_key TEXT NOT NULL,
+                  line REAL,
+                  confidence REAL
+                )
+                """
+            )
+        )
+        conn.execute(
+            text(
+                """
+                INSERT INTO nfl_player_prop_model_edges
+                  (season, week, model_version, player_name, market_key, line)
+                VALUES (2026, 1, 'nfl-player-v1', 'J.Brissett', 'pass_yds', NULL)
+                """
+            )
+        )
+        conf = conn.execute(
+            text("SELECT confidence FROM nfl_player_prop_model_edges LIMIT 1")
+        ).scalar_one()
+    assert conf is None
+    assert conf != 0.0
