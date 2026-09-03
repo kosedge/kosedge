@@ -8,6 +8,7 @@ import type {
   DeskMarketType,
   NflEdgesDeskResponse,
 } from "@/lib/nfl-edges-desk-types";
+import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import { nflPropsSurfaceCopy } from "@/lib/nfl-props-surface";
 import {
   modelUnreachableCopy,
@@ -23,7 +24,7 @@ const MIN_EDGE_OPTIONS = [
   { label: "2pp / 1pt", prob: 0.02, line: 1.0 },
   { label: "3pp / 1.5pt", prob: 0.03, line: 1.5 },
 ] as const;
-const MIN_CONF_OPTIONS = [0, 0.4, 0.6, 0.75] as const;
+const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
 type Props = {
   season: number;

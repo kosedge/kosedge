@@ -1,8 +1,8 @@
 """Nullable prop confidence — storage + read-path regression (PR 428 follow-up).
 
 PR 428 returns honest NULL confidence for projection-only rows, one-way ATD,
-and other unscorable cases. The DB column must accept NULL; board ordering and
-filters must not treat NULL as 0 or sort it ahead of scored rows.
+and other unscorable cases. The DB column must accept NULL; board ordering ranks
+by tag + abs edge (not reliability confidence); filters must not treat NULL as 0.
 """
 
 from __future__ import annotations
@@ -255,17 +255,20 @@ class _PropsBoardSession:
                 kept.append(row)
 
             def _sort_key(r: Dict[str, Any]) -> tuple:
+                # Mirrors SQL: tag ASC, abs-edge DESC NULLS LAST (no confidence).
                 tag = (r.get("diagnostics") or {}).get("tag", "PASS")
                 tag_rank = {"PLAY": 0, "WATCH": 1, "LEAN": 1}.get(tag, 2)
-                conf = r.get("confidence")
-                conf_sort = conf if conf is not None else float("-inf")
+                eo = r.get("edge_over")
+                eu = r.get("edge_under")
+                if eo is None and eu is None:
+                    return (tag_rank, 1, 0.0)
                 edge = max(
-                    abs(float(r.get("edge_over") or 0)),
-                    abs(float(r.get("edge_under") or 0)),
+                    abs(float(eo)) if eo is not None else 0.0,
+                    abs(float(eu)) if eu is not None else 0.0,
                 )
-                return (tag_rank, conf_sort, edge)
+                return (tag_rank, 0, -edge)
 
-            kept.sort(key=_sort_key, reverse=True)
+            kept.sort(key=_sort_key)
             return _Result(rows=[_FakeRow(row) for row in kept])
         raise AssertionError(f"Unexpected SQL in props board test: {sql}")
 
@@ -320,7 +323,7 @@ def _board_row(
     }
 
 
-def test_props_board_sql_orders_confidence_nulls_last(monkeypatch) -> None:
+def test_props_board_sql_orders_abs_edge_nulls_last(monkeypatch) -> None:
     board_session = _PropsBoardSession(
         [
             _board_row(player_name="HighConf", confidence=0.72),
@@ -338,7 +341,10 @@ def test_props_board_sql_orders_confidence_nulls_last(monkeypatch) -> None:
     response = client.get("/nfl/props/board", params={"season": 2026, "week": 1})
     assert response.status_code == 200
     assert board_session.last_board_sql is not None
-    assert "NULLS LAST" in board_session.last_board_sql
+    sql = board_session.last_board_sql
+    assert "NULLS LAST" in sql
+    assert "GREATEST(ABS(edge_over), ABS(edge_under)) DESC NULLS LAST" in sql
+    assert "confidence DESC" not in sql
 
 
 def test_props_board_returns_null_confidence_for_one_way_anytime_td(monkeypatch) -> None:
@@ -398,15 +404,34 @@ def test_props_board_projection_only_reads_back_null_confidence(monkeypatch) -> 
     assert row["confidence"] != 0
 
 
-def test_props_board_null_confidence_sorted_after_scored_rows(monkeypatch) -> None:
+def test_props_board_sorted_by_abs_edge_not_reliability(monkeypatch) -> None:
+    """Board primary rank = tag priority then abs edge — not reliability confidence."""
     monkeypatch.setattr(
         nfl_routes,
         "SessionLocal",
         lambda: _PropsBoardSession(
             [
-                _board_row(player_name="NullConf", confidence=None, line=None, edge_over=None, edge_under=None),
-                _board_row(player_name="MidConf", confidence=0.55),
-                _board_row(player_name="HighConf", confidence=0.81),
+                _board_row(
+                    player_name="LowEdgeHighConf",
+                    confidence=0.90,
+                    edge_over=0.02,
+                    edge_under=-0.02,
+                ),
+                _board_row(
+                    player_name="HighEdgeLowConf",
+                    confidence=0.08,
+                    edge_over=0.18,
+                    edge_under=-0.18,
+                    market_over_price=-110,
+                    market_under_price=-110,
+                ),
+                _board_row(
+                    player_name="NullEdge",
+                    confidence=0.55,
+                    line=None,
+                    edge_over=None,
+                    edge_under=None,
+                ),
             ]
         ),
     )
@@ -414,8 +439,44 @@ def test_props_board_null_confidence_sorted_after_scored_rows(monkeypatch) -> No
     response = client.get("/nfl/props/board", params={"season": 2026, "week": 1})
     assert response.status_code == 200
     names = [r["player_name"] for r in response.json()["rows"]]
-    assert names.index("HighConf") < names.index("MidConf")
-    assert names.index("MidConf") < names.index("NullConf")
+    assert names.index("HighEdgeLowConf") < names.index("LowEdgeHighConf")
+    assert names.index("LowEdgeHighConf") < names.index("NullEdge")
+
+
+def test_props_board_null_confidence_sorted_after_scored_rows(monkeypatch) -> None:
+    monkeypatch.setattr(
+        nfl_routes,
+        "SessionLocal",
+        lambda: _PropsBoardSession(
+            [
+                _board_row(
+                    player_name="NullConf",
+                    confidence=None,
+                    line=None,
+                    edge_over=None,
+                    edge_under=None,
+                ),
+                _board_row(
+                    player_name="MidEdge",
+                    confidence=0.55,
+                    edge_over=0.06,
+                    edge_under=-0.06,
+                ),
+                _board_row(
+                    player_name="HighEdge",
+                    confidence=0.20,
+                    edge_over=0.14,
+                    edge_under=-0.14,
+                ),
+            ]
+        ),
+    )
+    client = TestClient(app)
+    response = client.get("/nfl/props/board", params={"season": 2026, "week": 1})
+    assert response.status_code == 200
+    names = [r["player_name"] for r in response.json()["rows"]]
+    assert names.index("HighEdge") < names.index("MidEdge")
+    assert names.index("MidEdge") < names.index("NullConf")
 
 
 def test_props_board_min_confidence_keeps_null_confidence_rows(monkeypatch) -> None:
@@ -442,8 +503,31 @@ def test_props_board_min_confidence_keeps_null_confidence_rows(monkeypatch) -> N
     assert "LowConf" not in names
 
 
+def test_reliability_confidence_does_not_drop_market_joined_prop() -> None:
+    """Low reliability score is not a placeholder signal — keep investable joined rows."""
+    assert is_investable_prop(
+        market_key="rec_yds",
+        position="WR",
+        model_mean=72.0,
+        line=68.5,
+        confidence=0.08,
+        role_confidence=0.88,
+        market_joined=True,
+    )
+    # Same low reliability without a book still clears when volume clears the floor.
+    assert is_investable_prop(
+        market_key="pass_yds",
+        position="QB",
+        model_mean=238.0,
+        line=None,
+        confidence=0.05,
+        role_confidence=0.85,
+        market_joined=False,
+    )
+
+
 def test_placeholder_confidence_gate_does_not_drop_null_confidence() -> None:
-    """NULL is unscorable, not a placeholder — must not trigger PLACEHOLDER_CONFIDENCE_MAX drop."""
+    """NULL is unscorable, not a placeholder — must not trigger an eligibility drop."""
     assert is_investable_prop(
         market_key="pass_yds",
         position="QB",
@@ -453,8 +537,8 @@ def test_placeholder_confidence_gate_does_not_drop_null_confidence() -> None:
         role_confidence=0.85,
         market_joined=False,
     )
-    # Contrast: explicit low placeholder confidence still drops at the involvement floor.
-    assert not is_investable_prop(
+    # Starter at half-floor with low reliability must still pass (floor owns volume).
+    assert is_investable_prop(
         market_key="pass_yds",
         position="QB",
         model_mean=75.0,

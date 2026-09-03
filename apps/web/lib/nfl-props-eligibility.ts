@@ -35,7 +35,14 @@ export const SKILL_GROUPS = new Set(["QB", "RB", "WR", "TE"]);
 export const EXCLUDED_GROUPS = new Set(["OL", "DL", "LB", "DB", "ST", "DST"]);
 
 export const MARKETS_BY_GROUP: Record<string, readonly string[]> = {
-  QB: ["pass_yds", "pass_tds", "completions", "attempts", "rush_yds", "anytime_td"],
+  QB: [
+    "pass_yds",
+    "pass_tds",
+    "completions",
+    "attempts",
+    "rush_yds",
+    "anytime_td",
+  ],
   RB: ["rush_yds", "rush_att", "rec_yds", "receptions", "anytime_td"],
   WR: ["rec_yds", "receptions", "anytime_td", "longest_reception"],
   TE: ["rec_yds", "receptions", "anytime_td", "longest_reception"],
@@ -68,7 +75,8 @@ const MEAN_FLOORS: Record<string, Record<string, number>> = {
 
 export const STARTER_ROLE_CONFIDENCE = 0.55;
 const ZERO_MEAN_EPS = 1e-6;
-const PLACEHOLDER_CONFIDENCE_MAX = 0.12;
+// Reliability `confidence` is independent of edge (PR 428). Do not use it as a
+// placeholder signal — involvement floors + market join already gate junk.
 
 const UNKNOWN_POSITION_MARKETS = new Set([
   "pass_yds",
@@ -86,8 +94,12 @@ const UNKNOWN_POSITION_MARKETS = new Set([
 export const PROPS_ELIGIBILITY_NOTE =
   "Eligibility = skill positions (QB/RB/WR/TE) + involvement floors. OL/DL/ST and 0.0 model rows are omitted.";
 
-export function canonicalizePosition(position: string | null | undefined): string {
-  const pos = String(position || "").trim().toUpperCase();
+export function canonicalizePosition(
+  position: string | null | undefined,
+): string {
+  const pos = String(position || "")
+    .trim()
+    .toUpperCase();
   if (!pos) return "";
   return POSITION_ALIASES[pos] ?? pos;
 }
@@ -110,7 +122,11 @@ function volume(opts: {
       : null;
   if (mean != null && mean > ZERO_MEAN_EPS) return mean;
   if (opts.marketKey === "anytime_td") return 0;
-  if (opts.line != null && Number.isFinite(opts.line) && opts.line > ZERO_MEAN_EPS) {
+  if (
+    opts.line != null &&
+    Number.isFinite(opts.line) &&
+    opts.line > ZERO_MEAN_EPS
+  ) {
     return opts.line;
   }
   return 0;
@@ -154,14 +170,7 @@ export function isInvestableProp(row: PropEligibilityInput): boolean {
   const need = floor * (starter ? 0.5 : 1);
   if (vol + 1e-9 < need) return false;
 
-  if (
-    row.confidence != null &&
-    row.confidence <= PLACEHOLDER_CONFIDENCE_MAX &&
-    vol <= need &&
-    row.marketJoined !== true
-  ) {
-    return false;
-  }
-
+  // confidence / marketJoined stay on the input type for callers, but reliability
+  // confidence must not eligibility-drop (PR 428 — independent of edge).
   return true;
 }

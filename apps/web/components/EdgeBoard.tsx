@@ -6,6 +6,11 @@ import SportsbookBadge from "@/components/SportsbookBadge";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode } from "@/lib/kei-brand";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
+import {
+  displayActionLabel,
+  reachableActionLabels,
+  reachableConfidenceBands,
+} from "@/lib/nfl-dead-tiers";
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
 import type { StatDrop } from "@/lib/edge-board-stat-drop";
 
@@ -175,46 +180,47 @@ function ActionDecisionCell({
   if (!actionLabel && !publishTag) {
     return <span className="text-gray-500">—</span>;
   }
+  const shownLabel = displayActionLabel(actionLabel);
   const confLabel = formatConfidenceLabel(
     confidenceBand,
     confidenceScore,
     confidenceTierConstant,
   );
   const showLadder =
-    actionLabel === "PLAY" ||
-    actionLabel === "LEAN" ||
-    actionLabel === "BEST VALUE" ||
-    actionLabel === "ALERT";
+    shownLabel === "PLAY" ||
+    shownLabel === "LEAN" ||
+    shownLabel === "BEST VALUE" ||
+    shownLabel === "ALERT";
   const ladderVerb =
-    actionLabel === "LEAN"
+    shownLabel === "LEAN"
       ? "Lean to"
-      : actionLabel === "ALERT"
+      : shownLabel === "ALERT"
         ? "Was to"
         : "Play to";
   const ladderNum =
-    actionLabel === "LEAN" && leanToNum != null
+    shownLabel === "LEAN" && leanToNum != null
       ? leanToNum
       : playToNum != null
         ? playToNum
         : null;
   return (
     <div className={compact ? "leading-tight" : "leading-tight text-center"}>
-      {actionLabel ? (
-        <span className={actionLabelClassName(actionLabel, compact)}>
-          {actionLabel}
+      {shownLabel ? (
+        <span className={actionLabelClassName(shownLabel, compact)}>
+          {shownLabel}
         </span>
       ) : publishTag ? (
         <span className={tagClassName(publishTag, compact)}>{publishTag}</span>
       ) : null}
       {play &&
-      actionLabel &&
-      actionLabel !== "PASS" &&
-      actionLabel !== "STAY AWAY" ? (
+      shownLabel &&
+      shownLabel !== "PASS" &&
+      shownLabel !== "STAY AWAY" ? (
         <div
           className={`mt-1 text-[11px] font-bold truncate ${
-            actionLabel === "PLAY" || actionLabel === "BEST VALUE"
+            shownLabel === "PLAY" || shownLabel === "BEST VALUE"
               ? "text-edge-green"
-              : actionLabel === "LEAN"
+              : shownLabel === "LEAN"
                 ? "text-amber-400"
                 : "text-orange-300"
           }`}
@@ -265,12 +271,12 @@ function ActionDecisionCell({
           {playToNotes}
         </div>
       ) : null}
-      {caution && actionLabel && actionLabel !== "PASS" ? (
+      {caution && shownLabel && shownLabel !== "PASS" ? (
         <div className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-amber-300/90">
           Size down
         </div>
       ) : null}
-      {publishTag && actionLabel && publishTag !== actionLabel ? (
+      {publishTag && shownLabel && publishTag !== shownLabel ? (
         <div className="mt-1 text-[9px] text-gray-600">Desk {publishTag}</div>
       ) : null}
     </div>
@@ -1296,7 +1302,7 @@ export default function EdgeBoard({
           {marketsOnly
             ? `Markets-only board — ${keiCode} handicap model not shipped. KEI / Edge / Tag stay empty (no invented numbers). Open/Best from sportsbooks or shipped fallback snapshots.`
             : isNfl
-              ? "We bet prices, not teams. Action = KEI vs Current (stakeable book when present). Edge magnitude and confidence stay separate. "
+              ? `We bet prices, not teams. Action = KEI vs Current (stakeable book when present). Labels: ${reachableActionLabels().join(" / ")}. Confidence bands: ${reachableConfidenceBands().join(" / ")}. Edge magnitude and confidence stay separate. `
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : String(sportKey).toLowerCase() === "cfb"

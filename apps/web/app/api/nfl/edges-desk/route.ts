@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
 import { fetchNflEdgesDesk, type DeskMarketType } from "@/lib/nfl-edges";
+import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import {
   pageDataCacheHeaders,
   pageDataJsonResponse,
@@ -18,7 +19,7 @@ const MIN_EDGE_OPTIONS = [
   { prob: 0.02, line: 1.0 },
   { prob: 0.03, line: 1.5 },
 ] as const;
-const MIN_CONF_OPTIONS = [0, 0.4, 0.6, 0.75] as const;
+const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
 /**
  * Page-data for /pro/nfl/edges.

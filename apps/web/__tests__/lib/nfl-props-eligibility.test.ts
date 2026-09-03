@@ -79,4 +79,27 @@ describe("NFL props eligibility", () => {
     expect(PROPS_ELIGIBILITY_NOTE.toLowerCase()).toContain("skill");
     expect(PROPS_ELIGIBILITY_NOTE.toLowerCase()).not.toContain("2025");
   });
+
+  it("does not drop market-joined rows for low reliability confidence", () => {
+    expect(
+      isInvestableProp({
+        marketKey: "rec_yds",
+        position: "WR",
+        modelMean: 72,
+        line: 68.5,
+        confidence: 0.05,
+        marketJoined: true,
+      }),
+    ).toBe(true);
+    expect(
+      isInvestableProp({
+        marketKey: "pass_yds",
+        position: "QB",
+        modelMean: 238,
+        confidence: 0.08,
+        roleConfidence: 0.85,
+        marketJoined: false,
+      }),
+    ).toBe(true);
+  });
 });
