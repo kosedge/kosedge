@@ -17,6 +17,8 @@ import { MODEL_TRANSPARENCY_HREF } from "@/lib/model-transparency-hub";
 import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
+import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
+import { pickLatestIso } from "@/lib/market-asof-stamp";
 
 export const dynamic = "force-dynamic";
 
@@ -280,6 +282,17 @@ export default async function EdgeBoardSportPage({
               Full slate{fullCount ? ` (${fullCount})` : ""}
             </Link>
           </div>
+        ) : null}
+
+        {isNfl ? (
+          <MarketAsOfStamp
+            className="mt-3"
+            asOf={pickLatestIso(
+              ...rows.map((r) => (r as { linesAsOf?: string }).linesAsOf),
+            )}
+            kind="lines"
+            data-testid="edge-board-asof"
+          />
         ) : null}
 
         <EdgeBoard

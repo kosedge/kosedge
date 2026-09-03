@@ -16,6 +16,9 @@ import {
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
+import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
+import { bookDisplay } from "@/lib/odds-api";
+import { pickLatestIso } from "@/lib/market-asof-stamp";
 
 const DEFAULT_SEASON = 2026;
 /** Wide fetch window; UI slate tabs decide what to show. */
@@ -112,6 +115,11 @@ export default async function NflFairLinesPage({
     slateStatus: board.slateStatus,
   });
 
+  const marketAsOf = pickLatestIso(board.oddsAsOf, board.asOf);
+  const marketBooks = (board.diagnostics.bookmakers ?? [])
+    .map((k) => bookDisplay(k))
+    .filter(Boolean);
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-10">
       <section className="rounded-3xl border border-kos-gold/25 bg-linear-to-br from-kos-gold/10 via-black/40 to-black/70 p-6 sm:p-8">
@@ -123,6 +131,13 @@ export default async function NflFairLinesPage({
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
               KEI Lines
             </h1>
+            <MarketAsOfStamp
+              className="mt-3"
+              asOf={marketAsOf}
+              books={marketBooks}
+              kind="lines"
+              data-testid="kei-lines-asof"
+            />
           </div>
           <div className="grid gap-2 sm:min-w-48">
             <Link

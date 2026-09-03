@@ -2,13 +2,10 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import type { ReactNode } from "react";
 import SportProHeader from "@/components/pro/SportProHeader";
-import {
-  resolveSportKey,
-  sportDisplayLabel,
-  SPORTS,
-} from "@/lib/sports";
+import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
+import { resolveSportKey, sportDisplayLabel, SPORTS } from "@/lib/sports";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
-import type { OddsComparisonRow } from "@/lib/odds-api";
+import type { OddsComparisonBookAsOf, OddsComparisonRow } from "@/lib/odds-api";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +19,8 @@ async function getRequestOrigin(): Promise<string> {
 type CompareApiResponse = {
   rows: OddsComparisonRow[];
   books: { key: string; label: string }[];
+  asOf?: string | null;
+  bookAsOf?: OddsComparisonBookAsOf[];
 };
 
 /** Use cached API so we don't burn Odds API credits on every page load. */
@@ -33,11 +32,13 @@ async function getOddsData(
     cache: "no-store",
     headers: { accept: "application/json" },
   });
-  if (!res.ok) return { rows: [], books: [] };
+  if (!res.ok) return { rows: [], books: [], asOf: null, bookAsOf: [] };
   const data = (await res.json()) as CompareApiResponse;
   return {
     rows: Array.isArray(data.rows) ? data.rows : [],
     books: Array.isArray(data.books) ? data.books : [],
+    asOf: data.asOf ?? null,
+    bookAsOf: Array.isArray(data.bookAsOf) ? data.bookAsOf : [],
   };
 }
 
@@ -73,7 +74,10 @@ export default async function OddsComparePage({
   const sportName = sportDisplayLabel(sportKey);
 
   const origin = await getRequestOrigin();
-  const { rows, books } = await getOddsData(sportKey, origin);
+  const { rows, books, asOf, bookAsOf } = await getOddsData(sportKey, origin);
+  const stampBooks = (bookAsOf ?? []).filter((b) => b.asOf).map((b) => b.label);
+  // NFL always stamps; other sports stamp when rows loaded.
+  const showMarketStamp = sportKey === "nfl" || rows.length > 0;
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
@@ -140,6 +144,15 @@ export default async function OddsComparePage({
           <p className="mt-4 text-xs text-gray-400">
             Books: {books.map((b) => b.label).join(" · ")}
           </p>
+        ) : null}
+        {showMarketStamp ? (
+          <MarketAsOfStamp
+            className="mt-2"
+            asOf={asOf}
+            books={stampBooks}
+            kind="odds"
+            data-testid="compare-odds-asof"
+          />
         ) : null}
 
         <section className="mt-8">
@@ -250,7 +263,10 @@ export default async function OddsComparePage({
                             r.bestMlAwayBook === b.key ||
                             r.bestMlHomeBook === b.key;
                           return [
-                            <BookCell key={`${b.key}-s`} highlight={isBestSpread}>
+                            <BookCell
+                              key={`${b.key}-s`}
+                              highlight={isBestSpread}
+                            >
                               <div className="text-[12px] leading-tight">
                                 {spread?.away ?? "—"}
                               </div>
@@ -272,7 +288,10 @@ export default async function OddsComparePage({
                                 {ml ? ml.home : ""}
                               </div>
                             </BookCell>,
-                            <BookCell key={`${b.key}-t`} highlight={isBestTotal}>
+                            <BookCell
+                              key={`${b.key}-t`}
+                              highlight={isBestTotal}
+                            >
                               <div className="text-[12px] leading-tight">
                                 {total?.line ? `o${total.line}` : "—"}
                               </div>
@@ -299,8 +318,8 @@ export default async function OddsComparePage({
             </div>
           </div>
           <p className="mt-3 text-xs text-gray-500">
-            Best spread = highest away number (better juice wins ties). Best ML =
-            highest American price for that side. Best O/U = highest total
+            Best spread = highest away number (better juice wins ties). Best ML
+            = highest American price for that side. Best O/U = highest total
             (better Over juice wins ties).
           </p>
         </section>

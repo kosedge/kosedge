@@ -10,6 +10,8 @@ import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
 } from "@/lib/model-service-status";
+import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
+import { bookDisplay } from "@/lib/odds-api";
 
 const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
@@ -127,6 +129,13 @@ export default async function NflEdgesDeskPage({
               Separations between KosEdge lines and the joined market. Empty
               when nothing clears the cut.
             </p>
+            <MarketAsOfStamp
+              className="mt-3"
+              asOf={desk.marketAsOf}
+              books={desk.marketBooks.map((k) => bookDisplay(k))}
+              kind="market"
+              data-testid="edges-desk-asof"
+            />
           </div>
           <div className="grid gap-2 sm:min-w-48">
             <Link

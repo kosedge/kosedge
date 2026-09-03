@@ -6,10 +6,7 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 
-import {
-  americanImpliedProb,
-  noVigHomeProb,
-} from "@/lib/american-odds";
+import { americanImpliedProb, noVigHomeProb } from "@/lib/american-odds";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export { americanImpliedProb, noVigHomeProb };
@@ -70,12 +67,37 @@ type OddsEvent = {
   bookmakers?: {
     key: string;
     title: string;
+    /** Odds API bookmaker snapshot time (ISO). */
+    last_update?: string;
     markets: {
       key: string;
+      /** Odds API market snapshot time (ISO). */
+      last_update?: string;
       outcomes: Array<{ name: string; point?: number; price?: number }>;
     }[];
   }[];
 };
+
+/** Latest market/book last_update — never invents fetch time. */
+function bookmakerAsOf(book: {
+  last_update?: string;
+  markets?: Array<{ last_update?: string }>;
+}): string | null {
+  let best: string | null = null;
+  let bestMs = Number.NEGATIVE_INFINITY;
+  const consider = (raw: string | undefined) => {
+    if (!raw || !String(raw).trim()) return;
+    const ms = Date.parse(raw);
+    if (!Number.isFinite(ms)) return;
+    if (ms >= bestMs) {
+      bestMs = ms;
+      best = String(raw).trim();
+    }
+  };
+  consider(book.last_update);
+  for (const m of book.markets ?? []) consider(m.last_update);
+  return best;
+}
 
 /** Odds API commence_time is UTC. Format in Eastern (US sports standard). */
 const ET = "America/New_York";
@@ -327,9 +349,7 @@ export async function fetchEdgeBoard(
       const openMlEntry = selectedMl[0];
       const bestMlEntry = pickBestMoneylineEntry(selectedMl) ?? openMlEntry;
       const bestMlBookKey = bestMlEntry?.book;
-      const bestMlBook = bestMlBookKey
-        ? bookDisplay(bestMlBookKey)
-        : undefined;
+      const bestMlBook = bestMlBookKey ? bookDisplay(bestMlBookKey) : undefined;
 
       rows.push({
         id: `${ev.id}-moneyline`,
@@ -496,13 +516,31 @@ export type OddsComparisonRow = {
   bestMlHomeBook?: string;
 };
 
+export type OddsComparisonBookAsOf = {
+  key: string;
+  label: string;
+  /** Book/market last_update from Odds API; null when upstream omitted it. */
+  asOf: string | null;
+};
+
+export type OddsComparisonResult = {
+  rows: OddsComparisonRow[];
+  /**
+   * Max book/market last_update across the pull.
+   * Null when Odds API omitted timestamps — callers must not invent fetch time.
+   */
+  asOf: string | null;
+  /** Per-book capture stamps for the books that appeared in this pull. */
+  bookAsOf: OddsComparisonBookAsOf[];
+};
+
 export async function fetchOddsComparison(
   sportKey: string,
   apiKey: string,
-): Promise<OddsComparisonRow[]> {
+): Promise<OddsComparisonResult> {
   const normalizedSport = sportKey.toLowerCase();
   const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
-  if (!oddsSportKey) return [];
+  if (!oddsSportKey) return { rows: [], asOf: null, bookAsOf: [] };
   const isMlb = normalizedSport === "mlb";
   const sportBooks = configuredBooksForSport(normalizedSport);
 
@@ -518,6 +556,7 @@ export async function fetchOddsComparison(
   const events = (await res.json()) as OddsEvent[];
 
   const rows: OddsComparisonRow[] = [];
+  const bookAsOfMap = new Map<string, string | null>();
   const commenceTime = (e: OddsEvent) => new Date(e.commence_time).getTime();
 
   for (const ev of events.sort((a, b) => commenceTime(a) - commenceTime(b))) {
@@ -546,6 +585,16 @@ export async function fetchOddsComparison(
     let bestMlHomePrice: number | null = null;
 
     for (const b of bookmakers) {
+      const snapAsOf = bookmakerAsOf(b);
+      const prev = bookAsOfMap.get(b.key);
+      if (snapAsOf) {
+        if (!prev || Date.parse(snapAsOf) >= Date.parse(prev)) {
+          bookAsOfMap.set(b.key, snapAsOf);
+        }
+      } else if (!bookAsOfMap.has(b.key)) {
+        bookAsOfMap.set(b.key, null);
+      }
+
       const spreadM = b.markets?.find((x) => x.key === "spreads");
       if (spreadM) {
         const awayO = spreadM.outcomes?.find((o) => o.name === ev.away_team);
@@ -640,5 +689,25 @@ export async function fetchOddsComparison(
     });
   }
 
-  return rows;
+  const bookAsOf: OddsComparisonBookAsOf[] = sportBooks
+    .filter((key) => bookAsOfMap.has(key))
+    .map((key) => ({
+      key,
+      label: bookDisplay(key),
+      asOf: bookAsOfMap.get(key) ?? null,
+    }));
+
+  let asOf: string | null = null;
+  let asOfMs = Number.NEGATIVE_INFINITY;
+  for (const entry of bookAsOf) {
+    if (!entry.asOf) continue;
+    const ms = Date.parse(entry.asOf);
+    if (!Number.isFinite(ms)) continue;
+    if (ms >= asOfMs) {
+      asOfMs = ms;
+      asOf = entry.asOf;
+    }
+  }
+
+  return { rows, asOf, bookAsOf };
 }
