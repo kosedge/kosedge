@@ -24,15 +24,31 @@
 
 ## Prod deploy steps (Railway + warehouse)
 
-### 1) Apply migrations 039 + 040
+### 1) Apply migrations (tracked runner)
 
-On **prod** Postgres (public URL or `railway ssh` into model-service):
+On **prod** Postgres (public URL or `railway ssh` into model-service), use the
+tracked migration runner — see `infra/db/README.md`. Do **not** replay already-live
+SQL; baseline first if `schema_migrations` is empty on a nonempty warehouse.
 
 ```bash
-psql "$PROD_DATABASE_URL" -f infra/db/039_mlb_enterprise_runline_quality.sql
-psql "$PROD_DATABASE_URL" -f infra/db/040_mlb_enterprise_clv_board_health.sql
-# or:
-DATABASE_URL="$PROD_DATABASE_URL" python scripts/mlb/apply_039_040_prod.py
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status
+# If unbaselined legacy: stamp through the last version already live, then status.
+# Current KosEdge warehouse high-water mark is 054 (already applied by hand) —
+# baseline --through 054 only (with confirmation tokens); do not re-apply 054.
+# DBNAME=$(psql "$PROD_DATABASE_URL" -Atc 'select current_database()')
+# DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline \
+#   --through 054 --confirm-baseline 054 --expect-database "$DBNAME"
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status --require-current
+# apply only when a *new* pending migration exists after a clean prefix baseline
+# DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py apply
+```
+
+Historical (pre-runner) note — `039` + `040` were originally applied with:
+
+```bash
+# psql "$PROD_DATABASE_URL" -f infra/db/039_mlb_enterprise_runline_quality.sql
+# psql "$PROD_DATABASE_URL" -f infra/db/040_mlb_enterprise_clv_board_health.sql
+# DATABASE_URL="$PROD_DATABASE_URL" python scripts/mlb/apply_039_040_prod.py
 ```
 
 Verify:

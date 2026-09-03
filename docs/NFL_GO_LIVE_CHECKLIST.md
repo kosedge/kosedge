@@ -38,15 +38,34 @@ After `RAILWAY_TOKEN` is set, any push to `deploy-vercel` that touches `services
 
 ### 3) Production warehouse
 
-On the **prod** Postgres (public URL or `railway ssh` into model-service):
+On the **prod** Postgres (public URL or `railway ssh` into model-service), use the
+tracked migration runner — not ad-hoc `psql` for new work. See `infra/db/README.md`.
+
+**Current cutover (tracker only):** production already has hand-applied SQL through
+`054` (nullable `nfl_player_prop_model_edges.confidence`, no default; ~85,388 rows)
+with **no** `schema_migrations` rows. Verified 2026-09-03. Do **not** re-apply 054.
+Baseline is operator attestation — it does not re-check each historical DDL effect.
 
 ```bash
-# apply SQL migrations through 038 (snap GSIS bridge)
-psql "$PROD_DATABASE_URL" -f infra/db/037_nfl_data_resilience.sql
-psql "$PROD_DATABASE_URL" -f infra/db/038_nfl_snap_usage_bridge.sql
-# or: railway ssh -s model-service -- python scripts/nfl/apply_038_prod.py
-# then ingest / restore owned NFL data (or restore the verified local dump)
+# Explicit baseline through 054 (stamps only — never implicit). No apply.
+DBNAME=$(psql "$PROD_DATABASE_URL" -Atc 'select current_database()')
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py baseline \
+  --through 054 --confirm-baseline 054 --expect-database "$DBNAME"
+DATABASE_URL="$PROD_DATABASE_URL" python scripts/db/migrate.py status --require-current
+# After stamp: apply is a no-op until a future 055+. Never replay 054.
+# After runner deploy + baseline, enable Actions var MIGRATION_STATUS_GATE_ENABLED=true
 ```
+
+Historical (pre-runner) note — these were applied once by hand / one-off scripts:
+
+```bash
+# historical: snap GSIS bridge era
+# psql "$PROD_DATABASE_URL" -f infra/db/037_nfl_data_resilience.sql
+# psql "$PROD_DATABASE_URL" -f infra/db/038_nfl_snap_usage_bridge.sql
+# or: railway ssh -s model-service -- python scripts/nfl/apply_038_prod.py
+```
+
+Then ingest / restore owned NFL data (or restore the verified local dump) as needed.
 
 Freshness is wired; current prod blocker is `dr_backup:missing_timestamp` (offseason degraded is expected until DR backup lands).
 
