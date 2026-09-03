@@ -279,6 +279,33 @@ describe("pro sport IA", () => {
     expect(src).not.toContain("August 11, 2026");
   });
 
+  it("keeps Sleepers free of editorial August 11 / KOSEDGE_DATE chrome", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/nfl/fantasy/sleepers/page.tsx"),
+      "utf8",
+    );
+    // Same stale launch stamp killed on Guillotine (PR 421) / props (PR 419).
+    expect(src).not.toMatch(/\bKOSEDGE_DATE\b/);
+    expect(src).not.toContain("August 11, 2026");
+    expect(src).not.toMatch(/Date:\s*\{/);
+    // Honest ADP freshness labels stay.
+    expect(src).toMatch(/adpSourceLabel/);
+    expect(src).toMatch(/adpFreshnessLabel/);
+  });
+
+  it("keeps Awards free of editorial August 11 / KOSEDGE_DATE chrome", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/nfl/awards/page.tsx"),
+      "utf8",
+    );
+    expect(src).not.toMatch(/\bKOSEDGE_DATE\b/);
+    expect(src).not.toContain("August 11, 2026");
+    expect(src).not.toMatch(/Date:\s*\{/);
+    // Honest Awards vs Futures source stamp + real lineage as-of stay.
+    expect(src).toContain("NFL_AWARDS_SOURCE_STAMP");
+    expect(src).toMatch(/lineage/);
+  });
+
   it("keeps Team Intel free of betting-desk / props duplicates", () => {
     const content = buildSportOverviewContent("nfl", "NFL");
     const sections = buildSportOverviewSections({
