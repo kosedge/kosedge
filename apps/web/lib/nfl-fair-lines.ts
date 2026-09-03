@@ -539,6 +539,17 @@ export async function fetchNflFairLines(params: {
   modelVersion?: string;
   /** Comma-separated Odds API bookmaker keys for market join. */
   bookmakers?: string;
+  /**
+   * Upstream abort budget. Default = board (12s) for Overview/SSR HTML paths.
+   * Page-data APIs pass UPSTREAM_TIMEOUT_MS.pageData (25s).
+   */
+  timeoutMs?: number;
+  /**
+   * When true, timeout/transport/upstream failures throw instead of returning a
+   * soft-empty board (count=0, oddsAsOf=null). Page-data routes use this so the
+   * client gets 503/504 and retries — not a fake empty slate.
+   */
+  throwOnTransportError?: boolean;
 }): Promise<NflFairLinesResponse> {
   const base = env.MODEL_SERVICE_URL;
   const emptyDiagnostics = {
@@ -549,23 +560,26 @@ export async function fetchNflFairLines(params: {
     bookmakers: [] as string[],
     kosedgeOnly: true,
   };
+  const softEmpty = (error: string): NflFairLinesResponse => ({
+    season: params.season,
+    modelVersion: "",
+    asOf: null,
+    oddsAsOf: null,
+    currentWeek: 1,
+    count: 0,
+    lines: [],
+    window: {
+      daysAhead: params.daysAhead ?? 14,
+      includePastDays: params.includePastDays ?? 0,
+    },
+    diagnostics: emptyDiagnostics,
+    error,
+  });
 
   if (!base) {
-    return {
-      season: params.season,
-      modelVersion: "",
-      asOf: null,
-      oddsAsOf: null,
-      currentWeek: 1,
-      count: 0,
-      lines: [],
-      window: {
-        daysAhead: params.daysAhead ?? 14,
-        includePastDays: params.includePastDays ?? 0,
-      },
-      diagnostics: emptyDiagnostics,
-      error: "MODEL_SERVICE_URL is not configured.",
-    };
+    const error = "MODEL_SERVICE_URL is not configured.";
+    if (params.throwOnTransportError) throw new Error(error);
+    return softEmpty(error);
   }
 
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/fair-lines`);
@@ -585,8 +599,8 @@ export async function fetchNflFairLines(params: {
   try {
     const response = await upstreamFetch(url.toString(), {
       cache: "no-store",
-      // Cap board waits so Overview / Edge Board never hang on a cold Railway.
-      timeoutMs: UPSTREAM_TIMEOUT_MS.board,
+      // Default board cap keeps Overview / SSR from hanging on cold Railway.
+      timeoutMs: params.timeoutMs ?? UPSTREAM_TIMEOUT_MS.board,
       headers: {
         accept: "application/json",
         ...(env.INTERNAL_API_SECRET
@@ -600,6 +614,9 @@ export async function fetchNflFairLines(params: {
         season: params.season,
         error: statusError,
       });
+      if (params.throwOnTransportError && !honestStatus) {
+        throw new Error(statusError);
+      }
       return {
         season: params.season,
         modelVersion: "",
@@ -695,6 +712,9 @@ export async function fetchNflFairLines(params: {
       },
     };
   } catch (cause) {
+    if (params.throwOnTransportError) {
+      throw cause;
+    }
     const transportError = "Unable to reach model service.";
     const honestStatus = inferHonestEmptySlateStatus({
       season: params.season,

@@ -6,8 +6,17 @@
 export const UPSTREAM_TIMEOUT_MS = {
   /** Odds API / light JSON health probes */
   fast: 8_000,
-  /** Fair-lines / board assembly (cold Railway + odds join) */
+  /**
+   * Fair-lines / board assembly for Overview + SSR paths that still block HTML.
+   * Keep short so document completion cannot hang ~25s on cold Railway.
+   */
   board: 12_000,
+  /**
+   * Dedicated page-data APIs (fair-lines / edges-desk / edge-board assemble).
+   * Client-fetched after HTML; may wait longer than board without blocking SSR.
+   * Pair with `export const maxDuration = 30` on those routes only.
+   */
+  pageData: 25_000,
   /** Rare heavy ops (backfills, compare dumps) — still capped */
   heavy: 20_000,
   /**

@@ -1,8 +1,12 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
 import { fetchNflEdgesDesk, type DeskMarketType } from "@/lib/nfl-edges";
+import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
+import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
+/** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
+export const maxDuration = 30;
 
 const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];
 const MIN_EDGE_OPTIONS = [
@@ -16,6 +20,7 @@ const MIN_CONF_OPTIONS = [0, 0.4, 0.6, 0.75] as const;
  * Page-data for /pro/nfl/edges.
  * Desk already Promise.all's fair-lines ∥ edges/today ∥ props/board.
  * Client-fetch so HTML is not held open on that waterfall (Alex).
+ * Uses pageData timeout (25s); fair-lines transport failures → 503/504.
  */
 export async function GET(req: Request) {
   const access = await getProAccessState();
@@ -49,15 +54,20 @@ export async function GET(req: Request) {
     ? minConfRaw
     : 0;
 
-  // Parallel fan-out lives inside fetchNflEdgesDesk (fair ∥ today ∥ props).
-  const desk = await fetchNflEdgesDesk({
-    season,
-    week,
-    market,
-    minProbEdge: minEdge.prob,
-    minLineEdge: minEdge.line,
-    minConfidence,
-  });
-
-  return NextResponse.json(desk);
+  try {
+    // Parallel fan-out lives inside fetchNflEdgesDesk (fair ∥ today ∥ props).
+    const desk = await fetchNflEdgesDesk({
+      season,
+      week,
+      market,
+      minProbEdge: minEdge.prob,
+      minLineEdge: minEdge.line,
+      minConfidence,
+      timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
+      throwOnTransportError: true,
+    });
+    return NextResponse.json(desk);
+  } catch (err) {
+    return pageDataUpstreamErrorResponse(err);
+  }
 }

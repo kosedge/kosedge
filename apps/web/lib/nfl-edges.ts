@@ -300,6 +300,13 @@ export async function fetchNflEdgesDesk(params: {
   minConfidence?: number;
   daysAhead?: number;
   propLimit?: number;
+  /** Fair-lines upstream abort (page-data uses pageData budget). */
+  timeoutMs?: number;
+  /**
+   * Page-data: fair-lines timeout/transport throws so the route can 503/504
+   * instead of returning a desk with fairLinesError + null marketAsOf.
+   */
+  throwOnTransportError?: boolean;
 }): Promise<NflEdgesDeskResponse> {
   const market = params.market ?? "all";
   const minProbEdge = params.minProbEdge ?? 0.02;
@@ -308,7 +315,12 @@ export async function fetchNflEdgesDesk(params: {
   const daysAhead = params.daysAhead ?? 120;
 
   const [fairBoard, todayBoard, propsBoard] = await Promise.all([
-    fetchNflFairLines({ season: params.season, daysAhead }),
+    fetchNflFairLines({
+      season: params.season,
+      daysAhead,
+      timeoutMs: params.timeoutMs,
+      throwOnTransportError: params.throwOnTransportError,
+    }),
     fetchNflEdgesToday({
       minMlEdgeProb: minProbEdge,
       minConfidenceScore: minConfidence > 0 ? minConfidence : undefined,

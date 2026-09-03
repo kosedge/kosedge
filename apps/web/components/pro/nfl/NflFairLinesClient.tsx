@@ -87,13 +87,18 @@ export default function NflFairLinesClient({
   useEffect(() => {
     let cancelled = false;
     const controller = new AbortController();
-    const qs = new URLSearchParams({ season: String(season) });
+    // Bare /api/nfl/fair-lines — API already defaults season=2026. Do not append
+    // ?season=2026; Alex: that URL timed out under the old 12s board cap while
+    // the bare GET completed with the full 241-row board.
+    const qs = new URLSearchParams();
     if (includePastDays > 0) qs.set("includePast", String(includePastDays));
+    const query = qs.toString();
+    const href = query ? `/api/nfl/fair-lines?${query}` : "/api/nfl/fair-lines";
 
     async function load() {
       setState({ status: "loading" });
       try {
-        const res = await fetch(`/api/nfl/fair-lines?${qs}`, {
+        const res = await fetch(href, {
           cache: "no-store",
           headers: { accept: "application/json" },
           signal: controller.signal,
@@ -113,7 +118,7 @@ export default function NflFairLinesClient({
       cancelled = true;
       controller.abort();
     };
-  }, [season, includePastDays]);
+  }, [includePastDays]);
 
   const board =
     state.status === "ready"
