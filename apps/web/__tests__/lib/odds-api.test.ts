@@ -109,8 +109,8 @@ describe("odds-api edge board markets", () => {
               ],
             },
             {
-              key: "circa",
-              title: "Circa",
+              key: "hardrockbet",
+              title: "Hard Rock Bet",
               markets: [
                 {
                   key: "spreads",
@@ -138,10 +138,10 @@ describe("odds-api edge board markets", () => {
     const total = rows.find((row) => row.market === "Total");
 
     expect(spread?.open).toBe("+3");
-    expect(spread?.bookKey).toBe("circa");
+    expect(spread?.bookKey).toBe("hardrockbet");
     expect(spread?.best).toBe("+3.5");
     expect(spread?.bestJuice).toBe("-105");
-    expect(total?.bookKey).toBe("circa");
+    expect(total?.bookKey).toBe("hardrockbet");
     expect(total?.best).toBe("44");
     expect(total?.bestJuice).toBe("-102");
   });
@@ -163,23 +163,23 @@ describe("odds-api edge board markets", () => {
         juiceAway: "-115",
       },
       {
-        book: "circa",
+        book: "hardrockbet",
         line: "+3.5",
         point: 3.5,
         canonical: true,
         juiceAway: "-105",
       },
     ]);
-    expect(best?.book).toBe("circa");
+    expect(best?.book).toBe("hardrockbet");
   });
 
   it("pickBestTotalEntry prefers higher total then better Over juice", () => {
     const best = pickBestTotalEntry([
       { book: "draftkings", line: "43.5", point: 43.5, juiceOver: "-110" },
       { book: "fanduel", line: "44", point: 44, juiceOver: "-108" },
-      { book: "circa", line: "44", point: 44, juiceOver: "-102" },
+      { book: "hardrockbet", line: "44", point: 44, juiceOver: "-102" },
     ]);
-    expect(best?.book).toBe("circa");
+    expect(best?.book).toBe("hardrockbet");
   });
 
   it("emits Moneyline rows for MLB and picks best away American", async () => {
