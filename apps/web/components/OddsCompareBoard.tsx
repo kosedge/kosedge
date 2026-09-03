@@ -93,7 +93,9 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
   const books = state.status === "ready" ? state.data.books : [];
   const asOf = state.status === "ready" ? state.data.asOf : null;
   const bookAsOf = state.status === "ready" ? state.data.bookAsOf : [];
-  const stampBooks = bookAsOf.filter((b) => b.asOf).map((b) => b.label);
+  const stampBooks = bookAsOf
+    .filter((b) => b.asOf && b.feedStatus !== "not_carried")
+    .map((b) => b.label);
   // NFL always stamps; other sports stamp when rows loaded.
   const showMarketStamp =
     state.status === "ready" && (sportKey === "nfl" || rows.length > 0);
@@ -160,7 +162,14 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
 
       {books.length > 0 ? (
         <p className="mt-4 text-xs text-gray-400">
-          Books: {books.map((b) => b.label).join(" · ")}
+          Books:{" "}
+          {books
+            .map((b) =>
+              b.feedStatus === "not_carried"
+                ? `${b.label} (not on feed)`
+                : b.label,
+            )
+            .join(" · ")}
         </p>
       ) : null}
       {showMarketStamp ? (
@@ -263,7 +272,12 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
                           colSpan={3}
                           className="py-3 px-2 text-center border-l border-white/10"
                         >
-                          {b.label}
+                          <div>{b.label}</div>
+                          {b.feedStatus === "not_carried" ? (
+                            <div className="mt-0.5 text-[9px] font-normal normal-case tracking-normal text-gray-500">
+                              not on feed
+                            </div>
+                          ) : null}
                         </th>
                       ))}
                     </tr>
@@ -291,14 +305,37 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
                           {r.time}
                         </td>
                         {books.map((b) => {
+                          const notCarried = b.feedStatus === "not_carried";
                           const spread = r.spread[b.key];
                           const ml = r.moneyline?.[b.key];
                           const total = r.total[b.key];
-                          const isBestSpread = r.bestSpreadBook === b.key;
-                          const isBestTotal = r.bestTotalBook === b.key;
+                          const isBestSpread =
+                            !notCarried && r.bestSpreadBook === b.key;
+                          const isBestTotal =
+                            !notCarried && r.bestTotalBook === b.key;
                           const isBestMl =
-                            r.bestMlAwayBook === b.key ||
-                            r.bestMlHomeBook === b.key;
+                            !notCarried &&
+                            (r.bestMlAwayBook === b.key ||
+                              r.bestMlHomeBook === b.key);
+                          if (notCarried) {
+                            return [
+                              <BookCell key={`${b.key}-s`}>
+                                <div className="text-[11px] leading-tight text-gray-500">
+                                  n/a
+                                </div>
+                              </BookCell>,
+                              <BookCell key={`${b.key}-ml`}>
+                                <div className="text-[11px] leading-tight text-gray-500">
+                                  feed
+                                </div>
+                              </BookCell>,
+                              <BookCell key={`${b.key}-t`}>
+                                <div className="text-[11px] leading-tight text-gray-500">
+                                  n/a
+                                </div>
+                              </BookCell>,
+                            ];
+                          }
                           return [
                             <BookCell
                               key={`${b.key}-s`}
@@ -357,9 +394,11 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
         ) : null}
 
         <p className="mt-3 text-xs text-gray-500">
-          Best spread = highest away number (better juice wins ties). Best ML =
-          highest American price for that side. Best O/U = highest total (better
-          Over juice wins ties).
+          Best spread = highest away number (better juice wins ties; fresher
+          stamp breaks remaining ties). Best ML = highest American price for
+          that side. Best O/U = highest total (better Over juice wins ties).
+          Columns marked “not on feed” are designated books The Odds API does
+          not carry for this sport — not empty book posts.
         </p>
       </section>
     </div>

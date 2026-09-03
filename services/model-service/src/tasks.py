@@ -277,6 +277,12 @@ NFL_MODEL_STATE_KEY = "nfl_active_model"
 NFL_DEFAULT_ODDS_BOOKMAKERS = (
     "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr"
 )
+# Keys The Odds API actually returns for NFL in us/us2 (hardrockbet=us2, fanatics=paid us).
+# bet365/circa/betr stay designated for UI honesty but are never requested.
+NFL_ODDS_API_CARRIED_BOOKMAKERS = (
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics"
+)
+NFL_ODDS_REGIONS = "us,us2"
 
 
 def _now_utc() -> datetime:
@@ -310,6 +316,26 @@ def _resolve_nfl_odds_bookmakers(raw: Optional[str] = None) -> str:
         if book and book not in deduped:
             deduped.append(book)
     return ",".join(deduped) if deduped else NFL_DEFAULT_ODDS_BOOKMAKERS
+
+
+def _resolve_nfl_odds_bookmakers_for_request(raw: Optional[str] = None) -> str:
+    """Designated list filtered to keys Odds API carries for NFL us/us2."""
+    carried = {
+        b.strip().lower()
+        for b in NFL_ODDS_API_CARRIED_BOOKMAKERS.split(",")
+        if b.strip()
+    }
+    designated = _resolve_nfl_odds_bookmakers(raw)
+    request_books: List[str] = []
+    for token in designated.split(","):
+        book = token.strip().lower()
+        if book in carried and book not in request_books:
+            request_books.append(book)
+    return (
+        ",".join(request_books)
+        if request_books
+        else NFL_ODDS_API_CARRIED_BOOKMAKERS
+    )
 
 
 def _ensure_nfl_supervised_fits_table(session: Any) -> None:
@@ -412,11 +438,11 @@ def _fetch_live_nfl_market_lines_by_abbr() -> Dict[Tuple[str, str], Dict[str, Op
     """
     out: Dict[Tuple[str, str], Dict[str, Optional[float]]] = {}
     try:
-        bookmakers = _resolve_nfl_odds_bookmakers(None)
+        bookmakers = _resolve_nfl_odds_bookmakers_for_request(None)
         payload = fetch_odds(
             endpoint="sports/americanfootball_nfl/odds",
             params={
-                "regions": "us,us2",
+                "regions": NFL_ODDS_REGIONS,
                 "markets": "h2h,spreads,totals",
                 "oddsFormat": "american",
                 "dateFormat": "iso",
@@ -3772,7 +3798,7 @@ def _set_active_model(
 def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
     log.info("Running scheduled pull_odds_snapshot")
     data: List[Dict[str, Any]] = []
-    resolved_nfl_bookmakers = _resolve_nfl_odds_bookmakers(nfl_bookmakers)
+    resolved_nfl_bookmakers = _resolve_nfl_odds_bookmakers_for_request(nfl_bookmakers)
     credits_diag: Dict[str, Any] = {
         "remaining_by_sport": {},
         "used_by_sport": {},
@@ -3785,6 +3811,7 @@ def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
             "oddsFormat": "american",
         }
         if sport_key == "americanfootball_nfl":
+            params["regions"] = NFL_ODDS_REGIONS
             params["bookmakers"] = resolved_nfl_bookmakers
         try:
             payload_meta = fetch_odds_with_metadata(
@@ -16313,7 +16340,7 @@ def pull_nfl_player_prop_market_snapshots(
             details = fetch_odds(
                 endpoint=f"sports/americanfootball_nfl/events/{event_id}/odds",
                 params={
-                    "regions": "us",
+                    "regions": NFL_ODDS_REGIONS,
                     "markets": ",".join(market_keys),
                     "oddsFormat": "american",
                     "dateFormat": "iso",

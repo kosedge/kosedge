@@ -122,3 +122,55 @@ def test_extract_consensus_is_mode_not_average() -> None:
     assert out["market_total"] == 44.5
     assert out["best_spread_home"] == -3.5 or out["best_spread_home"] == -4.0
 
+
+def test_extract_best_ignores_not_carried_books_and_prefers_fresher_tie() -> None:
+    """circa is designated but not on Odds API — must not win Best Line."""
+    event = {
+        "home_team": "Seattle Seahawks",
+        "away_team": "New England Patriots",
+        "bookmakers": [
+            {
+                "key": "draftkings",
+                "last_update": "2026-09-02T16:00:00Z",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Seattle Seahawks", "point": -3.5, "price": -110},
+                            {"name": "New England Patriots", "point": 3.5, "price": -110},
+                        ],
+                    }
+                ],
+            },
+            {
+                "key": "fanduel",
+                "last_update": "2026-09-02T17:00:00Z",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Seattle Seahawks", "point": -3.5, "price": -110},
+                            {"name": "New England Patriots", "point": 3.5, "price": -110},
+                        ],
+                    }
+                ],
+            },
+            {
+                "key": "circa",
+                "last_update": "2026-09-02T18:00:00Z",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Seattle Seahawks", "point": -7.0, "price": -105},
+                            {"name": "New England Patriots", "point": 7.0, "price": -115},
+                        ],
+                    }
+                ],
+            },
+        ],
+    }
+    out = _extract_book_market_prices(event)
+    assert out["best_spread_home"] == -3.5
+    assert out["best_spread_book"] == "fanduel"
+

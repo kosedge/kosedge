@@ -89,12 +89,22 @@ describe("Compare Odds fat-payload fix", () => {
     expect(board).toContain("Odds by book");
   });
 
-  it("compare API route serves slim board payload (cache v7)", () => {
+  it("compare API route serves slim board payload (cache v8)", () => {
     const route = readFileSync(
       path.join(process.cwd(), "app/api/odds/[sport]/compare/route.ts"),
       "utf8",
     );
     expect(route).toContain("slimOddsComparisonForBoard");
-    expect(route).toContain("odds:${sport}:compare:v7");
+    expect(route).toContain("odds:${sport}:compare:v8");
+    expect(route).toContain("nflBookFeedStatus");
+  });
+
+  it("Compare Odds UI labels not-carried feed columns", () => {
+    const board = readFileSync(
+      path.join(process.cwd(), "components/OddsCompareBoard.tsx"),
+      "utf8",
+    );
+    expect(board).toContain("not on feed");
+    expect(board).toContain('feedStatus === "not_carried"');
   });
 });

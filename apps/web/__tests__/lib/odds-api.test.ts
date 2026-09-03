@@ -4,9 +4,11 @@ import {
   ALLOWED_BOOKS,
   fetchEdgeBoard,
   fetchOddsComparison,
+  nflBookFeedStatus,
   pickBestMoneylineEntry,
   pickBestSpreadEntry,
   pickBestTotalEntry,
+  requestBooksForSport,
 } from "@/lib/odds-api";
 
 function jsonResponse(body: unknown) {
@@ -23,7 +25,7 @@ afterEach(() => {
 });
 
 describe("odds-api edge board markets", () => {
-  it("requests NFL odds across all 9 configured books by default", async () => {
+  it("requests NFL odds across carried books only (not dead keys)", async () => {
     const fetchSpy = vi
       .spyOn(globalThis, "fetch")
       .mockResolvedValue(jsonResponse([]));
@@ -31,9 +33,15 @@ describe("odds-api edge board markets", () => {
     await fetchEdgeBoard("nfl", "fake-key");
 
     const url = String(fetchSpy.mock.calls[0]?.[0] ?? "");
+    expect(url).toContain("regions=us,us2");
     expect(url).toContain(
-      `bookmakers=${encodeURIComponent(ALLOWED_BOOKS.join(","))}`,
+      `bookmakers=${encodeURIComponent(
+        "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics",
+      )}`,
     );
+    expect(url).not.toContain("bet365");
+    expect(url).not.toContain("circa");
+    expect(url).not.toContain(",betr");
     expect(url).toContain("markets=spreads,totals");
     expect(ALLOWED_BOOKS).toHaveLength(9);
   });
@@ -409,5 +417,52 @@ describe("odds-api edge board markets", () => {
     expect(result.bookAsOf.find((b) => b.key === "fanduel")?.asOf).toBe(
       "2026-09-02T17:00:00Z",
     );
+    expect(result.bookAsOf.find((b) => b.key === "bet365")?.feedStatus).toBe(
+      "not_carried",
+    );
+    expect(result.bookAsOf.find((b) => b.key === "circa")?.feedStatus).toBe(
+      "not_carried",
+    );
+    expect(result.bookAsOf.find((b) => b.key === "betr")?.feedStatus).toBe(
+      "not_carried",
+    );
+    expect(result.bookAsOf).toHaveLength(9);
+  });
+
+  it("marks bet365/circa/betr not_carried and requests only six keys", () => {
+    expect(nflBookFeedStatus("bet365")).toBe("not_carried");
+    expect(nflBookFeedStatus("circa")).toBe("not_carried");
+    expect(nflBookFeedStatus("betr")).toBe("not_carried");
+    expect(nflBookFeedStatus("hardrockbet")).toBe("carried");
+    expect(requestBooksForSport("nfl")).toEqual([
+      "draftkings",
+      "fanduel",
+      "betmgm",
+      "betrivers",
+      "hardrockbet",
+      "fanatics",
+    ]);
+  });
+
+  it("pickBestSpreadEntry prefers fresher stamp when point+juice tie", () => {
+    const best = pickBestSpreadEntry([
+      {
+        book: "draftkings",
+        line: "+3.5",
+        point: 3.5,
+        canonical: true,
+        juiceAway: "-110",
+        asOfMs: Date.parse("2026-09-02T16:00:00Z"),
+      },
+      {
+        book: "fanduel",
+        line: "+3.5",
+        point: 3.5,
+        canonical: true,
+        juiceAway: "-110",
+        asOfMs: Date.parse("2026-09-02T17:00:00Z"),
+      },
+    ]);
+    expect(best?.book).toBe("fanduel");
   });
 });
