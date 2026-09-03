@@ -1,6 +1,6 @@
 # NBA grades summary (read-only)
 
-**as_of:** `2026-09-03T16:56:21Z`  
+**as_of:** `2026-09-01T14:19:10Z`  
 **stamp frozen:** `v0.1 · Ch2–Ch7`  
 **store:** `data/nba_grades_2026.jsonl`  
 **n_rows:** 4  
