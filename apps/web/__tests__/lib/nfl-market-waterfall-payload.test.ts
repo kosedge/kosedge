@@ -73,6 +73,9 @@ describe("NFL market page waterfall / RSC fat payload (Alex)", () => {
     expect(assemble).toContain("resolveEdgeBoardBoardLinesAsOf");
     expect(edgesApi).toContain("fetchNflEdgesDesk");
     expect(fairApi).toContain("fetchNflFairLines");
+    expect(fairApi).toMatch(/export const maxDuration = 30/);
+    expect(edgesApi).toMatch(/export const maxDuration = 30/);
+    expect(assemble).toMatch(/export const maxDuration = 30/);
     expect(deskLib).toMatch(
       /await Promise\.all\(\[\s*fetchNflFairLines[\s\S]*fetchNflEdgesToday[\s\S]*fetchNflPropsBoard/,
     );

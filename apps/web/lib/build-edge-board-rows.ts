@@ -79,6 +79,13 @@ export type NflEdgeBoardSlate = "week1" | "full" | "live" | "all";
 export type AssembleEdgeBoardOptions = {
   /** NFL: `week1` (default) = Week 1 REG only; `full` = multi-week projection slate. */
   slate?: NflEdgeBoardSlate;
+  /** Fair-lines upstream abort (page-data assemble uses pageData budget). */
+  timeoutMs?: number;
+  /**
+   * Page-data assemble: throw on fair-lines transport failure instead of
+   * soft-falling to a KEI file pack without market vintage.
+   */
+  throwOnTransportError?: boolean;
 };
 
 export function normalizeNflEdgeBoardSlate(
@@ -154,6 +161,8 @@ async function assembleNflEdgeBoardRows(
       daysAhead: 200,
       includePastDays: 14,
       bookmakers: ALLOWED_BOOKS.join(","),
+      timeoutMs: options?.timeoutMs,
+      throwOnTransportError: options?.throwOnTransportError,
     }),
   ]);
   const odds =
