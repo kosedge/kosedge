@@ -118,13 +118,14 @@ export default async function NflIntelTablePage({
               {campHref ? (
                 <>
                   {" "}
+                  See{" "}
                   <Link
                     href={campHref}
                     className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
                   >
                     Camp Desk
-                  </Link>{" "}
-                  stays the live roster SoT.
+                  </Link>
+                  .
                 </>
               ) : null}
             </p>

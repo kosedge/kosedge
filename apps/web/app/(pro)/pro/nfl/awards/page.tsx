@@ -133,14 +133,14 @@ export default async function NflAwardsPage() {
               {NFL_AWARDS_SOURCE_STAMP}
               {lineage
                 ? ` As-of: ${lineage}.`
-                : " As-of: last award materialize."}{" "}
+                : " As-of: last materialize."}{" "}
               <Link
                 href="/pro/nfl/projections"
                 className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
               >
                 Futures
               </Link>{" "}
-              keeps its own source stamp.
+              uses its own board.
             </p>
             <CurrentYtdHint className="mt-1" />
           </div>

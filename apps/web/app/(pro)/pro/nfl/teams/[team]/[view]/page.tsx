@@ -646,14 +646,14 @@ export default async function NflTeamIntelViewPage({
               className="text-xs text-kos-gold/85"
               data-testid="nfl-depth-source-stamp"
             >
-              {NFL_DEPTH_SOURCE_STAMP} As-of: {truth.period_line}.{" "}
+              {NFL_DEPTH_SOURCE_STAMP} As-of: {truth.period_line}. See{" "}
               <Link
                 href="/pro/nfl/camp"
                 className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
               >
                 Camp Desk
-              </Link>{" "}
-              stays the live roster SoT.
+              </Link>
+              .
             </p>
             <DepthChartRenderer rows={depth.rows} />
           </div>

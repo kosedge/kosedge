@@ -297,7 +297,7 @@ export default async function NflProjectionsPage({
               >
                 Awards
               </Link>{" "}
-              keeps its own award-score as-of.
+              uses its own board.
             </p>
             <CurrentYtdHint className="mt-1" />
           </div>
