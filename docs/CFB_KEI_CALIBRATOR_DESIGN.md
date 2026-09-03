@@ -9,16 +9,30 @@
 
 ---
 
+## Signed locks (Ryan/CoS 2026-09-03)
+
+These are product law for this design. Do not soft-pedal them in implementation PRs.
+
+1. **PLAY unsat requires CLV or a second unused year — not ATS-only.**  
+   NFL totals hit ~61% ATS with ~35% CLV. Even if unused 2025 Tag O/U PLAY-band ATS clears 52.4% (and ROI beats −110), `CFB_TOTALS_PLAY_ELIGIBLE` stays **false** until **movement-CLV+** exists **or** a **second unused year** also GREENS the same bars. ATS-vs-close alone never unsats PLAY. The same rule applies to any spread PLAY unsat: beat unused Tag ATS/ROI is necessary but not sufficient without CLV or a second unused year.
+
+2. **W0–2 is the first enable window, not forever.**  
+   Totals guard applies **W0–2 first** (mirror spread bias guard). Do **not** retune λ (or other guard knobs) on live W1 street. Proxy λ under-corrects live 2026 roster ratios. Later weeks need a **separate** design/holdout — do not treat the W0–2 λ as permanent season law.
+
+3. **Candidate order unchanged:** (b) totals-only matchup-response dampen primary; (a) level offset fallback; (c) mismatch buckets exploratory. **No** global `MATCHUP_RESPONSE` cut (that recuts spreads).
+
+---
+
 ## 1. Why now
 
 PLAY sits hide busy chrome. They do **not** fix KEI identity.
 
-| Surface | Today | Problem |
-| --- | --- | --- |
-| Totals Tag PLAY | Sat (`CFB_TOTALS_PLAY_ELIGIBLE = false`) | Board still paints Over-drunk KEI totals; LEAN/PASS chrome remains |
-| Spread Tag PLAY | Sat (`CFB_SPREAD_PLAY_ELIGIBLE = false`) | Current `apply_bias_guard` is **RED** on unused 2025 Tag PLAY vs close |
-| `kei_total` | **Identity** of `model_total` | Research-fair model published as market-facing O/U without a totals guard |
-| `kei_spread_home` | Model + versioned bias guard (W0–2) | Guard exists but does not clear PLAY holdout |
+| Surface           | Today                                    | Problem                                                                   |
+| ----------------- | ---------------------------------------- | ------------------------------------------------------------------------- |
+| Totals Tag PLAY   | Sat (`CFB_TOTALS_PLAY_ELIGIBLE = false`) | Board still paints Over-drunk KEI totals; LEAN/PASS chrome remains        |
+| Spread Tag PLAY   | Sat (`CFB_SPREAD_PLAY_ELIGIBLE = false`) | Current `apply_bias_guard` is **RED** on unused 2025 Tag PLAY vs close    |
+| `kei_total`       | **Identity** of `model_total`            | Research-fair model published as market-facing O/U without a totals guard |
+| `kei_spread_home` | Model + versioned bias guard (W0–2)      | Guard exists but does not clear PLAY holdout                              |
 
 W1 live stamp (ops card n=43): mean KEI−market **+8.12**, 37/6 Over/Under. Audit counterfactual: neutralize matchup ratio → gap **+2.16**. Base PPG 25.9 ≈ street; pace is cool. The failure is **matchup-response score inflation on sum-of-scores**, not a PPG knob and not a pace knob.
 
@@ -47,14 +61,14 @@ kei_total = model_total + totals_guard(...)
 # (see candidate (b) below)
 ```
 
-| Field | Contract |
-| --- | --- |
-| `model_total` | Research-fair. Never mutated by the guard. |
-| `kei_total` | Published O/U. May diverge only behind a **versioned** totals guard. |
-| `spread_home` / `kei_spread_home` | Unchanged by totals work. Totals guard must **not** rewrite team expected points that feed margin. |
-| Version stamp | New constant analogous to `BIAS_GUARD_VERSION` (e.g. `cfb-totals-guard-vN-…`). Logged on every KEI row. |
-| Week window | W0–2 only (same early window as spread bias guard). Off after week 2 until a later design says otherwise. |
-| Flag | Kill switch off until unused GREEN (see §6). |
+| Field                             | Contract                                                                                                                                                      |
+| --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `model_total`                     | Research-fair. Never mutated by the guard.                                                                                                                    |
+| `kei_total`                       | Published O/U. May diverge only behind a **versioned** totals guard.                                                                                          |
+| `spread_home` / `kei_spread_home` | Unchanged by totals work. Totals guard must **not** rewrite team expected points that feed margin.                                                            |
+| Version stamp                     | New constant analogous to `BIAS_GUARD_VERSION` (e.g. `cfb-totals-guard-vN-…`). Logged on every KEI row.                                                       |
+| Week window                       | **First enable = W0–2** (mirror spread bias guard). Not permanent season law — later weeks need a separate design/holdout. Do not retune λ on live W1 street. |
+| Flag                              | Kill switch off until unused GREEN (see §6).                                                                                                                  |
 
 ### `used_in_spread` analog for totals
 
@@ -65,11 +79,11 @@ Spreads already stamp:
 
 Totals need the same honesty when `kei_total ≠ model_total`:
 
-| Stamp (proposed) | Meaning |
-| --- | --- |
-| `used_in_total: true` | Published KEI total is the board O/U source |
-| `model_used_in_total: false` | Research `model_total` is not the published line |
-| `totals_guard_version` | Version string when guard applied; null/identity when off |
+| Stamp (proposed)             | Meaning                                                   |
+| ---------------------------- | --------------------------------------------------------- |
+| `used_in_total: true`        | Published KEI total is the board O/U source               |
+| `model_used_in_total: false` | Research `model_total` is not the published line          |
+| `totals_guard_version`       | Version string when guard applied; null/identity when off |
 
 Exact field names can land with the implementation PR; the doctrine is: **document divergence**, do not hide it behind an equal Model/KEI paint.
 
@@ -123,12 +137,12 @@ Dampen only the matchup-inflated portion of the **sum**, leaving research `model
 
 Evidence (audit 2026-09-01):
 
-| Counterfactual | Mean KEI−market |
-| --- | ---: |
-| Actual W1 | +8.12 |
-| Matchup ratio → 1 | **+2.16** (Δ −5.96) |
-| Pace → 1 | +8.30 (pace cool) |
-| `2 × LEAGUE_TEAM_PPG` | −0.75 vs street |
+| Counterfactual        |     Mean KEI−market |
+| --------------------- | ------------------: |
+| Actual W1             |               +8.12 |
+| Matchup ratio → 1     | **+2.16** (Δ −5.96) |
+| Pace → 1              |   +8.30 (pace cool) |
+| `2 × LEAGUE_TEAM_PPG` |     −0.75 vs street |
 
 Primary failure mode is `(off/def)^response` lifting favorite scoring more than it suppresses the dog — both sides still score → sum hot. A totals-only λ on that inflation is the mechanism-aligned fix.
 
@@ -150,13 +164,13 @@ Additive offsets by `|model_spread|` buckets (peer / mod / big / cupcake), fit o
 
 Reuse the spread Tag close holdout spine:
 
-| Input | Source |
-| --- | --- |
-| Close + scores | SportsDataverse `espn_cfb_betting` + box / linescores (same join as `run_spread_tag_close_holdout.py`) |
-| Model | Hist-cal proxy universe (`run_historical_backtest`) — prior-year ratings + league-avg roster/QB |
-| Spread KEI (for any joint runs) | `apply_bias_guard(model, week)` — **do not edit** in this design phase |
-| Totals KEI (eval) | Identity baseline vs candidate totals guard on `model_total` |
-| Market | **Close only** |
+| Input                           | Source                                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Close + scores                  | SportsDataverse `espn_cfb_betting` + box / linescores (same join as `run_spread_tag_close_holdout.py`) |
+| Model                           | Hist-cal proxy universe (`run_historical_backtest`) — prior-year ratings + league-avg roster/QB        |
+| Spread KEI (for any joint runs) | `apply_bias_guard(model, week)` — **do not edit** in this design phase                                 |
+| Totals KEI (eval)               | Identity baseline vs candidate totals guard on `model_total`                                           |
+| Market                          | **Close only**                                                                                         |
 
 Script pointer: `scripts/cfb/run_spread_tag_close_holdout.py` (spread Tag). Totals eval should twin that join / year labels; implementation is out of scope for this design PR.
 
@@ -166,10 +180,10 @@ Hist-cal proxy understates live Over-drunk. Live 2026 uses real ESPN roster + QB
 
 ### Fit / eval years
 
-| Label | Years | Role |
-| --- | --- | --- |
+| Label                  | Years         | Role                                                                          |
+| ---------------------- | ------------- | ----------------------------------------------------------------------------- |
 | **Fit (contaminated)** | **2023–2024** | Hist-cal knobs used these as primary; fit totals-guard coefficients here only |
-| **Eval (unused)** | **2025** | Primary GREEN/RED. Do not retune from 2025. |
+| **Eval (unused)**      | **2025**      | Primary GREEN/RED. Do not retune from 2025.                                   |
 
 ### CLV
 
@@ -179,22 +193,31 @@ CLV unavailable (close-only SDV series; no owned open≠close). **Label it. Do n
 
 All three must hold on **unused 2025** early weeks (W0–2), candidate vs identity:
 
-| Gate | Bar |
-| --- | --- |
-| Level | \|mean(KEI_total − close_total)\| ≤ **1.0** |
-| MAE | MAE not worse than identity by **> 0.3** |
-| Direction | mean gap not Over-drunk (**>+2**) |
+| Gate      | Bar                                         |
+| --------- | ------------------------------------------- |
+| Level     | \|mean(KEI_total − close_total)\| ≤ **1.0** |
+| MAE       | MAE not worse than identity by **> 0.3**    |
+| Direction | mean gap not Over-drunk (**>+2**)           |
 
 Flag stays **off** until all three clear. Passing this gate allows publishing `kei_total ≠ model_total` behind the versioned guard. It does **not** unsat Tag PLAY.
 
 ### GREEN — unsat totals PLAY (separate, stricter)
 
-| Gate | Bar |
-| --- | --- |
-| Tag O/U PLAY-band ATS vs close | ≥ **52.38%** with **n ≥ 60** (NFL bar) |
-| ROI | Beats **−110** |
+Necessary but **not sufficient** (ATS alone never unsats):
 
-Until then: `CFB_TOTALS_PLAY_ELIGIBLE` / `TOTALS_PLAY_ELIGIBLE` stay **false**. LEAN ≥ 2.5 may still fire. This design does not flip those flags.
+| Gate                           | Bar                                    |
+| ------------------------------ | -------------------------------------- |
+| Tag O/U PLAY-band ATS vs close | ≥ **52.38%** with **n ≥ 60** (NFL bar) |
+| ROI                            | Beats **−110**                         |
+
+**Also required (signed lock):** one of:
+
+| Confirmation              | Bar                                                                                        |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| Movement-CLV+             | Available and GREEN (owned open≠close favoring Tag side). Do not mint CLV from close-only. |
+| **Or** second unused year | Same ATS/ROI bars GREEN on a second unused year (not just 2025).                           |
+
+Even if unused 2025 ATS clears ~52.4%, `CFB_TOTALS_PLAY_ELIGIBLE` / `TOTALS_PLAY_ELIGIBLE` stay **false** until CLV or a second unused year confirms. LEAN ≥ 2.5 may still fire. This design does not flip those flags.
 
 ---
 
@@ -206,11 +229,11 @@ Only after a totals guard is **decided** (shipped or explicitly rejected with un
 
 Current `apply_bias_guard` (`cfb-bias-guard-v1-histcal-20260805`) on unused 2025 Tag PLAY vs close (Task 2b/2c):
 
-| Band | n | ATS | ROI (−110) |
-| --- | ---: | ---: | ---: |
-| PLAY all (≥4.0) | 349 | **48.7%** | **−7.0%** |
-| PLAY [4.0, 7.0) | 170 | **49.4%** | **−5.7%** |
-| PLAY ≥ 7.0 | 179 | **48.0%** | **−8.3%** |
+| Band            |   n |       ATS | ROI (−110) |
+| --------------- | --: | --------: | ---------: |
+| PLAY all (≥4.0) | 349 | **48.7%** |  **−7.0%** |
+| PLAY [4.0, 7.0) | 170 | **49.4%** |  **−5.7%** |
+| PLAY ≥ 7.0      | 179 | **48.0%** |  **−8.3%** |
 
 A new spread guard **v2** must beat **this** unused Tag table — not look busier, not retune the 4.0 floor from a red split, not lock cap7 from RED 2c.
 
@@ -218,14 +241,15 @@ A new spread guard **v2** must beat **this** unused Tag table — not look busie
 
 Eval new guard vs **current** `apply_bias_guard` on unused 2025 Tag PLAY:
 
-| Gate | Bar |
-| --- | --- |
-| ATS | ≥ **52.4%** with **n ≥ ~200** |
-| ROI | **> −110** on PLAY |
+| Gate | Bar                           |
+| ---- | ----------------------------- |
+| ATS  | ≥ **52.4%** with **n ≥ ~200** |
+| ROI  | **> −110** on PLAY            |
 
 If MAE improves but PLAY stays coin-flip → **do not ship**.  
-No cap7 lock from the RED 2c split.  
-`CFB_SPREAD_PLAY_ELIGIBLE` stays false until unused GREEN **and** Ryan/CoS flip (existing sit doc).
+No cap7 lock from the RED 2c split.
+
+**Signed lock (same as totals):** ATS/ROI alone never unsats spread PLAY. Also require movement-CLV+ **or** confirmatory GREEN on a second unused year. Until then `CFB_SPREAD_PLAY_ELIGIBLE` stays false even if unused 2025 ATS looks good — plus Ryan/CoS flip (existing sit doc).
 
 Do **not** edit `apply_bias_guard` in the totals-first implementation pass; spread v2 is a later, separate eval.
 
@@ -249,41 +273,41 @@ Do **not** edit `apply_bias_guard` in the totals-first implementation pass; spre
 
 **Kill switch:** product flag off until unused GREEN. Identity `kei_total = model_total` remains the live path while the flag is off.
 
-**No this-week pack recut.** Do not chase W1 street. Stamp-at-pull doctrine stands for the current pack.
+**No this-week pack recut.** Do not chase W1 street. Do **not** retune λ (or other knobs) on live W1 street — proxy λ under-corrects live 2026 roster ratios. Stamp-at-pull doctrine stands for the current pack. W0–2 enable is the first window only; later weeks need a separate design/holdout.
 
 ---
 
 ## 7. Out of scope (this design / follow-on research)
 
-| Item | Why out |
-| --- | --- |
-| W0 slate close / book close ops | Separate ops track |
-| Odds / Edge Board cache | Product infra, not calibrator design |
-| G5 coverage | Coverage, not KEI residual |
-| Calibrator implementation | This PR is markdown only |
-| `apply_bias_guard` edits | Spreads second; do not touch |
-| Pack remat / KEI mint | No recut |
-| Unsat PLAY flags | Separate CoS flip after GREEN |
-| Global `MATCHUP_RESPONSE` cut | Recuts spreads |
-| Minting CLV from close-only data | Honesty |
+| Item                             | Why out                              |
+| -------------------------------- | ------------------------------------ |
+| W0 slate close / book close ops  | Separate ops track                   |
+| Odds / Edge Board cache          | Product infra, not calibrator design |
+| G5 coverage                      | Coverage, not KEI residual           |
+| Calibrator implementation        | This PR is markdown only             |
+| `apply_bias_guard` edits         | Spreads second; do not touch         |
+| Pack remat / KEI mint            | No recut                             |
+| Unsat PLAY flags                 | Separate CoS flip after GREEN        |
+| Global `MATCHUP_RESPONSE` cut    | Recuts spreads                       |
+| Minting CLV from close-only data | Honesty                              |
 
 ---
 
 ## File index (context)
 
-| Path | Role |
-| --- | --- |
-| `docs/CFB_TOTALS_HOT_AUDIT.md` | Why totals are Over-drunk; matchup-response diagnosis |
-| `docs/CFB_TOTALS_PLAY_SIT.md` | Totals PLAY sat (tagger) |
-| `docs/CFB_SPREAD_PLAY_SIT.md` | Spread PLAY sat (tagger) |
-| `data/ops/cfb-spread-tag-close-holdout-20260903.md` | Unused 2025 spread Tag RED table |
-| `scripts/cfb/run_spread_tag_close_holdout.py` | Task 2b join / year labels |
-| `services/.../cfb_kei.py` | `apply_cfb_kei`, `apply_bias_guard`, identity `kei_total` |
-| `services/.../priors.py` | `MATCHUP_RESPONSE`, early soften |
-| `data/ops/cfb-kei-rules-2026.md` | House rules / bias guard doctrine |
+| Path                                                | Role                                                      |
+| --------------------------------------------------- | --------------------------------------------------------- |
+| `docs/CFB_TOTALS_HOT_AUDIT.md`                      | Why totals are Over-drunk; matchup-response diagnosis     |
+| `docs/CFB_TOTALS_PLAY_SIT.md`                       | Totals PLAY sat (tagger)                                  |
+| `docs/CFB_SPREAD_PLAY_SIT.md`                       | Spread PLAY sat (tagger)                                  |
+| `data/ops/cfb-spread-tag-close-holdout-20260903.md` | Unused 2025 spread Tag RED table                          |
+| `scripts/cfb/run_spread_tag_close_holdout.py`       | Task 2b join / year labels                                |
+| `services/.../cfb_kei.py`                           | `apply_cfb_kei`, `apply_bias_guard`, identity `kei_total` |
+| `services/.../priors.py`                            | `MATCHUP_RESPONSE`, early soften                          |
+| `data/ops/cfb-kei-rules-2026.md`                    | House rules / bias guard doctrine                         |
 
 ---
 
 ## CoS one-liner
 
-**Totals-first versioned KEI guard (matchup-inflation dampen on the sum only); fit 2023–24 / eval unused 2025; flag off until \|mean gap\|≤1 and MAE/Over bars clear; PLAY stays sat; spreads only after totals decision and must beat the RED unused Tag table — no W1 pack recut.**
+**Totals-first versioned KEI guard (matchup-inflation dampen on the sum only); fit 2023–24 / eval unused 2025; flag off until \|mean gap\|≤1 and MAE/Over bars clear; PLAY stays sat until CLV or a second unused year (ATS alone never unsats); W0–2 first window only (no λ retune on live street); spreads only after totals decision and must beat the RED unused Tag table — no W1 pack recut.**
