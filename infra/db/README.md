@@ -13,8 +13,8 @@ CLI (from `services/model-service`):
 python -m src.db_migrations check-integrity
 DATABASE_URL='…' python -m src.db_migrations status
 DATABASE_URL='…' python -m src.db_migrations apply   # alias: up
-DATABASE_URL='…' python -m src.db_migrations baseline --through 053
-DATABASE_URL='…' python -m src.db_migrations stamp --through 053   # alias
+DATABASE_URL='…' python -m src.db_migrations baseline --through 054
+DATABASE_URL='…' python -m src.db_migrations stamp --through 054   # alias
 ```
 
 From monorepo root:
@@ -22,6 +22,9 @@ From monorepo root:
 ```bash
 python scripts/db/migrate.py check-integrity
 DATABASE_URL='…' python scripts/db/migrate.py status
+# KosEdge prod cutover (054 already live — stamp only, do not re-apply):
+# DATABASE_URL='…' python scripts/db/migrate.py baseline --through 054
+# DATABASE_URL='…' python scripts/db/migrate.py status --require-current
 ```
 
 Uses the model-service `psycopg` dependency. Pass the URL via env or
