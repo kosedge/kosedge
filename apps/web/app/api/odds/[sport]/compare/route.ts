@@ -6,6 +6,7 @@ import {
   fetchOddsComparison,
   bookDisplay,
   configuredBooksForSport,
+  nflBookFeedStatus,
   slimOddsComparisonForBoard,
   SPORT_KEY_MAP,
   type OddsCompareBoardPayload,
@@ -22,16 +23,22 @@ const CACHE_HEADERS = {
 type ComparePayload = OddsCompareBoardPayload;
 
 const compareCache = new Map<string, { data: ComparePayload; ts: number }>();
-/** v7: slim board rows (no unused book fields) + honest asOf / bookAsOf. */
-const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v7`;
+/** v8: designated books carry feedStatus (not_carried vs empty line). */
+const compareCacheKeyForSport = (sport: string) => `odds:${sport}:compare:v8`;
+
+function booksForSport(sport: string): ComparePayload["books"] {
+  return configuredBooksForSport(sport).map((k) => ({
+    key: k,
+    label: bookDisplay(k),
+    feedStatus:
+      sport.toLowerCase() === "nfl" ? nflBookFeedStatus(k) : "carried",
+  }));
+}
 
 function emptyPayload(sport: string): ComparePayload {
   return {
     rows: [],
-    books: configuredBooksForSport(sport).map((k) => ({
-      key: k,
-      label: bookDisplay(k),
-    })),
+    books: booksForSport(sport),
     asOf: null,
     bookAsOf: [],
   };
@@ -99,10 +106,7 @@ export async function GET(
     return NextResponse.json(cached.data, { headers: CACHE_HEADERS });
   }
   try {
-    const books = configuredBooksForSport(sport).map((k) => ({
-      key: k,
-      label: bookDisplay(k),
-    }));
+    const books = booksForSport(sport);
     const data: ComparePayload = {
       rows: slimOddsComparisonForBoard(comparison.rows),
       books,

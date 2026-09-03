@@ -105,8 +105,14 @@ TASK_NFL_DECOMPOSITION_DRIFT = "src.tasks.run_nfl_decomposition_drift_monitor"
 # Multi-book default so fair-lines / edge-board pulls capture a real Best Line
 # and persist richer snapshots for training (override via NFL_ODDS_BOOKMAKERS).
 NFL_DEFAULT_ODDS_BOOKMAKERS = (
-    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,bet365,circa,betr"
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,"
+    "bovada,williamhill_us,betonlineag,bet365,circa,betr"
 )
+NFL_ODDS_API_CARRIED_BOOKMAKERS = (
+    "draftkings,fanduel,betmgm,betrivers,hardrockbet,fanatics,"
+    "bovada,williamhill_us,betonlineag"
+)
+NFL_ODDS_REGIONS = "us,us2"
 
 NFL_TEAM_CONFERENCE_MAP: Dict[str, str] = {
     "ARI": "NFC",
@@ -333,6 +339,26 @@ def _resolve_nfl_odds_bookmakers(raw: Optional[str] = None) -> str:
         if book and book not in books:
             books.append(book)
     return ",".join(books) if books else NFL_DEFAULT_ODDS_BOOKMAKERS
+
+
+def _resolve_nfl_odds_bookmakers_for_request(raw: Optional[str] = None) -> str:
+    """Filter designated books to keys Odds API carries for NFL us/us2."""
+    carried = {
+        b.strip().lower()
+        for b in NFL_ODDS_API_CARRIED_BOOKMAKERS.split(",")
+        if b.strip()
+    }
+    designated = _resolve_nfl_odds_bookmakers(raw)
+    request_books: List[str] = []
+    for token in designated.split(","):
+        book = token.strip().lower()
+        if book in carried and book not in request_books:
+            request_books.append(book)
+    return (
+        ",".join(request_books)
+        if request_books
+        else NFL_ODDS_API_CARRIED_BOOKMAKERS
+    )
 
 
 def _resolve_current_nfl_board_week(session: Any, season: int) -> int:
@@ -887,11 +913,22 @@ def _american_price_better(candidate: Optional[int], incumbent: Optional[int]) -
     return int(candidate) > int(incumbent)
 
 
+def _parse_book_last_update(raw: Any) -> Optional[datetime]:
+    if not raw:
+        return None
+    try:
+        return datetime.fromisoformat(str(raw).replace("Z", "+00:00"))
+    except ValueError:
+        return None
+
+
 def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
     """Extract consensus averages plus best-of-book spread/total from an odds event.
 
-    Best Line = highest away spread number across books (better away juice wins ties).
-    Best O/U = highest total number across books (better Over juice wins ties).
+    Best Line = highest away spread number across carried books that posted
+    (better away juice wins ties; fresher last_update breaks remaining ties).
+    Best O/U = highest total number across carried books (better Over juice;
+    fresher stamp breaks remaining ties).
     """
     home_team = str(event.get("home_team") or "")
     away_team = str(event.get("away_team") or "")
@@ -902,6 +939,7 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
 
     best_away_point: Optional[float] = None
     best_away_juice: Optional[int] = None
+    best_away_as_of: Optional[datetime] = None
     best_spread_home: Optional[float] = None
     best_spread_home_juice: Optional[int] = None
     best_spread_book: Optional[str] = None
@@ -909,14 +947,24 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
     best_total_point: Optional[float] = None
     best_total_over_juice: Optional[int] = None
     best_total_under_juice: Optional[int] = None
+    best_total_as_of: Optional[datetime] = None
     best_total_book: Optional[str] = None
     dk_spread_home: Optional[float] = None
     fd_spread_home: Optional[float] = None
     dk_total: Optional[float] = None
     fd_total: Optional[float] = None
 
+    carried = {
+        b.strip().lower()
+        for b in NFL_ODDS_API_CARRIED_BOOKMAKERS.split(",")
+        if b.strip()
+    }
+
     for book in event.get("bookmakers") or []:
         book_key = str(book.get("key") or "").strip().lower() or None
+        if not book_key or book_key not in carried:
+            continue
+        book_as_of = _parse_book_last_update(book.get("last_update"))
         away_spread_point: Optional[float] = None
         away_spread_price: Optional[int] = None
         home_spread_point: Optional[float] = None
@@ -927,6 +975,11 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
 
         for market in book.get("markets") or []:
             key = market.get("key")
+            market_as_of = _parse_book_last_update(market.get("last_update"))
+            if market_as_of is not None and (
+                book_as_of is None or market_as_of > book_as_of
+            ):
+                book_as_of = market_as_of
             if key == "h2h":
                 for outcome in market.get("outcomes") or []:
                     if outcome.get("name") == home_team and outcome.get("price") is not None:
@@ -962,9 +1015,17 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
                 away_spread_price, best_away_juice
             ):
                 replace_spread = True
+            elif (
+                away_spread_point == best_away_point
+                and away_spread_price == best_away_juice
+                and book_as_of is not None
+                and (best_away_as_of is None or book_as_of > best_away_as_of)
+            ):
+                replace_spread = True
             if replace_spread:
                 best_away_point = away_spread_point
                 best_away_juice = away_spread_price
+                best_away_as_of = book_as_of
                 best_spread_home = (
                     home_spread_point
                     if home_spread_point is not None
@@ -981,10 +1042,18 @@ def _extract_book_market_prices(event: Dict[str, Any]) -> Dict[str, Any]:
                 over_price, best_total_over_juice
             ):
                 replace_total = True
+            elif (
+                over_point == best_total_point
+                and over_price == best_total_over_juice
+                and book_as_of is not None
+                and (best_total_as_of is None or book_as_of > best_total_as_of)
+            ):
+                replace_total = True
             if replace_total:
                 best_total_point = over_point
                 best_total_over_juice = over_price
                 best_total_under_juice = under_price
+                best_total_as_of = book_as_of
                 best_total_book = book_key
 
         stake_spread_point = home_spread_point
@@ -3337,12 +3406,12 @@ def nfl_edges_today(
     framework_cfg = get_nfl_handicapping_config()
     market_events: List[Dict[str, Any]] = []
     odds_feed_error: Optional[str] = None
-    resolved_bookmakers = _resolve_nfl_odds_bookmakers(bookmakers)
+    resolved_bookmakers = _resolve_nfl_odds_bookmakers_for_request(bookmakers)
     try:
         raw_market_events = fetch_odds(
             endpoint="sports/americanfootball_nfl/odds",
             params={
-                "regions": "us",
+                "regions": NFL_ODDS_REGIONS,
                 "markets": "h2h,totals",
                 "oddsFormat": "american",
                 "dateFormat": "iso",
@@ -3714,12 +3783,12 @@ def nfl_fair_lines(
         "snapshots_inserted": 0,
         "history_upserted": 0,
     }
-    resolved_bookmakers = _resolve_nfl_odds_bookmakers(bookmakers)
+    resolved_bookmakers = _resolve_nfl_odds_bookmakers_for_request(bookmakers)
     try:
         raw_market_events = fetch_odds(
             endpoint="sports/americanfootball_nfl/odds",
             params={
-                "regions": "us,us2",
+                "regions": NFL_ODDS_REGIONS,
                 "markets": "h2h,spreads,totals",
                 "oddsFormat": "american",
                 "dateFormat": "iso",
