@@ -10,6 +10,12 @@ import {
   type NflPropBoardRow,
 } from "@/lib/nfl-props-board";
 import {
+  displayConfidenceForProps,
+  displaySuppressionNoteForUi,
+  loadDisplayHonestyFlags,
+  type DisplayHonestyFlags,
+} from "@/lib/display-honesty";
+import {
   NFL_WEEKLY_PROPS_GATE_BODY,
   NFL_WEEKLY_PROPS_GATE_TITLE,
   NFL_WEEKLY_PROPS_LIVE,
@@ -86,6 +92,8 @@ export default async function NflPropsBoardPage({
     team: team || undefined,
     limit,
   });
+  const displayFlags = await loadDisplayHonestyFlags();
+  const suppressionNote = displaySuppressionNoteForUi(displayFlags);
 
   const hasRows = board.rows.length > 0;
   const filteredEmpty =
@@ -156,6 +164,14 @@ export default async function NflPropsBoardPage({
         <div className="mt-6">
           <HonestStatusBanner title="Model service unreachable" tone="amber">
             <p>{modelUnreachableCopy(board.error)}</p>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
+
+      {suppressionNote ? (
+        <div className="mt-6" data-testid="display-honesty-note">
+          <HonestStatusBanner title="Confidence display" tone="neutral">
+            <p>{suppressionNote}</p>
           </HonestStatusBanner>
         </div>
       ) : null}
@@ -301,6 +317,7 @@ export default async function NflPropsBoardPage({
                     <PropCard
                       key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
                       row={row}
+                      displayFlags={displayFlags}
                     />
                   ))}
                 </ul>
@@ -328,6 +345,7 @@ export default async function NflPropsBoardPage({
                         <PropRow
                           key={`${row.playerId ?? row.playerName}-${row.marketKey}-${index}`}
                           row={row}
+                          displayFlags={displayFlags}
                         />
                       ))}
                     </tbody>
@@ -365,7 +383,18 @@ function formatBand(value: number | null): string {
   return formatPropNumber(value);
 }
 
-function PropCard({ row }: { row: NflPropBoardRow }) {
+function PropCard({
+  row,
+  displayFlags,
+}: {
+  row: NflPropBoardRow;
+  displayFlags: DisplayHonestyFlags;
+}) {
+  const conf = displayConfidenceForProps(
+    row.confidence,
+    row.marketKey,
+    displayFlags,
+  );
   return (
     <li className="rounded-xl border border-white/10 bg-white/3 p-3">
       <div className="flex items-start justify-between gap-2">
@@ -393,9 +422,7 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
         </span>
         <span>
           Conf:{" "}
-          <span className="text-edge-green">
-            {formatConfidence(row.confidence)}
-          </span>
+          <span className="text-edge-green">{formatConfidence(conf)}</span>
         </span>
         <span>
           Edge O/U:{" "}
@@ -408,7 +435,18 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
   );
 }
 
-function PropRow({ row }: { row: NflPropBoardRow }) {
+function PropRow({
+  row,
+  displayFlags,
+}: {
+  row: NflPropBoardRow;
+  displayFlags: DisplayHonestyFlags;
+}) {
+  const conf = displayConfidenceForProps(
+    row.confidence,
+    row.marketKey,
+    displayFlags,
+  );
   return (
     <tr className="border-b border-white/5 transition hover:bg-white/5">
       <td className="px-3 py-3">
@@ -456,9 +494,7 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
           <span className="text-kos-text/40">no mkt</span>
         )}
       </td>
-      <td className="px-3 py-3 text-edge-green">
-        {formatConfidence(row.confidence)}
-      </td>
+      <td className="px-3 py-3 text-edge-green">{formatConfidence(conf)}</td>
     </tr>
   );
 }

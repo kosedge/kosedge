@@ -48,6 +48,13 @@ const EnvSchema = z.object({
   // Redis (optional)
   REDIS_URL: optionalUrl,
   SITE_URL: optionalUrl,
+
+  // Vercel Global Config connection string (formerly Edge Config).
+  // Used at runtime by `@vercel/global-config` for display-honesty kill switches.
+  // Env alone is insufficient to flip flags — that requires editing the store
+  // (no redeploy). Connecting a store sets GLOBAL_CONFIG (falls back to EDGE_CONFIG).
+  GLOBAL_CONFIG: optionalString,
+  EDGE_CONFIG: optionalString,
 });
 
 export const env = EnvSchema.parse(process.env);

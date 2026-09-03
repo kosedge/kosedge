@@ -35,6 +35,7 @@
     "@prisma/client": "^7.3.0",
     "@prisma/client-runtime-utils": "7.4.0",
     "@sentry/nextjs": "^10.0.0",
+    "@vercel/global-config": "^1.5.1",
     "bcryptjs": "^2.4.3",
     "dompurify": "^3.2.2",
     "gray-matter": "^4.0.3",

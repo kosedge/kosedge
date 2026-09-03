@@ -20,6 +20,11 @@ import {
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { getSport } from "@/lib/sports";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import {
+  displaySuppressionNoteForUi,
+  isGameConfidenceBandDisplayOff,
+  loadDisplayHonestyFlags,
+} from "@/lib/display-honesty";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -64,6 +69,14 @@ export async function GET(
   };
 
   try {
+    const displayFlags = await loadDisplayHonestyFlags();
+    const displayHonesty = {
+      nfl_game_confidence_band_display:
+        displayFlags.nfl_game_confidence_band_display,
+      display_suppression_note: displaySuppressionNoteForUi(displayFlags),
+      suppressGameConfidenceBand: isGameConfidenceBandDisplayOff(displayFlags),
+    };
+
     if (sport === "nfl") {
       // One full assemble (Odds ∥ fair-lines inside), then derive Week 1 — same as prior SSR.
       const fullRows = ensureNflScheduleWeekOnBoard(
@@ -95,6 +108,7 @@ export async function GET(
         weeks,
         linesAsOf,
         games: gameCount(rows),
+        displayHonesty,
       });
     }
 
@@ -114,6 +128,7 @@ export async function GET(
         weeks: [],
         linesAsOf: null,
         games: gameCount(rows),
+        displayHonesty,
       });
     }
 
@@ -129,6 +144,7 @@ export async function GET(
       weeks: [],
       linesAsOf: null,
       games: gameCount(rows),
+      displayHonesty,
     });
   } catch (err) {
     return pageDataUpstreamErrorResponse(err);
