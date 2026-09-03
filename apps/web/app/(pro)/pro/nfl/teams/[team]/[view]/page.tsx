@@ -39,8 +39,12 @@ import {
   type TendencyPerspective,
 } from "@/lib/nfl-tendencies";
 import { assignTeamPreviewWriter } from "@/lib/team-research";
-import { nflActualRecordColumnLabel, resolveNflTruthLabel } from "@/lib/nfl-truth-label";
+import {
+  nflActualRecordColumnLabel,
+  resolveNflTruthLabel,
+} from "@/lib/nfl-truth-label";
 import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
+import { NFL_DEPTH_SOURCE_STAMP } from "@/lib/nfl-surface-honesty";
 
 const SITUATION_TAB_KEYS: SituationTabKey[] = [
   "down_distance",
@@ -191,41 +195,48 @@ export default async function NflTeamIntelViewPage({
     redirect(`/pro/nfl/teams/${selectedTeam}/${view}${suffix}`);
   }
 
-  const [stats, statsComparison, depth, injuries, rosters, coaching, truePrSurface] =
-    await Promise.all([
-      fetchNflIntel("stats", {
-        season: filters.season,
-        week: filters.week,
-        team: selectedTeam,
-      }),
-      fetchNflIntel("stats", { season: filters.season, week: filters.week }),
-      fetchNflIntel("depth-charts", {
-        season: filters.season ?? 2026,
-        week: filters.week ?? 1,
-        team: selectedTeam,
-      }),
-      fetchNflIntel("injuries", {
-        season: filters.season,
-        week: filters.week,
-        team: selectedTeam,
-      }),
-      fetchNflIntel("rosters", {
-        season: filters.season ?? 2026,
-        week: filters.week ?? 1,
-        team: selectedTeam,
-      }),
-      fetchNflCoachingStaff({
-        season: filters.season ?? 2026,
-        team: selectedTeam,
-      }),
-      view === "overview"
-        ? fetchTruePrProductSurface({
-            season: filters.season ?? 2026,
-            asOfWeek: 1,
-            team: selectedTeam,
-          })
-        : Promise.resolve(null),
-    ]);
+  const [
+    stats,
+    statsComparison,
+    depth,
+    injuries,
+    rosters,
+    coaching,
+    truePrSurface,
+  ] = await Promise.all([
+    fetchNflIntel("stats", {
+      season: filters.season,
+      week: filters.week,
+      team: selectedTeam,
+    }),
+    fetchNflIntel("stats", { season: filters.season, week: filters.week }),
+    fetchNflIntel("depth-charts", {
+      season: filters.season ?? 2026,
+      week: filters.week ?? 1,
+      team: selectedTeam,
+    }),
+    fetchNflIntel("injuries", {
+      season: filters.season,
+      week: filters.week,
+      team: selectedTeam,
+    }),
+    fetchNflIntel("rosters", {
+      season: filters.season ?? 2026,
+      week: filters.week ?? 1,
+      team: selectedTeam,
+    }),
+    fetchNflCoachingStaff({
+      season: filters.season ?? 2026,
+      team: selectedTeam,
+    }),
+    view === "overview"
+      ? fetchTruePrProductSurface({
+          season: filters.season ?? 2026,
+          asOfWeek: 1,
+          team: selectedTeam,
+        })
+      : Promise.resolve(null),
+  ]);
   const truePrRow = truePrSurface?.teams?.[0] ?? null;
   const coachingRow = coaching.rows[0] ?? null;
   const coachingBadge = coachingContinuityBadge(coachingRow);
@@ -236,7 +247,8 @@ export default async function NflTeamIntelViewPage({
     season,
     week,
     fallbackApplied: Boolean(
-      standings.selection?.fallback_applied || stats.selection?.fallback_applied,
+      standings.selection?.fallback_applied ||
+      stats.selection?.fallback_applied,
     ),
     latestSeason:
       standings.selection?.latest_available?.season ??
@@ -374,7 +386,10 @@ export default async function NflTeamIntelViewPage({
         <TeamIntelSectionNav
           activeView={view}
           team={selectedTeam}
-          filters={{ season: season ?? undefined, week: truth.week ?? undefined }}
+          filters={{
+            season: season ?? undefined,
+            week: truth.week ?? undefined,
+          }}
         />
         {directoryEntry ? (
           <p className="mt-3 text-xs text-kos-text/60">
@@ -553,7 +568,11 @@ export default async function NflTeamIntelViewPage({
                     >
                       <dt className="text-[10px] font-semibold uppercase tracking-wide text-kos-text/55">
                         {role}
-                        {isNew === true ? " · new" : isNew === false ? " · returning" : ""}
+                        {isNew === true
+                          ? " · new"
+                          : isNew === false
+                            ? " · returning"
+                            : ""}
                       </dt>
                       <dd className="mt-1 text-sm font-medium text-kos-text">
                         {typeof name === "string" && name.trim()
@@ -571,7 +590,9 @@ export default async function NflTeamIntelViewPage({
               )}
               {typeof coachingRow?.notes === "string" &&
               coachingRow.notes.trim() ? (
-                <p className="mt-3 text-xs text-kos-text/60">{coachingRow.notes}</p>
+                <p className="mt-3 text-xs text-kos-text/60">
+                  {coachingRow.notes}
+                </p>
               ) : null}
               <div className="mt-4 flex flex-wrap gap-2">
                 <Link
@@ -620,7 +641,22 @@ export default async function NflTeamIntelViewPage({
         ) : null}
 
         {view === "depth-chart" ? (
-          <DepthChartRenderer rows={depth.rows} />
+          <div className="space-y-3">
+            <p
+              className="text-xs text-kos-gold/85"
+              data-testid="nfl-depth-source-stamp"
+            >
+              {NFL_DEPTH_SOURCE_STAMP} As-of: {truth.period_line}. See{" "}
+              <Link
+                href="/pro/nfl/camp"
+                className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
+              >
+                Camp Desk
+              </Link>
+              .
+            </p>
+            <DepthChartRenderer rows={depth.rows} />
+          </div>
         ) : null}
 
         {view === "injuries" ? (
@@ -664,7 +700,10 @@ export default async function NflTeamIntelViewPage({
             season={tendencyData.profile.season}
             requestedSeason={tendencyData.profile.requestedSeason}
             usedFallback={tendencyData.profile.usedFallback}
-            filters={{ season: season ?? undefined, week: truth.week ?? undefined }}
+            filters={{
+              season: season ?? undefined,
+              week: truth.week ?? undefined,
+            }}
             perspective={perspective}
             activeSituation={activeSituation}
             activeQbSituation={activeQbSituation}
