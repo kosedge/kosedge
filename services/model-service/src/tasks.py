@@ -15820,6 +15820,25 @@ def materialize_nfl_player_props_edges(
                         market_lookup[key] = market
                         market_lookup_rank[key] = rank
 
+        prop_joined_book_counts: Dict[tuple[str, str, str, Optional[float]], int] = {}
+        prop_joined_book_sets: Dict[tuple[str, str, str, Optional[float]], set[str]] = {}
+        for market in market_rows:
+            line_key: Optional[float]
+            try:
+                line_key = round(float(market.line), 2) if market.line is not None else None
+            except (TypeError, ValueError):
+                line_key = None
+            book_key = (
+                str(market.player_name or "").strip().lower(),
+                str(market.team or "").strip().upper(),
+                str(market.market_key),
+                line_key,
+            )
+            book = str(getattr(market, "sportsbook", None) or "").strip().lower()
+            if book:
+                prop_joined_book_sets.setdefault(book_key, set()).add(book)
+        prop_joined_book_counts = {k: len(v) for k, v in prop_joined_book_sets.items()}
+
         for row in baselines:
             resolved_player_uid = str(row.player_uid) if row.player_uid is not None else None
             if resolved_player_uid is None:
@@ -15964,6 +15983,19 @@ def materialize_nfl_player_props_edges(
                     line = None
                 over_price = int(market.over_price) if (market is not None and market.over_price is not None) else None
                 under_price = int(market.under_price) if (market is not None and market.under_price is not None) else None
+                try:
+                    line_lookup = round(float(line), 2) if line is not None else None
+                except (TypeError, ValueError):
+                    line_lookup = None
+                joined_book_count = prop_joined_book_counts.get(
+                    (
+                        str(row.player_name or "").strip().lower(),
+                        str(row.team or "").strip().upper(),
+                        market_key,
+                        line_lookup,
+                    ),
+                    1 if market is not None else 0,
+                )
                 # Frozen cal once for edge math only — published mean stays spine.
                 cal = apply_prop_calibration(
                     model_mean=float(spine_mean),
@@ -15992,6 +16024,10 @@ def materialize_nfl_player_props_edges(
                         role_confidence=role_conf,
                         availability_confidence=avail_conf,
                         raw_model_mean=float(spine_mean),
+                        market_shrink=cal.get("market_shrink"),
+                        calibration_source=cal.get("calibration_source"),
+                        fallback_used=market is None,
+                        joined_book_count=joined_book_count,
                     )
                 else:
                     model_floor = max(0.0, model_mean - (1.0 * model_std))
@@ -16009,6 +16045,10 @@ def materialize_nfl_player_props_edges(
                         role_confidence=role_conf,
                         availability_confidence=avail_conf,
                         raw_model_mean=float(spine_mean),
+                        market_shrink=cal.get("market_shrink"),
+                        calibration_source=cal.get("calibration_source"),
+                        fallback_used=market is None,
+                        joined_book_count=joined_book_count,
                     )
                     if line is None:
                         # Projection-only row: no book to beat — honest empty fair juice.
