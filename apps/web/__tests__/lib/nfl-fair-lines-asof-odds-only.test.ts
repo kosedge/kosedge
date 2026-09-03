@@ -55,7 +55,13 @@ describe("fair-lines as-of = model odds_as_of", () => {
       lines: [{ oddsCapturedAt: renderDay }],
     });
     expect(marketAsOf).toBeNull();
-    expect(sanitizeMarketCaptureIso(requestInvent)).toBeNull();
+    // Pin nowMs — invent reject is a 30m window around wall clock; hardcode alone drifts.
+    expect(
+      sanitizeMarketCaptureIso(
+        requestInvent,
+        Date.parse("2026-09-03T01:36:20.000Z"),
+      ),
+    ).toBeNull();
     expect(marketAsOfStamp({ asOf: marketAsOf, kind: "lines" }).text).toBe(
       "Market as-of unavailable",
     );
