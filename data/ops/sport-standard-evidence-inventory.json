@@ -47,7 +47,9 @@
       "run_id absent on all major betting boards; appears on power-ratings/season-engine elsewhere \u2014 out of board scope here.",
       "NFL ActionLabel also includes ALERT and STAY AWAY (flagged as non-standard). isBestBet boolean exists \u2014 not a subscriber tag string.",
       "WATCH exists in prop policy / types; NFL web props adapter forces tag null.",
-      "Literal ODDS_API_KEY not shown in customer board UI; MODEL_SERVICE_URL / pipeline path copy still customer-visible on some desks."
+      "Literal ODDS_API_KEY not shown in customer board UI; MODEL_SERVICE_URL / pipeline path copy still customer-visible on some desks.",
+      "Live probe Best Value hits = 0 on customer HTML/API; ActionLabel BEST VALUE remains code-only until live hits.",
+      "run_id customer-visible strings thin across sports."
     ],
     "delivery_format": "CoS Notion paste lock \u2014 cos_matrix rows + markdown table"
   },
@@ -174,7 +176,18 @@
       "/pro/ncaab/overview",
       "/pro/ncaab/edges"
     ],
-    "adjacent_note": "/pro/cbb and /pro/ncaab overview+edges also 200 (outside primary six; cited only)"
+    "adjacent_note": "/pro/cbb and /pro/ncaab overview+edges also 200 (outside primary six; cited only)",
+    "cos_lock_facts": {
+      "model_route": "200 only NFL+CFB; 404 MLB/NBA/NHL/WNBA",
+      "fair_lines_api": "200 NFL-only; 404 others",
+      "edges_desk_api": "200 NFL-only; 404 others",
+      "assemble_api": "200 all six; linesAsOf present",
+      "kei_lines_pro_path": "404 all six (/pro/{sport}/kei-lines); no redirect to fair-lines",
+      "best_value_live_hits": 0,
+      "best_value_note": "Best Value / BEST VALUE: 0 hits in live HTML/API probe customer surface",
+      "run_id_customer_strings": "thin",
+      "run_id_note": "run_id customer-visible strings thin / absent on betting boards"
+    }
   },
   "www_spot_check_2026_09_04": {
     "edge_board_http": {
@@ -2689,11 +2702,11 @@
           "standard": [
             "PLAY",
             "LEAN",
-            "PASS",
-            "Best Value"
+            "PASS"
           ],
           "best_value_form": "BEST VALUE (ActionLabel space form)",
           "flagged_other": [
+            "BEST VALUE (code only; 0 live hits)",
             "WATCH",
             "ALERT",
             "STAY AWAY",
@@ -2716,7 +2729,9 @@
               "substring": "STAY AWAY",
               "flag": true
             }
-          ]
+          ],
+          "best_value_live_hits": 0,
+          "best_value_note": "Code ActionLabel includes BEST VALUE; live probe Best Value hits = 0 \u2014 do not list as in-use from live"
         },
         "as_of_present": {
           "value": true,
@@ -2732,9 +2747,10 @@
           "value": false,
           "evidence": [
             {
-              "note": "absent on major betting boards (code inventory); not reported present in live_probe assemble samples"
+              "note": "run_id customer strings thin; absent on betting boards / assemble samples"
             }
-          ]
+          ],
+          "customer_strings": "thin"
         },
         "empty_error_copy": [
           {
@@ -2923,7 +2939,8 @@
             {
               "file": "apps/web/lib/cfb-trusted-market.ts"
             }
-          ]
+          ],
+          "best_value_live_hits": 0
         },
         "as_of_present": {
           "value": true,
@@ -2940,7 +2957,8 @@
             {
               "note": "not present on betting boards / assemble samples"
             }
-          ]
+          ],
+          "customer_strings": "thin"
         },
         "empty_error_copy": [
           {
@@ -3096,7 +3114,8 @@
             {
               "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
             }
-          ]
+          ],
+          "best_value_live_hits": 0
         },
         "as_of_present": {
           "value": true,
@@ -3113,7 +3132,8 @@
             {
               "note": "not present on betting boards / assemble samples"
             }
-          ]
+          ],
+          "customer_strings": "thin"
         },
         "empty_error_copy": [
           {
@@ -3261,7 +3281,8 @@
             {
               "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
             }
-          ]
+          ],
+          "best_value_live_hits": 0
         },
         "as_of_present": {
           "value": true,
@@ -3278,7 +3299,8 @@
             {
               "note": "not present on betting boards / assemble samples"
             }
-          ]
+          ],
+          "customer_strings": "thin"
         },
         "empty_error_copy": [
           {
@@ -3424,7 +3446,8 @@
             {
               "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
             }
-          ]
+          ],
+          "best_value_live_hits": 0
         },
         "as_of_present": {
           "value": true,
@@ -3441,7 +3464,8 @@
             {
               "note": "not present on betting boards / assemble samples"
             }
-          ]
+          ],
+          "customer_strings": "thin"
         },
         "empty_error_copy": [
           {
@@ -3589,7 +3613,8 @@
             {
               "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
             }
-          ]
+          ],
+          "best_value_live_hits": 0
         },
         "as_of_present": {
           "value": true,
@@ -3606,7 +3631,8 @@
             {
               "note": "not present on betting boards / assemble samples"
             }
-          ]
+          ],
+          "customer_strings": "thin"
         },
         "empty_error_copy": [
           {

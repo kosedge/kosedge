@@ -6,7 +6,7 @@
 **Machine twin:** [`data/ops/sport-standard-evidence-inventory.json`](../data/ops/sport-standard-evidence-inventory.json) → key `cos_matrix`  
 **Live probe:** UTC **2026-09-04T03:49Z**, no auth · primary sports **200=58 / 404=20**
 
-Allowed tags in “Tags in use” column: **PLAY / LEAN / PASS** + **Best Value** where already exists. Flag others (do not introduce Best Bet / Stay Away).
+Allowed tags in “Tags in use” column: **PLAY / LEAN / PASS** + **Best Value** only where live evidence exists. **Live probe Best Value hits = 0** — flag code-only BEST VALUE; do not introduce Best Bet / Stay Away.
 
 ---
 
@@ -23,9 +23,9 @@ Columns locked: Overview · Model · Edge · Props · Futures · Tags in use · 
 | **Edge** | Edge Board agent **200** `/edge-board/nfl`. Assemble **200** `…/api/edge-board/nfl/assemble` — keys `linesAsOf`, `kei` (probe). Edges-desk API **200** `…/api/nfl/edges-desk` (probe: only nfl). Confidence seen on NFL edges (probe). |
 | **Props** | Desk `/pro/nfl/props`. Probe: Confidence on NFL props. Code: `no PLAY / LEAN stake tags` (`nfl-props-surface.ts`). |
 | **Futures** | Code route `/pro/nfl/projections` (title Futures). Individual live HTTP not broken out in probe aggregates. |
-| **Tags in use** | **PLAY / LEAN / PASS / Best Value** (`BEST VALUE` ActionLabel). Probe HTML/API saw PLAY/LEAN/PASS. **Flag:** WATCH, ALERT, STAY AWAY, isBestBet, STRONG PLAY, EXCEPTIONAL. |
+| **Tags in use** | **PLAY / LEAN / PASS**. Probe HTML/API saw PLAY/LEAN/PASS. **Best Value live hits = 0** (code ActionLabel `BEST VALUE` only — flag, not in-use). **Flag:** WATCH, ALERT, STAY AWAY, isBestBet, STRONG PLAY, EXCEPTIONAL. |
 | **as-of present?** | **Yes** — assemble key `linesAsOf` (probe). |
-| **run_id present?** | **No** — absent on betting boards / assemble samples. |
+| **run_id present?** | **No** — customer strings **thin**; absent on betting boards / assemble samples. |
 | **empty/error copy** | `Board temporarily unavailable. Refresh to try again.` · `No Slate Yet` · `Odds temporarily unavailable. Refresh to try again.` · `No odds data yet. Lines will appear when books post this slate.` · `Model service is not configured for this environment.` · `Market lines unavailable — showing Kosedge lines only.` · `…no PLAY / LEAN stake tags.` · `No investable props for this filter yet.` · API body: `open_competition` (`/api/nfl/fair-lines`). |
 | **mobile filter** | **Yes** on Edge (week chips), Odds (sport), Fair-lines (slate window), Props (market chips), Edges desk (market/edge/conf/week). |
 
@@ -38,9 +38,9 @@ Columns locked: Overview · Model · Edge · Props · Futures · Tags in use · 
 | **Edge** | Assemble **200** `…/api/edge-board/cfb/assemble` — `linesAsOf`, `kei` (probe). `…/api/cfb/edges-desk` → **404** (probe). Desk `/pro/cfb/edges` (code). |
 | **Props** | **Absent** — `/pro/cfb/props` → tempo (code). |
 | **Futures** | Code: `/pro/cfb/futures`, `/pro/cfb/projections`. Live HTTP not broken out in probe aggregates. |
-| **Tags in use** | **PLAY / LEAN / PASS**. Probe saw PLAY/LEAN/PASS. PLAY sit→PASS (`cfb-trusted-market.ts`). No Best Value. |
+| **Tags in use** | **PLAY / LEAN / PASS**. Probe saw PLAY/LEAN/PASS. PLAY sit→PASS (`cfb-trusted-market.ts`). Best Value live hits = 0. |
 | **as-of present?** | **Yes** — `linesAsOf` on assemble (probe). |
-| **run_id present?** | **No**. |
+| **run_id present?** | **No** — customer strings thin. |
 | **empty/error copy** | `KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF — we do not invent book prices.` · `No KEI lines for {sport} yet. Run the pipeline export to generate data/processed/kei_lines_*.json.` · `CFB fair-lines join the desk once the college football model board is connected to Pro.` · `No official Week {week} games in the KosEdge slate yet.` · `No quantified edges on the live board yet`. |
 | **mobile filter** | **Yes** Edge (Week0/1), Odds (sport). **No** Fair/KEI table, props (n/a), edges desk. |
 
@@ -110,7 +110,7 @@ Columns locked: Overview · Model · Edge · Props · Futures · Tags in use · 
 
 | Sport | Overview | Model | Edge | Props | Futures | Tags | as-of | run_id | Mobile filters |
 |-------|----------|-------|------|-------|---------|------|-------|--------|----------------|
-| NFL | 12/1 · overview+edge 200 · kei-lines **404** | **/pro/nfl/model 200** · `/api/nfl/fair-lines` 200 (+`open_competition`) | assemble 200 kei+asOf · edges-desk **200** | live; conf; no stake tags | `/projections` (code) | PLAY/LEAN/PASS/**Best Value** · flag WATCH/ALERT/STAY AWAY | **Y** | **N** | Y (edge/odds/fair/props/edges) |
+| NFL | 12/1 · overview+edge 200 · kei-lines **404** | **/pro/nfl/model 200** · `/api/nfl/fair-lines` 200 (+`open_competition`) | assemble 200 kei+asOf · edges-desk **200** | live; conf; no stake tags | `/projections` (code) | PLAY/LEAN/PASS · Best Value **0 hits** · flag WATCH/ALERT/STAY AWAY | **Y** | **N** (thin) | Y (edge/odds/fair/props/edges) |
 | CFB | 10/3 · kei-lines **404** | **/pro/cfb/model 200** · api fair-lines **404** | assemble 200 kei+asOf · edges-desk **404** | **none** (→tempo) | `/futures`+`/projections` (code) | PLAY/LEAN/PASS | **Y** | **N** | Y edge/odds; N fair/edges |
 | MLB | 9/4 · kei-lines **404** | model **404** · api **404** | assemble 200 **no kei** on sample · edges-desk **404** | soft-launch | none | PLAY/LEAN/PASS · flag WATCH | **Y** | **N** | Y edge/odds/fair/edges; N props |
 | NBA | 9/4 · kei-lines **404** | model **404** · api **404** | assemble 200 kei+asOf · edges-desk **404** | Ch6 dark PASS | none | PLAY/LEAN/PASS · flag WATCH | **Y** | **N** | Y edge/odds/fair; N props/edges |
@@ -119,15 +119,17 @@ Columns locked: Overview · Model · Edge · Props · Futures · Tags in use · 
 
 ---
 
-## Live probe key gaps (cited)
+## Live probe key gaps (cited) — CoS Gap Matrix v0.1 lock facts
 
-| Path | Result |
+| Fact | Result |
 |------|--------|
-| `/pro/{sport}/kei-lines` | 404 all six (no redirect to fair-lines) |
-| `/pro/{sport}/model` | 200 only nfl+cfb; 404 mlb/nba/nhl/wnba |
-| `/api/{sport}/fair-lines` | 200 only nfl; 404 others |
-| `/api/{sport}/edges-desk` | 200 only nfl; 404 others |
-| `/api/edge-board/{sport}/assemble` | 200 all six; `linesAsOf` present; kei/model on nfl/cfb/nba/nhl/wnba; mlb sample market/best/asOf only |
+| Model | **only NFL+CFB** (`/pro/{sport}/model` 200); mlb/nba/nhl/wnba **404** |
+| `/api/{sport}/fair-lines` | **NFL-only** 200; others 404 |
+| `/api/{sport}/edges-desk` | **NFL-only** 200; others 404 |
+| `/api/edge-board/{sport}/assemble` | **200 all six**; `linesAsOf` present; kei/model on nfl/cfb/nba/nhl/wnba; mlb sample market/best/asOf only |
+| `/pro/{sport}/kei-lines` | **404 all six** (no redirect to fair-lines) |
+| Best Value | **0 hits** on live customer HTML/API |
+| `run_id` | customer strings **thin** / absent on betting boards |
 
 **Adjacent (outside primary six):** `/pro/cbb` and `/pro/ncaab` overview+edges also **200**.
 
