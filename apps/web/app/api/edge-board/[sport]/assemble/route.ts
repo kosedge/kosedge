@@ -32,7 +32,9 @@ export const maxDuration = 30;
  * model-service / Odds (Alex: SSR wait waterfall, not download).
  * No INTERNAL_API_SECRET — same rows the public /edge-board page already shows.
  * NFL fair-lines transport failures → 503/504 (not partial KEI pack without vintage).
- * Cache-Control s-maxage=45 on non-empty 200 only (never 503/504/games=0).
+ * Cache-Control + CDN-Cache-Control s-maxage=45 on non-empty 200 only
+ * (never 503/504/games=0). Dual header: Vercel strips s-maxage from
+ * Cache-Control alone — see page-data-cache.ts / GO-1c ops note.
  */
 function gameCount(rows: EdgeBoardRow[]): number {
   return new Set(rows.map((r) => r.game).filter(Boolean)).size;

@@ -119,11 +119,25 @@ function getClientId(req: NextRequest): string {
   return `${ip}|${userAgent.slice(0, 120)}`;
 }
 
+function isCronOrWarmRequest(req: NextRequest): boolean {
+  if (req.nextUrl.pathname.startsWith("/api/cron/")) return true;
+  if (req.headers.get("x-vercel-cron") === "1") return true;
+  if (req.headers.get("x-kosedge-warm") === "1") return true;
+  const secret = process.env.CRON_SECRET?.trim();
+  if (secret) {
+    const auth = req.headers.get("authorization") || "";
+    if (auth === `Bearer ${secret}`) return true;
+  }
+  return false;
+}
+
 export async function rateLimit(
   req: NextRequest,
 ): Promise<NextResponse | null> {
   const { pathname } = req.nextUrl;
   if (!pathname.startsWith("/api/")) return null;
+  // Cron / CDN warm must not burn the strict edge-board bucket.
+  if (isCronOrWarmRequest(req)) return null;
 
   const clientId = getClientId(req);
   const { limiter, points } = getLimiterAndPoints(pathname);

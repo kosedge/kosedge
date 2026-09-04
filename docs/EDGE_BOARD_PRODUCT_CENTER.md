@@ -58,6 +58,11 @@ Client-fetch keeps document HTML off the model-service waterfall (Alex). First p
 - No odds rebuild · no PLAY threshold changes.
 - Route `maxDuration = 30` / `UPSTREAM_TIMEOUT_MS.pageData` unchanged — UX only.
 
+## Assemble CDN Cache-Control (#12 GO-1c)
+
+- Non-empty assemble 200 must deliver full `PAGE_DATA_CACHE_CONTROL` (`s-maxage=45`) via dual `Cache-Control` + `CDN-Cache-Control` (Vercel strips s-maxage from Cache-Control alone).
+- Ops + honesty H1–H4: `data/ops/edge-board-assemble-cdn-cache-go1c-20260904.md`. Optional cron warm: `/api/cron/warm-page-data`. HOLD GO-2.
+
 ## COLD assemble→hydrate (#12 GO-1)
 
 - SSR still does **not** await assemble (Alex waterfall).
