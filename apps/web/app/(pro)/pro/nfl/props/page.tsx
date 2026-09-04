@@ -421,7 +421,7 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
           Edge O/U:{" "}
           {row.marketJoined
             ? `${formatEdgeProb(row.edgeOver)} / ${formatEdgeProb(row.edgeUnder)}`
-            : "no mkt"}
+            : "N/A—DATA GAP"}
         </span>
       </div>
     </li>
@@ -466,14 +466,14 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
         {row.marketJoined ? (
           formatEdgeProb(row.edgeOver)
         ) : (
-          <span className="text-kos-text/40">no mkt</span>
+          <span className="text-kos-text/40">N/A—DATA GAP</span>
         )}
       </td>
       <td className="px-3 py-3 text-kos-text/70">
         {row.marketJoined ? (
           formatEdgeProb(row.edgeUnder)
         ) : (
-          <span className="text-kos-text/40">no mkt</span>
+          <span className="text-kos-text/40">N/A—DATA GAP</span>
         )}
       </td>
     </tr>

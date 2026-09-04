@@ -251,7 +251,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/edges",
           label: "Edges",
-          hint: "Thresholded game + prop edges with side and confidence.",
+          hint: "Thresholded game + prop edges with side.",
           premium: true,
           status: "active",
         },
@@ -411,7 +411,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/model-transparency",
           label: "Performance",
-          hint: "Closest live performance metrics surface (ROI / EV / sport backtests). Dedicated Performance page TBD.",
+          hint: "Held-out sport backtests. Dedicated Performance page TBD.",
           premium: true,
           status: "active",
         },

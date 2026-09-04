@@ -115,7 +115,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
       {
         href: "/pro/nfl/edges",
         title: "Edges",
-        description: "Thresholded game + prop edges with side and confidence.",
+        description: "Thresholded game + prop edges with side.",
         cta: "Open edges desk →",
         accent: "green",
         status: "active",

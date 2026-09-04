@@ -256,10 +256,6 @@ export default function MethodologyPage() {
         <p className="mt-2 text-base leading-7 text-white/75">
           We promise independent numbers.
         </p>
-        <p className="mt-2 text-base leading-7 text-white/75">
-          We promise that betting with a real framework beats betting without
-          one.
-        </p>
 
         <hr className="my-10 border-white/15" />
 
