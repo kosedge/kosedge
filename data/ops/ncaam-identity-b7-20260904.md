@@ -10,7 +10,7 @@
 | ----------------- | ------------------------------------------------------------------------- |
 | Alias SoT         | `apps/web/lib/ncaam/aliases.json`                                         |
 | TS identity       | `apps/web/lib/ncaam/identity.ts` (`resolveTeamId`, fail-closed)           |
-| Python twin       | `apps/web/ncaam_identity.py` (`odds_name_to_team_norm`)                   |
+| Python twin       | `apps/web/src/ncaam_identity.py` (`odds_name_to_team_norm`)               |
 | B7 sample fixture | `apps/web/lib/ncaam/b7-odds-sample.json` (≥50 odds names)                 |
 | Unit tests        | `apps/web/__tests__/lib/ncaam-identity-b7.test.ts`                        |
 | Directory         | `apps/web/lib/team-research/directories-college.ts` — Miami FL + Miami OH |
