@@ -35,6 +35,21 @@ describe("nfl-true-pr-format", () => {
     expect(chip?.muted).toBe(true);
   });
 
+  it("sits QB premium when packaged depth is past freshness", () => {
+    const chip = qbPremiumChip(
+      {
+        available: true,
+        band: "elite_lift",
+        band_label: "Elite lift",
+        starter_name: "Tua Tagovailoa",
+      },
+      { packStale: true },
+    );
+    expect(chip?.value).toMatch(/Sat/i);
+    expect(chip?.muted).toBe(true);
+    expect(chip?.detail).toMatch(/Camp Desk/i);
+  });
+
   it("frames projected SOS as outlook", () => {
     const chip = projectedSosChip({
       available: true,

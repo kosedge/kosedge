@@ -2,12 +2,17 @@ import { buildMetricRankMaps } from "@/lib/intel-ranking";
 import type { NflIntelResponseRow } from "@/lib/nfl-intel";
 import { formatIntelValue, formatIntelValueWithRank } from "@/lib/nfl-intel";
 import { formatIntelNumber } from "@/lib/intel-numeric";
+import {
+  formatCompetitionStatus,
+  formatDepthSlotLabel,
+} from "@/lib/nfl-depth-pack-freshness";
 
 type DepthRow = {
   position: string;
   player_name: string;
   depth_slot: string;
   depth_order: number;
+  competition_status?: string | null;
   role_confidence?: number;
   pass_yards?: number;
   pass_touchdowns?: number;
@@ -57,11 +62,15 @@ function toDepthRow(row: NflIntelResponseRow): DepthRow | null {
   const order = typeof row.depth_order === "number" ? row.depth_order : null;
   if (!position || !playerName || !slot || order === null) return null;
 
+  const competitionStatus =
+    typeof row.competition_status === "string" ? row.competition_status : null;
+
   return {
     position,
     player_name: playerName,
     depth_slot: slot,
     depth_order: order,
+    competition_status: competitionStatus,
     role_confidence:
       typeof row.role_confidence === "number" ? row.role_confidence : undefined,
     pass_yards: asFiniteNumber(row.pass_yards),
@@ -289,6 +298,13 @@ export default function DepthChartRenderer({
               {rowsForPosition.map((row) => {
                 const rowIndex = rowIndexByRef.get(row) ?? -1;
                 const projection = renderProjection(row, rowIndex, rankMaps);
+                const slotLabel = formatDepthSlotLabel(
+                  row.depth_slot,
+                  row.depth_order,
+                );
+                const competitionLabel = formatCompetitionStatus(
+                  row.competition_status,
+                );
                 return (
                   <div
                     key={`${position}-${row.player_name}-${row.depth_order}`}
@@ -300,8 +316,16 @@ export default function DepthChartRenderer({
                           {row.player_name}
                         </p>
                         <p className="mt-0.5 text-xs text-kos-text/60">
-                          {row.depth_slot} · {formatIntelValue(row.depth_order)}
+                          {`${slotLabel} · ${formatIntelValue(row.depth_order)}`}
                         </p>
+                        {competitionLabel ? (
+                          <p
+                            className="mt-0.5 text-[11px] font-medium text-amber-100/80"
+                            data-testid="depth-competition-status"
+                          >
+                            {competitionLabel}
+                          </p>
+                        ) : null}
                         <p className="mt-1 text-[11px] text-kos-gold">
                           {row.role_confidence !== undefined
                             ? `${formatIntelValueWithRank(

@@ -9,7 +9,10 @@ import {
   NFL_DEPTH_SOURCE_STAMP,
   NFL_FUTURES_SOURCE_NAME,
   NFL_FUTURES_SOURCE_STAMP,
+  nflDepthPackAsOfLine,
+  nflDepthPackFreshnessStamp,
 } from "@/lib/nfl-surface-honesty";
+import { NFL_DEPTH_PACK_AS_OF } from "@/lib/nfl-depth-pack-freshness";
 
 const webRoot = path.join(__dirname, "../..");
 
@@ -64,21 +67,45 @@ describe("NFL depth charts are not claimed as live camp", () => {
     expect(NFL_DEPTH_SOURCE_STAMP).not.toMatch(ENGINEERING_NOTE);
   });
 
+  it("stamps pack calendar as-of and fails closed when stale", () => {
+    expect(nflDepthPackAsOfLine()).toContain(NFL_DEPTH_PACK_AS_OF);
+    const fresh = nflDepthPackFreshnessStamp(
+      new Date(`${NFL_DEPTH_PACK_AS_OF}T12:00:00Z`),
+    );
+    expect(fresh).toContain(`Pack as-of ${NFL_DEPTH_PACK_AS_OF}`);
+    expect(fresh).toMatch(/Freshness window/i);
+    expect(fresh).not.toMatch(/Pack past/i);
+
+    const stale = nflDepthPackFreshnessStamp(new Date("2026-09-04T12:00:00Z"));
+    expect(stale).toMatch(/Pack past/i);
+    expect(stale).toMatch(/Camp Desk/i);
+    expect(stale).not.toMatch(ENGINEERING_NOTE);
+  });
+
   it("depth surfaces keep the chart visible with a not-live-camp stamp", () => {
     const league = readRel("app/(pro)/pro/[sport]/depth-charts/page.tsx");
     const teamHub = readRel("app/(pro)/pro/nfl/teams/[team]/[view]/page.tsx");
     const intel = readRel("components/pro/NflIntelTablePage.tsx");
+    const modelBoard = readRel("components/pro/nfl/TruePrDriversBoard.tsx");
 
-    expect(league).toContain("NFL_DEPTH_SOURCE_STAMP");
+    expect(league).toContain("nflDepthPackFreshnessStamp");
     expect(league).toContain('sourceHonestyTestId="nfl-depth-source-stamp"');
     expect(league).toContain('campHref="/pro/nfl/camp"');
     expect(league).not.toMatch(/hidden|coming soon|paywall/i);
 
-    expect(teamHub).toContain("NFL_DEPTH_SOURCE_STAMP");
+    expect(teamHub).toContain("nflDepthPackFreshnessStamp");
     expect(teamHub).toContain('data-testid="nfl-depth-source-stamp"');
     expect(teamHub).toContain("DepthChartRenderer");
     expect(teamHub).toContain("/pro/nfl/camp");
     expect(teamHub).not.toMatch(/live roster SoT/i);
+    // Must not misuse season-week truth as pack as-of.
+    expect(teamHub).not.toMatch(/As-of: \{truth\.period_line\}/);
+
+    expect(modelBoard).toContain("nflDepthPackFreshnessStamp");
+    expect(modelBoard).toContain(
+      'data-testid="nfl-depth-pack-freshness-stamp"',
+    );
+    expect(modelBoard).toContain("isPackagedDepthStale");
 
     expect(intel).toContain("sourceHonesty");
     expect(intel).not.toMatch(/live roster SoT/i);
