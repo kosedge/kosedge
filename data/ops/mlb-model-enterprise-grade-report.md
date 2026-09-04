@@ -13,7 +13,7 @@
 |------|:-----:|-------|
 | Edgeboard ML product | **B+** | Moneyline live on `/edge-board/mlb`; LEAN ≥1.5pp / PLAY ≥3.0pp ([#61](https://github.com/kosedge/kosedge/pull/61)) |
 | Moneyline sharpness (Brier) | **D+** | Densify walkforward ~**0.2496–0.2511**; gate ≤0.24 fail |
-| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after FIP/xFIP, BP role, Statcast stuff, lineup timing, late-info stamps, stuff-shape pitch matchup, **true pitch-type arsenal**, and park-rel totals; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
+| Moneyline CLV | **D** | Intersection densify still **~+0.004** (n=476) after FIP/xFIP, BP role, Statcast stuff, lineup timing, late-info stamps, stuff-shape pitch matchup, **true pitch-type arsenal**, **batter-level M1b (+0.00364)**, and park-rel totals; prod full-n ~**+0.005**; prior +0.023 was sample-confounded |
 | Calibration (ECE) | **B** | **0.017–0.027** ≪ 0.06 |
 | Leakage hygiene | **A** | **0** on all densify ablation runs this session |
 | Totals MAE | **C+** | ~**3.47–3.52**; park-rel wind did not clear MAE |
@@ -36,6 +36,7 @@
 | [#59](https://github.com/kosedge/kosedge/pull/59) | Late-info snapshots + pitch matchup + park-rel totals wind | Railway deployed; **no default flip** (H*/M1/W1 fail honest gates); wiring stays |
 | [#60](https://github.com/kosedge/kosedge/pull/60) | True pitch-type arsenal + batter-family + live ≤3h lake grader | Railway deployed; **no default flip** (M1t fail; live late-info n=0); wiring stays |
 | [#61](https://github.com/kosedge/kosedge/pull/61) | **Edgeboard MLB moneyline** + LEAN/PLAY **1.5pp / 3.0pp** | merged → `deploy-vercel` + Vercel production |
+| [#63](https://github.com/kosedge/kosedge/pull/63) | Batter-level lineup contact × pitch-type (M1b), defaults OFF | merged → `deploy-vercel` + Railway densify graded; **no default flip** |
 
 ### Engineering detail
 
@@ -49,8 +50,8 @@
 8. **Late-info stamps (H0–H2) + pitch matchup (M0/M1) + park-rel totals (W0/W1)** — see decision tables below. All **no-ship** on defaults; snapshot lake + totals-only wind path + pitch-matchup flag remain for live measurement / future trials.
 9. **True pitch-type arsenal (M0/M1t) + live ≤3h lake grade** — Prior M1 was BOM-contaminated stuff-shape; true FF/SI/SL/CH/CU mix + **team** batter-family still **no-ship**. Live late-info **n=0**.
 10. **Edgeboard moneyline product** — Odds `h2h,totals`; KEIMLB fair ML + `homeWinProb`; ML edge in percentage points; tags LEAN≥1.5 / PLAY≥3.0; O/U remains run-point 1.0/2.5.
-11. **Batter-level (lineup ID) contact-by-pitch-type** — wiring in progress (`MLB_PITCH_MATCHUP_BATTER_LEVEL`, default OFF; densify arm `M1b`). **No densify ship decision yet** — do not flip defaults until Inter ML CLV ≥ +0.010.
-12. **Optional ML head** — still skipped (likely next architecture path if M1b fails).
+11. **Batter-level (lineup ID) contact-by-pitch-type** — densify graded **no-ship** (Inter ML +0.00364 ≪ +0.010; Δ vs M0 −0.00019). Keep `MLB_PITCH_MATCHUP_BATTER_LEVEL=false`. **PA-mul research closed.**
+12. **Optional ML head** — next architecture path (market-aware / calibrated head with unused holdout frozen).
 
 ## Densify HFA ladder (prior session)
 
@@ -132,20 +133,19 @@ Live ≤3h lake: **638** jsonl / **10** live-source games / **late_info_live_n =
 
 Detail: `true_arsenal_2026-08-01.md`, `live_late_info_clv_2026-08-01.md`.
 
-## Batter-level lineup-ID arsenal (2026-08-01) — status
+## Batter-level lineup-ID arsenal (2026-08-01) — decision table
 
-| Item | Status |
-|------|--------|
-| Flag | `MLB_PITCH_MATCHUP_BATTER_LEVEL` default **false** |
-| Densify arm | `M1b` (tasks ablation map; M0/M1/M1b) |
-| Index | `batter_contact_asof_index.json` (per batter MLBAM id) |
-| Unit tests | **12 passed** locally |
-| Densify grade | **Pending Railway** — no intersection metrics yet; **no-ship until graded** |
-| Gate | Inter ML CLV ≥ +0.010, RL/total not torched, leak 0 |
+Fixed densify closing-line set **n=476**. Task `b52bf4c4-bd7c-42d7-ae80-3bbfa5f41c3c`. Force-resim `max_games=1200` (628/628/628; no 400-cap gap). Leakage repair on; **no Odds densify**.
 
-Detail: `mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.md`.
+| Config | Inter ML CLV | Inter RL CLV | Inter Total CLV | WF Brier | MAE | ECE | Leak |
+|--------|-------------:|-------------:|----------------:|---------:|----:|----:|-----:|
+| M0 pitch off | +0.00383 | +0.051 | +0.004 | 0.25047 | 3.483 | 0.0233 | 0 |
+| M1t team-family | +0.00392 | **0.000** | +0.002 | 0.24997 | 3.490 | 0.0229 | 0 |
+| M1b batter-level | **+0.00364** | +0.013 | +0.002 | 0.25131 | 3.482 | 0.0238 | 0 |
 
-If M1b fails: stop PA-mul research; prefer market-aware ML head / architecture change with unused holdout frozen.
+**Ship:** none. M1b ΔML vs M0 = **−0.00019**; fails +0.010. Keep both pitch-matchup flags **false**. Stop PA-mul research.
+
+Detail: `mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.md` + `.json`.
 
 ## Edgeboard product (2026-08-01)
 
@@ -174,22 +174,23 @@ Detail: `unused_holdout_stake_verdict_2026-08-01.md`. Do not flip stake flags.
 ## Blocking subscription-worthiness
 
 1. ML Brier still ≥0.248 vs 0.24 gate.  
-2. Intersection ML CLV ~+0.004 ≪ +0.010/+0.015 after exhaustive stack / talent / stuff / timing / late-stamp / pitch-matchup / park-wind / **true arsenal** trials; prior +0.023 was confounded.  
+2. Intersection ML CLV ~+0.004 ≪ +0.010/+0.015 after exhaustive stack / talent / stuff / timing / late-stamp / pitch-matchup / park-wind / **true arsenal** / **batter-level M1b** trials; prior +0.023 was confounded.  
 3. Unused holdout not large enough / not stake-green.  
-4. RL/total must not be softened for cosmetics (S2 / B1 / L1 / H2 / **M1t RL→0** rejected).  
-5. Edgeboard showing ML tags correctly does **not** imply provable +EV.
+4. RL/total must not be softened for cosmetics (S2 / B1 / L1 / H2 / **M1t RL→0** rejected; M1b RL soft-degraded).  
+5. Edgeboard showing ML tags correctly does **not** imply provable +EV.  
+6. **PA-mul / Statcast contact research closed** after M1b no-ship.
 
 ## Next lever
 
-1. **Finish batter-level densify (M1b)** — ship only if ≥ +0.010 Inter ML CLV  
-2. If miss: **architecture** (calibrated ML head / market-prior blend) — not another quality mul  
-3. **Live ≤3h late-info CLV** when lake has confirms (n=0 today)  
-4. Research-grade hold — **do not** open stake marketing
+1. **Architecture** (calibrated ML head / market-prior blend) — not another quality mul  
+2. **Live ≤3h late-info CLV** when lake has confirms (n=0 today)  
+3. Research-grade hold — **do not** open stake marketing; keep pitch-matchup flags OFF
 
 ## Artifacts
 
 - `data/ops/mlb-enterprise-holdout/mlb_moneyline_status_report_2026-08-01.md` ← **Full status narrative**
-- `data/ops/mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.md` ← Batter-level wiring / densify pending
+- `data/ops/mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.md` ← Batter-level densify **no-ship**
+- `data/ops/mlb-enterprise-holdout/batter_level_arsenal_2026-08-01.json`
 - `data/ops/mlb-enterprise-holdout/true_arsenal_2026-08-01.md` ← True arsenal decision
 - `data/ops/mlb-enterprise-holdout/live_late_info_clv_2026-08-01.md` ← Live ≤3h decision
 - `data/ops/mlb-enterprise-holdout/true_arsenal_2026-08-01.json`
