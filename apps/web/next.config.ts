@@ -128,6 +128,20 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // Edge Board Product Center (#4): canonical public decision center is
+        // /edge-board/{sport}. Soft page redirects returned 200 + meta refresh —
+        // permanent hop so bookmarks / pro aliases share one URL (query preserved).
+        source: "/pro/:sport(nfl|cfb|mlb|nba|nhl|wnba|ncaam)/edge-board",
+        destination: "/edge-board/:sport",
+        permanent: true,
+      },
+      {
+        // Typed alias — same board as /edge-board/nfl.
+        source: "/pro/nfl/boards",
+        destination: "/edge-board/nfl",
+        permanent: true,
+      },
+      {
         source: "/pro/nfl/odds",
         destination: "/odds/nfl",
         permanent: false,

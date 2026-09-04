@@ -95,7 +95,6 @@ export default function EdgeBoardSportClient({
   }, [sportKey, slate, cfbWeek]);
 
   const isNfl = sportKey === "nfl";
-  const usesMarketAsOf = sportKey === "nfl" || sportKey === "cfb";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
   const keiCode = getKeiCode(sportKey);
   const slateLabel =
@@ -108,11 +107,11 @@ export default function EdgeBoardSportClient({
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
   const boardLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
-  const headerAsOf = usesMarketAsOf
-    ? state.status === "loading"
+  // Always stamp from assemble linesAsOf — never invent "as of now" / bare ET.
+  const headerAsOf =
+    state.status === "loading"
       ? "…"
-      : marketAsOfHeaderSuffix({ asOf: boardLinesAsOf, kind: "lines" })
-    : null;
+      : marketAsOfHeaderSuffix({ asOf: boardLinesAsOf, kind: "lines" });
 
   return (
     <div data-testid="edge-board-client">
@@ -123,7 +122,7 @@ export default function EdgeBoardSportClient({
             {marketsOnly
               ? "Markets only"
               : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}
-            {usesMarketAsOf ? <> · {headerAsOf}</> : <> · ET</>}
+            <> · {headerAsOf}</>
           </div>
           {marketsOnly ? (
             <div className="mt-2">
@@ -267,7 +266,7 @@ export default function EdgeBoardSportClient({
         </div>
       ) : null}
 
-      {usesMarketAsOf && state.status === "ready" ? (
+      {state.status === "ready" ? (
         <MarketAsOfStamp
           className="mt-3"
           asOf={boardLinesAsOf}

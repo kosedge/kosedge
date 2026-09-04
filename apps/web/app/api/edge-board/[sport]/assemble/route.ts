@@ -123,13 +123,15 @@ export async function GET(
       slate: "week1",
       ...assembleOpts,
     });
+    // Book last_update / row linesAsOf — never GET clock (same honesty as NFL/CFB).
+    const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
     return pageDataJsonResponse({
       rows,
       week0Count: 0,
       week1Count: 0,
       fullCount: 0,
       weeks: [],
-      linesAsOf: null,
+      linesAsOf,
       games: gameCount(rows),
     });
   } catch (err) {
