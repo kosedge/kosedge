@@ -36,7 +36,9 @@ describe("CFB Edge Board market as-of honesty", () => {
     expect(cfbBlock).not.toMatch(/linesAsOf:\s*null/);
     // Default sport path also resolves — never invent-null when rows carry capture.
     const defaultBlock = assemble.slice(
-      assemble.lastIndexOf("const rows = await loadAssembledEdgeBoardRows(sport"),
+      assemble.lastIndexOf(
+        "const rows = await loadAssembledEdgeBoardRows(sport",
+      ),
     );
     expect(defaultBlock).toContain("resolveEdgeBoardBoardLinesAsOf(rows)");
     expect(defaultBlock).not.toMatch(/linesAsOf:\s*null/);

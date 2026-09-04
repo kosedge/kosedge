@@ -1,9 +1,7 @@
 import { permanentRedirect } from "next/navigation";
 
 function querySuffix(
-  searchParams:
-    | Record<string, string | string[] | undefined>
-    | undefined,
+  searchParams: Record<string, string | string[] | undefined> | undefined,
 ): string {
   if (!searchParams) return "";
   const qs = new URLSearchParams();

@@ -4,10 +4,7 @@
  * can assemble tonight games without crossing the client boundary.
  */
 
-import {
-  cfbAwayBookToHome,
-  trustCfbMarket,
-} from "@/lib/cfb-trusted-market";
+import { cfbAwayBookToHome, trustCfbMarket } from "@/lib/cfb-trusted-market";
 import {
   isNbaPreseason,
   nbaAwayBookToHome,

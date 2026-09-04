@@ -1,10 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import {
-  getSportEdgeBoardHref,
-  getSportPrimaryNav,
-} from "@/lib/sport-pro-nav";
+import { getSportEdgeBoardHref, getSportPrimaryNav } from "@/lib/sport-pro-nav";
 import { SPORTS } from "@/lib/sports";
 import {
   BEST_VALUE_TIER_REACHABLE,
