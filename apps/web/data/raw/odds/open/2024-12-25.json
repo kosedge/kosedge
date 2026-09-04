@@ -1,0 +1,1607 @@
+{
+  "timestamp": "2024-12-25T11:55:38Z",
+  "previous_timestamp": "2024-12-25T11:50:38Z",
+  "next_timestamp": "2024-12-25T12:00:38Z",
+  "data": [
+    {
+      "id": "82af91b8d8aa7f46964cb95d9edb04c2",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-25T18:30:00Z",
+      "home_team": "Murray St Racers",
+      "away_team": "Loyola (Chi) Ramblers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-25T11:54:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -112,
+                  "point": -1.5
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -108,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -111,
+                  "point": -1.5
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -101,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-25T11:54:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-25T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -105,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-25T11:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -105,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-25T11:54:45Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -105,
+                  "point": -2.0
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -115,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-25T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-25T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -105,
+                  "point": -2.5
+                },
+                {
+                  "name": "Murray St Racers",
+                  "price": -117,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "52daa1ae2c676bec42d3975637c8aca1",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-25T20:30:00Z",
+      "home_team": "Charlotte 49ers",
+      "away_team": "Charleston Cougars",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-25T11:54:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -118,
+                  "point": -5.5
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -104,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -111,
+                  "point": -6.0
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -101,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-25T11:54:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": -6.0
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -110,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-25T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -115,
+                  "point": -6.0
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -105,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -115,
+                  "point": -6.0
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -105,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-25T11:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -105,
+                  "point": -6.5
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -115,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-25T11:54:45Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -115,
+                  "point": -6.0
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -105,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -105,
+                  "point": -6.5
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -115,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-25T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -114,
+                  "point": -5.5
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -107,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-25T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": -6.0
+                },
+                {
+                  "name": "Charlotte 49ers",
+                  "price": -110,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "930bded01eb74d2f5d9258ff3bda0156",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-25T23:30:56Z",
+      "home_team": "Hawai'i Rainbow Warriors",
+      "away_team": "Oakland Golden Grizzlies",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-25T11:54:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -105,
+                  "point": -3.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -115,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -114,
+                  "point": -3.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": 102,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-25T11:54:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": -3.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-25T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -118,
+                  "point": -3.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -102,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -115,
+                  "point": -3.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -105,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-25T11:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": -3.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-25T11:54:45Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -118,
+                  "point": -3.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -102,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -112,
+                  "point": -3.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -108,
+                  "point": 3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-25T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -112,
+                  "point": -3.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -109,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -117,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-25T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -110,
+                  "point": -3.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "042055d6bbcdc44b2aa7eae16d8bb73d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-26T01:30:11Z",
+      "home_team": "Nebraska Cornhuskers",
+      "away_team": "Oregon St Beavers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-25T11:54:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -104,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -118,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -102,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-25T11:54:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-25T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -106,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -114,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-25T11:55:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -105,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:55:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-25T11:54:45Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -106,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -114,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-25T11:54:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -112,
+                  "point": -4.0
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -108,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-25T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -118,
+                  "point": -3.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -103,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -117,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-25T11:54:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.0
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -110,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-25T11:54:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

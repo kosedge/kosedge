@@ -1,0 +1,401 @@
+{
+  "timestamp": "2024-10-31T11:55:39Z",
+  "previous_timestamp": "2024-10-31T11:50:39Z",
+  "next_timestamp": "2024-10-31T12:00:40Z",
+  "data": [
+    {
+      "id": "c7325ac8f3e0e8073207dcf77a3a88c2",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-11-05T03:00:00Z",
+      "home_team": "Ohio State Buckeyes",
+      "away_team": "Texas Longhorns",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-10-31T11:54:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -106,
+                  "point": 3.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -106,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -102,
+                  "point": 2.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -120,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-10-31T11:55:29Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "179decc32dc04fa36e709af0e485f981",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-11-05T04:30:00Z",
+      "home_team": "Gonzaga Bulldogs",
+      "away_team": "Baylor Bears",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-10-31T11:54:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:54:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 155.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 155.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -106,
+                  "point": 3.0
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -106,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -115,
+                  "point": 3.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -105,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-10-31T11:55:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-10-31T11:55:29Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -105,
+                  "point": 2.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-10-31T11:55:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

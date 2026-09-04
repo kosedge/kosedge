@@ -1,0 +1,1595 @@
+{
+  "timestamp": "2024-03-31T21:55:39Z",
+  "previous_timestamp": "2024-03-31T21:50:38Z",
+  "next_timestamp": "2024-03-31T22:00:39Z",
+  "data": [
+    {
+      "id": "06a33ee05051945a726c3f196d2a7c1a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-03-31T21:11:11Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "NC State Wolfpack",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -120,
+                  "point": -8.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -108,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -106,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -122,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -120,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -120,
+                  "point": -9.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -110,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -117,
+                  "point": -8.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -114,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -118,
+                  "point": -8.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -115,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -8.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -115,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-03-31T21:54:07Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -9.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -115,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 123.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 123.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -120,
+                  "point": -8.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -125,
+                  "point": -9.5
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -105,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 124.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 124.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -9.0
+                },
+                {
+                  "name": "NC State Wolfpack",
+                  "price": -125,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d84df342fee6eae4c2d07fc672280703",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-04-02T23:00:28Z",
+      "home_team": "Indiana St Sycamores",
+      "away_team": "Utah Utes",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 164.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 164.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -106,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -106,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-03-31T21:54:07Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Utah Utes",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 163.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 163.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "36eecc0bec5b1ad37d860086af1edda5",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-04-03T01:30:56Z",
+      "home_team": "Seton Hall Pirates",
+      "away_team": "Georgia Bulldogs",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Bulldogs",
+                  "price": -104,
+                  "point": 3.5
+                },
+                {
+                  "name": "Seton Hall Pirates",
+                  "price": -118,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Bulldogs",
+                  "price": -106,
+                  "point": 4.0
+                },
+                {
+                  "name": "Seton Hall Pirates",
+                  "price": -106,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Bulldogs",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Seton Hall Pirates",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-03-31T21:54:07Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Bulldogs",
+                  "price": 100,
+                  "point": 3.5
+                },
+                {
+                  "name": "Seton Hall Pirates",
+                  "price": -120,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Bulldogs",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Seton Hall Pirates",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Bulldogs",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Seton Hall Pirates",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ea00d81955374d15711bf09c3721afbc",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-04-06T22:00:19Z",
+      "home_team": "UConn Huskies",
+      "away_team": "Alabama Crimson Tide",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -106,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -108,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -112,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -106,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -106,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -105,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -115,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet_us",
+          "title": "Unibet",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -112,
+                  "point": 12.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -108,
+                  "point": -12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -107,
+                  "point": 162.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 162.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -112,
+                  "point": 12.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -108,
+                  "point": -12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -107,
+                  "point": 162.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 162.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-03-31T21:54:07Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -105,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -115,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:07Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 12.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "superbook",
+          "title": "SuperBook",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -105,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -115,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-03-31T21:54:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-03-31T21:54:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 161.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 161.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "631e9182b6a71068046e9d071343dfb3",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-04-09T01:20:13Z",
+      "home_team": "Purdue Boilermakers",
+      "away_team": "Alabama Crimson Tide",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Alabama Crimson Tide",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "858a360d5fb9952a69dfdf73524288aa",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-04-09T01:20:39Z",
+      "home_team": "UConn Huskies",
+      "away_team": "Purdue Boilermakers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-03-31T21:54:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-03-31T21:54:06Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -118,
+                  "point": 5.5
+                },
+                {
+                  "name": "UConn Huskies",
+                  "price": -104,
+                  "point": -5.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

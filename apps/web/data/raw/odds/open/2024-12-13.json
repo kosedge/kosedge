@@ -1,0 +1,3162 @@
+{
+  "timestamp": "2024-12-13T11:55:38Z",
+  "previous_timestamp": "2024-12-13T11:50:38Z",
+  "next_timestamp": "2024-12-13T12:00:38Z",
+  "data": [
+    {
+      "id": "217cda6e9adf943436410dc5cc59dabb",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T00:00:00Z",
+      "home_team": "GW Revolutionaries",
+      "away_team": "Army Knights",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -112,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -109,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -107,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -106,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -106,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -112,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -108,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Army Knights",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "GW Revolutionaries",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "955683874efe3c607cbd226f193dd5e2",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T00:00:00Z",
+      "home_team": "Merrimack Warriors",
+      "away_team": "Boston Univ. Terriers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -102,
+                  "point": 5.5
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -120,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -113,
+                  "point": 6.0
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -108,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 123.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 123.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -106,
+                  "point": 6.0
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -106,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -112,
+                  "point": 6.0
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -108,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": 100,
+                  "point": 5.5
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -120,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Boston Univ. Terriers",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Merrimack Warriors",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "10a98ba626b31ed133c2b1d343ece482",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T00:30:00Z",
+      "home_team": "Louisiana Tech Bulldogs",
+      "away_team": "Georgia Southern Eagles",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -106,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -106,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -113,
+                  "point": 11.5
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -108,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -115,
+                  "point": 11.5
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -105,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-13T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Southern Eagles",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Louisiana Tech Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "679b0f29135ad1590b9f2f55110fe2a6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T01:00:00Z",
+      "home_team": "Nebraska Cornhuskers",
+      "away_team": "Indiana Hoosiers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -114,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -104,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -106,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -106,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -113,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -108,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -102,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -118,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -115,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -105,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-13T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -115,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -105,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f290bba30539302362eb6763f5920e54",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T01:00:00Z",
+      "home_team": "Northern Iowa Panthers",
+      "away_team": "Omaha Mavericks",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -106,
+                  "point": -15.5
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -114,
+                  "point": 15.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -105,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -115,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -101,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -111,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -113,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -108,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -115,
+                  "point": -14.5
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -105,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -105,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -115,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-13T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -115,
+                  "point": -14.5
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -105,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -110,
+                  "point": -15.0
+                },
+                {
+                  "name": "Omaha Mavericks",
+                  "price": -110,
+                  "point": 15.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fb40b7254449e99819a6486d7b0283b4",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T01:00:00Z",
+      "home_team": "St. Thomas (MN) Tommies",
+      "away_team": "Western Michigan Broncos",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -106,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -114,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -106,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -106,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -108,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -112,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-13T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -115,
+                  "point": -11.0
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -105,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 147.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 147.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "St. Thomas (MN) Tommies",
+                  "price": -108,
+                  "point": -12.0
+                },
+                {
+                  "name": "Western Michigan Broncos",
+                  "price": -113,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "13b49bcc24d0e74344e418cdaa53f8b4",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T01:00:53Z",
+      "home_team": "UTSA Roadrunners",
+      "away_team": "North Dakota Fighting Hawks",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota Fighting Hawks",
+                  "price": -115,
+                  "point": 6.5
+                },
+                {
+                  "name": "UTSA Roadrunners",
+                  "price": -105,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota Fighting Hawks",
+                  "price": -108,
+                  "point": 6.5
+                },
+                {
+                  "name": "UTSA Roadrunners",
+                  "price": -113,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "North Dakota Fighting Hawks",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "UTSA Roadrunners",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6d315ca13379c9cdb2d8558a17263e4c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T02:00:00Z",
+      "home_team": "Colorado Buffaloes",
+      "away_team": "South Dakota St Jackrabbits",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -106,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -106,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -114,
+                  "point": -8.0
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -107,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-13T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -115,
+                  "point": -8.0
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -105,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Colorado Buffaloes",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Dakota St Jackrabbits",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "965eb8ccbe53ed70b40621d18c7e3a0e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-14T02:00:00Z",
+      "home_team": "Utah Tech Trailblazers",
+      "away_team": "Weber State Wildcats",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-13T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -106,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -114,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -111,
+                  "point": 3.0
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -101,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2024-12-13T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -108,
+                  "point": 2.0
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -113,
+                  "point": -2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -107,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2024-12-13T11:52:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -108,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -112,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2024-12-13T11:53:55Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:53:55Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2024-12-13T11:52:59Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:52:59Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2024-12-13T11:55:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -105,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -115,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2024-12-13T11:55:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2024-12-13T11:55:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Utah Tech Trailblazers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Weber State Wildcats",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-13T11:55:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

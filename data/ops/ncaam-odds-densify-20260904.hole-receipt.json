@@ -1,0 +1,2486 @@
+{
+  "sport_key": "basketball_ncaab",
+  "path": "A",
+  "force": false,
+  "drop_dishonest_open": true,
+  "dates_requested": [
+    "2024-01-29",
+    "2024-01-30",
+    "2024-01-31",
+    "2024-02-01",
+    "2024-02-02",
+    "2024-02-03",
+    "2024-02-04",
+    "2024-02-05",
+    "2024-02-06",
+    "2024-02-07",
+    "2024-02-08",
+    "2024-02-09",
+    "2024-02-10",
+    "2024-02-11",
+    "2024-02-12",
+    "2024-02-13",
+    "2024-02-14",
+    "2024-02-15",
+    "2024-02-16",
+    "2024-02-17",
+    "2024-02-18",
+    "2024-02-19",
+    "2024-02-20",
+    "2024-02-21",
+    "2024-02-22",
+    "2024-02-23",
+    "2024-02-24",
+    "2024-02-25",
+    "2024-02-26",
+    "2024-02-27",
+    "2024-02-28",
+    "2024-02-29",
+    "2024-03-01",
+    "2024-03-02",
+    "2024-03-03",
+    "2024-03-04",
+    "2024-03-05",
+    "2024-03-06",
+    "2024-03-07",
+    "2024-03-08",
+    "2024-03-09",
+    "2024-03-10",
+    "2024-03-11",
+    "2024-03-12",
+    "2024-03-13",
+    "2024-03-14",
+    "2024-03-15",
+    "2024-03-16",
+    "2024-03-17",
+    "2024-03-18",
+    "2024-03-19",
+    "2024-03-20",
+    "2024-03-21",
+    "2024-03-22",
+    "2024-03-23",
+    "2024-03-24",
+    "2024-03-25",
+    "2024-03-26",
+    "2024-03-27",
+    "2024-03-28",
+    "2024-03-29",
+    "2024-03-30",
+    "2024-03-31",
+    "2024-04-01",
+    "2024-04-02",
+    "2024-04-03",
+    "2024-04-04",
+    "2024-04-05",
+    "2024-04-06",
+    "2024-04-07",
+    "2024-04-08",
+    "2024-04-09",
+    "2024-04-10",
+    "2024-04-11",
+    "2024-04-12",
+    "2024-04-13",
+    "2024-04-14",
+    "2024-04-15",
+    "2024-10-15",
+    "2024-10-16",
+    "2024-10-17",
+    "2024-10-18",
+    "2024-10-19",
+    "2024-10-20",
+    "2024-10-21",
+    "2024-10-22",
+    "2024-10-23",
+    "2024-10-24",
+    "2024-10-25",
+    "2024-10-26",
+    "2024-10-27",
+    "2024-10-28",
+    "2024-10-29",
+    "2024-10-30",
+    "2024-10-31",
+    "2024-11-01",
+    "2024-11-02",
+    "2024-11-03",
+    "2024-11-04",
+    "2024-11-05",
+    "2024-11-06",
+    "2024-11-07",
+    "2024-11-08",
+    "2024-11-09",
+    "2024-11-10",
+    "2024-11-11",
+    "2024-11-12",
+    "2024-11-13",
+    "2024-11-14",
+    "2024-11-15",
+    "2024-11-16",
+    "2024-11-17",
+    "2024-11-18",
+    "2024-11-19",
+    "2024-11-20",
+    "2024-11-21",
+    "2024-11-22",
+    "2024-11-23",
+    "2024-11-24",
+    "2024-11-25",
+    "2024-11-26",
+    "2024-11-27",
+    "2024-11-28",
+    "2024-11-29",
+    "2024-11-30",
+    "2024-12-01",
+    "2024-12-02",
+    "2024-12-03",
+    "2024-12-04",
+    "2024-12-05",
+    "2024-12-06",
+    "2024-12-07",
+    "2024-12-08",
+    "2024-12-09",
+    "2024-12-10",
+    "2024-12-11",
+    "2024-12-12",
+    "2024-12-13",
+    "2024-12-14",
+    "2024-12-15",
+    "2024-12-16",
+    "2024-12-17",
+    "2024-12-18",
+    "2024-12-19",
+    "2024-12-20",
+    "2024-12-21",
+    "2024-12-22",
+    "2024-12-23",
+    "2024-12-24",
+    "2024-12-25",
+    "2024-12-26",
+    "2024-12-27",
+    "2024-12-28",
+    "2024-12-29",
+    "2024-12-30",
+    "2024-12-31",
+    "2025-01-01",
+    "2025-01-02",
+    "2025-01-03",
+    "2025-01-04",
+    "2025-01-05",
+    "2025-01-06",
+    "2025-01-07",
+    "2025-01-08",
+    "2025-01-09",
+    "2025-01-10",
+    "2025-01-11",
+    "2025-01-12",
+    "2025-01-13",
+    "2025-01-14",
+    "2025-01-15",
+    "2025-01-16"
+  ],
+  "fetched": [
+    {
+      "date": "2024-01-29",
+      "open": {
+        "events": 17,
+        "timestamp": "2024-01-29T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 42,
+        "timestamp": "2024-01-29T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-01-30",
+      "open": {
+        "events": 30,
+        "timestamp": "2024-01-30T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 62,
+        "timestamp": "2024-01-30T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-01-31",
+      "open": {
+        "events": 44,
+        "timestamp": "2024-01-31T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 53,
+        "timestamp": "2024-01-31T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-01",
+      "open": {
+        "events": 65,
+        "timestamp": "2024-02-01T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 79,
+        "timestamp": "2024-02-01T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-02",
+      "open": {
+        "events": 15,
+        "timestamp": "2024-02-02T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 44,
+        "timestamp": "2024-02-02T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-03",
+      "open": {
+        "events": 145,
+        "timestamp": "2024-02-03T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 114,
+        "timestamp": "2024-02-03T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-04",
+      "open": {
+        "events": 17,
+        "timestamp": "2024-02-04T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 19,
+        "timestamp": "2024-02-04T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-05",
+      "open": {
+        "events": 16,
+        "timestamp": "2024-02-05T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 28,
+        "timestamp": "2024-02-05T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-06",
+      "open": {
+        "events": 33,
+        "timestamp": "2024-02-06T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 60,
+        "timestamp": "2024-02-06T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-07",
+      "open": {
+        "events": 52,
+        "timestamp": "2024-02-07T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 109,
+        "timestamp": "2024-02-07T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-08",
+      "open": {
+        "events": 63,
+        "timestamp": "2024-02-08T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 66,
+        "timestamp": "2024-02-08T21:55:41Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-09",
+      "open": {
+        "events": 3,
+        "timestamp": "2024-02-09T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 57,
+        "timestamp": "2024-02-09T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-10",
+      "open": {
+        "events": 155,
+        "timestamp": "2024-02-10T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 107,
+        "timestamp": "2024-02-10T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-11",
+      "open": {
+        "events": 11,
+        "timestamp": "2024-02-11T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 19,
+        "timestamp": "2024-02-11T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-12",
+      "open": {
+        "events": 16,
+        "timestamp": "2024-02-12T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 41,
+        "timestamp": "2024-02-12T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-13",
+      "open": {
+        "events": 25,
+        "timestamp": "2024-02-13T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 53,
+        "timestamp": "2024-02-13T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-14",
+      "open": {
+        "events": 39,
+        "timestamp": "2024-02-14T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 57,
+        "timestamp": "2024-02-14T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-15",
+      "open": {
+        "events": 67,
+        "timestamp": "2024-02-15T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 81,
+        "timestamp": "2024-02-15T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-16",
+      "open": {
+        "events": 15,
+        "timestamp": "2024-02-16T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 64,
+        "timestamp": "2024-02-16T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-17",
+      "open": {
+        "events": 140,
+        "timestamp": "2024-02-17T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 122,
+        "timestamp": "2024-02-17T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-18",
+      "open": {
+        "events": 22,
+        "timestamp": "2024-02-18T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 25,
+        "timestamp": "2024-02-18T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-19",
+      "open": {
+        "events": 19,
+        "timestamp": "2024-02-19T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 44,
+        "timestamp": "2024-02-19T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-20",
+      "open": {
+        "events": 25,
+        "timestamp": "2024-02-20T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 46,
+        "timestamp": "2024-02-20T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-21",
+      "open": {
+        "events": 45,
+        "timestamp": "2024-02-21T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 69,
+        "timestamp": "2024-02-21T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-22",
+      "open": {
+        "events": 64,
+        "timestamp": "2024-02-22T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 80,
+        "timestamp": "2024-02-22T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-23",
+      "open": {
+        "events": 16,
+        "timestamp": "2024-02-23T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 54,
+        "timestamp": "2024-02-23T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-24",
+      "open": {
+        "events": 137,
+        "timestamp": "2024-02-24T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 99,
+        "timestamp": "2024-02-24T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-25",
+      "open": {
+        "events": 27,
+        "timestamp": "2024-02-25T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 25,
+        "timestamp": "2024-02-25T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-26",
+      "open": {
+        "events": 16,
+        "timestamp": "2024-02-26T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 47,
+        "timestamp": "2024-02-26T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-27",
+      "open": {
+        "events": 31,
+        "timestamp": "2024-02-27T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 62,
+        "timestamp": "2024-02-27T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-28",
+      "open": {
+        "events": 58,
+        "timestamp": "2024-02-28T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 80,
+        "timestamp": "2024-02-28T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-02-29",
+      "open": {
+        "events": 51,
+        "timestamp": "2024-02-29T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 60,
+        "timestamp": "2024-02-29T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-01",
+      "open": {
+        "events": 26,
+        "timestamp": "2024-03-01T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 53,
+        "timestamp": "2024-03-01T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-02",
+      "open": {
+        "events": 132,
+        "timestamp": "2024-03-02T11:55:41Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 98,
+        "timestamp": "2024-03-02T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-03",
+      "open": {
+        "events": 19,
+        "timestamp": "2024-03-03T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 31,
+        "timestamp": "2024-03-03T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-04",
+      "open": {
+        "events": 22,
+        "timestamp": "2024-03-04T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 63,
+        "timestamp": "2024-03-04T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-05",
+      "open": {
+        "events": 43,
+        "timestamp": "2024-03-05T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 74,
+        "timestamp": "2024-03-05T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-06",
+      "open": {
+        "events": 35,
+        "timestamp": "2024-03-06T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 60,
+        "timestamp": "2024-03-06T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-07",
+      "open": {
+        "events": 54,
+        "timestamp": "2024-03-07T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 52,
+        "timestamp": "2024-03-07T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-08",
+      "open": {
+        "events": 26,
+        "timestamp": "2024-03-08T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 32,
+        "timestamp": "2024-03-08T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-09",
+      "open": {
+        "events": 97,
+        "timestamp": "2024-03-09T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 87,
+        "timestamp": "2024-03-09T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-10",
+      "open": {
+        "events": 27,
+        "timestamp": "2024-03-10T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 23,
+        "timestamp": "2024-03-10T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-11",
+      "open": {
+        "events": 14,
+        "timestamp": "2024-03-11T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 29,
+        "timestamp": "2024-03-11T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-12",
+      "open": {
+        "events": 23,
+        "timestamp": "2024-03-12T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 51,
+        "timestamp": "2024-03-12T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-13",
+      "open": {
+        "events": 43,
+        "timestamp": "2024-03-13T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 58,
+        "timestamp": "2024-03-13T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-14",
+      "open": {
+        "events": 52,
+        "timestamp": "2024-03-14T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 40,
+        "timestamp": "2024-03-14T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-15",
+      "open": {
+        "events": 35,
+        "timestamp": "2024-03-15T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 35,
+        "timestamp": "2024-03-15T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-16",
+      "open": {
+        "events": 23,
+        "timestamp": "2024-03-16T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 16,
+        "timestamp": "2024-03-16T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-17",
+      "open": {
+        "events": 5,
+        "timestamp": "2024-03-17T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-03-17T21:45:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-18",
+      "open": {
+        "events": 46,
+        "timestamp": "2024-03-18T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 57,
+        "timestamp": "2024-03-18T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-19",
+      "open": {
+        "events": 63,
+        "timestamp": "2024-03-19T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 65,
+        "timestamp": "2024-03-19T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-20",
+      "open": {
+        "events": 52,
+        "timestamp": "2024-03-20T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 53,
+        "timestamp": "2024-03-20T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-21",
+      "open": {
+        "events": 39,
+        "timestamp": "2024-03-21T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 35,
+        "timestamp": "2024-03-21T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-22",
+      "open": {
+        "events": 41,
+        "timestamp": "2024-03-22T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 37,
+        "timestamp": "2024-03-22T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-23",
+      "open": {
+        "events": 34,
+        "timestamp": "2024-03-23T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 27,
+        "timestamp": "2024-03-23T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-24",
+      "open": {
+        "events": 21,
+        "timestamp": "2024-03-24T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 17,
+        "timestamp": "2024-03-24T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-25",
+      "open": {
+        "events": 13,
+        "timestamp": "2024-03-25T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 15,
+        "timestamp": "2024-03-25T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-26",
+      "open": {
+        "events": 14,
+        "timestamp": "2024-03-26T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 15,
+        "timestamp": "2024-03-26T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-27",
+      "open": {
+        "events": 12,
+        "timestamp": "2024-03-27T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 12,
+        "timestamp": "2024-03-27T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-28",
+      "open": {
+        "events": 10,
+        "timestamp": "2024-03-28T11:55:40Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 10,
+        "timestamp": "2024-03-28T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-29",
+      "open": {
+        "events": 8,
+        "timestamp": "2024-03-29T11:55:40Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 8,
+        "timestamp": "2024-03-29T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-30",
+      "open": {
+        "events": 6,
+        "timestamp": "2024-03-30T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 22,
+        "timestamp": "2024-03-30T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-03-31",
+      "open": {
+        "events": 13,
+        "timestamp": "2024-03-31T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 6,
+        "timestamp": "2024-03-31T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-01",
+      "open": {
+        "events": 8,
+        "timestamp": "2024-04-01T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 8,
+        "timestamp": "2024-04-01T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-02",
+      "open": {
+        "events": 8,
+        "timestamp": "2024-04-02T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 8,
+        "timestamp": "2024-04-02T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-03",
+      "open": {
+        "events": 7,
+        "timestamp": "2024-04-03T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 7,
+        "timestamp": "2024-04-03T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-04",
+      "open": {
+        "events": 7,
+        "timestamp": "2024-04-04T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 7,
+        "timestamp": "2024-04-04T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-05",
+      "open": {
+        "events": 6,
+        "timestamp": "2024-04-05T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 6,
+        "timestamp": "2024-04-05T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-06",
+      "open": {
+        "events": 6,
+        "timestamp": "2024-04-06T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 6,
+        "timestamp": "2024-04-06T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-07",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-07T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-07T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-08",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-08T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-08T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-09",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-10",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-11",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-12",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-13",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-14",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-04-15",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-04-09T03:40:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-15",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-16",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-17",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-18",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-19",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-20",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-21",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-22",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-23",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-24",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-25",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-26",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 1,
+        "timestamp": "2024-08-19T21:25:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-27",
+      "open": {
+        "events": 2,
+        "timestamp": "2024-10-27T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 2,
+        "timestamp": "2024-10-27T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-28",
+      "open": {
+        "events": 2,
+        "timestamp": "2024-10-28T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 2,
+        "timestamp": "2024-10-28T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-29",
+      "open": {
+        "events": 2,
+        "timestamp": "2024-10-29T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 2,
+        "timestamp": "2024-10-29T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-30",
+      "open": {
+        "events": 2,
+        "timestamp": "2024-10-30T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 2,
+        "timestamp": "2024-10-30T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-10-31",
+      "open": {
+        "events": 2,
+        "timestamp": "2024-10-31T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 7,
+        "timestamp": "2024-10-31T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-01",
+      "open": {
+        "events": 7,
+        "timestamp": "2024-11-01T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 21,
+        "timestamp": "2024-11-01T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-02",
+      "open": {
+        "events": 28,
+        "timestamp": "2024-11-02T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 28,
+        "timestamp": "2024-11-02T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-03",
+      "open": {
+        "events": 40,
+        "timestamp": "2024-11-03T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 75,
+        "timestamp": "2024-11-03T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-04",
+      "open": {
+        "events": 111,
+        "timestamp": "2024-11-04T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 124,
+        "timestamp": "2024-11-04T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-05",
+      "open": {
+        "events": 8,
+        "timestamp": "2024-11-05T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 30,
+        "timestamp": "2024-11-05T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-06",
+      "open": {
+        "events": 23,
+        "timestamp": "2024-11-06T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 47,
+        "timestamp": "2024-11-06T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-07",
+      "open": {
+        "events": 24,
+        "timestamp": "2024-11-07T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 45,
+        "timestamp": "2024-11-07T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-08",
+      "open": {
+        "events": 63,
+        "timestamp": "2024-11-08T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 115,
+        "timestamp": "2024-11-08T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-09",
+      "open": {
+        "events": 53,
+        "timestamp": "2024-11-09T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 63,
+        "timestamp": "2024-11-09T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-10",
+      "open": {
+        "events": 21,
+        "timestamp": "2024-11-10T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 36,
+        "timestamp": "2024-11-10T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-11",
+      "open": {
+        "events": 32,
+        "timestamp": "2024-11-11T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 85,
+        "timestamp": "2024-11-11T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-12",
+      "open": {
+        "events": 56,
+        "timestamp": "2024-11-12T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 76,
+        "timestamp": "2024-11-12T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-13",
+      "open": {
+        "events": 42,
+        "timestamp": "2024-11-13T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 52,
+        "timestamp": "2024-11-13T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-14",
+      "open": {
+        "events": 19,
+        "timestamp": "2024-11-14T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 42,
+        "timestamp": "2024-11-14T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-15",
+      "open": {
+        "events": 47,
+        "timestamp": "2024-11-15T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 68,
+        "timestamp": "2024-11-15T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-16",
+      "open": {
+        "events": 68,
+        "timestamp": "2024-11-16T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 64,
+        "timestamp": "2024-11-16T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-17",
+      "open": {
+        "events": 34,
+        "timestamp": "2024-11-17T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 34,
+        "timestamp": "2024-11-17T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-18",
+      "open": {
+        "events": 22,
+        "timestamp": "2024-11-18T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 46,
+        "timestamp": "2024-11-18T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-19",
+      "open": {
+        "events": 46,
+        "timestamp": "2024-11-19T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 63,
+        "timestamp": "2024-11-19T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-20",
+      "open": {
+        "events": 37,
+        "timestamp": "2024-11-20T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 59,
+        "timestamp": "2024-11-20T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-21",
+      "open": {
+        "events": 39,
+        "timestamp": "2024-11-21T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 50,
+        "timestamp": "2024-11-21T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-22",
+      "open": {
+        "events": 77,
+        "timestamp": "2024-11-22T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 81,
+        "timestamp": "2024-11-22T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-23",
+      "open": {
+        "events": 46,
+        "timestamp": "2024-11-23T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 54,
+        "timestamp": "2024-11-23T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-24",
+      "open": {
+        "events": 52,
+        "timestamp": "2024-11-24T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 35,
+        "timestamp": "2024-11-24T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-25",
+      "open": {
+        "events": 48,
+        "timestamp": "2024-11-25T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 68,
+        "timestamp": "2024-11-25T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-26",
+      "open": {
+        "events": 55,
+        "timestamp": "2024-11-26T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 66,
+        "timestamp": "2024-11-26T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-27",
+      "open": {
+        "events": 56,
+        "timestamp": "2024-11-27T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 63,
+        "timestamp": "2024-11-27T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-28",
+      "open": {
+        "events": 21,
+        "timestamp": "2024-11-28T11:55:39Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 29,
+        "timestamp": "2024-11-28T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-29",
+      "open": {
+        "events": 51,
+        "timestamp": "2024-11-29T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 40,
+        "timestamp": "2024-11-29T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-11-30",
+      "open": {
+        "events": 62,
+        "timestamp": "2024-11-30T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 53,
+        "timestamp": "2024-11-30T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-01",
+      "open": {
+        "events": 30,
+        "timestamp": "2024-12-01T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 26,
+        "timestamp": "2024-12-01T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-02",
+      "open": {
+        "events": 12,
+        "timestamp": "2024-12-02T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 47,
+        "timestamp": "2024-12-02T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-03",
+      "open": {
+        "events": 47,
+        "timestamp": "2024-12-03T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 93,
+        "timestamp": "2024-12-03T21:55:40Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-04",
+      "open": {
+        "events": 56,
+        "timestamp": "2024-12-04T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 71,
+        "timestamp": "2024-12-04T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-05",
+      "open": {
+        "events": 23,
+        "timestamp": "2024-12-05T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 37,
+        "timestamp": "2024-12-05T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-06",
+      "open": {
+        "events": 16,
+        "timestamp": "2024-12-06T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 74,
+        "timestamp": "2024-12-06T21:55:39Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-07",
+      "open": {
+        "events": 99,
+        "timestamp": "2024-12-07T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 86,
+        "timestamp": "2024-12-07T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-08",
+      "open": {
+        "events": 37,
+        "timestamp": "2024-12-08T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 21,
+        "timestamp": "2024-12-08T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-09",
+      "open": {
+        "events": 5,
+        "timestamp": "2024-12-09T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 29,
+        "timestamp": "2024-12-09T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-10",
+      "open": {
+        "events": 24,
+        "timestamp": "2024-12-10T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 45,
+        "timestamp": "2024-12-10T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-11",
+      "open": {
+        "events": 21,
+        "timestamp": "2024-12-11T11:55:40Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 27,
+        "timestamp": "2024-12-11T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-12",
+      "open": {
+        "events": 7,
+        "timestamp": "2024-12-12T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 16,
+        "timestamp": "2024-12-12T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-13",
+      "open": {
+        "events": 9,
+        "timestamp": "2024-12-13T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 71,
+        "timestamp": "2024-12-13T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-14",
+      "open": {
+        "events": 84,
+        "timestamp": "2024-12-14T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 84,
+        "timestamp": "2024-12-14T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-15",
+      "open": {
+        "events": 29,
+        "timestamp": "2024-12-15T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 24,
+        "timestamp": "2024-12-15T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-16",
+      "open": {
+        "events": 12,
+        "timestamp": "2024-12-16T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 44,
+        "timestamp": "2024-12-16T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-17",
+      "open": {
+        "events": 41,
+        "timestamp": "2024-12-17T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 82,
+        "timestamp": "2024-12-17T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-18",
+      "open": {
+        "events": 56,
+        "timestamp": "2024-12-18T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 71,
+        "timestamp": "2024-12-18T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-19",
+      "open": {
+        "events": 18,
+        "timestamp": "2024-12-19T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 32,
+        "timestamp": "2024-12-19T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-20",
+      "open": {
+        "events": 16,
+        "timestamp": "2024-12-20T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 57,
+        "timestamp": "2024-12-20T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-21",
+      "open": {
+        "events": 103,
+        "timestamp": "2024-12-21T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 80,
+        "timestamp": "2024-12-21T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-22",
+      "open": {
+        "events": 40,
+        "timestamp": "2024-12-22T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 24,
+        "timestamp": "2024-12-22T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-23",
+      "open": {
+        "events": 7,
+        "timestamp": "2024-12-23T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 7,
+        "timestamp": "2024-12-23T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-24",
+      "open": {
+        "events": 2,
+        "timestamp": "2024-12-24T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 4,
+        "timestamp": "2024-12-24T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-25",
+      "open": {
+        "events": 4,
+        "timestamp": "2024-12-25T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 3,
+        "timestamp": "2024-12-25T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-26",
+      "open": {
+        "events": 1,
+        "timestamp": "2024-12-26T04:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 30,
+        "timestamp": "2024-12-26T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-27",
+      "open": {
+        "events": 32,
+        "timestamp": "2024-12-27T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 32,
+        "timestamp": "2024-12-27T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-28",
+      "open": {
+        "events": 32,
+        "timestamp": "2024-12-28T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 50,
+        "timestamp": "2024-12-28T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-29",
+      "open": {
+        "events": 43,
+        "timestamp": "2024-12-29T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 40,
+        "timestamp": "2024-12-29T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-30",
+      "open": {
+        "events": 26,
+        "timestamp": "2024-12-30T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 54,
+        "timestamp": "2024-12-30T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2024-12-31",
+      "open": {
+        "events": 30,
+        "timestamp": "2024-12-31T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 35,
+        "timestamp": "2024-12-31T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-01",
+      "open": {
+        "events": 20,
+        "timestamp": "2025-01-01T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 49,
+        "timestamp": "2025-01-01T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-02",
+      "open": {
+        "events": 66,
+        "timestamp": "2025-01-02T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 80,
+        "timestamp": "2025-01-02T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-03",
+      "open": {
+        "events": 17,
+        "timestamp": "2025-01-03T11:55:37Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 66,
+        "timestamp": "2025-01-03T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-04",
+      "open": {
+        "events": 137,
+        "timestamp": "2025-01-04T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 104,
+        "timestamp": "2025-01-04T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-05",
+      "open": {
+        "events": 24,
+        "timestamp": "2025-01-05T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 18,
+        "timestamp": "2025-01-05T21:55:37Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-06",
+      "open": {
+        "events": 19,
+        "timestamp": "2025-01-06T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 50,
+        "timestamp": "2025-01-06T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-07",
+      "open": {
+        "events": 34,
+        "timestamp": "2025-01-07T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 77,
+        "timestamp": "2025-01-07T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-08",
+      "open": {
+        "events": 50,
+        "timestamp": "2025-01-08T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 96,
+        "timestamp": "2025-01-08T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-09",
+      "open": {
+        "events": 55,
+        "timestamp": "2025-01-09T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 64,
+        "timestamp": "2025-01-09T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-10",
+      "open": {
+        "events": 14,
+        "timestamp": "2025-01-10T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 58,
+        "timestamp": "2025-01-10T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-11",
+      "open": {
+        "events": 148,
+        "timestamp": "2025-01-11T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 119,
+        "timestamp": "2025-01-11T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-12",
+      "open": {
+        "events": 21,
+        "timestamp": "2025-01-12T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 22,
+        "timestamp": "2025-01-12T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-13",
+      "open": {
+        "events": 22,
+        "timestamp": "2025-01-13T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 58,
+        "timestamp": "2025-01-13T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-14",
+      "open": {
+        "events": 36,
+        "timestamp": "2025-01-14T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 76,
+        "timestamp": "2025-01-14T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-15",
+      "open": {
+        "events": 47,
+        "timestamp": "2025-01-15T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 101,
+        "timestamp": "2025-01-15T21:55:38Z",
+        "credits": 20
+      }
+    },
+    {
+      "date": "2025-01-16",
+      "open": {
+        "events": 62,
+        "timestamp": "2025-01-16T11:55:38Z",
+        "credits": 20
+      },
+      "close": {
+        "events": 71,
+        "timestamp": "2025-01-16T21:55:38Z",
+        "credits": 20
+      }
+    }
+  ],
+  "skipped_exists": [],
+  "failed": [],
+  "dropped_dishonest": [
+    {
+      "date": "2024-10-15",
+      "drift_days": 56.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-16",
+      "drift_days": 57.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-17",
+      "drift_days": 58.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-18",
+      "drift_days": 59.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-19",
+      "drift_days": 60.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-20",
+      "drift_days": 61.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-21",
+      "drift_days": 62.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-22",
+      "drift_days": 63.107199074074074,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-23",
+      "drift_days": 64.10719907407407,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-24",
+      "drift_days": 65.10719907407407,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-25",
+      "drift_days": 66.10719907407407,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    },
+    {
+      "date": "2024-10-26",
+      "drift_days": 67.10719907407407,
+      "open_timestamp": "2024-08-19T21:25:38Z"
+    }
+  ],
+  "stopped_for_credits": false,
+  "credits_used_headers_sum": 6880,
+  "credits_remaining_last": "131",
+  "credits_used_period_last": "19869"
+}
