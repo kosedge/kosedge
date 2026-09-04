@@ -1,6 +1,6 @@
 import { notFound } from "next/navigation";
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
-import { NFL_DEPTH_SOURCE_STAMP } from "@/lib/nfl-surface-honesty";
+import { nflDepthPackFreshnessStamp } from "@/lib/nfl-surface-honesty";
 
 export default async function DepthChartsPage({
   params,
@@ -34,7 +34,7 @@ export default async function DepthChartsPage({
       endpoint="depth-charts"
       title="NFL Depth Charts"
       description="Team-first depth by position group — starter → backup → depth with light usage context. Research surface for role and injury impact."
-      sourceHonesty={NFL_DEPTH_SOURCE_STAMP}
+      sourceHonesty={nflDepthPackFreshnessStamp()}
       sourceHonestyTestId="nfl-depth-source-stamp"
       campHref="/pro/nfl/camp"
       emptyHint="Depth chart intel is not available yet for the selected season/week. Open a team hub for the richer chart view."

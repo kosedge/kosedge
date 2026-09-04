@@ -1,6 +1,8 @@
 import Link from "next/link";
 import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
 import TruePrDriverChips from "@/components/pro/nfl/TruePrDriverChips";
+import { isPackagedDepthStale } from "@/lib/nfl-depth-pack-freshness";
+import { nflDepthPackFreshnessStamp } from "@/lib/nfl-surface-honesty";
 import { driverChipsForTeam } from "@/lib/nfl-true-pr-format";
 import type { TruePrProductSurface } from "@/lib/nfl-true-pr";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
@@ -47,9 +49,25 @@ export default function TruePrDriversBoard({
         </p>
       </div>
 
+      <p
+        className="mt-3 text-[11px] leading-relaxed text-kos-gold/80"
+        data-testid="nfl-depth-pack-freshness-stamp"
+      >
+        {nflDepthPackFreshnessStamp()}{" "}
+        <Link
+          href="/pro/nfl/camp"
+          className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
+        >
+          Camp Desk
+        </Link>
+        .
+      </p>
+
       <ol className="mt-4 grid gap-2">
         {surface.teams.map((row) => {
-          const chips = driverChipsForTeam(row.drivers);
+          const chips = driverChipsForTeam(row.drivers, {
+            packStale: isPackagedDepthStale(),
+          });
           return (
             <li
               key={row.team}

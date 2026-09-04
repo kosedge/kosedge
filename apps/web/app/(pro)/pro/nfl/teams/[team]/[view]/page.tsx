@@ -44,7 +44,7 @@ import {
   resolveNflTruthLabel,
 } from "@/lib/nfl-truth-label";
 import NflTruthStateBadge from "@/components/pro/nfl/NflTruthStateBadge";
-import { NFL_DEPTH_SOURCE_STAMP } from "@/lib/nfl-surface-honesty";
+import { nflDepthPackFreshnessStamp } from "@/lib/nfl-surface-honesty";
 
 const SITUATION_TAB_KEYS: SituationTabKey[] = [
   "down_distance",
@@ -646,7 +646,7 @@ export default async function NflTeamIntelViewPage({
               className="text-xs text-kos-gold/85"
               data-testid="nfl-depth-source-stamp"
             >
-              {NFL_DEPTH_SOURCE_STAMP} As-of: {truth.period_line}. See{" "}
+              {nflDepthPackFreshnessStamp()} See{" "}
               <Link
                 href="/pro/nfl/camp"
                 className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"

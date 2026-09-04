@@ -1,5 +1,6 @@
 import Link from "next/link";
 import TruePrDriverChips from "@/components/pro/nfl/TruePrDriverChips";
+import { isPackagedDepthStale } from "@/lib/nfl-depth-pack-freshness";
 import { driverChipsForTeam } from "@/lib/nfl-true-pr-format";
 import type { TruePrTeamRow } from "@/lib/nfl-true-pr";
 
@@ -12,7 +13,9 @@ export default function TruePrTeamStrip({
   engineVersion?: string;
 }) {
   if (!row) return null;
-  const chips = driverChipsForTeam(row.drivers);
+  const chips = driverChipsForTeam(row.drivers, {
+    packStale: isPackagedDepthStale(),
+  });
 
   return (
     <section className="mt-4 rounded-2xl border border-white/10 bg-black/30 px-4 py-3">

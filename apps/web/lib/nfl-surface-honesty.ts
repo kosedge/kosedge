@@ -8,6 +8,12 @@
  * English only.)
  */
 
+import {
+  NFL_DEPTH_PACK_AS_OF,
+  NFL_DEPTH_PACK_MAX_AGE_DAYS,
+  isPackagedDepthStale,
+} from "@/lib/nfl-depth-pack-freshness";
+
 /** Awards board — model award-score snapshot, not Futures tiles. */
 export const NFL_AWARDS_SOURCE_NAME = "Model award-score snapshot";
 
@@ -27,3 +33,26 @@ export const NFL_DEPTH_SOURCE_STAMP =
   "Source: packaged model depth chart — not live Camp Desk. Named QB1, IR, and claims live on Camp Desk.";
 
 export const NFL_DEPTH_NOT_LIVE_CAMP_PHRASE = "not live Camp Desk";
+
+/** Pack calendar as-of for depth / QB surfaces (not season-week truth). */
+export function nflDepthPackAsOfLine(
+  asOf: string = NFL_DEPTH_PACK_AS_OF,
+): string {
+  return `Pack as-of ${asOf}`;
+}
+
+/**
+ * Subscriber stamp for depth/QB pack freshness.
+ * When past max_age_days_camp_season, fail closed — point to Camp Desk.
+ */
+export function nflDepthPackFreshnessStamp(
+  now: Date = new Date(),
+  asOf: string = NFL_DEPTH_PACK_AS_OF,
+  maxAgeDays: number = NFL_DEPTH_PACK_MAX_AGE_DAYS,
+): string {
+  const base = `${NFL_DEPTH_SOURCE_STAMP} ${nflDepthPackAsOfLine(asOf)}.`;
+  if (!isPackagedDepthStale(now, asOf, maxAgeDays)) {
+    return `${base} Freshness window ${maxAgeDays} days.`;
+  }
+  return `${base} Pack past ${maxAgeDays}-day camp freshness — QB roles may be stale; named QB1 / IR / claims on Camp Desk.`;
+}

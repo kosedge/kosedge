@@ -102,6 +102,33 @@ describe("DepthChartRenderer", () => {
     ).toBeInTheDocument();
   });
 
+  it("renders competition status in subscriber English", () => {
+    const rows: NflIntelResponseRow[] = [
+      {
+        position: "QB",
+        player_name: "Tua Tagovailoa",
+        depth_slot: "open_competition",
+        depth_order: 1,
+        competition_status: "open_competition",
+        role_confidence: 0.55,
+      },
+      {
+        position: "QB",
+        player_name: "Michael Penix Jr.",
+        depth_slot: "open_competition",
+        depth_order: 2,
+        competition_status: "open_competition",
+        role_confidence: 0.55,
+      },
+    ];
+
+    render(<DepthChartRenderer rows={rows} />);
+    expect(screen.getByText("starter · 1")).toBeInTheDocument();
+    expect(screen.getByText("backup · 2")).toBeInTheDocument();
+    expect(screen.getAllByText("Open competition")).toHaveLength(2);
+    expect(screen.queryByText(/open_competition/)).not.toBeInTheDocument();
+  });
+
   it("renders decimal metrics with 3-digit precision", () => {
     const rows: NflIntelResponseRow[] = [
       {
