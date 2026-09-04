@@ -6,15 +6,15 @@ PASS flips from Lab output (CoS → Ryan decides).
 
 ## Protocols
 
-| Version | Doc                                                                              | Status      |
-| ------- | -------------------------------------------------------------------------------- | ----------- |
+| Version | Doc                                                                              | Status       |
+| ------- | -------------------------------------------------------------------------------- | ------------ |
 | v1.0    | [`NFL_SPREAD_VALIDATION_PROTOCOL_v1.md`](./NFL_SPREAD_VALIDATION_PROTOCOL_v1.md) | `cos_signed` |
 
 ## Scorecards
 
-| Version | Doc                                                                  | Machine JSON                                              |
-| ------- | -------------------------------------------------------------------- | --------------------------------------------------------- |
-| v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md)         | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json) |
+| Version | Doc                                                          | Machine JSON                                                                                   |
+| ------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
+| v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md) | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json) |
 
 ## Machine twins
 

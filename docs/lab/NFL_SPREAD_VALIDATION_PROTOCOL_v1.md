@@ -365,11 +365,11 @@ inputs; this protocol PR adds **no** new evaluation runs.
 
 ## 14. Amendment process
 
-| Change type                                | Required action                        |
-| ------------------------------------------ | -------------------------------------- |
-| Typo / citation path fix                   | Patch on same version with CoS note    |
-| Any numeric cut point, min N, or grade bar | New protocol version (v1.1+)           |
-| Add sport/market (CFB, totals, …)          | New protocol doc (do not overload v1)  |
+| Change type                                | Required action                                            |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| Typo / citation path fix                   | Patch on same version with CoS note                        |
+| Any numeric cut point, min N, or grade bar | New protocol version (v1.1+)                               |
+| Add sport/market (CFB, totals, …)          | New protocol doc (do not overload v1)                      |
 | Fill scorecard / run pipeline              | Separate PR after CoS sign of v1.0 (this Lab execution PR) |
 
 **CoS sign-off:**
