@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
-"""CLI: first frozen NCAAM Fair Lab scorecard (Contract v1 / Phase E).
+"""CLI: NCAAM Fair Lab scorecard (Contract v1 / Phase E).
 
 Research only — scores Train-A + Test-A fair parquet vs B1/B2.
 Does not write Edge Board / kei_lines / PLAY tags. No peek-tune.
+
+Default (densify): freezes **v1.1** artifacts (distinct from frozen v1).
+`--no-densify`: thin event_id path (v1 baseline; requires --overwrite-frozen-v1 to write).
 
 Usage (from repo root):
   python3 apps/web/scripts/lab_ncaam_fair_scorecard.py
@@ -46,7 +49,7 @@ def main() -> int:
     parser.add_argument(
         "--overwrite-frozen-v1",
         action="store_true",
-        help="Allow overwriting frozen v1 scorecard artifacts (default: refuse when densified)",
+        help="Allow overwriting frozen v1 scorecard artifacts (thin path only; densify never clobbers v1)",
     )
     parser.add_argument(
         "--dry-run",
@@ -65,21 +68,26 @@ def main() -> int:
     )
     if args.dry_run:
         print(json.dumps({
+            "scorecard_version": card.get("scorecard_version"),
             "grades": card["grades"],
             "subscriber_influence": card["subscriber_influence"],
             "leakage_receipt": card["leakage_receipt"],
             "results_densify": densify,
             "test_a_predictive": (card.get("cuts") or {}).get("test_a", {}).get("predictive"),
             "test_a_market_edge": (card.get("cuts") or {}).get("test_a", {}).get("market_edge"),
+            "test_a_evidence": (card.get("cuts") or {}).get("test_a", {}).get("evidence"),
         }, indent=2))
         return 0
 
+    # Densify → v1.1 paths. Thin → v1 only when overwrite flag set.
+    overwrite_v1 = bool(args.overwrite_frozen_v1) and (not densify)
     paths = write_scorecard_artifacts(
         card,
         out_dir=args.out_dir,
-        overwrite_frozen_v1=args.overwrite_frozen_v1 or (not densify),
+        overwrite_frozen_v1=overwrite_v1,
     )
     summary = {
+        "scorecard_version": card.get("scorecard_version"),
         "grades": card["grades"],
         "subscriber_influence": card["subscriber_influence"],
         "leakage_receipt": card["leakage_receipt"],

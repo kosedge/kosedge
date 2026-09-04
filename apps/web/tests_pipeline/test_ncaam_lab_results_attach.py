@@ -303,26 +303,46 @@ def test_coverage_before_helper_event_id_only(tmp_path: Path) -> None:
     reason="Lab fair parquet not present",
 )
 def test_live_lab_densify_lifts_test_a_coverage() -> None:
-    """Integration: densify must lift Test-A off the frozen ~13% thin path."""
+    """Integration: densify must lift Test-A well above thin event_id join.
+
+    Frozen v1 used n_lab=609 → n_with_actual=80 (13%). After B7 expand rematerialize,
+    n_lab grows; thin event_id n scales with overlapping owned actuals — densify must
+    still clear Lab-honest coverage floors without inventing SETTLED.
+    """
     out_dir = WEB_ROOT.parent.parent / "data" / "ops" / "lab" / "ncaam"
     lab = pl.read_parquet(out_dir / "ncaam-fair-lab-test_a-latest.parquet")
     before = coverage_vs_event_id_only(lab)
     densified, after = attach_lab_outcomes(lab)
-    assert before["n_with_actual"] == 80  # frozen v1 receipt
+    assert before["n_with_actual"] < after["n_with_actual"]
     assert after["n_with_actual"] >= 500  # Lab-honest densify target
     assert after["outcome_coverage"] > 0.85
     assert densified.filter(pl.col("actual_margin").is_not_null()).height == after["n_with_actual"]
     # No SETTLED invent
     if "continuity_state" in densified.columns:
         assert "SETTLED" not in set(densified["continuity_state"].drop_nulls().unique().to_list())
+    # Frozen v1 receipt remains the historical thin baseline (not rewritten by remat)
+    v1 = out_dir / "ncaam-fair-lab-scorecard-v1.json"
+    if v1.exists():
+        import json
+
+        frozen = json.loads(v1.read_text(encoding="utf-8"))
+        assert frozen["cuts"]["test_a"]["predictive"]["n_with_actual"] == 80
+        assert frozen["cuts"]["test_a"]["predictive"]["n_lab_games"] == 609
 
 
 @pytest.mark.skipif(
     not (WEB_ROOT.parent.parent / "data" / "ops" / "lab" / "ncaam" / "ncaam-fair-lab-test_a-latest.parquet").exists(),
     reason="Lab fair parquet not present",
 )
-def test_build_scorecard_no_densify_preserves_thin_n() -> None:
-    card = build_scorecard(densify_results=False)
-    pred = (card.get("cuts") or {}).get("test_a", {}).get("predictive") or {}
-    assert pred.get("n_with_actual") == 80
-    assert abs(float(pred.get("outcome_coverage") or 0) - 0.1314) < 1e-3
+def test_build_scorecard_no_densify_is_thinner_than_v1_1() -> None:
+    """Thin path stays below densified v1.1; does not rewrite frozen v1 JSON."""
+    thin = build_scorecard(densify_results=False)
+    dense = build_scorecard(densify_results=True)
+    thin_pred = (thin.get("cuts") or {}).get("test_a", {}).get("predictive") or {}
+    dense_pred = (dense.get("cuts") or {}).get("test_a", {}).get("predictive") or {}
+    assert thin["scorecard_version"].endswith("v1.0")
+    assert dense["scorecard_version"].endswith("v1.1")
+    assert int(thin_pred.get("n_with_actual") or 0) < int(dense_pred.get("n_with_actual") or 0)
+    assert float(dense_pred.get("outcome_coverage") or 0) > 0.85
+    assert thin["leakage_receipt"]["kenpom_leakage_violations"] == 0
+    assert dense["leakage_receipt"]["settled_forbidden_total"] == 0
