@@ -11,7 +11,11 @@ import {
   decisionResultToApi,
   isTierConstantConfidence,
 } from "@/lib/nfl-decision-engine";
-import { displayActionLabel } from "@/lib/nfl-dead-tiers";
+import {
+  customerIsBestBet,
+  displayActionLabel,
+  quarantineDecisionForCustomer,
+} from "@/lib/nfl-dead-tiers";
 import { publishTagFromActionLabel } from "@/lib/nfl-publish-policy";
 import { resolveNflKickoffIso } from "@/lib/nfl-schedule-kickoff";
 import { coerceNflWeek } from "@/lib/nfl-edge-board-week";
@@ -323,14 +327,16 @@ export function syncEdgeBoardActionsWithCurrent(
         modelConfidenceTierConstant?: boolean;
         marketSpreadHome?: number;
       };
-      s.actionLabel = local.spread.actionLabel;
+      s.actionLabel = displayActionLabel(local.spread.actionLabel) ?? undefined;
       // Honest empty when market still missing — never fake 0.0 theater.
       s.edgeMagnitude =
         local.spread.marketLine == null &&
         local.spread.reason === "missing_fair_or_market"
           ? undefined
           : local.spread.edgeMagnitude;
-      s.decision = decisionResultToApi(local.spread);
+      s.decision = quarantineDecisionForCustomer(
+        decisionResultToApi(local.spread),
+      );
       s.fairLine = local.spread.fairLine;
       s.decisionMarketLine = local.spread.marketLine;
       s.coverProb = local.spread.coverProb ?? undefined;
@@ -338,7 +344,7 @@ export function syncEdgeBoardActionsWithCurrent(
       s.playToPlay = local.spread.playTo?.playTo;
       s.playToLean = local.spread.playTo?.leanTo;
       s.playToPass = local.spread.playTo?.passFrom;
-      s.isBestBet = local.spread.isBestBet;
+      s.isBestBet = customerIsBestBet();
       s.keyNumberCross = local.spread.keyNumberCross;
       s.weekRegime = local.weekRegime;
       s.modelConfidenceScore = local.modelConfidence.score;
@@ -369,13 +375,15 @@ export function syncEdgeBoardActionsWithCurrent(
         modelConfidenceTierConstant?: boolean;
         marketTotal?: number;
       };
-      t.actionLabel = local.total.actionLabel;
+      t.actionLabel = displayActionLabel(local.total.actionLabel) ?? undefined;
       t.edgeMagnitude =
         local.total.marketLine == null &&
         local.total.reason === "missing_fair_or_market"
           ? undefined
           : local.total.edgeMagnitude;
-      t.decision = decisionResultToApi(local.total);
+      t.decision = quarantineDecisionForCustomer(
+        decisionResultToApi(local.total),
+      );
       t.fairLine = local.total.fairLine;
       t.decisionMarketLine = local.total.marketLine;
       t.coverProb = local.total.coverProb ?? undefined;
@@ -383,7 +391,7 @@ export function syncEdgeBoardActionsWithCurrent(
       t.playToPlay = local.total.playTo?.playTo;
       t.playToLean = local.total.playTo?.leanTo;
       t.playToPass = local.total.playTo?.passFrom;
-      t.isBestBet = local.total.isBestBet;
+      t.isBestBet = customerIsBestBet();
       t.keyNumberCross = local.total.keyNumberCross;
       t.weekRegime = local.weekRegime;
       t.modelConfidenceScore = local.modelConfidence.score;
@@ -674,7 +682,7 @@ export function fairLinesToEdgeBoardRows(
       publishTag: publishTagSpread,
       actionLabel: shownSpread ?? actionLabelSpread ?? undefined,
       decision: spreadDecision
-        ? decisionResultToApi(spreadDecision)
+        ? quarantineDecisionForCustomer(decisionResultToApi(spreadDecision))
         : undefined,
       edgeMagnitude:
         spreadDecision?.marketLine == null &&
@@ -693,7 +701,7 @@ export function fairLinesToEdgeBoardRows(
       playToPass: spreadDecision?.playTo?.passFrom,
       fairLine: spreadDecision?.fairLine,
       decisionMarketLine: spreadDecision?.marketLine,
-      isBestBet: spreadDecision?.isBestBet,
+      isBestBet: customerIsBestBet(),
       keyNumberCross: spreadDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
       ...sharedMatchup,
@@ -723,7 +731,9 @@ export function fairLinesToEdgeBoardRows(
       linesAsOf,
       publishTag: publishTagTotal,
       actionLabel: shownTotal ?? actionLabelTotal ?? undefined,
-      decision: totalDecision ? decisionResultToApi(totalDecision) : undefined,
+      decision: totalDecision
+        ? quarantineDecisionForCustomer(decisionResultToApi(totalDecision))
+        : undefined,
       edgeMagnitude:
         totalDecision?.marketLine == null &&
         totalDecision?.reason === "missing_fair_or_market"
@@ -741,7 +751,7 @@ export function fairLinesToEdgeBoardRows(
       playToPass: totalDecision?.playTo?.passFrom,
       fairLine: totalDecision?.fairLine,
       decisionMarketLine: totalDecision?.marketLine,
-      isBestBet: totalDecision?.isBestBet,
+      isBestBet: customerIsBestBet(),
       keyNumberCross: totalDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
       ...sharedMatchup,

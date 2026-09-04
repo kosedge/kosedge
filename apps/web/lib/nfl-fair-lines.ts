@@ -5,6 +5,11 @@ import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
 import { humanizeCompetitionTokensInText } from "@/lib/nfl-depth-pack-freshness";
+import {
+  customerIsBestBet,
+  displayActionLabel,
+  quarantinePointGrade,
+} from "@/lib/nfl-dead-tiers";
 import type {
   ActionLabel,
   ConfidenceAssessment,
@@ -323,18 +328,20 @@ function normalizeDecisionResult(
       factors: {},
       unresolvedFlags: [],
     } satisfies NflDecisionConfidence);
+  const coverRaw = o.cover_grade ?? o.coverGrade;
+  // Customer serialize quarantine — Sport Standard publish set only.
+  const shownLabel = displayActionLabel(actionLabel) ?? "PASS";
   return {
     market,
-    actionLabel,
-    pointGrade: String(
-      o.point_grade ?? o.pointGrade ?? "PASS",
-    ) as DecisionResult["pointGrade"],
+    actionLabel: shownLabel,
+    pointGrade: quarantinePointGrade(o.point_grade ?? o.pointGrade),
     edgeMagnitude: toNumber(o.edge_magnitude ?? o.edgeMagnitude, 0),
     modelConfidence: conf,
     coverProb: toNumberOrNull(o.cover_prob ?? o.coverProb),
-    coverGrade: (o.cover_grade ??
-      o.coverGrade ??
-      null) as DecisionResult["coverGrade"],
+    coverGrade:
+      coverRaw == null || coverRaw === ""
+        ? null
+        : quarantinePointGrade(coverRaw),
     playTo: playToRaw
       ? {
           sideOrTotal: String(
@@ -370,7 +377,7 @@ function normalizeDecisionResult(
           : null,
       note: String(mcRaw?.note ?? ""),
     },
-    isBestBet: Boolean(o.is_best_bet ?? o.isBestBet),
+    isBestBet: customerIsBestBet(),
     modelWarning: Boolean(o.model_warning ?? o.modelWarning),
     keyNumberCross: Boolean(o.key_number_cross ?? o.keyNumberCross),
     priceStillAvailable: Boolean(
@@ -404,12 +411,14 @@ function normalizeDecision(raw: unknown): NflFairLineDecision | null {
       o.edge_magnitude_total ?? o.edgeMagnitudeTotal,
     ),
     modelConfidence: conf,
-    actionLabelSpread: normalizeActionLabel(
-      o.action_label_spread ?? o.actionLabelSpread,
-    ),
-    actionLabelTotal: normalizeActionLabel(
-      o.action_label_total ?? o.actionLabelTotal,
-    ),
+    actionLabelSpread:
+      displayActionLabel(
+        normalizeActionLabel(o.action_label_spread ?? o.actionLabelSpread),
+      ) ?? null,
+    actionLabelTotal:
+      displayActionLabel(
+        normalizeActionLabel(o.action_label_total ?? o.actionLabelTotal),
+      ) ?? null,
   };
 }
 
@@ -535,8 +544,10 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     publishTagTotal: normalizePublishTag(raw.publish_tag_total),
     publishTagMl: normalizePublishTag(raw.publish_tag_ml),
     decision: normalizeDecision(raw.decision),
-    actionLabelSpread: normalizeActionLabel(raw.action_label_spread),
-    actionLabelTotal: normalizeActionLabel(raw.action_label_total),
+    actionLabelSpread:
+      displayActionLabel(normalizeActionLabel(raw.action_label_spread)) ?? null,
+    actionLabelTotal:
+      displayActionLabel(normalizeActionLabel(raw.action_label_total)) ?? null,
   };
 }
 
