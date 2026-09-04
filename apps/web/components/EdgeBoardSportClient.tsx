@@ -335,7 +335,7 @@ export default function EdgeBoardSportClient({
           className="mt-6 rounded-2xl border border-amber-200/25 bg-black/30 p-12 text-center text-amber-100/90"
           data-testid="edge-board-slow"
         >
-          {edgeBoardAssembleHonestyCopy("timeout")}
+          {edgeBoardAssembleHonestyCopy("timeout", state.lastLinesAsOf)}
         </div>
       ) : null}
 
@@ -345,7 +345,7 @@ export default function EdgeBoardSportClient({
           data-testid="edge-board-unavailable"
           data-reason={state.reason}
         >
-          {edgeBoardAssembleHonestyCopy(state.reason)}
+          {edgeBoardAssembleHonestyCopy(state.reason, state.lastLinesAsOf)}
         </div>
       ) : null}
 
