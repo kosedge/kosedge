@@ -28,10 +28,11 @@ from pipeline_paths import (
     TORVIK_SNAPSHOTS_DIR,
     ENSEMBLE_WEIGHTS_PATH,
 )
+from ncaam_identity import odds_name_to_team_norm
 
 
 def normalize_team(col_expr: pl.Expr) -> pl.Expr:
-    """Must match build_ensemble_ratings."""
+    """Must match build_ensemble_ratings (ratings-side only; odds use ncaam_identity)."""
     return (
         col_expr.str.to_lowercase()
         .str.replace_all(r"\.", "")
@@ -39,32 +40,6 @@ def normalize_team(col_expr: pl.Expr) -> pl.Expr:
         .str.replace_all("uconn", "connecticut")
         .str.strip_chars()
     )
-
-
-ODDS_TO_RATINGS_ALIASES: dict[str, str] = {
-    "unc": "north carolina",
-    "lsu": "louisiana state",
-    "usc": "southern california",
-    "ole miss": "mississippi",
-    "unlv": "nevada las vegas",
-    "vcu": "virginia commonwealth",
-    "smu": "southern methodist",
-    "tcu": "texas christian",
-    "wku": "western kentucky",
-    "utsa": "texas san antonio",
-    "unm": "new mexico",
-}
-
-
-def odds_team_to_short(col_expr: pl.Expr) -> pl.Expr:
-    """Odds use 'Purdue Boilermakers'; ratings use 'purdue'. Derive short name for join."""
-    parts = col_expr.str.split(" ")
-    short = pl.when(parts.list.len() >= 3).then(parts.list.head(2).list.join(" ")).otherwise(parts.list.get(0))
-    normed = normalize_team(short)
-    result: pl.Expr = normed
-    for odds_val, ratings_val in ODDS_TO_RATINGS_ALIASES.items():
-        result = pl.when(result == odds_val).then(pl.lit(ratings_val)).otherwise(result)
-    return result
 
 
 def game_season(commence_expr: pl.Expr) -> pl.Expr:
@@ -121,11 +96,22 @@ def main() -> None:
     print(f"Consensus close (mean across books) for {len(odds):,} unique events.")
 
     odds = odds.with_columns([
-        odds_team_to_short(pl.col("home_team")).alias("home_team_norm"),
-        odds_team_to_short(pl.col("away_team")).alias("away_team_norm"),
+        pl.col("home_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("home_team_norm"),
+        pl.col("away_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("away_team_norm"),
         game_season(pl.col("commence_time")),
         pl.col("commence_time").str.slice(0, 10).str.to_date(strict=False).alias("game_date"),
     ])
+    # Fail-closed: drop events with unresolved identity (ambiguous / unknown alias)
+    before = len(odds)
+    odds = odds.filter(
+        pl.col("home_team_norm").is_not_null() & pl.col("away_team_norm").is_not_null()
+    )
+    if len(odds) < before:
+        print(f"Omitted {before - len(odds):,} events (unresolved NCAAM team identity).")
 
     use_archive = False
     kenpom_snap = _build_archive_from_snapshots(KENPOM_SNAPSHOTS_DIR, "kenpom")

@@ -1,5 +1,6 @@
 """
-Build schedule.parquet from odds parquet for build_rest_travel. Same team norm as merge.
+Build schedule.parquet from odds parquet for build_rest_travel.
+Team norm via shared ncaam_identity (fail-closed; no odds_team_to_short).
 Run from apps/web: python src/build_schedule_from_odds.py
 """
 import sys
@@ -11,28 +12,7 @@ _WEB = Path(__file__).resolve().parent.parent
 if str(_WEB) not in sys.path:
     sys.path.insert(0, str(_WEB))
 from pipeline_paths import ODDS_PARQUET_PATH, SCHEDULE_PATH, RAW_GAMES, ensure_dirs
-
-# Match merge_games_ensemble normalization
-def _normalize(col_expr: pl.Expr) -> pl.Expr:
-    return (
-        col_expr.str.to_lowercase()
-        .str.replace_all(r"\.", "")
-        .str.replace_all(" st", " state")
-        .str.replace_all("uconn", "connecticut")
-        .str.strip_chars()
-    )
-ALIASES = {"unc": "north carolina", "lsu": "louisiana state", "usc": "southern california",
-    "ole miss": "mississippi", "unlv": "nevada las vegas", "vcu": "virginia commonwealth",
-    "smu": "southern methodist", "tcu": "texas christian", "wku": "western kentucky",
-    "utsa": "texas san antonio", "unm": "new mexico"}
-def _odds_team_to_short(col_expr: pl.Expr) -> pl.Expr:
-    parts = col_expr.str.split(" ")
-    short = pl.when(parts.list.len() >= 3).then(parts.list.head(2).list.join(" ")).otherwise(parts.list.get(0))
-    normed = _normalize(short)
-    out = normed
-    for k, v in ALIASES.items():
-        out = pl.when(out == k).then(pl.lit(v)).otherwise(out)
-    return out
+from ncaam_identity import odds_name_to_team_norm
 
 
 def main() -> None:
@@ -45,10 +25,20 @@ def main() -> None:
         ["event_id", "home_team", "away_team", "commence_time"]
     )
     events = events.with_columns([
-        _odds_team_to_short(pl.col("home_team")).alias("home_team_norm"),
-        _odds_team_to_short(pl.col("away_team")).alias("away_team_norm"),
+        pl.col("home_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("home_team_norm"),
+        pl.col("away_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("away_team_norm"),
         pl.col("commence_time").str.slice(0, 10).str.to_date(strict=False).alias("game_date"),
     ])
+    before = len(events)
+    events = events.filter(
+        pl.col("home_team_norm").is_not_null() & pl.col("away_team_norm").is_not_null()
+    )
+    if len(events) < before:
+        print(f"Omitted {before - len(events):,} events (unresolved NCAAM team identity).")
     home_rows = events.select(
         pl.col("home_team_norm").alias("team_norm"), pl.col("game_date"),
         pl.lit(True).alias("is_home"), pl.col("away_team_norm").alias("opponent_norm"),

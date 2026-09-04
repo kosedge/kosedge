@@ -16,28 +16,28 @@ _WEB = Path(__file__).resolve().parent.parent
 if str(_WEB) not in sys.path:
     sys.path.insert(0, str(_WEB))
 from pipeline_paths import RAW_GAMES, ODDS_PARQUET_PATH, ACTUAL_MARGINS_PATH, PROCESSED, ensure_dirs
+from ncaam_identity import odds_name_to_team_norm, resolve_ratings_norm
 
 ensure_dirs()
 
-# SportsData.io uses short abbrevs (e.g. PURD, UNC). Map to pipeline team_norm (same as odds_team_to_short).
-# Expand as needed; unmapped abbrevs fall back to normalize_team(abbrev).
-SPORTSDATA_ABBREV_TO_NORM: dict[str, str] = {
-    "unc": "north carolina",
+# SportsData.io uses short abbrevs (e.g. PURD, UNC). Map via shared identity when possible.
+SPORTSDATA_ABBREV_TO_ALIAS: dict[str, str] = {
+    "unc": "unc",
     "purd": "purdue",
     "kans": "kansas",
     "uk": "kentucky",
-    "lsu": "louisiana state",
-    "usc": "southern california",
-    "ole miss": "mississippi",
-    "unlv": "nevada las vegas",
-    "vcu": "virginia commonwealth",
-    "smu": "southern methodist",
-    "tcu": "texas christian",
-    "wku": "western kentucky",
-    "unm": "new mexico",
-    "uconn": "connecticut",
-    "byu": "brigham young",
-    "st johns": "st john's",
+    "lsu": "lsu",
+    "usc": "usc",
+    "ole miss": "ole miss",
+    "unlv": "unlv",
+    "vcu": "vcu",
+    "smu": "smu",
+    "tcu": "tcu",
+    "wku": "wku",
+    "unm": "unm",
+    "uconn": "uconn",
+    "byu": "byu",
+    "st johns": "st johns",
     "mtnst": "montana state",
     "jaxst": "jacksonville state",
     "char": "charlotte",
@@ -45,32 +45,15 @@ SPORTSDATA_ABBREV_TO_NORM: dict[str, str] = {
 }
 
 
-def normalize_team(col_expr: pl.Expr) -> pl.Expr:
-    """Match build_ensemble_ratings / merge_games_ensemble."""
-    return (
-        col_expr.str.to_lowercase()
-        .str.replace_all(r"\.", "")
-        .str.replace_all(" st", " state")
-        .str.replace_all("uconn", "connecticut")
-        .str.strip_chars()
-    )
-
-
-def odds_team_to_short(col_expr: pl.Expr) -> pl.Expr:
-    """Odds use 'Purdue Boilermakers'; ESPN uses 'Purdue'. Derive short name for joining."""
-    parts = col_expr.str.split(" ")
-    # If 3+ words (e.g. 'North Carolina Tar Heels'), take first 2; else take first 1
-    short = pl.when(parts.list.len() >= 3).then(parts.list.head(2).list.join(" ")).otherwise(parts.list.get(0))
-    return normalize_team(short)
-
-
 def sportsdata_team_to_norm(col_expr: pl.Expr) -> pl.Expr:
-    """Map SportsData abbrev (e.g. PURD, IUPUI) to pipeline team_norm for odds join."""
-    raw = col_expr.str.to_lowercase().str.strip_chars().str.replace_all(r"\.", "")
-    out = raw
-    for abbrev, norm in SPORTSDATA_ABBREV_TO_NORM.items():
-        out = out.str.replace_all(abbrev, norm)
-    return normalize_team(out)
+    """Map SportsData abbrev to ratings team_norm via identity (fail-closed → null)."""
+
+    def _one(v: str | None) -> str | None:
+        raw = (v or "").strip().lower().replace(".", "")
+        alias = SPORTSDATA_ABBREV_TO_ALIAS.get(raw, raw)
+        return resolve_ratings_norm(alias, source="manual")
+
+    return col_expr.map_elements(_one, return_dtype=pl.Utf8)
 
 
 def main() -> None:
@@ -120,8 +103,12 @@ def main() -> None:
         ).filter(pl.col("away_pts").is_not_null() & pl.col("home_pts").is_not_null())
         df = df.with_columns(
             (pl.col("home_pts") - pl.col("away_pts")).alias("actual_margin"),
-            normalize_team(pl.col("home_team")).alias("home_norm"),
-            normalize_team(pl.col("away_team")).alias("away_norm"),
+            pl.col("home_team")
+            .map_elements(lambda v: resolve_ratings_norm(v or "", source="manual"), return_dtype=pl.Utf8)
+            .alias("home_norm"),
+            pl.col("away_team")
+            .map_elements(lambda v: resolve_ratings_norm(v or "", source="manual"), return_dtype=pl.Utf8)
+            .alias("away_norm"),
         )
         # Parse date: "Tue, Nov 5, 2024" or "Nov 5, 2024" or "2024-11-05"
         df = df.with_columns(
@@ -183,10 +170,16 @@ def main() -> None:
         return
     odds = pl.read_parquet(odds_path)
     odds = odds.with_columns([
-        odds_team_to_short(pl.col("home_team")).alias("home_short"),
-        odds_team_to_short(pl.col("away_team")).alias("away_short"),
+        pl.col("home_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("home_short"),
+        pl.col("away_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("away_short"),
         pl.col("commence_time").str.slice(0, 10).str.to_date(strict=False).alias("game_date"),
-    ]).unique(subset=["event_id", "home_short", "away_short", "game_date"])
+    ]).filter(
+        pl.col("home_short").is_not_null() & pl.col("away_short").is_not_null()
+    ).unique(subset=["event_id", "home_short", "away_short", "game_date"])
 
     # Join: match odds (short names from "Team Mascot") to results (ESPN/Sports-Ref short names)
     merged = odds.join(

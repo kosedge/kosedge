@@ -20,6 +20,7 @@ import {
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { getSport } from "@/lib/sports";
+import { isRetiredNcaamSportKey } from "@/lib/ncaam/identity";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 
 export const dynamic = "force-dynamic";
@@ -46,6 +47,18 @@ export async function GET(
 ) {
   const { sport: raw } = await params;
   const sport = (raw || "").toLowerCase();
+  // Canonical college-basketball key is `ncaam` only — retire `cbb` / `ncaab`.
+  if (isRetiredNcaamSportKey(sport)) {
+    return NextResponse.json(
+      {
+        error: "Retired sport key",
+        sport,
+        use: "ncaam",
+        message: "Use sport=ncaam; cbb/ncaab are retired as API sport keys.",
+      },
+      { status: 400, headers: pageDataCacheHeaders({ cacheable: false }) },
+    );
+  }
   if (!getSport(sport)) {
     return NextResponse.json(
       { error: "Unknown sport", sport },

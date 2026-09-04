@@ -19,17 +19,7 @@ from pipeline_paths import (
     GAMES_WITH_EDGES_PATH,
     RAW_GAMES,
 )
-
-
-def _norm(col_expr: pl.Expr) -> pl.Expr:
-    return col_expr.str.to_lowercase().str.replace_all(r"\.", "").str.replace_all(" st", " state").str.replace_all("uconn", "connecticut").str.strip_chars()
-
-
-def odds_team_to_short(col_expr: pl.Expr) -> pl.Expr:
-    """Odds use 'Purdue Boilermakers'; ratings use 'purdue'. Derive short name for join."""
-    parts = col_expr.str.split(" ")
-    short = pl.when(parts.list.len() >= 3).then(parts.list.head(2).list.join(" ")).otherwise(parts.list.get(0))
-    return _norm(short)
+from ncaam_identity import odds_name_to_team_norm
 
 
 def game_season(commence_expr: pl.Expr) -> pl.Expr:
@@ -53,12 +43,19 @@ def main() -> None:
     ratings = pl.read_parquet(FULL_RATINGS_PATH)
     odds = pl.read_parquet(ODDS_PARQUET_PATH)
 
-    # Short team names so odds match ratings (e.g. "Kansas Jayhawks" -> "kansas")
+    # Fail-closed identity (no odds_team_to_short / first-token shortening)
     odds = odds.with_columns([
-        odds_team_to_short(pl.col("home_team")).alias("home_team_norm"),
-        odds_team_to_short(pl.col("away_team")).alias("away_team_norm"),
+        pl.col("home_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("home_team_norm"),
+        pl.col("away_team")
+        .map_elements(lambda v: odds_name_to_team_norm(v or ""), return_dtype=pl.Utf8)
+        .alias("away_team_norm"),
         game_season(pl.col("commence_time")),
     ])
+    odds = odds.filter(
+        pl.col("home_team_norm").is_not_null() & pl.col("away_team_norm").is_not_null()
+    )
 
     # Join to get home and away ratings (one row per game-book with home/away adjem, sos)
     home_ratings = ratings.select([
