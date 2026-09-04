@@ -44,10 +44,7 @@ describe("Edge Board assemble href + early bootstrap (#12 GO-1)", () => {
     const pending = Promise.resolve(new Response("{}", { status: 200 }));
     (
       window as Window & {
-        [EDGE_BOARD_ASSEMBLE_BOOTSTRAP_KEY]?: Record<
-          string,
-          Promise<Response>
-        >;
+        [EDGE_BOARD_ASSEMBLE_BOOTSTRAP_KEY]?: Record<string, Promise<Response>>;
       }
     )[EDGE_BOARD_ASSEMBLE_BOOTSTRAP_KEY] = { [href]: pending };
 
@@ -87,7 +84,7 @@ describe("Edge Board assemble href + early bootstrap (#12 GO-1)", () => {
       "utf8",
     );
     expect(assemble).toContain("slate,");
-    expect(assemble).toContain("slate === \"full\" ? gameCount(assembled) : 0");
+    expect(assemble).toContain('slate === "full" ? gameCount(assembled) : 0');
     expect(assemble).not.toMatch(
       /loadAssembledEdgeBoardRows\("nfl",\s*\{\s*slate:\s*"full"/,
     );

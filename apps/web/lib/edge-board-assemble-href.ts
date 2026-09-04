@@ -13,10 +13,13 @@ export type EdgeBoardAssembleHrefInput = {
 };
 
 /** Relative assemble href matching EdgeBoardSportClient fetch. */
-export function edgeBoardAssembleHref(input: EdgeBoardAssembleHrefInput): string {
+export function edgeBoardAssembleHref(
+  input: EdgeBoardAssembleHrefInput,
+): string {
   const sport = (input.sportKey || "ncaam").toLowerCase();
   const qs = new URLSearchParams();
-  if (sport === "nfl") qs.set("slate", input.slate === "full" ? "full" : "week1");
+  if (sport === "nfl")
+    qs.set("slate", input.slate === "full" ? "full" : "week1");
   if (sport === "cfb") qs.set("week", String(input.cfbWeek === 0 ? 0 : 1));
   const q = qs.toString();
   return `/api/edge-board/${sport}/assemble${q ? `?${q}` : ""}`;
