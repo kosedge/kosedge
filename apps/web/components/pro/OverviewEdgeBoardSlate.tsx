@@ -5,6 +5,7 @@
 
 import Link from "next/link";
 import type { TonightGame } from "@/lib/edge-board-tonight";
+import type { OverviewSlateStatus } from "@/lib/overview-slate-games";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
 
 const SLATE_META: Record<
@@ -31,12 +32,21 @@ const SLATE_META: Record<
   },
 };
 
+const STATUS_HINT: Partial<Record<OverviewSlateStatus, string>> = {
+  timeout:
+    "Board data is taking longer than usual. Open Full Edge Board for the live board — this slate refreshes on the next page load.",
+  error:
+    "Couldn’t load slate cards just now. Open Full Edge Board for the live board.",
+};
+
 export default function OverviewEdgeBoardSlate({
   sport,
   games,
+  status = "ready",
 }: {
   sport: string;
   games: TonightGame[];
+  status?: OverviewSlateStatus;
 }) {
   const meta = SLATE_META[sport] ?? {
     eyebrow: "Current slate",
@@ -44,6 +54,10 @@ export default function OverviewEdgeBoardSlate({
     emptyHint: "Slate cards appear when live board data is available.",
   };
   const edgeBoardHref = `/edge-board/${sport}`;
+  const emptyCopy =
+    status === "timeout" || status === "error"
+      ? (STATUS_HINT[status] ?? meta.emptyHint)
+      : meta.emptyHint;
 
   return (
     <section className="mt-6 rounded-2xl border border-kos-gold/25 bg-linear-to-r from-kos-gold/12 via-black/40 to-black/60 p-5 sm:p-6">
@@ -69,7 +83,7 @@ export default function OverviewEdgeBoardSlate({
           games={games}
           sport={sport}
           embedded
-          emptyCopy={meta.emptyHint}
+          emptyCopy={emptyCopy}
         />
       </div>
     </section>

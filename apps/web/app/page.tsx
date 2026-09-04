@@ -65,7 +65,7 @@ export default function Home() {
                 KosEdge Analytics
               </div>
               <div className="text-[10px] tracking-[0.14em] uppercase text-gray-400/90 sm:text-[11px]">
-                Built on Data, Driven by Edge
+                Built on Data. Driven by Edge.
               </div>
             </div>
           </Link>
@@ -285,7 +285,7 @@ export default function Home() {
             </Link>
           </nav>
           <p className="mt-4 text-lg font-medium text-kos-gold">
-            Built on Data, Driven by Edge.
+            Built on Data. Driven by Edge.
           </p>
           <p className="mt-2 text-sm">
             © {new Date().getFullYear()} KosEdge Analytics

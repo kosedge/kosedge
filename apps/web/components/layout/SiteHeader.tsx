@@ -18,7 +18,7 @@ export default function SiteHeader() {
             KosEdge Analytics
           </div>
           <div className="-mt-0.5 text-[11px] text-white/65 tracking-[0.12em] uppercase sm:text-xs">
-            Built on Data, Driven by Edge
+            Built on Data. Driven by Edge.
           </div>
         </div>
       </Link>

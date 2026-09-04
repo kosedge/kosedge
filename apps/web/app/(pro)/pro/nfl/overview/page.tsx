@@ -1,25 +1,17 @@
-import Link from "next/link";
-import {
-  footerCardClassName,
-  footerCtaClassName,
-  footerTitleClassName,
-  getSportDeskConfig,
-} from "@/lib/pro-sport-desk";
+import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import {
   buildSportOverviewSections,
   buildSportOverviewContent,
 } from "@/lib/pro-sport-ia";
-import OverviewPageHeader from "@/components/pro/OverviewPageHeader";
-import OverviewEdgeBoardSlate from "@/components/pro/OverviewEdgeBoardSlate";
-import SportOverviewSection from "@/components/pro/SportOverviewSection";
+import OverviewSportShell from "@/components/pro/OverviewSportShell";
 import { loadOverviewSlateGames } from "@/lib/overview-slate-games";
 
 export default async function NflOverviewPage() {
   const desk = getSportDeskConfig("nfl");
   const content = buildSportOverviewContent("nfl", "NFL");
-  const tonightGames = await loadOverviewSlateGames("nfl");
+  const slate = await loadOverviewSlateGames("nfl");
   // Weekly Slate section links (Camp / Previews) stay below; elevated slate is Edge Board.
-  const gridSections = buildSportOverviewSections({
+  const sections = buildSportOverviewSections({
     sportKey: "nfl",
     base: "/pro/nfl",
     edgeBoardHref: "/edge-board/nfl",
@@ -27,51 +19,13 @@ export default async function NflOverviewPage() {
   }).filter((section) => section.title !== "Weekly Slate");
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <OverviewPageHeader sportLabel="NFL" />
-
-      <OverviewEdgeBoardSlate sport="nfl" games={tonightGames} />
-
-      {/* Betting Desk / Fantasy / Team Intel / Model Governance */}
-      <div className="mt-6 grid gap-4 lg:grid-cols-2">
-        {gridSections.map((section) => (
-          <SportOverviewSection
-            key={section.title}
-            title={section.title}
-            subtitle={section.subtitle}
-            links={section.links}
-          />
-        ))}
-      </div>
-
-      {/* Bottom 3×2 research tools */}
-      <section id="tools" className="mt-8 scroll-mt-28">
-        <h2 className="text-xl font-semibold tracking-tight text-kos-text">
-          Research tools
-        </h2>
-        <p className="mt-1 text-sm text-kos-text/65">
-          Season engine, previews, governance, and schedule tools.
-        </p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {desk.footerCards.map((card) => (
-            <Link
-              key={card.title}
-              href={card.href}
-              className={footerCardClassName(card.accent)}
-            >
-              <h3 className={footerTitleClassName(card.accent)}>
-                {card.title}
-              </h3>
-              <p className="mt-2 text-sm text-kos-text/80">
-                {card.description}
-              </p>
-              <span className={footerCtaClassName(card.accent)}>
-                {card.cta}
-              </span>
-            </Link>
-          ))}
-        </div>
-      </section>
-    </main>
+    <OverviewSportShell
+      sportKey="nfl"
+      sportLabel="NFL"
+      slate={slate}
+      sections={sections}
+      footerCards={desk.footerCards}
+      toolsSubtitle="Season engine, previews, governance, and schedule tools."
+    />
   );
 }

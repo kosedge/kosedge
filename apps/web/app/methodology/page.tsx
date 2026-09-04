@@ -5,7 +5,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 export const metadata = {
   title: "Methodology",
   description:
-    "KosEdge methodology: Model → KEI → Edge. Process over noise. Built on Data, Driven by Edge.",
+    "KosEdge methodology: Model → KEI → Edge. Process over noise. Built on Data. Driven by Edge.",
 };
 
 export default function MethodologyPage() {
@@ -18,7 +18,7 @@ export default function MethodologyPage() {
           Process over noise
         </p>
         <p className="mt-3 text-base font-medium text-kos-gold">
-          Built on Data, Driven by Edge.
+          Built on Data. Driven by Edge.
         </p>
         <p className="mt-4 text-base leading-7 text-white/80">
           We don&apos;t sell locks. We run a desk.
@@ -323,7 +323,7 @@ export default function MethodologyPage() {
         </div>
 
         <p className="mt-12 text-base font-medium text-kos-gold">
-          Built on Data, Driven by Edge.
+          Built on Data. Driven by Edge.
         </p>
       </article>
       <SiteFooter />

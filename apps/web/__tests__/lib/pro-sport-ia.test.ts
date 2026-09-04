@@ -232,13 +232,13 @@ describe("pro sport IA", () => {
     expect(fantasy?.subtitle).toMatch(/educational guillotine/i);
   });
 
-  it("keeps NFL Overview on shared Edge Board slate (no redundant Weekly Slate hero)", () => {
+  it("keeps NFL Overview on shared Edge Board shell (no redundant Weekly Slate hero)", () => {
     const src = readFileSync(
       path.join(__dirname, "../../app/(pro)/pro/nfl/overview/page.tsx"),
       "utf8",
     );
-    expect(src).toMatch(/OverviewEdgeBoardSlate/);
-    expect(src).toMatch(/OverviewPageHeader/);
+    expect(src).toMatch(/OverviewSportShell/);
+    expect(src).toMatch(/loadOverviewSlateGames/);
     expect(src).not.toMatch(/Open Weekly Slate/);
     expect(src).not.toMatch(/matchup briefs pending/i);
   });

@@ -7,7 +7,7 @@ test("homepage renders brand and CTA", async ({ page }) => {
   ).toBeVisible();
   await expect(
     page.getByRole("heading", {
-      name: /Built on Data, Driven by Edge/i,
+      name: /Built on Data\. Driven by Edge/i,
     }),
   ).toBeVisible();
 });

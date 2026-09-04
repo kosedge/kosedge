@@ -3,7 +3,10 @@
  * Minimal brand hierarchy — sport label, Overview, tagline. No CTA stack.
  */
 
-export const OVERVIEW_TAGLINE = "Built on Data. Driven by Edge.";
+import { SPORT_TAGLINE } from "@/lib/sport-pro-nav";
+
+/** Brand-standard Overview tagline (period form = two deliberate statements). */
+export const OVERVIEW_TAGLINE = SPORT_TAGLINE;
 
 export default function OverviewPageHeader({
   sportLabel,
