@@ -142,9 +142,6 @@ export default function AboutPage() {
         <p className="mt-4 text-base leading-7 text-white/75">
           We don&apos;t promise you&apos;ll win every night.
         </p>
-        <p className="mt-3 text-base leading-7 text-white/75">
-          We promise that betting with a real process beats betting without one.
-        </p>
 
         <hr className="my-10 border-white/15" />
 

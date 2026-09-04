@@ -1,5 +1,4 @@
 import NflEdgesDeskClient from "@/components/pro/nfl/NflEdgesDeskClient";
-import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import type { DeskMarketType } from "@/lib/nfl-edges-desk-types";
 
 export const dynamic = "force-dynamic";
@@ -8,7 +7,6 @@ const DEFAULT_SEASON = 2026;
 const DEFAULT_WEEK = 1;
 const MARKET_TABS: DeskMarketType[] = ["all", "ml", "spread", "total", "props"];
 const MIN_EDGE_OPTIONS_LEN = 3;
-const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
 type SearchValue = string | string[] | undefined;
 
@@ -21,6 +19,7 @@ function firstValue(value: SearchValue): string | undefined {
  * Edges desk — SSR shell parses filters only.
  * Desk data client-fetches /api/nfl/edges-desk (fair ∥ today ∥ props) so HTML
  * is not held open on model-service (Alex waterfall).
+ * Conf% filter chrome dark until Lab (KOS-22 C25).
  */
 export default async function NflEdgesDeskPage({
   searchParams,
@@ -49,12 +48,6 @@ export default async function NflEdgesDeskPage({
     minEdgeIdxRaw < MIN_EDGE_OPTIONS_LEN
       ? minEdgeIdxRaw
       : 1;
-  const minConfRaw = Number(firstValue(search.minConf));
-  const minConfidence = MIN_CONF_OPTIONS.includes(
-    minConfRaw as (typeof MIN_CONF_OPTIONS)[number],
-  )
-    ? minConfRaw
-    : 0;
 
   return (
     <NflEdgesDeskClient
@@ -62,7 +55,6 @@ export default async function NflEdgesDeskPage({
       week={week}
       market={market}
       minEdgeIdx={minEdgeIdx}
-      minConfidence={minConfidence}
     />
   );
 }

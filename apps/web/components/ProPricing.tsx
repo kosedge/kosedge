@@ -240,7 +240,7 @@ export default function ProPricing({
               </button>
 
               <div className="mt-3 text-xs text-gray-500 text-center">
-                Lowest effective rate • Built for long-term edge
+                Lowest effective rate
               </div>
             </div>
           </div>

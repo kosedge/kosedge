@@ -148,10 +148,6 @@ export default function Home() {
               game.
             </p>
 
-            <p className="mt-3 text-base sm:text-lg text-kos-gold font-semibold italic">
-              Sharper Data. Smarter Bets.
-            </p>
-
             <div className="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
               <Link
                 href="/edge-board"

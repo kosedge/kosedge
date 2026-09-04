@@ -8,7 +8,6 @@ import type {
   DeskMarketType,
   NflEdgesDeskResponse,
 } from "@/lib/nfl-edges-desk-types";
-import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
 import { nflPropsSurfaceCopy } from "@/lib/nfl-props-surface";
 import {
   modelUnreachableCopy,
@@ -24,14 +23,12 @@ const MIN_EDGE_OPTIONS = [
   { label: "2pp / 1pt", prob: 0.02, line: 1.0 },
   { label: "3pp / 1.5pt", prob: 0.03, line: 1.5 },
 ] as const;
-const MIN_CONF_OPTIONS = EDGES_DESK_MIN_CONF_OPTIONS;
 
 type Props = {
   season: number;
   week: number;
   market: DeskMarketType;
   minEdgeIdx: number;
-  minConfidence: number;
 };
 
 function buildHref(base: Record<string, string | undefined>): string {
@@ -67,7 +64,6 @@ export default function NflEdgesDeskClient({
   week,
   market,
   minEdgeIdx,
-  minConfidence,
 }: Props) {
   const [state, setState] = useState<
     | { status: "loading" }
@@ -84,7 +80,7 @@ export default function NflEdgesDeskClient({
       minEdge: String(minEdgeIdx),
     });
     if (market !== "all") qs.set("market", market);
-    if (minConfidence > 0) qs.set("minConf", String(minConfidence));
+    // Conf% dark until Lab (KOS-22 C25) — do not send minConf from customer UI.
 
     async function load() {
       setState({ status: "loading" });
@@ -109,14 +105,13 @@ export default function NflEdgesDeskClient({
       cancelled = true;
       controller.abort();
     };
-  }, [season, week, market, minEdgeIdx, minConfidence]);
+  }, [season, week, market, minEdgeIdx]);
 
   const activeQuery = {
     season: String(season),
     week: String(week),
     market: market === "all" ? undefined : market,
     minEdge: String(minEdgeIdx),
-    minConf: minConfidence > 0 ? String(minConfidence) : undefined,
   };
 
   const deskReady = state.status === "ready" ? state.desk : null;
@@ -236,24 +231,7 @@ export default function NflEdgesDeskClient({
           </div>
         </div>
         <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-kos-text/65">
-          <span>Min confidence:</span>
-          {MIN_CONF_OPTIONS.map((option) => (
-            <Link
-              key={option}
-              href={buildHref({
-                ...activeQuery,
-                minConf: option > 0 ? String(option) : undefined,
-              })}
-              className={`rounded-md px-2 py-1 font-semibold transition ${
-                minConfidence === option
-                  ? "bg-white/15 text-kos-text"
-                  : "text-kos-text/60 hover:text-kos-text"
-              }`}
-            >
-              {option === 0 ? "Any" : `${Math.round(option * 100)}%`}
-            </Link>
-          ))}
-          <span className="ml-2 text-kos-text/45">Week:</span>
+          <span className="text-kos-text/45">Week:</span>
           {[1, 2, 3, 4, 5].map((w) => (
             <Link
               key={w}
