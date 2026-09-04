@@ -19,7 +19,7 @@ const SPORT_FAIR_LINES_COPY: Record<
   nhl: {
     markets: "moneylines and totals (puck line staged next)",
     pendingNote:
-      "NHL fair-lines join the desk once the hockey model board is connected to Pro.",
+      "NHL fair-lines are not connected / no odds yet on this shell — we do not invent puck lines or KEI. Prefer /api/nhl/fair-lines for the honest empty JSON board when the model is offseason-empty.",
   },
   wnba: {
     markets: "spreads, totals, and moneylines",
@@ -29,12 +29,12 @@ const SPORT_FAIR_LINES_COPY: Record<
   cfb: {
     markets: "spreads and totals with key-number awareness",
     pendingNote:
-      "CFB fair-lines join the desk once the college football model board is connected to Pro.",
+      "CFB fair-lines are not connected / no odds yet — we do not invent book prices or KEI. Model-service has no /cfb/fair-lines; /api/cfb/fair-lines returns an honest empty board.",
   },
   ncaam: {
     markets: "spreads and totals with tempo-aware baselines",
     pendingNote:
-      "CBB fair-lines join the desk once the college basketball model board is connected to Pro.",
+      "CBB / NCAAM is out of this overnight slice. Fair-lines stay not connected — we do not invent prices.",
   },
 };
 
@@ -70,8 +70,7 @@ export default async function FairLinesPage({
 
   // Prefer live model-service / file KEI; file-only is the sync fallback.
   const resolvedKei = await resolveKeiGames(sportKey);
-  const keiGames =
-    resolvedKei.length > 0 ? resolvedKei : getKeiLines(sportKey);
+  const keiGames = resolvedKei.length > 0 ? resolvedKei : getKeiLines(sportKey);
   const boardGames =
     keiGames.length === 0 ? await getTonightGames(sportKey) : [];
 
@@ -188,8 +187,13 @@ export default async function FairLinesPage({
             </p>
             <p className="mt-4 text-sm text-kos-text/60">
               Until then, use the public edge board and odds compare for live
-              market context. We do not invent fair prices. NFL and MLB
-              fair-lines boards are live under their hubs.
+              market context. Not connected / no odds yet — we do not invent
+              fair prices. NFL fair-lines are live; other sports expose honest
+              empty JSON at{" "}
+              <code className="text-kos-text/80">
+                {"/api/{sport}/fair-lines"}
+              </code>{" "}
+              when no board is joined.
             </p>
             <div className="mt-5 flex flex-wrap gap-3">
               <Link

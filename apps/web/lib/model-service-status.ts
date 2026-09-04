@@ -13,6 +13,8 @@ export const HONEST_EMPTY_SLATE_STATUSES = new Set([
   "preseason_empty",
   "no_reg_week_games",
   "schema_not_ready",
+  "not_connected",
+  "no_odds_yet",
 ]);
 
 /**
@@ -56,7 +58,10 @@ export function inferHonestEmptySlateStatus(opts: {
   const inPreseasonWindow = isNflPreseasonDeskWindow();
   const futureOrCurrentSeason = season >= currentYear;
 
-  if (!isTransportFailureMessage(opts.error) && !(opts.cause instanceof UpstreamTimeoutError)) {
+  if (
+    !isTransportFailureMessage(opts.error) &&
+    !(opts.cause instanceof UpstreamTimeoutError)
+  ) {
     return null;
   }
 
@@ -114,6 +119,9 @@ export function honestEmptySlateCopy(status?: string | null): string {
     case "no_projections_yet":
     case "schema_not_ready":
       return "Projections are not posted for this window yet. The desk shell is live — model rows will populate when the pipeline publishes.";
+    case "not_connected":
+    case "no_odds_yet":
+      return "Not connected / no odds yet — we do not invent book prices or KEI lines.";
     default:
       return "No board rows in the current window yet.";
   }
