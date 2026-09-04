@@ -1,60 +1,35 @@
 #!/usr/bin/env python3
-"""CLI: materialize NCAAM Lab fair research set (Contract v1 / Phase E).
+"""Thin repo-root wrapper → apps/web Lab fair materialize CLI.
 
-Research only — does not write Edge Board / kei_lines product JSON.
+Canonical entrypoint (allowlisted web Python):
+  apps/web/scripts/lab_ncaam_fair_materialize.py
 
-Usage (from repo root):
-  python3 scripts/lab/ncaam_fair_materialize.py --cut train_a
-  python3 scripts/lab/ncaam_fair_materialize.py --cut test_a
-  python3 scripts/lab/ncaam_fair_materialize.py --cut universe_path_a --dry-run
-
-Cut windows (LOCKED tip dates):
-  train_a          2022-11-07 → 2023-03-12  (Valid-A folded in)
-  test_a           2023-11-06 → 2024-01-28  (OOS)
-  universe_path_a  2022-11-01 → 2024-01-28  (2025 pocket OUT)
+This wrapper exists for ergonomic `scripts/lab/` parity with NFL Lab runners.
+It is outside apps/web and is not part of the web Python allowlist.
 """
 
 from __future__ import annotations
 
-import argparse
-import json
+import runpy
 import sys
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-WEB = ROOT / "apps" / "web"
-SRC = WEB / "src"
-
-for p in (str(WEB), str(SRC)):
-    if p not in sys.path:
-        sys.path.insert(0, p)
+TARGET = (
+    Path(__file__).resolve().parents[2]
+    / "apps"
+    / "web"
+    / "scripts"
+    / "lab_ncaam_fair_materialize.py"
+)
 
 
 def main() -> int:
-    parser = argparse.ArgumentParser(description="NCAAM Lab fair materialize (research only)")
-    parser.add_argument(
-        "--cut",
-        default="train_a",
-        choices=["train_a", "test_a", "universe_path_a"],
-        help="Locked cut window (default: train_a)",
-    )
-    parser.add_argument(
-        "--out-dir",
-        type=Path,
-        default=None,
-        help="Artifact dir (default: data/ops/lab/ncaam)",
-    )
-    parser.add_argument("--dry-run", action="store_true", help="Compute summary only; no writes")
-    args = parser.parse_args()
-
-    from ncaam_lab.materialize import materialize_lab_fair
-
-    summary = materialize_lab_fair(
-        cut=args.cut,
-        out_dir=args.out_dir,
-        dry_run=args.dry_run,
-    )
-    print(json.dumps(summary, indent=2))
+    if not TARGET.is_file():
+        print(f"Missing canonical CLI: {TARGET}", file=sys.stderr)
+        return 1
+    # Preserve argv for argparse inside the target.
+    sys.argv[0] = str(TARGET)
+    runpy.run_path(str(TARGET), run_name="__main__")
     return 0
 
 

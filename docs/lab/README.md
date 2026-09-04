@@ -31,7 +31,7 @@ NCAAM fair artifacts: [`data/ops/lab/ncaam/`](../../data/ops/lab/ncaam/).
 python3 scripts/lab/nfl_spread_validation_v1.py
 
 # NCAAM Lab fair (research only — no Edge Board writes)
-python3 scripts/lab/ncaam_fair_materialize.py --cut train_a
+python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a
 ```
 
 Reads owned ops artifacts only (no Odds API scrapes / densify). Missing series →

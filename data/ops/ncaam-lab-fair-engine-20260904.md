@@ -25,20 +25,24 @@ Research Lab fair path for `ncaam`:
 
 ## How to run
 
-From repo root (uses Path A parquet + KenPom snapshots already in tree):
+From repo root (uses Path A parquet + KenPom snapshots already in tree).
+Canonical CLI is under `apps/web/scripts/` (web Python allowlist / house path):
 
 ```bash
 # Train-A (default) — 2022-11-07 → 2023-03-12
-python3 scripts/lab/ncaam_fair_materialize.py --cut train_a
+python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a
 
 # Test-A OOS — 2023-11-06 → 2024-01-28
-python3 scripts/lab/ncaam_fair_materialize.py --cut test_a
+python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut test_a
 
 # Full Path A universe (2025 pocket still OUT)
-python3 scripts/lab/ncaam_fair_materialize.py --cut universe_path_a
+python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut universe_path_a
 
 # Summary only
-python3 scripts/lab/ncaam_fair_materialize.py --cut train_a --dry-run
+python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a --dry-run
+
+# Optional thin wrapper (same behavior):
+python3 scripts/lab/ncaam_fair_materialize.py --cut train_a
 ```
 
 Requires: `polars`, `pyarrow`. Working directory may be repo root; script adds
