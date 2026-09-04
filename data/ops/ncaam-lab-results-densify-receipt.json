@@ -1,0 +1,110 @@
+{
+  "receipt_version": "ncaam-lab-results-densify-v1",
+  "generated_at": "2026-09-04T17:29:42.844416+00:00",
+  "protocol_note": "Scorecard v1 grades FROZEN \u2014 this receipt enables v1.1 later; no peek-tune.",
+  "hard_not": [
+    "no_odds_densify",
+    "no_invent_margins",
+    "no_fake_settled",
+    "b7_fail_closed",
+    "no_v1_grade_retune"
+  ],
+  "join_policy": {
+    "lab_schedule_sot": "D",
+    "results_primary": "schedule_sot_packs_tip_date_plus_b7_team_id",
+    "results_secondary": "event_id_owned_actual_margins_or_results_csv",
+    "ambiguous_key_policy": "omit",
+    "unresolved_b7_policy": "omit"
+  },
+  "pack_receipt": {
+    "packs": [
+      {
+        "path": "/workspace/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+        "exists": true,
+        "n_games": 1300,
+        "n_kept": 1300,
+        "n_omit_b7": 0,
+        "n_omit_score": 0
+      },
+      {
+        "path": "/workspace/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+        "exists": true,
+        "n_games": 660,
+        "n_kept": 660,
+        "n_omit_b7": 0,
+        "n_omit_score": 0
+      }
+    ],
+    "n_scored_rows_raw": 1960,
+    "n_omitted_missing_b7": 0,
+    "n_omitted_missing_score": 0,
+    "n_omitted_ambiguous_key": 0,
+    "n_unique_keys": 1960
+  },
+  "n_event_id_owned_actuals": 413,
+  "cuts": {
+    "train_a": {
+      "before": {
+        "n_lab": 1119,
+        "n_with_actual": 170,
+        "outcome_coverage": 0.1519,
+        "method": "event_id_actual_margins_only"
+      },
+      "after": {
+        "n_lab": 1119,
+        "n_with_actual": 1080,
+        "outcome_coverage": 0.9651,
+        "n_with_actual_pack": 1080,
+        "n_with_actual_event_id_fill": 0,
+        "sources": [
+          "schedule_sot_packs"
+        ]
+      },
+      "continuity_counts": {
+        "PRIOR": 1119
+      },
+      "settled_forbidden_count": 0,
+      "lift_n": 910,
+      "lift_coverage_pp": 81.32
+    },
+    "test_a": {
+      "before": {
+        "n_lab": 609,
+        "n_with_actual": 80,
+        "outcome_coverage": 0.1314,
+        "method": "event_id_actual_margins_only"
+      },
+      "after": {
+        "n_lab": 609,
+        "n_with_actual": 566,
+        "outcome_coverage": 0.9294,
+        "n_with_actual_pack": 566,
+        "n_with_actual_event_id_fill": 0,
+        "sources": [
+          "schedule_sot_packs"
+        ]
+      },
+      "continuity_counts": {
+        "PRIOR": 609
+      },
+      "settled_forbidden_count": 0,
+      "lift_n": 486,
+      "lift_coverage_pp": 79.8
+    }
+  },
+  "leakage_receipt": {
+    "kenpom_leakage_ok": true,
+    "kenpom_leakage_violations": 0,
+    "settled_forbidden_total": 0
+  },
+  "diagnosis": {
+    "root_cause": "Scorecard v1 joined only thin actual_margins.parquet (406 event_ids). espn_cbb_games_*.csv scrapes are sparse + short-name B7 miss rate high; SportsData parquet is 2025-only (scrambled trial margins). Schedule SoT packs already carry B7-mapped final scores for Lab tip windows.",
+    "artifacts_verified": {
+      "schedule_packs": "primary densify \u2014 join tip_date + team_id",
+      "actual_margins.parquet": "secondary event_id overlay only",
+      "results.csv": "secondary event_id overlay only",
+      "espn_cbb_games_*.csv": "insufficient alone (sparse + alias gaps)",
+      "all_sportsdata_results_2016-2025.parquet": "2025 season only; not Train/Test-A"
+    }
+  }
+}
