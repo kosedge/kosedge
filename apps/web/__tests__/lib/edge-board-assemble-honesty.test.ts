@@ -72,6 +72,9 @@ describe("Edge Board assemble 10s honesty", () => {
     expect(client).toContain('data-testid="edge-board-unavailable"');
     expect(client).toContain("MarketAsOfStamp");
     expect(client).toContain('status: "slow"');
+    // C1: stamp mounts on loading too (fail-closed unavailable).
+    expect(client).toContain('data-testid="edge-board-asof"');
+    expect(client).not.toMatch(/status === "loading"\s*\?\s*"…"/);
     // Keep fetch alive past honesty ceiling (do not abort on the 10s timer).
     expect(client).not.toMatch(
       /setTimeout\(\(\) => \{\s*timedOut = true;\s*controller\.abort\(\)/,
