@@ -1,6 +1,6 @@
 /**
  * Shared multi-sport Pro navigation — research desk IA.
- * Tagline: Built on Data, Driven by Edge.
+ * Tagline: Built on Data. Driven by Edge.
  *
  * NFL keeps its expanded tool set (Wall Chart, Fantasy, DFS, Awards, etc.).
  * Other sports get the shared foundation plus sport-specific desks only.
@@ -18,7 +18,7 @@ export type SportNavItem = {
   emphasis?: "green";
 };
 
-export const SPORT_TAGLINE = "Built on Data, Driven by Edge";
+export const SPORT_TAGLINE = "Built on Data. Driven by Edge.";
 export const SPORT_DESK_SUBTITLE = "Pro research desk";
 
 type SportNavConfig = {

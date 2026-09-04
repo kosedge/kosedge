@@ -72,7 +72,7 @@ export default function ContactPage() {
         </p>
 
         <p className="mt-12 text-base font-medium text-kos-gold">
-          Built on Data, Driven by Edge.
+          Built on Data. Driven by Edge.
         </p>
       </article>
       <SiteFooter />

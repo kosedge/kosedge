@@ -5,7 +5,7 @@ import SiteFooter from "@/components/layout/SiteFooter";
 export const metadata = {
   title: "About",
   description:
-    "KosEdge is a professional multi-sport analytics and handicapping desk. Built on Data, Driven by Edge.",
+    "KosEdge is a professional multi-sport analytics and handicapping desk. Built on Data. Driven by Edge.",
 };
 
 export default function AboutPage() {
@@ -25,7 +25,7 @@ export default function AboutPage() {
           vibes.
         </p>
         <p className="mt-4 text-base font-medium text-kos-gold">
-          Built on Data, Driven by Edge.
+          Built on Data. Driven by Edge.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -223,7 +223,7 @@ export default function AboutPage() {
         </div>
 
         <p className="mt-12 text-base font-medium text-kos-gold">
-          Built on Data, Driven by Edge.
+          Built on Data. Driven by Edge.
         </p>
         <p className="mt-2 text-base text-white/90">Welcome to KosEdge.</p>
       </article>

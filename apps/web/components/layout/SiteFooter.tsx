@@ -8,7 +8,7 @@ const LEGAL_LINKS = [
 ] as const;
 
 export default function SiteFooter({
-  tagline = "Built on Data, Driven by Edge.",
+  tagline = "Built on Data. Driven by Edge.",
 }: {
   tagline?: string;
 }) {

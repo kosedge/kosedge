@@ -6,26 +6,27 @@ import {
 import OverviewSportShell from "@/components/pro/OverviewSportShell";
 import { loadOverviewSlateGames } from "@/lib/overview-slate-games";
 
-export default async function NflOverviewPage() {
-  const desk = getSportDeskConfig("nfl");
-  const content = buildSportOverviewContent("nfl", "NFL");
-  const slate = await loadOverviewSlateGames("nfl");
-  // Weekly Slate section links (Camp / Previews) stay below; elevated slate is Edge Board.
+export default async function MlbOverviewPage() {
+  const desk = getSportDeskConfig("mlb");
+  const content = buildSportOverviewContent("mlb", "MLB");
+  const slate = await loadOverviewSlateGames("mlb");
+
+  // Slate lives at top — drop the duplicate Weekly Slate link wall.
   const sections = buildSportOverviewSections({
-    sportKey: "nfl",
-    base: "/pro/nfl",
-    edgeBoardHref: "/edge-board/nfl",
+    sportKey: "mlb",
+    base: "/pro/mlb",
+    edgeBoardHref: "/edge-board/mlb",
     content,
   }).filter((section) => section.title !== "Weekly Slate");
 
   return (
     <OverviewSportShell
-      sportKey="nfl"
-      sportLabel="NFL"
+      sportKey="mlb"
+      sportLabel="MLB"
       slate={slate}
       sections={sections}
       footerCards={desk.footerCards}
-      toolsSubtitle="Season engine, previews, governance, and schedule tools."
+      toolsSubtitle="Power ratings, odds compare, and MLB research desks."
     />
   );
 }
