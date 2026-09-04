@@ -38,7 +38,8 @@ import {
   type Tag,
 } from "@/lib/flat-rows-to-legacy";
 export type { Tag } from "@/lib/flat-rows-to-legacy";
-export { flatRowsToLegacy };
+// Do NOT re-export flatRowsToLegacy from this client module — RSC edges/slate
+// paths must import the server-safe lib directly (historical hydrate crash).
 
 type Variant = "home" | "full";
 

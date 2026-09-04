@@ -8,7 +8,7 @@ import {
 } from "@/lib/pro-sport-ia";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { SPORTS, supportsPropsFantasy } from "@/lib/sports";
-import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import type { LegacyEdgeBoardRow } from "@/lib/flat-rows-to-legacy";
 
 function buildRow(
   overrides: Partial<LegacyEdgeBoardRow> = {},

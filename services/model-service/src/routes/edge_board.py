@@ -184,7 +184,8 @@ def _open_total(over_under: str, open_book: Optional[Dict[str, Any]]) -> Tuple[s
 async def _fetch_odds_ncaab() -> List[Dict[str, Any]]:
     api_keys = get_odds_api_keys()
     if not api_keys or api_keys[0] == "YOUR_ODDS_API_KEY":
-        raise HTTPException(status_code=500, detail="ODDS_API_KEY is not set")
+        # Client-facing detail must not name env vars / ops setup.
+        raise HTTPException(status_code=500, detail="Odds feed unavailable")
 
     url = f"{ODDS_API_BASE}/sports/{SPORT_KEY_NCAAB}/odds"
     last_error: HTTPException | None = None
@@ -201,17 +202,17 @@ async def _fetch_odds_ncaab() -> List[Dict[str, Any]]:
 
             try:
                 r = await client.get(url, params=params)
-            except httpx.RequestError as e:
+            except httpx.RequestError:
                 last_error = HTTPException(
                     status_code=502,
-                    detail=f"Odds API request failed: {e}",
+                    detail="Odds feed unavailable",
                 )
                 continue
 
             if r.status_code != 200:
                 last_error = HTTPException(
                     status_code=502,
-                    detail=f"Odds API error: {r.status_code} {r.text}",
+                    detail="Odds feed unavailable",
                 )
                 continue
 
@@ -219,7 +220,7 @@ async def _fetch_odds_ncaab() -> List[Dict[str, Any]]:
             if not isinstance(data, list):
                 last_error = HTTPException(
                     status_code=502,
-                    detail="Odds API returned unexpected payload",
+                    detail="Odds feed unavailable",
                 )
                 continue
             return data
@@ -227,7 +228,7 @@ async def _fetch_odds_ncaab() -> List[Dict[str, Any]]:
     if last_error is not None:
         raise last_error
 
-    raise HTTPException(status_code=500, detail="ODDS_API_KEY is not set")
+    raise HTTPException(status_code=500, detail="Odds feed unavailable")
 
 
 @router.get("/ncaam/today")

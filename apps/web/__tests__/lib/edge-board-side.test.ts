@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { flatRowsToLegacy } from "@/components/EdgeBoard";
+import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
 
 describe("edge board side + play action", () => {
   it("favors home when KEI home spread is stiffer than market home", () => {

@@ -7,7 +7,6 @@ import os
 import requests
 
 BASE_URL = "https://api.the-odds-api.com/v4"
-EMBEDDED_ODDS_API_BACKUP_KEY = "90a633a22cbe3597b2bceab5eb665d48"
 
 
 def _env_bool(name: str, default: bool = False) -> bool:
@@ -26,9 +25,6 @@ def _configured_key_pool() -> list[tuple[str, str]]:
         key = (raw_key or "").strip()
         if key and all(existing_key != key for _, existing_key in pairs):
             pairs.append((source, key))
-    if _env_bool("ODDS_API_ALLOW_EMBEDDED_FALLBACK", default=False):
-        if all(existing_key != EMBEDDED_ODDS_API_BACKUP_KEY for _, existing_key in pairs):
-            pairs.append(("embedded", EMBEDDED_ODDS_API_BACKUP_KEY))
     return pairs
 
 
@@ -38,9 +34,14 @@ def _select_odds_api_key_pairs() -> list[tuple[str, str]]:
     by_source = {source: key for source, key in pool}
     if mode == "auto":
         return pool
-    if mode in {"primary", "backup", "embedded"}:
+    if mode in {"primary", "backup"}:
         selected_key = by_source.get(mode)
         return [(mode, selected_key)] if selected_key else []
+    if mode == "embedded":
+        logging.warning(
+            "ODDS_API_KEY_ACTIVE=embedded is retired; use ODDS_API_KEY / ODDS_API_KEY_BACKUP"
+        )
+        return []
     logging.warning("Unknown ODDS_API_KEY_ACTIVE value '%s'; defaulting to auto mode", mode)
     return pool
 
@@ -58,7 +59,6 @@ def odds_key_diagnostics() -> dict[str, object]:
     selected = _select_odds_api_key_pairs()
     return {
         "active_mode": str(os.getenv("ODDS_API_KEY_ACTIVE", "auto")).strip().lower(),
-        "allow_embedded_fallback": _env_bool("ODDS_API_ALLOW_EMBEDDED_FALLBACK", default=False),
         "selected_sources": [source for source, _ in selected],
         "selected_key_count": len(selected),
     }
@@ -67,8 +67,7 @@ def odds_key_diagnostics() -> dict[str, object]:
 def assert_odds_key_present() -> None:
     if not get_odds_api_key():
         raise RuntimeError(
-            "Odds API key missing. Configure ODDS_API_KEY/ODDS_API_KEY_BACKUP, "
-            "or set ODDS_API_ALLOW_EMBEDDED_FALLBACK=true. "
+            "Odds API key missing. Configure ODDS_API_KEY/ODDS_API_KEY_BACKUP. "
             f"diagnostics={odds_key_diagnostics()}"
         )
 

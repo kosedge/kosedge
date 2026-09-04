@@ -2,7 +2,7 @@
 """Pull live basketball_nba odds → odds_raw_nba.json → edge_board_fallback_nba.json.
 
 Preserves prior Open (first capture); refreshes Best/Current.
-Requires ODDS_API_KEY or ODDS_API_KEY_BACKUP (or ODDS_API_ALLOW_EMBEDDED_FALLBACK).
+Requires ODDS_API_KEY or ODDS_API_KEY_BACKUP (env only — no embedded fallback).
 """
 
 from __future__ import annotations
@@ -25,17 +25,7 @@ def _api_key() -> str:
         key = (os.getenv(env_name) or "").strip()
         if key:
             return key
-    if os.getenv("ODDS_API_ALLOW_EMBEDDED_FALLBACK", "").strip().lower() in {
-        "1",
-        "true",
-        "yes",
-        "on",
-    }:
-        # Same embedded fallback as model-service odds_api.py
-        return "90a633a22cbe3597b2bceab5eb665d48"
-    raise SystemExit(
-        "Set ODDS_API_KEY or ODDS_API_KEY_BACKUP (or ODDS_API_ALLOW_EMBEDDED_FALLBACK=true)"
-    )
+    raise SystemExit("Set ODDS_API_KEY or ODDS_API_KEY_BACKUP")
 
 
 def main() -> int:

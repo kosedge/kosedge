@@ -20,17 +20,17 @@ schedule → teams → players → injuries → transactions
        → articles / desk copy (Editor Fact Gate for NEW filings)
 ```
 
-| Stage            | What must be true                                                                 | Typical SoT / provenance                                      |
-| ---------------- | --------------------------------------------------------------------------------- | ------------------------------------------------------------- |
-| Schedule         | Games exist with season/week/date; no orphan odds                                 | League schedule pack / official slate                         |
-| Teams            | Abbr ↔ full name stable                                                           | Team dictionary / season engine team table                    |
-| Players          | Identity ids stable; no invented names                                            | Depth / roster universe                                       |
-| Injuries         | Status stamped with as-of; rumor ≠ SoT                                            | Injury report ingest                                          |
-| Transactions     | Moves stamped; Camp Desk for named claims                                         | Transaction ingest + Camp Desk                                |
-| Market           | Book line with book + as-of; trust gate before edge                               | Odds API cache / warehouse; CFB `trustCfbMarket`              |
-| Model run        | Number carries **run id** and/or **as-of** when required                          | Pack id, bundle stamp, KEI pull timestamp                     |
-| UI               | Display uses same tagger / SoT as Edge Board; no hardcoded PLAY bypass            | `cfbEdgeTag`, NFL decision engine, packaged depth             |
-| Articles         | NEW copy → Editor Fact Gate; filed stamps stay                                    | `docs/writers/EDITOR_FACT_GATE.md`                            |
+| Stage        | What must be true                                                      | Typical SoT / provenance                          |
+| ------------ | ---------------------------------------------------------------------- | ------------------------------------------------- |
+| Schedule     | Games exist with season/week/date; no orphan odds                      | League schedule pack / official slate             |
+| Teams        | Abbr ↔ full name stable                                                | Team dictionary / season engine team table        |
+| Players      | Identity ids stable; no invented names                                 | Depth / roster universe                           |
+| Injuries     | Status stamped with as-of; rumor ≠ SoT                                 | Injury report ingest                              |
+| Transactions | Moves stamped; Camp Desk for named claims                              | Transaction ingest + Camp Desk                    |
+| Market       | Book line with book + as-of; trust gate before edge                    | Odds API cache / warehouse; CFB `trustCfbMarket`  |
+| Model run    | Number carries **run id** and/or **as-of** when required               | Pack id, bundle stamp, KEI pull timestamp         |
+| UI           | Display uses same tagger / SoT as Edge Board; no hardcoded PLAY bypass | `cfbEdgeTag`, NFL decision engine, packaged depth |
+| Articles     | NEW copy → Editor Fact Gate; filed stamps stay                         | `docs/writers/EDITOR_FACT_GATE.md`                |
 
 ---
 
@@ -38,16 +38,16 @@ schedule → teams → players → injuries → transactions
 
 Surfaces that show **model numbers, tags, QBs, or market**. Expand in later steps.
 
-| Route / surface                         | Fields shown                         | SoT / tagger                                              | Provenance required                          |
-| --------------------------------------- | ------------------------------------ | --------------------------------------------------------- | -------------------------------------------- |
-| `/` homepage Edge Board (`variant=home`)| Edge pts + Tag                       | `buildHomePreviewRows` → `cfbEdgeTag`                     | Sit flags; no stamped PLAY                   |
-| `/pro/cfb/edge-board` + assemble API    | KEI, market, edge, tag               | `applyCfbTrustedMarketToRows` + `cfbEdgeTag`              | Trust reason; no PLAY while sit flags false  |
-| `/pro/cfb/edges`                        | Matchup edges                        | Same CFB trusted-market path                              | As-of / assemble provenance when live        |
-| `/pro/*/odds` (Odds Compare)            | Book lines                           | Odds feed                                                 | Empty state must not leak ops/env language   |
-| `/pro/nfl/model` + team overview        | Season model / QB context            | Packaged depth + season-engine launch bundle              | Depth snapshot id; model pack stamp          |
-| `/pro/nfl/teams/[team]/*`               | Depth QB1, camp claims               | `nfl_depth_chart_2026_w1.json` (packaged); Camp Desk live | Snapshot id; Camp as-of                      |
-| NFL Edge Board / fair lines             | Fair, market, action                 | `nfl-edge-board-from-fair-lines` + dead-tier remap        | Lines as-of; publish≡action after remap      |
-| Writer previews / articles              | Market + Model numbers               | Bundle `expected_wins` + street at file time              | Editor Fact Gate; no minted KEI              |
+| Route / surface                          | Fields shown              | SoT / tagger                                              | Provenance required                         |
+| ---------------------------------------- | ------------------------- | --------------------------------------------------------- | ------------------------------------------- |
+| `/` homepage Edge Board (`variant=home`) | Edge pts + Tag            | `buildHomePreviewRows` → `cfbEdgeTag`                     | Sit flags; no stamped PLAY                  |
+| `/pro/cfb/edge-board` + assemble API     | KEI, market, edge, tag    | `applyCfbTrustedMarketToRows` + `cfbEdgeTag`              | Trust reason; no PLAY while sit flags false |
+| `/pro/cfb/edges`                         | Matchup edges             | Same CFB trusted-market path                              | As-of / assemble provenance when live       |
+| `/pro/*/odds` (Odds Compare)             | Book lines                | Odds feed                                                 | Empty state must not leak ops/env language  |
+| `/pro/nfl/model` + team overview         | Season model / QB context | Packaged depth + season-engine launch bundle              | Depth snapshot id; model pack stamp         |
+| `/pro/nfl/teams/[team]/*`                | Depth QB1, camp claims    | `nfl_depth_chart_2026_w1.json` (packaged); Camp Desk live | Snapshot id; Camp as-of                     |
+| NFL Edge Board / fair lines              | Fair, market, action      | `nfl-edge-board-from-fair-lines` + dead-tier remap        | Lines as-of; publish≡action after remap     |
+| Writer previews / articles               | Market + Model numbers    | Bundle `expected_wins` + street at file time              | Editor Fact Gate; no minted KEI             |
 
 ### NFL season-model QB SoT (named for deferred fix)
 
