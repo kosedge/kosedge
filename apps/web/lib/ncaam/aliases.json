@@ -5,11 +5,7 @@
     "nc state": "nc stateate",
     "mount st mary's": "mount state mary's"
   },
-  "omit_aliases": [
-    "miami",
-    "miami university",
-    "miami redhawks"
-  ],
+  "omit_aliases": ["miami", "miami university", "miami redhawks"],
   "aliases": {
     "air force": "air force",
     "air force falcons": "air force",
