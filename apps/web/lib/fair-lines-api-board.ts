@@ -5,6 +5,7 @@
  * - Never invent book prices, KEI, CLV, or as-of clocks.
  * - Prefer HTTP 200 + empty lines + slateStatus over bare 404 when a desk expects JSON.
  * - asOf / oddsAsOf are null unless upstream supplied a real vintage.
+ * - Envelope keys mirror NFL `/api/nfl/fair-lines` where possible (Alex #5).
  */
 
 export const FAIR_LINES_HONESTY_SPORTS = [
@@ -13,6 +14,7 @@ export const FAIR_LINES_HONESTY_SPORTS = [
   "nba",
   "nhl",
   "wnba",
+  "ncaaf", // CFB Odds-API alias
 ] as const;
 
 export type FairLinesHonestySport =
@@ -32,17 +34,38 @@ export const FAIR_LINES_HONEST_EMPTY_STATUSES = new Set([
   "upstream_unreachable",
 ]);
 
+/** NFL-shaped diagnostics — zeros/empty only; never invent book joins. */
+export type FairLinesApiDiagnostics = {
+  oddsFeedStatus: string;
+  oddsFeedError: string | null;
+  oddsEventsSeen: number;
+  marketJoinedCount: number;
+  bookmakers: string[];
+  kosedgeOnly: boolean;
+  oddsPersisted: {
+    eventsPersisted: number;
+    snapshotsInserted: number;
+    historyUpserted: number;
+  };
+};
+
 export type FairLinesApiBoard<TLine = unknown> = {
   sport: string;
+  /** Product season when known — null when not connected (do not invent). */
+  season: number | null;
+  modelVersion: string;
   /** Model / board vintage when known — never request clock. */
   asOf: string | null;
   /** Book odds vintage when known — never request clock. */
   oddsAsOf: string | null;
+  /** Current week when known — null when not connected. */
+  currentWeek: number | null;
   count: number;
   lines: TLine[];
   slateStatus: string;
   message: string;
-  modelVersion: string;
+  window: { daysAhead: number; includePastDays: number };
+  diagnostics: FairLinesApiDiagnostics;
   gameDate?: string;
   error?: string;
 };
@@ -58,6 +81,24 @@ export function fairLinesNoOddsYetMessage(sportLabel: string): string {
   return `${sportLabel}: no odds or projections for this window yet. ${FAIR_LINES_DO_NOT_INVENT}`;
 }
 
+export function emptyFairLinesDiagnostics(
+  oddsFeedStatus = "not_connected",
+): FairLinesApiDiagnostics {
+  return {
+    oddsFeedStatus,
+    oddsFeedError: null,
+    oddsEventsSeen: 0,
+    marketJoinedCount: 0,
+    bookmakers: [],
+    kosedgeOnly: true,
+    oddsPersisted: {
+      eventsPersisted: 0,
+      snapshotsInserted: 0,
+      historyUpserted: 0,
+    },
+  };
+}
+
 export function honestEmptyFairLinesBoard(opts: {
   sport: string;
   slateStatus: string;
@@ -65,23 +106,31 @@ export function honestEmptyFairLinesBoard(opts: {
   modelVersion?: string;
   gameDate?: string;
   error?: string;
+  season?: number | null;
+  currentWeek?: number | null;
 }): FairLinesApiBoard {
   return {
     sport: opts.sport,
+    season: opts.season ?? null,
+    modelVersion: opts.modelVersion ?? "",
     asOf: null,
     oddsAsOf: null,
+    currentWeek: opts.currentWeek ?? null,
     count: 0,
     lines: [],
     slateStatus: opts.slateStatus,
     message: opts.message,
-    modelVersion: opts.modelVersion ?? "",
+    window: { daysAhead: 0, includePastDays: 0 },
+    diagnostics: emptyFairLinesDiagnostics(
+      opts.slateStatus === "not_connected" ? "not_connected" : "unknown",
+    ),
     ...(opts.gameDate ? { gameDate: opts.gameDate } : {}),
     ...(opts.error ? { error: opts.error } : {}),
   };
 }
 
 /**
- * Normalize a sport board into the shared API envelope.
+ * Normalize a sport board into the NFL-shaped API envelope.
  * Preserves real lines; stamps asOf/oddsAsOf only when provided (never Date.now()).
  */
 export function toFairLinesApiBoard<TLine>(opts: {
@@ -95,6 +144,11 @@ export function toFairLinesApiBoard<TLine>(opts: {
   oddsAsOf?: string | null;
   error?: string | null;
   sportLabel?: string;
+  season?: number | null;
+  currentWeek?: number | null;
+  daysAhead?: number;
+  includePastDays?: number;
+  diagnostics?: Partial<FairLinesApiDiagnostics> | null;
 }): FairLinesApiBoard<TLine> {
   const count = opts.lines.length;
   const slateStatus =
@@ -107,15 +161,38 @@ export function toFairLinesApiBoard<TLine>(opts: {
       ? fairLinesNoOddsYetMessage(sportLabel)
       : `${sportLabel} fair-lines board.`);
 
+  const baseDiag = emptyFairLinesDiagnostics(
+    opts.error
+      ? "upstream_error"
+      : count === 0
+        ? "no_odds_yet"
+        : "unknown",
+  );
+  const diagnostics: FairLinesApiDiagnostics = {
+    ...baseDiag,
+    ...(opts.diagnostics ?? {}),
+    oddsPersisted: {
+      ...baseDiag.oddsPersisted,
+      ...(opts.diagnostics?.oddsPersisted ?? {}),
+    },
+  };
+
   return {
     sport: opts.sport,
+    season: opts.season ?? null,
+    modelVersion: opts.modelVersion ?? "",
     asOf: opts.asOf ?? null,
     oddsAsOf: opts.oddsAsOf ?? null,
+    currentWeek: opts.currentWeek ?? null,
     count,
     lines: opts.lines,
     slateStatus,
     message,
-    modelVersion: opts.modelVersion ?? "",
+    window: {
+      daysAhead: opts.daysAhead ?? 0,
+      includePastDays: opts.includePastDays ?? 0,
+    },
+    diagnostics,
     ...(opts.gameDate ? { gameDate: opts.gameDate } : {}),
     ...(opts.error ? { error: opts.error } : {}),
   };

@@ -128,6 +128,17 @@ const nextConfig: NextConfig = {
         permanent: true,
       },
       {
+        // Odds-API / colloquial alias — same CFB fair-lines desk (Alex #5).
+        source: "/pro/ncaaf/kei-lines",
+        destination: "/pro/cfb/fair-lines",
+        permanent: true,
+      },
+      {
+        source: "/pro/ncaaf/fair-lines",
+        destination: "/pro/cfb/fair-lines",
+        permanent: true,
+      },
+      {
         // Edge Board Product Center (#4): canonical public decision center is
         // /edge-board/{sport}. Soft page redirects returned 200 + meta refresh —
         // permanent hop so bookmarks / pro aliases share one URL (query preserved).

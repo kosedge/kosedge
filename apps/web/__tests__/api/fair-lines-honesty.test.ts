@@ -22,6 +22,7 @@ vi.mock("@/lib/wnba-fair-lines", () => ({
 
 import { getProAccessState } from "@/lib/auth/pro";
 import { GET as getCfb } from "@/app/api/cfb/fair-lines/route";
+import { GET as getNcaaf } from "@/app/api/ncaaf/fair-lines/route";
 import { GET as getMlb } from "@/app/api/mlb/fair-lines/route";
 import { GET as getNba } from "@/app/api/nba/fair-lines/route";
 import { GET as getNhl } from "@/app/api/nhl/fair-lines/route";
@@ -32,24 +33,72 @@ import { fetchNhlFairLines } from "@/lib/nhl-fair-lines";
 import { fetchWnbaFairLines } from "@/lib/wnba-fair-lines";
 import { FAIR_LINES_DO_NOT_INVENT } from "@/lib/fair-lines-api-board";
 
+/** NFL-shaped keys customers/API clients may read (Alex #5). */
+const NFL_SHAPED_KEYS = [
+  "sport",
+  "season",
+  "modelVersion",
+  "asOf",
+  "oddsAsOf",
+  "currentWeek",
+  "count",
+  "lines",
+  "slateStatus",
+  "message",
+  "window",
+  "diagnostics",
+] as const;
+
+function expectNflShapedHonestEmpty(body: Record<string, unknown>) {
+  for (const key of NFL_SHAPED_KEYS) {
+    expect(body).toHaveProperty(key);
+  }
+  expect(body.count).toBe(0);
+  expect(body.lines).toEqual([]);
+  expect(body.asOf).toBeNull();
+  expect(body.oddsAsOf).toBeNull();
+  const diag = body.diagnostics as {
+    bookmakers: unknown[];
+    oddsPersisted: {
+      eventsPersisted: number;
+      snapshotsInserted: number;
+      historyUpserted: number;
+    };
+  };
+  expect(diag.bookmakers).toEqual([]);
+  expect(diag.oddsPersisted.eventsPersisted).toBe(0);
+  expect(diag.oddsPersisted.snapshotsInserted).toBe(0);
+  expect(diag.oddsPersisted.historyUpserted).toBe(0);
+}
+
 describe("non-NFL /api/{sport}/fair-lines honesty", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     vi.mocked(getProAccessState).mockResolvedValue("authorized");
   });
 
-  it("CFB returns 200 honest empty not_connected (never invents)", async () => {
-    const res = await getCfb();
+  it("CFB returns 200 NFL-shaped honest empty not_connected", async () => {
+    const res = await getCfb(
+      new Request("http://localhost/api/cfb/fair-lines"),
+    );
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.sport).toBe("cfb");
-    expect(body.count).toBe(0);
-    expect(body.lines).toEqual([]);
-    expect(body.asOf).toBeNull();
-    expect(body.oddsAsOf).toBeNull();
     expect(body.slateStatus).toBe("not_connected");
     expect(body.message).toContain("not connected");
     expect(body.message).toContain(FAIR_LINES_DO_NOT_INVENT);
+    expectNflShapedHonestEmpty(body);
+  });
+
+  it("NCAAF alias returns same honest empty shape (sport=ncaaf)", async () => {
+    const res = await getNcaaf(
+      new Request("http://localhost/api/ncaaf/fair-lines"),
+    );
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.sport).toBe("ncaaf");
+    expect(body.slateStatus).toBe("not_connected");
+    expectNflShapedHonestEmpty(body);
   });
 
   it("MLB empty slate stays empty with null as-of stamps", async () => {
@@ -62,11 +111,9 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
     const res = await getMlb(new Request("http://localhost/api/mlb/fair-lines"));
     const body = await res.json();
     expect(res.status).toBe(200);
-    expect(body.count).toBe(0);
-    expect(body.asOf).toBeNull();
-    expect(body.oddsAsOf).toBeNull();
     expect(body.slateStatus).toBe("no_slate");
     expect(body.message).toContain(FAIR_LINES_DO_NOT_INVENT);
+    expectNflShapedHonestEmpty(body);
   });
 
   it("NBA proxies real lines without inventing asOf", async () => {
@@ -106,6 +153,8 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
     expect(body.asOf).toBeNull();
     expect(body.oddsAsOf).toBeNull();
     expect(body.slateStatus).toBe("ok");
+    expect(body).toHaveProperty("diagnostics");
+    expect(body).toHaveProperty("window");
   });
 
   it("NHL offseason_empty stays honest empty", async () => {
@@ -121,10 +170,8 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
     const res = await getNhl(new Request("http://localhost/api/nhl/fair-lines"));
     const body = await res.json();
     expect(res.status).toBe(200);
-    expect(body.count).toBe(0);
     expect(body.slateStatus).toBe("offseason_empty");
-    expect(body.asOf).toBeNull();
-    expect(body.oddsAsOf).toBeNull();
+    expectNflShapedHonestEmpty(body);
   });
 
   it("WNBA proxies empty without inventing prices", async () => {
@@ -142,15 +189,14 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
     );
     const body = await res.json();
     expect(res.status).toBe(200);
-    expect(body.count).toBe(0);
-    expect(body.lines).toEqual([]);
-    expect(body.asOf).toBeNull();
-    expect(body.oddsAsOf).toBeNull();
+    expectNflShapedHonestEmpty(body);
   });
 
   it("returns 401 when not authorized", async () => {
     vi.mocked(getProAccessState).mockResolvedValue("unauthenticated");
-    const res = await getCfb();
+    const res = await getCfb(
+      new Request("http://localhost/api/cfb/fair-lines"),
+    );
     expect(res.status).toBe(401);
   });
 });

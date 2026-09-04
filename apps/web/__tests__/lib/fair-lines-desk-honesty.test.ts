@@ -20,4 +20,10 @@ describe("fair-lines desk honesty copy", () => {
     expect(honestEmptySlateCopy("not_connected")).toContain("do not invent");
     expect(honestEmptySlateCopy("no_odds_yet")).toContain("no odds yet");
   });
+
+  it("ncaaf kei-lines redirects to cfb fair-lines (Alex #5)", () => {
+    const cfg = readFileSync(join(ROOT, "next.config.ts"), "utf8");
+    expect(cfg).toContain('source: "/pro/ncaaf/kei-lines"');
+    expect(cfg).toContain('destination: "/pro/cfb/fair-lines"');
+  });
 });

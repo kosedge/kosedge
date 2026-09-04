@@ -13,11 +13,11 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 30;
 
 /**
- * Page-data for /pro/cfb/fair-lines.
- * Model-service has no /cfb/fair-lines (404). Return honest empty JSON —
+ * Page-data for /pro/cfb/fair-lines (and Odds-API alias /api/ncaaf/fair-lines).
+ * Model-service has no /cfb/fair-lines (404). Return NFL-shaped honest empty JSON —
  * never invent KEI / book prices / as-of clocks.
  */
-export async function GET() {
+export async function GET(req: Request) {
   const access = await getProAccessState();
   if (access !== "authorized") {
     return NextResponse.json(
@@ -26,11 +26,15 @@ export async function GET() {
     );
   }
 
+  const path = new URL(req.url).pathname.toLowerCase();
+  const sport = path.includes("/ncaaf/") ? "ncaaf" : "cfb";
+  const label = sport === "ncaaf" ? "NCAAF (CFB alias)" : "CFB";
+
   return pageDataJsonResponse(
     honestEmptyFairLinesBoard({
-      sport: "cfb",
+      sport,
       slateStatus: "not_connected",
-      message: fairLinesNotConnectedMessage("CFB"),
+      message: fairLinesNotConnectedMessage(label),
     }),
   );
 }
