@@ -195,10 +195,11 @@ pass for the Lab process.
 ### 8.1 Predictive Quality
 
 **GREEN gate choice (locked, CoS 2026-09-04):** **market-relative comparison only** for
-spread-vs-close MAE. The former absolute OR (`≤ 13.0 pts`) is removed — too loose /
-always-true. v1.0 does **not** use an absolute spread-MAE floor as an alternate OR
-gate. A tight absolute (`≤ 4.0 pts vs close`) is reserved only as a possible **additional
-AND conjunct** in a future protocol bump — not an escape hatch in v1.0.
+spread-vs-close MAE. The former absolute-OR escape hatch on spread-vs-close MAE is
+removed (always-true / too loose) — do not restore any absolute OR alternate. v1.0 does
+**not** use an absolute spread-MAE floor as an alternate OR gate. A tight absolute
+(`≤ 4.0 pts vs close`) is reserved only as a possible **additional AND conjunct** in a
+future protocol bump — not an escape hatch in v1.0.
 
 | Grade        | Criteria (all must hold unless noted)                                                                                                                                                 |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
