@@ -1,0 +1,241 @@
+{
+  "scorecard_version": "ncaam-fair-lab-scorecard-v1.0",
+  "protocol_version": "ncaam-fair-lab-protocol-v1.0",
+  "protocol_doc": "docs/lab/NCAAM_FAIR_LAB_PROTOCOL_v1.md",
+  "scorecard_doc": "docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1.md",
+  "status": "results_filled",
+  "generated_at": "2026-09-04T15:38:48.755601+00:00",
+  "sport": "ncaam",
+  "schedule_sot_lab": "D",
+  "baselines": {
+    "B1": "close_consensus_path_a",
+    "B2": "kenpom_adjem_plus_hca_prior_unknown_honesty"
+  },
+  "primary_window": "test_a",
+  "diagnostic_window": "train_a",
+  "hard_locks": [
+    "no_peek_tune_after_test_a",
+    "no_edge_gt4_shopping",
+    "no_edge_board_populate",
+    "no_play_lean_conf",
+    "kenpom_feed_not_sot",
+    "continuity_prior_unknown_only",
+    "path_a_only",
+    "lab_joins_remain_sot_d",
+    "red_equals_honest_failure_success"
+  ],
+  "frozen_gates": {
+    "breakeven_ats": 0.5238,
+    "min_n_pred_green": 100,
+    "min_n_pred_amber": 50,
+    "mae_amber_tol": 0.15,
+    "min_n_ats": 60,
+    "min_n_clv_green": 100,
+    "clv_pos_min": 0.55,
+    "outcome_cov_green": 0.4,
+    "note": "Gates locked pre-fill; AMBER vocabulary per CoS #14 DAY GO"
+  },
+  "grades": {
+    "predictive_quality": "AMBER",
+    "market_edge_evidence": "AMBER",
+    "evidence_quality": "RED"
+  },
+  "grade_detail": {
+    "predictive_quality": "n=80; B2 MAE 8.8128 vs B1 7.1253 (ratio=1.2368); clears soft AMBER, not market-relative GREEN",
+    "market_edge_evidence": "ATS clears (0.5500 n=80) but CLV/ROI soft (CLV+=0.4286 n_clv=42; ROI=0.055) \u2014 no Edge>4 shopping",
+    "evidence_quality": "outcome coverage too thin for claimed scorecard (n_actual=80, cov=13.14%)"
+  },
+  "subscriber_influence": "INSUFFICIENT EVIDENCE",
+  "subscriber_influence_detail": "Evidence Quality RED or DATA GAP blocks influence claim; numbers reported honestly \u2014 no product flip",
+  "leakage_receipt": {
+    "kenpom_leakage_ok": true,
+    "kenpom_leakage_violations": 0,
+    "settled_forbidden_total": 0
+  },
+  "cuts": {
+    "train_a": {
+      "cut": "train_a",
+      "predictive": {
+        "n_lab_games": 1119,
+        "n_with_actual": 170,
+        "outcome_coverage": 0.1519,
+        "b2_margin_mae": 10.2948,
+        "b2_margin_rmse": 12.6385,
+        "b2_signed_bias": -1.1546,
+        "b1_margin_mae": 8.3882,
+        "b1_margin_rmse": 10.7792,
+        "b1_signed_bias": -0.4423,
+        "market_relative": {
+          "b2_mae_le_b1": false,
+          "b2_vs_b1_ratio": 1.2273
+        },
+        "convention": {
+          "b2": "fair_spread_home = predicted home margin (AdjEM diff + HCA)",
+          "b1": "implied home margin = -b1_consensus_close_spread",
+          "error": "actual_margin - predicted_or_implied_margin"
+        }
+      },
+      "market_edge": {
+        "primary_filter": "full_slate_no_edge_gt4_shopping",
+        "n_ats": 169,
+        "ats": 0.4201,
+        "ats_wins": 71,
+        "roi_minus110": -0.2178,
+        "units_minus110": -36.8,
+        "n_open_honest_with_actual": 170,
+        "open_honest_coverage_on_actuals": 1.0,
+        "n_clv_move": 78,
+        "clv_positive_rate": 0.5641,
+        "mean_clv_move": 0.5329,
+        "side_rule": "bet home iff (fair_margin - open_or_close_implied_margin) > 0",
+        "clv_rule": "home CLV = open_spread - close_spread; away = negate; pushes on zero line move excluded from n_clv_move"
+      },
+      "evidence": {
+        "n_lab_games": 1119,
+        "n_with_fair_spread": 1119,
+        "n_with_actual": 170,
+        "outcome_coverage": 0.1519,
+        "continuity_counts": {
+          "PRIOR": 1119
+        },
+        "settled_forbidden_count": 0,
+        "open_snapshot_honest_n": 1119,
+        "schedule_sot": "D",
+        "espn_schedule_sot_a_note": "PR 477 ESPN Schedule SoT A package exists (slate_complete=false); Lab joins remain Odds event_id + B7 fail-closed for this scorecard"
+      },
+      "manifest": {
+        "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T153604Z.manifest.json",
+        "n_lab_games": 1132,
+        "n_with_fair_spread": 1119,
+        "n_missing_kenpom": 13,
+        "kenpom_leakage_ok": true,
+        "kenpom_leakage_violations": 0,
+        "n_continuity_prior": 1119,
+        "n_continuity_unknown": 0,
+        "n_open_snapshot_honest": 1119
+      }
+    },
+    "test_a": {
+      "cut": "test_a",
+      "predictive": {
+        "n_lab_games": 609,
+        "n_with_actual": 80,
+        "outcome_coverage": 0.1314,
+        "b2_margin_mae": 8.8128,
+        "b2_margin_rmse": 12.0952,
+        "b2_signed_bias": 0.2786,
+        "b1_margin_mae": 7.1253,
+        "b1_margin_rmse": 10.1622,
+        "b1_signed_bias": 0.6217,
+        "market_relative": {
+          "b2_mae_le_b1": false,
+          "b2_vs_b1_ratio": 1.2368
+        },
+        "convention": {
+          "b2": "fair_spread_home = predicted home margin (AdjEM diff + HCA)",
+          "b1": "implied home margin = -b1_consensus_close_spread",
+          "error": "actual_margin - predicted_or_implied_margin"
+        }
+      },
+      "market_edge": {
+        "primary_filter": "full_slate_no_edge_gt4_shopping",
+        "n_ats": 80,
+        "ats": 0.55,
+        "ats_wins": 44,
+        "roi_minus110": 0.055,
+        "units_minus110": 4.4,
+        "n_open_honest_with_actual": 80,
+        "open_honest_coverage_on_actuals": 1.0,
+        "n_clv_move": 42,
+        "clv_positive_rate": 0.4286,
+        "mean_clv_move": -0.2175,
+        "side_rule": "bet home iff (fair_margin - open_or_close_implied_margin) > 0",
+        "clv_rule": "home CLV = open_spread - close_spread; away = negate; pushes on zero line move excluded from n_clv_move"
+      },
+      "evidence": {
+        "n_lab_games": 609,
+        "n_with_fair_spread": 609,
+        "n_with_actual": 80,
+        "outcome_coverage": 0.1314,
+        "continuity_counts": {
+          "PRIOR": 609
+        },
+        "settled_forbidden_count": 0,
+        "open_snapshot_honest_n": 609,
+        "schedule_sot": "D",
+        "espn_schedule_sot_a_note": "PR 477 ESPN Schedule SoT A package exists (slate_complete=false); Lab joins remain Odds event_id + B7 fail-closed for this scorecard"
+      },
+      "manifest": {
+        "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260904T153617Z.manifest.json",
+        "n_lab_games": 616,
+        "n_with_fair_spread": 609,
+        "n_missing_kenpom": 7,
+        "kenpom_leakage_ok": true,
+        "kenpom_leakage_violations": 0,
+        "n_continuity_prior": 609,
+        "n_continuity_unknown": 0,
+        "n_open_snapshot_honest": 609
+      }
+    }
+  },
+  "inputs": {
+    "actual_margins": "/workspace/apps/web/data/processed/actual_margins.parquet",
+    "n_actual_events_owned": 406,
+    "actuals_caveat": "Owned actual_margins.parquet (406 events historically). Methodology notes some SportsData trial margins may be scrambled \u2014 report coverage honestly; do not densify."
+  },
+  "protocol": {
+    "protocol_version": "ncaam-fair-lab-protocol-v1.0",
+    "sport": "ncaam",
+    "schedule_sot": "D",
+    "baselines": {
+      "B1": "close_consensus_path_a",
+      "B2": "kenpom_adjem_plus_hca_prior_unknown_honesty"
+    },
+    "cut_windows": {
+      "universe_path_a": {
+        "start": "2022-11-01",
+        "end": "2024-01-28",
+        "role": "universe"
+      },
+      "train_a": {
+        "start": "2022-11-07",
+        "end": "2023-03-12",
+        "role": "train"
+      },
+      "test_a": {
+        "start": "2023-11-06",
+        "end": "2024-01-28",
+        "role": "test"
+      }
+    },
+    "excluded_pockets": [
+      {
+        "name": "pocket_2025",
+        "start": "2025-11-01",
+        "end": "2025-12-31",
+        "role": "excluded"
+      }
+    ],
+    "hca_default": 2.8696,
+    "uncertainty_sigma": {
+      "PRIOR": 4.0,
+      "UNKNOWN": 6.0,
+      "SETTLED": "FORBIDDEN \u2014 portal model DATA GAP"
+    },
+    "open_timestamp_max_drift_days": 7,
+    "fair_total_method": "kenpom_adj_oe_de_tempo_v1",
+    "hard_not": [
+      "edge_board_populate",
+      "play_lean_conf",
+      "props",
+      "odds_densify_credit_burns",
+      "invent_tips",
+      "kenpom_as_sot",
+      "peek_tune_after_scorecard",
+      "edge_gt_4_shopping",
+      "silent_spread_to_ml",
+      "fake_settled_continuity"
+    ]
+  },
+  "product_side_effects": "none"
+}

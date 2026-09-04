@@ -13,12 +13,14 @@ PASS flips from Lab output (CoS → Ryan decides).
 
 ## Scorecards
 
-| Version | Doc                                                          | Machine JSON                                                                                   |
-| ------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- |
-| v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md) | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json) |
+| Version | Doc                                                                      | Machine JSON                                                                                                       |
+| ------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
+| v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md)             | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json)                     |
+| v1.0    | [`NCAAM_FAIR_LAB_SCORECARD_v1.md`](./NCAAM_FAIR_LAB_SCORECARD_v1.md)     | [`data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json`](../../data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json) |
 
-NCAAM fair scorecard is a **follow-up** after fair materialize — protocol frozen
-first (`data/ops/ncaam-lab-fair-engine-20260904.md`).
+NCAAM fair scorecard fills after protocol-frozen materialize
+(`data/ops/ncaam-lab-fair-engine-20260904.md`,
+`data/ops/ncaam-lab-first-scorecard-20260904.md`). RED = honest success.
 
 ## Machine twins
 
@@ -32,6 +34,8 @@ python3 scripts/lab/nfl_spread_validation_v1.py
 
 # NCAAM Lab fair (research only — no Edge Board writes)
 python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a
+python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut test_a
+python3 apps/web/scripts/lab_ncaam_fair_scorecard.py
 ```
 
 Reads owned ops artifacts only (no Odds API scrapes / densify). Missing series →
