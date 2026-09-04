@@ -142,22 +142,116 @@ function withFallback(value: string | undefined, fallback: string): string {
   return normalized;
 }
 
+function MatchupCards({
+  games,
+  content,
+}: {
+  games: TonightGame[];
+  content: SportScrollerContent;
+}) {
+  return (
+    <div className="-mx-1 overflow-x-auto pb-1">
+      <div className="flex min-w-max gap-3 px-1">
+        {games.map((game) => {
+          const status = getGameStatus(game.row.time);
+          const signal = getSignal(game, content);
+          const bestLine = withFallback(
+            game.row.bestLine.top.label,
+            "Line pending",
+          );
+          const bestTotal = withFallback(
+            game.row.bestOU.top.label,
+            "Total pending",
+          );
+          const gameTime = withFallback(game.row.time, "Time pending");
+          const hasData = hasArticleData(game.row);
+          const statusClass =
+            status === "Live"
+              ? "border-kos-green/45 bg-kos-green/10 text-kos-green"
+              : status === "Final"
+                ? "border-white/20 bg-white/5 text-kos-text/75"
+                : "border-kos-gold/30 bg-kos-gold/10 text-kos-gold";
+
+          const card = (
+            <>
+              <div className="flex items-center justify-between gap-2">
+                <span
+                  className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${statusClass}`}
+                >
+                  {status}
+                </span>
+                <span className="text-xs text-kos-text/60">{gameTime}</span>
+              </div>
+              <div className="mt-3 text-sm font-semibold text-kos-text">
+                {game.row.teamA.name} @ {game.row.teamB.name}
+              </div>
+              <div className="mt-2 text-xs text-kos-text/70">{signal}</div>
+              <div className="mt-3 flex items-center justify-between text-xs">
+                <span className="text-kos-text/60">
+                  Best {bestLine} / {bestTotal}
+                </span>
+                {hasData ? (
+                  <span className="font-semibold text-kos-gold">Preview</span>
+                ) : (
+                  <span className="font-semibold text-kos-text/70">
+                    Data pending
+                  </span>
+                )}
+              </div>
+            </>
+          );
+
+          if (!hasData) {
+            return (
+              <div
+                key={game.slug}
+                className="w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4"
+              >
+                {card}
+              </div>
+            );
+          }
+
+          return (
+            <Link
+              key={game.slug}
+              href={`/pro/articles/${game.slug}`}
+              className="w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4 transition hover:border-kos-gold/45 hover:bg-kos-gold/5"
+            >
+              {card}
+            </Link>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export default function WeeklyGamesScroller({
   games,
   sport,
+  embedded = false,
+  emptyCopy,
 }: {
   games: TonightGame[];
   sport: string;
+  /** When true, omit nested chrome/CTA — parent Overview slate owns hierarchy. */
+  embedded?: boolean;
+  emptyCopy?: string;
 }) {
   const content = getScrollerContent(sport);
+  const resolvedEmpty = emptyCopy ?? content.emptyCopy;
 
   if (!games.length) {
+    if (embedded) {
+      return <p className="text-sm text-kos-text/60">{resolvedEmpty}</p>;
+    }
     return (
       <section className="rounded-2xl border border-sky-400/25 bg-sky-400/8 p-5 sm:p-6 backdrop-blur-xl">
         <h2 className="text-lg font-semibold text-kos-text">
           {content.sectionTitle}
         </h2>
-        <p className="mt-2 text-sm text-kos-text/75">{content.emptyCopy}</p>
+        <p className="mt-2 text-sm text-kos-text/75">{resolvedEmpty}</p>
         {sport === "nfl" ? (
           <Link
             href="/pro/nfl/slate/today"
@@ -168,6 +262,10 @@ export default function WeeklyGamesScroller({
         ) : null}
       </section>
     );
+  }
+
+  if (embedded) {
+    return <MatchupCards games={games} content={content} />;
   }
 
   return (
@@ -189,80 +287,7 @@ export default function WeeklyGamesScroller({
         </Link>
       </div>
 
-      <div className="-mx-1 overflow-x-auto pb-1">
-        <div className="flex min-w-max gap-3 px-1">
-          {games.map((game) => {
-            const status = getGameStatus(game.row.time);
-            const signal = getSignal(game, content);
-            const bestLine = withFallback(
-              game.row.bestLine.top.label,
-              "Line pending",
-            );
-            const bestTotal = withFallback(
-              game.row.bestOU.top.label,
-              "Total pending",
-            );
-            const gameTime = withFallback(game.row.time, "Time pending");
-            const hasData = hasArticleData(game.row);
-            const statusClass =
-              status === "Live"
-                ? "border-kos-green/45 bg-kos-green/10 text-kos-green"
-                : status === "Final"
-                  ? "border-white/20 bg-white/5 text-kos-text/75"
-                  : "border-kos-gold/30 bg-kos-gold/10 text-kos-gold";
-
-            const card = (
-              <>
-                <div className="flex items-center justify-between gap-2">
-                  <span
-                    className={`rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${statusClass}`}
-                  >
-                    {status}
-                  </span>
-                  <span className="text-xs text-kos-text/60">{gameTime}</span>
-                </div>
-                <div className="mt-3 text-sm font-semibold text-kos-text">
-                  {game.row.teamA.name} @ {game.row.teamB.name}
-                </div>
-                <div className="mt-2 text-xs text-kos-text/70">{signal}</div>
-                <div className="mt-3 flex items-center justify-between text-xs">
-                  <span className="text-kos-text/60">
-                    Best {bestLine} / {bestTotal}
-                  </span>
-                  {hasData ? (
-                    <span className="font-semibold text-kos-gold">Preview</span>
-                  ) : (
-                    <span className="font-semibold text-kos-text/70">
-                      Data pending
-                    </span>
-                  )}
-                </div>
-              </>
-            );
-
-            if (!hasData) {
-              return (
-                <div
-                  key={game.slug}
-                  className="w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4"
-                >
-                  {card}
-                </div>
-              );
-            }
-
-            return (
-              <Link
-                key={game.slug}
-                href={`/pro/articles/${game.slug}`}
-                className="w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4 transition hover:border-kos-gold/45 hover:bg-kos-gold/5"
-              >
-                {card}
-              </Link>
-            );
-          })}
-        </div>
-      </div>
+      <MatchupCards games={games} content={content} />
     </section>
   );
 }

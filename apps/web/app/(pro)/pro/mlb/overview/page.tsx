@@ -14,25 +14,35 @@ import OverviewEdgeBoardSlate from "@/components/pro/OverviewEdgeBoardSlate";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 import { loadOverviewSlateGames } from "@/lib/overview-slate-games";
 
-export default async function NflOverviewPage() {
-  const desk = getSportDeskConfig("nfl");
-  const content = buildSportOverviewContent("nfl", "NFL");
-  const tonightGames = await loadOverviewSlateGames("nfl");
-  // Weekly Slate section links (Camp / Previews) stay below; elevated slate is Edge Board.
+export default async function MlbOverviewPage() {
+  const desk = getSportDeskConfig("mlb");
+  const content = buildSportOverviewContent("mlb", "MLB");
+  const tonightGames = await loadOverviewSlateGames("mlb");
+  const edgeBoardHref = "/edge-board/mlb";
+
+  // Slate lives at top — drop the duplicate Weekly Slate link wall.
   const gridSections = buildSportOverviewSections({
-    sportKey: "nfl",
-    base: "/pro/nfl",
-    edgeBoardHref: "/edge-board/nfl",
+    sportKey: "mlb",
+    base: "/pro/mlb",
+    edgeBoardHref,
     content,
   }).filter((section) => section.title !== "Weekly Slate");
 
+  const footerCards = desk.footerCards;
+  const footerCols =
+    footerCards.length >= 5
+      ? "sm:grid-cols-2 lg:grid-cols-3"
+      : footerCards.length >= 3
+        ? "sm:grid-cols-2 lg:grid-cols-3"
+        : "sm:grid-cols-2";
+
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <OverviewPageHeader sportLabel="NFL" />
+      <OverviewPageHeader sportLabel="MLB" />
 
-      <OverviewEdgeBoardSlate sport="nfl" games={tonightGames} />
+      <OverviewEdgeBoardSlate sport="mlb" games={tonightGames} />
 
-      {/* Betting Desk / Fantasy / Team Intel / Model Governance */}
+      {/* Betting Desk / League Intel (SP & bullpen) / Model Governance */}
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {gridSections.map((section) => (
           <SportOverviewSection
@@ -42,18 +52,26 @@ export default async function NflOverviewPage() {
             links={section.links}
           />
         ))}
+        <Link
+          href="/insights/sports/mlb"
+          className="rounded-2xl border border-kos-gold/25 bg-kos-gold/5 p-5 transition hover:border-kos-gold/45"
+        >
+          <h3 className="font-semibold text-kos-gold">Insights</h3>
+          <p className="mt-2 text-sm text-kos-text/70">
+            Desk notes and doctrine for MLB — This Week and house rules.
+          </p>
+        </Link>
       </div>
 
-      {/* Bottom 3×2 research tools */}
       <section id="tools" className="mt-8 scroll-mt-28">
         <h2 className="text-xl font-semibold tracking-tight text-kos-text">
           Research tools
         </h2>
         <p className="mt-1 text-sm text-kos-text/65">
-          Season engine, previews, governance, and schedule tools.
+          Power ratings, odds compare, and MLB research desks.
         </p>
-        <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {desk.footerCards.map((card) => (
+        <div className={`mt-4 grid gap-4 ${footerCols}`}>
+          {footerCards.map((card) => (
             <Link
               key={card.title}
               href={card.href}

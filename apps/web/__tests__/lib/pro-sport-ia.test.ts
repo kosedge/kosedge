@@ -232,15 +232,15 @@ describe("pro sport IA", () => {
     expect(fantasy?.subtitle).toMatch(/educational guillotine/i);
   });
 
-  it("labels NFL Overview matchup briefs as pending (not a finished brief desk)", () => {
+  it("keeps NFL Overview on shared Edge Board slate (no redundant Weekly Slate hero)", () => {
     const src = readFileSync(
       path.join(__dirname, "../../app/(pro)/pro/nfl/overview/page.tsx"),
       "utf8",
     );
-    expect(src).toMatch(/matchup briefs pending/i);
-    expect(src).not.toMatch(
-      /Matchup briefs, slate snapshot, and game cards — the weekly desk/,
-    );
+    expect(src).toMatch(/OverviewEdgeBoardSlate/);
+    expect(src).toMatch(/OverviewPageHeader/);
+    expect(src).not.toMatch(/Open Weekly Slate/);
+    expect(src).not.toMatch(/matchup briefs pending/i);
   });
 
   it("keeps Guillotine destination honest: educational lists, not weekly elimination/waiver", () => {
