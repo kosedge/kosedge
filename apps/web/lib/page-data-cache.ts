@@ -27,14 +27,22 @@ export type PageDataBoardBody = {
 /**
  * Never cache 503/504, auth failures, transport errors, or true-empty boards.
  * Cached bodies must already carry oddsAsOf / linesAsOf from upstream — never Date.now().
+ *
+ * Vercel CDN strip (GO-1b / GO-1c): if only `Cache-Control` is set, Vercel strips
+ * `s-maxage` and `stale-while-revalidate` from the client-visible header (leaving
+ * bare `public`) while still caching at the edge. Set matching targeted
+ * `CDN-Cache-Control` so the full PAGE_DATA_CACHE_CONTROL survives on the wire.
+ * @see https://vercel.com/docs/caching/cdn-cache
  */
 export function pageDataCacheHeaders(
   decision: PageDataCacheDecision,
 ): Record<string, string> {
+  const value = decision.cacheable
+    ? PAGE_DATA_CACHE_CONTROL
+    : PAGE_DATA_NO_STORE;
   return {
-    "Cache-Control": decision.cacheable
-      ? PAGE_DATA_CACHE_CONTROL
-      : PAGE_DATA_NO_STORE,
+    "Cache-Control": value,
+    "CDN-Cache-Control": value,
   };
 }
 
