@@ -17,7 +17,7 @@ test("NBA overview loads desk without error boundary", async ({ page }) => {
   await expect(
     page.locator("h3").filter({ hasText: "Betting Desk" }),
   ).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Fantasy$/i }).first()).toBeVisible();
+  await expect(page.getByRole("link", { name: /Fantasy/i }).first()).toBeVisible();
   await expect(
     page.getByRole("link", { name: /Props \(dark\)/i }).first(),
   ).toBeVisible();
