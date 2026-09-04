@@ -23,22 +23,24 @@
 | B7.2 | ≥50 odds names → unique team_id OR explicit omit        | **PASS**                                           | `b7-odds-sample.json` has 55 resolve rows with unique team_ids + explicit omit rows for bare Miami.                                                                           |
 | B7.3 | Zero production publish paths call `odds_team_to_short` | **PASS**                                           | Cutover: `project_future_kei_lines.py`, `merge_games_ensemble.py`, `build_schedule_from_odds.py`, `build_actual_margins.py`, `join_and_backtest.py`. Source-lock in B7 tests. |
 | B7.4 | Assemble/API reject `sport=cbb`                         | **PASS**                                           | Assemble returns **400** `Retired sport key` / `use: "ncaam"` via `isRetiredNcaamSportKey`. Prisma Sport comments no longer say `cbb`.                                        |
-| B7.5 | Named **Schedule SoT** for future game_id joins         | **DATA GAP** (documented; does not block identity) | See below.                                                                                                                                                                    |
+| B7.5 | Named **Schedule SoT** for future game_id joins         | **Option A shipped** (2026-09-04) — see schedule ops note | ESPN scoreboard packs + reader; Lab still on Odds `event_id` (D) until evidenced E hybrid.                                                                                   |
 
-## Schedule SoT (B7.5) — cite / gap
+## Schedule SoT (B7.5) — cite
 
 **CFB (exists):** ESPN team-schedule SoT — `official_schedule.py` / packaged `cfb_official_schedule_2026.json` (game_id + names).
 
 **NFL (exists):** Canonical schedule JSON + ops notes under `data/ops/nfl-canonical-schedule-*`.
 
-**NCAAM (gap):** There is **no** named Schedule SoT with stable `game_id` for warehouse joins.
+**NCAAM (Option A — 2026-09-04):** ESPN scoreboard Schedule SoT — `data/ops/ncaam-espn-schedule-sot-20260904.md`.
 
-Closest today (not a Schedule SoT):
+- Reader: `services/model-service/src/services/ncaam_schedule/official_schedule.py`
+- Packs: `ncaam_official_schedule_2022_23.json` + early `2023_24` (Lab tip window)
+- Lab interim joins still use Odds `event_id` (D); ESPN `game_id` + null `odds_event_id` stubs only
 
-- Odds-derived schedule grain: `apps/web/src/build_schedule_from_odds.py` → `event_id` + `game_date` + `home_team_norm` / `away_team_norm`
-- Methodology join key (date + normalized teams): `docs/CBB_KEI_MODEL_RUN_AND_METHODOLOGY.md`
+Closest Odds grain (still Lab D join — not Schedule SoT):
 
-**Do not invent** a schedule system in this identity PR. Future game_id joins need an explicit NCAAM Schedule SoT decision (ESPN / NCAA / SportsData / Odds event_id promotion) before publish-on-schedule.
+- Odds-derived: `apps/web/src/build_schedule_from_odds.py` → `event_id` + norms
+- Methodology join key: `docs/CBB_KEI_MODEL_RUN_AND_METHODOLOGY.md`
 
 ## Hard rules locked in this slice
 
