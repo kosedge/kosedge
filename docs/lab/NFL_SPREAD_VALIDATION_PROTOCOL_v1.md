@@ -99,11 +99,11 @@ Each pillar receives exactly one of: **GREEN** / **YELLOW** / **RED** /
 
 ### 4.1 Predictive Quality
 
-| Role      | Metric                                                                                    |
-| --------- | ----------------------------------------------------------------------------------------- |
-| Primary   | Spread **MAE vs closing line** (model/KEI home spread vs close); lower is better          |
-| Secondary | Margin MAE vs final score differential; Brier on home cover probability (if WP published) |
-| Reporting | Bias (signed mean error) reported but not grade-primary                                   |
+| Role      | Metric                                                                                                                                                  |
+| --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Primary   | Spread **MAE vs closing line**, graded **market-relative only** (model/KEI MAE ≤ market-implied benchmark MAE). No absolute-pt OR escape hatch in v1.0. |
+| Secondary | Margin MAE vs final score differential (enterprise echo ≤9.5 is secondary, not a GREEN alternate); Brier on home cover probability (if WP published)    |
+| Reporting | Bias (signed mean error) reported but not grade-primary; absolute spread-vs-close MAE reported but does not gate GREEN in v1.0                          |
 
 ### 4.2 Market Edge Evidence
 
@@ -194,14 +194,22 @@ pass for the Lab process.
 
 ### 8.1 Predictive Quality
 
-| Grade        | Criteria (all must hold unless noted)                                                                                                                                                  |
-| ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| GREEN        | Overall n≥200; model/KEI spread MAE ≤ market-implied benchmark MAE **or** ≤ 13.0 pts absolute; margin MAE ≤ 9.5; no catastrophic bias (\|mean signed error\| ≤ 2.0 pts on `all_sides`) |
-| YELLOW       | n≥100 and primary MAE within 15% of market benchmark **or** margin MAE ≤ 10.5; else thin-sample caution                                                                                |
-| RED          | n≥100 and model spread MAE worse than market by >15% **and** margin MAE > 10.5; or systematic bias \|mean error\| > 3.0 pts                                                            |
-| N/A—DATA GAP | Closing lines or finals missing for ≥20% of intended slate                                                                                                                             |
+**GREEN gate choice (locked, CoS 2026-09-04):** **market-relative comparison only** for
+spread-vs-close MAE. The former absolute OR (`≤ 13.0 pts`) is removed — too loose /
+always-true. v1.0 does **not** use an absolute spread-MAE floor as an alternate OR
+gate. A tight absolute (`≤ 4.0 pts vs close`) is reserved only as a possible **additional
+AND conjunct** in a future protocol bump — not an escape hatch in v1.0.
 
-_(MAE floors 9.5 / 10.5 echo enterprise supervised-holdout bars for margin/total; spread-vs-close MAE uses market-relative comparison as primary.)_
+| Grade        | Criteria (all must hold unless noted)                                                                                                                                                 |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| GREEN        | Overall n≥200; model/KEI spread MAE ≤ market-implied benchmark MAE (**market-relative only** — no absolute OR); no catastrophic bias (\|mean signed error\| ≤ 2.0 pts on `all_sides`) |
+| YELLOW       | n≥100 and primary MAE within 15% of market benchmark **or** margin MAE ≤ 10.5; else thin-sample caution                                                                               |
+| RED          | n≥100 and model spread MAE worse than market by >15% **and** margin MAE > 10.5; or systematic bias \|mean error\| > 3.0 pts                                                           |
+| N/A—DATA GAP | Closing lines or finals missing for ≥20% of intended slate                                                                                                                            |
+
+_Margin MAE ≤ 9.5 (enterprise supervised-holdout echo) is **secondary** for Predictive
+Quality — report it; it does not alone carry or substitute for the market-relative GREEN
+gate. Absolute spread-vs-close MAE is reported for transparency only in v1.0._
 
 ### 8.2 Market Edge Evidence
 
