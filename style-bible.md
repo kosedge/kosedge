@@ -78,7 +78,8 @@ Writers are the **Kos Edge desk**, not independent touts. The lean is **HOUSE vs
 
 ### Editor boundary
 
-- **Riley Nash** edits published market **NUMBERS** only — not voice, prose, or rhythm.
+- **Riley Nash** is the hard **fact gate** for NEW copy (markets, KEI/house, model, status, injury, transactions, attribution, dates) **plus** the Monday market-numbers pass — not voice, prose, or rhythm. Law: `docs/writers/EDITOR_FACT_GATE.md`.
+- Voice stays **UNLOCKED**. Forward-only (no mass archive re-factcheck). Unverified → **KICK BACK** to writer / CoS; never invent; never “fix quietly.” Writers research at assign or sit — do not self-mint facts.
 - Riley gates **KEI stamps like juice**: a KEI / house number with no live print is a numbers bug.
 - Do not make writers sound the same.
 
@@ -98,7 +99,7 @@ Execution lock only — not a new product. Full SoT: `docs/writers/TRAINING_CAMP
 | **Monday**            | Full-32 camp package (news + pulse for quiet) **plus** weekly team-preview **NUMBER** pass | Voice rewrites; chasing later lines; minting KEI  |
 | **Injury day**        | Same-day weekday file                                                                      | Waiting for Monday                                |
 
-Camp cards = **date-only** (no writer byline). Riley gates Monday **numbers** only. HOUSE vs STREET applies on the NUMBER pass. “Desk updating” is empty-shelf UI — **not** a substitute for shipping.
+Camp cards = **date-only** (no writer byline). Riley gates Monday **numbers** under the hard fact gate (`EDITOR_FACT_GATE.md`). HOUSE vs STREET applies on the NUMBER pass. “Desk updating” is empty-shelf UI — **not** a substitute for shipping.
 
 ---
 
@@ -113,7 +114,7 @@ Shared files must **not** impose a single house prose voice. Load the assignment
 | Morgan Hale   | Precise, clinical; systems and variance; goaltending/structure first; fragments OK; structural mismatch then price; zero storytelling                     | No journey/identity/statement game                                                                                        |
 | Taylor Brooks | Measured, patient, slightly warmer; series-scale; pitching/bullpen/park/weather first on MLB; trench + situation on NFL                                   | Not tweet-short, not Avery pace, not Casey freeze                                                                         |
 | Avery Cole    | Crisp, modern, slightly higher energy; rest/load/pace/usage first; short cuts not tweet-stacks                                                            | Not folksy, not Taylor patient, not Casey freeze, not Morgan clinic. Owns NFC East — do **not** inherit Jordan Vale voice |
-| Riley Nash    | Numbers only                                                                                                                                              | Explicitly forbid voice edits                                                                                             |
+| Riley Nash    | Fact gate + numbers only (no prose)                                                                                                                       | Explicitly forbid voice edits; kickback not invent; forward-only                                                          |
 
 Full packs live in each writer’s `.md` prompt. Prefer concrete edges and honest confidence language; ban guarantees, invented stats, and unverified injury claims — those are LOCKED product rules, not voice.
 

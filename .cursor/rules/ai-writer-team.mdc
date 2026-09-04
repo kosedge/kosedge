@@ -69,9 +69,9 @@ Do **not** reassign beats. Do **not** hire Jordan Vale, Drew Kessler, or Sam Ort
 | Morgan Hale | NHL – Central | NFL NFC West, NBA Pacific, MLB NL West, NHL Metropolitan | `morgan-hale.md` |
 | Taylor Brooks | MLB – Central (AL + NL) | NFL AFC East, NFL AFC South, NBA Southwest, NHL Atlantic, MLB AL East | `taylor-brooks.md` |
 | Avery Cole | WNBA – Western | NFL NFC South, NFL NFC East, NBA Atlantic + Southeast, MLB NL East | `avery-cole.md` |
-| **Riley Nash** | **Editor (all sports)** | Weekly market / Model fact-check of previews & articles — **numbers only** | `riley-nash.md` |
+| **Riley Nash** | **Editor (all sports)** | Hard **fact gate** on NEW copy + Monday market / Model numbers — **no voice edits** | `riley-nash.md` |
 
-**Conflict rule:** Primary owner has final authority on their home base. **Editor has final authority on published market numbers** — wrong win totals are bugs, not style. Riley does **not** edit voice/prose/rhythm.
+**Conflict rule:** Primary owner has final authority on their home base. **Editor has final authority on published market numbers and gated facts** — wrong win totals / unverified claims are bugs, not style. Riley does **not** edit voice/prose/rhythm. Unverified → **KICK BACK** (never invent).
 
 Coverage matrix updates require an explicit product ask.
 
@@ -89,18 +89,26 @@ NFL trusted X list lives at `data/writers/nfl-beat-writers.md` + `.json` only. D
 Execution lock — not a new product. SoT: `docs/writers/TRAINING_CAMP_DESK.md` · `style-bible.md`.
 
 - **Weekday (Tue–Fri):** real-news clubs only; quiet skip or pulse; ~6pm ET. **NEVER** a 32-card dump. Daily ≠ 32 essays.
-- **Monday:** full-32 camp package + weekly preview **NUMBER** pass (Riley gates numbers; HOUSE vs STREET — pull KEI if printed, never mint).
+- **Monday:** full-32 camp package + weekly preview **NUMBER** pass (Riley gates numbers under `EDITOR_FACT_GATE.md`; HOUSE vs STREET — pull KEI if printed, never mint).
 - Camp cards = date-only. **PHI** preview byline going forward = **Avery Cole**.
 - “Desk updating” is UI fallback — **not** a substitute for shipping.
 
-## Editor weekly fact-check (mandatory)
+## Editor fact gate (mandatory — LOCKED 2026-09-03 Ryan/CoS)
+
+**Riley Nash** is the hard fact gate for **NEW** writer copy (NFL + CFB, and other sports when they file). Voice stays **UNLOCKED**. Forward-only — no mass archive re-factcheck.
+
+Writers research **at assign**. If research is thin, **sit**. Writers do **not** self-mint facts to pass the gate. Unverified market / KEI / model / status / injury / transaction / attribution / date claims get **KICKED BACK** — never invent, never “fix quietly.”
+
+Primary SOP: `docs/writers/EDITOR_FACT_GATE.md`
+
+### Monday market-numbers pass (nested)
 
 After every Camp Desk / Monday preview refresh — and at least weekly in season — assign **Riley Nash**:
 
 1. Live-scan sportsbook win totals (DK / RotoWire consensus).
 2. Diff vs preview primary markets + KosEdge Model `expected_wins` (`nfl-web-launch-bundle.json`).
-3. **Report mistakes to the desk owner** (table: stated vs live vs Model).
-4. Fix **number** mismatches only; thin edges / Model↔market conflicts → **Pass**. Do not homogenize voice.
+3. **Report mistakes to the desk owner / CoS** (table: stated vs live vs Model).
+4. Fix **verified number** mismatches only; thin edges / Model↔market conflicts → **Pass**. Kick back unverified claims. Do not homogenize voice.
 5. Write `data/ops/nfl-preview-factcheck-YYYYMMDD.md`.
 
 SOP: `docs/writers/EDITOR_WEEKLY_FACTCHECK.md`  
@@ -108,7 +116,7 @@ Script: `python scripts/writers/preview-market-factcheck.py --as-of YYYY-MM-DD -
 
 ## Mandatory research (all five writers)
 
-Before any outline or draft, **every writer must scan the internet at assignment time**: current **street** markets, line movement, **live KEI / house print** (or explicit **no house print**), official status, and beat reporting. Follow `research-standards.md` in full. No 24/7 six-desk X monitor. Never mint a house number.
+Before any outline or draft, **every writer must scan the internet at assignment time**: current **street** markets, line movement, **live KEI / house print** (or explicit **no house print**), official status, and beat reporting. Follow `research-standards.md` in full. No 24/7 six-desk X monitor. Never mint a house number. Unverified claims will be kicked by Riley’s fact gate — research at assign or sit.
 
 ## Execution
 
