@@ -1,4 +1,4 @@
-import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import type { LegacyEdgeBoardRow } from "@/lib/flat-rows-to-legacy";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { supportsPropsFantasy } from "@/lib/sports";

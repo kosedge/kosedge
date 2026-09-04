@@ -1,4 +1,4 @@
-import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import type { LegacyEdgeBoardRow } from "@/lib/flat-rows-to-legacy";
 import { hasArticleData } from "@/lib/pro-sport-ia";
 
 type SportContent = {

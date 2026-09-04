@@ -13,6 +13,7 @@ import {
 } from "@/lib/nfl-dead-tiers";
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
 import type { StatDrop } from "@/lib/edge-board-stat-drop";
+import { buildHomePreviewRows } from "@/lib/edge-board-home-preview";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -37,7 +38,8 @@ import {
   type Tag,
 } from "@/lib/flat-rows-to-legacy";
 export type { Tag } from "@/lib/flat-rows-to-legacy";
-export { flatRowsToLegacy };
+// Do NOT re-export flatRowsToLegacy from this client module — RSC edges/slate
+// paths must import the server-safe lib directly (historical hydrate crash).
 
 type Variant = "home" | "full";
 
@@ -47,62 +49,10 @@ const EMPTY_PAIR: PricePair = {
 };
 
 /**
- * Homepage eye-catcher only — three stamped CFB Week 1 rows (2 PLAY + 1 PASS).
- * Do not wire the full live board here (would dump huge dogs and break the mix).
+ * Homepage eye-catcher — stamped CFB Week 1 chrome; tags via `cfbEdgeTag`
+ * (sit-aware). Do not hardcode PLAY. Full live board stays off the hero.
  */
-const homePreviewRows: LegacyEdgeBoardRow[] = [
-  {
-    id: "home-smu-fsu",
-    teamA: { name: "SMU", site: "Away" },
-    teamB: { name: "FSU", site: "Home" },
-    openOU: EMPTY_PAIR,
-    openLine: EMPTY_PAIR,
-    bestLine: {
-      top: { label: "SMU -3", juice: "—" },
-      bottom: { label: "—", juice: "—" },
-    },
-    bestOU: {
-      top: { label: "o53.5", juice: "—" },
-      bottom: { label: "—", juice: "—" },
-    },
-    edgeLineNum: 5.4,
-    tagLine: "PLAY",
-  },
-  {
-    id: "home-unlv-hawaii",
-    teamA: { name: "UNLV", site: "Away" },
-    teamB: { name: "Hawaii", site: "Home" },
-    openOU: EMPTY_PAIR,
-    openLine: EMPTY_PAIR,
-    bestLine: {
-      top: { label: "HAW +2.5", juice: "—" },
-      bottom: { label: "—", juice: "—" },
-    },
-    bestOU: {
-      top: { label: "o58.5", juice: "—" },
-      bottom: { label: "—", juice: "—" },
-    },
-    edgeLineNum: 5.5,
-    tagLine: "PLAY",
-  },
-  {
-    id: "home-sjsu-emu",
-    teamA: { name: "SJSU", site: "Away" },
-    teamB: { name: "E. Michigan", site: "Home" },
-    openOU: EMPTY_PAIR,
-    openLine: EMPTY_PAIR,
-    bestLine: {
-      top: { label: "SJSU +3.5", juice: "—" },
-      bottom: { label: "—", juice: "—" },
-    },
-    bestOU: {
-      top: { label: "o56.5", juice: "—" },
-      bottom: { label: "—", juice: "—" },
-    },
-    edgeLineNum: 1.4,
-    tagLine: "PASS",
-  },
-];
+const homePreviewRows = buildHomePreviewRows();
 
 /** Short team label for dense board cells (last word of full name). */
 

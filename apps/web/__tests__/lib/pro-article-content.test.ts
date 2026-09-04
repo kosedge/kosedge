@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { LegacyEdgeBoardRow } from "@/components/EdgeBoard";
+import type { LegacyEdgeBoardRow } from "@/lib/flat-rows-to-legacy";
 import { buildProArticleContent } from "@/lib/pro-article-content";
 
 function buildRow(

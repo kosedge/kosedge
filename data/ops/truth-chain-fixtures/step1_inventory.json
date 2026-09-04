@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "name": "truth-chain-step1-inventory",
+  "as_of": "2026-09-04T00:00:00Z",
+  "notes": "Fixture-only CI entry. No live prod secrets. Expand surfaces in later steps.",
+  "surfaces": [
+    {
+      "id": "home-edge-board",
+      "route": "/",
+      "component": "apps/web/components/EdgeBoard.tsx",
+      "builder": "apps/web/lib/edge-board-home-preview.ts",
+      "fields": ["edgeLineNum", "tagLine"],
+      "sot": "cfbEdgeTag via buildHomePreviewRows",
+      "numbers": [
+        {
+          "name": "smu_fsu_spread_edge",
+          "value": 5.4,
+          "tag": "PASS",
+          "requires_run_id": false,
+          "requires_as_of": false,
+          "provenance": {
+            "tagger": "cfbEdgeTag",
+            "market": "spread",
+            "sit_flags": "CFB_SPREAD_PLAY_ELIGIBLE=false"
+          }
+        },
+        {
+          "name": "unlv_hawaii_spread_edge",
+          "value": 5.5,
+          "tag": "PASS",
+          "requires_run_id": false,
+          "requires_as_of": false,
+          "provenance": {
+            "tagger": "cfbEdgeTag",
+            "market": "spread",
+            "sit_flags": "CFB_SPREAD_PLAY_ELIGIBLE=false"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cfb-assemble-board",
+      "route": "/pro/cfb/edge-board",
+      "api": "/api/edge-board/cfb/assemble",
+      "fields": ["kei", "best", "edge", "tag"],
+      "sot": "applyCfbTrustedMarketToRows + cfbEdgeTag",
+      "numbers": [
+        {
+          "name": "example_trusted_spread_edge",
+          "value": 4.1,
+          "tag": "PASS",
+          "requires_run_id": true,
+          "requires_as_of": true,
+          "run_id": "fixture-cfb-assemble-run-001",
+          "as_of": "2026-09-01T16:00:00Z",
+          "provenance": {
+            "tagger": "cfbEdgeTag",
+            "trust": "best"
+          }
+        }
+      ]
+    },
+    {
+      "id": "nfl-depth-qb1",
+      "route": "/pro/nfl/teams/[team]/depth-chart",
+      "fields": ["player_name", "depth_order"],
+      "sot": "services/model-service/.../nfl_depth_chart_2026_w1.json",
+      "numbers": [
+        {
+          "name": "atl_qb1",
+          "value": "Tua Tagovailoa",
+          "requires_run_id": true,
+          "requires_as_of": false,
+          "run_id": "nfl-depth-2026-w1-20260813T120000Z",
+          "provenance": {
+            "snapshot_id": "nfl-depth-2026-w1-20260813T120000Z",
+            "source": "packaged-from-nfl_depth_chart_2026_w1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "odds-compare-empty-state",
+      "route": "/pro/*/odds",
+      "component": "apps/web/components/OddsCompareBoard.tsx",
+      "fields": ["empty_state_copy"],
+      "sot": "customer-facing empty state (no ops/env language)",
+      "numbers": []
+    }
+  ]
+}
