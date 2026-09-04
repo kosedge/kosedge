@@ -132,8 +132,9 @@ describe("CFB spread PLAY sit (tagger only)", () => {
     expect(cfbEdgeTag(3.0, "total")).toBe("LEAN");
   });
 
-  it("Edge Board Tag Line uses spread sit (flatRowsToLegacy)", () => {
-    // FRES@USC-class: home-signed KEI −29.8 vs away +22.5 → home −22.5 → |7.3|.
+  it("Edge Board Tag Line does not invent tags when assemble omits publishTag", () => {
+    // FRES@USC-class edge — sit tests cover cfbEdgeTag; Edge Board stays blank
+    // until assemble ships publishTag (live Week 1: 0 tags on 164 rows).
     const spreadPlay = flatRowsToLegacy(
       [
         {
@@ -162,14 +163,14 @@ describe("CFB spread PLAY sit (tagger only)", () => {
       "cfb",
       1,
     );
-    expect(spreadPlay[0]?.tagLine).toBe("PASS");
+    expect(spreadPlay[0]?.tagLine).toBeUndefined();
+    expect(spreadPlay[0]?.tagOU).toBeUndefined();
     expect(Math.abs(spreadPlay[0]?.edgeLineNum ?? 0)).toBeGreaterThanOrEqual(
       CFB_PLAY_EDGE_PTS,
     );
-    expect(spreadPlay[0]?.tagOU).toBe("PASS");
 
-    // LEAN band still LEAN on spreads.
-    const leanRows = flatRowsToLegacy(
+    // When assemble does publish, honor it (no client remap invent).
+    const published = flatRowsToLegacy(
       [
         {
           market: "Spread",
@@ -181,6 +182,7 @@ describe("CFB spread PLAY sit (tagger only)", () => {
           bookKey: "hardrockbet",
           book: "Hard Rock Bet",
           cfbMarketTrusted: true,
+          publishTag: "LEAN",
         },
         {
           market: "Total",
@@ -192,16 +194,18 @@ describe("CFB spread PLAY sit (tagger only)", () => {
           bookKey: "hardrockbet",
           book: "Hard Rock Bet",
           cfbMarketTrusted: true,
+          publishTag: "PASS",
         },
       ],
       "cfb",
       1,
     );
-    expect(leanRows[0]?.tagLine).toBe("LEAN");
-    expect(Math.abs(leanRows[0]?.edgeLineNum ?? 0)).toBeGreaterThanOrEqual(
+    expect(published[0]?.tagLine).toBe("LEAN");
+    expect(published[0]?.tagOU).toBe("PASS");
+    expect(Math.abs(published[0]?.edgeLineNum ?? 0)).toBeGreaterThanOrEqual(
       CFB_LEAN_EDGE_PTS,
     );
-    expect(Math.abs(leanRows[0]?.edgeLineNum ?? 0)).toBeLessThan(
+    expect(Math.abs(published[0]?.edgeLineNum ?? 0)).toBeLessThan(
       CFB_PLAY_EDGE_PTS,
     );
   });

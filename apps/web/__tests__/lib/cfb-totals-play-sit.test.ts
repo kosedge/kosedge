@@ -118,7 +118,7 @@ describe("CFB totals PLAY sit (tagger only)", () => {
     expect(cfbEdgeTag(2.0, "spread")).toBe("PASS");
   });
 
-  it("Edge Board Tag O/U uses totals sit (flatRowsToLegacy)", () => {
+  it("Edge Board Tag O/U does not invent tags when assemble omits publishTag", () => {
     const mkt = 52.5;
     const playKei = mkt + 5.1; // BALL@OSU-class Over
     const leanKei = mkt + 3.8; // UCLA@Cal-class Over
@@ -150,7 +150,7 @@ describe("CFB totals PLAY sit (tagger only)", () => {
       "cfb",
       1,
     );
-    expect(playRows[0]?.tagOU).toBe("PASS");
+    expect(playRows[0]?.tagOU).toBeUndefined();
     expect(playRows[0]?.edgeOUNum).toBeCloseTo(5.1, 5);
 
     const leanRows = flatRowsToLegacy(
@@ -176,6 +176,7 @@ describe("CFB totals PLAY sit (tagger only)", () => {
           bookKey: "fanduel",
           book: "FanDuel",
           cfbMarketTrusted: true,
+          publishTag: "LEAN",
         },
       ],
       "cfb",
@@ -184,7 +185,7 @@ describe("CFB totals PLAY sit (tagger only)", () => {
     expect(leanRows[0]?.tagOU).toBe("LEAN");
     expect(leanRows[0]?.edgeOUNum).toBeCloseTo(3.8, 5);
 
-    // Spread PLAY sat — trusted large edge tags PASS.
+    // No publishTag → blank (sit lives in cfbEdgeTag unit tests, not invent-on-board).
     const spreadPlay = flatRowsToLegacy(
       [
         {
@@ -213,8 +214,8 @@ describe("CFB totals PLAY sit (tagger only)", () => {
       "cfb",
       1,
     );
-    expect(spreadPlay[0]?.tagLine).toBe("PASS");
-    expect(spreadPlay[0]?.tagOU).toBe("PASS");
+    expect(spreadPlay[0]?.tagLine).toBeUndefined();
+    expect(spreadPlay[0]?.tagOU).toBeUndefined();
   });
 
   it("kei_total == model_total identity path untouched (no KEI edits)", () => {

@@ -153,6 +153,10 @@ export function reachablePropTagFilters(): readonly (
 /**
  * Quarantine a decision API blob (camel or snake) before customer JSON leaves.
  * Does not mutate engine DecisionResult objects in memory.
+ *
+ * Subscriber surfaces use publishTag / actionLabel only. Internal ladder fields
+ * (`point_grade` / `cover_grade`) can fork from the publish tag (e.g. PLAY
+ * ladder vs PASS holdout) — strip them from customer payloads.
  */
 export function quarantineDecisionForCustomer<
   T extends Record<string, unknown>,
@@ -166,26 +170,11 @@ export function quarantineDecisionForCustomer<
     if ("action_label" in out) out.action_label = shown;
     if ("actionLabel" in out) out.actionLabel = shown;
   }
-  if ("point_grade" in out) {
-    out.point_grade = quarantinePointGrade(
-      out.point_grade as string | null | undefined,
-    );
-  }
-  if ("pointGrade" in out) {
-    out.pointGrade = quarantinePointGrade(
-      out.pointGrade as string | null | undefined,
-    );
-  }
-  if ("cover_grade" in out && out.cover_grade != null) {
-    out.cover_grade = quarantinePointGrade(
-      out.cover_grade as string | null | undefined,
-    );
-  }
-  if ("coverGrade" in out && out.coverGrade != null) {
-    out.coverGrade = quarantinePointGrade(
-      out.coverGrade as string | null | undefined,
-    );
-  }
+  // Strip internal ladder — never paint point_grade when it forks from publish.
+  delete out.point_grade;
+  delete out.pointGrade;
+  delete out.cover_grade;
+  delete out.coverGrade;
   if ("is_best_bet" in out) out.is_best_bet = false;
   if ("isBestBet" in out) out.isBestBet = false;
   return out as T;

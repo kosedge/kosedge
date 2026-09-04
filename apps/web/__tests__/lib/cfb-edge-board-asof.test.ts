@@ -27,28 +27,34 @@ describe("CFB Edge Board market as-of honesty", () => {
     );
     expect(assemble).toContain('sport === "cfb"');
     expect(assemble).toContain("resolveEdgeBoardBoardLinesAsOf(rows)");
-    // CFB block must not hardcode null (other sports may still).
+    // CFB block must not hardcode null.
     const cfbBlock = assemble.slice(
       assemble.indexOf('if (sport === "cfb")'),
       assemble.indexOf("const rows = await loadAssembledEdgeBoardRows(sport"),
     );
     expect(cfbBlock).toContain("resolveEdgeBoardBoardLinesAsOf(rows)");
     expect(cfbBlock).not.toMatch(/linesAsOf:\s*null/);
+    // Default sport path also resolves — never invent-null when rows carry capture.
+    const defaultBlock = assemble.slice(
+      assemble.lastIndexOf(
+        "const rows = await loadAssembledEdgeBoardRows(sport",
+      ),
+    );
+    expect(defaultBlock).toContain("resolveEdgeBoardBoardLinesAsOf(rows)");
+    expect(defaultBlock).not.toMatch(/linesAsOf:\s*null/);
   });
 
-  it("client uses NFL-style as-of for CFB — never bare · ET", () => {
+  it("client stamps lines as-of for every sport — never bare · ET", () => {
     const client = readFileSync(
       path.join(process.cwd(), "components/EdgeBoardSportClient.tsx"),
       "utf8",
     );
-    expect(client).toContain('sportKey === "nfl" || sportKey === "cfb"');
     expect(client).toContain("marketAsOfHeaderSuffix");
-    expect(client).toContain("usesMarketAsOf");
     expect(client).toContain('data-testid="edge-board-asof"');
-    // Bare ET only for sports without market as-of wiring.
-    expect(client).toContain(
-      "usesMarketAsOf ? <> · {headerAsOf}</> : <> · ET</>",
-    );
+    expect(client).toContain("MarketAsOfStamp");
+    // Honesty: header always uses marketAsOfHeaderSuffix (blank → unavailable).
+    expect(client).toContain("<> · {headerAsOf}</>");
+    expect(client).not.toContain("<> · ET</>");
   });
 
   it("blank board as-of → unavailable copy (no empty · ET)", () => {

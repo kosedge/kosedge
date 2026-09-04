@@ -4,11 +4,7 @@
  * can assemble tonight games without crossing the client boundary.
  */
 
-import {
-  cfbAwayBookToHome,
-  cfbEdgeTag,
-  trustCfbMarket,
-} from "@/lib/cfb-trusted-market";
+import { cfbAwayBookToHome, trustCfbMarket } from "@/lib/cfb-trusted-market";
 import {
   isNbaPreseason,
   nbaAwayBookToHome,
@@ -265,11 +261,20 @@ function edgeToTag(
     );
     return pub.tag;
   }
-  if (edgeNum == null) return undefined;
+  if (edgeNum == null && sport !== "cfb") return undefined;
   if (sport === "cfb") {
-    // SoT: cfbEdgeTag (PLAY sit via CFB_*_PLAY_ELIGIBLE flags).
-    return cfbEdgeTag(edgeNum, market === "total" ? "total" : "spread");
+    // Edge Board honesty: only paint tags assemble already published.
+    // Never invent PLAY/LEAN/PASS from edge when publishTag is absent.
+    if (
+      serverPublishTag === "PLAY" ||
+      serverPublishTag === "LEAN" ||
+      serverPublishTag === "PASS"
+    ) {
+      return serverPublishTag;
+    }
+    return undefined;
   }
+  if (edgeNum == null) return undefined;
   if (sport === "nba") {
     // Chapter 4: LEAN ≥ 2.5 / PLAY ≥ 4.0 (trusted Best only; caller gates trust).
     return nbaEdgeTag(edgeNum);
@@ -729,8 +734,17 @@ export function flatRowsToLegacy(
         totalRow?.nhlMarketTrusted === false);
     const forcePass =
       cfbFinalTape || nbaForcePass || wnbaForcePass || nhlForcePass;
-    const tagLine = forcePass ? ("PASS" as Tag) : tagLineRaw;
-    const tagOU = forcePass ? ("PASS" as Tag) : tagOURaw;
+    // Week-0 / untrusted: collapse published tags to PASS — never invent a tag.
+    const tagLine = forcePass
+      ? tagLineRaw
+        ? ("PASS" as Tag)
+        : undefined
+      : tagLineRaw;
+    const tagOU = forcePass
+      ? tagOURaw
+        ? ("PASS" as Tag)
+        : undefined
+      : tagOURaw;
     const playLineOut = forcePass ? undefined : playLine;
     const playOUOut = forcePass ? undefined : playOU;
 

@@ -95,7 +95,6 @@ export default function EdgeBoardSportClient({
   }, [sportKey, slate, cfbWeek]);
 
   const isNfl = sportKey === "nfl";
-  const usesMarketAsOf = sportKey === "nfl" || sportKey === "cfb";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
   const keiCode = getKeiCode(sportKey);
   const slateLabel =
@@ -108,11 +107,11 @@ export default function EdgeBoardSportClient({
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
   const boardLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
-  const headerAsOf = usesMarketAsOf
-    ? state.status === "loading"
+  // Always stamp from assemble linesAsOf — never invent "as of now" / bare ET.
+  const headerAsOf =
+    state.status === "loading"
       ? "…"
-      : marketAsOfHeaderSuffix({ asOf: boardLinesAsOf, kind: "lines" })
-    : null;
+      : marketAsOfHeaderSuffix({ asOf: boardLinesAsOf, kind: "lines" });
 
   return (
     <div data-testid="edge-board-client">
@@ -123,7 +122,7 @@ export default function EdgeBoardSportClient({
             {marketsOnly
               ? "Markets only"
               : `KEI vs Market · ${getKeiProductLabel(sportKey)}`}
-            {usesMarketAsOf ? <> · {headerAsOf}</> : <> · ET</>}
+            <> · {headerAsOf}</>
           </div>
           {marketsOnly ? (
             <div className="mt-2">
@@ -222,8 +221,8 @@ export default function EdgeBoardSportClient({
             </Link>
           </div>
           <p className="text-[11px] text-gray-500">
-            Week {cfbWeek} · Tag = KEI vs trusted market · Model is
-            research-only ·{" "}
+            Week {cfbWeek} · Research board · Tags only when assemble publishes
+            them (never invented from edge) · Model is research-only ·{" "}
             <Link
               href={MODEL_TRANSPARENCY_HREF}
               className="text-kos-gold/80 hover:text-kos-gold hover:underline"
@@ -267,7 +266,7 @@ export default function EdgeBoardSportClient({
         </div>
       ) : null}
 
-      {usesMarketAsOf && state.status === "ready" ? (
+      {state.status === "ready" ? (
         <MarketAsOfStamp
           className="mt-3"
           asOf={boardLinesAsOf}
@@ -302,7 +301,7 @@ export default function EdgeBoardSportClient({
               isNfl && slate === "week1"
                 ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."
                 : sportKey === "cfb"
-                  ? "KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF — we do not invent book prices."
+                  ? "KEI vs trusted market when books clear. Tags stay blank until assemble publishes PLAY/LEAN/PASS — we do not invent tags from edge. Open/Best stay empty until The Odds API returns NCAAF."
                   : undefined
             }
           />

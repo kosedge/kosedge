@@ -65,15 +65,28 @@ function tagClassName(tag: Tag, compact = false): string {
   return `${base} bg-white/10 text-gray-400`;
 }
 
-function actionLabelClassName(label: ActionLabel, compact = false): string {
+/** Product surfaces: PLAY / LEAN / PASS only (no Best Bet / BEST VALUE chrome). */
+type PublishActionLabel = "PLAY" | "LEAN" | "PASS";
+
+function toPublishActionLabel(
+  label: ActionLabel | null | undefined,
+): PublishActionLabel | null {
+  const shown = displayActionLabel(label);
+  if (shown === "PLAY" || shown === "LEAN" || shown === "PASS") return shown;
+  // Defensive: unreachable / legacy ActionLabel leftovers never paint.
+  if (shown == null) return null;
+  return "PASS";
+}
+
+function actionLabelClassName(
+  label: PublishActionLabel,
+  compact = false,
+): string {
   const base = compact
     ? "inline-flex px-2 py-0.5 rounded-md text-[11px] font-bold tracking-wide"
     : "inline-flex items-center justify-center px-2 py-1 rounded-md text-[12px] font-bold tracking-wide";
-  if (label === "BEST VALUE") return `${base} bg-kos-gold text-black`;
   if (label === "PLAY") return `${base} bg-edge-green text-black`;
   if (label === "LEAN") return `${base} bg-amber-500 text-black`;
-  if (label === "ALERT") return `${base} bg-orange-500/90 text-black`;
-  if (label === "STAY AWAY") return `${base} bg-red-500/80 text-white`;
   return `${base} bg-white/10 text-gray-400`;
 }
 
@@ -130,23 +143,17 @@ function ActionDecisionCell({
   if (!actionLabel && !publishTag) {
     return <span className="text-gray-500">—</span>;
   }
-  const shownLabel = displayActionLabel(actionLabel);
+  const shownLabel =
+    publishTag === "PLAY" || publishTag === "LEAN" || publishTag === "PASS"
+      ? publishTag
+      : toPublishActionLabel(actionLabel);
   const confLabel = formatConfidenceLabel(
     confidenceBand,
     confidenceScore,
     confidenceTierConstant,
   );
-  const showLadder =
-    shownLabel === "PLAY" ||
-    shownLabel === "LEAN" ||
-    shownLabel === "BEST VALUE" ||
-    shownLabel === "ALERT";
-  const ladderVerb =
-    shownLabel === "LEAN"
-      ? "Lean to"
-      : shownLabel === "ALERT"
-        ? "Was to"
-        : "Play to";
+  const showLadder = shownLabel === "PLAY" || shownLabel === "LEAN";
+  const ladderVerb = shownLabel === "LEAN" ? "Lean to" : "Play to";
   const ladderNum =
     shownLabel === "LEAN" && leanToNum != null
       ? leanToNum
@@ -162,17 +169,14 @@ function ActionDecisionCell({
       ) : publishTag ? (
         <span className={tagClassName(publishTag, compact)}>{publishTag}</span>
       ) : null}
-      {play &&
-      shownLabel &&
-      shownLabel !== "PASS" &&
-      shownLabel !== "STAY AWAY" ? (
+      {play && shownLabel && shownLabel !== "PASS" ? (
         <div
           className={`mt-1 text-[11px] font-bold truncate ${
-            shownLabel === "PLAY" || shownLabel === "BEST VALUE"
+            shownLabel === "PLAY"
               ? "text-edge-green"
               : shownLabel === "LEAN"
                 ? "text-amber-400"
-                : "text-orange-300"
+                : "text-gray-400"
           }`}
         >
           {play}
@@ -1256,7 +1260,7 @@ export default function EdgeBoard({
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : String(sportKey).toLowerCase() === "cfb"
-                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. Current paints the feed; untrusted / no book is a footnote — never invent Open. "
+                  ? "CFB research board — tags paint only when assemble publishes PLAY/LEAN/PASS (never invented from edge). Current paints the feed; untrusted / no book is a footnote — never invent Open. "
                   : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb

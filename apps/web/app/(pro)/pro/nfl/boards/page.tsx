@@ -1,6 +1,6 @@
-import { redirect } from "next/navigation";
+import { permanentRedirect } from "next/navigation";
 
-/** Alias for users who type /pro/nfl/boards. */
+/** Alias for users who type /pro/nfl/boards — canonical is /edge-board/nfl. */
 export default function NflBoardsAliasPage() {
-  redirect("/edge-board/nfl");
+  permanentRedirect("/edge-board/nfl");
 }
