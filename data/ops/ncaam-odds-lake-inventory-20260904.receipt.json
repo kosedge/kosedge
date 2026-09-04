@@ -1,0 +1,205 @@
+{
+  "generated_at": "2026-09-04T18:03:19.435123+00:00",
+  "credits_per_request": 20,
+  "credits_per_day": 40,
+  "markets": "spreads,totals",
+  "regions": "us",
+  "path_a": {
+    "open_count": 463,
+    "close_count": 463,
+    "paired": 463,
+    "honest_pairs": 462,
+    "dishonest_or_bad_pairs": 1,
+    "open_only": [],
+    "close_only": [],
+    "empty_or_placeholder": [],
+    "honest_ranges": [
+      {
+        "start": "2022-11-05",
+        "end": "2023-04-10",
+        "days": 157
+      },
+      {
+        "start": "2023-10-10",
+        "end": "2024-04-15",
+        "days": 189
+      },
+      {
+        "start": "2024-10-27",
+        "end": "2025-01-16",
+        "days": 82
+      },
+      {
+        "start": "2025-11-01",
+        "end": "2025-12-04",
+        "days": 34
+      }
+    ],
+    "zero_event_open_honest": [],
+    "zero_event_close_honest": []
+  },
+  "hole": {
+    "window": "2024-01-29\u21922025-10-31",
+    "calendar_days": 642,
+    "honest_path_a_owned": 160,
+    "missing_honest_path_a": 482,
+    "present_but_dishonest": [],
+    "parquet_open_date_overlap_with_missing": [],
+    "parquet_commence_overlap_with_missing": [
+      "2025-01-17"
+    ],
+    "remaining_to_buy": 482,
+    "credits_to_finish": 19280
+  },
+  "early": {
+    "window": "2020-11-16\u21922022-10-31",
+    "calendar_days": 715,
+    "honest_path_a_owned": 0,
+    "missing_honest_path_a": 715,
+    "present_but_dishonest": [],
+    "parquet_open_date_overlap_with_missing": [],
+    "parquet_commence_overlap_with_missing": [],
+    "remaining_to_buy": 715,
+    "credits_to_finish": 28600
+  },
+  "parquet": {
+    "path": "apps/web/data/processed/ncaab_historical_odds_open_close.parquet",
+    "rows": 189609,
+    "unique_events": 15459,
+    "unique_open_dates": 463,
+    "open_date_min": "2022-11-05",
+    "open_date_max": "2025-12-04",
+    "duplicate_event_id_book": 4759
+  },
+  "claimed_vs_recount": {
+    "claimed_hole_missing": 482,
+    "recount_hole_missing": 482,
+    "claimed_early_credits": 28600,
+    "recount_early_days": 715,
+    "recount_early_credits": 28600
+  },
+  "integrity": {
+    "path_a_open_close_counts": [
+      463,
+      463
+    ],
+    "honest_pairs": 462,
+    "residual_dishonest_opens": [
+      {
+        "date": "2023-04-11",
+        "open_timestamp": "2023-04-04T03:40:39Z",
+        "drift_days": 7.347,
+        "n_events": 1
+      }
+    ],
+    "empty_files": 0,
+    "zero_event_snapshots": 0,
+    "parquet_rows": 189609,
+    "parquet_unique_events": 15459,
+    "parquet_books": 21,
+    "duplicate_event_id_book_rows": 4759,
+    "duplicate_note": "Same event_id+book appears across multiple snapshot dates (process_odds emits one row per Path A day the event is listed). Not file-level dupes.",
+    "null_counts": {
+      "open_spread_home": 1742,
+      "close_spread_home": 1912,
+      "open_total": 2778,
+      "close_total": 3610
+    },
+    "densify_range_correction": "Densify ops claimed pocket ending 2023-04-11 (158d); independent honesty (>7d) fails that single day (API ts 2023-04-04). Honest pocket ends 2023-04-10 (157d)."
+  },
+  "stores": {
+    "path_a_raw": {
+      "path": "apps/web/data/raw/odds/{open,close}",
+      "role": "canonical lake",
+      "open": 463,
+      "close": 463
+    },
+    "path_a_parquet": {
+      "path": "apps/web/data/processed/ncaab_historical_odds_open_close.parquet",
+      "role": "processed Path A",
+      "rows": 189609,
+      "events": 15459
+    },
+    "path_a_parquet_stale_copy": {
+      "path": "apps/web/src/data/processed/ncaab_historical_odds_open_close.parquet",
+      "role": "STALE non-canonical copy",
+      "rows": 84672,
+      "open_dates": "2022-11-01\u21922023-04-16",
+      "overlap_missing_hole_or_early": 0,
+      "note": "Do not treat as lake; smaller pre-densify artifact under src/data"
+    },
+    "path_b": {
+      "path": "apps/web/data/historical-odds/ncaab/",
+      "role": "README-only drift",
+      "has_open_close_json": false
+    },
+    "merged_games_with_odds_and_ratings": {
+      "path": "apps/web/data/processed/merged_games_with_odds_and_ratings.parquet",
+      "role": "Path A odds JOIN ratings/results",
+      "open_date_overlap_missing": 0,
+      "note": "Derived; not an alternate odds lake"
+    },
+    "enterprise_training_pull": {
+      "path": "data/ops/odds-enterprise-training-pull/",
+      "checkpoint_ncaam_mainlines_dates": 894,
+      "inventory_ncaam_mainline_games": 0,
+      "verified_at_summary": "2026-07-28",
+      "note": "Checkpoint marked ncaam:mainlines complete; verify inventory reported 0 mainline games. No in-repo JSON/parquet dump of those pulls. Fail-closed: NOT ALREADY OWNED for Path A backfill."
+    },
+    "railway_odds_snapshots": {
+      "status": "not_live_queried_this_run",
+      "reason": "DATABASE_URL sealed in Railway MCP/CLI for this agent; /api/jobs/ncaam-inventory is a non-functional celery PENDING stub",
+      "proxy": "altaria.proxy.rlwy.net:10880",
+      "best_in_repo_receipt": "enterprise summary inventory.ncaam.mainline_games=0 (2026-07-28)",
+      "live_cross_check": "GET /api/jobs/nba-inventory works (nba mainline_games=1386) proving warehouse reachable via model-service, but no NCAAM inventory route returns counts"
+    },
+    "prisma_MarketSnapshot": {
+      "path": "apps/web/prisma/schema.prisma",
+      "role": "web app live/board market rows schema",
+      "historical_lake": false
+    },
+    "excluded_not_odds": [
+      "apps/web/data/processed/kenpom_snapshots/*",
+      "apps/web/data/processed/all_sportsdata_results_2016-2025.parquet",
+      "apps/web/data/processed/sportsdata_games_2025.parquet",
+      "apps/web/data/processed/actual_margins.parquet",
+      "apps/web/data/processed/kei_lines_ncaam.json (skeleton)",
+      "apps/web/data/processed/edge_board_fallback_ncaam.json (skeleton)",
+      "services/model-service/.../ncaam_official_schedule_*.json (schedule SoT, not odds)"
+    ]
+  },
+  "credits_plan": {
+    "source_script": "apps/web/scripts/fetch_historical_ncaab_odds.py",
+    "regions": "us",
+    "markets": "spreads,totals",
+    "CREDITS_PER_REQUEST": 20,
+    "requests_per_day": 2,
+    "credits_per_day": 40,
+    "hole_remaining_days": 482,
+    "hole_credits": 19280,
+    "early_remaining_days": 715,
+    "early_credits": 28600,
+    "total_credits_to_finish_all_calendar_missing": 47880,
+    "receipt_remaining_credits_after_densify": 131,
+    "hole_in_season_nov_apr_days": 119,
+    "hole_in_season_credits": 4760,
+    "early_in_season_nov_apr_days": 347,
+    "early_in_season_credits": 13880,
+    "note_offseason": "May\u2013Oct calendar days often return Odds API last-known (honesty drop risk); densify prioritized in-season. Pricing below still calendar-complete as requested."
+  },
+  "why_last_run_stopped": {
+    "u0": "Re-pulled 185 dishonest days; API still last-known; all 185 dropped. Credits header sum 7400. Not a miss \u2014 honesty purge.",
+    "hole": "Pre-selected 172 season-priority days under remaining budget (not mid-loop --max-credits stop; hole receipt stopped_for_credits=false). 12 Oct 15\u201326 dropped dishonest. Kept 160. Remaining 482 never requested.",
+    "early": "Explicitly skipped \u2014 densify summary: ~131 credits left vs ~28,600 needed.",
+    "remaining_credits_cited": 131
+  },
+  "already_owned": {
+    "definition": "Honest Path A open+close pair for that calendar date, OR parquet open_time date for that calendar date (same lake). Game commence_date / KenPom / results alone do NOT count.",
+    "hole_missing_with_path_a_or_parquet_open_date": 0,
+    "early_missing_with_path_a_or_parquet_open_date": 0,
+    "commence_only_false_friends": {
+      "2025-01-17": "56 events in parquet with commence_time on 2025-01-17 but open_time 2025-01-16 (owned prior day). NOT ALREADY OWNED for missing snapshot day 2025-01-17."
+    }
+  },
+  "how_did_we_miss_this_one_paragraph": "We did not already have the hole/early days sitting in another store: Path B is README-only, the processed parquet open_dates exactly match Path A (0 overlap with the 482+715 missing days), the stale src/data parquet copy only covers 2022-11\u21922023-04, and the July enterprise training-pull verify receipt shows ncaam mainline_games=0 despite a checkpoint claiming 894 dates. The gaps exist because pre-#482 Path A only ever held 2022-11-01\u21922024-01-28 plus a thin 2025-11 pocket; densify then spent ~14.3k credits on U0 honesty drops (185 last-known opens removed) plus a credit-capped 172-day season-priority hole slice (~160 kept), stopping with ~131 credits left \u2014 enough to explain skipping the remaining 482 hole days and the entire 715-day early window (~28.6k), not a failure to look in the DB for owned snapshots."
+}
