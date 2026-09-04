@@ -23,6 +23,7 @@ from typing import Any, Dict, List, Optional, Tuple
 import polars as pl
 
 from ncaam_lab.protocol import PROTOCOL_DOC, PROTOCOL_VERSION, protocol_manifest
+from ncaam_lab.results_attach import attach_lab_outcomes
 
 # ---------------------------------------------------------------------------
 # Frozen grade gates (registered pre-fill — do not retune after Test-A)
@@ -84,7 +85,7 @@ def _mean(xs: List[float]) -> Optional[float]:
 
 
 def load_actual_margins(path: Optional[Path] = None) -> pl.DataFrame:
-    """Owned actual_margins only — no Odds densify / invent tips."""
+    """Owned actual_margins only — secondary event_id overlay (no Odds densify)."""
     p = path or (_web_root() / "data" / "processed" / "actual_margins.parquet")
     if not p.exists():
         return pl.DataFrame({"event_id": [], "actual_margin": []})
@@ -93,8 +94,20 @@ def load_actual_margins(path: Optional[Path] = None) -> pl.DataFrame:
     return df.select(cols).unique(subset=["event_id"], keep="first")
 
 
-def attach_outcomes(lab: pl.DataFrame, actuals: pl.DataFrame) -> pl.DataFrame:
-    if actuals.is_empty() or "event_id" not in actuals.columns:
+def attach_outcomes(
+    lab: pl.DataFrame,
+    actuals: Optional[pl.DataFrame] = None,
+    *,
+    densify: bool = True,
+) -> pl.DataFrame:
+    """Attach actual_margin. Default densify uses Schedule SoT packs (repo only).
+
+    densify=False keeps the historical thin event_id→actual_margins join (v1 freeze baseline).
+    """
+    if densify:
+        out, _receipt = attach_lab_outcomes(lab, event_actuals=actuals)
+        return out
+    if actuals is None or actuals.is_empty() or "event_id" not in actuals.columns:
         return lab.with_columns(pl.lit(None).cast(pl.Float64).alias("actual_margin"))
     return lab.join(actuals.select(["event_id", "actual_margin"]), on="event_id", how="left")
 
@@ -414,6 +427,7 @@ def build_scorecard(
     *,
     out_dir: Optional[Path] = None,
     actuals_path: Optional[Path] = None,
+    densify_results: bool = True,
 ) -> Dict[str, Any]:
     root = _repo_root()
     out_dir = out_dir or (root / "data" / "ops" / "lab" / "ncaam")
@@ -423,6 +437,7 @@ def build_scorecard(
     leakage_ok = True
     leakage_violations = 0
     manifests: Dict[str, Any] = {}
+    densify_receipts: Dict[str, Any] = {}
 
     for cut in ("train_a", "test_a"):
         latest = out_dir / f"ncaam-fair-lab-{cut}-latest.parquet"
@@ -430,7 +445,10 @@ def build_scorecard(
             cuts[cut] = {"error": f"missing {latest.name} — run materialize first"}
             continue
         lab = pl.read_parquet(latest)
-        lab = attach_outcomes(lab, actuals)
+        if densify_results:
+            lab, densify_receipts[cut] = attach_lab_outcomes(lab, event_actuals=actuals)
+        else:
+            lab = attach_outcomes(lab, actuals, densify=False)
         # Prefer stamped manifest if present
         man_candidates = sorted(out_dir.glob(f"ncaam-fair-lab-{cut}-*.manifest.json"))
         man = {}
@@ -452,6 +470,16 @@ def build_scorecard(
             leakage_violations += int(man.get("kenpom_leakage_violations") or 0)
         scored = score_cut(lab, cut=cut)
         scored["manifest"] = manifests.get(cut)
+        if cut in densify_receipts:
+            scored["results_attach"] = {
+                "n_with_actual": densify_receipts[cut].get("n_with_actual"),
+                "outcome_coverage": densify_receipts[cut].get("outcome_coverage"),
+                "n_with_actual_pack": densify_receipts[cut].get("n_with_actual_pack"),
+                "n_with_actual_event_id_fill": densify_receipts[cut].get(
+                    "n_with_actual_event_id_fill"
+                ),
+                "sources": densify_receipts[cut].get("sources"),
+            }
         cuts[cut] = scored
 
     # Primary grades from Test-A OOS only
@@ -541,10 +569,17 @@ def build_scorecard(
                 (actuals_path or (_web_root() / "data" / "processed" / "actual_margins.parquet"))
             ),
             "n_actual_events_owned": len(actuals) if not actuals.is_empty() else 0,
+            "results_densify": densify_results,
+            "results_attach_receipts": densify_receipts,
             "actuals_caveat": (
-                "Owned actual_margins.parquet (406 events historically). "
-                "Methodology notes some SportsData trial margins may be scrambled — "
-                "report coverage honestly; do not densify."
+                "Primary actuals from Schedule SoT packs (tip_date + B7 team_id, fail-closed). "
+                "Secondary fill from owned actual_margins.parquet / results.csv by event_id. "
+                "No Odds densify. Sparse espn_cbb_games_*.csv alone are insufficient for Lab coverage."
+                if densify_results
+                else (
+                    "Thin path: owned actual_margins.parquet by event_id only "
+                    "(historical v1 freeze baseline ~406 events)."
+                )
             ),
         },
         "protocol": protocol_manifest(),
@@ -553,11 +588,32 @@ def build_scorecard(
     return card
 
 
-def write_scorecard_artifacts(card: Dict[str, Any], *, out_dir: Optional[Path] = None) -> Dict[str, str]:
+def write_scorecard_artifacts(
+    card: Dict[str, Any],
+    *,
+    out_dir: Optional[Path] = None,
+    overwrite_frozen_v1: bool = False,
+) -> Dict[str, str]:
+    """Write scorecard artifacts.
+
+    Frozen v1 JSON/MD are NOT overwritten unless overwrite_frozen_v1=True.
+    Densified runs should use the coverage receipt script instead of retuning v1.
+    """
     root = _repo_root()
     out_dir = out_dir or (root / "data" / "ops" / "lab" / "ncaam")
     out_dir.mkdir(parents=True, exist_ok=True)
     stamped = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+    densified = bool((card.get("inputs") or {}).get("results_densify"))
+    if densified and not overwrite_frozen_v1:
+        # Keep v1 frozen — write stamped research preview only
+        preview_json = out_dir / f"ncaam-fair-lab-scorecard-densify-preview-{stamped}.json"
+        preview_json.write_text(json.dumps(card, indent=2) + "\n", encoding="utf-8")
+        return {
+            "preview_json": str(preview_json.relative_to(root)),
+            "frozen_v1_untouched": "true",
+            "note": "Densified scorecard not written over v1; use coverage receipt + v1.1 later",
+        }
 
     json_path = out_dir / "ncaam-fair-lab-scorecard-v1.json"
     stamped_json = out_dir / f"ncaam-fair-lab-scorecard-v1-{stamped}.json"
@@ -582,10 +638,12 @@ def write_scorecard_artifacts(card: Dict[str, Any], *, out_dir: Optional[Path] =
         "See `docs/lab/NCAAM_FAIR_LAB_PROTOCOL_v1.md`,\n"
         "`docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1.md`, and\n"
         "`data/ops/ncaam-lab-first-scorecard-20260904.md`.\n\n"
+        "Results densify receipt: `data/ops/ncaam-lab-results-densify-20260904.md`.\n\n"
         "```bash\n"
         "python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a\n"
         "python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut test_a\n"
-        "python3 apps/web/scripts/lab_ncaam_fair_scorecard.py\n"
+        "python3 apps/web/scripts/lab_ncaam_fair_scorecard.py --no-densify  # v1 baseline\n"
+        "python3 apps/web/scripts/lab_ncaam_results_coverage_receipt.py\n"
         "```\n",
         encoding="utf-8",
     )
