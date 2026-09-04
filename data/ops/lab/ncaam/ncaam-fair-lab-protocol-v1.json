@@ -1,0 +1,54 @@
+{
+  "protocol_version": "ncaam-fair-lab-protocol-v1.0",
+  "sport": "ncaam",
+  "schedule_sot": "D",
+  "baselines": {
+    "B1": "close_consensus_path_a",
+    "B2": "kenpom_adjem_plus_hca_prior_unknown_honesty"
+  },
+  "cut_windows": {
+    "universe_path_a": {
+      "start": "2022-11-01",
+      "end": "2024-01-28",
+      "role": "universe"
+    },
+    "train_a": {
+      "start": "2022-11-07",
+      "end": "2023-03-12",
+      "role": "train"
+    },
+    "test_a": {
+      "start": "2023-11-06",
+      "end": "2024-01-28",
+      "role": "test"
+    }
+  },
+  "excluded_pockets": [
+    {
+      "name": "pocket_2025",
+      "start": "2025-11-01",
+      "end": "2025-12-31",
+      "role": "excluded"
+    }
+  ],
+  "hca_default": 2.8696,
+  "uncertainty_sigma": {
+    "PRIOR": 4.0,
+    "UNKNOWN": 6.0,
+    "SETTLED": "FORBIDDEN \u2014 portal model DATA GAP"
+  },
+  "open_timestamp_max_drift_days": 7,
+  "fair_total_method": "kenpom_adj_oe_de_tempo_v1",
+  "hard_not": [
+    "edge_board_populate",
+    "play_lean_conf",
+    "props",
+    "odds_densify_credit_burns",
+    "invent_tips",
+    "kenpom_as_sot",
+    "peek_tune_after_scorecard",
+    "edge_gt_4_shopping",
+    "silent_spread_to_ml",
+    "fake_settled_continuity"
+  ]
+}
