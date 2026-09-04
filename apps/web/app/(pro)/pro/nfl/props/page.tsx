@@ -23,7 +23,12 @@ import {
 } from "@/lib/model-service-status";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { boardAsOfFromUpdatedAts } from "@/lib/market-asof-stamp";
-import { formatNflPropsBoardPeriod } from "@/lib/nfl-props-header";
+import {
+  NFL_PROPS_BOARD_STALE_HONESTY_TITLE,
+  formatNflPropsBoardPeriod,
+  nflPropsBoardStaleHonestyBody,
+  resolveNflPropsBoardStamp,
+} from "@/lib/nfl-props-header";
 
 /** Soft-launch default: current season board — never archive-week CTAs. */
 const DEFAULT_SEASON = 2026;
@@ -89,6 +94,11 @@ export default async function NflPropsBoardPage({
   const hasRows = board.rows.length > 0;
   const filteredEmpty =
     !board.error && !hasRows && (board.diagnostics.eligibilityDropped ?? 0) > 0;
+  // Honest board vintage from row updated_at — never invent "as of now".
+  const boardAsOf = hasRows ? propsBoardAsOf(board.rows) : null;
+  const boardStamp = resolveNflPropsBoardStamp(boardAsOf);
+  const boardStale = boardStamp.stale;
+  const periodLabel = formatNflPropsBoardPeriod(season, week, { boardStale });
   const activeQuery = {
     season: String(season),
     week: String(week),
@@ -115,12 +125,13 @@ export default async function NflPropsBoardPage({
             <p
               className="mt-2 text-xs text-kos-text/55"
               data-testid="props-board-period"
+              data-board-stale={boardStale ? "true" : "false"}
             >
-              {formatNflPropsBoardPeriod(season, week)}
+              {periodLabel}
             </p>
             <MarketAsOfStamp
               className="mt-2"
-              asOf={hasRows ? propsBoardAsOf(board.rows) : null}
+              asOf={boardAsOf}
               kind="board"
               data-testid="props-board-asof"
             />
@@ -147,6 +158,23 @@ export default async function NflPropsBoardPage({
           </div>
         </div>
       </section>
+
+      {boardStale ? (
+        <div className="mt-6" data-testid="props-board-stale-honesty">
+          <HonestStatusBanner
+            title={NFL_PROPS_BOARD_STALE_HONESTY_TITLE}
+            tone="amber"
+          >
+            <p>
+              {nflPropsBoardStaleHonestyBody({
+                season,
+                week,
+                stampText: boardStamp.text,
+              })}
+            </p>
+          </HonestStatusBanner>
+        </div>
+      ) : null}
 
       {shouldShowModelUnreachableBanner({
         error: board.error,
