@@ -78,8 +78,8 @@ export default async function SportEdgesPage({
           </p>
           <p className="mt-2 text-sm text-kos-text/70">
             When Open/Best and KEI lines are both present, separations appear
-            here. Until then, use Edge Board and Compare Odds for market
-            context — we do not invent edge numbers.
+            here. Until then, use Edge Board and Compare Odds for market context
+            — we do not invent edge numbers.
           </p>
           <div className="mt-5 flex flex-wrap gap-3">
             <Link

@@ -53,7 +53,9 @@ describe("edges desk honesty fork (#8 Phase C / #4 E4)", () => {
     expect(NFL_EDGES_DESK_SUMMARY.toLowerCase()).not.toContain(
       "model vs market edges",
     );
-    expect(NFL_EDGES_DESK_SUMMARY).toMatch(/Edge Board is the decision center/i);
+    expect(NFL_EDGES_DESK_SUMMARY).toMatch(
+      /Edge Board is the decision center/i,
+    );
   });
 
   it("source-locks shared sport edges page through honesty helpers (no model-vs-market)", () => {
