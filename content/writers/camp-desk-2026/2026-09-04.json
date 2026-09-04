@@ -1,0 +1,111 @@
+{
+  "desk_date": "2026-09-04",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Friday, Sep 4",
+    "bottom_line": "Swift cramp + Odunze OK scare + Okuayinonu OUT Week 1. Not a 32-card dump. Existing LAC Under 2/5 and DEN Over 2/5 stand. Everything else Pass.",
+    "storylines": [
+      "Bears: Rome Odunze left Thursday practice early with an apparent right-leg issue; The Athletic’s Dan Wiederer preliminary: “all good” / “should be all good.” D’Andre Swift later exited holding midsection/core in significant discomfort; Schefter: cramp (encouraging). Monangai still sidelined (hyperextended knee Aug 16). Pass — do not invent Week 1 RB1/WR1 sit or a new win-total.",
+      "49ers: DE Sam Okuayinonu (foot) did not travel Wed/Thu with the club to Melbourne; Friday the club downgraded him to OUT for Week 1 vs LAR (Maiocco / Wagoner; FantasyPros Fri 8:44am EDT; ClutchPoints). Williams on PUP (first four); Bosa on the plane but ramping. Pass — Week 1 DL availability flag; no new win-total; do not chase Melbourne board."
+    ],
+    "what_to_watch": "Swift/Odunze next-week participation before Sep 13 @ CAR; first official IR Wednesday. Okuayinonu Week 1 OUT vs LAR locked — do not invent EDGE1. LAC Under 2/5 and DEN Over 2/5 stand — no chase.",
+    "sources": [
+      {
+        "label": "Bears Wire — Swift / Odunze practice exits",
+        "href": "https://bearswire.usatoday.com/story/sports/nfl/bears/2026/09/03/bears-injury-news-dandre-swift-rome-odunze/91599519007/"
+      },
+      {
+        "label": "Bears Wire — Swift injury update (cramp)",
+        "href": "https://bearswire.usatoday.com/story/sports/nfl/bears/2026/09/03/bears-dandre-swift-injury-update-cramp-practice/91601689007/"
+      },
+      {
+        "label": "Deadspin — Swift / Odunze practice injuries",
+        "href": "https://deadspin.com/reports-bears-rb-dandre-swift-wr-rome-odunze-injured-at-practice/"
+      },
+      {
+        "label": "PFT — Okuayinonu not on Australia flight / questionable",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/49ers-de-sam-okuayinonu-not-on-team-flight-to-australia-questionable-with-foot-injury"
+      },
+      {
+        "label": "FantasyPros — Okuayinonu OUT vs Rams",
+        "href": "https://www.fantasypros.com/nfl/news/605899/sam-okuayinonu-foot-out-against-la-rams.php"
+      },
+      {
+        "label": "ClutchPoints — 49ers Week 1 injury downgrade",
+        "href": "https://clutchpoints.com/nfl/san-francisco-49ers/49ers-news-week-1-injury-report-rams-downgrade"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "CHI",
+      "title": "Bears camp — Sep 4",
+      "bottom_line": "Thursday practice scare: Odunze left early (right leg) — Wiederer preliminary “all good.” Swift exited holding core; Schefter: cramp. Monangai still out. Pass — do not invent Week 1 RB1/WR1 sit or a new win-total.",
+      "key_points": [
+        "Bears Wire / Deadspin on Thursday practice: WR Rome Odunze left early with an apparent right-leg issue after trainers pulled him. The Athletic’s Dan Wiederer’s preliminary read: “all good” / “should be all good.” Not a Week 1 WR sit off one early exit.",
+        "Late Thursday: RB D’Andre Swift exited holding midsection/core in “significant discomfort.” ESPN’s Adam Schefter: cramp — encouraging. Backup RB Kyle Monangai remains sidelined (hyperextended knee Aug 16); depth is thin if Swift is limited, but the current read is cramp + Odunze OK.",
+        "Ben Johnson’s next media availability is next week. First official IR is Wednesday before Sep 13 @ CAR. Pass — do not invent a Week 1 RB1/WR1 sit or mint a Bears win-total off a practice scare."
+      ],
+      "what_to_watch": "Swift and Odunze participation when official Week 1 reports open next week — consecutive DNPs would change the flag; one Thursday scare does not.",
+      "is_material_depth": true,
+      "sot_flag": "Swift cramp + Odunze OK preliminary. Monangai still out. Pass on inventing RB1/WR1 sit or a new win-total.",
+      "sources": [
+        {
+          "label": "Bears Wire — Swift / Odunze practice exits",
+          "href": "https://bearswire.usatoday.com/story/sports/nfl/bears/2026/09/03/bears-injury-news-dandre-swift-rome-odunze/91599519007/"
+        },
+        {
+          "label": "Bears Wire — Swift injury update (cramp)",
+          "href": "https://bearswire.usatoday.com/story/sports/nfl/bears/2026/09/03/bears-dandre-swift-injury-update-cramp-practice/91601689007/"
+        },
+        {
+          "label": "Deadspin — Swift / Odunze practice injuries",
+          "href": "https://deadspin.com/reports-bears-rb-dandre-swift-wr-rome-odunze-injured-at-practice/"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers camp — Sep 4",
+      "bottom_line": "Okuayinonu (foot) OUT Week 1 vs LAR after Friday downgrade. Did not travel to Melbourne; Williams on PUP; Bosa ramping. Pass — DL availability flag; no new win-total; do not chase Melbourne.",
+      "key_points": [
+        "PFT / Michael David Smith: DE Sam Okuayinonu (foot) did not travel Wednesday/Thursday with the club to Melbourne for Sep 10 vs LAR. Initially listed questionable, with the door open to fly later.",
+        "Friday Sep 4: club downgraded him to OUT for Week 1 vs the Rams — reported by Matt Maiocco / Nick Wagoner; FantasyPros Fri 8:44am EDT; ClutchPoints. Second-team DL depth, not a starter crown.",
+        "Depth context only: Mykel Williams remains on PUP (misses first four); Nick Bosa is on the plane but still ramping (ACL / tendinitis). Do not invent EDGE1 or crown Keion White as starter in SoT from prose. Pass on a new win-total."
+      ],
+      "what_to_watch": "Week 1 DL active list vs LAR in Melbourne — Okuayinonu is OUT; do not chase the board or invent a replacement starter.",
+      "is_material_depth": true,
+      "sot_flag": "Okuayinonu OUT Week 1 (foot). DL availability flag. Pass on inventing EDGE1 or a new win-total.",
+      "sources": [
+        {
+          "label": "PFT — Okuayinonu not on Australia flight / questionable",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/49ers-de-sam-okuayinonu-not-on-team-flight-to-australia-questionable-with-foot-injury"
+        },
+        {
+          "label": "FantasyPros — Okuayinonu OUT vs Rams",
+          "href": "https://www.fantasypros.com/nfl/news/605899/sam-okuayinonu-foot-out-against-la-rams.php"
+        },
+        {
+          "label": "ClutchPoints — 49ers Week 1 injury downgrade",
+          "href": "https://clutchpoints.com/nfl/san-francisco-49ers/49ers-news-week-1-injury-report-rams-downgrade"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line"],
+      "reason": "Swift cramp + Odunze OK preliminary after Thursday practice scare; Monangai still out. Pass on inventing RB1/WR1 sit or a new win-total; LAC Under 2/5 and DEN Over 2/5 stand.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "SF",
+      "fields": ["bottom_line"],
+      "reason": "Okuayinonu OUT Week 1 vs LAR (foot). DL availability flag. Pass on inventing EDGE1 or a new win-total; do not chase Melbourne board.",
+      "status": "flagged"
+    }
+  ]
+}
