@@ -16,9 +16,7 @@ describe("nfl-depth-pack-freshness", () => {
     expect(formatCompetitionStatus("open_competition")).toBe(
       "Open competition",
     );
-    expect(formatCompetitionLabel("open_competition")).toBe(
-      "Open competition",
-    );
+    expect(formatCompetitionLabel("open_competition")).toBe("Open competition");
     expect(formatCompetitionStatus("named_starter")).toBe("Named starter");
     expect(formatCompetitionStatus("camp_arm")).toBe("Camp arm");
     expect(formatCompetitionStatus(null)).toBeNull();
