@@ -1,322 +1,145 @@
-# KosEdge Sport Standard — Evidence Inventory
+# KosEdge Sport Standard — Evidence Inventory (CoS Notion paste)
 
-**Status:** inventory only (spec-first). No product grammar. No redesign.  
+**Status:** inventory only. No product grammar. No redesign.  
 **As of:** 2026-09-04  
-**Base:** `deploy-vercel` + public `www.kosedge.com` (read-only)  
-**Machine-readable twin:** [`data/ops/sport-standard-evidence-inventory.json`](../data/ops/sport-standard-evidence-inventory.json)
+**Base:** `deploy-vercel` + www.kosedge.com  
+**Machine twin:** [`data/ops/sport-standard-evidence-inventory.json`](../data/ops/sport-standard-evidence-inventory.json) → key `cos_matrix`  
+**Live probe:** UTC **2026-09-04T03:49Z**, no auth · primary sports **200=58 / 404=20**
 
-CoS use: turn this into a gap matrix. Field values are `present` | `partial` | `absent`.
-
-Allowed tag standard for inventory marking: **PLAY / LEAN / PASS** + **Best Value** where already exists. Do **not** introduce Best Bet / Stay Away (flag only if already in code).
+Allowed tags in “Tags in use” column: **PLAY / LEAN / PASS** + **Best Value** where already exists. Flag others (do not introduce Best Bet / Stay Away).
 
 ---
 
-## Shared contracts (evidence)
+## CoS paste matrix (one section per sport)
+
+Columns locked: Overview · Model · Edge · Props · Futures · Tags in use · as-of? · run_id? · empty/error copy · mobile filter.
+
+### NFL
+
+| Column | Status + evidence |
+|--------|-------------------|
+| **Overview** | Probe **12×200 / 1×404**. `https://www.kosedge.com/pro/nfl/overview` (agent 200). `https://www.kosedge.com/edge-board/nfl` (agent 200). **`/pro/nfl/kei-lines` → 404** (probe: kei-lines 404 all six; no redirect to fair-lines). |
+| **Model** | **200** `https://www.kosedge.com/pro/nfl/model` (probe: model 200 only nfl+cfb). API **200** `https://www.kosedge.com/api/nfl/fair-lines` (probe: fair-lines API 200 only nfl; body still contains substring `open_competition`). |
+| **Edge** | Edge Board agent **200** `/edge-board/nfl`. Assemble **200** `…/api/edge-board/nfl/assemble` — keys `linesAsOf`, `kei` (probe). Edges-desk API **200** `…/api/nfl/edges-desk` (probe: only nfl). Confidence seen on NFL edges (probe). |
+| **Props** | Desk `/pro/nfl/props`. Probe: Confidence on NFL props. Code: `no PLAY / LEAN stake tags` (`nfl-props-surface.ts`). |
+| **Futures** | Code route `/pro/nfl/projections` (title Futures). Individual live HTTP not broken out in probe aggregates. |
+| **Tags in use** | **PLAY / LEAN / PASS / Best Value** (`BEST VALUE` ActionLabel). Probe HTML/API saw PLAY/LEAN/PASS. **Flag:** WATCH, ALERT, STAY AWAY, isBestBet, STRONG PLAY, EXCEPTIONAL. |
+| **as-of present?** | **Yes** — assemble key `linesAsOf` (probe). |
+| **run_id present?** | **No** — absent on betting boards / assemble samples. |
+| **empty/error copy** | `Board temporarily unavailable. Refresh to try again.` · `No Slate Yet` · `Odds temporarily unavailable. Refresh to try again.` · `No odds data yet. Lines will appear when books post this slate.` · `Model service is not configured for this environment.` · `Market lines unavailable — showing Kosedge lines only.` · `…no PLAY / LEAN stake tags.` · `No investable props for this filter yet.` · API body: `open_competition` (`/api/nfl/fair-lines`). |
+| **mobile filter** | **Yes** on Edge (week chips), Odds (sport), Fair-lines (slate window), Props (market chips), Edges desk (market/edge/conf/week). |
+
+### CFB
+
+| Column | Status + evidence |
+|--------|-------------------|
+| **Overview** | Probe **10×200 / 3×404**. `…/pro/cfb/overview` (agent 200). `…/edge-board/cfb` (agent 200). **`/pro/cfb/kei-lines` → 404** (probe). |
+| **Model** | **200** `…/pro/cfb/model` (probe: nfl+cfb only). `…/api/cfb/fair-lines` → **404** (probe: API fair-lines only nfl). |
+| **Edge** | Assemble **200** `…/api/edge-board/cfb/assemble` — `linesAsOf`, `kei` (probe). `…/api/cfb/edges-desk` → **404** (probe). Desk `/pro/cfb/edges` (code). |
+| **Props** | **Absent** — `/pro/cfb/props` → tempo (code). |
+| **Futures** | Code: `/pro/cfb/futures`, `/pro/cfb/projections`. Live HTTP not broken out in probe aggregates. |
+| **Tags in use** | **PLAY / LEAN / PASS**. Probe saw PLAY/LEAN/PASS. PLAY sit→PASS (`cfb-trusted-market.ts`). No Best Value. |
+| **as-of present?** | **Yes** — `linesAsOf` on assemble (probe). |
+| **run_id present?** | **No**. |
+| **empty/error copy** | `KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF — we do not invent book prices.` · `No KEI lines for {sport} yet. Run the pipeline export to generate data/processed/kei_lines_*.json.` · `CFB fair-lines join the desk once the college football model board is connected to Pro.` · `No official Week {week} games in the KosEdge slate yet.` · `No quantified edges on the live board yet`. |
+| **mobile filter** | **Yes** Edge (Week0/1), Odds (sport). **No** Fair/KEI table, props (n/a), edges desk. |
+
+### MLB
+
+| Column | Status + evidence |
+|--------|-------------------|
+| **Overview** | Probe **9×200 / 4×404**. `…/pro/mlb/overview` (agent 200). **`/pro/mlb/kei-lines` → 404** (probe). Fair-lines desk code: `/pro/mlb/fair-lines` (distinct path). |
+| **Model** | **`/pro/mlb/model` → 404** (probe). `…/api/mlb/fair-lines` → **404** (probe). |
+| **Edge** | Assemble **200** `…/api/edge-board/mlb/assemble` — `linesAsOf` present; **sampled rows lacked kei/model** (market/best/asOf only) (probe). `…/api/mlb/edges-desk` → **404**. Desk `/pro/mlb/edges` (code). |
+| **Props** | Soft-launch shell `/pro/mlb/props` (code: stake gate off). |
+| **Futures** | None in primary inventory routes. |
+| **Tags in use** | **PLAY / LEAN / PASS**. Probe: PLAY/LEAN/PASS. **Flag:** WATCH (prop policy). |
+| **as-of present?** | **Yes** — assemble `linesAsOf` (probe). |
+| **run_id present?** | **No**. |
+| **empty/error copy** | `No MLB projections for this date yet. Check back after the daily sim cycle.` · `…play-stake eligibility stays gated off for soft launch…` · `Model service is not configured for this environment.` · `No live slate rows yet`. |
+| **mobile filter** | **Yes** Edge/Odds (sport), Fair-lines (run-line focus), Edges desk. **No** props shell. |
+
+### NBA
+
+| Column | Status + evidence |
+|--------|-------------------|
+| **Overview** | Probe **9×200 / 4×404**. `…/pro/nba/overview` (agent 200). **`/pro/nba/kei-lines` → 404** (probe). Fair-lines: `/pro/nba/fair-lines` (code). |
+| **Model** | **`/pro/nba/model` → 404** (probe). `…/api/nba/fair-lines` → **404**. |
+| **Edge** | Assemble **200** — `linesAsOf`, **kei/model present** on sample (probe). `…/api/nba/edges-desk` → **404**. |
+| **Props** | `/pro/nba/props` Ch6 dark (code). Copy: `Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.` |
+| **Futures** | None in primary inventory routes. |
+| **Tags in use** | **PLAY / LEAN / PASS**. Props forced PASS. **Flag:** WATCH (prop policy). |
+| **as-of present?** | **Yes** — `linesAsOf` (probe). |
+| **run_id present?** | **No**. |
+| **empty/error copy** | `Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.` · `No Ch6 dark prop rows yet — PlayerProjection pack required.` · `…We do not invent fair prices when the slate is empty.` · `Board unavailable: {error}` (may include MODEL_SERVICE_URL). |
+| **mobile filter** | **Yes** Edge/Odds (sport), Fair-lines (date). **No** props, edges desk. |
+
+### NHL
+
+| Column | Status + evidence |
+|--------|-------------------|
+| **Overview** | Probe **9×200 / 4×404**. `…/pro/nhl/overview` (agent 200). **`/pro/nhl/kei-lines` → 404** (probe). Code KEI primary href `/pro/kei-lines/nhl` (hub path; distinct from 404 pattern). |
+| **Model** | **`/pro/nhl/model` → 404** (probe). `…/api/nhl/fair-lines` → **404**. |
+| **Edge** | Assemble **200** — `linesAsOf`, **kei/model present** (probe). `…/api/nhl/edges-desk` → **404**. |
+| **Props** | `/pro/nhl/props` Ch6 dark / forced PASS (code). |
+| **Futures** | None in primary inventory routes. |
+| **Tags in use** | **PLAY / LEAN / PASS**. |
+| **as-of present?** | **Yes** — `linesAsOf` (probe). |
+| **run_id present?** | **No**. |
+| **empty/error copy** | `NHL fair-lines join the desk once the hockey model board is connected to Pro.` · `Model board pending` · `No KEI lines for {sport} yet. Run the pipeline export to generate data/processed/kei_lines_*.json.` · `Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.` |
+| **mobile filter** | **Yes** Edge/Odds (sport). **No** Fair/KEI, props, edges desk. |
+
+### WNBA
+
+| Column | Status + evidence |
+|--------|-------------------|
+| **Overview** | Probe **9×200 / 4×404**. `…/pro/wnba/overview` (agent 200). **`/pro/wnba/kei-lines` → 404** (probe). Fair-lines: `/pro/wnba/fair-lines` (code). |
+| **Model** | **`/pro/wnba/model` → 404** (probe). `…/api/wnba/fair-lines` → **404**. |
+| **Edge** | Assemble **200** — `linesAsOf`, **kei/model present** (probe). `…/api/wnba/edges-desk` → **404**. |
+| **Props** | `/pro/wnba/props` Ch6 dark / forced PASS (code). |
+| **Futures** | None in primary inventory routes. |
+| **Tags in use** | **PLAY / LEAN / PASS**. **Flag:** WATCH (prop policy). |
+| **as-of present?** | **Yes** — `linesAsOf` (probe). |
+| **run_id present?** | **No**. |
+| **empty/error copy** | `No WNBA projections for this date yet. Check back after the daily sim cycle.` · `Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.` · `…No projections for this date yet — offseason empty slate is intentional…`. |
+| **mobile filter** | **Yes** Edge/Odds (sport), Fair-lines (date). **No** props, edges desk. |
+
+---
+
+## Compact rollup (Notion-friendly wide table)
+
+| Sport | Overview | Model | Edge | Props | Futures | Tags | as-of | run_id | Mobile filters |
+|-------|----------|-------|------|-------|---------|------|-------|--------|----------------|
+| NFL | 12/1 · overview+edge 200 · kei-lines **404** | **/pro/nfl/model 200** · `/api/nfl/fair-lines` 200 (+`open_competition`) | assemble 200 kei+asOf · edges-desk **200** | live; conf; no stake tags | `/projections` (code) | PLAY/LEAN/PASS/**Best Value** · flag WATCH/ALERT/STAY AWAY | **Y** | **N** | Y (edge/odds/fair/props/edges) |
+| CFB | 10/3 · kei-lines **404** | **/pro/cfb/model 200** · api fair-lines **404** | assemble 200 kei+asOf · edges-desk **404** | **none** (→tempo) | `/futures`+`/projections` (code) | PLAY/LEAN/PASS | **Y** | **N** | Y edge/odds; N fair/edges |
+| MLB | 9/4 · kei-lines **404** | model **404** · api **404** | assemble 200 **no kei** on sample · edges-desk **404** | soft-launch | none | PLAY/LEAN/PASS · flag WATCH | **Y** | **N** | Y edge/odds/fair/edges; N props |
+| NBA | 9/4 · kei-lines **404** | model **404** · api **404** | assemble 200 kei+asOf · edges-desk **404** | Ch6 dark PASS | none | PLAY/LEAN/PASS · flag WATCH | **Y** | **N** | Y edge/odds/fair; N props/edges |
+| NHL | 9/4 · kei-lines **404** | model **404** · api **404** | assemble 200 kei+asOf · edges-desk **404** | Ch6 dark PASS | none | PLAY/LEAN/PASS | **Y** | **N** | Y edge/odds; N fair/props/edges |
+| WNBA | 9/4 · kei-lines **404** | model **404** · api **404** | assemble 200 kei+asOf · edges-desk **404** | Ch6 dark PASS | none | PLAY/LEAN/PASS · flag WATCH | **Y** | **N** | Y edge/odds/fair; N props/edges |
+
+---
+
+## Live probe key gaps (cited)
+
+| Path | Result |
+|------|--------|
+| `/pro/{sport}/kei-lines` | 404 all six (no redirect to fair-lines) |
+| `/pro/{sport}/model` | 200 only nfl+cfb; 404 mlb/nba/nhl/wnba |
+| `/api/{sport}/fair-lines` | 200 only nfl; 404 others |
+| `/api/{sport}/edges-desk` | 200 only nfl; 404 others |
+| `/api/edge-board/{sport}/assemble` | 200 all six; `linesAsOf` present; kei/model on nfl/cfb/nba/nhl/wnba; mlb sample market/best/asOf only |
+
+**Adjacent (outside primary six):** `/pro/cbb` and `/pro/ncaab` overview+edges also **200**.
+
+---
+
+## Shared contracts (code)
 
 | Symbol | File |
 |--------|------|
 | `Tag = PLAY \| LEAN \| PASS` | `apps/web/lib/flat-rows-to-legacy.ts` |
-| `ActionLabel` (NFL) = PASS/LEAN/PLAY/**BEST VALUE**/ALERT/**STAY AWAY** | `apps/web/lib/nfl-decision-engine.ts` |
+| `ActionLabel` incl. BEST VALUE / ALERT / STAY AWAY | `apps/web/lib/nfl-decision-engine.ts` |
 | Edge Board UI | `apps/web/components/EdgeBoard.tsx` |
 | Assemble API | `GET /api/edge-board/[sport]/assemble` |
-| Odds compare | `GET /api/odds/[sport]/compare` · `OddsCompareBoard.tsx` |
-| Nav SoT | `apps/web/lib/sport-pro-nav.ts` |
-| Sport registry | `apps/web/lib/sports.ts` (`nfl\|cfb\|mlb\|nba\|nhl\|wnba` + ncaam) |
 
-**`run_id`:** absent on all major betting boards (edge / fair-lines / props / edges / odds). Present elsewhere (power-ratings / season-engine) — out of board scope.
-
-**ODDS_API_KEY:** not shown in customer board UI (env/lib only). Ops-ish copy that **is** still visible: `Model service is not configured for this environment.` (`model-service-status.ts`); KEI table pipeline/`data/processed/kei_lines_*.json` empty copy.
-
----
-
-## Live www probe (authoritative HTTP)
-
-**Probe UTC:** 2026-09-04T03:49Z · **base:** www.kosedge.com · **auth:** none  
-Machine twin: JSON `live_probe`. Facts below only — nothing invented beyond this probe.
-
-**Totals (primary sports):** HTTP **200 = 58**, **404 = 20**.
-
-| Sport | 200 | 404 |
-|-------|-----|-----|
-| NFL | 12 | 1 |
-| CFB | 10 | 3 |
-| MLB | 9 | 4 |
-| NBA | 9 | 4 |
-| NHL | 9 | 4 |
-| WNBA | 9 | 4 |
-
-### Key live gaps
-
-| Path pattern | Live result |
-|--------------|-------------|
-| `/pro/{sport}/kei-lines` | **404 all six** (no redirect to fair-lines) |
-| `/pro/{sport}/model` | **200** only nfl+cfb; **404** mlb/nba/nhl/wnba |
-| `/api/{sport}/fair-lines` | **200** only nfl; **404** others |
-| `/api/{sport}/edges-desk` | **200** only nfl; **404** others |
-
-### Assemble API
-
-- `/api/edge-board/{sport}/assemble` → **200 all six**
-- `linesAsOf` present
-- kei/model on sampled rows: **nfl, cfb, nba, nhl, wnba**
-- **mlb** sampled rows lacked kei/model (market / best / asOf only)
-
-### Tags / Confidence (HTML or API)
-
-- Tags seen: **PLAY / LEAN / PASS**
-- Confidence seen on **NFL props** and **NFL edges**
-- NFL fair-lines API body still contains `open_competition` string
-
-### Adjacent (outside primary six; cited only)
-
-- `/pro/cbb` and `/pro/ncaab` **overview + edges** also **200**
-
----
-
-## Summary table — Edge Board field coverage
-
-Primary Sport Standard surface. Code capability (not live-row sparsity).
-
-| Sport | Model/KEI | Market | Best | Edge | Confidence | Status/Tag | as-of | run_id |
-|-------|-----------|--------|------|------|------------|------------|-------|--------|
-| NFL | present | present | present | present | **partial** (Action cell) | present (Tag + ActionLabel) | present | absent |
-| CFB | present | present | present | present | absent | present (PLAY sat→PASS) | present | absent |
-| MLB | present | present | present | present | absent | present | present | absent |
-| NBA | present | present | present | present | absent | present | present | absent |
-| NHL | present | present | present | present | absent | present | present | absent |
-| WNBA | present | present | present | present | absent | present | present | absent |
-
----
-
-## Summary table — Fair / KEI Lines field coverage
-
-| Sport | Model/KEI | Market | Best | Edge | Confidence | Status/Tag | as-of | run_id |
-|-------|-----------|--------|------|------|------------|------------|-------|--------|
-| NFL | present | partial | partial | partial | partial | partial | present | absent |
-| CFB | present | absent | absent | absent | absent | absent | partial | absent |
-| MLB | present | absent | absent | absent | absent | absent | partial | absent |
-| NBA | present | absent | absent | absent | absent | absent | partial | absent |
-| NHL | present | absent | absent | absent | absent | absent | partial | absent |
-| WNBA | present | absent | absent | absent | absent | absent | partial | absent |
-
----
-
-## Summary table — Props / Edges desk / Odds (compressed)
-
-| Sport | Props board | Props tags | Edges desk tags | Odds Model/KEI |
-|-------|-------------|------------|-----------------|----------------|
-| NFL | live means/edge/conf; tag UI **absent** (null) | no PLAY/LEAN stake tags; WATCH in types only | no PLAY/LEAN/PASS col | absent |
-| CFB | **no board** (→ tempo) | — | absent (on Edge Board) | absent |
-| MLB | soft-launch shell | policy WATCH/PLAY/PASS stake off | absent | absent |
-| NBA | Ch6 dark | forced **PASS** | absent | absent |
-| NHL | Ch6 dark | forced **PASS** | absent | absent |
-| WNBA | Ch6 dark | forced **PASS** | absent | absent |
-
-Full per-board matrices: JSON `coverage_matrix.*`.
-
----
-
-## Tags currently in use
-
-| Tag | Sports / surfaces | Notes |
-|-----|-------------------|-------|
-| PLAY | Edge Board all six (policy-gated) | CFB PLAY sat→PASS; NFL spread lock `spread_play_v2_cap7` |
-| LEAN | Edge Board all six | |
-| PASS | Default everywhere | Props dark boards forced PASS |
-| BEST VALUE / Best Value | **NFL only** (ActionLabel) | Remapped to PLAY when dead-tier (`nfl-dead-tiers.ts`) |
-| **WATCH** (flag) | Prop policies NFL/NBA/MLB/WNBA | Web NFL props forces `tag: null` |
-| **ALERT** (flag) | NFL ActionLabel | Non-standard |
-| **STAY AWAY** (flag) | NFL ActionLabel | Already in code — inventory only; do not introduce as grammar |
-| **isBestBet** (flag) | NFL boolean | Not a subscriber tag string / not “Best Bet” chrome |
-
-Not found as board tags: `FIRE`, `PASS_HARD`, `BEST_BET` / `STAY_AWAY` (underscore forms).
-
----
-
-## 1) Routes by sport
-
-### NFL
-
-| Path | Title / purpose | File |
-|------|-----------------|------|
-| `/edge-board/nfl` | NFL Edge Board (public) | `app/edge-board/[sport]/page.tsx` |
-| `/odds/nfl` | Compare Odds | `app/odds/[sport]/page.tsx` |
-| `/pro/nfl/overview` | Desk hub | `pro/nfl/overview/page.tsx` |
-| `/pro/nfl/slate/today` | Weekly Slate | `pro/nfl/slate/[date]/page.tsx` |
-| `/pro/nfl/fair-lines` | KEI Lines | `pro/nfl/fair-lines/page.tsx` |
-| `/pro/nfl/edges` | Model vs Market Edges | `pro/nfl/edges/page.tsx` |
-| `/pro/nfl/props` | Props board | `pro/nfl/props/page.tsx` |
-| `/pro/nfl/model` | Season Model | `pro/nfl/model/page.tsx` |
-| `/pro/nfl/edge-board` | → `/edge-board/nfl` | `pro/nfl/edge-board/page.tsx` |
-| `/pro/nfl/teams` (+ `[team]/[view]`) | Team Intel | `pro/nfl/teams/*` |
-| `/pro/power-ratings/nfl` | Power Ratings | `pro/power-ratings/[sport]/page.tsx` |
-| `/pro/nfl/fantasy` (+ builder/mock/…) | Fantasy desks | `pro/nfl/fantasy/*` |
-| `/pro/nfl/survivor` | Survivor | `pro/nfl/survivor/page.tsx` |
-| `/pro/nfl/game-boxes` | Game Boxes | `pro/nfl/game-boxes/page.tsx` |
-| `/pro/nfl/camp` | Camp Desk | `pro/nfl/camp/page.tsx` |
-| `/pro/nfl/execution` | Execution Monitor | `pro/[sport]/execution/page.tsx` |
-| `/pro/nfl/injuries` | Injuries & News | `pro/nfl/injuries/page.tsx` |
-| `/pro/nfl/launch-notes` | How to read desk (public) | `pro/nfl/launch-notes/page.tsx` |
-| Also: projections, awards, previews, dfs, weekly-fantasy, news, standings, depth-charts | Desks / tools | various under `pro/nfl/` |
-
-**APIs:** `/api/edge-board/nfl/assemble`, `/api/odds/nfl/compare`, `/api/nfl/fair-lines`, `/api/nfl/edges-desk`
-
-### CFB
-
-| Path | Title / purpose | File |
-|------|-----------------|------|
-| `/edge-board/cfb` | CFB Edge Board (`?week=0\|1`) | `edge-board/[sport]/page.tsx` |
-| `/odds/cfb` | Compare Odds | `odds/[sport]/page.tsx` |
-| `/pro/cfb/overview` | Overview | `pro/cfb/overview/page.tsx` |
-| `/pro/cfb/slate` | Official slate | `pro/cfb/slate/page.tsx` |
-| `/pro/kei-lines/cfb` | KEI Lines (primary) | `pro/kei-lines/[sport]/page.tsx` |
-| `/pro/cfb/fair-lines` | Fair Lines shell | `pro/[sport]/fair-lines/page.tsx` |
-| `/pro/cfb/edges` | Edges | `pro/[sport]/edges/page.tsx` |
-| `/pro/cfb/model` | Season Model | `pro/cfb/model/page.tsx` |
-| `/pro/cfb/project-game` | Project Game | `pro/cfb/project-game/page.tsx` |
-| `/pro/cfb/projections` | Projections | `pro/cfb/projections/page.tsx` |
-| `/pro/cfb/futures` | Futures | `pro/cfb/futures/page.tsx` |
-| `/pro/cfb/teams` | Power + Teams | `pro/cfb/teams/page.tsx` |
-| `/pro/cfb/tempo` | Tempo & Havoc (props redirect) | `pro/[sport]/tempo/page.tsx` |
-| Also: previews, conferences | Editorial | `pro/cfb/previews/*`, `conferences/*` |
-
-**No CFB props board.** `/pro/cfb/props` → tempo.
-
-### MLB
-
-| Path | Title / purpose | File |
-|------|-----------------|------|
-| `/edge-board/mlb` | MLB Edge Board | `edge-board/[sport]/page.tsx` |
-| `/odds/mlb` | Compare Odds | `odds/[sport]/page.tsx` |
-| `/pro/mlb/overview` | Overview | `pro/[sport]/overview/page.tsx` |
-| `/pro/mlb/slate/today` | Daily Slate | `pro/[sport]/slate/[date]/page.tsx` |
-| `/pro/mlb/fair-lines` | KEI Lines (ML/total/run line) | `pro/mlb/fair-lines/page.tsx` |
-| `/pro/mlb/edges` | MLB Edges | `pro/mlb/edges/page.tsx` |
-| `/pro/mlb/props` | Props soft-launch | `pro/[sport]/props/page.tsx` |
-| `/pro/mlb/teams` | Team Research | `pro/[sport]/teams/page.tsx` |
-| `/pro/power-ratings/mlb` | Power Ratings | `pro/power-ratings/[sport]/page.tsx` |
-| Also: injuries, execution, tracking, matchups | Shared `[sport]` desks | |
-
-### NBA
-
-| Path | Title / purpose | File |
-|------|-----------------|------|
-| `/edge-board/nba` | NBA Edge Board | `edge-board/[sport]/page.tsx` |
-| `/odds/nba` | Compare Odds | `odds/[sport]/page.tsx` |
-| `/pro/nba/overview` | Overview | `pro/[sport]/overview/page.tsx` |
-| `/pro/nba/slate/today` | Daily Slate | `pro/[sport]/slate/[date]/page.tsx` |
-| `/pro/nba/fair-lines` | KEI Lines | `pro/nba/fair-lines/page.tsx` |
-| `/pro/nba/edges` | Edges | `pro/[sport]/edges/page.tsx` |
-| `/pro/nba/props` | Props (Ch6 dark) | `pro/[sport]/props/page.tsx` |
-| `/pro/nba/fantasy` | Fantasy | `pro/nba/fantasy/page.tsx` |
-| `/pro/nba/teams` | Team Research | `pro/[sport]/teams/page.tsx` |
-| `/pro/power-ratings/nba` | Power Ratings | `pro/power-ratings/[sport]/page.tsx` |
-
-### NHL
-
-| Path | Title / purpose | File |
-|------|-----------------|------|
-| `/edge-board/nhl` | NHL Edge Board | `edge-board/[sport]/page.tsx` |
-| `/odds/nhl` | Compare Odds | `odds/[sport]/page.tsx` |
-| `/pro/nhl/overview` | Overview | `pro/[sport]/overview/page.tsx` |
-| `/pro/nhl/slate/today` | Daily Slate | `pro/[sport]/slate/[date]/page.tsx` |
-| `/pro/nhl/fair-lines` | Fair Lines (dynamic shell) | `pro/[sport]/fair-lines/page.tsx` |
-| `/pro/kei-lines/nhl` | KEI Lines (primary href) | `pro/kei-lines/[sport]/page.tsx` |
-| `/pro/nhl/edges` | Edges | `pro/[sport]/edges/page.tsx` |
-| `/pro/nhl/props` | Props (Ch6 dark) | `pro/[sport]/props/page.tsx` |
-| `/pro/nhl/goalies` | Goalie Desk | `pro/[sport]/goalies/page.tsx` |
-| `/pro/nhl/fantasy` | Fantasy | `pro/nhl/fantasy/page.tsx` |
-| `/pro/nhl/teams` | Team Research | `pro/[sport]/teams/page.tsx` |
-| `/pro/power-ratings/nhl` | Power Ratings | `pro/power-ratings/[sport]/page.tsx` |
-
-### WNBA
-
-| Path | Title / purpose | File |
-|------|-----------------|------|
-| `/edge-board/wnba` | WNBA Edge Board | `edge-board/[sport]/page.tsx` |
-| `/odds/wnba` | Compare Odds | `odds/[sport]/page.tsx` |
-| `/pro/wnba/overview` | Overview | `pro/[sport]/overview/page.tsx` |
-| `/pro/wnba/slate/today` | Daily Slate | `pro/[sport]/slate/[date]/page.tsx` |
-| `/pro/wnba/fair-lines` | KEI Lines | `pro/wnba/fair-lines/page.tsx` |
-| `/pro/wnba/edges` | Edges | `pro/[sport]/edges/page.tsx` |
-| `/pro/wnba/props` | Props (Ch6 dark) | `pro/[sport]/props/page.tsx` |
-| `/pro/wnba/fantasy` | Fantasy | `pro/wnba/fantasy/page.tsx` |
-| `/pro/wnba/teams` | Team Research | `pro/[sport]/teams/page.tsx` |
-| `/pro/power-ratings/wnba` | Power Ratings | `pro/power-ratings/[sport]/page.tsx` |
-
-**Nav 404 traps (tools list):** `/pro/{mlb|nba|nhl|wnba}/standings` and several `/stats` links → `notFound()` (NFL-only pages). Inventory only — not a fix PR.
-
----
-
-## 2) Board field evidence (major surfaces)
-
-### Edge Board (all sports)
-
-- **UI cols:** Open O/U, Open Line, Current Line, Current O/U, KEI Line, KEI O/U, Edge, Tag/Action — `EdgeBoard.tsx`
-- **NFL assemble live fields seen:** `kei`, `modelKei`, `best`, `open`, `market`, `edgeMagnitude`, `publishTag`, `actionLabel`, `modelConfidenceScore|Band`, `linesAsOf`, `isBestBet` — **no `run_id`**
-- **Confidence:** NFL Action cell only → **partial**; other sports **absent**
-- **CFB:** trust labels (`cfbMarketTrusted`); Open/Best empty until Odds NCAAF (honest empty copy)
-
-### Fair / KEI Lines
-
-- NFL: richest payload (`NflFairLinesClient` + `/api/nfl/fair-lines`); UI Model/KEI/market subset; tags/confidence/best mostly payload
-- MLB/NBA/WNBA static fair-lines: Model/KEI (or fair=KEI); no market/best/edge/tag table
-- CFB/NHL: `/pro/kei-lines/{sport}` `KeiLinesTable` = Away/Home/Proj line/O/U only
-
-### Props
-
-- NFL: means, line, edge, confidence; **tags suppressed**
-- NBA/NHL/WNBA: Best + Edge + proj; tag forced PASS; dark copy
-- MLB: soft-launch / gated
-- CFB: absent
-
-### Edges desk
-
-- NFL: kosedgeLine / marketLine / edge / marketAsOf; confidence **filter-only**
-- MLB: edges + qualityScore (≠ confidence band)
-- Others: derived from Edge Board tonight; **no tag column**
-
-### Odds compare
-
-- Market per-book + best-book highlights + asOf; **no** Model/KEI/Edge/Tag/Confidence/run_id
-
----
-
-## 4) Empty-state / error copy (customer-visible)
-
-| Board | Representative copy | Ops language? |
-|-------|---------------------|---------------|
-| Edge Board | `Board temporarily unavailable. Refresh to try again.` · `No Slate Yet` · CFB Odds/NCAAF empty pack note | No |
-| Odds | `Odds temporarily unavailable…` · `No odds data yet…` (desktop-only) | No |
-| Fair/KEI | NFL honest empty / Kosedge-only market · NBA/WNBA/MLB “no projections… daily sim” · NHL/CFB “Model board pending” | Partial |
-| KEI table | `Run the pipeline export to generate data/processed/kei_lines_*.json` | **Yes** |
-| Props | NFL no PLAY/LEAN stake tags · NBA/NHL/WNBA Ch6 dark · MLB soft-launch gate | Partial |
-| Model errors | `Model service is not configured for this environment.` | **Yes** |
-| ODDS_API_KEY / Vercel deploy ops | **Not found** in board UI | — |
-
-Full quote list with files: JSON `sports.*.empty_states`.
-
----
-
-## 5) Mobile filter presence
-
-| Board | NFL | CFB | MLB | NBA | NHL | WNBA |
-|-------|-----|-----|-----|-----|-----|------|
-| Edge Board | yes (week/sport chips) | yes (week chips) | yes (sport) | yes (sport) | yes (sport) | yes (sport) |
-| Odds | yes (sport) | yes | yes | yes | yes | yes |
-| Fair/KEI | yes (slate window) | no | yes (run-line focus) | yes (date) | no | yes (date) |
-| Props | yes (market chips) | n/a | no | no | no | no |
-| Edges desk | yes (market/edge/conf) | no | yes (market/edge/quality) | no | no | no |
-
-No dedicated `MobileFilter` drawer/Sheet on these boards. Filter chips use `flex-wrap` (shared mobile+desktop). Edge/Odds mobile **cards** ≠ filters.
-
----
-
-## CoS handoff notes
-
-1. Use JSON `coverage_matrix` as the gap-matrix seed (sport × board × field); overlay `live_probe` for HTTP 404 gaps.
-2. Live probe gaps: `/pro/{sport}/kei-lines` 404 all six; `/pro/{sport}/model` and `/api/{sport}/fair-lines|edges-desk` NFL(+CFB model)-only.
-3. NFL is the only sport with dual Tag + ActionLabel + confidence on Edge Board (probe: Confidence on NFL props/edges).
-4. Fair/KEI Lines outside NFL are Model/KEI-only tables in code — live `/pro/{sport}/kei-lines` path is 404 (fair-lines paths differ).
-5. Non-standard tags already in code (WATCH, ALERT, STAY AWAY, isBestBet) are flagged — inventory, not product language. Probe also notes `open_competition` still in NFL fair-lines API body.
-6. Ops copy still customer-visible: model-service env string + KEI pipeline path — preferred to remove in a later copy PR (out of scope here).
+Full route lists, board field matrices, and empty-state file paths: JSON `sports.*`, `coverage_matrix`, `live_probe`, `cos_matrix`.

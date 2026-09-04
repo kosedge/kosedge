@@ -1,15 +1,22 @@
 {
   "meta": {
-    "title": "KosEdge Sport Standard — Evidence Inventory",
+    "title": "KosEdge Sport Standard \u2014 Evidence Inventory",
     "purpose": "CoS gap-matrix input. Spec-first inventory only. No product grammar. No redesign.",
     "as_of": "2026-09-04",
     "branch_base": "deploy-vercel",
     "sources": [
       "kosedge/kosedge apps/web on deploy-vercel",
       "public www.kosedge.com read-only HTTP + /api/edge-board/{sport}/assemble",
-      "live www probe UTC 2026-09-04T03:49Z (no auth) — see live_probe"
+      "live www probe UTC 2026-09-04T03:49Z (no auth) \u2014 see live_probe"
     ],
-    "sports": ["nfl", "cfb", "mlb", "nba", "nhl", "wnba"],
+    "sports": [
+      "nfl",
+      "cfb",
+      "mlb",
+      "nba",
+      "nhl",
+      "wnba"
+    ],
     "field_vocab": [
       "model_line_kei",
       "market",
@@ -20,16 +27,29 @@
       "as_of",
       "run_id"
     ],
-    "field_values": ["present", "partial", "absent"],
-    "allowed_tags_standard": ["PLAY", "LEAN", "PASS", "Best Value"],
-    "do_not_introduce": ["Best Bet", "Stay Away"],
+    "field_values": [
+      "present",
+      "partial",
+      "absent"
+    ],
+    "allowed_tags_standard": [
+      "PLAY",
+      "LEAN",
+      "PASS",
+      "Best Value"
+    ],
+    "do_not_introduce": [
+      "Best Bet",
+      "Stay Away"
+    ],
     "notes": [
       "Best Value exists in code as ActionLabel BEST VALUE (space), not best_value.",
-      "run_id absent on all major betting boards; appears on power-ratings/season-engine elsewhere — out of board scope here.",
-      "NFL ActionLabel also includes ALERT and STAY AWAY (flagged as non-standard). isBestBet boolean exists — not a subscriber tag string.",
+      "run_id absent on all major betting boards; appears on power-ratings/season-engine elsewhere \u2014 out of board scope here.",
+      "NFL ActionLabel also includes ALERT and STAY AWAY (flagged as non-standard). isBestBet boolean exists \u2014 not a subscriber tag string.",
       "WATCH exists in prop policy / types; NFL web props adapter forces tag null.",
       "Literal ODDS_API_KEY not shown in customer board UI; MODEL_SERVICE_URL / pipeline path copy still customer-visible on some desks."
-    ]
+    ],
+    "delivery_format": "CoS Notion paste lock \u2014 cos_matrix rows + markdown table"
   },
   "shared_contracts": {
     "edge_board_tag": {
@@ -72,12 +92,30 @@
       "http_404": 20
     },
     "per_sport_http": {
-      "nfl": { "ok_200": 12, "not_found_404": 1 },
-      "cfb": { "ok_200": 10, "not_found_404": 3 },
-      "mlb": { "ok_200": 9, "not_found_404": 4 },
-      "nba": { "ok_200": 9, "not_found_404": 4 },
-      "nhl": { "ok_200": 9, "not_found_404": 4 },
-      "wnba": { "ok_200": 9, "not_found_404": 4 }
+      "nfl": {
+        "ok_200": 12,
+        "not_found_404": 1
+      },
+      "cfb": {
+        "ok_200": 10,
+        "not_found_404": 3
+      },
+      "mlb": {
+        "ok_200": 9,
+        "not_found_404": 4
+      },
+      "nba": {
+        "ok_200": 9,
+        "not_found_404": 4
+      },
+      "nhl": {
+        "ok_200": 9,
+        "not_found_404": 4
+      },
+      "wnba": {
+        "ok_200": 9,
+        "not_found_404": 4
+      }
     },
     "key_gaps": [
       {
@@ -110,7 +148,11 @@
         "wnba": "present",
         "mlb": "absent_on_sampled_rows"
       },
-      "mlb_sampled_row_fields": ["market", "best", "asOf"],
+      "mlb_sampled_row_fields": [
+        "market",
+        "best",
+        "asOf"
+      ],
       "mlb_note": "mlb assemble sampled rows lacked kei/model (market/best/asOf only)"
     },
     "tags_seen_html_or_api": [
@@ -119,7 +161,10 @@
       "PASS"
     ],
     "confidence_seen": {
-      "surfaces": ["nfl props", "nfl edges"],
+      "surfaces": [
+        "nfl props",
+        "nfl edges"
+      ],
       "note": "Confidence observed on NFL props/edges in HTML/API"
     },
     "nfl_fair_lines_api_body_note": "NFL fair-lines API body still contains open_competition string",
@@ -177,12 +222,22 @@
         "note": "Sample week=1 rows often lack best/open until Odds NCAAF returns; code path supports Open/Best when present."
       },
       "mlb": {
-        "row_fields_seen": ["best", "open", "market", "linesAsOf"],
+        "row_fields_seen": [
+          "best",
+          "open",
+          "market",
+          "linesAsOf"
+        ],
         "note": "Live assemble sample markets-only (no kei on sampled rows); fair-lines desk separate."
       },
       "nba": {
-        "row_fields_seen": ["best", "open", "market", "linesAsOf"],
-        "note": "Agent spot-check first row lacked kei; authoritative live_probe (03:49Z) reports kei/model present on nba assemble sample — prefer live_probe."
+        "row_fields_seen": [
+          "best",
+          "open",
+          "market",
+          "linesAsOf"
+        ],
+        "note": "Agent spot-check first row lacked kei; authoritative live_probe (03:49Z) reports kei/model present on nba assemble sample \u2014 prefer live_probe."
       },
       "nhl": {
         "row_fields_seen": [
@@ -574,7 +629,7 @@
         {
           "path": "/pro/nfl/edge-board",
           "title": "Redirect",
-          "purpose": "→ /edge-board/nfl",
+          "purpose": "\u2192 /edge-board/nfl",
           "file": "apps/web/app/(pro)/pro/nfl/edge-board/page.tsx"
         },
         {
@@ -659,11 +714,17 @@
             },
             "best": {
               "status": "present",
-              "evidence": ["bestLine/bestOU", "assemble: best, book"]
+              "evidence": [
+                "bestLine/bestOU",
+                "assemble: best, book"
+              ]
             },
             "edge": {
               "status": "present",
-              "evidence": ["Edge column", "assemble: edgeMagnitude"]
+              "evidence": [
+                "Edge column",
+                "assemble: edgeMagnitude"
+              ]
             },
             "confidence": {
               "status": "partial",
@@ -681,11 +742,15 @@
             },
             "as_of": {
               "status": "present",
-              "evidence": ["linesAsOf top-level + per-row"]
+              "evidence": [
+                "linesAsOf top-level + per-row"
+              ]
             },
             "run_id": {
               "status": "absent",
-              "evidence": ["not in assemble payload or EdgeBoard UI"]
+              "evidence": [
+                "not in assemble payload or EdgeBoard UI"
+              ]
             }
           }
         },
@@ -694,33 +759,51 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["NflFairLinesClient Model+KEI cols", "/api/nfl/fair-lines"]
+              "evidence": [
+                "NflFairLinesClient Model+KEI cols",
+                "/api/nfl/fair-lines"
+              ]
             },
             "market": {
               "status": "partial",
-              "evidence": ["Market ML/total in UI; fuller market in payload"]
+              "evidence": [
+                "Market ML/total in UI; fuller market in payload"
+              ]
             },
             "best": {
               "status": "partial",
-              "evidence": ["payload bestSpread*/bestTotal*; not table cols"]
+              "evidence": [
+                "payload bestSpread*/bestTotal*; not table cols"
+              ]
             },
             "edge": {
               "status": "partial",
-              "evidence": ["ML edge UI; spread/total edge in payload"]
+              "evidence": [
+                "ML edge UI; spread/total edge in payload"
+              ]
             },
             "confidence": {
               "status": "partial",
-              "evidence": ["decision.modelConfidence in payload"]
+              "evidence": [
+                "decision.modelConfidence in payload"
+              ]
             },
             "status_tag": {
               "status": "partial",
-              "evidence": ["publishTag* + actionLabel* in payload, not table"]
+              "evidence": [
+                "publishTag* + actionLabel* in payload, not table"
+              ]
             },
             "as_of": {
               "status": "present",
-              "evidence": ["oddsAsOf / asOf"]
+              "evidence": [
+                "oddsAsOf / asOf"
+              ]
             },
-            "run_id": { "status": "absent", "evidence": [] }
+            "run_id": {
+              "status": "absent",
+              "evidence": []
+            }
           }
         },
         "props": {
@@ -728,26 +811,50 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["nfl-props-board.ts means/floor/ceiling"]
+              "evidence": [
+                "nfl-props-board.ts means/floor/ceiling"
+              ]
             },
             "market": {
               "status": "present",
-              "evidence": ["line + fair O/U"]
+              "evidence": [
+                "line + fair O/U"
+              ]
             },
             "best": {
               "status": "partial",
-              "evidence": ["market prices; no Best column"]
+              "evidence": [
+                "market prices; no Best column"
+              ]
             },
-            "edge": { "status": "present", "evidence": ["edge over/under"] },
-            "confidence": { "status": "present", "evidence": ["confidence field"] },
+            "edge": {
+              "status": "present",
+              "evidence": [
+                "edge over/under"
+              ]
+            },
+            "confidence": {
+              "status": "present",
+              "evidence": [
+                "confidence field"
+              ]
+            },
             "status_tag": {
               "status": "absent",
               "evidence": [
                 "adapter forces tag:null; type allows WATCH/LEAN/PLAY/PASS; copy: no PLAY/LEAN stake tags"
               ]
             },
-            "as_of": { "status": "present", "evidence": ["updatedAt"] },
-            "run_id": { "status": "absent", "evidence": [] }
+            "as_of": {
+              "status": "present",
+              "evidence": [
+                "updatedAt"
+              ]
+            },
+            "run_id": {
+              "status": "absent",
+              "evidence": []
+            }
           }
         },
         "edges_desk": {
@@ -755,42 +862,99 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["kosedgeLine / NflEdgesDeskClient"]
+              "evidence": [
+                "kosedgeLine / NflEdgesDeskClient"
+              ]
             },
-            "market": { "status": "present", "evidence": ["marketLine"] },
-            "best": { "status": "absent", "evidence": [] },
-            "edge": { "status": "present", "evidence": [] },
+            "market": {
+              "status": "present",
+              "evidence": [
+                "marketLine"
+              ]
+            },
+            "best": {
+              "status": "absent",
+              "evidence": []
+            },
+            "edge": {
+              "status": "present",
+              "evidence": []
+            },
             "confidence": {
               "status": "partial",
-              "evidence": ["filter only, not table col"]
+              "evidence": [
+                "filter only, not table col"
+              ]
             },
             "status_tag": {
               "status": "absent",
-              "evidence": ["Lean col = side string, not PLAY/LEAN/PASS"]
+              "evidence": [
+                "Lean col = side string, not PLAY/LEAN/PASS"
+              ]
             },
-            "as_of": { "status": "present", "evidence": ["marketAsOf"] },
-            "run_id": { "status": "absent", "evidence": [] }
+            "as_of": {
+              "status": "present",
+              "evidence": [
+                "marketAsOf"
+              ]
+            },
+            "run_id": {
+              "status": "absent",
+              "evidence": []
+            }
           }
         },
         "odds_compare": {
           "path": "/odds/nfl",
           "fields": {
-            "model_line_kei": { "status": "absent", "evidence": [] },
-            "market": { "status": "present", "evidence": ["per-book lines"] },
+            "model_line_kei": {
+              "status": "absent",
+              "evidence": []
+            },
+            "market": {
+              "status": "present",
+              "evidence": [
+                "per-book lines"
+              ]
+            },
             "best": {
               "status": "partial",
-              "evidence": ["bestSpreadBook / bestTotalBook highlights"]
+              "evidence": [
+                "bestSpreadBook / bestTotalBook highlights"
+              ]
             },
-            "edge": { "status": "absent", "evidence": [] },
-            "confidence": { "status": "absent", "evidence": [] },
-            "status_tag": { "status": "absent", "evidence": [] },
-            "as_of": { "status": "present", "evidence": ["asOf + bookAsOf"] },
-            "run_id": { "status": "absent", "evidence": [] }
+            "edge": {
+              "status": "absent",
+              "evidence": []
+            },
+            "confidence": {
+              "status": "absent",
+              "evidence": []
+            },
+            "status_tag": {
+              "status": "absent",
+              "evidence": []
+            },
+            "as_of": {
+              "status": "present",
+              "evidence": [
+                "asOf + bookAsOf"
+              ]
+            },
+            "run_id": {
+              "status": "absent",
+              "evidence": []
+            }
           }
         }
       },
       "tags": {
-        "standard_in_use": ["PLAY", "LEAN", "PASS", "BEST VALUE"],
+        "standard_in_use": [
+          "PLAY",
+          "LEAN",
+          "PASS",
+          "BEST VALUE"
+        ],
         "other_flagged": [
           {
             "tag": "WATCH",
@@ -802,11 +966,11 @@
           },
           {
             "tag": "STAY AWAY",
-            "where": "NFL ActionLabel (decision engine) — flag only; do not introduce as product grammar"
+            "where": "NFL ActionLabel (decision engine) \u2014 flag only; do not introduce as product grammar"
           },
           {
             "tag": "isBestBet",
-            "where": "boolean on flat rows / decision — not Best Bet chrome"
+            "where": "boolean on flat rows / decision \u2014 not Best Bet chrome"
           },
           {
             "tag": "STRONG PLAY / EXCEPTIONAL",
@@ -816,7 +980,7 @@
         "policy_notes": [
           "Spread PLAY locked to spread_play_v2_cap7 (NFL_SPREAD_PLAY_LOCKED.md)",
           "Props: no PLAY/LEAN stake tags on web surface",
-          "displayActionLabel remaps unreachable BEST VALUE → PLAY (nfl-dead-tiers.ts)"
+          "displayActionLabel remaps unreachable BEST VALUE \u2192 PLAY (nfl-dead-tiers.ts)"
         ]
       },
       "empty_states": [
@@ -831,7 +995,7 @@
           "board": "edge_board"
         },
         {
-          "quote": "No regular-season fair-lines in the pull window yet…",
+          "quote": "No regular-season fair-lines in the pull window yet\u2026",
           "file": "apps/web/components/EdgeBoard.tsx",
           "board": "edge_board"
         },
@@ -853,12 +1017,12 @@
           "ops_language": true
         },
         {
-          "quote": "Market lines unavailable — showing Kosedge lines only.",
+          "quote": "Market lines unavailable \u2014 showing Kosedge lines only.",
           "file": "apps/web/components/pro/nfl/NflFairLinesClient.tsx",
           "board": "fair_lines"
         },
         {
-          "quote": "…no PLAY / LEAN stake tags.",
+          "quote": "\u2026no PLAY / LEAN stake tags.",
           "file": "apps/web/lib/nfl-props-surface.ts",
           "board": "props"
         },
@@ -869,7 +1033,7 @@
         }
       ],
       "ops_language_flags": [
-        "MODEL_SERVICE_URL / not configured for this environment (model-service-status.ts) — still customer-visible"
+        "MODEL_SERVICE_URL / not configured for this environment (model-service-status.ts) \u2014 still customer-visible"
       ],
       "odds_api_key_in_ui": false,
       "mobile_filters": {
@@ -987,23 +1151,47 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["KEI col", "assemble kei/modelKei"]
+              "evidence": [
+                "KEI col",
+                "assemble kei/modelKei"
+              ]
             },
-            "market": { "status": "present", "evidence": ["Current cols"] },
+            "market": {
+              "status": "present",
+              "evidence": [
+                "Current cols"
+              ]
+            },
             "best": {
               "status": "present",
-              "evidence": ["best + trust label when Odds present"]
+              "evidence": [
+                "best + trust label when Odds present"
+              ]
             },
-            "edge": { "status": "present", "evidence": [] },
-            "confidence": { "status": "absent", "evidence": [] },
+            "edge": {
+              "status": "present",
+              "evidence": []
+            },
+            "confidence": {
+              "status": "absent",
+              "evidence": []
+            },
             "status_tag": {
               "status": "present",
               "evidence": [
-                "PLAY/LEAN/PASS via cfb-trusted-market; PLAY sat flags → PASS"
+                "PLAY/LEAN/PASS via cfb-trusted-market; PLAY sat flags \u2192 PASS"
               ]
             },
-            "as_of": { "status": "present", "evidence": ["linesAsOf"] },
-            "run_id": { "status": "absent", "evidence": [] }
+            "as_of": {
+              "status": "present",
+              "evidence": [
+                "linesAsOf"
+              ]
+            },
+            "run_id": {
+              "status": "absent",
+              "evidence": []
+            }
           }
         },
         "fair_kei_lines": {
@@ -1011,75 +1199,149 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["KeiLinesTable Proj line/O/U"]
+              "evidence": [
+                "KeiLinesTable Proj line/O/U"
+              ]
             },
-            "market": { "status": "absent", "evidence": [] },
-            "best": { "status": "absent", "evidence": [] },
-            "edge": { "status": "absent", "evidence": [] },
-            "confidence": { "status": "absent", "evidence": [] },
-            "status_tag": { "status": "absent", "evidence": [] },
+            "market": {
+              "status": "absent",
+              "evidence": []
+            },
+            "best": {
+              "status": "absent",
+              "evidence": []
+            },
+            "edge": {
+              "status": "absent",
+              "evidence": []
+            },
+            "confidence": {
+              "status": "absent",
+              "evidence": []
+            },
+            "status_tag": {
+              "status": "absent",
+              "evidence": []
+            },
             "as_of": {
               "status": "partial",
-              "evidence": ["pack as_of in artifacts"]
+              "evidence": [
+                "pack as_of in artifacts"
+              ]
             },
-            "run_id": { "status": "absent", "evidence": [] }
+            "run_id": {
+              "status": "absent",
+              "evidence": []
+            }
           }
         },
         "props": {
           "path": null,
           "note": "/pro/cfb/props redirects to tempo; no props board",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "absent" },
-            "best": { "status": "absent" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "absent"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "edges_desk": {
           "path": "/pro/cfb/edges",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
             "status_tag": {
               "status": "absent",
-              "evidence": ["tags live on Edge Board"]
+              "evidence": [
+                "tags live on Edge Board"
+              ]
             },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "odds_compare": {
           "path": "/odds/cfb",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         }
       },
       "tags": {
-        "standard_in_use": ["PLAY", "LEAN", "PASS"],
+        "standard_in_use": [
+          "PLAY",
+          "LEAN",
+          "PASS"
+        ],
         "other_flagged": [],
         "policy_notes": [
-          "CFB_*_PLAY_ELIGIBLE sit → PLAY remapped to PASS (cfb-trusted-market.ts)",
+          "CFB_*_PLAY_ELIGIBLE sit \u2192 PLAY remapped to PASS (cfb-trusted-market.ts)",
           "No Best Value on CFB edge tags"
         ]
       },
       "empty_states": [
         {
-          "quote": "KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF — we do not invent book prices.",
+          "quote": "KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF \u2014 we do not invent book prices.",
           "file": "apps/web/components/EdgeBoard.tsx",
           "board": "edge_board"
         },
@@ -1114,13 +1376,22 @@
           "status": "yes",
           "detail": "Week0/Week1 chips"
         },
-        "odds_compare": { "status": "yes", "detail": "sport chips" },
+        "odds_compare": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
         "fair_kei_lines": {
           "status": "no",
           "detail": "KeiLinesTable list only (non-NCAAM)"
         },
-        "props": { "status": "no", "detail": "no props board" },
-        "edges_desk": { "status": "no", "detail": "no threshold filters" }
+        "props": {
+          "status": "no",
+          "detail": "no props board"
+        },
+        "edges_desk": {
+          "status": "no",
+          "detail": "no threshold filters"
+        }
       }
     },
     "mlb": {
@@ -1181,7 +1452,7 @@
         },
         {
           "path": "/pro/kei-lines/mlb",
-          "title": "MLB — KEI Lines",
+          "title": "MLB \u2014 KEI Lines",
           "purpose": "KEI table (nav prefers fair-lines)",
           "file": "apps/web/app/(pro)/pro/kei-lines/[sport]/page.tsx"
         }
@@ -1196,18 +1467,34 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["code path KEI+ML edge; live sample may be markets-only"]
+              "evidence": [
+                "code path KEI+ML edge; live sample may be markets-only"
+              ]
             },
-            "market": { "status": "present" },
-            "best": { "status": "present" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "present"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
             "status_tag": {
               "status": "present",
-              "evidence": ["edgeToTag ML ≥3.0 PLAY / ≥1.5 LEAN"]
+              "evidence": [
+                "edgeToTag ML \u22653.0 PLAY / \u22651.5 LEAN"
+              ]
             },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "fair_kei_lines": {
@@ -1215,70 +1502,143 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["Model vs KEI split"]
+              "evidence": [
+                "Model vs KEI split"
+              ]
             },
-            "market": { "status": "absent" },
-            "best": { "status": "absent" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "partial", "evidence": ["projectedAt"] },
-            "run_id": { "status": "absent" }
+            "market": {
+              "status": "absent"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "partial",
+              "evidence": [
+                "projectedAt"
+              ]
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "props": {
           "path": "/pro/mlb/props",
           "note": "Soft-launch shell; policy PLAY/WATCH/PASS stake off",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "absent" },
-            "best": { "status": "absent" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "absent"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "edges_desk": {
           "path": "/pro/mlb/edges",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "absent" },
-            "edge": { "status": "present" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "present"
+            },
             "confidence": {
               "status": "partial",
-              "evidence": ["qualityScore ≠ confidence band"]
+              "evidence": [
+                "qualityScore \u2260 confidence band"
+              ]
             },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "odds_compare": {
           "path": "/odds/mlb",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         }
       },
       "tags": {
-        "standard_in_use": ["PLAY", "LEAN", "PASS"],
+        "standard_in_use": [
+          "PLAY",
+          "LEAN",
+          "PASS"
+        ],
         "other_flagged": [
           {
             "tag": "WATCH",
             "where": "mlb_prop_edge_policy.py (props soft-launch)"
           }
         ],
-        "policy_notes": ["Props play-stake eligibility gated off for soft launch"]
+        "policy_notes": [
+          "Props play-stake eligibility gated off for soft launch"
+        ]
       },
       "empty_states": [
         {
@@ -1287,7 +1647,7 @@
           "board": "fair_lines"
         },
         {
-          "quote": "…play-stake eligibility stays gated off for soft launch…",
+          "quote": "\u2026play-stake eligibility stays gated off for soft launch\u2026",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
           "board": "props"
         },
@@ -1307,13 +1667,22 @@
       ],
       "odds_api_key_in_ui": false,
       "mobile_filters": {
-        "edge_board": { "status": "yes", "detail": "sport chips" },
-        "odds_compare": { "status": "yes", "detail": "sport chips" },
+        "edge_board": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
+        "odds_compare": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
         "fair_kei_lines": {
           "status": "yes",
           "detail": "All markets / Run line focus chips"
         },
-        "props": { "status": "no", "detail": "soft-launch shell" },
+        "props": {
+          "status": "no",
+          "detail": "soft-launch shell"
+        },
         "edges_desk": {
           "status": "yes",
           "detail": "Market / Min edge / Min quality + md:hidden cards"
@@ -1361,7 +1730,7 @@
         {
           "path": "/pro/nba/props",
           "title": "NBA Props",
-          "purpose": "Ch6 dark — forced PASS",
+          "purpose": "Ch6 dark \u2014 forced PASS",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx"
         },
         {
@@ -1391,20 +1760,36 @@
         "edge_board": {
           "path": "/edge-board/nba",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
             "best": {
               "status": "present",
-              "evidence": ["trusted Best → tags (nba-trusted-market.ts)"]
+              "evidence": [
+                "trusted Best \u2192 tags (nba-trusted-market.ts)"
+              ]
             },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
             "status_tag": {
               "status": "present",
-              "evidence": ["PLAY≥4.0 / LEAN≥2.5 trusted Best"]
+              "evidence": [
+                "PLAY\u22654.0 / LEAN\u22652.5 trusted Best"
+              ]
             },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "fair_kei_lines": {
@@ -1412,62 +1797,139 @@
           "fields": {
             "model_line_kei": {
               "status": "present",
-              "evidence": ["fair=KEI identity"]
+              "evidence": [
+                "fair=KEI identity"
+              ]
             },
-            "market": { "status": "absent" },
-            "best": { "status": "absent" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "partial", "evidence": ["projected"] },
-            "run_id": { "status": "absent" }
+            "market": {
+              "status": "absent"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "partial",
+              "evidence": [
+                "projected"
+              ]
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "props": {
           "path": "/pro/nba/props",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "present" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "partial", "evidence": ["in payload"] },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "present"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "partial",
+              "evidence": [
+                "in payload"
+              ]
+            },
             "status_tag": {
               "status": "partial",
-              "evidence": ["forced PASS (darkTag); zero PLAY/LEAN"]
+              "evidence": [
+                "forced PASS (darkTag); zero PLAY/LEAN"
+              ]
             },
-            "as_of": { "status": "present", "evidence": ["asOfDate"] },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present",
+              "evidence": [
+                "asOfDate"
+              ]
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "edges_desk": {
           "path": "/pro/nba/edges",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "odds_compare": {
           "path": "/odds/nba",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         }
       },
       "tags": {
-        "standard_in_use": ["PLAY", "LEAN", "PASS"],
+        "standard_in_use": [
+          "PLAY",
+          "LEAN",
+          "PASS"
+        ],
         "other_flagged": [
           {
             "tag": "WATCH",
@@ -1476,22 +1938,22 @@
         ],
         "policy_notes": [
           "Props Ch6 dark: tag always PASS; copy zero PLAY/LEAN",
-          "Edge Board PLAY≥4.0 / LEAN≥2.5 on trusted Best"
+          "Edge Board PLAY\u22654.0 / LEAN\u22652.5 on trusted Best"
         ]
       },
       "empty_states": [
         {
-          "quote": "Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.",
+          "quote": "Chapter 6 dark \u2014 proj, Best, edge, \u03c3; zero PLAY / LEAN.",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
           "board": "props"
         },
         {
-          "quote": "No Ch6 dark prop rows yet — PlayerProjection pack required.",
+          "quote": "No Ch6 dark prop rows yet \u2014 PlayerProjection pack required.",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
           "board": "props"
         },
         {
-          "quote": "…We do not invent fair prices when the slate is empty.",
+          "quote": "\u2026We do not invent fair prices when the slate is empty.",
           "file": "apps/web/app/(pro)/pro/nba/fair-lines/page.tsx",
           "board": "fair_lines"
         },
@@ -1508,14 +1970,26 @@
       ],
       "odds_api_key_in_ui": false,
       "mobile_filters": {
-        "edge_board": { "status": "yes", "detail": "sport chips" },
-        "odds_compare": { "status": "yes", "detail": "sport chips" },
+        "edge_board": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
+        "odds_compare": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
         "fair_kei_lines": {
           "status": "yes",
           "detail": "date filter today / clear"
         },
-        "props": { "status": "no", "detail": "table only" },
-        "edges_desk": { "status": "no", "detail": "no threshold filters" }
+        "props": {
+          "status": "no",
+          "detail": "table only"
+        },
+        "edges_desk": {
+          "status": "no",
+          "detail": "no threshold filters"
+        }
       }
     },
     "nhl": {
@@ -1552,7 +2026,7 @@
         },
         {
           "path": "/pro/kei-lines/nhl",
-          "title": "NHL — KEI Lines",
+          "title": "NHL \u2014 KEI Lines",
           "purpose": "Primary KEI board href for NHL",
           "file": "apps/web/app/(pro)/pro/kei-lines/[sport]/page.tsx"
         },
@@ -1601,77 +2075,161 @@
         "edge_board": {
           "path": "/edge-board/nhl",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "present" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "present"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
             "status_tag": {
               "status": "present",
-              "evidence": ["nhl-trusted-market PLAY≥4.0 / LEAN≥2.5"]
+              "evidence": [
+                "nhl-trusted-market PLAY\u22654.0 / LEAN\u22652.5"
+              ]
             },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "fair_kei_lines": {
           "path": "/pro/kei-lines/nhl",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "absent" },
-            "best": { "status": "absent" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "partial" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "absent"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "partial"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "props": {
           "path": "/pro/nhl/props",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "present" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "partial" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "present"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "partial"
+            },
             "status_tag": {
               "status": "partial",
-              "evidence": ["forced PASS"]
+              "evidence": [
+                "forced PASS"
+              ]
             },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "edges_desk": {
           "path": "/pro/nhl/edges",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "odds_compare": {
           "path": "/odds/nhl",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         }
       },
       "tags": {
-        "standard_in_use": ["PLAY", "LEAN", "PASS"],
+        "standard_in_use": [
+          "PLAY",
+          "LEAN",
+          "PASS"
+        ],
         "other_flagged": [],
         "policy_notes": [
           "Props dark: forced PASS",
@@ -1695,7 +2253,7 @@
           "ops_language": true
         },
         {
-          "quote": "Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.",
+          "quote": "Chapter 6 dark \u2014 proj, Best, edge, \u03c3; zero PLAY / LEAN.",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
           "board": "props"
         }
@@ -1706,14 +2264,26 @@
       ],
       "odds_api_key_in_ui": false,
       "mobile_filters": {
-        "edge_board": { "status": "yes", "detail": "sport chips" },
-        "odds_compare": { "status": "yes", "detail": "sport chips" },
+        "edge_board": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
+        "odds_compare": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
         "fair_kei_lines": {
           "status": "no",
           "detail": "pending shell or KEI list; no filter bar"
         },
-        "props": { "status": "no", "detail": "table only" },
-        "edges_desk": { "status": "no", "detail": "no threshold filters" }
+        "props": {
+          "status": "no",
+          "detail": "table only"
+        },
+        "edges_desk": {
+          "status": "no",
+          "detail": "no threshold filters"
+        }
       }
     },
     "wnba": {
@@ -1757,7 +2327,7 @@
         {
           "path": "/pro/wnba/props",
           "title": "WNBA Props",
-          "purpose": "Ch6 dark — forced PASS",
+          "purpose": "Ch6 dark \u2014 forced PASS",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx"
         },
         {
@@ -1787,84 +2357,170 @@
         "edge_board": {
           "path": "/edge-board/wnba",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "present" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "present"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
             "status_tag": {
               "status": "present",
-              "evidence": ["wnba-trusted-market PLAY≥4.0 / LEAN≥2.5"]
+              "evidence": [
+                "wnba-trusted-market PLAY\u22654.0 / LEAN\u22652.5"
+              ]
             },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "fair_kei_lines": {
           "path": "/pro/wnba/fair-lines",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "absent" },
-            "best": { "status": "absent" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "partial" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "absent"
+            },
+            "best": {
+              "status": "absent"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "partial"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "props": {
           "path": "/pro/wnba/props",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "present" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "partial" },
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "present"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "partial"
+            },
             "status_tag": {
               "status": "partial",
-              "evidence": ["forced PASS"]
+              "evidence": [
+                "forced PASS"
+              ]
             },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "edges_desk": {
           "path": "/pro/wnba/edges",
           "fields": {
-            "model_line_kei": { "status": "present" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "present" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "absent" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "present"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "present"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "absent"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         },
         "odds_compare": {
           "path": "/odds/wnba",
           "fields": {
-            "model_line_kei": { "status": "absent" },
-            "market": { "status": "present" },
-            "best": { "status": "partial" },
-            "edge": { "status": "absent" },
-            "confidence": { "status": "absent" },
-            "status_tag": { "status": "absent" },
-            "as_of": { "status": "present" },
-            "run_id": { "status": "absent" }
+            "model_line_kei": {
+              "status": "absent"
+            },
+            "market": {
+              "status": "present"
+            },
+            "best": {
+              "status": "partial"
+            },
+            "edge": {
+              "status": "absent"
+            },
+            "confidence": {
+              "status": "absent"
+            },
+            "status_tag": {
+              "status": "absent"
+            },
+            "as_of": {
+              "status": "present"
+            },
+            "run_id": {
+              "status": "absent"
+            }
           }
         }
       },
       "tags": {
-        "standard_in_use": ["PLAY", "LEAN", "PASS"],
+        "standard_in_use": [
+          "PLAY",
+          "LEAN",
+          "PASS"
+        ],
         "other_flagged": [
           {
             "tag": "WATCH",
             "where": "wnba_prop_edge_policy.py (dark board forces PASS on web)"
           }
         ],
-        "policy_notes": ["Props Ch6 dark: tag always PASS"]
+        "policy_notes": [
+          "Props Ch6 dark: tag always PASS"
+        ]
       },
       "empty_states": [
         {
@@ -1873,12 +2529,12 @@
           "board": "fair_lines"
         },
         {
-          "quote": "Chapter 6 dark — proj, Best, edge, σ; zero PLAY / LEAN.",
+          "quote": "Chapter 6 dark \u2014 proj, Best, edge, \u03c3; zero PLAY / LEAN.",
           "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
           "board": "props"
         },
         {
-          "quote": "…No projections for this date yet — offseason empty slate is intentional…",
+          "quote": "\u2026No projections for this date yet \u2014 offseason empty slate is intentional\u2026",
           "file": "apps/web/app/(pro)/pro/wnba/fair-lines/page.tsx",
           "board": "fair_lines"
         }
@@ -1889,15 +2545,1121 @@
       ],
       "odds_api_key_in_ui": false,
       "mobile_filters": {
-        "edge_board": { "status": "yes", "detail": "sport chips" },
-        "odds_compare": { "status": "yes", "detail": "sport chips" },
+        "edge_board": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
+        "odds_compare": {
+          "status": "yes",
+          "detail": "sport chips"
+        },
         "fair_kei_lines": {
           "status": "yes",
           "detail": "date filter today / clear"
         },
-        "props": { "status": "no", "detail": "table only" },
-        "edges_desk": { "status": "no", "detail": "no threshold filters" }
+        "props": {
+          "status": "no",
+          "detail": "table only"
+        },
+        "edges_desk": {
+          "status": "no",
+          "detail": "no threshold filters"
+        }
       }
+    }
+  },
+  "cos_matrix": {
+    "format": "CoS Notion paste lock \u2014 one row/section per sport",
+    "columns": [
+      "overview",
+      "model",
+      "edge",
+      "props",
+      "futures",
+      "tags_in_use",
+      "as_of_present",
+      "run_id_present",
+      "empty_error_copy",
+      "mobile_filter_presence"
+    ],
+    "probe_utc": "2026-09-04T03:49Z",
+    "rows": {
+      "nfl": {
+        "sport": "NFL",
+        "overview": {
+          "status": "live",
+          "route_probe": "probe 12\u00d7200 / 1\u00d7404 across NFL primary set",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nfl/overview",
+              "note": "included in probe primary set; agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/edge-board/nfl",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/odds/nfl",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/nfl/kei-lines",
+              "substring": "404",
+              "note": "live_probe: /pro/{sport}/kei-lines \u2192 404 all six; no redirect to fair-lines"
+            }
+          ]
+        },
+        "model": {
+          "status": "200",
+          "route": "/pro/nfl/model",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nfl/model",
+              "substring": "200",
+              "note": "live_probe: /pro/{sport}/model \u2192 200 only nfl+cfb"
+            },
+            {
+              "url": "https://www.kosedge.com/api/nfl/fair-lines",
+              "substring": "200",
+              "note": "live_probe: /api/{sport}/fair-lines \u2192 200 only nfl; body still contains open_competition"
+            }
+          ]
+        },
+        "edge": {
+          "status": "200",
+          "routes": [
+            "/edge-board/nfl",
+            "/pro/nfl/edges",
+            "/api/nfl/edges-desk"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/edge-board/nfl",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nfl/assemble",
+              "api_key": "linesAsOf",
+              "note": "live_probe: assemble 200 all six; linesAsOf present; kei/model present on nfl sample"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nfl/assemble",
+              "api_key": "kei"
+            },
+            {
+              "url": "https://www.kosedge.com/api/nfl/edges-desk",
+              "substring": "200",
+              "note": "live_probe: edges-desk 200 only nfl"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/nfl/edges",
+              "note": "Confidence seen on NFL edges (live_probe HTML/API)"
+            }
+          ]
+        },
+        "props": {
+          "status": "live_code",
+          "route": "/pro/nfl/props",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nfl/props",
+              "note": "code desk; Confidence seen on NFL props (live_probe)"
+            },
+            {
+              "file": "apps/web/lib/nfl-props-surface.ts",
+              "substring": "no PLAY / LEAN stake tags"
+            }
+          ]
+        },
+        "futures": {
+          "status": "code_route",
+          "routes": [
+            "/pro/nfl/projections"
+          ],
+          "evidence": [
+            {
+              "path": "/pro/nfl/projections",
+              "title": "Futures",
+              "file": "apps/web/app/(pro)/pro/nfl/projections/page.tsx",
+              "note": "code inventory; individual live HTTP not separately reported in probe aggregates"
+            }
+          ]
+        },
+        "tags_in_use": {
+          "standard": [
+            "PLAY",
+            "LEAN",
+            "PASS",
+            "Best Value"
+          ],
+          "best_value_form": "BEST VALUE (ActionLabel space form)",
+          "flagged_other": [
+            "WATCH",
+            "ALERT",
+            "STAY AWAY",
+            "isBestBet",
+            "STRONG PLAY",
+            "EXCEPTIONAL"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nfl/assemble",
+              "api_key": "publishTag",
+              "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
+            },
+            {
+              "file": "apps/web/lib/nfl-decision-engine.ts",
+              "substring": "BEST VALUE"
+            },
+            {
+              "file": "apps/web/lib/nfl-decision-engine.ts",
+              "substring": "STAY AWAY",
+              "flag": true
+            }
+          ]
+        },
+        "as_of_present": {
+          "value": true,
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nfl/assemble",
+              "api_key": "linesAsOf",
+              "note": "live_probe: linesAsOf present"
+            }
+          ]
+        },
+        "run_id_present": {
+          "value": false,
+          "evidence": [
+            {
+              "note": "absent on major betting boards (code inventory); not reported present in live_probe assemble samples"
+            }
+          ]
+        },
+        "empty_error_copy": [
+          {
+            "quote": "Board temporarily unavailable. Refresh to try again.",
+            "file": "apps/web/components/EdgeBoardSportClient.tsx",
+            "board": "edge_board"
+          },
+          {
+            "quote": "No Slate Yet",
+            "file": "apps/web/components/EdgeBoard.tsx",
+            "board": "edge_board"
+          },
+          {
+            "quote": "No regular-season fair-lines in the pull window yet\u2026",
+            "file": "apps/web/components/EdgeBoard.tsx",
+            "board": "edge_board"
+          },
+          {
+            "quote": "Odds temporarily unavailable. Refresh to try again.",
+            "file": "apps/web/components/OddsCompareBoard.tsx",
+            "board": "odds"
+          },
+          {
+            "quote": "No odds data yet. Lines will appear when books post this slate.",
+            "file": "apps/web/components/OddsCompareBoard.tsx",
+            "board": "odds",
+            "note": "desktop-only (hidden lg:block)"
+          },
+          {
+            "quote": "Model service is not configured for this environment.",
+            "file": "apps/web/lib/model-service-status.ts",
+            "board": "fair_lines/edges/props",
+            "ops_language": true
+          },
+          {
+            "quote": "Market lines unavailable \u2014 showing Kosedge lines only.",
+            "file": "apps/web/components/pro/nfl/NflFairLinesClient.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "\u2026no PLAY / LEAN stake tags.",
+            "file": "apps/web/lib/nfl-props-surface.ts",
+            "board": "props"
+          },
+          {
+            "quote": "No investable props for this filter yet.",
+            "file": "apps/web/app/(pro)/pro/nfl/props/page.tsx",
+            "board": "props"
+          },
+          {
+            "quote": "open_competition",
+            "url": "https://www.kosedge.com/api/nfl/fair-lines",
+            "note": "live_probe: NFL fair-lines API body still contains open_competition string"
+          }
+        ],
+        "mobile_filter_presence": {
+          "summary": "edge_board:yes; odds_compare:yes; fair_kei_lines:yes; props:yes; edges_desk:yes",
+          "detail": {
+            "edge_board": {
+              "status": "yes",
+              "detail": "sport chips + Week1/Full; no market/tag/confidence filters"
+            },
+            "odds_compare": {
+              "status": "yes",
+              "detail": "sport chips only"
+            },
+            "fair_kei_lines": {
+              "status": "yes",
+              "detail": "Current week / Season slate + Include last week"
+            },
+            "props": {
+              "status": "yes",
+              "detail": "Market filter chips + Rows limit"
+            },
+            "edges_desk": {
+              "status": "yes",
+              "detail": "Market / Min edge / Min confidence / Week chips; table-only layout on mobile"
+            }
+          }
+        }
+      },
+      "cfb": {
+        "sport": "CFB",
+        "overview": {
+          "status": "live",
+          "route_probe": "probe 10\u00d7200 / 3\u00d7404",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/cfb/overview",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/edge-board/cfb",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/cfb/kei-lines",
+              "substring": "404",
+              "note": "live_probe: kei-lines 404 all six"
+            }
+          ]
+        },
+        "model": {
+          "status": "200",
+          "route": "/pro/cfb/model",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/cfb/model",
+              "substring": "200",
+              "note": "live_probe: model 200 only nfl+cfb"
+            },
+            {
+              "url": "https://www.kosedge.com/api/cfb/fair-lines",
+              "substring": "404",
+              "note": "live_probe: /api/{sport}/fair-lines 200 only nfl \u2192 others 404"
+            }
+          ]
+        },
+        "edge": {
+          "status": "200",
+          "routes": [
+            "/edge-board/cfb",
+            "/pro/cfb/edges"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/cfb/assemble",
+              "api_key": "linesAsOf",
+              "note": "assemble 200; kei/model present on cfb sample"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/cfb/assemble",
+              "api_key": "kei"
+            },
+            {
+              "url": "https://www.kosedge.com/api/cfb/edges-desk",
+              "substring": "404",
+              "note": "live_probe: edges-desk 200 only nfl"
+            }
+          ]
+        },
+        "props": {
+          "status": "absent_redirect",
+          "route": "/pro/cfb/props \u2192 /pro/cfb/tempo",
+          "evidence": [
+            {
+              "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+              "note": "CFB props redirects to tempo; no props board"
+            }
+          ]
+        },
+        "futures": {
+          "status": "code_route",
+          "routes": [
+            "/pro/cfb/futures",
+            "/pro/cfb/projections"
+          ],
+          "evidence": [
+            {
+              "path": "/pro/cfb/futures",
+              "title": "Futures",
+              "file": "apps/web/app/(pro)/pro/cfb/futures/page.tsx"
+            },
+            {
+              "path": "/pro/cfb/projections",
+              "title": "Season projections",
+              "file": "apps/web/app/(pro)/pro/cfb/projections/page.tsx"
+            },
+            {
+              "note": "individual live HTTP not separately reported in probe aggregates"
+            }
+          ]
+        },
+        "tags_in_use": {
+          "standard": [
+            "PLAY",
+            "LEAN",
+            "PASS"
+          ],
+          "flagged_other": [],
+          "policy_note": "CFB PLAY sit\u2192PASS via CFB_*_PLAY_ELIGIBLE (code)",
+          "evidence": [
+            {
+              "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
+            },
+            {
+              "file": "apps/web/lib/cfb-trusted-market.ts"
+            }
+          ]
+        },
+        "as_of_present": {
+          "value": true,
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/cfb/assemble",
+              "api_key": "linesAsOf"
+            }
+          ]
+        },
+        "run_id_present": {
+          "value": false,
+          "evidence": [
+            {
+              "note": "not present on betting boards / assemble samples"
+            }
+          ]
+        },
+        "empty_error_copy": [
+          {
+            "quote": "KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF \u2014 we do not invent book prices.",
+            "file": "apps/web/components/EdgeBoard.tsx",
+            "board": "edge_board"
+          },
+          {
+            "quote": "No KEI lines for {sport} yet. Run the pipeline export to generate data/processed/kei_lines_*.json.",
+            "file": "apps/web/app/(pro)/pro/kei-lines/[sport]/KeiLinesTable.tsx",
+            "board": "kei_lines",
+            "ops_language": true
+          },
+          {
+            "quote": "CFB fair-lines join the desk once the college football model board is connected to Pro.",
+            "file": "apps/web/app/(pro)/pro/[sport]/fair-lines/page.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "No official Week {week} games in the KosEdge slate yet.",
+            "file": "apps/web/components/pro/cfb/CfbOfficialSlatePanel.tsx",
+            "board": "slate"
+          },
+          {
+            "quote": "No quantified edges on the live board yet",
+            "file": "apps/web/app/(pro)/pro/[sport]/edges/page.tsx",
+            "board": "edges"
+          }
+        ],
+        "mobile_filter_presence": {
+          "summary": "edge_board:yes; odds_compare:yes; fair_kei_lines:no; props:no; edges_desk:no",
+          "detail": {
+            "edge_board": {
+              "status": "yes",
+              "detail": "Week0/Week1 chips"
+            },
+            "odds_compare": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "fair_kei_lines": {
+              "status": "no",
+              "detail": "KeiLinesTable list only (non-NCAAM)"
+            },
+            "props": {
+              "status": "no",
+              "detail": "no props board"
+            },
+            "edges_desk": {
+              "status": "no",
+              "detail": "no threshold filters"
+            }
+          }
+        }
+      },
+      "mlb": {
+        "sport": "MLB",
+        "overview": {
+          "status": "live",
+          "route_probe": "probe 9\u00d7200 / 4\u00d7404",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/mlb/overview",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/edge-board/mlb",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/mlb/kei-lines",
+              "substring": "404",
+              "note": "live_probe: kei-lines 404 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/mlb/fair-lines",
+              "note": "code fair-lines desk (distinct from 404 /pro/{sport}/kei-lines)"
+            }
+          ]
+        },
+        "model": {
+          "status": "404",
+          "route": "/pro/mlb/model",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/mlb/model",
+              "substring": "404",
+              "note": "live_probe: model 200 only nfl+cfb"
+            },
+            {
+              "url": "https://www.kosedge.com/api/mlb/fair-lines",
+              "substring": "404",
+              "note": "live_probe: fair-lines API 200 only nfl"
+            }
+          ]
+        },
+        "edge": {
+          "status": "200_edge_board",
+          "routes": [
+            "/edge-board/mlb",
+            "/pro/mlb/edges"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/mlb/assemble",
+              "api_key": "linesAsOf",
+              "note": "assemble 200 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/mlb/assemble",
+              "note": "live_probe: mlb sampled rows lacked kei/model (market/best/asOf only)"
+            },
+            {
+              "url": "https://www.kosedge.com/api/mlb/edges-desk",
+              "substring": "404",
+              "note": "live_probe: edges-desk 200 only nfl"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/mlb/assemble",
+              "api_key": "best"
+            }
+          ]
+        },
+        "props": {
+          "status": "code_desk",
+          "route": "/pro/mlb/props",
+          "evidence": [
+            {
+              "path": "/pro/mlb/props",
+              "note": "soft-launch / stake gate off (code)"
+            }
+          ]
+        },
+        "futures": {
+          "status": "none_in_inventory",
+          "routes": [],
+          "evidence": [
+            {
+              "note": "no sport-specific futures desk in primary inventory routes"
+            }
+          ]
+        },
+        "tags_in_use": {
+          "standard": [
+            "PLAY",
+            "LEAN",
+            "PASS"
+          ],
+          "flagged_other": [
+            "WATCH"
+          ],
+          "evidence": [
+            {
+              "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
+            }
+          ]
+        },
+        "as_of_present": {
+          "value": true,
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/mlb/assemble",
+              "api_key": "linesAsOf"
+            }
+          ]
+        },
+        "run_id_present": {
+          "value": false,
+          "evidence": [
+            {
+              "note": "not present on betting boards / assemble samples"
+            }
+          ]
+        },
+        "empty_error_copy": [
+          {
+            "quote": "No MLB projections for this date yet. Check back after the daily sim cycle.",
+            "file": "apps/web/app/(pro)/pro/mlb/fair-lines/page.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "\u2026play-stake eligibility stays gated off for soft launch\u2026",
+            "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+            "board": "props"
+          },
+          {
+            "quote": "Model service is not configured for this environment.",
+            "file": "apps/web/lib/model-service-status.ts",
+            "board": null,
+            "ops_language": true
+          },
+          {
+            "quote": "No live slate rows yet",
+            "file": "apps/web/app/(pro)/pro/[sport]/slate/[date]/page.tsx",
+            "board": "slate"
+          }
+        ],
+        "mobile_filter_presence": {
+          "summary": "edge_board:yes; odds_compare:yes; fair_kei_lines:yes; props:no; edges_desk:yes",
+          "detail": {
+            "edge_board": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "odds_compare": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "fair_kei_lines": {
+              "status": "yes",
+              "detail": "All markets / Run line focus chips"
+            },
+            "props": {
+              "status": "no",
+              "detail": "soft-launch shell"
+            },
+            "edges_desk": {
+              "status": "yes",
+              "detail": "Market / Min edge / Min quality + md:hidden cards"
+            }
+          }
+        }
+      },
+      "nba": {
+        "sport": "NBA",
+        "overview": {
+          "status": "live",
+          "route_probe": "probe 9\u00d7200 / 4\u00d7404",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nba/overview",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/edge-board/nba",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/nba/kei-lines",
+              "substring": "404",
+              "note": "live_probe: kei-lines 404 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/nba/fair-lines",
+              "note": "code fair-lines desk (distinct from 404 /pro/{sport}/kei-lines)"
+            }
+          ]
+        },
+        "model": {
+          "status": "404",
+          "route": "/pro/nba/model",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nba/model",
+              "substring": "404",
+              "note": "live_probe: model 200 only nfl+cfb"
+            },
+            {
+              "url": "https://www.kosedge.com/api/nba/fair-lines",
+              "substring": "404",
+              "note": "live_probe: fair-lines API 200 only nfl"
+            }
+          ]
+        },
+        "edge": {
+          "status": "200_edge_board",
+          "routes": [
+            "/edge-board/nba",
+            "/pro/nba/edges"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nba/assemble",
+              "api_key": "linesAsOf",
+              "note": "assemble 200 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nba/assemble",
+              "api_key": "kei",
+              "note": "live_probe: kei/model present on sample"
+            },
+            {
+              "url": "https://www.kosedge.com/api/nba/edges-desk",
+              "substring": "404",
+              "note": "live_probe: edges-desk 200 only nfl"
+            }
+          ]
+        },
+        "props": {
+          "status": "code_desk",
+          "route": "/pro/nba/props",
+          "evidence": [
+            {
+              "path": "/pro/nba/props",
+              "note": "Ch6 dark \u2014 forced PASS; zero PLAY/LEAN (code + empty copy)"
+            }
+          ]
+        },
+        "futures": {
+          "status": "none_in_inventory",
+          "routes": [],
+          "evidence": [
+            {
+              "note": "no sport-specific futures desk in primary inventory routes"
+            }
+          ]
+        },
+        "tags_in_use": {
+          "standard": [
+            "PLAY",
+            "LEAN",
+            "PASS"
+          ],
+          "flagged_other": [
+            "WATCH"
+          ],
+          "evidence": [
+            {
+              "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
+            }
+          ]
+        },
+        "as_of_present": {
+          "value": true,
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nba/assemble",
+              "api_key": "linesAsOf"
+            }
+          ]
+        },
+        "run_id_present": {
+          "value": false,
+          "evidence": [
+            {
+              "note": "not present on betting boards / assemble samples"
+            }
+          ]
+        },
+        "empty_error_copy": [
+          {
+            "quote": "Chapter 6 dark \u2014 proj, Best, edge, \u03c3; zero PLAY / LEAN.",
+            "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+            "board": "props"
+          },
+          {
+            "quote": "No Ch6 dark prop rows yet \u2014 PlayerProjection pack required.",
+            "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+            "board": "props"
+          },
+          {
+            "quote": "\u2026We do not invent fair prices when the slate is empty.",
+            "file": "apps/web/app/(pro)/pro/nba/fair-lines/page.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "Board unavailable: {error}",
+            "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+            "board": "props",
+            "note": "can include MODEL_SERVICE_URL not configured"
+          }
+        ],
+        "mobile_filter_presence": {
+          "summary": "edge_board:yes; odds_compare:yes; fair_kei_lines:yes; props:no; edges_desk:no",
+          "detail": {
+            "edge_board": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "odds_compare": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "fair_kei_lines": {
+              "status": "yes",
+              "detail": "date filter today / clear"
+            },
+            "props": {
+              "status": "no",
+              "detail": "table only"
+            },
+            "edges_desk": {
+              "status": "no",
+              "detail": "no threshold filters"
+            }
+          }
+        }
+      },
+      "nhl": {
+        "sport": "NHL",
+        "overview": {
+          "status": "live",
+          "route_probe": "probe 9\u00d7200 / 4\u00d7404",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nhl/overview",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/edge-board/nhl",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/nhl/kei-lines",
+              "substring": "404",
+              "note": "live_probe: kei-lines 404 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/nhl/fair-lines",
+              "note": "code fair-lines desk (distinct from 404 /pro/{sport}/kei-lines)"
+            }
+          ]
+        },
+        "model": {
+          "status": "404",
+          "route": "/pro/nhl/model",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/nhl/model",
+              "substring": "404",
+              "note": "live_probe: model 200 only nfl+cfb"
+            },
+            {
+              "url": "https://www.kosedge.com/api/nhl/fair-lines",
+              "substring": "404",
+              "note": "live_probe: fair-lines API 200 only nfl"
+            }
+          ]
+        },
+        "edge": {
+          "status": "200_edge_board",
+          "routes": [
+            "/edge-board/nhl",
+            "/pro/nhl/edges"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nhl/assemble",
+              "api_key": "linesAsOf",
+              "note": "assemble 200 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nhl/assemble",
+              "api_key": "kei",
+              "note": "live_probe: kei/model present on sample"
+            },
+            {
+              "url": "https://www.kosedge.com/api/nhl/edges-desk",
+              "substring": "404",
+              "note": "live_probe: edges-desk 200 only nfl"
+            }
+          ]
+        },
+        "props": {
+          "status": "code_desk",
+          "route": "/pro/nhl/props",
+          "evidence": [
+            {
+              "path": "/pro/nhl/props",
+              "note": "Ch6 dark \u2014 forced PASS (code)"
+            }
+          ]
+        },
+        "futures": {
+          "status": "none_in_inventory",
+          "routes": [],
+          "evidence": [
+            {
+              "note": "no sport-specific futures desk in primary inventory routes"
+            }
+          ]
+        },
+        "tags_in_use": {
+          "standard": [
+            "PLAY",
+            "LEAN",
+            "PASS"
+          ],
+          "flagged_other": [],
+          "evidence": [
+            {
+              "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
+            }
+          ]
+        },
+        "as_of_present": {
+          "value": true,
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/nhl/assemble",
+              "api_key": "linesAsOf"
+            }
+          ]
+        },
+        "run_id_present": {
+          "value": false,
+          "evidence": [
+            {
+              "note": "not present on betting boards / assemble samples"
+            }
+          ]
+        },
+        "empty_error_copy": [
+          {
+            "quote": "NHL fair-lines join the desk once the hockey model board is connected to Pro.",
+            "file": "apps/web/app/(pro)/pro/[sport]/fair-lines/page.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "Model board pending",
+            "file": "apps/web/app/(pro)/pro/[sport]/fair-lines/page.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "No KEI lines for {sport} yet. Run the pipeline export to generate data/processed/kei_lines_*.json.",
+            "file": "apps/web/app/(pro)/pro/kei-lines/[sport]/KeiLinesTable.tsx",
+            "board": null,
+            "ops_language": true
+          },
+          {
+            "quote": "Chapter 6 dark \u2014 proj, Best, edge, \u03c3; zero PLAY / LEAN.",
+            "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+            "board": "props"
+          }
+        ],
+        "mobile_filter_presence": {
+          "summary": "edge_board:yes; odds_compare:yes; fair_kei_lines:no; props:no; edges_desk:no",
+          "detail": {
+            "edge_board": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "odds_compare": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "fair_kei_lines": {
+              "status": "no",
+              "detail": "pending shell or KEI list; no filter bar"
+            },
+            "props": {
+              "status": "no",
+              "detail": "table only"
+            },
+            "edges_desk": {
+              "status": "no",
+              "detail": "no threshold filters"
+            }
+          }
+        }
+      },
+      "wnba": {
+        "sport": "WNBA",
+        "overview": {
+          "status": "live",
+          "route_probe": "probe 9\u00d7200 / 4\u00d7404",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/wnba/overview",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/edge-board/wnba",
+              "note": "agent spot-check HTTP 200"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/wnba/kei-lines",
+              "substring": "404",
+              "note": "live_probe: kei-lines 404 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/pro/wnba/fair-lines",
+              "note": "code fair-lines desk (distinct from 404 /pro/{sport}/kei-lines)"
+            }
+          ]
+        },
+        "model": {
+          "status": "404",
+          "route": "/pro/wnba/model",
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/pro/wnba/model",
+              "substring": "404",
+              "note": "live_probe: model 200 only nfl+cfb"
+            },
+            {
+              "url": "https://www.kosedge.com/api/wnba/fair-lines",
+              "substring": "404",
+              "note": "live_probe: fair-lines API 200 only nfl"
+            }
+          ]
+        },
+        "edge": {
+          "status": "200_edge_board",
+          "routes": [
+            "/edge-board/wnba",
+            "/pro/wnba/edges"
+          ],
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/wnba/assemble",
+              "api_key": "linesAsOf",
+              "note": "assemble 200 all six"
+            },
+            {
+              "url": "https://www.kosedge.com/api/edge-board/wnba/assemble",
+              "api_key": "kei",
+              "note": "live_probe: kei/model present on sample"
+            },
+            {
+              "url": "https://www.kosedge.com/api/wnba/edges-desk",
+              "substring": "404",
+              "note": "live_probe: edges-desk 200 only nfl"
+            }
+          ]
+        },
+        "props": {
+          "status": "code_desk",
+          "route": "/pro/wnba/props",
+          "evidence": [
+            {
+              "path": "/pro/wnba/props",
+              "note": "Ch6 dark \u2014 forced PASS (code)"
+            }
+          ]
+        },
+        "futures": {
+          "status": "none_in_inventory",
+          "routes": [],
+          "evidence": [
+            {
+              "note": "no sport-specific futures desk in primary inventory routes"
+            }
+          ]
+        },
+        "tags_in_use": {
+          "standard": [
+            "PLAY",
+            "LEAN",
+            "PASS"
+          ],
+          "flagged_other": [
+            "WATCH"
+          ],
+          "evidence": [
+            {
+              "note": "live_probe tags seen HTML/API: PLAY/LEAN/PASS"
+            }
+          ]
+        },
+        "as_of_present": {
+          "value": true,
+          "evidence": [
+            {
+              "url": "https://www.kosedge.com/api/edge-board/wnba/assemble",
+              "api_key": "linesAsOf"
+            }
+          ]
+        },
+        "run_id_present": {
+          "value": false,
+          "evidence": [
+            {
+              "note": "not present on betting boards / assemble samples"
+            }
+          ]
+        },
+        "empty_error_copy": [
+          {
+            "quote": "No WNBA projections for this date yet. Check back after the daily sim cycle.",
+            "file": "apps/web/app/(pro)/pro/wnba/fair-lines/page.tsx",
+            "board": "fair_lines"
+          },
+          {
+            "quote": "Chapter 6 dark \u2014 proj, Best, edge, \u03c3; zero PLAY / LEAN.",
+            "file": "apps/web/app/(pro)/pro/[sport]/props/page.tsx",
+            "board": "props"
+          },
+          {
+            "quote": "\u2026No projections for this date yet \u2014 offseason empty slate is intentional\u2026",
+            "file": "apps/web/app/(pro)/pro/wnba/fair-lines/page.tsx",
+            "board": "fair_lines"
+          }
+        ],
+        "mobile_filter_presence": {
+          "summary": "edge_board:yes; odds_compare:yes; fair_kei_lines:yes; props:no; edges_desk:no",
+          "detail": {
+            "edge_board": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "odds_compare": {
+              "status": "yes",
+              "detail": "sport chips"
+            },
+            "fair_kei_lines": {
+              "status": "yes",
+              "detail": "date filter today / clear"
+            },
+            "props": {
+              "status": "no",
+              "detail": "table only"
+            },
+            "edges_desk": {
+              "status": "no",
+              "detail": "no threshold filters"
+            }
+          }
+        }
+      }
+    },
+    "adjacent_outside_primary": {
+      "note": "/pro/cbb and /pro/ncaab overview+edges also 200 (outside primary six; cited only)",
+      "urls": [
+        "https://www.kosedge.com/pro/cbb/overview",
+        "https://www.kosedge.com/pro/cbb/edges",
+        "https://www.kosedge.com/pro/ncaab/overview",
+        "https://www.kosedge.com/pro/ncaab/edges"
+      ]
     }
   }
 }
