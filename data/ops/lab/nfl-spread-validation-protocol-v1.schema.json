@@ -1,0 +1,134 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kosedge.local/schemas/lab/nfl-spread-validation-protocol-v1.schema.json",
+  "title": "NFL Spread Validation Protocol v1.0 — result envelope (empty stub)",
+  "description": "Machine twin for docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md. Schema only — no filled scorecards or evaluation results in protocol registration PRs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "protocol_version",
+    "status",
+    "scope",
+    "grades",
+    "subscriber_influence",
+    "results"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "const": "nfl-spread-validation-protocol-v1.0"
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "pre_registered",
+        "cos_signed",
+        "results_pending",
+        "results_filled"
+      ]
+    },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sport", "market"],
+      "properties": {
+        "sport": { "type": "string", "const": "NFL" },
+        "market": { "type": "string", "const": "spread" },
+        "excluded": {
+          "type": "array",
+          "items": { "type": "string" },
+          "default": ["CBB", "totals", "props", "ml_only"]
+        }
+      }
+    },
+    "discrepancy_buckets": {
+      "type": "array",
+      "description": "Locked cut points from protocol §2 — do not alter without v1.1+.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "abs_edge_min", "abs_edge_max_exclusive"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "enum": [
+              "noise",
+              "lean_band",
+              "play_low",
+              "play_mid",
+              "play_high",
+              "mega_edge"
+            ]
+          },
+          "abs_edge_min": { "type": "number" },
+          "abs_edge_max_exclusive": {
+            "type": ["number", "null"],
+            "description": "null means +infinity"
+          }
+        }
+      }
+    },
+    "min_n": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "overall": { "type": "integer", "const": 200 },
+        "per_bucket": { "type": "integer", "const": 40 },
+        "clv_green": { "type": "integer", "const": 200 },
+        "ci_level": { "type": "number", "const": 0.95 }
+      }
+    },
+    "grades": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "predictive_quality",
+        "market_edge_evidence",
+        "evidence_quality"
+      ],
+      "properties": {
+        "predictive_quality": { "$ref": "#/$defs/grade" },
+        "market_edge_evidence": { "$ref": "#/$defs/grade" },
+        "evidence_quality": { "$ref": "#/$defs/grade" }
+      }
+    },
+    "subscriber_influence": {
+      "type": "string",
+      "enum": ["YES", "LIMITED", "NO", "INSUFFICIENT_EVIDENCE", "UNSET"]
+    },
+    "results": {
+      "description": "Must remain null/empty until a post-sign evaluation PR. Protocol registration forbids filled metrics.",
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "note": {
+          "type": "string",
+          "const": "NO RESULTS — protocol pre-registration only"
+        },
+        "buckets": { "type": "array", "maxItems": 0 },
+        "regimes": { "type": "array", "maxItems": 0 },
+        "comparators": { "type": "array", "maxItems": 0 },
+        "ats": { "type": "null" },
+        "roi": { "type": "null" },
+        "clv": { "type": "null" }
+      }
+    },
+    "hard_locks": {
+      "type": "array",
+      "items": { "type": "string" },
+      "default": [
+        "no_live_play_lean_pass_flip",
+        "no_rebuild_without_defect_and_cos_gate",
+        "no_invent_missing_odds",
+        "no_post_hoc_bucket_changes",
+        "red_equals_honest_failure_success"
+      ]
+    }
+  },
+  "$defs": {
+    "grade": {
+      "type": "string",
+      "enum": ["GREEN", "YELLOW", "RED", "N/A—DATA_GAP", "UNSET"]
+    }
+  }
+}
