@@ -1,59 +1,73 @@
-# NCAAB historical odds (open + close)
+# NCAAB historical odds — Path B (retired destination claim)
 
-## ⚠️ 2015–2016 is not available
+## Status (Odds P1 VERIFY ACCEPTED — ONE EMPTY)
 
-**The Odds API only has NCAAB historical data from November 16, 2020** (`basketball_ncaab` start date). They do not offer 2015–2016 or any season before 2020–21.
+**This directory is docs-only.** There is **no** `open/` or `close/` JSON under
+`apps/web/data/historical-odds/ncaab/`, and those trees were **never tracked** in
+git. Do **not** treat Path B as a second market lake.
 
-Seasons you *can* pull:
+CoS Odds P1 VERIFY: Path B = README-only / **ONE EMPTY**. Scripts already write
+and read **Path A** only.
 
-- **2020–21** (from 2020-11-16)
-- **2021–22**, **2022–23**, **2023–24**, **2024–25**
+---
+
+## Live lake (Path A) — use this
+
+| Role | Path |
+|------|------|
+| Raw open snapshots | `apps/web/data/raw/odds/open/YYYY-MM-DD.json` |
+| Raw close snapshots | `apps/web/data/raw/odds/close/YYYY-MM-DD.json` |
+| Processed parquet | `apps/web/data/processed/ncaab_historical_odds_open_close.parquet` |
+
+Canonical layout and pipeline order: [`apps/web/data/README.md`](../../README.md).
+
+Code SoT (no Path B):
+
+- `scripts/fetch_historical_ncaab_odds.py` → writes Path A
+- `pipeline_paths.ODDS_OPEN` / `ODDS_CLOSE` → Path A
+- `src/process_odds.py` → reads Path A → parquet above
+
+---
+
+## Coverage floor (honest — do not invent denser)
+
+| Layer | Floor |
+|-------|--------|
+| **Odds API** NCAAB historical (`basketball_ncaab`) | From **2020-11-16** (API start; no pre-2020–21) |
+| **In-repo Path A lake** (VERIFY) | Currently starts **2022-11-01** |
+
+Do not claim 2020–21 / 2021–22 open/close JSON in this repo unless Path A is
+actually densified later. API availability ≠ lake contents.
 
 ---
 
 ## Credits (cost on the-odds-api.com)
 
+Unchanged planning note for anyone running the Path A fetch script:
+
 - **Historical odds endpoint**: **10 credits per region per market**.
-- This script uses `regions=us` and `markets=spreads,totals` → **2 markets × 1 region = 20 credits per request**.
-- We do **2 requests per day** (one “open” snapshot, one “close” snapshot) → **40 credits per day**.
+- Script uses `regions=us` and `markets=spreads,totals` → **20 credits per request**.
+- **2 requests per day** (open + close) → **40 credits per day**.
 
-Rough totals:
-
-| Range              | Days (approx) | Requests | Credits (approx) |
-|--------------------|----------------|----------|-------------------|
-| One season (~150)  | 150            | 300      | 6,000             |
-| 2020-11 → 2025-04  | ~1,600         | 3,200    | 64,000            |
-| **3 seasons**      | ~900           | 1,800    | **~22,000**       |
-
-Check your plan: 20K/month, 100K/month, etc. You can run the script for a **short date range** first (e.g. one month) to confirm everything and cost.
+| Range | Days (approx) | Requests | Credits (approx) |
+|-------|----------------|----------|-------------------|
+| One season (~150) | 150 | 300 | 6,000 |
+| 2020-11 → 2025-04 | ~1,600 | 3,200 | 64,000 |
+| **3 seasons** | ~900 | 1,800 | **~22,000** |
 
 ---
 
-## Usage
+## Usage (writes Path A, not here)
 
-1. Set your API key:  
-   `export ODDS_API_KEY="your_key"`
-
-2. Install deps (if needed):  
-   `pip install requests`  
-   (or use the same venv as `ingest_kenpom`.)
-
-3. Run (default: from 2020-11-16 to today, open + close each day):
+1. `export ODDS_API_KEY="your_key"`
+2. From `apps/web`:
 
    ```bash
-   cd apps/web
    python scripts/fetch_historical_ncaab_odds.py
-   ```
-
-4. Optional date range:
-
-   ```bash
+   # optional range:
    python scripts/fetch_historical_ncaab_odds.py --start 2024-11-01 --end 2025-02-15
+   python src/process_odds.py
    ```
 
-Output files:
-
-- `data/historical-odds/ncaab/open/YYYY-MM-DD.json` – snapshot early that day (UTC).
-- `data/historical-odds/ncaab/close/YYYY-MM-DD.json` – snapshot later that day (UTC).
-
-Each JSON has the API response: `timestamp`, `previous_timestamp`, `next_timestamp`, and `data` (list of events with `bookmakers`, etc.).
+Output lands under **`data/raw/odds/{open,close}/`**, then parquet under
+**`data/processed/`** — never under this Path B folder.
