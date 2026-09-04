@@ -27,6 +27,10 @@ ODDS_LEDGER_HEALTH_NOTE = (
     "beat/worker-owned tables; no FRESH/AGING/STALE product windows."
 )
 
+# Bound cold MAX on large odds_snapshots so fair-lines / Edge Board never hang.
+# Bare '2000' = 2000ms in Postgres. Timeout → ledger_health=unknown (fail closed).
+LEDGER_PROBE_STATEMENT_TIMEOUT = "2000"
+
 _LEDGER_MAX_SQL = """
 SELECT
   (
@@ -122,10 +126,19 @@ def build_odds_ledger_health_payload(
 
 
 def probe_nfl_odds_ledger_health(session: Any) -> Dict[str, Any]:
-    """Cheap MAX(captured_at) probe; never raises into the fair-lines board."""
+    """Cheap MAX(captured_at) probe; never raises into the fair-lines board.
+
+    Applies ``SET LOCAL statement_timeout`` so a cold scan of large
+    ``odds_snapshots`` fails closed to ``ledger_health=unknown`` instead of
+    hanging fair-lines / Edge Board assemble.
+    """
     try:
+        session.execute(
+            text(f"SET LOCAL statement_timeout = '{LEDGER_PROBE_STATEMENT_TIMEOUT}'")
+        )
         row = session.execute(text(_LEDGER_MAX_SQL)).fetchone()
     except SQLAlchemyError:
+        # Includes Postgres statement_timeout / query canceled.
         log.exception("NFL odds ledger health probe failed")
         return build_odds_ledger_health_payload(probe_ok=False)
     except Exception:

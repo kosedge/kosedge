@@ -41,6 +41,8 @@ class _Result:
 class _Session:
     def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _Result:
         sql = " ".join(str(statement).split()).lower()
+        if "statement_timeout" in sql:
+            return _Result([])
         if "from nfl_model_runtime_state" in sql:
             return _Result([{"active_model_version": "nfl-v1.5-matchup-sim"}])
         if "from nfl_dp_schedules" in sql and "spread_home" not in sql:

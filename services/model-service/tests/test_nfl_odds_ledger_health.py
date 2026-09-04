@@ -3,6 +3,9 @@
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+from typing import Any
+
+from sqlalchemy.exc import OperationalError
 
 from src.services.nfl_odds_ledger_health import (
     build_odds_ledger_health_payload,
@@ -104,28 +107,63 @@ class _LedgerResult:
 class _LedgerSession:
     def __init__(self, mapping: dict | None) -> None:
         self._mapping = mapping
+        self.statements: list[str] = []
 
-    def execute(self, *_args, **_kwargs):
+    def execute(self, statement: Any, *_args: Any, **_kwargs: Any):
+        sql = str(statement)
+        self.statements.append(sql)
+        if "statement_timeout" in sql.lower():
+            return _LedgerResult({})
         return _LedgerResult(self._mapping)
 
 
 def test_probe_builds_ok_payload() -> None:
     raw = datetime(2026, 9, 4, 12, 0, tzinfo=UTC)
     hist = datetime(2026, 9, 4, 12, 0, tzinfo=UTC)
-    payload = probe_nfl_odds_ledger_health(
-        _LedgerSession(
-            {
-                "last_odds_snapshot_captured_at": raw,
-                "last_market_history_captured_at": hist,
-            }
-        )
+    session = _LedgerSession(
+        {
+            "last_odds_snapshot_captured_at": raw,
+            "last_market_history_captured_at": hist,
+        }
     )
+    payload = probe_nfl_odds_ledger_health(session)
     assert payload["ledger_health"] == "ok"
     assert payload["history_lag_seconds"] == 0
     assert payload["last_odds_snapshot_captured_at"] == raw.isoformat()
+    assert any("statement_timeout" in s.lower() for s in session.statements)
+    assert any("2000" in s for s in session.statements)
 
 
 def test_probe_unknown_on_empty_row() -> None:
     payload = probe_nfl_odds_ledger_health(_LedgerSession(None))
     assert payload["ledger_health"] == "unknown"
     assert payload["last_odds_snapshot_captured_at"] is None
+
+
+class _TimeoutSession:
+    """Simulates Postgres statement_timeout on the MAX probe."""
+
+    def __init__(self) -> None:
+        self.statements: list[str] = []
+
+    def execute(self, statement: Any, *_args: Any, **_kwargs: Any):
+        sql = str(statement)
+        self.statements.append(sql)
+        if "statement_timeout" in sql.lower():
+            return _LedgerResult({})
+        raise OperationalError(
+            "canceling statement due to statement timeout",
+            {},
+            Exception("canceling statement due to statement timeout"),
+        )
+
+
+def test_probe_statement_timeout_returns_unknown() -> None:
+    session = _TimeoutSession()
+    payload = probe_nfl_odds_ledger_health(session)
+    assert payload["ledger_health"] == "unknown"
+    assert payload["last_odds_snapshot_captured_at"] is None
+    assert payload["last_market_history_captured_at"] is None
+    assert payload["history_lag_seconds"] is None
+    assert any("statement_timeout" in s.lower() for s in session.statements)
+    assert any("2000" in s for s in session.statements)
