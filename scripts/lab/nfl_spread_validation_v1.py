@@ -280,9 +280,19 @@ def _grade_evidence_quality(
 
 
 def _subscriber_influence(
-    pq: str, me: str, eq: str
+    pq: str,
+    me: str,
+    eq: str,
+    *,
+    primary_me: str,
+    clean_era_clv_pos: Optional[float],
 ) -> Tuple[str, str]:
-    """Protocol §9 — recommendation only, not a product flip."""
+    """Protocol §9 — recommendation only, not a product flip.
+
+    YES requires Market Edge GREEN on the **primary unused** OOS window as well as
+    confirmatory. Confirmatory-only GREEN → LIMITED (scope to confirmatory /
+    PLAY-band). Clean-era CLV failure reinforces LIMITED, not YES.
+    """
     pillars = {pq, me, eq}
     if GRADE_GAP in pillars and me in (GRADE_GAP, "RED"):
         return (
@@ -293,22 +303,42 @@ def _subscriber_influence(
         return "INSUFFICIENT_EVIDENCE", "Evidence blocked by DATA GAP or thin RED Evidence Quality."
     if me == "RED" or pq == "RED":
         return "NO", "Market Edge Evidence RED or Predictive Quality RED at adequate n."
-    if me == "GREEN" and eq == "GREEN" and pq in ("GREEN", "YELLOW"):
+
+    clean_era_clv_fail = (
+        clean_era_clv_pos is not None and float(clean_era_clv_pos) < CLV_POS_MIN
+    )
+    # YES only when primary unused holdout also clears Market Edge GREEN.
+    # Confirmatory-window GREEN alone → LIMITED (Protocol §9 scope text).
+    primary_clears = primary_me == "GREEN"
+    if (
+        me == "GREEN"
+        and eq == "GREEN"
+        and pq in ("GREEN", "YELLOW")
+        and primary_clears
+        and not clean_era_clv_fail
+    ):
         return (
             "YES",
-            "Predictive ≥ YELLOW; Market Edge GREEN; Evidence Quality GREEN "
-            "(scoped to confirmatory PLAY-band evidence — not a live tag flip).",
+            "Predictive ≥ YELLOW; Market Edge GREEN on primary unused + confirmatory; "
+            "Evidence Quality GREEN — not a live tag flip.",
         )
     if me in ("GREEN", "YELLOW") and eq in ("GREEN", "YELLOW") and "RED" not in pillars:
+        clean_note = (
+            f" Clean-era 2020–22 CLV+ fails (~{float(clean_era_clv_pos):.2f})."
+            if clean_era_clv_fail and clean_era_clv_pos is not None
+            else ""
+        )
         return (
             "LIMITED",
-            "Market Edge GREEN/YELLOW with Evidence ≥ YELLOW — scope to confirmatory "
-            "PLAY-band only; not full-slate product-ready.",
+            "Protocol §9 LIMITED: Market Edge GREEN rides confirmatory 2024–25 window; "
+            f"primary unused 2025 alone is {primary_me} (CLV n below product floor). "
+            "Scope claim to confirmatory window / PLAY-band only."
+            f"{clean_note} YES would overclaim money-influence when primary OOS year "
+            "does not clear product CLV floor. Evidence only — no live tag flip.",
         )
     if me == GRADE_GAP or eq == "RED":
         return "INSUFFICIENT_EVIDENCE", "CLV/coverage gap or Evidence Quality RED (thin n)."
     return "INSUFFICIENT_EVIDENCE", "Does not clear YES/LIMITED/NO bars cleanly."
-
 
 def _slice_summary(row: Optional[Dict[str, Any]]) -> Dict[str, Any]:
     if not row:
@@ -597,6 +627,12 @@ def run() -> Dict[str, Any]:
 
     me_grade, me_detail = _grade_market_edge(confirmatory)
     me_primary_grade, me_primary_detail = _grade_market_edge(primary)
+    # Stamp Market Edge as confirmatory-window (pillar stays GREEN when bars clear).
+    if me_grade != GRADE_GAP:
+        me_detail = (
+            f"[confirmatory window 2024–2025] {me_detail} "
+            f"(primary unused 2025 alone: {me_primary_grade}.)"
+        )
 
     play_n = int(confirmatory.get("n") or 0)
     n_clv_move = int(confirmatory.get("n_clv_move") or 0)
@@ -614,8 +650,14 @@ def run() -> Dict[str, Any]:
         me_grade = "YELLOW"
         me_detail += " Demoted ≤YELLOW: ≥2 contradicting regimes (n≥40)."
 
-    influence, influence_detail = _subscriber_influence(pq_grade, me_grade, eq_grade)
-
+    clean_era_clv = clean_era.get("clv_positive_rate")
+    influence, influence_detail = _subscriber_influence(
+        pq_grade,
+        me_grade,
+        eq_grade,
+        primary_me=me_primary_grade,
+        clean_era_clv_pos=float(clean_era_clv) if clean_era_clv is not None else None,
+    )
     stages.append(
         {
             "stage": "threshold_evaluation",
@@ -831,6 +873,7 @@ def write_markdown(payload: Dict[str, Any]) -> str:
         "",
         f"**Subscriber Influence (recommendation to CoS → Ryan):** "
         f"**{payload['subscriber_influence_code'].replace('_', ' ')}**  ",
+        "",
         f"{payload['subscriber_influence_detail']}",
         "",
         "Primary-2025-alone Market Edge (context): "

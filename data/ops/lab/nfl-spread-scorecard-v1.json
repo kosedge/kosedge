@@ -2,7 +2,7 @@
   "protocol_version": "nfl-spread-validation-protocol-v1.0",
   "status": "results_filled",
   "cos_sign_off": "Chief of Staff \u2014 2026-09-04 \u2014 Protocol v1.0",
-  "generated_at": "2026-09-04T04:41:55.421044+00:00",
+  "generated_at": "2026-09-04T04:46:39.131508+00:00",
   "scope": {
     "sport": "NFL",
     "market": "spread",
@@ -353,7 +353,7 @@
     },
     {
       "stage": "influence",
-      "subscriber_influence": "YES",
+      "subscriber_influence": "LIMITED",
       "note": "Evidence recommendation for CoS\u2192Ryan only \u2014 NO live PLAY/LEAN/PASS flip."
     }
   ],
@@ -364,16 +364,16 @@
   },
   "grade_details": {
     "predictive_quality": "n=1693; MAE market-relative ok (model 9.5513 / market 9.7764); margin MAE=7.4801; signed bias series = N/A\u2014DATA GAP (blocks GREEN conjunct).",
-    "market_edge_evidence": "play_band_all ATS 0.7313 n=227; ROI 0.3961; CLV+ 0.6117 n_clv_move=206 (\u2265200).",
+    "market_edge_evidence": "[confirmatory window 2024\u20132025] play_band_all ATS 0.7313 n=227; ROI 0.3961; CLV+ 0.6117 n_clv_move=206 (\u2265200). (primary unused 2025 alone: YELLOW.)",
     "market_edge_primary_2025_alone": {
       "grade": "YELLOW",
       "detail": "ATS clears (ATS=0.6964 n=112, ROI=0.3295) but CLV soft/fails (CLV+=0.5842 n_clv_move=101; GREEN needs \u2265200 @ \u22650.55)."
     },
     "evidence_quality": "overall_n=1693; play_band n=227; CLV coverage 90.75%; contradicting regimes=0."
   },
-  "subscriber_influence": "YES",
-  "subscriber_influence_code": "YES",
-  "subscriber_influence_detail": "Predictive \u2265 YELLOW; Market Edge GREEN; Evidence Quality GREEN (scoped to confirmatory PLAY-band evidence \u2014 not a live tag flip).",
+  "subscriber_influence": "LIMITED",
+  "subscriber_influence_code": "LIMITED",
+  "subscriber_influence_detail": "Protocol \u00a79 LIMITED: Market Edge GREEN rides confirmatory 2024\u201325 window; primary unused 2025 alone is YELLOW (CLV n below product floor). Scope claim to confirmatory window / PLAY-band only. Clean-era 2020\u201322 CLV+ fails (~0.45). YES would overclaim money-influence when primary OOS year does not clear product CLV floor. Evidence only \u2014 no live tag flip.",
   "results": {
     "windows": {
       "primary_unused_holdout": "2025",
