@@ -23,11 +23,53 @@ Allowed tag standard for inventory marking: **PLAY / LEAN / PASS** + **Best Valu
 | Nav SoT | `apps/web/lib/sport-pro-nav.ts` |
 | Sport registry | `apps/web/lib/sports.ts` (`nfl\|cfb\|mlb\|nba\|nhl\|wnba` + ncaam) |
 
-**www spot-check (2026-09-04):** `/edge-board/{sport}` and `/odds/{sport}` → **200** for all six sports.
-
 **`run_id`:** absent on all major betting boards (edge / fair-lines / props / edges / odds). Present elsewhere (power-ratings / season-engine) — out of board scope.
 
 **ODDS_API_KEY:** not shown in customer board UI (env/lib only). Ops-ish copy that **is** still visible: `Model service is not configured for this environment.` (`model-service-status.ts`); KEI table pipeline/`data/processed/kei_lines_*.json` empty copy.
+
+---
+
+## Live www probe (authoritative HTTP)
+
+**Probe UTC:** 2026-09-04T03:49Z · **base:** www.kosedge.com · **auth:** none  
+Machine twin: JSON `live_probe`. Facts below only — nothing invented beyond this probe.
+
+**Totals (primary sports):** HTTP **200 = 58**, **404 = 20**.
+
+| Sport | 200 | 404 |
+|-------|-----|-----|
+| NFL | 12 | 1 |
+| CFB | 10 | 3 |
+| MLB | 9 | 4 |
+| NBA | 9 | 4 |
+| NHL | 9 | 4 |
+| WNBA | 9 | 4 |
+
+### Key live gaps
+
+| Path pattern | Live result |
+|--------------|-------------|
+| `/pro/{sport}/kei-lines` | **404 all six** (no redirect to fair-lines) |
+| `/pro/{sport}/model` | **200** only nfl+cfb; **404** mlb/nba/nhl/wnba |
+| `/api/{sport}/fair-lines` | **200** only nfl; **404** others |
+| `/api/{sport}/edges-desk` | **200** only nfl; **404** others |
+
+### Assemble API
+
+- `/api/edge-board/{sport}/assemble` → **200 all six**
+- `linesAsOf` present
+- kei/model on sampled rows: **nfl, cfb, nba, nhl, wnba**
+- **mlb** sampled rows lacked kei/model (market / best / asOf only)
+
+### Tags / Confidence (HTML or API)
+
+- Tags seen: **PLAY / LEAN / PASS**
+- Confidence seen on **NFL props** and **NFL edges**
+- NFL fair-lines API body still contains `open_competition` string
+
+### Adjacent (outside primary six; cited only)
+
+- `/pro/cbb` and `/pro/ncaab` **overview + edges** also **200**
 
 ---
 
@@ -272,8 +314,9 @@ No dedicated `MobileFilter` drawer/Sheet on these boards. Filter chips use `flex
 
 ## CoS handoff notes
 
-1. Use JSON `coverage_matrix` as the gap-matrix seed (sport × board × field).
-2. NFL is the only sport with dual Tag + ActionLabel + confidence on Edge Board.
-3. Fair/KEI Lines outside NFL are Model/KEI-only tables — largest structural gap vs Edge Board grammar.
-4. Non-standard tags already in code (WATCH, ALERT, STAY AWAY, isBestBet) are flagged — inventory, not product language.
-5. Ops copy still customer-visible: model-service env string + KEI pipeline path — preferred to remove in a later copy PR (out of scope here).
+1. Use JSON `coverage_matrix` as the gap-matrix seed (sport × board × field); overlay `live_probe` for HTTP 404 gaps.
+2. Live probe gaps: `/pro/{sport}/kei-lines` 404 all six; `/pro/{sport}/model` and `/api/{sport}/fair-lines|edges-desk` NFL(+CFB model)-only.
+3. NFL is the only sport with dual Tag + ActionLabel + confidence on Edge Board (probe: Confidence on NFL props/edges).
+4. Fair/KEI Lines outside NFL are Model/KEI-only tables in code — live `/pro/{sport}/kei-lines` path is 404 (fair-lines paths differ).
+5. Non-standard tags already in code (WATCH, ALERT, STAY AWAY, isBestBet) are flagged — inventory, not product language. Probe also notes `open_competition` still in NFL fair-lines API body.
+6. Ops copy still customer-visible: model-service env string + KEI pipeline path — preferred to remove in a later copy PR (out of scope here).

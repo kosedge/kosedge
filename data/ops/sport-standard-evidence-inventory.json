@@ -6,7 +6,8 @@
     "branch_base": "deploy-vercel",
     "sources": [
       "kosedge/kosedge apps/web on deploy-vercel",
-      "public www.kosedge.com read-only HTTP + /api/edge-board/{sport}/assemble"
+      "public www.kosedge.com read-only HTTP + /api/edge-board/{sport}/assemble",
+      "live www probe UTC 2026-09-04T03:49Z (no auth) — see live_probe"
     ],
     "sports": ["nfl", "cfb", "mlb", "nba", "nhl", "wnba"],
     "field_vocab": [
@@ -61,6 +62,75 @@
     "nav_sot": "apps/web/lib/sport-pro-nav.ts",
     "sport_registry": "apps/web/lib/sports.ts"
   },
+  "live_probe": {
+    "probe_utc": "2026-09-04T03:49Z",
+    "base": "https://www.kosedge.com",
+    "auth": "none",
+    "scope": "Totals primary sports NFL/CFB/MLB/NBA/NHL/WNBA route set as probed",
+    "totals": {
+      "http_200": 58,
+      "http_404": 20
+    },
+    "per_sport_http": {
+      "nfl": { "ok_200": 12, "not_found_404": 1 },
+      "cfb": { "ok_200": 10, "not_found_404": 3 },
+      "mlb": { "ok_200": 9, "not_found_404": 4 },
+      "nba": { "ok_200": 9, "not_found_404": 4 },
+      "nhl": { "ok_200": 9, "not_found_404": 4 },
+      "wnba": { "ok_200": 9, "not_found_404": 4 }
+    },
+    "key_gaps": [
+      {
+        "path_pattern": "/pro/{sport}/kei-lines",
+        "result": "404 all six",
+        "note": "no redirect to fair-lines"
+      },
+      {
+        "path_pattern": "/pro/{sport}/model",
+        "result": "200 only nfl+cfb; 404 mlb/nba/nhl/wnba"
+      },
+      {
+        "path_pattern": "/api/{sport}/fair-lines",
+        "result": "200 only nfl; 404 others"
+      },
+      {
+        "path_pattern": "/api/{sport}/edges-desk",
+        "result": "200 only nfl; 404 others"
+      }
+    ],
+    "assemble_api": {
+      "path_pattern": "/api/edge-board/{sport}/assemble",
+      "http": "200 all six",
+      "linesAsOf": "present",
+      "kei_model_sampled": {
+        "nfl": "present",
+        "cfb": "present",
+        "nba": "present",
+        "nhl": "present",
+        "wnba": "present",
+        "mlb": "absent_on_sampled_rows"
+      },
+      "mlb_sampled_row_fields": ["market", "best", "asOf"],
+      "mlb_note": "mlb assemble sampled rows lacked kei/model (market/best/asOf only)"
+    },
+    "tags_seen_html_or_api": [
+      "PLAY",
+      "LEAN",
+      "PASS"
+    ],
+    "confidence_seen": {
+      "surfaces": ["nfl props", "nfl edges"],
+      "note": "Confidence observed on NFL props/edges in HTML/API"
+    },
+    "nfl_fair_lines_api_body_note": "NFL fair-lines API body still contains open_competition string",
+    "adjacent_college_aliases_also_200": [
+      "/pro/cbb/overview",
+      "/pro/cbb/edges",
+      "/pro/ncaab/overview",
+      "/pro/ncaab/edges"
+    ],
+    "adjacent_note": "/pro/cbb and /pro/ncaab overview+edges also 200 (outside primary six; cited only)"
+  },
   "www_spot_check_2026_09_04": {
     "edge_board_http": {
       "nfl": 200,
@@ -112,7 +182,7 @@
       },
       "nba": {
         "row_fields_seen": ["best", "open", "market", "linesAsOf"],
-        "note": "Live assemble sample lacked kei on first row; code path + KEI fair-lines exist."
+        "note": "Agent spot-check first row lacked kei; authoritative live_probe (03:49Z) reports kei/model present on nba assemble sample — prefer live_probe."
       },
       "nhl": {
         "row_fields_seen": [
