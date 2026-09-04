@@ -386,8 +386,7 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
                 </table>
               ) : (
                 <div className="p-12 text-center text-gray-400">
-                  No odds data yet. Ensure ODDS_API_KEY is set and games are
-                  posted at the books.
+                  No odds data yet. Lines will appear when books post this slate.
                 </div>
               )}
             </div>
