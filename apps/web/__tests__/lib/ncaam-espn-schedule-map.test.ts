@@ -19,7 +19,10 @@ const ESPN_SCHEDULE_NAMES = [
   { name: "Furman Paladins", teamId: "furman" },
   { name: "Charleston Cougars", teamId: "charleston" },
   { name: "Sam Houston Bearkats", teamId: "sam houston state" },
-  { name: "Texas A&M-Corpus Christi Islanders", teamId: "texas a&m corpus chris" },
+  {
+    name: "Texas A&M-Corpus Christi Islanders",
+    teamId: "texas a&m corpus chris",
+  },
   { name: "IU Indianapolis Jaguars", teamId: "iu indy" },
   { name: "Gardner-Webb Runnin' Bulldogs", teamId: "gardner webb" },
   { name: "Fairleigh Dickinson Knights", teamId: "fairleigh dickinson" },
