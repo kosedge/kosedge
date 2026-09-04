@@ -16,6 +16,7 @@ apps/web/scripts/project_future_kei_lines.py
 apps/web/scripts/pull_odds_this_season.py
 apps/web/scripts/pull_sportsdata_cbb.py
 apps/web/scripts/write_dratings_from_fetch.py
+apps/web/scripts/lab_ncaam_fair_materialize.py
 apps/web/src/audit_data_usage.py
 apps/web/src/build_actual_margins.py
 apps/web/src/build_ensemble_ratings.py
@@ -32,7 +33,14 @@ apps/web/src/ingest_kenpom.py
 apps/web/src/join_and_backtest.py
 apps/web/src/merge_games_ensemble.py
 apps/web/src/ncaam_identity.py
+apps/web/src/ncaam_lab/__init__.py
+apps/web/src/ncaam_lab/protocol.py
+apps/web/src/ncaam_lab/schedule_sot_d.py
+apps/web/src/ncaam_lab/kenpom_asof.py
+apps/web/src/ncaam_lab/fair_b2.py
+apps/web/src/ncaam_lab/materialize.py
 apps/web/src/precompute_kenpom_snapshots.py
+apps/web/tests_pipeline/test_ncaam_lab_fair.py
 apps/web/src/precompute_torvik_snapshots.py
 apps/web/src/process_odds.py
 apps/web/src/real_backtest.py
