@@ -8,6 +8,7 @@ import {
   displayActionLabel,
   reachableActionLabels,
 } from "@/lib/nfl-dead-tiers";
+import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
 
 const webRoot = path.join(__dirname, "../..");
 
@@ -111,5 +112,44 @@ describe("Edge Board Product Center #4 — tag quarantine (no Best Bet chrome)",
     );
     expect(src).toContain("Never invent PLAY/LEAN/PASS from edge");
     expect(src).not.toMatch(/return cfbEdgeTag\(/);
+  });
+
+  it("NBA/NHL/WNBA untrusted forcePass still paints PASS (not blank)", () => {
+    // Untrusted markets skip edge → tagLineRaw undefined; posture must stay PASS.
+    for (const sport of ["nba", "nhl", "wnba"] as const) {
+      const trustKey =
+        sport === "nba"
+          ? "nbaMarketTrusted"
+          : sport === "nhl"
+            ? "nhlMarketTrusted"
+            : "wnbaMarketTrusted";
+      const rows = flatRowsToLegacy(
+        [
+          {
+            market: "Spread",
+            game: "Team A @ Team B",
+            kei: "-4.5",
+            best: "+22.5",
+            open: "+20.5",
+            bookKey: "draftkings",
+            book: "DraftKings",
+            [trustKey]: false,
+          },
+          {
+            market: "Total",
+            game: "Team A @ Team B",
+            kei: "220.5",
+            best: "221.0",
+            open: "220.0",
+            bookKey: "draftkings",
+            book: "DraftKings",
+            [trustKey]: false,
+          },
+        ],
+        sport,
+      );
+      expect(rows[0]?.tagLine, sport).toBe("PASS");
+      expect(rows[0]?.tagOU, sport).toBe("PASS");
+    }
   });
 });

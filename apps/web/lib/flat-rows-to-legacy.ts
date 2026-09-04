@@ -734,16 +734,21 @@ export function flatRowsToLegacy(
         totalRow?.nhlMarketTrusted === false);
     const forcePass =
       cfbFinalTape || nbaForcePass || wnbaForcePass || nhlForcePass;
-    // Week-0 / untrusted: collapse published tags to PASS — never invent a tag.
+    // CFB: never invent PASS when assemble omitted publishTag (research-only).
+    // NBA / NHL / WNBA: untrusted / preseason is an explicit PASS posture.
     const tagLine = forcePass
-      ? tagLineRaw
-        ? ("PASS" as Tag)
-        : undefined
+      ? cfbFinalTape
+        ? tagLineRaw
+          ? ("PASS" as Tag)
+          : undefined
+        : ("PASS" as Tag)
       : tagLineRaw;
     const tagOU = forcePass
-      ? tagOURaw
-        ? ("PASS" as Tag)
-        : undefined
+      ? cfbFinalTape
+        ? tagOURaw
+          ? ("PASS" as Tag)
+          : undefined
+        : ("PASS" as Tag)
       : tagOURaw;
     const playLineOut = forcePass ? undefined : playLine;
     const playOUOut = forcePass ? undefined : playOU;
