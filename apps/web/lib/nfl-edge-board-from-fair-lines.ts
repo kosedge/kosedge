@@ -12,7 +12,6 @@ import {
   isTierConstantConfidence,
 } from "@/lib/nfl-decision-engine";
 import {
-  customerIsBestBet,
   displayActionLabel,
   quarantineDecisionForCustomer,
 } from "@/lib/nfl-dead-tiers";
@@ -344,7 +343,8 @@ export function syncEdgeBoardActionsWithCurrent(
       s.playToPlay = local.spread.playTo?.playTo;
       s.playToLean = local.spread.playTo?.leanTo;
       s.playToPass = local.spread.playTo?.passFrom;
-      s.isBestBet = customerIsBestBet();
+      // Customer assemble: omit isBestBet key (quarantine scrub / NFL-V3).
+      delete s.isBestBet;
       s.keyNumberCross = local.spread.keyNumberCross;
       s.weekRegime = local.weekRegime;
       s.modelConfidenceScore = local.modelConfidence.score;
@@ -391,7 +391,8 @@ export function syncEdgeBoardActionsWithCurrent(
       t.playToPlay = local.total.playTo?.playTo;
       t.playToLean = local.total.playTo?.leanTo;
       t.playToPass = local.total.playTo?.passFrom;
-      t.isBestBet = customerIsBestBet();
+      // Customer assemble: omit isBestBet key (quarantine scrub / NFL-V3).
+      delete t.isBestBet;
       t.keyNumberCross = local.total.keyNumberCross;
       t.weekRegime = local.weekRegime;
       t.modelConfidenceScore = local.modelConfidence.score;
@@ -701,7 +702,6 @@ export function fairLinesToEdgeBoardRows(
       playToPass: spreadDecision?.playTo?.passFrom,
       fairLine: spreadDecision?.fairLine,
       decisionMarketLine: spreadDecision?.marketLine,
-      isBestBet: customerIsBestBet(),
       keyNumberCross: spreadDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
       ...sharedMatchup,
@@ -751,7 +751,6 @@ export function fairLinesToEdgeBoardRows(
       playToPass: totalDecision?.playTo?.passFrom,
       fairLine: totalDecision?.fairLine,
       decisionMarketLine: totalDecision?.marketLine,
-      isBestBet: customerIsBestBet(),
       keyNumberCross: totalDecision?.keyNumberCross,
       weekRegime: decisionBundle.weekRegime,
       ...sharedMatchup,

@@ -1,13 +1,12 @@
 /**
  * Edge Board matchup overview copy engine.
- * Structure: Bottom line → What matters → Watch.
+ * Structure: Bottom line → What matters → What flips.
+ * (Former "Watch" heading quarantined — OD-1 / #8 Phase C; no WATCH chrome.)
  * Season gates + neutral-site honesty + desk voice rotation.
  */
 
-import {
-  pickDeskVoice,
-  type DeskVoiceId,
-} from "@/lib/edge-board-desk-voices";
+import { pickDeskVoice, type DeskVoiceId } from "@/lib/edge-board-desk-voices";
+import { MATCHUP_OVERVIEW_FLIPS_HEADING } from "@/lib/edge-board-assemble-quarantine";
 import {
   allowsRecentFormLanguage,
   needsEarlySeasonUncertainty,
@@ -31,10 +30,7 @@ function fmtSigned(n: number, digits = 1): string {
   return r > 0 ? `+${r.toFixed(digits)}` : r.toFixed(digits);
 }
 
-function absEdge(
-  kei: number | null,
-  mkt: number | null,
-): number | null {
+function absEdge(kei: number | null, mkt: number | null): number | null {
   if (kei == null || mkt == null) return null;
   return Math.abs(kei - mkt);
 }
@@ -47,7 +43,11 @@ function leanSide(ctx: EdgeBoardMatchupContext): "home" | "away" | "push" {
   if (ctx.keiSpreadHome == null || ctx.marketSpreadHome == null) {
     if (ctx.keiSpreadHome == null) return "push";
     // No market — lean to KEI favorite.
-    return ctx.keiSpreadHome < 0 ? "home" : ctx.keiSpreadHome > 0 ? "away" : "push";
+    return ctx.keiSpreadHome < 0
+      ? "home"
+      : ctx.keiSpreadHome > 0
+        ? "away"
+        : "push";
   }
   const signed = ctx.keiSpreadHome - ctx.marketSpreadHome;
   // Negative signed ⇒ KEI likes home more than market.
@@ -72,10 +72,7 @@ function siteClause(ctx: EdgeBoardMatchupContext): string | null {
 }
 
 function powerClause(ctx: EdgeBoardMatchupContext): string | null {
-  if (
-    ctx.modelPowerAway != null &&
-    ctx.modelPowerHome != null
-  ) {
+  if (ctx.modelPowerAway != null && ctx.modelPowerHome != null) {
     const delta = ctx.modelPowerHome - ctx.modelPowerAway;
     return `${shortTeam(ctx, "home")} model power ${ctx.modelPowerHome.toFixed(1)} vs ${shortTeam(ctx, "away")} ${ctx.modelPowerAway.toFixed(1)} (Δ ${fmtSigned(delta)} E[wins])`;
   }
@@ -105,7 +102,11 @@ function paceBullet(ctx: EdgeBoardMatchupContext): string | null {
   if (ctx.paceAway == null || ctx.paceHome == null) return null;
   const avg = (ctx.paceAway + ctx.paceHome) / 2;
   const label =
-    avg >= 1.02 ? "above-average pace" : avg <= 0.96 ? "slower pace" : "mid-pack pace";
+    avg >= 1.02
+      ? "above-average pace"
+      : avg <= 0.96
+        ? "slower pace"
+        : "mid-pack pace";
   return `Pace proxy ${shortTeam(ctx, "away")} ${ctx.paceAway.toFixed(2)} / ${shortTeam(ctx, "home")} ${ctx.paceHome.toFixed(2)} → ${label}`;
 }
 
@@ -173,8 +174,10 @@ function marketTotalBullet(ctx: EdgeBoardMatchupContext): string | null {
 
 function wpBullet(ctx: EdgeBoardMatchupContext): string | null {
   if (ctx.homeWinProb == null && ctx.awayWinProb == null) return null;
-  const h = ctx.homeWinProb ?? (ctx.awayWinProb != null ? 1 - ctx.awayWinProb : null);
-  const a = ctx.awayWinProb ?? (ctx.homeWinProb != null ? 1 - ctx.homeWinProb : null);
+  const h =
+    ctx.homeWinProb ?? (ctx.awayWinProb != null ? 1 - ctx.awayWinProb : null);
+  const a =
+    ctx.awayWinProb ?? (ctx.homeWinProb != null ? 1 - ctx.homeWinProb : null);
   if (h == null || a == null) return null;
   return `Implied WP ${shortTeam(ctx, "away")} ${Math.round(a * 100)}% / ${shortTeam(ctx, "home")} ${Math.round(h * 100)}%`;
 }
@@ -395,7 +398,7 @@ export function formatMatchupOverview(parts: {
     "What matters",
     ...parts.whatMatters.map((b) => `• ${b}`),
     "",
-    "Watch",
+    MATCHUP_OVERVIEW_FLIPS_HEADING,
     parts.watch,
   ];
   if (parts.uncertainty) {

@@ -24,19 +24,31 @@ describe("edge-board season gates", () => {
 
   it("treats first team game as week1 even mid schedule", () => {
     expect(
-      resolveSeasonFormGate({ week: 5, gamesPlayedAway: 0, gamesPlayedHome: 4 }),
+      resolveSeasonFormGate({
+        week: 5,
+        gamesPlayedAway: 0,
+        gamesPlayedHome: 4,
+      }),
     ).toBe("week1");
   });
 
   it("marks games 2–4 as early", () => {
     expect(
-      resolveSeasonFormGate({ week: 3, gamesPlayedAway: 2, gamesPlayedHome: 2 }),
+      resolveSeasonFormGate({
+        week: 3,
+        gamesPlayedAway: 2,
+        gamesPlayedHome: 2,
+      }),
     ).toBe("early");
   });
 
   it("allows form language midseason", () => {
     expect(
-      resolveSeasonFormGate({ week: 10, gamesPlayedAway: 9, gamesPlayedHome: 9 }),
+      resolveSeasonFormGate({
+        week: 10,
+        gamesPlayedAway: 9,
+        gamesPlayedHome: 9,
+      }),
     ).toBe("mid");
     expect(allowsRecentFormLanguage("mid")).toBe(true);
   });
@@ -83,7 +95,8 @@ describe("matchup overview + season honesty", () => {
     expect(overview.watch.length).toBeGreaterThan(10);
     expect(overview.text).toContain("Bottom line");
     expect(overview.text).toContain("What matters");
-    expect(overview.text).toContain("Watch");
+    expect(overview.text).toContain("What flips");
+    expect(overview.text).not.toMatch(/(^|\n)Watch(\n|$)/);
     expect(overview.uncertainty).toMatch(/Early-season/i);
     expect(copyContainsForbiddenWeek1Form(overview.text)).toBe(false);
     expect(overview.text.toLowerCase()).not.toContain("recent form");

@@ -4,6 +4,7 @@ import {
   loadAssembledEdgeBoardRows,
   normalizeNflEdgeBoardSlate,
 } from "@/lib/build-edge-board-rows";
+import { scrubEdgeBoardAssembleCustomerRows } from "@/lib/edge-board-assemble-quarantine";
 import {
   filterNflStrictWeekRows,
   resolveEdgeBoardBoardLinesAsOf,
@@ -88,7 +89,8 @@ export async function GET(
       ].sort((a, b) => a - b);
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
       return pageDataJsonResponse({
-        rows,
+        // #8 Phase C / NFL-V3 — strip quarantine vocab from customer assemble.
+        rows: scrubEdgeBoardAssembleCustomerRows(rows),
         week1Count: gameCount(week1Rows),
         fullCount: gameCount(fullRows),
         week0Count: 0,
@@ -109,7 +111,7 @@ export async function GET(
       // Same honesty as NFL: book last_update / row linesAsOf — never GET clock.
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
       return pageDataJsonResponse({
-        rows,
+        rows: scrubEdgeBoardAssembleCustomerRows(rows),
         week0Count: gameCount(all.filter((r) => r.week === 0)),
         week1Count: gameCount(all.filter((r) => r.week === 1)),
         fullCount: 0,
@@ -126,7 +128,7 @@ export async function GET(
     // Book last_update / row linesAsOf — never GET clock (same honesty as NFL/CFB).
     const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
     return pageDataJsonResponse({
-      rows,
+      rows: scrubEdgeBoardAssembleCustomerRows(rows),
       week0Count: 0,
       week1Count: 0,
       fullCount: 0,
