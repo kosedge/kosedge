@@ -69,6 +69,9 @@ export function formatCompetitionStatus(
     .join(" ");
 }
 
+/** Alias used by PR 447 / CoS notes — same helper as formatCompetitionStatus. */
+export const formatCompetitionLabel = formatCompetitionStatus;
+
 /**
  * Depth slot for display. Pack sometimes stores competition_status in
  * depth_slot (ATL/CLE QB open races) — never show raw snake_case as a slot.
@@ -83,6 +86,39 @@ export function formatDepthSlotLabel(
     if (depthOrder === 2) return "backup";
     if (depthOrder === 3) return "rotation";
     return "depth";
+  }
+  return raw;
+}
+
+/**
+ * Intel table cell formatter for depth_slot / competition_status columns
+ * (Roster Pulse, league Rosters, etc.). Returns null when the column should
+ * fall through to generic intel formatting.
+ *
+ * Never returns raw snake_case for competition-as-slot values.
+ */
+export function formatCompetitionAwareIntelCell(
+  columnKey: string,
+  value: unknown,
+): string | null {
+  if (columnKey !== "depth_slot" && columnKey !== "competition_status") {
+    return null;
+  }
+  if (typeof value !== "string") {
+    if (value == null) return "—";
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return String(value);
+    }
+    return "—";
+  }
+  const raw = value.trim();
+  if (!raw) return "—";
+  if (columnKey === "competition_status") {
+    return formatCompetitionStatus(raw) ?? "—";
+  }
+  // depth_slot: competition statuses (and any snake_case) → subscriber English
+  if (raw.includes("_") || COMPETITION_LABELS[raw.toLowerCase()]) {
+    return formatCompetitionStatus(raw) ?? raw;
   }
   return raw;
 }

@@ -7,8 +7,25 @@ import {
   groupStandingsRows,
   type NflIntelResponseRow,
 } from "@/lib/nfl-intel";
+import { formatCompetitionAwareIntelCell } from "@/lib/nfl-depth-pack-freshness";
 import { buildMetricRankMaps } from "@/lib/intel-ranking";
 import { resolveNflTruthLabel } from "@/lib/nfl-truth-label";
+
+function formatIntelTableCell(
+  columnKey: string,
+  row: NflIntelResponseRow,
+  rank?: number,
+): string {
+  const competitionAware = formatCompetitionAwareIntelCell(
+    columnKey,
+    row[columnKey],
+  );
+  if (competitionAware != null) return competitionAware;
+  if (columnKey === "record") {
+    return formatTeamRecordWithRank(row, rank);
+  }
+  return formatIntelValueWithRank(row[columnKey], rank);
+}
 
 type IntelEndpoint =
   | "rosters"
@@ -193,19 +210,14 @@ export default async function NflIntelTablePage({
                               key={column.key}
                               className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85"
                             >
-                              {column.key === "record"
-                                ? formatTeamRecordWithRank(
-                                    row,
-                                    rankMaps.win_pct?.get(
-                                      tableRowIndexByRef.get(row) ?? -1,
-                                    ),
-                                  )
-                                : formatIntelValueWithRank(
-                                    row[column.key],
-                                    rankMaps[column.key]?.get(
-                                      tableRowIndexByRef.get(row) ?? -1,
-                                    ),
-                                  )}
+                              {formatIntelTableCell(
+                                column.key,
+                                row,
+                                (column.key === "record"
+                                  ? rankMaps.win_pct
+                                  : rankMaps[column.key]
+                                )?.get(tableRowIndexByRef.get(row) ?? -1),
+                              )}
                             </td>
                           ))}
                         </tr>
@@ -220,16 +232,20 @@ export default async function NflIntelTablePage({
                           <td
                             key={column.key}
                             className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85"
+                            data-testid={
+                              column.key === "depth_slot"
+                                ? "intel-depth-slot"
+                                : undefined
+                            }
                           >
-                            {column.key === "record"
-                              ? formatTeamRecordWithRank(
-                                  row,
-                                  rankMaps.win_pct?.get(rowIndex),
-                                )
-                              : formatIntelValueWithRank(
-                                  row[column.key],
-                                  rankMaps[column.key]?.get(rowIndex),
-                                )}
+                            {formatIntelTableCell(
+                              column.key,
+                              row,
+                              (column.key === "record"
+                                ? rankMaps.win_pct
+                                : rankMaps[column.key]
+                              )?.get(rowIndex),
+                            )}
                           </td>
                         ))}
                       </tr>

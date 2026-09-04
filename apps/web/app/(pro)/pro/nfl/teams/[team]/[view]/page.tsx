@@ -6,6 +6,7 @@ import TruePrTeamStrip from "@/components/pro/nfl/TruePrTeamStrip";
 import TeamIntelFilterBar from "@/components/pro/TeamIntelFilterBar";
 import TeamIntelSectionNav from "@/components/pro/TeamIntelSectionNav";
 import TeamIntelStatCards from "@/components/pro/TeamIntelStatCards";
+import TeamIntelTable from "@/components/pro/TeamIntelTable";
 import TeamPreviewSlot from "@/components/pro/team-research/TeamPreviewSlot";
 import TeamTendencyPanels, {
   type SituationTabKey,
@@ -17,7 +18,6 @@ import {
   fetchNflIntel,
   formatIntelValueWithRank,
   formatTeamRecordWithRank,
-  type NflIntelResponseRow,
 } from "@/lib/nfl-intel";
 import { fetchTruePrProductSurface } from "@/lib/nfl-true-pr";
 import {
@@ -57,104 +57,6 @@ const QB_SITUATION_KEYS: QbSituationType[] = [
   "score_state",
   "field_position",
 ];
-
-type TeamIntelTableProps = {
-  title: string;
-  rows: NflIntelResponseRow[];
-  comparisonRows?: NflIntelResponseRow[];
-  columns: Array<{ key: string; label: string }>;
-  empty: string;
-};
-
-function TeamIntelTable({
-  title,
-  rows,
-  comparisonRows,
-  columns,
-  empty,
-}: TeamIntelTableProps) {
-  const rankingRows = comparisonRows ?? rows;
-  const rankMetricKeys = columns.map((column) => column.key);
-  if (
-    columns.some((column) => column.key === "record") &&
-    !rankMetricKeys.includes("win_pct")
-  ) {
-    rankMetricKeys.push("win_pct");
-  }
-  const rankMaps = buildMetricRankMaps(rankingRows, rankMetricKeys);
-  const rowIndexByRef = new Map(
-    rankingRows.map((row, index) => [row, index] as const),
-  );
-  const rowIndexByTeam = new Map(
-    rankingRows
-      .map((row, index) => ({
-        index,
-        team: typeof row.team === "string" ? row.team : null,
-      }))
-      .filter((entry): entry is { index: number; team: string } =>
-        Boolean(entry.team),
-      )
-      .map((entry) => [entry.team, entry.index] as const),
-  );
-
-  return (
-    <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
-      <h3 className="text-lg font-semibold text-kos-text">{title}</h3>
-      {rows.length === 0 ? (
-        <p className="mt-3 rounded-xl border border-white/10 bg-white/5 p-4 text-sm text-kos-text/70">
-          {empty}
-        </p>
-      ) : (
-        <div className="mt-3 overflow-x-auto">
-          <table className="min-w-full border-separate border-spacing-0">
-            <thead>
-              <tr>
-                {columns.map((column) => (
-                  <th
-                    key={column.key}
-                    className="border-b border-white/10 px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-kos-text/65"
-                  >
-                    {column.label}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((row, idx) => (
-                <tr key={`${title}-${idx}`} className="odd:bg-white/3">
-                  {columns.map((column) => {
-                    const byRef = rowIndexByRef.get(row);
-                    const byTeam =
-                      typeof row.team === "string"
-                        ? rowIndexByTeam.get(row.team)
-                        : undefined;
-                    const rankingIndex = byRef ?? byTeam ?? -1;
-                    return (
-                      <td
-                        key={column.key}
-                        className="border-b border-white/5 px-3 py-2 text-sm text-kos-text/85"
-                      >
-                        {column.key === "record"
-                          ? formatTeamRecordWithRank(
-                              row,
-                              rankMaps.win_pct?.get(rankingIndex),
-                            )
-                          : formatIntelValueWithRank(
-                              row[column.key],
-                              rankMaps[column.key]?.get(rankingIndex),
-                            )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
-    </section>
-  );
-}
 
 export default async function NflTeamIntelViewPage({
   params,
