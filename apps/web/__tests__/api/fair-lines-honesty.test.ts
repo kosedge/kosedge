@@ -78,9 +78,7 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
   });
 
   it("CFB returns 200 NFL-shaped honest empty not_connected", async () => {
-    const res = await getCfb(
-      new Request("http://localhost/api/cfb/fair-lines"),
-    );
+    const res = await getCfb();
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.sport).toBe("cfb");
@@ -91,9 +89,7 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
   });
 
   it("NCAAF alias returns same honest empty shape (sport=ncaaf)", async () => {
-    const res = await getNcaaf(
-      new Request("http://localhost/api/ncaaf/fair-lines"),
-    );
+    const res = await getNcaaf();
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.sport).toBe("ncaaf");
@@ -200,9 +196,7 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
 
   it("returns 401 when not authorized", async () => {
     vi.mocked(getProAccessState).mockResolvedValue("unauthenticated");
-    const res = await getCfb(
-      new Request("http://localhost/api/cfb/fair-lines"),
-    );
+    const res = await getCfb();
     expect(res.status).toBe(401);
   });
 });
