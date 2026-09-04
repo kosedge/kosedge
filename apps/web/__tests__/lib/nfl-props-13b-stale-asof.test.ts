@@ -52,7 +52,9 @@ describe("NFL props 13b stale as-of honesty (source lock)", () => {
     const period = formatNflPropsBoardPeriod(2026, 1, {
       boardStale: stamp.stale,
     });
-    expect(period).toBe(`2026 · Week 1 REG · ${NFL_PROPS_BOARD_NOT_LIVE_PHRASE}`);
+    expect(period).toBe(
+      `2026 · Week 1 REG · ${NFL_PROPS_BOARD_NOT_LIVE_PHRASE}`,
+    );
 
     const body = nflPropsBoardStaleHonestyBody({
       season: 2026,
