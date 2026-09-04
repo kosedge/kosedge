@@ -9,7 +9,7 @@ datasource db {
 
 /**
  * Core concepts:
- * - Sport is a namespace (cbb, nfl, nba, mlb)
+ * - Sport is a namespace (ncaam, nfl, nba, mlb, nhl, cfb, wnba) — never `cbb`
  * - Team belongs to a Sport
  * - Game belongs to a Sport and links two Teams
  * - MarketSnapshot stores book prices (normalized, queryable)
@@ -106,7 +106,7 @@ model VerificationToken {
 
 model Sport {
   id        String   @id @default(cuid())
-  key       String   @unique // "cbb", "nfl", "nba", "mlb"
+  key       String   @unique // "ncaam", "nfl", "nba", "mlb", "nhl", "cfb", "wnba" — never "cbb"
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

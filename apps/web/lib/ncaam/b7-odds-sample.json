@@ -1,0 +1,234 @@
+{
+  "resolve_or_omit": [
+    {
+      "odds_name": "Miami Hurricanes",
+      "team_id": "miami fl"
+    },
+    {
+      "odds_name": "Miami (OH) RedHawks",
+      "team_id": "miami oh"
+    },
+    {
+      "odds_name": "Air Force Falcons",
+      "team_id": "air force"
+    },
+    {
+      "odds_name": "Akron Zips",
+      "team_id": "akron"
+    },
+    {
+      "odds_name": "Alabama Crimson Tide",
+      "team_id": "alabama"
+    },
+    {
+      "odds_name": "Alcorn St Braves",
+      "team_id": "alcorn state"
+    },
+    {
+      "odds_name": "Appalachian St Mountaineers",
+      "team_id": "appalachian state"
+    },
+    {
+      "odds_name": "Arizona St Sun Devils",
+      "team_id": "arizona state"
+    },
+    {
+      "odds_name": "Arizona Wildcats",
+      "team_id": "arizona"
+    },
+    {
+      "odds_name": "Arkansas Razorbacks",
+      "team_id": "arkansas"
+    },
+    {
+      "odds_name": "Auburn Tigers",
+      "team_id": "auburn"
+    },
+    {
+      "odds_name": "BYU Cougars",
+      "team_id": "byu"
+    },
+    {
+      "odds_name": "Ball State Cardinals",
+      "team_id": "ball state"
+    },
+    {
+      "odds_name": "Baylor Bears",
+      "team_id": "baylor"
+    },
+    {
+      "odds_name": "Boise State Broncos",
+      "team_id": "boise state"
+    },
+    {
+      "odds_name": "Boston College Eagles",
+      "team_id": "boston college"
+    },
+    {
+      "odds_name": "Bradley Braves",
+      "team_id": "bradley"
+    },
+    {
+      "odds_name": "Butler Bulldogs",
+      "team_id": "butler"
+    },
+    {
+      "odds_name": "CSU Bakersfield Roadrunners",
+      "team_id": "cal state bakersfield"
+    },
+    {
+      "odds_name": "CSU Fullerton Titans",
+      "team_id": "cal state fullerton"
+    },
+    {
+      "odds_name": "CSU Northridge Matadors",
+      "team_id": "csun"
+    },
+    {
+      "odds_name": "California Golden Bears",
+      "team_id": "california"
+    },
+    {
+      "odds_name": "Cincinnati Bearcats",
+      "team_id": "cincinnati"
+    },
+    {
+      "odds_name": "Clemson Tigers",
+      "team_id": "clemson"
+    },
+    {
+      "odds_name": "Colorado Buffaloes",
+      "team_id": "colorado"
+    },
+    {
+      "odds_name": "Creighton Bluejays",
+      "team_id": "creighton"
+    },
+    {
+      "odds_name": "Dayton Flyers",
+      "team_id": "dayton"
+    },
+    {
+      "odds_name": "DePaul Blue Demons",
+      "team_id": "depaul"
+    },
+    {
+      "odds_name": "Drake Bulldogs",
+      "team_id": "drake"
+    },
+    {
+      "odds_name": "Duke Blue Devils",
+      "team_id": "duke"
+    },
+    {
+      "odds_name": "Florida Atlantic Owls",
+      "team_id": "florida atlantic"
+    },
+    {
+      "odds_name": "Florida Gators",
+      "team_id": "florida"
+    },
+    {
+      "odds_name": "Florida Gulf Coast Eagles",
+      "team_id": "florida gulf coast"
+    },
+    {
+      "odds_name": "Florida St Seminoles",
+      "team_id": "florida state"
+    },
+    {
+      "odds_name": "Fresno St Bulldogs",
+      "team_id": "fresno state"
+    },
+    {
+      "odds_name": "Georgetown Hoyas",
+      "team_id": "georgetown"
+    },
+    {
+      "odds_name": "Georgia Bulldogs",
+      "team_id": "georgia"
+    },
+    {
+      "odds_name": "Georgia Tech Yellow Jackets",
+      "team_id": "georgia tech"
+    },
+    {
+      "odds_name": "Gonzaga Bulldogs",
+      "team_id": "gonzaga"
+    },
+    {
+      "odds_name": "Grambling St Tigers",
+      "team_id": "grambling state"
+    },
+    {
+      "odds_name": "Grand Canyon Antelopes",
+      "team_id": "grand canyon"
+    },
+    {
+      "odds_name": "Hawai'i Rainbow Warriors",
+      "team_id": "hawaii"
+    },
+    {
+      "odds_name": "Houston Cougars",
+      "team_id": "houston"
+    },
+    {
+      "odds_name": "Illinois Fighting Illini",
+      "team_id": "illinois"
+    },
+    {
+      "odds_name": "Indiana Hoosiers",
+      "team_id": "indiana"
+    },
+    {
+      "odds_name": "Indiana St Sycamores",
+      "team_id": "indiana state"
+    },
+    {
+      "odds_name": "Iowa Hawkeyes",
+      "team_id": "iowa"
+    },
+    {
+      "odds_name": "Iowa State Cyclones",
+      "team_id": "iowa state"
+    },
+    {
+      "odds_name": "Kansas Jayhawks",
+      "team_id": "kansas"
+    },
+    {
+      "odds_name": "Kansas St Wildcats",
+      "team_id": "kansas state"
+    },
+    {
+      "odds_name": "Kentucky Wildcats",
+      "team_id": "kentucky"
+    },
+    {
+      "odds_name": "LSU Tigers",
+      "team_id": "lsu"
+    },
+    {
+      "odds_name": "Liberty Flames",
+      "team_id": "liberty"
+    },
+    {
+      "odds_name": "Louisville Cardinals",
+      "team_id": "louisville"
+    },
+    {
+      "odds_name": "Loyola (Chi) Ramblers",
+      "team_id": "loyola chicago"
+    }
+  ],
+  "explicit_omit": [
+    {
+      "odds_name": "miami",
+      "reason": "ambiguous FL vs OH"
+    },
+    {
+      "odds_name": "Miami",
+      "reason": "ambiguous FL vs OH"
+    }
+  ]
+}

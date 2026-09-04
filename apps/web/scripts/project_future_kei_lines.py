@@ -26,20 +26,10 @@ from pipeline_paths import (
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 NCAAB_SPORT = "basketball_ncaab"
 
-# Must match merge_games_ensemble for join to ratings
-ODDS_TO_RATINGS_ALIASES = {
-    "unc": "north carolina",
-    "lsu": "louisiana state",
-    "usc": "southern california",
-    "ole miss": "mississippi",
-    "unlv": "nevada las vegas",
-    "vcu": "virginia commonwealth",
-    "smu": "southern methodist",
-    "tcu": "texas christian",
-    "wku": "western kentucky",
-    "utsa": "texas san antonio",
-    "unm": "new mexico",
-}
+# Identity SoT: apps/web/lib/ncaam/aliases.json via src/ncaam_identity (fail-closed).
+# Do NOT use first-token shortening on publish paths.
+sys.path.insert(0, str(_WEB / "src"))
+from ncaam_identity import odds_name_to_team_norm
 
 
 def _load_dotenv() -> None:
@@ -60,20 +50,6 @@ def _load_dotenv() -> None:
                     if value:
                         os.environ["ODDS_API_KEY"] = value
                     return
-
-
-def _normalize_team(s: str) -> str:
-    s = (s or "").lower().replace(".", "").replace(" st", " state").replace("uconn", "connecticut").strip()
-    return ODDS_TO_RATINGS_ALIASES.get(s, s)
-
-
-def _odds_team_to_short(full: str) -> str:
-    parts = (full or "").split()
-    if len(parts) >= 3:
-        short = " ".join(parts[:2])
-    else:
-        short = parts[0] if parts else ""
-    return _normalize_team(short)
 
 
 def _game_season(commence_iso: str) -> int:
@@ -117,17 +93,36 @@ def main() -> None:
         return
 
     rows = []
+    omitted = 0
     for e in future:
+        home_norm = odds_name_to_team_norm(e.get("home_team", "") or "")
+        away_norm = odds_name_to_team_norm(e.get("away_team", "") or "")
+        if home_norm is None or away_norm is None:
+            # Fail-closed: ambiguous / unknown alias → omit from publish join
+            omitted += 1
+            continue
         rows.append({
             "event_id": e.get("id"),
             "home_team": e.get("home_team", ""),
             "away_team": e.get("away_team", ""),
             "commence_time": e.get("commence_time"),
-            "home_team_norm": _odds_team_to_short(e.get("home_team", "")),
-            "away_team_norm": _odds_team_to_short(e.get("away_team", "")),
+            "home_team_norm": home_norm,
+            "away_team_norm": away_norm,
             "season": _game_season(e.get("commence_time", "")),
         })
-    odds = pl.DataFrame(rows)
+    if omitted:
+        print(f"Omitted {omitted} upcoming events (unresolved NCAAM team identity).")
+    odds = pl.DataFrame(rows) if rows else pl.DataFrame(
+        schema={
+            "event_id": pl.Utf8,
+            "home_team": pl.Utf8,
+            "away_team": pl.Utf8,
+            "commence_time": pl.Utf8,
+            "home_team_norm": pl.Utf8,
+            "away_team_norm": pl.Utf8,
+            "season": pl.Int64,
+        }
+    )
 
     ratings = pl.read_parquet(FULL_ENSEMBLE_RATINGS_PATH)
     if "year" not in ratings.columns:

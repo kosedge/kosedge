@@ -31,6 +31,7 @@ apps/web/src/ingest_haslametrics.py
 apps/web/src/ingest_kenpom.py
 apps/web/src/join_and_backtest.py
 apps/web/src/merge_games_ensemble.py
+apps/web/src/ncaam_identity.py
 apps/web/src/precompute_kenpom_snapshots.py
 apps/web/src/precompute_torvik_snapshots.py
 apps/web/src/process_odds.py
