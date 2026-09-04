@@ -4,7 +4,9 @@ Canonical sport key: ncaam only (cbb retired as API/DB sport key).
 Canonical team_id: clean KenPom-style team_norm (miami fl / miami oh).
 
 P0: bare "miami" is OMIT — Miami FL ≠ Miami OH must never collapse.
+Peer homonyms: bare "loyola" / "southern" also OMIT (aliases.json omit_aliases).
 No fuzzy auto-publish joins; unknown / ambiguous → None.
+Alias SoT: apps/web/lib/ncaam/aliases.json (shared with TS identity).
 """
 
 from __future__ import annotations

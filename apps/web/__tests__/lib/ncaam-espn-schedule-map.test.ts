@@ -13,6 +13,20 @@ const ESPN_SCHEDULE_NAMES = [
   { name: "Duke Blue Devils", teamId: "duke" },
   { name: "North Carolina Tar Heels", teamId: "north carolina" },
   { name: "Indiana State Sycamores", teamId: "indiana state" },
+  // B7 alias expand — former high-frequency misses
+  { name: "UAB Blazers", teamId: "uab" },
+  { name: "Charlotte 49ers", teamId: "charlotte" },
+  { name: "Furman Paladins", teamId: "furman" },
+  { name: "Charleston Cougars", teamId: "charleston" },
+  { name: "Sam Houston Bearkats", teamId: "sam houston state" },
+  { name: "Texas A&M-Corpus Christi Islanders", teamId: "texas a&m corpus chris" },
+  { name: "IU Indianapolis Jaguars", teamId: "iu indy" },
+  { name: "Gardner-Webb Runnin' Bulldogs", teamId: "gardner webb" },
+  { name: "Fairleigh Dickinson Knights", teamId: "fairleigh dickinson" },
+  { name: "Green Bay Phoenix", teamId: "green bay" },
+  { name: "Loyola Chicago Ramblers", teamId: "loyola chicago" },
+  { name: "Loyola Maryland Greyhounds", teamId: "loyola md" },
+  { name: "Southern Jaguars", teamId: "southern" },
 ] as const;
 
 describe("NCAAM ESPN schedule name → B7 map (fail-closed)", () => {
@@ -27,10 +41,12 @@ describe("NCAAM ESPN schedule name → B7 map (fail-closed)", () => {
     expect(fl.teamId).not.toBe(oh.teamId);
   });
 
-  it("omits bare miami and unknown ESPN schedule aliases", () => {
-    const bare = resolveTeamId("Miami", "unknown");
-    expect(bare.ok).toBe(false);
-    expect(bare.teamId).toBeNull();
+  it("omits bare miami / loyola / southern and unknown ESPN schedule aliases", () => {
+    for (const bare of ["Miami", "miami", "loyola", "southern"]) {
+      const r = resolveTeamId(bare, "unknown");
+      expect(r.ok).toBe(false);
+      expect(r.teamId).toBeNull();
+    }
 
     const unknown = resolveTeamId("ZZZ Fake U Explorers", "unknown");
     expect(unknown.ok).toBe(false);
@@ -43,5 +59,17 @@ describe("NCAAM ESPN schedule name → B7 map (fail-closed)", () => {
       expect(r.ok).toBe(true);
       expect(r.teamId).toBe(row.teamId);
     }
+  });
+
+  it("keeps peer Loyola / Southern disambiguators unique", () => {
+    expect(resolveTeamId("Loyola Marymount Lions", "unknown").teamId).toBe(
+      "loyola marymount",
+    );
+    expect(resolveTeamId("Southern Miss Golden Eagles", "unknown").teamId).toBe(
+      "southern miss",
+    );
+    expect(resolveTeamId("Southern Illinois Salukis", "unknown").teamId).toBe(
+      "southern illinois",
+    );
   });
 });
