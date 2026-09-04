@@ -45,6 +45,16 @@ class _Session:
             return _Result([{"active_model_version": "nfl-v1.5-matchup-sim"}])
         if "from nfl_dp_schedules" in sql and "spread_home" not in sql:
             return _Result([{"week": 1}])
+        # #5 R1 Slice B — warehouse MAX probe (must run before generic odds_snapshots).
+        if "last_odds_snapshot_captured_at" in sql:
+            return _Result(
+                [
+                    {
+                        "last_odds_snapshot_captured_at": None,
+                        "last_market_history_captured_at": None,
+                    }
+                ]
+            )
         if "odds_snapshots" in sql:
             return _Result([])
         if "from nfl_market_projections np" in sql and "spread_home" in sql:
@@ -370,6 +380,15 @@ def test_nfl_fair_lines_persist_0_skips_odds_snapshots_write(monkeypatch) -> Non
         "snapshots_inserted": 0,
         "history_upserted": 0,
     }
+    ledger = skipped.json()["diagnostics"]["odds_ledger_health"]
+    assert ledger["ledger_health"] == "raw_dark"
+    assert ledger["last_odds_snapshot_captured_at"] is None
+    assert ledger["last_market_history_captured_at"] is None
+    assert ledger["history_lag_seconds"] is None
+    assert "persist=0" in ledger["note"]
+    # zeros on odds_persisted must remain readable as "this GET did not write",
+    # not "warehouse is dark" — ledger block is the warehouse SoT.
+    assert skipped.json()["diagnostics"]["odds_persisted"]["snapshots_inserted"] == 0
 
     default = client.get(
         "/nfl/fair-lines",
@@ -378,3 +397,10 @@ def test_nfl_fair_lines_persist_0_skips_odds_snapshots_write(monkeypatch) -> Non
     assert default.status_code == 200
     assert len(calls) == 1
     assert default.json()["diagnostics"]["odds_persisted"]["events_persisted"] == 1
+    assert "odds_ledger_health" in default.json()["diagnostics"]
+    assert default.json()["diagnostics"]["odds_ledger_health"]["ledger_health"] in {
+        "ok",
+        "history_lagging",
+        "raw_dark",
+        "unknown",
+    }

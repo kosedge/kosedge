@@ -179,6 +179,18 @@ export type NflFairLinesResponse = {
       snapshotsInserted: number;
       historyUpserted: number;
     };
+    /**
+     * Ops/diagnostics only (#5 R1 Slice B). Warehouse MAX(captured_at) lag.
+     * Nested so page-data oddsPersisted zeros are not misread as a dark ledger.
+     * No FRESH/AGING/STALE product windows.
+     */
+    oddsLedgerHealth?: {
+      lastOddsSnapshotCapturedAt: string | null;
+      lastMarketHistoryCapturedAt: string | null;
+      historyLagSeconds: number | null;
+      ledgerHealth: "ok" | "history_lagging" | "raw_dark" | "unknown";
+      note?: string;
+    };
   };
   error?: string;
   slateStatus?: string;
@@ -554,6 +566,33 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
   };
 }
 
+function normalizeOddsLedgerHealth(
+  raw: unknown,
+): NflFairLinesResponse["diagnostics"]["oddsLedgerHealth"] | undefined {
+  if (!raw || typeof raw !== "object") return undefined;
+  const o = raw as Record<string, unknown>;
+  const healthRaw = String(o.ledger_health ?? o.ledgerHealth ?? "unknown");
+  const ledgerHealth =
+    healthRaw === "ok" ||
+    healthRaw === "history_lagging" ||
+    healthRaw === "raw_dark" ||
+    healthRaw === "unknown"
+      ? healthRaw
+      : "unknown";
+  const lag = toNumberOrNull(o.history_lag_seconds ?? o.historyLagSeconds);
+  return {
+    lastOddsSnapshotCapturedAt: toIsoOrNull(
+      o.last_odds_snapshot_captured_at ?? o.lastOddsSnapshotCapturedAt,
+    ),
+    lastMarketHistoryCapturedAt: toIsoOrNull(
+      o.last_market_history_captured_at ?? o.lastMarketHistoryCapturedAt,
+    ),
+    historyLagSeconds: lag == null ? null : Math.trunc(lag),
+    ledgerHealth,
+    note: typeof o.note === "string" ? o.note : undefined,
+  };
+}
+
 export async function fetchNflFairLines(params: {
   season: number;
   daysAhead?: number;
@@ -687,6 +726,7 @@ export async function fetchNflFairLines(params: {
           snapshots_inserted?: number;
           history_upserted?: number;
         };
+        odds_ledger_health?: Record<string, unknown>;
         current_week?: number;
       };
     };
@@ -694,6 +734,9 @@ export async function fetchNflFairLines(params: {
       ? payload.lines.map(normalizeFairLine)
       : [];
     const persisted = payload.diagnostics?.odds_persisted;
+    const ledgerHealth = normalizeOddsLedgerHealth(
+      payload.diagnostics?.odds_ledger_health,
+    );
     const apiSlateStatus =
       typeof payload.slate_status === "string" ? payload.slate_status : null;
     const slateStatus =
@@ -740,6 +783,7 @@ export async function fetchNflFairLines(params: {
               historyUpserted: toNumber(persisted.history_upserted),
             }
           : undefined,
+        ...(ledgerHealth ? { oddsLedgerHealth: ledgerHealth } : {}),
       },
     };
   } catch (cause) {

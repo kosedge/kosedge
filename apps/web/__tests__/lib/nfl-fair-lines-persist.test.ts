@@ -41,6 +41,18 @@ describe("fetchNflFairLines persist=0 (read-only page-data)", () => {
             market_joined_count: 0,
             bookmakers: [],
             kosedge_only: true,
+            odds_persisted: {
+              events_persisted: 0,
+              snapshots_inserted: 0,
+              history_upserted: 0,
+            },
+            odds_ledger_health: {
+              last_odds_snapshot_captured_at: "2026-09-04T10:00:00+00:00",
+              last_market_history_captured_at: "2026-09-04T09:59:00+00:00",
+              history_lag_seconds: 60,
+              ledger_health: "history_lagging",
+              note: "ops-only: odds_persisted zeros on persist=0 ≠ dark warehouse ledger",
+            },
           },
         }),
         { status: 200, headers: { "content-type": "application/json" } },
@@ -55,6 +67,18 @@ describe("fetchNflFairLines persist=0 (read-only page-data)", () => {
     expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(board.count).toBe(1);
     expect(board.oddsAsOf).toBe("2026-09-03T14:00:00Z");
+    expect(board.diagnostics.oddsPersisted).toEqual({
+      eventsPersisted: 0,
+      snapshotsInserted: 0,
+      historyUpserted: 0,
+    });
+    expect(board.diagnostics.oddsLedgerHealth).toEqual({
+      lastOddsSnapshotCapturedAt: "2026-09-04T10:00:00+00:00",
+      lastMarketHistoryCapturedAt: "2026-09-04T09:59:00+00:00",
+      historyLagSeconds: 60,
+      ledgerHealth: "history_lagging",
+      note: "ops-only: odds_persisted zeros on persist=0 ≠ dark warehouse ledger",
+    });
   });
 
   it("sends persist=1 only when persistOdds is explicitly true", async () => {
