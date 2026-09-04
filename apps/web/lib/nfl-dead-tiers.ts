@@ -151,12 +151,23 @@ export function reachablePropTagFilters(): readonly (
 }
 
 /**
+ * OD-1 / KOS-15: research WATCH reason tokens → PASS-equivalent customer vocab.
+ * Engine may still emit `mild_edge_watch_list*`; customer JSON must not.
+ * Do not promote to LEAN — suppress only.
+ */
+export function scrubCustomerDecisionReason(reason: string): string {
+  return reason.replace(/\bmild_edge_watch_list\b/g, "mild_edge_pass");
+}
+
+/**
  * Quarantine a decision API blob (camel or snake) before customer JSON leaves.
  * Does not mutate engine DecisionResult objects in memory.
  *
  * Subscriber surfaces use publishTag / actionLabel only. Internal ladder fields
  * (`point_grade` / `cover_grade`) can fork from the publish tag (e.g. PLAY
  * ladder vs PASS holdout) — strip them from customer payloads.
+ * Strip isBestBet / is_best_bet keys entirely (no Best Bet productization).
+ * Scrub mild_edge_watch_list* reason vocabulary (OD-1).
  */
 export function quarantineDecisionForCustomer<
   T extends Record<string, unknown>,
@@ -175,8 +186,12 @@ export function quarantineDecisionForCustomer<
   delete out.pointGrade;
   delete out.cover_grade;
   delete out.coverGrade;
-  if ("is_best_bet" in out) out.is_best_bet = false;
-  if ("isBestBet" in out) out.isBestBet = false;
+  // Strip Best Bet keys — false still leaks quarantine chrome if UI binds.
+  delete out.is_best_bet;
+  delete out.isBestBet;
+  if (typeof out.reason === "string") {
+    out.reason = scrubCustomerDecisionReason(out.reason);
+  }
   return out as T;
 }
 

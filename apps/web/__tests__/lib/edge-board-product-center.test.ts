@@ -120,6 +120,24 @@ describe("Edge Board Product Center #4 — tag quarantine (no Best Bet chrome)",
     expect(src).toContain("delete out.point_grade");
     expect(src).toContain("delete out.pointGrade");
     expect(src).toContain("delete out.cover_grade");
+    expect(src).toContain("delete out.isBestBet");
+    expect(src).toContain("delete out.is_best_bet");
+    expect(src).toContain("scrubCustomerDecisionReason");
+  });
+
+  it("assemble route scrubs quarantine vocab before customer JSON", () => {
+    const assemble = readFileSync(
+      path.join(webRoot, "app/api/edge-board/[sport]/assemble/route.ts"),
+      "utf8",
+    );
+    const quarantine = readFileSync(
+      path.join(webRoot, "lib/edge-board-assemble-quarantine.ts"),
+      "utf8",
+    );
+    expect(assemble).toContain("scrubEdgeBoardAssembleCustomerRows");
+    expect(quarantine).toContain("delete out.isBestBet");
+    expect(quarantine).toContain("MATCHUP_OVERVIEW_FLIPS_HEADING");
+    expect(quarantine).toContain("scrubCustomerDecisionReason");
   });
 
   it("CFB Edge Board does not invent tags from edge without publishTag", () => {

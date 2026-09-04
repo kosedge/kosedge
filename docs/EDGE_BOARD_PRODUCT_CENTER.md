@@ -25,11 +25,12 @@ Internal nav (`sport-pro-nav`, desk cards) already links `/edge-board/{sport}` �
 
 Customer chrome is **PLAY / LEAN / PASS** only.
 
-- Assemble may still carry engine `actionLabel` / `isBestBet` internals.
+- Assemble customer JSON **strips** quarantine fields: no `isBestBet` / `is_best_bet` keys, no matchupOverview **Watch** heading (→ **What flips**), no `mild_edge_watch_list*` reason tokens (→ `mild_edge_pass*`). Cite: #8 Phase C · NFL-V3 · Phase B #4 · OD-1 / KOS-15.
 - Edge Board UI remaps via `displayActionLabel` + `toPublishActionLabel` — no Best Bet / BEST VALUE / WATCH / ALERT productization.
 - **`point_grade` / `cover_grade` stripped** from customer `decision` blobs — can fork from `publishTag` (e.g. PASS publish + PLAY ladder). UI uses **publishTag / actionLabel only**.
 - **CFB:** do not invent tags from edge when assemble omits `publishTag` (research-only / blank tag cells).
 - No live PLAY band or threshold changes in this slice.
+- Do **not** reverse OD-1 (no WATCH→LEAN; no fourth customer tag).
 
 ## Honesty stamps
 

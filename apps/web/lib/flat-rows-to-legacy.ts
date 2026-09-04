@@ -937,8 +937,7 @@ export function flatRowsToLegacy(
         totalRow?.decisionMarketLine,
         marketOUFromCurrent,
       ),
-      isBestBetLine: lineRow?.isBestBet,
-      isBestBetOU: totalRow?.isBestBet,
+      // Customer chrome: omit Best Bet keys (quarantine scrub / NFL-V3).
       overview: overviewText,
       statDrop,
       isNeutral: matchupCtx.isNeutral,

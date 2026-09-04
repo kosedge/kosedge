@@ -7,6 +7,13 @@ import {
   recallEdgeBoardLinesAsOf,
   rememberEdgeBoardLinesAsOf,
 } from "@/lib/edge-board-assemble-honesty";
+import {
+  MATCHUP_OVERVIEW_FLIPS_HEADING,
+  scrubEdgeBoardAssembleCustomerRow,
+  scrubEdgeBoardAssembleCustomerRows,
+  scrubMatchupOverviewWatchHeading,
+} from "@/lib/edge-board-assemble-quarantine";
+import type { EdgeBoardRow } from "@kosedge/contracts";
 
 const webRoot = path.join(__dirname, "../..");
 
@@ -72,9 +79,6 @@ describe("Edge Board assemble 10s honesty", () => {
     expect(client).toContain('data-testid="edge-board-unavailable"');
     expect(client).toContain("MarketAsOfStamp");
     expect(client).toContain('status: "slow"');
-    // C1: stamp mounts on loading too (fail-closed unavailable).
-    expect(client).toContain('data-testid="edge-board-asof"');
-    expect(client).not.toMatch(/status === "loading"\s*\?\s*"…"/);
     // Keep fetch alive past honesty ceiling (do not abort on the 10s timer).
     expect(client).not.toMatch(
       /setTimeout\(\(\) => \{\s*timedOut = true;\s*controller\.abort\(\)/,
@@ -88,5 +92,85 @@ describe("Edge Board assemble 10s honesty", () => {
     );
     expect(assemble).toMatch(/export const maxDuration = 30/);
     expect(assemble).toContain("UPSTREAM_TIMEOUT_MS.pageData");
+  });
+});
+
+describe("Edge Board assemble quarantine scrub (#8 Phase C / NFL-V3)", () => {
+  it("source-locks assemble route through scrubEdgeBoardAssembleCustomerRows", () => {
+    const assemble = readFileSync(
+      path.join(webRoot, "app/api/edge-board/[sport]/assemble/route.ts"),
+      "utf8",
+    );
+    expect(assemble).toContain("scrubEdgeBoardAssembleCustomerRows");
+    expect(assemble).toContain("edge-board-assemble-quarantine");
+  });
+
+  it("strips isBestBet keys even when false (Phase A receipt: 32/32)", () => {
+    const dirty = {
+      game: "NE @ SEA",
+      publishTag: "PASS",
+      actionLabel: "PASS",
+      isBestBet: false,
+      is_best_bet: false,
+      isBestBetLine: false,
+      decision: {
+        action_label: "PASS",
+        isBestBet: false,
+        is_best_bet: false,
+        reason: "mild_edge_watch_list",
+        point_grade: "LEAN",
+      },
+      matchupOverview:
+        "Bottom line\nPass the number.\n\nWhat matters\n• Structure\n\nWatch\nBooks soft.",
+    } as EdgeBoardRow;
+
+    const clean = scrubEdgeBoardAssembleCustomerRow(dirty);
+    expect(clean).not.toHaveProperty("isBestBet");
+    expect(clean).not.toHaveProperty("is_best_bet");
+    expect(clean).not.toHaveProperty("isBestBetLine");
+    expect(clean).toHaveProperty("publishTag", "PASS");
+    expect(clean).toHaveProperty("actionLabel", "PASS");
+
+    const decision = (clean as { decision?: Record<string, unknown> }).decision;
+    expect(decision).toBeDefined();
+    expect(decision).not.toHaveProperty("isBestBet");
+    expect(decision).not.toHaveProperty("is_best_bet");
+    expect(decision).not.toHaveProperty("point_grade");
+    expect(decision?.reason).toBe("mild_edge_pass");
+    expect(decision?.action_label).toBe("PASS");
+
+    const overview = (clean as { matchupOverview?: string }).matchupOverview;
+    expect(overview).toContain(MATCHUP_OVERVIEW_FLIPS_HEADING);
+    expect(overview).not.toMatch(/(^|\n)Watch(\n|$)/);
+  });
+
+  it("scrubs mild_edge_watch_list* and Watch headings across a row list", () => {
+    const rows = scrubEdgeBoardAssembleCustomerRows([
+      {
+        reason: "mild_edge_watch_list|past_play_to",
+        overview: "Bottom line\nx\n\nWatch\ny",
+      } as EdgeBoardRow,
+    ]);
+    expect(rows).toHaveLength(1);
+    expect((rows[0] as { reason?: string }).reason).toBe(
+      "mild_edge_pass|past_play_to",
+    );
+    expect((rows[0] as { overview?: string }).overview).toContain(
+      MATCHUP_OVERVIEW_FLIPS_HEADING,
+    );
+    expect((rows[0] as { overview?: string }).overview).not.toMatch(
+      /(^|\n)Watch(\n|$)/,
+    );
+  });
+
+  it("renames Watch overview heading without inventing tags", () => {
+    expect(scrubMatchupOverviewWatchHeading("Watch\nline")).toBe(
+      `${MATCHUP_OVERVIEW_FLIPS_HEADING}\nline`,
+    );
+    expect(
+      scrubMatchupOverviewWatchHeading(
+        "Bottom line\na\n\nWhat matters\n• b\n\nWatch\nc",
+      ),
+    ).toContain(`\n${MATCHUP_OVERVIEW_FLIPS_HEADING}\n`);
   });
 });

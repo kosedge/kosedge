@@ -14,6 +14,7 @@ import {
   reachableActionLabels,
   reachableConfidenceBands,
   reachablePropTagFilters,
+  scrubCustomerDecisionReason,
 } from "@/lib/nfl-dead-tiers";
 import {
   CONFIDENCE_BEST_BET_MIN,
@@ -72,12 +73,18 @@ describe("NFL dead-tier honesty", () => {
       point_grade: "STRONG PLAY",
       cover_grade: "EXCEPTIONAL",
       is_best_bet: true,
+      isBestBet: true,
+      reason: "mild_edge_watch_list|past_play_to",
     });
     expect(q.action_label).toBe("PASS");
     // Internal ladder stripped — can fork from publishTag (PASS vs PLAY).
     expect(q).not.toHaveProperty("point_grade");
     expect(q).not.toHaveProperty("cover_grade");
-    expect(q.is_best_bet).toBe(false);
+    // Best Bet keys stripped entirely (false still leaks if UI binds).
+    expect(q).not.toHaveProperty("is_best_bet");
+    expect(q).not.toHaveProperty("isBestBet");
+    // OD-1: watch_list reason vocab → PASS-equivalent (no WATCH→LEAN).
+    expect(q.reason).toBe("mild_edge_pass|past_play_to");
   });
 
   it("strips point_grade so PASS publish cannot show PLAY ladder", () => {
@@ -90,6 +97,19 @@ describe("NFL dead-tier honesty", () => {
     expect(q.action_label).toBe("PASS");
     expect(q).not.toHaveProperty("point_grade");
     expect(q).not.toHaveProperty("cover_grade");
+    expect(q).not.toHaveProperty("is_best_bet");
+  });
+
+  it("scrubs mild_edge_watch_list reason vocab to mild_edge_pass (OD-1)", () => {
+    expect(scrubCustomerDecisionReason("mild_edge_watch_list")).toBe(
+      "mild_edge_pass",
+    );
+    expect(
+      scrubCustomerDecisionReason("mild_edge_watch_list|past_play_to"),
+    ).toBe("mild_edge_pass|past_play_to");
+    expect(scrubCustomerDecisionReason("edge_below_week_threshold")).toBe(
+      "edge_below_week_threshold",
+    );
   });
 
   it("documents why tiers are hidden for ops", () => {

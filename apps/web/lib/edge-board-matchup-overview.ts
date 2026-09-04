@@ -1,6 +1,7 @@
 /**
  * Edge Board matchup overview copy engine.
- * Structure: Bottom line → What matters → Watch.
+ * Structure: Bottom line → What matters → What flips.
+ * (Former "Watch" heading quarantined — OD-1 / #8 Phase C; no WATCH chrome.)
  * Season gates + neutral-site honesty + desk voice rotation.
  */
 
@@ -8,6 +9,7 @@ import {
   pickDeskVoice,
   type DeskVoiceId,
 } from "@/lib/edge-board-desk-voices";
+import { MATCHUP_OVERVIEW_FLIPS_HEADING } from "@/lib/edge-board-assemble-quarantine";
 import {
   allowsRecentFormLanguage,
   needsEarlySeasonUncertainty,
@@ -395,7 +397,7 @@ export function formatMatchupOverview(parts: {
     "What matters",
     ...parts.whatMatters.map((b) => `• ${b}`),
     "",
-    "Watch",
+    MATCHUP_OVERVIEW_FLIPS_HEADING,
     parts.watch,
   ];
   if (parts.uncertainty) {
