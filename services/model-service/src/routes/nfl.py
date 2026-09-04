@@ -35,6 +35,10 @@ from src.services.nfl_matchup_features import (
 from src.services.nfl_portfolio_optimizer import optimize_nfl_portfolio
 from src.services.nfl_player_identity import apply_manual_mapping_resolution
 from src.services.nfl_props_eligibility import filter_investable_rows
+from src.services.nfl_odds_ledger_health import (
+    build_odds_ledger_health_payload,
+    probe_nfl_odds_ledger_health,
+)
 from src.services.nfl_clv_semantics import (
     NFL_CLV_DEFINITION,
     NFL_CLV_POPULATION,
@@ -3817,6 +3821,8 @@ def nfl_fair_lines(
 
     current_week = 1
     open_by_game_id: Dict[str, Dict[str, Any]] = {}
+    # Default unknown until warehouse probe runs (never invent healthy).
+    odds_ledger_health: Dict[str, Any] = build_odds_ledger_health_payload(probe_ok=False)
     session = SessionLocal()
     try:
         effective_model_version = model_version or _resolve_active_nfl_model_version(session)
@@ -3919,6 +3925,9 @@ def nfl_fair_lines(
             [str(mapped.get("game_id") or "") for mapped in fair_line_rows],
             games=fair_line_rows,
         )
+        # #5 R1 Slice B — ops ledger lag (warehouse MAX stamps). Independent of
+        # persist=0 odds_persisted zeros on this subscriber GET.
+        odds_ledger_health = probe_nfl_odds_ledger_health(session)
     except SQLAlchemyError as exc:
         raise HTTPException(
             status_code=503,
@@ -4540,6 +4549,8 @@ def nfl_fair_lines(
             "bookmakers": resolved_bookmakers.split(","),
             "kosedge_only": market_joined_count == 0,
             "odds_persisted": odds_persist,
+            # Nested so page-data odds_persisted=0 is not misread as dark ledger.
+            "odds_ledger_health": odds_ledger_health,
             "current_week": current_week,
             "odds_as_of": odds_as_of,
             "kei_week1_reprice": {
