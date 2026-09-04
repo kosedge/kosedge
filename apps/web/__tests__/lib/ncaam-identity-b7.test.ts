@@ -46,6 +46,18 @@ describe("B7.1 Miami FL vs Miami OH never collapse", () => {
     expect(bare.teamId).toBeNull();
   });
 
+  it("omits bare loyola / southern peer homonyms", () => {
+    for (const bare of ["loyola", "southern"]) {
+      const r = resolveTeamId(bare, "odds");
+      expect(r.ok).toBe(false);
+      expect(r.teamId).toBeNull();
+    }
+    expect(resolveTeamId("loyola chicago", "odds").teamId).toBe(
+      "loyola chicago",
+    );
+    expect(resolveTeamId("Southern Jaguars", "odds").teamId).toBe("southern");
+  });
+
   it("directory keeps Miami FL and Miami OH as separate entries", () => {
     const fl = findTeamInDirectory("ncaam", "miami-fl");
     const oh = findTeamInDirectory("ncaam", "miami-oh");
@@ -133,11 +145,13 @@ describe("NCAAM identity helpers", () => {
     expect(toRatingsNorm("miami fl")).toBe("miami fl");
   });
 
-  it("expands NCAAM directory past prior Miami-ACC-only incompleteness", () => {
+  it("expands NCAAM directory toward D1 with distinct Miami FL/OH", () => {
     const dir = getTeamDirectory("ncaam");
-    expect(dir.length).toBeGreaterThan(110);
+    expect(dir.length).toBeGreaterThan(300);
     expect(dir.some((t) => t.slug === "miami-fl")).toBe(true);
     expect(dir.some((t) => t.slug === "miami-oh")).toBe(true);
     expect(dir.some((t) => t.slug === "miami")).toBe(false);
+    const slugs = dir.map((t) => t.slug);
+    expect(new Set(slugs).size).toBe(slugs.length);
   });
 });
