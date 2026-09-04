@@ -3,7 +3,6 @@ import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import {
   fetchNflPropsBoard,
   formatAmericanOdds,
-  formatConfidence,
   formatEdgeProb,
   formatPropNumber,
   propMarketLabel,
@@ -320,7 +319,6 @@ export default async function NflPropsBoardPage({
                         <th className="px-3 py-2 font-semibold">Fair under</th>
                         <th className="px-3 py-2 font-semibold">Edge over</th>
                         <th className="px-3 py-2 font-semibold">Edge under</th>
-                        <th className="px-3 py-2 font-semibold">Confidence</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -392,12 +390,6 @@ function PropCard({ row }: { row: NflPropBoardRow }) {
           Band: {formatBand(row.modelFloor)}–{formatBand(row.modelCeiling)}
         </span>
         <span>
-          Conf:{" "}
-          <span className="text-edge-green">
-            {formatConfidence(row.confidence)}
-          </span>
-        </span>
-        <span>
           Edge O/U:{" "}
           {row.marketJoined
             ? `${formatEdgeProb(row.edgeOver)} / ${formatEdgeProb(row.edgeUnder)}`
@@ -455,9 +447,6 @@ function PropRow({ row }: { row: NflPropBoardRow }) {
         ) : (
           <span className="text-kos-text/40">no mkt</span>
         )}
-      </td>
-      <td className="px-3 py-3 text-edge-green">
-        {formatConfidence(row.confidence)}
       </td>
     </tr>
   );
