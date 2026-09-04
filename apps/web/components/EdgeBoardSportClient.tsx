@@ -55,7 +55,8 @@ type ClientState =
 /**
  * Client-fetched Edge Board body.
  * Document HTML is not blocked on model-service / Odds (Alex waterfall fix).
- * As-of stamps (PR 416) fill after assemble returns.
+ * C1 (#8): first-paint SSR always stamps as-of — real assemble linesAsOf when
+ * ready, else honest “as-of unavailable” (never blank “…”, never invent-now).
  * Honesty: past EDGE_BOARD_ASSEMBLE_HONESTY_MS escalate copy (keep fetch; no invent).
  */
 export default function EdgeBoardSportClient({
@@ -145,17 +146,18 @@ export default function EdgeBoardSportClient({
   const fullCount = state.status === "ready" ? state.data.fullCount : 0;
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
+  // Loading → null stamp (unavailable). Ready → assemble. Slow/error → last good.
+  // Never invent "as of now"; never leave first paint blank ("…").
   const boardLinesAsOf =
     state.status === "ready"
       ? state.data.linesAsOf
       : state.status === "error" || state.status === "slow"
         ? state.lastLinesAsOf
         : null;
-  // Always stamp from assemble linesAsOf (or last good) — never invent "as of now".
-  const headerAsOf =
-    state.status === "loading"
-      ? "…"
-      : marketAsOfHeaderSuffix({ asOf: boardLinesAsOf, kind: "lines" });
+  const headerAsOf = marketAsOfHeaderSuffix({
+    asOf: boardLinesAsOf,
+    kind: "lines",
+  });
 
   return (
     <div data-testid="edge-board-client">
@@ -310,16 +312,13 @@ export default function EdgeBoardSportClient({
         </div>
       ) : null}
 
-      {state.status === "ready" ||
-      state.status === "error" ||
-      state.status === "slow" ? (
-        <MarketAsOfStamp
-          className="mt-3"
-          asOf={boardLinesAsOf}
-          kind="lines"
-          data-testid="edge-board-asof"
-        />
-      ) : null}
+      {/* C1: stamp on every paint — loading fail-closes to unavailable. */}
+      <MarketAsOfStamp
+        className="mt-3"
+        asOf={boardLinesAsOf}
+        kind="lines"
+        data-testid="edge-board-asof"
+      />
 
       {state.status === "loading" ? (
         <div

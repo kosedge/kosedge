@@ -37,6 +37,15 @@ Customer chrome is **PLAY / LEAN / PASS** only.
 - Blank / unparseable → “as-of unavailable” / “Market as-of unavailable”.
 - Never mint “as of now” from the request clock.
 
+## SSR first-paint as-of (Phase C1 / #8)
+
+Client-fetch keeps document HTML off the model-service waterfall (Alex). First paint must still be honest:
+
+- SSR / loading always renders `MarketAsOfStamp` + header suffix.
+- Until assemble returns: **as-of unavailable** / **Market as-of unavailable** (fail-closed).
+- After assemble: real `linesAsOf` when present; still unavailable when blank — never invent-now, never blank “…”.
+- Rows stay empty while loading (no invent).
+
 ## Assemble 10s honesty (follow-up)
 
 - Past **`EDGE_BOARD_ASSEMBLE_HONESTY_MS` (10s)** while assemble is still pending: escalate from bare “Loading…” to honesty copy + `MarketAsOfStamp` (last good `linesAsOf` when known, else unavailable).
