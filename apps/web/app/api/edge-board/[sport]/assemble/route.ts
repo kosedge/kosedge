@@ -66,18 +66,20 @@ export async function GET(
 
   try {
     if (sport === "nfl") {
-      // One full assemble (Odds ∥ fair-lines inside), then derive Week 1 — same as prior SSR.
-      const fullRows = ensureNflScheduleWeekOnBoard(
+      // #12 GO-1: honor requested slate — week1 must not enrich the full slate
+      // just for a tab badge (COLD hydrate paid full-slate CPU after Railway).
+      // Odds ∥ fair-lines still parallel inside loadAssembled.
+      const assembled = ensureNflScheduleWeekOnBoard(
         stampNflEdgeBoardWeeksFromSchedule(
           await loadAssembledEdgeBoardRows("nfl", {
-            slate: "full",
+            slate,
             ...assembleOpts,
           }),
         ),
         1,
       );
-      const week1Rows = filterNflStrictWeekRows(fullRows, 1);
-      const rows = slate === "full" ? fullRows : week1Rows;
+      const week1Rows = filterNflStrictWeekRows(assembled, 1);
+      const rows = slate === "full" ? assembled : week1Rows;
       const weeks = [
         ...new Set(
           rows
@@ -92,7 +94,9 @@ export async function GET(
         // #8 Phase C / NFL-V3 — strip quarantine vocab from customer assemble.
         rows: scrubEdgeBoardAssembleCustomerRows(rows),
         week1Count: gameCount(week1Rows),
-        fullCount: gameCount(fullRows),
+        // Full-slate badge count only when this response is the full assemble.
+        // Week1 responses omit the badge number until Full tab is opened (honest).
+        fullCount: slate === "full" ? gameCount(assembled) : 0,
         week0Count: 0,
         weeks,
         linesAsOf,

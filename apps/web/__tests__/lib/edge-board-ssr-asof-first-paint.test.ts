@@ -54,9 +54,10 @@ describe("Edge Board SSR as-of first paint (C1)", () => {
     );
     expect(page).toContain("EdgeBoardSportClient");
     expect(page).not.toContain("loadAssembledEdgeBoardRows");
-    // Comment may mention assemble; page must not call it.
-    expect(page).not.toMatch(/fetch\s*\(/);
+    // #12 GO-1: inline bootstrap may call fetch() — must not await assemble.
+    expect(page).toContain("edgeBoardAssembleBootstrapScript");
     expect(page).not.toMatch(/await\s+loadAssembled/);
+    expect(page).not.toMatch(/await\s+fetch\s*\(/);
     expect(page).not.toMatch(/\blinesAsOf\b/);
   });
 });
