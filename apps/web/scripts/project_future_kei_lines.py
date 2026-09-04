@@ -26,8 +26,9 @@ from pipeline_paths import (
 ODDS_API_BASE = "https://api.the-odds-api.com/v4"
 NCAAB_SPORT = "basketball_ncaab"
 
-# Identity SoT: apps/web/lib/ncaam/aliases.json via ncaam_identity (fail-closed).
-# Do NOT use odds_team_to_short / first-token shortening on publish paths.
+# Identity SoT: apps/web/lib/ncaam/aliases.json via src/ncaam_identity (fail-closed).
+# Do NOT use first-token shortening on publish paths.
+sys.path.insert(0, str(_WEB / "src"))
 from ncaam_identity import odds_name_to_team_norm
 
 

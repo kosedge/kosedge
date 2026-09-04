@@ -16,7 +16,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-_ALIAS_PATH = Path(__file__).resolve().parent / "lib" / "ncaam" / "aliases.json"
+_ALIAS_PATH = Path(__file__).resolve().parent.parent / "lib" / "ncaam" / "aliases.json"
 
 RETIRED_NCAAM_SPORT_KEYS = frozenset({"cbb", "ncaab"})
 
