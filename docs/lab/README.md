@@ -13,10 +13,10 @@ PASS flips from Lab output (CoS → Ryan decides).
 
 ## Scorecards
 
-| Version | Doc                                                                      | Machine JSON                                                                                                       |
-| ------- | ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md)             | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json)                     |
-| v1.0    | [`NCAAM_FAIR_LAB_SCORECARD_v1.md`](./NCAAM_FAIR_LAB_SCORECARD_v1.md)     | [`data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json`](../../data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json) |
+| Version | Doc                                                                  | Machine JSON                                                                                                       |
+| ------- | -------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md)         | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json)                     |
+| v1.0    | [`NCAAM_FAIR_LAB_SCORECARD_v1.md`](./NCAAM_FAIR_LAB_SCORECARD_v1.md) | [`data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json`](../../data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json) |
 
 NCAAM fair scorecard fills after protocol-frozen materialize
 (`data/ops/ncaam-lab-fair-engine-20260904.md`,

@@ -13,11 +13,11 @@
 
 ## Executive grades (Test-A OOS primary)
 
-| Pillar | Grade | Detail |
-| ------ | ----- | ------ |
-| Predictive Quality | **AMBER** | n=80; B2 MAE 8.8128 vs B1 7.1253 (ratio=1.2368); clears soft AMBER, not market-relative GREEN |
+| Pillar               | Grade     | Detail                                                                                           |
+| -------------------- | --------- | ------------------------------------------------------------------------------------------------ |
+| Predictive Quality   | **AMBER** | n=80; B2 MAE 8.8128 vs B1 7.1253 (ratio=1.2368); clears soft AMBER, not market-relative GREEN    |
 | Market Edge Evidence | **AMBER** | ATS clears (0.5500 n=80) but CLV/ROI soft (CLV+=0.4286 n_clv=42; ROI=0.055) — no Edge>4 shopping |
-| Evidence Quality | **RED** | outcome coverage too thin for claimed scorecard (n_actual=80, cov=13.14%) |
+| Evidence Quality     | **RED**   | outcome coverage too thin for claimed scorecard (n_actual=80, cov=13.14%)                        |
 
 **Subscriber Influence (recommendation to CoS → Ryan):** **INSUFFICIENT EVIDENCE**
 
@@ -40,31 +40,31 @@ Evidence Quality RED or DATA GAP blocks influence claim; numbers reported honest
 
 ## Test-A Predictive (B2 vs B1, home-margin space)
 
-| Metric | Value |
-| ------ | ----- |
-| n lab games | 609 |
-| n with actual | 80 |
-| outcome coverage | 0.1314 |
-| B2 margin MAE | 8.8128 |
-| B2 margin RMSE | 12.0952 |
-| B2 signed bias | 0.2786 |
-| B1 margin MAE | 7.1253 |
-| B1 margin RMSE | 10.1622 |
-| B2 MAE ≤ B1 | False |
-| B2/B1 MAE ratio | 1.2368 |
+| Metric           | Value   |
+| ---------------- | ------- |
+| n lab games      | 609     |
+| n with actual    | 80      |
+| outcome coverage | 0.1314  |
+| B2 margin MAE    | 8.8128  |
+| B2 margin RMSE   | 12.0952 |
+| B2 signed bias   | 0.2786  |
+| B1 margin MAE    | 7.1253  |
+| B1 margin RMSE   | 10.1622 |
+| B2 MAE ≤ B1      | False   |
+| B2/B1 MAE ratio  | 1.2368  |
 
 ## Test-A Market Edge (full slate; honest open CLV)
 
-| Metric | Value |
-| ------ | ----- |
-| filter | `full_slate_no_edge_gt4_shopping` |
-| n ATS | 80 |
-| ATS | 0.55 |
-| ROI (−110) | 0.055 |
-| n open honest w/ actual | 80 |
-| n CLV move | 42 |
-| CLV+ rate | 0.4286 |
-| mean CLV move | -0.2175 |
+| Metric                  | Value                             |
+| ----------------------- | --------------------------------- |
+| filter                  | `full_slate_no_edge_gt4_shopping` |
+| n ATS                   | 80                                |
+| ATS                     | 0.55                              |
+| ROI (−110)              | 0.055                             |
+| n open honest w/ actual | 80                                |
+| n CLV move              | 42                                |
+| CLV+ rate               | 0.4286                            |
+| mean CLV move           | -0.2175                           |
 
 ## Test-A Evidence
 
@@ -74,16 +74,15 @@ Evidence Quality RED or DATA GAP blocks influence claim; numbers reported honest
 
 ## Train-A diagnostic (context only — not primary grade)
 
-| Metric | Train-A |
-| ------ | ------- |
-| n lab / n actual | 1119 / 170 |
-| B2 MAE / B1 MAE | 10.2948 / 8.3882 |
-| ATS / ROI | 0.4201 / -0.2178 |
-| CLV+ (n_move) | 0.5641 (78) |
+| Metric           | Train-A          |
+| ---------------- | ---------------- |
+| n lab / n actual | 1119 / 170       |
+| B2 MAE / B1 MAE  | 10.2948 / 8.3882 |
+| ATS / ROI        | 0.4201 / -0.2178 |
+| CLV+ (n_move)    | 0.5641 (78)      |
 
 ## Hard NOT (held)
 
 - Edge Board / PLAY / Conf% / props
 - Odds densify / invent tips / KenPom-as-SoT / #12 GO-2 / squash
 - Retune after seeing Test-A
-
