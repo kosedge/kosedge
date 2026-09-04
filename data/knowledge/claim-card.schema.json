@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kosedge.local/schemas/claim-card.schema.json",
+  "title": "KosEdgeClaimCard",
+  "description": "Simple shape for institutional-memory claim cards. Markdown+YAML in data/knowledge is SoT; this schema is optional for tooling.",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "id",
+    "status",
+    "sport",
+    "product",
+    "event",
+    "as_of",
+    "claim",
+    "house_view",
+    "model_view",
+    "market_view",
+    "sot_class",
+    "writer",
+    "filed_by"
+  ],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "status": {
+      "type": "string",
+      "enum": ["open", "graded", "void", "EXAMPLE"]
+    },
+    "sport": { "type": "string", "minLength": 1 },
+    "product": { "type": "string", "minLength": 1 },
+    "event": { "type": "string", "minLength": 1 },
+    "as_of": { "type": "string", "minLength": 1 },
+    "claim": { "type": "string", "minLength": 1 },
+    "house_view": { "type": "string" },
+    "model_view": { "type": "string" },
+    "market_view": { "type": "string" },
+    "sot_class": { "type": "string" },
+    "writer": { "type": "string" },
+    "filed_by": { "type": "string" },
+    "grade": {
+      "type": ["string", "null"],
+      "enum": ["right", "wrong", "mixed", "void", null]
+    },
+    "lesson": { "type": "string" },
+    "evidence": { "type": "string" },
+    "graded_by": { "type": "string" },
+    "graded_as_of": { "type": "string" },
+    "related_paths": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "notes": { "type": "string" }
+  }
+}
