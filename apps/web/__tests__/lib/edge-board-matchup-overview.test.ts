@@ -83,7 +83,10 @@ describe("matchup overview + season honesty", () => {
     expect(overview.watch.length).toBeGreaterThan(10);
     expect(overview.text).toContain("Bottom line");
     expect(overview.text).toContain("What matters");
-    expect(overview.text).toContain("Watch");
+    expect(overview.text).toContain("What flips");
+    // Vocab scrub: no "Watch" section heading (narrative prose may still say watch).
+    expect(overview.text).not.toMatch(/^Watch$/m);
+    expect(overview.text).not.toMatch(/\nWatch\n/);
     expect(overview.uncertainty).toMatch(/Early-season/i);
     expect(copyContainsForbiddenWeek1Form(overview.text)).toBe(false);
     expect(overview.text.toLowerCase()).not.toContain("recent form");

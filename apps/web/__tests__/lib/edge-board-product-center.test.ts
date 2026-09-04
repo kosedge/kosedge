@@ -122,6 +122,28 @@ describe("Edge Board Product Center #4 — tag quarantine (no Best Bet chrome)",
     expect(src).toContain("delete out.cover_grade");
   });
 
+  it("customer quarantine strips isBestBet keys + scrubs mild_edge_watch_list", () => {
+    const src = readFileSync(
+      path.join(webRoot, "lib/nfl-dead-tiers.ts"),
+      "utf8",
+    );
+    expect(src).toContain("delete out.is_best_bet");
+    expect(src).toContain("delete out.isBestBet");
+    expect(src).toContain("scrubCustomerDecisionReason");
+    expect(src).toContain('return "mild_edge"');
+  });
+
+  it("matchup overview uses What flips — never a Watch section heading", () => {
+    const src = readFileSync(
+      path.join(webRoot, "lib/edge-board-matchup-overview.ts"),
+      "utf8",
+    );
+    expect(src).toContain('MATCHUP_OVERVIEW_FLIP_HEADING = "What flips"');
+    expect(src).toContain("MATCHUP_OVERVIEW_FLIP_HEADING");
+    // Section heading string must not be the bare Watch label.
+    expect(src).not.toMatch(/^\s*"Watch",\s*$/m);
+  });
+
   it("CFB Edge Board does not invent tags from edge without publishTag", () => {
     const src = readFileSync(
       path.join(webRoot, "lib/flat-rows-to-legacy.ts"),

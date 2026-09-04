@@ -61,7 +61,7 @@ describe("NFL dead-tier honesty", () => {
     );
   });
 
-  it("quarantines WATCH / STRONG PLAY / EXCEPTIONAL / isBestBet for customers", () => {
+  it("quarantines WATCH / STRONG PLAY / EXCEPTIONAL and strips isBestBet", () => {
     expect(displayPropTag("WATCH")).toBe("PASS");
     expect(displayPropTag("LEAN")).toBe("LEAN");
     expect(quarantinePointGrade("STRONG PLAY")).toBe("PLAY");
@@ -72,12 +72,32 @@ describe("NFL dead-tier honesty", () => {
       point_grade: "STRONG PLAY",
       cover_grade: "EXCEPTIONAL",
       is_best_bet: true,
+      isBestBet: true,
+      reason: "mild_edge_watch_list|past_play_to",
     });
     expect(q.action_label).toBe("PASS");
     // Internal ladder stripped — can fork from publishTag (PASS vs PLAY).
     expect(q).not.toHaveProperty("point_grade");
     expect(q).not.toHaveProperty("cover_grade");
-    expect(q.is_best_bet).toBe(false);
+    // Best Bet keys omitted from customer JSON (not forced-false leftovers).
+    expect(q).not.toHaveProperty("is_best_bet");
+    expect(q).not.toHaveProperty("isBestBet");
+    expect(q.reason).toBe("mild_edge|past_play_to");
+  });
+
+  it("scrubs mild_edge_watch_list reason codes for customers", () => {
+    expect(
+      quarantineDecisionForCustomer({ reason: "mild_edge_watch_list" }).reason,
+    ).toBe("mild_edge");
+    expect(
+      quarantineDecisionForCustomer({
+        reason: "mild_edge_watch_list|past_play_to",
+      }).reason,
+    ).toBe("mild_edge|past_play_to");
+    // Unrelated reasons untouched.
+    expect(
+      quarantineDecisionForCustomer({ reason: "play_triple_cleared" }).reason,
+    ).toBe("play_triple_cleared");
   });
 
   it("strips point_grade so PASS publish cannot show PLAY ladder", () => {
@@ -90,6 +110,7 @@ describe("NFL dead-tier honesty", () => {
     expect(q.action_label).toBe("PASS");
     expect(q).not.toHaveProperty("point_grade");
     expect(q).not.toHaveProperty("cover_grade");
+    expect(q).not.toHaveProperty("is_best_bet");
   });
 
   it("documents why tiers are hidden for ops", () => {

@@ -151,12 +151,32 @@ export function reachablePropTagFilters(): readonly (
 }
 
 /**
+ * Customer-safe decision reason — scrub legacy "watch_list" vocab.
+ * Engine may still emit `mild_edge_watch_list` internally; Edge Board surfaces
+ * get a neutral code (`mild_edge` / `mild_edge|past_play_to`).
+ */
+export function scrubCustomerDecisionReason(
+  reason: string | null | undefined,
+): string {
+  const raw = String(reason ?? "");
+  if (!raw) return raw;
+  // Exact LEAN mild-edge codes (and pipe suffixes). Do not touch prose.
+  if (raw === "mild_edge_watch_list") return "mild_edge";
+  if (raw.startsWith("mild_edge_watch_list|")) {
+    return `mild_edge|${raw.slice("mild_edge_watch_list|".length)}`;
+  }
+  return raw;
+}
+
+/**
  * Quarantine a decision API blob (camel or snake) before customer JSON leaves.
  * Does not mutate engine DecisionResult objects in memory.
  *
  * Subscriber surfaces use publishTag / actionLabel only. Internal ladder fields
  * (`point_grade` / `cover_grade`) can fork from the publish tag (e.g. PLAY
  * ladder vs PASS holdout) — strip them from customer payloads.
+ * `isBestBet` / `is_best_bet` are forced false for any remaining callers and
+ * stripped from customer JSON (no Best Bet chrome).
  */
 export function quarantineDecisionForCustomer<
   T extends Record<string, unknown>,
@@ -175,8 +195,12 @@ export function quarantineDecisionForCustomer<
   delete out.pointGrade;
   delete out.cover_grade;
   delete out.coverGrade;
-  if ("is_best_bet" in out) out.is_best_bet = false;
-  if ("isBestBet" in out) out.isBestBet = false;
+  // Best Bet keys never leave on customer payloads (UI must not read them).
+  delete out.is_best_bet;
+  delete out.isBestBet;
+  if (typeof out.reason === "string") {
+    out.reason = scrubCustomerDecisionReason(out.reason);
+  }
   return out as T;
 }
 

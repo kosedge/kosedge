@@ -206,8 +206,6 @@ export type LegacyEdgeBoardRow = {
   coverProbOU?: number;
   playToLine?: string;
   playToOU?: string;
-  isBestBetLine?: boolean;
-  isBestBetOU?: boolean;
   overview?: string;
   statDrop?: StatDrop;
   isNeutral?: boolean;
@@ -937,8 +935,6 @@ export function flatRowsToLegacy(
         totalRow?.decisionMarketLine,
         marketOUFromCurrent,
       ),
-      isBestBetLine: lineRow?.isBestBet,
-      isBestBetOU: totalRow?.isBestBet,
       overview: overviewText,
       statDrop,
       isNeutral: matchupCtx.isNeutral,

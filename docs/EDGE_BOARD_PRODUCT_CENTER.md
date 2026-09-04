@@ -25,9 +25,10 @@ Internal nav (`sport-pro-nav`, desk cards) already links `/edge-board/{sport}` �
 
 Customer chrome is **PLAY / LEAN / PASS** only.
 
-- Assemble may still carry engine `actionLabel` / `isBestBet` internals.
 - Edge Board UI remaps via `displayActionLabel` + `toPublishActionLabel` — no Best Bet / BEST VALUE / WATCH / ALERT productization.
 - **`point_grade` / `cover_grade` stripped** from customer `decision` blobs — can fork from `publishTag` (e.g. PASS publish + PLAY ladder). UI uses **publishTag / actionLabel only**.
+- **`isBestBet` / `is_best_bet` stripped** from customer payloads (`customerIsBestBet()` stays false for any remaining callers; UI never reads the keys).
+- **Vocab scrub:** overview section heading is **What flips** (never **Watch**); `mild_edge_watch_list` reason codes remap to neutral `mild_edge` on customer decision blobs. Narrative prose may still contain the word “watch”.
 - **CFB:** do not invent tags from edge when assemble omits `publishTag` (research-only / blank tag cells).
 - No live PLAY band or threshold changes in this slice.
 
@@ -46,4 +47,4 @@ Customer chrome is **PLAY / LEAN / PASS** only.
 
 ## Out of scope (other PRs)
 
-Homepage redesign · odds/fair-lines rebuild · PLAY 2.5–7 band / CFB sit · Lab scorecard · mobile redesign.
+Homepage redesign · odds/fair-lines rebuild · PLAY 2.5–7 band / CFB sit · Lab scorecard · mobile redesign · Overview SSR `/pro/nfl/edges` listing (desk / More tools — fine as-is).

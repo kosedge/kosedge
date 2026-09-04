@@ -1,7 +1,10 @@
 /**
  * Edge Board matchup overview copy engine.
- * Structure: Bottom line → What matters → Watch.
+ * Structure: Bottom line → What matters → What flips.
  * Season gates + neutral-site honesty + desk voice rotation.
+ *
+ * Customer chrome: never emit a "Watch" section heading (vocab scrub #4).
+ * Narrative prose may still contain the word “watch” — that is not a heading.
  */
 
 import {
@@ -382,6 +385,9 @@ function uncertaintyClause(ctx: EdgeBoardMatchupContext): string | undefined {
   return "Inputs incomplete — omit anything we cannot see.";
 }
 
+/** Customer-facing flip-line heading — never "Watch" (Edge Board vocab scrub). */
+export const MATCHUP_OVERVIEW_FLIP_HEADING = "What flips";
+
 export function formatMatchupOverview(parts: {
   bottomLine: string;
   whatMatters: string[];
@@ -395,7 +401,7 @@ export function formatMatchupOverview(parts: {
     "What matters",
     ...parts.whatMatters.map((b) => `• ${b}`),
     "",
-    "Watch",
+    MATCHUP_OVERVIEW_FLIP_HEADING,
     parts.watch,
   ];
   if (parts.uncertainty) {
