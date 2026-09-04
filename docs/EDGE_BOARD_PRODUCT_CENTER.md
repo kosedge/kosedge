@@ -21,6 +21,10 @@ Internal nav (`sport-pro-nav`, desk cards) already links `/edge-board/{sport}` �
 
 **Choice:** demote desk Edges from the primary sport strip into **More tools** as **“Edges desk”**. Do **not** 308 `/pro/{sport}/edges` (Pro desk users still need that page). Confusing Edge Board aliases (`/pro/.../edge-board`, `/pro/nfl/boards`) already permanent-redirect to canonical.
 
+### Desk honesty fork (#8 Phase C last slice · Phase B #5 · #4 E4)
+
+Desk copy must not present **model-vs-market** as competing decision-center truth vs Edge Board research-fair honesty (`KEI vs market. Model is research-fair. Tags never use Model vs market.`). Shared constants live in `lib/edges-desk-honesty.ts`. Routes stay live — honesty demotion only; no redesign / remat / PLAY invent.
+
 ## Tag quarantine (product surfaces)
 
 Customer chrome is **PLAY / LEAN / PASS** only.

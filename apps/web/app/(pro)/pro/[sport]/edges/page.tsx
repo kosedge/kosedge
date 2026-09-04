@@ -2,12 +2,18 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import SportHubShell from "@/components/pro/SportHubShell";
 import { getTonightGames } from "@/lib/edge-board-tonight";
+import {
+  EDGES_DESK_SEPARATIONS_PENDING_TITLE,
+  edgesDeskQuantifiedLine,
+  edgesDeskSummary,
+} from "@/lib/edges-desk-honesty";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 /**
  * Shared Edges desk for sports without a dedicated model edges feed yet.
  * Surfaces board-derived separations honestly — never invents edge numbers.
+ * Demoted desk (#4 E4 / #8 Phase C): not dual-truth vs Edge Board research-fair.
  */
 export default async function SportEdgesPage({
   params,
@@ -59,7 +65,7 @@ export default async function SportEdgesPage({
       base={base}
       badge={`${sportName} Betting Desk`}
       title={`${sportName} Edges`}
-      summary={`Thresholded model-vs-market separations for the current slate. Desk path: ${desk.pathLabel}. Research only — you make the picks.`}
+      summary={edgesDeskSummary(desk.pathLabel)}
       primaryHref={`/edge-board/${sportKey}`}
       primaryLabel="Open edge board →"
       secondaryHref={`/pro/${sportKey}/fair-lines`}
@@ -95,8 +101,7 @@ export default async function SportEdgesPage({
           {quantified.length > 0 ? (
             <>
               <p className="mb-3 text-sm text-kos-text/65">
-                {quantified.length} matchups with model-vs-market separation on
-                the current board.
+                {edgesDeskQuantifiedLine(quantified.length)}
               </p>
               <div className="hidden overflow-hidden rounded-2xl border border-white/10 md:block">
                 <table className="w-full text-sm">
@@ -173,7 +178,7 @@ export default async function SportEdgesPage({
           ) : (
             <div className="rounded-2xl border border-kos-border bg-kos-surface/30 p-5">
               <p className="text-sm font-semibold text-kos-gold">
-                Board slate live — model separations pending
+                {EDGES_DESK_SEPARATIONS_PENDING_TITLE}
               </p>
               <p className="mt-2 text-sm text-kos-text/70">
                 {rows.length} matchups are on the board with market lines. KEI

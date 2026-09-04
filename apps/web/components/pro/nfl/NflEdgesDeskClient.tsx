@@ -9,6 +9,10 @@ import type {
   NflEdgesDeskResponse,
 } from "@/lib/nfl-edges-desk-types";
 import { EDGES_DESK_MIN_CONF_OPTIONS } from "@/lib/nfl-dead-tiers";
+import {
+  NFL_EDGES_DESK_SUMMARY,
+  NFL_EDGES_DESK_TITLE,
+} from "@/lib/edges-desk-honesty";
 import { nflPropsSurfaceCopy } from "@/lib/nfl-props-surface";
 import {
   modelUnreachableCopy,
@@ -153,11 +157,10 @@ export default function NflEdgesDeskClient({
               Week {week} · {season} · {headerAsOf}
             </p>
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
-              Model vs Market Edges
+              {NFL_EDGES_DESK_TITLE}
             </h1>
             <p className="mt-3 text-sm text-kos-text/80 sm:text-base">
-              Separations between KosEdge lines and the joined market. Empty
-              when nothing clears the cut.
+              {NFL_EDGES_DESK_SUMMARY}
             </p>
             {deskReady ? (
               <MarketAsOfStamp
