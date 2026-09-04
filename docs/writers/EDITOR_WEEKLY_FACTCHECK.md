@@ -3,7 +3,9 @@
 **Owner:** Riley Nash (Editor)  
 **Cadence:** Every **Monday** after Camp Desk full-32 + preview **NUMBER** pass, and after any market-moving desk publish. Weekday Camp Desk (Tue–Fri real-news only) does not replace Monday’s number gate.
 
-**Scope (LOCKED 2026-08-30):** Market **numbers** only. Do **not** edit voice, prose, or rhythm. Distinct writer voices stay UNLOCKED — see `style-bible.md` / `riley-nash.md`.
+**Broader law (LOCKED 2026-09-03 — Ryan/CoS):** Hard fact gate for **all NEW** writer copy — markets, KEI/house, model, status, injury, transactions, attribution, dates. Voice stays **UNLOCKED**. Forward-only (no mass archive re-factcheck). Unverified → **KICK BACK** (never invent). Full SOP: [`EDITOR_FACT_GATE.md`](./EDITOR_FACT_GATE.md).
+
+**Scope (LOCKED 2026-08-30; nested under fact gate 2026-09-03):** This doc is the **Monday market-numbers** pass only. Do **not** edit voice, prose, or rhythm. Distinct writer voices stay UNLOCKED — see `style-bible.md` / `riley-nash.md`. Status/injury/attribution/date claims on **new** filings still go through `EDITOR_FACT_GATE.md` even when this script is green.
 
 **House vs Street (LOCKED 2026-08-30 — Ryan):** Writers are the Kos Edge desk. Lean is HOUSE vs STREET. Riley gates **KEI stamps like juice** — a KEI / house number with no live print is a **numbers bug**. Stamp audits at the board the writer pulled; do not force same-day chase rewrites when the street moved after file time.
 
@@ -26,6 +28,8 @@ Optional: `--fix` applies market stamps only after human review of the printed m
 | Model       | `data/ops/nfl-web-launch-bundle.json` → `team_regular_season_outcomes.csv` `expected_wins`  |
 | Copy        | `content/writers/season-previews-2026/*.md`                                                 |
 
+Approved source **classes** for the broader gate (street books, status wires, dates): see `EDITOR_FACT_GATE.md`. Do not invent Circa/Bet365/Betr or unauthorized theScore lines.
+
 ## Pass rules (do not skip)
 
 1. Print mismatch table (team · stated · live street · house / KEI · Model E[wins] · Δ).
@@ -38,4 +42,4 @@ Optional: `--fix` applies market stamps only after human review of the printed m
 
 ## Integration
 
-Writers ship copy in their own voices. Editor closes the **numbers** loop only (street + house). See `riley-nash.md` and `.cursor/rules/ai-writer-team.mdc`.
+Writers ship copy in their own voices. Editor closes the **numbers** loop on Monday (street + house) and the **hard fact gate** on all NEW filings. See `EDITOR_FACT_GATE.md`, `riley-nash.md`, and `.cursor/rules/ai-writer-team.mdc`.
