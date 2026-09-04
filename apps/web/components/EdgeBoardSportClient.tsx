@@ -12,6 +12,10 @@ import {
   rememberEdgeBoardLinesAsOf,
   type EdgeBoardAssembleHonestyReason,
 } from "@/lib/edge-board-assemble-honesty";
+import {
+  edgeBoardAssembleHref,
+  takeEdgeBoardAssembleBootstrap,
+} from "@/lib/edge-board-assemble-href";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
@@ -58,6 +62,8 @@ type ClientState =
  * C1 (#8): first-paint SSR always stamps as-of — real assemble linesAsOf when
  * ready, else honest “as-of unavailable” (never blank “…”, never invent-now).
  * Honesty: past EDGE_BOARD_ASSEMBLE_HONESTY_MS escalate copy (keep fetch; no invent).
+ * #12 GO-1: prefer SSR bootstrap promise (started in HTML) over post-hydrate
+ * fetch; omit fetch cache bypass so page-data CDN / IR can reuse.
  */
 export default function EdgeBoardSportClient({
   sportKey,
@@ -82,22 +88,20 @@ export default function EdgeBoardSportClient({
       );
     }, EDGE_BOARD_ASSEMBLE_HONESTY_MS);
 
-    const qs = new URLSearchParams();
-    if (sportKey === "nfl") qs.set("slate", slate);
-    if (sportKey === "cfb") qs.set("week", String(cfbWeek));
-    const q = qs.toString();
+    const href = edgeBoardAssembleHref({ sportKey, slate, cfbWeek });
 
     async function load() {
       setState({ status: "loading" });
       try {
-        const res = await fetch(
-          `/api/edge-board/${sportKey}/assemble${q ? `?${q}` : ""}`,
-          {
-            cache: "no-store",
+        // Bootstrap may already be in flight from SSR HTML — do not abort it
+        // on unmount (lets CDN warm). Only skip setState when cancelled.
+        const bootstrapped = takeEdgeBoardAssembleBootstrap(href);
+        const res = await (bootstrapped ??
+          fetch(href, {
+            credentials: "same-origin",
             headers: { accept: "application/json" },
             signal: controller.signal,
-          },
-        );
+          }));
         if (!res.ok) throw new Error(`assemble ${res.status}`);
         const data = (await res.json()) as AssemblePayload;
         if (cancelled) return;
@@ -130,6 +134,7 @@ export default function EdgeBoardSportClient({
     return () => {
       cancelled = true;
       clearTimeout(honestyTimer);
+      // Abort only the fallback fetch — never the SSR bootstrap promise.
       controller.abort();
     };
   }, [sportKey, slate, cfbWeek]);

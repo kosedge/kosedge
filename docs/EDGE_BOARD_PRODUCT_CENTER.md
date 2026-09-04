@@ -58,6 +58,14 @@ Client-fetch keeps document HTML off the model-service waterfall (Alex). First p
 - No odds rebuild · no PLAY threshold changes.
 - Route `maxDuration = 30` / `UPSTREAM_TIMEOUT_MS.pageData` unchanged — UX only.
 
+## COLD assemble→hydrate (#12 GO-1)
+
+- SSR still does **not** await assemble (Alex waterfall).
+- HTML boots assemble early (`rel=preload` + inline fetch bag) so useful board is not gated on post-hydrate waterfall.
+- Client prefers the bootstrap promise; does not use `cache: "no-store"` on assemble (page-data CDN / IR).
+- NFL week1 assemble honors `slate=week1` (no full-slate enrich for the default tab).
+- Honesty unchanged: Loading / as-of unavailable until assemble returns — never invent finish.
+
 ## Out of scope (other PRs)
 
 Homepage redesign · odds/fair-lines rebuild · PLAY 2.5–7 band / CFB sit · Lab scorecard · mobile redesign.

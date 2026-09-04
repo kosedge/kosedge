@@ -1,6 +1,10 @@
 import SportProHeader from "@/components/pro/SportProHeader";
 import EdgeBoardSportClient from "@/components/EdgeBoardSportClient";
 import { normalizeNflEdgeBoardSlate } from "@/lib/build-edge-board-rows";
+import {
+  edgeBoardAssembleBootstrapScript,
+  edgeBoardAssembleHref,
+} from "@/lib/edge-board-assemble-href";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -9,6 +13,8 @@ export const dynamic = "force-dynamic";
  * Edge Board — SSR shell only.
  * Board rows client-fetch /api/edge-board/[sport]/assemble so HTML is not
  * held open on model-service (Alex: SSR wait waterfall, not download).
+ * #12 GO-1: inline bootstrap starts assemble during HTML parse (before hydrate).
+ * Do not await assemble here — honesty stays Loading / as-of unavailable.
  */
 export default async function EdgeBoardSportPage({
   params,
@@ -40,9 +46,22 @@ export default async function EdgeBoardSportPage({
     sportKey === "nfl" ? normalizeNflEdgeBoardSlate(slateRaw) : "week1";
   const cfbWeekRaw = Array.isArray(sp.week) ? sp.week[0] : sp.week;
   const cfbWeek: 0 | 1 = sportKey === "cfb" ? (cfbWeekRaw === "0" ? 0 : 1) : 1;
+  const assembleHref = edgeBoardAssembleHref({ sportKey, slate, cfbWeek });
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
+      {/* #12 GO-1: start assemble with HTML — do not await (Alex waterfall). */}
+      <link
+        rel="preload"
+        as="fetch"
+        href={assembleHref}
+        crossOrigin="use-credentials"
+      />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: edgeBoardAssembleBootstrapScript(assembleHref),
+        }}
+      />
       <SportProHeader activeSport={sportKey} />
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         <div className="absolute -top-44 left-1/2 h-[520px] w-[900px] -translate-x-1/2 rounded-full bg-edge-green/12 blur-3xl animate-pulse-slow" />
