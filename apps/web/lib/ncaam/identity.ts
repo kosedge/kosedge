@@ -19,7 +19,12 @@ export type NcaamAliasSource =
 
 export type NcaamResolveResult =
   | { ok: true; teamId: string; alias: string; source: NcaamAliasSource }
-  | { ok: false; teamId: null; alias: string; reason: "empty" | "omit" | "unknown" };
+  | {
+      ok: false;
+      teamId: null;
+      alias: string;
+      reason: "empty" | "omit" | "unknown";
+    };
 
 const ALIASES: Record<string, string> = {
   ...(aliasesDoc.aliases as Record<string, string>),
@@ -83,7 +88,9 @@ export function resolveRatingsNorm(
 /** Retired API/DB sport key — product SoT is `ncaam` only. */
 export const RETIRED_NCAAM_SPORT_KEYS = ["cbb", "ncaab"] as const;
 
-export function isRetiredNcaamSportKey(key: string | null | undefined): boolean {
+export function isRetiredNcaamSportKey(
+  key: string | null | undefined,
+): boolean {
   const k = String(key || "")
     .trim()
     .toLowerCase();

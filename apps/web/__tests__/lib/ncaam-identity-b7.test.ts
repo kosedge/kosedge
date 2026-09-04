@@ -90,10 +90,7 @@ describe("B7.3 zero production publish paths call odds_team_to_short", () => {
   });
 
   it("no remaining def odds_team_to_short under apps/web publish tree", () => {
-    const roots = [
-      path.join(webRoot, "scripts"),
-      path.join(webRoot, "src"),
-    ];
+    const roots = [path.join(webRoot, "scripts"), path.join(webRoot, "src")];
     const offenders: string[] = [];
     const scanFile = (fp: string) => {
       if (!fp.endsWith(".py")) return;
