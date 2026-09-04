@@ -1,7 +1,11 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { getSportEdgeBoardHref, getSportPrimaryNav, getSportToolNav } from "@/lib/sport-pro-nav";
+import {
+  getSportEdgeBoardHref,
+  getSportPrimaryNav,
+  getSportToolNav,
+} from "@/lib/sport-pro-nav";
 import { SPORTS } from "@/lib/sports";
 import {
   BEST_VALUE_TIER_REACHABLE,
@@ -73,7 +77,9 @@ describe("Edge Board Product Center #4 — canonical URL", () => {
       expect(primary).toContain("Edge Board");
     }
     // Deep link preserved under tools for NFL (desk page stays live).
-    const nflDesk = getSportToolNav("nfl").find((i) => i.label === "Edges desk");
+    const nflDesk = getSportToolNav("nfl").find(
+      (i) => i.label === "Edges desk",
+    );
     expect(nflDesk?.href).toBe("/pro/nfl/edges");
   });
 });

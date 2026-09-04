@@ -14,10 +14,10 @@ Internal nav (`sport-pro-nav`, desk cards) already links `/edge-board/{sport}` �
 
 ## Desk Edges demotion (follow-up)
 
-| Surface                         | Role                                                                 |
-| ------------------------------- | -------------------------------------------------------------------- |
-| `/edge-board/{sport}`           | **Primary** decision CTA (green emphasis in sport subnav)            |
-| `/pro/{sport}/edges`            | **Desk** surface — deep links stay live; **not** a dual primary CTA  |
+| Surface               | Role                                                                |
+| --------------------- | ------------------------------------------------------------------- |
+| `/edge-board/{sport}` | **Primary** decision CTA (green emphasis in sport subnav)           |
+| `/pro/{sport}/edges`  | **Desk** surface — deep links stay live; **not** a dual primary CTA |
 
 **Choice:** demote desk Edges from the primary sport strip into **More tools** as **“Edges desk”**. Do **not** 308 `/pro/{sport}/edges` (Pro desk users still need that page). Confusing Edge Board aliases (`/pro/.../edge-board`, `/pro/nfl/boards`) already permanent-redirect to canonical.
 

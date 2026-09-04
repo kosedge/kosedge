@@ -41,9 +41,7 @@ describe("Edge Board assemble 10s honesty", () => {
       /taking longer than usual/i,
     );
     expect(edgeBoardAssembleHonestyCopy("timeout")).toMatch(/do not invent/i);
-    expect(edgeBoardAssembleHonestyCopy("unavailable")).toMatch(
-      /unavailable/i,
-    );
+    expect(edgeBoardAssembleHonestyCopy("unavailable")).toMatch(/unavailable/i);
     expect(edgeBoardAssembleHonestyCopy("unavailable")).toMatch(
       /do not invent/i,
     );
