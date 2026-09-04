@@ -5,6 +5,12 @@
  * from subscriber filters / legends / empty-state promises. Do not flip stake
  * gates or raise confidence floors here — that is a separate product decision.
  *
+ * Sport Standard publish tags (customer chrome): PLAY / LEAN / PASS only
+ * (+ BEST VALUE only when reachable). ALERT / STAY AWAY / isBestBet /
+ * STRONG PLAY / EXCEPTIONAL are internal decision-engine debt — map or hide
+ * at this display layer; do not introduce Best Bet / Stay Away as publish tags.
+ * Props-desk WATCH is props vocabulary, not Sport Standard game publish.
+ *
  * Re-enable later:
  * - Prop PLAY: set model-service `PLAY_STAKE_ELIGIBLE = True` after a cleared
  *   holdout, then mirror `NFL_PROPS_PLAY_STAKE_ELIGIBLE` below.
@@ -62,6 +68,8 @@ export function reachableActionLabels(
 ): ActionLabel[] {
   return labels.filter((label) => {
     if (label === "BEST VALUE") return BEST_VALUE_TIER_REACHABLE;
+    // Legacy / non-Sport-Standard — never promise as publish tags.
+    if (label === "ALERT" || label === "STAY AWAY") return false;
     return true;
   });
 }
@@ -77,13 +85,16 @@ export function reachableConfidenceBands(
 }
 
 /**
- * Subscriber badge: remaps unreachable BEST VALUE → PLAY so the gold badge
- * is not promised. Engine thresholds are unchanged.
+ * Subscriber badge: Sport Standard publish vocabulary only.
+ * - Unreachable BEST VALUE → PLAY (no gold badge promise).
+ * - ALERT / STAY AWAY → PASS (legacy decision-engine labels; not publish tags).
+ * Engine thresholds / ActionLabel union are unchanged.
  */
 export function displayActionLabel(
   label: ActionLabel | null | undefined,
 ): ActionLabel | null {
   if (label == null) return null;
+  if (label === "ALERT" || label === "STAY AWAY") return "PASS";
   if (label === "BEST VALUE" && !BEST_VALUE_TIER_REACHABLE) return "PLAY";
   return label;
 }

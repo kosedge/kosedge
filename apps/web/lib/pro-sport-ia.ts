@@ -458,7 +458,7 @@ function mlbIntelLinks(base: string): OverviewSectionLink[] {
       status: "active",
     },
     {
-      href: `/pro/kei-lines/mlb`,
+      href: `/pro/mlb/fair-lines`,
       label: "KEI projections",
       hint: "Projected baselines to benchmark current market prices.",
       premium: true,
@@ -518,7 +518,7 @@ function genericIntelLinks(
       status: "active",
     },
     {
-      href: `/pro/kei-lines/${sportKey}`,
+      href: `/pro/${sportKey}/fair-lines`,
       label: "KEI projections",
       hint: "Projected spread and total table by matchup.",
       premium: true,
@@ -607,7 +607,7 @@ function marketLinksForSport({
       status: "active",
     },
     {
-      href: `/pro/kei-lines/${sportKey}`,
+      href: `/pro/${sportKey}/fair-lines`,
       label: "KEI projections",
       hint: sportIsMarketsOnlyEdgeBoard(sportKey)
         ? "No KEI fair lines yet — markets-only until a handicap model ships."

@@ -48,6 +48,20 @@ describe("NFL KEI Lines live board (not pipeline stub)", () => {
     expect(nextConfig).toContain('destination: "/pro/nfl/fair-lines"');
   });
 
+  it("permanently redirects /pro/{sport}/kei-lines → fair-lines for all six", () => {
+    const nextConfig = readFileSync(
+      path.join(process.cwd(), "next.config.ts"),
+      "utf8",
+    );
+    expect(nextConfig).toContain(
+      'source: "/pro/:sport(nfl|cfb|mlb|nba|nhl|wnba)/kei-lines"',
+    );
+    expect(nextConfig).toContain('destination: "/pro/:sport/fair-lines"');
+    expect(nextConfig).toMatch(
+      /source: "\/pro\/:sport\(nfl\|cfb\|mlb\|nba\|nhl\|wnba\)\/kei-lines"[\s\S]*?permanent: true/,
+    );
+  });
+
   it("does not leave NFL empty-state invent copy on the live path helper", () => {
     expect(getKeiLinesBoardHref("nfl")).not.toContain("kei-lines");
   });

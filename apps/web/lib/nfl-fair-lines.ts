@@ -4,6 +4,7 @@ import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
+import { humanizeCompetitionTokensInText } from "@/lib/nfl-depth-pack-freshness";
 import type {
   ActionLabel,
   ConfidenceAssessment,
@@ -261,7 +262,11 @@ function normalizeKeiRepriceFactor(raw: unknown): NflKeiRepriceFactor | null {
     spreadPts: toNumber(o.spread_pts ?? o.spreadPts, 0),
     totalPts: toNumber(o.total_pts ?? o.totalPts, 0),
     confidenceDelta: toNumber(o.confidence_delta ?? o.confidenceDelta, 0),
-    reason: typeof o.reason === "string" ? o.reason : "",
+    // Customer serialize: never leak pack snake_case (open_competition → Open competition).
+    reason:
+      typeof o.reason === "string"
+        ? humanizeCompetitionTokensInText(o.reason)
+        : "",
   };
 }
 
@@ -283,7 +288,10 @@ function normalizeKeiReprice(raw: unknown): NflKeiRepriceLog | null {
   return {
     applied: Boolean(o.applied),
     skipped: Boolean(o.skipped),
-    reason: typeof o.reason === "string" ? o.reason : "",
+    reason:
+      typeof o.reason === "string"
+        ? humanizeCompetitionTokensInText(o.reason)
+        : "",
     spreadDelta: toNumber(o.spread_delta ?? o.spreadDelta, 0),
     totalDelta: toNumber(o.total_delta ?? o.totalDelta, 0),
     qbClear: typeof o.qb_clear === "boolean" ? o.qb_clear : null,

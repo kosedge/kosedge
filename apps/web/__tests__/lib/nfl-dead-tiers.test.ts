@@ -46,6 +46,16 @@ describe("NFL dead-tier honesty", () => {
     expect(displayActionLabel(null)).toBeNull();
   });
 
+  it("quarantines legacy ALERT / STAY AWAY to PASS (not publish tags)", () => {
+    expect(displayActionLabel("ALERT")).toBe("PASS");
+    expect(displayActionLabel("STAY AWAY")).toBe("PASS");
+    expect(reachableActionLabels()).not.toContain("ALERT");
+    expect(reachableActionLabels()).not.toContain("STAY AWAY");
+    expect(reachableActionLabels()).toEqual(
+      expect.arrayContaining(["PASS", "LEAN", "PLAY"]),
+    );
+  });
+
   it("documents why tiers are hidden for ops", () => {
     expect(DEAD_TIER_OPS_BLURB.toLowerCase()).toContain("play_stake_eligible");
     expect(DEAD_TIER_OPS_BLURB.toLowerCase()).toContain("0.72");

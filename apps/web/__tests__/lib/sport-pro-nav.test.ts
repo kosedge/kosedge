@@ -171,12 +171,23 @@ describe("sport-pro-nav", () => {
     expect(sportHubHref("nba")).toBe("/pro/nba/overview");
   });
 
-  it("routes live KEI boards away from the NFL pipeline stub", () => {
+  it("routes live KEI boards to fair-lines for all six sports", () => {
     expect(getKeiLinesBoardHref("nfl")).toBe("/pro/nfl/fair-lines");
     expect(getKeiLinesBoardHref("mlb")).toBe("/pro/mlb/fair-lines");
     expect(getKeiLinesBoardHref("nba")).toBe("/pro/nba/fair-lines");
     expect(getKeiLinesBoardHref("wnba")).toBe("/pro/wnba/fair-lines");
-    expect(getKeiLinesBoardHref("cfb")).toBe("/pro/kei-lines/cfb");
+    expect(getKeiLinesBoardHref("cfb")).toBe("/pro/cfb/fair-lines");
+    expect(getKeiLinesBoardHref("nhl")).toBe("/pro/nhl/fair-lines");
+    // Never the sport-first alias that 404'd (redirect covers bookmarks).
+    for (const s of ["nfl", "cfb", "mlb", "nba", "nhl", "wnba"] as const) {
+      expect(getKeiLinesBoardHref(s)).not.toBe(`/pro/${s}/kei-lines`);
+    }
+  });
+
+  it("CFB tool KEI Lines points at fair-lines, not the hub stub path", () => {
+    expect(
+      getSportToolNav("cfb").find((i) => i.label === "KEI Lines")?.href,
+    ).toBe("/pro/cfb/fair-lines");
   });
 
   it("marks overview and edge board active correctly", () => {

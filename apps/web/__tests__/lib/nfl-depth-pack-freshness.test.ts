@@ -5,6 +5,7 @@ import {
   formatCompetitionLabel,
   formatCompetitionStatus,
   formatDepthSlotLabel,
+  humanizeCompetitionTokensInText,
   isPackagedDepthStale,
   NFL_DEPTH_PACK_AS_OF,
   NFL_DEPTH_PACK_MAX_AGE_DAYS,
@@ -21,6 +22,23 @@ describe("nfl-depth-pack-freshness", () => {
     expect(formatCompetitionStatus("camp_arm")).toBe("Camp arm");
     expect(formatCompetitionStatus(null)).toBeNull();
     expect(formatCompetitionStatus("")).toBeNull();
+  });
+
+  it("humanizes competition tokens inside free-text reasons (API serialize)", () => {
+    expect(
+      humanizeCompetitionTokensInText(
+        "open_competition Tua Tagovailoa, Michael Penix Jr. — no crown; mixture; wider uncertainty",
+      ),
+    ).toBe(
+      "Open competition Tua Tagovailoa, Michael Penix Jr. — no crown; mixture; wider uncertainty",
+    );
+    expect(
+      humanizeCompetitionTokensInText(
+        "QB1 confirmed Aaron Rodgers (named_starter; confirmation=med)",
+      ),
+    ).toBe("QB1 confirmed Aaron Rodgers (Named starter; confirmation=med)");
+    expect(humanizeCompetitionTokensInText("no status")).toBe("no status");
+    expect(humanizeCompetitionTokensInText("")).toBe("");
   });
 
   it("maps competition-as-slot to order-based starter/backup labels", () => {

@@ -60,6 +60,16 @@ import {
   spreadEdgeInPlayBand,
 } from "./nfl-spread-play-lock";
 
+/**
+ * Decision-engine action labels.
+ *
+ * Sport Standard *publish* tags (customer Edge Board / fair-lines / homepage):
+ * PLAY / LEAN / PASS only (+ BEST VALUE when reachable via displayActionLabel).
+ * ALERT / STAY AWAY remain in this union for internal engine logic — they are
+ * legacy / non-standard and must not paint as publish chrome (see
+ * displayActionLabel / publishTagFromActionLabel). Do not add Best Bet or
+ * Stay Away as product grammar.
+ */
 export type ActionLabel =
   | "PASS"
   | "LEAN"
@@ -68,6 +78,10 @@ export type ActionLabel =
   | "ALERT"
   | "STAY AWAY";
 
+/**
+ * Internal point-grade ladder (engine only). STRONG PLAY / EXCEPTIONAL are
+ * not Sport Standard publish tags — never render them as customer stake badges.
+ */
 export type PointGrade =
   | "PASS"
   | "LEAN"

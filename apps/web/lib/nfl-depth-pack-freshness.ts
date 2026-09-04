@@ -73,6 +73,19 @@ export function formatCompetitionStatus(
 export const formatCompetitionLabel = formatCompetitionStatus;
 
 /**
+ * Replace known competition_status tokens inside free-text reasons / notes
+ * so customer JSON never leaks raw snake_case (e.g. open_competition).
+ * Pack enums stay internal; this is serialize/display only.
+ */
+export function humanizeCompetitionTokensInText(text: string): string {
+  if (!text) return text;
+  return text.replace(
+    /\b(open_competition|named_starter|camp_arm)\b/gi,
+    (token) => formatCompetitionStatus(token) ?? token,
+  );
+}
+
+/**
  * Depth slot for display. Pack sometimes stores competition_status in
  * depth_slot (ATL/CLE QB open races) — never show raw snake_case as a slot.
  */
