@@ -26,7 +26,10 @@ export const MATCHUP_OVERVIEW_FLIPS_HEADING = "What flips";
  */
 export function scrubMatchupOverviewWatchHeading(text: string): string {
   // Section heading on its own line (formatMatchupOverview shape).
-  return text.replace(/(^|\n)Watch(\n|$)/g, `$1${MATCHUP_OVERVIEW_FLIPS_HEADING}$2`);
+  return text.replace(
+    /(^|\n)Watch(\n|$)/g,
+    `$1${MATCHUP_OVERVIEW_FLIPS_HEADING}$2`,
+  );
 }
 
 function scrubNestedDecision(value: unknown): unknown {

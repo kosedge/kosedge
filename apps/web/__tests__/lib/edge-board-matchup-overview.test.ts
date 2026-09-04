@@ -24,19 +24,31 @@ describe("edge-board season gates", () => {
 
   it("treats first team game as week1 even mid schedule", () => {
     expect(
-      resolveSeasonFormGate({ week: 5, gamesPlayedAway: 0, gamesPlayedHome: 4 }),
+      resolveSeasonFormGate({
+        week: 5,
+        gamesPlayedAway: 0,
+        gamesPlayedHome: 4,
+      }),
     ).toBe("week1");
   });
 
   it("marks games 2–4 as early", () => {
     expect(
-      resolveSeasonFormGate({ week: 3, gamesPlayedAway: 2, gamesPlayedHome: 2 }),
+      resolveSeasonFormGate({
+        week: 3,
+        gamesPlayedAway: 2,
+        gamesPlayedHome: 2,
+      }),
     ).toBe("early");
   });
 
   it("allows form language midseason", () => {
     expect(
-      resolveSeasonFormGate({ week: 10, gamesPlayedAway: 9, gamesPlayedHome: 9 }),
+      resolveSeasonFormGate({
+        week: 10,
+        gamesPlayedAway: 9,
+        gamesPlayedHome: 9,
+      }),
     ).toBe("mid");
     expect(allowsRecentFormLanguage("mid")).toBe(true);
   });
