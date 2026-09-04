@@ -1,7 +1,11 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { getSportEdgeBoardHref, getSportPrimaryNav } from "@/lib/sport-pro-nav";
+import {
+  getSportEdgeBoardHref,
+  getSportPrimaryNav,
+  getSportToolNav,
+} from "@/lib/sport-pro-nav";
 import { SPORTS } from "@/lib/sports";
 import {
   BEST_VALUE_TIER_REACHABLE,
@@ -63,6 +67,20 @@ describe("Edge Board Product Center #4 — canonical URL", () => {
       expect(edge?.href.startsWith("/edge-board/")).toBe(true);
       expect(edge?.href).not.toMatch(/\/pro\/.+\/edge-board/);
     }
+  });
+
+  it("demotes desk Edges out of primary (Edge Board sole decision CTA)", () => {
+    for (const sport of SPORTS) {
+      const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
+      expect(primary).not.toContain("Edges");
+      expect(primary).not.toContain("Edges desk");
+      expect(primary).toContain("Edge Board");
+    }
+    // Deep link preserved under tools for NFL (desk page stays live).
+    const nflDesk = getSportToolNav("nfl").find(
+      (i) => i.label === "Edges desk",
+    );
+    expect(nflDesk?.href).toBe("/pro/nfl/edges");
   });
 });
 

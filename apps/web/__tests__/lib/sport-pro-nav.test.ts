@@ -18,17 +18,18 @@ describe("sport-pro-nav", () => {
       expect(labels).toContain("Teams");
       const edgeBoard = primary.find((i) => i.label === "Edge Board");
       expect(edgeBoard?.emphasis).toBe("green");
+      // Desk Edges demoted — not a dual primary with Edge Board.
+      expect(labels).not.toContain("Edges");
+      expect(labels).not.toContain("Edges desk");
       if (sport.key === "cfb") {
         expect(labels).toContain("Slate");
         expect(labels).toContain("Model");
         expect(labels).toContain("Project Game");
         expect(labels).toContain("Projections");
         expect(labels).toContain("Previews");
-        expect(labels).not.toContain("Edges");
         expect(labels).not.toContain("Fair Lines");
         expect(labels).not.toContain("KEI Lines");
       } else {
-        expect(labels).toContain("Edges");
         expect(labels).toContain("Power Ratings");
         if (sport.key !== "nfl") {
           expect(labels).toContain("KEI Lines");
@@ -37,14 +38,13 @@ describe("sport-pro-nav", () => {
     }
   });
 
-  it("locks NFL primary nav order and demotes KEI / model / boxes / previews", () => {
+  it("locks NFL primary nav order and demotes KEI / Edges desk / model / boxes / previews", () => {
     const nflPrimary = getSportPrimaryNav("nfl");
     const labels = nflPrimary.map((i) => i.label);
     expect(labels).toEqual([
       "Overview",
       "Edge Board",
       "Weekly Slate",
-      "Edges",
       "Survivor",
       "Fantasy",
       "Power Ratings",
@@ -53,6 +53,8 @@ describe("sport-pro-nav", () => {
     ]);
     // Demoted from primary — live in Overview body / More tools.
     expect(labels).not.toContain("KEI Lines");
+    expect(labels).not.toContain("Edges");
+    expect(labels).not.toContain("Edges desk");
     expect(labels).not.toContain("Season Model");
     expect(labels).not.toContain("Game Boxes");
     expect(labels).not.toContain("Team Previews");
@@ -76,6 +78,12 @@ describe("sport-pro-nav", () => {
     expect(nflToolItems.find((i) => i.label === "KEI Lines")?.href).toBe(
       "/pro/nfl/fair-lines",
     );
+    // Edges desk demoted — deep link preserved, not dual-primary with Edge Board.
+    expect(nflTools).toContain("Edges desk");
+    expect(nflToolItems.find((i) => i.label === "Edges desk")?.href).toBe(
+      "/pro/nfl/edges",
+    );
+    expect(nflTools).not.toContain("Edges");
     expect(nflTools).toContain("Season Model");
     expect(nflTools).toContain("Game Boxes");
     expect(nflTools).toContain("Model Transparency");
@@ -98,6 +106,7 @@ describe("sport-pro-nav", () => {
       (s) => s.key !== "nfl" && s.key !== "cfb",
     )) {
       const tools = getSportToolNav(sport.key).map((i) => i.label);
+      const toolItems = getSportToolNav(sport.key);
       const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
       expect(tools).not.toContain("Wall Chart");
       expect(tools).not.toContain("Draft Desk");
@@ -109,6 +118,13 @@ describe("sport-pro-nav", () => {
       expect(primary).not.toContain("Game Boxes");
       expect(primary).not.toContain("Fantasy");
       expect(primary).not.toContain("Season Model");
+      expect(primary).not.toContain("Edges");
+      expect(primary).not.toContain("Edges desk");
+      expect(tools).toContain("Edges desk");
+      const desk = toolItems.find((i) => i.label === "Edges desk");
+      expect(desk?.href).toBe(
+        sport.key === "mlb" ? "/pro/mlb/edges" : `/pro/${sport.key}/edges`,
+      );
     }
 
     // NBA/WNBA Ch7 fantasy desks live under tools (not primary — NFL-only Fantasy primary).
@@ -135,9 +151,11 @@ describe("sport-pro-nav", () => {
     expect(cfbPrimary).toContain("Futures");
     expect(cfbPrimary).not.toContain("Fair Lines");
     expect(cfbPrimary).not.toContain("Edges");
+    expect(cfbPrimary).not.toContain("Edges desk");
     expect(cfbPrimary).not.toContain("KEI Lines");
     expect(cfbTools).toContain("KEI Lines");
     expect(cfbTools).toContain("Conferences");
+    expect(cfbTools).not.toContain("Edges desk");
     expect(cfbTools).not.toContain("KEI (not shipped)");
     expect(cfbTools).not.toContain("KEI Projections");
     expect(cfbPrimary).not.toContain("Survivor");

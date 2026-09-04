@@ -27,6 +27,10 @@ type SportNavConfig = {
   slateLabel: string;
 };
 
+function edgesDeskHref(sport: SportKey): string {
+  return sport === "mlb" ? "/pro/mlb/edges" : `/pro/${sport}/edges`;
+}
+
 function sharedTools(sport: SportKey): SportNavItem[] {
   const keiHref = getKeiLinesBoardHref(sport);
   const keiTool: SportNavItem = sportIsMarketsOnlyEdgeBoard(sport)
@@ -40,6 +44,8 @@ function sharedTools(sport: SportKey): SportNavItem[] {
       };
   return [
     { href: `/odds/${sport}`, label: "Compare Odds" },
+    // Desk surface — demoted from primary so Edge Board is the sole decision CTA.
+    { href: edgesDeskHref(sport), label: "Edges desk" },
     { href: `/pro/${sport}/execution`, label: "Execution Monitor" },
     keiTool,
     { href: `/pro/${sport}/tracking`, label: "Sport Tracking" },
@@ -52,7 +58,7 @@ function corePrimary(
   sport: SportKey,
   opts: {
     slateLabel: string;
-    /** Extra desk item after Edges (Tempo, Run Line, Goalie, Props, etc.) */
+    /** Extra desk item after Fair/KEI Lines (Tempo, Run Line, Goalie, Props, etc.) */
     deskExtras?: SportNavItem[];
   },
 ): SportNavItem[] {
@@ -73,10 +79,6 @@ function corePrimary(
       href: `/pro/${sport}/fair-lines`,
       label: sportIsMarketsOnlyEdgeBoard(sport) ? "Fair Lines" : "KEI Lines",
     },
-    {
-      href: sport === "mlb" ? "/pro/mlb/edges" : `/pro/${sport}/edges`,
-      label: "Edges",
-    },
     ...(opts.deskExtras ?? []),
     { href: `/pro/power-ratings/${sport}`, label: "Power Ratings" },
     { href: `/pro/${sport}/teams`, label: "Teams" },
@@ -95,7 +97,6 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
         emphasis: "green",
       },
       { href: "/pro/nfl/slate/today", label: "Weekly Slate", primary: true },
-      { href: "/pro/nfl/edges", label: "Edges" },
       { href: "/pro/nfl/survivor", label: "Survivor", primary: true },
       // Draft Desk for now; post-kickoff can retarget to Weekly Fantasy Projections.
       { href: "/pro/nfl/fantasy", label: "Fantasy", primary: true },
@@ -106,6 +107,8 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     tools: [
       // Demoted from primary — live in Overview body / More tools.
       { href: "/pro/nfl/fair-lines", label: "KEI Lines" },
+      // Desk surface — not a dual primary with Edge Board (product center).
+      { href: "/pro/nfl/edges", label: "Edges desk" },
       { href: "/pro/nfl/model", label: "Season Model" },
       { href: "/pro/nfl/game-boxes", label: "Game Boxes" },
       { href: "/pro/nfl/previews", label: "Team Previews" },
