@@ -60,9 +60,7 @@ describe("KOS-22 claims audit source-lock (bounded FLAG removals)", () => {
   it("C24 Performance hint has no ROI/EV live-performance claim", () => {
     const ia = readCustomer("lib/pro-sport-ia.ts");
     expect(ia).not.toContain("ROI / EV");
-    expect(ia).not.toContain(
-      "Closest live performance metrics surface",
-    );
+    expect(ia).not.toContain("Closest live performance metrics surface");
     expect(ia).toMatch(/Performance page TBD/i);
   });
 
@@ -91,4 +89,3 @@ describe("KOS-22 claims audit source-lock (bounded FLAG removals)", () => {
     expect(page).toMatch(/unavailable/i);
   });
 });
-
