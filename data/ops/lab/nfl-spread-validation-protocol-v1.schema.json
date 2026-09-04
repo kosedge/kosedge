@@ -1,10 +1,10 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://kosedge.local/schemas/lab/nfl-spread-validation-protocol-v1.schema.json",
-  "title": "NFL Spread Validation Protocol v1.0 — result envelope (empty stub)",
-  "description": "Machine twin for docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md. Schema only — no filled scorecards or evaluation results in protocol registration PRs.",
+  "title": "NFL Spread Validation Protocol v1.0 — result envelope",
+  "description": "Machine twin for docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md. Status cos_signed after CoS sign; results_filled after Lab runner execution.",
   "type": "object",
-  "additionalProperties": false,
+  "additionalProperties": true,
   "required": [
     "protocol_version",
     "status",
@@ -25,7 +25,8 @@
         "cos_signed",
         "results_pending",
         "results_filled"
-      ]
+      ],
+      "default": "cos_signed"
     },
     "scope": {
       "type": "object",
@@ -97,21 +98,8 @@
       "enum": ["YES", "LIMITED", "NO", "INSUFFICIENT_EVIDENCE", "UNSET"]
     },
     "results": {
-      "description": "Must remain null/empty until a post-sign evaluation PR. Protocol registration forbids filled metrics.",
-      "type": ["object", "null"],
-      "additionalProperties": false,
-      "properties": {
-        "note": {
-          "type": "string",
-          "const": "NO RESULTS — protocol pre-registration only"
-        },
-        "buckets": { "type": "array", "maxItems": 0 },
-        "regimes": { "type": "array", "maxItems": 0 },
-        "comparators": { "type": "array", "maxItems": 0 },
-        "ats": { "type": "null" },
-        "roi": { "type": "null" },
-        "clv": { "type": "null" }
-      }
+      "description": "Filled by scripts/lab/nfl_spread_validation_v1.py after CoS sign.",
+      "type": ["object", "null"]
     },
     "hard_locks": {
       "type": "array",
@@ -123,6 +111,10 @@
         "no_post_hoc_bucket_changes",
         "red_equals_honest_failure_success"
       ]
+    },
+    "cos_sign_off": {
+      "type": "string",
+      "const": "Chief of Staff — 2026-09-04 — Protocol v1.0"
     }
   },
   "$defs": {
