@@ -221,8 +221,8 @@ export default function EdgeBoardSportClient({
             </Link>
           </div>
           <p className="text-[11px] text-gray-500">
-            Week {cfbWeek} · Tag = KEI vs trusted market · Model is
-            research-only ·{" "}
+            Week {cfbWeek} · Research board · Tags only when assemble publishes
+            them (never invented from edge) · Model is research-only ·{" "}
             <Link
               href={MODEL_TRANSPARENCY_HREF}
               className="text-kos-gold/80 hover:text-kos-gold hover:underline"
@@ -301,7 +301,7 @@ export default function EdgeBoardSportClient({
               isNfl && slate === "week1"
                 ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."
                 : sportKey === "cfb"
-                  ? "KEI rows load from the bundled W0/W1 pack. Open/Best stay empty until The Odds API returns NCAAF — we do not invent book prices."
+                  ? "KEI vs trusted market when books clear. Tags stay blank until assemble publishes PLAY/LEAN/PASS — we do not invent tags from edge. Open/Best stay empty until The Odds API returns NCAAF."
                   : undefined
             }
           />

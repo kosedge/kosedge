@@ -143,7 +143,10 @@ function ActionDecisionCell({
   if (!actionLabel && !publishTag) {
     return <span className="text-gray-500">—</span>;
   }
-  const shownLabel = toPublishActionLabel(actionLabel);
+  const shownLabel =
+    publishTag === "PLAY" || publishTag === "LEAN" || publishTag === "PASS"
+      ? publishTag
+      : toPublishActionLabel(actionLabel);
   const confLabel = formatConfidenceLabel(
     confidenceBand,
     confidenceScore,
@@ -1257,7 +1260,7 @@ export default function EdgeBoard({
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
                 : String(sportKey).toLowerCase() === "cfb"
-                  ? "CFB tags — PASS default · LEAN ≥2.5 · PLAY ≥4.0 vs trusted Best only. Current paints the feed; untrusted / no book is a footnote — never invent Open. "
+                  ? "CFB research board — tags paint only when assemble publishes PLAY/LEAN/PASS (never invented from edge). Current paints the feed; untrusted / no book is a footnote — never invent Open. "
                   : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb

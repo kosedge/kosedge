@@ -74,9 +74,22 @@ describe("NFL dead-tier honesty", () => {
       is_best_bet: true,
     });
     expect(q.action_label).toBe("PASS");
-    expect(q.point_grade).toBe("PLAY");
-    expect(q.cover_grade).toBe("PLAY");
+    // Internal ladder stripped — can fork from publishTag (PASS vs PLAY).
+    expect(q).not.toHaveProperty("point_grade");
+    expect(q).not.toHaveProperty("cover_grade");
     expect(q.is_best_bet).toBe(false);
+  });
+
+  it("strips point_grade so PASS publish cannot show PLAY ladder", () => {
+    const q = quarantineDecisionForCustomer({
+      action_label: "PASS",
+      point_grade: "PLAY",
+      cover_grade: "LEAN",
+      is_best_bet: false,
+    });
+    expect(q.action_label).toBe("PASS");
+    expect(q).not.toHaveProperty("point_grade");
+    expect(q).not.toHaveProperty("cover_grade");
   });
 
   it("documents why tiers are hidden for ops", () => {

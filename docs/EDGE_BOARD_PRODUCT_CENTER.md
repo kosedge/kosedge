@@ -18,6 +18,8 @@ Customer chrome is **PLAY / LEAN / PASS** only.
 
 - Assemble may still carry engine `actionLabel` / `isBestBet` internals.
 - Edge Board UI remaps via `displayActionLabel` + `toPublishActionLabel` — no Best Bet / BEST VALUE / WATCH / ALERT productization.
+- **`point_grade` / `cover_grade` stripped** from customer `decision` blobs — can fork from `publishTag` (e.g. PASS publish + PLAY ladder). UI uses **publishTag / actionLabel only**.
+- **CFB:** do not invent tags from edge when assemble omits `publishTag` (research-only / blank tag cells).
 - No live PLAY band or threshold changes in this slice.
 
 ## Honesty stamps

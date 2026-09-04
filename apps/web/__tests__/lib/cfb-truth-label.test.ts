@@ -76,7 +76,8 @@ describe("cfb truth-label wiring", () => {
     expect(page).toMatch(/cfbWeekRaw === "0" \? 0 : 1/);
     expect(page).not.toContain("loadAssembledEdgeBoardRows");
 
-    expect(client).toContain("Tag = KEI vs trusted market");
+    expect(client).toContain("Research board");
+    expect(client).toContain("never invented from edge");
     expect(client).toContain("/edge-board/cfb?week=0");
     expect(client).toContain("/edge-board/cfb?week=1");
     expect(client).toContain("week0Count");

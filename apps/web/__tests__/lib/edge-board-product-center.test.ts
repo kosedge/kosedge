@@ -92,7 +92,27 @@ describe("Edge Board Product Center #4 — tag quarantine (no Best Bet chrome)",
     expect(src).not.toMatch(/>\s*Best Bet\s*</);
     expect(src).not.toMatch(/>\s*BEST VALUE\s*</);
     expect(src).not.toMatch(/isBestBet/);
+    expect(src).not.toMatch(/point_grade|pointGrade/);
     // Legend promises reachable labels only (PLAY / LEAN / PASS while dark).
     expect(src).toContain("reachableActionLabels().join");
+  });
+
+  it("customer decision quarantine strips point_grade fork", () => {
+    const src = readFileSync(
+      path.join(webRoot, "lib/nfl-dead-tiers.ts"),
+      "utf8",
+    );
+    expect(src).toContain("delete out.point_grade");
+    expect(src).toContain("delete out.pointGrade");
+    expect(src).toContain("delete out.cover_grade");
+  });
+
+  it("CFB Edge Board does not invent tags from edge without publishTag", () => {
+    const src = readFileSync(
+      path.join(webRoot, "lib/flat-rows-to-legacy.ts"),
+      "utf8",
+    );
+    expect(src).toContain("Never invent PLAY/LEAN/PASS from edge");
+    expect(src).not.toMatch(/return cfbEdgeTag\(/);
   });
 });
