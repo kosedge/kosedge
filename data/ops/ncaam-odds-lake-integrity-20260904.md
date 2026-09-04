@@ -132,8 +132,19 @@ _Note:_ B7 unresolved is fail-closed Lab omit (not lake corruption). Multi-day e
 
 `data/ops/ncaam-odds-lake-integrity-20260904.receipt.json`
 
-## Next
+## HOLD — Scorecard v1.2 deferred (Ryan 2026-09-04)
 
-If verdict PASS → rematerialize Train-A/Test-A from current Path A parquet (locked cuts) → Scorecard v1.2 vs frozen v1.1 (same protocol gates).
-If FAIL → stop; diagnose here; do not rebuild model.
+**STOP.** Odds API upgrade authorized ($59 / 100k) + full calendar backfill
+(hole remainder + early including offseason). **Do not** merge Scorecard v1.2
+on this pre-backfill lake. **Do not** claim grades from this snapshot.
+
+This branch is **integrity WIP only** (draft). Scorecard v1.2 must rerun
+**after** the backfill lands on `deploy-vercel`. No Odds API fetch from the
+scorecard agent.
+
+## Next (after backfill on deploy-vercel)
+
+Re-run integrity on the post-backfill Path A lake → rematerialize Train-A /
+Test-A (locked cuts) → Scorecard v1.2 vs frozen v1.1. Until then: board dark /
+B2 quarantined / no PLAY.
 
