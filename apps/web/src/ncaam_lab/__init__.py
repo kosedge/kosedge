@@ -6,10 +6,13 @@ KenPom is a feed, never SoT. Schedule joins use Schedule SoT D only.
 
 from .protocol import PROTOCOL_VERSION, CUT_WINDOWS, ContinuityState
 from .materialize import materialize_lab_fair
+from .scorecard import build_scorecard, write_scorecard_artifacts
 
 __all__ = [
     "PROTOCOL_VERSION",
     "CUT_WINDOWS",
     "ContinuityState",
     "materialize_lab_fair",
+    "build_scorecard",
+    "write_scorecard_artifacts",
 ]
