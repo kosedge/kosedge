@@ -331,15 +331,18 @@ function normalizeDecisionResult(
   const coverRaw = o.cover_grade ?? o.coverGrade;
   // Customer serialize quarantine — Sport Standard publish set only.
   const shownLabel = displayActionLabel(actionLabel) ?? "PASS";
+  const pointGradeRaw = o.point_grade ?? o.pointGrade;
   return {
     market,
     actionLabel: shownLabel,
-    pointGrade: quarantinePointGrade(o.point_grade ?? o.pointGrade),
+    pointGrade: quarantinePointGrade(
+      typeof pointGradeRaw === "string" ? pointGradeRaw : null,
+    ),
     edgeMagnitude: toNumber(o.edge_magnitude ?? o.edgeMagnitude, 0),
     modelConfidence: conf,
     coverProb: toNumberOrNull(o.cover_prob ?? o.coverProb),
     coverGrade:
-      coverRaw == null || coverRaw === ""
+      typeof coverRaw !== "string" || !coverRaw
         ? null
         : quarantinePointGrade(coverRaw),
     playTo: playToRaw
