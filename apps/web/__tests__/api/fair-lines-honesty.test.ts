@@ -176,6 +176,28 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
     expectNflShapedHonestEmpty(body);
   });
 
+  it("NBA upstream_error uses outage copy, not no-odds empty slate", async () => {
+    vi.mocked(fetchNbaFairLines).mockResolvedValue({
+      gameDate: "2026-09-04",
+      modelVersion: "",
+      workerBuildId: "",
+      count: 0,
+      lines: [],
+      slateStatus: "upstream_error",
+      error: "Model service returned 503.",
+    });
+    const res = await getNba(
+      new Request("http://localhost/api/nba/fair-lines"),
+    );
+    const body = await res.json();
+    expect(res.status).toBe(200);
+    expect(body.slateStatus).toBe("upstream_error");
+    expect(body.message).toContain("upstream unavailable");
+    expect(body.message).not.toContain("no odds or projections");
+    expect(body.asOf).toBeNull();
+    expect(body.oddsAsOf).toBeNull();
+  });
+
   it("WNBA proxies empty without inventing prices", async () => {
     vi.mocked(fetchWnbaFairLines).mockResolvedValue({
       gameDate: "2026-09-04",
