@@ -5,6 +5,12 @@
  * from subscriber filters / legends / empty-state promises. Do not flip stake
  * gates or raise confidence floors here — that is a separate product decision.
  *
+ * Sport Standard publish tags (customer chrome / API serialize): PLAY / LEAN / PASS
+ * only. Best Value ActionLabel only when BEST_VALUE_TIER_REACHABLE (actually
+ * earnable / would render) — otherwise quarantine → PLAY. Flagged debt never
+ * paints: ALERT, STAY AWAY, WATCH, isBestBet / Best Bet, STRONG PLAY, EXCEPTIONAL.
+ * Engine unions stay intact; no PLAY flip / remat / Sport Standard redesign.
+ *
  * Re-enable later:
  * - Prop PLAY: set model-service `PLAY_STAKE_ELIGIBLE = True` after a cleared
  *   holdout, then mirror `NFL_PROPS_PLAY_STAKE_ELIGIBLE` below.
@@ -12,7 +18,11 @@
  *   the HIGH / BEST-BET cut so the tier is actually earnable early season.
  */
 
-import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
+import type {
+  ActionLabel,
+  ConfidenceBand,
+  PointGrade,
+} from "@/lib/nfl-decision-engine";
 import {
   CONFIDENCE_BEST_BET_MIN,
   CONFIDENCE_TIER_BASE,
@@ -62,6 +72,8 @@ export function reachableActionLabels(
 ): ActionLabel[] {
   return labels.filter((label) => {
     if (label === "BEST VALUE") return BEST_VALUE_TIER_REACHABLE;
+    // Legacy / non-Sport-Standard — never promise as publish tags.
+    if (label === "ALERT" || label === "STAY AWAY") return false;
     return true;
   });
 }
@@ -77,29 +89,107 @@ export function reachableConfidenceBands(
 }
 
 /**
- * Subscriber badge: remaps unreachable BEST VALUE → PLAY so the gold badge
- * is not promised. Engine thresholds are unchanged.
+ * Subscriber badge: Sport Standard publish vocabulary only.
+ * - Unreachable BEST VALUE → PLAY (no gold badge promise; live hits were 0).
+ * - ALERT / STAY AWAY → PASS (legacy decision-engine labels; not publish tags).
+ * Engine thresholds / ActionLabel union are unchanged.
  */
 export function displayActionLabel(
   label: ActionLabel | null | undefined,
 ): ActionLabel | null {
   if (label == null) return null;
+  if (label === "ALERT" || label === "STAY AWAY") return "PASS";
   if (label === "BEST VALUE" && !BEST_VALUE_TIER_REACHABLE) return "PLAY";
   return label;
 }
 
-/** Prop tag filter options — omit PLAY while stake-ineligible. */
+/**
+ * Internal point-grade ladder → customer-safe grade.
+ * STRONG PLAY / EXCEPTIONAL are never Sport Standard publish tags.
+ */
+export function quarantinePointGrade(
+  grade: PointGrade | string | null | undefined,
+): PointGrade {
+  const token = String(grade ?? "PASS")
+    .trim()
+    .toUpperCase();
+  if (token === "STRONG PLAY" || token === "EXCEPTIONAL") return "PLAY";
+  if (token === "LEAN" || token === "PLAY" || token === "PASS") {
+    return token;
+  }
+  return "PASS";
+}
+
+/** Customer surfaces never advertise Best Bet chrome. */
+export function customerIsBestBet(_raw?: boolean | null): false {
+  return false;
+}
+
+/**
+ * Props research tags → Sport Standard publish set.
+ * WATCH is legacy/internal — collapse to PASS (props board already nulls tags live).
+ */
+export function displayPropTag(
+  tag: "PLAY" | "WATCH" | "LEAN" | "PASS" | null | undefined,
+): "PLAY" | "LEAN" | "PASS" | null {
+  if (tag == null) return null;
+  if (tag === "WATCH") return "PASS";
+  if (tag === "PLAY" && !PROP_PLAY_TIER_REACHABLE) return "PASS";
+  return tag;
+}
+
+/** Prop tag filter chrome — Sport Standard only (no WATCH). */
 export function reachablePropTagFilters(): readonly (
-  | "WATCH"
   | "PASS"
   | "LEAN"
   | "PLAY"
 )[] {
   if (PROP_PLAY_TIER_REACHABLE) {
-    return ["PLAY", "WATCH", "LEAN", "PASS"] as const;
+    return ["PLAY", "LEAN", "PASS"] as const;
   }
-  return ["WATCH", "LEAN", "PASS"] as const;
+  return ["LEAN", "PASS"] as const;
+}
+
+/**
+ * Quarantine a decision API blob (camel or snake) before customer JSON leaves.
+ * Does not mutate engine DecisionResult objects in memory.
+ */
+export function quarantineDecisionForCustomer<
+  T extends Record<string, unknown>,
+>(raw: T): T {
+  const out: Record<string, unknown> = { ...raw };
+  const action =
+    (typeof out.action_label === "string" ? out.action_label : null) ??
+    (typeof out.actionLabel === "string" ? out.actionLabel : null);
+  const shown = displayActionLabel(action as ActionLabel | null);
+  if (shown) {
+    if ("action_label" in out) out.action_label = shown;
+    if ("actionLabel" in out) out.actionLabel = shown;
+  }
+  if ("point_grade" in out) {
+    out.point_grade = quarantinePointGrade(
+      out.point_grade as string | null | undefined,
+    );
+  }
+  if ("pointGrade" in out) {
+    out.pointGrade = quarantinePointGrade(
+      out.pointGrade as string | null | undefined,
+    );
+  }
+  if ("cover_grade" in out && out.cover_grade != null) {
+    out.cover_grade = quarantinePointGrade(
+      out.cover_grade as string | null | undefined,
+    );
+  }
+  if ("coverGrade" in out && out.coverGrade != null) {
+    out.coverGrade = quarantinePointGrade(
+      out.coverGrade as string | null | undefined,
+    );
+  }
+  if ("is_best_bet" in out) out.is_best_bet = false;
+  if ("isBestBet" in out) out.isBestBet = false;
+  return out as T;
 }
 
 export const DEAD_TIER_OPS_BLURB =
-  "Hidden tiers: prop PLAY (PLAY_STAKE_ELIGIBLE=false); game BEST VALUE / HIGH (tier base 0.72 < HIGH cut 0.75). Re-enable only as a product decision — not from display PRs.";
+  "Hidden tiers: prop PLAY (PLAY_STAKE_ELIGIBLE=false); prop WATCH quarantined; game BEST VALUE / HIGH (tier base 0.72 < HIGH cut 0.75); ALERT/STAY AWAY/STRONG PLAY/EXCEPTIONAL/isBestBet not publish tags. Re-enable only as a product decision — not from display PRs.";

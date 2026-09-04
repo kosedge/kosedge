@@ -4,6 +4,12 @@ import { inferHonestEmptySlateStatus } from "@/lib/model-service-status";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 import { keiRepriceDriverLine } from "@/lib/nfl-kei-driver-line";
 import { canonicalKickoffForMatchup } from "@/lib/nfl-canonical-schedule";
+import { humanizeCompetitionTokensInText } from "@/lib/nfl-depth-pack-freshness";
+import {
+  customerIsBestBet,
+  displayActionLabel,
+  quarantinePointGrade,
+} from "@/lib/nfl-dead-tiers";
 import type {
   ActionLabel,
   ConfidenceAssessment,
@@ -261,7 +267,11 @@ function normalizeKeiRepriceFactor(raw: unknown): NflKeiRepriceFactor | null {
     spreadPts: toNumber(o.spread_pts ?? o.spreadPts, 0),
     totalPts: toNumber(o.total_pts ?? o.totalPts, 0),
     confidenceDelta: toNumber(o.confidence_delta ?? o.confidenceDelta, 0),
-    reason: typeof o.reason === "string" ? o.reason : "",
+    // Customer serialize: never leak pack snake_case (open_competition → Open competition).
+    reason:
+      typeof o.reason === "string"
+        ? humanizeCompetitionTokensInText(o.reason)
+        : "",
   };
 }
 
@@ -283,7 +293,10 @@ function normalizeKeiReprice(raw: unknown): NflKeiRepriceLog | null {
   return {
     applied: Boolean(o.applied),
     skipped: Boolean(o.skipped),
-    reason: typeof o.reason === "string" ? o.reason : "",
+    reason:
+      typeof o.reason === "string"
+        ? humanizeCompetitionTokensInText(o.reason)
+        : "",
     spreadDelta: toNumber(o.spread_delta ?? o.spreadDelta, 0),
     totalDelta: toNumber(o.total_delta ?? o.totalDelta, 0),
     qbClear: typeof o.qb_clear === "boolean" ? o.qb_clear : null,
@@ -315,18 +328,23 @@ function normalizeDecisionResult(
       factors: {},
       unresolvedFlags: [],
     } satisfies NflDecisionConfidence);
+  const coverRaw = o.cover_grade ?? o.coverGrade;
+  // Customer serialize quarantine — Sport Standard publish set only.
+  const shownLabel = displayActionLabel(actionLabel) ?? "PASS";
+  const pointGradeRaw = o.point_grade ?? o.pointGrade;
   return {
     market,
-    actionLabel,
-    pointGrade: String(
-      o.point_grade ?? o.pointGrade ?? "PASS",
-    ) as DecisionResult["pointGrade"],
+    actionLabel: shownLabel,
+    pointGrade: quarantinePointGrade(
+      typeof pointGradeRaw === "string" ? pointGradeRaw : null,
+    ),
     edgeMagnitude: toNumber(o.edge_magnitude ?? o.edgeMagnitude, 0),
     modelConfidence: conf,
     coverProb: toNumberOrNull(o.cover_prob ?? o.coverProb),
-    coverGrade: (o.cover_grade ??
-      o.coverGrade ??
-      null) as DecisionResult["coverGrade"],
+    coverGrade:
+      typeof coverRaw !== "string" || !coverRaw
+        ? null
+        : quarantinePointGrade(coverRaw),
     playTo: playToRaw
       ? {
           sideOrTotal: String(
@@ -362,7 +380,7 @@ function normalizeDecisionResult(
           : null,
       note: String(mcRaw?.note ?? ""),
     },
-    isBestBet: Boolean(o.is_best_bet ?? o.isBestBet),
+    isBestBet: customerIsBestBet(),
     modelWarning: Boolean(o.model_warning ?? o.modelWarning),
     keyNumberCross: Boolean(o.key_number_cross ?? o.keyNumberCross),
     priceStillAvailable: Boolean(
@@ -396,12 +414,14 @@ function normalizeDecision(raw: unknown): NflFairLineDecision | null {
       o.edge_magnitude_total ?? o.edgeMagnitudeTotal,
     ),
     modelConfidence: conf,
-    actionLabelSpread: normalizeActionLabel(
-      o.action_label_spread ?? o.actionLabelSpread,
-    ),
-    actionLabelTotal: normalizeActionLabel(
-      o.action_label_total ?? o.actionLabelTotal,
-    ),
+    actionLabelSpread:
+      displayActionLabel(
+        normalizeActionLabel(o.action_label_spread ?? o.actionLabelSpread),
+      ) ?? null,
+    actionLabelTotal:
+      displayActionLabel(
+        normalizeActionLabel(o.action_label_total ?? o.actionLabelTotal),
+      ) ?? null,
   };
 }
 
@@ -527,8 +547,10 @@ function normalizeFairLine(raw: Record<string, unknown>): NflFairLineRow {
     publishTagTotal: normalizePublishTag(raw.publish_tag_total),
     publishTagMl: normalizePublishTag(raw.publish_tag_ml),
     decision: normalizeDecision(raw.decision),
-    actionLabelSpread: normalizeActionLabel(raw.action_label_spread),
-    actionLabelTotal: normalizeActionLabel(raw.action_label_total),
+    actionLabelSpread:
+      displayActionLabel(normalizeActionLabel(raw.action_label_spread)) ?? null,
+    actionLabelTotal:
+      displayActionLabel(normalizeActionLabel(raw.action_label_total)) ?? null,
   };
 }
 

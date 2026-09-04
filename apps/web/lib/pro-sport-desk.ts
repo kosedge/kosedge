@@ -39,7 +39,8 @@ const SHARED_FOOTER = (sportKey: string): HubFooterCard[] => [
   },
   sportKey === "cfb" || sportKey === "nhl"
     ? {
-        href: `/pro/kei-lines/${sportKey}`,
+        // Fair-lines desk (not /pro/{sport}/kei-lines — that path 404s).
+        href: `/pro/${sportKey}/fair-lines`,
         title: "KEI Lines",
         description:
           "No handicap model on this sport yet — honest empty, not invented KEI.",
@@ -47,7 +48,7 @@ const SHARED_FOOTER = (sportKey: string): HubFooterCard[] => [
         accent: "neutral",
       }
     : {
-        href: `/pro/kei-lines/${sportKey}`,
+        href: `/pro/${sportKey}/fair-lines`,
         title: "KEI Lines",
         description:
           "Projected spread/total baselines to benchmark current market prices.",
@@ -478,7 +479,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "green",
       },
       {
-        href: "/pro/kei-lines/cfb",
+        href: "/pro/cfb/fair-lines",
         title: "KEI Lines",
         description:
           "Published CFB KEI (W0/W1). Aligns with Edge Board. Model column stays research.",

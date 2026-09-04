@@ -121,6 +121,13 @@ const nextConfig: NextConfig = {
         permanent: false,
       },
       {
+        // Sport-first alias never had a page — permanent hop to the live fair-lines desk.
+        // CoS Gap Matrix: /pro/{sport}/kei-lines 404'd all six with no redirect.
+        source: "/pro/:sport(nfl|cfb|mlb|nba|nhl|wnba)/kei-lines",
+        destination: "/pro/:sport/fair-lines",
+        permanent: true,
+      },
+      {
         source: "/pro/nfl/odds",
         destination: "/odds/nfl",
         permanent: false,

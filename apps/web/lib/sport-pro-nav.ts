@@ -28,13 +28,14 @@ type SportNavConfig = {
 };
 
 function sharedTools(sport: SportKey): SportNavItem[] {
+  const keiHref = getKeiLinesBoardHref(sport);
   const keiTool: SportNavItem = sportIsMarketsOnlyEdgeBoard(sport)
     ? {
-        href: `/pro/kei-lines/${sport}`,
+        href: keiHref,
         label: "KEI (not shipped)",
       }
     : {
-        href: `/pro/kei-lines/${sport}`,
+        href: keiHref,
         label: "KEI Projections",
       };
   return [
@@ -155,7 +156,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/odds/cfb", label: "Compare Odds" },
       { href: "/pro/cfb/conferences", label: "Conferences" },
       { href: "/pro/cfb/teams", label: "Power Ratings" },
-      { href: "/pro/kei-lines/cfb", label: "KEI Lines" },
+      { href: "/pro/cfb/fair-lines", label: "KEI Lines" },
       { href: "/pro/model-transparency", label: "Model Transparency" },
     ],
   },
@@ -237,14 +238,22 @@ export function getSportOverviewHref(sportKey: string): string {
 
 /**
  * Live KEI Lines board URL for a sport.
- * NFL never uses /pro/kei-lines/nfl (pipeline stub / missing kei_lines_nfl.json).
+ * Prefer /pro/{sport}/fair-lines when that desk exists (six live sports).
+ * Never send customers to /pro/{sport}/kei-lines (no page — 404) or the
+ * NFL hub stub /pro/kei-lines/nfl (missing kei_lines_nfl.json).
  */
 export function getKeiLinesBoardHref(sportKey: string): string {
   const key = (sportKey || "nfl").toLowerCase();
-  if (key === "nfl") return "/pro/nfl/fair-lines";
-  if (key === "mlb") return "/pro/mlb/fair-lines";
-  if (key === "nba") return "/pro/nba/fair-lines";
-  if (key === "wnba") return "/pro/wnba/fair-lines";
+  if (
+    key === "nfl" ||
+    key === "cfb" ||
+    key === "mlb" ||
+    key === "nba" ||
+    key === "nhl" ||
+    key === "wnba"
+  ) {
+    return `/pro/${key}/fair-lines`;
+  }
   return `/pro/kei-lines/${key}`;
 }
 
