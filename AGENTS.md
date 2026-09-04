@@ -2,6 +2,8 @@
 
 **NFL tag lock:** `/NFL_SPREAD_PLAY_LOCKED.md` (Ryan Kos, 2026-09-03) — spread PLAY only in `spread_play_v2_cap7`; totals/prop PLAY sat; publish≡action after remap.
 
+**Institutional memory (CoS):** Recurring writer assignments **require** prior graded lessons from `data/knowledge/` (or an explicit **`no prior grades`** note). SoT + SOP: `docs/writers/INSTITUTIONAL_MEMORY.md` · CoS note: `docs/writers/COS_INSTITUTIONAL_MEMORY.md`. Do not invent grades; forward-only from 2026-09-03 night lock.
+
 ## Production contract (one branch, three platforms)
 
 Daily subscription ships go through **`deploy-vercel` only**. Do not mix branches.

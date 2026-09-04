@@ -75,6 +75,10 @@ Numbers-script green does **not** waive status/injury/attribution/date gates on 
 - Unverified status / injury / transaction / attribution / date → **KICK BACK**, never invent.
 - Forward-only: do not mass re-factcheck the live archive under the 2026-09-03 lock.
 
+## Institutional memory (grades — assist only)
+
+After outcomes, Riley may **assist** CoS with evidence for claim-card grades in `data/knowledge/` (`docs/writers/INSTITUTIONAL_MEMORY.md`). Grades are sacred — **never invent**. CoS owns ledger close. Do not treat EXAMPLE cards as history. Publish-time fact gate stays separate from post-event grading.
+
 ## Shared files (always)
 
 - `style-bible.md`
@@ -83,3 +87,4 @@ Numbers-script green does **not** waive status/injury/attribution/date gates on 
 - `project-log.md`
 - `docs/writers/EDITOR_FACT_GATE.md` — **primary hard-gate law**
 - `docs/writers/EDITOR_WEEKLY_FACTCHECK.md` — Monday numbers pass
+- `docs/writers/INSTITUTIONAL_MEMORY.md` — graded lesson ledger (post-outcome; CoS-owned)

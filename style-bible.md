@@ -83,6 +83,13 @@ Writers are the **Kos Edge desk**, not independent touts. The lean is **HOUSE vs
 - Riley gates **KEI stamps like juice**: a KEI / house number with no live print is a numbers bug.
 - Do not make writers sound the same.
 
+### Institutional memory (LOCKED 2026-09-03 night — Ryan/CoS)
+
+- Graded lessons live in-repo at `data/knowledge/` (SoT). Complements the fact gate (facts at publish vs learning after outcomes).
+- **Required-read** before recurring products (draft / season / week preview, futures, etc.): prior graded lessons for that product. If none → **`no prior grades`**. Do not invent history or grades.
+- SOP: `docs/writers/INSTITUTIONAL_MEMORY.md` · CoS: `docs/writers/COS_INSTITUTIONAL_MEMORY.md`
+- Voice stays unlocked; grades do not rewrite published articles.
+
 ### Coverage matrix
 
 Live matrix after PR #330 — five hired desks + Riley. Do **not** reassign beats. Do **not** hire Jordan Vale, Drew Kessler, or Sam Ortiz. See `ai-writer-team.mdc`.

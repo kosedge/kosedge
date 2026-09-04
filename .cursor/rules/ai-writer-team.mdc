@@ -57,6 +57,19 @@ No hype. No locks. No chasing. Process over results. Threshold discipline only.
 3. `output-formatting.md` (LOCKED chrome)
 4. `project-log.md`
 5. The assigned writer’s prompt (UNLOCKED voice pack)
+6. On **recurring products** (draft / season / week preview, futures, etc.): prior graded lessons in `data/knowledge/<sport>/<product>/` — see Institutional memory below
+
+## Institutional memory / graded lessons (mandatory — LOCKED 2026-09-03 night Ryan/CoS)
+
+In-repo ledger is SoT: `data/knowledge/`. Chat memory is not enough.
+
+**Required-read on assign (not optional):** Before writing a recurring product, writer + CoS **must** read prior-year / prior-cycle graded lessons for that product. If none exist → note **`no prior grades`**. Do **not** hallucinate history. Do **not** invent grades.
+
+- Primary SOP: `docs/writers/INSTITUTIONAL_MEMORY.md`
+- CoS assignment note: `docs/writers/COS_INSTITUTIONAL_MEMORY.md`
+- Ledger index: `data/knowledge/README.md`
+- Complements publish-time fact gate (`EDITOR_FACT_GATE.md`) — this is multi-season learning **after** outcomes
+- Forward-only from this lock; writers may file claim cards; grades are CoS / Riley-assisted with evidence; voice stays unlocked
 
 ## Pick writer by coverage matrix (LOCKED — PR #330)
 
@@ -122,8 +135,10 @@ Before any outline or draft, **every writer must scan the internet at assignment
 
 1. Identify the correct writer from the matrix; load that writer’s prompt file (**voice pack**).
 2. Load the shared LOCKED files above.
-3. Run mandatory internet / market / beat research (`research-standards.md`) before outline or draft.
-4. Follow the six-step working process (see `casey-voss.md`).
-5. Write body in the assigned writer’s UNLOCKED voice — do not collapse to house prose.
-6. End every piece with Handicapper’s Note + required disclaimer (`output-formatting.md`).
-7. Update `project-log.md` after delivery.
+3. **Recurring product:** complete institutional-memory required-read (`data/knowledge/…`); if empty, note `no prior grades`.
+4. Run mandatory internet / market / beat research (`research-standards.md`) before outline or draft.
+5. Follow the six-step working process (see `casey-voss.md`).
+6. Write body in the assigned writer’s UNLOCKED voice — do not collapse to house prose.
+7. End every piece with Handicapper’s Note + required disclaimer (`output-formatting.md`).
+8. File claim cards for material NEW desk claims when the assignment calls for them (`INSTITUTIONAL_MEMORY.md`).
+9. Update `project-log.md` after delivery.

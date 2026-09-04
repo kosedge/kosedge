@@ -153,6 +153,15 @@ Monday numbers report path unchanged: `data/ops/nfl-preview-factcheck-YYYYMMDD.m
 
 Running the numbers script does **not** waive status/injury/attribution/date gates on new copy.
 
+## Relationship to institutional memory
+
+| Doc                       | Role                                                                                          |
+| ------------------------- | --------------------------------------------------------------------------------------------- |
+| **This file**             | Facts at **publish** (CLEAR / KICK BACK).                                                     |
+| `INSTITUTIONAL_MEMORY.md` | Multi-season learning **after** outcomes — claim cards + graded lessons in `data/knowledge/`. |
+
+Fact-gate CLEAR does **not** create a grade. Required-read of prior graded lessons on recurring assignments is owned by CoS / writer OS — see `docs/writers/COS_INSTITUTIONAL_MEMORY.md`.
+
 ---
 
 ## Integration
@@ -161,3 +170,4 @@ Running the numbers script does **not** waive status/injury/attribution/date gat
 - Editor prompt: `riley-nash.md` · rule: `.cursor/rules/riley-nash.mdc`
 - Product chrome / voice split: `style-bible.md`
 - Research order: `research-standards.md`
+- Institutional memory: `docs/writers/INSTITUTIONAL_MEMORY.md` · ledger `data/knowledge/`
