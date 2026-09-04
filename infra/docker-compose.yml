@@ -77,7 +77,7 @@ services:
       celery -A src.celery_app:celery_app worker
       --loglevel=INFO
       -n worker@%h
-      -Q default,odds,models
+      -Q default,odds,models,nfl_market
     depends_on:
       postgres:
         condition: service_healthy

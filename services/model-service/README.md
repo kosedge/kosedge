@@ -79,9 +79,20 @@ export DATABASE_URL="postgresql+psycopg://<user>:<pass>@127.0.0.1:5432/kosedge"
 export CELERY_BROKER_URL="redis://127.0.0.1:6379/0"
 export ODDS_API_KEY="..."
 
-celery -A src.celery_app worker --loglevel=info --concurrency=2 -Q odds,models,celery &
+celery -A src.celery_app worker --loglevel=info --concurrency=2 -Q odds,models,nfl_market,celery &
 celery -A src.celery_app beat --loglevel=info -s /tmp/celerybeat-schedule &
 ```
+
+### NFL market-history queue (`nfl_market`)
+
+`materialize_nfl_market_history` is routed to the dedicated **`nfl_market`**
+queue (env `CELERY_NFL_MARKET_QUEUE`, default `nfl_market`) so NBA/models
+backlog cannot starve append-only ledger writes. Production worker must
+consume it:
+
+- Dockerfile default: `-Q ${CELERY_WORKER_QUEUES:-default,odds,models,nfl_market}`
+- If Railway overrides `CELERY_WORKER_QUEUES`, append `,nfl_market` and
+  redeploy/restart the worker (+ beat so schedule options pick up the queue).
 
 Or call any task directly without a broker, e.g. for one-off backfills:
 

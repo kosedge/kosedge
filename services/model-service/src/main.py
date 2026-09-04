@@ -12,7 +12,7 @@ from fastapi.responses import PlainTextResponse
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 
-from src.celery_app import QUEUE_MODELS, celery_app, celery_healthcheck
+from src.celery_app import QUEUE_MODELS, QUEUE_NFL_MARKET, celery_app, celery_healthcheck
 from src.db import engine
 from src.nfl_remat_policy import resolve_remat_weeks
 from src.routes import (
@@ -1300,6 +1300,7 @@ def job_materialize_nfl_market_history(
         async_result = celery_app.send_task(
             TASK_MATERIALIZE_NFL_MARKET_HISTORY,
             kwargs={"lookback_days": lookback_days},
+            queue=QUEUE_NFL_MARKET,
         )
         return {"task_id": async_result.id, "task_name": TASK_MATERIALIZE_NFL_MARKET_HISTORY}
     except Exception as e:

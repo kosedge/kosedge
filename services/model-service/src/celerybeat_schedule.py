@@ -153,6 +153,8 @@ NFL_CONTEXT_REFRESH_MINUTE = os.getenv("NFL_CONTEXT_REFRESH_MINUTE", "20")
 
 ODDS_QUEUE = os.getenv("CELERY_ODDS_QUEUE", "odds")
 MODELS_QUEUE = os.getenv("CELERY_MODELS_QUEUE", "models")
+# Isolate NFL market-history materialize from NBA-clogged models queue (#5 C-fix).
+NFL_MARKET_QUEUE = os.getenv("CELERY_NFL_MARKET_QUEUE", "nfl_market")
 
 beat_schedule: Dict[str, Dict[str, Any]] = {
     "pull-odds-season-cadence": {
@@ -214,7 +216,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "task": TASK_MATERIALIZE_NFL_MARKET_HISTORY,
         "schedule": crontab(minute="25", hour="3"),
         "kwargs": {"lookback_days": int(os.getenv("NFL_MARKET_HISTORY_LOOKBACK_DAYS", "45"))},
-        "options": {"queue": MODELS_QUEUE},
+        "options": {"queue": NFL_MARKET_QUEUE},
     },
     "pull-mlb-context-morning": {
         "task": TASK_PULL_MLB_CONTEXT,
@@ -330,7 +332,7 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         "task": TASK_MATERIALIZE_NFL_MARKET_HISTORY,
         "schedule": crontab(minute="17"),
         "kwargs": {"lookback_days": int(os.getenv("NFL_MARKET_HISTORY_LOOKBACK_DAYS", "45"))},
-        "options": {"queue": MODELS_QUEUE},
+        "options": {"queue": NFL_MARKET_QUEUE},
     },
     "run-nfl-clv-attribution-morning": {
         "task": TASK_RUN_NFL_CLV_ATTRIBUTION,

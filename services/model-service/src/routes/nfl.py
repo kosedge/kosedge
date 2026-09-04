@@ -5809,8 +5809,8 @@ def _queue_inventory(r: Any, name: str, sample: int = 40) -> Dict[str, Any]:
 
 @router.get("/ops/celery-queues")
 def nfl_celery_queue_inventory() -> Dict[str, Any]:
-    """Inventory default/models/odds. Does not mutate the broker."""
-    from src.celery_app import QUEUE_DEFAULT, QUEUE_MODELS, QUEUE_ODDS
+    """Inventory default/models/odds/nfl_market. Does not mutate the broker."""
+    from src.celery_app import QUEUE_DEFAULT, QUEUE_MODELS, QUEUE_NFL_MARKET, QUEUE_ODDS
 
     try:
         r = _celery_broker_client()
@@ -5830,6 +5830,7 @@ def nfl_celery_queue_inventory() -> Dict[str, Any]:
             "default": _queue_inventory(r, QUEUE_DEFAULT, sample=200),
             "models": _queue_inventory(r, QUEUE_MODELS, sample=80),
             "odds": _queue_inventory(r, QUEUE_ODDS, sample=40),
+            "nfl_market": _queue_inventory(r, QUEUE_NFL_MARKET, sample=40),
         },
         "active_workers": sorted(active.keys()),
         "active_count": sum(len(v or []) for v in active.values()),

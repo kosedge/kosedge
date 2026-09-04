@@ -38,5 +38,6 @@ RUN useradd -m appuser && chown -R appuser:appuser /app
 USER appuser
 
 # API default PORT 8080 matches Railway public domain. Worker must listen on
-# default+odds+models or season 5–10min odds/board jobs never run.
-CMD ["sh", "-c", "case \"${PROCESS_TYPE:-api}\" in worker) exec celery -A src.celery_app worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-4} -Q ${CELERY_WORKER_QUEUES:-default,odds,models};; beat) exec celery -A src.celery_app beat --loglevel=info;; *) exec uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8080};; esac"]
+# default+odds+models+nfl_market or season odds/board/history jobs never run.
+# nfl_market isolates materialize_nfl_market_history from NBA models backlog.
+CMD ["sh", "-c", "case \"${PROCESS_TYPE:-api}\" in worker) exec celery -A src.celery_app worker --loglevel=info --concurrency=${CELERY_CONCURRENCY:-4} -Q ${CELERY_WORKER_QUEUES:-default,odds,models,nfl_market};; beat) exec celery -A src.celery_app beat --loglevel=info;; *) exec uvicorn src.main:app --host 0.0.0.0 --port ${PORT:-8080};; esac"]

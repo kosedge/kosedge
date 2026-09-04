@@ -8746,7 +8746,13 @@ def materialize_nba_team_rolling_features(
         session.close()
 
 
-@celery_app.task(name="src.tasks.pull_nba_context_snapshot")
+@celery_app.task(
+    name="src.tasks.pull_nba_context_snapshot",
+    # Match WNBA context ingest kill switch (soft 120 / hard 240s sibling pattern
+    # is schedule_ingest; context uses 120/180 — see pull_wnba_context_snapshot).
+    soft_time_limit=120,
+    time_limit=180,
+)
 def pull_nba_context_snapshot(days_ahead: int = 3) -> Dict[str, int]:
     """Assemble nba_game_context for upcoming slate from rolling features."""
     session = SessionLocal()
@@ -10030,7 +10036,14 @@ def run_nba_phase3_props_bootstrap(
     }
 
 
-@celery_app.task(name="src.tasks.run_nba_daily_cycle")
+@celery_app.task(
+    name="src.tasks.run_nba_daily_cycle",
+    # Match WNBA season-ingest / phase2 kill switch (soft 1800 / hard 2100).
+    # Daily cycle can include rolling + context + sims; schedule-ingest 180/240
+    # is too tight in-season. Prevents NBA jobs from wedging the models queue.
+    soft_time_limit=1800,
+    time_limit=2100,
+)
 def run_nba_daily_cycle(
     *,
     days_ahead: int = 3,

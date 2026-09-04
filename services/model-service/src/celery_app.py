@@ -61,6 +61,9 @@ BROKER_CONNECTION_RETRY_ON_STARTUP: bool = _env_bool(
 QUEUE_DEFAULT = os.getenv("CELERY_DEFAULT_QUEUE", "default")
 QUEUE_ODDS = os.getenv("CELERY_ODDS_QUEUE", "odds")
 QUEUE_MODELS = os.getenv("CELERY_MODELS_QUEUE", "models")
+# Dedicated path for NFL market-history materialize so NBA/models backlog
+# cannot starve append-only ledger writes (#5 R1 Slice C-fix).
+QUEUE_NFL_MARKET = os.getenv("CELERY_NFL_MARKET_QUEUE", "nfl_market")
 
 # ----------------------------
 # App
@@ -76,6 +79,7 @@ celery_app: Celery = Celery(
 ex_default = Exchange(QUEUE_DEFAULT, type="direct")
 ex_odds = Exchange(QUEUE_ODDS, type="direct")
 ex_models = Exchange(QUEUE_MODELS, type="direct")
+ex_nfl_market = Exchange(QUEUE_NFL_MARKET, type="direct")
 
 celery_app.conf.update(
     # Timezone
@@ -115,6 +119,7 @@ celery_app.conf.update(
         Queue(QUEUE_DEFAULT, ex_default, routing_key=QUEUE_DEFAULT),
         Queue(QUEUE_ODDS, ex_odds, routing_key=QUEUE_ODDS),
         Queue(QUEUE_MODELS, ex_models, routing_key=QUEUE_MODELS),
+        Queue(QUEUE_NFL_MARKET, ex_nfl_market, routing_key=QUEUE_NFL_MARKET),
     ),
 )
 
@@ -123,7 +128,10 @@ celery_app.conf.task_routes = {
     "src.tasks.pull_odds_snapshot": {"queue": QUEUE_ODDS, "routing_key": QUEUE_ODDS},
     "src.tasks.pull_nfl_context_snapshot": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_nfl_market_simulations": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
-    "src.tasks.materialize_nfl_market_history": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
+    "src.tasks.materialize_nfl_market_history": {
+        "queue": QUEUE_NFL_MARKET,
+        "routing_key": QUEUE_NFL_MARKET,
+    },
     "src.tasks.run_nfl_clv_attribution": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.pull_nfl_outcomes": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
     "src.tasks.run_nfl_quality_grading": {"queue": QUEUE_MODELS, "routing_key": QUEUE_MODELS},
@@ -200,5 +208,6 @@ def celery_healthcheck() -> Dict[str, Any]:
             "default": QUEUE_DEFAULT,
             "odds": QUEUE_ODDS,
             "models": QUEUE_MODELS,
+            "nfl_market": QUEUE_NFL_MARKET,
         },
     }
