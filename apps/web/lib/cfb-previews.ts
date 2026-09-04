@@ -245,7 +245,7 @@ export const CFB_TEAM_PREVIEWS: CfbTeamPreview[] = [
     conference: "Sun Belt",
     date: CFB_PREVIEW_PUBLISHED,
     bottomLine:
-      "James Madison is the third G5 preview: power #65 (1.149), E[wins] #22 (7.91, band 6–10). Open QB (Arrington Maiden, open_competition). Higher uncertainty (0.394) than the P4 incumbents. Win-total is a Sun Belt path, not a talent spike.",
+      "James Madison is the third G5 preview: power #65 (1.149), E[wins] #22 (7.91, band 6–10). Open QB (Arrington Maiden, Open competition). Higher uncertainty (0.394) than the P4 incumbents. Win-total is a Sun Belt path, not a talent spike.",
     theNumber:
       "Research win band 6–10 (median 8, E[wins] 7.91). Power rank 65. Research only.",
     quickProjection:

@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   competitionImpliesOpenRace,
+  formatCompetitionAwareIntelCell,
+  formatCompetitionLabel,
   formatCompetitionStatus,
   formatDepthSlotLabel,
   isPackagedDepthStale,
@@ -12,6 +14,9 @@ import {
 describe("nfl-depth-pack-freshness", () => {
   it("humanizes competition_status without snake_case", () => {
     expect(formatCompetitionStatus("open_competition")).toBe(
+      "Open competition",
+    );
+    expect(formatCompetitionLabel("open_competition")).toBe(
       "Open competition",
     );
     expect(formatCompetitionStatus("named_starter")).toBe("Named starter");
@@ -26,6 +31,22 @@ describe("nfl-depth-pack-freshness", () => {
     expect(formatDepthSlotLabel("named_starter", 1)).toBe("starter");
     expect(formatDepthSlotLabel("starter", 1)).toBe("starter");
     expect(formatDepthSlotLabel("backup", 2)).toBe("backup");
+  });
+
+  it("formats Roster Pulse / intel depth_slot cells without snake_case", () => {
+    expect(
+      formatCompetitionAwareIntelCell("depth_slot", "open_competition"),
+    ).toBe("Open competition");
+    expect(
+      formatCompetitionAwareIntelCell("competition_status", "open_competition"),
+    ).toBe("Open competition");
+    expect(formatCompetitionAwareIntelCell("depth_slot", "camp_arm")).toBe(
+      "Camp arm",
+    );
+    expect(formatCompetitionAwareIntelCell("depth_slot", "starter")).toBe(
+      "starter",
+    );
+    expect(formatCompetitionAwareIntelCell("player_name", "Tua")).toBeNull();
   });
 
   it("flags open races that must not read as locked crowns", () => {

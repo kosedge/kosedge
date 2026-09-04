@@ -192,4 +192,52 @@ describe("NflIntelTablePage", () => {
     expect(screen.getByText("Stafford")).toBeInTheDocument();
     vi.useRealTimers();
   });
+
+  it("renders open_competition depth_slot as Open competition", async () => {
+    vi.mocked(fetchNflIntel).mockResolvedValue({
+      season: 2026,
+      week: 1,
+      team: "ATL",
+      count: 2,
+      rows: [
+        {
+          team: "ATL",
+          position: "QB",
+          player_name: "Tua Tagovailoa",
+          depth_slot: "open_competition",
+          depth_order: 1,
+        },
+        {
+          team: "ATL",
+          position: "QB",
+          player_name: "Michael Penix Jr.",
+          depth_slot: "open_competition",
+          depth_order: 2,
+        },
+      ],
+      selection: {
+        fallback_applied: false,
+        latest_available: { season: 2026, week: 1, row_count: 2 },
+      },
+    });
+
+    const page = await NflIntelTablePage({
+      endpoint: "rosters",
+      title: "NFL Team Intel · Rosters",
+      description: "Roster hierarchy",
+      emptyHint: "No data",
+      columns: [
+        { key: "player_name", label: "Player" },
+        { key: "depth_slot", label: "Role" },
+      ],
+    });
+
+    render(page);
+
+    expect(screen.getAllByText("Open competition")).toHaveLength(2);
+    expect(screen.queryByText(/open_competition/)).not.toBeInTheDocument();
+    for (const cell of screen.getAllByTestId("intel-depth-slot")) {
+      expect(cell.textContent).toBe("Open competition");
+    }
+  });
 });

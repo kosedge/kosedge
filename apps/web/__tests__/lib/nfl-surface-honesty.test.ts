@@ -108,7 +108,13 @@ describe("NFL depth charts are not claimed as live camp", () => {
     expect(modelBoard).toContain("isPackagedDepthStale");
 
     expect(intel).toContain("sourceHonesty");
+    expect(intel).toContain("formatCompetitionAwareIntelCell");
     expect(intel).not.toMatch(/live roster SoT/i);
     expect(intel).not.toMatch(/return null.*depth|hide.*depth/i);
+
+    const rosterPulse = readRel("components/pro/TeamIntelTable.tsx");
+    expect(rosterPulse).toContain("formatCompetitionAwareIntelCell");
+    expect(teamHub).toContain("TeamIntelTable");
+    expect(teamHub).toContain("depth_slot");
   });
 });
