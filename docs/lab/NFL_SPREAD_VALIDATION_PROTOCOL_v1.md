@@ -1,11 +1,12 @@
 # NFL Spread Validation Protocol v1.0
 
-**Status:** PRE-REGISTERED — awaiting CoS review/sign  
+**Status:** `cos_signed`  
 **Lab:** Kos Edge #3 Model Validation Lab  
 **Protocol version:** `nfl-spread-validation-protocol-v1.0`  
 **Registered:** 2026-09-04  
+**Date:** 2026-09-04  
 **Scope lock:** NFL spread only (home/away ATS). CBB excluded.  
-**Machine twin (empty schema stub):** [`data/ops/lab/nfl-spread-validation-protocol-v1.schema.json`](../../data/ops/lab/nfl-spread-validation-protocol-v1.schema.json)
+**Machine twin:** [`data/ops/lab/nfl-spread-validation-protocol-v1.schema.json`](../../data/ops/lab/nfl-spread-validation-protocol-v1.schema.json)
 
 > **NO RESULTS IN THIS DOCUMENT.** This file pre-registers evaluation criteria
 > before any outcome viewing, scorecard fill, or ATS/CLV computation. Amending
@@ -195,7 +196,7 @@ pass for the Lab process.
 ### 8.1 Predictive Quality
 
 **GREEN gate choice (locked, CoS 2026-09-04):** **market-relative comparison only** for
-spread-vs-close MAE. The former absolute OR (`≤ 13.0 pts`) is removed — too loose /
+spread-vs-close MAE. Any former absolute-pt OR escape hatch is removed — too loose /
 always-true. v1.0 does **not** use an absolute spread-MAE floor as an alternate OR
 gate. A tight absolute (`≤ 4.0 pts vs close`) is reserved only as a possible **additional
 AND conjunct** in a future protocol bump — not an escape hatch in v1.0.
@@ -268,9 +269,10 @@ weight search in v1.0 — comparator is descriptive, not a retune license.
 
 ---
 
-## 11. Pipeline stages (spec only)
+## 11. Pipeline stages
 
-Ordered stages for a future runner. **This PR does not implement or execute them.**
+Ordered stages for the Lab runner (`scripts/lab/nfl_spread_validation_v1.py`).
+Criteria remain frozen under protocol v1.0 — runner applies bars, does not retune.
 
 ```text
 1. prediction          → stamped model/KEI spread + as_of
@@ -286,8 +288,8 @@ Ordered stages for a future runner. **This PR does not implement or execute them
 11. influence          → YES / LIMITED / NO / INSUFFICIENT EVIDENCE (§9)
 ```
 
-Artifacts (future): empty-result-shaped JSON conforming to the twin schema
-stub under `data/ops/lab/`. No filled scorecards in protocol PRs.
+Artifacts: filled scorecard JSON conforming to the twin schema under
+`data/ops/lab/` (`nfl-spread-scorecard-v1.json`) plus the markdown scorecard.
 
 ---
 
@@ -363,25 +365,27 @@ inputs; this protocol PR adds **no** new evaluation runs.
 
 ## 14. Amendment process
 
-| Change type                                | Required action                        |
-| ------------------------------------------ | -------------------------------------- |
-| Typo / citation path fix                   | Patch on same version with CoS note    |
-| Any numeric cut point, min N, or grade bar | New protocol version (v1.1+)           |
-| Add sport/market (CFB, totals, …)          | New protocol doc (do not overload v1)  |
-| Fill scorecard / run pipeline              | Separate PR **after** CoS sign of v1.0 |
+| Change type                                | Required action                                            |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| Typo / citation path fix                   | Patch on same version with CoS note                        |
+| Any numeric cut point, min N, or grade bar | New protocol version (v1.1+)                               |
+| Add sport/market (CFB, totals, …)          | New protocol doc (do not overload v1)                      |
+| Fill scorecard / run pipeline              | Separate PR after CoS sign of v1.0 (this Lab execution PR) |
 
-**CoS sign line (blank until review):**
+**CoS sign-off:**
 
 ```text
-CoS sign-off: ____________________  Date: __________  Protocol: v1.0
+CoS sign-off: Chief of Staff — 2026-09-04 — Protocol v1.0
 ```
 
 ---
 
-## 15. Explicit non-goals for this registration PR
+## 15. Post-sign execution (Lab runner)
 
-- No holdout execution
-- No ATS / ROI / CLV result tables from Lab runs
-- No scorecard JSON filled with numbers
-- No scripts that compute Lab grades yet
-- No outcome-dataset analysis in this change set
+After CoS sign, the Lab runner under `scripts/lab/nfl_spread_validation_v1.py`
+reads frozen ops artifacts (no new scrapes, no invented odds) and writes:
+
+- `docs/lab/NFL_SPREAD_SCORECARD_v1.md`
+- `data/ops/lab/nfl-spread-scorecard-v1.json`
+
+Hard locks in §13 still apply: evidence only — no live PLAY/LEAN/PASS flips.

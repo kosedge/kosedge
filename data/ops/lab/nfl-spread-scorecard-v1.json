@@ -1,0 +1,868 @@
+{
+  "protocol_version": "nfl-spread-validation-protocol-v1.0",
+  "status": "results_filled",
+  "cos_sign_off": "Chief of Staff \u2014 2026-09-04 \u2014 Protocol v1.0",
+  "generated_at": "2026-09-04T04:46:39.131508+00:00",
+  "scope": {
+    "sport": "NFL",
+    "market": "spread",
+    "excluded": [
+      "CBB",
+      "totals",
+      "props",
+      "ml_only"
+    ]
+  },
+  "hard_locks": [
+    "no_live_play_lean_pass_flip",
+    "no_rebuild_without_defect_and_cos_gate",
+    "no_invent_missing_odds",
+    "no_post_hoc_bucket_changes",
+    "red_equals_honest_failure_success",
+    "cbb_excluded"
+  ],
+  "data_sources": [
+    "data/ops/nfl-play-only-holdout.json",
+    "data/ops/nfl-kav-grading-after.json",
+    "data/ops/nfl-kav-supervised-retrain-v3.json",
+    "data/ops/nfl-enterprise-gates-latest.json",
+    "data/ops/nfl-vegas-benchmark-report.json"
+  ],
+  "citations": [
+    "docs/NFL_ENTERPRISE_GATES.md",
+    "data/ops/nfl-play-only-holdout.json",
+    "apps/web/lib/nfl-spread-play-lock.ts",
+    "NFL_SPREAD_PLAY_LOCKED.md",
+    "scripts/nfl/evaluate_enterprise_gates.py",
+    "services/model-service/src/services/nfl_enterprise_gates.py",
+    "docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md"
+  ],
+  "pipeline_stages": [
+    {
+      "stage": "prediction",
+      "status": "ok",
+      "note": "Model/KEI spreads absorbed from grading + PLAY holdout projections (owned DB snapshot)."
+    },
+    {
+      "stage": "timestamped_market",
+      "status": "ok",
+      "note": "Open/close via owned odds_snapshots (movement_only_n_snaps_ge_2); no Odds API re-burn."
+    },
+    {
+      "stage": "outcome",
+      "status": "ok",
+      "note": "ATS vs closing home spread; pushes excluded from denominators (prior art)."
+    },
+    {
+      "stage": "error",
+      "status": "partial",
+      "model_spread_mae": 9.5513,
+      "market_spread_mae": 9.7764,
+      "margin_mae": 7.48009840196442,
+      "signed_bias": "N/A\u2014DATA GAP"
+    },
+    {
+      "stage": "calibration",
+      "status": "ok",
+      "model_spread_mae": 9.5513,
+      "market_spread_mae": 9.7764,
+      "brier": 0.14822177223985103,
+      "margin_mae": 7.48009840196442,
+      "vegas_2025_holdout_spread_mae": {
+        "model": 8.353,
+        "vegas": 9.67,
+        "unit": "points"
+      }
+    },
+    {
+      "stage": "edge_bucket",
+      "status": "ok",
+      "play_band_all_primary_2025": {
+        "n": 112,
+        "hits": 78,
+        "hit_rate": 0.6964,
+        "roi": 0.3295,
+        "units": 36.909,
+        "mean_abs_edge": 4.664,
+        "n_clv_all": 112,
+        "clv_positive_rate_all": 0.5268,
+        "n_clv_move": 101,
+        "clv_positive_rate": 0.5842,
+        "clv_avg_move": 0.5693,
+        "wilson_95": {
+          "low": 0.605929294234967,
+          "high": 0.7738997136516643
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears; movement-CLV +rate clears soft n\u226540 but below n\u2265200 product floor."
+      },
+      "play_band_all_confirmatory_2024_2025": {
+        "n": 227,
+        "hits": 166,
+        "hit_rate": 0.7313,
+        "roi": 0.3961,
+        "units": 89.909,
+        "mean_abs_edge": 4.463,
+        "n_clv_all": 227,
+        "clv_positive_rate_all": 0.5551,
+        "n_clv_move": 206,
+        "clv_positive_rate": 0.6117,
+        "clv_avg_move": 0.9684,
+        "wilson_95": {
+          "low": 0.6701129851283073,
+          "high": 0.7847443716046213
+        },
+        "prior_art_gate": "GREEN",
+        "detail": "ATS + movement-CLV clear selective PLAY floors (n_move\u2265200)."
+      },
+      "buckets": {
+        "noise": {
+          "abs_edge_min": 0.0,
+          "abs_edge_max_exclusive": 1.1,
+          "primary_2025": "N/A\u2014DATA GAP",
+          "note": "noise/lean/mega not segmented in play-only holdout artifact"
+        },
+        "lean_band": {
+          "abs_edge_min": 1.1,
+          "abs_edge_max_exclusive": 2.5,
+          "primary_2025": "N/A\u2014DATA GAP",
+          "note": "noise/lean/mega not segmented in play-only holdout artifact"
+        },
+        "play_low": {
+          "abs_edge_min": 2.5,
+          "abs_edge_max_exclusive": 3.5,
+          "primary_2025": {
+            "n": 33,
+            "hits": 19,
+            "hit_rate": 0.5758,
+            "roi": 0.0992,
+            "units": 3.273,
+            "mean_abs_edge": 3.001,
+            "n_clv_all": 33,
+            "clv_positive_rate_all": 0.3939,
+            "n_clv_move": 28,
+            "clv_positive_rate": 0.4643,
+            "clv_avg_move": -0.8036,
+            "wilson_95": {
+              "low": 0.40806973691460025,
+              "high": 0.7276464100497011
+            },
+            "prior_art_gate": "RED",
+            "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+          },
+          "note": "From segments_2025 (PLAY holdout prior art)."
+        },
+        "play_mid": {
+          "abs_edge_min": 3.5,
+          "abs_edge_max_exclusive": 5.0,
+          "primary_2025": {
+            "n": 31,
+            "hits": 19,
+            "hit_rate": 0.6129,
+            "roi": 0.1701,
+            "units": 5.273,
+            "mean_abs_edge": 4.235,
+            "n_clv_all": 31,
+            "clv_positive_rate_all": 0.6452,
+            "n_clv_move": 31,
+            "clv_positive_rate": 0.6452,
+            "clv_avg_move": 0.3387,
+            "wilson_95": {
+              "low": 0.4382380114113197,
+              "high": 0.7626712464872843
+            },
+            "prior_art_gate": "RED",
+            "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+          },
+          "note": "From segments_2025 (PLAY holdout prior art)."
+        },
+        "play_high": {
+          "abs_edge_min": 5.0,
+          "abs_edge_max_exclusive": 7.0,
+          "primary_2025": {
+            "n": 48,
+            "hits": 40,
+            "hit_rate": 0.8333,
+            "roi": 0.5909,
+            "units": 28.364,
+            "mean_abs_edge": 6.085,
+            "n_clv_all": 48,
+            "clv_positive_rate_all": 0.5417,
+            "n_clv_move": 42,
+            "clv_positive_rate": 0.619,
+            "clv_avg_move": 1.6548,
+            "wilson_95": {
+              "low": 0.7042189996260375,
+              "high": 0.9130458996054678
+            },
+            "prior_art_gate": "RED",
+            "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+          },
+          "note": "From segments_2025 (PLAY holdout prior art)."
+        },
+        "mega_edge": {
+          "abs_edge_min": 7.0,
+          "abs_edge_max_exclusive": null,
+          "primary_2025": "N/A\u2014DATA GAP",
+          "note": "noise/lean/mega not segmented in play-only holdout artifact"
+        }
+      }
+    },
+    {
+      "stage": "clv",
+      "methodology": "movement_only_n_snaps_ge_2",
+      "status": "ok",
+      "primary_2025": {
+        "n_clv_move": 101,
+        "clv_positive_rate": 0.5842,
+        "clv_avg_move": 0.5693
+      },
+      "confirmatory_2024_2025": {
+        "n_clv_move": 206,
+        "clv_positive_rate": 0.6117,
+        "clv_avg_move": 0.9684
+      },
+      "clv_pred_ts_to_close": "N/A\u2014DATA GAP"
+    },
+    {
+      "stage": "regime",
+      "status": "partial",
+      "contradicting_regimes_n40": 0,
+      "regimes": {
+        "home_side": {
+          "n": 57,
+          "hits": 39,
+          "hit_rate": 0.6842,
+          "roi": 0.3062,
+          "units": 17.455,
+          "mean_abs_edge": 4.864,
+          "n_clv_all": 57,
+          "clv_positive_rate_all": 0.5263,
+          "n_clv_move": 47,
+          "clv_positive_rate": 0.6383,
+          "clv_avg_move": 1.0745,
+          "wilson_95": {
+            "low": 0.5551998120281706,
+            "high": 0.7899587636831847
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "away_side": {
+          "n": 55,
+          "hits": 39,
+          "hit_rate": 0.7091,
+          "roi": 0.3537,
+          "units": 19.455,
+          "mean_abs_edge": 4.457,
+          "n_clv_all": 55,
+          "clv_positive_rate_all": 0.5273,
+          "n_clv_move": 54,
+          "clv_positive_rate": 0.537,
+          "clv_avg_move": 0.1296,
+          "wilson_95": {
+            "low": 0.5785902917965606,
+            "high": 0.8122896298914968
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "edge_play_low": {
+          "n": 33,
+          "hits": 19,
+          "hit_rate": 0.5758,
+          "roi": 0.0992,
+          "units": 3.273,
+          "mean_abs_edge": 3.001,
+          "n_clv_all": 33,
+          "clv_positive_rate_all": 0.3939,
+          "n_clv_move": 28,
+          "clv_positive_rate": 0.4643,
+          "clv_avg_move": -0.8036,
+          "wilson_95": {
+            "low": 0.40806973691460025,
+            "high": 0.7276464100497011
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "edge_play_mid": {
+          "n": 31,
+          "hits": 19,
+          "hit_rate": 0.6129,
+          "roi": 0.1701,
+          "units": 5.273,
+          "mean_abs_edge": 4.235,
+          "n_clv_all": 31,
+          "clv_positive_rate_all": 0.6452,
+          "n_clv_move": 31,
+          "clv_positive_rate": 0.6452,
+          "clv_avg_move": 0.3387,
+          "wilson_95": {
+            "low": 0.4382380114113197,
+            "high": 0.7626712464872843
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "edge_play_high": {
+          "n": 48,
+          "hits": 40,
+          "hit_rate": 0.8333,
+          "roi": 0.5909,
+          "units": 28.364,
+          "mean_abs_edge": 6.085,
+          "n_clv_all": 48,
+          "clv_positive_rate_all": 0.5417,
+          "n_clv_move": 42,
+          "clv_positive_rate": 0.619,
+          "clv_avg_move": 1.6548,
+          "wilson_95": {
+            "low": 0.7042189996260375,
+            "high": 0.9130458996054678
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "favorite": "N/A\u2014DATA GAP",
+        "dog": "N/A\u2014DATA GAP",
+        "week_W1_W4": "N/A\u2014DATA GAP",
+        "week_W5_W12": "N/A\u2014DATA GAP",
+        "week_W13_W18": "N/A\u2014DATA GAP",
+        "postseason": "N/A\u2014DATA GAP",
+        "outdoor": "N/A\u2014DATA GAP",
+        "dome": "N/A\u2014DATA GAP"
+      }
+    },
+    {
+      "stage": "threshold_evaluation",
+      "protocol_version": "nfl-spread-validation-protocol-v1.0",
+      "frozen": true,
+      "bars_applied": {
+        "ats_breakeven": 0.5238,
+        "clv_pos_min": 0.55,
+        "clv_n_green": 200,
+        "play_ats_n_min": 60
+      }
+    },
+    {
+      "stage": "grades",
+      "predictive_quality": "YELLOW",
+      "market_edge_evidence": "GREEN",
+      "evidence_quality": "GREEN"
+    },
+    {
+      "stage": "influence",
+      "subscriber_influence": "LIMITED",
+      "note": "Evidence recommendation for CoS\u2192Ryan only \u2014 NO live PLAY/LEAN/PASS flip."
+    }
+  ],
+  "grades": {
+    "predictive_quality": "YELLOW",
+    "market_edge_evidence": "GREEN",
+    "evidence_quality": "GREEN"
+  },
+  "grade_details": {
+    "predictive_quality": "n=1693; MAE market-relative ok (model 9.5513 / market 9.7764); margin MAE=7.4801; signed bias series = N/A\u2014DATA GAP (blocks GREEN conjunct).",
+    "market_edge_evidence": "[confirmatory window 2024\u20132025] play_band_all ATS 0.7313 n=227; ROI 0.3961; CLV+ 0.6117 n_clv_move=206 (\u2265200). (primary unused 2025 alone: YELLOW.)",
+    "market_edge_primary_2025_alone": {
+      "grade": "YELLOW",
+      "detail": "ATS clears (ATS=0.6964 n=112, ROI=0.3295) but CLV soft/fails (CLV+=0.5842 n_clv_move=101; GREEN needs \u2265200 @ \u22650.55)."
+    },
+    "evidence_quality": "overall_n=1693; play_band n=227; CLV coverage 90.75%; contradicting regimes=0."
+  },
+  "subscriber_influence": "LIMITED",
+  "subscriber_influence_code": "LIMITED",
+  "subscriber_influence_detail": "Protocol \u00a79 LIMITED: Market Edge GREEN rides confirmatory 2024\u201325 window; primary unused 2025 alone is YELLOW (CLV n below product floor). Scope claim to confirmatory window / PLAY-band only. Clean-era 2020\u201322 CLV+ fails (~0.45). YES would overclaim money-influence when primary OOS year does not clear product CLV floor. Evidence only \u2014 no live tag flip.",
+  "results": {
+    "windows": {
+      "primary_unused_holdout": "2025",
+      "confirmatory": "2024-2025",
+      "clean_era_check": "2020-2022"
+    },
+    "all_sides_context": {
+      "n": 1693,
+      "ats_hit_rate": 0.495,
+      "note": "Full-slate ATS is context only; selective claim uses play_band_all.",
+      "enterprise_full_slate_gate": "RED"
+    },
+    "play_band_all": {
+      "primary_2025": {
+        "n": 112,
+        "hits": 78,
+        "hit_rate": 0.6964,
+        "roi": 0.3295,
+        "units": 36.909,
+        "mean_abs_edge": 4.664,
+        "n_clv_all": 112,
+        "clv_positive_rate_all": 0.5268,
+        "n_clv_move": 101,
+        "clv_positive_rate": 0.5842,
+        "clv_avg_move": 0.5693,
+        "wilson_95": {
+          "low": 0.605929294234967,
+          "high": 0.7738997136516643
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears; movement-CLV +rate clears soft n\u226540 but below n\u2265200 product floor."
+      },
+      "confirmatory_2024_2025": {
+        "n": 227,
+        "hits": 166,
+        "hit_rate": 0.7313,
+        "roi": 0.3961,
+        "units": 89.909,
+        "mean_abs_edge": 4.463,
+        "n_clv_all": 227,
+        "clv_positive_rate_all": 0.5551,
+        "n_clv_move": 206,
+        "clv_positive_rate": 0.6117,
+        "clv_avg_move": 0.9684,
+        "wilson_95": {
+          "low": 0.6701129851283073,
+          "high": 0.7847443716046213
+        },
+        "prior_art_gate": "GREEN",
+        "detail": "ATS + movement-CLV clear selective PLAY floors (n_move\u2265200)."
+      },
+      "clean_era_2020_2022": {
+        "n": 387,
+        "hits": 208,
+        "hit_rate": 0.5375,
+        "roi": 0.0261,
+        "units": 10.091,
+        "mean_abs_edge": 4.685,
+        "n_clv_all": 387,
+        "clv_positive_rate_all": 0.2584,
+        "n_clv_move": 222,
+        "clv_positive_rate": 0.4505,
+        "clv_avg_move": -0.5721,
+        "wilson_95": {
+          "low": 0.48766665813831234,
+          "high": 0.5865321988922597
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears \u2212110 but movement-CLV fails or sample thin."
+      }
+    },
+    "buckets": {
+      "noise": {
+        "abs_edge_min": 0.0,
+        "abs_edge_max_exclusive": 1.1,
+        "primary_2025": "N/A\u2014DATA GAP",
+        "note": "noise/lean/mega not segmented in play-only holdout artifact"
+      },
+      "lean_band": {
+        "abs_edge_min": 1.1,
+        "abs_edge_max_exclusive": 2.5,
+        "primary_2025": "N/A\u2014DATA GAP",
+        "note": "noise/lean/mega not segmented in play-only holdout artifact"
+      },
+      "play_low": {
+        "abs_edge_min": 2.5,
+        "abs_edge_max_exclusive": 3.5,
+        "primary_2025": {
+          "n": 33,
+          "hits": 19,
+          "hit_rate": 0.5758,
+          "roi": 0.0992,
+          "units": 3.273,
+          "mean_abs_edge": 3.001,
+          "n_clv_all": 33,
+          "clv_positive_rate_all": 0.3939,
+          "n_clv_move": 28,
+          "clv_positive_rate": 0.4643,
+          "clv_avg_move": -0.8036,
+          "wilson_95": {
+            "low": 0.40806973691460025,
+            "high": 0.7276464100497011
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "note": "From segments_2025 (PLAY holdout prior art)."
+      },
+      "play_mid": {
+        "abs_edge_min": 3.5,
+        "abs_edge_max_exclusive": 5.0,
+        "primary_2025": {
+          "n": 31,
+          "hits": 19,
+          "hit_rate": 0.6129,
+          "roi": 0.1701,
+          "units": 5.273,
+          "mean_abs_edge": 4.235,
+          "n_clv_all": 31,
+          "clv_positive_rate_all": 0.6452,
+          "n_clv_move": 31,
+          "clv_positive_rate": 0.6452,
+          "clv_avg_move": 0.3387,
+          "wilson_95": {
+            "low": 0.4382380114113197,
+            "high": 0.7626712464872843
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "note": "From segments_2025 (PLAY holdout prior art)."
+      },
+      "play_high": {
+        "abs_edge_min": 5.0,
+        "abs_edge_max_exclusive": 7.0,
+        "primary_2025": {
+          "n": 48,
+          "hits": 40,
+          "hit_rate": 0.8333,
+          "roi": 0.5909,
+          "units": 28.364,
+          "mean_abs_edge": 6.085,
+          "n_clv_all": 48,
+          "clv_positive_rate_all": 0.5417,
+          "n_clv_move": 42,
+          "clv_positive_rate": 0.619,
+          "clv_avg_move": 1.6548,
+          "wilson_95": {
+            "low": 0.7042189996260375,
+            "high": 0.9130458996054678
+          },
+          "prior_art_gate": "RED",
+          "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+        },
+        "note": "From segments_2025 (PLAY holdout prior art)."
+      },
+      "mega_edge": {
+        "abs_edge_min": 7.0,
+        "abs_edge_max_exclusive": null,
+        "primary_2025": "N/A\u2014DATA GAP",
+        "note": "noise/lean/mega not segmented in play-only holdout artifact"
+      }
+    },
+    "regimes": {
+      "home_side": {
+        "n": 57,
+        "hits": 39,
+        "hit_rate": 0.6842,
+        "roi": 0.3062,
+        "units": 17.455,
+        "mean_abs_edge": 4.864,
+        "n_clv_all": 57,
+        "clv_positive_rate_all": 0.5263,
+        "n_clv_move": 47,
+        "clv_positive_rate": 0.6383,
+        "clv_avg_move": 1.0745,
+        "wilson_95": {
+          "low": 0.5551998120281706,
+          "high": 0.7899587636831847
+        },
+        "prior_art_gate": "RED",
+        "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+      },
+      "away_side": {
+        "n": 55,
+        "hits": 39,
+        "hit_rate": 0.7091,
+        "roi": 0.3537,
+        "units": 19.455,
+        "mean_abs_edge": 4.457,
+        "n_clv_all": 55,
+        "clv_positive_rate_all": 0.5273,
+        "n_clv_move": 54,
+        "clv_positive_rate": 0.537,
+        "clv_avg_move": 0.1296,
+        "wilson_95": {
+          "low": 0.5785902917965606,
+          "high": 0.8122896298914968
+        },
+        "prior_art_gate": "RED",
+        "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+      },
+      "edge_play_low": {
+        "n": 33,
+        "hits": 19,
+        "hit_rate": 0.5758,
+        "roi": 0.0992,
+        "units": 3.273,
+        "mean_abs_edge": 3.001,
+        "n_clv_all": 33,
+        "clv_positive_rate_all": 0.3939,
+        "n_clv_move": 28,
+        "clv_positive_rate": 0.4643,
+        "clv_avg_move": -0.8036,
+        "wilson_95": {
+          "low": 0.40806973691460025,
+          "high": 0.7276464100497011
+        },
+        "prior_art_gate": "RED",
+        "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+      },
+      "edge_play_mid": {
+        "n": 31,
+        "hits": 19,
+        "hit_rate": 0.6129,
+        "roi": 0.1701,
+        "units": 5.273,
+        "mean_abs_edge": 4.235,
+        "n_clv_all": 31,
+        "clv_positive_rate_all": 0.6452,
+        "n_clv_move": 31,
+        "clv_positive_rate": 0.6452,
+        "clv_avg_move": 0.3387,
+        "wilson_95": {
+          "low": 0.4382380114113197,
+          "high": 0.7626712464872843
+        },
+        "prior_art_gate": "RED",
+        "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+      },
+      "edge_play_high": {
+        "n": 48,
+        "hits": 40,
+        "hit_rate": 0.8333,
+        "roi": 0.5909,
+        "units": 28.364,
+        "mean_abs_edge": 6.085,
+        "n_clv_all": 48,
+        "clv_positive_rate_all": 0.5417,
+        "n_clv_move": 42,
+        "clv_positive_rate": 0.619,
+        "clv_avg_move": 1.6548,
+        "wilson_95": {
+          "low": 0.7042189996260375,
+          "high": 0.9130458996054678
+        },
+        "prior_art_gate": "RED",
+        "detail": "ATS below \u2212110 or sample below MIN_SEGMENT_N."
+      },
+      "favorite": "N/A\u2014DATA GAP",
+      "dog": "N/A\u2014DATA GAP",
+      "week_W1_W4": "N/A\u2014DATA GAP",
+      "week_W5_W12": "N/A\u2014DATA GAP",
+      "week_W13_W18": "N/A\u2014DATA GAP",
+      "postseason": "N/A\u2014DATA GAP",
+      "outdoor": "N/A\u2014DATA GAP",
+      "dome": "N/A\u2014DATA GAP"
+    },
+    "comparators": {
+      "kosedge_alone": {
+        "rule": "Bet model side when |edge| in play_band_all (2.5\u2264|edge|<7.0)",
+        "window": "confirmatory_2024_2025",
+        "metrics": {
+          "n": 227,
+          "hits": 166,
+          "hit_rate": 0.7313,
+          "roi": 0.3961,
+          "units": 89.909,
+          "mean_abs_edge": 4.463,
+          "n_clv_all": 227,
+          "clv_positive_rate_all": 0.5551,
+          "n_clv_move": 206,
+          "clv_positive_rate": 0.6117,
+          "clv_avg_move": 0.9684,
+          "wilson_95": {
+            "low": 0.6701129851283073,
+            "high": 0.7847443716046213
+          },
+          "prior_art_gate": "GREEN",
+          "detail": "ATS + movement-CLV clear selective PLAY floors (n_move\u2265200)."
+        },
+        "status": "ok"
+      },
+      "market_alone": {
+        "rule": "Always home favorite at close (pick'em excluded)",
+        "status": "N/A\u2014DATA GAP",
+        "note": "Home-favorite baseline ATS not present in owned ops JSON \u2014 do not invent."
+      },
+      "kosedge_plus_market": {
+        "rule": "kosedge_alone \u2229 open\u2192close move not strictly against model side",
+        "status": "N/A\u2014DATA GAP",
+        "note": "Filtered momentum-agreement slice not precomputed in holdout artifact."
+      }
+    },
+    "predictive_metrics": {
+      "model_spread_mae": 9.5513,
+      "market_spread_mae": 9.7764,
+      "n_spread": 1693,
+      "margin_mae_supervised": 7.48009840196442,
+      "brier_supervised": 0.14822177223985103,
+      "signed_bias": "N/A\u2014DATA GAP",
+      "mae_gate": "market_relative_only"
+    },
+    "walk_forward_by_season": {
+      "2020": {
+        "n": 124,
+        "hits": 68,
+        "hit_rate": 0.5484,
+        "roi": 0.0469,
+        "units": 5.818,
+        "mean_abs_edge": 4.696,
+        "n_clv_all": 124,
+        "clv_positive_rate_all": 0.2097,
+        "n_clv_move": 71,
+        "clv_positive_rate": 0.3662,
+        "clv_avg_move": -1.0211,
+        "wilson_95": {
+          "low": 0.46065341741337773,
+          "high": 0.6332127419588452
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears \u2212110 but movement-CLV fails or sample thin."
+      },
+      "2021": {
+        "n": 130,
+        "hits": 69,
+        "hit_rate": 0.5308,
+        "roi": 0.0133,
+        "units": 1.727,
+        "mean_abs_edge": 4.82,
+        "n_clv_all": 130,
+        "clv_positive_rate_all": 0.2692,
+        "n_clv_move": 78,
+        "clv_positive_rate": 0.4487,
+        "clv_avg_move": -0.3846,
+        "wilson_95": {
+          "low": 0.4453328226886355,
+          "high": 0.614439325881017
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears \u2212110 but movement-CLV fails or sample thin."
+      },
+      "2022": {
+        "n": 133,
+        "hits": 71,
+        "hit_rate": 0.5338,
+        "roi": 0.0191,
+        "units": 2.545,
+        "mean_abs_edge": 4.543,
+        "n_clv_all": 133,
+        "clv_positive_rate_all": 0.2932,
+        "n_clv_move": 73,
+        "clv_positive_rate": 0.5342,
+        "clv_avg_move": -0.3356,
+        "wilson_95": {
+          "low": 0.44929587361127976,
+          "high": 0.6164735999990845
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears \u2212110 but movement-CLV fails or sample thin."
+      },
+      "2023": {
+        "n": 120,
+        "hits": 84,
+        "hit_rate": 0.7,
+        "roi": 0.3364,
+        "units": 40.364,
+        "mean_abs_edge": 4.459,
+        "n_clv_all": 120,
+        "clv_positive_rate_all": 0.4333,
+        "n_clv_move": 97,
+        "clv_positive_rate": 0.5361,
+        "clv_avg_move": 0.2887,
+        "wilson_95": {
+          "low": 0.6128469049643513,
+          "high": 0.7747449866132768
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears \u2212110 but movement-CLV fails or sample thin."
+      },
+      "2024": {
+        "n": 115,
+        "hits": 88,
+        "hit_rate": 0.7652,
+        "roi": 0.4609,
+        "units": 53.0,
+        "mean_abs_edge": 4.268,
+        "n_clv_all": 115,
+        "clv_positive_rate_all": 0.5826,
+        "n_clv_move": 105,
+        "clv_positive_rate": 0.6381,
+        "clv_avg_move": 1.3524,
+        "wilson_95": {
+          "low": 0.6799560029579482,
+          "high": 0.8333322732012419
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears; movement-CLV +rate clears soft n\u226540 but below n\u2265200 product floor."
+      },
+      "2025": {
+        "n": 112,
+        "hits": 78,
+        "hit_rate": 0.6964,
+        "roi": 0.3295,
+        "units": 36.909,
+        "mean_abs_edge": 4.664,
+        "n_clv_all": 112,
+        "clv_positive_rate_all": 0.5268,
+        "n_clv_move": 101,
+        "clv_positive_rate": 0.5842,
+        "clv_avg_move": 0.5693,
+        "wilson_95": {
+          "low": 0.605929294234967,
+          "high": 0.7738997136516643
+        },
+        "prior_art_gate": "YELLOW",
+        "detail": "ATS clears; movement-CLV +rate clears soft n\u226540 but below n\u2265200 product floor."
+      }
+    },
+    "enterprise_gates_echo": {
+      "overall": "RED",
+      "selective_play_ready": true,
+      "betting_product_ready": false
+    }
+  },
+  "data_gaps": [
+    "Signed mean spread error (bias) not present in grading artifacts \u2192 Predictive GREEN bias conjunct = N/A\u2014DATA GAP.",
+    "Bucket `noise` ATS/CLV not in nfl-play-only-holdout segments \u2192 N/A\u2014DATA GAP.",
+    "Bucket `lean_band` ATS/CLV not in nfl-play-only-holdout segments \u2192 N/A\u2014DATA GAP.",
+    "Bucket `mega_edge` ATS/CLV not in nfl-play-only-holdout segments \u2192 N/A\u2014DATA GAP.",
+    "Secondary CLV `clv_pred_ts_to_close` (prediction-timestamp\u2192close) not in artifacts \u2192 N/A\u2014DATA GAP.",
+    "Regime `favorite` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `dog` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `week_W1_W4` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `week_W5_W12` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `week_W13_W18` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `postseason` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `outdoor` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Regime `dome` field coverage <80% / absent \u2192 N/A\u2014DATA GAP.",
+    "Comparator market_alone \u2192 N/A\u2014DATA GAP.",
+    "Comparator kosedge_plus_market \u2192 N/A\u2014DATA GAP."
+  ],
+  "min_n": {
+    "overall": 200,
+    "per_bucket": 40,
+    "clv_green": 200,
+    "ci_level": 0.95
+  },
+  "discrepancy_buckets": [
+    {
+      "id": "noise",
+      "abs_edge_min": 0.0,
+      "abs_edge_max_exclusive": 1.1
+    },
+    {
+      "id": "lean_band",
+      "abs_edge_min": 1.1,
+      "abs_edge_max_exclusive": 2.5
+    },
+    {
+      "id": "play_low",
+      "abs_edge_min": 2.5,
+      "abs_edge_max_exclusive": 3.5
+    },
+    {
+      "id": "play_mid",
+      "abs_edge_min": 3.5,
+      "abs_edge_max_exclusive": 5.0
+    },
+    {
+      "id": "play_high",
+      "abs_edge_min": 5.0,
+      "abs_edge_max_exclusive": 7.0
+    },
+    {
+      "id": "mega_edge",
+      "abs_edge_min": 7.0,
+      "abs_edge_max_exclusive": null
+    }
+  ],
+  "rerun": "python3 scripts/lab/nfl_spread_validation_v1.py"
+}
