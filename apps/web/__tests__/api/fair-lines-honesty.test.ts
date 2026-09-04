@@ -108,7 +108,9 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
       count: 0,
       lines: [],
     });
-    const res = await getMlb(new Request("http://localhost/api/mlb/fair-lines"));
+    const res = await getMlb(
+      new Request("http://localhost/api/mlb/fair-lines"),
+    );
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.slateStatus).toBe("no_slate");
@@ -145,7 +147,9 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
       slateStatus: "ok",
       message: "ok",
     });
-    const res = await getNba(new Request("http://localhost/api/nba/fair-lines"));
+    const res = await getNba(
+      new Request("http://localhost/api/nba/fair-lines"),
+    );
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.count).toBe(1);
@@ -167,7 +171,9 @@ describe("non-NFL /api/{sport}/fair-lines honesty", () => {
       slateStatus: "offseason_empty",
       message: "Offseason empty",
     });
-    const res = await getNhl(new Request("http://localhost/api/nhl/fair-lines"));
+    const res = await getNhl(
+      new Request("http://localhost/api/nhl/fair-lines"),
+    );
     const body = await res.json();
     expect(res.status).toBe(200);
     expect(body.slateStatus).toBe("offseason_empty");

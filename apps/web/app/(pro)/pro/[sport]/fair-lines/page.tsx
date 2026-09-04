@@ -70,8 +70,7 @@ export default async function FairLinesPage({
 
   // Prefer live model-service / file KEI; file-only is the sync fallback.
   const resolvedKei = await resolveKeiGames(sportKey);
-  const keiGames =
-    resolvedKei.length > 0 ? resolvedKei : getKeiLines(sportKey);
+  const keiGames = resolvedKei.length > 0 ? resolvedKei : getKeiLines(sportKey);
   const boardGames =
     keiGames.length === 0 ? await getTonightGames(sportKey) : [];
 

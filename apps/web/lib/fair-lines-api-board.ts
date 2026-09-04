@@ -17,8 +17,7 @@ export const FAIR_LINES_HONESTY_SPORTS = [
   "ncaaf", // CFB Odds-API alias
 ] as const;
 
-export type FairLinesHonestySport =
-  (typeof FAIR_LINES_HONESTY_SPORTS)[number];
+export type FairLinesHonestySport = (typeof FAIR_LINES_HONESTY_SPORTS)[number];
 
 /** Fail-closed statuses for boards that are not inventing prices. */
 export const FAIR_LINES_HONEST_EMPTY_STATUSES = new Set([
@@ -162,11 +161,7 @@ export function toFairLinesApiBoard<TLine>(opts: {
       : `${sportLabel} fair-lines board.`);
 
   const baseDiag = emptyFairLinesDiagnostics(
-    opts.error
-      ? "upstream_error"
-      : count === 0
-        ? "no_odds_yet"
-        : "unknown",
+    opts.error ? "upstream_error" : count === 0 ? "no_odds_yet" : "unknown",
   );
   const diagnostics: FairLinesApiDiagnostics = {
     ...baseDiag,

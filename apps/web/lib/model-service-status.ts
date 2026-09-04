@@ -58,7 +58,10 @@ export function inferHonestEmptySlateStatus(opts: {
   const inPreseasonWindow = isNflPreseasonDeskWindow();
   const futureOrCurrentSeason = season >= currentYear;
 
-  if (!isTransportFailureMessage(opts.error) && !(opts.cause instanceof UpstreamTimeoutError)) {
+  if (
+    !isTransportFailureMessage(opts.error) &&
+    !(opts.cause instanceof UpstreamTimeoutError)
+  ) {
     return null;
   }
 
