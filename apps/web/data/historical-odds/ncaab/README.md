@@ -34,10 +34,12 @@ Code SoT (no Path B):
 | Layer | Floor |
 |-------|--------|
 | **Odds API** NCAAB historical (`basketball_ncaab`) | From **2020-11-16** (API start; no pre-2020–21) |
-| **In-repo Path A lake** (VERIFY) | Currently starts **2022-11-01** |
+| **In-repo Path A lake** (VERIFY) | Contiguous pockets from **2022-11-05** (see densify ops note); not a continuous calendar fill |
 
 Do not claim 2020–21 / 2021–22 open/close JSON in this repo unless Path A is
-actually densified later. API availability ≠ lake contents.
+actually densified later. API availability ≠ lake contents.  
+**Lab windows are unchanged** unless CoS re-appendixes — densify = lake capability only.
+See `data/ops/ncaam-odds-densify-20260904.md`.
 
 ---
 

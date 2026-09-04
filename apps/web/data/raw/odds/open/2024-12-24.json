@@ -1,0 +1,105 @@
+{
+  "timestamp": "2024-12-24T11:55:38Z",
+  "previous_timestamp": "2024-12-24T11:50:38Z",
+  "next_timestamp": "2024-12-24T12:00:38Z",
+  "data": [
+    {
+      "id": "930bded01eb74d2f5d9258ff3bda0156",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-25T23:30:56Z",
+      "home_team": "Hawai'i Rainbow Warriors",
+      "away_team": "Oakland Golden Grizzlies",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-24T11:51:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-24T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Hawai'i Rainbow Warriors",
+                  "price": -120,
+                  "point": -2.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -102,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-24T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "042055d6bbcdc44b2aa7eae16d8bb73d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2024-12-26T01:30:11Z",
+      "home_team": "Nebraska Cornhuskers",
+      "away_team": "Oregon St Beavers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2024-12-24T11:51:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2024-12-24T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -120,
+                  "point": -3.5
+                },
+                {
+                  "name": "Oregon St Beavers",
+                  "price": -102,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2024-12-24T11:51:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
