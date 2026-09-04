@@ -5,6 +5,13 @@ import { useEffect, useState } from "react";
 import EdgeBoard, { type EdgeBoardRow } from "@/components/EdgeBoard";
 import { MarketAsOfStamp } from "@/components/pro/MarketAsOfStamp";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
+import {
+  EDGE_BOARD_ASSEMBLE_HONESTY_MS,
+  edgeBoardAssembleHonestyCopy,
+  recallEdgeBoardLinesAsOf,
+  rememberEdgeBoardLinesAsOf,
+  type EdgeBoardAssembleHonestyReason,
+} from "@/lib/edge-board-assemble-honesty";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
@@ -30,10 +37,26 @@ type Props = {
   cfbWeek: 0 | 1;
 };
 
+type ClientState =
+  | { status: "loading" }
+  | {
+      status: "slow";
+      /** Last good as-of when known — never invent rows while waiting. */
+      lastLinesAsOf: string | null;
+    }
+  | { status: "ready"; data: AssemblePayload }
+  | {
+      status: "error";
+      reason: EdgeBoardAssembleHonestyReason;
+      /** Last good as-of when known — never invent rows. */
+      lastLinesAsOf: string | null;
+    };
+
 /**
  * Client-fetched Edge Board body.
  * Document HTML is not blocked on model-service / Odds (Alex waterfall fix).
  * As-of stamps (PR 416) fill after assemble returns.
+ * Honesty: past EDGE_BOARD_ASSEMBLE_HONESTY_MS escalate copy (keep fetch; no invent).
  */
 export default function EdgeBoardSportClient({
   sportKey,
@@ -41,15 +64,23 @@ export default function EdgeBoardSportClient({
   slate,
   cfbWeek,
 }: Props) {
-  const [state, setState] = useState<
-    | { status: "loading" }
-    | { status: "ready"; data: AssemblePayload }
-    | { status: "error" }
-  >({ status: "loading" });
+  const [state, setState] = useState<ClientState>({ status: "loading" });
 
   useEffect(() => {
     let cancelled = false;
     const controller = new AbortController();
+    const honestyTimer = setTimeout(() => {
+      if (cancelled) return;
+      setState((prev) =>
+        prev.status === "loading"
+          ? {
+              status: "slow",
+              lastLinesAsOf: recallEdgeBoardLinesAsOf(sportKey),
+            }
+          : prev,
+      );
+    }, EDGE_BOARD_ASSEMBLE_HONESTY_MS);
+
     const qs = new URLSearchParams();
     if (sportKey === "nfl") qs.set("slate", slate);
     if (sportKey === "cfb") qs.set("week", String(cfbWeek));
@@ -69,6 +100,8 @@ export default function EdgeBoardSportClient({
         if (!res.ok) throw new Error(`assemble ${res.status}`);
         const data = (await res.json()) as AssemblePayload;
         if (cancelled) return;
+        const linesAsOf = data.linesAsOf ?? null;
+        rememberEdgeBoardLinesAsOf(sportKey, linesAsOf);
         setState({
           status: "ready",
           data: {
@@ -77,19 +110,25 @@ export default function EdgeBoardSportClient({
             week1Count: data.week1Count ?? 0,
             fullCount: data.fullCount ?? 0,
             weeks: Array.isArray(data.weeks) ? data.weeks : [],
-            linesAsOf: data.linesAsOf ?? null,
+            linesAsOf,
             games: data.games ?? 0,
           },
         });
       } catch {
         if (cancelled || controller.signal.aborted) return;
-        setState({ status: "error" });
+        const lastLinesAsOf = recallEdgeBoardLinesAsOf(sportKey);
+        setState({
+          status: "error",
+          reason: "unavailable",
+          lastLinesAsOf,
+        });
       }
     }
 
     void load();
     return () => {
       cancelled = true;
+      clearTimeout(honestyTimer);
       controller.abort();
     };
   }, [sportKey, slate, cfbWeek]);
@@ -106,8 +145,13 @@ export default function EdgeBoardSportClient({
   const fullCount = state.status === "ready" ? state.data.fullCount : 0;
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
-  const boardLinesAsOf = state.status === "ready" ? state.data.linesAsOf : null;
-  // Always stamp from assemble linesAsOf — never invent "as of now" / bare ET.
+  const boardLinesAsOf =
+    state.status === "ready"
+      ? state.data.linesAsOf
+      : state.status === "error" || state.status === "slow"
+        ? state.lastLinesAsOf
+        : null;
+  // Always stamp from assemble linesAsOf (or last good) — never invent "as of now".
   const headerAsOf =
     state.status === "loading"
       ? "…"
@@ -266,7 +310,9 @@ export default function EdgeBoardSportClient({
         </div>
       ) : null}
 
-      {state.status === "ready" ? (
+      {state.status === "ready" ||
+      state.status === "error" ||
+      state.status === "slow" ? (
         <MarketAsOfStamp
           className="mt-3"
           asOf={boardLinesAsOf}
@@ -284,9 +330,22 @@ export default function EdgeBoardSportClient({
         </div>
       ) : null}
 
+      {state.status === "slow" ? (
+        <div
+          className="mt-6 rounded-2xl border border-amber-200/25 bg-black/30 p-12 text-center text-amber-100/90"
+          data-testid="edge-board-slow"
+        >
+          {edgeBoardAssembleHonestyCopy("timeout")}
+        </div>
+      ) : null}
+
       {state.status === "error" ? (
-        <div className="mt-6 rounded-2xl border border-white/12 bg-black/30 p-12 text-center text-gray-400">
-          Board temporarily unavailable. Refresh to try again.
+        <div
+          className="mt-6 rounded-2xl border border-amber-200/25 bg-black/30 p-12 text-center text-amber-100/90"
+          data-testid="edge-board-unavailable"
+          data-reason={state.reason}
+        >
+          {edgeBoardAssembleHonestyCopy(state.reason)}
         </div>
       ) : null}
 
