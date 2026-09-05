@@ -1,0 +1,77 @@
+{
+  "all_153_remain_quarantined": true,
+  "counts_match_expected": true,
+  "expected_duplicate_conflicts": 153,
+  "future_recovery_spec": {
+    "eligible_if": "unordered B7 pair + tip_date uniquely match exactly one schedule game with reversed home/away; provider event id preserved; no score-based survivor",
+    "n_ambiguous_remain_quarantined": 0,
+    "n_orientation_rows": 149,
+    "n_unambiguous_orientation_maps": 149,
+    "recovery_applied_in_phase_26c": false,
+    "status": "DRAFT_FUTURE_ONLY_NOT_APPLIED",
+    "transform": {
+      "authoritative_schedule_id": true,
+      "negate_home_spread": true,
+      "swap_home_away": true,
+      "total_unchanged": true
+    },
+    "true_duplicate_rows_remain_quarantined": 4
+  },
+  "model_performance_not_used": true,
+  "n_duplicate_conflicts": 153,
+  "n_orientation_mismatch": 149,
+  "n_true_duplicate_grain": 4,
+  "reason_tuple_counts": {
+    "['close_not_before_tip', 'duplicate_event_grain']": 2,
+    "['close_not_before_tip', 'participant_orientation_mismatch']": 74,
+    "['duplicate_event_grain']": 2,
+    "['participant_orientation_mismatch']": 75
+  },
+  "recovery_applied": false,
+  "schema_version": "ncaam-reversal-duplicate-diagnostic-26c-v1",
+  "scores_omitted": true,
+  "true_duplicate_cases": [
+    {
+      "away_team_id": "north carolina central",
+      "home_team_id": "morgan state",
+      "odds_event_id": "ede3d3d823d39e52e348ee69c8d4393f",
+      "reasons": [
+        "duplicate_event_grain"
+      ],
+      "tip_date": "2025-01-07",
+      "verdict": "true_duplicate_or_event_id_collision_quarantined"
+    },
+    {
+      "away_team_id": "coastal carolina",
+      "home_team_id": "georgia southern",
+      "odds_event_id": "7f8cf2b9d706f5b326401e903bc679c5",
+      "reasons": [
+        "duplicate_event_grain"
+      ],
+      "tip_date": "2025-01-23",
+      "verdict": "true_duplicate_or_event_id_collision_quarantined"
+    },
+    {
+      "away_team_id": "north carolina central",
+      "home_team_id": "morgan state",
+      "odds_event_id": "233826881a523d0d54a8deea5445a888",
+      "reasons": [
+        "close_not_before_tip",
+        "duplicate_event_grain"
+      ],
+      "tip_date": "2025-01-07",
+      "verdict": "true_duplicate_or_event_id_collision_quarantined"
+    },
+    {
+      "away_team_id": "coastal carolina",
+      "home_team_id": "georgia southern",
+      "odds_event_id": "941c728f4fe8d34308cd4a43297b1634",
+      "reasons": [
+        "close_not_before_tip",
+        "duplicate_event_grain"
+      ],
+      "tip_date": "2025-01-23",
+      "verdict": "true_duplicate_or_event_id_collision_quarantined"
+    }
+  ]
+}
