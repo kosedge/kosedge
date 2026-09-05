@@ -1,5 +1,5 @@
 /**
- * Shared Overview page header for NFL / NBA / MLB.
+ * Shared Overview page header for every sport hub.
  * Typography only — chrome lives on OverviewSportShell so header + slate
  * read as one continuous hero surface.
  */

@@ -14,12 +14,12 @@ import OverviewInsightsCard from "@/components/pro/OverviewInsightsCard";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 
 /**
- * Shared flagship Overview composition for NFL / NBA / MLB.
+ * Shared flagship Overview composition for every sport hub.
  * Keeps above-the-fold shell + Insights + research tools aligned so dedicated
  * sport pages cannot drift independently.
  *
  * Header + slate share one hero surface (visual continuity); components stay
- * separate for reuse.
+ * separate for reuse. Daily sports show Today’s Slate; NFL/CFB show This Week’s.
  */
 export default function OverviewSportShell({
   sportKey,
@@ -57,6 +57,8 @@ export default function OverviewSportShell({
             sport={sportKey}
             games={slate.games}
             status={slate.status}
+            weekLabel={slate.weekLabel}
+            week={slate.week}
           />
         </div>
       </section>

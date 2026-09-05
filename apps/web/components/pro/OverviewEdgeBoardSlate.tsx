@@ -13,17 +13,37 @@ const SLATE_META: Record<string, { title: string; emptyHint: string }> = {
   nfl: {
     title: "This Week’s Slate",
     emptyHint:
-      "No live REG matchup cards on the board yet. Open Edge Board when markets post.",
+      "No NFL REG week on the board yet — schedule not released or not pulled. Shell stays ready; we do not invent matchups.",
+  },
+  cfb: {
+    title: "This Week’s Slate",
+    emptyHint:
+      "No CFB week on the board yet — schedule not released or not pulled. Open Edge Board when Week 1 posts.",
   },
   nba: {
     title: "Today’s Slate",
     emptyHint:
-      "No NBA game board posted right now. Shell stays ready — we do not invent matchups.",
+      "No NBA games scheduled on the board yet. When opening night posts, the first slate appears here — we do not invent matchups.",
   },
   mlb: {
     title: "Today’s Slate",
     emptyHint:
-      "No MLB slate rows yet. Edge Board refreshes when books and starters post.",
+      "No MLB slate rows yet. When the next day posts, cards appear here — we do not invent matchups.",
+  },
+  nhl: {
+    title: "Today’s Slate",
+    emptyHint:
+      "No NHL games scheduled on the board yet. Opening-night cards appear when the schedule posts — we do not invent matchups.",
+  },
+  wnba: {
+    title: "Today’s Slate",
+    emptyHint:
+      "No WNBA slate on the board right now. Next available day posts here when scheduled — we do not invent matchups.",
+  },
+  ncaam: {
+    title: "Today’s Slate",
+    emptyHint:
+      "No college basketball board posted yet. Opening slate appears when the schedule posts — we do not invent matchups.",
   },
 };
 
@@ -37,32 +57,43 @@ const STATUS_HINT: Partial<Record<OverviewSlateStatus, string>> = {
 function subtleStatusLine(
   status: OverviewSlateStatus,
   gameCount: number,
+  weekLabel?: string | null,
 ): string | null {
   if (status === "timeout" || status === "error") return null;
   if (status === "empty" || gameCount === 0) return null;
-  if (gameCount === 1) return "1 matchup on the board";
-  return `${gameCount} matchups on the board`;
+  const count =
+    gameCount === 1 ? "1 matchup on the board" : `${gameCount} matchups on the board`;
+  return weekLabel ? `${weekLabel} · ${count}` : count;
 }
 
 export default function OverviewEdgeBoardSlate({
   sport,
   games,
   status = "ready",
+  weekLabel = null,
+  week = null,
 }: {
   sport: string;
   games: TonightGame[];
   status?: OverviewSlateStatus;
+  weekLabel?: string | null;
+  week?: number | null;
 }) {
   const meta = SLATE_META[sport] ?? {
     title: "Today’s Slate",
-    emptyHint: "Slate cards appear when live board data is available.",
+    emptyHint: "Slate cards appear when the schedule posts — we do not invent matchups.",
   };
-  const edgeBoardHref = `/edge-board/${sport}`;
+  const cfbWeek =
+    typeof week === "number" && Number.isFinite(week) ? week : 1;
+  const edgeBoardHref =
+    sport === "cfb"
+      ? `/edge-board/cfb?week=${cfbWeek}`
+      : `/edge-board/${sport}`;
   const emptyCopy =
     status === "timeout" || status === "error"
       ? (STATUS_HINT[status] ?? meta.emptyHint)
       : meta.emptyHint;
-  const statusLine = subtleStatusLine(status, games.length);
+  const statusLine = subtleStatusLine(status, games.length, weekLabel);
 
   return (
     <div className="relative mt-2.5 border-t border-white/10 pt-2.5 sm:mt-3 sm:pt-3">
