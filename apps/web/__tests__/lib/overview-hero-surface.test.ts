@@ -25,9 +25,12 @@ describe("Overview hero surface (NFL/NBA/MLB)", () => {
     expect(slate).toMatch(/This Week.?s Slate/);
     expect(slate).toMatch(/Today.?s Slate/);
     expect(slate).toMatch(/Full Edge Board →/);
-    // No second hero title competing with Overview.
+    // Gold small-caps label (original eyebrow treatment), not a second hero h2.
+    expect(slate).toMatch(
+      /text-\[11px\] font-semibold uppercase tracking-\[0\.14em\] text-kos-gold/,
+    );
     expect(slate).not.toMatch(/title:\s*"Edge Board"/);
-    expect(slate).not.toMatch(/eyebrow:/);
+    expect(slate).not.toMatch(/<h2/);
   });
 
   it("header is typography-only (chrome owned by shell)", () => {

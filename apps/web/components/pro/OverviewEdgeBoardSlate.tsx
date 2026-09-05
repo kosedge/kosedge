@@ -65,25 +65,27 @@ export default function OverviewEdgeBoardSlate({
   const statusLine = subtleStatusLine(status, games.length);
 
   return (
-    <div className="relative mt-3.5 border-t border-white/10 pt-3.5 sm:mt-4 sm:pt-4">
-      <div className="flex flex-wrap items-center justify-between gap-2 sm:gap-3">
+    <div className="relative mt-2.5 border-t border-white/10 pt-2.5 sm:mt-3 sm:pt-3">
+      <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="min-w-0 max-w-2xl">
-          <h2 className="text-base font-semibold tracking-tight text-kos-text sm:text-lg">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
             {meta.title}
-          </h2>
+          </p>
           {statusLine ? (
-            <p className="mt-0.5 text-[11px] text-kos-text/50">{statusLine}</p>
+            <p className="mt-0.5 text-[11px] leading-tight text-kos-text/50">
+              {statusLine}
+            </p>
           ) : null}
         </div>
         <Link
           href={edgeBoardHref}
-          className="min-h-10 inline-flex items-center rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3.5 py-1.5 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55 hover:bg-kos-gold/25"
+          className="min-h-9 inline-flex items-center rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55 hover:bg-kos-gold/25"
         >
           Full Edge Board →
         </Link>
       </div>
 
-      <div className="mt-3">
+      <div className="mt-2.5">
         <WeeklyGamesScroller
           games={games}
           sport={sport}
