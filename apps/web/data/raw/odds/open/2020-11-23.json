@@ -1,0 +1,1222 @@
+{
+  "timestamp": "2020-11-23T11:55:00Z",
+  "previous_timestamp": "2020-11-23T11:45:00Z",
+  "next_timestamp": "2020-11-23T12:05:00Z",
+  "data": [
+    {
+      "id": "b262e632fa366d0cdc2044accd48ae92",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-11-27T16:00:00Z",
+      "home_team": "Auburn Tigers",
+      "away_team": "Gonzaga Bulldogs",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -115,
+                  "point": 11.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -11.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 11.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -11.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aa13d8936336357b25a13430cbb35390",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-11-29T22:00:00Z",
+      "home_team": "Texas Tech Red Raiders",
+      "away_team": "Houston Cougars",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -114,
+                  "point": 2.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -116,
+                  "point": -2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -109,
+                  "point": 2.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -112,
+                  "point": -2.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d9a8e389718b4a263b9e54a3ffee1176",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-02T02:30:00Z",
+      "home_team": "Kentucky Wildcats",
+      "away_team": "Kansas Jayhawks",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -116,
+                  "point": 1.0
+                },
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -114,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -112,
+                  "point": 1.0
+                },
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "470f5bbe05f61bc27ed3fea9f424e4d3",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-04T22:59:00Z",
+      "home_team": "Marquette Golden Eagles",
+      "away_team": "Wisconsin Badgers",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -115,
+                  "point": 9.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -115,
+                  "point": -9.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -110,
+                  "point": 9.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -9.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4a4a9815c2d603cce92b8d7b7a795815",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-06T18:00:00Z",
+      "home_team": "Texas Longhorns",
+      "away_team": "Villanova Wildcats",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -115,
+                  "point": 6.0
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -115,
+                  "point": -6.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5f98eb46b33ce8c7133a7673e1a04f24",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-08T22:59:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Illinois Fighting Illini",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -114,
+                  "point": -1.0
+                },
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -116,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "caa7f03e5c344199059ba4b804362fa8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-08T22:59:00Z",
+      "home_team": "Iowa Hawkeyes",
+      "away_team": "North Carolina Tar Heels",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -116,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -114,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -114,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -109,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f58771e81d84105ed22955fb4572db99",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-08T22:59:00Z",
+      "home_team": "Kansas Jayhawks",
+      "away_team": "Creighton Bluejays",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -112,
+                  "point": 4.0
+                },
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -116,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -109,
+                  "point": 4.0
+                },
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -114,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8a6d812d7150f7e030c206f7ee3d5f5b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-09T22:59:00Z",
+      "home_team": "Wisconsin Badgers",
+      "away_team": "Louisville Cardinals",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -115,
+                  "point": 8.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -115,
+                  "point": -8.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -110,
+                  "point": 8.0
+                },
+                {
+                  "name": "Wisconsin Badgers",
+                  "price": -110,
+                  "point": -8.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "95f81c08bb5a93507b422ca5e5a7ff59",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-17T22:59:00Z",
+      "home_team": "Texas Tech Red Raiders",
+      "away_team": "Kansas Jayhawks",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -116,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -112,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -114,
+                  "point": -3.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -109,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "777f835f095c13a5e7df979eafa20e6c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-19T17:00:00Z",
+      "home_team": "Iowa Hawkeyes",
+      "away_team": "Gonzaga Bulldogs",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -114,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -112,
+                  "point": -1.5
+                },
+                {
+                  "name": "Iowa Hawkeyes",
+                  "price": -109,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "98b1cf5c430bc1e56e45a4a6da2128a4",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-19T19:00:00Z",
+      "home_team": "Ohio State Buckeyes",
+      "away_team": "North Carolina Tar Heels",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -116,
+                  "point": -4.5
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -112,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -112,
+                  "point": -4.5
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -109,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5fbc410502faa01b0de4b9136b1a4be6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-19T21:15:00Z",
+      "home_team": "UCLA Bruins",
+      "away_team": "Kentucky Wildcats",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -116,
+                  "point": -5.0
+                },
+                {
+                  "name": "UCLA Bruins",
+                  "price": -114,
+                  "point": 5.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "UCLA Bruins",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fd6cc120f7d3128fddd7e638a85b49d3",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-19T22:59:00Z",
+      "home_team": "Virginia Cavaliers",
+      "away_team": "Villanova Wildcats",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -115,
+                  "point": -0.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -115,
+                  "point": 0.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -110,
+                  "point": -0.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 0.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c8a83ade04959c96b7306dcf82f85d2c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-22T22:59:00Z",
+      "home_team": "Kansas Jayhawks",
+      "away_team": "West Virginia Mountaineers",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -116,
+                  "point": -3.5
+                },
+                {
+                  "name": "West Virginia Mountaineers",
+                  "price": -112,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -114,
+                  "point": -3.5
+                },
+                {
+                  "name": "West Virginia Mountaineers",
+                  "price": -109,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f50b4b97efb7bd502b4abf8ba2c7fdf0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-23T22:59:00Z",
+      "home_team": "Oregon Ducks",
+      "away_team": "UCLA Bruins",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Oregon Ducks",
+                  "price": -114,
+                  "point": 1.5
+                },
+                {
+                  "name": "UCLA Bruins",
+                  "price": -115,
+                  "point": -1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Oregon Ducks",
+                  "price": -109,
+                  "point": 1.5
+                },
+                {
+                  "name": "UCLA Bruins",
+                  "price": -112,
+                  "point": -1.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6c4d863cf91e5c232ed2ec031b215108",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-02T22:59:00Z",
+      "home_team": "Florida St Seminoles",
+      "away_team": "Duke Blue Devils",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -115,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "df4b260b38e315d6a6dd9ba96ae81007",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-16T22:59:00Z",
+      "home_team": "Florida St Seminoles",
+      "away_team": "North Carolina Tar Heels",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -112,
+                  "point": 3.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -116,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -109,
+                  "point": 3.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -114,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f94d04c4d31eccb9386c16a64b847495",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-06T22:59:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "North Carolina Tar Heels",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -116,
+                  "point": -3.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -112,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "411f0af03a10538652285f54f646f2a1",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-13T22:59:00Z",
+      "home_team": "Virginia Cavaliers",
+      "away_team": "North Carolina Tar Heels",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -114,
+                  "point": 4.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -116,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -109,
+                  "point": 4.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -112,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "342203f51ed2abfc5a072ed9d280bee0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-15T22:59:00Z",
+      "home_team": "Florida St Seminoles",
+      "away_team": "Virginia Cavaliers",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -115,
+                  "point": -5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-11-23T11:50:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:08Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9b8e18b581c98db3178dac0f2596ed20",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-20T22:59:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Virginia Cavaliers",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-11-23T11:45:47Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:45:47Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -114,
+                  "point": 3.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -116,
+                  "point": -3.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "f01c94ff56a23433387b90a44493da3a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-11-26T00:00:00Z",
+      "home_team": "Villanova Wildcats",
+      "away_team": "Boston College Eagles",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-11-23T11:50:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:35Z",
+              "outcomes": [
+                {
+                  "name": "Boston College Eagles",
+                  "price": -106,
+                  "point": 14.0
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -106,
+                  "point": -14.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6a94c81db211340af6ac05a907044362",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-11-26T02:30:00Z",
+      "home_team": "Baylor Bears",
+      "away_team": "Arizona St Sun Devils",
+      "bookmakers": []
+    },
+    {
+      "id": "471aa0802b7771b568e687a64faac6e8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-11-26T18:30:00Z",
+      "home_team": "Kansas Jayhawks",
+      "away_team": "Gonzaga Bulldogs",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-11-23T11:50:35Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-11-23T11:50:35Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -122,
+                  "point": -3.5
+                },
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": 109,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

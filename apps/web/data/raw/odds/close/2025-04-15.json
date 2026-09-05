@@ -1,0 +1,40 @@
+{
+  "timestamp": "2025-04-08T03:20:38Z",
+  "previous_timestamp": "2025-04-08T03:15:39Z",
+  "next_timestamp": "2025-10-24T22:05:39Z",
+  "data": [
+    {
+      "id": "935e3431859f7ea600918db2662e888b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-08T00:51:41Z",
+      "home_team": "Houston Cougars",
+      "away_team": "Florida Gators",
+      "bookmakers": [
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-04-08T03:09:23Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-08T03:09:23Z",
+              "outcomes": [
+                {
+                  "name": "Florida Gators",
+                  "price": 150,
+                  "point": -2.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -200,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

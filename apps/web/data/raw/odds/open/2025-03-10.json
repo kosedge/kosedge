@@ -1,0 +1,4406 @@
+{
+  "timestamp": "2025-03-10T11:55:38Z",
+  "previous_timestamp": "2025-03-10T11:50:38Z",
+  "next_timestamp": "2025-03-10T12:00:38Z",
+  "data": [
+    {
+      "id": "61c8489173585f4bc64b35ce40b29a98",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-10T22:00:00Z",
+      "home_team": "Towson Tigers",
+      "away_team": "Delaware Blue Hens",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -106,
+                  "point": 5.0
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -106,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -105,
+                  "point": 4.5
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -115,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Delaware Blue Hens",
+                  "price": -110,
+                  "point": 5.5
+                },
+                {
+                  "name": "Towson Tigers",
+                  "price": -110,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b4842ebf90c38d13bdcd2e03daf8ed30",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-10T22:00:00Z",
+      "home_team": "Northwestern St Demons",
+      "away_team": "Texas A&M-CC Islanders",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -105,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -115,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 129.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 129.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -101,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -111,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 129.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 129.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -120,
+                  "point": 4.5
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -102,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -112,
+                  "point": 4.5
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -108,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 130.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 130.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 129.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 129.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Northwestern St Demons",
+                  "price": -117,
+                  "point": 4.5
+                },
+                {
+                  "name": "Texas A&M-CC Islanders",
+                  "price": -104,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 130.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 130.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7054cb3adb4c4fa22b840a92bccf1586",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-10T23:00:00Z",
+      "home_team": "Troy Trojans",
+      "away_team": "Arkansas St Red Wolves",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -112,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -108,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -106,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -106,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -102,
+                  "point": -2.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -120,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas St Red Wolves",
+                  "price": -106,
+                  "point": -1.5
+                },
+                {
+                  "name": "Troy Trojans",
+                  "price": -115,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0bea247223bfd6833446577f2f99d93f",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-10T23:00:00Z",
+      "home_team": "Furman Paladins",
+      "away_team": "Wofford Terriers",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -108,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -112,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -106,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -106,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -105,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -115,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -113,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -108,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -107,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-03-10T11:54:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Furman Paladins",
+                  "price": -105,
+                  "point": -2.5
+                },
+                {
+                  "name": "Wofford Terriers",
+                  "price": -115,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4f99c467a1556818e139959151cacc46",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-10T23:00:00Z",
+      "home_team": "Robert Morris Colonials",
+      "away_team": "Oakland Golden Grizzlies",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -113,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -108,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -115,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -105,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -112,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -108,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-03-10T11:54:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5e2feef1dbb8edca29e437acfe5439e7",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-10T23:30:00Z",
+      "home_team": "Idaho State Bengals",
+      "away_team": "Montana St Bobcats",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -115,
+                  "point": -1.0
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -105,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -111,
+                  "point": -1.0
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -101,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -106,
+                  "point": -1.5
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -115,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -104,
+                  "point": -1.5
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -118,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": -1.0
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -110,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": -1.0
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -110,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -112,
+                  "point": -1.0
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -108,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -102,
+                  "point": -1.5
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -118,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": -1.0
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -110,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-03-10T11:54:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Idaho State Bengals",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Montana St Bobcats",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "35cd6563fdebe0fc37e5e1d73dd4805b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-11T00:30:00Z",
+      "home_team": "UNC Wilmington Seahawks",
+      "away_team": "Charleston Cougars",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -115,
+                  "point": 3.0
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -105,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -111,
+                  "point": 3.0
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -101,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": 3.0
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -110,
+                  "point": -3.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Charleston Cougars",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "UNC Wilmington Seahawks",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8503426d7a7f1e25ac5f0cb2193330fb",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-11T00:30:00Z",
+      "home_team": "Nicholls St Colonels",
+      "away_team": "Incarnate Word Cardinals",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -105,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -115,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -101,
+                  "point": 4.0
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -111,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -109,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -112,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Incarnate Word Cardinals",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Nicholls St Colonels",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "554062b18448651ec38c1fb7e5ebe464",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-11T01:00:00Z",
+      "home_team": "Saint Mary's Gaels",
+      "away_team": "Pepperdine Waves",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -105,
+                  "point": 19.5
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -115,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -101,
+                  "point": 19.5
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -111,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -112,
+                  "point": 20.5
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -108,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": 20.0
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -110,
+                  "point": -20.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -110,
+                  "point": 20.0
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -110,
+                  "point": -20.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -115,
+                  "point": 20.5
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -105,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -102,
+                  "point": 19.5
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -120,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Pepperdine Waves",
+                  "price": -115,
+                  "point": 20.5
+                },
+                {
+                  "name": "Saint Mary's Gaels",
+                  "price": -106,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d2c90b3d104908d407729d089ee1616d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-11T01:30:00Z",
+      "home_team": "Cleveland St Vikings",
+      "away_team": "Youngstown St Penguins",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -115,
+                  "point": -2.0
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -105,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -111,
+                  "point": -2.0
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -101,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -108,
+                  "point": -2.5
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -113,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -106,
+                  "point": -2.5
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -114,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -102,
+                  "point": -2.5
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -118,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -105,
+                  "point": -2.5
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -115,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -115,
+                  "point": -2.0
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -105,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-03-10T11:54:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Youngstown St Penguins",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2df6805779ab05be33e9345c6e234c66",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-11T02:00:00Z",
+      "home_team": "Portland St Vikings",
+      "away_team": "Idaho Vandals",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -106,
+                  "point": 5.0
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -106,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -107,
+                  "point": 4.5
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -114,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -117,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -105,
+                  "point": 4.5
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -115,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -105,
+                  "point": 4.5
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -115,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-03-10T11:54:39Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Idaho Vandals",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Portland St Vikings",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "22f859ae5e12637303a06ba787525b78",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-11T03:30:00Z",
+      "home_team": "Gonzaga Bulldogs",
+      "away_team": "San Francisco Dons",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 155.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 155.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -106,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -106,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 155.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 155.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 155.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 155.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 155.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 155.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-03-10T11:53:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:53:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-03-10T11:54:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -112,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -109,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 156.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 156.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-10T11:54:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -14.5
+                },
+                {
+                  "name": "San Francisco Dons",
+                  "price": -110,
+                  "point": 14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-10T11:54:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -18,12 +18,15 @@ PASS flips from Lab output (CoS → Ryan decides).
 | v1.0    | [`NFL_SPREAD_SCORECARD_v1.md`](./NFL_SPREAD_SCORECARD_v1.md)             | [`data/ops/lab/nfl-spread-scorecard-v1.json`](../../data/ops/lab/nfl-spread-scorecard-v1.json)                         |
 | v1.0    | [`NCAAM_FAIR_LAB_SCORECARD_v1.md`](./NCAAM_FAIR_LAB_SCORECARD_v1.md)     | [`data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json`](../../data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json)     |
 | v1.1    | [`NCAAM_FAIR_LAB_SCORECARD_v1_1.md`](./NCAAM_FAIR_LAB_SCORECARD_v1_1.md) | [`data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.1.json`](../../data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.1.json) |
+| v1.2    | [`NCAAM_FAIR_LAB_SCORECARD_v1_2.md`](./NCAAM_FAIR_LAB_SCORECARD_v1_2.md) | [`data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.2.json`](../../data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.2.json) |
 
 NCAAM fair scorecard fills after protocol-frozen materialize
 (`data/ops/ncaam-lab-fair-engine-20260904.md`,
 `data/ops/ncaam-lab-first-scorecard-20260904.md`,
-`data/ops/ncaam-lab-scorecard-v1-1-20260904.md`).
-v1.1 = denser results-join + B7 alias expand; same gates/cuts. RED = honest success.
+`data/ops/ncaam-lab-scorecard-v1-1-20260904.md`,
+`data/ops/ncaam-lab-scorecard-v1-2-20260905.md`).
+v1.1 = denser results-join + B7 alias expand; v1.2 = denser Path A odds lake
+(honesty-clean); same gates/cuts. RED = honest success.
 
 ## Machine twins
 
@@ -38,7 +41,7 @@ python3 scripts/lab/nfl_spread_validation_v1.py
 # NCAAM Lab fair (research only — no Edge Board writes)
 python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a
 python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut test_a
-python3 apps/web/scripts/lab_ncaam_fair_scorecard.py              # freeze v1.1
+python3 apps/web/scripts/lab_ncaam_fair_scorecard.py              # freeze v1.2
 python3 apps/web/scripts/lab_ncaam_fair_scorecard.py --no-densify # thin v1 path
 ```
 

@@ -1,0 +1,307 @@
+{
+  "timestamp": "2021-11-05T21:55:00Z",
+  "previous_timestamp": "2021-11-05T21:45:00Z",
+  "next_timestamp": "2021-11-05T22:05:00Z",
+  "data": [
+    {
+      "id": "a31ff7252cbd66a61481b764bf3b3705",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-11-09T23:00:00Z",
+      "home_team": "Michigan St Spartans",
+      "away_team": "Kansas Jayhawks",
+      "bookmakers": [
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-11-05T21:49:32Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-11-05T21:49:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:49:32Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -109,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-11-05T21:46:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:46:04Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2021-11-05T21:46:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:46:03Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -109,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-11-05T21:46:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-11-05T21:46:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:46:02Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -115,
+                  "point": -4.5
+                },
+                {
+                  "name": "Michigan St Spartans",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-11-05T21:46:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "6f6b22fc49403e749a465bf54c7adcce",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-11-10T02:30:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Kentucky Wildcats",
+      "bookmakers": [
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-11-05T21:49:32Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-11-05T21:49:32Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:49:32Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -108,
+                  "point": -2.0
+                },
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-11-05T21:46:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:46:04Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -1.0
+                },
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -110,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2021-11-05T21:46:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:46:03Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -108,
+                  "point": -2.0
+                },
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-11-05T21:46:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-11-05T21:46:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-11-05T21:46:02Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -111,
+                  "point": -2.0
+                },
+                {
+                  "name": "Kentucky Wildcats",
+                  "price": -118,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-11-05T21:46:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

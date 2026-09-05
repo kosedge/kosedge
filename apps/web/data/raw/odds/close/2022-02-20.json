@@ -1,0 +1,4611 @@
+{
+  "timestamp": "2022-02-20T21:55:00Z",
+  "previous_timestamp": "2022-02-20T21:45:00Z",
+  "next_timestamp": "2022-02-20T22:05:00Z",
+  "data": [
+    {
+      "id": "f6d8005818cc9efa844842bcea56574e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T20:04:48Z",
+      "home_team": "Oakland Golden Grizzlies",
+      "away_team": "Northern Kentucky Norse",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": -120,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": -120,
+                  "point": -5.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -125,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": 105,
+                  "point": -5.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -135,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": -145,
+                  "point": -4.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": 110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": -114,
+                  "point": -6.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -114,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 136.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": -116,
+                  "point": 6.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -114,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Northern Kentucky Norse",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -125,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": 100,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a8a293897c5f49c33591f27a84831918",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T21:10:06Z",
+      "home_team": "San Jos\u00e9 St Spartans",
+      "away_team": "New Mexico Lobos",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 129.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 129.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -120,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -125,
+                  "point": -3.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -105,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 126.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -105,
+                  "point": -4.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -125,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -102,
+                  "point": -5.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -125,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 149.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -110,
+                  "point": -6.0
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": 6.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 125.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -115,
+                  "point": -4.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 125.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 125.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:20Z",
+              "outcomes": [
+                {
+                  "name": "New Mexico Lobos",
+                  "price": -114,
+                  "point": -4.0
+                },
+                {
+                  "name": "San Jos\u00e9 St Spartans",
+                  "price": -114,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 127.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 127.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d13542d61da3f7818d39be7831009a28",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T20:15:23Z",
+      "home_team": "Creighton Bluejays",
+      "away_team": "Marquette Golden Eagles",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": 100,
+                  "point": -1.5
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -132,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:20Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -106,
+                  "point": -1.0
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -122,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -108,
+                  "point": -1.0
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -122,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -108,
+                  "point": -1.0
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -122,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -120,
+                  "point": -0.5
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -110,
+                  "point": 0.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -108,
+                  "point": -1.0
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -122,
+                  "point": 1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -125,
+                  "point": 170.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 170.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": 110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -145,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -105,
+                  "point": -1.5
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -120,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 100,
+                  "point": 171.5
+                },
+                {
+                  "name": "Under",
+                  "price": -125,
+                  "point": 171.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 169.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Creighton Bluejays",
+                  "price": -118,
+                  "point": 0.5
+                },
+                {
+                  "name": "Marquette Golden Eagles",
+                  "price": -105,
+                  "point": -0.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "45809475a58062d65713b4eb04473218",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T20:05:58Z",
+      "home_team": "SMU Mustangs",
+      "away_team": "Memphis Tigers",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": 19.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -120,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -120,
+                  "point": 19.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -130,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": 100,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -120,
+                  "point": 20.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -109,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -120,
+                  "point": 20.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -109,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -125,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:20Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:20Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -119,
+                  "point": 20.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -109,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -111,
+                  "point": 19.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -115,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -115,
+                  "point": 19.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 148.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -111,
+                  "point": -3.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -119,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -120,
+                  "point": 20.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -109,
+                  "point": -20.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -118,
+                  "point": 19.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -105,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -105,
+                  "point": 19.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -125,
+                  "point": -19.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -125,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "90bc5ebe986836de23be5834d99dcf73",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-21T00:30:00Z",
+      "home_team": "USC Trojans",
+      "away_team": "Washington St Cougars",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -115,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -115,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-02-20T21:50:29Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -102,
+                  "point": 7.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -114,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -106,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -105,
+                  "point": -7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -115,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -115,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -105,
+                  "point": 7.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -109,
+                  "point": -7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -109,
+                  "point": 7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "USC Trojans",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "7ef5dff222b8ff859631ee0997e97c32",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-21T01:00:00Z",
+      "home_team": "Missouri Tigers",
+      "away_team": "Mississippi St Bulldogs",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -105,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -108,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -106,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -116,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -114,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-02-20T21:50:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -101,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -111,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -108,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -108,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -101,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -111,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -108,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -118,
+                  "point": -4.0
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": 100,
+                  "point": 4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -109,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -109,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Mississippi St Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "Missouri Tigers",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "60d5b95ad09f0dfa4d20de4bb4be3c55",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T22:30:00Z",
+      "home_team": "Purdue Boilermakers",
+      "away_team": "Rutgers Scarlet Knights",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -115,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -115,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -109,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -109,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -109,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -106,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -106,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": 100,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -105,
+                  "point": -12.5
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -115,
+                  "point": 12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -109,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -109,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -110,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -110,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-02-20T21:50:29Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Purdue Boilermakers",
+                  "price": -106,
+                  "point": -13.0
+                },
+                {
+                  "name": "Rutgers Scarlet Knights",
+                  "price": -106,
+                  "point": 13.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": 100,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2298b885ae4921de8e51987f9f393f08",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T22:00:00Z",
+      "home_team": "Hartford Hawks",
+      "away_team": "Stony Brook Seawolves",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -112,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -109,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -115,
+                  "point": -2.0
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -105,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 146.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -101,
+                  "point": -2.0
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -111,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 146.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -104,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -118,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -109,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -109,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-02-20T21:50:29Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 146.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:29Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -101,
+                  "point": -2.0
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -111,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -112,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -109,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -105,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -115,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -112,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -109,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -112,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -109,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": 100,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -118,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -116,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -114,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "44f3ef39417cf20ccdbecc8cf395e45a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T22:00:00Z",
+      "home_team": "Loyola (MD) Greyhounds",
+      "away_team": "Lehigh Mountain Hawks",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -115,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -105,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": 100,
+                  "point": 4.0
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -120,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 136.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:50:26Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:26Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": 100,
+                  "point": 4.0
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -118,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-02-20T21:50:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -109,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -109,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:50:21Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -114,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -116,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-02-20T21:50:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Lehigh Mountain Hawks",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Loyola (MD) Greyhounds",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:50:27Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ab564aad6085a054409980b94836537a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-02-20T20:03:20Z",
+      "home_team": "Green Bay Phoenix",
+      "away_team": "Cleveland St Vikings",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-02-20T21:48:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:48:48Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -125,
+                  "point": -10.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -105,
+                  "point": 10.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-02-20T21:43:24Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:43:24Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -100000,
+                  "point": -6.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -100000,
+                  "point": 6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:43:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -100000,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -100000,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-02-20T21:48:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:48:48Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -128,
+                  "point": -10.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": 100,
+                  "point": 10.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-02-20T21:47:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:47:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -125,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": 100,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-02-20T21:43:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:43:19Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -112,
+                  "point": -9.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -115,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-02-20T21:48:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:48:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 131.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:48:46Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -114,
+                  "point": -9.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -114,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-02-20T21:43:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:43:27Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -120,
+                  "point": -9.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -109,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-02-20T21:43:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:43:26Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -120,
+                  "point": -9.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -109,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-02-20T21:43:27Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:43:27Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -120,
+                  "point": -9.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -109,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2022-02-20T21:48:47Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-02-20T21:48:47Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 144.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-02-20T21:48:47Z",
+              "outcomes": [
+                {
+                  "name": "Cleveland St Vikings",
+                  "price": -133,
+                  "point": -9.5
+                },
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": 105,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

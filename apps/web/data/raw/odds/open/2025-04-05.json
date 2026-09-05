@@ -1,0 +1,2008 @@
+{
+  "timestamp": "2025-04-05T11:55:40Z",
+  "previous_timestamp": "2025-04-05T11:50:38Z",
+  "next_timestamp": "2025-04-05T12:00:38Z",
+  "data": [
+    {
+      "id": "ff0b2136cc60802fe6ab0c35193b2caf",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-05T17:30:00Z",
+      "home_team": "Boise State Broncos",
+      "away_team": "Nebraska Cornhuskers",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Boise State Broncos",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 155.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 155.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Boise State Broncos",
+                  "price": -106,
+                  "point": -2.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -106,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 155.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 155.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Boise State Broncos",
+                  "price": -120,
+                  "point": -1.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -102,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Boise State Broncos",
+                  "price": -108,
+                  "point": -2.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -112,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 155.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 155.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-04-05T11:53:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Boise State Broncos",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "Nebraska Cornhuskers",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8628c192c1a212929ea7dd570d8aa80a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-05T20:00:00Z",
+      "home_team": "Villanova Wildcats",
+      "away_team": "UCF Knights",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "UCF Knights",
+                  "price": -113,
+                  "point": 3.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -107,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "UCF Knights",
+                  "price": -109,
+                  "point": 3.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -103,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-04-05T11:53:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "UCF Knights",
+                  "price": -115,
+                  "point": 3.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -105,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "UCF Knights",
+                  "price": -115,
+                  "point": 3.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -105,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd5cf48db64241c8161c0845399d9340",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-05T22:09:00Z",
+      "home_team": "Auburn Tigers",
+      "away_team": "Florida Gators",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -112,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -108,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -106,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -106,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-04-05T11:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 160.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-04-05T11:53:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -109,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -112,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 160.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-04-05T11:55:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:17Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 2.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "39b102534d2155056298515ca865f77c",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-06T00:49:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Houston Cougars",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -104,
+                  "point": -5.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -118,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -120,
+                  "point": -4.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": 100,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -106,
+                  "point": -5.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -106,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2025-04-05T11:55:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-04-05T11:55:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:17Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -5.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -5.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -109,
+                  "point": -5.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -112,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -102,
+                  "point": -5.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -118,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2025-04-05T11:53:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -5.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:53:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "60cf8a1db5f29a8f8af4e1969aaed7f4",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-08T00:50:00Z",
+      "home_team": "Auburn Tigers",
+      "away_team": "Duke Blue Devils",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -120,
+                  "point": 6.5
+                },
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -102,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -106,
+                  "point": 6.0
+                },
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -106,
+                  "point": -6.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -115,
+                  "point": 5.5
+                },
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -115,
+                  "point": 6.5
+                },
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -106,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-04-05T11:42:18Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:42:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "490f0f2af566585eccc2971d7dbe5f6a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-08T00:50:00Z",
+      "home_team": "Auburn Tigers",
+      "away_team": "Houston Cougars",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": 104,
+                  "point": 1.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -116,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": 100,
+                  "point": 1.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -120,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -108,
+                  "point": 1.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -113,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -117,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-04-05T11:42:18Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:42:18Z",
+              "outcomes": [
+                {
+                  "name": "Auburn Tigers",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:42:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "83e388b7fe092b7a7c33f31f7fdcc6c1",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-08T00:50:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Florida Gators",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -120,
+                  "point": -4.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -102,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 158.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 158.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -101,
+                  "point": -4.0
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -111,
+                  "point": 4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -4.0
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -115,
+                  "point": 4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -105,
+                  "point": -4.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -118,
+                  "point": -4.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -103,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -117,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "935e3431859f7ea600918db2662e888b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-04-08T00:50:00Z",
+      "home_team": "Houston Cougars",
+      "away_team": "Florida Gators",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Florida Gators",
+                  "price": -114,
+                  "point": -1.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -106,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2025-04-05T11:55:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:16Z",
+              "outcomes": [
+                {
+                  "name": "Florida Gators",
+                  "price": -106,
+                  "point": -1.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -106,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -1.0
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-04-05T11:55:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Florida Gators",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -106,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:55:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2025-04-05T11:42:18Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2025-04-05T11:42:18Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

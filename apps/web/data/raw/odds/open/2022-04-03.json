@@ -1,0 +1,719 @@
+{
+  "timestamp": "2022-04-03T11:55:00Z",
+  "previous_timestamp": "2022-04-03T11:45:00Z",
+  "next_timestamp": "2022-04-03T12:05:00Z",
+  "data": [
+    {
+      "id": "3ac0ababad974c5c6fc79dabff763220",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2022-04-05T01:20:00Z",
+      "home_team": "Kansas Jayhawks",
+      "away_team": "North Carolina Tar Heels",
+      "bookmakers": [
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2022-04-03T11:50:12Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -112,
+                  "point": -4.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -108,
+                  "point": 4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betus",
+          "title": "BetUS",
+          "last_update": "2022-04-03T11:50:11Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2022-04-03T11:50:13Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:13Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -5.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2022-04-03T11:48:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:01Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2022-04-03T11:48:04Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:04Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -112,
+                  "point": -4.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -108,
+                  "point": 4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2022-04-03T11:50:13Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:13Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:13Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2022-04-03T11:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -106,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -106,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "intertops",
+          "title": "Intertops",
+          "last_update": "2022-04-03T11:50:17Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:17Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:17Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2022-04-03T11:50:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:12Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2022-04-03T11:48:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:04Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -112,
+                  "point": -4.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -108,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2022-04-03T11:48:03Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:03Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -105,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2022-04-03T11:48:04Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:04Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -112,
+                  "point": -4.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -108,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:04Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2022-04-03T11:46:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:46:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:46:11Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2022-04-03T11:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -106,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -106,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2022-04-03T11:46:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:46:06Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -116,
+                  "point": -4.0
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -112,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:46:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2022-04-03T11:48:03Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:03Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -105,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -115,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:03Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2022-04-03T11:48:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:48:02Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:48:02Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2022-04-03T11:46:08Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2022-04-03T11:46:08Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -109,
+                  "point": -4.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -109,
+                  "point": 4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2022-04-03T11:46:08Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

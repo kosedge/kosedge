@@ -1,0 +1,238 @@
+{
+  "task": "NCAAM Path A odds lake integrity",
+  "generated_at": "2026-09-05T08:36:54.634417+00:00",
+  "path": "A",
+  "grades": {
+    "coverage": "GREEN",
+    "open_honesty": "GREEN",
+    "duplicates": "GREEN",
+    "duplicates_note": "graded on event_id+book+open_time only; multi-day event+book is expected",
+    "event_team_identity": "GREEN",
+    "timestamps": "GREEN",
+    "line_price_validity": "AMBER",
+    "missingness": "GREEN",
+    "outliers": "AMBER"
+  },
+  "raw": {
+    "n_open_json": 876,
+    "n_close_json": 876,
+    "n_paired": 876,
+    "open_only": [],
+    "close_only": [],
+    "honesty_fails_gt7d": [],
+    "n_honesty_fails": 0,
+    "empty_open_event_days": [],
+    "bad_json": [],
+    "paired_ranges": [
+      {
+        "start": "2020-11-16",
+        "end": "2021-04-13",
+        "days": 149
+      },
+      {
+        "start": "2021-11-04",
+        "end": "2022-04-12",
+        "days": 160
+      },
+      {
+        "start": "2022-11-05",
+        "end": "2023-04-11",
+        "days": 158
+      },
+      {
+        "start": "2023-10-10",
+        "end": "2024-04-16",
+        "days": 190
+      },
+      {
+        "start": "2024-08-20",
+        "end": "2024-08-26",
+        "days": 7
+      },
+      {
+        "start": "2024-10-27",
+        "end": "2025-04-15",
+        "days": 171
+      },
+      {
+        "start": "2025-10-25",
+        "end": "2025-12-04",
+        "days": 41
+      }
+    ],
+    "paired_min": "2020-11-16",
+    "paired_max": "2025-12-04"
+  },
+  "parquet": {
+    "path": "/workspace/apps/web/data/processed/ncaab_historical_odds_open_close.parquet",
+    "n_rows": 321147,
+    "n_events": 26759,
+    "columns": [
+      "away_team",
+      "book",
+      "close_spread_home",
+      "close_time",
+      "close_total",
+      "commence_time",
+      "event_id",
+      "home_team",
+      "open_spread_home",
+      "open_time",
+      "open_total"
+    ],
+    "duplicates": [
+      {
+        "key": [
+          "event_id",
+          "book",
+          "open_time"
+        ],
+        "n_dup_groups": 0,
+        "max_count": 1
+      },
+      {
+        "key": [
+          "event_id",
+          "book"
+        ],
+        "n_dup_groups": 8306,
+        "max_count": 28
+      }
+    ],
+    "identity": {
+      "null_event_id": 0,
+      "blank_home_team": 0,
+      "blank_away_team": 0,
+      "home_eq_away": 0
+    },
+    "timestamps": {
+      "open_time": {
+        "min": "2020-11-16T12:00:00Z",
+        "max": "2025-12-04T12:00:00Z"
+      },
+      "close_time": {
+        "min": "2020-11-16T22:00:00Z",
+        "max": "2025-12-04T22:00:00Z"
+      }
+    },
+    "outliers": {
+      "close_spread_abs_gt_45": 27,
+      "close_spread_null": 7857,
+      "open_spread_abs_gt_45": 0,
+      "open_spread_null": 7271,
+      "close_total_lt_100": 107,
+      "close_total_gt_200": 2,
+      "close_total_null": 10658,
+      "open_total_lt_100": 20,
+      "open_total_gt_200": 0,
+      "open_total_null": 11888
+    },
+    "price_abs_gt_1000_cells": 0,
+    "missingness": {
+      "event_id": {
+        "nulls": 0,
+        "pct": 0.0
+      },
+      "home_team": {
+        "nulls": 0,
+        "pct": 0.0
+      },
+      "away_team": {
+        "nulls": 0,
+        "pct": 0.0
+      },
+      "book": {
+        "nulls": 0,
+        "pct": 0.0
+      },
+      "open_spread_home": {
+        "nulls": 7271,
+        "pct": 0.0226
+      },
+      "close_spread_home": {
+        "nulls": 7857,
+        "pct": 0.0245
+      },
+      "open_total": {
+        "nulls": 11888,
+        "pct": 0.037
+      },
+      "close_total": {
+        "nulls": 10658,
+        "pct": 0.0332
+      },
+      "open_time": {
+        "nulls": 0,
+        "pct": 0.0
+      },
+      "close_time": {
+        "nulls": 0,
+        "pct": 0.0
+      }
+    },
+    "top_bookmakers": [
+      {
+        "book": "draftkings",
+        "count": 26618
+      },
+      {
+        "book": "betrivers",
+        "count": 25442
+      },
+      {
+        "book": "williamhill_us",
+        "count": 23895
+      },
+      {
+        "book": "fanduel",
+        "count": 23675
+      },
+      {
+        "book": "lowvig",
+        "count": 22868
+      },
+      {
+        "book": "bovada",
+        "count": 20004
+      },
+      {
+        "book": "betmgm",
+        "count": 19945
+      },
+      {
+        "book": "betonlineag",
+        "count": 19861
+      },
+      {
+        "book": "betus",
+        "count": 17713
+      },
+      {
+        "book": "pointsbetus",
+        "count": 14058
+      },
+      {
+        "book": "mybookieag",
+        "count": 12830
+      },
+      {
+        "book": "sugarhouse",
+        "count": 12796
+      },
+      {
+        "book": "wynnbet",
+        "count": 12297
+      },
+      {
+        "book": "twinspires",
+        "count": 11744
+      },
+      {
+        "book": "unibet_us",
+        "count": 11155
+      }
+    ],
+    "spread_col_used": "open_spread_home",
+    "total_col_used": "open_total"
+  }
+}
