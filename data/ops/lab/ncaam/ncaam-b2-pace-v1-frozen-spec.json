@@ -1,0 +1,70 @@
+{
+  "candidate_id": "B2-PACE-v1",
+  "method_id": "kenpom_adjem_pit_tempo_plus_game_hca_v1",
+  "research_alias": "C3",
+  "frozen_at_utc": "2026-09-05T10:41:59.495128+00:00",
+  "hca": 2.8696,
+  "formula": {
+    "adjem_diff": "clip(home_adjem - away_adjem, -30, +30)",
+    "expected_possessions": "(home_adjt + away_adjt) / 2",
+    "raw_home_margin": "adjem_diff * (expected_possessions / 100) + 2.8696",
+    "fair_home_margin": "clip(raw_home_margin, -28, +28)"
+  },
+  "sign_convention": "positive fair = home margin points",
+  "fail_closed_requires": [
+    "home_adjem",
+    "away_adjem",
+    "home_adjt",
+    "away_adjt",
+    "pit_asof_both_sides"
+  ],
+  "forbidden_fallbacks": [
+    "national_avg_tempo",
+    "fitted_beta",
+    "market_implied_tempo",
+    "post_tip_ratings",
+    "SETTLED"
+  ],
+  "incumbent_preserved": true,
+  "production_default": false,
+  "materialize_uses_challenger": false,
+  "input_hashes": {
+    "fair_b2_pace_v1_py_sha256": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707",
+    "train_a_parquet_sha256": "bbc7a3c71ba8c2af93dc04a2fbd11f706a5929f5cc35eba76c4a2ec5a3dabb66",
+    "train_a_diagnostics_sha256": "644bf8f61918023e63c9edf18503cc12c83284f97df8283e06236ee2d61fc296"
+  },
+  "evaluation_window_preregistered": {
+    "pocket_id": "pocket_2025",
+    "start": "2025-11-01",
+    "end": "2025-12-31",
+    "scored_in_this_phase": false
+  },
+  "primary_endpoint": "paired_delta_mae_vs_b1 = MAE(B2-PACE-v1)-MAE(B1)",
+  "secondary_endpoints": [
+    "mae_vs_c0",
+    "rmse",
+    "signed_bias",
+    "calibration",
+    "by_abs_adjem_gap",
+    "favorites_gap_ge_12",
+    "pit_coverage",
+    "neutral_descriptive_split"
+  ],
+  "hard_locks": [
+    "no_test_a_challenger_scoring",
+    "no_pocket_2025_performance",
+    "no_open_shrink",
+    "no_market_feature",
+    "no_injury_feature",
+    "no_hca_retune",
+    "no_neutral_fix",
+    "no_fitted_beta",
+    "no_gate_changes",
+    "no_odds_pull",
+    "no_scorecard_rewrite",
+    "no_production_default_change",
+    "no_board_play",
+    "no_merge_deploy"
+  ],
+  "commit_sha": "PENDING_COMMIT"
+}

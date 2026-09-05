@@ -91,6 +91,7 @@ def materialize_lab_fair(
     if not ok_leak:
         raise RuntimeError(f"KenPom leakage audit failed: {n_viol} as_of > tip violations")
 
+    # Incumbent only. B2-PACE-v1 is a non-default challenger (fair_b2_pace_v1) and must never become the silent materialize path.
     games = compute_fair_b2(games, weights_path=weights_path)
 
     # Drop rows still without fair_spread (missing KenPom both sides)
