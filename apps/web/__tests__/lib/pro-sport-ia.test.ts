@@ -232,15 +232,25 @@ describe("pro sport IA", () => {
     expect(fantasy?.subtitle).toMatch(/educational guillotine/i);
   });
 
-  it("keeps NFL Overview on shared Edge Board shell (no redundant Weekly Slate hero)", () => {
-    const src = readFileSync(
-      path.join(__dirname, "../../app/(pro)/pro/nfl/overview/page.tsx"),
-      "utf8",
-    );
-    expect(src).toMatch(/OverviewSportShell/);
-    expect(src).toMatch(/loadOverviewSlateGames/);
-    expect(src).not.toMatch(/Open Weekly Slate/);
-    expect(src).not.toMatch(/matchup briefs pending/i);
+  it("keeps dedicated Overviews on shared Edge Board shell", () => {
+    for (const sport of [
+      "nfl",
+      "nba",
+      "mlb",
+      "nhl",
+      "wnba",
+      "ncaam",
+      "cfb",
+    ] as const) {
+      const src = readFileSync(
+        path.join(__dirname, `../../app/(pro)/pro/${sport}/overview/page.tsx`),
+        "utf8",
+      );
+      expect(src).toMatch(/OverviewSportShell/);
+      expect(src).toMatch(/loadOverviewSlateGames/);
+      expect(src).not.toMatch(/Open Weekly Slate/);
+      expect(src).not.toMatch(/matchup briefs pending/i);
+    }
   });
 
   it("keeps Guillotine destination honest: educational lists, not weekly elimination/waiver", () => {

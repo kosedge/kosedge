@@ -14,9 +14,12 @@ import OverviewInsightsCard from "@/components/pro/OverviewInsightsCard";
 import SportOverviewSection from "@/components/pro/SportOverviewSection";
 
 /**
- * Shared flagship Overview composition for NFL / NBA / MLB.
+ * Shared flagship Overview composition for every sport hub.
  * Keeps above-the-fold shell + Insights + research tools aligned so dedicated
  * sport pages cannot drift independently.
+ *
+ * Header + slate share one hero surface (visual continuity); components stay
+ * separate for reuse. Daily sports show Today’s Slate; NFL/CFB show This Week’s.
  */
 export default function OverviewSportShell({
   sportKey,
@@ -42,14 +45,23 @@ export default function OverviewSportShell({
       : "sm:grid-cols-2";
 
   return (
-    <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
-      <OverviewPageHeader sportLabel={sportLabel} />
-
-      <OverviewEdgeBoardSlate
-        sport={sportKey}
-        games={slate.games}
-        status={slate.status}
-      />
+    <main className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-5">
+      <section
+        aria-label={`${sportLabel} Overview`}
+        className="relative overflow-hidden rounded-2xl border border-kos-gold/20 bg-[radial-gradient(ellipse_at_top_left,_rgba(245,185,66,0.14),_transparent_55%),linear-gradient(160deg,#0c0c0e_0%,#141218_45%,#0a0a0c_100%)] px-4 py-3.5 sm:px-5 sm:py-4"
+      >
+        <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-size-[28px_28px] opacity-40" />
+        <div className="relative">
+          <OverviewPageHeader sportLabel={sportLabel} />
+          <OverviewEdgeBoardSlate
+            sport={sportKey}
+            games={slate.games}
+            status={slate.status}
+            weekLabel={slate.weekLabel}
+            week={slate.week}
+          />
+        </div>
+      </section>
 
       <div className="mt-6 grid gap-4 lg:grid-cols-2">
         {sections.map((section) => (

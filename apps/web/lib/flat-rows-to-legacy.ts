@@ -151,6 +151,12 @@ export type LegacyEdgeBoardRow = {
   time?: string;
   kickoffDate?: string;
   kickoffTime?: string;
+  /** ISO commence when assemble provides it — Overview day grouping. */
+  commenceTime?: string;
+  /** REG / CFB week when known — Overview week filter. */
+  week?: number | null;
+  /** Matchup label for CFB week stamp helpers (away @ home). */
+  game?: string;
   linesAsOf?: string;
   linesStale?: boolean;
   teamA: TeamBlock;
@@ -863,6 +869,15 @@ export function flatRowsToLegacy(
       time,
       kickoffDate: lineRow?.kickoffDate ?? totalRow?.kickoffDate,
       kickoffTime: lineRow?.kickoffTime ?? totalRow?.kickoffTime,
+      commenceTime:
+        lineRow?.commenceTime ??
+        totalRow?.commenceTime ??
+        (typeof (lineRow ?? totalRow)?.time === "string" &&
+        String((lineRow ?? totalRow)?.time).includes("T")
+          ? String((lineRow ?? totalRow)?.time)
+          : undefined),
+      week: weekNum,
+      game: `${away} @ ${home}`,
       linesAsOf,
       linesStale: isLinesStale(linesAsOf),
       teamA: {

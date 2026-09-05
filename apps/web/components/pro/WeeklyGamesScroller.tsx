@@ -145,13 +145,29 @@ function withFallback(value: string | undefined, fallback: string): string {
 function MatchupCards({
   games,
   content,
+  compact = false,
 }: {
   games: TonightGame[];
   content: SportScrollerContent;
+  /** Tighter cards for Overview hero embed — does not change standalone scroller. */
+  compact?: boolean;
 }) {
+  const cardShell = compact
+    ? "w-64 shrink-0 rounded-lg border border-white/10 bg-black/35 p-3"
+    : "w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4";
+  const titleClass = compact
+    ? "mt-2 text-sm font-semibold text-kos-text"
+    : "mt-3 text-sm font-semibold text-kos-text";
+  const signalClass = compact
+    ? "mt-1.5 text-xs text-kos-text/70"
+    : "mt-2 text-xs text-kos-text/70";
+  const footerClass = compact
+    ? "mt-2 flex items-center justify-between text-xs"
+    : "mt-3 flex items-center justify-between text-xs";
+
   return (
     <div className="-mx-1 overflow-x-auto pb-1">
-      <div className="flex min-w-max gap-3 px-1">
+      <div className={`flex min-w-max px-1 ${compact ? "gap-2.5" : "gap-3"}`}>
         {games.map((game) => {
           const status = getGameStatus(game.row.time);
           const signal = getSignal(game, content);
@@ -182,11 +198,11 @@ function MatchupCards({
                 </span>
                 <span className="text-xs text-kos-text/60">{gameTime}</span>
               </div>
-              <div className="mt-3 text-sm font-semibold text-kos-text">
+              <div className={titleClass}>
                 {game.row.teamA.name} @ {game.row.teamB.name}
               </div>
-              <div className="mt-2 text-xs text-kos-text/70">{signal}</div>
-              <div className="mt-3 flex items-center justify-between text-xs">
+              <div className={signalClass}>{signal}</div>
+              <div className={footerClass}>
                 <span className="text-kos-text/60">
                   Best {bestLine} / {bestTotal}
                 </span>
@@ -203,10 +219,7 @@ function MatchupCards({
 
           if (!hasData) {
             return (
-              <div
-                key={game.slug}
-                className="w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4"
-              >
+              <div key={game.slug} className={cardShell}>
                 {card}
               </div>
             );
@@ -216,7 +229,7 @@ function MatchupCards({
             <Link
               key={game.slug}
               href={`/pro/articles/${game.slug}`}
-              className="w-72 shrink-0 rounded-xl border border-white/10 bg-black/35 p-4 transition hover:border-kos-gold/45 hover:bg-kos-gold/5"
+              className={`${cardShell} transition hover:border-kos-gold/45 hover:bg-kos-gold/5`}
             >
               {card}
             </Link>
@@ -265,7 +278,7 @@ export default function WeeklyGamesScroller({
   }
 
   if (embedded) {
-    return <MatchupCards games={games} content={content} />;
+    return <MatchupCards games={games} content={content} compact />;
   }
 
   return (
