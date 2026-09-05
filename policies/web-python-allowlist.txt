@@ -19,6 +19,7 @@ apps/web/scripts/write_dratings_from_fetch.py
 apps/web/scripts/lab_ncaam_fair_materialize.py
 apps/web/scripts/lab_ncaam_fair_scorecard.py
 apps/web/scripts/lab_ncaam_results_coverage_receipt.py
+apps/web/scripts/ncaam_odds_lake_integrity.py
 apps/web/src/audit_data_usage.py
 apps/web/src/build_actual_margins.py
 apps/web/src/build_ensemble_ratings.py
