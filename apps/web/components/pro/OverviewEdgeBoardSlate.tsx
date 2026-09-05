@@ -1,6 +1,7 @@
 /**
- * Shared Overview Edge Board slate — primary above-the-fold product surface.
+ * Shared Overview Edge Board slate — continuation of the Overview hero surface.
  * One CTA only: Full Edge Board. Sport-specific matchup cards via WeeklyGamesScroller.
+ * Card chrome lives on OverviewSportShell (header + slate = one visual unit).
  */
 
 import Link from "next/link";
@@ -8,25 +9,19 @@ import type { TonightGame } from "@/lib/edge-board-tonight";
 import type { OverviewSlateStatus } from "@/lib/overview-slate-games";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
 
-const SLATE_META: Record<
-  string,
-  { eyebrow: string; title: string; emptyHint: string }
-> = {
+const SLATE_META: Record<string, { title: string; emptyHint: string }> = {
   nfl: {
-    eyebrow: "Current slate",
-    title: "Edge Board",
+    title: "This Week’s Slate",
     emptyHint:
       "No live REG matchup cards on the board yet. Open Edge Board when markets post.",
   },
   nba: {
-    eyebrow: "Today’s slate",
-    title: "Edge Board",
+    title: "Today’s Slate",
     emptyHint:
       "No NBA game board posted right now. Shell stays ready — we do not invent matchups.",
   },
   mlb: {
-    eyebrow: "Today’s slate",
-    title: "Edge Board",
+    title: "Today’s Slate",
     emptyHint:
       "No MLB slate rows yet. Edge Board refreshes when books and starters post.",
   },
@@ -39,6 +34,16 @@ const STATUS_HINT: Partial<Record<OverviewSlateStatus, string>> = {
     "Couldn’t load slate cards just now. Open Full Edge Board for the live board.",
 };
 
+function subtleStatusLine(
+  status: OverviewSlateStatus,
+  gameCount: number,
+): string | null {
+  if (status === "timeout" || status === "error") return null;
+  if (status === "empty" || gameCount === 0) return null;
+  if (gameCount === 1) return "1 matchup on the board";
+  return `${gameCount} matchups on the board`;
+}
+
 export default function OverviewEdgeBoardSlate({
   sport,
   games,
@@ -49,8 +54,7 @@ export default function OverviewEdgeBoardSlate({
   status?: OverviewSlateStatus;
 }) {
   const meta = SLATE_META[sport] ?? {
-    eyebrow: "Current slate",
-    title: "Edge Board",
+    title: "Today’s Slate",
     emptyHint: "Slate cards appear when live board data is available.",
   };
   const edgeBoardHref = `/edge-board/${sport}`;
@@ -58,17 +62,18 @@ export default function OverviewEdgeBoardSlate({
     status === "timeout" || status === "error"
       ? (STATUS_HINT[status] ?? meta.emptyHint)
       : meta.emptyHint;
+  const statusLine = subtleStatusLine(status, games.length);
 
   return (
-    <section className="mt-6 rounded-2xl border border-kos-gold/25 bg-linear-to-r from-kos-gold/12 via-black/40 to-black/60 p-5 sm:p-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div className="max-w-2xl">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold">
-            {meta.eyebrow}
-          </p>
-          <h2 className="mt-2 text-xl font-semibold tracking-tight text-kos-text">
+    <div className="relative mt-6 border-t border-white/10 pt-5 sm:mt-7 sm:pt-6">
+      <div className="flex flex-wrap items-end justify-between gap-3 sm:gap-4">
+        <div className="min-w-0 max-w-2xl">
+          <h2 className="text-lg font-semibold tracking-tight text-kos-text sm:text-xl">
             {meta.title}
           </h2>
+          {statusLine ? (
+            <p className="mt-1 text-xs text-kos-text/50">{statusLine}</p>
+          ) : null}
         </div>
         <Link
           href={edgeBoardHref}
@@ -86,6 +91,6 @@ export default function OverviewEdgeBoardSlate({
           emptyCopy={emptyCopy}
         />
       </div>
-    </section>
+    </div>
   );
 }

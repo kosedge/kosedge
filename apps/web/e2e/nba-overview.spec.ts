@@ -11,7 +11,7 @@ test("NBA overview loads desk without error boundary", async ({ page }) => {
   await expect(page.getByText(/^NBA$/).first()).toBeVisible();
   await expect(page.getByText(/Something Went Wrong/i)).toHaveCount(0);
   await expect(
-    page.getByRole("heading", { name: /^Edge Board$/i }),
+    page.getByRole("heading", { name: /^Today’s Slate$/i }),
   ).toBeVisible();
   await expect(
     page.getByRole("link", { name: /Full Edge Board/i }),
