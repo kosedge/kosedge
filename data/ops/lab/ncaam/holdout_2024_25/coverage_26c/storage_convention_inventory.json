@@ -1,0 +1,77 @@
+{
+  "awaiting_decision_owner": "Ryan",
+  "candidate_conventions_for_ncaam_raw": [
+    {
+      "cons": [
+        "needs Ryan bucket/prefix decision",
+        "credential wiring"
+      ],
+      "description": "Mirror NFL DR: optional remote URI env (e.g. NCAAM_HOLDOUT_RAW_URI=s3://\u2026/ncaam/holdout_2024_25/raw/espn_scoreboard) + local cache + sha256 sidecars",
+      "id": "A_s3_r2_immutable_prefix",
+      "pros": [
+        "matches NFL ops muscle memory",
+        "immutable object keys",
+        "offline-capable"
+      ]
+    },
+    {
+      "cons": [
+        "more tooling; overkill for day-keyed ESPN boards"
+      ],
+      "description": "sha256-keyed objects with manifest index in-repo; blobs external",
+      "id": "B_content_addressed_object_store",
+      "pros": [
+        "dedupe",
+        "strong integrity"
+      ]
+    },
+    {
+      "cons": [
+        "rejected for ~100MiB+ growing lab datasets; PR bloat"
+      ],
+      "description": "Track raw JSON via Git LFS",
+      "id": "C_git_lfs",
+      "pros": [
+        "simple clone path"
+      ],
+      "status": "not_recommended"
+    }
+  ],
+  "existing_patterns_inventoried": {
+    "git_lfs": {
+      "configured": false,
+      "recommendation": "do_not_add_raw_espn_to_lfs"
+    },
+    "local_holdout_raw": {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/raw/espn_scoreboard",
+      "payload_count": 156,
+      "sha256_sidecar_count": 156,
+      "total_bytes": 104772233,
+      "total_mib": 99.92
+    },
+    "nfl_dr_s3_r2": {
+      "docs": [
+        "docs/NFL_DATA_RESILIENCE.md",
+        "docs/NFL_DATA_PLATFORM.md"
+      ],
+      "env_var": "NFL_DR_REMOTE_URI",
+      "local_default": "data/backups/nfl",
+      "module": "services/model-service/data_platform_nfl/dr_backup.py",
+      "raw_object_table_pattern": "nfl_dp_raw_objects (checksum + payload; not git)",
+      "retention_env": "NFL_DR_BACKUP_KEEP",
+      "sidecar": ".sha256 next to object",
+      "upload_fn": "upload_dump_if_configured",
+      "uri_shape": "s3://bucket/prefix (AWS CLI; R2-compatible endpoint via AWS config)"
+    }
+  },
+  "hard_stops": [
+    "no_bucket_provisioning_in_26c",
+    "no_raw_deletion",
+    "no_migration_execution",
+    "await_ryan_architecture_decision"
+  ],
+  "phase": "2.6C",
+  "provisioning_performed": false,
+  "schema_version": "ncaam-storage-convention-inventory-26c-v1",
+  "scores_omitted": true
+}

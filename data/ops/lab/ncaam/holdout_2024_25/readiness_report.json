@@ -1,13 +1,17 @@
 {
+  "ats_roi_clv_calibration_omitted": true,
   "b1_eligibility_count": 3599,
-  "before_complete_intersection_count": 2318,
   "blockers": [
     "BLOCKED_TIMESTAMP_INTEGRITY",
     "BLOCKED_STORAGE_ARCHITECTURE"
   ],
+  "candidate_predictions_omitted": true,
   "complete_intersection_count": 3334,
+  "espn_taxonomy_sums_to_expected": true,
   "holdout_id": "ncaam_holdout_2024_25_v1_1",
   "holdout_unseal_omitted": true,
+  "identity_collision_safe": true,
+  "identity_unresolved_cleared": true,
   "manifest_hash_status": {
     "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
     "features_labels_joined_for_evaluation": false,
@@ -16,28 +20,33 @@
   },
   "merged_deployed_promoted": false,
   "model_implementation_omitted": true,
+  "n_duplicate_conflict": 153,
+  "n_espn_rejects": 530,
   "n_gte_100_not_sufficient_for_representativeness": true,
+  "n_timestamp_dishonest": 2006,
+  "new_seal_issued": false,
+  "offline_mac_recovery_applied": false,
   "outcome_distribution_inspection_omitted": true,
   "package_version": "v1.1",
   "performance_scoring_omitted": true,
-  "phase": "2.6B",
-  "pr_490_untouched": true,
-  "representativeness_answer": "broadly_representative_on_observed_feature_slices_with_documented_exclusions",
+  "phase": "2.6C",
+  "representativeness_conclusion": "MATERIAL_SELECTION_DETECTED",
+  "reversal_recovery_applied": false,
   "scheduled_event_count": 5769,
   "scores_omitted": true,
+  "seal_evaluated": false,
   "secondary_status_notes": [
     "SEALED_COVERAGE_REVIEW_REQUIRED"
   ],
   "selection_integrity_notes": [
-    "complete_intersection=3334 of mapped=5769 (57.8%)",
-    "b1_eligible=3599 of odds=5758",
-    "timestamp_dishonest=2006",
-    "identity_unresolved=0",
-    "duplicate_conflict=153",
+    "complete_intersection=3334 of mapped=5769",
+    "b1_eligible=3599",
+    "timestamp_dishonest=2006 (offline_manifest_rows=2006)",
+    "duplicate_conflict=153 (orientation=149)",
     "espn_rejects=530",
-    "slate_complete=false"
+    "representativeness=MATERIAL_SELECTION_DETECTED"
   ],
-  "slate_complete": false,
   "status": "BLOCKED_MULTIPLE",
-  "supersedes_holdout_id": "ncaam_holdout_2024_25_v1"
+  "storage_architecture_decision_pending": true,
+  "threshold_version": "phase26c_feature_only_v1"
 }
