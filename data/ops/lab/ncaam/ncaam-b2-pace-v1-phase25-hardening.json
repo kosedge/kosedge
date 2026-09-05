@@ -1,0 +1,533 @@
+{
+  "generated_at_utc": "2026-09-05T11:11:24.999365+00:00",
+  "phase": "2.5",
+  "window": "train_a_only",
+  "candidate_id": "B2-PACE-v1",
+  "method_id": "kenpom_adjem_pit_tempo_plus_game_hca_v1",
+  "hca": 2.8696,
+  "locked_interpretation": {
+    "b2_pace_v1_fixes_confirmed_dimensional_defect": true,
+    "train_a_mae_vs_c0_delta": -0.449,
+    "train_a_mae_vs_c0_ci95": [
+      -0.562,
+      -0.336
+    ],
+    "train_a_mae_vs_b1_delta": 0.314,
+    "train_a_mae_vs_b1_ci95": [
+      0.232,
+      0.394
+    ],
+    "calibration_c0_to_pace": [
+      0.703,
+      1.013
+    ],
+    "verdict": "successful_unit_correction_not_evidence_b1_beaten",
+    "status": "non_default_research_challenger",
+    "do_not_alter": true
+  },
+  "content_hashes": {
+    "fair_b2_pace_v1_py": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707",
+    "frozen_spec_md": "e4ede770477857c545c239478f8f4aa46e1091fdeadf8b1418475a672ad7b943",
+    "diagnostics_script": "be0a9dbefe4a6aaa22a859288a86976c5ef78e2521abbc70f63e7cab32e86cf4",
+    "phase25_script": "75729790809c609d529ee5fcc6c8f32b95dd47cacb350e8d686be957e9333b16",
+    "frozen_spec_json": "967fba5b5c8b43cfca6ad7f8107ce1fe978d362461b17a4e0c6dbf877b33a3ff",
+    "train_a_parquet": "bbc7a3c71ba8c2af93dc04a2fbd11f706a5929f5cc35eba76c4a2ec5a3dabb66",
+    "train_a_manifest_083657": "f7cf481ba84933fb17202a4ac07a68d6ff8747d7c6a2db72768aedc164a2c270",
+    "train_a_manifest_083535": "6f80571d0a748a140c59fce4563db0f04d034c78efab6c081b5ffc928cfbc87e",
+    "train_a_diagnostics_json": "644bf8f61918023e63c9edf18503cc12c83284f97df8283e06236ee2d61fc296"
+  },
+  "commit_binding": {
+    "feature_commit": "0d08b963014c5c3f51378cf4c2558cf0a8e287bc",
+    "prior_pr_head": "a5ccc463c10090ae819fc6fe7beeb34139bda462",
+    "fair_b2_pace_v1_sha256_at_feature_commit": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707",
+    "fair_b2_pace_v1_sha256_at_prior_pr_head": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707",
+    "fair_b2_pace_v1_sha256_workdir": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707",
+    "files_changed_feature_to_prior_head": [
+      "data/ops/lab/ncaam/ncaam-b2-pace-v1-frozen-spec.json"
+    ],
+    "prior_head_change_summary": "stamp-only: commit_sha PENDING\u2192feature commit; formula bytes unchanged",
+    "challenger_behavior_unchanged_feature_to_prior_head": true
+  },
+  "incumbent_reproduction": {
+    "row_count_raw": 3676,
+    "row_count_recomputed": 3676,
+    "event_id_set_equal": true,
+    "n_both_nonnull_fair": 3676,
+    "max_abs_fair_diff": 0.0,
+    "exact_equality": true,
+    "null_mask_equal": true,
+    "tolerance": "exact float equality required; no tolerance applied",
+    "schema_columns_preserved": true,
+    "challenger_does_not_overwrite_fair_spread_home": true
+  },
+  "outcome_attach_receipt": {
+    "n_lab": 3676,
+    "n_with_actual_pack": 3583,
+    "n_with_actual_event_id_fill": 0,
+    "n_with_actual": 3583,
+    "outcome_coverage": 0.9747,
+    "pack_receipt": {
+      "packs": [
+        {
+          "path": "/workspace/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+          "exists": true,
+          "n_games": 5699,
+          "n_kept": 5699,
+          "n_omit_b7": 0,
+          "n_omit_score": 0
+        },
+        {
+          "path": "/workspace/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+          "exists": true,
+          "n_games": 3438,
+          "n_kept": 3438,
+          "n_omit_b7": 0,
+          "n_omit_score": 0
+        }
+      ],
+      "n_scored_rows_raw": 9137,
+      "n_omitted_missing_b7": 0,
+      "n_omitted_missing_score": 0,
+      "n_omitted_ambiguous_key": 1,
+      "n_unique_keys": 9135
+    },
+    "sources": [
+      "schedule_sot_packs"
+    ]
+  },
+  "n_eligible_with_actual": 3583,
+  "overall_train_a": {
+    "C0_incumbent_b2": {
+      "n": 3583,
+      "mae": 9.508934886966228,
+      "rmse": 11.960921537945481,
+      "signed_bias": -0.295198353335194,
+      "cal_slope": 0.7034781536421855,
+      "cal_intercept": 1.2669988730389632,
+      "bootstrap_mae": {
+        "n": 3583,
+        "mae": 9.508934886966228,
+        "ci95": [
+          9.267162198576612,
+          9.749181957856546
+        ],
+        "n_bootstrap": 2000,
+        "seed": 20260905,
+        "grain": "game_row"
+      }
+    },
+    "B2_PACE_v1": {
+      "n": 3583,
+      "mae": 9.060352650206628,
+      "rmse": 11.448770945621082,
+      "signed_bias": 0.37028333626144283,
+      "cal_slope": 1.0127896282456885,
+      "cal_intercept": 0.31141365618979516,
+      "bootstrap_mae": {
+        "n": 3583,
+        "mae": 9.060352650206628,
+        "ci95": [
+          8.823046934564427,
+          9.291195822936398
+        ],
+        "n_bootstrap": 2000,
+        "seed": 20260905,
+        "grain": "game_row"
+      }
+    },
+    "B1_close_consensus": {
+      "n": 3583,
+      "mae": 8.746003889415364,
+      "rmse": 11.092108108188926,
+      "signed_bias": 0.37513173556062823,
+      "cal_slope": 1.0093919294335478,
+      "cal_intercept": 0.3319469389319428,
+      "bootstrap_mae": {
+        "n": 3583,
+        "mae": 8.746003889415364,
+        "ci95": [
+          8.519570426855262,
+          8.961311826013782
+        ],
+        "n_bootstrap": 2000,
+        "seed": 20260905,
+        "grain": "game_row"
+      }
+    }
+  },
+  "venue_join_receipt": {
+    "packs": [
+      {
+        "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+        "exists": true,
+        "as_of": "2026-09-04T17:28Z",
+        "source": "espn_scoreboard_public",
+        "slate_complete": false,
+        "n_games": 5699,
+        "n_with_neutral_flag": 5699
+      },
+      {
+        "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+        "exists": true,
+        "as_of": "2026-09-04T17:29Z",
+        "source": "espn_scoreboard_public",
+        "slate_complete": false,
+        "n_games": 3438,
+        "n_with_neutral_flag": 3438
+      }
+    ],
+    "reliable_pit_neutral_flag_in_lab_inputs": false,
+    "fail_closed_unknown_policy": "unknown_venue_status_must_not_be_coerced_to_home_or_neutral",
+    "reason": "neutral_site exists on Schedule SoT packs but is NOT a Lab fair-engine input. Incumbent C0 and B2-PACE-v1 apply HCA to every game unconditionally.",
+    "original_source": "espn_scoreboard_public",
+    "raw_field": "neutral_site",
+    "accepted_values": [
+      true,
+      false
+    ],
+    "identity_join_key": "(tip_date, home_team_id=pack.home, away_team_id=pack.away)",
+    "duplicate_behavior": "ambiguous_keys_dropped_fail_closed",
+    "conflicting_source_behavior": "single_SoT_pack_per_season; no multi-source merge",
+    "as_of_availability": "pack as_of is pack-build timestamp, not game-time PIT stamp",
+    "known_limitations": [
+      "semi-home tournaments may be labeled neutral inconsistently upstream",
+      "mislabeled_neutral risk inherited from ESPN scoreboard",
+      "pack as_of is retrospective (2026-09-04), not a contemporaneous PIT capture"
+    ],
+    "n_ambiguous_keys_dropped": 1,
+    "n_joined_nonnull": 3583,
+    "n_neutral_true": 337,
+    "n_home_site": 3246,
+    "n_unknown": 0
+  },
+  "train_a_venue_split": {
+    "home_site": {
+      "n": 3246,
+      "C0_incumbent_b2": {
+        "n": 3246,
+        "mae": 9.434408256315466,
+        "rmse": 11.862840415837196,
+        "signed_bias": 0.062173937153419505,
+        "cal_slope": 0.7109970297749164,
+        "cal_intercept": 1.5224298576113173,
+        "bootstrap_mae": {
+          "n": 3246,
+          "mae": 9.434408256315466,
+          "ci95": [
+            9.189973361059765,
+            9.685410726278496
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B2_PACE_v1": {
+        "n": 3246,
+        "mae": 9.00243616173555,
+        "rmse": 11.368138379902765,
+        "signed_bias": 0.650840142037677,
+        "cal_slope": 1.0231604935872092,
+        "cal_intercept": 0.5474500654503982,
+        "bootstrap_mae": {
+          "n": 3246,
+          "mae": 9.00243616173555,
+          "ci95": [
+            8.765266476160265,
+            9.235662269564841
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B1_close_consensus": {
+        "n": 3246,
+        "mae": 8.72422267417587,
+        "rmse": 11.041723287107773,
+        "signed_bias": 0.3915342193797329,
+        "cal_slope": 1.0106474248436483,
+        "cal_intercept": 0.3412424237277106,
+        "bootstrap_mae": {
+          "n": 3246,
+          "mae": 8.72422267417587,
+          "ci95": [
+            8.492921339847369,
+            8.964675111386686
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      }
+    },
+    "neutral_site": {
+      "n": 337,
+      "C0_incumbent_b2": {
+        "n": 337,
+        "mae": 10.22677893175074,
+        "rmse": 12.867419192232568,
+        "signed_bias": -3.737425222551929,
+        "cal_slope": 0.6572890414337488,
+        "cal_intercept": -1.2199617410221208,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 10.22677893175074,
+          "ci95": [
+            9.421381899109791,
+            11.071243983679524
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B2_PACE_v1": {
+        "n": 337,
+        "mae": 9.618207016904304,
+        "rmse": 12.198166325100127,
+        "signed_bias": -2.3320531371796736,
+        "cal_slope": 0.9394873252881778,
+        "cal_intercept": -1.9725859593839514,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 9.618207016904304,
+          "ci95": [
+            8.868376957462685,
+            10.45941993052893
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B1_close_consensus": {
+        "n": 337,
+        "mae": 8.95580158872515,
+        "rmse": 11.566183883058521,
+        "signed_bias": 0.2171422326620716,
+        "cal_slope": 0.9835048511969671,
+        "cal_intercept": 0.27308002659525255,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 8.95580158872515,
+          "ci95": [
+            8.189017780839905,
+            9.755219797114064
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      }
+    },
+    "unknown_venue": {
+      "n": 0
+    }
+  },
+  "neutral_hca_counterfactual_research_only": {
+    "research_only": true,
+    "implemented": false,
+    "treatment": "On confirmed neutral_site==True only: subtract frozen HCA then re-clip \u00b128. Home-site and unknown_venue unchanged. Exact formula recompute with HCA=0 before final clip is equivalent except where \u00b128 clip binds.",
+    "n_neutrals_adjusted": 337,
+    "n_neutral_rows_touching_pm28_clip_c0": 4,
+    "n_neutral_rows_touching_pm28_clip_pace": 0,
+    "overall_train_a": {
+      "C0_baseline": {
+        "n": 3583,
+        "mae": 9.508934886966228,
+        "rmse": 11.960921537945481,
+        "signed_bias": -0.295198353335194,
+        "cal_slope": 0.7034781536421855,
+        "cal_intercept": 1.2669988730389632,
+        "bootstrap_mae": {
+          "n": 3583,
+          "mae": 9.508934886966228,
+          "ci95": [
+            9.267162198576612,
+            9.749181957856546
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "C0_with_neutral_hca_zero": {
+        "n": 3583,
+        "mae": 9.458358051911807,
+        "rmse": 11.908848913441823,
+        "signed_bias": -0.02529737650013966,
+        "cal_slope": 0.7085455331623827,
+        "cal_intercept": 1.4315389961431475,
+        "bootstrap_mae": {
+          "n": 3583,
+          "mae": 9.458358051911807,
+          "ci95": [
+            9.219102463019816,
+            9.69844362545353
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B2_PACE_v1_baseline": {
+        "n": 3583,
+        "mae": 9.060352650206628,
+        "rmse": 11.448770945621082,
+        "signed_bias": 0.37028333626144283,
+        "cal_slope": 1.0127896282456885,
+        "cal_intercept": 0.31141365618979516,
+        "bootstrap_mae": {
+          "n": 3583,
+          "mae": 9.060352650206628,
+          "ci95": [
+            8.823046934564427,
+            9.291195822936398
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B2_PACE_v1_with_neutral_hca_zero": {
+        "n": 3583,
+        "mae": 9.038905721597837,
+        "rmse": 11.42759892404836,
+        "signed_bias": 0.6401843130964973,
+        "cal_slope": 1.0188809399962522,
+        "cal_intercept": 0.5583727753312623,
+        "bootstrap_mae": {
+          "n": 3583,
+          "mae": 9.038905721597837,
+          "ci95": [
+            8.806948231618557,
+            9.263622454991324
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      }
+    },
+    "neutral_site_only": {
+      "C0_baseline": {
+        "n": 337,
+        "mae": 10.22677893175074,
+        "rmse": 12.867419192232568,
+        "signed_bias": -3.737425222551929,
+        "cal_slope": 0.6572890414337488,
+        "cal_intercept": -1.2199617410221208,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 10.22677893175074,
+          "ci95": [
+            9.421381899109791,
+            11.071243983679524
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "C0_hca_zero": {
+        "n": 337,
+        "mae": 9.689043620178042,
+        "rmse": 12.343226887299974,
+        "signed_bias": -0.8678252225519288,
+        "cal_slope": 0.6572890414337487,
+        "cal_intercept": 0.6661948922761652,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 9.689043620178042,
+          "ci95": [
+            8.89838090504451,
+            10.53232887240356
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B2_PACE_v1_baseline": {
+        "n": 337,
+        "mae": 9.618207016904304,
+        "rmse": 12.198166325100127,
+        "signed_bias": -2.3320531371796736,
+        "cal_slope": 0.9394873252881778,
+        "cal_intercept": -1.9725859593839514,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 9.618207016904304,
+          "ci95": [
+            8.868376957462685,
+            10.45941993052893
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      },
+      "B2_PACE_v1_hca_zero": {
+        "n": 337,
+        "mae": 9.390182253683827,
+        "rmse": 11.985230347803297,
+        "signed_bias": 0.537546862820326,
+        "cal_slope": 0.9394873252881786,
+        "cal_intercept": 0.7233668692630029,
+        "bootstrap_mae": {
+          "n": 337,
+          "mae": 9.390182253683827,
+          "ci95": [
+            8.620556859595752,
+            10.215045802545667
+          ],
+          "n_bootstrap": 2000,
+          "seed": 20260905,
+          "grain": "game_row"
+        }
+      }
+    }
+  },
+  "future_challenger_design_only": {
+    "candidate_id": "B2-PACE-NEUTRAL-v1",
+    "status": "design_only_not_implemented",
+    "atomic_difference_from_b2_pace_v1": {
+      "confirmed_neutral_site": "HCA = 0",
+      "confirmed_non_neutral_home_site": "HCA = 2.8696",
+      "unknown_venue": "fail_closed unless frozen protocol authorizes alternate treatment"
+    },
+    "is_one_atomic_change": true,
+    "atomic_change_statement": "Single change: gate HCA by confirmed venue status. Pace scaling, clips, AdjEM inputs, and fail-closed AdjT/PIT rules unchanged.",
+    "data_contract_migration_required": [
+      "Promote venue_status into Lab fair inputs with values {home, neutral, unknown}",
+      "Fail-closed: missing/unknown must not silently become home or neutral",
+      "Carry Schedule SoT lineage (pack path, as_of, raw neutral_site, join key)",
+      "Reject multi-source conflicts without explicit precedence policy"
+    ]
+  },
+  "default_wiring": {
+    "materialize_calls_compute_fair_b2_pace_v1": false,
+    "materialize_calls_only_incumbent": true,
+    "candidate_id": "B2-PACE-v1",
+    "method_id": "kenpom_adjem_pit_tempo_plus_game_hca_v1",
+    "production_default": false
+  },
+  "scorecard_v1_2_hashes": {
+    "v1_2_json": "23d29ea40738bb9841c53f9b7f56d3c098f58fbc60ff82d81ea463c3c184996e",
+    "v1_2_md": "f100c0ed9b33cabd71d0adabcd57720d90543512c41384441c942eeb5be264d1",
+    "ncaam-fair-lab-scorecard-v1.2.md": "f100c0ed9b33cabd71d0adabcd57720d90543512c41384441c942eeb5be264d1",
+    "ncaam-fair-lab-scorecard-v1.2-20260905T083559Z.json": "16af912ec216306d482e0b1865f98dc48aefb7feda97f01419e0e56eabf65c0e",
+    "ncaam-fair-lab-scorecard-v1.2-20260905T083700Z.json": "23d29ea40738bb9841c53f9b7f56d3c098f58fbc60ff82d81ea463c3c184996e",
+    "ncaam-fair-lab-scorecard-v1.2.json": "23d29ea40738bb9841c53f9b7f56d3c098f58fbc60ff82d81ea463c3c184996e"
+  },
+  "governance": {
+    "test_a_scored": false,
+    "pocket_2025_scored": false,
+    "formula_changed": false,
+    "neutral_challenger_implemented": false,
+    "merged": false,
+    "deployed": false,
+    "promoted": false
+  }
+}

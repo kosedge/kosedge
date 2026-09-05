@@ -1,0 +1,78 @@
+{
+  "generated_at_utc": "2026-09-05T11:11:51.052675+00:00",
+  "pocket_id": "pocket_2025",
+  "window": {
+    "configured_start": "2025-11-01",
+    "configured_end": "2025-12-31",
+    "odds_tips_observed_start": "2025-11-03",
+    "odds_tips_observed_end": "2025-12-06",
+    "dec_7_through_31_covered": false,
+    "do_not_describe_configured_end_as_covered": true
+  },
+  "status": "BLOCKED_PARTIAL_ODDS_AND_MISSING_PIT_KENPOM",
+  "performance_metrics_computed": false,
+  "forbidden_not_computed": [
+    "actual_margin_distribution",
+    "candidate_errors",
+    "mae",
+    "rmse",
+    "ats",
+    "roi",
+    "clv",
+    "calibration",
+    "candidate_vs_b1",
+    "result_conditioned_slices"
+  ],
+  "manifests": {
+    "odds_parquet": {
+      "path": "apps/web/data/processed/ncaab_historical_odds_open_close.parquet",
+      "sha256": "5fef6efc8889bb7319f3ef6b99b6872021f63a896590f7e59827fdd88cf98102",
+      "exists": true
+    },
+    "kenpom_snapshots_dir": {
+      "path": "apps/web/data/processed/kenpom_snapshots",
+      "exists": true,
+      "n_snapshot_files_total": 198,
+      "n_snapshot_dates_2025_10_through_12": 0,
+      "n_snapshot_dates_2025_11_through_12": 0,
+      "snapshot_dates_2025_11_12": []
+    },
+    "schedule_packs_2025": []
+  },
+  "counts": {
+    "odds_rows_in_window": 10600,
+    "unique_event_ids": 1287,
+    "duplicate_event_id_groups_at_event_grain": 0,
+    "tip_date_min": "2025-11-03",
+    "tip_date_max": "2025-12-06",
+    "events_with_b1_close_spread": 1287,
+    "b1_close_coverage_rate": 1.0,
+    "outcome_score_presence_count": null,
+    "outcome_score_presence_note": "no_2025_schedule_pack_in_repo",
+    "b2_pace_v1_input_eligibility_count": null,
+    "b2_pace_v1_eligibility_note": "Not materialized: Lab cut for pocket_2025 is protocol-excluded. Eligibility requires a future authorized materialize with PIT KenPom AdjEM+AdjT. Snapshot date coverage above is a prerequisite check only.",
+    "b7_identity_coverage": null,
+    "b7_identity_note": "B7 mapping occurs at Lab materialize time; pocket is not materialized. Odds lake carries raw home_team/away_team strings only at this stage."
+  },
+  "date_bounds_ok": true,
+  "governance": {
+    "unsealed": false,
+    "scored": false,
+    "requires_explicit_ryan_authorization_to_unseal_and_score": true
+  },
+  "blockers": [
+    {
+      "id": "partial_odds_coverage",
+      "detail": "Odds tips only span 2025-11-03 through 2025-12-06. Configured pocket label ends 2025-12-31; Dec 7\u201331 are NOT covered by the current odds lake."
+    },
+    {
+      "id": "kenpom_snapshots_nov_dec_2025",
+      "detail": "Repo has KenPom snapshots through 2025-03 only; zero snapshot files dated 2025-10-01..2025-12-31."
+    },
+    {
+      "id": "no_2025_schedule_pack",
+      "detail": "No 2025 schedule SoT pack in repo."
+    }
+  ],
+  "coverage_classification": "PARTIAL_COVERAGE"
+}
