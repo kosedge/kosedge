@@ -68,4 +68,7 @@ apps/web/src/ncaam_lab/holdout_2425/odds_audit.py
 apps/web/src/ncaam_lab/holdout_2425/seal_package.py
 apps/web/src/ncaam_lab/holdout_2425/readiness.py
 apps/web/src/ncaam_lab/holdout_2425/evaluator_gate.py
+apps/web/src/ncaam_lab/holdout_2425/phase26c/__init__.py
+apps/web/src/ncaam_lab/holdout_2425/phase26c/thresholds.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py
+apps/web/tests_pipeline/test_ncaam_holdout_2425_phase26c.py
