@@ -1,0 +1,1009 @@
+{
+  "cloud_must_not_access_external_drive": true,
+  "n_timestamp_gaps": 2006,
+  "no_api_credits": true,
+  "owner": "Ryan offline historical odds archive",
+  "sample_gaps": [
+    {
+      "away_team": "VMI Keydets",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401744189",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "UNC Greensboro Spartans",
+      "odds_event_id": "41e3151973a7e17daa574b33d738c001",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-08"
+    },
+    {
+      "away_team": "Alabama A&M Bulldogs",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721250",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Alabama St Hornets",
+      "odds_event_id": "d3e3df1cc3ce318930ed23384b998c5a",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Le Moyne Dolphins",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720951",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Dartmouth Big Green",
+      "odds_event_id": "233c1dd015e4dedb21dda5a2ab98942f",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-18"
+    },
+    {
+      "away_team": "Clemson Tigers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724768",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Miami Hurricanes",
+      "odds_event_id": "fbd5d76dd97c6347ff59b43576e900e6",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-07"
+    },
+    {
+      "away_team": "Bradley Braves",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401744061",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Drake Bulldogs",
+      "odds_event_id": "9d966f69f9a8ec53e71375fc51bbf057",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-09"
+    },
+    {
+      "away_team": "Louisiana Tech Bulldogs",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401700223",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Florida Int'l Golden Panthers",
+      "odds_event_id": "68aaac46d1b6127d138ee90285f020c1",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-08"
+    },
+    {
+      "away_team": "Northwestern St Demons",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720722",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "McNeese Cowboys",
+      "odds_event_id": "0ea18539896b73532e43780c421a97b2",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-08"
+    },
+    {
+      "away_team": "Toledo Rockets",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721068",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Marshall Thundering Herd",
+      "odds_event_id": "3d2ac76ddea7c016767ce241993aec9a",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-09"
+    },
+    {
+      "away_team": "Loyola (Chi) Ramblers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724458",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Saint Louis Billikens",
+      "odds_event_id": "1f10c44b146d1adc11f9d8386445366e",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "St. Francis (PA) Red Flash",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721943",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "LIU Sharks",
+      "odds_event_id": "ae0f7e3385a07a905a41e4f65b84e9aa",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-18"
+    },
+    {
+      "away_team": "Rhode Island Rams",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724221",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Duquesne Dukes",
+      "odds_event_id": "3dd4acf679b6335ab1ea4d9091dbb8eb",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-31"
+    },
+    {
+      "away_team": "Merrimack Warriors",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706202",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Sacred Heart Pioneers",
+      "odds_event_id": "22951fafedb2f4f237b247273e908a96",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-10"
+    },
+    {
+      "away_team": "UNC Asheville Bulldogs",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401727878",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Presbyterian Blue Hose",
+      "odds_event_id": "468c67fb25461f888c88e80023dd2f28",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-11"
+    },
+    {
+      "away_team": "Nebraska Cornhuskers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721384",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Wisconsin Badgers",
+      "odds_event_id": "1d9bddbaa998c139d709f4f26cc9569e",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-26"
+    },
+    {
+      "away_team": "La Salle Explorers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401700394",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "North Carolina Tar Heels",
+      "odds_event_id": "bd5c446145365e57d703d636b09edf50",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-14"
+    },
+    {
+      "away_team": "Towson Tigers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401714288",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Campbell Fighting Camels",
+      "odds_event_id": "bc2c72391cc35f5ecbc5ebcebcf9d3ed",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "NC State Wolfpack",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724780",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Virginia Cavaliers",
+      "odds_event_id": "6f9c91b8497f7a2411acc42348762031",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-31"
+    },
+    {
+      "away_team": "Maine Black Bears",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401722087",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Stony Brook Seawolves",
+      "odds_event_id": "8d80784b87589cbe0d6eb10a25bf2a05",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Oklahoma St Cowboys",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725693",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Texas Tech Red Raiders",
+      "odds_event_id": "cd271de45b82e81eef0f6dcf0be23799",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-26"
+    },
+    {
+      "away_team": "Wake Forest Demon Deacons",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724778",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Clemson Tigers",
+      "odds_event_id": "4c7422cfaedfb443b226cc5fa26f48a6",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Wyoming Cowboys",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401722438",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Colorado St Rams",
+      "odds_event_id": "7bed0a1ac10f2a788fbc6d2800fb7e06",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-15"
+    },
+    {
+      "away_team": "New Hampshire Wildcats",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401722016",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Stonehill Skyhawks",
+      "odds_event_id": "869cc6295d5995c15894e69736c223aa",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-22"
+    },
+    {
+      "away_team": "Eastern Illinois Panthers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724523",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Valparaiso Beacons",
+      "odds_event_id": "2f84bd99388561173bea4f31f57ebc07",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-24"
+    },
+    {
+      "away_team": "NC State Wolfpack",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724925",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Miami Hurricanes",
+      "odds_event_id": "19e78dcf971d0ecf03da96a7dce3eda7",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-08"
+    },
+    {
+      "away_team": "Miami (OH) RedHawks",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706394",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Ohio Bobcats",
+      "odds_event_id": "96da1837b8e0f02fc706e101a94e0660",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Wisconsin Badgers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401743942",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Michigan Wolverines",
+      "odds_event_id": "dcd877d577bd4af27ec0fc9f81b5d15e",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-16"
+    },
+    {
+      "away_team": "Denver Pioneers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401719654",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Portland St Vikings",
+      "odds_event_id": "5487f2cc490b337c6bb4757d353a9f13",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-07"
+    },
+    {
+      "away_team": "LIU Sharks",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401715314",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Missouri Tigers",
+      "odds_event_id": "b99951069e47eced7338bd3dae6a61d7",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-14"
+    },
+    {
+      "away_team": "UCF Knights",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725769",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "TCU Horned Frogs",
+      "odds_event_id": "850fc94a7ba43b9e8a56dac93da17fae",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "UMBC Retrievers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720837",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Maine Black Bears",
+      "odds_event_id": "7661d6fc33d792f5c8ab581499affe49",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-08"
+    },
+    {
+      "away_team": "Canisius Golden Griffins",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706218",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Fairfield Stags",
+      "odds_event_id": "9d582091fe40289ff2e632cf9877a263",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-18"
+    },
+    {
+      "away_team": "Morgan St Bears",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401715396",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Minnesota Golden Gophers",
+      "odds_event_id": "d18c949a497017e7198babbeb611c7c4",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-29"
+    },
+    {
+      "away_team": "South Florida Bulls",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725554",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "East Carolina Pirates",
+      "odds_event_id": "41e5613d33fcc93789193214e921ae8f",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-25"
+    },
+    {
+      "away_team": "Lipscomb Bisons",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401711667",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "North Florida Ospreys",
+      "odds_event_id": "19055c42c4d285411f0450c3cc67962e",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-04"
+    },
+    {
+      "away_team": "South Alabama Jaguars",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401746100",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Akron Zips",
+      "odds_event_id": "21dc5dc0136bf1817c27750b97da36c1",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-08"
+    },
+    {
+      "away_team": "Villanova Wildcats",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401719078",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Creighton Bluejays",
+      "odds_event_id": "1060b65a97c176d6aadaec0fc3fe57c9",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "GW Revolutionaries",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724430",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Davidson Wildcats",
+      "odds_event_id": "3cf38f7b75188cadf5dd4465a696b153",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-15"
+    },
+    {
+      "away_team": "Northeastern Huskies",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401714299",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "William & Mary Tribe",
+      "odds_event_id": "4d7ecaf5dbdf88ece7d147bd10549715",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "James Madison Dukes",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401714602",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Coastal Carolina Chanticleers",
+      "odds_event_id": "edf2abe3257f51bbadd6d861d7ae1004",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-15"
+    },
+    {
+      "away_team": "Arizona St Sun Devils",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725725",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Oklahoma St Cowboys",
+      "odds_event_id": "3a81a3979371dfbb84eabc7d3d97361c",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-09"
+    },
+    {
+      "away_team": "Morgan St Bears",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401723743",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Howard Bison",
+      "odds_event_id": "3ae9a34a1aa4a7a77447e6c1f7f0fe3b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-11"
+    },
+    {
+      "away_team": "West Virginia Mountaineers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725755",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Texas Tech Red Raiders",
+      "odds_event_id": "1919f956f06524d86459a1fbc6444fd0",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "East Carolina Pirates",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725590",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Charlotte 49ers",
+      "odds_event_id": "1a4f99e8fd071aafe0da399ed2c16852",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-15"
+    },
+    {
+      "away_team": "George Mason Patriots",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724444",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "VCU Rams",
+      "odds_event_id": "c405d6b03b7d3684d6d6dc07aa6054f4",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "IUPUI Jaguars",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401714413",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Milwaukee Panthers",
+      "odds_event_id": "5c595607dd6adf1ae043eb199c67a39e",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-29"
+    },
+    {
+      "away_team": "Syracuse Orange",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724907",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Virginia Tech Hokies",
+      "odds_event_id": "06e3dc9e51a50dd290454f419f24ea6d",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Bellarmine Knights",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721964",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Central Arkansas Bears",
+      "odds_event_id": "0abad3ad17b0bfb9b06e3bf1951a386b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-04"
+    },
+    {
+      "away_team": "South Carolina Gamecocks",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401744152",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Arkansas Razorbacks",
+      "odds_event_id": "296eddeb88a4a7e1db8746fc4f75fcc4",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-12"
+    },
+    {
+      "away_team": "Rider Broncs",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706210",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Niagara Purple Eagles",
+      "odds_event_id": "8d5c375176198104da4e96eabe94768b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-12"
+    },
+    {
+      "away_team": "Colorado Buffaloes",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401729695",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Iowa State Cyclones",
+      "odds_event_id": "f885ff9bd7018f9e51f3ed62c08a0b47",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-27"
+    },
+    {
+      "away_team": "Charlotte 49ers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725520",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Rice Owls",
+      "odds_event_id": "3a0b43d5448fe3ded4550b9a18f052ec",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-04"
+    },
+    {
+      "away_team": "Stetson Hatters",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401711611",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Austin Peay Governors",
+      "odds_event_id": "4e1ba1352465e474445ca76feea69418",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-15"
+    },
+    {
+      "away_team": "Florida Gators",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401746082",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Houston Cougars",
+      "odds_event_id": "935e3431859f7ea600918db2662e888b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-04-08"
+    },
+    {
+      "away_team": "St. Bonaventure Bonnies",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724350",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Fordham Rams",
+      "odds_event_id": "85bf41eaece2fb52e1ab773bec463aeb",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-04"
+    },
+    {
+      "away_team": "Houston Christian Huskies",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401715963",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "North Texas Mean Green",
+      "odds_event_id": "51d3a804aaf5bcf6e6b4eb8b8d717fd5",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-22"
+    },
+    {
+      "away_team": "Dartmouth Big Green",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720957",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Brown Bears",
+      "odds_event_id": "adde411764c4817f1774c7adc7e12db8",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-25"
+    },
+    {
+      "away_team": "Rhode Island Rams",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724441",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Saint Louis Billikens",
+      "odds_event_id": "da0f81586703c30d66b32f7d774764ab",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "Stony Brook Seawolves",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401714286",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "North Carolina A&T Aggies",
+      "odds_event_id": "d018ae05c8bdf2181effea9b36cdb647",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "Texas A&M Aggies",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401708440",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "LSU Tigers",
+      "odds_event_id": "1f9c97aa84af56a934d4a443c3e98997",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-08"
+    },
+    {
+      "away_team": "South Carolina Gamecocks",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401729827",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Tennessee Volunteers",
+      "odds_event_id": "8f667a4f517c8addc704410ee92f5ea2",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-08"
+    },
+    {
+      "away_team": "Sacramento St Hornets",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706877",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "California Golden Bears",
+      "odds_event_id": "7fcd1af996f3bfc64bd478fa9dd384f3",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-24"
+    },
+    {
+      "away_team": "Loyola (MD) Greyhounds",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401715465",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "DePaul Blue Demons",
+      "odds_event_id": "36cff3f83243b2dc908f88cb3a248b15",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-28"
+    },
+    {
+      "away_team": "Seattle Redhawks",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706624",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Utah Valley Wolverines",
+      "odds_event_id": "906eca29dce986c36c36d77cfc46c510",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "Incarnate Word Cardinals",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401756994",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Jacksonville Dolphins",
+      "odds_event_id": "a54c18724151179828f564e5892a442b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-24"
+    },
+    {
+      "away_team": "Richmond Spiders",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724455",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Dayton Flyers",
+      "odds_event_id": "30d88a6657b996e6de0f5763753c0465",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Houston Christian Huskies",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401745820",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Texas A&M-CC Islanders",
+      "odds_event_id": "fe32401516bb89b36b8de7e15c9967dc",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-09"
+    },
+    {
+      "away_team": "UMass Lowell River Hawks",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720851",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Vermont Catamounts",
+      "odds_event_id": "c629c86df0a04f829e50150135fdd9ee",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-22"
+    },
+    {
+      "away_team": "Manhattan Jaspers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706199",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Rider Broncs",
+      "odds_event_id": "27a014aeca21b9549083895c69a27644",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-05"
+    },
+    {
+      "away_team": "Massachusetts Minutemen",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724419",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "La Salle Explorers",
+      "odds_event_id": "d6636d797aec0876c6289482159e830f",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-09"
+    },
+    {
+      "away_team": "Tennessee Volunteers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401700427",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Louisville Cardinals",
+      "odds_event_id": "0e3878edc11baa813ce77807f36b26e7",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-09"
+    },
+    {
+      "away_team": "Northern Illinois Huskies",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706353",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Toledo Rockets",
+      "odds_event_id": "2ffdc2ff34d63c840e10a78681b594eb",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-01"
+    },
+    {
+      "away_team": "Southern Jaguars",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721661",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "USC Trojans",
+      "odds_event_id": "04787b75d1709cbf0e3b746bd1267130",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-22"
+    },
+    {
+      "away_team": "Abilene Christian Wildcats",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706634",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "UT-Arlington Mavericks",
+      "odds_event_id": "0e9c27535a7e0be9ad1d100e4a3b40ba",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Evansville Purple Aces",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401722510",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Belmont Bruins",
+      "odds_event_id": "7925e58d3319cd24f132c6f115872ecf",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-02"
+    },
+    {
+      "away_team": "Morehead St Eagles",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401700307",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "SE Missouri St Redhawks",
+      "odds_event_id": "38d99596bd6a95e4c58300212a917bc5",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-11"
+    },
+    {
+      "away_team": "Memphis Tigers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725616",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "UAB Blazers",
+      "odds_event_id": "d73660849ea2f1ed06d8b2956d18d508",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-02"
+    },
+    {
+      "away_team": "Hampton Pirates",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721829",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Loyola (MD) Greyhounds",
+      "odds_event_id": "a2e6e9b94ff59f555138a69e3485fcef",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Bryant Bulldogs",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720836",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Binghamton Bearcats",
+      "odds_event_id": "aeccf11914b72376f185ab25b2bbc388",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-08"
+    },
+    {
+      "away_team": "High Point Panthers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720453",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Southern Illinois Salukis",
+      "odds_event_id": "187bc619df04b5b052c45ac7709b17b4",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Prairie View Panthers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721300",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Alcorn St Braves",
+      "odds_event_id": "9a18c2ba4085aa290695611a0da0e047",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Wichita St Shockers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401715464",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "DePaul Blue Demons",
+      "odds_event_id": "5127a60144ba8fff99e5d39aefda9f48",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-14"
+    },
+    {
+      "away_team": "Navy Midshipmen",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721833",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Coppin St Eagles",
+      "odds_event_id": "ac93a2fecf7c1b6f2a3faeaf96f521ac",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Arkansas-Little Rock Trojans",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401700318",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Tennessee Tech Golden Eagles",
+      "odds_event_id": "860557a86d83df40c1b6bd4d921c9e0d",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-18"
+    },
+    {
+      "away_team": "New Hampshire Wildcats",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401720818",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "NJIT Highlanders",
+      "odds_event_id": "79b4771869111cd9d50622aa5bfbafa6",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-18"
+    },
+    {
+      "away_team": "Eastern Washington Eagles",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401718470",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Utah Utes",
+      "odds_event_id": "76e74be0e9930e0e4a8e0252ec191c81",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-30"
+    },
+    {
+      "away_team": "Cornell Big Red",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721720",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Columbia Lions",
+      "odds_event_id": "52328fa496ca8ccc0cc1dafbf07e4ea9",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-11"
+    },
+    {
+      "away_team": "Texas Southern Tigers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": null,
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Arkansas-Pine Bluff Golden Lions",
+      "odds_event_id": "f135c743d511dcd2b6dd5da3e7354e35",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-11"
+    },
+    {
+      "away_team": "Arizona St Sun Devils",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401718426",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Massachusetts Minutemen",
+      "odds_event_id": "e29239e2593d02676c588628814170cf",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Marshall Thundering Herd",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401726054",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "UNC Wilmington Seahawks",
+      "odds_event_id": "bafbb7cff42d5c7e6d6444829645096b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-07"
+    },
+    {
+      "away_team": "Eastern Illinois Panthers",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401700338",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Lindenwood Lions",
+      "odds_event_id": "9335529e97904a209e7ea5a5d7d8833a",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-02-01"
+    },
+    {
+      "away_team": "Ball State Cardinals",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706302",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Kent State Golden Flashes",
+      "odds_event_id": "a3c7be1e85cfa8d27f3ab7a4b346574b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-04"
+    },
+    {
+      "away_team": "Northwestern St Demons",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401722275",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Rice Owls",
+      "odds_event_id": "f3d2a0022f5783ae4fb1c82c639d2d32",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-16"
+    },
+    {
+      "away_team": "Boise State Broncos",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401722371",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "San Jos\u00e9 St Spartans",
+      "odds_event_id": "c17bd999527d223eef3c37fc358766e4",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-28"
+    },
+    {
+      "away_team": "Valparaiso Beacons",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401718715",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Liberty Flames",
+      "odds_event_id": "b433cbc16998224ec77affeb7d120c46",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-04"
+    },
+    {
+      "away_team": "Bowling Green Falcons",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706314",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Ball State Cardinals",
+      "odds_event_id": "24b8b168d8e7138c9aaeae1b25078e1b",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-11"
+    },
+    {
+      "away_team": "Cleveland St Vikings",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401714473",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "IUPUI Jaguars",
+      "odds_event_id": "82636011e28cc3df2f49ddbe3fef7446",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-19"
+    },
+    {
+      "away_team": "George Mason Patriots",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401724456",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Duquesne Dukes",
+      "odds_event_id": "03dcc7a69b3c6f38090718ccfed045c4",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-03-01"
+    },
+    {
+      "away_team": "Texas State Bobcats",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401725374",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Abilene Christian Wildcats",
+      "odds_event_id": "6485f7ac847b2d37d02edc8dcdd20f71",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-11-16"
+    },
+    {
+      "away_team": "Samford Bulldogs",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401721234",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Alabama A&M Bulldogs",
+      "odds_event_id": "9a7d40dde44fbb3d9b5f3bb02d752a85",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2024-12-21"
+    },
+    {
+      "away_team": "Fairfield Stags",
+      "desired_source_timestamps": "source_snapshot_time < event_tip",
+      "espn_game_id": "401706192",
+      "gap_class": "offline_archive_candidate",
+      "home_team": "Merrimack Warriors",
+      "odds_event_id": "7c7dcd7137d54dd701d4c4c9026f6930",
+      "timestamp_failure_reason": "synthetic_eod_close_hour_22_utc",
+      "tip_date": "2025-01-03"
+    }
+  ],
+  "scores_omitted": true
+}

@@ -333,3 +333,29 @@ def test_write_json_deterministic(tmp_path):
     h2 = write_json(p, {"a": 2, "b": 1})
     assert h1 == h2
     assert hashlib.sha256(p.read_bytes()).hexdigest() == h1
+
+
+def test_odds_identity_alias_families_26b():
+    """Deterministic odds-name expansions; no fuzzy; Miami FL≠OH; USC≠South Carolina."""
+    from ncaam_identity import odds_name_to_team_norm
+
+    assert odds_name_to_team_norm("Washington St Cougars") == "washington state"
+    assert odds_name_to_team_norm("Texas A&M-Commerce Lions") == "east texas a&m"
+    assert odds_name_to_team_norm("UMKC Kangaroos") == "kansas city"
+    assert odds_name_to_team_norm("St. Thomas (MN) Tommies") == "st thomas"
+    assert odds_name_to_team_norm("St. Francis (PA) Red Flash") == "saint francis"
+    assert odds_name_to_team_norm("Florida Int'l Golden Panthers") == "fiu"
+    assert odds_name_to_team_norm("Miami") is None
+    assert odds_name_to_team_norm("Miami (OH)") == "miami oh"
+    assert odds_name_to_team_norm("USC Trojans") == "usc"
+    assert odds_name_to_team_norm("South Carolina Gamecocks") == "south carolina"
+    # Must not collapse Commerce into Texas A&M
+    assert odds_name_to_team_norm("Texas A&M-Commerce Lions") != "texas a&m"
+
+
+def test_readiness_no_longer_sealed_and_ready_by_default():
+    from ncaam_lab.holdout_2425.readiness import compute_readiness
+    import inspect
+    src = inspect.getsource(compute_readiness)
+    assert "SEALED_AND_READY" not in src or "SEALED_COVERAGE_REVIEW_REQUIRED" in src
+    assert "SEALED_COVERAGE_REVIEW_REQUIRED" in src

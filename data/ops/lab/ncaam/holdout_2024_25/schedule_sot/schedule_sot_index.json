@@ -1,5 +1,5 @@
 {
-  "built_at": "2026-09-05T11:43:24.782596+00:00",
+  "built_at": "2026-09-05T13:27:17.761131+00:00",
   "canonical_pack_path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2024_25.json",
   "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
   "game_ids": [
@@ -5773,7 +5773,7 @@
     "401758636",
     "401746082"
   ],
-  "holdout_id": "ncaam_holdout_2024_25_v1",
+  "holdout_id": "ncaam_holdout_2024_25_v1_1",
   "map_stats": {
     "espn_events": 6299,
     "map_miss_rate": 0.0841,

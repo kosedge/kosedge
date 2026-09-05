@@ -1,0 +1,27 @@
+{
+  "current_package": {
+    "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
+    "holdout_id": "ncaam_holdout_2024_25_v1_1",
+    "label_manifest_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+    "n_complete_intersection": 3334,
+    "package_version": "v1.1",
+    "seal_receipt_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84"
+  },
+  "delta": {
+    "complete_intersection_delta": 1016,
+    "either_package_evaluated": false,
+    "features_labels_remain_separated": true,
+    "identity_unresolved_cleared": true,
+    "old_package_overwritten": false,
+    "timestamp_honesty_rules_unchanged": true
+  },
+  "scores_omitted": true,
+  "superseded_package": {
+    "archive_path": "data/ops/lab/ncaam/holdout_2024_25/seal_archive/v1/seal_receipt.json",
+    "feature_manifest_sha256": "e7cc244f0e0758195fa94c6b5ddd37b6f4072a914157ba5e3f473cd031cfc010",
+    "holdout_id": "ncaam_holdout_2024_25_v1",
+    "label_manifest_sha256": "11b9818d38721e9129289ba684ad4d090ffeaa6bb4a0eee12a60af3f272e38e4",
+    "n_complete_intersection": 2318,
+    "seal_receipt_sha256": "4218281a5e4e970d9e83a88fb332013e66329fe72905fd85905e71ccd4a1705c"
+  }
+}

@@ -58,7 +58,7 @@ def compute_readiness(
             blockers.append("BLOCKED_MULTIPLE")
 
     if not blockers and n_complete > 0:
-        status = "SEALED_AND_READY"
+        status = "SEALED_COVERAGE_REVIEW_REQUIRED"
     elif len(blockers) == 1:
         status = blockers[0]
     else:

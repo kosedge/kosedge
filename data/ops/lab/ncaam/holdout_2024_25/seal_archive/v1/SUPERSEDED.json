@@ -1,0 +1,7 @@
+{
+  "note": "Preserved immutable; not overwritten; not evaluated",
+  "package_version": "v1",
+  "seal_receipt_sha256": "4218281a5e4e970d9e83a88fb332013e66329fe72905fd85905e71ccd4a1705c",
+  "superseded_by": "ncaam_holdout_2024_25_v1_1",
+  "superseded_holdout_id": "ncaam_holdout_2024_25_v1"
+}

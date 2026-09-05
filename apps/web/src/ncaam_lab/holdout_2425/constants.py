@@ -8,11 +8,14 @@ from pathlib import Path
 REPO = Path(__file__).resolve().parents[5]
 WEB = REPO / "apps" / "web"
 
-HOLDOUT_ID = "ncaam_holdout_2024_25_v1"
+HOLDOUT_ID = "ncaam_holdout_2024_25_v1_1"
+HOLDOUT_ID_V1 = "ncaam_holdout_2024_25_v1"
 SEASON_KEY = "2024-25"
 SEASON_END_YEAR = 2025
 WINDOW_START = date(2024, 11, 4)
 WINDOW_END = date(2025, 4, 8)
+PACKAGE_VERSION = "v1.1"
+SUPERSEDED_PACKAGE_VERSION = "v1"
 
 SCHEMA_VERSION_SCHEDULE = "ncaam-schedule-sot-v1"
 SCHEMA_VERSION_VENUE = "ncaam-venue-contract-v1"
@@ -36,6 +39,8 @@ LABEL_DIR = OUT_ROOT / "label_package"
 SEAL_DIR = OUT_ROOT / "seal"
 QUARANTINE_DIR = OUT_ROOT / "quarantine"
 REJECTED_DIR = OUT_ROOT / "rejected"
+COVERAGE_DIR = OUT_ROOT / "coverage_26b"
+SEAL_ARCHIVE_DIR = OUT_ROOT / "seal_archive"
 
 CANONICAL_PACK_PATH = (
     REPO
@@ -58,11 +63,22 @@ HISTORICAL_STATIC_RECONSTRUCTION = "HISTORICAL_STATIC_RECONSTRUCTION"
 VENUE_STATUS = ("confirmed_home", "confirmed_neutral", "unknown")
 
 READINESS_STATUSES = (
+    "SEALED_AND_REPRESENTATIVE",
+    "SEALED_WITH_DOCUMENTED_COVERAGE_LIMITATION",
+    "SEALED_COVERAGE_REVIEW_REQUIRED",
+    "BLOCKED_IDENTITY",
+    "BLOCKED_TIMESTAMP_INTEGRITY",
+    "BLOCKED_STORAGE_ARCHITECTURE",
+    "BLOCKED_MULTIPLE",
+    # Legacy 2.6A labels retained for fixture compatibility only.
     "SEALED_AND_READY",
     "BLOCKED_PIT_KENPOM",
     "BLOCKED_B1_ODDS",
     "BLOCKED_OUTCOMES",
-    "BLOCKED_IDENTITY",
     "BLOCKED_VENUE_CONTRACT",
-    "BLOCKED_MULTIPLE",
+)
+
+# Power-conference short codes as used in KenPom confshort (feature-only slices).
+POWER_CONF_SHORT = frozenset(
+    {"ACC", "B10", "B12", "BE", "P12", "SEC", "Amer", "MWC", "WCC", "A10"}
 )

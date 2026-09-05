@@ -1,40 +1,43 @@
 {
-  "b1_eligibility_count": 2499,
-  "b7_coverage_count": 5769,
-  "b7_reject_count": 530,
-  "blockers": [],
-  "complete_intersection_count": 2318,
-  "final_label_presence_count": 5769,
-  "forbidden_outputs_omitted": [
-    "score_values",
-    "actual_margin_distribution",
-    "candidate_predictions_joined_to_outcomes",
-    "mae",
-    "rmse",
-    "ats",
-    "roi",
-    "clv",
-    "calibration",
-    "b1_vs_candidate_performance",
-    "result_conditioned_slices"
+  "b1_eligibility_count": 3599,
+  "before_complete_intersection_count": 2318,
+  "blockers": [
+    "BLOCKED_TIMESTAMP_INTEGRITY",
+    "BLOCKED_STORAGE_ARCHITECTURE"
   ],
+  "complete_intersection_count": 3334,
+  "holdout_id": "ncaam_holdout_2024_25_v1_1",
+  "holdout_unseal_omitted": true,
   "manifest_hash_status": {
-    "feature_manifest_sha256": "e7cc244f0e0758195fa94c6b5ddd37b6f4072a914157ba5e3f473cd031cfc010",
+    "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
     "features_labels_joined_for_evaluation": false,
-    "label_manifest_sha256": "11b9818d38721e9129289ba684ad4d090ffeaa6bb4a0eee12a60af3f272e38e4",
-    "seal_receipt_sha256": "4218281a5e4e970d9e83a88fb332013e66329fe72905fd85905e71ccd4a1705c"
+    "label_manifest_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+    "seal_receipt_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84"
   },
-  "pit_kenpom_eligibility_count": 5504,
-  "quarantine_count": 0,
-  "rejection_counts_note": "see rejected/rejected_events.json reasons (no scores)",
+  "merged_deployed_promoted": false,
+  "model_implementation_omitted": true,
+  "n_gte_100_not_sufficient_for_representativeness": true,
+  "outcome_distribution_inspection_omitted": true,
+  "package_version": "v1.1",
+  "performance_scoring_omitted": true,
+  "phase": "2.6B",
+  "pr_490_untouched": true,
+  "representativeness_answer": "broadly_representative_on_observed_feature_slices_with_documented_exclusions",
   "scheduled_event_count": 5769,
+  "scores_omitted": true,
+  "secondary_status_notes": [
+    "SEALED_COVERAGE_REVIEW_REQUIRED"
+  ],
+  "selection_integrity_notes": [
+    "complete_intersection=3334 of mapped=5769 (57.8%)",
+    "b1_eligible=3599 of odds=5758",
+    "timestamp_dishonest=2006",
+    "identity_unresolved=0",
+    "duplicate_conflict=153",
+    "espn_rejects=530",
+    "slate_complete=false"
+  ],
   "slate_complete": false,
-  "status": "SEALED_AND_READY",
-  "venue_status_coverage": {
-    "confirmed_home": 5008,
-    "confirmed_neutral": 739,
-    "conflicts": 22,
-    "known_total": 5747,
-    "unknown": 22
-  }
+  "status": "BLOCKED_MULTIPLE",
+  "supersedes_holdout_id": "ncaam_holdout_2024_25_v1"
 }

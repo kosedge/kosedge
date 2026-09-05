@@ -1,0 +1,21 @@
+{
+  "close_hour_utc_counts": {
+    "22": 2006
+  },
+  "counts_by_reason": {
+    "synthetic_eod_close_hour_22_utc": 2006
+  },
+  "counts_by_recovery_class": {
+    "offline_archive_candidate": 2006
+  },
+  "honesty_rule_unchanged": "source_snapshot_time < event_tip; no post-tip relabel",
+  "irrecoverable_count_estimate": 0,
+  "n_timestamp_dishonest": 2006,
+  "recoverable_count_estimate": 2006,
+  "scores_omitted": true,
+  "single_malformed_batch_hypothesis": {
+    "dominant_reason": "synthetic_eod_close_hour_22_utc",
+    "note": "Dishonest closes at 22:00:00Z indicate synthetic EOD/batch close. Do not reclassify as honest without source_snapshot_time < event_tip from raw archive.",
+    "supported": true
+  }
+}
