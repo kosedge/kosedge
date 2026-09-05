@@ -58,3 +58,14 @@ apps/web/src/yesterday_ats.py
 apps/web/tests_pipeline/conftest.py
 apps/web/tests_pipeline/test_build_ratings.py
 apps/web/tests_pipeline/test_schema.py
+apps/web/src/ncaam_lab/holdout_2425/__init__.py
+apps/web/src/ncaam_lab/holdout_2425/constants.py
+apps/web/src/ncaam_lab/holdout_2425/io_util.py
+apps/web/src/ncaam_lab/holdout_2425/schedule_normalize.py
+apps/web/src/ncaam_lab/holdout_2425/venue_contract.py
+apps/web/src/ncaam_lab/holdout_2425/kenpom_audit.py
+apps/web/src/ncaam_lab/holdout_2425/odds_audit.py
+apps/web/src/ncaam_lab/holdout_2425/seal_package.py
+apps/web/src/ncaam_lab/holdout_2425/readiness.py
+apps/web/src/ncaam_lab/holdout_2425/evaluator_gate.py
+apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py

@@ -56,6 +56,8 @@ OUT_DIR = (
 SEASON_WINDOWS = {
     "2022-23": (date(2022, 11, 1), date(2023, 4, 10)),
     "2023-24": (date(2023, 11, 1), date(2024, 4, 10)),
+    # 2024-25 sealed-holdout candidate window (tip dates inclusive).
+    "2024-25": (date(2024, 11, 4), date(2025, 4, 8)),
 }
 
 
@@ -171,7 +173,10 @@ def parse_event(event: Dict[str, Any], *, season_key: str, season_end_year: int)
         "date": tip[:10] if tip else "",
         "home_team_raw": home_team,
         "away_team_raw": away_team,
-        "neutral_site": bool(comps.get("neutralSite")),
+        # Preserve null when ESPN omits the field (unknown ≠ False).
+        "neutral_site": (
+            None if "neutralSite" not in comps else bool(comps.get("neutralSite"))
+        ),
         "conference_game": bool(comps.get("conferenceCompetition")),
         "venue": str(venue.get("fullName") or ""),
         "venue_city": str(address.get("city") or ""),
@@ -241,6 +246,7 @@ def ingest_window(
     start: date,
     end: date,
     delay_s: float = 0.2,
+    archive_raw_dir: Optional[Path] = None,
 ) -> Dict[str, Any]:
     season_end_year = int(season_key.split("-")[0]) + 1
     games: List[Dict[str, Any]] = []
@@ -252,10 +258,43 @@ def ingest_window(
     omit_unmapped = 0
     omit_dup = 0
     miss_names: Dict[str, int] = {}
+    raw_receipts: List[Dict[str, Any]] = []
+
+    if archive_raw_dir is not None:
+        archive_raw_dir.mkdir(parents=True, exist_ok=True)
 
     day = start
     while day <= end:
         events, err = fetch_scoreboard_day(day)
+        if archive_raw_dir is not None:
+            import hashlib
+
+            envelope = {
+                "day": day.isoformat(),
+                "endpoint": ESPN_SCOREBOARD,
+                "captured_at_utc": datetime.now(timezone.utc).isoformat(),
+                "schema_version": "espn-scoreboard-raw-v1",
+                "error": err,
+                "payload": {"events": events} if not err else None,
+            }
+            raw_bytes = json.dumps(
+                envelope, sort_keys=True, separators=(",", ":")
+            ).encode("utf-8")
+            raw_path = archive_raw_dir / f"espn_scoreboard_{day.isoformat()}.json"
+            raw_path.write_bytes(raw_bytes)
+            digest = hashlib.sha256(raw_bytes).hexdigest()
+            (archive_raw_dir / f"espn_scoreboard_{day.isoformat()}.sha256").write_text(
+                digest + "\n", encoding="utf-8"
+            )
+            raw_receipts.append(
+                {
+                    "day": day.isoformat(),
+                    "path": raw_path.name,
+                    "sha256": digest,
+                    "n_events": len(events),
+                    "error": err,
+                }
+            )
         if err:
             fetch_errors.append(err)
         for event in events:
@@ -357,13 +396,16 @@ def ingest_window(
             {"name": n, "count": c} for n, c in top_misses
         ],
         "unmapped_sample": unmapped_sample,
+        "raw_day_receipts": raw_receipts,
         "games": games,
         "notes": [
             "Option A Schedule SoT — ESPN public scoreboard.",
             "Identity: apps/web/lib/ncaam/aliases.json via ncaam_identity (fail-closed).",
             "Bare miami omitted — Miami FL ≠ Miami OH.",
             "No Edge Board populate / PLAY / props / Odds densify in this package.",
+            "metadata_class=HISTORICAL_STATIC_RECONSTRUCTION for post-tip venue/static fields.",
         ],
+        "metadata_class": "HISTORICAL_STATIC_RECONSTRUCTION",
     }
     return blob
 
@@ -402,6 +444,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         default=None,
         help="Output JSON path (default: model-service ncaam_schedule/data)",
     )
+    parser.add_argument(
+        "--archive-raw",
+        default=None,
+        help="Directory for immutable per-day ESPN raw envelopes + sha256 sidecars",
+    )
     args = parser.parse_args(argv)
 
     start, end = SEASON_WINDOWS[args.season]
@@ -413,9 +460,14 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("end-date before start-date", file=sys.stderr)
         return 2
 
+    archive = Path(args.archive_raw) if args.archive_raw else None
     print(f"Ingesting ESPN NCAAM {args.season} ({start} → {end})…")
     blob = ingest_window(
-        season_key=args.season, start=start, end=end, delay_s=args.delay
+        season_key=args.season,
+        start=start,
+        end=end,
+        delay_s=args.delay,
+        archive_raw_dir=archive,
     )
     out = Path(args.out) if args.out else out_path_for_season(args.season)
     out.parent.mkdir(parents=True, exist_ok=True)

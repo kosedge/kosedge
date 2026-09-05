@@ -1,0 +1,15 @@
+{
+  "content_sha256": "8818ea1390ae333bec3bcac7b5259071d3448948cde2d0c07dd9d6ef2f3e8808",
+  "holdout_id": "ncaam_holdout_2024_25_v1",
+  "n_complete_intersection": 2318,
+  "n_rows": 5769,
+  "note": "PIT inputs + static metadata only; no final scores",
+  "package": "feature",
+  "path": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
+  "schema_version": "ncaam-holdout-feature-v1",
+  "sealed_at": "2026-09-05T11:43:25.470922+00:00",
+  "window": {
+    "end": "2025-04-08",
+    "start": "2024-11-04"
+  }
+}
