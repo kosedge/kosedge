@@ -1,0 +1,333 @@
+{
+  "generated_at_utc": "2026-09-05T11:08:52.437146+00:00",
+  "performance_metrics_computed": false,
+  "outcome_values_inspected": false,
+  "outcome_distributions_revealed": false,
+  "schedule_packs": {
+    "2022_23": {
+      "exists": true,
+      "season": "2022_23",
+      "as_of": "2026-09-04T17:28Z",
+      "source": "espn_scoreboard_public",
+      "slate_complete": false,
+      "n_games": 5699,
+      "tip_min": "2022-11-07",
+      "tip_max": "2023-04-04",
+      "venue_status_coverage_rate": 1.0,
+      "outcome_field_presence_rate": 1.0,
+      "b7_espn_id_coverage_rate": 1.0,
+      "note_outcome_values_not_inspected": true
+    },
+    "2023_24": {
+      "exists": true,
+      "season": "2023_24",
+      "as_of": "2026-09-04T17:29Z",
+      "source": "espn_scoreboard_public",
+      "slate_complete": false,
+      "n_games": 3438,
+      "tip_min": "2023-11-06",
+      "tip_max": "2024-01-29",
+      "venue_status_coverage_rate": 1.0,
+      "outcome_field_presence_rate": 1.0,
+      "b7_espn_id_coverage_rate": 1.0,
+      "note_outcome_values_not_inspected": true
+    },
+    "2024_25": {
+      "exists": false,
+      "season": "2024_25"
+    },
+    "2025_26": {
+      "exists": false,
+      "season": "2025_26"
+    }
+  },
+  "windows": [
+    {
+      "window_id": "post_test_a_remaining_2023_24",
+      "configured_date_bounds": [
+        "2024-01-29",
+        "2024-04-15"
+      ],
+      "odds_tip_min_observed": "2024-01-29",
+      "odds_tip_max_observed": "2024-04-09",
+      "qualifying_scheduled_events_odds_lake": 2288,
+      "honest_b1_open_coverage": {
+        "n": 2288,
+        "rate": 1.0
+      },
+      "honest_b1_close_coverage": {
+        "n": 2288,
+        "rate": 1.0
+      },
+      "pit_kenpom_adjem_coverage": {
+        "n_snapshots_in_window": 9,
+        "snapshot_dates": [
+          "2024-02-04",
+          "2024-02-11",
+          "2024-02-18",
+          "2024-02-25",
+          "2024-03-03",
+          "2024-03-10",
+          "2024-03-17",
+          "2024-03-24",
+          "2024-03-31"
+        ],
+        "source": "kenpom_archive_api_endpoint=archive",
+        "reconstruction_forbidden": true
+      },
+      "pit_kenpom_adjt_coverage": {
+        "same_snapshots_as_adjem": true,
+        "n_snapshots_in_window": 9,
+        "note": "adjtempo column present in archive snapshots"
+      },
+      "schedule_sot_outcome_availability": "PARTIAL_PACK_TIP_MAX_2024-01-29",
+      "b7_identity_coverage": "PRESENT_IN_PACKS:['2023_24']",
+      "venue_status_coverage": "PRESENT_IN_PACKS:['2023_24']",
+      "duplicate_event_count": 0,
+      "expected_eligible_count": "NOT_MATERIALIZABLE",
+      "prior_model_metric_calculated_on_window": false,
+      "seal_status": "UNSEALED_CANDIDATE_NOT_SCORED_BY_B2_PACE",
+      "blockers": [
+        "SCHEDULE_SOT_INCOMPLETE_OR_ABSENT"
+      ],
+      "external_drive_dependency": "OPTIONAL_IF_CLOUD_ODDS_COMPLETE",
+      "classification_notes": "Cloud odds+KenPom exist; Schedule SoT pack tip_max=2024-01-29 only \u2192 not a complete intersection."
+    },
+    {
+      "window_id": "full_2024_25",
+      "configured_date_bounds": [
+        "2024-11-01",
+        "2025-04-15"
+      ],
+      "odds_tip_min_observed": "2024-11-04",
+      "odds_tip_max_observed": "2025-04-08",
+      "qualifying_scheduled_events_odds_lake": 5758,
+      "honest_b1_open_coverage": {
+        "n": 5758,
+        "rate": 1.0
+      },
+      "honest_b1_close_coverage": {
+        "n": 5758,
+        "rate": 1.0
+      },
+      "pit_kenpom_adjem_coverage": {
+        "n_snapshots_in_window": 21,
+        "snapshot_dates": [
+          "2024-11-10",
+          "2024-11-17",
+          "2024-11-24",
+          "2024-12-01",
+          "2024-12-08",
+          "2024-12-15",
+          "2024-12-22",
+          "2024-12-29",
+          "2025-01-05",
+          "2025-01-12",
+          "2025-01-19",
+          "2025-01-26",
+          "2025-02-02",
+          "2025-02-09",
+          "2025-02-16",
+          "2025-02-23",
+          "2025-03-02",
+          "2025-03-09",
+          "2025-03-16",
+          "2025-03-23",
+          "2025-03-30"
+        ],
+        "source": "kenpom_archive_api_endpoint=archive",
+        "reconstruction_forbidden": true
+      },
+      "pit_kenpom_adjt_coverage": {
+        "same_snapshots_as_adjem": true,
+        "n_snapshots_in_window": 21,
+        "note": "adjtempo column present in archive snapshots"
+      },
+      "schedule_sot_outcome_availability": "NO_SCHEDULE_PACK",
+      "b7_identity_coverage": "NO_SCHEDULE_PACK",
+      "venue_status_coverage": "NO_SCHEDULE_PACK",
+      "duplicate_event_count": 0,
+      "expected_eligible_count": "NOT_MATERIALIZABLE",
+      "prior_model_metric_calculated_on_window": false,
+      "seal_status": "UNSEALED_CANDIDATE_NOT_SCORED_BY_B2_PACE",
+      "blockers": [
+        "SCHEDULE_SOT_INCOMPLETE_OR_ABSENT"
+      ],
+      "external_drive_dependency": "OPTIONAL_IF_CLOUD_ODDS_COMPLETE",
+      "classification_notes": "Cloud odds+KenPom exist; NO 2024-25 Schedule SoT pack in repo."
+    },
+    {
+      "window_id": "pocket_2025_configured_label",
+      "configured_date_bounds": [
+        "2025-11-01",
+        "2025-12-31"
+      ],
+      "odds_tip_min_observed": "2025-11-03",
+      "odds_tip_max_observed": "2025-12-06",
+      "qualifying_scheduled_events_odds_lake": 1287,
+      "honest_b1_open_coverage": {
+        "n": 1287,
+        "rate": 1.0
+      },
+      "honest_b1_close_coverage": {
+        "n": 1287,
+        "rate": 1.0
+      },
+      "pit_kenpom_adjem_coverage": {
+        "n_snapshots_in_window": 0,
+        "snapshot_dates": [],
+        "source": "kenpom_archive_api_endpoint=archive",
+        "reconstruction_forbidden": true
+      },
+      "pit_kenpom_adjt_coverage": {
+        "same_snapshots_as_adjem": true,
+        "n_snapshots_in_window": 0,
+        "note": "adjtempo column present in archive snapshots"
+      },
+      "schedule_sot_outcome_availability": "NO_SCHEDULE_PACK",
+      "b7_identity_coverage": "NO_SCHEDULE_PACK",
+      "venue_status_coverage": "NO_SCHEDULE_PACK",
+      "duplicate_event_count": 0,
+      "expected_eligible_count": "NOT_MATERIALIZABLE",
+      "prior_model_metric_calculated_on_window": false,
+      "seal_status": "SEALED_PROTOCOL_EXCLUDED",
+      "blockers": [
+        "MISSING_PIT_KENPOM_SNAPSHOTS",
+        "SCHEDULE_SOT_INCOMPLETE_OR_ABSENT"
+      ],
+      "external_drive_dependency": "MAY_HOLD_ADDITIONAL_ODDS_OR_SNAPSHOTS_UNVERIFIED",
+      "classification_notes": "Configured label Nov1\u2013Dec31. Odds tips only 2025-11-03\u21922025-12-06. Dec7\u201331 NOT covered by current odds lake. Zero KenPom snapshots in window. No 2025-26 schedule pack."
+    },
+    {
+      "window_id": "pocket_2025_odds_observed_partial",
+      "configured_date_bounds": [
+        "2025-11-03",
+        "2025-12-06"
+      ],
+      "odds_tip_min_observed": "2025-11-03",
+      "odds_tip_max_observed": "2025-12-06",
+      "qualifying_scheduled_events_odds_lake": 1287,
+      "honest_b1_open_coverage": {
+        "n": 1287,
+        "rate": 1.0
+      },
+      "honest_b1_close_coverage": {
+        "n": 1287,
+        "rate": 1.0
+      },
+      "pit_kenpom_adjem_coverage": {
+        "n_snapshots_in_window": 0,
+        "snapshot_dates": [],
+        "source": "kenpom_archive_api_endpoint=archive",
+        "reconstruction_forbidden": true
+      },
+      "pit_kenpom_adjt_coverage": {
+        "same_snapshots_as_adjem": true,
+        "n_snapshots_in_window": 0,
+        "note": "adjtempo column present in archive snapshots"
+      },
+      "schedule_sot_outcome_availability": "NO_SCHEDULE_PACK",
+      "b7_identity_coverage": "NO_SCHEDULE_PACK",
+      "venue_status_coverage": "NO_SCHEDULE_PACK",
+      "duplicate_event_count": 0,
+      "expected_eligible_count": "NOT_MATERIALIZABLE",
+      "prior_model_metric_calculated_on_window": false,
+      "seal_status": "SEALED_PARTIAL_COVERAGE",
+      "blockers": [
+        "MISSING_PIT_KENPOM_SNAPSHOTS",
+        "SCHEDULE_SOT_INCOMPLETE_OR_ABSENT"
+      ],
+      "external_drive_dependency": "MAY_HOLD_ADDITIONAL_ODDS_BEYOND_DEC6_UNVERIFIED",
+      "classification_notes": "Accurate partial-pocket classification: odds tips span 2025-11-03 through 2025-12-06 only. Do not describe Dec7\u201331 as covered."
+    },
+    {
+      "window_id": "post_pocket_2026_jan_mar",
+      "configured_date_bounds": [
+        "2026-01-01",
+        "2026-03-31"
+      ],
+      "odds_tip_min_observed": null,
+      "odds_tip_max_observed": null,
+      "qualifying_scheduled_events_odds_lake": 0,
+      "honest_b1_open_coverage": {
+        "n": 0,
+        "rate": null
+      },
+      "honest_b1_close_coverage": {
+        "n": 0,
+        "rate": null
+      },
+      "pit_kenpom_adjem_coverage": {
+        "n_snapshots_in_window": 0,
+        "snapshot_dates": [],
+        "source": "kenpom_archive_api_endpoint=archive",
+        "reconstruction_forbidden": true
+      },
+      "pit_kenpom_adjt_coverage": {
+        "same_snapshots_as_adjem": true,
+        "n_snapshots_in_window": 0,
+        "note": "adjtempo column present in archive snapshots"
+      },
+      "schedule_sot_outcome_availability": "NO_SCHEDULE_PACK",
+      "b7_identity_coverage": "NO_SCHEDULE_PACK",
+      "venue_status_coverage": "NO_SCHEDULE_PACK",
+      "duplicate_event_count": 0,
+      "expected_eligible_count": "NOT_MATERIALIZABLE",
+      "prior_model_metric_calculated_on_window": false,
+      "seal_status": "NO_DATA",
+      "blockers": [
+        "MISSING_PIT_KENPOM_SNAPSHOTS",
+        "SCHEDULE_SOT_INCOMPLETE_OR_ABSENT",
+        "NO_ODDS_EVENTS_IN_CLOUD_LAKE"
+      ],
+      "external_drive_dependency": "UNKNOWN",
+      "classification_notes": "No cloud odds or KenPom snapshots for 2026."
+    }
+  ],
+  "kenpom_integrity": {
+    "archive_mechanism": "apps/web/src/precompute_kenpom_snapshots.py uses KenPom API endpoint=archive&d=YYYY-MM-DD",
+    "repo_snapshot_date_min": "2015-11-15",
+    "repo_snapshot_date_max": "2025-03-30",
+    "n_snapshots": 198,
+    "forbidden": [
+      "end_of_season_ratings_assigned_backward",
+      "current_kenpom_used_for_historical_dates",
+      "interpolation_from_future_snapshots",
+      "reconstruction_using_games_after_target_tip",
+      "annual_csvs_treated_as_pit",
+      "inferred_historical_ratings_without_governed_model"
+    ],
+    "post_test_a_valid_pit_intersection_materializable": false,
+    "verdict": "NO VALID UNTOUCHED OOS WINDOW CURRENTLY MATERIALIZABLE",
+    "verdict_reason": "Although archive KenPom snapshots and odds exist for some post-Test-A calendar ranges, no window simultaneously has (1) PIT KenPom AdjEM+AdjT, (2) complete Schedule SoT outcome+venue+B7 packs, and (3) sealed/unscored status suitable for confirmation. Pocket 2025 lacks KenPom entirely and has only partial odds coverage through 2025-12-06. Remaining 2023-24 and full 2024-25 lack complete Schedule SoT packs in-repo."
+  },
+  "offline_archive": {
+    "odds_archive": {
+      "ownership": "USER_CONFIRMED_OWNED_OFFLINE",
+      "cloud_availability": "NOT_PRESENT",
+      "exact_coverage_schema": "OFFLINE_UNVERIFIED"
+    },
+    "kenpom_pit_snapshots": {
+      "may_exist_on_offline_archive": true,
+      "confirmed": false,
+      "status": "UNCONFIRMED_POSSIBLE_PENDING_RYAN_OR_LOCAL_INVENTORY"
+    },
+    "schedule_sot_packs": {
+      "may_exist_on_offline_archive": true,
+      "confirmed": false,
+      "status": "UNCONFIRMED_POSSIBLE_PENDING_RYAN_OR_LOCAL_INVENTORY"
+    },
+    "no_api_credits_requested": true,
+    "no_external_drive_access_attempted": true
+  },
+  "pocket_reclassification": {
+    "configured_label": "2025-11-01 \u2192 2025-12-31",
+    "accurate_classification": "PARTIAL_COVERAGE",
+    "odds_tips_observed": [
+      "2025-11-03",
+      "2025-12-06"
+    ],
+    "dec_7_through_31_covered": false,
+    "do_not_describe_dec7_31_as_covered": true
+  }
+}

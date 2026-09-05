@@ -335,13 +335,18 @@ def test_live_lab_densify_lifts_test_a_coverage() -> None:
     reason="Lab fair parquet not present",
 )
 def test_build_scorecard_no_densify_is_thinner_than_v1_1() -> None:
-    """Thin path stays below densified v1.1; does not rewrite frozen v1 JSON."""
+    """Thin path stays below densified fill; does not rewrite frozen v1 JSON.
+
+    Densify default now stamps scorecard v1.2 (v1.1 densify join + denser Path A
+    odds lake). Thin path remains v1.0. This assertion tracks current versioning;
+    it does not rewrite frozen scorecard artifacts or thresholds.
+    """
     thin = build_scorecard(densify_results=False)
     dense = build_scorecard(densify_results=True)
     thin_pred = (thin.get("cuts") or {}).get("test_a", {}).get("predictive") or {}
     dense_pred = (dense.get("cuts") or {}).get("test_a", {}).get("predictive") or {}
     assert thin["scorecard_version"].endswith("v1.0")
-    assert dense["scorecard_version"].endswith("v1.1")
+    assert dense["scorecard_version"].endswith("v1.2")
     assert int(thin_pred.get("n_with_actual") or 0) < int(dense_pred.get("n_with_actual") or 0)
     assert float(dense_pred.get("outcome_coverage") or 0) > 0.85
     assert thin["leakage_receipt"]["kenpom_leakage_violations"] == 0
