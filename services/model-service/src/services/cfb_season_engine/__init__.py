@@ -380,6 +380,10 @@ def engine_status_payload(
             "src.services.cfb_season_engine.qb_situation_overrides",
             fromlist=["documentation"],
         ).documentation(),
+        "qb_confirmed_starters": __import__(
+            "src.services.cfb_season_engine.qb_confirmed_starters",
+            fromlist=["documentation"],
+        ).documentation(),
         "hfa_bucket_counts": hfa_buckets,
         "coaching_flag_counts": coaching_flags,
         "roster_strength_ladder": {

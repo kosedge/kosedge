@@ -30,6 +30,7 @@ from src.services.cfb_season_engine.player_hooks import build_player_hooks
 from src.services.cfb_season_engine.position_groups import build_position_groups
 from src.services.cfb_season_engine.qb_situation import build_qb_situation
 from src.services.cfb_season_engine.qb_situation_overrides import apply_qb_situation_override
+from src.services.cfb_season_engine.qb_confirmed_starters import apply_confirmed_starter
 from src.services.cfb_season_engine.real_roster import (
     ROSTER_SOURCE_LEGACY_PRIORS,
     ROSTER_SOURCE_PACKAGED_ESPN,
@@ -144,7 +145,9 @@ def _team_state_from_payload(
         team, payload.get("roster"), default_source=default_source
     )
     groups_payload = payload.get("position_groups") or {}
+    # 1C–1E path (do not fork): pack qb → expert override → W1 confirm → build
     qb_payload = apply_qb_situation_override(team, payload.get("qb"))
+    qb_payload = apply_confirmed_starter(team, qb_payload)
     qb = build_qb_situation(
         team,
         qb_payload,

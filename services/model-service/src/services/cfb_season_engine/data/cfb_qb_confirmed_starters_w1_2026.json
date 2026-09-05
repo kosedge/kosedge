@@ -1,0 +1,616 @@
+{
+  "as_of": "2026-09-01",
+  "season": 2026,
+  "week": 1,
+  "source": "w1_confirmed_starter",
+  "doctrine": "Confirmation join into the existing 1C\u20131E path (pack \u2192 expert override \u2192 confirm \u2192 build_qb_situation). Identity only; does not fork qb_situation or invent ESPN-missing names. Seeded to match current 1C\u20131E inputs \u2192 zero KEI moves. rest_travel is a later class, not this PR.",
+  "ops": "docs/CFB_CH3_CONFIRMATION_JOIN_BRIEF.md",
+  "open_camps_no_lock": [
+    "ALA",
+    "MICH",
+    "UF",
+    "UGA"
+  ],
+  "teams": {
+    "AKR": {
+      "starter_name": "Ben Finley",
+      "starter_key": "4431091",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "AUB": {
+      "starter_name": "Byrum Brown",
+      "starter_key": "4880272",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "BALL": {
+      "starter_name": "Keldric Luster",
+      "starter_key": "5075392",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "BAY": {
+      "starter_name": "DJ Lagway",
+      "starter_key": "5079555",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "BC": {
+      "starter_name": "Enzo Arjona",
+      "starter_key": "5085788",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "BOISE": {
+      "starter_name": "Maddux Madsen",
+      "starter_key": "4870513",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "CAL": {
+      "starter_name": "Jaron-Keawe Sagapolutele",
+      "starter_key": "5164313",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "CCU": {
+      "starter_name": "Deuce Bailey",
+      "starter_key": "5296439",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "CIN": {
+      "starter_name": "JC French IV",
+      "starter_key": "4685345",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "CLEM": {
+      "starter_name": "Christopher Vizzina",
+      "starter_key": "4899369",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "CMU": {
+      "starter_name": "Angel Flores",
+      "starter_key": "5084769",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "COLO": {
+      "starter_name": "Julian Lewis",
+      "starter_key": "5159016",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "DUKE": {
+      "starter_name": "Walker Eget",
+      "starter_key": "4694149",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "EMU": {
+      "starter_name": "Noah Kim",
+      "starter_key": "4690158",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "FAU": {
+      "starter_name": "Drew Devillier",
+      "starter_key": "5219898",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "FIU": {
+      "starter_name": "JJ Kohl",
+      "starter_key": "4870883",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "FRES": {
+      "starter_name": "Khristian Martin",
+      "starter_key": "5146667",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "FSU": {
+      "starter_name": "Ashton Daniels",
+      "starter_key": "4838679",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "expert_override",
+      "espn_present": true
+    },
+    "GT": {
+      "starter_name": "Alberto Mendoza",
+      "starter_key": "5191162",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "HAW": {
+      "starter_name": "Micah Alejado",
+      "starter_key": "5101124",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "HOU": {
+      "starter_name": "Luke Carney",
+      "starter_key": "5208138",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "ILL": {
+      "starter_name": "Katin Houser",
+      "starter_key": "4795295",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "IOWA": {
+      "starter_name": "Hank Brown",
+      "starter_key": "5089314",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "IU": {
+      "starter_name": "Josh Hoover",
+      "starter_key": "4685401",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "JMU": {
+      "starter_name": "Arrington Maiden",
+      "starter_key": "5147757",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "KENT": {
+      "starter_name": "Dru DeShields",
+      "starter_key": "5119841",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "LIB": {
+      "starter_name": "Ethan Vasko",
+      "starter_key": "4832918",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "LOU": {
+      "starter_name": "Davin Wydner",
+      "starter_key": "4836476",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "LSU": {
+      "starter_name": "Sam Leavitt",
+      "starter_key": "5078810",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "expert_override",
+      "espn_present": true
+    },
+    "M-OH": {
+      "starter_name": "Thomas Gotkowski",
+      "starter_key": "5142146",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MASS": {
+      "starter_name": "Logan Inagawa",
+      "starter_key": "5298739",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MEM": {
+      "starter_name": "Air Noland",
+      "starter_key": "5079548",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MIA": {
+      "starter_name": "Darian Mensah",
+      "starter_key": "5121169",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MISS": {
+      "starter_name": "Trinidad Chambliss",
+      "starter_key": "4911529",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MOST": {
+      "starter_name": "Skyler Locklear",
+      "starter_key": "5083042",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MRSH": {
+      "starter_name": "Carlos Del Rio-Wilson",
+      "starter_key": "4432691",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MSST": {
+      "starter_name": "AJ Swann",
+      "starter_key": "5081405",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "MSU": {
+      "starter_name": "Alessio Milivojevic",
+      "starter_key": "5146670",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "ND": {
+      "starter_name": "CJ Carr",
+      "starter_key": "5079369",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "NEB": {
+      "starter_name": "Anthony Colandrea",
+      "starter_key": "5044387",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "NIU": {
+      "starter_name": "Taron Dickens",
+      "starter_key": "4881032",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "OHIO": {
+      "starter_name": "Matt Vezza",
+      "starter_key": "5171031",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "OKST": {
+      "starter_name": "Drew Mestemaker",
+      "starter_key": "5219834",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "ORE": {
+      "starter_name": "Dante Moore",
+      "starter_key": "4870921",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "ORST": {
+      "starter_name": "Braden Atkinson",
+      "starter_key": "5212654",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "OSU": {
+      "starter_name": "Julian Sayin",
+      "starter_key": "5079712",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "OU": {
+      "starter_name": "John Mateer",
+      "starter_key": "4915980",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "PITT": {
+      "starter_name": "Mason Heintschel",
+      "starter_key": "5208095",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "PSU": {
+      "starter_name": "Rocco Becht",
+      "starter_key": "4801299",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "RUT": {
+      "starter_name": "Dylan Lonergan",
+      "starter_key": "4870900",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "SCAR": {
+      "starter_name": "LaNorris Sellers",
+      "starter_key": "4875127",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "SHSU": {
+      "starter_name": "Landyn Locke",
+      "starter_key": "5148427",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "SJSU": {
+      "starter_name": "Luke Weaver",
+      "starter_key": "5295238",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "SMU": {
+      "starter_name": "Kevin Jennings",
+      "starter_key": "5084084",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "STAN": {
+      "starter_name": "Charlie Mirer",
+      "starter_key": "4914482",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "TAMU": {
+      "starter_name": "Marcel Reed",
+      "starter_key": "4870971",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "TEX": {
+      "starter_name": "Arch Manning",
+      "starter_key": "4870906",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "TLSA": {
+      "starter_name": "Baylor Hayes",
+      "starter_key": "5224011",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "TROY": {
+      "starter_name": "Tucker Kilcrease",
+      "starter_key": "4912119",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "TULN": {
+      "starter_name": "Zeon Chriss-Gremillion",
+      "starter_key": "4870518",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "TXST": {
+      "starter_name": "Brad Jackson",
+      "starter_key": "5148803",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "UCLA": {
+      "starter_name": "Nico Iamaleava",
+      "starter_key": "4870799",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "ULM": {
+      "starter_name": "Aidan Armenta",
+      "starter_key": "5122054",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "UNLV": {
+      "starter_name": "Jackson Arnold",
+      "starter_key": "4870607",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "USC": {
+      "starter_name": "Jayden Maiava",
+      "starter_key": "4685454",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "USF": {
+      "starter_name": "KJ Cooper",
+      "starter_key": "5232131",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "UTEP": {
+      "starter_name": "EJ Colson Jr.",
+      "starter_key": "5141395",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WAKE": {
+      "starter_name": "Gio Lopez",
+      "starter_key": "4920227",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WASH": {
+      "starter_name": "Demond Williams Jr.",
+      "starter_key": "5079653",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WIS": {
+      "starter_name": "Colton Joseph",
+      "starter_key": "5125715",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WKU": {
+      "starter_name": "Rodney Tisdale Jr.",
+      "starter_key": "5196864",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WMU": {
+      "starter_name": "Broc Lowry",
+      "starter_key": "5074245",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WSU": {
+      "starter_name": "Caden Pinnick",
+      "starter_key": "5226019",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WVU": {
+      "starter_name": "Scotty Fox Jr.",
+      "starter_key": "5164314",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    },
+    "WYO": {
+      "starter_name": "Tyler Hughes",
+      "starter_key": "4838536",
+      "status": "confirmed",
+      "matched_1c1e_input": true,
+      "via": "pack_qb1",
+      "espn_present": true
+    }
+  }
+}

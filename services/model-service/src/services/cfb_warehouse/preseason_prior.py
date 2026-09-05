@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Mapping, Optional, Sequence
 
 from src.services.cfb_season_engine.coaching_continuity import build_coaching_continuity
 from src.services.cfb_season_engine.loaders import load_packaged_team_priors
+from src.services.cfb_season_engine.qb_confirmed_starters import apply_confirmed_starter
 from src.services.cfb_season_engine.qb_situation import build_qb_situation
 from src.services.cfb_season_engine.qb_situation_overrides import apply_qb_situation_override
 from src.services.cfb_season_engine.roster_construction import build_roster_construction
@@ -216,9 +217,9 @@ def build_preseason_priors(
     for team in team_ids:
         payload = dict(teams_payload.get(team) or {})
         roster = build_roster_construction(team, payload.get("roster"))
-        qb = build_qb_situation(
-            team, apply_qb_situation_override(team, payload.get("qb"))
-        )
+        qb_payload = apply_qb_situation_override(team, payload.get("qb"))
+        qb_payload = apply_confirmed_starter(team, qb_payload)
+        qb = build_qb_situation(team, qb_payload)
         coaching = build_coaching_continuity(team, payload.get("coaching"))
         program = program_component(legal, team, prior_year=prior_year)
         rows.append(
