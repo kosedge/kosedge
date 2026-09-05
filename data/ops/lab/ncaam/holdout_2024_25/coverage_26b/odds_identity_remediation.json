@@ -1,0 +1,14 @@
+{
+  "event_level_deterministic_recovery_estimate": 0,
+  "forbidden_methods_not_used": [
+    "unattended_fuzzy_matching",
+    "nearest_name_selection",
+    "city_only_inference",
+    "conference_only_inference",
+    "silent_homonym_collapse",
+    "home_away_flip_to_force_join"
+  ],
+  "n_identity_unresolved_events_in_current_audit_rows": 0,
+  "note": "After rebuild, identity unresolved is cleared via deterministic alias/expansion families.",
+  "scores_omitted": true
+}

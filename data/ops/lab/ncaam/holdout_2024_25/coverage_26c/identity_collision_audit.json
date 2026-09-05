@@ -1,0 +1,158 @@
+{
+  "collision_failures": [],
+  "collision_safe": true,
+  "forbidden_methods_not_used": [
+    "fuzzy_matching",
+    "nearest_name",
+    "city_only",
+    "conference_only",
+    "home_away_flip_to_match",
+    "silent_many_to_one_collapse"
+  ],
+  "homonym_checks": {
+    "east texas a&m": {
+      "direct": "east texas a&m",
+      "expected": "east texas a&m",
+      "odds_norm": "east texas a&m",
+      "ok": true
+    },
+    "eastern kentucky": {
+      "direct": "eastern kentucky",
+      "expected": "eastern kentucky",
+      "odds_norm": "eastern kentucky",
+      "ok": true
+    },
+    "loyola": {
+      "direct": null,
+      "expected": null,
+      "odds_norm": null,
+      "ok": true
+    },
+    "loyola chicago": {
+      "direct": "loyola chicago",
+      "expected": "loyola chicago",
+      "odds_norm": "loyola chicago",
+      "ok": true
+    },
+    "loyola marymount": {
+      "direct": "loyola marymount",
+      "expected": "loyola marymount",
+      "odds_norm": "loyola marymount",
+      "ok": true
+    },
+    "miami": {
+      "direct": null,
+      "expected": null,
+      "odds_norm": null,
+      "ok": true
+    },
+    "miami fl": {
+      "direct": "miami fl",
+      "expected": "miami fl",
+      "odds_norm": "miami fl",
+      "ok": true
+    },
+    "miami oh": {
+      "direct": "miami oh",
+      "expected": "miami oh",
+      "odds_norm": "miami oh",
+      "ok": true
+    },
+    "northern iowa": {
+      "direct": "northern iowa",
+      "expected": "northern iowa",
+      "odds_norm": "northern iowa",
+      "ok": true
+    },
+    "saint francis": {
+      "direct": "saint francis",
+      "expected": "saint francis",
+      "odds_norm": "saint francis",
+      "ok": true
+    },
+    "saint mary's": {
+      "direct": "saint mary's",
+      "expected": "saint mary's",
+      "odds_norm": "saint mary's",
+      "ok": true
+    },
+    "south carolina": {
+      "direct": "south carolina",
+      "expected": "south carolina",
+      "odds_norm": "south carolina",
+      "ok": true
+    },
+    "southern": {
+      "direct": null,
+      "expected": null,
+      "odds_norm": null,
+      "ok": true
+    },
+    "st francis": {
+      "direct": null,
+      "expected": null,
+      "odds_norm": null,
+      "ok": true
+    },
+    "st francis pa": {
+      "direct": "saint francis",
+      "expected": "saint francis",
+      "odds_norm": "saint francis",
+      "ok": true
+    },
+    "texas a&m": {
+      "direct": "texas a&m",
+      "expected": "texas a&m",
+      "odds_norm": "texas a&m",
+      "ok": true
+    },
+    "texas a&m commerce": {
+      "direct": "east texas a&m",
+      "expected": "east texas a&m",
+      "odds_norm": "east texas a&m",
+      "ok": true
+    },
+    "usc": {
+      "direct": "usc",
+      "expected": "usc",
+      "odds_norm": "usc",
+      "ok": true
+    },
+    "ut arlington": {
+      "direct": "ut arlington",
+      "expected": "ut arlington",
+      "odds_norm": "ut arlington",
+      "ok": true
+    },
+    "utep": {
+      "direct": "utep",
+      "expected": "utep",
+      "odds_norm": "utep",
+      "ok": true
+    },
+    "utsa": {
+      "direct": "utsa",
+      "expected": "utsa",
+      "odds_norm": "utsa",
+      "ok": true
+    },
+    "western kentucky": {
+      "direct": "western kentucky",
+      "expected": "western kentucky",
+      "odds_norm": "western kentucky",
+      "ok": true
+    }
+  },
+  "identity_unresolved_cleared": true,
+  "identity_unresolved_events": 0,
+  "n_alias_entries": 1199,
+  "n_b7_targets": 365,
+  "n_omit_entries": 5,
+  "overbroad_bare_tokens": [],
+  "rule_hit_counts": {
+    "deterministic_expansion": 901,
+    "exact_alias": 10615
+  },
+  "schema_version": "ncaam-identity-collision-audit-26c-v1",
+  "scores_omitted": true
+}

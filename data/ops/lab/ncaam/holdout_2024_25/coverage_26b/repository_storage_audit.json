@@ -1,0 +1,15 @@
+{
+  "git_lfs_configured": false,
+  "raw_payload_count": 156,
+  "recommendation": {
+    "blocked_storage_architecture": true,
+    "do_not_migrate_or_delete_in_this_phase": true,
+    "split_pr_491": [
+      "1_reusable_ingestion_code_schema_tests",
+      "2_manifest_and_small_normalized_fixtures",
+      "3_externally_stored_immutable_raw_dataset"
+    ]
+  },
+  "scores_omitted": true,
+  "total_added_mib": 99.92
+}

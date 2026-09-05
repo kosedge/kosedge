@@ -1,0 +1,10 @@
+{
+  "coverage_counts": {
+    "confirmed_home": 5008,
+    "confirmed_neutral": 739,
+    "conflicts": 22,
+    "unknown": 22
+  },
+  "n_rows": 5769,
+  "scores_omitted": true
+}

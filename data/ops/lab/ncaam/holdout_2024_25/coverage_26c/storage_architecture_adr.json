@@ -1,0 +1,55 @@
+{
+  "adr_id": "ADR_2026-09-05_holdout_raw_object_storage",
+  "context": "Holdout raw ESPN scoreboard payloads (~100 MiB, 300+ day files) currently live under data/ops/lab/ncaam/holdout_2024_25/raw/. PR491 must not land as a single mega-diff of raw JSON. NFL DR already uses optional S3/R2 via NFL_DR_REMOTE_URI + sha256 sidecars.",
+  "decision": null,
+  "doc_path": "docs/ops/ncaam/ADR_2026-09-05_holdout_raw_object_storage.md",
+  "evaluated": false,
+  "non_goals_26c": [
+    "provision_bucket",
+    "upload_raw",
+    "delete_local_raw",
+    "rewrite_pr491",
+    "unseal_or_score"
+  ],
+  "options_considered": [
+    {
+      "cons": [
+        "needs Ryan bucket/prefix decision",
+        "credential wiring"
+      ],
+      "description": "Mirror NFL DR: optional remote URI env (e.g. NCAAM_HOLDOUT_RAW_URI=s3://\u2026/ncaam/holdout_2024_25/raw/espn_scoreboard) + local cache + sha256 sidecars",
+      "id": "A_s3_r2_immutable_prefix",
+      "pros": [
+        "matches NFL ops muscle memory",
+        "immutable object keys",
+        "offline-capable"
+      ]
+    },
+    {
+      "cons": [
+        "more tooling; overkill for day-keyed ESPN boards"
+      ],
+      "description": "sha256-keyed objects with manifest index in-repo; blobs external",
+      "id": "B_content_addressed_object_store",
+      "pros": [
+        "dedupe",
+        "strong integrity"
+      ]
+    },
+    {
+      "cons": [
+        "rejected for ~100MiB+ growing lab datasets; PR bloat"
+      ],
+      "description": "Track raw JSON via Git LFS",
+      "id": "C_git_lfs",
+      "pros": [
+        "simple clone path"
+      ],
+      "status": "not_recommended"
+    }
+  ],
+  "recommendation_pending_ryan": "A_s3_r2_immutable_prefix",
+  "schema_version": "ncaam-storage-architecture-adr-26c-v1",
+  "scores_omitted": true,
+  "status": "PROPOSED_AWAITING_RYAN"
+}

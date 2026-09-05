@@ -1,0 +1,19 @@
+{
+  "current_seal_receipt_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
+  "evaluated": false,
+  "features_labels_joined_for_evaluation": false,
+  "holdout_id": "ncaam_holdout_2024_25_v1_1",
+  "membership_changed": false,
+  "n_complete_intersection": 3334,
+  "new_seal_issued": false,
+  "package_version": "v1.1",
+  "policy": "No new seal unless complete-intersection membership changes. Phase 2.6C does not change membership; preserve v1 archive + v1.1 seal.",
+  "preserve_v1": true,
+  "preserve_v1_1": true,
+  "schema_version": "ncaam-seal-governance-26c-v1",
+  "scores_omitted": true,
+  "unseal_omitted": true,
+  "v1_1_seal_path": "seal/seal_receipt.json",
+  "v1_archive_path": "seal_archive/v1/seal_receipt.json",
+  "v1_archive_present": true
+}

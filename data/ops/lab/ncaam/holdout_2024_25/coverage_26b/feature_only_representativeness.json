@@ -1,0 +1,9 @@
+{
+  "answer": "broadly_representative_on_observed_feature_slices_with_documented_exclusions",
+  "global_coverage_pct": 57.79,
+  "material_selection_flags": [],
+  "n_accepted_complete": 3334,
+  "n_feature_rows": 5769,
+  "outcome_distributions_omitted": true,
+  "scores_omitted": true
+}
