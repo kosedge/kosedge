@@ -103,8 +103,7 @@ export function preferNextDailySlate(games: TonightGame[]): TonightGame[] {
   const days = [...byDay.keys()].sort();
   // Upcoming/today first; if the board only has past days, keep the latest day
   // so Overview is not empty when schedule rows exist.
-  const todayOrNext =
-    days.find((d) => d >= todayEt) ?? days[days.length - 1];
+  const todayOrNext = days.find((d) => d >= todayEt) ?? days[days.length - 1];
   const picked = byDay.get(todayOrNext) ?? games;
   return [...picked].sort((a, b) =>
     gameSortKey(a).localeCompare(gameSortKey(b)),
@@ -141,9 +140,7 @@ export function filterCfbOverviewWeek(games: TonightGame[]): {
 
   const weeks = [
     ...new Set(
-      games
-        .map((g) => Number(g.row.week))
-        .filter((w) => Number.isFinite(w)),
+      games.map((g) => Number(g.row.week)).filter((w) => Number.isFinite(w)),
     ),
   ].sort((a, b) => a - b);
   // Prefer first regular week (>=1) over Week 0 finals when both exist.
@@ -170,10 +167,7 @@ async function loadSportGames(sportKey: string): Promise<SportSlateLoad> {
     }
     try {
       const flat = await loadAssembledEdgeBoardRows("nfl", { slate: "full" });
-      const legacy = flatRowsToLegacy(
-        Array.isArray(flat) ? flat : [],
-        "nfl",
-      );
+      const legacy = flatRowsToLegacy(Array.isArray(flat) ? flat : [], "nfl");
       games = legacy
         .filter((row) => row?.teamA?.name && row?.teamB?.name)
         .map((row) => ({
@@ -202,9 +196,7 @@ async function loadSportGames(sportKey: string): Promise<SportSlateLoad> {
         const stamped = stampCfbEdgeBoardWeek(
           games.map((g) => ({
             ...g.row,
-            game:
-              g.row.game ??
-              `${g.row.teamA.name} @ ${g.row.teamB.name}`,
+            game: g.row.game ?? `${g.row.teamA.name} @ ${g.row.teamB.name}`,
             week: g.row.week ?? undefined,
           })),
         );

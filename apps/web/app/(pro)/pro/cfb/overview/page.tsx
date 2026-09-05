@@ -167,7 +167,9 @@ export default async function CfbOverviewPage() {
 
             <div className="rounded-2xl border border-white/10 bg-black/30 p-5">
               <div className="flex flex-wrap items-end justify-between gap-2">
-                <h2 className="text-lg font-semibold text-kos-text">Previews</h2>
+                <h2 className="text-lg font-semibold text-kos-text">
+                  Previews
+                </h2>
                 <Link
                   href="/pro/cfb/previews"
                   className="text-xs font-semibold text-kos-gold hover:underline"

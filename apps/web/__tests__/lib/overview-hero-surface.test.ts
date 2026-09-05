@@ -6,21 +6,9 @@ import type { TonightGame } from "@/lib/edge-board-tonight";
 
 const ROOT = join(__dirname, "../..");
 
-const DEDICATED = [
-  "nfl",
-  "nba",
-  "mlb",
-  "nhl",
-  "wnba",
-  "ncaam",
-  "cfb",
-] as const;
+const DEDICATED = ["nfl", "nba", "mlb", "nhl", "wnba", "ncaam", "cfb"] as const;
 
-function game(
-  slug: string,
-  commenceTime: string,
-  week?: number,
-): TonightGame {
+function game(slug: string, commenceTime: string, week?: number): TonightGame {
   return {
     slug,
     sport: "nba",

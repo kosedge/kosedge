@@ -62,7 +62,9 @@ function subtleStatusLine(
   if (status === "timeout" || status === "error") return null;
   if (status === "empty" || gameCount === 0) return null;
   const count =
-    gameCount === 1 ? "1 matchup on the board" : `${gameCount} matchups on the board`;
+    gameCount === 1
+      ? "1 matchup on the board"
+      : `${gameCount} matchups on the board`;
   return weekLabel ? `${weekLabel} · ${count}` : count;
 }
 
@@ -81,10 +83,10 @@ export default function OverviewEdgeBoardSlate({
 }) {
   const meta = SLATE_META[sport] ?? {
     title: "Today’s Slate",
-    emptyHint: "Slate cards appear when the schedule posts — we do not invent matchups.",
+    emptyHint:
+      "Slate cards appear when the schedule posts — we do not invent matchups.",
   };
-  const cfbWeek =
-    typeof week === "number" && Number.isFinite(week) ? week : 1;
+  const cfbWeek = typeof week === "number" && Number.isFinite(week) ? week : 1;
   const edgeBoardHref =
     sport === "cfb"
       ? `/edge-board/cfb?week=${cfbWeek}`
