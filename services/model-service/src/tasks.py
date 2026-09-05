@@ -262,7 +262,10 @@ SPORT_MAP: Dict[str, Tuple[str, str, str]] = {
     "baseball_mlb": ("mlb", "MLB", "Major League Baseball"),
     "basketball_nba": ("nba", "NBA", "National Basketball Association"),
     "basketball_wnba": ("wnba", "WNBA", "Women's National Basketball Association"),
+    "icehockey_nhl": ("nhl", "NHL", "National Hockey League"),
     "americanfootball_nfl": ("nfl", "NFL", "National Football League"),
+    # Live beat previously omitted NCAAF — Edge Board joined request-time only.
+    "americanfootball_ncaaf": ("cfb", "CFB", "NCAA Football"),
 }
 
 MARKET_MAP: Dict[str, str] = {
@@ -2221,6 +2224,9 @@ def _ensure_hierarchy(
         from .services.wnba_data import wnba_season_year_from_date
 
         season_year = wnba_season_year_from_date(game_dt.date())
+    elif sport_key in {"americanfootball_nfl", "americanfootball_ncaaf"}:
+        # Football season label = tip-off year (Aug–Feb); Jan/Feb → prior calendar year.
+        season_year = game_dt.year if game_dt.month >= 3 else game_dt.year - 1
     else:
         season_year = game_dt.year
     home_team = _normalize_team_name_for_lookup(sport_key, home_team)
@@ -3797,7 +3803,10 @@ def _set_active_model(
 
 
 @celery_app.task(name="src.tasks.pull_odds_snapshot")
-def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
+def pull_odds_snapshot(
+    nfl_bookmakers: Optional[str] = None,
+    sport_keys: Optional[str] = None,
+) -> Dict[str, Any]:
     log.info("Running scheduled pull_odds_snapshot")
     data: List[Dict[str, Any]] = []
     resolved_nfl_bookmakers = _resolve_nfl_odds_bookmakers_for_request(nfl_bookmakers)
@@ -3806,7 +3815,19 @@ def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
         "used_by_sport": {},
         "selected_sources": odds_key_diagnostics().get("selected_sources"),
     }
-    for sport_key in SPORT_MAP.keys():
+    if sport_keys:
+        requested = [k.strip() for k in str(sport_keys).split(",") if k.strip()]
+        pull_keys = [k for k in requested if k in SPORT_MAP]
+        unknown = [k for k in requested if k not in SPORT_MAP]
+        if unknown:
+            log.warning(
+                "Ignoring unknown sport_keys for odds snapshot",
+                extra={"unknown": unknown},
+            )
+    else:
+        pull_keys = list(SPORT_MAP.keys())
+
+    for sport_key in pull_keys:
         params: Dict[str, str] = {
             "regions": "us",
             "markets": "h2h,spreads,totals",
@@ -3840,7 +3861,12 @@ def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
 
     if not data:
         log.warning("Odds payload was empty; skipping persistence.")
-        return {"events_fetched": 0, "events_persisted": 0, "snapshots_inserted": 0}
+        return {
+            "events_fetched": 0,
+            "events_persisted": 0,
+            "snapshots_inserted": 0,
+            "sport_keys": pull_keys,
+        }
 
     session = SessionLocal()
     try:
@@ -3878,6 +3904,7 @@ def pull_odds_snapshot(nfl_bookmakers: Optional[str] = None) -> Dict[str, Any]:
         "events_fetched": len(data),
         "events_persisted": events_persisted,
         "snapshots_inserted": snapshots_inserted,
+        "sport_keys": pull_keys,
         "credits_diagnostics": credits_diag,
     }
     log.info(

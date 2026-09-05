@@ -730,12 +730,24 @@ def job_pull_odds_snapshot(
         None,
         description="Comma-separated NFL bookmaker keys for The Odds API (defaults to NFL_ODDS_BOOKMAKERS or draftkings).",
     ),
+    sport_keys: Optional[str] = Query(
+        None,
+        description=(
+            "Optional comma-separated Odds API sport keys to pull "
+            "(e.g. americanfootball_ncaaf). Default = full SPORT_MAP including CFB."
+        ),
+    ),
 ) -> Dict[str, str]:
     try:
+        kwargs: Dict[str, Any] = {}
         if nfl_bookmakers is not None:
+            kwargs["nfl_bookmakers"] = nfl_bookmakers
+        if sport_keys is not None:
+            kwargs["sport_keys"] = sport_keys
+        if kwargs:
             async_result = celery_app.send_task(
                 TASK_PULL_ODDS_SNAPSHOT,
-                kwargs={"nfl_bookmakers": nfl_bookmakers},
+                kwargs=kwargs,
             )
         else:
             async_result = celery_app.send_task(TASK_PULL_ODDS_SNAPSHOT)

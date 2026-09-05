@@ -173,6 +173,8 @@ def test_pull_odds_snapshot_persists_rows(monkeypatch) -> None:
     assert first["events_fetched"] == 1
     assert first["events_persisted"] == 1
     assert first["snapshots_inserted"] == 3
+    assert "americanfootball_ncaaf" in first["sport_keys"]
+    assert "basketball_ncaab" in first["sport_keys"]
 
     second = tasks.pull_odds_snapshot()
     assert second["events_fetched"] == 1
@@ -193,3 +195,96 @@ def test_pull_odds_snapshot_persists_rows(monkeypatch) -> None:
     assert snapshots == 6  # append-only behavior across two pulls
     assert sport_code == "ncaam"
     assert datetime.fromisoformat(captured_at).tzinfo is timezone.utc
+
+
+def test_pull_odds_snapshot_cfb_only_filter(monkeypatch) -> None:
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    _create_sqlite_schema(engine)
+    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    monkeypatch.setattr(tasks, "SessionLocal", TestSession)
+
+    def _fake_fetch_odds_with_metadata(endpoint, params):
+        payload = []
+        if endpoint == "sports/americanfootball_ncaaf/odds":
+            payload = [
+                {
+                    "id": "cfb-evt-1",
+                    "sport_key": "americanfootball_ncaaf",
+                    "commence_time": "2026-09-06T19:00:00Z",
+                    "home_team": "Ohio State Buckeyes",
+                    "away_team": "Ball State Cardinals",
+                    "bookmakers": [
+                        {
+                            "key": "draftkings",
+                            "last_update": "2026-09-05T12:00:00Z",
+                            "markets": [
+                                {
+                                    "key": "h2h",
+                                    "outcomes": [
+                                        {
+                                            "name": "Ohio State Buckeyes",
+                                            "price": -5000,
+                                        },
+                                        {
+                                            "name": "Ball State Cardinals",
+                                            "price": 1800,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "key": "spreads",
+                                    "outcomes": [
+                                        {
+                                            "name": "Ohio State Buckeyes",
+                                            "point": -42.5,
+                                            "price": -110,
+                                        },
+                                        {
+                                            "name": "Ball State Cardinals",
+                                            "point": 42.5,
+                                            "price": -110,
+                                        },
+                                    ],
+                                },
+                                {
+                                    "key": "totals",
+                                    "outcomes": [
+                                        {
+                                            "name": "Over",
+                                            "point": 55.5,
+                                            "price": -108,
+                                        },
+                                        {
+                                            "name": "Under",
+                                            "point": 55.5,
+                                            "price": -112,
+                                        },
+                                    ],
+                                },
+                            ],
+                        }
+                    ],
+                }
+            ]
+        return {
+            "payload": payload,
+            "source": "test",
+            "x_requests_remaining": "40",
+            "x_requests_used": "1",
+        }
+
+    monkeypatch.setattr(
+        tasks, "fetch_odds_with_metadata", _fake_fetch_odds_with_metadata
+    )
+
+    result = tasks.pull_odds_snapshot(sport_keys="americanfootball_ncaaf")
+    assert result["sport_keys"] == ["americanfootball_ncaaf"]
+    assert result["events_fetched"] == 1
+    assert result["events_persisted"] == 1
+    assert result["snapshots_inserted"] == 3
+
+    with engine.connect() as conn:
+        league = conn.execute(text("SELECT code FROM leagues LIMIT 1")).scalar_one()
+        sport = conn.execute(text("SELECT code FROM sports LIMIT 1")).scalar_one()
+    assert league == "cfb"
+    assert sport == "cfb"
