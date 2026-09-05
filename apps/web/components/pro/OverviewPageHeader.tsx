@@ -20,12 +20,10 @@ export default function OverviewPageHeader({
       <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-kos-gold">
         {sportLabel}
       </p>
-      <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text sm:text-4xl">
+      <h1 className="mt-1 text-2xl font-semibold tracking-tight text-kos-text sm:text-3xl">
         Overview
       </h1>
-      <p className="mt-2 text-sm text-kos-text/75 sm:text-base">
-        {OVERVIEW_TAGLINE}
-      </p>
+      <p className="mt-1 text-sm text-kos-text/70">{OVERVIEW_TAGLINE}</p>
     </header>
   );
 }
