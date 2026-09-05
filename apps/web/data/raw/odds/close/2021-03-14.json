@@ -1,0 +1,112 @@
+{
+  "timestamp": "2021-03-14T21:55:00Z",
+  "previous_timestamp": "2021-03-14T21:45:00Z",
+  "next_timestamp": "2021-03-14T22:05:00Z",
+  "data": [
+    {
+      "id": "11b01e5964067cf30fd4c0ed4c9d3a2d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-03-14T19:30:00Z",
+      "home_team": "Illinois Fighting Illini",
+      "away_team": "Ohio State Buckeyes",
+      "bookmakers": [
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-03-14T21:49:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-03-14T21:49:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-03-14T21:49:25Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -110,
+                  "point": -6.5
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": 6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-03-14T21:47:40Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-03-14T21:47:40Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -122,
+                  "point": -5.5
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -104,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "da905f1d52b0eec3d4870c0f64332dae",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-03-14T19:15:00Z",
+      "home_team": "Houston Cougars",
+      "away_team": "Cincinnati Bearcats",
+      "bookmakers": [
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-03-14T21:42:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-03-14T21:42:38Z",
+              "outcomes": [
+                {
+                  "name": "Cincinnati Bearcats",
+                  "price": -111,
+                  "point": 34.5
+                },
+                {
+                  "name": "Houston Cougars",
+                  "price": -167,
+                  "point": -34.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

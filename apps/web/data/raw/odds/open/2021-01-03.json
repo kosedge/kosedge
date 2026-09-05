@@ -1,0 +1,2582 @@
+{
+  "timestamp": "2021-01-03T11:55:00Z",
+  "previous_timestamp": "2021-01-03T11:45:00Z",
+  "next_timestamp": "2021-01-03T12:05:00Z",
+  "data": [
+    {
+      "id": "5e0f6c71000cfa53d97d505d00c9ebe6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-03T21:00:00Z",
+      "home_team": "South Carolina St Bulldogs",
+      "away_team": "North Carolina A&T Aggies",
+      "bookmakers": [
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina A&T Aggies",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "South Carolina St Bulldogs",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "2dcaeaa9513b370a94e706450130ad22",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-03T21:30:00Z",
+      "home_team": "Rhode Island Rams",
+      "away_team": "Saint Joseph's Hawks",
+      "bookmakers": [
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-01-03T11:48:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-01-03T11:48:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-01-03T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Rhode Island Rams",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-01-03T11:49:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Rhode Island Rams",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Rhode Island Rams",
+                  "price": -115,
+                  "point": -12.0
+                },
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -115,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Rhode Island Rams",
+                  "price": -110,
+                  "point": -12.0
+                },
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-01-03T11:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Rhode Island Rams",
+                  "price": -110,
+                  "point": -12.0
+                },
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-01-03T11:47:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Rhode Island Rams",
+                  "price": -110,
+                  "point": -12.0
+                },
+                {
+                  "name": "Saint Joseph's Hawks",
+                  "price": -110,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b6c73e3163ee2dcd0a871efb3e2bb2a6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-03T22:30:00Z",
+      "home_team": "Minnesota Golden Gophers",
+      "away_team": "Ohio State Buckeyes",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-01-03T11:47:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -111,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -101,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-01-03T11:48:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-01-03T11:48:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -109,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-01-03T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-01-03T11:49:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": 105,
+                  "point": -1.5
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -125,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-01-03T11:48:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:33Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -110,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -110,
+                  "point": -1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -116,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -114,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -112,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-01-03T11:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -112,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-01-03T11:47:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Minnesota Golden Gophers",
+                  "price": -112,
+                  "point": 1.0
+                },
+                {
+                  "name": "Ohio State Buckeyes",
+                  "price": -109,
+                  "point": -1.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "30630dd26e2479d6454228826a8b66da",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-03T23:00:00Z",
+      "home_team": "Georgia Tech Yellow Jackets",
+      "away_team": "Wake Forest Demon Deacons",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-01-03T11:47:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -101,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -111,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-01-03T11:48:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-01-03T11:48:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -109,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -109,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-01-03T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -105,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -115,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-01-03T11:49:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -105,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -115,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -110,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": 100,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -120,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-01-03T11:48:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:33Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": -9.5
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -110,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -115,
+                  "point": -9.0
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -115,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-01-03T11:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-01-03T11:47:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "Wake Forest Demon Deacons",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8f5c3b7d61987091e5470e6c8ee5ce89",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-03T23:00:00Z",
+      "home_team": "Drake Bulldogs",
+      "away_team": "Southern Illinois Salukis",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-01-03T11:47:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -106,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -106,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-01-03T11:48:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -106,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-01-03T11:48:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-01-03T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-01-03T11:49:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -105,
+                  "point": -10.5
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -115,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-01-03T11:48:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:33Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -115,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -115,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-01-03T11:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-01-03T11:47:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "32175504044c388e74586fc6c1e16e02",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-04T00:00:00Z",
+      "home_team": "SMU Mustangs",
+      "away_team": "Houston Cougars",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-01-03T11:47:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -106,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -106,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-01-03T11:48:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-01-03T11:48:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -109,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -109,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-01-03T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-01-03T11:48:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:33Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -110,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -110,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -119,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -111,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -108,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-01-03T11:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -108,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-01-03T11:47:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Houston Cougars",
+                  "price": -115,
+                  "point": -2.5
+                },
+                {
+                  "name": "SMU Mustangs",
+                  "price": -108,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 137.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 137.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b6679a8cd6d3974d9d28c5fbdc6ff74f",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-04T00:30:00Z",
+      "home_team": "Michigan Wolverines",
+      "away_team": "Northwestern Wildcats",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-01-03T11:48:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-01-03T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Michigan Wolverines",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-01-03T11:49:01Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Michigan Wolverines",
+                  "price": 100,
+                  "point": -8.5
+                },
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -120,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:01Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Michigan Wolverines",
+                  "price": -115,
+                  "point": -8.0
+                },
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -115,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Michigan Wolverines",
+                  "price": -110,
+                  "point": -8.0
+                },
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-01-03T11:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Michigan Wolverines",
+                  "price": -110,
+                  "point": -8.0
+                },
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-01-03T11:47:48Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Michigan Wolverines",
+                  "price": -110,
+                  "point": -8.0
+                },
+                {
+                  "name": "Northwestern Wildcats",
+                  "price": -110,
+                  "point": 8.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bc3920ddb7a36272619ec393dca2b10d",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-01-03T20:00:00Z",
+      "home_team": "Siena Saints",
+      "away_team": "Monmouth Hawks",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-01-03T11:47:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:44Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 152.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 152.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-01-03T11:48:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:48:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-01-03T11:47:56Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:56Z",
+              "outcomes": [
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -109,
+                  "point": 3.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -109,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-01-03T11:49:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:49:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 151.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 151.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-01-03T11:48:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:48:33Z",
+              "outcomes": [
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-01-03T11:47:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -109,
+                  "point": 3.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -114,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:47:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 152.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 152.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-01-03T11:46:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -112,
+                  "point": 3.5
+                },
+                {
+                  "name": "Siena Saints",
+                  "price": -116,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-01-03T11:46:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 152.0
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 152.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

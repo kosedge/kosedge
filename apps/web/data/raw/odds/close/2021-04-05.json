@@ -1,0 +1,515 @@
+{
+  "timestamp": "2021-04-05T21:55:00Z",
+  "previous_timestamp": "2021-04-05T21:45:00Z",
+  "next_timestamp": "2021-04-05T22:05:00Z",
+  "data": [
+    {
+      "id": "7dc0571c88a13a4b17493e574d2cd3f1",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-04-06T01:20:00Z",
+      "home_team": "Gonzaga Bulldogs",
+      "away_team": "Baylor Bears",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-04-05T21:47:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:46Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -114,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -116,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 160.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-04-05T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -105,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -105,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-04-05T21:47:25Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 160.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:25Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -108,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-04-05T21:46:24Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:46:24Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:46:24Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -105,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-04-05T21:48:15Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:48:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 160.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:48:15Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -108,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-04-05T21:49:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:49:31Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -112,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -104,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:49:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-04-05T21:47:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:42Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -108,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -112,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:42Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 160.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-04-05T21:47:21Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:21Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:21Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-04-05T21:47:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:20Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-04-05T21:46:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:46:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-04-05T21:47:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:14Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -108,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -102,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-04-05T21:49:41Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:49:41Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -109,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -109,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-04-05T21:48:14Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:48:14Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -116,
+                  "point": 4.5
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -106,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-04-05T21:47:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-04-05T21:47:52Z",
+              "outcomes": [
+                {
+                  "name": "Baylor Bears",
+                  "price": -105,
+                  "point": 4.0
+                },
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-04-05T21:47:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

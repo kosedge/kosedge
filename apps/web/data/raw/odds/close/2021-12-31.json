@@ -1,0 +1,596 @@
+{
+  "timestamp": "2021-12-31T21:55:00Z",
+  "previous_timestamp": "2021-12-31T21:45:00Z",
+  "next_timestamp": "2021-12-31T22:05:00Z",
+  "data": [
+    {
+      "id": "3e0bb270b3f03486f28102255046f03a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-12-31T21:05:02Z",
+      "home_team": "St. Francis BKN Terriers",
+      "away_team": "Central Connecticut St Blue Devils",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-12-31T21:50:28Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-12-31T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -110,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -120,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2021-12-31T21:49:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:49:57Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -118,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -109,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:49:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-12-31T21:50:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -118,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -109,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-12-31T21:48:48Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:48:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 135.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:48:48Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -114,
+                  "point": 8.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -114,
+                  "point": -8.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2021-12-31T21:50:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -118,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -109,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-12-31T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -120,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -110,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-12-31T21:50:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:34Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -115,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -110,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-12-31T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -116,
+                  "point": 10.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -109,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-12-31T21:50:12Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:12Z",
+              "outcomes": [
+                {
+                  "name": "Central Connecticut St Blue Devils",
+                  "price": -102,
+                  "point": 9.5
+                },
+                {
+                  "name": "St. Francis BKN Terriers",
+                  "price": -125,
+                  "point": -9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:12Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d75a308278834d85ad165166fa260b25",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-12-31T21:02:41Z",
+      "home_team": "St. Francis (PA) Red Flash",
+      "away_team": "Fairleigh Dickinson Knights",
+      "bookmakers": [
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-12-31T21:48:48Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:48:48Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -119,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 131.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:48:48Z",
+              "outcomes": [
+                {
+                  "name": "Fairleigh Dickinson Knights",
+                  "price": -112,
+                  "point": -2.5
+                },
+                {
+                  "name": "St. Francis (PA) Red Flash",
+                  "price": -118,
+                  "point": 2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "twinspires",
+          "title": "TwinSpires",
+          "last_update": "2021-12-31T21:49:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:49:57Z",
+              "outcomes": [
+                {
+                  "name": "Fairleigh Dickinson Knights",
+                  "price": -112,
+                  "point": -6.0
+                },
+                {
+                  "name": "St. Francis (PA) Red Flash",
+                  "price": -114,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:49:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-12-31T21:50:31Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Fairleigh Dickinson Knights",
+                  "price": -115,
+                  "point": -5.5
+                },
+                {
+                  "name": "St. Francis (PA) Red Flash",
+                  "price": -115,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "barstool",
+          "title": "Barstool Sportsbook",
+          "last_update": "2021-12-31T21:50:38Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Fairleigh Dickinson Knights",
+                  "price": -112,
+                  "point": -6.0
+                },
+                {
+                  "name": "St. Francis (PA) Red Flash",
+                  "price": -114,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:38Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-12-31T21:50:28Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-31T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Fairleigh Dickinson Knights",
+                  "price": -111,
+                  "point": -6.0
+                },
+                {
+                  "name": "St. Francis (PA) Red Flash",
+                  "price": -114,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-31T21:50:28Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

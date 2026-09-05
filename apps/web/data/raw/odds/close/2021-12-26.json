@@ -1,0 +1,290 @@
+{
+  "timestamp": "2021-12-26T21:55:00Z",
+  "previous_timestamp": "2021-12-26T21:45:00Z",
+  "next_timestamp": "2021-12-26T22:05:00Z",
+  "data": [
+    {
+      "id": "a9f2db703f795d5c7c1ebd88bc391415",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-12-27T23:00:00Z",
+      "home_team": "Syracuse Orange",
+      "away_team": "Brown Bears",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-12-26T21:48:26Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:48:26Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -110,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -110,
+                  "point": -9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:48:26Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-12-26T21:48:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:48:06Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -110,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -110,
+                  "point": -9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:48:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-12-26T21:47:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:47:51Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -110,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -110,
+                  "point": -9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:47:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "wynnbet",
+          "title": "WynnBET",
+          "last_update": "2021-12-26T21:48:35Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:48:35Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:48:35Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -110,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -110,
+                  "point": -9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-12-26T21:44:11Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:44:11Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:44:11Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -110,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -110,
+                  "point": -9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-12-26T21:49:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:49:10Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -110,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -110,
+                  "point": -9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:49:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-12-26T21:47:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-12-26T21:47:10Z",
+              "outcomes": [
+                {
+                  "name": "Brown Bears",
+                  "price": -109,
+                  "point": 9.5
+                },
+                {
+                  "name": "Syracuse Orange",
+                  "price": -109,
+                  "point": -9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-12-26T21:47:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

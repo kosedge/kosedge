@@ -1,0 +1,2783 @@
+{
+  "timestamp": "2020-12-26T21:55:00Z",
+  "previous_timestamp": "2020-12-26T21:45:00Z",
+  "next_timestamp": "2020-12-26T22:05:00Z",
+  "data": [
+    {
+      "id": "ab86776782762fbcc01d251cdc1b371b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-26T21:00:00Z",
+      "home_team": "Wright St Raiders",
+      "away_team": "Green Bay Phoenix",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -115,
+                  "point": 10.5
+                },
+                {
+                  "name": "Wright St Raiders",
+                  "price": -115,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 118.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 118.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -105,
+                  "point": 10.5
+                },
+                {
+                  "name": "Wright St Raiders",
+                  "price": -120,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 118.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 118.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -118,
+                  "point": 10.5
+                },
+                {
+                  "name": "Wright St Raiders",
+                  "price": -106,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 118.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 118.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-12-26T21:50:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -118,
+                  "point": 10.5
+                },
+                {
+                  "name": "Wright St Raiders",
+                  "price": -105,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 118.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 118.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -118,
+                  "point": 10.5
+                },
+                {
+                  "name": "Wright St Raiders",
+                  "price": -106,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 118.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 118.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2020-12-26T21:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Green Bay Phoenix",
+                  "price": -106,
+                  "point": 10.0
+                },
+                {
+                  "name": "Wright St Raiders",
+                  "price": -118,
+                  "point": -10.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 118.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 118.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "a7e9f06e33c8abd3486af42b648c534b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-26T21:00:00Z",
+      "home_team": "Illinois Fighting Illini",
+      "away_team": "Indiana Hoosiers",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 148.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -120,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -115,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -115,
+                  "point": -5.5
+                },
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -108,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -115,
+                  "point": -5.5
+                },
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -108,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2020-12-26T21:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -114,
+                  "point": -5.0
+                },
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -109,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Illinois Fighting Illini",
+                  "price": -125,
+                  "point": -3.5
+                },
+                {
+                  "name": "Indiana Hoosiers",
+                  "price": -125,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -125,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c69e444f870baa91ff8c25b266c5dd78",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-26T21:00:00Z",
+      "home_team": "Gonzaga Bulldogs",
+      "away_team": "Virginia Cavaliers",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -110,
+                  "point": -16.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -120,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 148.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 148.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -115,
+                  "point": -17.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -114,
+                  "point": -16.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -112,
+                  "point": 16.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-12-26T21:50:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -111,
+                  "point": -17.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -111,
+                  "point": 17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -114,
+                  "point": -16.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -112,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 147.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 147.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2020-12-26T21:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -112,
+                  "point": -16.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -112,
+                  "point": 16.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 149.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2020-12-26T21:38:43Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:38:43Z",
+              "outcomes": [
+                {
+                  "name": "Gonzaga Bulldogs",
+                  "price": -118,
+                  "point": -10.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -118,
+                  "point": 10.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e13288b22f8cfaa4e8043d6795fb3baa",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-26T21:00:00Z",
+      "home_team": "Detroit Mercy Titans",
+      "away_team": "Oakland Golden Grizzlies",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Detroit Mercy Titans",
+                  "price": -100000,
+                  "point": -5.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -100000,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -100000,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -100000,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Detroit Mercy Titans",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -115,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-12-26T21:50:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Detroit Mercy Titans",
+                  "price": -112,
+                  "point": -5.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Detroit Mercy Titans",
+                  "price": -114,
+                  "point": -5.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Detroit Mercy Titans",
+                  "price": -114,
+                  "point": -5.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2020-12-26T21:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Detroit Mercy Titans",
+                  "price": -114,
+                  "point": -5.0
+                },
+                {
+                  "name": "Oakland Golden Grizzlies",
+                  "price": -110,
+                  "point": 5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e1b0b2513e3ce0ca3861c640fa7bcf6b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-26T21:00:00Z",
+      "home_team": "George Mason Patriots",
+      "away_team": "Norfolk St Spartans",
+      "bookmakers": [
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "George Mason Patriots",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "Norfolk St Spartans",
+                  "price": -115,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-12-26T21:50:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "George Mason Patriots",
+                  "price": -108,
+                  "point": -9.0
+                },
+                {
+                  "name": "Norfolk St Spartans",
+                  "price": -115,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "George Mason Patriots",
+                  "price": -108,
+                  "point": -9.0
+                },
+                {
+                  "name": "Norfolk St Spartans",
+                  "price": -115,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2020-12-26T21:50:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "George Mason Patriots",
+                  "price": -108,
+                  "point": -9.0
+                },
+                {
+                  "name": "Norfolk St Spartans",
+                  "price": -115,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2020-12-26T21:50:16Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "George Mason Patriots",
+                  "price": -108,
+                  "point": -9.0
+                },
+                {
+                  "name": "Norfolk St Spartans",
+                  "price": -115,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:16Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "George Mason Patriots",
+                  "price": -115,
+                  "point": -9.5
+                },
+                {
+                  "name": "Norfolk St Spartans",
+                  "price": -115,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5dd980077015dd0bed2879ff3fdd2996",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T00:00:00Z",
+      "home_team": "Fort Wayne Mastodons",
+      "away_team": "Robert Morris Colonials",
+      "bookmakers": [
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2020-12-26T21:50:00Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Fort Wayne Mastodons",
+                  "price": -111,
+                  "point": -2.5
+                },
+                {
+                  "name": "Robert Morris Colonials",
+                  "price": -118,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:00Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e8d7e12fa2a0a640ca85316b66012b9b",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T18:00:00Z",
+      "home_team": "Indiana St Sycamores",
+      "away_team": "Drake Bulldogs",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -111,
+                  "point": -3.5
+                },
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -101,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -109,
+                  "point": -3.5
+                },
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -109,
+                  "point": 3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -105,
+                  "point": -4.0
+                },
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -115,
+                  "point": 4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -115,
+                  "point": -3.5
+                },
+                {
+                  "name": "Indiana St Sycamores",
+                  "price": -105,
+                  "point": 3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "34f63c56eaaf86327d6effe921d49143",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T19:00:00Z",
+      "home_team": "Monmouth Hawks",
+      "away_team": "Canisius Golden Griffins",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -106,
+                  "point": 5.0
+                },
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -106,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -103,
+                  "point": 155.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 155.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -109,
+                  "point": 5.0
+                },
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -109,
+                  "point": -5.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Canisius Golden Griffins",
+                  "price": -110,
+                  "point": 5.0
+                },
+                {
+                  "name": "Monmouth Hawks",
+                  "price": -110,
+                  "point": -5.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 155.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 155.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "48fc6b08f8492a62522a4fc797c5153e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T21:00:00Z",
+      "home_team": "Northern Iowa Panthers",
+      "away_team": "Missouri St Bears",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 145.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 145.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Missouri St Bears",
+                  "price": -109,
+                  "point": 8.5
+                },
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -109,
+                  "point": -8.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Missouri St Bears",
+                  "price": -110,
+                  "point": 8.5
+                },
+                {
+                  "name": "Northern Iowa Panthers",
+                  "price": -110,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 146.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 146.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "797fb8447e0bdfea89ec7fc858b80226",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T21:00:00Z",
+      "home_team": "Southern Illinois Salukis",
+      "away_team": "Evansville Purple Aces",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Evansville Purple Aces",
+                  "price": -101,
+                  "point": 11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -111,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 133.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Evansville Purple Aces",
+                  "price": -105,
+                  "point": 10.5
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -115,
+                  "point": -10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Evansville Purple Aces",
+                  "price": -110,
+                  "point": 11.0
+                },
+                {
+                  "name": "Southern Illinois Salukis",
+                  "price": -110,
+                  "point": -11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4f66b0616622f341e34be18d71aa6bdb",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T21:00:00Z",
+      "home_team": "Loyola (Chi) Ramblers",
+      "away_team": "Illinois St Redbirds",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Illinois St Redbirds",
+                  "price": -106,
+                  "point": 14.5
+                },
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -106,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Illinois St Redbirds",
+                  "price": -109,
+                  "point": 14.0
+                },
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -109,
+                  "point": -14.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Illinois St Redbirds",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Illinois St Redbirds",
+                  "price": -105,
+                  "point": 14.0
+                },
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -115,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c3d894c6420595aa7b660ddc746248fe",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T21:30:00Z",
+      "home_team": "Providence Friars",
+      "away_team": "DePaul Blue Demons",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "DePaul Blue Demons",
+                  "price": -106,
+                  "point": 6.5
+                },
+                {
+                  "name": "Providence Friars",
+                  "price": -106,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "DePaul Blue Demons",
+                  "price": -109,
+                  "point": 6.5
+                },
+                {
+                  "name": "Providence Friars",
+                  "price": -109,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "DePaul Blue Demons",
+                  "price": -110,
+                  "point": 6.0
+                },
+                {
+                  "name": "Providence Friars",
+                  "price": -110,
+                  "point": -6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "DePaul Blue Demons",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Providence Friars",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b946c7d68e4cdef8a535df020acb05ed",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-28T00:00:00Z",
+      "home_team": "UC Irvine Anteaters",
+      "away_team": "UC Santa Barbara Gauchos",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2020-12-26T21:50:15Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "UC Irvine Anteaters",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "UC Santa Barbara Gauchos",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:15Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "748e68ce91dd7405e5e5e18634668d8e",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T20:00:00Z",
+      "home_team": "Vermont Catamounts",
+      "away_team": "NJIT Highlanders",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "NJIT Highlanders",
+                  "price": -111,
+                  "point": 11.5
+                },
+                {
+                  "name": "Vermont Catamounts",
+                  "price": -101,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "NJIT Highlanders",
+                  "price": -115,
+                  "point": 12.0
+                },
+                {
+                  "name": "Vermont Catamounts",
+                  "price": -105,
+                  "point": -12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d3ed5e768b495154d56ff426ab55ebf3",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T18:00:00Z",
+      "home_team": "UMBC Retrievers",
+      "away_team": "Binghamton Bearcats",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8dadfb76e55283a4604fef47f6d990c0",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T18:00:00Z",
+      "home_team": "New Hampshire Wildcats",
+      "away_team": "Hartford Hawks",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -111,
+                  "point": 4.5
+                },
+                {
+                  "name": "New Hampshire Wildcats",
+                  "price": -101,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -109,
+                  "point": 4.5
+                },
+                {
+                  "name": "New Hampshire Wildcats",
+                  "price": -109,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Hartford Hawks",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "New Hampshire Wildcats",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "9506663bd2203180efa2a9505ea9cd10",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T21:00:00Z",
+      "home_team": "Vanderbilt Commodores",
+      "away_team": "Alcorn St Braves",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Alcorn St Braves",
+                  "price": -109,
+                  "point": 22.0
+                },
+                {
+                  "name": "Vanderbilt Commodores",
+                  "price": -109,
+                  "point": -22.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Alcorn St Braves",
+                  "price": -110,
+                  "point": 22.0
+                },
+                {
+                  "name": "Vanderbilt Commodores",
+                  "price": -110,
+                  "point": -22.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ee53f6af0a9cccc17c5f189bf4de866a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2020-12-27T22:00:00Z",
+      "home_team": "Stony Brook Seawolves",
+      "away_team": "UMass Lowell River Hawks",
+      "bookmakers": [
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -106,
+                  "point": -2.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -106,
+                  "point": 2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2020-12-26T21:50:14Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:14Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2020-12-26T21:50:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:31Z",
+              "outcomes": [
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -109,
+                  "point": -2.0
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2020-12-26T21:50:06Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Stony Brook Seawolves",
+                  "price": -105,
+                  "point": -1.5
+                },
+                {
+                  "name": "UMass Lowell River Hawks",
+                  "price": -115,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2020-12-26T21:50:06Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

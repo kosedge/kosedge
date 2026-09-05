@@ -1,0 +1,3698 @@
+{
+  "timestamp": "2021-02-15T21:55:00Z",
+  "previous_timestamp": "2021-02-15T21:45:00Z",
+  "next_timestamp": "2021-02-15T22:05:00Z",
+  "data": [
+    {
+      "id": "15db44bbb7b6b6913cf85e9511e5a995",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-16T21:00:00Z",
+      "home_team": "Oklahoma St Cowboys",
+      "away_team": "Iowa State Cyclones",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -106,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -106,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Iowa State Cyclones",
+                  "price": -109,
+                  "point": 12.5
+                },
+                {
+                  "name": "Oklahoma St Cowboys",
+                  "price": -109,
+                  "point": -12.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 144.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 144.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b511e7b14830fe11c15ef1d8eb7b07db",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-15T19:00:00Z",
+      "home_team": "New Orleans Privateers",
+      "away_team": "Stephen F. Austin Lumberjacks",
+      "bookmakers": [
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "New Orleans Privateers",
+                  "price": -115,
+                  "point": 8.5
+                },
+                {
+                  "name": "Stephen F. Austin Lumberjacks",
+                  "price": -105,
+                  "point": -8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -120,
+                  "point": 83.0
+                },
+                {
+                  "name": "Under",
+                  "price": 100,
+                  "point": 83.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ac8a3027e26a7b985ab6e0947b1348a8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-15T22:00:00Z",
+      "home_team": "SIU-Edwardsville Cougars",
+      "away_team": "Murray St Racers",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -102,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -119,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": 102,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -12.0
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 12.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -109,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -109,
+                  "point": 11.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -115,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -105,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -115,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -115,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -118,
+                  "point": -11.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "8836e7c25327484a6ab3a80c45033a8f",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-15T23:00:00Z",
+      "home_team": "Longwood Lancers",
+      "away_team": "Hampton Pirates",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -108,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -112,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2021-02-15T21:49:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -108,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -112,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -108,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -112,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -115,
+                  "point": 4.5
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -105,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -106,
+                  "point": 4.5
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -106,
+                  "point": -4.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -112,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -116,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -109,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -109,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -105,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -115,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": 100,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -118,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Hampton Pirates",
+                  "price": -105,
+                  "point": 4.0
+                },
+                {
+                  "name": "Longwood Lancers",
+                  "price": -115,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4e4a26be4b62b4ac9130317761f9ad76",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-15T23:00:00Z",
+      "home_team": "Presbyterian Blue Hose",
+      "away_team": "South Carolina Upstate Spartans",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -112,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2021-02-15T21:49:49Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -120,
+                  "point": -1.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": 100,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -105,
+                  "point": -1.5
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -115,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -116,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -116,
+                  "point": -1.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": 104,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -109,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 134.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -112,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -112,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 134.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 134.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 133.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 133.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -118,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Presbyterian Blue Hose",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "South Carolina Upstate Spartans",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "66fdefe3adbf9a026d1a59dbadb1c8ba",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-16T00:00:00Z",
+      "home_team": "Florida St Seminoles",
+      "away_team": "Virginia Cavaliers",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2021-02-15T21:49:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -112,
+                  "point": -1.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -108,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 128.0
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 128.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 128.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 128.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -108,
+                  "point": -1.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -104,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 128.0
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 128.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -114,
+                  "point": -1.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -104,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 127.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -112,
+                  "point": -2.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -110,
+                  "point": -2.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 127.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -112,
+                  "point": -2.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -112,
+                  "point": -2.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -109,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Florida St Seminoles",
+                  "price": -116,
+                  "point": -2.0
+                },
+                {
+                  "name": "Virginia Cavaliers",
+                  "price": -114,
+                  "point": 2.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "b051da3bd807751db98b0384e857deca",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-16T00:00:00Z",
+      "home_team": "Chattanooga Mocs",
+      "away_team": "East Tennessee St Buccaneers",
+      "bookmakers": [
+        {
+          "key": "betonlineag",
+          "title": "BetOnline.ag",
+          "last_update": "2021-02-15T21:49:49Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -109,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -111,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:49Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -105,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -115,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -105,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -106,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -109,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -105,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -115,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -109,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -109,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.0
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -110,
+                  "point": 1.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -110,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -110,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Chattanooga Mocs",
+                  "price": -115,
+                  "point": -1.5
+                },
+                {
+                  "name": "East Tennessee St Buccaneers",
+                  "price": -114,
+                  "point": 1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -111,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "5730d4068bc19f12f7d6d25afecdd687",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-15T21:21:14Z",
+      "home_team": "Tennessee Tech Golden Eagles",
+      "away_team": "Eastern Kentucky Colonels",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -110,
+                  "point": -23.5
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -120,
+                  "point": 23.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 175.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 175.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -112,
+                  "point": -24.0
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -114,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 173.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 173.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -114,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 173.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 173.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -112,
+                  "point": -24.0
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -114,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 173.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 173.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -108,
+                  "point": -23.5
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -116,
+                  "point": 23.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -105,
+                  "point": -24.5
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -115,
+                  "point": 24.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 172.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 172.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -115,
+                  "point": -23.5
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -110,
+                  "point": 23.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 173.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 173.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Eastern Kentucky Colonels",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Tennessee Tech Golden Eagles",
+                  "price": -112,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 173.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 173.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "85d327b3e858f127fec22601bc2e32d5",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-16T01:00:00Z",
+      "home_team": "Washington St Cougars",
+      "away_team": "Washington Huskies",
+      "bookmakers": [
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -105,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -115,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -109,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-15T21:49:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-15T21:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -101,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -111,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -114,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -106,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -110,
+                  "point": 7.0
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -7.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-15T21:49:53Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:53Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -114,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -106,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-15T21:49:54Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -114,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -106,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:54Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "foxbet",
+          "title": "FOX Bet",
+          "last_update": "2021-02-15T21:49:52Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:52Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -118,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-15T21:49:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Washington Huskies",
+                  "price": -120,
+                  "point": 7.5
+                },
+                {
+                  "name": "Washington St Cougars",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-15T21:49:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -14,6 +14,7 @@ No Edge>4 shopping for primary grades.
 Scorecard versions:
   v1.0 — thin event_id→actual_margins join (frozen; do not overwrite)
   v1.1 — denser Schedule SoT results-join + expanded B7 aliases (same gates/cuts)
+  v1.2 — denser Path A odds lake (honesty-clean) + v1.1 results-join (same gates/cuts)
 """
 
 from __future__ import annotations
@@ -62,12 +63,17 @@ SCORECARD_VERSION_V1 = "ncaam-fair-lab-scorecard-v1.0"
 SCORECARD_DOC_V1 = "docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1.md"
 SCORECARD_VERSION_V1_1 = "ncaam-fair-lab-scorecard-v1.1"
 SCORECARD_DOC_V1_1 = "docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_1.md"
-# Default module constant points at current fill (v1.1); frozen v1 paths stay separate.
-SCORECARD_VERSION = SCORECARD_VERSION_V1_1
-SCORECARD_DOC = SCORECARD_DOC_V1_1
+SCORECARD_VERSION_V1_2 = "ncaam-fair-lab-scorecard-v1.2"
+SCORECARD_DOC_V1_2 = "docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_2.md"
+# Default module constant points at current fill (v1.2); frozen v1 / v1.1 paths stay separate.
+SCORECARD_VERSION = SCORECARD_VERSION_V1_2
+SCORECARD_DOC = SCORECARD_DOC_V1_2
 V1_1_ALLOWED_DELTAS = (
     "denser_results_join_schedule_sot_packs",
     "expanded_b7_aliases_espn_packs_remapped",
+)
+V1_2_ALLOWED_DELTAS = V1_1_ALLOWED_DELTAS + (
+    "denser_path_a_odds_lake_honesty_clean",
 )
 
 
@@ -527,19 +533,23 @@ def build_scorecard(
     influence, influence_detail = influence_decision(grades)
     generated = datetime.now(timezone.utc).isoformat()
 
-    # v1.1 = densified results-join (allowed delta). Thin join remains v1.0 freeze.
+    # v1.2 = densified results-join (v1.1) + denser Path A odds lake (allowed delta).
+    # Thin join remains v1.0 freeze; v1.1 densify fill remains frozen.
     if densify_results:
-        scorecard_version = SCORECARD_VERSION_V1_1
-        scorecard_doc = SCORECARD_DOC_V1_1
+        scorecard_version = SCORECARD_VERSION_V1_2
+        scorecard_doc = SCORECARD_DOC_V1_2
         version_note = (
-            "v1.1 fill: same protocol cuts/gates/baselines as v1.0; "
-            "allowed deltas = denser Schedule SoT results-join + expanded B7 aliases "
-            "(PR 479/480). No gate shopping; no new Lab windows from Odds densify."
+            "v1.2 fill: same protocol cuts/gates/baselines as v1.0/v1.1; "
+            "allowed deltas = denser Path A odds lake (honesty-clean open/close) "
+            "+ denser Schedule SoT results-join + expanded B7 aliases. "
+            "No gate shopping; no new Lab windows; Lab cut dates frozen."
         )
+        allowed_deltas = list(V1_2_ALLOWED_DELTAS)
     else:
         scorecard_version = SCORECARD_VERSION_V1
         scorecard_doc = SCORECARD_DOC_V1
         version_note = "v1.0 freeze baseline: thin event_id→actual_margins only"
+        allowed_deltas = []
 
     card: Dict[str, Any] = {
         "scorecard_version": scorecard_version,
@@ -558,6 +568,7 @@ def build_scorecard(
         "diagnostic_window": "train_a",
         "version_note": version_note,
         "v1_1_allowed_deltas": list(V1_1_ALLOWED_DELTAS) if densify_results else [],
+        "v1_2_allowed_deltas": allowed_deltas,
         "hard_locks": [
             "no_peek_tune_after_test_a",
             "no_edge_gt4_shopping",
@@ -569,7 +580,10 @@ def build_scorecard(
             "lab_joins_remain_sot_d",
             "red_equals_honest_failure_success",
             "no_odds_densify_new_windows",
+            "lab_cut_dates_frozen",
             "frozen_v1_untouched",
+            "frozen_v1_1_untouched",
+            "b2_quarantined",
         ],
         "frozen_gates": {
             "breakeven_ats": BREAKEVEN_ATS,
@@ -581,8 +595,8 @@ def build_scorecard(
             "clv_pos_min": CLV_POS_MIN,
             "outcome_cov_green": OUTCOME_COV_GREEN,
             "note": (
-                "Gates locked pre-fill (protocol v1.0); identical for scorecard v1.0 and v1.1 — "
-                "no threshold shopping after densify"
+                "Gates locked pre-fill (protocol v1.0); identical for scorecard "
+                "v1.0 / v1.1 / v1.2 — no threshold shopping after densify"
             ),
         },
         "grades": grades,
@@ -608,7 +622,8 @@ def build_scorecard(
             "actuals_caveat": (
                 "Primary actuals from Schedule SoT packs (tip_date + B7 team_id, fail-closed). "
                 "Secondary fill from owned actual_margins.parquet / results.csv by event_id. "
-                "No Odds densify. Sparse espn_cbb_games_*.csv alone are insufficient for Lab coverage."
+                "Path A odds lake densify refreshes B1/open honesty within frozen Lab cuts only. "
+                "Sparse espn_cbb_games_*.csv alone are insufficient for Lab coverage."
                 if densify_results
                 else (
                     "Thin path: owned actual_margins.parquet by event_id only "
@@ -630,8 +645,8 @@ def write_scorecard_artifacts(
 ) -> Dict[str, str]:
     """Write scorecard artifacts.
 
-    Frozen v1 JSON/MD are NOT overwritten by densified (v1.1) runs.
-    v1.1 writes distinct paths. Thin --no-densify path can refresh v1 only
+    Frozen v1 / v1.1 JSON/MD are NOT overwritten by densified (v1.2) runs.
+    v1.2 writes distinct paths. Thin --no-densify path can refresh v1 only
     when overwrite_frozen_v1=True (or CLI sets that for the thin baseline).
     """
     root = _repo_root()
@@ -642,11 +657,15 @@ def write_scorecard_artifacts(
     densified = bool((card.get("inputs") or {}).get("results_densify"))
     version = str(card.get("scorecard_version") or "")
 
-    # Densified → always v1.1 paths (never touch frozen v1)
-    if densified or version == SCORECARD_VERSION_V1_1:
+    # Densified → always v1.2 paths (never touch frozen v1 / v1.1)
+    if densified or version == SCORECARD_VERSION_V1_2:
         if densified and overwrite_frozen_v1:
             # Explicit refuse: densify must not clobber v1 even if flag set
             pass
+        return _write_v1_2_artifacts(card, out_dir=out_dir, root=root, stamped=stamped)
+
+    # Legacy: allow explicit v1.1 rewrite only when card is stamped v1.1 and not densified-default
+    if version == SCORECARD_VERSION_V1_1:
         return _write_v1_1_artifacts(card, out_dir=out_dir, root=root, stamped=stamped)
 
     # Thin v1 path
@@ -681,6 +700,49 @@ def write_scorecard_artifacts(
         "md_ops": str(md_ops.relative_to(root)),
         "docs_md": str(docs_md.relative_to(root)),
         "ops_note": str(ops_note.relative_to(root)),
+    }
+
+
+def _write_v1_2_artifacts(
+    card: Dict[str, Any],
+    *,
+    out_dir: Path,
+    root: Path,
+    stamped: str,
+) -> Dict[str, str]:
+    """Freeze scorecard v1.2 artifacts; leave v1 and v1.1 paths untouched."""
+    card = dict(card)
+    card["scorecard_version"] = SCORECARD_VERSION_V1_2
+    card["scorecard_doc"] = SCORECARD_DOC_V1_2
+    if not card.get("v1_2_allowed_deltas"):
+        card["v1_2_allowed_deltas"] = list(V1_2_ALLOWED_DELTAS)
+    if not card.get("v1_1_allowed_deltas"):
+        card["v1_1_allowed_deltas"] = list(V1_1_ALLOWED_DELTAS)
+
+    json_path = out_dir / "ncaam-fair-lab-scorecard-v1.2.json"
+    stamped_json = out_dir / f"ncaam-fair-lab-scorecard-v1.2-{stamped}.json"
+    md_ops = out_dir / "ncaam-fair-lab-scorecard-v1.2.md"
+    ops_note = root / "data" / "ops" / "ncaam-lab-scorecard-v1-2-20260905.md"
+    docs_md = root / "docs" / "lab" / "NCAAM_FAIR_LAB_SCORECARD_v1_2.md"
+
+    payload = json.dumps(card, indent=2) + "\n"
+    json_path.write_text(payload, encoding="utf-8")
+    stamped_json.write_text(payload, encoding="utf-8")
+
+    md = render_scorecard_md(card)
+    md_ops.write_text(md, encoding="utf-8")
+    docs_md.write_text(md, encoding="utf-8")
+    ops_note.write_text(render_ops_note(card), encoding="utf-8")
+    _refresh_lab_readme(out_dir)
+
+    return {
+        "json": str(json_path.relative_to(root)),
+        "stamped_json": str(stamped_json.relative_to(root)),
+        "md_ops": str(md_ops.relative_to(root)),
+        "docs_md": str(docs_md.relative_to(root)),
+        "ops_note": str(ops_note.relative_to(root)),
+        "frozen_v1_untouched": "true",
+        "frozen_v1_1_untouched": "true",
     }
 
 
@@ -731,15 +793,18 @@ def _refresh_lab_readme(out_dir: Path) -> None:
         "Protocol twin + Train-A / Test-A fair parquet manifests + scorecards.\n"
         "See `docs/lab/NCAAM_FAIR_LAB_PROTOCOL_v1.md`,\n"
         "`docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1.md` (frozen thin join),\n"
-        "`docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_1.md` (densify + B7 expand),\n"
-        "`data/ops/ncaam-lab-first-scorecard-20260904.md`, and\n"
-        "`data/ops/ncaam-lab-scorecard-v1-1-20260904.md`.\n\n"
+        "`docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_1.md` (results densify + B7 expand),\n"
+        "`docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_2.md` (Path A odds lake densify),\n"
+        "`data/ops/ncaam-lab-first-scorecard-20260904.md`,\n"
+        "`data/ops/ncaam-lab-scorecard-v1-1-20260904.md`, and\n"
+        "`data/ops/ncaam-lab-scorecard-v1-2-20260905.md`.\n\n"
         "Results densify receipt: `data/ops/ncaam-lab-results-densify-20260904.md`.\n"
-        "B7 alias expand: `data/ops/ncaam-b7-alias-expand-20260904.md`.\n\n"
+        "B7 alias expand: `data/ops/ncaam-b7-alias-expand-20260904.md`.\n"
+        "Odds lake Path A backfill: `data/ops/ncaam-odds-lake-backfill-20260905.md`.\n\n"
         "```bash\n"
         "python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a\n"
         "python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut test_a\n"
-        "python3 apps/web/scripts/lab_ncaam_fair_scorecard.py              # freeze v1.1\n"
+        "python3 apps/web/scripts/lab_ncaam_fair_scorecard.py              # freeze v1.2\n"
         "python3 apps/web/scripts/lab_ncaam_fair_scorecard.py --no-densify  # v1 thin baseline\n"
         "python3 apps/web/scripts/lab_ncaam_results_coverage_receipt.py\n"
         "```\n",
@@ -756,14 +821,18 @@ def render_scorecard_md(card: Dict[str, Any]) -> str:
     tm = test.get("market_edge", {})
     te = test.get("evidence", {})
     leak = card.get("leakage_receipt", {})
-    version = str(card.get("scorecard_version") or SCORECARD_VERSION_V1_1)
+    version = str(card.get("scorecard_version") or SCORECARD_VERSION_V1_2)
+    is_v12 = version == SCORECARD_VERSION_V1_2
     is_v11 = version == SCORECARD_VERSION_V1_1
-    title = "NCAAM Fair Lab Scorecard v1.1" if is_v11 else "NCAAM Fair Lab Scorecard v1.0"
-    json_rel = (
-        "data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.1.json"
-        if is_v11
-        else "data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json"
-    )
+    if is_v12:
+        title = "NCAAM Fair Lab Scorecard v1.2"
+        json_rel = "data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.2.json"
+    elif is_v11:
+        title = "NCAAM Fair Lab Scorecard v1.1"
+        json_rel = "data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.1.json"
+    else:
+        title = "NCAAM Fair Lab Scorecard v1.0"
+        json_rel = "data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.json"
 
     def _fmt(v: Any) -> str:
         if v is None:
@@ -785,7 +854,20 @@ def render_scorecard_md(card: Dict[str, Any]) -> str:
         "> No peek-tuning after Test-A. No Edge>4 shopping.",
         "",
     ]
-    if is_v11:
+    if is_v12:
+        lines += [
+            "## v1.2 vs v1.1 (honest delta — no gate shopping)",
+            "",
+            "- Same protocol cuts, baselines B1+B2, frozen grade gates",
+            "- Allowed deltas: denser Path A odds lake (honesty-clean) + v1.1 results-join/B7",
+            "- Does **not** re-appendix Lab cut dates; 2025 pocket stays OUT",
+            "- Frozen v1 / v1.1 artifacts remain untouched",
+            "- B2 stays quarantined (KenPom feed ≠ SoT); Board/PLAY stay dark",
+            "",
+            f"**Version note:** {card.get('version_note') or 'v1.2 Path A lake fill'}",
+            "",
+        ]
+    elif is_v11:
         lines += [
             "## v1.1 vs v1.0 (honest delta — no gate shopping)",
             "",
@@ -884,7 +966,8 @@ def render_scorecard_md(card: Dict[str, Any]) -> str:
         "## Hard NOT (held)",
         "",
         "- Edge Board / PLAY / Conf% / props",
-        "- Odds densify / invent tips / KenPom-as-SoT / #12 GO-2 / squash",
+        "- Path B invent / invent tips / KenPom-as-SoT / #12 GO-2 / squash",
+        "- Re-appendix Lab cut dates / change thresholds/features/validation dates",
         "- Retune after seeing Test-A",
         "- Shopping grade thresholds after densify",
         "",
@@ -894,14 +977,57 @@ def render_scorecard_md(card: Dict[str, Any]) -> str:
 
 def render_ops_note(card: Dict[str, Any]) -> str:
     g = card["grades"]
-    version = str(card.get("scorecard_version") or SCORECARD_VERSION_V1_1)
+    version = str(card.get("scorecard_version") or SCORECARD_VERSION_V1_2)
+    is_v12 = version == SCORECARD_VERSION_V1_2
     is_v11 = version == SCORECARD_VERSION_V1_1
     test = (card.get("cuts") or {}).get("test_a") or {}
     train = (card.get("cuts") or {}).get("train_a") or {}
     tp = test.get("predictive") or {}
     trp = train.get("predictive") or {}
+    tm = test.get("market_edge") or {}
 
-    if is_v11:
+    if is_v12:
+        title = "# NCAAM Lab — scorecard v1.2 fill (#14 Path A odds lake backfill GO)\n\n"
+        arts = (
+            "- `data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.2.json`\n"
+            "- `data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.2.md`\n"
+            "- `docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_2.md`\n"
+            "- Fair sets: `ncaam-fair-lab-{train_a,test_a}-latest.parquet` (rematerialized; cuts frozen)\n"
+            "- Frozen v1 / v1.1 artifacts **untouched**\n"
+        )
+        compare = (
+            "## Honest compare to v1.1 (no threshold shopping)\n\n"
+            f"- v1.1 Test-A coverage: `2205 / 2298` (0.9595) → v1.2: "
+            f"`{tp.get('n_with_actual')} / {tp.get('n_lab_games')}` "
+            f"({tp.get('outcome_coverage')})\n"
+            f"- v1.1 Train-A coverage: `3583 / 3676` (0.9747) → v1.2: "
+            f"`{trp.get('n_with_actual')} / {trp.get('n_lab_games')}` "
+            f"({trp.get('outcome_coverage')})\n"
+            f"- v1.1 Test-A Predictive AMBER (B2 MAE 9.248 / B1 8.5703) → v1.2: "
+            f"B2 `{tp.get('b2_margin_mae')}` / B1 `{tp.get('b1_margin_mae')}` "
+            f"grade `{g.get('predictive_quality')}`\n"
+            f"- v1.1 Market Edge AMBER (ATS 0.5305 / CLV+ 0.5012) → v1.2: "
+            f"ATS `{tm.get('ats')}` / CLV+ `{tm.get('clv_positive_rate')}` "
+            f"grade `{g.get('market_edge_evidence')}`\n"
+            "- Same cuts / B1+B2 / gates; delta = denser Path A odds lake (honesty-clean) only\n"
+            "- Grades reported under pre-registered gates; RED remains success when criteria say so\n"
+            "- B2 quarantined; Board/PLAY dark; Influence only if gate clears\n\n"
+        )
+        how = (
+            "## How to re-run\n\n"
+            "```bash\n"
+            "python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut train_a\n"
+            "python3 apps/web/scripts/lab_ncaam_fair_materialize.py --cut test_a\n"
+            "python3 apps/web/scripts/lab_ncaam_fair_scorecard.py\n"
+            "```\n"
+        )
+        base = (
+            f"**As of:** {card['generated_at'][:10]}\n"
+            f"**Base:** `deploy-vercel` + Path A odds lake backfill (#14 FULL GO)\n"
+            f"**Protocol:** `{card['protocol_version']}` (unchanged)\n"
+            f"**Scorecard:** `{card['scorecard_version']}`\n\n"
+        )
+    elif is_v11:
         title = "# NCAAM Lab — scorecard v1.1 fill (#14 Lab scorecard v1.1 fill GO)\n\n"
         arts = (
             "- `data/ops/lab/ncaam/ncaam-fair-lab-scorecard-v1.1.json`\n"

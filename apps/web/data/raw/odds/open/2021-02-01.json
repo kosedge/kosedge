@@ -1,0 +1,4903 @@
+{
+  "timestamp": "2021-02-01T11:55:00Z",
+  "previous_timestamp": "2021-02-01T11:45:00Z",
+  "next_timestamp": "2021-02-01T12:05:00Z",
+  "data": [
+    {
+      "id": "3a6eb318329369d28b4cf517e89ead41",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-03T01:00:00Z",
+      "home_team": "Coppin St Eagles",
+      "away_team": "Morgan St Bears",
+      "bookmakers": [
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 160.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -109,
+                  "point": 2.5
+                },
+                {
+                  "name": "Morgan St Bears",
+                  "price": -112,
+                  "point": -2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 160.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -109,
+                  "point": 2.5
+                },
+                {
+                  "name": "Morgan St Bears",
+                  "price": -112,
+                  "point": -2.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -109,
+                  "point": 2.5
+                },
+                {
+                  "name": "Morgan St Bears",
+                  "price": -112,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 160.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Coppin St Eagles",
+                  "price": -114,
+                  "point": 2.5
+                },
+                {
+                  "name": "Morgan St Bears",
+                  "price": -116,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 160.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 160.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "67e0a528a26a0df517c68852a12256b9",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-01T19:00:00Z",
+      "home_team": "NJIT Highlanders",
+      "away_team": "UMBC Retrievers",
+      "bookmakers": []
+    },
+    {
+      "id": "a341e9fbcade1e1010b8f467ee912092",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-01T19:00:00Z",
+      "home_team": "Louisville Cardinals",
+      "away_team": "Georgia Tech Yellow Jackets",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-01T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 4.0
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-01T11:49:45Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:45Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -115,
+                  "point": 4.0
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -106,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 4.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -110,
+                  "point": -4.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -108,
+                  "point": 3.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -112,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-01T11:47:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -106,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -103,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -109,
+                  "point": 3.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -109,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -115,
+                  "point": 4.0
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -106,
+                  "point": -4.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -106,
+                  "point": 3.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-01T11:46:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:42Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Georgia Tech Yellow Jackets",
+                  "price": -119,
+                  "point": 4.0
+                },
+                {
+                  "name": "Louisville Cardinals",
+                  "price": -110,
+                  "point": -4.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 135.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 135.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "bd6e5b772a7b1ec6acbf4a081627f140",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-01T17:00:00Z",
+      "home_team": "Western Carolina Catamounts",
+      "away_team": "The Citadel Bulldogs",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 170.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-01T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -115,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -105,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 170.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -112,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -109,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-01T11:49:45Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 170.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:45Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 170.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 170.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -114,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -106,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-01T11:47:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 170.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -114,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -104,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -115,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -105,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 170.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 170.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -116,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -114,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -111,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -101,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": 102,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -119,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -112,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -109,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -112,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -109,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 169.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 169.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-01T11:46:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:42Z",
+              "outcomes": [
+                {
+                  "name": "The Citadel Bulldogs",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Western Carolina Catamounts",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "61fb5fb8172f4f8502df7d72a23ac700",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-01T20:00:00Z",
+      "home_team": "SIU-Edwardsville Cougars",
+      "away_team": "Austin Peay Governors",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 143.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -112,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-01T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -110,
+                  "point": -6.0
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 6.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 143.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -112,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -112,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-01T11:46:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:42Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "caesars",
+          "title": "Caesars",
+          "last_update": "2021-02-01T11:49:45Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:45Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:45Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 143.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 143.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -114,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -106,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-01T11:47:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -109,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -109,
+                  "point": 5.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -110,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -110,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -115,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -114,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 143.0
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 143.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Austin Peay Governors",
+                  "price": -111,
+                  "point": -5.5
+                },
+                {
+                  "name": "SIU-Edwardsville Cougars",
+                  "price": -101,
+                  "point": 5.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "092e67bdd2f38ec5da78f4099db0cdee",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T00:00:00Z",
+      "home_team": "Miami Hurricanes",
+      "away_team": "Duke Blue Devils",
+      "bookmakers": [
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-01T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -10.5
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -105,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -11.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -118,
+                  "point": -10.5
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -104,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -110,
+                  "point": -10.5
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -110,
+                  "point": 10.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 139.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 139.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -11.0
+                },
+                {
+                  "name": "Miami Hurricanes",
+                  "price": -115,
+                  "point": 11.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 139.0
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 139.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ec7a48e3031e785f07c01cff8af5d943",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T00:00:00Z",
+      "home_team": "SE Missouri St Redhawks",
+      "away_team": "Murray St Racers",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-01T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -112,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -108,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-01T11:47:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -114,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -104,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -105,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -101,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -111,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -112,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -109,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -112,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -109,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -112,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -109,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-01T11:46:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:42Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -105,
+                  "point": 7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Murray St Racers",
+                  "price": -116,
+                  "point": -7.5
+                },
+                {
+                  "name": "SE Missouri St Redhawks",
+                  "price": -114,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 132.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 132.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "e0990e78bbdf493a571db94d5da1f6ec",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T01:00:00Z",
+      "home_team": "Memphis Tigers",
+      "away_team": "UCF Knights",
+      "bookmakers": [
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "pointsbetus",
+          "title": "PointsBet (US)",
+          "last_update": "2021-02-01T11:45:51Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": -8.5
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 8.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:45:51Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-01T11:46:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:42Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -110,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -110,
+                  "point": 9.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": 100,
+                  "point": -9.5
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -120,
+                  "point": 9.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -102,
+                  "point": -9.5
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -120,
+                  "point": 9.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 131.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-01T11:47:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 132.0
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 132.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -115,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -115,
+                  "point": 9.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 131.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 131.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 131.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 131.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -106,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -106,
+                  "point": 9.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -109,
+                  "point": -9.0
+                },
+                {
+                  "name": "UCF Knights",
+                  "price": -109,
+                  "point": 9.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "aa88109ebdef449454743510585aafcf",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T01:30:00Z",
+      "home_team": "Texas Southern Tigers",
+      "away_team": "Alabama A&M Bulldogs",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -108,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -112,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -109,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -109,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -111,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -101,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -115,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -115,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.0
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 141.0
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Alabama A&M Bulldogs",
+                  "price": -110,
+                  "point": 7.5
+                },
+                {
+                  "name": "Texas Southern Tigers",
+                  "price": -110,
+                  "point": -7.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "c10d4f3fef38649f5c01fce977e69752",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T01:30:00Z",
+      "home_team": "Prairie View Panthers",
+      "away_team": "Alabama St Hornets",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 127.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 127.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -110,
+                  "point": 14.0
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -110,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -112,
+                  "point": 14.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -108,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -105,
+                  "point": 127.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 127.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -115,
+                  "point": 14.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -105,
+                  "point": -14.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 128.0
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 128.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -109,
+                  "point": 14.5
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -109,
+                  "point": -14.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Alabama St Hornets",
+                  "price": -115,
+                  "point": 14.0
+                },
+                {
+                  "name": "Prairie View Panthers",
+                  "price": -115,
+                  "point": -14.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 126.5
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 126.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "15ae2c7568e8d33fe146efd4bb9cdb70",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T01:30:00Z",
+      "home_team": "Grambling St Tigers",
+      "away_team": "Miss Valley St Delta Devils",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -110,
+                  "point": -24.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -110,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -112,
+                  "point": -23.5
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -108,
+                  "point": 23.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -105,
+                  "point": -24.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -115,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -109,
+                  "point": -23.5
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -109,
+                  "point": 23.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -115,
+                  "point": -24.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -114,
+                  "point": 24.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -111,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -118,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -110,
+                  "point": -23.5
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -110,
+                  "point": 23.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 141.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 141.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 141.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Grambling St Tigers",
+                  "price": -101,
+                  "point": -24.0
+                },
+                {
+                  "name": "Miss Valley St Delta Devils",
+                  "price": -111,
+                  "point": 24.0
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "d0be472b866482fbd804ff6b7c2880a9",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T01:30:00Z",
+      "home_team": "Jackson St Tigers",
+      "away_team": "Arkansas-Pine Bluff Golden Lions",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -106,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bovada",
+          "title": "Bovada",
+          "last_update": "2021-02-01T11:48:57Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:48:57Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -110,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -110,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -114,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -109,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -109,
+                  "point": -12.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -115,
+                  "point": 12.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -115,
+                  "point": -12.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 136.0
+                },
+                {
+                  "name": "Under",
+                  "price": -116,
+                  "point": 136.0
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Arkansas-Pine Bluff Golden Lions",
+                  "price": -105,
+                  "point": 11.5
+                },
+                {
+                  "name": "Jackson St Tigers",
+                  "price": -115,
+                  "point": -11.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 136.5
+                },
+                {
+                  "name": "Under",
+                  "price": -105,
+                  "point": 136.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "52e757e0f0b2f4a140b2d2b579991f1a",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T02:00:00Z",
+      "home_team": "Texas Tech Red Raiders",
+      "away_team": "Oklahoma Sooners",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 137.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -108,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -114,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 137.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -108,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -114,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -108,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -114,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -114,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -109,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "bookmaker",
+          "title": "Bookmaker",
+          "last_update": "2021-02-01T11:47:39Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:39Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "gtbets",
+          "title": "GTbets",
+          "last_update": "2021-02-01T11:47:13Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:13Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -104,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -114,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -111,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -119,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -116,
+                  "point": 137.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 137.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -101,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -111,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2021-02-01T11:46:46Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 138.5
+                }
+              ]
+            },
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:46Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -110,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -110,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "mybookieag",
+          "title": "MyBookie.ag",
+          "last_update": "2021-02-01T11:46:42Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:42Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -105,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -115,
+                  "point": -6.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Oklahoma Sooners",
+                  "price": -105,
+                  "point": 6.5
+                },
+                {
+                  "name": "Texas Tech Red Raiders",
+                  "price": -115,
+                  "point": -6.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 138.5
+                },
+                {
+                  "name": "Under",
+                  "price": -112,
+                  "point": 138.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "62d741cbefde778125fde9d3687cb314",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T02:00:00Z",
+      "home_team": "North Carolina Central Eagles",
+      "away_team": "South Carolina St Bulldogs",
+      "bookmakers": [
+        {
+          "key": "williamhill_us",
+          "title": "William Hill (US)",
+          "last_update": "2021-02-01T11:49:20Z",
+          "markets": [
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:20Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "sugarhouse",
+          "title": "SugarHouse",
+          "last_update": "2021-02-01T11:49:50Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Central Eagles",
+                  "price": -110,
+                  "point": -16.0
+                },
+                {
+                  "name": "South Carolina St Bulldogs",
+                  "price": -110,
+                  "point": 16.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:50Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2021-02-01T11:47:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Central Eagles",
+                  "price": -110,
+                  "point": -16.0
+                },
+                {
+                  "name": "South Carolina St Bulldogs",
+                  "price": -110,
+                  "point": 16.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:47:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2021-02-01T11:49:34Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Central Eagles",
+                  "price": -110,
+                  "point": -16.0
+                },
+                {
+                  "name": "South Carolina St Bulldogs",
+                  "price": -110,
+                  "point": 16.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:34Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Central Eagles",
+                  "price": -118,
+                  "point": -15.5
+                },
+                {
+                  "name": "South Carolina St Bulldogs",
+                  "price": -104,
+                  "point": 15.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "unibet",
+          "title": "Unibet",
+          "last_update": "2021-02-01T11:50:10Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "North Carolina Central Eagles",
+                  "price": -115,
+                  "point": -16.0
+                },
+                {
+                  "name": "South Carolina St Bulldogs",
+                  "price": -115,
+                  "point": 16.0
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:50:10Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -115,
+                  "point": 140.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 140.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "46129f9b77c47f5643b3b3b43aabeeb6",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T01:00:00Z",
+      "home_team": "Missouri St Bears",
+      "away_team": "Loyola (Chi) Ramblers",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Loyola (Chi) Ramblers",
+                  "price": -118,
+                  "point": -7.5
+                },
+                {
+                  "name": "Missouri St Bears",
+                  "price": -104,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -112,
+                  "point": 134.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 134.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "0eb98b70d5a1df1a547c36b3b6f9dd88",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2021-02-02T00:00:00Z",
+      "home_team": "Drake Bulldogs",
+      "away_team": "Illinois St Redbirds",
+      "bookmakers": [
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2021-02-01T11:49:36Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -114,
+                  "point": -17.5
+                },
+                {
+                  "name": "Illinois St Redbirds",
+                  "price": -106,
+                  "point": 17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:49:36Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "lowvig",
+          "title": "LowVig.ag",
+          "last_update": "2021-02-01T11:46:33Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Drake Bulldogs",
+                  "price": -106,
+                  "point": -17.5
+                },
+                {
+                  "name": "Illinois St Redbirds",
+                  "price": -106,
+                  "point": 17.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2021-02-01T11:46:33Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -108,
+                  "point": 142.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 142.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -104,7 +104,7 @@ def test_influence_insufficient_on_data_gap():
 
 
 def test_v1_1_write_paths_distinct_from_v1(tmp_path, monkeypatch):
-    """Densified card freezes v1.1 artifacts without touching v1 filenames."""
+    """Explicit v1.1 card freezes v1.1 artifacts without touching v1 filenames."""
     import ncaam_lab.scorecard as sc
     from ncaam_lab.scorecard import SCORECARD_VERSION_V1_1, write_scorecard_artifacts
 
@@ -158,7 +158,7 @@ def test_v1_1_write_paths_distinct_from_v1(tmp_path, monkeypatch):
                 "market_edge": {},
             },
         },
-        "inputs": {"results_densify": True},
+        "inputs": {"results_densify": False},
         "version_note": "unit",
         "v1_1_allowed_deltas": ["denser_results_join_schedule_sot_packs"],
     }
@@ -169,3 +169,77 @@ def test_v1_1_write_paths_distinct_from_v1(tmp_path, monkeypatch):
     assert not (out / "ncaam-fair-lab-scorecard-v1.json").exists()
     assert (tmp_path / "docs" / "lab" / "NCAAM_FAIR_LAB_SCORECARD_v1_1.md").exists()
     assert (tmp_path / "data" / "ops" / "ncaam-lab-scorecard-v1-1-20260904.md").exists()
+
+
+def test_v1_2_write_paths_distinct_from_v1_and_v1_1(tmp_path, monkeypatch):
+    """Densified card freezes v1.2 artifacts without touching v1 / v1.1 filenames."""
+    import ncaam_lab.scorecard as sc
+    from ncaam_lab.scorecard import SCORECARD_VERSION_V1_2, write_scorecard_artifacts
+
+    monkeypatch.setattr(sc, "_repo_root", lambda: tmp_path)
+    (tmp_path / "data" / "ops").mkdir(parents=True)
+    (tmp_path / "docs" / "lab").mkdir(parents=True)
+    out = tmp_path / "lab"
+    out.mkdir()
+    # Pre-seed frozen v1.1 so we can assert it stays untouched
+    (out / "ncaam-fair-lab-scorecard-v1.1.json").write_text('{"frozen":true}\n')
+
+    card = {
+        "scorecard_version": SCORECARD_VERSION_V1_2,
+        "protocol_version": "ncaam-fair-lab-protocol-v1.0",
+        "protocol_doc": "docs/lab/NCAAM_FAIR_LAB_PROTOCOL_v1.md",
+        "scorecard_doc": "docs/lab/NCAAM_FAIR_LAB_SCORECARD_v1_2.md",
+        "status": "results_filled",
+        "generated_at": "2026-09-05T00:00:00+00:00",
+        "sport": "ncaam",
+        "grades": {
+            "predictive_quality": "AMBER",
+            "market_edge_evidence": "AMBER",
+            "evidence_quality": "GREEN",
+        },
+        "grade_detail": {
+            "predictive_quality": "unit",
+            "market_edge_evidence": "unit",
+            "evidence_quality": "unit",
+        },
+        "subscriber_influence": "INSUFFICIENT EVIDENCE",
+        "subscriber_influence_detail": "unit",
+        "leakage_receipt": {
+            "kenpom_leakage_ok": True,
+            "kenpom_leakage_violations": 0,
+            "settled_forbidden_total": 0,
+        },
+        "cuts": {
+            "test_a": {
+                "predictive": {
+                    "n_lab_games": 10,
+                    "n_with_actual": 9,
+                    "outcome_coverage": 0.9,
+                    "b2_margin_mae": 9.2,
+                    "b1_margin_mae": 8.5,
+                },
+                "market_edge": {"ats": 0.53, "clv_positive_rate": 0.5},
+                "evidence": {"continuity_counts": {"PRIOR": 10}},
+            },
+            "train_a": {
+                "predictive": {
+                    "n_lab_games": 10,
+                    "n_with_actual": 9,
+                    "outcome_coverage": 0.9,
+                },
+                "market_edge": {},
+            },
+        },
+        "inputs": {"results_densify": True},
+        "version_note": "unit",
+        "v1_2_allowed_deltas": ["denser_path_a_odds_lake_honesty_clean"],
+    }
+    paths = write_scorecard_artifacts(card, out_dir=out)
+    assert paths.get("frozen_v1_untouched") == "true"
+    assert paths.get("frozen_v1_1_untouched") == "true"
+    assert (out / "ncaam-fair-lab-scorecard-v1.2.json").exists()
+    assert (out / "ncaam-fair-lab-scorecard-v1.2.md").exists()
+    assert not (out / "ncaam-fair-lab-scorecard-v1.json").exists()
+    assert (out / "ncaam-fair-lab-scorecard-v1.1.json").read_text() == '{"frozen":true}\n'
+    assert (tmp_path / "docs" / "lab" / "NCAAM_FAIR_LAB_SCORECARD_v1_2.md").exists()
+    assert (tmp_path / "data" / "ops" / "ncaam-lab-scorecard-v1-2-20260905.md").exists()

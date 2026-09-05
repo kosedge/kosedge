@@ -1,0 +1,105 @@
+{
+  "timestamp": "2025-10-27T11:55:38Z",
+  "previous_timestamp": "2025-10-27T11:50:38Z",
+  "next_timestamp": "2025-10-27T12:00:38Z",
+  "data": [
+    {
+      "id": "d93d0951fdc4c2139966f98df7fd5470",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-11-04T00:00:00Z",
+      "home_team": "Arizona Wildcats",
+      "away_team": "Florida Gators",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-10-27T11:55:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-27T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Arizona Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-27T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fbec2fd73675dfd3e001ba97e90b8661",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-11-04T02:30:00Z",
+      "home_team": "BYU Cougars",
+      "away_team": "Villanova Wildcats",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-10-27T11:55:25Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-27T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "BYU Cougars",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-27T11:55:25Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

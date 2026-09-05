@@ -1,0 +1,102 @@
+{
+  "timestamp": "2025-03-16T21:50:37Z",
+  "previous_timestamp": "2025-03-16T21:45:37Z",
+  "next_timestamp": "2025-03-16T22:05:37Z",
+  "data": [
+    {
+      "id": "c773eb4b742117a3ba3d0fcb7f2fa1f8",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-03-16T19:19:00Z",
+      "home_team": "Memphis Tigers",
+      "away_team": "UAB Blazers",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-03-16T21:36:37Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-16T21:36:37Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": 110,
+                  "point": -13.5
+                },
+                {
+                  "name": "UAB Blazers",
+                  "price": -140,
+                  "point": 13.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-03-16T21:36:37Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 156.5
+                },
+                {
+                  "name": "Under",
+                  "price": -120,
+                  "point": 156.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betmgm",
+          "title": "BetMGM",
+          "last_update": "2025-03-16T21:38:02Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-16T21:38:02Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": 220,
+                  "point": -12.5
+                },
+                {
+                  "name": "UAB Blazers",
+                  "price": -300,
+                  "point": 12.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "williamhill_us",
+          "title": "Caesars",
+          "last_update": "2025-03-16T21:40:44Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-03-16T21:40:44Z",
+              "outcomes": [
+                {
+                  "name": "Memphis Tigers",
+                  "price": -320,
+                  "point": -13.5
+                },
+                {
+                  "name": "UAB Blazers",
+                  "price": 240,
+                  "point": 13.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

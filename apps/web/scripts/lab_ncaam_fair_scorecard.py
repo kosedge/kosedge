@@ -4,7 +4,7 @@
 Research only — scores Train-A + Test-A fair parquet vs B1/B2.
 Does not write Edge Board / kei_lines / PLAY tags. No peek-tune.
 
-Default (densify): freezes **v1.1** artifacts (distinct from frozen v1).
+Default (densify): freezes **v1.2** artifacts (distinct from frozen v1 / v1.1).
 `--no-densify`: thin event_id path (v1 baseline; requires --overwrite-frozen-v1 to write).
 
 Usage (from repo root):
@@ -79,7 +79,7 @@ def main() -> int:
         }, indent=2))
         return 0
 
-    # Densify → v1.1 paths. Thin → v1 only when overwrite flag set.
+    # Densify → v1.2 paths. Thin → v1 only when overwrite flag set.
     overwrite_v1 = bool(args.overwrite_frozen_v1) and (not densify)
     paths = write_scorecard_artifacts(
         card,

@@ -1,0 +1,554 @@
+{
+  "timestamp": "2025-10-31T11:55:39Z",
+  "previous_timestamp": "2025-10-31T11:50:39Z",
+  "next_timestamp": "2025-10-31T12:00:39Z",
+  "data": [
+    {
+      "id": "d93d0951fdc4c2139966f98df7fd5470",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-11-04T00:00:00Z",
+      "home_team": "Arizona Wildcats",
+      "away_team": "Florida Gators",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Arizona Wildcats",
+                  "price": -105,
+                  "point": 3.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -115,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-10-31T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Arizona Wildcats",
+                  "price": -108,
+                  "point": 3.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -118,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -118,
+                  "point": 158.5
+                },
+                {
+                  "name": "Under",
+                  "price": -108,
+                  "point": 158.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-10-31T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Arizona Wildcats",
+                  "price": -110,
+                  "point": 3.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -110,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanduel",
+          "title": "FanDuel",
+          "last_update": "2025-10-31T11:51:31Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:51:31Z",
+              "outcomes": [
+                {
+                  "name": "Arizona Wildcats",
+                  "price": -120,
+                  "point": 3.5
+                },
+                {
+                  "name": "Florida Gators",
+                  "price": -102,
+                  "point": -3.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:51:31Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 159.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 159.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fbec2fd73675dfd3e001ba97e90b8661",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-11-04T02:30:00Z",
+      "home_team": "BYU Cougars",
+      "away_team": "Villanova Wildcats",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "BYU Cougars",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-10-31T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "BYU Cougars",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -109,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -109,
+                  "point": 154.5
+                },
+                {
+                  "name": "Under",
+                  "price": -117,
+                  "point": 154.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-10-31T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "BYU Cougars",
+                  "price": -110,
+                  "point": -7.5
+                },
+                {
+                  "name": "Villanova Wildcats",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "60d3a99a9ce0d5c8dac499689d12bb45",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-11-05T01:45:00Z",
+      "home_team": "Duke Blue Devils",
+      "away_team": "Texas Longhorns",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -105,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-10-31T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -110,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 149.5
+                },
+                {
+                  "name": "Under",
+                  "price": -115,
+                  "point": 149.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-10-31T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Duke Blue Devils",
+                  "price": -115,
+                  "point": -7.5
+                },
+                {
+                  "name": "Texas Longhorns",
+                  "price": -105,
+                  "point": 7.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 150.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 150.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "4b6c281923e35edf6ae980014f0d37da",
+      "sport_key": "basketball_ncaab",
+      "sport_title": "NCAAB",
+      "commence_time": "2025-11-08T00:00:00Z",
+      "home_team": "North Carolina Tar Heels",
+      "away_team": "Kansas Jayhawks",
+      "bookmakers": [
+        {
+          "key": "draftkings",
+          "title": "DraftKings",
+          "last_update": "2025-10-31T11:55:30Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:30Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "betrivers",
+          "title": "BetRivers",
+          "last_update": "2025-10-31T11:55:19Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -113,
+                  "point": 2.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -113,
+                  "point": -2.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:19Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -113,
+                  "point": 152.5
+                },
+                {
+                  "name": "Under",
+                  "price": -113,
+                  "point": 152.5
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "fanatics",
+          "title": "Fanatics",
+          "last_update": "2025-10-31T11:55:05Z",
+          "markets": [
+            {
+              "key": "spreads",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Kansas Jayhawks",
+                  "price": -110,
+                  "point": 1.5
+                },
+                {
+                  "name": "North Carolina Tar Heels",
+                  "price": -110,
+                  "point": -1.5
+                }
+              ]
+            },
+            {
+              "key": "totals",
+              "last_update": "2025-10-31T11:55:05Z",
+              "outcomes": [
+                {
+                  "name": "Over",
+                  "price": -110,
+                  "point": 153.5
+                },
+                {
+                  "name": "Under",
+                  "price": -110,
+                  "point": 153.5
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -100,14 +100,32 @@ def build_from_historical() -> Optional[pl.DataFrame]:
                     "book": book_key,
                     "open_time": f"{date_str}T12:00:00Z",
                     "close_time": f"{date_str}T22:00:00Z",
-                    "open_spread_home": spread_o,
-                    "close_spread_home": spread_c,
-                    "open_total": total_o,
-                    "close_total": total_c,
+                    # Cast numerics to float so mixed int/half-point lines share one schema
+                    "open_spread_home": float(spread_o) if spread_o is not None else None,
+                    "close_spread_home": float(spread_c) if spread_c is not None else None,
+                    "open_total": float(total_o) if total_o is not None else None,
+                    "close_total": float(total_c) if total_c is not None else None,
                 })
     if not rows:
         return None
-    return pl.DataFrame(rows)
+    df = pl.DataFrame(
+        rows,
+        schema={
+            "event_id": pl.Utf8,
+            "home_team": pl.Utf8,
+            "away_team": pl.Utf8,
+            "commence_time": pl.Utf8,
+            "book": pl.Utf8,
+            "open_time": pl.Utf8,
+            "close_time": pl.Utf8,
+            "open_spread_home": pl.Float64,
+            "close_spread_home": pl.Float64,
+            "open_total": pl.Float64,
+            "close_total": pl.Float64,
+        },
+    )
+    # Same event/book can appear twice in one day's JSON (rare). Keep first.
+    return df.unique(subset=["event_id", "book", "open_time"], keep="first")
 
 
 def main() -> None:
