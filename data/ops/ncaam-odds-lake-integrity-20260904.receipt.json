@@ -1,0 +1,873 @@
+{
+  "task": "NCAAM Path A lake integrity (Scorecard v1.2 prep)",
+  "as_of": "2026-09-04T18:09:05.917785+00:00",
+  "rules": {
+    "no_odds_api": true,
+    "no_fetch_historical": true,
+    "no_credit_spend": true,
+    "path": "A_only",
+    "open_honesty_max_drift_days": 7
+  },
+  "paths": {
+    "open": "apps/web/data/raw/odds/open",
+    "close": "apps/web/data/raw/odds/close",
+    "parquet": "apps/web/data/processed/ncaab_historical_odds_open_close.parquet"
+  },
+  "expected_from_densify_pr482": {
+    "open_close_pockets": 463,
+    "pockets": [
+      {
+        "start": "2022-11-05",
+        "end": "2023-04-11",
+        "days": 158
+      },
+      {
+        "start": "2023-10-10",
+        "end": "2024-04-15",
+        "days": 189
+      },
+      {
+        "start": "2024-10-27",
+        "end": "2025-01-16",
+        "days": 82
+      },
+      {
+        "start": "2025-11-01",
+        "end": "2025-12-04",
+        "days": 34
+      }
+    ],
+    "parquet_rows": 189609,
+    "unique_events": 15459
+  },
+  "pockets": {
+    "open_count": 463,
+    "close_count": 463,
+    "expected_count": 463,
+    "open_equals_close_pairing": true,
+    "open_only": [],
+    "close_only": [],
+    "n_open_only": 0,
+    "n_close_only": 0,
+    "matches_expected_inventory": true,
+    "n_unexpected_stems": 0,
+    "unexpected_stems_sample": [],
+    "n_missing_expected": 0,
+    "missing_expected_sample": [],
+    "pockets": [
+      {
+        "start": "2022-11-05",
+        "end": "2023-04-11",
+        "expected_days": 158,
+        "calendar_days": 158,
+        "open_present": 158,
+        "close_present": 158,
+        "missing_open": [],
+        "n_missing_open": 0
+      },
+      {
+        "start": "2023-10-10",
+        "end": "2024-04-15",
+        "expected_days": 189,
+        "calendar_days": 189,
+        "open_present": 189,
+        "close_present": 189,
+        "missing_open": [],
+        "n_missing_open": 0
+      },
+      {
+        "start": "2024-10-27",
+        "end": "2025-01-16",
+        "expected_days": 82,
+        "calendar_days": 82,
+        "open_present": 82,
+        "close_present": 82,
+        "missing_open": [],
+        "n_missing_open": 0
+      },
+      {
+        "start": "2025-11-01",
+        "end": "2025-12-04",
+        "expected_days": 34,
+        "calendar_days": 34,
+        "open_present": 34,
+        "close_present": 34,
+        "missing_open": [],
+        "n_missing_open": 0
+      }
+    ],
+    "open_first": "2022-11-05",
+    "open_last": "2025-12-04"
+  },
+  "honesty": {
+    "max_drift_days": 7,
+    "open_honest_n": 463,
+    "open_dishonest_n": 0,
+    "open_dishonest_sample": [],
+    "open_missing_timestamp_n": 0,
+    "open_missing_timestamp_sample": [],
+    "open_bad_json_n": 0,
+    "close_dishonest_n": 0,
+    "close_dishonest_sample": [],
+    "open_honesty_clean": true
+  },
+  "raw_events": {
+    "n_event_rows_across_open_files": 17011,
+    "n_unique_event_ids_open": 15463,
+    "empty_event_id_n": 0,
+    "empty_team_name_n": 0,
+    "sport_key_not_basketball_ncaab_n": 0,
+    "event_ids_on_multiple_open_days_n": 650,
+    "event_ids_on_multiple_open_days_sample": [
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "days": [
+          "2023-10-10",
+          "2023-10-11",
+          "2023-10-12",
+          "2023-10-13",
+          "2023-10-14"
+        ],
+        "n_days": 28
+      },
+      {
+        "event_id": "b5683f79775ac42bb79bbfdd67e0489f",
+        "days": [
+          "2023-10-10",
+          "2023-10-11",
+          "2023-10-12",
+          "2023-10-13",
+          "2023-10-14"
+        ],
+        "n_days": 28
+      },
+      {
+        "event_id": "858a360d5fb9952a69dfdf73524288aa",
+        "days": [
+          "2024-03-31",
+          "2024-04-01",
+          "2024-04-02",
+          "2024-04-03",
+          "2024-04-04"
+        ],
+        "n_days": 16
+      },
+      {
+        "event_id": "10b34f47460faa71d51065cdb8f7da41",
+        "days": [
+          "2023-04-02",
+          "2023-04-03",
+          "2023-04-04",
+          "2023-04-05",
+          "2023-04-06"
+        ],
+        "n_days": 10
+      },
+      {
+        "event_id": "c7325ac8f3e0e8073207dcf77a3a88c2",
+        "days": [
+          "2024-10-27",
+          "2024-10-28",
+          "2024-10-29",
+          "2024-10-30",
+          "2024-10-31"
+        ],
+        "n_days": 9
+      },
+      {
+        "event_id": "179decc32dc04fa36e709af0e485f981",
+        "days": [
+          "2024-10-27",
+          "2024-10-28",
+          "2024-10-29",
+          "2024-10-30",
+          "2024-10-31"
+        ],
+        "n_days": 9
+      },
+      {
+        "event_id": "631e9182b6a71068046e9d071343dfb3",
+        "days": [
+          "2024-03-31",
+          "2024-04-01",
+          "2024-04-02",
+          "2024-04-03",
+          "2024-04-04"
+        ],
+        "n_days": 7
+      },
+      {
+        "event_id": "eb5f80436f9441a0af1091268d01a91a",
+        "days": [
+          "2024-03-31",
+          "2024-04-01",
+          "2024-04-02",
+          "2024-04-03",
+          "2024-04-04"
+        ],
+        "n_days": 7
+      },
+      {
+        "event_id": "47a2909ed0a063d5af561e2efe42f5ac",
+        "days": [
+          "2024-03-31",
+          "2024-04-01",
+          "2024-04-02",
+          "2024-04-03",
+          "2024-04-04"
+        ],
+        "n_days": 7
+      },
+      {
+        "event_id": "4b6c281923e35edf6ae980014f0d37da",
+        "days": [
+          "2025-11-01",
+          "2025-11-02",
+          "2025-11-03",
+          "2025-11-04",
+          "2025-11-05"
+        ],
+        "n_days": 7
+      },
+      {
+        "event_id": "f3784e08936ce538206c2b95c1624810",
+        "days": [
+          "2023-03-14",
+          "2023-03-15",
+          "2023-03-16",
+          "2023-03-17",
+          "2023-03-18"
+        ],
+        "n_days": 6
+      },
+      {
+        "event_id": "bcb591281fd559be10881f606552c41f",
+        "days": [
+          "2023-03-14",
+          "2023-03-15",
+          "2023-03-16",
+          "2023-03-17",
+          "2023-03-18"
+        ],
+        "n_days": 6
+      },
+      {
+        "event_id": "54d28d935a94958d9ddccfb7d7ae868a",
+        "days": [
+          "2023-03-14",
+          "2023-03-15",
+          "2023-03-16",
+          "2023-03-17",
+          "2023-03-18"
+        ],
+        "n_days": 6
+      },
+      {
+        "event_id": "0257d8762d22ad9a72b904780ab6c68a",
+        "days": [
+          "2023-03-14",
+          "2023-03-15",
+          "2023-03-16",
+          "2023-03-17",
+          "2023-03-18"
+        ],
+        "n_days": 6
+      },
+      {
+        "event_id": "1738c0c7214e7fced61c1caa479a5385",
+        "days": [
+          "2023-03-19",
+          "2023-03-20",
+          "2023-03-21",
+          "2023-03-22",
+          "2023-03-23"
+        ],
+        "n_days": 6
+      }
+    ],
+    "identity_team_string_conflicts_n": 16,
+    "identity_home_away_flips_n": 16,
+    "identity_home_away_flips_sample": [
+      {
+        "event_id": "6122639b33f1ae9ccebd885502fbf853",
+        "first": {
+          "home": "Pittsburgh Panthers",
+          "away": "Mississippi St Bulldogs"
+        },
+        "later": {
+          "home": "Mississippi St Bulldogs",
+          "away": "Pittsburgh Panthers",
+          "date": "2023-03-14"
+        }
+      },
+      {
+        "event_id": "cf3f01ab57a58b04e18404629d62f60b",
+        "first": {
+          "home": "Fairleigh Dickinson Knights",
+          "away": "Texas Southern Tigers"
+        },
+        "later": {
+          "home": "Texas Southern Tigers",
+          "away": "Fairleigh Dickinson Knights",
+          "date": "2023-03-15"
+        }
+      },
+      {
+        "event_id": "581f0bdef23caad8d69f4b8784d795d5",
+        "first": {
+          "home": "Nevada Wolf Pack",
+          "away": "Arizona St Sun Devils"
+        },
+        "later": {
+          "home": "Arizona St Sun Devils",
+          "away": "Nevada Wolf Pack",
+          "date": "2023-03-15"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-02"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-03"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-04"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-05"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-06"
+        }
+      },
+      {
+        "event_id": "4c5851ab5700be872cb565db78758c0d",
+        "first": {
+          "home": "Indiana St Sycamores",
+          "away": "Seton Hall Pirates"
+        },
+        "later": {
+          "home": "Seton Hall Pirates",
+          "away": "Indiana St Sycamores",
+          "date": "2024-04-04"
+        }
+      },
+      {
+        "event_id": "a7413c1ef3f3e7ecb7075bebe9145c90",
+        "first": {
+          "home": "Iowa State Cyclones",
+          "away": "Creighton Bluejays"
+        },
+        "later": {
+          "home": "Creighton Bluejays",
+          "away": "Iowa State Cyclones",
+          "date": "2025-11-25"
+        }
+      }
+    ],
+    "identity_real_conflicts_n": 0,
+    "identity_real_conflicts_sample": [],
+    "identity_team_string_conflicts_sample": [
+      {
+        "event_id": "6122639b33f1ae9ccebd885502fbf853",
+        "first": {
+          "home": "Pittsburgh Panthers",
+          "away": "Mississippi St Bulldogs"
+        },
+        "later": {
+          "home": "Mississippi St Bulldogs",
+          "away": "Pittsburgh Panthers",
+          "date": "2023-03-14"
+        }
+      },
+      {
+        "event_id": "cf3f01ab57a58b04e18404629d62f60b",
+        "first": {
+          "home": "Fairleigh Dickinson Knights",
+          "away": "Texas Southern Tigers"
+        },
+        "later": {
+          "home": "Texas Southern Tigers",
+          "away": "Fairleigh Dickinson Knights",
+          "date": "2023-03-15"
+        }
+      },
+      {
+        "event_id": "581f0bdef23caad8d69f4b8784d795d5",
+        "first": {
+          "home": "Nevada Wolf Pack",
+          "away": "Arizona St Sun Devils"
+        },
+        "later": {
+          "home": "Arizona St Sun Devils",
+          "away": "Nevada Wolf Pack",
+          "date": "2023-03-15"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-02"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-03"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-04"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-05"
+        }
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "first": {
+          "home": "Oregon Ducks",
+          "away": "Georgia Bulldogs"
+        },
+        "later": {
+          "home": "Georgia Bulldogs",
+          "away": "Oregon Ducks",
+          "date": "2023-11-06"
+        }
+      },
+      {
+        "event_id": "4c5851ab5700be872cb565db78758c0d",
+        "first": {
+          "home": "Indiana St Sycamores",
+          "away": "Seton Hall Pirates"
+        },
+        "later": {
+          "home": "Seton Hall Pirates",
+          "away": "Indiana St Sycamores",
+          "date": "2024-04-04"
+        }
+      },
+      {
+        "event_id": "a7413c1ef3f3e7ecb7075bebe9145c90",
+        "first": {
+          "home": "Iowa State Cyclones",
+          "away": "Creighton Bluejays"
+        },
+        "later": {
+          "home": "Creighton Bluejays",
+          "away": "Iowa State Cyclones",
+          "date": "2025-11-25"
+        }
+      }
+    ],
+    "b7_both_sides_resolved_n": 11772,
+    "b7_home_unresolved_n": 2520,
+    "b7_away_unresolved_n": 3463,
+    "b7_resolve_rate_both": 0.692,
+    "b7_unresolved_name_top": [
+      [
+        "San Diego St Aztecs",
+        144
+      ],
+      [
+        "Washington St Cougars",
+        107
+      ],
+      [
+        "Cleveland St Vikings",
+        107
+      ],
+      [
+        "Oklahoma St Cowboys",
+        101
+      ],
+      [
+        "Arkansas St Red Wolves",
+        100
+      ],
+      [
+        "Montana St Bobcats",
+        99
+      ],
+      [
+        "Colorado St Rams",
+        98
+      ],
+      [
+        "Long Beach St 49ers",
+        97
+      ],
+      [
+        "Jackson St Tigers",
+        96
+      ],
+      [
+        "Wichita St Shockers",
+        96
+      ],
+      [
+        "Arkansas-Little Rock Trojans",
+        95
+      ],
+      [
+        "Fort Wayne Mastodons",
+        94
+      ],
+      [
+        "Seattle Redhawks",
+        94
+      ],
+      [
+        "Chicago St Cougars",
+        93
+      ],
+      [
+        "Delaware St Hornets",
+        93
+      ]
+    ],
+    "note": "B7 unresolved is fail-closed Lab omit (not lake corruption). Multi-day event_id in open files is expected (same tip reappears across snapshot days). Home/away flips across days are a known Odds API neutral-site quirk."
+  },
+  "parquet": {
+    "exists": true,
+    "path": "apps/web/data/processed/ncaab_historical_odds_open_close.parquet",
+    "n_rows": 189609,
+    "n_unique_events": 15459,
+    "expected_rows": 189609,
+    "expected_unique_events": 15459,
+    "matches_densify_inventory": true,
+    "duplicate_event_id_book_n": 4759,
+    "duplicate_event_id_book_same_open_time_n": 0,
+    "duplicate_event_id_book_snapshot_grain_n": 4759,
+    "duplicate_event_id_book_sample": [
+      {
+        "event_id": "5c191bb632a92794c6275e1ea95ffdda",
+        "book": "williamhill_us",
+        "n": 3,
+        "n_open_times": 3
+      },
+      {
+        "event_id": "99eebd820cb0134a0808d634c068231a",
+        "book": "draftkings",
+        "n": 3,
+        "n_open_times": 3
+      },
+      {
+        "event_id": "689a4990ae9f452e04c2e6c3b0cc0722",
+        "book": "lowvig",
+        "n": 2,
+        "n_open_times": 2
+      },
+      {
+        "event_id": "a17832c7bb9667ce7500dde5a976ac79",
+        "book": "twinspires",
+        "n": 2,
+        "n_open_times": 2
+      },
+      {
+        "event_id": "1b74a95273c62e4e7ef59705d1b6f945",
+        "book": "betonlineag",
+        "n": 4,
+        "n_open_times": 4
+      },
+      {
+        "event_id": "cee2db89c2fb31b8b87048cf185f4368",
+        "book": "wynnbet",
+        "n": 2,
+        "n_open_times": 2
+      },
+      {
+        "event_id": "f4af582f71860b64244c2337f41f49d2",
+        "book": "draftkings",
+        "n": 3,
+        "n_open_times": 3
+      },
+      {
+        "event_id": "a65b89150c6444c3283a2893575c32f5",
+        "book": "williamhill_us",
+        "n": 4,
+        "n_open_times": 4
+      },
+      {
+        "event_id": "9a030d3e4b9183be26c5f4cd0a82a1e7",
+        "book": "betrivers",
+        "n": 4,
+        "n_open_times": 4
+      },
+      {
+        "event_id": "c7325ac8f3e0e8073207dcf77a3a88c2",
+        "book": "betmgm",
+        "n": 3,
+        "n_open_times": 3
+      }
+    ],
+    "home_away_flip_events_n": 12,
+    "home_away_flip_sample": [
+      {
+        "event_id": "6122639b33f1ae9ccebd885502fbf853",
+        "homes": [
+          "Mississippi St Bulldogs",
+          "Pittsburgh Panthers"
+        ],
+        "aways": [
+          "Mississippi St Bulldogs",
+          "Pittsburgh Panthers"
+        ]
+      },
+      {
+        "event_id": "72d448ed919c366ba8437122d6584d00",
+        "homes": [
+          "Georgia Bulldogs",
+          "Oregon Ducks"
+        ],
+        "aways": [
+          "Georgia Bulldogs",
+          "Oregon Ducks"
+        ]
+      },
+      {
+        "event_id": "3db36a23968b61f7bd64f0ce518f143f",
+        "homes": [
+          "Houston Cougars",
+          "Tennessee Volunteers"
+        ],
+        "aways": [
+          "Houston Cougars",
+          "Tennessee Volunteers"
+        ]
+      },
+      {
+        "event_id": "cf3f01ab57a58b04e18404629d62f60b",
+        "homes": [
+          "Fairleigh Dickinson Knights",
+          "Texas Southern Tigers"
+        ],
+        "aways": [
+          "Fairleigh Dickinson Knights",
+          "Texas Southern Tigers"
+        ]
+      },
+      {
+        "event_id": "ede12d4b460250218ccc71620fce72f9",
+        "homes": [
+          "Gonzaga Bulldogs",
+          "Maryland Terrapins"
+        ],
+        "aways": [
+          "Gonzaga Bulldogs",
+          "Maryland Terrapins"
+        ]
+      },
+      {
+        "event_id": "4c5851ab5700be872cb565db78758c0d",
+        "homes": [
+          "Indiana St Sycamores",
+          "Seton Hall Pirates"
+        ],
+        "aways": [
+          "Indiana St Sycamores",
+          "Seton Hall Pirates"
+        ]
+      },
+      {
+        "event_id": "581f0bdef23caad8d69f4b8784d795d5",
+        "homes": [
+          "Arizona St Sun Devils",
+          "Nevada Wolf Pack"
+        ],
+        "aways": [
+          "Arizona St Sun Devils",
+          "Nevada Wolf Pack"
+        ]
+      },
+      {
+        "event_id": "be1c87f28714b3d07d2823b342af9be1",
+        "homes": [
+          "Baylor Bears",
+          "St. John's Red Storm"
+        ],
+        "aways": [
+          "Baylor Bears",
+          "St. John's Red Storm"
+        ]
+      },
+      {
+        "event_id": "eb2479bcd330d993a8b147d2371fb0d8",
+        "homes": [
+          "Alabama Crimson Tide",
+          "UNLV Rebels"
+        ],
+        "aways": [
+          "Alabama Crimson Tide",
+          "UNLV Rebels"
+        ]
+      },
+      {
+        "event_id": "a7413c1ef3f3e7ecb7075bebe9145c90",
+        "homes": [
+          "Creighton Bluejays",
+          "Iowa State Cyclones"
+        ],
+        "aways": [
+          "Creighton Bluejays",
+          "Iowa State Cyclones"
+        ]
+      }
+    ],
+    "event_id_real_team_conflicts_n": 0,
+    "event_id_real_team_conflicts_sample": [],
+    "event_id_conflicting_team_strings_n": 12,
+    "empty_event_id_rows": 0,
+    "empty_home_team_rows": 0,
+    "empty_away_team_rows": 0,
+    "null_counts": {
+      "event_id": 0,
+      "home_team": 0,
+      "away_team": 0,
+      "commence_time": 0,
+      "book": 0,
+      "open_time": 0,
+      "close_time": 0,
+      "open_spread_home": 1742,
+      "close_spread_home": 1912,
+      "open_total": 2778,
+      "close_total": 3610
+    },
+    "open_time_span": {
+      "min": "2022-11-05T12:00:00Z",
+      "max": "2025-12-04T12:00:00Z"
+    },
+    "line_validity": {
+      "open_spread_home": {
+        "n_non_null": 187867,
+        "min": -44.0,
+        "max": 32.5,
+        "mean": -5.380215790958498,
+        "soft_outlier_n": 98,
+        "hard_outlier_n": 0
+      },
+      "close_spread_home": {
+        "n_non_null": 187697,
+        "min": -64.5,
+        "max": 43.0,
+        "mean": -5.4551084993366965,
+        "soft_outlier_n": 209,
+        "hard_outlier_n": 3
+      },
+      "open_total": {
+        "n_non_null": 186831,
+        "min": 0.0,
+        "max": 191.5,
+        "mean": 143.15130519025215,
+        "soft_outlier_n": 90,
+        "hard_outlier_n": 19
+      },
+      "close_total": {
+        "n_non_null": 185999,
+        "min": 0.0,
+        "max": 210.5,
+        "mean": 143.1496083312276,
+        "soft_outlier_n": 176,
+        "hard_outlier_n": 20
+      },
+      "bands": {
+        "spread_abs_soft": 40.0,
+        "spread_abs_hard": 55.0,
+        "total_soft": [
+          100.0,
+          180.0
+        ],
+        "total_hard": [
+          80.0,
+          220.0
+        ]
+      }
+    }
+  },
+  "verdict": {
+    "status": "PASS",
+    "blockers": [],
+    "warnings": [
+      "event_id+book repeats across snapshot days (Path A grain): 4759 \u2014 expected",
+      "Odds API home/away flips across snapshot days (neutral-site quirk): 12 events \u2014 Lab SoT D fail-closed / consensus; not densify corruption",
+      "raw open home/away flips across days: 16",
+      "hard line outliers (band check): 42",
+      "soft line outliers (band check): 573",
+      "B7 both-sides resolve rate 0.692 (<0.85) \u2014 Lab omit grain, not lake fail"
+    ],
+    "scorecard_gate": "ok_to_rerun_locked_scorecard"
+  }
+}
