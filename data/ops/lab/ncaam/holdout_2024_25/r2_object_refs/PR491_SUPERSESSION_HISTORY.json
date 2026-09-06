@@ -22,7 +22,7 @@
     },
     "B": {
       "branch": "cursor/ncaam-holdout-governance-16f9",
-      "pr": null
+      "pr": 497
     }
   },
   "note": "Do not close/rewrite/force-push PR #491 until Ryan reviews clean replacements and parity evidence.",
