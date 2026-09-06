@@ -20,6 +20,8 @@ Includes:
 - Schemas + contracts + Phase 2.6C thresholds (taxonomy relabel)
 - Foundation + phase26c unit tests
 - Rebuild/hydrate/verify scripts + seal semantics doc
+- **Path B recovery:** deterministic rebuild of schedule pack + seal from governed ESPN raw + in-repo KenPom/odds (no manual placement)
+- **Raw fail-closed on build path:** missing/mismatched sidecars refuse sealing
 - Ops docs + allowlist
 - Tiny synthetic fixtures only
 

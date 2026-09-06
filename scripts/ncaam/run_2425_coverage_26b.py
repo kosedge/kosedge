@@ -311,7 +311,8 @@ def main() -> int:
         "manifest_hash_status": {
             "feature_manifest_sha256": seal.get("feature_manifest_sha256"),
             "label_manifest_sha256": seal.get("label_manifest_sha256"),
-            "seal_receipt_sha256": seal.get("seal_receipt_sha256"),
+            "seal_payload_sha256": seal.get("seal_payload_sha256"),
+            "seal_file_sha256": seal.get("seal_file_sha256"),
             "features_labels_joined_for_evaluation": False,
         },
         "representativeness_answer": repr_audit["answer"],

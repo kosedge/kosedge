@@ -72,7 +72,8 @@ def _raw_ingestion_receipt(raw_dir: Path) -> Dict[str, Any]:
         raw_dir_s = str(raw_dir)
     return {
         "source": "espn_scoreboard_public",
-        "raw_dir": raw_dir_s,        "n_day_payloads": len(files),
+        "raw_dir": raw_dir_s,
+        "n_day_payloads": len(files),
         "n_sha256_sidecars": len(sha_sidecars),
         "immutable_raw_preserved": integrity_ok,
         "n_day_receipts_indexed": n_indexed,
@@ -85,10 +86,35 @@ def _raw_ingestion_receipt(raw_dir: Path) -> Dict[str, Any]:
     }
 
 
+def _refuse_if_raw_not_preserved(raw_receipt: Dict[str, Any]) -> None:
+    """Hard stop before any derived artifacts / package sealing."""
+    if raw_receipt.get("immutable_raw_preserved"):
+        return
+    raise SystemExit(
+        "FAIL-CLOSED: immutable ESPN raw not preserved "
+        f"(n_day_payloads={raw_receipt.get('n_day_payloads')}, "
+        f"n_missing_sidecars={raw_receipt.get('n_missing_sidecars')}, "
+        f"n_digest_mismatches={raw_receipt.get('n_digest_mismatches')}). "
+        "Refusing derived artifacts and seal."
+    )
+
+
 def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
     if season != C.SEASON_KEY:
         raise SystemExit(
             f"This Phase 2.6A builder seals {C.SEASON_KEY} only; got {season}."
+        )
+
+    # Fail closed on raw integrity BEFORE any derived artifacts or sealing.
+    raw_receipt = _raw_ingestion_receipt(C.RAW_ESPN_DIR)
+    _refuse_if_raw_not_preserved(raw_receipt)
+
+    if not C.CANONICAL_PACK_PATH.exists():
+        raise SystemExit(
+            "FAIL-CLOSED: canonical schedule pack missing at "
+            f"{C.CANONICAL_PACK_PATH}. Rebuild from governed ESPN raw via "
+            "scripts/ncaam/rebuild_2425_sealed_holdout_from_governed_inputs.py "
+            "(path B) — do not manually place hash-only seal artifacts."
         )
 
     io.ensure_dirs(
@@ -103,6 +129,7 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
             C.SEAL_DIR,
         ]
     )
+    io.write_json(C.SCHEDULE_DIR / "raw_ingestion_receipt.json", raw_receipt)
 
     pack = json.loads(C.CANONICAL_PACK_PATH.read_text(encoding="utf-8"))
     games: List[Dict[str, Any]] = list(pack.get("games") or [])
@@ -120,6 +147,10 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
 
     b7_reject_count = int((pack.get("map_stats") or {}).get("omit_unmapped_or_ambiguous") or 0)
 
+    try:
+        pack_rel = str(C.CANONICAL_PACK_PATH.relative_to(REPO))
+    except ValueError:
+        pack_rel = str(C.CANONICAL_PACK_PATH)
     schedule_index = {
         "holdout_id": C.HOLDOUT_ID,
         "season": season,
@@ -137,7 +168,7 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "n_participant_reversals": len(reversals),
         "slate_complete": bool(pack.get("slate_complete")),
         "map_stats": pack.get("map_stats"),
-        "canonical_pack_path": str(C.CANONICAL_PACK_PATH.relative_to(REPO)),
+        "canonical_pack_path": pack_rel,
         "canonical_pack_sha256": io.sha256_file(C.CANONICAL_PACK_PATH),
         "game_ids": [
             str(g.get("espn_game_id") or g.get("game_id") or "") for g in games
@@ -145,9 +176,6 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "built_at": datetime.now(timezone.utc).isoformat(),
     }
     io.write_json(C.SCHEDULE_DIR / "schedule_sot_index.json", schedule_index)
-
-    raw_receipt = _raw_ingestion_receipt(C.RAW_ESPN_DIR)
-    io.write_json(C.SCHEDULE_DIR / "raw_ingestion_receipt.json", raw_receipt)
 
     venue_pack = venue.build_venue_table(games)
     io.write_json(C.VENUE_DIR / "venue_contract.json", venue_pack)
@@ -227,8 +255,10 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "label_manifest_sha256": seal.get("label_manifest_sha256"),
         "seal_payload_sha256": seal.get("seal_payload_sha256"),
         "seal_file_sha256": seal.get("seal_file_sha256"),
-        # Legacy key retained for readers mid-migration; equals seal_payload_sha256.
+        # Compatibility alias for external readers only; equals seal_payload_sha256.
+        # Internal build/readiness consumers must use seal_payload_sha256 / seal_file_sha256.
         "seal_receipt_sha256": seal.get("seal_payload_sha256"),
+        "seal_receipt_sha256_alias_of": "seal_payload_sha256",
         "features_labels_joined_for_evaluation": False,
         "performance_metrics_calculated": False,
         "api_calls_made": False,

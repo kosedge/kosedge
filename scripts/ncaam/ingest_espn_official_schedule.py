@@ -240,6 +240,199 @@ def build_mapped_game(parsed: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     }
 
 
+def load_events_from_raw_day(path: Path) -> Tuple[List[Dict[str, Any]], Optional[str]]:
+    """Load ESPN events from an immutable raw day file (archive envelope or bare payload).
+
+    Supported shapes:
+      - archive envelope: {payload: {events: [...]}, error?: str}
+      - bare scoreboard / fixture: {events: [...]}
+    """
+    try:
+        blob = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        return [], f"{path.name}: {exc}"
+    if not isinstance(blob, dict):
+        return [], f"{path.name}: root not an object"
+    if blob.get("error"):
+        return [], str(blob.get("error"))
+    payload = blob.get("payload")
+    if isinstance(payload, dict):
+        events = payload.get("events") or []
+    else:
+        events = blob.get("events") or []
+    if not isinstance(events, list):
+        return [], f"{path.name}: events not a list"
+    return events, None
+
+
+def ingest_from_raw_dir(
+    *,
+    season_key: str,
+    raw_dir: Path,
+    start: date,
+    end: date,
+) -> Dict[str, Any]:
+    """Deterministically rebuild the official schedule pack from governed ESPN raw."""
+    if not raw_dir.exists():
+        raise SystemExit(f"FAIL-CLOSED: raw ESPN dir missing: {raw_dir}")
+    season_end_year = int(season_key.split("-")[0]) + 1
+    games: List[Dict[str, Any]] = []
+    seen: set[str] = set()
+    fetch_errors: List[str] = []
+    unmapped_sample: List[Dict[str, Any]] = []
+    espn_events = 0
+    mapped_both = 0
+    omit_unmapped = 0
+    omit_dup = 0
+    miss_names: Dict[str, int] = {}
+    raw_receipts: List[Dict[str, Any]] = []
+
+    day_files = sorted(raw_dir.glob("espn_scoreboard_*.json"))
+    if not day_files:
+        raise SystemExit(f"FAIL-CLOSED: no espn_scoreboard_*.json under {raw_dir}")
+
+    for raw_path in day_files:
+        side = raw_dir / raw_path.name.replace(".json", ".sha256")
+        if not side.exists():
+            raise SystemExit(
+                f"FAIL-CLOSED: missing sha256 sidecar for {raw_path.name}"
+            )
+        claimed = side.read_text(encoding="utf-8").strip().split()[0]
+        import hashlib
+
+        actual = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+        if claimed.lower() != actual.lower():
+            raise SystemExit(
+                f"FAIL-CLOSED: digest mismatch for {raw_path.name}: "
+                f"claimed={claimed} actual={actual}"
+            )
+        # Prefer day from filename; fall back to envelope.
+        day_token = raw_path.stem.replace("espn_scoreboard_", "")
+        try:
+            day = date.fromisoformat(day_token)
+        except ValueError:
+            blob = json.loads(raw_path.read_text(encoding="utf-8"))
+            day = date.fromisoformat(str(blob.get("day") or ""))
+        if day < start or day > end:
+            continue
+        events, err = load_events_from_raw_day(raw_path)
+        raw_receipts.append(
+            {
+                "day": day.isoformat(),
+                "path": raw_path.name,
+                "sha256": actual,
+                "n_events": len(events),
+                "error": err,
+            }
+        )
+        if err:
+            fetch_errors.append(err)
+            continue
+        for event in events:
+            espn_events += 1
+            parsed = parse_event(
+                event, season_key=season_key, season_end_year=season_end_year
+            )
+            mapped_row = build_mapped_game(parsed)
+            if mapped_row is None:
+                omit_unmapped += 1
+                m = parsed["mapped"]
+                if not m.get("home"):
+                    raw = str(m.get("home_name") or "").strip()
+                    if raw:
+                        miss_names[raw] = miss_names.get(raw, 0) + 1
+                if not m.get("away"):
+                    raw = str(m.get("away_name") or "").strip()
+                    if raw:
+                        miss_names[raw] = miss_names.get(raw, 0) + 1
+                if len(unmapped_sample) < 40:
+                    unmapped_sample.append(
+                        {
+                            "espn_game_id": parsed["espn_game_id"],
+                            "tipoff": parsed["tipoff"],
+                            "home_name": m.get("home_name"),
+                            "away_name": m.get("away_name"),
+                            "home": m.get("home"),
+                            "away": m.get("away"),
+                            "reason": m.get("reason"),
+                        }
+                    )
+                continue
+            gid = mapped_row["game_id"]
+            if gid in seen:
+                omit_dup += 1
+                continue
+            seen.add(gid)
+            mapped_both += 1
+            games.append(mapped_row)
+
+    games.sort(key=lambda g: (g.get("tipoff") or "", g.get("game_id") or ""))
+    miss_rate = (omit_unmapped / espn_events) if espn_events else 0.0
+    as_of = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+    top_misses = sorted(miss_names.items(), key=lambda kv: (-kv[1], kv[0]))[:40]
+    miami_fl = sum(
+        1 for g in games if g["home"] == "miami fl" or g["away"] == "miami fl"
+    )
+    miami_oh = sum(
+        1 for g in games if g["home"] == "miami oh" or g["away"] == "miami oh"
+    )
+    return {
+        "sport": "ncaam",
+        "season": season_key,
+        "season_end_year": season_end_year,
+        "as_of": as_of,
+        "official": True,
+        "source": "espn_scoreboard_public",
+        "source_detail": {
+            "endpoint": ESPN_SCOREBOARD,
+            "groups": 50,
+            "limit": 500,
+            "window_start": start.isoformat(),
+            "window_end": end.isoformat(),
+            "rebuild_mode": "from_governed_raw_dir",
+            "raw_dir": str(raw_dir),
+        },
+        "fidelity": "espn_receipt_b7_mapped_subset",
+        "slate_complete": False,
+        "slate_complete_note": (
+            "Fail-closed B7 map of ESPN scoreboard. Thin/mapped subset ≠ complete D1 slate. "
+            "Do not stamp slate_complete=true without an honest densified full join."
+        ),
+        "lab_join_note": (
+            "Lab interim joins still use Odds event_id (D). This pack exposes ESPN game_id "
+            "+ odds_event_id=null stubs for future E hybrid — no invented Odds↔ESPN links."
+        ),
+        "crosswalk": {
+            "odds_event_id_field": "odds_event_id",
+            "populated": False,
+            "policy": "evidence_only_never_invent",
+        },
+        "n_games": len(games),
+        "map_stats": {
+            "espn_events": espn_events,
+            "mapped_both_sides": mapped_both,
+            "omit_unmapped_or_ambiguous": omit_unmapped,
+            "omit_duplicate_game_id": omit_dup,
+            "map_miss_rate": round(miss_rate, 4),
+            "miami_fl_mapped_games": miami_fl,
+            "miami_oh_mapped_games": miami_oh,
+            "miami_fl_ne_miami_oh": True,
+        },
+        "fetch_errors": fetch_errors,
+        "top_unmapped_names": [{"name": n, "count": c} for n, c in top_misses],
+        "unmapped_sample": unmapped_sample,
+        "raw_day_receipts": raw_receipts,
+        "games": games,
+        "notes": [
+            "Option A Schedule SoT — rebuilt from governed ESPN raw (path B).",
+            "Identity: apps/web/lib/ncaam/aliases.json via ncaam_identity (fail-closed).",
+            "No manual schedule-pack placement; fail-closed if raw missing/mismatched.",
+            "metadata_class=HISTORICAL_STATIC_RECONSTRUCTION for post-tip venue/static fields.",
+        ],
+        "metadata_class": "HISTORICAL_STATIC_RECONSTRUCTION",
+    }
+
+
 def ingest_window(
     *,
     season_key: str,
@@ -449,6 +642,14 @@ def main(argv: Optional[List[str]] = None) -> int:
         default=None,
         help="Directory for immutable per-day ESPN raw envelopes + sha256 sidecars",
     )
+    parser.add_argument(
+        "--from-raw-dir",
+        default=None,
+        help=(
+            "Rebuild schedule pack deterministically from governed ESPN raw day files "
+            "+ verified sha256 sidecars (path B; no live ESPN fetch)."
+        ),
+    )
     args = parser.parse_args(argv)
 
     start, end = SEASON_WINDOWS[args.season]
@@ -460,15 +661,28 @@ def main(argv: Optional[List[str]] = None) -> int:
         print("end-date before start-date", file=sys.stderr)
         return 2
 
-    archive = Path(args.archive_raw) if args.archive_raw else None
-    print(f"Ingesting ESPN NCAAM {args.season} ({start} → {end})…")
-    blob = ingest_window(
-        season_key=args.season,
-        start=start,
-        end=end,
-        delay_s=args.delay,
-        archive_raw_dir=archive,
-    )
+    if args.from_raw_dir:
+        raw_dir = Path(args.from_raw_dir)
+        print(
+            f"Rebuilding NCAAM {args.season} schedule from governed raw "
+            f"({raw_dir}; {start} → {end})…"
+        )
+        blob = ingest_from_raw_dir(
+            season_key=args.season,
+            raw_dir=raw_dir,
+            start=start,
+            end=end,
+        )
+    else:
+        archive = Path(args.archive_raw) if args.archive_raw else None
+        print(f"Ingesting ESPN NCAAM {args.season} ({start} → {end})…")
+        blob = ingest_window(
+            season_key=args.season,
+            start=start,
+            end=end,
+            delay_s=args.delay,
+            archive_raw_dir=archive,
+        )
     out = Path(args.out) if args.out else out_path_for_season(args.season)
     out.parent.mkdir(parents=True, exist_ok=True)
     out.write_text(json.dumps(blob, indent=2) + "\n", encoding="utf-8")

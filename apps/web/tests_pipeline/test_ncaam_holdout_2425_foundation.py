@@ -622,3 +622,327 @@ def test_readiness_no_longer_sealed_and_ready_by_default():
     src = inspect.getsource(compute_readiness)
     assert "SEALED_AND_READY" not in src or "SEALED_COVERAGE_REVIEW_REQUIRED" in src
     assert "SEALED_COVERAGE_REVIEW_REQUIRED" in src
+
+
+def _load_build_module():
+    import importlib.util
+
+    script = (
+        WEB_ROOT.parent.parent / "scripts" / "ncaam" / "build_2425_sealed_holdout.py"
+    )
+    spec = importlib.util.spec_from_file_location("build_2425_sealed_holdout", script)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_build_refuses_seal_when_raw_integrity_fails(tmp_path, monkeypatch):
+    """Corrupt/missing raw MUST NOT produce a seal (fail-closed on build path)."""
+    import ncaam_lab.holdout_2425.constants as constants
+
+    mod = _load_build_module()
+    out = tmp_path / "holdout"
+    raw = out / "raw" / "espn_scoreboard"
+    raw.mkdir(parents=True)
+    seal_dir = out / "seal"
+    seal_dir.mkdir(parents=True)
+    # Pre-seed a fake seal that must remain the only seal artifact if we refuse early —
+    # actually delete any seal; assert none created after failed build.
+    pack = tmp_path / "pack.json"
+    pack.write_text(
+        json.dumps(
+            {
+                "games": [
+                    {
+                        "espn_game_id": "1",
+                        "date": "2024-11-04",
+                        "tipoff": "2024-11-04T00:00Z",
+                        "home": "duke",
+                        "away": "kentucky",
+                        "status": "final",
+                        "home_score": 80,
+                        "away_score": 70,
+                    }
+                ],
+                "slate_complete": False,
+                "map_stats": {"omit_unmapped_or_ambiguous": 0},
+                "source": "test",
+            }
+        ),
+        encoding="utf-8",
+    )
+    payload = raw / "espn_scoreboard_2024-11-04.json"
+    payload.write_text('{"events":[]}\n', encoding="utf-8")
+    # Missing sidecar → not preserved
+    monkeypatch.setattr(constants, "OUT_ROOT", out)
+    monkeypatch.setattr(constants, "RAW_ESPN_DIR", raw)
+    monkeypatch.setattr(constants, "SCHEDULE_DIR", out / "schedule_sot")
+    monkeypatch.setattr(constants, "VENUE_DIR", out / "venue")
+    monkeypatch.setattr(constants, "KENPOM_DIR", out / "kenpom_audit")
+    monkeypatch.setattr(constants, "ODDS_DIR", out / "odds_audit")
+    monkeypatch.setattr(constants, "FEATURE_DIR", out / "feature_package")
+    monkeypatch.setattr(constants, "LABEL_DIR", out / "label_package")
+    monkeypatch.setattr(constants, "SEAL_DIR", seal_dir)
+    monkeypatch.setattr(constants, "QUARANTINE_DIR", out / "quarantine")
+    monkeypatch.setattr(constants, "REJECTED_DIR", out / "rejected")
+    monkeypatch.setattr(constants, "CANONICAL_PACK_PATH", pack)
+    monkeypatch.setattr(mod.C, "OUT_ROOT", out)
+    monkeypatch.setattr(mod.C, "RAW_ESPN_DIR", raw)
+    monkeypatch.setattr(mod.C, "SCHEDULE_DIR", out / "schedule_sot")
+    monkeypatch.setattr(mod.C, "VENUE_DIR", out / "venue")
+    monkeypatch.setattr(mod.C, "KENPOM_DIR", out / "kenpom_audit")
+    monkeypatch.setattr(mod.C, "ODDS_DIR", out / "odds_audit")
+    monkeypatch.setattr(mod.C, "FEATURE_DIR", out / "feature_package")
+    monkeypatch.setattr(mod.C, "LABEL_DIR", out / "label_package")
+    monkeypatch.setattr(mod.C, "SEAL_DIR", seal_dir)
+    monkeypatch.setattr(mod.C, "QUARANTINE_DIR", out / "quarantine")
+    monkeypatch.setattr(mod.C, "REJECTED_DIR", out / "rejected")
+    monkeypatch.setattr(mod.C, "CANONICAL_PACK_PATH", pack)
+
+    with pytest.raises(SystemExit, match="FAIL-CLOSED"):
+        mod.build(season="2024-25")
+    assert not (seal_dir / "seal_receipt.json").exists()
+    assert not (out / "feature_package" / "features.json").exists()
+
+    # Corrupt sidecar also fails closed
+    (raw / "espn_scoreboard_2024-11-04.sha256").write_text("0" * 64 + "\n", encoding="utf-8")
+    with pytest.raises(SystemExit, match="FAIL-CLOSED"):
+        mod.build(season="2024-25")
+    assert not (seal_dir / "seal_receipt.json").exists()
+
+
+def test_build_readiness_round_trip_uses_explicit_seal_hashes(tmp_path, monkeypatch):
+    """Build → readiness must read seal_payload_sha256 / seal_file_sha256 (not null/stale)."""
+    import ncaam_lab.holdout_2425.constants as constants
+    import ncaam_lab.holdout_2425.seal_package as seal_mod
+    from ncaam_lab.holdout_2425.readiness import compute_readiness
+
+    monkeypatch.setattr(constants, "FEATURE_DIR", tmp_path / "feature_package")
+    monkeypatch.setattr(constants, "LABEL_DIR", tmp_path / "label_package")
+    monkeypatch.setattr(constants, "REJECTED_DIR", tmp_path / "rejected")
+    monkeypatch.setattr(constants, "SEAL_DIR", tmp_path / "seal")
+    monkeypatch.setattr(seal_mod, "FEATURE_DIR", tmp_path / "feature_package")
+    monkeypatch.setattr(seal_mod, "LABEL_DIR", tmp_path / "label_package")
+    monkeypatch.setattr(seal_mod, "REJECTED_DIR", tmp_path / "rejected")
+    monkeypatch.setattr(seal_mod, "SEAL_DIR", tmp_path / "seal")
+
+    schedule = [
+        {
+            "espn_game_id": "10",
+            "date": "2024-12-01",
+            "tipoff": "2024-12-01T19:00Z",
+            "home": "duke",
+            "away": "kentucky",
+            "status": "final",
+            "home_score": 80,
+            "away_score": 70,
+        }
+    ]
+    venue_rows = [
+        {
+            "source_event_id": "10",
+            "venue_status": "confirmed_home",
+            "validation_status": "ok",
+            "historical_reconstruction": True,
+            "b7_join_key": "2024-12-01|duke|kentucky",
+            "conflict_reason": None,
+        }
+    ]
+    kenpom_rows = [
+        {
+            "source_event_id": "10",
+            "event_id": "10",
+            "eligibility_status": "PIT_ELIGIBLE",
+            "selected_snapshot_id": "kenpom_2024-11-24.parquet",
+            "selected_snapshot_sha256": "abc",
+        }
+    ]
+    odds_by = {
+        "10": {
+            "event_id": "odds1",
+            "b1_status": "B1_ELIGIBLE",
+            "open_snapshot_ts": "2024-11-30T12:00:00Z",
+            "close_snapshot_ts": "2024-12-01T18:00:00Z",
+            "n_books": 5,
+        }
+    }
+    seal = build_feature_and_label_packages(
+        schedule_rows=schedule,
+        venue_rows=venue_rows,
+        kenpom_eligibility=kenpom_rows,
+        odds_by_espn_id=odds_by,
+    )
+    assert seal.get("seal_payload_sha256")
+    assert seal.get("seal_file_sha256")
+    readiness = compute_readiness(
+        schedule_pack={"games": schedule, "slate_complete": False},
+        venue_pack={
+            "coverage_counts": {
+                "confirmed_home": 1,
+                "confirmed_neutral": 0,
+                "unknown": 0,
+                "conflicts": 0,
+            },
+            "n_rows": 1,
+        },
+        kenpom_game={"n_pit_eligible": 1, "rows": kenpom_rows},
+        odds_audit={"n_b1_eligible": 1, "rows": []},
+        seal=seal,
+        b7_reject_count=0,
+        quarantine_count=0,
+    )
+    hashes = readiness["manifest_hash_status"]
+    assert hashes["seal_payload_sha256"] == seal["seal_payload_sha256"]
+    assert hashes["seal_file_sha256"] == seal["seal_file_sha256"]
+    assert hashes["seal_payload_sha256"] is not None
+    assert hashes["seal_file_sha256"] is not None
+    assert "seal_receipt_sha256" not in hashes
+
+
+def test_clean_checkout_path_b_rebuild_without_preseeded_seal(tmp_path, monkeypatch):
+    """Clean tree: rebuild schedule+seal from governed raw without pre-seeded seal artifacts."""
+    import importlib.util
+    import polars as pl
+    import ncaam_lab.holdout_2425.constants as constants
+    import ncaam_lab.holdout_2425.kenpom_audit as kenpom_mod
+    import ncaam_lab.holdout_2425.odds_audit as odds_mod
+    import ncaam_lab.holdout_2425.seal_package as seal_mod
+
+    fixture = (
+        WEB_ROOT.parent.parent
+        / "data"
+        / "ops"
+        / "lab"
+        / "ncaam"
+        / "holdout_2024_25"
+        / "fixtures"
+        / "espn_scoreboard_fixture_day.json"
+    )
+    fixture_sha = fixture.with_suffix(".sha256")
+    assert fixture.exists() and fixture_sha.exists()
+
+    clean = tmp_path / "clean_checkout"
+    raw = clean / "raw" / "espn_scoreboard"
+    raw.mkdir(parents=True)
+    day = raw / "espn_scoreboard_2024-11-04.json"
+    day.write_bytes(fixture.read_bytes())
+    (raw / "espn_scoreboard_2024-11-04.sha256").write_text(
+        fixture_sha.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+
+    pack_path = clean / "ncaam_official_schedule_2024_25.json"
+    kenpom_dir = clean / "kenpom_snapshots"
+    kenpom_dir.mkdir()
+    pl.DataFrame(
+        {
+            "team_norm": ["duke", "kentucky"],
+            "adjem": [30.0, 25.0],
+            "adjtempo": [68.0, 70.0],
+        }
+    ).write_parquet(kenpom_dir / "kenpom_2024-11-03.parquet")
+    odds_path = clean / "odds.parquet"
+    # Empty odds grain → B1 nonqualifying is ok for seal production; builder must still seal.
+    pl.DataFrame(
+        {
+            "event_id": pl.Series([], dtype=pl.Utf8),
+            "home_team": pl.Series([], dtype=pl.Utf8),
+            "away_team": pl.Series([], dtype=pl.Utf8),
+            "commence_time": pl.Series([], dtype=pl.Utf8),
+            "book": pl.Series([], dtype=pl.Utf8),
+            "open_time": pl.Series([], dtype=pl.Utf8),
+            "close_time": pl.Series([], dtype=pl.Utf8),
+            "open_spread_home": pl.Series([], dtype=pl.Float64),
+            "close_spread_home": pl.Series([], dtype=pl.Float64),
+            "open_total": pl.Series([], dtype=pl.Float64),
+            "close_total": pl.Series([], dtype=pl.Float64),
+        }
+    ).write_parquet(odds_path)
+
+    out = clean / "holdout"
+    seal_dir = out / "seal"
+    assert not seal_dir.exists()
+
+    for attr, val in [
+        ("OUT_ROOT", out),
+        ("RAW_ESPN_DIR", raw),
+        ("SCHEDULE_DIR", out / "schedule_sot"),
+        ("VENUE_DIR", out / "venue"),
+        ("KENPOM_DIR", out / "kenpom_audit"),
+        ("ODDS_DIR", out / "odds_audit"),
+        ("FEATURE_DIR", out / "feature_package"),
+        ("LABEL_DIR", out / "label_package"),
+        ("SEAL_DIR", seal_dir),
+        ("QUARANTINE_DIR", out / "quarantine"),
+        ("REJECTED_DIR", out / "rejected"),
+        ("CANONICAL_PACK_PATH", pack_path),
+        ("KENPOM_SNAPSHOT_DIR", kenpom_dir),
+        ("ODDS_PARQUET", odds_path),
+    ]:
+        monkeypatch.setattr(constants, attr, val)
+
+    monkeypatch.setattr(seal_mod, "FEATURE_DIR", out / "feature_package")
+    monkeypatch.setattr(seal_mod, "LABEL_DIR", out / "label_package")
+    monkeypatch.setattr(seal_mod, "REJECTED_DIR", out / "rejected")
+    monkeypatch.setattr(seal_mod, "SEAL_DIR", seal_dir)
+
+    _real_inventory = kenpom_mod.inventory_snapshots
+    _real_odds = odds_mod.load_odds_event_grain
+
+    def _inventory(*_a, **k):
+        kw = {kk: vv for kk, vv in k.items() if kk != "snapshot_dir"}
+        return _real_inventory(kenpom_dir, **kw)
+
+    def _odds(*_a, **k):
+        kw = {kk: vv for kk, vv in k.items() if kk != "parquet"}
+        return _real_odds(odds_path, **kw)
+
+    monkeypatch.setattr(kenpom_mod, "inventory_snapshots", _inventory)
+    monkeypatch.setattr(odds_mod, "load_odds_event_grain", _odds)
+
+    ingest_path = (
+        WEB_ROOT.parent.parent / "scripts" / "ncaam" / "ingest_espn_official_schedule.py"
+    )
+    spec = importlib.util.spec_from_file_location("ingest_espn_official_schedule", ingest_path)
+    ingest = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(ingest)
+
+    pack = ingest.ingest_from_raw_dir(
+        season_key="2024-25",
+        raw_dir=raw,
+        start=date(2024, 11, 4),
+        end=date(2025, 4, 8),
+    )
+    assert pack["n_games"] >= 1
+    pack_path.write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
+
+    build_mod = _load_build_module()
+    monkeypatch.setattr(build_mod.C, "OUT_ROOT", out)
+    monkeypatch.setattr(build_mod.C, "RAW_ESPN_DIR", raw)
+    monkeypatch.setattr(build_mod.C, "SCHEDULE_DIR", out / "schedule_sot")
+    monkeypatch.setattr(build_mod.C, "VENUE_DIR", out / "venue")
+    monkeypatch.setattr(build_mod.C, "KENPOM_DIR", out / "kenpom_audit")
+    monkeypatch.setattr(build_mod.C, "ODDS_DIR", out / "odds_audit")
+    monkeypatch.setattr(build_mod.C, "FEATURE_DIR", out / "feature_package")
+    monkeypatch.setattr(build_mod.C, "LABEL_DIR", out / "label_package")
+    monkeypatch.setattr(build_mod.C, "SEAL_DIR", seal_dir)
+    monkeypatch.setattr(build_mod.C, "QUARANTINE_DIR", out / "quarantine")
+    monkeypatch.setattr(build_mod.C, "REJECTED_DIR", out / "rejected")
+    monkeypatch.setattr(build_mod.C, "CANONICAL_PACK_PATH", pack_path)
+    monkeypatch.setattr(build_mod.C, "KENPOM_SNAPSHOT_DIR", kenpom_dir)
+    monkeypatch.setattr(build_mod.C, "ODDS_PARQUET", odds_path)
+    monkeypatch.setattr(build_mod.kenpom, "inventory_snapshots", _inventory)
+    monkeypatch.setattr(build_mod.odds, "load_odds_event_grain", _odds)
+
+    summary = build_mod.build(season="2024-25")
+    seal_path = seal_dir / "seal_receipt.json"
+    assert seal_path.exists(), "path-B rebuild must produce seal without pre-seeded artifacts"
+    seal = json.loads(seal_path.read_text(encoding="utf-8"))
+    assert seal.get("seal_payload_sha256")
+    assert summary.get("seal_payload_sha256") == seal["seal_payload_sha256"]
+    assert summary.get("seal_file_sha256")
+    assert "seal_receipt_sha256" not in seal
+    readiness = json.loads((out / "readiness_report.json").read_text(encoding="utf-8"))
+    assert readiness["manifest_hash_status"]["seal_payload_sha256"] == seal["seal_payload_sha256"]
+    assert readiness["manifest_hash_status"]["seal_file_sha256"] == summary["seal_file_sha256"]
