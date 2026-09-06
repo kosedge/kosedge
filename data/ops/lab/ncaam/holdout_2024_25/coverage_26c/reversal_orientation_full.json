@@ -1,0 +1,2988 @@
+{
+  "n_rows": 149,
+  "recovery_applied": false,
+  "rows": [
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "baylor",
+      "odds_event_id": "c02b8e1d7393f60e5c454ace6dabec45",
+      "odds_home": "tennessee",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729733",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "mississippi",
+      "odds_event_id": "68b3ed0a453a02ec42c6a3c089e0cb84",
+      "odds_home": "byu",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715322",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "iona",
+      "odds_event_id": "a86fb998978a153ceebade4b2c492407",
+      "odds_home": "rice",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716025",
+      "scores_omitted": true,
+      "tip_date": "2024-12-01",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "ucf",
+      "odds_event_id": "ea97e14934b8c800ab8c2e1cd164ce46",
+      "odds_home": "nebraska",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401758636",
+      "scores_omitted": true,
+      "tip_date": "2025-04-06",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "rutgers",
+      "odds_event_id": "03dc899da8e705ac69a80383ed70ce58",
+      "odds_home": "alabama",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719212",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "davidson",
+      "odds_event_id": "8c2f4f9a27e053e07aa407ae2e09bc02",
+      "odds_home": "arizona",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715868",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "detroit mercy",
+      "odds_event_id": "9af39c3411c891beb70b1dd76a79316b",
+      "odds_home": "tulsa",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729815",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "tennessee",
+      "odds_event_id": "945636c59a5da655dea7e1796fef2fc7",
+      "odds_home": "virginia",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715338",
+      "scores_omitted": true,
+      "tip_date": "2024-11-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "nebraska",
+      "odds_event_id": "ff0b2136cc60802fe6ab0c35193b2caf",
+      "odds_home": "boise state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401758632",
+      "scores_omitted": true,
+      "tip_date": "2025-04-05",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "long beach state",
+      "odds_event_id": "a11619e05f4a40a525556c68597582ba",
+      "odds_home": "san jose state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401709975",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "virginia tech",
+      "odds_event_id": "4a591c2d461bf1a3fae537d02bfa6cca",
+      "odds_home": "south carolina",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729801",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "cincinnati",
+      "odds_event_id": "455894225c69e67241a4bd855b69abec",
+      "odds_home": "ucf",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401758629",
+      "scores_omitted": true,
+      "tip_date": "2025-04-03",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "texas",
+      "odds_event_id": "4dadf71b90498184a795ada97a9f733f",
+      "odds_home": "xavier",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401745909",
+      "scores_omitted": true,
+      "tip_date": "2025-03-20",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "utah tech",
+      "odds_event_id": "e1c4de9f0f49571cb79954c7d93c52f1",
+      "odds_home": "csun",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401725808",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "san jose state",
+      "odds_event_id": "557cf7fc1b7d08a95fa3d31aeff65402",
+      "odds_home": "unc greensboro",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722367",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "purdue",
+      "odds_event_id": "072c4e8704f391a8d5d65b275003241a",
+      "odds_home": "mississippi",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401731040",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "west virginia",
+      "odds_event_id": "cfa467e540e4a50b2863e2f39c2dc494",
+      "odds_home": "arizona",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729746",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "indiana state",
+      "odds_event_id": "b9f386545d9eef22119f8ac549d535d1",
+      "odds_home": "tarleton state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716053",
+      "scores_omitted": true,
+      "tip_date": "2024-12-02",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "jacksonville",
+      "odds_event_id": "9fee9ab4e71a7475e1dcb10b2e281997",
+      "odds_home": "mercer",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715947",
+      "scores_omitted": true,
+      "tip_date": "2024-11-25",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "tcu",
+      "odds_event_id": "8dc1c73f43aba49df992db343bf010fb",
+      "odds_home": "santa clara",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706985",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "ucf",
+      "odds_event_id": "3eb4165364ef928ffc8a6d6f7a647bd3",
+      "odds_home": "lsu",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729803",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "colorado",
+      "odds_event_id": "528265d9322fc952e1c748883ce7de0e",
+      "odds_home": "villanova",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401758619",
+      "scores_omitted": true,
+      "tip_date": "2025-04-02",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "bethune cookman",
+      "odds_event_id": "e3d87f4d4c5678d8b203c84f0aefa5ec",
+      "odds_home": "north dakota",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722036",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "rutgers",
+      "odds_event_id": "2a45a76aeadfe34fce8238c8efd93513",
+      "odds_home": "notre dame",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719211",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "kansas",
+      "odds_event_id": "9d8c4c03f018dad029db299f11ba21fc",
+      "odds_home": "michigan state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706963",
+      "scores_omitted": true,
+      "tip_date": "2024-11-12",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "mississippi",
+      "odds_event_id": "14e1e9ba2c7e3d3c4a166ebdf697e0d0",
+      "odds_home": "southern miss",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715324",
+      "scores_omitted": true,
+      "tip_date": "2024-12-14",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "illinois",
+      "odds_event_id": "569835128e0571ee40474f94dce93f48",
+      "odds_home": "duke",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401707856",
+      "scores_omitted": true,
+      "tip_date": "2025-02-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "texas",
+      "odds_event_id": "c7325ac8f3e0e8073207dcf77a3a88c2",
+      "odds_home": "ohio state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715344",
+      "scores_omitted": true,
+      "tip_date": "2024-11-05",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "monmouth",
+      "odds_event_id": "1c56ea25465a4d9f62b4e683418f00bb",
+      "odds_home": "youngstown state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401726039",
+      "scores_omitted": true,
+      "tip_date": "2024-11-21",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "st john's",
+      "odds_event_id": "d679b8f3a4e9cc845475329b95aa6cec",
+      "odds_home": "virginia",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729735",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "siena",
+      "odds_event_id": "a8a110dd4a043f598a3001860f1f9d15",
+      "odds_home": "jacksonville",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729799",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "kennesaw state",
+      "odds_event_id": "2d248de2a249c516905e6845178d8044",
+      "odds_home": "kent state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401700272",
+      "scores_omitted": true,
+      "tip_date": "2024-12-01",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "northwestern",
+      "odds_event_id": "4936b1417436a7896269016e356c6923",
+      "odds_home": "unlv",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729705",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "alabama state",
+      "odds_event_id": "bcd6f21bbfcbc4e748b7c19c5c65ff00",
+      "odds_home": "nebraska omaha",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401720944",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "smu",
+      "odds_event_id": "673f8cb0bb842f21b3f507a85010ab0c",
+      "odds_home": "cal baptist",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401700448",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "rhode island",
+      "odds_event_id": "1266fec7063a5b4155f3666c61591983",
+      "odds_home": "ut arlington",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729820",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "american",
+      "odds_event_id": "bf4d099ab2609bba145ccfc1b8f20243",
+      "odds_home": "mount st mary's",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401745913",
+      "scores_omitted": true,
+      "tip_date": "2025-03-19",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "portland state",
+      "odds_event_id": "e64869e3ab4ddd340594d8c399d17f8b",
+      "odds_home": "wofford",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719651",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "georgia southern",
+      "odds_event_id": "9bf2bf534bfcf68709958ec488cba88f",
+      "odds_home": "north carolina central",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401727054",
+      "scores_omitted": true,
+      "tip_date": "2024-11-16",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "northeastern",
+      "odds_event_id": "5869f716f00fcc2a43489d4c2d67be79",
+      "odds_home": "cal state bakersfield",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722322",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "tennessee tech",
+      "odds_event_id": "9851eda2ccff4203792e663dfbddb8c6",
+      "odds_home": "tennessee martin",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401744110",
+      "scores_omitted": true,
+      "tip_date": "2025-03-06",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "temple",
+      "odds_event_id": "753aa088156eb40634b75e3c3bc4b013",
+      "odds_home": "villanova",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729755",
+      "scores_omitted": true,
+      "tip_date": "2024-12-07",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "tarleton state",
+      "odds_event_id": "3f5fa62c4029625fa93251399682ddf1",
+      "odds_home": "hofstra",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716024",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "west virginia",
+      "odds_event_id": "42566fc883245a9cecfe4ac1d5fbd63f",
+      "odds_home": "gonzaga",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715867",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "grand canyon",
+      "odds_event_id": "62b3a436ee5cad24db467ab2d81a0efc",
+      "odds_home": "stanford",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715698",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oklahoma",
+      "odds_event_id": "a0ccdb0f63e33e9b1fde377a1993f2cc",
+      "odds_home": "oklahoma state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719222",
+      "scores_omitted": true,
+      "tip_date": "2024-12-15",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "drexel",
+      "odds_event_id": "7addd737cd4bbd876797cc1ba853a39d",
+      "odds_home": "penn",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729757",
+      "scores_omitted": true,
+      "tip_date": "2024-12-07",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "michigan",
+      "odds_event_id": "88fce655f28ed6ec81d1188472be2cd2",
+      "odds_home": "xavier",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729802",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "notre dame",
+      "odds_event_id": "bf0e79740dac9aa2bc0ec4894cb61348",
+      "odds_home": "houston",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719213",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "austin peay",
+      "odds_event_id": "e9f08879154a8686f4606db2d5471254",
+      "odds_home": "georgia state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729817",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "utep",
+      "odds_event_id": "353e9df407bad10a7ef88c7f857a1030",
+      "odds_home": "long beach state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401709974",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "pacific",
+      "odds_event_id": "fe4b9ff4378a15d7299b387eeab261da",
+      "odds_home": "san jose state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722342",
+      "scores_omitted": true,
+      "tip_date": "2024-11-09",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "ucla",
+      "odds_event_id": "2ba4ceb9651e86da2550db04805e409e",
+      "odds_home": "north carolina",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401700440",
+      "scores_omitted": true,
+      "tip_date": "2024-12-21",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "indiana",
+      "odds_event_id": "553781bd2606c3f49e57b3199887ca5c",
+      "odds_home": "gonzaga",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729740",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "la salle",
+      "odds_event_id": "bde403eebe9dc63152411c717e13cce3",
+      "odds_home": "saint joseph's",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729758",
+      "scores_omitted": true,
+      "tip_date": "2024-12-08",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "california",
+      "odds_event_id": "14f504d1241b37611c51d45d660c6e0c",
+      "odds_home": "san diego state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706880",
+      "scores_omitted": true,
+      "tip_date": "2024-12-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "howard",
+      "odds_event_id": "ec8038650398fd72662a396edd451ce5",
+      "odds_home": "boston university",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721803",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "providence",
+      "odds_event_id": "0984d189383c3e87e801033148650eaf",
+      "odds_home": "davidson",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729742",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "penn state",
+      "odds_event_id": "3674e2fdc36cb09b1521f090e135bbd4",
+      "odds_home": "clemson",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729853",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "san jose state",
+      "odds_event_id": "671c039e1454a3f998571cd0a67f6f24",
+      "odds_home": "utep",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722366",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "northern iowa",
+      "odds_event_id": "5525d85efcd1a197295a4d6a188e5aa0",
+      "odds_home": "valparaiso",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401744052",
+      "scores_omitted": true,
+      "tip_date": "2025-03-08",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oklahoma",
+      "odds_event_id": "b420b0fb15dfd9e43607eeecb5de3d43",
+      "odds_home": "providence",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401735273",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oklahoma",
+      "odds_event_id": "61c95b33dfee483979df4079afbe3598",
+      "odds_home": "michigan",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716054",
+      "scores_omitted": true,
+      "tip_date": "2024-12-19",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "hampton",
+      "odds_event_id": "d2e920d35542ef778295f9ba18bb2345",
+      "odds_home": "howard",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401754722",
+      "scores_omitted": true,
+      "tip_date": "2025-02-01",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "ball state",
+      "odds_event_id": "469449cff51b408e0f067df2205103e1",
+      "odds_home": "eastern kentucky",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401732167",
+      "scores_omitted": true,
+      "tip_date": "2024-11-25",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "rice",
+      "odds_event_id": "53446e0f356880fa77649fc2cf94f212",
+      "odds_home": "arkansas state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716023",
+      "scores_omitted": true,
+      "tip_date": "2024-12-01",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "illinois chicago",
+      "odds_event_id": "124ad7cbf528c32b26ad3891fe6ae0e0",
+      "odds_home": "la salle",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729760",
+      "scores_omitted": true,
+      "tip_date": "2024-11-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "long beach state",
+      "odds_event_id": "d54d29c0621372b990f139437fa63d83",
+      "odds_home": "unc greensboro",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401709973",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "iona",
+      "odds_event_id": "22b37651bcf8c03b5a47a40582302f5c",
+      "odds_home": "tarleton state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716019",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "kentucky",
+      "odds_event_id": "4b4d05a034f5a008423b10403f697da1",
+      "odds_home": "duke",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706883",
+      "scores_omitted": true,
+      "tip_date": "2024-11-13",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "south carolina",
+      "odds_event_id": "62082021074c936c05834ad9397ab4fc",
+      "odds_home": "xavier",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715330",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "albany",
+      "odds_event_id": "84d27bfb2e34c84d0949c3f94588e4bd",
+      "odds_home": "american",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721930",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "wisconsin",
+      "odds_event_id": "0e10ece30663a33cfc20581eb56fcf2e",
+      "odds_home": "ucf",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715444",
+      "scores_omitted": true,
+      "tip_date": "2024-11-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "alabama state",
+      "odds_event_id": "f243edbf217ac8d682690023368e915b",
+      "odds_home": "saint francis",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401745907",
+      "scores_omitted": true,
+      "tip_date": "2025-03-18",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "dayton",
+      "odds_event_id": "005686318aa37195d89a9b4ab9a170d9",
+      "odds_home": "florida atlantic",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401751940",
+      "scores_omitted": true,
+      "tip_date": "2025-03-19",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "chicago state",
+      "odds_event_id": "801f374fb59d5c72463d36cdf8673c8e",
+      "odds_home": "drexel",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729855",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oregon",
+      "odds_event_id": "94913340961e168fb7dac54a0ff9cd57",
+      "odds_home": "san diego state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719208",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "iowa",
+      "odds_event_id": "99695e2d93fc7084bf0c9ddede0833c9",
+      "odds_home": "utah state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715382",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "delaware state",
+      "odds_event_id": "7e5412d3f901acf51fab02018bced178",
+      "odds_home": "grambling state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401723705",
+      "scores_omitted": true,
+      "tip_date": "2024-12-20",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "unlv",
+      "odds_event_id": "cd370c2e18c584f13824a3414a7a5f3f",
+      "odds_home": "mississippi state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401714990",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "louisville",
+      "odds_event_id": "8eecd9e8666a62d0d99901561a8a00a0",
+      "odds_home": "west virginia",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729739",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "liu",
+      "odds_event_id": "a2220167051073bf4d4d5a4b33bbb228",
+      "odds_home": "binghamton",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721994",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "hofstra",
+      "odds_event_id": "cba3c855e92bde021bca644936a87114",
+      "odds_home": "arkansas state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716026",
+      "scores_omitted": true,
+      "tip_date": "2024-12-01",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "florida",
+      "odds_event_id": "bfb848aaa93d98e3c4795ce8b98d2539",
+      "odds_home": "arizona state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401714895",
+      "scores_omitted": true,
+      "tip_date": "2024-12-14",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "illinois chicago",
+      "odds_event_id": "fdafa6f897a42317467a768024ca3e09",
+      "odds_home": "east carolina",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729765",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "gonzaga",
+      "odds_event_id": "2f2d6529e65e3661545ad4ec419ed764",
+      "odds_home": "davidson",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729748",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "canisius",
+      "odds_event_id": "a4f1b95eba368df334dceb861d288b4a",
+      "odds_home": "siue",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706160",
+      "scores_omitted": true,
+      "tip_date": "2024-11-16",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "detroit mercy",
+      "odds_event_id": "4ecaef7b6375c864f0f73165f95a6ebe",
+      "odds_home": "rhode island",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729816",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "north carolina",
+      "odds_event_id": "66c2ae0cabff61318233aa0bf2f69360",
+      "odds_home": "florida",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401700439",
+      "scores_omitted": true,
+      "tip_date": "2024-12-18",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "massachusetts",
+      "odds_event_id": "e621ac4c598876808af8be8859ee785b",
+      "odds_home": "florida state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715656",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "arkansas",
+      "odds_event_id": "9a58f945e89995a1996d1e962fe62a98",
+      "odds_home": "illinois",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401707853",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "norfolk state",
+      "odds_event_id": "da42e8aa28fd790145b6073415609778",
+      "odds_home": "alabama state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401723775",
+      "scores_omitted": true,
+      "tip_date": "2024-12-19",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "utah valley",
+      "odds_event_id": "edf2cea972d34ae69dd4cfa781bd7111",
+      "odds_home": "west georgia",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721989",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "monmouth",
+      "odds_event_id": "71a77b73177ae4a678918b5aae85ee98",
+      "odds_home": "temple",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722288",
+      "scores_omitted": true,
+      "tip_date": "2024-11-08",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "florida state",
+      "odds_event_id": "dbb41cf5dc5aa10d2808c500d33e8eaa",
+      "odds_home": "temple",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715655",
+      "scores_omitted": true,
+      "tip_date": "2024-11-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "vmi",
+      "odds_event_id": "95f36226445dd0cd526fa013c246ead2",
+      "odds_home": "tennessee tech",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715949",
+      "scores_omitted": true,
+      "tip_date": "2024-11-15",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "hofstra",
+      "odds_event_id": "4d220828365a80ebeadd234ca38fc1bd",
+      "odds_home": "seton hall",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715562",
+      "scores_omitted": true,
+      "tip_date": "2024-11-14",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "saint louis",
+      "odds_event_id": "3b08d5d9adfb9829c0ebda64e5e96407",
+      "odds_home": "wichita state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715982",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "miami oh",
+      "odds_event_id": "4af266d7895dbac0ff27672726ad2386",
+      "odds_home": "siena",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706169",
+      "scores_omitted": true,
+      "tip_date": "2024-11-25",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "merrimack",
+      "odds_event_id": "5e590772c701c812fc1cdedcabda5e7b",
+      "odds_home": "utsa",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716158",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "usc",
+      "odds_event_id": "03084f16527eec660ffded5667b418a8",
+      "odds_home": "saint mary's",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721659",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "pittsburgh",
+      "odds_event_id": "8c1f36fc6fa9e57ade86cb6f6d95f20b",
+      "odds_home": "wisconsin",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729804",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "indiana state",
+      "odds_event_id": "46f17ef1923ae089835b0e28565c4343",
+      "odds_home": "iona",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716022",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "monmouth",
+      "odds_event_id": "43c882aabac4a7783e3b18b9a4e6c28d",
+      "odds_home": "presbyterian",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401726041",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "bucknell",
+      "odds_event_id": "a683e84c9a1267bbe0aab4db8c6307c5",
+      "odds_home": "siena",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401720586",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "san diego state",
+      "odds_event_id": "22b73f69af32ba2ba9502112f836c07c",
+      "odds_home": "creighton",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715453",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "howard",
+      "odds_event_id": "c2d9d0e689b03864acf94f76aea2650f",
+      "odds_home": "tennessee state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401727338",
+      "scores_omitted": true,
+      "tip_date": "2024-11-14",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "william & mary",
+      "odds_event_id": "6f1a87b3c55aa4d1cb76a95a6264a1cd",
+      "odds_home": "georgia southern",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401726060",
+      "scores_omitted": true,
+      "tip_date": "2024-11-17",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "portland state",
+      "odds_event_id": "4096a62fa7e2330baaf946bc9d1b3aba",
+      "odds_home": "st thomas",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719650",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "lamar",
+      "odds_event_id": "95d54bafbb8f020fce5d3bf9d4a547ff",
+      "odds_home": "nebraska omaha",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401720668",
+      "scores_omitted": true,
+      "tip_date": "2024-11-24",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "texas a&m",
+      "odds_event_id": "3128abe41db88a2238bf428e0099e0a8",
+      "odds_home": "creighton",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719067",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "louisville",
+      "odds_event_id": "233687ba70fade11aa416eb31ea33b99",
+      "odds_home": "oklahoma",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729747",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oregon",
+      "odds_event_id": "1ebac0a4a689d4a75624aeff1a611292",
+      "odds_home": "texas a&m",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719207",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "unc greensboro",
+      "odds_event_id": "9110afbe52d444bcd9f5072b23d846d5",
+      "odds_home": "utep",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401726434",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "hofstra",
+      "odds_event_id": "7d793bf58f047e2ca7efd972a3ed6ba9",
+      "odds_home": "rice",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716021",
+      "scores_omitted": true,
+      "tip_date": "2024-11-30",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "elon",
+      "odds_event_id": "abd1e603c42545eefe3e10658a23b258",
+      "odds_home": "maine",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722088",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "purdue",
+      "odds_event_id": "8445870dce375a3cbead1ce4f630b24c",
+      "odds_home": "nc state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716065",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "houston",
+      "odds_event_id": "166fc626486f6e3ec0d9137e19e066ab",
+      "odds_home": "alabama",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401719210",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "pittsburgh",
+      "odds_event_id": "1bfa80b5f7cec6da2a3a76c542bb64d8",
+      "odds_home": "lsu",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401714920",
+      "scores_omitted": true,
+      "tip_date": "2024-11-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "north dakota state",
+      "odds_event_id": "1f6676a6ecaab5b2f07b1d1ff00ee1d7",
+      "odds_home": "utah valley",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401725818",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "butler",
+      "odds_event_id": "52bf10023dc14f10e5ef1d26da20a533",
+      "odds_home": "northwestern",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401712997",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "saint mary's",
+      "odds_event_id": "be523a7aa771bd69caeeac588aa0358f",
+      "odds_home": "nebraska",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401707987",
+      "scores_omitted": true,
+      "tip_date": "2024-11-17",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "binghamton",
+      "odds_event_id": "a332c966530c67bf5e1b9ab2e318f109",
+      "odds_home": "niagara",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721993",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "florida atlantic",
+      "odds_event_id": "38c1312057afab2337aab0cce3aebee9",
+      "odds_home": "indiana state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722206",
+      "scores_omitted": true,
+      "tip_date": "2024-11-05",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "dayton",
+      "odds_event_id": "ae5acf616acb339afe04f4193d20527a",
+      "odds_home": "cincinnati",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715634",
+      "scores_omitted": true,
+      "tip_date": "2024-12-21",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "weber state",
+      "odds_event_id": "b5720b737188f55eaa3afe114492b918",
+      "odds_home": "bowling green",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401720518",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "lindenwood",
+      "odds_event_id": "115d59bd1f98a63d94fda977d147a570",
+      "odds_home": "morehead state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401744114",
+      "scores_omitted": true,
+      "tip_date": "2025-03-06",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "auburn",
+      "odds_event_id": "ae858e4422c30d93b93d497f5c24953e",
+      "odds_home": "ohio state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401714645",
+      "scores_omitted": true,
+      "tip_date": "2024-12-14",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "fordham",
+      "odds_event_id": "75a62c1471786f6b2fc2e8baa26d2e59",
+      "odds_home": "san francisco",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729854",
+      "scores_omitted": true,
+      "tip_date": "2024-11-26",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "jacksonville state",
+      "odds_event_id": "c547102a106378ab668853c045dca29f",
+      "odds_home": "toledo",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729763",
+      "scores_omitted": true,
+      "tip_date": "2024-11-22",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "cal state bakersfield",
+      "odds_event_id": "e0116ef77de5af473be0c515cfbd7adf",
+      "odds_home": "fiu",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722321",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "iu indy",
+      "odds_event_id": "3e212c937af09129593c2886934d69c9",
+      "odds_home": "south carolina state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401727498",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "csun",
+      "odds_event_id": "7b770e1ae011521aee985cbc112a7ccf",
+      "odds_home": "denver",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401727091",
+      "scores_omitted": true,
+      "tip_date": "2024-11-25",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "florida",
+      "odds_event_id": "0ff9370e983671c27fd7bdb98cbb5c52",
+      "odds_home": "south florida",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401714888",
+      "scores_omitted": true,
+      "tip_date": "2024-11-05",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "holy cross",
+      "odds_event_id": "e21b3b49ad4cb01189bf8c3732f43f27",
+      "odds_home": "new hampshire",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721793",
+      "scores_omitted": true,
+      "tip_date": "2024-11-17",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "duke",
+      "odds_event_id": "61a9382aaefecc59c62fc3727ef50fbc",
+      "odds_home": "kansas",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401706886",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "saint joseph's",
+      "odds_event_id": "81fa52bcacec38e5a1589b6e941fb7b1",
+      "odds_home": "virginia tech",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401700405",
+      "scores_omitted": true,
+      "tip_date": "2024-12-21",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oakland",
+      "odds_event_id": "c6c19fe701fab84f6403c349c1e0bf3f",
+      "odds_home": "michigan state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721648",
+      "scores_omitted": true,
+      "tip_date": "2024-12-18",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "oklahoma",
+      "odds_event_id": "2acb13696386365c53703e3f1c93edf2",
+      "odds_home": "arizona",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729741",
+      "scores_omitted": true,
+      "tip_date": "2024-11-28",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "uc san diego",
+      "odds_event_id": "17e73d65a9bd3c37d3ea80350a336247",
+      "odds_home": "toledo",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729767",
+      "scores_omitted": true,
+      "tip_date": "2024-11-23",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "sacred heart",
+      "odds_event_id": "e3d5d3c9e57c8b5d197533516c2e19ab",
+      "odds_home": "holy cross",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721791",
+      "scores_omitted": true,
+      "tip_date": "2024-11-15",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "northern iowa",
+      "odds_event_id": "e0105d60b589700f37b0a278ba1495b5",
+      "odds_home": "washington state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401715922",
+      "scores_omitted": true,
+      "tip_date": "2024-12-21",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "richmond",
+      "odds_event_id": "b13f51e2748f0f0b0fb674088cee2808",
+      "odds_home": "ball state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401732175",
+      "scores_omitted": true,
+      "tip_date": "2024-11-27",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "ohio state",
+      "odds_event_id": "b412eb326ddaf57afc19971fa49d4136",
+      "odds_home": "kentucky",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401714915",
+      "scores_omitted": true,
+      "tip_date": "2024-12-21",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "towson",
+      "odds_event_id": "d0773e83ddb8e891333fc6aa12295aa9",
+      "odds_home": "uc irvine",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401720980",
+      "scores_omitted": true,
+      "tip_date": "2024-12-01",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "indiana",
+      "odds_event_id": "4fb753b689aa7590e75caadb82b63467",
+      "odds_home": "providence",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401729744",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "appalachian state",
+      "odds_event_id": "ce9950209f2eefcda00b820d66fbc395",
+      "odds_home": "colgate",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401721810",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "new mexico",
+      "odds_event_id": "0404a1dbfd3d7a8be3b8f0a459ce6361",
+      "odds_home": "arizona state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401722309",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    },
+    {
+      "mathematically_unambiguous_orientation_map": true,
+      "n_exact_orientation_matches": 0,
+      "n_reverse_orientation_matches": 1,
+      "n_schedule_pair_date_matches": 1,
+      "odds_away": "arkansas state",
+      "odds_event_id": "a8ac6f92d3cd6bae12a6aeab8aa89877",
+      "odds_home": "indiana state",
+      "recovery_applied": false,
+      "schedule_espn_game_id": "401716020",
+      "scores_omitted": true,
+      "tip_date": "2024-11-29",
+      "would_require": [
+        "swap_home_away",
+        "negate_home_spread",
+        "preserve_total",
+        "reconcile_commence_timestamps",
+        "retain_schedule_espn_game_id_as_authoritative"
+      ]
+    }
+  ],
+  "schema_version": "ncaam-reversal-orientation-full-26c-v1",
+  "scores_omitted": true
+}

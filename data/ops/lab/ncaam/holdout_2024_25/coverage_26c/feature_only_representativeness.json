@@ -1,0 +1,1430 @@
+{
+  "ats_roi_clv_calibration_omitted": true,
+  "candidate_predictions_omitted": true,
+  "conclusion": "MATERIAL_SELECTION_DETECTED",
+  "coverage_rate_max": 0.9019169329073482,
+  "coverage_rate_min": 0.0,
+  "global_coverage_pct": 57.79,
+  "honesty_dependence": {
+    "by_close_hour_utc": [
+      {
+        "dishonest_rate": 0.3585007173601148,
+        "n": 5576,
+        "n_timestamp_dishonest": 1999,
+        "slice": "close_hour_utc",
+        "slice_value": "22"
+      },
+      {
+        "dishonest_rate": 0.0,
+        "n": 193,
+        "n_timestamp_dishonest": 0,
+        "slice": "close_hour_utc",
+        "slice_value": "missing"
+      }
+    ],
+    "by_month": [
+      {
+        "dishonest_rate": 0.34537873523280055,
+        "n": 1439,
+        "n_timestamp_dishonest": 497,
+        "slice": "month",
+        "slice_value": "2025-01"
+      },
+      {
+        "dishonest_rate": 0.33357664233576645,
+        "n": 1370,
+        "n_timestamp_dishonest": 457,
+        "slice": "month",
+        "slice_value": "2025-02"
+      },
+      {
+        "dishonest_rate": 0.25474031327287716,
+        "n": 1213,
+        "n_timestamp_dishonest": 309,
+        "slice": "month",
+        "slice_value": "2024-11"
+      },
+      {
+        "dishonest_rate": 0.4455026455026455,
+        "n": 945,
+        "n_timestamp_dishonest": 421,
+        "slice": "month",
+        "slice_value": "2024-12"
+      },
+      {
+        "dishonest_rate": 0.39719029374201786,
+        "n": 783,
+        "n_timestamp_dishonest": 311,
+        "slice": "month",
+        "slice_value": "2025-03"
+      },
+      {
+        "dishonest_rate": 0.21052631578947367,
+        "n": 19,
+        "n_timestamp_dishonest": 4,
+        "slice": "month",
+        "slice_value": "2025-04"
+      }
+    ],
+    "by_power": [
+      {
+        "dishonest_rate": 0.3575893973493373,
+        "n": 3999,
+        "n_timestamp_dishonest": 1430,
+        "slice": "power",
+        "slice_value": "non_power"
+      },
+      {
+        "dishonest_rate": 0.3523035230352303,
+        "n": 1476,
+        "n_timestamp_dishonest": 520,
+        "slice": "power",
+        "slice_value": "power"
+      },
+      {
+        "dishonest_rate": 0.16666666666666666,
+        "n": 294,
+        "n_timestamp_dishonest": 49,
+        "slice": "power",
+        "slice_value": "missing"
+      }
+    ],
+    "by_tip_band_utc": [
+      {
+        "dishonest_rate": 0.0038338658146964857,
+        "n": 3130,
+        "n_timestamp_dishonest": 12,
+        "slice": "tip_band_utc",
+        "slice_value": "early_utc_0_15"
+      },
+      {
+        "dishonest_rate": 0.5970744680851063,
+        "n": 1504,
+        "n_timestamp_dishonest": 898,
+        "slice": "tip_band_utc",
+        "slice_value": "primetime_utc_20_23"
+      },
+      {
+        "dishonest_rate": 0.9594713656387666,
+        "n": 1135,
+        "n_timestamp_dishonest": 1089,
+        "slice": "tip_band_utc",
+        "slice_value": "afternoon_utc_16_19"
+      }
+    ],
+    "by_venue_status": [
+      {
+        "dishonest_rate": 0.3462460063897764,
+        "n": 5008,
+        "n_timestamp_dishonest": 1734,
+        "slice": "venue_status",
+        "slice_value": "confirmed_home"
+      },
+      {
+        "dishonest_rate": 0.35453315290933696,
+        "n": 739,
+        "n_timestamp_dishonest": 262,
+        "slice": "venue_status",
+        "slice_value": "confirmed_neutral"
+      },
+      {
+        "dishonest_rate": 0.13636363636363635,
+        "n": 22,
+        "n_timestamp_dishonest": 3,
+        "slice": "venue_status",
+        "slice_value": "unknown"
+      }
+    ],
+    "by_weekday": [
+      {
+        "dishonest_rate": 0.6802139037433155,
+        "n": 1870,
+        "n_timestamp_dishonest": 1272,
+        "slice": "weekday",
+        "slice_value": "Saturday"
+      },
+      {
+        "dishonest_rate": 0.4559139784946237,
+        "n": 930,
+        "n_timestamp_dishonest": 424,
+        "slice": "weekday",
+        "slice_value": "Sunday"
+      },
+      {
+        "dishonest_rate": 0.10012360939431397,
+        "n": 809,
+        "n_timestamp_dishonest": 81,
+        "slice": "weekday",
+        "slice_value": "Friday"
+      },
+      {
+        "dishonest_rate": 0.07840616966580977,
+        "n": 778,
+        "n_timestamp_dishonest": 61,
+        "slice": "weekday",
+        "slice_value": "Thursday"
+      },
+      {
+        "dishonest_rate": 0.08940852819807428,
+        "n": 727,
+        "n_timestamp_dishonest": 65,
+        "slice": "weekday",
+        "slice_value": "Wednesday"
+      },
+      {
+        "dishonest_rate": 0.09073359073359073,
+        "n": 518,
+        "n_timestamp_dishonest": 47,
+        "slice": "weekday",
+        "slice_value": "Tuesday"
+      },
+      {
+        "dishonest_rate": 0.35766423357664234,
+        "n": 137,
+        "n_timestamp_dishonest": 49,
+        "slice": "weekday",
+        "slice_value": "Monday"
+      }
+    ],
+    "expected_dishonest_odds_rows": 2006,
+    "n_dishonest_on_features": 1999,
+    "n_honest_on_features": 3575,
+    "synthetic_close_hour_utc": 22
+  },
+  "material_numeric_flags": [
+    {
+      "clearly_material_flag": true,
+      "excluded_mean": 17.253388090349077,
+      "excluded_n": 2435,
+      "feature": "tip_hour_utc",
+      "included_mean": 4.32753449310138,
+      "included_n": 3334,
+      "material_flag": true,
+      "smd": -1.8085
+    },
+    {
+      "clearly_material_flag": false,
+      "excluded_mean": 8.589206066012489,
+      "excluded_n": 2242,
+      "feature": "n_books",
+      "included_mean": 8.86622675464907,
+      "included_n": 3334,
+      "material_flag": true,
+      "smd": 0.1583
+    },
+    {
+      "clearly_material_flag": true,
+      "excluded_mean": -1.9887079988105858,
+      "excluded_n": 2242,
+      "feature": "hours_close_to_tip",
+      "included_mean": 2.7586682663467306,
+      "included_n": 3334,
+      "material_flag": true,
+      "smd": 1.3686
+    }
+  ],
+  "material_selection_flags": [
+    {
+      "abs_gap_pp_vs_global": 12.94,
+      "coverage_pct": 44.85,
+      "coverage_rate": 0.44847485572959606,
+      "denominator_count": 1213,
+      "included_count": 544,
+      "material_flag": true,
+      "slice": "month",
+      "slice_value": "2024-11"
+    },
+    {
+      "abs_gap_pp_vs_global": 31.59,
+      "coverage_pct": 26.2,
+      "coverage_rate": 0.2620320855614973,
+      "denominator_count": 1870,
+      "included_count": 490,
+      "material_flag": true,
+      "slice": "weekday",
+      "slice_value": "Saturday"
+    },
+    {
+      "abs_gap_pp_vs_global": 25.4,
+      "coverage_pct": 83.19,
+      "coverage_rate": 0.8318912237330037,
+      "denominator_count": 809,
+      "included_count": 673,
+      "material_flag": true,
+      "slice": "weekday",
+      "slice_value": "Friday"
+    },
+    {
+      "abs_gap_pp_vs_global": 26.91,
+      "coverage_pct": 84.7,
+      "coverage_rate": 0.8470437017994858,
+      "denominator_count": 778,
+      "included_count": 659,
+      "material_flag": true,
+      "slice": "weekday",
+      "slice_value": "Thursday"
+    },
+    {
+      "abs_gap_pp_vs_global": 27.08,
+      "coverage_pct": 84.87,
+      "coverage_rate": 0.8486932599724897,
+      "denominator_count": 727,
+      "included_count": 617,
+      "material_flag": true,
+      "slice": "weekday",
+      "slice_value": "Wednesday"
+    },
+    {
+      "abs_gap_pp_vs_global": 32.4,
+      "coverage_pct": 90.19,
+      "coverage_rate": 0.9019169329073482,
+      "denominator_count": 3130,
+      "included_count": 2823,
+      "material_flag": true,
+      "slice": "tip_band_utc",
+      "slice_value": "early_utc_0_15"
+    },
+    {
+      "abs_gap_pp_vs_global": 23.82,
+      "coverage_pct": 33.98,
+      "coverage_rate": 0.33976063829787234,
+      "denominator_count": 1504,
+      "included_count": 511,
+      "material_flag": true,
+      "slice": "tip_band_utc",
+      "slice_value": "primetime_utc_20_23"
+    },
+    {
+      "abs_gap_pp_vs_global": 57.79,
+      "coverage_pct": 0.0,
+      "coverage_rate": 0.0,
+      "denominator_count": 1135,
+      "included_count": 0,
+      "material_flag": true,
+      "slice": "tip_band_utc",
+      "slice_value": "afternoon_utc_16_19"
+    },
+    {
+      "abs_gap_pp_vs_global": 16.93,
+      "coverage_pct": 40.87,
+      "coverage_rate": 0.40866035182679294,
+      "denominator_count": 739,
+      "included_count": 302,
+      "material_flag": true,
+      "slice": "venue_status",
+      "slice_value": "confirmed_neutral"
+    },
+    {
+      "abs_gap_pp_vs_global": 57.79,
+      "coverage_pct": 0.0,
+      "coverage_rate": 0.0,
+      "denominator_count": 22,
+      "included_count": 0,
+      "material_flag": true,
+      "slice": "venue_status",
+      "slice_value": "unknown"
+    },
+    {
+      "abs_gap_pp_vs_global": 53.37,
+      "coverage_pct": 4.42,
+      "coverage_rate": 0.04421768707482993,
+      "denominator_count": 294,
+      "included_count": 13,
+      "material_flag": true,
+      "slice": "power",
+      "slice_value": "missing"
+    },
+    {
+      "abs_gap_pp_vs_global": 53.37,
+      "coverage_pct": 4.42,
+      "coverage_rate": 0.04421768707482993,
+      "denominator_count": 294,
+      "included_count": 13,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "missing"
+    },
+    {
+      "abs_gap_pp_vs_global": 27.85,
+      "coverage_pct": 85.64,
+      "coverage_rate": 0.8563829787234043,
+      "denominator_count": 188,
+      "included_count": 161,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "WCC"
+    },
+    {
+      "abs_gap_pp_vs_global": 11.94,
+      "coverage_pct": 69.73,
+      "coverage_rate": 0.6972972972972973,
+      "denominator_count": 185,
+      "included_count": 129,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "MWC"
+    },
+    {
+      "abs_gap_pp_vs_global": 25.14,
+      "coverage_pct": 82.93,
+      "coverage_rate": 0.8292682926829268,
+      "denominator_count": 164,
+      "included_count": 136,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "BW"
+    },
+    {
+      "abs_gap_pp_vs_global": 12.8,
+      "coverage_pct": 70.59,
+      "coverage_rate": 0.7058823529411765,
+      "denominator_count": 136,
+      "included_count": 96,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "SWAC"
+    },
+    {
+      "abs_gap_pp_vs_global": 17.21,
+      "coverage_pct": 75.0,
+      "coverage_rate": 0.75,
+      "denominator_count": 132,
+      "included_count": 99,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "BSky"
+    },
+    {
+      "abs_gap_pp_vs_global": 19.89,
+      "coverage_pct": 77.69,
+      "coverage_rate": 0.7768595041322314,
+      "denominator_count": 121,
+      "included_count": 94,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "WAC"
+    },
+    {
+      "abs_gap_pp_vs_global": 11.85,
+      "coverage_pct": 69.64,
+      "coverage_rate": 0.6964285714285714,
+      "denominator_count": 112,
+      "included_count": 78,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "Sum"
+    },
+    {
+      "abs_gap_pp_vs_global": 16.3,
+      "coverage_pct": 41.49,
+      "coverage_rate": 0.4148936170212766,
+      "denominator_count": 94,
+      "included_count": 39,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "Ivy"
+    },
+    {
+      "abs_gap_pp_vs_global": 12.01,
+      "coverage_pct": 45.78,
+      "coverage_rate": 0.4578313253012048,
+      "denominator_count": 83,
+      "included_count": 38,
+      "material_flag": true,
+      "slice": "home_conf",
+      "slice_value": "MEAC"
+    },
+    {
+      "abs_gap_pp_vs_global": 47.73,
+      "coverage_pct": 10.06,
+      "coverage_rate": 0.10060975609756098,
+      "denominator_count": 328,
+      "included_count": 33,
+      "material_flag": true,
+      "slice": "adjm_gap_bin",
+      "slice_value": "missing"
+    },
+    {
+      "abs_gap_pp_vs_global": 18.36,
+      "coverage_pct": 76.15,
+      "coverage_rate": 0.7615384615384615,
+      "denominator_count": 130,
+      "included_count": 99,
+      "material_flag": true,
+      "slice": "adjm_gap_bin",
+      "slice_value": "gap_lt_-20"
+    },
+    {
+      "abs_gap_pp_vs_global": 47.73,
+      "coverage_pct": 10.06,
+      "coverage_rate": 0.10060975609756098,
+      "denominator_count": 328,
+      "included_count": 33,
+      "material_flag": true,
+      "slice": "adjt_bin",
+      "slice_value": "missing"
+    },
+    {
+      "abs_gap_pp_vs_global": 14.94,
+      "coverage_pct": 72.73,
+      "coverage_rate": 0.7272727272727273,
+      "denominator_count": 11,
+      "included_count": 8,
+      "material_flag": true,
+      "slice": "adjt_bin",
+      "slice_value": "pace_gte_74"
+    },
+    {
+      "abs_gap_pp_vs_global": 15.52,
+      "coverage_pct": 42.28,
+      "coverage_rate": 0.42276422764227645,
+      "denominator_count": 123,
+      "included_count": 52,
+      "material_flag": true,
+      "slice": "season_type",
+      "slice_value": "postseason"
+    },
+    {
+      "abs_gap_pp_vs_global": 57.79,
+      "coverage_pct": 0.0,
+      "coverage_rate": 0.0,
+      "denominator_count": 193,
+      "included_count": 0,
+      "material_flag": true,
+      "slice": "close_hour_utc",
+      "slice_value": "missing"
+    },
+    {
+      "abs_gap_pp_vs_global": 57.79,
+      "coverage_pct": 0.0,
+      "coverage_rate": 0.0,
+      "denominator_count": 193,
+      "included_count": 0,
+      "material_flag": true,
+      "slice": "spread_mag_bin",
+      "slice_value": "missing"
+    },
+    {
+      "abs_gap_pp_vs_global": 10.41,
+      "coverage_pct": 47.38,
+      "coverage_rate": 0.4738084001887683,
+      "denominator_count": 2119,
+      "included_count": 1004,
+      "material_flag": true,
+      "slice": "conference_game",
+      "slice_value": "False"
+    }
+  ],
+  "missingness": {
+    "adjm_gap_missing_pct": 5.69,
+    "adjt_missing_pct": 5.69,
+    "home_conf_missing_pct": 5.1,
+    "n_books_missing_pct": 3.35,
+    "spread_mag_missing_pct": 3.35
+  },
+  "multiplicity_note": "Many slices tested; material flags are descriptive disclosures under predeclared thresholds, not multiplicity-adjusted p-values.",
+  "n_complete_intersection": 3334,
+  "n_mapped_schedule": 5769,
+  "numeric_smds": [
+    {
+      "clearly_material_flag": false,
+      "excluded_mean": 2.2956158878504676,
+      "excluded_n": 2140,
+      "feature": "adjm_gap",
+      "included_mean": 2.9714608906392,
+      "included_n": 3301,
+      "material_flag": false,
+      "smd": 0.0567
+    },
+    {
+      "clearly_material_flag": false,
+      "excluded_mean": 68.14413703271028,
+      "excluded_n": 2140,
+      "feature": "adjt_mean",
+      "included_mean": 68.1613345349894,
+      "included_n": 3301,
+      "material_flag": false,
+      "smd": 0.0083
+    },
+    {
+      "clearly_material_flag": true,
+      "excluded_mean": 17.253388090349077,
+      "excluded_n": 2435,
+      "feature": "tip_hour_utc",
+      "included_mean": 4.32753449310138,
+      "included_n": 3334,
+      "material_flag": true,
+      "smd": -1.8085
+    },
+    {
+      "clearly_material_flag": false,
+      "excluded_mean": 8.589206066012489,
+      "excluded_n": 2242,
+      "feature": "n_books",
+      "included_mean": 8.86622675464907,
+      "included_n": 3334,
+      "material_flag": true,
+      "smd": 0.1583
+    },
+    {
+      "clearly_material_flag": true,
+      "excluded_mean": -1.9887079988105858,
+      "excluded_n": 2242,
+      "feature": "hours_close_to_tip",
+      "included_mean": 2.7586682663467306,
+      "included_n": 3334,
+      "material_flag": true,
+      "smd": 1.3686
+    },
+    {
+      "clearly_material_flag": false,
+      "excluded_mean": 8.762265834076716,
+      "excluded_n": 2242,
+      "feature": "spread_mag",
+      "included_mean": 8.210932813437312,
+      "included_n": 3334,
+      "material_flag": false,
+      "smd": -0.0765
+    }
+  ],
+  "outcomes_omitted": true,
+  "schema_version": "ncaam-feature-only-representativeness-26c-v1",
+  "scores_omitted": true,
+  "slices": {
+    "adjm_gap_bin": [
+      {
+        "abs_gap_pp_vs_global": 0.43,
+        "coverage_pct": 58.22,
+        "coverage_rate": 0.5822401614530777,
+        "denominator_count": 991,
+        "included_count": 577,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_0_5"
+      },
+      {
+        "abs_gap_pp_vs_global": 1.29,
+        "coverage_pct": 59.09,
+        "coverage_rate": 0.5908584169453734,
+        "denominator_count": 897,
+        "included_count": 530,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_-5_0"
+      },
+      {
+        "abs_gap_pp_vs_global": 7.15,
+        "coverage_pct": 64.94,
+        "coverage_rate": 0.649379932356257,
+        "denominator_count": 887,
+        "included_count": 576,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_10_20"
+      },
+      {
+        "abs_gap_pp_vs_global": 0.48,
+        "coverage_pct": 58.27,
+        "coverage_rate": 0.58274231678487,
+        "denominator_count": 846,
+        "included_count": 493,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_5_10"
+      },
+      {
+        "abs_gap_pp_vs_global": 0.63,
+        "coverage_pct": 57.16,
+        "coverage_rate": 0.5716440422322775,
+        "denominator_count": 663,
+        "included_count": 379,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_-10_-5"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.21,
+        "coverage_pct": 60.0,
+        "coverage_rate": 0.6,
+        "denominator_count": 595,
+        "included_count": 357,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_-20_-10"
+      },
+      {
+        "abs_gap_pp_vs_global": 9.34,
+        "coverage_pct": 67.13,
+        "coverage_rate": 0.6712962962962963,
+        "denominator_count": 432,
+        "included_count": 290,
+        "material_flag": false,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_gte_20"
+      },
+      {
+        "abs_gap_pp_vs_global": 47.73,
+        "coverage_pct": 10.06,
+        "coverage_rate": 0.10060975609756098,
+        "denominator_count": 328,
+        "included_count": 33,
+        "material_flag": true,
+        "slice": "adjm_gap_bin",
+        "slice_value": "missing"
+      },
+      {
+        "abs_gap_pp_vs_global": 18.36,
+        "coverage_pct": 76.15,
+        "coverage_rate": 0.7615384615384615,
+        "denominator_count": 130,
+        "included_count": 99,
+        "material_flag": true,
+        "slice": "adjm_gap_bin",
+        "slice_value": "gap_lt_-20"
+      }
+    ],
+    "adjt_bin": [
+      {
+        "abs_gap_pp_vs_global": 1.41,
+        "coverage_pct": 59.2,
+        "coverage_rate": 0.5920138888888888,
+        "denominator_count": 2304,
+        "included_count": 1364,
+        "material_flag": false,
+        "slice": "adjt_bin",
+        "slice_value": "pace_68_71"
+      },
+      {
+        "abs_gap_pp_vs_global": 3.54,
+        "coverage_pct": 61.33,
+        "coverage_rate": 0.6132983377077865,
+        "denominator_count": 2286,
+        "included_count": 1402,
+        "material_flag": false,
+        "slice": "adjt_bin",
+        "slice_value": "pace_65_68"
+      },
+      {
+        "abs_gap_pp_vs_global": 8.54,
+        "coverage_pct": 66.33,
+        "coverage_rate": 0.6632860040567952,
+        "denominator_count": 493,
+        "included_count": 327,
+        "material_flag": false,
+        "slice": "adjt_bin",
+        "slice_value": "pace_71_74"
+      },
+      {
+        "abs_gap_pp_vs_global": 0.15,
+        "coverage_pct": 57.64,
+        "coverage_rate": 0.5763688760806917,
+        "denominator_count": 347,
+        "included_count": 200,
+        "material_flag": false,
+        "slice": "adjt_bin",
+        "slice_value": "pace_lt_65"
+      },
+      {
+        "abs_gap_pp_vs_global": 47.73,
+        "coverage_pct": 10.06,
+        "coverage_rate": 0.10060975609756098,
+        "denominator_count": 328,
+        "included_count": 33,
+        "material_flag": true,
+        "slice": "adjt_bin",
+        "slice_value": "missing"
+      },
+      {
+        "abs_gap_pp_vs_global": 14.94,
+        "coverage_pct": 72.73,
+        "coverage_rate": 0.7272727272727273,
+        "denominator_count": 11,
+        "included_count": 8,
+        "material_flag": true,
+        "slice": "adjt_bin",
+        "slice_value": "pace_gte_74"
+      }
+    ],
+    "close_hour_utc": [
+      {
+        "abs_gap_pp_vs_global": 2.0,
+        "coverage_pct": 59.79,
+        "coverage_rate": 0.5979196556671449,
+        "denominator_count": 5576,
+        "included_count": 3334,
+        "material_flag": false,
+        "slice": "close_hour_utc",
+        "slice_value": "22"
+      },
+      {
+        "abs_gap_pp_vs_global": 57.79,
+        "coverage_pct": 0.0,
+        "coverage_rate": 0.0,
+        "denominator_count": 193,
+        "included_count": 0,
+        "material_flag": true,
+        "slice": "close_hour_utc",
+        "slice_value": "missing"
+      }
+    ],
+    "conference_game": [
+      {
+        "abs_gap_pp_vs_global": 6.04,
+        "coverage_pct": 63.84,
+        "coverage_rate": 0.6383561643835617,
+        "denominator_count": 3650,
+        "included_count": 2330,
+        "material_flag": false,
+        "slice": "conference_game",
+        "slice_value": "True"
+      },
+      {
+        "abs_gap_pp_vs_global": 10.41,
+        "coverage_pct": 47.38,
+        "coverage_rate": 0.4738084001887683,
+        "denominator_count": 2119,
+        "included_count": 1004,
+        "material_flag": true,
+        "slice": "conference_game",
+        "slice_value": "False"
+      }
+    ],
+    "home_conf": [
+      {
+        "abs_gap_pp_vs_global": 2.56,
+        "coverage_pct": 60.35,
+        "coverage_rate": 0.6034985422740525,
+        "denominator_count": 343,
+        "included_count": 207,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "B10"
+      },
+      {
+        "abs_gap_pp_vs_global": 3.58,
+        "coverage_pct": 61.37,
+        "coverage_rate": 0.6137071651090342,
+        "denominator_count": 321,
+        "included_count": 197,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "SEC"
+      },
+      {
+        "abs_gap_pp_vs_global": 0.54,
+        "coverage_pct": 58.33,
+        "coverage_rate": 0.5833333333333334,
+        "denominator_count": 312,
+        "included_count": 182,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "ACC"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.08,
+        "coverage_pct": 59.87,
+        "coverage_rate": 0.5986842105263158,
+        "denominator_count": 304,
+        "included_count": 182,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "B12"
+      },
+      {
+        "abs_gap_pp_vs_global": 53.37,
+        "coverage_pct": 4.42,
+        "coverage_rate": 0.04421768707482993,
+        "denominator_count": 294,
+        "included_count": 13,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "missing"
+      },
+      {
+        "abs_gap_pp_vs_global": 1.73,
+        "coverage_pct": 56.06,
+        "coverage_rate": 0.5606060606060606,
+        "denominator_count": 264,
+        "included_count": 148,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "A10"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.29,
+        "coverage_pct": 55.5,
+        "coverage_rate": 0.5550239234449761,
+        "denominator_count": 209,
+        "included_count": 116,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "Amer"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.31,
+        "coverage_pct": 60.1,
+        "coverage_rate": 0.6009852216748769,
+        "denominator_count": 203,
+        "included_count": 122,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "SB"
+      },
+      {
+        "abs_gap_pp_vs_global": 1.79,
+        "coverage_pct": 56.0,
+        "coverage_rate": 0.56,
+        "denominator_count": 200,
+        "included_count": 112,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "CAA"
+      },
+      {
+        "abs_gap_pp_vs_global": 4.45,
+        "coverage_pct": 62.24,
+        "coverage_rate": 0.6224489795918368,
+        "denominator_count": 196,
+        "included_count": 122,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "BE"
+      },
+      {
+        "abs_gap_pp_vs_global": 1.61,
+        "coverage_pct": 56.19,
+        "coverage_rate": 0.5618556701030928,
+        "denominator_count": 194,
+        "included_count": 109,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "MVC"
+      },
+      {
+        "abs_gap_pp_vs_global": 27.85,
+        "coverage_pct": 85.64,
+        "coverage_rate": 0.8563829787234043,
+        "denominator_count": 188,
+        "included_count": 161,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "WCC"
+      },
+      {
+        "abs_gap_pp_vs_global": 11.94,
+        "coverage_pct": 69.73,
+        "coverage_rate": 0.6972972972972973,
+        "denominator_count": 185,
+        "included_count": 129,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "MWC"
+      },
+      {
+        "abs_gap_pp_vs_global": 3.99,
+        "coverage_pct": 53.8,
+        "coverage_rate": 0.5380116959064327,
+        "denominator_count": 171,
+        "included_count": 92,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "MAAC"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.37,
+        "coverage_pct": 55.42,
+        "coverage_rate": 0.5542168674698795,
+        "denominator_count": 166,
+        "included_count": 92,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "Horz"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.81,
+        "coverage_pct": 60.61,
+        "coverage_rate": 0.6060606060606061,
+        "denominator_count": 165,
+        "included_count": 100,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "MAC"
+      },
+      {
+        "abs_gap_pp_vs_global": 25.14,
+        "coverage_pct": 82.93,
+        "coverage_rate": 0.8292682926829268,
+        "denominator_count": 164,
+        "included_count": 136,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "BW"
+      },
+      {
+        "abs_gap_pp_vs_global": 5.1,
+        "coverage_pct": 62.89,
+        "coverage_rate": 0.6289308176100629,
+        "denominator_count": 159,
+        "included_count": 100,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "ASun"
+      },
+      {
+        "abs_gap_pp_vs_global": 5.67,
+        "coverage_pct": 63.46,
+        "coverage_rate": 0.6346153846153846,
+        "denominator_count": 156,
+        "included_count": 99,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "Slnd"
+      },
+      {
+        "abs_gap_pp_vs_global": 3.43,
+        "coverage_pct": 61.22,
+        "coverage_rate": 0.6122448979591837,
+        "denominator_count": 147,
+        "included_count": 90,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "CUSA"
+      },
+      {
+        "abs_gap_pp_vs_global": 3.57,
+        "coverage_pct": 54.23,
+        "coverage_rate": 0.5422535211267606,
+        "denominator_count": 142,
+        "included_count": 77,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "OVC"
+      },
+      {
+        "abs_gap_pp_vs_global": 9.24,
+        "coverage_pct": 48.55,
+        "coverage_rate": 0.4855072463768116,
+        "denominator_count": 138,
+        "included_count": 67,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "PL"
+      },
+      {
+        "abs_gap_pp_vs_global": 12.8,
+        "coverage_pct": 70.59,
+        "coverage_rate": 0.7058823529411765,
+        "denominator_count": 136,
+        "included_count": 96,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "SWAC"
+      },
+      {
+        "abs_gap_pp_vs_global": 8.16,
+        "coverage_pct": 49.63,
+        "coverage_rate": 0.4962962962962963,
+        "denominator_count": 135,
+        "included_count": 67,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "SC"
+      },
+      {
+        "abs_gap_pp_vs_global": 17.21,
+        "coverage_pct": 75.0,
+        "coverage_rate": 0.75,
+        "denominator_count": 132,
+        "included_count": 99,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "BSky"
+      },
+      {
+        "abs_gap_pp_vs_global": 19.89,
+        "coverage_pct": 77.69,
+        "coverage_rate": 0.7768595041322314,
+        "denominator_count": 121,
+        "included_count": 94,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "WAC"
+      },
+      {
+        "abs_gap_pp_vs_global": 7.36,
+        "coverage_pct": 50.43,
+        "coverage_rate": 0.5043478260869565,
+        "denominator_count": 115,
+        "included_count": 58,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "BSth"
+      },
+      {
+        "abs_gap_pp_vs_global": 6.91,
+        "coverage_pct": 50.88,
+        "coverage_rate": 0.5087719298245614,
+        "denominator_count": 114,
+        "included_count": 58,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "AE"
+      },
+      {
+        "abs_gap_pp_vs_global": 11.85,
+        "coverage_pct": 69.64,
+        "coverage_rate": 0.6964285714285714,
+        "denominator_count": 112,
+        "included_count": 78,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "Sum"
+      },
+      {
+        "abs_gap_pp_vs_global": 6.85,
+        "coverage_pct": 50.94,
+        "coverage_rate": 0.5094339622641509,
+        "denominator_count": 106,
+        "included_count": 54,
+        "material_flag": false,
+        "slice": "home_conf",
+        "slice_value": "NEC"
+      },
+      {
+        "abs_gap_pp_vs_global": 16.3,
+        "coverage_pct": 41.49,
+        "coverage_rate": 0.4148936170212766,
+        "denominator_count": 94,
+        "included_count": 39,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "Ivy"
+      },
+      {
+        "abs_gap_pp_vs_global": 12.01,
+        "coverage_pct": 45.78,
+        "coverage_rate": 0.4578313253012048,
+        "denominator_count": 83,
+        "included_count": 38,
+        "material_flag": true,
+        "slice": "home_conf",
+        "slice_value": "MEAC"
+      }
+    ],
+    "month": [
+      {
+        "abs_gap_pp_vs_global": 7.18,
+        "coverage_pct": 64.98,
+        "coverage_rate": 0.6497567755385685,
+        "denominator_count": 1439,
+        "included_count": 935,
+        "material_flag": false,
+        "slice": "month",
+        "slice_value": "2025-01"
+      },
+      {
+        "abs_gap_pp_vs_global": 8.34,
+        "coverage_pct": 66.13,
+        "coverage_rate": 0.6613138686131387,
+        "denominator_count": 1370,
+        "included_count": 906,
+        "material_flag": false,
+        "slice": "month",
+        "slice_value": "2025-02"
+      },
+      {
+        "abs_gap_pp_vs_global": 12.94,
+        "coverage_pct": 44.85,
+        "coverage_rate": 0.44847485572959606,
+        "denominator_count": 1213,
+        "included_count": 544,
+        "material_flag": true,
+        "slice": "month",
+        "slice_value": "2024-11"
+      },
+      {
+        "abs_gap_pp_vs_global": 5.2,
+        "coverage_pct": 52.59,
+        "coverage_rate": 0.5259259259259259,
+        "denominator_count": 945,
+        "included_count": 497,
+        "material_flag": false,
+        "slice": "month",
+        "slice_value": "2024-12"
+      },
+      {
+        "abs_gap_pp_vs_global": 1.34,
+        "coverage_pct": 56.45,
+        "coverage_rate": 0.5644955300127714,
+        "denominator_count": 783,
+        "included_count": 442,
+        "material_flag": false,
+        "slice": "month",
+        "slice_value": "2025-03"
+      },
+      {
+        "abs_gap_pp_vs_global": 5.16,
+        "coverage_pct": 52.63,
+        "coverage_rate": 0.5263157894736842,
+        "denominator_count": 19,
+        "included_count": 10,
+        "material_flag": false,
+        "slice": "month",
+        "slice_value": "2025-04"
+      }
+    ],
+    "power": [
+      {
+        "abs_gap_pp_vs_global": 3.0,
+        "coverage_pct": 60.79,
+        "coverage_rate": 0.6079019754938735,
+        "denominator_count": 3999,
+        "included_count": 2431,
+        "material_flag": false,
+        "slice": "power",
+        "slice_value": "non_power"
+      },
+      {
+        "abs_gap_pp_vs_global": 2.51,
+        "coverage_pct": 60.3,
+        "coverage_rate": 0.6029810298102981,
+        "denominator_count": 1476,
+        "included_count": 890,
+        "material_flag": false,
+        "slice": "power",
+        "slice_value": "power"
+      },
+      {
+        "abs_gap_pp_vs_global": 53.37,
+        "coverage_pct": 4.42,
+        "coverage_rate": 0.04421768707482993,
+        "denominator_count": 294,
+        "included_count": 13,
+        "material_flag": true,
+        "slice": "power",
+        "slice_value": "missing"
+      }
+    ],
+    "season_type": [
+      {
+        "abs_gap_pp_vs_global": 0.34,
+        "coverage_pct": 58.13,
+        "coverage_rate": 0.5812964930924548,
+        "denominator_count": 5646,
+        "included_count": 3282,
+        "material_flag": false,
+        "slice": "season_type",
+        "slice_value": "regular"
+      },
+      {
+        "abs_gap_pp_vs_global": 15.52,
+        "coverage_pct": 42.28,
+        "coverage_rate": 0.42276422764227645,
+        "denominator_count": 123,
+        "included_count": 52,
+        "material_flag": true,
+        "slice": "season_type",
+        "slice_value": "postseason"
+      }
+    ],
+    "spread_mag_bin": [
+      {
+        "abs_gap_pp_vs_global": 3.02,
+        "coverage_pct": 60.81,
+        "coverage_rate": 0.6081309994353472,
+        "denominator_count": 1771,
+        "included_count": 1077,
+        "material_flag": false,
+        "slice": "spread_mag_bin",
+        "slice_value": "spread_3_7"
+      },
+      {
+        "abs_gap_pp_vs_global": 3.22,
+        "coverage_pct": 61.01,
+        "coverage_rate": 0.610105580693816,
+        "denominator_count": 1326,
+        "included_count": 809,
+        "material_flag": false,
+        "slice": "spread_mag_bin",
+        "slice_value": "spread_7_12"
+      },
+      {
+        "abs_gap_pp_vs_global": 0.67,
+        "coverage_pct": 58.46,
+        "coverage_rate": 0.5846153846153846,
+        "denominator_count": 1170,
+        "included_count": 684,
+        "material_flag": false,
+        "slice": "spread_mag_bin",
+        "slice_value": "spread_0_3"
+      },
+      {
+        "abs_gap_pp_vs_global": 5.12,
+        "coverage_pct": 62.92,
+        "coverage_rate": 0.6291618828932262,
+        "denominator_count": 871,
+        "included_count": 548,
+        "material_flag": false,
+        "slice": "spread_mag_bin",
+        "slice_value": "spread_12_20"
+      },
+      {
+        "abs_gap_pp_vs_global": 8.48,
+        "coverage_pct": 49.32,
+        "coverage_rate": 0.4931506849315068,
+        "denominator_count": 438,
+        "included_count": 216,
+        "material_flag": false,
+        "slice": "spread_mag_bin",
+        "slice_value": "spread_gte_20"
+      },
+      {
+        "abs_gap_pp_vs_global": 57.79,
+        "coverage_pct": 0.0,
+        "coverage_rate": 0.0,
+        "denominator_count": 193,
+        "included_count": 0,
+        "material_flag": true,
+        "slice": "spread_mag_bin",
+        "slice_value": "missing"
+      }
+    ],
+    "tip_band_utc": [
+      {
+        "abs_gap_pp_vs_global": 32.4,
+        "coverage_pct": 90.19,
+        "coverage_rate": 0.9019169329073482,
+        "denominator_count": 3130,
+        "included_count": 2823,
+        "material_flag": true,
+        "slice": "tip_band_utc",
+        "slice_value": "early_utc_0_15"
+      },
+      {
+        "abs_gap_pp_vs_global": 23.82,
+        "coverage_pct": 33.98,
+        "coverage_rate": 0.33976063829787234,
+        "denominator_count": 1504,
+        "included_count": 511,
+        "material_flag": true,
+        "slice": "tip_band_utc",
+        "slice_value": "primetime_utc_20_23"
+      },
+      {
+        "abs_gap_pp_vs_global": 57.79,
+        "coverage_pct": 0.0,
+        "coverage_rate": 0.0,
+        "denominator_count": 1135,
+        "included_count": 0,
+        "material_flag": true,
+        "slice": "tip_band_utc",
+        "slice_value": "afternoon_utc_16_19"
+      }
+    ],
+    "venue_status": [
+      {
+        "abs_gap_pp_vs_global": 2.75,
+        "coverage_pct": 60.54,
+        "coverage_rate": 0.6054313099041534,
+        "denominator_count": 5008,
+        "included_count": 3032,
+        "material_flag": false,
+        "slice": "venue_status",
+        "slice_value": "confirmed_home"
+      },
+      {
+        "abs_gap_pp_vs_global": 16.93,
+        "coverage_pct": 40.87,
+        "coverage_rate": 0.40866035182679294,
+        "denominator_count": 739,
+        "included_count": 302,
+        "material_flag": true,
+        "slice": "venue_status",
+        "slice_value": "confirmed_neutral"
+      },
+      {
+        "abs_gap_pp_vs_global": 57.79,
+        "coverage_pct": 0.0,
+        "coverage_rate": 0.0,
+        "denominator_count": 22,
+        "included_count": 0,
+        "material_flag": true,
+        "slice": "venue_status",
+        "slice_value": "unknown"
+      }
+    ],
+    "weekday": [
+      {
+        "abs_gap_pp_vs_global": 31.59,
+        "coverage_pct": 26.2,
+        "coverage_rate": 0.2620320855614973,
+        "denominator_count": 1870,
+        "included_count": 490,
+        "material_flag": true,
+        "slice": "weekday",
+        "slice_value": "Saturday"
+      },
+      {
+        "abs_gap_pp_vs_global": 6.61,
+        "coverage_pct": 51.18,
+        "coverage_rate": 0.5118279569892473,
+        "denominator_count": 930,
+        "included_count": 476,
+        "material_flag": false,
+        "slice": "weekday",
+        "slice_value": "Sunday"
+      },
+      {
+        "abs_gap_pp_vs_global": 25.4,
+        "coverage_pct": 83.19,
+        "coverage_rate": 0.8318912237330037,
+        "denominator_count": 809,
+        "included_count": 673,
+        "material_flag": true,
+        "slice": "weekday",
+        "slice_value": "Friday"
+      },
+      {
+        "abs_gap_pp_vs_global": 26.91,
+        "coverage_pct": 84.7,
+        "coverage_rate": 0.8470437017994858,
+        "denominator_count": 778,
+        "included_count": 659,
+        "material_flag": true,
+        "slice": "weekday",
+        "slice_value": "Thursday"
+      },
+      {
+        "abs_gap_pp_vs_global": 27.08,
+        "coverage_pct": 84.87,
+        "coverage_rate": 0.8486932599724897,
+        "denominator_count": 727,
+        "included_count": 617,
+        "material_flag": true,
+        "slice": "weekday",
+        "slice_value": "Wednesday"
+      },
+      {
+        "abs_gap_pp_vs_global": 9.2,
+        "coverage_pct": 66.99,
+        "coverage_rate": 0.6698841698841699,
+        "denominator_count": 518,
+        "included_count": 347,
+        "material_flag": false,
+        "slice": "weekday",
+        "slice_value": "Tuesday"
+      },
+      {
+        "abs_gap_pp_vs_global": 5.24,
+        "coverage_pct": 52.55,
+        "coverage_rate": 0.5255474452554745,
+        "denominator_count": 137,
+        "included_count": 72,
+        "material_flag": false,
+        "slice": "weekday",
+        "slice_value": "Monday"
+      }
+    ]
+  },
+  "threshold_version": "phase26c_feature_only_v1"
+}

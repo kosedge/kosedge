@@ -1,0 +1,48 @@
+{
+  "blockers": [
+    "BLOCKED_TIMESTAMP_INTEGRITY",
+    "BLOCKED_STORAGE_ARCHITECTURE"
+  ],
+  "coverage_dir": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c",
+  "docs": {
+    "adr": "docs/ops/ncaam/ADR_2026-09-05_holdout_raw_object_storage.md",
+    "runbook": "docs/ops/ncaam/OFFLINE_MAC_RECOVERY_RUNBOOK_26C.md",
+    "split_plan": "docs/ops/ncaam/PR491_SPLIT_MIGRATION_PLAN_26C.md"
+  },
+  "espn_taxonomy_sum": 530,
+  "espn_taxonomy_sums_to_expected": true,
+  "hard_stops_honored": [
+    "no_scoring",
+    "no_unseal",
+    "no_model",
+    "no_api",
+    "no_external_drive",
+    "no_recovery_applied",
+    "no_raw_deletion"
+  ],
+  "holdout_id": "ncaam_holdout_2024_25_v1_1",
+  "holdout_unseal_omitted": true,
+  "identity_collision_safe": true,
+  "identity_unresolved_events": 0,
+  "model_implementation_omitted": true,
+  "n_duplicate_conflicts": 153,
+  "n_espn_rejects": 530,
+  "n_orientation_mismatch": 149,
+  "n_timestamp_dishonest": 2006,
+  "n_true_duplicate_grain": 4,
+  "new_seal_issued": false,
+  "package_version": "v1.1",
+  "performance_scoring_omitted": true,
+  "phase": "2.6C",
+  "readiness_status": "BLOCKED_MULTIPLE",
+  "recovery_applied": false,
+  "representativeness_conclusion": "MATERIAL_SELECTION_DETECTED",
+  "schema_version": "ncaam-coverage-26c-summary-v1",
+  "scores_omitted": true,
+  "seal_evaluated": false,
+  "secondary_status_notes": [
+    "SEALED_COVERAGE_REVIEW_REQUIRED"
+  ],
+  "threshold_locked_before_slices": true,
+  "threshold_version": "phase26c_feature_only_v1"
+}

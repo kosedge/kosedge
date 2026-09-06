@@ -1,0 +1,57 @@
+{
+  "schema_version": "ncaam-r2-storage-receipt-v1",
+  "status": "COMPLETE",
+  "created_at_utc": "2026-09-06T17:06:20.533785Z",
+  "credentials_included_in_receipt": false,
+  "account_id": "29e153aea94d9d3394f523bc9a3938cf",
+  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+  "prefix": "ncaam/gap_recovery_research_subset_v1/",
+  "population": "GAP_RECOVERY_RESEARCH_SUBSET",
+  "inventory_sha256": "5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+  "confirmations": {
+    "uploader_token_revoked": {
+      "token_name": "kosedge-ncaam-gap-recovery-uploader-v1",
+      "status": "CONFIRMED_BY_RYAN_VIA_GROK_BOT",
+      "note": "Objects in R2 are unaffected by token revoke."
+    },
+    "bucket_remains_private": "CONFIRMED_BY_RYAN_VIA_GROK_BOT",
+    "public_r2_dev_access_disabled": "CONFIRMED_BY_RYAN_VIA_GROK_BOT",
+    "no_custom_public_domain_attached": "CONFIRMED_BY_RYAN_VIA_GROK_BOT",
+    "bucket_lock_rule": {
+      "name": "retain-gap-recovery-research-subset-v1",
+      "prefix": "ncaam/gap_recovery_research_subset_v1/",
+      "retention": "indefinite",
+      "enabled": "CONFIRMED_BY_RYAN_VIA_GROK_BOT"
+    },
+    "verified_1532_package_remains_accessible": {
+      "status": "YES",
+      "basis": [
+        "Prior fresh-download verify: 1532/1532, inventory hash match, overall_ok",
+        "MCP bucket list still shows kosedge-ncaam-lab-gap-recovery-raw-v1 (2026-09-06)",
+        "Token revoke does not delete objects; lock retains prefix"
+      ],
+      "prior_verify_receipt": "mac_handoff_ops_20260905/HANDOFF_UPLOAD_VERIFY_COMPLETE.json"
+    },
+    "no_credentials_in_repository": true,
+    "no_credentials_in_shell_startup_files": true
+  },
+  "local_cleanup": {
+    "temp_upload_credential_files_removed_or_absent": true,
+    "unrelated_aws_r2_cloudflare_profiles_untouched": true,
+    "git_worktree_clean": true,
+    "worktree": "/Users/ryankos/kosedge/.worktrees/nfl-spine-worker-hygiene"
+  },
+  "agent_independently_reverified": {
+    "mcp_bucket_exists": true,
+    "dashboard_ui_lock_and_privacy": false,
+    "reason_dashboard_not_rechecked": "Cursor browser lacked Cloudflare login; Ryan reported Grok completed dashboard steps."
+  },
+  "forbidden_actions_not_performed": [
+    "scoring",
+    "unseal",
+    "merge",
+    "deployment",
+    "model_changes"
+  ],
+  "independent_backup": "UNDECIDED"
+}

@@ -1,0 +1,49 @@
+{
+  "awaiting_decision_owner": "Ryan",
+  "doc_path": "docs/ops/ncaam/PR491_SPLIT_MIGRATION_PLAN_26C.md",
+  "migration_executed": false,
+  "pr491_rewritten": false,
+  "schema_version": "ncaam-pr491-split-migration-plan-26c-v1",
+  "scores_omitted": true,
+  "split_tracks": [
+    {
+      "excludes": [
+        "raw espn_scoreboard_*.json bulk payloads"
+      ],
+      "includes": [
+        "scripts/ncaam/ingest_espn_official_schedule.py",
+        "ncaam_espn_schedule_map / identity helpers",
+        "apps/web/tests_pipeline holdout foundation + 26c tests",
+        "normalized schedule SoT schema (no bulk raw)"
+      ],
+      "name": "reusable_ingestion_code_schema_tests",
+      "track": 1
+    },
+    {
+      "excludes": [
+        "full-window raw scoreboard dump"
+      ],
+      "includes": [
+        "day receipts / sha256 manifests",
+        "tiny fixture days for CI",
+        "feature/odds audit summaries (no outcome joins)"
+      ],
+      "name": "manifest_and_small_normalized_fixtures",
+      "track": 2
+    },
+    {
+      "blocked_until": "storage_architecture_decision",
+      "excludes": [
+        "git history rewrite",
+        "deletion of local raw before remote verify"
+      ],
+      "includes": [
+        "object-store prefix for espn_scoreboard_YYYY-MM-DD.json + .sha256",
+        "fetch/verify script gated on Ryan-approved URI"
+      ],
+      "name": "externally_stored_immutable_raw_dataset",
+      "track": 3
+    }
+  ],
+  "status": "DRAFT_PLAN_ONLY"
+}

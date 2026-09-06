@@ -1,0 +1,43 @@
+{
+  "schema_version": "ncaam-r2-object-refs-v1",
+  "created_at_utc": "2026-09-06T17:32:49.890577Z",
+  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+  "objects": [
+    {
+      "role": "gap_recovery_research_subset_package",
+      "prefix": "ncaam/gap_recovery_research_subset_v1/",
+      "inventory_sha256": "5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+      "lock_rule": "retain-gap-recovery-research-subset-v1",
+      "upload_status": "UPLOADED_VERIFIED_PRIOR"
+    },
+    {
+      "role": "espn_schedule_raw_v1",
+      "prefix": "ncaam/holdout_2024_25/espn_schedule_raw_v1/",
+      "cas_index_sha256": "7513f28a255e7cd770bd75dd8c066ced83762594e9bff7fb7a5a049e35e67613",
+      "n_objects": 312,
+      "total_bytes": 104782373,
+      "source_commit": "2d51cdcdc0d0d87c185352388f1ea891992b24f3",
+      "lock_rule_planned": "retain-holdout-2024-25-espn-schedule-raw-v1",
+      "upload_status": "PACKAGED_LOCAL_UPLOAD_PENDING"
+    }
+  ],
+  "pr491_bulk_should_live_in_r2_summary": {
+    "pr": 491,
+    "url": "https://github.com/kosedge/kosedge/pull/491",
+    "head_sha": "2d51cdcdc0d0d87c185352388f1ea891992b24f3",
+    "n_files_in_pr_diff": 381,
+    "n_files_ncaam_tree_on_branch": 389,
+    "total_bytes_ncaam_tree": 128985034,
+    "espn_json_n": 156,
+    "espn_sha256_sidecar_n": 156,
+    "espn_all_n": 312,
+    "espn_total_bytes": 104782373,
+    "should_live_in_r2_n": 323,
+    "should_live_in_r2_bytes": 127074047,
+    "reason_counts": {
+      "large_blob_ge_250kb": 6,
+      "generated_large_json": 5,
+      "raw_espn_schedule_sot": 312
+    }
+  }
+}

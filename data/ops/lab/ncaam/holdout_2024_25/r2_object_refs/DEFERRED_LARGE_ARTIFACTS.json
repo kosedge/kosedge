@@ -1,0 +1,41 @@
+{
+  "items": [
+    {
+      "path": "raw/espn_scoreboard/*",
+      "n": 312,
+      "bytes": 104782373
+    },
+    {
+      "path": "feature_package/features.json",
+      "bytes": 6595599
+    },
+    {
+      "path": "label_package/labels.json",
+      "bytes": 1320517
+    },
+    {
+      "path": "venue/venue_contract.json",
+      "bytes": 4613749
+    },
+    {
+      "path": "odds_audit/odds_audit_rows.json",
+      "bytes": 4234714
+    },
+    {
+      "path": "kenpom_audit/game_eligibility_rows.json",
+      "bytes": 2367631
+    },
+    {
+      "path": "coverage_26c/offline_mac_recovery_manifest.json",
+      "bytes": 1209583
+    },
+    {
+      "path": "coverage_26c/espn_reject_ledger.json",
+      "bytes": 576357
+    },
+    {
+      "path": "ncaam_official_schedule_2024_25.json",
+      "bytes": 5276769
+    }
+  ]
+}
