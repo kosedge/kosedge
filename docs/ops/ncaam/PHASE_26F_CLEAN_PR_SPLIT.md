@@ -41,13 +41,13 @@ Excludes:
 
 ## Storage verdict (Phase 2.6F storage portion — complete)
 
-| Gate | Status |
-|---|---|
-| R2 upload | GREEN |
-| Fresh-download verification | GREEN |
-| Retention controls | PROVIDER_VERIFIED |
-| Temporary credential revoked | GREEN |
-| Holdout seal | REMAINS SEALED |
+| Gate                         | Status            |
+| ---------------------------- | ----------------- |
+| R2 upload                    | GREEN             |
+| Fresh-download verification  | GREEN             |
+| Retention controls           | PROVIDER_VERIFIED |
+| Temporary credential revoked | GREEN             |
+| Holdout seal                 | REMAINS SEALED    |
 
 Exact prefixes/hashes: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/` on PR B.
 
