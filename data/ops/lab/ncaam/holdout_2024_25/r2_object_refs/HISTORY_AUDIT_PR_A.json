@@ -1,9 +1,10 @@
 {
   "branch": "cursor/ncaam-26f-foundation-fix-8a49",
-  "head": "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
+  "head": "41e5a85b48d0c97c3643b63df7ad36057cc84618",
   "base": "origin/deploy-vercel",
-  "n_commits": 3,
+  "n_commits": 4,
   "commits": [
+    "41e5a85b48d0c97c3643b63df7ad36057cc84618",
     "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
     "82cd73730b0b6badf9ed6cb2131fecbc4875b032",
     "94843e8a50298f54153301ccfc91c70fe3238f98"
@@ -23,5 +24,5 @@
     "taxonomy_relabel_not_in_governed_pit_rating_universe"
   ],
   "verdict": true,
-  "audited_at_utc": "2026-09-06T20:58:37Z"
+  "audited_at_utc": "2026-09-06T21:01:28Z"
 }
