@@ -271,8 +271,14 @@ def ingest_from_raw_dir(
     raw_dir: Path,
     start: date,
     end: date,
+    as_of: Optional[str] = None,
 ) -> Dict[str, Any]:
-    """Deterministically rebuild the official schedule pack from governed ESPN raw."""
+    """Deterministically rebuild the official schedule pack from governed ESPN raw.
+
+    Hashed pack identity uses a frozen as_of for the locked 2024–25 v1.1 pack
+    (not datetime.now). Operational rebuild metadata is omitted from the pack body
+    so identity matches the sealed schedule bytes.
+    """
     if not raw_dir.exists():
         raise SystemExit(f"FAIL-CLOSED: raw ESPN dir missing: {raw_dir}")
     season_end_year = int(season_key.split("-")[0]) + 1
@@ -368,7 +374,12 @@ def ingest_from_raw_dir(
 
     games.sort(key=lambda g: (g.get("tipoff") or "", g.get("game_id") or ""))
     miss_rate = (omit_unmapped / espn_events) if espn_events else 0.0
-    as_of = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+    # Frozen v1.1 as_of for locked 2024-25 pack identity; other seasons may override.
+    if as_of is None:
+        if season_key == "2024-25":
+            as_of = "2026-09-05T11:28Z"
+        else:
+            as_of = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
     top_misses = sorted(miss_names.items(), key=lambda kv: (-kv[1], kv[0]))[:40]
     miami_fl = sum(
         1 for g in games if g["home"] == "miami fl" or g["away"] == "miami fl"
@@ -376,6 +387,8 @@ def ingest_from_raw_dir(
     miami_oh = sum(
         1 for g in games if g["home"] == "miami oh" or g["away"] == "miami oh"
     )
+    # Pack body matches locked v1.1 identity envelope (no rebuild_mode / raw_dir /
+    # wall-clock as_of). Operational path-B metadata belongs in rebuild receipts.
     return {
         "sport": "ncaam",
         "season": season_key,
@@ -389,8 +402,6 @@ def ingest_from_raw_dir(
             "limit": 500,
             "window_start": start.isoformat(),
             "window_end": end.isoformat(),
-            "rebuild_mode": "from_governed_raw_dir",
-            "raw_dir": str(raw_dir),
         },
         "fidelity": "espn_receipt_b7_mapped_subset",
         "slate_complete": False,
@@ -424,9 +435,10 @@ def ingest_from_raw_dir(
         "raw_day_receipts": raw_receipts,
         "games": games,
         "notes": [
-            "Option A Schedule SoT — rebuilt from governed ESPN raw (path B).",
+            "Option A Schedule SoT — ESPN public scoreboard.",
             "Identity: apps/web/lib/ncaam/aliases.json via ncaam_identity (fail-closed).",
-            "No manual schedule-pack placement; fail-closed if raw missing/mismatched.",
+            "Bare miami omitted — Miami FL ≠ Miami OH.",
+            "No Edge Board populate / PLAY / props / Odds densify in this package.",
             "metadata_class=HISTORICAL_STATIC_RECONSTRUCTION for post-tip venue/static fields.",
         ],
         "metadata_class": "HISTORICAL_STATIC_RECONSTRUCTION",

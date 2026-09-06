@@ -30,6 +30,12 @@ RAW = HOLDOUT / "raw" / "espn_scoreboard"
 EXPECTED_SEAL_PAYLOAD_SHA256 = (
     "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84"
 )
+EXPECTED_SEAL_FILE_SHA256 = (
+    "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2"
+)
+EXPECTED_CANONICAL_PACK_SHA256 = (
+    "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e"
+)
 # Historical on-disk file hash when the receipt still used key seal_receipt_sha256.
 HISTORICAL_SEAL_FILE_SHA256_LEGACY_KEY = (
     "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09"
@@ -99,6 +105,8 @@ def verify(*, require_raw: bool = False) -> Dict[str, Any]:
             )
         if payload_claimed == EXPECTED_SEAL_PAYLOAD_SHA256:
             notes.append("seal payload matches locked v1.1 membership hash")
+        if file_sha == EXPECTED_SEAL_FILE_SHA256:
+            notes.append("seal file matches locked v1.1 on-disk digest")
         if "seal_payload_sha256" not in seal and "seal_receipt_sha256" in seal:
             errors.append(
                 "seal still uses ambiguous seal_receipt_sha256; rename to seal_payload_sha256"
@@ -116,6 +124,31 @@ def verify(*, require_raw: bool = False) -> Dict[str, Any]:
                 "on-disk seal file hash matches historical 1074731f… "
                 "(legacy key seal_receipt_sha256); payload remains af4fd451…"
             )
+
+    pack_path = (
+        REPO
+        / "services"
+        / "model-service"
+        / "src"
+        / "services"
+        / "ncaam_schedule"
+        / "data"
+        / "ncaam_official_schedule_2024_25.json"
+    )
+    if pack_path.exists():
+        pack_sha = _sha256_file(pack_path)
+        seal_info_pack = {"canonical_pack_sha256": pack_sha}
+        if pack_sha == EXPECTED_CANONICAL_PACK_SHA256:
+            notes.append("canonical pack matches locked v1.1 sha256 4016f2ab…")
+        else:
+            notes.append(
+                f"canonical pack present but sha256={pack_sha} "
+                f"(locked={EXPECTED_CANONICAL_PACK_SHA256})"
+            )
+    else:
+        seal_info_pack = {"canonical_pack_sha256": None}
+        notes.append("canonical pack not in this checkout (path-B rebuild)")
+    seal_info.update(seal_info_pack)
 
     raw_info: Dict[str, Any] = {"present": RAW.exists()}
     if RAW.exists():

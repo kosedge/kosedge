@@ -1,13 +1,21 @@
 # Phase 2.6F — clean PR A/B split (execution)
 
-**Status:** ACCEPTANCE FIX IN PROGRESS (A'/B' rebuild; do not merge; #491 untouched)  
+**Status:** ACCEPTANCE FIX IN PROGRESS — CR3 Path B determinism + atomic promote (A′′′/B′′′); do not merge; #491 untouched
 **Supersedes plan-only:** `PR491_SPLIT_MIGRATION_PLAN_26C.md` (plan retained for history)  
 **Does not close:** PR #491 (remains draft until Ryan reviews A/B + parity)  
 **Prior drafts:** #496 / #497 failed acceptance — replaced by clean A'/B' branches from current `deploy-vercel` (no fat JSON ancestor `7ced9f10` in merge history).
 
-## PR A' — Code foundation (fixed)
+## PR A′′′ — Code foundation (CR3)
 
 Branch: `cursor/ncaam-26f-foundation-fix-8a49`
+
+Includes prior A′′ fixes plus:
+
+- **Frozen v1.1 identity timestamps** in hashed pack / manifest / seal (no `datetime.now()` in membership)
+- **Path B staging → verify → atomic promote**; live seal never unlinked before successful verification
+- Locked expected hashes incl. canonical pack `4016f2ab…`
+- CR3 tests: two-run byte identity, locked-hash match, failed-promote preserves seal
+
 
 Includes:
 

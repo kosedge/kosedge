@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -20,6 +19,11 @@ from ncaam_lab.holdout_2425.constants import (
     WINDOW_START,
 )
 from ncaam_lab.holdout_2425.io_util import write_json
+from ncaam_lab.holdout_2425.locked_identity import (
+    V1_1_FEATURE_SEALED_AT,
+    V1_1_LABEL_SEALED_AT,
+    V1_1_SEAL_SEALED_AT,
+)
 from ncaam_lab.holdout_2425.schedule_normalize import outcome_label_ok
 
 
@@ -34,14 +38,25 @@ def build_feature_and_label_packages(
     """Build physically separated feature + label packages.
 
     Never joins labels to candidate predictions. Scores appear only in the label package.
+
+    Hashed identity uses frozen v1.1 sealed_at timestamps (not datetime.now).
+    When out_root is set, packages write under that staging/live root.
     """
-    _ = out_root
-    feature_dir = FEATURE_DIR
-    label_dir = LABEL_DIR
+    if out_root is None:
+        feature_dir = FEATURE_DIR
+        label_dir = LABEL_DIR
+        rejected_dir = REJECTED_DIR
+        seal_dir = SEAL_DIR
+    else:
+        feature_dir = out_root / "feature_package"
+        label_dir = out_root / "label_package"
+        rejected_dir = out_root / "rejected"
+        seal_dir = out_root / "seal"
+
     feature_dir.mkdir(parents=True, exist_ok=True)
     label_dir.mkdir(parents=True, exist_ok=True)
-    REJECTED_DIR.mkdir(parents=True, exist_ok=True)
-    SEAL_DIR.mkdir(parents=True, exist_ok=True)
+    rejected_dir.mkdir(parents=True, exist_ok=True)
+    seal_dir.mkdir(parents=True, exist_ok=True)
 
     venue_by_eid = {str(r.get("source_event_id") or ""): r for r in venue_rows}
     kp_by_eid = {
@@ -140,12 +155,20 @@ def build_feature_and_label_packages(
 
     feat_path = feature_dir / "features.json"
     lab_path = label_dir / "labels.json"
-    rej_path = REJECTED_DIR / "rejected_events.json"
+    rej_path = rejected_dir / "rejected_events.json"
     feat_sha = write_json(feat_path, features)
     lab_sha = write_json(lab_path, labels)
     rej_sha = write_json(rej_path, rejected)
 
     def _rel(p: Path) -> str:
+        # Identity path is always the live package path (not staging), so manifest
+        # hashes remain stable across staging rebuilds.
+        live_map = {
+            "features.json": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
+            "labels.json": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
+        }
+        if p.name in live_map:
+            return live_map[p.name]
         try:
             return str(p.relative_to(REPO))
         except ValueError:
@@ -162,7 +185,7 @@ def build_feature_and_label_packages(
         ),
         "content_sha256": feat_sha,
         "path": _rel(feat_path),
-        "sealed_at": datetime.now(timezone.utc).isoformat(),
+        "sealed_at": V1_1_FEATURE_SEALED_AT,
         "note": "PIT inputs + static metadata only; no final scores",
     }
     label_manifest = {
@@ -174,7 +197,7 @@ def build_feature_and_label_packages(
         "n_label_present": sum(1 for L in labels if L.get("label_present")),
         "content_sha256": lab_sha,
         "path": _rel(lab_path),
-        "sealed_at": datetime.now(timezone.utc).isoformat(),
+        "sealed_at": V1_1_LABEL_SEALED_AT,
         "note": "Evaluation labels only; must not be joined to predictions in Phase 2.6A",
     }
     fm_sha = write_json(feature_dir / "feature_manifest.json", feature_manifest)
@@ -194,16 +217,16 @@ def build_feature_and_label_packages(
         "n_rejected": len(rejected),
         "n_complete_intersection": feature_manifest["n_complete_intersection"],
         "features_labels_joined_for_evaluation": False,
-        "sealed_at": datetime.now(timezone.utc).isoformat(),
+        "sealed_at": V1_1_SEAL_SEALED_AT,
     }
-    seal_path = SEAL_DIR / "seal_receipt.json"
+    seal_path = seal_dir / "seal_receipt.json"
     # seal_payload_sha256 = SHA-256 of canonical JSON without the hash field itself.
     # The on-disk file hash differs once the field is inserted; that file digest is
     # recorded externally (sidecar / build_summary), never claimed as the payload hash.
     seal_payload_sha = write_json(seal_path, seal)
     seal["seal_payload_sha256"] = seal_payload_sha
     seal_file_sha = write_json(seal_path, seal)
-    seal_file_sidecar = SEAL_DIR / "seal_receipt.file_sha256"
+    seal_file_sidecar = seal_dir / "seal_receipt.file_sha256"
     seal_file_sidecar.write_text(seal_file_sha + "\n", encoding="utf-8")
     return {
         **seal,

@@ -515,6 +515,12 @@ def test_feature_label_separation_and_deterministic_hashes(tmp_path, monkeypatch
         kenpom_eligibility=kenpom_rows,
         odds_by_espn_id=odds_by,
     )
+    # Snapshot first-run bytes before second run overwrites the same paths.
+    feat_bytes_1 = (tmp_path / "feature_package" / "features.json").read_bytes()
+    lab_bytes_1 = (tmp_path / "label_package" / "labels.json").read_bytes()
+    fm_bytes_1 = (tmp_path / "feature_package" / "feature_manifest.json").read_bytes()
+    lm_bytes_1 = (tmp_path / "label_package" / "label_manifest.json").read_bytes()
+    seal_bytes_1 = (tmp_path / "seal" / "seal_receipt.json").read_bytes()
     seal2 = build_feature_and_label_packages(
         schedule_rows=schedule,
         venue_rows=venue_rows,
@@ -523,8 +529,17 @@ def test_feature_label_separation_and_deterministic_hashes(tmp_path, monkeypatch
     )
     assert seal1["feature_content_sha256"] == seal2["feature_content_sha256"]
     assert seal1["label_content_sha256"] == seal2["label_content_sha256"]
+    assert seal1["feature_manifest_sha256"] == seal2["feature_manifest_sha256"]
+    assert seal1["label_manifest_sha256"] == seal2["label_manifest_sha256"]
+    assert seal1["seal_payload_sha256"] == seal2["seal_payload_sha256"]
+    assert seal1["seal_file_sha256"] == seal2["seal_file_sha256"]
     assert seal1["features_labels_joined_for_evaluation"] is False
     assert seal1["n_complete_intersection"] == 1
+    assert (tmp_path / "feature_package" / "features.json").read_bytes() == feat_bytes_1
+    assert (tmp_path / "label_package" / "labels.json").read_bytes() == lab_bytes_1
+    assert (tmp_path / "feature_package" / "feature_manifest.json").read_bytes() == fm_bytes_1
+    assert (tmp_path / "label_package" / "label_manifest.json").read_bytes() == lm_bytes_1
+    assert (tmp_path / "seal" / "seal_receipt.json").read_bytes() == seal_bytes_1
 
     features = json.loads((tmp_path / "feature_package" / "features.json").read_text())
     labels = json.loads((tmp_path / "label_package" / "labels.json").read_text())
@@ -532,6 +547,7 @@ def test_feature_label_separation_and_deterministic_hashes(tmp_path, monkeypatch
     assert "away_score" not in features[0]
     assert "actual_home_margin" not in features[0]
     assert labels[0]["label_present"] is True
+    assert seal1["sealed_at"] == "2026-09-05T13:27:18.625914+00:00"
 
 
 def test_evaluator_refuses_without_unseal():
@@ -915,6 +931,8 @@ def test_clean_checkout_path_b_rebuild_without_preseeded_seal(tmp_path, monkeypa
         end=date(2025, 4, 8),
     )
     assert pack["n_games"] >= 1
+    assert pack["as_of"] == "2026-09-05T11:28Z"
+    assert "rebuild_mode" not in (pack.get("source_detail") or {})
     pack_path.write_text(json.dumps(pack, indent=2) + "\n", encoding="utf-8")
 
     build_mod = _load_build_module()
@@ -946,3 +964,361 @@ def test_clean_checkout_path_b_rebuild_without_preseeded_seal(tmp_path, monkeypa
     readiness = json.loads((out / "readiness_report.json").read_text(encoding="utf-8"))
     assert readiness["manifest_hash_status"]["seal_payload_sha256"] == seal["seal_payload_sha256"]
     assert readiness["manifest_hash_status"]["seal_file_sha256"] == summary["seal_file_sha256"]
+
+
+# ---------------------------------------------------------------------------
+# Phase 2.6F CR3 — Path B determinism + atomic promote
+# ---------------------------------------------------------------------------
+
+
+def test_cr3_identical_inputs_byte_identical_artifacts_two_runs(tmp_path, monkeypatch):
+    """CR3(a): identical governed inputs → byte-identical artifacts + hashes across two runs."""
+    import ncaam_lab.holdout_2425.constants as constants
+    import ncaam_lab.holdout_2425.seal_package as seal_mod
+
+    monkeypatch.setattr(constants, "FEATURE_DIR", tmp_path / "feature_package")
+    monkeypatch.setattr(constants, "LABEL_DIR", tmp_path / "label_package")
+    monkeypatch.setattr(constants, "REJECTED_DIR", tmp_path / "rejected")
+    monkeypatch.setattr(constants, "SEAL_DIR", tmp_path / "seal")
+    monkeypatch.setattr(seal_mod, "FEATURE_DIR", tmp_path / "feature_package")
+    monkeypatch.setattr(seal_mod, "LABEL_DIR", tmp_path / "label_package")
+    monkeypatch.setattr(seal_mod, "REJECTED_DIR", tmp_path / "rejected")
+    monkeypatch.setattr(seal_mod, "SEAL_DIR", tmp_path / "seal")
+
+    schedule = [
+        {
+            "espn_game_id": "cr3a",
+            "date": "2024-12-01",
+            "tipoff": "2024-12-01T19:00Z",
+            "home": "duke",
+            "away": "kentucky",
+            "status": "final",
+            "home_score": 80,
+            "away_score": 70,
+        }
+    ]
+    venue_rows = [
+        {
+            "source_event_id": "cr3a",
+            "venue_status": "confirmed_home",
+            "validation_status": "ok",
+            "historical_reconstruction": True,
+            "b7_join_key": "2024-12-01|duke|kentucky",
+            "conflict_reason": None,
+        }
+    ]
+    kenpom_rows = [
+        {
+            "source_event_id": "cr3a",
+            "event_id": "cr3a",
+            "eligibility_status": "PIT_ELIGIBLE",
+            "selected_snapshot_id": "kenpom_2024-11-24.parquet",
+            "selected_snapshot_sha256": "abc",
+        }
+    ]
+    odds_by = {
+        "cr3a": {
+            "event_id": "odds1",
+            "b1_status": "B1_ELIGIBLE",
+            "open_snapshot_ts": "2024-11-30T12:00:00Z",
+            "close_snapshot_ts": "2024-12-01T18:00:00Z",
+            "n_books": 5,
+        }
+    }
+
+    run_dirs = []
+    digests = []
+    for i in range(2):
+        root = tmp_path / f"run{i}"
+        seal = build_feature_and_label_packages(
+            schedule_rows=schedule,
+            venue_rows=venue_rows,
+            kenpom_eligibility=kenpom_rows,
+            odds_by_espn_id=odds_by,
+            out_root=root,
+        )
+        run_dirs.append(root)
+        digests.append(
+            {
+                "feature_content_sha256": seal["feature_content_sha256"],
+                "label_content_sha256": seal["label_content_sha256"],
+                "feature_manifest_sha256": seal["feature_manifest_sha256"],
+                "label_manifest_sha256": seal["label_manifest_sha256"],
+                "seal_payload_sha256": seal["seal_payload_sha256"],
+                "seal_file_sha256": seal["seal_file_sha256"],
+                "features": (root / "feature_package" / "features.json").read_bytes(),
+                "labels": (root / "label_package" / "labels.json").read_bytes(),
+                "feature_manifest": (
+                    root / "feature_package" / "feature_manifest.json"
+                ).read_bytes(),
+                "label_manifest": (
+                    root / "label_package" / "label_manifest.json"
+                ).read_bytes(),
+                "seal": (root / "seal" / "seal_receipt.json").read_bytes(),
+            }
+        )
+
+    assert digests[0] == digests[1]
+
+    # Pack identity: frozen as_of, no wall-clock / rebuild_mode in hashed body.
+    import importlib.util
+
+    ingest_path = (
+        WEB_ROOT.parent.parent / "scripts" / "ncaam" / "ingest_espn_official_schedule.py"
+    )
+    spec = importlib.util.spec_from_file_location("ingest_espn_cr3a", ingest_path)
+    ingest = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(ingest)
+
+    fixture = (
+        WEB_ROOT.parent.parent
+        / "data"
+        / "ops"
+        / "lab"
+        / "ncaam"
+        / "holdout_2024_25"
+        / "fixtures"
+        / "espn_scoreboard_fixture_day.json"
+    )
+    fixture_sha = fixture.with_suffix(".sha256")
+    raw = tmp_path / "raw_pack"
+    raw.mkdir()
+    (raw / "espn_scoreboard_2024-11-04.json").write_bytes(fixture.read_bytes())
+    (raw / "espn_scoreboard_2024-11-04.sha256").write_text(
+        fixture_sha.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    packs = [
+        ingest.ingest_from_raw_dir(
+            season_key="2024-25",
+            raw_dir=raw,
+            start=date(2024, 11, 4),
+            end=date(2025, 4, 8),
+        )
+        for _ in range(2)
+    ]
+    assert packs[0] == packs[1]
+    assert packs[0]["as_of"] == "2026-09-05T11:28Z"
+    b0 = (json.dumps(packs[0], indent=2) + "\n").encode()
+    b1 = (json.dumps(packs[1], indent=2) + "\n").encode()
+    assert b0 == b1
+
+
+def test_cr3_rebuild_matches_locked_expected_hashes():
+    """CR3(b): frozen v1.1 identity reproduces locked pack/manifest/seal hashes."""
+    from ncaam_lab.holdout_2425.io_util import write_json
+    from ncaam_lab.holdout_2425.locked_identity import (
+        LOCKED_CANONICAL_PACK_SHA256,
+        LOCKED_FEATURE_CONTENT_SHA256,
+        LOCKED_FEATURE_MANIFEST_SHA256,
+        LOCKED_LABEL_CONTENT_SHA256,
+        LOCKED_LABEL_MANIFEST_SHA256,
+        LOCKED_REJECTED_SHA256,
+        LOCKED_SEAL_FILE_SHA256,
+        LOCKED_SEAL_PAYLOAD_SHA256,
+        V1_1_FEATURE_SEALED_AT,
+        V1_1_LABEL_SEALED_AT,
+        V1_1_SEAL_SEALED_AT,
+        locked_expected_hashes,
+    )
+    from ncaam_lab.holdout_2425.path_b_promote import (
+        seal_payload_sha256,
+        verify_against_locked,
+    )
+
+    # Tip-discovered locks (do not invent).
+    assert LOCKED_SEAL_PAYLOAD_SHA256 == (
+        "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84"
+    )
+    assert LOCKED_SEAL_FILE_SHA256 == (
+        "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2"
+    )
+    assert LOCKED_FEATURE_CONTENT_SHA256 == (
+        "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940"
+    )
+    assert LOCKED_LABEL_CONTENT_SHA256 == (
+        "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12"
+    )
+    assert LOCKED_FEATURE_MANIFEST_SHA256 == (
+        "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9"
+    )
+    assert LOCKED_LABEL_MANIFEST_SHA256 == (
+        "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0"
+    )
+    assert LOCKED_CANONICAL_PACK_SHA256 == (
+        "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e"
+    )
+
+    feature_manifest = {
+        "content_sha256": LOCKED_FEATURE_CONTENT_SHA256,
+        "holdout_id": HOLDOUT_ID,
+        "n_complete_intersection": 3334,
+        "n_rows": 5769,
+        "note": "PIT inputs + static metadata only; no final scores",
+        "package": "feature",
+        "path": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
+        "schema_version": "ncaam-holdout-feature-v1",
+        "sealed_at": V1_1_FEATURE_SEALED_AT,
+        "window": {"end": "2025-04-08", "start": "2024-11-04"},
+    }
+    label_manifest = {
+        "content_sha256": LOCKED_LABEL_CONTENT_SHA256,
+        "holdout_id": HOLDOUT_ID,
+        "n_label_present": 5769,
+        "n_rows": 5769,
+        "note": "Evaluation labels only; must not be joined to predictions in Phase 2.6A",
+        "package": "label",
+        "path": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
+        "schema_version": "ncaam-holdout-label-v1",
+        "sealed_at": V1_1_LABEL_SEALED_AT,
+        "window": {"end": "2025-04-08", "start": "2024-11-04"},
+    }
+    import tempfile
+    from pathlib import Path as P
+
+    with tempfile.TemporaryDirectory() as td:
+        root = P(td)
+        fm_sha = write_json(root / "feature_manifest.json", feature_manifest)
+        lm_sha = write_json(root / "label_manifest.json", label_manifest)
+        assert fm_sha == LOCKED_FEATURE_MANIFEST_SHA256
+        assert lm_sha == LOCKED_LABEL_MANIFEST_SHA256
+
+        seal = {
+            "feature_content_sha256": LOCKED_FEATURE_CONTENT_SHA256,
+            "feature_manifest_sha256": fm_sha,
+            "features_labels_joined_for_evaluation": False,
+            "holdout_id": HOLDOUT_ID,
+            "label_content_sha256": LOCKED_LABEL_CONTENT_SHA256,
+            "label_manifest_sha256": lm_sha,
+            "n_complete_intersection": 3334,
+            "n_features": 5769,
+            "n_labels": 5769,
+            "n_rejected": 2435,
+            "package_schema_version": "ncaam-holdout-package-v1",
+            "rejected_sha256": LOCKED_REJECTED_SHA256,
+            "sealed_at": V1_1_SEAL_SEALED_AT,
+        }
+        payload = seal_payload_sha256(seal)
+        assert payload == LOCKED_SEAL_PAYLOAD_SHA256
+        seal["seal_payload_sha256"] = payload
+        file_sha = write_json(root / "seal_receipt.json", seal)
+        assert file_sha == LOCKED_SEAL_FILE_SHA256
+
+        actual = {
+            **locked_expected_hashes(),
+            "feature_manifest_sha256": fm_sha,
+            "label_manifest_sha256": lm_sha,
+            "seal_payload_sha256": payload,
+            "seal_file_sha256": file_sha,
+        }
+        verify_against_locked(actual)
+
+
+def test_cr3_mismatch_refuses_promotion_preserves_live_seal(tmp_path):
+    """CR3(c): hash mismatch refuses promote and leaves the previous seal untouched."""
+    from ncaam_lab.holdout_2425.io_util import write_json
+    from ncaam_lab.holdout_2425.path_b_promote import (
+        PromoteVerificationError,
+        collect_staging_hashes,
+        promote_staging_to_live,
+        seal_payload_sha256,
+        verify_against_locked,
+    )
+
+    live_root = tmp_path / "live"
+    live_seal_dir = live_root / "seal"
+    live_seal_dir.mkdir(parents=True)
+    previous_seal = {
+        "holdout_id": HOLDOUT_ID,
+        "seal_payload_sha256": "deadbeef" * 8,
+        "note": "previous-known-good",
+    }
+    live_seal_path = live_seal_dir / "seal_receipt.json"
+    live_seal_path.write_text(
+        json.dumps(previous_seal, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    live_seal_bytes = live_seal_path.read_bytes()
+    live_side = live_seal_dir / "seal_receipt.file_sha256"
+    live_side.write_text("prevfilehash\n", encoding="utf-8")
+    live_side_bytes = live_side.read_bytes()
+
+    staging = tmp_path / "staging"
+    (staging / "feature_package").mkdir(parents=True)
+    (staging / "label_package").mkdir(parents=True)
+    (staging / "seal").mkdir(parents=True)
+    (staging / "feature_package" / "feature_manifest.json").write_text(
+        json.dumps(
+            {
+                "content_sha256": "0" * 64,
+                "holdout_id": HOLDOUT_ID,
+                "sealed_at": "2026-09-05T13:27:18.625322+00:00",
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    (staging / "label_package" / "label_manifest.json").write_text(
+        json.dumps(
+            {
+                "content_sha256": "1" * 64,
+                "holdout_id": HOLDOUT_ID,
+                "sealed_at": "2026-09-05T13:27:18.625658+00:00",
+            },
+            indent=2,
+            sort_keys=True,
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    bad_seal = {
+        "feature_content_sha256": "0" * 64,
+        "feature_manifest_sha256": "2" * 64,
+        "features_labels_joined_for_evaluation": False,
+        "holdout_id": HOLDOUT_ID,
+        "label_content_sha256": "1" * 64,
+        "label_manifest_sha256": "3" * 64,
+        "n_complete_intersection": 0,
+        "n_features": 0,
+        "n_labels": 0,
+        "n_rejected": 0,
+        "package_schema_version": "ncaam-holdout-package-v1",
+        "rejected_sha256": "4" * 64,
+        "sealed_at": "2026-09-05T13:27:18.625914+00:00",
+    }
+    payload = seal_payload_sha256(bad_seal)
+    bad_seal["seal_payload_sha256"] = payload
+    write_json(staging / "seal" / "seal_receipt.json", bad_seal)
+    (staging / "seal" / "seal_receipt.file_sha256").write_text(
+        hashlib.sha256(
+            (staging / "seal" / "seal_receipt.json").read_bytes()
+        ).hexdigest()
+        + "\n",
+        encoding="utf-8",
+    )
+    staging_pack = tmp_path / "pack.staging.json"
+    staging_pack.write_text('{"n_games": 0}\n', encoding="utf-8")
+
+    actual = collect_staging_hashes(
+        staging_root=staging, staging_pack_path=staging_pack
+    )
+    with pytest.raises(PromoteVerificationError):
+        verify_against_locked(actual)
+
+    # Mismatch path must not promote — live seal/sidecar unchanged.
+    assert live_seal_path.read_bytes() == live_seal_bytes
+    assert live_side.read_bytes() == live_side_bytes
+    assert json.loads(live_seal_path.read_text())["note"] == "previous-known-good"
+
+    # Control: only an explicit promote call changes live seal (atomic replace).
+    promote_staging_to_live(
+        staging_root=staging,
+        staging_pack_path=staging_pack,
+        live_root=live_root,
+        live_pack_path=tmp_path / "live_pack.json",
+        live_seal_dir=live_seal_dir,
+    )
+    assert live_seal_path.read_bytes() != live_seal_bytes
+    promoted = json.loads(live_seal_path.read_text(encoding="utf-8"))
+    assert promoted["seal_payload_sha256"] == payload

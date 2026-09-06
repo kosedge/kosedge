@@ -10,7 +10,6 @@ from __future__ import annotations
 import argparse
 import json
 import sys
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List
 
@@ -27,6 +26,10 @@ from ncaam_lab.holdout_2425 import readiness as readiness_mod  # noqa: E402
 from ncaam_lab.holdout_2425 import schedule_normalize as sched  # noqa: E402
 from ncaam_lab.holdout_2425 import seal_package as seal_mod  # noqa: E402
 from ncaam_lab.holdout_2425 import venue_contract as venue  # noqa: E402
+from ncaam_lab.holdout_2425.locked_identity import (  # noqa: E402
+    V1_1_BUILD_SUMMARY_BUILT_AT,
+    V1_1_SCHEDULE_INDEX_BUILT_AT,
+)
 
 
 def _raw_ingestion_receipt(raw_dir: Path) -> Dict[str, Any]:
@@ -173,7 +176,7 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "game_ids": [
             str(g.get("espn_game_id") or g.get("game_id") or "") for g in games
         ],
-        "built_at": datetime.now(timezone.utc).isoformat(),
+        "built_at": V1_1_SCHEDULE_INDEX_BUILT_AT,
     }
     io.write_json(C.SCHEDULE_DIR / "schedule_sot_index.json", schedule_index)
 
@@ -263,7 +266,7 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "performance_metrics_calculated": False,
         "api_calls_made": False,
         "raw_day_payloads": raw_receipt.get("n_day_payloads"),
-        "built_at": datetime.now(timezone.utc).isoformat(),
+        "built_at": V1_1_BUILD_SUMMARY_BUILT_AT,
     }
     io.write_json(C.OUT_ROOT / "build_summary.json", summary)
     print(json.dumps(summary, indent=2, sort_keys=True))
