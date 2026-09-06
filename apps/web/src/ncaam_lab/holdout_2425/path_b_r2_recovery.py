@@ -1,14 +1,14 @@
-"""Path B authoritative disaster recovery via private R2 (Phase 2.6F CR4).
+"""Path B authoritative disaster recovery via private R2 (Phase 2.6F CR4/CR5).
 
 Flow (locked):
   R2 hydrate → staging → verify inventory + all locked hashes
   → reseal from downloaded packages with frozen v1.1 identity
-  → atomic promote only after pass
+  → release-pointer promote only after pass (immutable release + CURRENT)
 
-Live seal is never unlinked first. Any failure preserves the previous package.
-Credential-free recovery receipt. No Odds API / live-data fallback.
-Raw+KenPom+odds reconstruction is a SEPARATE forensic path and must not call
-this promote path to redefine the frozen holdout.
+Live seal is never unlinked first. Any failure preserves the previous package
+(CURRENT pointer unchanged). Credential-free recovery receipt. No Odds API /
+live-data fallback. Raw+KenPom+odds reconstruction is a SEPARATE forensic path
+and must not call this promote path to redefine the frozen holdout.
 """
 
 from __future__ import annotations
@@ -19,10 +19,12 @@ from typing import Any, Dict, List, Mapping, Optional
 
 from ncaam_lab.holdout_2425.locked_identity import locked_expected_hashes
 from ncaam_lab.holdout_2425.path_b_promote import (
+    PromoteError,
     PromoteVerificationError,
     cleanup_staging,
     collect_staging_hashes,
     promote_staging_to_live,
+    resolve_live_artifacts,
     sha256_file,
     verify_against_locked,
 )
@@ -68,23 +70,80 @@ def _scrub(receipt: Mapping[str, Any]) -> Dict[str, Any]:
     return out
 
 
+def _read_optional(path: Path) -> Optional[bytes]:
+    if path.exists() and path.is_file():
+        return path.read_bytes()
+    # Symlink to missing target — treat as absent.
+    if path.is_symlink():
+        try:
+            if path.exists():
+                return path.read_bytes()
+        except OSError:
+            return None
+    return None
+
+
 def _snapshot_live_package(
     *,
     live_root: Path,
     live_pack_path: Path,
     live_seal_dir: Path,
 ) -> Dict[str, Optional[bytes]]:
-    snap: Dict[str, Optional[bytes]] = {}
-    seal = live_seal_dir / "seal_receipt.json"
-    side = live_seal_dir / "seal_receipt.file_sha256"
-    snap["seal"] = seal.read_bytes() if seal.exists() else None
-    snap["seal_sidecar"] = side.read_bytes() if side.exists() else None
-    snap["pack"] = live_pack_path.read_bytes() if live_pack_path.exists() else None
-    feat = live_root / "feature_package" / "features.json"
-    lab = live_root / "label_package" / "labels.json"
-    snap["features"] = feat.read_bytes() if feat.exists() else None
-    snap["labels"] = lab.read_bytes() if lab.exists() else None
+    """Snapshot all governed live artifacts (features/labels/manifests/rejected/pack/seal)."""
+    paths = resolve_live_artifacts(
+        live_root=live_root,
+        live_pack_path=live_pack_path,
+        live_seal_dir=live_seal_dir,
+    )
+    snap: Dict[str, Optional[bytes]] = {
+        "seal": _read_optional(paths["seal_receipt"]),
+        "seal_sidecar": _read_optional(paths["seal_sidecar"]),
+        "pack": _read_optional(paths["pack_path"]),
+        "features": _read_optional(paths["feature_content"]),
+        "feature_manifest": _read_optional(paths["feature_manifest"]),
+        "labels": _read_optional(paths["label_content"]),
+        "label_manifest": _read_optional(paths["label_manifest"]),
+        "rejected": _read_optional(paths["rejected_events"]),
+    }
+    # Also snapshot legacy flat paths when CURRENT is absent so mid-promote
+    # materialize cannot silently mutate pre-pointer live trees.
+    if (live_root / "CURRENT").exists() is False and not (live_root / "CURRENT").is_symlink():
+        flat = {
+            "flat_seal": _read_optional(live_seal_dir / "seal_receipt.json"),
+            "flat_seal_sidecar": _read_optional(
+                live_seal_dir / "seal_receipt.file_sha256"
+            ),
+            "flat_pack": _read_optional(live_pack_path),
+            "flat_features": _read_optional(
+                live_root / "feature_package" / "features.json"
+            ),
+            "flat_feature_manifest": _read_optional(
+                live_root / "feature_package" / "feature_manifest.json"
+            ),
+            "flat_labels": _read_optional(live_root / "label_package" / "labels.json"),
+            "flat_label_manifest": _read_optional(
+                live_root / "label_package" / "label_manifest.json"
+            ),
+            "flat_rejected": _read_optional(
+                live_root / "rejected" / "rejected_events.json"
+            ),
+        }
+        snap.update(flat)
     return snap
+
+
+def _assert_bytes_unchanged(
+    snap: Mapping[str, Optional[bytes]],
+    key: str,
+    path: Path,
+    label: str,
+) -> None:
+    expected = snap.get(key)
+    if expected is None:
+        return
+    actual = _read_optional(path)
+    if actual != expected:
+        raise RecoveryError(f"FAIL-CLOSED: live {label} mutated before successful promote")
 
 
 def _assert_live_unchanged(
@@ -94,23 +153,68 @@ def _assert_live_unchanged(
     live_pack_path: Path,
     live_seal_dir: Path,
 ) -> None:
-    seal = live_seal_dir / "seal_receipt.json"
-    side = live_seal_dir / "seal_receipt.file_sha256"
-    if snap["seal"] is not None:
-        if not seal.exists() or seal.read_bytes() != snap["seal"]:
-            raise RecoveryError(
-                "FAIL-CLOSED: live seal mutated before successful promote"
-            )
-    if snap["seal_sidecar"] is not None:
-        if not side.exists() or side.read_bytes() != snap["seal_sidecar"]:
-            raise RecoveryError(
-                "FAIL-CLOSED: live seal sidecar mutated before successful promote"
-            )
-    if snap["pack"] is not None:
-        if not live_pack_path.exists() or live_pack_path.read_bytes() != snap["pack"]:
-            raise RecoveryError(
-                "FAIL-CLOSED: live canonical pack mutated before successful promote"
-            )
+    paths = resolve_live_artifacts(
+        live_root=live_root,
+        live_pack_path=live_pack_path,
+        live_seal_dir=live_seal_dir,
+    )
+    _assert_bytes_unchanged(snap, "seal", paths["seal_receipt"], "seal")
+    _assert_bytes_unchanged(
+        snap, "seal_sidecar", paths["seal_sidecar"], "seal sidecar"
+    )
+    _assert_bytes_unchanged(snap, "pack", paths["pack_path"], "canonical pack")
+    _assert_bytes_unchanged(snap, "features", paths["feature_content"], "features")
+    _assert_bytes_unchanged(
+        snap, "feature_manifest", paths["feature_manifest"], "feature manifest"
+    )
+    _assert_bytes_unchanged(snap, "labels", paths["label_content"], "labels")
+    _assert_bytes_unchanged(
+        snap, "label_manifest", paths["label_manifest"], "label manifest"
+    )
+    _assert_bytes_unchanged(snap, "rejected", paths["rejected_events"], "rejected")
+
+    # Pre-pointer flat layout must also remain untouched until CURRENT switches.
+    if "flat_seal" in snap:
+        _assert_bytes_unchanged(
+            snap, "flat_seal", live_seal_dir / "seal_receipt.json", "flat seal"
+        )
+        _assert_bytes_unchanged(
+            snap,
+            "flat_seal_sidecar",
+            live_seal_dir / "seal_receipt.file_sha256",
+            "flat seal sidecar",
+        )
+        _assert_bytes_unchanged(snap, "flat_pack", live_pack_path, "flat pack")
+        _assert_bytes_unchanged(
+            snap,
+            "flat_features",
+            live_root / "feature_package" / "features.json",
+            "flat features",
+        )
+        _assert_bytes_unchanged(
+            snap,
+            "flat_feature_manifest",
+            live_root / "feature_package" / "feature_manifest.json",
+            "flat feature manifest",
+        )
+        _assert_bytes_unchanged(
+            snap,
+            "flat_labels",
+            live_root / "label_package" / "labels.json",
+            "flat labels",
+        )
+        _assert_bytes_unchanged(
+            snap,
+            "flat_label_manifest",
+            live_root / "label_package" / "label_manifest.json",
+            "flat label manifest",
+        )
+        _assert_bytes_unchanged(
+            snap,
+            "flat_rejected",
+            live_root / "rejected" / "rejected_events.json",
+            "flat rejected",
+        )
 
 
 def verify_inventory_and_locked_hashes(
@@ -190,12 +294,22 @@ def recover_from_r2(
     dry_run: bool = False,
     interrupt_after_hydrate: bool = False,
     fail_promote: bool = False,
+    fail_at: Optional[str] = None,
     require_locked_hashes: bool = True,
 ) -> Dict[str, Any]:
     """Authoritative Path B recovery.
 
     Builders (or missing unseal auth) fail closed at label hydrate — live untouched.
+    fail_at: inject PromoteError/OSError at a named promote boundary (tests).
+    fail_promote: legacy alias for fail_at='before_pointer_switch' after materialize
+    would still flip... use fail_at='after_dir:feature_package' etc. Prefer fail_at.
+    When fail_promote=True without fail_at, inject after_dir:feature_package so the
+    failure occurs mid-promotion (not before promote starts).
     """
+    if fail_promote and not fail_at:
+        # Mid-promote boundary (materialize of first package dir) — NOT pre-promote.
+        fail_at = "after_dir:feature_package"
+
     snap = _snapshot_live_package(
         live_root=live_root,
         live_pack_path=live_pack_path,
@@ -214,6 +328,7 @@ def recover_from_r2(
         "live_seal_preserved_until_verify": True,
         "live_seal_existed_before": snap["seal"] is not None,
         "never_unlink_live_seal_first": True,
+        "promotion_model": "immutable_release_plus_current_pointer",
         "features_bucket": FEATURES_BUCKET,
         "label_vault_bucket": LABEL_VAULT_BUCKET,
         "locked_expected_hashes": locked_expected_hashes(),
@@ -354,21 +469,26 @@ def recover_from_r2(
             live_seal_dir=live_seal_dir,
         )
 
-        if fail_promote:
-            raise RecoveryError("injected promote failure (test harness)")
-
         promote_receipt = promote_staging_to_live(
             staging_root=staging,
             staging_pack_path=staging_pack,
             live_root=live_root,
             live_pack_path=live_pack_path,
             live_seal_dir=live_seal_dir,
+            fail_at=fail_at,
         )
         receipt["promote"] = promote_receipt
         receipt["status"] = "RECOVERED_VERIFIED_PROMOTED"
         return _scrub(receipt)
 
-    except (PromoteVerificationError, HydrateError, LabelVaultAccessDenied, RecoveryError) as exc:
+    except (
+        PromoteVerificationError,
+        HydrateError,
+        LabelVaultAccessDenied,
+        RecoveryError,
+        PromoteError,
+        OSError,
+    ) as exc:
         # Preserve previous live package bytes on any failure.
         _assert_live_unchanged(
             snap,
@@ -376,8 +496,17 @@ def recover_from_r2(
             live_pack_path=live_pack_path,
             live_seal_dir=live_seal_dir,
         )
-        # If somehow seal was touched, restore snapshot.
-        if snap["seal"] is not None:
+        # If somehow seal/pack were touched on legacy flat paths, restore snapshot.
+        if snap.get("flat_seal") is not None:
+            live_seal_dir.mkdir(parents=True, exist_ok=True)
+            seal_path = live_seal_dir / "seal_receipt.json"
+            if not seal_path.exists() or seal_path.read_bytes() != snap["flat_seal"]:
+                seal_path.write_bytes(snap["flat_seal"])
+            if snap.get("flat_seal_sidecar") is not None:
+                (live_seal_dir / "seal_receipt.file_sha256").write_bytes(
+                    snap["flat_seal_sidecar"]
+                )
+        elif snap["seal"] is not None:
             live_seal_dir.mkdir(parents=True, exist_ok=True)
             seal_path = live_seal_dir / "seal_receipt.json"
             if not seal_path.exists() or seal_path.read_bytes() != snap["seal"]:
@@ -386,10 +515,30 @@ def recover_from_r2(
                 (live_seal_dir / "seal_receipt.file_sha256").write_bytes(
                     snap["seal_sidecar"]
                 )
-        if snap["pack"] is not None:
-            if not live_pack_path.exists() or live_pack_path.read_bytes() != snap["pack"]:
+        pack_bytes = snap.get("flat_pack") if snap.get("flat_pack") is not None else snap["pack"]
+        if pack_bytes is not None:
+            if not live_pack_path.exists() or live_pack_path.read_bytes() != pack_bytes:
                 live_pack_path.parent.mkdir(parents=True, exist_ok=True)
-                live_pack_path.write_bytes(snap["pack"])
+                live_pack_path.write_bytes(pack_bytes)
+        for flat_key, rel in (
+            ("flat_features", live_root / "feature_package" / "features.json"),
+            (
+                "flat_feature_manifest",
+                live_root / "feature_package" / "feature_manifest.json",
+            ),
+            ("flat_labels", live_root / "label_package" / "labels.json"),
+            (
+                "flat_label_manifest",
+                live_root / "label_package" / "label_manifest.json",
+            ),
+            ("flat_rejected", live_root / "rejected" / "rejected_events.json"),
+        ):
+            body = snap.get(flat_key)
+            if body is None:
+                continue
+            if not rel.exists() or rel.read_bytes() != body:
+                rel.parent.mkdir(parents=True, exist_ok=True)
+                rel.write_bytes(body)
         receipt.update(
             {
                 "status": "REFUSED_OR_FAILED_LIVE_PRESERVED",

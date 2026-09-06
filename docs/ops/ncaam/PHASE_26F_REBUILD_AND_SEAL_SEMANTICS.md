@@ -22,7 +22,7 @@ Legacy ESPN raw (312 objects) remains in `kosedge-ncaam-lab-gap-recovery-raw-v1`
 
 ## Recovery path B (clean checkout) — CR4 LOCKED
 
-Enterprise path **B**: hydrate exact frozen packages from private R2 → staging → verify inventory + all locked hashes → reseal from downloaded packages with frozen v1.1 identity → atomic promote only after pass.
+Enterprise path **B**: hydrate exact frozen packages from private R2 → staging → verify inventory + all locked hashes → reseal from downloaded packages with frozen v1.1 identity → release-pointer promote only after pass (immutable release dir + atomic `CURRENT` symlink switch).
 
 ```bash
 python scripts/ncaam/recover_2425_sealed_holdout_from_r2.py --dry-run
@@ -33,14 +33,14 @@ python scripts/ncaam/verify_2425_sealed_artifacts.py
 
 Unit tests use `MockR2Store` (no network). Real hydrate is the script above after CoS upload.
 
-### Determinism + atomic promote
+### Determinism + release-pointer promote
 
 1. Hashed identity uses **frozen v1.1 timestamps** — never `datetime.now()` in pack / manifest / seal membership.
 2. Hydrate writes into a **staging** directory (live seal untouched; never unlink live seal first).
 3. Staging verified against package inventory + locked expected hashes.
 4. **Reseal** from downloaded content packages (real identity path); no silent reuse of a pre-seeded seal.
-5. **Atomic promote** (`os.replace`) only after verification passes; seal promoted last.
-6. On any mismatch/failure/interrupt: refuse promotion and **preserve** the previous live package.
+5. **Release-pointer promote** only after verification passes: materialize a complete immutable `releases/<id>/`, then atomically switch one `CURRENT` symlink (`os.replace` of the symlink). All consumers (including canonical pack) resolve through that release. Multi-file live `os.replace` is **not** an atomic promote.
+6. On any mismatch/failure/interrupt (including mid-materialize): refuse pointer switch and **preserve** the previous live package (all of features, labels, manifests, rejected, pack, seal).
 7. Credential-free recovery receipt (no secrets in receipt or git).
 
 ### Label vault separation
@@ -54,7 +54,7 @@ Unit tests use `MockR2Store` (no network). Real hydrate is the script above afte
 - Missing feature object → fail closed; live preserved.
 - Missing/restricted label object → fail closed; no label body in errors; live preserved.
 - Corrupted object / wrong manifest or seal hash → fail closed; live preserved.
-- Interrupted recovery / failed atomic promote → previous package preserved.
+- Interrupted recovery / failed release-pointer promote → previous package preserved.
 - No Odds API or live-data fallback.
 - No regenerate-substitutes path for frozen holdout.
 

@@ -46,7 +46,7 @@ python scripts/ncaam/recover_2425_sealed_holdout_from_r2.py \
   --governed-evaluator --authorize-unseal
 ```
 
-Flow: hydrate → staging → verify inventory+locked hashes → reseal (frozen v1.1 identity) → atomic promote. Live seal never unlinked first. Credential-free receipt.
+Flow: hydrate → staging → verify inventory+locked hashes → reseal (frozen v1.1 identity) → **release-pointer promote** (materialize immutable `releases/<id>/`, then atomically switch single `CURRENT` symlink). Live seal never unlinked first. Multi-file live `os.replace` is **not** atomic and is not used for cutover. Credential-free receipt. Python `default_package_inventory()` is SoT; checked-in refs JSON must match.
 
 ## Forensic (non-authoritative)
 

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 """Path B authoritative disaster recovery — hydrate frozen v1.1 packages from private R2.
 
-Phase 2.6F CR4 (Ryan LOCKED):
+Phase 2.6F CR4/CR5 (Ryan LOCKED):
   R2 hydrate → staging → verify inventory + locked hashes
-  → reseal (frozen v1.1 identity) → atomic promote only after pass.
+  → reseal (frozen v1.1 identity) → release-pointer promote only after pass.
 
-Live seal is never unlinked first. Failures preserve the previous package.
-Credential-free receipt. No Odds API / live-data fallback.
+Live seal is never unlinked first. Failures preserve the previous package
+(CURRENT pointer unchanged). Inventory SoT is Python default_package_inventory();
+checked-in r2_object_refs must match. Credential-free receipt. No Odds API /
+live-data fallback.
 
 CoS provisions buckets/upload separately. This script reads env-driven endpoint /
 bucket / prefix placeholders and locked refs — it does NOT invent credentials.
@@ -38,7 +40,7 @@ if str(WEB_SRC) not in sys.path:
     sys.path.insert(0, str(WEB_SRC))
 
 from ncaam_lab.holdout_2425 import constants as C  # noqa: E402
-from ncaam_lab.holdout_2425.path_b_promote import PromoteVerificationError  # noqa: E402
+from ncaam_lab.holdout_2425.path_b_promote import PromoteError, PromoteVerificationError  # noqa: E402
 from ncaam_lab.holdout_2425.path_b_r2_recovery import (  # noqa: E402
     RecoveryError,
     recover_from_r2,
@@ -61,18 +63,87 @@ from ncaam_lab.holdout_2425.r2_storage_contract import (  # noqa: E402
 REFS_PATH = C.OUT_ROOT / "r2_object_refs" / "r2_object_refs_v1.json"
 
 
-def _load_inventory() -> List[Dict[str, Any]]:
-    """Prefer PR-B refs inventory when present; else default contract placeholders."""
-    if REFS_PATH.exists():
-        refs = json.loads(REFS_PATH.read_text(encoding="utf-8"))
-        if "package_inventory" in refs:
-            inv = refs["package_inventory"]
-            if isinstance(inv, dict) and "objects" in inv:
-                return list(inv["objects"])
-        if "cr4_package_inventory_objects" in refs:
-            return list(refs["cr4_package_inventory_objects"])
-    return list(default_package_inventory()["objects"])
+def _canonical_object_fingerprint(obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Stable subset used to compare Python SoT vs checked-in refs inventory."""
+    keys = (
+        "role",
+        "bucket",
+        "expected_content_sha256",
+        "cas_key",
+        "fixed_key",
+        "sidecar_file_sha256",
+        "sidecar_text_sha256_of_seal_file",
+        "logical_path",
+        "upload_status",
+        "retention",
+    )
+    return {k: obj.get(k) for k in keys if k in obj or k in ("cas_key", "fixed_key")}
 
+
+def _load_inventory() -> List[Dict[str, Any]]:
+    """Canonical inventory = Python default_package_inventory() (CoS-verified).
+
+    Checked-in r2_object_refs JSON must match when present. Never prefer stale
+    PENDING_COS / null-CAS placeholders over the verified Python contract.
+    """
+    canonical = list(default_package_inventory()["objects"])
+    if not REFS_PATH.exists():
+        return canonical
+
+    refs = json.loads(REFS_PATH.read_text(encoding="utf-8"))
+    checked_in: List[Dict[str, Any]] | None = None
+    if "package_inventory" in refs:
+        inv = refs["package_inventory"]
+        if isinstance(inv, dict) and "objects" in inv:
+            checked_in = list(inv["objects"])
+    if checked_in is None and "cr4_package_inventory_objects" in refs:
+        checked_in = list(refs["cr4_package_inventory_objects"])
+
+    if checked_in is None:
+        return canonical
+
+    # Lockstep gate: checked-in objects must equal Python SoT fingerprints.
+    can_by_role = {o["role"]: _canonical_object_fingerprint(o) for o in canonical}
+    ref_by_role = {o["role"]: _canonical_object_fingerprint(o) for o in checked_in}
+    if set(can_by_role) != set(ref_by_role):
+        raise SystemExit(
+            json.dumps(
+                {
+                    "status": "REFUSED_INVENTORY_DRIFT",
+                    "error": "checked-in r2_object_refs roles != Python default_package_inventory",
+                    "python_roles": sorted(can_by_role),
+                    "refs_roles": sorted(ref_by_role),
+                    "credentials_included": False,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+    drift = []
+    for role in sorted(can_by_role):
+        if can_by_role[role] != ref_by_role[role]:
+            drift.append(
+                {
+                    "role": role,
+                    "python": can_by_role[role],
+                    "refs_json": ref_by_role[role],
+                }
+            )
+    if drift:
+        raise SystemExit(
+            json.dumps(
+                {
+                    "status": "REFUSED_INVENTORY_DRIFT",
+                    "error": "checked-in package_inventory does not match verified Python SoT",
+                    "drift": drift,
+                    "credentials_included": False,
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+    # Prefer Python objects (single source); refs JSON verified equal.
+    return canonical
 
 def main(argv: List[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
@@ -172,6 +243,8 @@ def main(argv: List[str] | None = None) -> int:
         HydrateError,
         RecoveryError,
         PromoteVerificationError,
+        PromoteError,
+        OSError,
     ) as exc:
         receipt = getattr(
             exc,

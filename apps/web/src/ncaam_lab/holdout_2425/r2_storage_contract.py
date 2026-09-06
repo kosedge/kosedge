@@ -1,8 +1,11 @@
-"""Private R2 storage contract for frozen v1.1 holdout disaster recovery (Phase 2.6F CR4).
+"""Private R2 storage contract for frozen v1.1 holdout disaster recovery (Phase 2.6F CR4/CR5).
 
 CoS provisioned buckets and uploaded exact frozen bytes (verified PASS, fresh-download).
-This module documents the contract + uploaded CAS/object refs — env var *names* only;
-no credentials, secrets, or agent-side uploads.
+This module is the single source of truth for package inventory object entries.
+Checked-in `r2_object_refs/r2_object_refs_v1.json` package_inventory.objects MUST
+match `default_package_inventory()["objects"]` fingerprints (generated+verified).
+
+Env var *names* only — no credentials, secrets, or agent-side uploads.
 """
 
 from __future__ import annotations

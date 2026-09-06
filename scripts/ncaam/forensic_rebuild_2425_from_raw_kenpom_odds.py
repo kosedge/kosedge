@@ -12,7 +12,7 @@ Authoritative recovery is:
 This forensic script may rebuild into an isolated forensic output directory for
 drift investigation (e.g. B1). It refuses:
   - writing to the live sealed holdout tree
-  - atomic promote into live seal / live pack
+  - release-pointer promote into live seal / live pack (forensic MUST NOT)
   - claiming frozen v1.1 identity
   - Odds API live calls
 

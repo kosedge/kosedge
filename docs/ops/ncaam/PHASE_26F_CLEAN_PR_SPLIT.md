@@ -13,7 +13,7 @@ Includes prior CR3 plus CR4:
 
 - **Authoritative Path B recovery** = private R2 hydrate of exact frozen v1.1 packages (not regenerate from raw+KenPom+odds)
 - Features-bucket hydrate vs **separate label-vault** hydrate (builders fail closed)
-- Staging → verify inventory+locked hashes → reseal (frozen identity) → atomic promote; live seal never unlinked first
+- Staging → verify inventory+locked hashes → reseal (frozen identity) → release-pointer promote (`CURRENT` symlink); live seal never unlinked first
 - Credential-free recovery receipt; forensic raw+KenPom+odds script cannot promote frozen holdout
 - CR4 tests (mock R2): dual recovery identity, locked hashes, fail-closed missing/corrupt/restricted, interrupt/promote preserve, builders blocked, no Odds API fallback
 
@@ -28,7 +28,7 @@ Includes:
 - Schemas + contracts + Phase 2.6C thresholds (taxonomy relabel)
 - Foundation + phase26c unit tests
 - Rebuild/hydrate/verify/recover scripts + seal semantics + CR4 R2 DR docs
-- **Path B recovery (CR4):** R2 hydrate of exact frozen packages → staging → verify → reseal → atomic promote (builders cannot access label vault)
+- **Path B recovery (CR4/CR5):** R2 hydrate of exact frozen packages → staging → verify → reseal → release-pointer promote (builders cannot access label vault)
 - **Forensic only:** raw+KenPom+odds rebuild script cannot redefine/promote frozen holdout
 - **Raw fail-closed on build path:** missing/mismatched sidecars refuse sealing
 - Ops docs + allowlist
@@ -63,16 +63,16 @@ Excludes:
 
 ## Storage verdict (Phase 2.6F CR4 — dual private buckets)
 
-| Gate                         | Status                                               |
-| ---------------------------- | ---------------------------------------------------- |
-| Features bucket contract     | DOCUMENTED (`…-features-v1`) — CoS upload PENDING    |
-| Label vault contract         | DOCUMENTED (`…-label-vault-v1`) — CoS upload PENDING |
-| Public / r2.dev / custom dom | disabled / none (contract)                           |
-| Retention locks              | indefinite on frozen v1.1 prefixes (CoS)             |
-| Builder label-vault creds    | FORBIDDEN                                            |
-| Temporary credential in git  | ABSENT                                               |
-| Holdout seal                 | REMAINS SEALED                                       |
-| Legacy gap-recovery raw      | retained for forensic ESPN hydrate only              |
+| Gate                         | Status                                                  |
+| ---------------------------- | ------------------------------------------------------- |
+| Features bucket contract     | DOCUMENTED (`…-features-v1`) — CoS UPLOADED verified    |
+| Label vault contract         | DOCUMENTED (`…-label-vault-v1`) — CoS UPLOADED verified |
+| Public / r2.dev / custom dom | disabled / none (contract)                              |
+| Retention locks              | indefinite; provider_verified true (CoS)                |
+| Builder label-vault creds    | FORBIDDEN                                               |
+| Temporary credential in git  | ABSENT                                                  |
+| Holdout seal                 | REMAINS SEALED                                          |
+| Legacy gap-recovery raw      | retained for forensic ESPN hydrate only                 |
 
 Exact prefixes/hashes: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/` on PR B (CoS fills CAS keys post-upload).
 

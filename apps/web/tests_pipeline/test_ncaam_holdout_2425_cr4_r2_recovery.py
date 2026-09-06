@@ -29,7 +29,10 @@ from ncaam_lab.holdout_2425.locked_identity import (  # noqa: E402
     locked_expected_hashes,
 )
 from ncaam_lab.holdout_2425.path_b_promote import (  # noqa: E402
+    PromoteError,
     PromoteVerificationError,
+    resolve_current_release,
+    resolve_live_artifacts,
     sha256_file,
 )
 from ncaam_lab.holdout_2425.path_b_r2_recovery import (  # noqa: E402
@@ -50,6 +53,7 @@ from ncaam_lab.holdout_2425.r2_storage_contract import (  # noqa: E402
     FEATURES_BUCKET,
     LABEL_VAULT_BUCKET,
     ROLE_STAGING_RELPATH,
+    default_package_inventory,
 )
 from ncaam_lab.holdout_2425.seal_package import reseal_from_content_packages  # noqa: E402
 
@@ -394,6 +398,7 @@ def test_cr4_interrupted_recovery_preserves_previous_package(tmp_path):
 
 
 def test_cr4_failed_atomic_promotion_preserves_previous_package(tmp_path):
+    """Mid-promote failure (after first release dir copy) leaves all live artifacts intact."""
     store, inventory = _seed_store(tmp_path)
     live = tmp_path / "live_fail_promote"
     live.mkdir()
@@ -404,7 +409,23 @@ def test_cr4_failed_atomic_promotion_preserves_previous_package(tmp_path):
     (seal_dir / "seal_receipt.file_sha256").write_text("prevfilehash\n")
     pack = live / "pack.json"
     pack.write_bytes(b'{"previous":true}\n')
-    with pytest.raises(RecoveryError, match="injected promote failure"):
+    (live / "feature_package").mkdir()
+    feat_prev = b'{"previous":"features"}\n'
+    (live / "feature_package" / "features.json").write_bytes(feat_prev)
+    (live / "feature_package" / "feature_manifest.json").write_bytes(
+        b'{"previous":"feat_manifest"}\n'
+    )
+    (live / "label_package").mkdir()
+    lab_prev = b'{"previous":"labels"}\n'
+    (live / "label_package" / "labels.json").write_bytes(lab_prev)
+    (live / "label_package" / "label_manifest.json").write_bytes(
+        b'{"previous":"lab_manifest"}\n'
+    )
+    (live / "rejected").mkdir()
+    rej_prev = b'{"previous":"rejected"}\n'
+    (live / "rejected" / "rejected_events.json").write_bytes(rej_prev)
+
+    with pytest.raises((PromoteError, RecoveryError, OSError)):
         recover_from_r2(
             features_store=store,
             label_store=store,
@@ -415,10 +436,107 @@ def test_cr4_failed_atomic_promotion_preserves_previous_package(tmp_path):
             staging_root=tmp_path / "st_fail_promote",
             access_role=AccessRole.GOVERNED_EVALUATOR,
             authorize_unseal=True,
-            fail_promote=True,
+            fail_promote=True,  # mid-promote: after_dir:feature_package
         )
+    # CURRENT must not have switched.
+    assert resolve_current_release(live) is None
     assert (seal_dir / "seal_receipt.json").read_bytes() == prev
     assert pack.read_bytes() == b'{"previous":true}\n'
+    assert (live / "feature_package" / "features.json").read_bytes() == feat_prev
+    assert (live / "label_package" / "labels.json").read_bytes() == lab_prev
+    assert (live / "rejected" / "rejected_events.json").read_bytes() == rej_prev
+
+
+@pytest.mark.parametrize(
+    "fail_at",
+    [
+        "after_dir:feature_package",
+        "after_dir:label_package",
+        "after_dir:rejected",
+        "after_dir:seal",
+        "after_pack",
+        "after_materialize",
+        "before_pointer_switch",
+        "during_pointer_switch",
+    ],
+)
+def test_cr5_mid_promote_boundary_preserves_all_live_artifacts(tmp_path, fail_at):
+    store, inventory = _seed_store(tmp_path)
+    live = tmp_path / f"live_boundary_{fail_at.replace(':', '_')}"
+    live.mkdir()
+    seal_dir = live / "seal"
+    seal_dir.mkdir()
+    prev_seal = b'{"note":"previous-known-good","boundary":true}\n'
+    (seal_dir / "seal_receipt.json").write_bytes(prev_seal)
+    (seal_dir / "seal_receipt.file_sha256").write_bytes(b"prevfilehash\n")
+    pack = live / "pack.json"
+    prev_pack = b'{"previous":true,"pack":1}\n'
+    pack.write_bytes(prev_pack)
+    (live / "feature_package").mkdir()
+    prev_feat = b'{"previous":"features"}\n'
+    prev_feat_m = b'{"previous":"feat_manifest"}\n'
+    (live / "feature_package" / "features.json").write_bytes(prev_feat)
+    (live / "feature_package" / "feature_manifest.json").write_bytes(prev_feat_m)
+    (live / "label_package").mkdir()
+    prev_lab = b'{"previous":"labels"}\n'
+    prev_lab_m = b'{"previous":"lab_manifest"}\n'
+    (live / "label_package" / "labels.json").write_bytes(prev_lab)
+    (live / "label_package" / "label_manifest.json").write_bytes(prev_lab_m)
+    (live / "rejected").mkdir()
+    prev_rej = b'{"previous":"rejected"}\n'
+    (live / "rejected" / "rejected_events.json").write_bytes(prev_rej)
+
+    with pytest.raises((PromoteError, RecoveryError, OSError)):
+        recover_from_r2(
+            features_store=store,
+            label_store=store,
+            inventory_objects=inventory,
+            live_root=live,
+            live_pack_path=pack,
+            live_seal_dir=seal_dir,
+            staging_root=tmp_path / f"st_{fail_at.replace(':', '_')}",
+            access_role=AccessRole.GOVERNED_EVALUATOR,
+            authorize_unseal=True,
+            fail_at=fail_at,
+        )
+
+    assert resolve_current_release(live) is None
+    assert (seal_dir / "seal_receipt.json").read_bytes() == prev_seal
+    assert (seal_dir / "seal_receipt.file_sha256").read_bytes() == b"prevfilehash\n"
+    assert pack.read_bytes() == prev_pack
+    assert (live / "feature_package" / "features.json").read_bytes() == prev_feat
+    assert (
+        live / "feature_package" / "feature_manifest.json"
+    ).read_bytes() == prev_feat_m
+    assert (live / "label_package" / "labels.json").read_bytes() == prev_lab
+    assert (
+        live / "label_package" / "label_manifest.json"
+    ).read_bytes() == prev_lab_m
+    assert (live / "rejected" / "rejected_events.json").read_bytes() == prev_rej
+
+
+def test_cr5_successful_promote_uses_current_pointer(tmp_path):
+    store, inventory = _seed_store(tmp_path)
+    live, pack, seal_dir, receipt = _run_recovery(
+        tmp_path, store, inventory, run_id="pointer"
+    )
+    assert receipt["status"] == "RECOVERED_VERIFIED_PROMOTED"
+    assert receipt["promote"]["promotion_model"] == (
+        "immutable_release_plus_current_pointer"
+    )
+    assert receipt["promote"]["multi_file_live_replace_called_atomic"] is False
+    release = resolve_current_release(live)
+    assert release is not None
+    assert (release / "seal" / "seal_receipt.json").exists()
+    assert (release / pack.name).exists()
+    # Compat paths resolve through CURRENT.
+    assert (seal_dir / "seal_receipt.json").exists()
+    assert pack.exists()
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert arts["release_dir"] == release
+    assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
 
 
 def test_cr4_builders_cannot_access_label_vault(tmp_path):
@@ -619,3 +737,78 @@ def test_cr4_storage_contract_buckets_and_no_secrets():
     assert "aws_secret_access_key\": \"" not in text.lower()
     # No credential-looking blobs beyond env var names / account id.
     assert "r2_dev_access" in text
+
+
+def test_cr5_cli_load_inventory_matches_locked_uploaded_contract(tmp_path):
+    """Real CLI `_load_inventory()` must equal verified Python SoT (10/10 UPLOADED)."""
+    import importlib.util
+
+    path = REPO / "scripts" / "ncaam" / "recover_2425_sealed_holdout_from_r2.py"
+    spec = importlib.util.spec_from_file_location("recover_cli_cr5", path)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    from ncaam_lab.holdout_2425.r2_storage_contract import (
+        PACKAGE_INVENTORY_CONTENT_SHA256,
+        PROVENANCE_RECEIPT_CONTENT_SHA256,
+        SEAL_FILE_SIDECAR_FILE_SHA256,
+        cas_object_key,
+    )
+
+    # Without refs JSON: Python SoT.
+    loaded = mod._load_inventory()
+    canonical = default_package_inventory()["objects"]
+    assert [{k: o.get(k) for k in ("role", "cas_key", "upload_status", "expected_content_sha256")} for o in loaded] == [
+        {k: o.get(k) for k in ("role", "cas_key", "upload_status", "expected_content_sha256")}
+        for o in canonical
+    ]
+    assert len(loaded) == 10
+    assert all(o["upload_status"] == "UPLOADED" for o in loaded)
+    assert all(o.get("cas_key") for o in loaded)
+    by_role = {o["role"]: o for o in loaded}
+    locked = locked_expected_hashes()
+    assert by_role["feature_content"]["cas_key"] == cas_object_key(
+        locked["feature_content_sha256"]
+    )
+    assert by_role["seal_file_sidecar"]["cas_key"] == cas_object_key(
+        SEAL_FILE_SIDECAR_FILE_SHA256
+    )
+    assert by_role["seal_file_sidecar"]["expected_content_sha256"] == locked[
+        "seal_file_sha256"
+    ]
+    assert by_role["package_inventory"]["cas_key"] == cas_object_key(
+        PACKAGE_INVENTORY_CONTENT_SHA256
+    )
+    assert by_role["package_inventory"]["fixed_key"].endswith("package_inventory.json")
+    assert by_role["provenance_receipt"]["cas_key"] == cas_object_key(
+        PROVENANCE_RECEIPT_CONTENT_SHA256
+    )
+
+    # Matching checked-in inventory is accepted (lockstep).
+    refs_dir = tmp_path / "r2_object_refs"
+    refs_dir.mkdir()
+    refs_path = refs_dir / "r2_object_refs_v1.json"
+    refs_path.write_text(
+        json.dumps({"package_inventory": default_package_inventory()}, indent=2)
+        + "\n",
+        encoding="utf-8",
+    )
+    mod.REFS_PATH = refs_path
+    loaded2 = mod._load_inventory()
+    assert len(loaded2) == 10
+    assert all(o["upload_status"] == "UPLOADED" for o in loaded2)
+
+    # Stale PENDING_COS refs must refuse (not silently preferred).
+    stale = default_package_inventory()
+    for o in stale["objects"]:
+        o["upload_status"] = "PENDING_COS"
+        if o["role"] in ("seal_file_sidecar", "package_inventory", "provenance_receipt"):
+            o["cas_key"] = None
+    refs_path.write_text(
+        json.dumps({"package_inventory": stale}, indent=2) + "\n", encoding="utf-8"
+    )
+    with pytest.raises(SystemExit) as excinfo:
+        mod._load_inventory()
+    payload = str(excinfo.value)
+    assert "REFUSED_INVENTORY_DRIFT" in payload

@@ -967,7 +967,7 @@ def test_clean_checkout_path_b_rebuild_without_preseeded_seal(tmp_path, monkeypa
 
 
 # ---------------------------------------------------------------------------
-# Phase 2.6F CR3 — Path B determinism + atomic promote
+# Phase 2.6F CR3 — Path B determinism + release-pointer promote
 # ---------------------------------------------------------------------------
 
 
@@ -1370,7 +1370,7 @@ def test_cr3_mismatch_refuses_promotion_preserves_live_seal(tmp_path):
     assert live_side.read_bytes() == live_side_bytes
     assert json.loads(live_seal_path.read_text())["note"] == "previous-known-good"
 
-    # Control: only an explicit promote call changes live seal (atomic replace).
+    # Control: only an explicit promote call changes live seal (release + CURRENT).
     promote_staging_to_live(
         staging_root=staging,
         staging_pack_path=staging_pack,
