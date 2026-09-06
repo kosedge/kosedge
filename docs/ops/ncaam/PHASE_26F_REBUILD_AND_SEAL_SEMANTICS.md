@@ -25,6 +25,7 @@ Enterprise path **B**: deterministically rebuild sealed packages + canonical sch
 3. Staging is verified against locked expected hashes (pack + content + manifests + seal payload/file).
 4. **Atomic promote** (`os.replace`) only after verification passes; seal is promoted last.
 5. On any mismatch/failure: refuse promotion and **preserve** the previous live seal.
+6. **CR3(b) proof:** tip content bytes (features/labels/rejected/pack) asserted equal to locked content/pack hashes, then manifests+seal rebuilt via `reseal_from_content_packages` (real identity path) and checked with `locked_expected_hashes()`. Live `ingest_window` `datetime.now` does **not** affect Path B `ingest_from_raw_dir` hashed pack when as_of is frozen.
 
 ```bash
 python scripts/ncaam/hydrate_2425_sealed_holdout_from_r2.py --dry-run

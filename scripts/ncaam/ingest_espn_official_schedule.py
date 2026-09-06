@@ -377,6 +377,8 @@ def ingest_from_raw_dir(
     # Frozen v1.1 as_of for locked 2024-25 pack identity; other seasons may override.
     if as_of is None:
         if season_key == "2024-25":
+            # Keep literal in-file so Path B identity does not depend on importing
+            # ncaam_lab from this scripts/ entrypoint; must match locked_identity.V1_1_CANONICAL_PACK_AS_OF.
             as_of = "2026-09-05T11:28Z"
         else:
             as_of = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%MZ")

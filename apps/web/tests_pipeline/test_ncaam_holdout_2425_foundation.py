@@ -1104,9 +1104,20 @@ def test_cr3_identical_inputs_byte_identical_artifacts_two_runs(tmp_path, monkey
     assert b0 == b1
 
 
-def test_cr3_rebuild_matches_locked_expected_hashes():
-    """CR3(b): frozen v1.1 identity reproduces locked pack/manifest/seal hashes."""
-    from ncaam_lab.holdout_2425.io_util import write_json
+def test_cr3_rebuild_matches_locked_expected_hashes(tmp_path):
+    """CR3(b): real reseal/Path-B identity path reproduces locked hashes.
+
+    Not a hand-built constants round-trip. Materialize sealed v1.1 tip content
+    bytes, assert they already equal LOCKED_*_CONTENT / pack hashes, then rebuild
+    manifests+seal through reseal_from_content_packages (real write_json + frozen
+    sealed_at). Verify pack+content+manifest+seal via locked_expected_hashes().
+
+    Also documents: Path B ingest_from_raw_dir uses frozen as_of for 2024-25 —
+    live ESPN ingest_window datetime.now does not enter the hashed pack identity.
+    """
+    import importlib.util
+    import subprocess
+
     from ncaam_lab.holdout_2425.locked_identity import (
         LOCKED_CANONICAL_PACK_SHA256,
         LOCKED_FEATURE_CONTENT_SHA256,
@@ -1116,102 +1127,150 @@ def test_cr3_rebuild_matches_locked_expected_hashes():
         LOCKED_REJECTED_SHA256,
         LOCKED_SEAL_FILE_SHA256,
         LOCKED_SEAL_PAYLOAD_SHA256,
-        V1_1_FEATURE_SEALED_AT,
-        V1_1_LABEL_SEALED_AT,
-        V1_1_SEAL_SEALED_AT,
+        SEALED_V1_1_CONTENT_FETCH_REF,
+        SEALED_V1_1_CONTENT_GIT_SHA,
+        V1_1_CANONICAL_PACK_AS_OF,
         locked_expected_hashes,
     )
     from ncaam_lab.holdout_2425.path_b_promote import (
-        seal_payload_sha256,
+        collect_staging_hashes,
+        sha256_file,
         verify_against_locked,
     )
+    from ncaam_lab.holdout_2425.seal_package import reseal_from_content_packages
 
-    # Tip-discovered locks (do not invent).
-    assert LOCKED_SEAL_PAYLOAD_SHA256 == (
-        "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84"
-    )
-    assert LOCKED_SEAL_FILE_SHA256 == (
-        "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2"
-    )
-    assert LOCKED_FEATURE_CONTENT_SHA256 == (
-        "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940"
-    )
-    assert LOCKED_LABEL_CONTENT_SHA256 == (
-        "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12"
-    )
-    assert LOCKED_FEATURE_MANIFEST_SHA256 == (
-        "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9"
-    )
-    assert LOCKED_LABEL_MANIFEST_SHA256 == (
-        "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0"
-    )
-    assert LOCKED_CANONICAL_PACK_SHA256 == (
-        "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e"
-    )
+    repo = WEB_ROOT.parent.parent
 
-    feature_manifest = {
-        "content_sha256": LOCKED_FEATURE_CONTENT_SHA256,
-        "holdout_id": HOLDOUT_ID,
-        "n_complete_intersection": 3334,
-        "n_rows": 5769,
-        "note": "PIT inputs + static metadata only; no final scores",
-        "package": "feature",
-        "path": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
-        "schema_version": "ncaam-holdout-feature-v1",
-        "sealed_at": V1_1_FEATURE_SEALED_AT,
-        "window": {"end": "2025-04-08", "start": "2024-11-04"},
+    def _ensure_sealed_content_commit() -> str:
+        """Return a local SHA that has sealed v1.1 tip content blobs."""
+        # Prefer already-local object; else fetch PR #491 tip (same content SHA).
+        probe = subprocess.run(
+            ["git", "cat-file", "-e", f"{SEALED_V1_1_CONTENT_GIT_SHA}^{{commit}}"],
+            cwd=repo,
+            capture_output=True,
+        )
+        if probe.returncode == 0:
+            return SEALED_V1_1_CONTENT_GIT_SHA
+        fetched = subprocess.run(
+            ["git", "fetch", "--no-tags", "origin", SEALED_V1_1_CONTENT_FETCH_REF],
+            cwd=repo,
+            capture_output=True,
+            text=True,
+        )
+        if fetched.returncode != 0:
+            pytest.fail(
+                "CR3(b) requires sealed v1.1 tip content commit "
+                f"{SEALED_V1_1_CONTENT_GIT_SHA} (or fetchable {SEALED_V1_1_CONTENT_FETCH_REF}). "
+                f"fetch_stderr={fetched.stderr.strip()}"
+            )
+        # FETCH_HEAD / explicit rev after fetch
+        sha = subprocess.check_output(
+            ["git", "rev-parse", "FETCH_HEAD"], cwd=repo, text=True
+        ).strip()
+        assert sha.startswith(SEALED_V1_1_CONTENT_GIT_SHA[:12]) or sha == SEALED_V1_1_CONTENT_GIT_SHA
+        return SEALED_V1_1_CONTENT_GIT_SHA
+
+    content_sha = _ensure_sealed_content_commit()
+    tip_paths = {
+        "features": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
+        "labels": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
+        "rejected": "data/ops/lab/ncaam/holdout_2024_25/rejected/rejected_events.json",
+        "pack": (
+            "services/model-service/src/services/ncaam_schedule/data/"
+            "ncaam_official_schedule_2024_25.json"
+        ),
     }
-    label_manifest = {
-        "content_sha256": LOCKED_LABEL_CONTENT_SHA256,
-        "holdout_id": HOLDOUT_ID,
-        "n_label_present": 5769,
-        "n_rows": 5769,
-        "note": "Evaluation labels only; must not be joined to predictions in Phase 2.6A",
-        "package": "label",
-        "path": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
-        "schema_version": "ncaam-holdout-label-v1",
-        "sealed_at": V1_1_LABEL_SEALED_AT,
-        "window": {"end": "2025-04-08", "start": "2024-11-04"},
-    }
-    import tempfile
-    from pathlib import Path as P
 
-    with tempfile.TemporaryDirectory() as td:
-        root = P(td)
-        fm_sha = write_json(root / "feature_manifest.json", feature_manifest)
-        lm_sha = write_json(root / "label_manifest.json", label_manifest)
-        assert fm_sha == LOCKED_FEATURE_MANIFEST_SHA256
-        assert lm_sha == LOCKED_LABEL_MANIFEST_SHA256
+    staging = tmp_path / "cr3b_staging"
+    feat_dir = staging / "feature_package"
+    lab_dir = staging / "label_package"
+    rej_dir = staging / "rejected"
+    feat_dir.mkdir(parents=True)
+    lab_dir.mkdir(parents=True)
+    rej_dir.mkdir(parents=True)
 
-        seal = {
-            "feature_content_sha256": LOCKED_FEATURE_CONTENT_SHA256,
-            "feature_manifest_sha256": fm_sha,
-            "features_labels_joined_for_evaluation": False,
-            "holdout_id": HOLDOUT_ID,
-            "label_content_sha256": LOCKED_LABEL_CONTENT_SHA256,
-            "label_manifest_sha256": lm_sha,
-            "n_complete_intersection": 3334,
-            "n_features": 5769,
-            "n_labels": 5769,
-            "n_rejected": 2435,
-            "package_schema_version": "ncaam-holdout-package-v1",
-            "rejected_sha256": LOCKED_REJECTED_SHA256,
-            "sealed_at": V1_1_SEAL_SEALED_AT,
-        }
-        payload = seal_payload_sha256(seal)
-        assert payload == LOCKED_SEAL_PAYLOAD_SHA256
-        seal["seal_payload_sha256"] = payload
-        file_sha = write_json(root / "seal_receipt.json", seal)
-        assert file_sha == LOCKED_SEAL_FILE_SHA256
+    def _materialize(rel: str, dest: Path) -> bytes:
+        blob = subprocess.check_output(["git", "show", f"{content_sha}:{rel}"], cwd=repo)
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes(blob)
+        return blob
 
-        actual = {
-            **locked_expected_hashes(),
-            "feature_manifest_sha256": fm_sha,
-            "label_manifest_sha256": lm_sha,
-            "seal_payload_sha256": payload,
-            "seal_file_sha256": file_sha,
-        }
-        verify_against_locked(actual)
+    feat_bytes = _materialize(tip_paths["features"], feat_dir / "features.json")
+    lab_bytes = _materialize(tip_paths["labels"], lab_dir / "labels.json")
+    rej_bytes = _materialize(tip_paths["rejected"], rej_dir / "rejected_events.json")
+    pack_path = staging / "ncaam_official_schedule_2024_25.json"
+    pack_bytes = _materialize(tip_paths["pack"], pack_path)
+
+    # Tip content must already equal locked content / pack identities.
+    assert hashlib.sha256(feat_bytes).hexdigest() == LOCKED_FEATURE_CONTENT_SHA256
+    assert hashlib.sha256(lab_bytes).hexdigest() == LOCKED_LABEL_CONTENT_SHA256
+    assert hashlib.sha256(rej_bytes).hexdigest() == LOCKED_REJECTED_SHA256
+    assert hashlib.sha256(pack_bytes).hexdigest() == LOCKED_CANONICAL_PACK_SHA256
+    pack_obj = json.loads(pack_bytes)
+    assert pack_obj["as_of"] == V1_1_CANONICAL_PACK_AS_OF
+    assert "rebuild_mode" not in (pack_obj.get("source_detail") or {})
+
+    # Real identity rebuild path — not hand-assembled seal dicts.
+    seal = reseal_from_content_packages(out_root=staging)
+    assert seal["feature_content_sha256"] == LOCKED_FEATURE_CONTENT_SHA256
+    assert seal["label_content_sha256"] == LOCKED_LABEL_CONTENT_SHA256
+    assert seal["rejected_sha256"] == LOCKED_REJECTED_SHA256
+    assert seal["feature_manifest_sha256"] == LOCKED_FEATURE_MANIFEST_SHA256
+    assert seal["label_manifest_sha256"] == LOCKED_LABEL_MANIFEST_SHA256
+    assert seal["seal_payload_sha256"] == LOCKED_SEAL_PAYLOAD_SHA256
+    assert seal["seal_file_sha256"] == LOCKED_SEAL_FILE_SHA256
+    assert sha256_file(staging / "seal" / "seal_receipt.json") == LOCKED_SEAL_FILE_SHA256
+
+    actual = collect_staging_hashes(
+        staging_root=staging, staging_pack_path=pack_path
+    )
+    assert actual == locked_expected_hashes()
+    verify_against_locked(actual)
+
+    # Path B pack identity: frozen as_of; live ingest_window datetime.now is irrelevant.
+    ingest_path = repo / "scripts" / "ncaam" / "ingest_espn_official_schedule.py"
+    spec = importlib.util.spec_from_file_location("ingest_espn_cr3b", ingest_path)
+    ingest = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(ingest)
+    src = Path(ingest_path).read_text(encoding="utf-8")
+    # ingest_from_raw_dir body uses frozen 2024-25 as_of (not datetime.now for that season).
+    assert 'as_of = "2026-09-05T11:28Z"' in src or "V1_1_CANONICAL_PACK_AS_OF" in src or (
+        'season_key == "2024-25"' in src and "2026-09-05T11:28Z" in src
+    )
+    assert "datetime.now" in src  # live ingest_window still stamps wall-clock
+    fixture = (
+        repo
+        / "data"
+        / "ops"
+        / "lab"
+        / "ncaam"
+        / "holdout_2024_25"
+        / "fixtures"
+        / "espn_scoreboard_fixture_day.json"
+    )
+    fixture_sha = fixture.with_suffix(".sha256")
+    raw = tmp_path / "raw_cr3b"
+    raw.mkdir()
+    (raw / "espn_scoreboard_2024-11-04.json").write_bytes(fixture.read_bytes())
+    (raw / "espn_scoreboard_2024-11-04.sha256").write_text(
+        fixture_sha.read_text(encoding="utf-8"), encoding="utf-8"
+    )
+    p1 = ingest.ingest_from_raw_dir(
+        season_key="2024-25",
+        raw_dir=raw,
+        start=date(2024, 11, 4),
+        end=date(2025, 4, 8),
+    )
+    p2 = ingest.ingest_from_raw_dir(
+        season_key="2024-25",
+        raw_dir=raw,
+        start=date(2024, 11, 4),
+        end=date(2025, 4, 8),
+    )
+    assert p1["as_of"] == V1_1_CANONICAL_PACK_AS_OF == p2["as_of"]
+    assert p1 == p2
+    assert "rebuild_mode" not in (p1.get("source_detail") or {})
 
 
 def test_cr3_mismatch_refuses_promotion_preserves_live_seal(tmp_path):

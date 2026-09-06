@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 from typing import Any
 
@@ -18,13 +19,168 @@ from ncaam_lab.holdout_2425.constants import (
     WINDOW_END,
     WINDOW_START,
 )
-from ncaam_lab.holdout_2425.io_util import write_json
+from ncaam_lab.holdout_2425.io_util import sha256_file, write_json
 from ncaam_lab.holdout_2425.locked_identity import (
     V1_1_FEATURE_SEALED_AT,
     V1_1_LABEL_SEALED_AT,
     V1_1_SEAL_SEALED_AT,
 )
 from ncaam_lab.holdout_2425.schedule_normalize import outcome_label_ok
+
+
+def _live_rel_path(filename: str, fallback: Path) -> str:
+    """Identity path is always the live package path (not staging)."""
+    live_map = {
+        "features.json": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
+        "labels.json": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
+    }
+    if filename in live_map:
+        return live_map[filename]
+    try:
+        return str(fallback.relative_to(REPO))
+    except ValueError:
+        return fallback.as_posix()
+
+
+def write_manifests_and_seal(
+    *,
+    feature_dir: Path,
+    label_dir: Path,
+    rejected_dir: Path,
+    seal_dir: Path,
+    features: list[dict[str, Any]],
+    labels: list[dict[str, Any]],
+    rejected: list[dict[str, Any]],
+    feature_content_sha256: str,
+    label_content_sha256: str,
+    rejected_sha256: str,
+) -> dict[str, Any]:
+    """Write feature/label manifests + seal via real write_json (frozen v1.1 sealed_at).
+
+    Content files are assumed already on disk; this rebuilds only the hashed
+    identity layer (manifests + seal payload/file).
+    """
+    feature_dir.mkdir(parents=True, exist_ok=True)
+    label_dir.mkdir(parents=True, exist_ok=True)
+    rejected_dir.mkdir(parents=True, exist_ok=True)
+    seal_dir.mkdir(parents=True, exist_ok=True)
+
+    feat_path = feature_dir / "features.json"
+    lab_path = label_dir / "labels.json"
+
+    feature_manifest = {
+        "holdout_id": HOLDOUT_ID,
+        "package": "feature",
+        "schema_version": FEATURE_SCHEMA_VERSION,
+        "window": {"start": WINDOW_START.isoformat(), "end": WINDOW_END.isoformat()},
+        "n_rows": len(features),
+        "n_complete_intersection": sum(
+            1 for f in features if f["eligibility_flags"]["complete_intersection"]
+        ),
+        "content_sha256": feature_content_sha256,
+        "path": _live_rel_path("features.json", feat_path),
+        "sealed_at": V1_1_FEATURE_SEALED_AT,
+        "note": "PIT inputs + static metadata only; no final scores",
+    }
+    label_manifest = {
+        "holdout_id": HOLDOUT_ID,
+        "package": "label",
+        "schema_version": LABEL_SCHEMA_VERSION,
+        "window": {"start": WINDOW_START.isoformat(), "end": WINDOW_END.isoformat()},
+        "n_rows": len(labels),
+        "n_label_present": sum(1 for L in labels if L.get("label_present")),
+        "content_sha256": label_content_sha256,
+        "path": _live_rel_path("labels.json", lab_path),
+        "sealed_at": V1_1_LABEL_SEALED_AT,
+        "note": "Evaluation labels only; must not be joined to predictions in Phase 2.6A",
+    }
+    fm_sha = write_json(feature_dir / "feature_manifest.json", feature_manifest)
+    lm_sha = write_json(label_dir / "label_manifest.json", label_manifest)
+
+    seal = {
+        "holdout_id": HOLDOUT_ID,
+        "package_schema_version": PACKAGE_SCHEMA_VERSION,
+        "feature_manifest_sha256": fm_sha,
+        "label_manifest_sha256": lm_sha,
+        "feature_content_sha256": feature_content_sha256,
+        "label_content_sha256": label_content_sha256,
+        "rejected_sha256": rejected_sha256,
+        "n_features": len(features),
+        "n_labels": len(labels),
+        "n_rejected": len(rejected),
+        "n_complete_intersection": feature_manifest["n_complete_intersection"],
+        "features_labels_joined_for_evaluation": False,
+        "sealed_at": V1_1_SEAL_SEALED_AT,
+    }
+    seal_path = seal_dir / "seal_receipt.json"
+    seal_payload_sha = write_json(seal_path, seal)
+    seal["seal_payload_sha256"] = seal_payload_sha
+    seal_file_sha = write_json(seal_path, seal)
+    (seal_dir / "seal_receipt.file_sha256").write_text(
+        seal_file_sha + "\n", encoding="utf-8"
+    )
+    return {
+        **seal,
+        "seal_file_sha256": seal_file_sha,
+    }
+
+
+def reseal_from_content_packages(
+    *,
+    out_root: Path | None = None,
+    feature_dir: Path | None = None,
+    label_dir: Path | None = None,
+    rejected_dir: Path | None = None,
+    seal_dir: Path | None = None,
+) -> dict[str, Any]:
+    """Rebuild manifests + seal from existing tip content files (real identity path).
+
+    Does not invent content: features.json / labels.json / rejected_events.json
+    must already be present. Hashes content bytes on disk, then writes manifests
+    and seal through write_manifests_and_seal (frozen v1.1 sealed_at).
+    """
+    if out_root is not None:
+        feature_dir = out_root / "feature_package"
+        label_dir = out_root / "label_package"
+        rejected_dir = out_root / "rejected"
+        seal_dir = out_root / "seal"
+    feature_dir = feature_dir or FEATURE_DIR
+    label_dir = label_dir or LABEL_DIR
+    rejected_dir = rejected_dir or REJECTED_DIR
+    seal_dir = seal_dir or SEAL_DIR
+
+    feat_path = feature_dir / "features.json"
+    lab_path = label_dir / "labels.json"
+    rej_path = rejected_dir / "rejected_events.json"
+    for p in (feat_path, lab_path, rej_path):
+        if not p.exists():
+            raise FileNotFoundError(f"reseal requires tip content file: {p}")
+
+    features = json.loads(feat_path.read_text(encoding="utf-8"))
+    labels = json.loads(lab_path.read_text(encoding="utf-8"))
+    rejected = json.loads(rej_path.read_text(encoding="utf-8"))
+    if not isinstance(features, list) or not isinstance(labels, list):
+        raise ValueError("features.json / labels.json must be JSON arrays")
+    if not isinstance(rejected, list):
+        raise ValueError("rejected_events.json must be a JSON array")
+
+    # Content identity = on-disk bytes (tip content), not a re-serialize.
+    feat_sha = sha256_file(feat_path)
+    lab_sha = sha256_file(lab_path)
+    rej_sha = sha256_file(rej_path)
+
+    return write_manifests_and_seal(
+        feature_dir=feature_dir,
+        label_dir=label_dir,
+        rejected_dir=rejected_dir,
+        seal_dir=seal_dir,
+        features=features,
+        labels=labels,
+        rejected=rejected,
+        feature_content_sha256=feat_sha,
+        label_content_sha256=lab_sha,
+        rejected_sha256=rej_sha,
+    )
 
 
 def build_feature_and_label_packages(
@@ -160,75 +316,15 @@ def build_feature_and_label_packages(
     lab_sha = write_json(lab_path, labels)
     rej_sha = write_json(rej_path, rejected)
 
-    def _rel(p: Path) -> str:
-        # Identity path is always the live package path (not staging), so manifest
-        # hashes remain stable across staging rebuilds.
-        live_map = {
-            "features.json": "data/ops/lab/ncaam/holdout_2024_25/feature_package/features.json",
-            "labels.json": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
-        }
-        if p.name in live_map:
-            return live_map[p.name]
-        try:
-            return str(p.relative_to(REPO))
-        except ValueError:
-            return p.as_posix()
-
-    feature_manifest = {
-        "holdout_id": HOLDOUT_ID,
-        "package": "feature",
-        "schema_version": FEATURE_SCHEMA_VERSION,
-        "window": {"start": WINDOW_START.isoformat(), "end": WINDOW_END.isoformat()},
-        "n_rows": len(features),
-        "n_complete_intersection": sum(
-            1 for f in features if f["eligibility_flags"]["complete_intersection"]
-        ),
-        "content_sha256": feat_sha,
-        "path": _rel(feat_path),
-        "sealed_at": V1_1_FEATURE_SEALED_AT,
-        "note": "PIT inputs + static metadata only; no final scores",
-    }
-    label_manifest = {
-        "holdout_id": HOLDOUT_ID,
-        "package": "label",
-        "schema_version": LABEL_SCHEMA_VERSION,
-        "window": {"start": WINDOW_START.isoformat(), "end": WINDOW_END.isoformat()},
-        "n_rows": len(labels),
-        "n_label_present": sum(1 for L in labels if L.get("label_present")),
-        "content_sha256": lab_sha,
-        "path": _rel(lab_path),
-        "sealed_at": V1_1_LABEL_SEALED_AT,
-        "note": "Evaluation labels only; must not be joined to predictions in Phase 2.6A",
-    }
-    fm_sha = write_json(feature_dir / "feature_manifest.json", feature_manifest)
-    lm_sha = write_json(label_dir / "label_manifest.json", label_manifest)
-
-    # Seal membership payload — hash this body BEFORE inserting any self-hash field.
-    seal = {
-        "holdout_id": HOLDOUT_ID,
-        "package_schema_version": PACKAGE_SCHEMA_VERSION,
-        "feature_manifest_sha256": fm_sha,
-        "label_manifest_sha256": lm_sha,
-        "feature_content_sha256": feat_sha,
-        "label_content_sha256": lab_sha,
-        "rejected_sha256": rej_sha,
-        "n_features": len(features),
-        "n_labels": len(labels),
-        "n_rejected": len(rejected),
-        "n_complete_intersection": feature_manifest["n_complete_intersection"],
-        "features_labels_joined_for_evaluation": False,
-        "sealed_at": V1_1_SEAL_SEALED_AT,
-    }
-    seal_path = seal_dir / "seal_receipt.json"
-    # seal_payload_sha256 = SHA-256 of canonical JSON without the hash field itself.
-    # The on-disk file hash differs once the field is inserted; that file digest is
-    # recorded externally (sidecar / build_summary), never claimed as the payload hash.
-    seal_payload_sha = write_json(seal_path, seal)
-    seal["seal_payload_sha256"] = seal_payload_sha
-    seal_file_sha = write_json(seal_path, seal)
-    seal_file_sidecar = seal_dir / "seal_receipt.file_sha256"
-    seal_file_sidecar.write_text(seal_file_sha + "\n", encoding="utf-8")
-    return {
-        **seal,
-        "seal_file_sha256": seal_file_sha,
-    }
+    return write_manifests_and_seal(
+        feature_dir=feature_dir,
+        label_dir=label_dir,
+        rejected_dir=rejected_dir,
+        seal_dir=seal_dir,
+        features=features,
+        labels=labels,
+        rejected=rejected,
+        feature_content_sha256=feat_sha,
+        label_content_sha256=lab_sha,
+        rejected_sha256=rej_sha,
+    )

@@ -45,6 +45,12 @@ LOCKED_REJECTED_SHA256 = (
     "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d"
 )
 
+# Sealed v1.1 tip content commit (features/labels/rejected/pack bytes). Clean A/B
+# strip bulk content from git; CR3(b) recovers these exact bytes from this ref.
+# Same tip as origin/cursor/ncaam-2425-sealed-holdout-73d9 and refs/pull/491/head.
+SEALED_V1_1_CONTENT_GIT_SHA = "2d51cdcdc0d0d87c185352388f1ea891992b24f3"
+SEALED_V1_1_CONTENT_FETCH_REF = "refs/pull/491/head"
+
 
 def locked_expected_hashes() -> Dict[str, str]:
     return {
