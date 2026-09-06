@@ -1,0 +1,66 @@
+{
+  "sport": "nfl",
+  "season": 2026,
+  "contract": {
+    "eligible": "desk PLAY/LEAN only (writer packages / stamped desk SoT)",
+    "edge_board_tag_plays": "excluded unless also on desk card",
+    "juice": "best available pre-kick among Compare Odds books; never invent flat \u2212110",
+    "stake_play_u": 1.0,
+    "stake_lean_u": 0.5,
+    "pushes": "profit 0; stake excluded from risked",
+    "segments": "PLAY-only, LEAN-only, and All each expose ATS + ROI"
+  },
+  "as_of": "2026-09-06T16:59:10Z",
+  "ledger_path": "data/desk-record/nfl/2026/ledger.jsonl",
+  "n_tickets": 0,
+  "n_open": 0,
+  "play_ats": {
+    "w": 0,
+    "l": 0,
+    "p": 0
+  },
+  "play_ats_str": "0-0-0",
+  "lean_ats": {
+    "w": 0,
+    "l": 0,
+    "p": 0
+  },
+  "lean_ats_str": "0-0-0",
+  "combined_ats": {
+    "w": 0,
+    "l": 0,
+    "p": 0
+  },
+  "combined_ats_str": "0-0-0",
+  "play_roi": {
+    "status": "empty",
+    "profit_u": 0.0,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 0,
+    "n_stamped_juice": 0,
+    "note": "No settled W/L tickets with stake at risk yet."
+  },
+  "lean_roi": {
+    "status": "empty",
+    "profit_u": 0.0,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 0,
+    "n_stamped_juice": 0,
+    "note": "No settled W/L tickets with stake at risk yet."
+  },
+  "combined_roi": {
+    "status": "empty",
+    "profit_u": 0.0,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 0,
+    "n_stamped_juice": 0,
+    "note": "No settled W/L tickets with stake at risk yet."
+  },
+  "open_ticket_ids": []
+}

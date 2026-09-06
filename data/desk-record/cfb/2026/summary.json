@@ -1,0 +1,68 @@
+{
+  "sport": "cfb",
+  "season": 2026,
+  "contract": {
+    "eligible": "desk PLAY/LEAN only (writer packages / stamped desk SoT)",
+    "edge_board_tag_plays": "excluded unless also on desk card",
+    "juice": "best available pre-kick among Compare Odds books; never invent flat \u2212110",
+    "stake_play_u": 1.0,
+    "stake_lean_u": 0.5,
+    "pushes": "profit 0; stake excluded from risked",
+    "segments": "PLAY-only, LEAN-only, and All each expose ATS + ROI"
+  },
+  "as_of": "2026-09-06T16:59:10Z",
+  "ledger_path": "data/desk-record/cfb/2026/ledger.jsonl",
+  "n_tickets": 10,
+  "n_open": 1,
+  "play_ats": {
+    "w": 4,
+    "l": 3,
+    "p": 1
+  },
+  "play_ats_str": "4-3-1",
+  "lean_ats": {
+    "w": 0,
+    "l": 1,
+    "p": 0
+  },
+  "lean_ats_str": "0-1-0",
+  "combined_ats": {
+    "w": 4,
+    "l": 4,
+    "p": 1
+  },
+  "combined_ats_str": "4-4-1",
+  "play_roi": {
+    "status": "DATA_GAP",
+    "profit_u": null,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 7,
+    "n_stamped_juice": 0,
+    "note": "Settled W/L tickets lack stamped pre-kick juice \u2014 no flat \u2212110 invent."
+  },
+  "lean_roi": {
+    "status": "DATA_GAP",
+    "profit_u": null,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 1,
+    "n_stamped_juice": 0,
+    "note": "Settled W/L tickets lack stamped pre-kick juice \u2014 no flat \u2212110 invent."
+  },
+  "combined_roi": {
+    "status": "DATA_GAP",
+    "profit_u": null,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 8,
+    "n_stamped_juice": 0,
+    "note": "Settled W/L tickets lack stamped pre-kick juice \u2014 no flat \u2212110 invent."
+  },
+  "open_ticket_ids": [
+    "cfb-2026-w1-wsu-wash-spread-play"
+  ]
+}

@@ -80,6 +80,9 @@ const nextConfig: NextConfig = {
     "/pro/power-ratings/[sport]": ["../../data/ops/**/*"],
     "/pro/clv-tracker": ["../../data/ops/**/*"],
     "/pro/model-transparency": ["../../data/ops/**/*"],
+    // Public desk ATS/ROI record — ledger SoT under data/desk-record.
+    "/record/[sport]": ["../../data/desk-record/**/*"],
+    "/api/cron/desk-record-refresh": ["../../data/desk-record/**/*"],
     "/pro/nfl/news": ["../../content/writers/news-breaks-2026/**/*"],
     "/pro/nfl/news/[slug]": ["../../content/writers/news-breaks-2026/**/*"],
     "/pro/desk": ["../../content/writers/desk-2026/**/*"],
