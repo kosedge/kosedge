@@ -11,10 +11,10 @@ This is a **product record page**, not SEO acquisition (#13 faucet stays OFF). S
 
 ## Eligibility (fail-closed)
 
-| Counts | Does not count |
-| ------ | -------------- |
+| Counts                                                                                           | Does not count                                         |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
 | Desk **PLAY** / **LEAN** from writer packages / stamped desk SoT (`content/writers/desk-2026/…`) | Edge Board Tag PLAY/LEAN that never made the desk card |
-| Desk-tagged **totals** only when the package tagged PLAY/LEAN total | Pass / context / board lag |
+| Desk-tagged **totals** only when the package tagged PLAY/LEAN total                              | Pass / context / board lag                             |
 
 Stake convention until changed: **PLAY = 1.0u**, **LEAN = 0.5u**.
 
@@ -31,12 +31,12 @@ Stake convention until changed: **PLAY = 1.0u**, **LEAN = 0.5u**.
 
 ## Settlement math
 
-| Result | Profit | Risked denominator |
-| ------ | ------ | ------------------ |
-| W | `stake ×` American win payout | include stake |
-| L | `−stake` | include stake |
-| P | `0` | **exclude** stake |
-| OPEN | null | excluded until settled |
+| Result | Profit                        | Risked denominator     |
+| ------ | ----------------------------- | ---------------------- |
+| W      | `stake ×` American win payout | include stake          |
+| L      | `−stake`                      | include stake          |
+| P      | `0`                           | **exclude** stake      |
+| OPEN   | null                          | excluded until settled |
 
 Combined ROI = `sum(profit_u) / sum(risked_u)` over tickets with stamped juice and W/L only. If every settled W/L lacks juice → season ROI status **DATA_GAP**.
 

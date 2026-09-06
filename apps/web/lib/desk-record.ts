@@ -152,10 +152,8 @@ function parseTicket(raw: Record<string, unknown>): DeskRecordTicket | null {
         ? raw.profit_u
         : null,
     juice_status: juiceStatus,
-    final_away:
-      typeof raw.final_away === "number" ? raw.final_away : null,
-    final_home:
-      typeof raw.final_home === "number" ? raw.final_home : null,
+    final_away: typeof raw.final_away === "number" ? raw.final_away : null,
+    final_home: typeof raw.final_home === "number" ? raw.final_home : null,
     source_package: String(raw.source_package ?? ""),
     notes: raw.notes == null ? null : String(raw.notes),
   };
@@ -198,7 +196,11 @@ function computeRoi(settled: DeskRecordTicket[]): DeskRoiSummary {
 
   for (const t of settled) {
     if (t.result === "P") continue;
-    if (t.juice == null || t.juice_status === "DATA_GAP" || Math.abs(t.juice) < 100) {
+    if (
+      t.juice == null ||
+      t.juice_status === "DATA_GAP" ||
+      Math.abs(t.juice) < 100
+    ) {
       dataGapRoi += 1;
       continue;
     }
@@ -254,10 +256,14 @@ export function summarizeDeskTickets(
   season: number,
 ): DeskRecordSummary {
   const playSettled = tickets.filter(
-    (t) => t.grade === "PLAY" && (t.result === "W" || t.result === "L" || t.result === "P"),
+    (t) =>
+      t.grade === "PLAY" &&
+      (t.result === "W" || t.result === "L" || t.result === "P"),
   );
   const leanSettled = tickets.filter(
-    (t) => t.grade === "LEAN" && (t.result === "W" || t.result === "L" || t.result === "P"),
+    (t) =>
+      t.grade === "LEAN" &&
+      (t.result === "W" || t.result === "L" || t.result === "P"),
   );
   const openTickets = tickets.filter((t) => t.result === "OPEN");
   const playAll = tickets.filter((t) => t.grade === "PLAY");
@@ -334,7 +340,10 @@ export function formatSideLine(side: string, line: number): string {
   return `${side} ${signed}`;
 }
 
-export function formatJuice(juice: number | null, status: DeskJuiceStatus): string {
+export function formatJuice(
+  juice: number | null,
+  status: DeskJuiceStatus,
+): string {
   if (status === "DATA_GAP" || juice == null) return "DATA GAP";
   const n = Math.round(juice);
   return n > 0 ? `+${n}` : String(n);

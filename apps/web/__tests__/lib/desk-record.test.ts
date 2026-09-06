@@ -116,9 +116,9 @@ describe("desk-record contract", () => {
     expect(summary.segments.play.tickets).toHaveLength(9);
     expect(summary.segments.lean.tickets).toHaveLength(1);
     expect(summary.segments.all.tickets).toHaveLength(10);
-    expect(summary.tickets.every((t) => t.grade === "PLAY" || t.grade === "LEAN")).toBe(
-      true,
-    );
+    expect(
+      summary.tickets.every((t) => t.grade === "PLAY" || t.grade === "LEAN"),
+    ).toBe(true);
     expect(formatAts(summary.play_ats)).toBe("4-3-1");
   });
 

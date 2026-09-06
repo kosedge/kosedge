@@ -196,7 +196,9 @@ export default async function DeskRecordPage({
           </p>
         ) : empty ? (
           <section className="mt-10 rounded-2xl border border-white/10 bg-white/[0.03] p-6">
-            <h2 className="text-lg font-semibold text-kos-gold">No tickets yet</h2>
+            <h2 className="text-lg font-semibold text-kos-gold">
+              No tickets yet
+            </h2>
             <p className="mt-2 text-sm leading-6 text-white/70">
               Honest empty — no desk PLAY/LEAN ledger rows for {label} {SEASON}.
               CFB Week 1 is seeded from desk packages; other sports stay blank
@@ -382,14 +384,12 @@ export default async function DeskRecordPage({
           </ul>
           <p className="mt-4">
             Ops note:{" "}
-            <Link
-              href="/methodology"
-              className="text-kos-gold hover:underline"
-            >
+            <Link href="/methodology" className="text-kos-gold hover:underline">
               Methodology
             </Link>
             {" · "}
-            machine SoT under <code className="text-white/70">data/desk-record/</code>
+            machine SoT under{" "}
+            <code className="text-white/70">data/desk-record/</code>
             {" · "}
             <code className="text-white/70">docs/DESK_ATS_ROI_RECORD.md</code>
           </p>

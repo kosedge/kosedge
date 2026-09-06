@@ -48,7 +48,8 @@ export async function GET(req: Request) {
       ok: true,
       mode: "read_only_summary",
       note: "Ledger settles via morning commit; this stub does not invent juice or rewrite FS.",
-      rebuild: "python3 scripts/desk-record/rebuild_summary.py --sport cfb --season 2026",
+      rebuild:
+        "python3 scripts/desk-record/rebuild_summary.py --sport cfb --season 2026",
       docs: "docs/DESK_ATS_ROI_RECORD.md",
       summary: rest,
     },
