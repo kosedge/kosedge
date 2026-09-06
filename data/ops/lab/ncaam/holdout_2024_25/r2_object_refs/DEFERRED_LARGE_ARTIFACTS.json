@@ -103,7 +103,13 @@
     }
   ],
   "manual_placement_of_seal_or_schedule_pack": false,
-  "note": "Round-2: sealed packages + canonical 2024-25 schedule pack are path-B rebuildable from governed ESPN raw (R2 hydrate) + in-repo KenPom/odds. Do not manually place hash-only seal artifacts. Raw ESPN remains R2-backed.",
+  "note": "Round-3 CR3: sealed packages + canonical 2024-25 schedule pack are path-B rebuildable with frozen v1.1 identity timestamps; staging\u2192verify\u2192atomic promote. Do not manually place hash-only seal artifacts. Raw ESPN remains R2-backed.",
+  "path_b_cr3": {
+    "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+    "frozen_v1_1_identity_timestamps": true,
+    "live_seal_never_unlinked_before_verify": true,
+    "staging_verify_atomic_promote": true
+  },
   "recovery_path": "B_deterministic_rebuild_from_governed_inputs",
-  "updated_at_utc": "2026-09-06T19:58:55.369084Z"
+  "updated_at_utc": "2026-09-06T21:39:00Z"
 }
