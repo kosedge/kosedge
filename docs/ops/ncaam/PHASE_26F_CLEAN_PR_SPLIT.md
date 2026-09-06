@@ -1,20 +1,21 @@
 # Phase 2.6F — clean PR A/B split (execution)
 
-**Status:** ACCEPTANCE FIX IN PROGRESS — CR3 Path B determinism + atomic promote (A′′′/B′′′); do not merge; #491 untouched
+**Status:** ACCEPTANCE FIX IN PROGRESS — CR4 Path B authoritative R2 disaster recovery (A/B); do not merge; #490/#491/#496/#497 untouched
 **Supersedes plan-only:** `PR491_SPLIT_MIGRATION_PLAN_26C.md` (plan retained for history)  
 **Does not close:** PR #491 (remains draft until Ryan reviews A/B + parity)  
 **Prior drafts:** #496 / #497 failed acceptance — replaced by clean A'/B' branches from current `deploy-vercel` (no fat JSON ancestor `7ced9f10` in merge history).
 
-## PR A′′′ — Code foundation (CR3)
+## PR A — Code foundation (CR4 on CR3)
 
 Branch: `cursor/ncaam-26f-foundation-fix-8a49`
 
-Includes prior A′′ fixes plus:
+Includes prior CR3 plus CR4:
 
-- **Frozen v1.1 identity timestamps** in hashed pack / manifest / seal (no `datetime.now()` in membership)
-- **Path B staging → verify → atomic promote**; live seal never unlinked before successful verification
-- Locked expected hashes incl. canonical pack `4016f2ab…`
-- CR3 tests: two-run byte identity, locked-hash match, failed-promote preserves seal
+- **Authoritative Path B recovery** = private R2 hydrate of exact frozen v1.1 packages (not regenerate from raw+KenPom+odds)
+- Features-bucket hydrate vs **separate label-vault** hydrate (builders fail closed)
+- Staging → verify inventory+locked hashes → reseal (frozen identity) → atomic promote; live seal never unlinked first
+- Credential-free recovery receipt; forensic raw+KenPom+odds script cannot promote frozen holdout
+- CR4 tests (mock R2): dual recovery identity, locked hashes, fail-closed missing/corrupt/restricted, interrupt/promote preserve, builders blocked, no Odds API fallback
 
 Includes:
 
@@ -26,11 +27,13 @@ Includes:
 - **KenPom PIT:** locked filename-as-of policy; both bridged teams + AdjEM/AdjT required
 - Schemas + contracts + Phase 2.6C thresholds (taxonomy relabel)
 - Foundation + phase26c unit tests
-- Rebuild/hydrate/verify scripts + seal semantics doc
-- **Path B recovery:** deterministic rebuild of schedule pack + seal from governed ESPN raw + in-repo KenPom/odds (no manual placement)
+- Rebuild/hydrate/verify/recover scripts + seal semantics + CR4 R2 DR docs
+- **Path B recovery (CR4):** R2 hydrate of exact frozen packages → staging → verify → reseal → atomic promote (builders cannot access label vault)
+- **Forensic only:** raw+KenPom+odds rebuild script cannot redefine/promote frozen holdout
 - **Raw fail-closed on build path:** missing/mismatched sidecars refuse sealing
 - Ops docs + allowlist
 - Tiny synthetic fixtures only
+- B1 drift forensic note (Alex ownership; no B1 code changes)
 
 Excludes:
 
@@ -58,17 +61,20 @@ Excludes:
 - Secrets / API tokens / S3 credentials
 - Any ancestor commit containing oversized ops JSON dumps
 
-## Storage verdict (Phase 2.6F storage portion — complete)
+## Storage verdict (Phase 2.6F CR4 — dual private buckets)
 
-| Gate                         | Status            |
-| ---------------------------- | ----------------- |
-| R2 upload                    | GREEN             |
-| Fresh-download verification  | GREEN             |
-| Retention controls           | PROVIDER_VERIFIED |
-| Temporary credential revoked | GREEN             |
-| Holdout seal                 | REMAINS SEALED    |
+| Gate                         | Status                                               |
+| ---------------------------- | ---------------------------------------------------- |
+| Features bucket contract     | DOCUMENTED (`…-features-v1`) — CoS upload PENDING    |
+| Label vault contract         | DOCUMENTED (`…-label-vault-v1`) — CoS upload PENDING |
+| Public / r2.dev / custom dom | disabled / none (contract)                           |
+| Retention locks              | indefinite on frozen v1.1 prefixes (CoS)             |
+| Builder label-vault creds    | FORBIDDEN                                            |
+| Temporary credential in git  | ABSENT                                               |
+| Holdout seal                 | REMAINS SEALED                                       |
+| Legacy gap-recovery raw      | retained for forensic ESPN hydrate only              |
 
-Exact prefixes/hashes: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/` on PR B'.
+Exact prefixes/hashes: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/` on PR B (CoS fills CAS keys post-upload).
 
 ## Hard stops (this phase)
 
@@ -76,4 +82,8 @@ Exact prefixes/hashes: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/` on P
 - No B2-PACE-NEUTRAL-v1
 - No merge / deploy / model change
 - No rewrite / close / force-push of PR #491
-- No touch of PR #490
+- No touch of PR #490 / #496 / #497
+- No cloud-agent real R2 upload / no secrets in git
+- No Odds API / live-data fallback for holdout recovery
+- Forensic rebuild must not promote frozen holdout
+- No B1 code changes (forensic note only)
