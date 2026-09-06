@@ -1,6 +1,6 @@
 {
   "audit_commit_is_post_audit": true,
-  "audited_at_utc": "2026-09-06T22:15Z",
+  "audited_at_utc": "2026-09-06T22:38:21Z",
   "audited_commits": [
     "44c7a7aa4109572dfd049d7ca48f67a8178cd48c",
     "aa13b09ef8815eca3292b0f8482dcaed8830074a",
@@ -27,7 +27,7 @@
   "credential_scrub_receipt_scanned": true,
   "expected_n_audited_commits": 12,
   "fat_json_ancestor_7ced9f10_in_history": false,
-  "note": "Honest binding: audited_commits lists every B commit on the parent tip (44c7a7aa4109572dfd049d7ca48f67a8178cd48c) before this HISTORY_AUDIT docs commit. The audit commit SHA is post-audit and intentionally excluded (no self-reference fakery). Final B HEAD = audited_parent_tip + this audit commit. stacked_on_a_head = A CR4 69800f22fddaa6053f9f54f5b88de63b4d7d1e40.",
+  "note": "Restacked on A tip after CR4 Prettier fix e90128c4",
   "oversized_blobs_gt_250kb": [],
   "path_b_cr3_determinism_atomic_promote": true,
   "path_b_cr3b_reseal_from_tip_content": true,
@@ -36,13 +36,14 @@
   "path_b_recovery": true,
   "raw_espn_paths": [],
   "resolution": {
-    "commits_command": "git log --format=%H cursor/ncaam-26f-foundation-fix-8a49..cursor/ncaam-26f-governance-fix-8a49",
-    "head_command": "git rev-parse cursor/ncaam-26f-governance-fix-8a49"
+    "head_command": "git rev-parse cursor/ncaam-26f-governance-fix-8a49",
+    "commits_command": "git log --format=%H cursor/ncaam-26f-foundation-fix-8a49..cursor/ncaam-26f-governance-fix-8a49"
   },
   "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
   "seal_file_sha256_legacy_key_seal_receipt_sha256": "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09",
   "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
-  "stacked_on_a_head": "69800f22fddaa6053f9f54f5b88de63b4d7d1e40",
+  "stacked_on_a_head": "e90128c457330cb2c1c95b79a1f6225b10492a67",
   "taxonomy_relabel": "confirmed_non_di_opponent \u2192 not_in_governed_pit_rating_universe",
-  "verdict": true
+  "verdict": true,
+  "covers_all_commits_on_final_B_HEAD": true
 }
