@@ -1,6 +1,6 @@
 {
   "audit_commit_is_post_audit": true,
-  "audited_at_utc": "2026-09-06T23:17:16Z",
+  "audited_at_utc": "2026-09-06T23:20:16Z",
   "audited_commits": [
     "b2804e7c32cbe374f9e8e6ba4ff6538cc78a75c1",
     "e66af241f83d1d8c7edb62270a23a67eb61dccc6",
@@ -16,9 +16,11 @@
     "88bb02550374f3922dfafa2c3610cee5ea97a5d4",
     "28c015e61d3ea0ceec453f0ae6ac80ac029dd8d6",
     "8023a4bf112b599ba9fadf09187bb1cf6035b17c",
-    "4b5898aebf7dd05a8f98c0aef0f1a501c0bfe71a"
+    "4b5898aebf7dd05a8f98c0aef0f1a501c0bfe71a",
+    "64f25e28c63b49f9e792a5acba0178528c0b69e6",
+    "96872a7385914000de9d9daca7f50643f4595f50"
   ],
-  "audited_parent_tip": "4b5898aebf7dd05a8f98c0aef0f1a501c0bfe71a",
+  "audited_parent_tip": "96872a7385914000de9d9daca7f50643f4595f50",
   "b1_drift_event_investigation": "OPEN_TODO_non_blocking",
   "base_for_history": "cursor/ncaam-26f-foundation-fix-8a49",
   "branch": "cursor/ncaam-26f-governance-fix-8a49",
@@ -30,9 +32,9 @@
   "credential_pattern_hits": [],
   "credential_scrub_receipt_contains_revocation_narrative_only": true,
   "credential_scrub_receipt_scanned": true,
-  "expected_n_audited_commits": 15,
+  "expected_n_audited_commits": 17,
   "fat_json_ancestor_7ced9f10_in_history": false,
-  "note": "CR5 restack on A tip f5e016e2; inventory 10/10 UPLOADED; release-pointer promote; HISTORY_AUDIT bound to A..HEAD^",
+  "note": "CI gate uses PR head SHA (not merge commit). Audit bound to A..HEAD^ where tip is this audit commit.",
   "oversized_blobs_gt_250kb": [],
   "path_b_cr3_determinism_atomic_promote": false,
   "path_b_cr3_release_pointer_promote": true,
