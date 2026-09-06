@@ -4,14 +4,14 @@
 
 ## Authoritative sealed artifacts
 
-| Artifact | Where | Exact ref |
-| --- | --- | --- |
-| ESPN scoreboard raw (312 objects) | R2 bucket `kosedge-ncaam-lab-gap-recovery-raw-v1` | prefix `ncaam/holdout_2024_25/espn_schedule_raw_v1/` — see `r2_object_refs/r2_object_refs_v1.json` (`cas_index_sha256`, `n_objects=312`) |
-| Seal membership payload hash | `seal/seal_receipt.json` → `seal_payload_sha256` | `af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84` |
-| Seal on-disk file hash | external sidecar `seal/seal_receipt.file_sha256` (or verify script) | historically `1074731f…` when key was still `seal_receipt_sha256`; recomputed after rename |
-| Features / labels bulk | deferred / not git (hashes in manifests) | content sha in feature/label manifests |
-| Official schedule pack | deferred / not git OR local model-service path | `ncaam_official_schedule_2024_25.json` |
-| KenPom snapshots / odds parquet | local processed paths used by builder | `apps/web/data/processed/kenpom_snapshots`, `ncaab_historical_odds_open_close.parquet` |
+| Artifact                          | Where                                                               | Exact ref                                                                                                                                |
+| --------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| ESPN scoreboard raw (312 objects) | R2 bucket `kosedge-ncaam-lab-gap-recovery-raw-v1`                   | prefix `ncaam/holdout_2024_25/espn_schedule_raw_v1/` — see `r2_object_refs/r2_object_refs_v1.json` (`cas_index_sha256`, `n_objects=312`) |
+| Seal membership payload hash      | `seal/seal_receipt.json` → `seal_payload_sha256`                    | `af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84`                                                                       |
+| Seal on-disk file hash            | external sidecar `seal/seal_receipt.file_sha256` (or verify script) | historically `1074731f…` when key was still `seal_receipt_sha256`; recomputed after rename                                               |
+| Features / labels bulk            | deferred / not git (hashes in manifests)                            | content sha in feature/label manifests                                                                                                   |
+| Official schedule pack            | deferred / not git OR local model-service path                      | `ncaam_official_schedule_2024_25.json`                                                                                                   |
+| KenPom snapshots / odds parquet   | local processed paths used by builder                               | `apps/web/data/processed/kenpom_snapshots`, `ncaab_historical_odds_open_close.parquet`                                                   |
 
 ## Rebuild path (clean checkout)
 
