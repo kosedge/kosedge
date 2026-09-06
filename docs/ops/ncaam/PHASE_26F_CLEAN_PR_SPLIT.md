@@ -16,7 +16,6 @@ Includes prior A′′ fixes plus:
 - Locked expected hashes incl. canonical pack `4016f2ab…`
 - CR3 tests: two-run byte identity, locked-hash match, failed-promote preserves seal
 
-
 Includes:
 
 - Reusable holdout ingestion / normalize / venue / identity / seal / evaluator gate

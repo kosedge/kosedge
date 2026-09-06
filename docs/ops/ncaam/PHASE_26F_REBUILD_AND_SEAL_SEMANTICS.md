@@ -11,7 +11,7 @@
 | Seal on-disk file hash            | external sidecar `seal/seal_receipt.file_sha256` (or verify script) | `82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2` (legacy key era: `1074731f…`)                                         |
 | Feature / label content           | rebuilt from governed inputs (not git)                              | `8c9e7fff…` / `aa7e1088…`                                                                                                                |
 | Feature / label manifests         | `feature_package/` / `label_package/`                               | `f45c0438…` / `0893a9e2…`                                                                                                                |
-| Official schedule pack            | rebuilt from governed ESPN raw (path B)                             | `ncaam_official_schedule_2024_25.json` sha256 `4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e`                          |
+| Official schedule pack            | rebuilt from governed ESPN raw (path B)                             | `ncaam_official_schedule_2024_25.json` sha256 `4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e`                         |
 | KenPom snapshots / odds parquet   | in-repo processed paths used by builder                             | `apps/web/data/processed/kenpom_snapshots`, `ncaab_historical_odds_open_close.parquet`                                                   |
 
 ## Recovery path B (clean checkout) — locked
