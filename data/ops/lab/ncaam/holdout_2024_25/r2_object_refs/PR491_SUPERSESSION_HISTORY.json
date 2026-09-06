@@ -35,13 +35,15 @@
     "A": {
       "branch": "cursor/ncaam-holdout-foundation-d05b",
       "pr": 498,
-      "head": "0d4b0c95e4646d6b590faa2c1f23ec91cb7b40a8"
+      "head": "0d4b0c95e4646d6b590faa2c1f23ec91cb7b40a8",
+      "url": "https://github.com/kosedge/kosedge/pull/498"
     },
     "B": {
       "branch": "cursor/ncaam-holdout-governance-d05b",
-      "pr": null,
+      "pr": 499,
       "note": "this PR; stacked on A",
-      "head": "7e4a7384ab0b2e29cec1f2600db84e57f821e60f"
+      "head": "7e4a7384ab0b2e29cec1f2600db84e57f821e60f",
+      "url": "https://github.com/kosedge/kosedge/pull/499"
     }
   },
   "hard_prohibition": "Do not merge/close/rewrite/force-push/delete PR #491. Reference only.",
