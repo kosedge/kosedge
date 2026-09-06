@@ -202,7 +202,9 @@ jobs:
         run: python3 scripts/ops/truth_chain_audit.py --fixture data/ops/truth-chain-fixtures/step1_inventory.json
 
       - name: NCAAM HISTORY_AUDIT_PR_B stack gate
-        # CR5-3: recorded parent/list must equal HEAD^ and git rev-list A..HEAD^
+        # CR5-3: recorded parent/list must equal PR-head^ and git rev-list A..PR-head^
+        # IMPORTANT: pull_request checkout is a merge commit; HEAD^ is the base (A),
+        # not the B tip. Always evaluate against github.event.pull_request.head.sha.
         if: steps.paths.outputs.ncaam_hist_audit == '1'
         run: |
           set -euo pipefail
@@ -216,7 +218,11 @@ jobs:
             git fetch --no-tags origin cursor/ncaam-26f-foundation-fix-8a49 || true
             A_REF=origin/cursor/ncaam-26f-foundation-fix-8a49
           fi
-          python3 scripts/ncaam/check_history_audit_pr_b.py --a-ref "$A_REF"
+          HEAD_REF="${{ github.event.pull_request.head.sha }}"
+          if ! git cat-file -e "${HEAD_REF}^{commit}" 2>/dev/null; then
+            git fetch --no-tags origin "${HEAD_REF}" || true
+          fi
+          python3 scripts/ncaam/check_history_audit_pr_b.py --a-ref "$A_REF" --head-ref "$HEAD_REF"
 
       - name: Run tests (web changes only)
         if: steps.paths.outputs.web == '1'

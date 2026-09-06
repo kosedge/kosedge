@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
 """CI gate: HISTORY_AUDIT_PR_B must match final B stack (Phase 2.6F CR5-3).
 
-Ryan LOCKED comparison:
-  recorded audited_parent_tip == git rev-parse HEAD^
-  recorded audited_commits    == git rev-list --reverse A..HEAD^
+Ryan LOCKED comparison (against the PR head tip, NOT the merge commit):
+  recorded audited_parent_tip == git rev-parse <pr-head>^
+  recorded audited_commits    == git rev-list --reverse A..<pr-head>^
+
+On pull_request workflows, actions/checkout yields a merge commit where HEAD^
+is the base branch — callers MUST pass --head-ref $PR_HEAD_SHA.
 
 Fails closed on drift. Does not invent coverage.
 """
