@@ -1,0 +1,11 @@
+{
+  "authoritative_event_grain": "espn_game_id + tip_date + (home_team_id, away_team_id) schedule orientation",
+  "classification": {
+    "home_away_reversal_vs_schedule": 149,
+    "true_duplicate_row_or_event_id_collision": 4
+  },
+  "n_duplicate_conflicts": 153,
+  "scores_omitted": true,
+  "survivor_rule": "Schedule SoT orientation authoritative; reversed participants quarantined; never resolve via score/model performance.",
+  "unresolved_remain_quarantined": true
+}

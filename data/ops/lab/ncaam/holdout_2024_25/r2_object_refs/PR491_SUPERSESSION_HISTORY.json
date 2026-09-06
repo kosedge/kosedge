@@ -1,0 +1,30 @@
+{
+  "schema_version": "ncaam-pr491-supersession-v1",
+  "status": "PROPOSED_NOT_CLOSED",
+  "source_pr": 491,
+  "source_url": "https://github.com/kosedge/kosedge/pull/491",
+  "prior_attempt_prs": {
+    "A": {
+      "pr": 494,
+      "branch": "cursor/ncaam-holdout-foundation-26f",
+      "note": "superseded by -16f9"
+    },
+    "B": {
+      "pr": 495,
+      "branch": "cursor/ncaam-holdout-governance-26f",
+      "note": "superseded by -16f9; had upload_pending"
+    }
+  },
+  "replacement": {
+    "A": {
+      "branch": "cursor/ncaam-holdout-foundation-16f9",
+      "pr": 496
+    },
+    "B": {
+      "branch": "cursor/ncaam-holdout-governance-16f9",
+      "pr": null
+    }
+  },
+  "note": "Do not close/rewrite/force-push PR #491 until Ryan reviews clean replacements and parity evidence.",
+  "created_at_utc": "2026-09-06T19:34:37.242391Z"
+}

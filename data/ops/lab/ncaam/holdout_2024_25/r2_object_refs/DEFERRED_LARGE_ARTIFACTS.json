@@ -1,0 +1,51 @@
+{
+  "items": [
+    {
+      "path": "raw/espn_scoreboard/*",
+      "n": 312,
+      "bytes": 104782373,
+      "lives_in": "r2:ncaam/holdout_2024_25/espn_schedule_raw_v1/"
+    },
+    {
+      "path": "feature_package/features.json",
+      "bytes": 6595599,
+      "lives_in": "r2_or_local_sealed_only_not_git"
+    },
+    {
+      "path": "label_package/labels.json",
+      "bytes": 1320517,
+      "lives_in": "r2_or_local_sealed_only_not_git"
+    },
+    {
+      "path": "venue/venue_contract.json",
+      "bytes": 4613749,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "odds_audit/odds_audit_rows.json",
+      "bytes": 4234714,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "kenpom_audit/game_eligibility_rows.json",
+      "bytes": 2367631,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/offline_mac_recovery_manifest.json",
+      "bytes": 1209583,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/espn_reject_ledger.json",
+      "bytes": 576357,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "ncaam_official_schedule_2024_25.json",
+      "bytes": 5276769,
+      "lives_in": "deferred_not_git"
+    }
+  ],
+  "note": "These bulk artifacts from PR #491 are intentionally absent from clean PR A/B git history."
+}

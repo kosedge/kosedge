@@ -1,0 +1,171 @@
+{
+  "interpretation": "Non-DI opponent games are legitimate documented exclusions, not identity bugs.",
+  "n_rejects_reported": 530,
+  "n_samples_classified": 40,
+  "scores_omitted": true,
+  "taxonomy_on_sample": {
+    "non_di_opponent": 40
+  },
+  "top_unmapped_names": [
+    {
+      "count": 13,
+      "name": "Virginia Lynchburg Dragons"
+    },
+    {
+      "count": 6,
+      "name": "Life Pacific Warriors"
+    },
+    {
+      "count": 5,
+      "name": "Bethesda Flames"
+    },
+    {
+      "count": 5,
+      "name": "Champion Christian Tigers"
+    },
+    {
+      "count": 5,
+      "name": "College of Biblical Studies Ambassadors"
+    },
+    {
+      "count": 5,
+      "name": "East West Phantoms"
+    },
+    {
+      "count": 5,
+      "name": "Florida Tech Panthers"
+    },
+    {
+      "count": 5,
+      "name": "La Sierra Golden Eagles"
+    },
+    {
+      "count": 5,
+      "name": "St. Andrews Knights"
+    },
+    {
+      "count": 4,
+      "name": "Brescia Bearcats"
+    },
+    {
+      "count": 4,
+      "name": "Carolina University Bruins"
+    },
+    {
+      "count": 4,
+      "name": "Cheyney (PA) Wolves"
+    },
+    {
+      "count": 4,
+      "name": "Columbia International Rams"
+    },
+    {
+      "count": 4,
+      "name": "Dallas Christian Crusaders"
+    },
+    {
+      "count": 4,
+      "name": "Defiance Yellow Jackets"
+    },
+    {
+      "count": 4,
+      "name": "Mid Atlantic Christian Mustangs"
+    },
+    {
+      "count": 4,
+      "name": "Northern New Mexico Eagles"
+    },
+    {
+      "count": 4,
+      "name": "Northwest Indian RedHawks"
+    },
+    {
+      "count": 3,
+      "name": "Arkansas Baptist Buffaloes"
+    },
+    {
+      "count": 3,
+      "name": "Cleary University Cougars"
+    },
+    {
+      "count": 3,
+      "name": "Ecclesia Royals"
+    },
+    {
+      "count": 3,
+      "name": "Eureka Red Devils"
+    },
+    {
+      "count": 3,
+      "name": "Kentucky Christian Knights"
+    },
+    {
+      "count": 3,
+      "name": "Lincoln (CA) Oaklanders"
+    },
+    {
+      "count": 3,
+      "name": "Midway Eagles"
+    },
+    {
+      "count": 3,
+      "name": "Mississippi College Choctaws"
+    },
+    {
+      "count": 3,
+      "name": "Mount Marty Lancers"
+    },
+    {
+      "count": 3,
+      "name": "Mount Olive Trojans"
+    },
+    {
+      "count": 3,
+      "name": "Penn State Schuylkill Nittany Lions"
+    },
+    {
+      "count": 3,
+      "name": "Penn State Wilkes-Barre Mountain Lions"
+    },
+    {
+      "count": 3,
+      "name": "Regent Royals"
+    },
+    {
+      "count": 3,
+      "name": "Southern New Orleans Knights"
+    },
+    {
+      "count": 3,
+      "name": "St. Ambrose Fighting Bees"
+    },
+    {
+      "count": 3,
+      "name": "Stanislaus State Warriors"
+    },
+    {
+      "count": 3,
+      "name": "Toccoa Falls Eagles"
+    },
+    {
+      "count": 3,
+      "name": "Trinity College of Jacksonville Eagles"
+    },
+    {
+      "count": 2,
+      "name": "Alice Lloyd Eagles"
+    },
+    {
+      "count": 2,
+      "name": "Aquinas Saints"
+    },
+    {
+      "count": 2,
+      "name": "Arlington Baptist Patriots"
+    },
+    {
+      "count": 2,
+      "name": "Avila Eagles"
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "captured_note": "HISTORICAL_STATIC_RECONSTRUCTION for static/venue fields",
+  "immutable_raw_preserved": true,
+  "n_day_payloads": 156,
+  "n_day_receipts_indexed": 156,
+  "n_sha256_sidecars": 156,
+  "raw_dir": "data/ops/lab/ncaam/holdout_2024_25/raw/espn_scoreboard",
+  "source": "espn_scoreboard_public"
+}
