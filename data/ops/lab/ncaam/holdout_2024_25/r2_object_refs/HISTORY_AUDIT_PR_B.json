@@ -1,16 +1,18 @@
 {
   "audit_commit_is_post_audit": true,
-  "audited_at_utc": "2026-09-06T21:39Z",
+  "audited_at_utc": "2026-09-06T21:42Z",
   "audited_commits": [
-    "bb888a9d5cca18198bca27bc0eee38198dcda36b",
-    "0094b4c664ce4ab341a3ac003258a4224a4f643a",
-    "2604486a3b817d09805e42f49c8ce905a645d7dc",
-    "113470c51540343919047470bb48a0de9ffcc122",
-    "07b8a6a3809176d003788a5081c149b0915770e5",
-    "337339b10c97df34ad11513e8ef826a58a0b939f",
-    "1960e0768c45de5b13acdfd20667278c8bef9e75"
+    "ec2b2b434c9948bbc5e282addfb1aea67599900e",
+    "45202a3f7ac25f237e891d206df6aa90631944d0",
+    "981f386ff95f787fd260b8656e34068ea50a42dd",
+    "d91f31dae61a0b81dd73b7671176629bef2532eb",
+    "6f06eb1733c8a3d50d2c0160d8c59f4fcff3d52e",
+    "7a89bde0fbfb3744c95325a5651be09e19da6e7e",
+    "80323b39e22fdab643da8ac699a44d309e389701",
+    "a9e7b7481c98cccdb609ce8a3d22ab0bc7413034",
+    "bea80403f524d8fb258fbc9eb36dde6952ff49a1"
   ],
-  "audited_parent_tip": "bb888a9d5cca18198bca27bc0eee38198dcda36b",
+  "audited_parent_tip": "ec2b2b434c9948bbc5e282addfb1aea67599900e",
   "base_for_history": "cursor/ncaam-26f-foundation-fix-8a49",
   "branch": "cursor/ncaam-26f-governance-fix-8a49",
   "bulk_dataset_paths": [],
@@ -20,9 +22,9 @@
   "credential_pattern_hits": [],
   "credential_scrub_receipt_contains_revocation_narrative_only": true,
   "credential_scrub_receipt_scanned": true,
-  "expected_n_audited_commits": 7,
+  "expected_n_audited_commits": 9,
   "fat_json_ancestor_7ced9f10_in_history": false,
-  "note": "Honest binding: audited_commits lists every B commit on the parent tip (bb888a9d5cca18198bca27bc0eee38198dcda36b) before this HISTORY_AUDIT docs commit. The audit commit SHA is post-audit and intentionally excluded (no self-reference fakery). Final B HEAD = audited_parent_tip + this audit commit. stacked_on_a_head = A''' b45fe28a34581adc16f8327b9ebd0d016084894f.",
+  "note": "Honest binding: audited_commits lists every B commit on the parent tip (ec2b2b434c9948bbc5e282addfb1aea67599900e) before this HISTORY_AUDIT docs commit. The audit commit SHA is post-audit and intentionally excluded (no self-reference fakery). Final B HEAD = audited_parent_tip + this audit commit. stacked_on_a_head = A''' 83d79167b4b3f6b9eee5b9f2c3e32e67612948d1.",
   "oversized_blobs_gt_250kb": [],
   "path_b_cr3_determinism_atomic_promote": true,
   "path_b_recovery": true,
@@ -34,7 +36,7 @@
   "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
   "seal_file_sha256_legacy_key_seal_receipt_sha256": "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09",
   "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
-  "stacked_on_a_head": "b45fe28a34581adc16f8327b9ebd0d016084894f",
+  "stacked_on_a_head": "83d79167b4b3f6b9eee5b9f2c3e32e67612948d1",
   "taxonomy_relabel": "confirmed_non_di_opponent \u2192 not_in_governed_pit_rating_universe",
   "verdict": true
 }

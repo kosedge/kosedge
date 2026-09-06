@@ -10,13 +10,16 @@
     "path_b_frozen_v1_1_identity_timestamps",
     "path_b_staging_verify_atomic_promote",
     "kenpom_pit_policy",
-    "taxonomy_relabel_not_in_governed_pit_rating_universe"
+    "taxonomy_relabel_not_in_governed_pit_rating_universe",
+    "web_python_allowlist_cr3_modules"
   ],
-  "audited_at_utc": "2026-09-06T21:39Z",
+  "audited_at_utc": "2026-09-06T21:42Z",
   "base": "origin/deploy-vercel",
   "branch": "cursor/ncaam-26f-foundation-fix-8a49",
   "bulk_dataset_paths": [],
   "commits": [
+    "83d79167b4b3f6b9eee5b9f2c3e32e67612948d1",
+    "a713320356e2dd84c16b96bd02929da856d8c8a5",
     "b45fe28a34581adc16f8327b9ebd0d016084894f",
     "aafbeb7c53b3461d289a066685d14df138eeb265",
     "6c035c43ed199274737fd38caa5e4daea30846d9",
@@ -28,9 +31,9 @@
   "covers_all_commits_on_final_A_HEAD": true,
   "credential_pattern_hits": [],
   "fat_json_ancestor_7ced9f10_in_history": false,
-  "head": "b45fe28a34581adc16f8327b9ebd0d016084894f",
-  "n_commits": 7,
-  "note": "A tip is finalized on foundation branch before this B audit commit; A head SHA is exact (CR3 A''' determinism + atomic promote).",
+  "head": "83d79167b4b3f6b9eee5b9f2c3e32e67612948d1",
+  "n_commits": 9,
+  "note": "A tip is finalized on foundation branch before this B audit commit; A head SHA is exact (CR3 A''' + Prettier + allowlist).",
   "oversized_blobs_gt_250kb": [],
   "raw_espn_paths": [],
   "verdict": true
