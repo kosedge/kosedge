@@ -14,68 +14,6 @@
   "raw_espn_paths": [],
   "bulk_dataset_paths": [],
   "credential_pattern_hits": [],
-  "largest_blobs": [
-    {
-      "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
-      "bytes": 5179637
-    },
-    {
-      "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
-      "bytes": 3131670
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-latest.parquet",
-      "bytes": 343381
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260905T083657Z.parquet",
-      "bytes": 343381
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260905T083535Z.parquet",
-      "bytes": 343381
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T174056Z.parquet",
-      "bytes": 343381
-    },
-    {
-      "path": "data/ops/ncaam-odds-lake-backfill-20260905.early-receipt.json",
-      "bytes": 254631
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260905T083546Z.parquet",
-      "bytes": 227102
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260904T174105Z.parquet",
-      "bytes": 227102
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-latest.parquet",
-      "bytes": 227100
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260905T083659Z.parquet",
-      "bytes": 227100
-    },
-    {
-      "path": "data/ops/ncaam-odds-lake-backfill-20260905.hole-receipt.json",
-      "bytes": 186033
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T153604Z.parquet",
-      "bytes": 121991
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T151735Z.parquet",
-      "bytes": 121991
-    },
-    {
-      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260904T153617Z.parquet",
-      "bytes": 78814
-    }
-  ],
   "acceptance_fixes_present": [
     "governed_mascot_strip",
     "b1_timestamp_fail_closed",
@@ -85,5 +23,5 @@
     "taxonomy_relabel_not_in_governed_pit_rating_universe"
   ],
   "verdict": true,
-  "audited_at_utc": "2026-09-06T20:57:11Z"
+  "audited_at_utc": "2026-09-06T20:58:37Z"
 }

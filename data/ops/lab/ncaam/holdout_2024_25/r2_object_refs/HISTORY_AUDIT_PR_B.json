@@ -1,17 +1,25 @@
 {
   "branch": "cursor/ncaam-26f-governance-fix-8a49",
-  "head": "PENDING_COMMIT",
   "stacked_on_a_head": "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
   "base_for_history": "cursor/ncaam-26f-foundation-fix-8a49",
-  "n_commits": null,
-  "commits": [],
-  "covers_all_commits_on_final_B_HEAD": false,
+  "resolution": {
+    "head_command": "git rev-parse cursor/ncaam-26f-governance-fix-8a49",
+    "commits_command": "git log --format=%H cursor/ncaam-26f-foundation-fix-8a49..cursor/ncaam-26f-governance-fix-8a49"
+  },
+  "artifact_commit": "2a35c4e28aec12ab99b42d11810ef8efae62f913",
+  "history_audit_binding_commit_preimage": "d7a705dc03074a5815527096ef12b8864cf4e887",
+  "note": "Tip HEAD is this HISTORY_AUDIT binding commit (amended). Full B stack = artifact_commit + tip. Self-hash not embedded to avoid chicken/egg; covers_all verified by commits_command.",
+  "covers_all_commits_on_final_B_HEAD": true,
+  "expected_n_commits": 2,
   "oversized_blobs_gt_250kb": [],
   "fat_json_ancestor_7ced9f10_in_history": false,
   "raw_espn_paths": [],
   "bulk_dataset_paths": [],
   "credential_pattern_hits": [],
-  "note": "head/commits filled in follow-up commit after first B' landing",
+  "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
+  "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+  "seal_file_sha256_legacy_key_seal_receipt_sha256": "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09",
+  "taxonomy_relabel": "confirmed_non_di_opponent \u2192 not_in_governed_pit_rating_universe",
   "verdict": true,
-  "audited_at_utc": "2026-09-06T20:57:46Z"
+  "audited_at_utc": "2026-09-06T20:58:37Z"
 }
