@@ -1,50 +1,21 @@
 {
-  "schema_version": "ncaam-r2-storage-receipt-v2-cr4",
-  "status": "CONTRACT_DOCUMENTED_UPLOAD_PENDING_COS",
-  "phase": "2.6F-CR4",
-  "created_at_utc": "2026-09-06T22:10:00Z",
-  "credentials_included_in_receipt": false,
-  "cloud_agent_upload_attempted": false,
   "authority": "private_r2_exact_frozen_v1_1_bytes",
-  "do_not_regenerate_substitutes": true,
   "buckets": {
     "features": "kosedge-ncaam-holdout-2425-features-v1",
     "label_vault": "kosedge-ncaam-holdout-2425-label-vault-v1"
   },
-  "verdict": {
-    "features_bucket_contract": "DOCUMENTED",
-    "label_vault_contract": "DOCUMENTED",
-    "r2_upload": "PENDING_COS",
-    "fresh_download_verification": "PENDING_COS",
-    "retention_controls": "DOCUMENTED_PENDING_COS",
-    "public_access_disabled": true,
-    "r2_dev_disabled": true,
-    "custom_domains": "none",
-    "builders_receive_label_vault_credentials": false,
-    "holdout_remains_sealed": true
-  },
-  "hashes": {
-    "feature_content_sha256": "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940",
-    "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
-    "label_content_sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
-    "label_manifest_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
-    "rejected_sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
-    "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
-    "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
-    "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e"
-  },
+  "cloud_agent_upload_attempted": false,
   "confirmations": {
-    "credentials_included_in_receipt": false,
-    "no_access_keys_in_git": true,
-    "no_secret_keys_in_git": true,
     "cloud_agent_must_not_upload": true,
-    "cos_fills_cas_keys_after_upload": true
+    "cos_upload_verified_pass": true,
+    "credentials_included_in_receipt": false,
+    "inventory_sot": "apps/web/src/ncaam_lab/holdout_2425/r2_storage_contract.default_package_inventory",
+    "no_access_keys_in_git": true,
+    "no_secret_keys_in_git": true
   },
-  "legacy_gap_recovery_raw": {
-    "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
-    "status": "COMPLETE_FORENSIC_ONLY",
-    "note": "Does not redefine frozen holdout"
-  },
+  "created_at_utc": "2026-09-06T23:20:00Z",
+  "credentials_included_in_receipt": false,
+  "do_not_regenerate_substitutes": true,
   "forbidden_actions_not_performed": [
     "scoring",
     "unseal",
@@ -57,5 +28,135 @@
     "pr497_modification",
     "real_r2_upload_from_cloud_agent",
     "b1_code_changes"
-  ]
+  ],
+  "hashes": {
+    "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+    "feature_content_sha256": "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940",
+    "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
+    "label_content_sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+    "label_manifest_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+    "rejected_sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+    "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+    "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84"
+  },
+  "legacy_gap_recovery_raw": {
+    "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+    "note": "Does not redefine frozen holdout",
+    "status": "COMPLETE_FORENSIC_ONLY"
+  },
+  "package_inventory_objects": [
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940",
+      "expected_content_sha256": "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940",
+      "logical_path": "feature_package/features.json",
+      "retention": "indefinite",
+      "role": "feature_content",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
+      "expected_content_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
+      "logical_path": "feature_package/feature_manifest.json",
+      "retention": "indefinite",
+      "role": "feature_manifest",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-label-vault-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+      "expected_content_sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+      "logical_path": "label_package/labels.json",
+      "retention": "indefinite",
+      "role": "label_content",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-label-vault-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+      "expected_content_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+      "logical_path": "label_package/label_manifest.json",
+      "retention": "indefinite",
+      "role": "label_manifest",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+      "expected_content_sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+      "logical_path": "rejected/rejected_events.json",
+      "retention": "indefinite",
+      "role": "rejected",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+      "expected_content_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+      "logical_path": "ncaam_official_schedule_2024_25.json",
+      "retention": "indefinite",
+      "role": "canonical_pack",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+      "expected_content_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+      "logical_path": "seal/seal_receipt.json",
+      "retention": "indefinite",
+      "role": "seal_receipt",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/aa3e148703a5e23d5f82a9a74d143bb97d3e0c8b053754965f9de464d76967d8",
+      "expected_content_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+      "logical_path": "seal/seal_receipt.file_sha256",
+      "retention": "indefinite",
+      "role": "seal_file_sidecar",
+      "sidecar_file_sha256": "aa3e148703a5e23d5f82a9a74d143bb97d3e0c8b053754965f9de464d76967d8",
+      "sidecar_text_sha256_of_seal_file": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/51bc1ed2dd23e439d0f06d8f2602dae62555474edaf986866959eb6229590a5b",
+      "expected_content_sha256": "51bc1ed2dd23e439d0f06d8f2602dae62555474edaf986866959eb6229590a5b",
+      "fixed_key": "ncaam/holdout_2024_25/v1_1/package_inventory.json",
+      "logical_path": "inventory/package_inventory.json",
+      "retention": "indefinite",
+      "role": "package_inventory",
+      "upload_status": "UPLOADED"
+    },
+    {
+      "bucket": "kosedge-ncaam-holdout-2425-features-v1",
+      "cas_key": "ncaam/holdout_2024_25/v1_1/cas/25f2fc6e1c1cd8bb81b95ec84e867c315233f6ac9af7080b94a97cf1f18b8f19",
+      "expected_content_sha256": "25f2fc6e1c1cd8bb81b95ec84e867c315233f6ac9af7080b94a97cf1f18b8f19",
+      "fixed_key": "ncaam/holdout_2024_25/v1_1/provenance_receipt.json",
+      "logical_path": "inventory/provenance_receipt.json",
+      "retention": "indefinite",
+      "role": "provenance_receipt",
+      "upload_status": "UPLOADED"
+    }
+  ],
+  "phase": "2.6F-CR5",
+  "r2_account_id": "29e153aea94d9d3394f523bc9a3938cf",
+  "schema_version": "ncaam-r2-storage-receipt-v3-cr5",
+  "status": "UPLOADED_VERIFIED_PASS",
+  "verdict": {
+    "builders_receive_label_vault_credentials": false,
+    "custom_domains": "none",
+    "features_bucket_contract": "UPLOADED_VERIFIED",
+    "fresh_download_verification": "PASS",
+    "holdout_remains_sealed": true,
+    "label_vault_contract": "UPLOADED_VERIFIED",
+    "n_objects_pending_cos": 0,
+    "n_objects_uploaded": 10,
+    "public_access_disabled": true,
+    "r2_dev_disabled": true,
+    "r2_upload": "UPLOADED",
+    "retention_controls": "PROVIDER_VERIFIED",
+    "tokens_revoked": true
+  }
 }

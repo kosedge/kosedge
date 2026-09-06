@@ -1,60 +1,59 @@
 {
-  "schema_version": "ncaam-r2-retention-docs-v2-cr4",
-  "phase": "2.6F-CR4",
-  "created_at_utc": "2026-09-06T22:10:00Z",
-  "provider_verified": false,
-  "cos_applies_retention_locks": true,
-  "do_not_change_mid_phase": true,
-  "credentials_in_git": false,
   "buckets": [
     {
-      "name": "kosedge-ncaam-holdout-2425-features-v1",
-      "privacy": "private",
-      "public_access": "disabled",
-      "r2_dev_access": "disabled",
       "custom_domains": "none",
+      "lock_rule_name": "retain-holdout-2425-features-v1",
+      "name": "kosedge-ncaam-holdout-2425-features-v1",
       "prefix_specific_rules": [
         {
+          "impact": "narrow",
           "name": "retain-holdout-2425-features-v1_1-cas",
           "prefix": "ncaam/holdout_2024_25/v1_1/cas/",
           "retention": "indefinite",
           "scope": "prefix",
-          "impact": "narrow",
-          "status": "PENDING_COS"
+          "status": "PROVIDER_VERIFIED"
         },
         {
+          "impact": "narrow",
           "name": "retain-holdout-2425-features-v1_1-manifests",
           "prefix": "ncaam/holdout_2024_25/v1_1/manifests/",
           "retention": "indefinite",
           "scope": "prefix",
-          "impact": "narrow",
-          "status": "PENDING_COS"
+          "status": "PROVIDER_VERIFIED"
         }
-      ]
-    },
-    {
-      "name": "kosedge-ncaam-holdout-2425-label-vault-v1",
+      ],
       "privacy": "private",
       "public_access": "disabled",
-      "r2_dev_access": "disabled",
-      "custom_domains": "none",
+      "r2_dev_access": "disabled"
+    },
+    {
       "builder_access": "FORBIDDEN",
+      "custom_domains": "none",
+      "lock_rule_name": "retain-holdout-2425-label-vault-v1",
+      "name": "kosedge-ncaam-holdout-2425-label-vault-v1",
       "prefix_specific_rules": [
         {
+          "impact": "narrow",
           "name": "retain-holdout-2425-label-vault-v1_1-cas",
           "prefix": "ncaam/holdout_2024_25/v1_1/cas/",
           "retention": "indefinite",
           "scope": "prefix",
-          "impact": "narrow",
-          "status": "PENDING_COS"
+          "status": "PROVIDER_VERIFIED"
         }
-      ]
+      ],
+      "privacy": "private",
+      "public_access": "disabled",
+      "r2_dev_access": "disabled"
     }
   ],
+  "change_policy": "Do not modify mid-phase. CoS verified indefinite locks on frozen v1.1 prefixes. Future narrowing requires separate Ryan approval.",
+  "cos_applies_retention_locks": true,
+  "created_at_utc": "2026-09-06T23:20:00Z",
+  "credentials_in_git": false,
+  "do_not_change_mid_phase": true,
   "legacy_gap_recovery_raw": {
     "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
     "note": "FORENSIC ESPN raw only; not frozen holdout authority",
-    "provider_verified": true,
     "prefix_specific_rules": [
       {
         "name": "retain-gap-recovery-research-subset-v1",
@@ -68,7 +67,11 @@
         "retention": "indefinite",
         "scope": "prefix"
       }
-    ]
+    ],
+    "provider_verified": true
   },
-  "change_policy": "Do not modify mid-phase. CoS provisions real locks after upload. Future narrowing requires separate Ryan approval."
+  "phase": "2.6F-CR5",
+  "provider_verified": true,
+  "r2_account_id": "29e153aea94d9d3394f523bc9a3938cf",
+  "schema_version": "ncaam-r2-retention-docs-v3-cr5"
 }

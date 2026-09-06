@@ -68,9 +68,13 @@ jobs:
           NFL_MS=0
           NFL_SCRIPTS=0
           DB_MIG=0
+          NCAAM_HIST_AUDIT=0
           for f in "${ALL[@]:-}"; do
             case "$f" in
               apps/web/*|packages/*) WEB=1 ;;
+              data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/HISTORY_AUDIT_PR_B.json|scripts/ncaam/check_history_audit_pr_b.py)
+                NCAAM_HIST_AUDIT=1
+                ;;
               services/model-service/src/services/cfb_*/*|services/model-service/tests/test_cfb_*|services/model-service/src/routes/cfb.py)
                 MS=1
                 CFB_MS=1
@@ -124,7 +128,8 @@ jobs:
           echo "nfl_ops=$NFL_SCRIPTS" >> "$GITHUB_OUTPUT"
           echo "nfl_truth=$NFL_TRUTH" >> "$GITHUB_OUTPUT"
           echo "db_mig=$DB_MIG" >> "$GITHUB_OUTPUT"
-          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS wnba_ms=$WNBA_MS nhl_ms=$NHL_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH db_mig=$DB_MIG (${#ALL[@]} files)"
+          echo "ncaam_hist_audit=$NCAAM_HIST_AUDIT" >> "$GITHUB_OUTPUT"
+          echo "Changed paths: web=$WEB model_service=$MS cfb_ms=$CFB_MS nba_ms=$NBA_MS wnba_ms=$WNBA_MS nhl_ms=$NHL_MS nfl_ms=$NFL_MS nfl_ops=$NFL_SCRIPTS nfl_truth=$NFL_TRUTH db_mig=$DB_MIG ncaam_hist_audit=$NCAAM_HIST_AUDIT (${#ALL[@]} files)"
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
@@ -195,6 +200,23 @@ jobs:
 
       - name: Truth-chain audit (fixture step 1)
         run: python3 scripts/ops/truth_chain_audit.py --fixture data/ops/truth-chain-fixtures/step1_inventory.json
+
+      - name: NCAAM HISTORY_AUDIT_PR_B stack gate
+        # CR5-3: recorded parent/list must equal HEAD^ and git rev-list A..HEAD^
+        if: steps.paths.outputs.ncaam_hist_audit == '1'
+        run: |
+          set -euo pipefail
+          if [ ! -f data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/HISTORY_AUDIT_PR_B.json ]; then
+            echo "HISTORY_AUDIT_PR_B.json absent — skip."
+            exit 0
+          fi
+          # Resolve foundation A tip: prefer stacked_on_a_head from audit, else branch name.
+          A_REF=$(python3 -c "import json; print(json.load(open('data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/HISTORY_AUDIT_PR_B.json')).get('stacked_on_a_head') or 'cursor/ncaam-26f-foundation-fix-8a49')")
+          if ! git cat-file -e "${A_REF}^{commit}" 2>/dev/null; then
+            git fetch --no-tags origin cursor/ncaam-26f-foundation-fix-8a49 || true
+            A_REF=origin/cursor/ncaam-26f-foundation-fix-8a49
+          fi
+          python3 scripts/ncaam/check_history_audit_pr_b.py --a-ref "$A_REF"
 
       - name: Run tests (web changes only)
         if: steps.paths.outputs.web == '1'
