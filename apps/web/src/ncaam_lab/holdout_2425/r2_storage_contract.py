@@ -1,7 +1,8 @@
 """Private R2 storage contract for frozen v1.1 holdout disaster recovery (Phase 2.6F CR4).
 
-CoS provisions real buckets/upload separately. This module documents the contract
-and env-driven placeholders only — no credentials, secrets, or invented uploads.
+CoS provisioned buckets and uploaded exact frozen bytes (verified PASS, fresh-download).
+This module documents the contract + uploaded CAS/object refs — env var *names* only;
+no credentials, secrets, or agent-side uploads.
 """
 
 from __future__ import annotations
@@ -10,9 +11,16 @@ from typing import Any, Dict, List, Mapping
 
 from ncaam_lab.holdout_2425.locked_identity import locked_expected_hashes
 
+# Cloudflare R2 account id (public identifier; not a secret).
+R2_ACCOUNT_ID = "29e153aea94d9d3394f523bc9a3938cf"
+
 # Separate private buckets (public access + r2.dev disabled; no custom domains).
 FEATURES_BUCKET = "kosedge-ncaam-holdout-2425-features-v1"
 LABEL_VAULT_BUCKET = "kosedge-ncaam-holdout-2425-label-vault-v1"
+
+# Retention lock rule names (provider-side; CoS applied).
+FEATURES_RETENTION_LOCK = "retain-holdout-2425-features-v1"
+LABEL_VAULT_RETENTION_LOCK = "retain-holdout-2425-label-vault-v1"
 
 # Env placeholders CoS fills after provisioning (never commit secrets).
 FEATURES_ENV = {
@@ -37,6 +45,18 @@ FROZEN_V1_1_CAS_PREFIX = "ncaam/holdout_2024_25/v1_1/cas/"
 FROZEN_V1_1_MANIFEST_PREFIX = "ncaam/holdout_2024_25/v1_1/manifests/"
 FROZEN_V1_1_INVENTORY_KEY = "ncaam/holdout_2024_25/v1_1/package_inventory.json"
 FROZEN_V1_1_PROVENANCE_KEY = "ncaam/holdout_2024_25/v1_1/provenance_receipt.json"
+
+# Uploaded object digests for roles not covered by locked_expected_hashes().
+# Sidecar *file* bytes are "<seal_file_sha256>\\n"; CAS digests those bytes.
+SEAL_FILE_SIDECAR_FILE_SHA256 = (
+    "aa3e148703a5e23d5f82a9a74d143bb97d3e0c8b053754965f9de464d76967d8"
+)
+PACKAGE_INVENTORY_CONTENT_SHA256 = (
+    "51bc1ed2dd23e439d0f06d8f2602dae62555474edaf986866959eb6229590a5b"
+)
+PROVENANCE_RECEIPT_CONTENT_SHA256 = (
+    "25f2fc6e1c1cd8bb81b95ec84e867c315233f6ac9af7080b94a97cf1f18b8f19"
+)
 
 # Logical roles → which bucket owns the object.
 FEATURES_ROLES = (
@@ -64,7 +84,7 @@ ROLE_TO_LOCKED_HASH_KEY: Mapping[str, str] = {
     "rejected": "rejected_sha256",
     "canonical_pack": "canonical_pack_sha256",
     "seal_receipt": "seal_file_sha256",
-    "seal_file_sidecar": "seal_file_sha256",  # sidecar bytes are "<sha>\\n"
+    "seal_file_sidecar": "seal_file_sha256",  # sidecar TEXT names seal_file_sha256
 }
 
 # Staging relative destinations for hydrated objects.
@@ -92,26 +112,30 @@ def cas_object_key(content_sha256: str, *, prefix: str = FROZEN_V1_1_CAS_PREFIX)
 
 
 def default_package_inventory() -> Dict[str, Any]:
-    """Logical inventory CoS uploads after placing exact frozen v1.1 bytes.
+    """Logical inventory of CoS-uploaded exact frozen v1.1 bytes (UPLOADED).
 
-    Hashes are locked; object keys are CAS placeholders until CoS fills upload status.
+    Hashes are locked; cas_keys are the verified R2 CAS object keys under the
+    contract prefix. Recovery MUST use these keys only — orphan paths under
+    cas/sha256/* or logical/v1_1/* are non-authoritative.
     """
     hashes = locked_expected_hashes()
     objects: List[Dict[str, Any]] = []
     for role, hash_key in ROLE_TO_LOCKED_HASH_KEY.items():
         if role == "seal_file_sidecar":
-            # Sidecar file content is "<seal_file_sha256>\\n"; CAS key uses that file digest.
-            # Placeholder until CoS computes sidecar-file digest after upload.
-            sha = hashes["seal_file_sha256"]
+            # Sidecar file content is "<seal_file_sha256>\\n".
+            # expected_content_sha256 names the seal-file digest (sidecar TEXT);
+            # CAS / sidecar_file_sha256 digests the sidecar file bytes.
+            seal_sha = hashes["seal_file_sha256"]
             objects.append(
                 {
                     "role": role,
                     "bucket": FEATURES_BUCKET,
-                    "expected_content_sha256": sha,
-                    "sidecar_text_sha256_of_seal_file": sha,
-                    "cas_key": None,  # CoS fills after upload (sha256 of sidecar bytes)
+                    "expected_content_sha256": seal_sha,
+                    "sidecar_text_sha256_of_seal_file": seal_sha,
+                    "sidecar_file_sha256": SEAL_FILE_SIDECAR_FILE_SHA256,
+                    "cas_key": cas_object_key(SEAL_FILE_SIDECAR_FILE_SHA256),
                     "logical_path": ROLE_STAGING_RELPATH[role],
-                    "upload_status": "PENDING_COS",
+                    "upload_status": "UPLOADED",
                     "retention": "indefinite",
                 }
             )
@@ -125,20 +149,32 @@ def default_package_inventory() -> Dict[str, Any]:
                 "expected_content_sha256": sha,
                 "cas_key": cas_object_key(sha),
                 "logical_path": ROLE_STAGING_RELPATH[role],
-                "upload_status": "PENDING_COS",
+                "upload_status": "UPLOADED",
                 "retention": "indefinite",
             }
         )
-    # Inventory + provenance are self-describing; CoS fills their CAS keys post-upload.
-    for role in ("package_inventory", "provenance_receipt"):
+    # Inventory + provenance: fixed logical keys + CAS copies (both in features bucket).
+    for role, content_sha, fixed_key in (
+        (
+            "package_inventory",
+            PACKAGE_INVENTORY_CONTENT_SHA256,
+            FROZEN_V1_1_INVENTORY_KEY,
+        ),
+        (
+            "provenance_receipt",
+            PROVENANCE_RECEIPT_CONTENT_SHA256,
+            FROZEN_V1_1_PROVENANCE_KEY,
+        ),
+    ):
         objects.append(
             {
                 "role": role,
                 "bucket": FEATURES_BUCKET,
-                "expected_content_sha256": None,
-                "cas_key": None,
+                "expected_content_sha256": content_sha,
+                "cas_key": cas_object_key(content_sha),
+                "fixed_key": fixed_key,
                 "logical_path": ROLE_STAGING_RELPATH[role],
-                "upload_status": "PENDING_COS",
+                "upload_status": "UPLOADED",
                 "retention": "indefinite",
             }
         )
@@ -149,13 +185,23 @@ def default_package_inventory() -> Dict[str, Any]:
         "phase": "2.6F-CR4",
         "authority": "private_r2_exact_frozen_bytes",
         "do_not_regenerate_substitutes": True,
+        "r2_account_id": R2_ACCOUNT_ID,
         "features_bucket": FEATURES_BUCKET,
         "label_vault_bucket": LABEL_VAULT_BUCKET,
+        "features_retention_lock": FEATURES_RETENTION_LOCK,
+        "label_vault_retention_lock": LABEL_VAULT_RETENTION_LOCK,
         "public_access": "disabled",
         "r2_dev_access": "disabled",
         "custom_domains": "none",
         "builders_receive_label_vault_credentials": False,
         "label_access": "governed_evaluator_after_explicit_unseal_only",
+        "cos_upload_status": "UPLOADED_VERIFIED_PASS",
+        "cos_upload_verification": "fresh_download_sha256_match",
+        "authoritative_cas_prefix": FROZEN_V1_1_CAS_PREFIX,
+        "orphan_non_authoritative_prefixes": [
+            "cas/sha256/",
+            "logical/v1_1/",
+        ],
         "locked_expected_hashes": hashes,
         "objects": objects,
     }
@@ -164,8 +210,11 @@ def default_package_inventory() -> Dict[str, Any]:
 def storage_contract_summary() -> Dict[str, Any]:
     return {
         "phase": "2.6F-CR4",
+        "r2_account_id": R2_ACCOUNT_ID,
         "features_bucket": FEATURES_BUCKET,
         "label_vault_bucket": LABEL_VAULT_BUCKET,
+        "features_retention_lock": FEATURES_RETENTION_LOCK,
+        "label_vault_retention_lock": LABEL_VAULT_RETENTION_LOCK,
         "features_env_placeholders": FEATURES_ENV,
         "label_vault_env_placeholders": LABEL_VAULT_ENV,
         "frozen_cas_prefix": FROZEN_V1_1_CAS_PREFIX,
@@ -174,7 +223,17 @@ def storage_contract_summary() -> Dict[str, Any]:
         "features_roles": list(FEATURES_ROLES),
         "label_vault_roles": list(LABEL_VAULT_ROLES),
         "locked_expected_hashes": locked_expected_hashes(),
+        "seal_file_sidecar_file_sha256": SEAL_FILE_SIDECAR_FILE_SHA256,
+        "package_inventory_content_sha256": PACKAGE_INVENTORY_CONTENT_SHA256,
+        "provenance_receipt_content_sha256": PROVENANCE_RECEIPT_CONTENT_SHA256,
         "credentials_in_git": False,
         "cloud_agent_upload_attempted": False,
         "cos_provisions_buckets_and_upload": True,
+        "cos_buckets_provisioned": True,
+        "cos_upload_status": "UPLOADED_VERIFIED_PASS",
+        "cos_upload_verification": "fresh_download_sha256_match",
+        "orphan_non_authoritative_prefixes": [
+            "cas/sha256/",
+            "logical/v1_1/",
+        ],
     }

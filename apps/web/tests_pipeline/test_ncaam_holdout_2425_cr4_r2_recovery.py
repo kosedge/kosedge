@@ -557,6 +557,11 @@ def test_cr4_forensic_script_cannot_promote_live(tmp_path):
 
 def test_cr4_storage_contract_buckets_and_no_secrets():
     from ncaam_lab.holdout_2425.r2_storage_contract import (
+        R2_ACCOUNT_ID,
+        SEAL_FILE_SIDECAR_FILE_SHA256,
+        PACKAGE_INVENTORY_CONTENT_SHA256,
+        PROVENANCE_RECEIPT_CONTENT_SHA256,
+        cas_object_key,
         storage_contract_summary,
         default_package_inventory,
     )
@@ -564,14 +569,53 @@ def test_cr4_storage_contract_buckets_and_no_secrets():
     summary = storage_contract_summary()
     assert summary["features_bucket"] == FEATURES_BUCKET
     assert summary["label_vault_bucket"] == LABEL_VAULT_BUCKET
+    assert summary["r2_account_id"] == R2_ACCOUNT_ID
     assert summary["credentials_in_git"] is False
     assert summary["cloud_agent_upload_attempted"] is False
+    assert summary["cos_buckets_provisioned"] is True
+    assert summary["cos_upload_status"] == "UPLOADED_VERIFIED_PASS"
     inv = default_package_inventory()
     assert inv["builders_receive_label_vault_credentials"] is False
     assert inv["public_access"] == "disabled"
     assert inv["r2_dev_access"] == "disabled"
+    assert inv["cos_upload_status"] == "UPLOADED_VERIFIED_PASS"
+    by_role = {o["role"]: o for o in inv["objects"]}
+    locked = locked_expected_hashes()
+    # All governed roles uploaded with real CAS keys (no PENDING_COS / null).
+    for role, hash_key in (
+        ("feature_content", "feature_content_sha256"),
+        ("feature_manifest", "feature_manifest_sha256"),
+        ("label_content", "label_content_sha256"),
+        ("label_manifest", "label_manifest_sha256"),
+        ("rejected", "rejected_sha256"),
+        ("canonical_pack", "canonical_pack_sha256"),
+        ("seal_receipt", "seal_file_sha256"),
+    ):
+        obj = by_role[role]
+        assert obj["upload_status"] == "UPLOADED"
+        assert obj["cas_key"] == cas_object_key(locked[hash_key])
+        assert obj["expected_content_sha256"] == locked[hash_key]
+        assert obj["cas_key"] is not None
+    side = by_role["seal_file_sidecar"]
+    assert side["upload_status"] == "UPLOADED"
+    assert side["expected_content_sha256"] == locked["seal_file_sha256"]
+    assert side["sidecar_file_sha256"] == SEAL_FILE_SIDECAR_FILE_SHA256
+    assert side["cas_key"] == cas_object_key(SEAL_FILE_SIDECAR_FILE_SHA256)
+    inv_obj = by_role["package_inventory"]
+    assert inv_obj["upload_status"] == "UPLOADED"
+    assert inv_obj["expected_content_sha256"] == PACKAGE_INVENTORY_CONTENT_SHA256
+    assert inv_obj["cas_key"] == cas_object_key(PACKAGE_INVENTORY_CONTENT_SHA256)
+    assert inv_obj["fixed_key"].endswith("package_inventory.json")
+    prov = by_role["provenance_receipt"]
+    assert prov["upload_status"] == "UPLOADED"
+    assert prov["expected_content_sha256"] == PROVENANCE_RECEIPT_CONTENT_SHA256
+    assert prov["cas_key"] == cas_object_key(PROVENANCE_RECEIPT_CONTENT_SHA256)
+    assert all(o.get("upload_status") != "PENDING_COS" for o in inv["objects"])
+    assert all(o.get("cas_key") for o in inv["objects"])
     text = json.dumps(summary) + json.dumps(inv)
     assert "AKIA" not in text
     assert "SECRET" not in text or "SECRET_ACCESS_KEY" in text  # env var *names* ok
     # Ensure no secret *values*
     assert "aws_secret_access_key\": \"" not in text.lower()
+    # No credential-looking blobs beyond env var names / account id.
+    assert "r2_dev_access" in text

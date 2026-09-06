@@ -1,7 +1,7 @@
 # B1 drift forensic investigation note — Phase 2.6F CR4
 
-**Status:** OPEN — ownership: Alex  
-**Do not change B1 code or scoring.** This note is for event-level receipt fill-in only.  
+**Status:** OPEN — ownership: Alex (platform note folded for CR4 support)  
+**Do not change B1 code, thresholds, or membership.** This note is for event-level receipt fill-in only.  
 **Authoritative holdout recovery:** private R2 exact frozen v1.1 packages (not this path).
 
 ## Purpose
@@ -15,6 +15,21 @@ python scripts/ncaam/forensic_rebuild_2425_from_raw_kenpom_odds.py --dry-run
 python scripts/ncaam/forensic_rebuild_2425_from_raw_kenpom_odds.py \
   --out-root /tmp/ncaam-forensic-2425-b1
 ```
+
+## Platform forensic note (supports CR4 — no B1 code changes)
+
+Observed tip drift: **65** events `B1_ELIGIBLE → IDENTITY_UNRESOLVED`.
+
+Illustrative schools in the unresolved set:
+
+- Loyola MD
+- New Orleans
+- Sam Houston St
+- LIU
+
+Root-cause hypothesis (platform): the tip used a **generic strip-final-token** path for odds name normalization. Current **governed-mascot strip** fail-closes correctly (does not invent campus-school / trailing-token matches).
+
+**CR4 implication:** a raw+KenPom+odds rebuild cannot redefine frozen v1.1 membership or B1 eligibility. Disaster recovery remains exact R2 bytes only. No B1 / threshold / membership changes in this track.
 
 ## Ownership
 
@@ -35,6 +50,13 @@ Copy/extend as needed. Do not paste secrets or live Odds API payloads into git.
   "holdout_id": "ncaam_holdout_2024_25_v1_1",
   "forensic_only": true,
   "redefines_frozen_holdout": false,
+  "platform_note": {
+    "n_b1_eligible_to_identity_unresolved": 65,
+    "example_schools": ["Loyola MD", "New Orleans", "Sam Houston St", "LIU"],
+    "tip_behavior": "generic_strip_final_token",
+    "current_behavior": "governed_mascot_strip_fail_closed",
+    "supports_cr4": "raw_rebuild_cannot_redefine_frozen_v1_1"
+  },
   "events": [
     {
       "espn_game_id": "TODO",
@@ -49,8 +71,8 @@ Copy/extend as needed. Do not paste secrets or live Odds API payloads into git.
   ],
   "summary": {
     "n_events_reviewed": null,
-    "n_drift": null,
-    "root_cause_hypothesis": "TODO — Alex"
+    "n_drift": 65,
+    "root_cause_hypothesis": "tip generic strip-final-token vs current governed-mascot strip fail-closed — Alex to confirm event-level"
   }
 }
 ```

@@ -327,8 +327,8 @@ def hydrate_features_objects(
                 "(CoS must upload and fill refs; refusing substitute generation)"
             )
         expected = _expected_sha_for_role(role, obj)
-        # seal_file_sidecar: expected_sha256 in inventory may be seal file hash
-        # (text content) while CAS digests the sidecar file bytes — tests seed both.
+        # seal_file_sidecar: expected_content_sha256 names the seal-file digest
+        # (sidecar TEXT). Object bytes are digested by cas_key / sidecar_file_sha256.
         if role == "seal_file_sidecar":
             expected = obj.get("expected_content_sha256") or expected
         body = _fetch_and_verify(
@@ -346,10 +346,25 @@ def hydrate_features_objects(
                 raise HydrateError(
                     "seal_file_sidecar content does not match locked seal_file_sha256"
                 )
-            if expected and sha256_bytes(body) != expected:
+            body_sha = sha256_bytes(body)
+            cas_digest = str(cas_key).rsplit("/", 1)[-1]
+            if body_sha != cas_digest:
                 raise HydrateError(
                     "corrupted seal_file_sidecar object "
-                    f"expected_sha256={expected} actual_sha256={sha256_bytes(body)}"
+                    f"cas_key_digest={cas_digest} actual_sha256={body_sha}"
+                )
+            sidecar_file_sha = obj.get("sidecar_file_sha256")
+            if sidecar_file_sha and body_sha != sidecar_file_sha:
+                raise HydrateError(
+                    "corrupted seal_file_sidecar object "
+                    f"sidecar_file_sha256={sidecar_file_sha} actual_sha256={body_sha}"
+                )
+            # expected_content_sha256 may be seal-file digest (contract) OR object
+            # digest (mock seed). Accept either; never confuse the two.
+            if expected and expected not in (locked_seal_file, body_sha):
+                raise HydrateError(
+                    "seal_file_sidecar expected_content_sha256 is neither seal-file "
+                    f"digest nor object digest: expected={expected}"
                 )
         rel = ROLE_STAGING_RELPATH.get(role)
         if not rel:

@@ -144,7 +144,24 @@ def verify_inventory_and_locked_hashes(
                 raise PromoteVerificationError(
                     "seal_file_sidecar text does not match locked seal_file_sha256"
                 )
-            if expected and actual != expected:
+            # expected_content_sha256 names the seal-file digest (sidecar TEXT).
+            # Object bytes digest is cas_key / sidecar_file_sha256 (mock seed may
+            # put the object digest in expected_content_sha256 instead).
+            sidecar_file_sha = obj.get("sidecar_file_sha256")
+            if sidecar_file_sha and actual != sidecar_file_sha:
+                raise PromoteVerificationError(
+                    f"inventory hash mismatch role={role!r} "
+                    f"sidecar_file_sha256={sidecar_file_sha} actual={actual}"
+                )
+            cas_key = obj.get("cas_key")
+            if cas_key:
+                cas_digest = str(cas_key).rsplit("/", 1)[-1]
+                if actual != cas_digest:
+                    raise PromoteVerificationError(
+                        f"inventory hash mismatch role={role!r} "
+                        f"cas_key_digest={cas_digest} actual={actual}"
+                    )
+            if expected and expected not in (locked["seal_file_sha256"], actual):
                 raise PromoteVerificationError(
                     f"inventory hash mismatch role={role!r}"
                 )
