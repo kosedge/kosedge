@@ -113,6 +113,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/game-boxes", label: "Game Boxes" },
       { href: "/pro/nfl/previews", label: "Team Previews" },
       { href: "/odds/nfl", label: "Compare Odds" },
+      { href: "/record/nfl", label: "Desk record" },
       { href: "/pro/prediction-market", label: "Prediction Markets" },
       { href: "/pro/nfl/execution", label: "Execution Monitor" },
       { href: "/pro/nfl/projections", label: "Futures" },
@@ -157,6 +158,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     ],
     tools: [
       { href: "/odds/cfb", label: "Compare Odds" },
+      { href: "/record/cfb", label: "Desk record" },
       { href: "/pro/cfb/conferences", label: "Conferences" },
       { href: "/pro/cfb/teams", label: "Power Ratings" },
       { href: "/pro/cfb/fair-lines", label: "KEI Lines" },
