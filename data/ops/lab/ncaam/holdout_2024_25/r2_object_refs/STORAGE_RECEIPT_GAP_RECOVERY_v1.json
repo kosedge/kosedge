@@ -1,0 +1,15 @@
+{
+  "schema_version": "ncaam-r2-storage-receipt-gap-recovery-v1",
+  "status": "COMPLETE",
+  "phase": "2.6F",
+  "created_at_utc": "2026-09-06T19:56:23.890503Z",
+  "credentials_included_in_receipt": false,
+  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+  "prefix": "ncaam/gap_recovery_research_subset_v1/",
+  "inventory_sha256": "5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+  "lock_rule": "retain-gap-recovery-research-subset-v1",
+  "retention": "indefinite",
+  "upload_status": "UPLOADED_VERIFIED",
+  "fresh_download_verification": "GREEN",
+  "note": "Sanitized receipt only \u2014 no credentials."
+}

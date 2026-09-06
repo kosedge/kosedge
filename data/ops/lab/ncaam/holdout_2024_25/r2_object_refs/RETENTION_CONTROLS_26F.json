@@ -1,0 +1,34 @@
+{
+  "schema_version": "ncaam-r2-retention-docs-v1",
+  "phase": "2.6F",
+  "created_at_utc": "2026-09-06T19:56:23.890503Z",
+  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+  "provider_verified": true,
+  "do_not_change_mid_phase": true,
+  "prefix_specific_rules": [
+    {
+      "name": "retain-gap-recovery-research-subset-v1",
+      "prefix": "ncaam/gap_recovery_research_subset_v1/",
+      "retention": "indefinite",
+      "scope": "prefix",
+      "impact": "narrow"
+    },
+    {
+      "name": "retain-holdout-2024-25-espn-schedule-raw-v1",
+      "prefix": "ncaam/holdout_2024_25/espn_schedule_raw_v1/",
+      "retention": "indefinite",
+      "scope": "prefix",
+      "impact": "narrow"
+    }
+  ],
+  "bucket_wide_indefinite_rule": {
+    "name": "ncaam-recovery-archival-indefinite",
+    "scope": "bucket",
+    "retention": "indefinite",
+    "impact": "broader_than_prefix_rules",
+    "intentionally_permanent": true,
+    "status": "intact",
+    "rationale": "Sealed lab immutability while 2024-25 holdout remains sealed; prevents silent overwrite/delete across all objects in this private bucket.",
+    "change_policy": "Do not modify mid-phase. Future narrowing requires separate Ryan approval after PR A/B review."
+  }
+}

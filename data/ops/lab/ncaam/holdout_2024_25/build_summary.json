@@ -1,0 +1,31 @@
+{
+  "api_calls_made": false,
+  "b1_eligibility_count": 3599,
+  "b7_coverage_count": 5769,
+  "b7_reject_count": 530,
+  "built_at": "2026-09-05T13:27:18.631709+00:00",
+  "complete_intersection_count": 3334,
+  "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
+  "features_labels_joined_for_evaluation": false,
+  "final_label_presence_count": 5769,
+  "holdout_id": "ncaam_holdout_2024_25_v1_1",
+  "label_manifest_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+  "performance_metrics_calculated": false,
+  "pit_kenpom_eligibility_count": 5504,
+  "raw_day_payloads": 156,
+  "readiness_status": "SEALED_COVERAGE_REVIEW_REQUIRED",
+  "scheduled_event_count": 5769,
+  "seal_receipt_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
+  "season": "2024-25",
+  "venue_status_coverage": {
+    "confirmed_home": 5008,
+    "confirmed_neutral": 739,
+    "conflicts": 22,
+    "known_total": 5747,
+    "unknown": 22
+  },
+  "window": {
+    "end": "2025-04-08",
+    "start": "2024-11-04"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "ncaam-pr491-supersession-v1",
+  "status": "PROPOSED_NOT_CLOSED",
+  "source_pr": 491,
+  "source_url": "https://github.com/kosedge/kosedge/pull/491",
+  "source_head": "2d51cdcdc0d0d87c185352388f1ea891992b24f3",
+  "source_branch": "cursor/ncaam-2425-sealed-holdout-73d9",
+  "prior_attempt_prs": {
+    "A": [
+      {
+        "pr": 494,
+        "branch": "cursor/ncaam-holdout-foundation-26f",
+        "note": "earlier clean-split attempt"
+      },
+      {
+        "pr": 496,
+        "branch": "cursor/ncaam-holdout-foundation-16f9",
+        "note": "earlier clean-split attempt"
+      }
+    ],
+    "B": [
+      {
+        "pr": 495,
+        "branch": "cursor/ncaam-holdout-governance-26f",
+        "note": "had upload_pending"
+      },
+      {
+        "pr": 497,
+        "branch": "cursor/ncaam-holdout-governance-16f9",
+        "note": "included borderline row dumps; d05b excludes them"
+      }
+    ]
+  },
+  "replacement": {
+    "A": {
+      "branch": "cursor/ncaam-holdout-foundation-d05b",
+      "pr": 498,
+      "head": "0d4b0c95e4646d6b590faa2c1f23ec91cb7b40a8"
+    },
+    "B": {
+      "branch": "cursor/ncaam-holdout-governance-d05b",
+      "pr": null,
+      "note": "this PR; stacked on A"
+    }
+  },
+  "hard_prohibition": "Do not merge/close/rewrite/force-push/delete PR #491. Reference only.",
+  "created_at_utc": "2026-09-06T19:56:23.890503Z"
+}

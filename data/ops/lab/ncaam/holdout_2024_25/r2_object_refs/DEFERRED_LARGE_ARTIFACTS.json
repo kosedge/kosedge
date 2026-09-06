@@ -1,0 +1,89 @@
+{
+  "schema_version": "ncaam-deferred-large-artifacts-26f-v1",
+  "note": "These bulk artifacts from PR #491 are intentionally absent from clean PR A/B git history. Content hashes recorded for integrity; payloads live in R2 or remain deferred/not-git.",
+  "source_pr491_head": "2d51cdcdc0d0d87c185352388f1ea891992b24f3",
+  "items": [
+    {
+      "path": "raw/espn_scoreboard/*",
+      "n_json": 156,
+      "n_sha256_sidecars": 156,
+      "n_objects": 312,
+      "bytes": 104782373,
+      "lives_in": "r2:ncaam/holdout_2024_25/espn_schedule_raw_v1/",
+      "cas_index_sha256": "7513f28a255e7cd770bd75dd8c066ced83762594e9bff7fb7a5a049e35e67613"
+    },
+    {
+      "path": "feature_package/features.json",
+      "bytes": 6595599,
+      "sha256": "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940",
+      "lives_in": "r2_or_local_sealed_only_not_git"
+    },
+    {
+      "path": "label_package/labels.json",
+      "bytes": 1320517,
+      "sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+      "lives_in": "r2_or_local_sealed_only_not_git"
+    },
+    {
+      "path": "rejected/rejected_events.json",
+      "bytes": 218712,
+      "sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+      "lives_in": "deferred_not_git_hash_in_seal_receipt",
+      "note": "Excluded from PR B as large row dump; seal retains rejected_sha256"
+    },
+    {
+      "path": "schedule_sot/schedule_sot_index.json",
+      "bytes": 99057,
+      "sha256": "30821f75fa3397ce8b22c8776483043eec419b27b47f0b580cdbaa7342c4c8c3",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/reversal_orientation_full.json",
+      "bytes": 99896,
+      "sha256": "2061972c914b4320a761d9553d0af3272cdbb91dcae41fff0d6eea9fd5e42073",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26b/offline_archive_recovery_manifest.json",
+      "bytes": 41130,
+      "sha256": "9024bd3d8e739449f41398c2a67c0831de625c0b330d7e6a2f83be9e400ada80",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "venue/venue_contract.json",
+      "bytes": 4613749,
+      "sha256": "ecf878359a724b06f8e9702a83b723de8c692eefa82fb22618b5294e32eb84bd",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "odds_audit/odds_audit_rows.json",
+      "bytes": 4234714,
+      "sha256": "a4c7965a1eec11141071e8bc4568da768de423a7df24806b0489946ebf9078b6",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "kenpom_audit/game_eligibility_rows.json",
+      "bytes": 2367631,
+      "sha256": "d115523df827e497db6b06d5d9507de06b26bb4a3c4fce5091414c2f1e9ecc50",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/offline_mac_recovery_manifest.json",
+      "bytes": 1209583,
+      "sha256": "52d92830d5481f60edf47ac4538f2873d3348de9a6c7a4fd82c4e81ab57e7ae7",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/espn_reject_ledger.json",
+      "bytes": 576357,
+      "sha256": "a0ced1ab7c04ab394940db357d56040ecb61ecad6b811e9248f4830d16c40c3a",
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "ncaam_official_schedule_2024_25.json",
+      "bytes": 5276769,
+      "sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+      "lives_in": "deferred_not_git"
+    }
+  ]
+}
