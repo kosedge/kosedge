@@ -1,0 +1,20 @@
+{
+  "schema_version": "ncaam-rejected-events-manifest-26f-v1",
+  "artifact": "rejected/rejected_events.json",
+  "status": "STRIPPED_FROM_GIT_COS",
+  "stripped_at_utc": "2026-09-06T19:58:41.609514Z",
+  "content_sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+  "bytes": 218712,
+  "n_rows": 2435,
+  "reason_counts": {
+    "DUPLICATE_CONFLICT": 2,
+    "NONQUALIFYING_EVENT": 193,
+    "PIT_KENPOM_INELIGIBLE": 265,
+    "TIMESTAMP_DISHONEST": 1999,
+    "VENUE_UNKNOWN_OR_CONFLICT": 22
+  },
+  "lives_in": "deferred_not_git",
+  "integrity_also_in": "seal/seal_receipt.json#rejected_sha256",
+  "note": "Full row dump removed per CoS on PR #497; hash retained for seal integrity.",
+  "scores_omitted": true
+}

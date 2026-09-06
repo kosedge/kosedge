@@ -1,0 +1,28 @@
+{
+  "schema_version": "ncaam-r2-storage-receipt-v1",
+  "status": "COMPLETE",
+  "created_at_utc": "2026-09-06T17:06:20.533785Z",
+  "credentials_included_in_receipt": false,
+  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+  "prefix": "ncaam/gap_recovery_research_subset_v1/",
+  "population": "GAP_RECOVERY_RESEARCH_SUBSET",
+  "inventory_sha256": "5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+  "confirmations": {
+    "uploader_token_revoked": {
+      "token_name": "kosedge-ncaam-gap-recovery-uploader-v1",
+      "status": "REVOKED",
+      "note": "Objects in R2 are unaffected by token revoke."
+    },
+    "bucket_remains_private": true,
+    "public_r2_dev_access_disabled": true,
+    "no_custom_public_domain_attached": true,
+    "bucket_lock_rule": {
+      "name": "retain-gap-recovery-research-subset-v1",
+      "prefix": "ncaam/gap_recovery_research_subset_v1/",
+      "retention": "indefinite",
+      "enabled": true
+    },
+    "no_credentials_in_repository": true
+  },
+  "sanitization_note": "Account IDs and worktree paths omitted from git receipt."
+}

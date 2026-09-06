@@ -1,0 +1,19 @@
+{
+  "api_calls_made": false,
+  "n_b1_eligible": 3599,
+  "n_duplicate_schedule_keys": 2,
+  "n_joined_to_schedule_sot": 5578,
+  "n_odds_events_in_window": 5758,
+  "n_schedule_events_missing_odds_join": 193,
+  "offline_external_drive": {
+    "cloud_availability": "NOT_PRESENT",
+    "ownership": "USER_CONFIRMED_OWNED_OFFLINE",
+    "technical_coverage": "OFFLINE_UNVERIFIED"
+  },
+  "spread_values_omitted": true,
+  "status_counts": {
+    "B1_ELIGIBLE": 3599,
+    "DUPLICATE_CONFLICT": 153,
+    "TIMESTAMP_DISHONEST": 2006
+  }
+}

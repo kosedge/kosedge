@@ -1,0 +1,74 @@
+{
+  "branch": "origin/cursor/ncaam-holdout-foundation-16f9",
+  "n_commits": 1,
+  "commits": [
+    "1adab8a13697c738462a053d627f580e8955acc4"
+  ],
+  "oversized_blobs_gt_250kb": [],
+  "raw_espn_paths": [],
+  "bulk_dataset_paths": [],
+  "credential_pattern_hits": [],
+  "largest_blobs": [
+    {
+      "path": "scripts/ncaam/run_2425_phase26c.py",
+      "bytes": 55336
+    },
+    {
+      "path": "scripts/ncaam/run_2425_coverage_26b.py",
+      "bytes": 20186
+    },
+    {
+      "path": "apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py",
+      "bytes": 12125
+    },
+    {
+      "path": "scripts/ncaam/build_2425_sealed_holdout.py",
+      "bytes": 8157
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/odds_audit.py",
+      "bytes": 8048
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/seal_package.py",
+      "bytes": 7887
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/kenpom_audit.py",
+      "bytes": 7047
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/readiness.py",
+      "bytes": 4327
+    },
+    {
+      "path": "apps/web/tests_pipeline/test_ncaam_holdout_2425_phase26c.py",
+      "bytes": 4032
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/venue_contract.py",
+      "bytes": 3646
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/schedule_normalize.py",
+      "bytes": 2948
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/phase26c/thresholds.py",
+      "bytes": 2859
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/constants.py",
+      "bytes": 2700
+    },
+    {
+      "path": "apps/web/src/ncaam_lab/holdout_2425/evaluator_gate.py",
+      "bytes": 2467
+    },
+    {
+      "path": "docs/ops/ncaam/ADR_2026-09-05_holdout_raw_object_storage.md",
+      "bytes": 2412
+    }
+  ],
+  "verdict": true
+}

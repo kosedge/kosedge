@@ -1,0 +1,36 @@
+{
+  "abs_coverage_gap_pp_material": 10.0,
+  "allowed_conclusions": [
+    "INCONCLUSIVE_DUE_TO_MISSING_FEATURES",
+    "MATERIAL_SELECTION_DETECTED",
+    "REPRESENTATIVE_ON_AUDITED_FEATURES"
+  ],
+  "candidate_predictions_omitted": true,
+  "espn_reject_taxonomy": [
+    "confirmed_non_di_opponent",
+    "exhibition_or_scrimmage",
+    "duplicate_schedule_event",
+    "cancelled_or_non_final",
+    "b7_team_missing",
+    "b7_alias_missing",
+    "ambiguous_identity",
+    "malformed_source_record",
+    "other_explicit_reason"
+  ],
+  "frozen_before_slice_results": true,
+  "justification": "Material selection flagged when |coverage_included \u2212 coverage_reference| \u2265 10pp or |SMD| \u2265 0.10 for numeric features; |SMD| \u2265 0.20 is clearly material. Thresholds chosen a priori to detect systematic 22:00 UTC timestamp selection without outcome inspection.",
+  "outcomes_omitted": true,
+  "power_conf_short": [
+    "ACC",
+    "B10",
+    "B12",
+    "BE",
+    "P12",
+    "SEC"
+  ],
+  "scores_omitted": true,
+  "smd_clearly_material": 0.2,
+  "smd_material": 0.1,
+  "synthetic_close_hour_utc": 22,
+  "threshold_version": "phase26c_feature_only_v1"
+}

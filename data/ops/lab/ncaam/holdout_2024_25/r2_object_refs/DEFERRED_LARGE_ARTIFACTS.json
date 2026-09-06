@@ -1,0 +1,101 @@
+{
+  "items": [
+    {
+      "path": "raw/espn_scoreboard/*",
+      "n": 312,
+      "bytes": 104782373,
+      "lives_in": "r2:ncaam/holdout_2024_25/espn_schedule_raw_v1/"
+    },
+    {
+      "path": "feature_package/features.json",
+      "bytes": 6595599,
+      "lives_in": "r2_or_local_sealed_only_not_git"
+    },
+    {
+      "path": "label_package/labels.json",
+      "bytes": 1320517,
+      "lives_in": "r2_or_local_sealed_only_not_git"
+    },
+    {
+      "path": "venue/venue_contract.json",
+      "bytes": 4613749,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "odds_audit/odds_audit_rows.json",
+      "bytes": 4234714,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "kenpom_audit/game_eligibility_rows.json",
+      "bytes": 2367631,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/offline_mac_recovery_manifest.json",
+      "bytes": 1209583,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "coverage_26c/espn_reject_ledger.json",
+      "bytes": 576357,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "ncaam_official_schedule_2024_25.json",
+      "bytes": 5276769,
+      "lives_in": "deferred_not_git"
+    },
+    {
+      "path": "rejected/rejected_events.json",
+      "bytes": 218712,
+      "sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+      "lives_in": "deferred_not_git",
+      "replacement_manifest": "rejected/rejected_events.manifest.json",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "path": "schedule_sot/schedule_sot_index.json",
+      "bytes": 99057,
+      "sha256": "30821f75fa3397ce8b22c8776483043eec419b27b47f0b580cdbaa7342c4c8c3",
+      "lives_in": "deferred_not_git",
+      "replacement_manifest": "schedule_sot/schedule_sot_index.manifest.json",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "path": "coverage_26c/reversal_orientation_full.json",
+      "bytes": 99896,
+      "sha256": "2061972c914b4320a761d9553d0af3272cdbb91dcae41fff0d6eea9fd5e42073",
+      "lives_in": "deferred_not_git",
+      "replacement_manifest": "coverage_26c/reversal_orientation_full.manifest.json",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "path": "coverage_26c/feature_only_representativeness.json",
+      "bytes": 39656,
+      "sha256": "9ab7a457ef31714266ae3873566851d66e541b64f231215055ffbd8449a8b9e3",
+      "lives_in": "deferred_not_git",
+      "replacement_manifest": "coverage_26c/feature_only_representativeness.manifest.json",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "path": "kenpom_audit/snapshot_inventory.json",
+      "bytes": 28462,
+      "sha256": "337229e26ffedc8ee12a524289e00b1e57abd6096689c56cca177f49345f7824",
+      "lives_in": "deferred_not_git",
+      "replacement_manifest": "kenpom_audit/snapshot_inventory.manifest.json",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "path": "coverage_26b/offline_archive_recovery_manifest.json",
+      "bytes": 41130,
+      "sha256": "9024bd3d8e739449f41398c2a67c0831de625c0b330d7e6a2f83be9e400ada80",
+      "lives_in": "deferred_not_git",
+      "replacement_manifest": "coverage_26b/offline_archive_recovery_manifest.manifest.json",
+      "stripped_by": "COS_STRIP_PR497"
+    }
+  ],
+  "note": "Bulk artifacts from PR #491 intentionally absent from clean PR A/B git history. CoS strip on PR #497 replaced six additional oversized ops JSON files with short manifests.",
+  "cos_strip_receipt": "r2_object_refs/COS_STRIP_RECEIPT_26F.json",
+  "updated_at_utc": "2026-09-06T19:58:55.369084Z"
+}
