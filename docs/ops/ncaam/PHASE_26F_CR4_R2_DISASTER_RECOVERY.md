@@ -6,18 +6,18 @@ Raw+KenPom+odds reconstruction is a **separate forensic** path and must not rede
 
 ## Storage contract (CoS provisioned + uploaded; no secrets in git)
 
-| Item                      | Value                                                  |
-| ------------------------- | ------------------------------------------------------ |
-| R2 account id             | `29e153aea94d9d3394f523bc9a3938cf` (not a secret)      |
-| Features bucket           | `kosedge-ncaam-holdout-2425-features-v1`               |
-| Label vault bucket        | `kosedge-ncaam-holdout-2425-label-vault-v1`            |
-| Public access             | disabled                                               |
-| r2.dev                    | disabled                                               |
-| Custom domains            | none                                                   |
-| Retention                 | indefinite locks (`retain-holdout-2425-features-v1`, `retain-holdout-2425-label-vault-v1`) |
-| CoS upload status         | **UPLOADED** — fresh-download sha256 match (PASS)      |
-| Builder label-vault creds | **never**                                              |
-| Label access              | governed evaluator after explicit unseal only          |
+| Item                      | Value                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------- |
+| R2 account id             | `29e153aea94d9d3394f523bc9a3938cf` (not a secret)                                               |
+| Features bucket           | `kosedge-ncaam-holdout-2425-features-v1`                                                        |
+| Label vault bucket        | `kosedge-ncaam-holdout-2425-label-vault-v1`                                                     |
+| Public access             | disabled                                                                                        |
+| r2.dev                    | disabled                                                                                        |
+| Custom domains            | none                                                                                            |
+| Retention                 | indefinite locks (`retain-holdout-2425-features-v1`, `retain-holdout-2425-label-vault-v1`)      |
+| CoS upload status         | **UPLOADED** — fresh-download sha256 match (PASS)                                               |
+| Builder label-vault creds | **never**                                                                                       |
+| Label access              | governed evaluator after explicit unseal only                                                   |
 | Object layout             | content-addressed (`ncaam/holdout_2024_25/v1_1/cas/<sha256>`) + fixed inventory/provenance keys |
 
 Governed object set (all `upload_status=UPLOADED` in `default_package_inventory()`): features+manifest, labels+manifest, rejected, canonical pack, seal receipt + file-hash sidecar, package inventory + provenance receipt.
