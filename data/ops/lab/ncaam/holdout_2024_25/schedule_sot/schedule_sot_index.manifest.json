@@ -1,0 +1,42 @@
+{
+  "schema_version": "ncaam-schedule-sot-index-manifest-26f-v1",
+  "artifact": "schedule_sot/schedule_sot_index.json",
+  "status": "STRIPPED_FROM_GIT_COS",
+  "stripped_at_utc": "2026-09-06T19:58:41.609514Z",
+  "content_sha256": "30821f75fa3397ce8b22c8776483043eec419b27b47f0b580cdbaa7342c4c8c3",
+  "bytes": 99057,
+  "summary": {
+    "built_at": "2026-09-05T13:27:17.761131+00:00",
+    "canonical_pack_path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2024_25.json",
+    "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+    "holdout_id": "ncaam_holdout_2024_25_v1_1",
+    "map_stats": {
+      "espn_events": 6299,
+      "map_miss_rate": 0.0841,
+      "mapped_both_sides": 5769,
+      "miami_fl_mapped_games": 31,
+      "miami_fl_ne_miami_oh": true,
+      "miami_oh_mapped_games": 32,
+      "omit_duplicate_game_id": 0,
+      "omit_unmapped_or_ambiguous": 530
+    },
+    "metadata_class": "HISTORICAL_STATIC_RECONSTRUCTION",
+    "n_duplicate_event_ids": 0,
+    "n_games": 5769,
+    "n_participant_reversals": 0,
+    "n_quarantined_nonfinal": 0,
+    "schema_version": "ncaam-schedule-sot-v1",
+    "season": "2024-25",
+    "slate_complete": false,
+    "source": "espn_scoreboard_public",
+    "window": {
+      "end": "2025-04-08",
+      "start": "2024-11-04"
+    }
+  },
+  "n_game_ids_omitted_from_git": 5769,
+  "lives_in": "deferred_not_git",
+  "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+  "note": "Full game_ids index removed per CoS; summary + hashes retained.",
+  "scores_omitted": true
+}

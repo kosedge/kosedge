@@ -1,95 +1,95 @@
 {
   "branch": "cursor/ncaam-holdout-governance-16f9",
-  "n_commits": 2,
-  "commits": [
-    "b40fc87507e37f92d86f806b553dd3185045db18",
-    "1adab8a13697c738462a053d627f580e8955acc4"
-  ],
+  "created_at_utc": "2026-09-06T19:59:07.821227Z",
+  "cos_strip": "COS_STRIP_RECEIPT_26F.json",
   "oversized_blobs_gt_250kb": [],
-  "raw_espn_paths": [],
-  "bulk_dataset_paths": [],
+  "stripped_full_dumps_still_present": [],
   "credential_pattern_hits": [],
   "largest_blobs": [
-    {
-      "path": "data/ops/lab/ncaam/holdout_2024_25/rejected/rejected_events.json",
-      "bytes": 218712
-    },
-    {
-      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/reversal_orientation_full.json",
-      "bytes": 99896
-    },
-    {
-      "path": "data/ops/lab/ncaam/holdout_2024_25/schedule_sot/schedule_sot_index.json",
-      "bytes": 99057
-    },
-    {
-      "path": "scripts/ncaam/run_2425_phase26c.py",
-      "bytes": 55336
-    },
-    {
-      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26b/offline_archive_recovery_manifest.json",
-      "bytes": 41130
-    },
-    {
-      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/feature_only_representativeness.json",
-      "bytes": 39656
-    },
-    {
-      "path": "data/ops/lab/ncaam/holdout_2024_25/kenpom_audit/snapshot_inventory.json",
-      "bytes": 28462
-    },
-    {
-      "path": "scripts/ncaam/run_2425_coverage_26b.py",
-      "bytes": 20186
-    },
-    {
-      "path": "apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py",
-      "bytes": 12125
-    },
-    {
-      "path": "scripts/ncaam/build_2425_sealed_holdout.py",
-      "bytes": 8157
-    },
-    {
-      "path": "apps/web/src/ncaam_lab/holdout_2425/odds_audit.py",
-      "bytes": 8048
-    },
-    {
-      "path": "apps/web/src/ncaam_lab/holdout_2425/seal_package.py",
-      "bytes": 7887
-    },
-    {
-      "path": "apps/web/src/ncaam_lab/holdout_2425/kenpom_audit.py",
-      "bytes": 7047
-    },
     {
       "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26b/eligibility_funnel.json",
       "bytes": 5339
     },
     {
-      "path": "apps/web/src/ncaam_lab/holdout_2425/readiness.py",
-      "bytes": 4327
+      "path": "data/ops/lab/ncaam/holdout_2024_25/kenpom_audit/snapshot_inventory.manifest.json",
+      "bytes": 4553
     },
     {
-      "path": "apps/web/tests_pipeline/test_ncaam_holdout_2425_phase26c.py",
-      "bytes": 4032
+      "path": "docs/ops/ncaam/PHASE_26F_SEMANTIC_PARITY_MATRIX.md",
+      "bytes": 4410
     },
     {
       "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/identity_collision_audit.json",
       "bytes": 3670
     },
     {
-      "path": "apps/web/src/ncaam_lab/holdout_2425/venue_contract.py",
-      "bytes": 3646
+      "path": "data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/DEFERRED_LARGE_ARTIFACTS.json",
+      "bytes": 3549
     },
     {
       "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26b/espn_reject_taxonomy.json",
       "bytes": 3126
     },
     {
-      "path": "apps/web/src/ncaam_lab/holdout_2425/schedule_normalize.py",
-      "bytes": 2948
+      "path": "data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/HISTORY_AUDIT_PR_B.json",
+      "bytes": 2599
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/reversal_duplicate_diagnostic.json",
+      "bytes": 2597
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/storage_convention_inventory.json",
+      "bytes": 2369
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/readiness_report.json",
+      "bytes": 2363
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/r2_object_refs_v1.json",
+      "bytes": 2064
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/COS_STRIP_RECEIPT_26F.json",
+      "bytes": 2050
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/STORAGE_RECEIPT_26F_COMPLETE.json",
+      "bytes": 1867
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/HISTORY_AUDIT_PR_A.json",
+      "bytes": 1839
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/storage_architecture_adr.json",
+      "bytes": 1823
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/schedule_sot/schedule_sot_index.manifest.json",
+      "bytes": 1621
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/coverage_26c_summary.json",
+      "bytes": 1500
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/pr491_split_migration_plan.json",
+      "bytes": 1477
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26c/feature_only_representativeness.manifest.json",
+      "bytes": 1351
+    },
+    {
+      "path": "data/ops/lab/ncaam/holdout_2024_25/coverage_26b/seal_version_delta.json",
+      "bytes": 1228
     }
   ],
-  "verdict": true
+  "verdict": "GREEN",
+  "note": "After CoS strip: six oversized ops JSON replaced by short manifests.",
+  "kept_tiny_summaries_ok": [
+    "data/ops/lab/ncaam/holdout_2024_25/coverage_26b/feature_only_representativeness.json"
+  ]
 }

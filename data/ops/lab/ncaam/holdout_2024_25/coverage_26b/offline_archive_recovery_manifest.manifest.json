@@ -1,0 +1,19 @@
+{
+  "schema_version": "ncaam-offline-archive-recovery-manifest-26f-v1",
+  "artifact": "coverage_26b/offline_archive_recovery_manifest.json",
+  "status": "STRIPPED_FROM_GIT_COS",
+  "stripped_at_utc": "2026-09-06T19:58:41.609514Z",
+  "content_sha256": "9024bd3d8e739449f41398c2a67c0831de625c0b330d7e6a2f83be9e400ada80",
+  "bytes": 41130,
+  "summary": {
+    "n_timestamp_gaps": 2006,
+    "owner": "Ryan offline historical odds archive",
+    "cloud_must_not_access_external_drive": true,
+    "no_api_credits": true,
+    "n_sample_gaps_omitted_from_git": 100
+  },
+  "lives_in": "deferred_not_git",
+  "related_larger_artifact": "coverage_26c/offline_mac_recovery_manifest.json (also deferred)",
+  "note": "Gap id list removed per CoS; counts only. Offline Mac recovery still not applied.",
+  "scores_omitted": true
+}

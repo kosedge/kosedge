@@ -1,0 +1,37 @@
+{
+  "schema_version": "ncaam-feature-only-representativeness-manifest-26f-v1",
+  "artifact": "coverage_26c/feature_only_representativeness.json",
+  "status": "STRIPPED_FROM_GIT_COS",
+  "stripped_at_utc": "2026-09-06T19:58:41.609514Z",
+  "content_sha256": "9ab7a457ef31714266ae3873566851d66e541b64f231215055ffbd8449a8b9e3",
+  "bytes": 39656,
+  "summary": {
+    "conclusion": "MATERIAL_SELECTION_DETECTED",
+    "global_coverage_pct": 57.79,
+    "coverage_rate_min": 0.0,
+    "coverage_rate_max": 0.9019169329073482,
+    "n_complete_intersection": 3334,
+    "n_mapped_schedule": 5769,
+    "n_material_selection_flags": 29,
+    "n_material_numeric_flags": 3,
+    "missingness": {
+      "adjm_gap_missing_pct": 5.69,
+      "adjt_missing_pct": 5.69,
+      "home_conf_missing_pct": 5.1,
+      "n_books_missing_pct": 3.35,
+      "spread_mag_missing_pct": 3.35
+    },
+    "honesty_dependence": {
+      "expected_dishonest_odds_rows": 2006,
+      "n_dishonest_on_features": 1999,
+      "n_honest_on_features": 3575,
+      "synthetic_close_hour_utc": 22
+    },
+    "outcomes_omitted": true,
+    "scores_omitted": true,
+    "source_schema_version": "ncaam-feature-only-representativeness-26c-v1"
+  },
+  "lives_in": "deferred_not_git",
+  "note": "Slice matrices / full flag lists removed per CoS; conclusion + headline rates retained.",
+  "scores_omitted": true
+}

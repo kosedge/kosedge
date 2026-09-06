@@ -1,0 +1,50 @@
+{
+  "schema_version": "ncaam-cos-strip-receipt-26f-v1",
+  "decision": "STRIP_OVERSIZED_OPS_JSON_FROM_PR_B",
+  "pr_b": 497,
+  "pr_a_kept": 496,
+  "pr_a_ci": "GREEN",
+  "pr_491_untouched": true,
+  "created_at_utc": "2026-09-06T19:58:41.609514Z",
+  "no_scoring": true,
+  "no_merge": true,
+  "stripped": [
+    {
+      "path": "rejected/rejected_events.json",
+      "bytes": 218712,
+      "sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+      "replacement": "rejected/rejected_events.manifest.json"
+    },
+    {
+      "path": "schedule_sot/schedule_sot_index.json",
+      "bytes": 99057,
+      "sha256": "30821f75fa3397ce8b22c8776483043eec419b27b47f0b580cdbaa7342c4c8c3",
+      "replacement": "schedule_sot/schedule_sot_index.manifest.json"
+    },
+    {
+      "path": "coverage_26c/reversal_orientation_full.json",
+      "bytes": 99896,
+      "sha256": "2061972c914b4320a761d9553d0af3272cdbb91dcae41fff0d6eea9fd5e42073",
+      "replacement": "coverage_26c/reversal_orientation_full.manifest.json"
+    },
+    {
+      "path": "coverage_26c/feature_only_representativeness.json",
+      "bytes": 39656,
+      "sha256": "9ab7a457ef31714266ae3873566851d66e541b64f231215055ffbd8449a8b9e3",
+      "replacement": "coverage_26c/feature_only_representativeness.manifest.json"
+    },
+    {
+      "path": "kenpom_audit/snapshot_inventory.json",
+      "bytes": 28462,
+      "sha256": "337229e26ffedc8ee12a524289e00b1e57abd6096689c56cca177f49345f7824",
+      "replacement": "kenpom_audit/snapshot_inventory.manifest.json"
+    },
+    {
+      "path": "coverage_26b/offline_archive_recovery_manifest.json",
+      "bytes": 41130,
+      "sha256": "9024bd3d8e739449f41398c2a67c0831de625c0b330d7e6a2f83be9e400ada80",
+      "replacement": "coverage_26b/offline_archive_recovery_manifest.manifest.json"
+    }
+  ],
+  "r2_note": "These six artifacts were NOT part of the already-uploaded ESPN schedule raw / gap-recovery R2 prefixes. They are deferred_not_git with content hashes; upload to R2 is optional follow-on and not performed in this trim."
+}

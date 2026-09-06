@@ -32,3 +32,19 @@
 | Intent              | monolithic code+bulk | code foundation | manifests + R2 refs |
 | Bulk ESPN in git    | yes (~100 MiB)       | no              | no                  |
 | Seal remains sealed | yes                  | yes             | yes                 |
+
+
+## CoS strip on PR B (#497)
+
+The following oversized ops JSON files were removed from Git and replaced with short hash/summary manifests (not uploaded to R2 in this trim; content hashes retained):
+
+| Removed | Replacement |
+| --- | --- |
+| `rejected/rejected_events.json` | `rejected/rejected_events.manifest.json` |
+| `schedule_sot/schedule_sot_index.json` | `schedule_sot/schedule_sot_index.manifest.json` |
+| `coverage_26c/reversal_orientation_full.json` | `coverage_26c/reversal_orientation_full.manifest.json` |
+| `coverage_26c/feature_only_representativeness.json` | `coverage_26c/feature_only_representativeness.manifest.json` |
+| `kenpom_audit/snapshot_inventory.json` | `kenpom_audit/snapshot_inventory.manifest.json` |
+| `coverage_26b/offline_archive_recovery_manifest.json` | `coverage_26b/offline_archive_recovery_manifest.manifest.json` |
+
+Receipt: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/COS_STRIP_RECEIPT_26F.json`
