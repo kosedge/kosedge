@@ -3,6 +3,7 @@
 
 Does not invent juice, lines, or results. ROI only from stamped American juice.
 Pushes: profit 0; stake excluded from risked denominator.
+PLAY / LEAN / combined each get their own ATS + ROI rollup.
 
 Usage:
   python3 scripts/desk-record/rebuild_summary.py --sport cfb --season 2026
@@ -49,6 +50,76 @@ def format_ats(t: dict[str, int]) -> str:
     return f"{t['w']}-{t['l']}-{t['p']}"
 
 
+def compute_roi(settled: list[dict[str, Any]]) -> dict[str, Any]:
+    profit_sum = 0.0
+    risked = 0.0
+    roi_tickets = 0
+    data_gap_roi = 0
+    stamped_juice = 0
+
+    for t in settled:
+        result = t.get("result")
+        stake = float(t.get("stake_u") or 0)
+        juice = t.get("juice")
+        juice_status = t.get("juice_status") or (
+            "DATA_GAP" if juice is None else "stamped"
+        )
+
+        if result == "P":
+            continue
+
+        if juice is None or juice_status == "DATA_GAP":
+            data_gap_roi += 1
+            continue
+
+        if not isinstance(juice, (int, float)) or abs(int(juice)) < 100:
+            data_gap_roi += 1
+            continue
+
+        stamped_juice += 1
+        j = int(juice)
+        won = result == "W"
+        profit = american_profit(stake, j, won)
+        ledger_profit = t.get("profit_u")
+        if isinstance(ledger_profit, (int, float)):
+            profit = float(ledger_profit)
+        profit_sum += profit
+        risked += stake
+        roi_tickets += 1
+
+    if risked > 0:
+        return {
+            "status": "ok",
+            "profit_u": round(profit_sum, 6),
+            "risked_u": round(risked, 6),
+            "roi": round(profit_sum / risked, 6),
+            "n_tickets": roi_tickets,
+            "n_data_gap": data_gap_roi,
+            "n_stamped_juice": stamped_juice,
+        }
+    if data_gap_roi > 0:
+        return {
+            "status": "DATA_GAP",
+            "profit_u": None,
+            "risked_u": 0.0,
+            "roi": None,
+            "n_tickets": 0,
+            "n_data_gap": data_gap_roi,
+            "n_stamped_juice": stamped_juice,
+            "note": "Settled W/L tickets lack stamped pre-kick juice — no flat −110 invent.",
+        }
+    return {
+        "status": "empty",
+        "profit_u": 0.0,
+        "risked_u": 0.0,
+        "roi": None,
+        "n_tickets": 0,
+        "n_data_gap": 0,
+        "n_stamped_juice": 0,
+        "note": "No settled W/L tickets with stake at risk yet.",
+    }
+
+
 def rebuild(sport: str, season: int) -> dict[str, Any]:
     ledger_path = ROOT / "data" / "desk-record" / sport / str(season) / "ledger.jsonl"
     tickets = load_ledger(ledger_path)
@@ -63,83 +134,11 @@ def rebuild(sport: str, season: int) -> dict[str, Any]:
 
     play_ats = ats_triple([t["result"] for t in play_settled])
     lean_ats = ats_triple([t["result"] for t in lean_settled])
-    combined_ats = ats_triple(
-        [t["result"] for t in play_settled + lean_settled]
-    )
+    combined_ats = ats_triple([t["result"] for t in play_settled + lean_settled])
 
-    profit_sum = 0.0
-    risked = 0.0
-    roi_tickets = 0
-    data_gap_roi = 0
-    stamped_juice = 0
-
-    for t in play_settled + lean_settled:
-        result = t.get("result")
-        stake = float(t.get("stake_u") or 0)
-        juice = t.get("juice")
-        juice_status = t.get("juice_status") or (
-            "DATA_GAP" if juice is None else "stamped"
-        )
-
-        if result == "P":
-            # Push: profit 0; exclude stake from risked.
-            if t.get("profit_u") is None:
-                t["profit_u"] = 0.0
-            continue
-
-        if juice is None or juice_status == "DATA_GAP":
-            data_gap_roi += 1
-            continue
-
-        stamped_juice += 1
-        j = int(juice)
-        if not isinstance(juice, (int, float)) or abs(j) < 100:
-            data_gap_roi += 1
-            continue
-
-        won = result == "W"
-        profit = american_profit(stake, j, won)
-        # Prefer ledger profit_u when present and finite; else compute.
-        ledger_profit = t.get("profit_u")
-        if isinstance(ledger_profit, (int, float)):
-            profit = float(ledger_profit)
-        profit_sum += profit
-        risked += stake
-        roi_tickets += 1
-
-    roi: dict[str, Any]
-    if risked > 0:
-        roi = {
-            "status": "ok",
-            "profit_u": round(profit_sum, 6),
-            "risked_u": round(risked, 6),
-            "roi": round(profit_sum / risked, 6),
-            "n_tickets": roi_tickets,
-            "n_data_gap": data_gap_roi,
-            "n_stamped_juice": stamped_juice,
-        }
-    elif data_gap_roi > 0:
-        roi = {
-            "status": "DATA_GAP",
-            "profit_u": None,
-            "risked_u": 0.0,
-            "roi": None,
-            "n_tickets": 0,
-            "n_data_gap": data_gap_roi,
-            "n_stamped_juice": stamped_juice,
-            "note": "Settled W/L tickets lack stamped pre-kick juice — no flat −110 invent.",
-        }
-    else:
-        roi = {
-            "status": "empty",
-            "profit_u": 0.0,
-            "risked_u": 0.0,
-            "roi": None,
-            "n_tickets": 0,
-            "n_data_gap": 0,
-            "n_stamped_juice": 0,
-            "note": "No settled W/L tickets with stake at risk yet.",
-        }
+    play_roi = compute_roi(play_settled)
+    lean_roi = compute_roi(lean_settled)
+    combined_roi = compute_roi(play_settled + lean_settled)
 
     return {
         "sport": sport,
@@ -151,6 +150,7 @@ def rebuild(sport: str, season: int) -> dict[str, Any]:
             "stake_play_u": 1.0,
             "stake_lean_u": 0.5,
             "pushes": "profit 0; stake excluded from risked",
+            "segments": "PLAY-only, LEAN-only, and All each expose ATS + ROI",
         },
         "as_of": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "ledger_path": str(ledger_path.relative_to(ROOT)),
@@ -162,7 +162,9 @@ def rebuild(sport: str, season: int) -> dict[str, Any]:
         "lean_ats_str": format_ats(lean_ats),
         "combined_ats": combined_ats,
         "combined_ats_str": format_ats(combined_ats),
-        "combined_roi": roi,
+        "play_roi": play_roi,
+        "lean_roi": lean_roi,
+        "combined_roi": combined_roi,
         "open_ticket_ids": [t.get("ticket_id") for t in open_tickets],
     }
 

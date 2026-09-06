@@ -7,6 +7,8 @@ import {
   loadDeskRecord,
   type DeskRecordSummary,
   type DeskRecordTicket,
+  type DeskRoiSummary,
+  type DeskSegmentSummary,
 } from "@/lib/desk-record";
 import {
   getSport,
@@ -20,6 +22,14 @@ export const dynamic = "force-dynamic";
 const RECORD_SPORTS: SportKey[] = ["cfb", "nfl"];
 const SEASON = 2026;
 
+type RecordView = "play" | "lean" | "all";
+
+function parseView(raw: string | string[] | undefined): RecordView {
+  const v = Array.isArray(raw) ? raw[0] : raw;
+  if (v === "play" || v === "lean" || v === "all") return v;
+  return "all";
+}
+
 function resultClass(result: DeskRecordTicket["result"]): string {
   if (result === "W") return "text-edge-green";
   if (result === "L") return "text-red-400";
@@ -27,8 +37,7 @@ function resultClass(result: DeskRecordTicket["result"]): string {
   return "text-white/55";
 }
 
-function RoiBlock({ summary }: { summary: DeskRecordSummary }) {
-  const roi = summary.combined_roi;
+function RoiBlock({ roi }: { roi: DeskRoiSummary }) {
   if (roi.status === "DATA_GAP") {
     return (
       <div>
@@ -37,7 +46,7 @@ function RoiBlock({ summary }: { summary: DeskRecordSummary }) {
         </div>
         <p className="mt-1 text-sm text-white/60">
           {roi.note ??
-            "Combined ROI waits on stamped pre-kick juice — no flat −110 invent."}
+            "ROI waits on stamped pre-kick juice — no flat −110 invent."}
         </p>
         <p className="mt-1 text-xs text-white/45">
           {roi.n_data_gap} settled W/L ticket
@@ -83,6 +92,15 @@ function RoiBlock({ summary }: { summary: DeskRecordSummary }) {
   );
 }
 
+function segmentFor(
+  summary: DeskRecordSummary,
+  view: RecordView,
+): DeskSegmentSummary {
+  if (view === "play") return summary.segments.play;
+  if (view === "lean") return summary.segments.lean;
+  return summary.segments.all;
+}
+
 export async function generateMetadata({
   params,
 }: {
@@ -102,22 +120,39 @@ export async function generateMetadata({
 
 export default async function DeskRecordPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ sport?: string }> | { sport?: string };
+  searchParams?:
+    | Promise<Record<string, string | string[] | undefined>>
+    | Record<string, string | string[] | undefined>;
 }) {
-  const resolved =
+  const paramsPromise =
     params && typeof (params as Promise<unknown>).then === "function"
-      ? await (params as Promise<{ sport?: string }>)
-      : ((params as { sport?: string }) ?? {});
+      ? (params as Promise<{ sport?: string }>)
+      : Promise.resolve((params as { sport?: string }) ?? {});
+  const searchPromise =
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
+      ? (searchParams as Promise<Record<string, string | string[] | undefined>>)
+      : Promise.resolve(
+          (searchParams as Record<string, string | string[] | undefined>) ?? {},
+        );
+
+  const [resolved, sp] = await Promise.all([paramsPromise, searchPromise]);
   const sportKey = resolveSportKey(resolved?.sport, "cfb") as SportKey;
+  const view = parseView(sp.view);
   const sport = getSport(sportKey);
   const label = sportDisplayLabel(sportKey, "Sport");
   const supported = RECORD_SPORTS.includes(sportKey);
   const summary = supported
     ? loadDeskRecord(sportKey, SEASON)
     : loadDeskRecord("cfb", SEASON);
-
+  const segment = segmentFor(summary, view);
   const empty = summary.n_tickets === 0;
+
+  const viewHref = (v: RecordView) =>
+    v === "all" ? `/record/${sportKey}` : `/record/${sportKey}?view=${v}`;
 
   return (
     <main className="min-h-screen bg-kos-black text-kos-text">
@@ -142,7 +177,7 @@ export default async function DeskRecordPage({
             return (
               <Link
                 key={s}
-                href={`/record/${s}`}
+                href={`/record/${s}${view === "all" ? "" : `?view=${view}`}`}
                 className={
                   active
                     ? "rounded-xl bg-kos-gold px-4 py-2 text-sm font-semibold text-black"
@@ -170,51 +205,88 @@ export default async function DeskRecordPage({
           </section>
         ) : (
           <>
-            <section className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <div
+              className="mt-8 flex flex-wrap gap-2"
+              role="tablist"
+              aria-label="Record segment"
+            >
+              {(
+                [
+                  ["all", "All"],
+                  ["play", "PLAY"],
+                  ["lean", "LEAN"],
+                ] as const
+              ).map(([key, labelText]) => {
+                const active = view === key;
+                return (
+                  <Link
+                    key={key}
+                    href={viewHref(key)}
+                    role="tab"
+                    aria-selected={active}
+                    className={
+                      active
+                        ? "rounded-xl border border-edge-green/40 bg-edge-green/15 px-4 py-2 text-sm font-semibold text-edge-green"
+                        : "rounded-xl border border-white/10 bg-white/5 px-4 py-2 text-sm text-white/70 hover:border-white/25 hover:text-white"
+                    }
+                  >
+                    {labelText}
+                  </Link>
+                );
+              })}
+            </div>
+
+            <section className="mt-6 grid gap-4 sm:grid-cols-2">
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                 <div className="text-xs uppercase tracking-wide text-white/45">
-                  PLAY ATS
+                  {view === "play"
+                    ? "PLAY ATS"
+                    : view === "lean"
+                      ? "LEAN ATS"
+                      : "Combined ATS"}
                 </div>
                 <div className="mt-2 text-3xl font-semibold tracking-tight">
-                  {summary.play_ats_str}
-                </div>
-                <p className="mt-1 text-xs text-white/45">1.0u each</p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                <div className="text-xs uppercase tracking-wide text-white/45">
-                  LEAN ATS
-                </div>
-                <div className="mt-2 text-3xl font-semibold tracking-tight">
-                  {summary.lean_ats_str}
-                </div>
-                <p className="mt-1 text-xs text-white/45">0.5u each</p>
-              </div>
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
-                <div className="text-xs uppercase tracking-wide text-white/45">
-                  Combined ATS
-                </div>
-                <div className="mt-2 text-3xl font-semibold tracking-tight">
-                  {summary.combined_ats_str}
+                  {segment.ats_str}
                 </div>
                 <p className="mt-1 text-xs text-white/45">
-                  {summary.n_open > 0
-                    ? `${summary.n_open} still open`
-                    : "all settled tickets"}
+                  {view === "play"
+                    ? "1.0u each"
+                    : view === "lean"
+                      ? "0.5u each"
+                      : "PLAY 1.0u · LEAN 0.5u"}
+                  {segment.n_open > 0
+                    ? ` · ${segment.n_open} open`
+                    : " · settled sample"}
                 </p>
+                {view === "all" ? (
+                  <p className="mt-2 text-xs text-white/50">
+                    PLAY {summary.play_ats_str} · LEAN {summary.lean_ats_str}
+                  </p>
+                ) : null}
               </div>
               <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-5">
                 <div className="text-xs uppercase tracking-wide text-white/45">
-                  Combined ROI
+                  {view === "play"
+                    ? "PLAY ROI"
+                    : view === "lean"
+                      ? "LEAN ROI"
+                      : "Combined ROI"}
                 </div>
                 <div className="mt-2">
-                  <RoiBlock summary={summary} />
+                  <RoiBlock roi={segment.roi} />
                 </div>
               </div>
             </section>
 
             <section className="mt-10">
               <div className="flex flex-wrap items-end justify-between gap-3">
-                <h2 className="text-lg font-semibold text-kos-gold">Tickets</h2>
+                <h2 className="text-lg font-semibold text-kos-gold">
+                  {view === "play"
+                    ? "PLAY tickets"
+                    : view === "lean"
+                      ? "LEAN tickets"
+                      : "All tickets"}
+                </h2>
                 <p className="text-xs text-white/45">
                   Ledger SoT · morning settle prior-day ET
                 </p>
@@ -233,8 +305,18 @@ export default async function DeskRecordPage({
                     </tr>
                   </thead>
                   <tbody>
-                    {summary.tickets.map((t) => {
-                      return (
+                    {segment.tickets.length === 0 ? (
+                      <tr>
+                        <td
+                          colSpan={7}
+                          className="px-4 py-6 text-sm text-white/55"
+                        >
+                          No {view === "lean" ? "LEAN" : "PLAY"} tickets in this
+                          ledger yet.
+                        </td>
+                      </tr>
+                    ) : (
+                      segment.tickets.map((t) => (
                         <tr
                           key={t.ticket_id}
                           className="border-b border-white/5 last:border-0"
@@ -274,8 +356,8 @@ export default async function DeskRecordPage({
                                 : String(t.profit_u)}
                           </td>
                         </tr>
-                      );
-                    })}
+                      ))
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -287,6 +369,10 @@ export default async function DeskRecordPage({
           <h2 className="text-sm font-semibold text-white/80">Contract</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>Desk PLAY/LEAN only — writer packages / stamped desk SoT.</li>
+            <li>
+              Segment views: PLAY-only, LEAN-only, and All — each with its own
+              ATS + ROI.
+            </li>
             <li>
               Best pre-kick number + juice among Compare Odds books; stamp
               as_of.

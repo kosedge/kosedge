@@ -7,9 +7,10 @@
     "juice": "best available pre-kick among Compare Odds books; never invent flat \u2212110",
     "stake_play_u": 1.0,
     "stake_lean_u": 0.5,
-    "pushes": "profit 0; stake excluded from risked"
+    "pushes": "profit 0; stake excluded from risked",
+    "segments": "PLAY-only, LEAN-only, and All each expose ATS + ROI"
   },
-  "as_of": "2026-09-06T16:55:16Z",
+  "as_of": "2026-09-06T16:59:10Z",
   "ledger_path": "data/desk-record/cfb/2026/ledger.jsonl",
   "n_tickets": 10,
   "n_open": 1,
@@ -31,6 +32,26 @@
     "p": 1
   },
   "combined_ats_str": "4-4-1",
+  "play_roi": {
+    "status": "DATA_GAP",
+    "profit_u": null,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 7,
+    "n_stamped_juice": 0,
+    "note": "Settled W/L tickets lack stamped pre-kick juice \u2014 no flat \u2212110 invent."
+  },
+  "lean_roi": {
+    "status": "DATA_GAP",
+    "profit_u": null,
+    "risked_u": 0.0,
+    "roi": null,
+    "n_tickets": 0,
+    "n_data_gap": 1,
+    "n_stamped_juice": 0,
+    "note": "Settled W/L tickets lack stamped pre-kick juice \u2014 no flat \u2212110 invent."
+  },
   "combined_roi": {
     "status": "DATA_GAP",
     "profit_u": null,

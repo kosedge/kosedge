@@ -1,8 +1,6 @@
 # Desk ATS / ROI record — product contract
 
-**Public path:** `/record/[sport]` (CFB first: `/record/cfb`)  
-**Machine SoT:** `data/desk-record/<sport>/<season>/ledger.jsonl`  
-**Rollup:** `data/desk-record/<sport>/<season>/summary.json` via `scripts/desk-record/rebuild_summary.py`
+Segment views on `/record/cfb?view=play|lean|all` (default All): each segment shows its own ATS (W–L–P) and ROI (PLAY 1.0u / LEAN 0.5u at stamped best pre-kick juice). Ticket table filters with the same segment.
 
 This is a **product record page**, not SEO acquisition (#13 faucet stays OFF). Soft destinations only.
 

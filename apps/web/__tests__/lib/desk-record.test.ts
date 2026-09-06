@@ -111,6 +111,11 @@ describe("desk-record contract", () => {
     expect(summary.lean_ats_str).toBe("0-1-0");
     expect(summary.n_open).toBe(1);
     expect(summary.combined_roi.status).toBe("DATA_GAP");
+    expect(summary.play_roi.status).toBe("DATA_GAP");
+    expect(summary.lean_roi.status).toBe("DATA_GAP");
+    expect(summary.segments.play.tickets).toHaveLength(9);
+    expect(summary.segments.lean.tickets).toHaveLength(1);
+    expect(summary.segments.all.tickets).toHaveLength(10);
     expect(summary.tickets.every((t) => t.grade === "PLAY" || t.grade === "LEAN")).toBe(
       true,
     );

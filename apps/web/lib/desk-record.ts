@@ -44,6 +44,15 @@ export type DeskRoiSummary = {
   note?: string;
 };
 
+export type DeskSegmentSummary = {
+  grade: "PLAY" | "LEAN" | "ALL";
+  ats: AtsTriple;
+  ats_str: string;
+  roi: DeskRoiSummary;
+  n_open: number;
+  tickets: DeskRecordTicket[];
+};
+
 export type DeskRecordSummary = {
   sport: string;
   season: number;
@@ -57,9 +66,16 @@ export type DeskRecordSummary = {
   lean_ats_str: string;
   combined_ats: AtsTriple;
   combined_ats_str: string;
+  play_roi: DeskRoiSummary;
+  lean_roi: DeskRoiSummary;
   combined_roi: DeskRoiSummary;
   open_ticket_ids: string[];
   tickets: DeskRecordTicket[];
+  segments: {
+    play: DeskSegmentSummary;
+    lean: DeskSegmentSummary;
+    all: DeskSegmentSummary;
+  };
 };
 
 function findRepoRoot(): string | null {
@@ -173,32 +189,14 @@ function loadTickets(sport: string, season: number): DeskRecordTicket[] {
   return out;
 }
 
-export function summarizeDeskTickets(
-  tickets: DeskRecordTicket[],
-  sport: string,
-  season: number,
-): DeskRecordSummary {
-  const playSettled = tickets.filter(
-    (t) => t.grade === "PLAY" && (t.result === "W" || t.result === "L" || t.result === "P"),
-  );
-  const leanSettled = tickets.filter(
-    (t) => t.grade === "LEAN" && (t.result === "W" || t.result === "L" || t.result === "P"),
-  );
-  const openTickets = tickets.filter((t) => t.result === "OPEN");
-
-  const playAts = atsTriple(playSettled.map((t) => t.result));
-  const leanAts = atsTriple(leanSettled.map((t) => t.result));
-  const combinedAts = atsTriple(
-    [...playSettled, ...leanSettled].map((t) => t.result),
-  );
-
+function computeRoi(settled: DeskRecordTicket[]): DeskRoiSummary {
   let profitSum = 0;
   let risked = 0;
   let roiTickets = 0;
   let dataGapRoi = 0;
   let stampedJuice = 0;
 
-  for (const t of [...playSettled, ...leanSettled]) {
+  for (const t of settled) {
     if (t.result === "P") continue;
     if (t.juice == null || t.juice_status === "DATA_GAP" || Math.abs(t.juice) < 100) {
       dataGapRoi += 1;
@@ -215,9 +213,8 @@ export function summarizeDeskTickets(
     roiTickets += 1;
   }
 
-  let combinedRoi: DeskRoiSummary;
   if (risked > 0) {
-    combinedRoi = {
+    return {
       status: "ok",
       profit_u: Number(profitSum.toFixed(6)),
       risked_u: Number(risked.toFixed(6)),
@@ -226,8 +223,9 @@ export function summarizeDeskTickets(
       n_data_gap: dataGapRoi,
       n_stamped_juice: stampedJuice,
     };
-  } else if (dataGapRoi > 0) {
-    combinedRoi = {
+  }
+  if (dataGapRoi > 0) {
+    return {
       status: "DATA_GAP",
       profit_u: null,
       risked_u: 0,
@@ -237,18 +235,43 @@ export function summarizeDeskTickets(
       n_stamped_juice: stampedJuice,
       note: "Settled W/L tickets lack stamped pre-kick juice — no flat −110 invent.",
     };
-  } else {
-    combinedRoi = {
-      status: "empty",
-      profit_u: 0,
-      risked_u: 0,
-      roi: null,
-      n_tickets: 0,
-      n_data_gap: 0,
-      n_stamped_juice: 0,
-      note: "No settled W/L tickets with stake at risk yet.",
-    };
   }
+  return {
+    status: "empty",
+    profit_u: 0,
+    risked_u: 0,
+    roi: null,
+    n_tickets: 0,
+    n_data_gap: 0,
+    n_stamped_juice: 0,
+    note: "No settled W/L tickets with stake at risk yet.",
+  };
+}
+
+export function summarizeDeskTickets(
+  tickets: DeskRecordTicket[],
+  sport: string,
+  season: number,
+): DeskRecordSummary {
+  const playSettled = tickets.filter(
+    (t) => t.grade === "PLAY" && (t.result === "W" || t.result === "L" || t.result === "P"),
+  );
+  const leanSettled = tickets.filter(
+    (t) => t.grade === "LEAN" && (t.result === "W" || t.result === "L" || t.result === "P"),
+  );
+  const openTickets = tickets.filter((t) => t.result === "OPEN");
+  const playAll = tickets.filter((t) => t.grade === "PLAY");
+  const leanAll = tickets.filter((t) => t.grade === "LEAN");
+
+  const playAts = atsTriple(playSettled.map((t) => t.result));
+  const leanAts = atsTriple(leanSettled.map((t) => t.result));
+  const combinedAts = atsTriple(
+    [...playSettled, ...leanSettled].map((t) => t.result),
+  );
+
+  const playRoi = computeRoi(playSettled);
+  const leanRoi = computeRoi(leanSettled);
+  const combinedRoi = computeRoi([...playSettled, ...leanSettled]);
 
   return {
     sport,
@@ -263,9 +286,37 @@ export function summarizeDeskTickets(
     lean_ats_str: formatAts(leanAts),
     combined_ats: combinedAts,
     combined_ats_str: formatAts(combinedAts),
+    play_roi: playRoi,
+    lean_roi: leanRoi,
     combined_roi: combinedRoi,
     open_ticket_ids: openTickets.map((t) => t.ticket_id),
     tickets,
+    segments: {
+      play: {
+        grade: "PLAY",
+        ats: playAts,
+        ats_str: formatAts(playAts),
+        roi: playRoi,
+        n_open: playAll.filter((t) => t.result === "OPEN").length,
+        tickets: playAll,
+      },
+      lean: {
+        grade: "LEAN",
+        ats: leanAts,
+        ats_str: formatAts(leanAts),
+        roi: leanRoi,
+        n_open: leanAll.filter((t) => t.result === "OPEN").length,
+        tickets: leanAll,
+      },
+      all: {
+        grade: "ALL",
+        ats: combinedAts,
+        ats_str: formatAts(combinedAts),
+        roi: combinedRoi,
+        n_open: openTickets.length,
+        tickets,
+      },
+    },
   };
 }
 
