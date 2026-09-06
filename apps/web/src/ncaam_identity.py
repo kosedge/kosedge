@@ -7,6 +7,9 @@ P0: bare "miami" is OMIT — Miami FL ≠ Miami OH must never collapse.
 Peer homonyms: bare "loyola" / "southern" also OMIT (aliases.json omit_aliases).
 No fuzzy auto-publish joins; unknown / ambiguous → None.
 Alias SoT: apps/web/lib/ncaam/aliases.json (shared with TS identity).
+
+Phase 2.6B: odds_name_to_team_norm may apply deterministic expansions only
+(hyphen→space, St→State, trailing-mascot strip, univ→university). Never fuzzy.
 """
 
 from __future__ import annotations
@@ -21,6 +24,63 @@ from typing import Any, Dict, Optional
 _ALIAS_PATH = Path(__file__).resolve().parent.parent / "lib" / "ncaam" / "aliases.json"
 
 RETIRED_NCAAM_SPORT_KEYS = frozenset({"cbb", "ncaab"})
+
+# Campus location tokens that may appear after a school stem in odds strings.
+_CAMPUS_LOC_TOKENS = frozenset(
+    {
+        "mn",
+        "pa",
+        "ny",
+        "oh",
+        "fl",
+        "ca",
+        "tx",
+        "il",
+        "in",
+        "mi",
+        "nc",
+        "sc",
+        "va",
+        "md",
+        "ga",
+        "al",
+        "ms",
+        "la",
+        "ar",
+        "mo",
+        "ks",
+        "ok",
+        "co",
+        "az",
+        "wa",
+        "or",
+        "ky",
+        "tn",
+        "wi",
+        "ia",
+        "ne",
+        "sd",
+        "nd",
+        "mt",
+        "id",
+        "ut",
+        "nm",
+        "nv",
+        "wy",
+        "hi",
+        "ak",
+        "ct",
+        "ma",
+        "ri",
+        "nh",
+        "vt",
+        "me",
+        "nj",
+        "de",
+        "wv",
+        "dc",
+    }
+)
 
 
 def fold_ncaam_alias(raw: str) -> str:
@@ -77,9 +137,96 @@ def is_retired_ncaam_sport_key(key: Optional[str]) -> bool:
     return str(key or "").strip().lower() in RETIRED_NCAAM_SPORT_KEYS
 
 
+def _expand_st_abbreviation(folded: str) -> str:
+    """Deterministic St → State token expansion (not fuzzy).
+
+    Examples: 'washington st cougars' → 'washington state cougars';
+              'san diego st' → 'san diego state'.
+    Does not touch leading saint prefixes (st thomas, st johns, etc.).
+    """
+    parts = folded.split()
+    out: list[str] = []
+    for i, p in enumerate(parts):
+        if p == "st" and i > 0 and parts[i - 1] not in {"st", "saint"}:
+            out.append("state")
+        else:
+            out.append(p)
+    return " ".join(out)
+
+
+def _normalize_odds_fold(folded: str) -> str:
+    """Deterministic odds-string normalizations before alias lookup."""
+    s = folded.replace("-", " ")
+    s = re.sub(r"\s+", " ", s).strip()
+    parts = s.split()
+    out: list[str] = []
+    for p in parts:
+        if p in {"univ", "u"} and out:
+            # 'boston univ' → 'boston university'; lone 'u' after school stem only when prior is alpha school token
+            if p == "univ":
+                out.append("university")
+            else:
+                out.append(p)
+        else:
+            out.append(p)
+    return " ".join(out)
+
+
+def _lookup_folded(folded: str) -> Optional[str]:
+    if not folded or folded in _omit():
+        return None
+    tid = _aliases().get(folded)
+    if tid is None:
+        return None
+    return to_ratings_norm(tid)
+
+
 def odds_name_to_team_norm(full: str) -> Optional[str]:
-    """Publish-safe replacement for odds_team_to_short — fail-closed, no first-token shortening."""
-    return resolve_ratings_norm(full, source="odds")
+    """Publish-safe odds-name resolver — fail-closed, deterministic expansions only.
+
+    Resolution order:
+      1) exact folded alias
+      2) hyphen→space + univ→university normalization
+      3) St→State abbreviation expansion
+      4) strip final mascot token, then retry 1–3
+      5) if stem ends with a 2-letter campus locator, strip it and retry
+
+    Never uses fuzzy/edit-distance matching. Bare homonyms stay omit-listed.
+    Never collapses Texas A&M-Commerce → Texas A&M (requires explicit commerce alias).
+    """
+    folded0 = fold_ncaam_alias(full)
+    if not folded0:
+        return None
+
+    bases = []
+    for b in (folded0, _normalize_odds_fold(folded0)):
+        if b and b not in bases:
+            bases.append(b)
+
+    candidates: list[str] = []
+    for base in bases:
+        for cand in (base, _expand_st_abbreviation(base)):
+            if cand and cand not in candidates:
+                candidates.append(cand)
+        parts = base.split()
+        if len(parts) >= 2:
+            stem = " ".join(parts[:-1])
+            for cand in (stem, _expand_st_abbreviation(stem)):
+                if cand and cand not in candidates:
+                    candidates.append(cand)
+            # campus locator: 'st thomas mn' / 'st francis pa'
+            stem_parts = stem.split()
+            if len(stem_parts) >= 2 and stem_parts[-1] in _CAMPUS_LOC_TOKENS:
+                stem2 = " ".join(stem_parts[:-1])
+                for cand in (stem2, _expand_st_abbreviation(stem2)):
+                    if cand and cand not in candidates:
+                        candidates.append(cand)
+
+    for cand in candidates:
+        hit = _lookup_folded(cand)
+        if hit:
+            return hit
+    return None
 
 
 def map_odds_names_to_norm(names: list[str]) -> list[Optional[str]]:
