@@ -1,32 +1,74 @@
 {
-  "schema_version": "ncaam-r2-retention-docs-v1",
-  "phase": "2.6F",
-  "created_at_utc": "2026-09-06T19:34:37.242391Z",
-  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
-  "provider_verified": true,
+  "schema_version": "ncaam-r2-retention-docs-v2-cr4",
+  "phase": "2.6F-CR4",
+  "created_at_utc": "2026-09-06T22:10:00Z",
+  "provider_verified": false,
+  "cos_applies_retention_locks": true,
   "do_not_change_mid_phase": true,
-  "prefix_specific_rules": [
+  "credentials_in_git": false,
+  "buckets": [
     {
-      "name": "retain-gap-recovery-research-subset-v1",
-      "prefix": "ncaam/gap_recovery_research_subset_v1/",
-      "retention": "indefinite",
-      "scope": "prefix",
-      "impact": "narrow"
+      "name": "kosedge-ncaam-holdout-2425-features-v1",
+      "privacy": "private",
+      "public_access": "disabled",
+      "r2_dev_access": "disabled",
+      "custom_domains": "none",
+      "prefix_specific_rules": [
+        {
+          "name": "retain-holdout-2425-features-v1_1-cas",
+          "prefix": "ncaam/holdout_2024_25/v1_1/cas/",
+          "retention": "indefinite",
+          "scope": "prefix",
+          "impact": "narrow",
+          "status": "PENDING_COS"
+        },
+        {
+          "name": "retain-holdout-2425-features-v1_1-manifests",
+          "prefix": "ncaam/holdout_2024_25/v1_1/manifests/",
+          "retention": "indefinite",
+          "scope": "prefix",
+          "impact": "narrow",
+          "status": "PENDING_COS"
+        }
+      ]
     },
     {
-      "name": "retain-holdout-2024-25-espn-schedule-raw-v1",
-      "prefix": "ncaam/holdout_2024_25/espn_schedule_raw_v1/",
-      "retention": "indefinite",
-      "scope": "prefix",
-      "impact": "narrow"
+      "name": "kosedge-ncaam-holdout-2425-label-vault-v1",
+      "privacy": "private",
+      "public_access": "disabled",
+      "r2_dev_access": "disabled",
+      "custom_domains": "none",
+      "builder_access": "FORBIDDEN",
+      "prefix_specific_rules": [
+        {
+          "name": "retain-holdout-2425-label-vault-v1_1-cas",
+          "prefix": "ncaam/holdout_2024_25/v1_1/cas/",
+          "retention": "indefinite",
+          "scope": "prefix",
+          "impact": "narrow",
+          "status": "PENDING_COS"
+        }
+      ]
     }
   ],
-  "bucket_wide_indefinite_rule": {
-    "scope": "bucket",
-    "retention": "indefinite",
-    "impact": "broader_than_prefix_rules",
-    "intentionally_permanent": true,
-    "rationale": "Sealed lab immutability while 2024-25 holdout remains sealed; prevents silent overwrite/delete across all objects in this private bucket.",
-    "change_policy": "Do not modify mid-phase. Future narrowing requires separate Ryan approval after PR A/B review."
-  }
+  "legacy_gap_recovery_raw": {
+    "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+    "note": "FORENSIC ESPN raw only; not frozen holdout authority",
+    "provider_verified": true,
+    "prefix_specific_rules": [
+      {
+        "name": "retain-gap-recovery-research-subset-v1",
+        "prefix": "ncaam/gap_recovery_research_subset_v1/",
+        "retention": "indefinite",
+        "scope": "prefix"
+      },
+      {
+        "name": "retain-holdout-2024-25-espn-schedule-raw-v1",
+        "prefix": "ncaam/holdout_2024_25/espn_schedule_raw_v1/",
+        "retention": "indefinite",
+        "scope": "prefix"
+      }
+    ]
+  },
+  "change_policy": "Do not modify mid-phase. CoS provisions real locks after upload. Future narrowing requires separate Ryan approval."
 }
