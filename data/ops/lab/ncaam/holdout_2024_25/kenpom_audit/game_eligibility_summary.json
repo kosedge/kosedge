@@ -1,0 +1,19 @@
+{
+  "forbidden_methods_not_used": [
+    "current_ratings",
+    "end_of_season_backfilled",
+    "later_snapshot_for_earlier_event",
+    "interpolation_from_future",
+    "annual_csv_as_pit",
+    "reconstructed_from_later_games"
+  ],
+  "n_games": 5769,
+  "n_missing_or_invalid": 265,
+  "n_pit_eligible": 5504,
+  "n_snapshots_eligible": 21,
+  "n_snapshots_inventoried": 21,
+  "scores_omitted": true,
+  "archive_date_semantics": "filename_date_is_as_of",
+  "null_captured_at_policy": "allowed_when_filename_date_is_as_of",
+  "require_both_teams_ratings_for_pit_eligible": true
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "ncaam-reversal-orientation-full-manifest-26f-v1",
+  "artifact": "coverage_26c/reversal_orientation_full.json",
+  "status": "STRIPPED_FROM_GIT_COS",
+  "stripped_at_utc": "2026-09-06T19:58:41.609514Z",
+  "content_sha256": "2061972c914b4320a761d9553d0af3272cdbb91dcae41fff0d6eea9fd5e42073",
+  "bytes": 99896,
+  "n_rows": 149,
+  "recovery_applied": false,
+  "source_schema_version": "ncaam-reversal-orientation-full-26c-v1",
+  "lives_in": "deferred_not_git",
+  "summary_also_in": "coverage_26c/reversal_duplicate_diagnostic.json",
+  "note": "Full orientation row dump removed per CoS; diagnostic summary retained.",
+  "scores_omitted": true
+}

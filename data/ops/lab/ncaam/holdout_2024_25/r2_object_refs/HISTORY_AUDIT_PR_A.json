@@ -1,0 +1,89 @@
+{
+  "branch": "cursor/ncaam-26f-foundation-fix-8a49",
+  "head": "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
+  "base": "origin/deploy-vercel",
+  "n_commits": 3,
+  "commits": [
+    "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
+    "82cd73730b0b6badf9ed6cb2131fecbc4875b032",
+    "94843e8a50298f54153301ccfc91c70fe3238f98"
+  ],
+  "covers_all_commits_on_final_A_HEAD": true,
+  "oversized_blobs_gt_250kb": [],
+  "fat_json_ancestor_7ced9f10_in_history": false,
+  "raw_espn_paths": [],
+  "bulk_dataset_paths": [],
+  "credential_pattern_hits": [],
+  "largest_blobs": [
+    {
+      "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+      "bytes": 5179637
+    },
+    {
+      "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+      "bytes": 3131670
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-latest.parquet",
+      "bytes": 343381
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260905T083657Z.parquet",
+      "bytes": 343381
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260905T083535Z.parquet",
+      "bytes": 343381
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T174056Z.parquet",
+      "bytes": 343381
+    },
+    {
+      "path": "data/ops/ncaam-odds-lake-backfill-20260905.early-receipt.json",
+      "bytes": 254631
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260905T083546Z.parquet",
+      "bytes": 227102
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260904T174105Z.parquet",
+      "bytes": 227102
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-latest.parquet",
+      "bytes": 227100
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260905T083659Z.parquet",
+      "bytes": 227100
+    },
+    {
+      "path": "data/ops/ncaam-odds-lake-backfill-20260905.hole-receipt.json",
+      "bytes": 186033
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T153604Z.parquet",
+      "bytes": 121991
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-20260904T151735Z.parquet",
+      "bytes": 121991
+    },
+    {
+      "path": "data/ops/lab/ncaam/ncaam-fair-lab-test_a-20260904T153617Z.parquet",
+      "bytes": 78814
+    }
+  ],
+  "acceptance_fixes_present": [
+    "governed_mascot_strip",
+    "b1_timestamp_fail_closed",
+    "raw_checksum_no_or_True",
+    "seal_payload_sha256",
+    "kenpom_pit_policy",
+    "taxonomy_relabel_not_in_governed_pit_rating_universe"
+  ],
+  "verdict": true,
+  "audited_at_utc": "2026-09-06T20:57:11Z"
+}

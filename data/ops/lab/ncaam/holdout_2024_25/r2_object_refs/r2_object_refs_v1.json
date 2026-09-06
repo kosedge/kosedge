@@ -1,0 +1,47 @@
+{
+  "bucket": "kosedge-ncaam-lab-gap-recovery-raw-v1",
+  "bucket_privacy": "private",
+  "created_at_utc": "2026-09-06T19:34:37.242391Z",
+  "git_excludes_bulk": true,
+  "objects": [
+    {
+      "fresh_download_verification": "GREEN",
+      "inventory_sha256": "5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+      "lock_rule": "retain-gap-recovery-research-subset-v1",
+      "prefix": "ncaam/gap_recovery_research_subset_v1/",
+      "retention": "indefinite",
+      "role": "gap_recovery_research_subset_package",
+      "upload_status": "UPLOADED_VERIFIED"
+    },
+    {
+      "cas_index_sha256": "7513f28a255e7cd770bd75dd8c066ced83762594e9bff7fb7a5a049e35e67613",
+      "fresh_download_verification": "GREEN",
+      "lock_rule": "retain-holdout-2024-25-espn-schedule-raw-v1",
+      "n_objects": 312,
+      "note": "Phase 2.6F storage portion closed GREEN; not re-uploaded in PR split.",
+      "prefix": "ncaam/holdout_2024_25/espn_schedule_raw_v1/",
+      "retention": "indefinite",
+      "role": "espn_schedule_raw_v1",
+      "source_commit_pr491": "2d51cdcdc0d0d87c185352388f1ea891992b24f3",
+      "total_bytes": 104782373,
+      "upload_status": "UPLOADED_VERIFIED"
+    }
+  ],
+  "phase": "2.6F",
+  "public_r2_dev_access": "disabled",
+  "schema_version": "ncaam-r2-object-refs-v1",
+  "seal_content_hashes": {
+    "feature_content_sha256": "8c9e7ffffd05511e0e90f1e9bbd95d68377370f6a7660f0a4652e50f2d820940",
+    "feature_manifest_sha256": "f45c0438e40f62eee12fd6d9ec944ab077f2cb6734cc79db95ce2462c0c7abf9",
+    "features_labels_joined_for_evaluation": false,
+    "holdout_id": "ncaam_holdout_2024_25_v1_1",
+    "label_content_sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+    "label_manifest_sha256": "0893a9e28ebd1e878a5ef8289540ffd35db864f55c4de4f34bda2bacefb60cc0",
+    "rejected_sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+    "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
+    "seal_file_sha256_legacy_key_seal_receipt_sha256": "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09",
+    "seal_hash_semantics": "seal_payload_sha256 is membership hash before inserting hash field; seal_file_sha256 is on-disk digest",
+    "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
+    "sealed_at": "2026-09-05T13:27:18.625914+00:00"
+  }
+}

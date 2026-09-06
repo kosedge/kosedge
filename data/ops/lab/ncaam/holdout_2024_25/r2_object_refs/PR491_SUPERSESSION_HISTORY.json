@@ -1,0 +1,47 @@
+{
+  "schema_version": "ncaam-pr491-supersession-v1",
+  "status": "PROPOSED_NOT_CLOSED",
+  "source_pr": 491,
+  "source_url": "https://github.com/kosedge/kosedge/pull/491",
+  "prior_attempt_prs": {
+    "A": {
+      "pr": 494,
+      "branch": "cursor/ncaam-holdout-foundation-26f",
+      "note": "superseded by -16f9"
+    },
+    "B": {
+      "pr": 495,
+      "branch": "cursor/ncaam-holdout-governance-26f",
+      "note": "superseded by -16f9; had upload_pending"
+    }
+  },
+  "replacement": {
+    "A": {
+      "branch": "cursor/ncaam-holdout-foundation-16f9",
+      "pr": 496
+    },
+    "B": {
+      "branch": "cursor/ncaam-holdout-governance-16f9",
+      "pr": 497
+    }
+  },
+  "note": "Do not close/rewrite/force-push PR #491 until Ryan reviews clean replacements and parity evidence.",
+  "created_at_utc": "2026-09-06T19:34:37.242391Z",
+  "events": [
+    {
+      "at_utc": "2026-09-06T20:57:11Z",
+      "event": "acceptance_fix_A_prime_B_prime",
+      "note": "Ryan CHANGES_REQUIRED on #496/#497; clean A'/B' from deploy-vercel; #491/#490 untouched; no merge",
+      "pr_a_branch": "cursor/ncaam-26f-foundation-fix-8a49",
+      "pr_a_head": "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
+      "pr_b_branch": "cursor/ncaam-26f-governance-fix-8a49",
+      "prior_drafts": [
+        "#496",
+        "#497"
+      ],
+      "fat_ancestor_excluded": "7ced9f10"
+    }
+  ],
+  "current_a_branch": "cursor/ncaam-26f-foundation-fix-8a49",
+  "current_b_branch": "cursor/ncaam-26f-governance-fix-8a49"
+}

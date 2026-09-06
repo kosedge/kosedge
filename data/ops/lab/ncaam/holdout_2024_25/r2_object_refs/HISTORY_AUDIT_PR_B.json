@@ -1,0 +1,17 @@
+{
+  "branch": "cursor/ncaam-26f-governance-fix-8a49",
+  "head": "PENDING_COMMIT",
+  "stacked_on_a_head": "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
+  "base_for_history": "cursor/ncaam-26f-foundation-fix-8a49",
+  "n_commits": null,
+  "commits": [],
+  "covers_all_commits_on_final_B_HEAD": false,
+  "oversized_blobs_gt_250kb": [],
+  "fat_json_ancestor_7ced9f10_in_history": false,
+  "raw_espn_paths": [],
+  "bulk_dataset_paths": [],
+  "credential_pattern_hits": [],
+  "note": "head/commits filled in follow-up commit after first B' landing",
+  "verdict": true,
+  "audited_at_utc": "2026-09-06T20:57:46Z"
+}
