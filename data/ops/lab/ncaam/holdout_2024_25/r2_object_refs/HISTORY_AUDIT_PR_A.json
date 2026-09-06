@@ -1,9 +1,21 @@
 {
-  "branch": "cursor/ncaam-26f-foundation-fix-8a49",
-  "head": "6c035c43ed199274737fd38caa5e4daea30846d9",
+  "acceptance_fixes_present": [
+    "governed_mascot_strip",
+    "b1_timestamp_fail_closed",
+    "raw_checksum_no_or_True",
+    "raw_integrity_hard_stop_before_seal",
+    "seal_payload_sha256",
+    "seal_file_sha256_internal_consumers",
+    "path_b_deterministic_rebuild",
+    "kenpom_pit_policy",
+    "taxonomy_relabel_not_in_governed_pit_rating_universe"
+  ],
+  "audited_at_utc": "2026-09-06T21:23:38Z",
   "base": "origin/deploy-vercel",
-  "n_commits": 5,
+  "branch": "cursor/ncaam-26f-foundation-fix-8a49",
+  "bulk_dataset_paths": [],
   "commits": [
+    "aafbeb7c53b3461d289a066685d14df138eeb265",
     "6c035c43ed199274737fd38caa5e4daea30846d9",
     "41e5a85b48d0c97c3643b63df7ad36057cc84618",
     "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
@@ -11,19 +23,12 @@
     "94843e8a50298f54153301ccfc91c70fe3238f98"
   ],
   "covers_all_commits_on_final_A_HEAD": true,
-  "oversized_blobs_gt_250kb": [],
-  "fat_json_ancestor_7ced9f10_in_history": false,
-  "raw_espn_paths": [],
-  "bulk_dataset_paths": [],
   "credential_pattern_hits": [],
-  "acceptance_fixes_present": [
-    "governed_mascot_strip",
-    "b1_timestamp_fail_closed",
-    "raw_checksum_no_or_True",
-    "seal_payload_sha256",
-    "kenpom_pit_policy",
-    "taxonomy_relabel_not_in_governed_pit_rating_universe"
-  ],
-  "verdict": true,
-  "audited_at_utc": "2026-09-06T21:03:14Z"
+  "fat_json_ancestor_7ced9f10_in_history": false,
+  "head": "aafbeb7c53b3461d289a066685d14df138eeb265",
+  "n_commits": 6,
+  "note": "A tip is finalized on foundation branch before this B audit commit; A head SHA is exact.",
+  "oversized_blobs_gt_250kb": [],
+  "raw_espn_paths": [],
+  "verdict": true
 }

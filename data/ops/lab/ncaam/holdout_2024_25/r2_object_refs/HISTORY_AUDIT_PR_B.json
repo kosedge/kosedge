@@ -1,25 +1,35 @@
 {
-  "branch": "cursor/ncaam-26f-governance-fix-8a49",
-  "stacked_on_a_head": "52f2d5536062cd29849d3c5339e9f0e47444e2f4",
+  "audit_commit_is_post_audit": true,
+  "audited_at_utc": "2026-09-06T21:23:38Z",
+  "audited_commits": [
+    "649600327ff0ef9212c0fcd1423ac372317d9d7a",
+    "50e437ed3b5c88bec05dc9a482545a228240cf91",
+    "78b6b6d19fe2a1dcd3f8189a9edcf6eafb4aecc0",
+    "8fd13e400588bebf1179972777e828ba36dac35a",
+    "6071e06ee42fb2e3091735999f3529004561e571",
+    "f9852b05611e75bddf6013c2f38e22b7d1082b90"
+  ],
+  "audited_parent_tip": "649600327ff0ef9212c0fcd1423ac372317d9d7a",
   "base_for_history": "cursor/ncaam-26f-foundation-fix-8a49",
-  "resolution": {
-    "head_command": "git rev-parse cursor/ncaam-26f-governance-fix-8a49",
-    "commits_command": "git log --format=%H cursor/ncaam-26f-foundation-fix-8a49..cursor/ncaam-26f-governance-fix-8a49"
-  },
-  "artifact_commit": "2a35c4e28aec12ab99b42d11810ef8efae62f913",
-  "history_audit_binding_commit_preimage": "d7a705dc03074a5815527096ef12b8864cf4e887",
-  "note": "Tip HEAD is this HISTORY_AUDIT binding commit (amended). Full B stack = artifact_commit + tip. Self-hash not embedded to avoid chicken/egg; covers_all verified by commits_command.",
-  "covers_all_commits_on_final_B_HEAD": true,
-  "expected_n_commits": 2,
-  "oversized_blobs_gt_250kb": [],
-  "fat_json_ancestor_7ced9f10_in_history": false,
-  "raw_espn_paths": [],
+  "branch": "cursor/ncaam-26f-governance-fix-8a49",
   "bulk_dataset_paths": [],
+  "covers_all_commits_on_audited_parent_tip": true,
+  "covers_all_commits_on_final_B_HEAD_except_this_audit_commit": true,
   "credential_pattern_hits": [],
-  "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
+  "expected_n_audited_commits": 6,
+  "fat_json_ancestor_7ced9f10_in_history": false,
+  "note": "Honest binding: audited_commits lists every B commit on the parent tip (649600327ff0ef9212c0fcd1423ac372317d9d7a) before this HISTORY_AUDIT docs commit. The audit commit SHA is post-audit and intentionally excluded (no self-reference fakery). Final B HEAD = audited_parent_tip + this audit commit.",
+  "oversized_blobs_gt_250kb": [],
+  "path_b_recovery": true,
+  "raw_espn_paths": [],
+  "resolution": {
+    "commits_command": "git log --format=%H cursor/ncaam-26f-foundation-fix-8a49..cursor/ncaam-26f-governance-fix-8a49",
+    "head_command": "git rev-parse cursor/ncaam-26f-governance-fix-8a49"
+  },
   "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
   "seal_file_sha256_legacy_key_seal_receipt_sha256": "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09",
+  "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
+  "stacked_on_a_head": "aafbeb7c53b3461d289a066685d14df138eeb265",
   "taxonomy_relabel": "confirmed_non_di_opponent \u2192 not_in_governed_pit_rating_universe",
-  "verdict": true,
-  "audited_at_utc": "2026-09-06T20:58:37Z"
+  "verdict": true
 }
