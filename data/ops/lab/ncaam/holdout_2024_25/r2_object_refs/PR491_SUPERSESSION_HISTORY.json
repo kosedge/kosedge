@@ -40,7 +40,8 @@
     "B": {
       "branch": "cursor/ncaam-holdout-governance-d05b",
       "pr": null,
-      "note": "this PR; stacked on A"
+      "note": "this PR; stacked on A",
+      "head": "7e4a7384ab0b2e29cec1f2600db84e57f821e60f"
     }
   },
   "hard_prohibition": "Do not merge/close/rewrite/force-push/delete PR #491. Reference only.",

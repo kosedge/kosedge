@@ -112,5 +112,10 @@
   ],
   "verdict": "GREEN",
   "verdict_bool": true,
-  "note": "Excludes rejected_events / schedule_sot_index / reversal_orientation_full / offline recovery lists vs prior attempt #497."
+  "note": "Excludes rejected_events / schedule_sot_index / reversal_orientation_full / offline recovery lists vs prior attempt #497.",
+  "commits": [
+    "0d4b0c95e4646d6b590faa2c1f23ec91cb7b40a8",
+    "7e4a7384ab0b2e29cec1f2600db84e57f821e60f"
+  ],
+  "n_commits": 2
 }
