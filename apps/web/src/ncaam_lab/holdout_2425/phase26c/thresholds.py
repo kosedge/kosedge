@@ -58,7 +58,7 @@ ALLOWED_CONCLUSIONS = frozenset(
 )
 
 ESPN_REJECT_TAXONOMY = (
-    "confirmed_non_di_opponent",
+    "not_in_governed_pit_rating_universe",
     "exhibition_or_scrimmage",
     "duplicate_schedule_event",
     "cancelled_or_non_final",
@@ -68,6 +68,10 @@ ESPN_REJECT_TAXONOMY = (
     "malformed_source_record",
     "other_explicit_reason",
 )
+
+# Backward-compatible alias for readers of the pre-relabel name.
+CONFIRMED_NON_DI_OPPONENT_LEGACY = "confirmed_non_di_opponent"
+NOT_IN_GOVERNED_PIT_RATING_UNIVERSE = "not_in_governed_pit_rating_universe"
 
 EXPECTED_ESPN_REJECT_COUNT = 530
 EXPECTED_TIMESTAMP_DISHONEST_COUNT = 2006

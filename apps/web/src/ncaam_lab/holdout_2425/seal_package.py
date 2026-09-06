@@ -180,6 +180,7 @@ def build_feature_and_label_packages(
     fm_sha = write_json(feature_dir / "feature_manifest.json", feature_manifest)
     lm_sha = write_json(label_dir / "label_manifest.json", label_manifest)
 
+    # Seal membership payload — hash this body BEFORE inserting any self-hash field.
     seal = {
         "holdout_id": HOLDOUT_ID,
         "package_schema_version": PACKAGE_SCHEMA_VERSION,
@@ -196,7 +197,15 @@ def build_feature_and_label_packages(
         "sealed_at": datetime.now(timezone.utc).isoformat(),
     }
     seal_path = SEAL_DIR / "seal_receipt.json"
-    seal_sha = write_json(seal_path, seal)
-    seal["seal_receipt_sha256"] = seal_sha
-    write_json(seal_path, seal)
-    return seal
+    # seal_payload_sha256 = SHA-256 of canonical JSON without the hash field itself.
+    # The on-disk file hash differs once the field is inserted; that file digest is
+    # recorded externally (sidecar / build_summary), never claimed as the payload hash.
+    seal_payload_sha = write_json(seal_path, seal)
+    seal["seal_payload_sha256"] = seal_payload_sha
+    seal_file_sha = write_json(seal_path, seal)
+    seal_file_sidecar = SEAL_DIR / "seal_receipt.file_sha256"
+    seal_file_sidecar.write_text(seal_file_sha + "\n", encoding="utf-8")
+    return {
+        **seal,
+        "seal_file_sha256": seal_file_sha,
+    }

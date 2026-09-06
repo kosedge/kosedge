@@ -72,3 +72,8 @@ apps/web/src/ncaam_lab/holdout_2425/phase26c/__init__.py
 apps/web/src/ncaam_lab/holdout_2425/phase26c/thresholds.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_phase26c.py
+scripts/ncaam/build_2425_sealed_holdout.py
+scripts/ncaam/hydrate_2425_sealed_holdout_from_r2.py
+scripts/ncaam/verify_2425_sealed_artifacts.py
+scripts/ncaam/run_2425_coverage_26b.py
+scripts/ncaam/run_2425_phase26c.py

@@ -8,8 +8,10 @@ Peer homonyms: bare "loyola" / "southern" also OMIT (aliases.json omit_aliases).
 No fuzzy auto-publish joins; unknown / ambiguous → None.
 Alias SoT: apps/web/lib/ncaam/aliases.json (shared with TS identity).
 
-Phase 2.6B: odds_name_to_team_norm may apply deterministic expansions only
-(hyphen→space, St→State, trailing-mascot strip, univ→university). Never fuzzy.
+Phase 2.6B/F: odds_name_to_team_norm may apply deterministic expansions only
+(hyphen→space, St→State, governed trailing-mascot / campus-locator strip,
+univ→university). Never fuzzy. Never generic strip-final-token (campus schools
+must not collapse onto D-I parents).
 """
 
 from __future__ import annotations
@@ -26,6 +28,7 @@ _ALIAS_PATH = Path(__file__).resolve().parent.parent / "lib" / "ncaam" / "aliase
 RETIRED_NCAAM_SPORT_KEYS = frozenset({"cbb", "ncaab"})
 
 # Campus location tokens that may appear after a school stem in odds strings.
+# Strict 2-letter USPS-style locators only — never city/campus names.
 _CAMPUS_LOC_TOKENS = frozenset(
     {
         "mn",
@@ -110,6 +113,14 @@ def _ratings_bridge() -> Dict[str, str]:
     return dict(_load_doc().get("ratings_norm_bridge") or {})
 
 
+def _governed_mascot_tokens() -> set[str]:
+    return {fold_ncaam_alias(t) for t in (_load_doc().get("governed_mascot_tokens") or [])}
+
+
+def _governed_mascot_phrases() -> set[str]:
+    return {fold_ncaam_alias(t) for t in (_load_doc().get("governed_mascot_phrases") or [])}
+
+
 def resolve_team_id(alias: str, source: str = "unknown") -> Optional[str]:
     """Return canonical team_id or None (omit). Fail-closed."""
     del source  # reserved for logging / future source-lock
@@ -181,6 +192,40 @@ def _lookup_folded(folded: str) -> Optional[str]:
     return to_ratings_norm(tid)
 
 
+def _strip_governed_trailing(folded: str) -> list[str]:
+    """Return stems after stripping governed mascot phrase/token or campus locator.
+
+    Never strips arbitrary final tokens (Kingsville / Beaufort / Wesleyan / Pueblo).
+    """
+    parts = folded.split()
+    if len(parts) < 2:
+        return []
+    out: list[str] = []
+    mascots = _governed_mascot_tokens()
+    phrases = _governed_mascot_phrases()
+
+    if len(parts) >= 3:
+        phrase = " ".join(parts[-2:])
+        if phrase in phrases:
+            out.append(" ".join(parts[:-2]))
+
+    last = parts[-1]
+    if last in mascots:
+        out.append(" ".join(parts[:-1]))
+    elif last in _CAMPUS_LOC_TOKENS:
+        # 'st thomas mn' / 'st francis pa' — locator only, never city names
+        out.append(" ".join(parts[:-1]))
+
+    # de-dupe while preserving order
+    seen: set[str] = set()
+    uniq: list[str] = []
+    for s in out:
+        if s and s not in seen:
+            seen.add(s)
+            uniq.append(s)
+    return uniq
+
+
 def odds_name_to_team_norm(full: str) -> Optional[str]:
     """Publish-safe odds-name resolver — fail-closed, deterministic expansions only.
 
@@ -188,10 +233,11 @@ def odds_name_to_team_norm(full: str) -> Optional[str]:
       1) exact folded alias
       2) hyphen→space + univ→university normalization
       3) St→State abbreviation expansion
-      4) strip final mascot token, then retry 1–3
-      5) if stem ends with a 2-letter campus locator, strip it and retry
+      4) strip governed mascot phrase/token OR 2-letter campus locator, then retry 1–3
 
     Never uses fuzzy/edit-distance matching. Bare homonyms stay omit-listed.
+    Never collapses Texas A&M-Kingsville / South Carolina Beaufort /
+    North Carolina Wesleyan / Colorado State Pueblo onto D-I parents.
     Never collapses Texas A&M-Commerce → Texas A&M (requires explicit commerce alias).
     """
     folded0 = fold_ncaam_alias(full)
@@ -208,16 +254,12 @@ def odds_name_to_team_norm(full: str) -> Optional[str]:
         for cand in (base, _expand_st_abbreviation(base)):
             if cand and cand not in candidates:
                 candidates.append(cand)
-        parts = base.split()
-        if len(parts) >= 2:
-            stem = " ".join(parts[:-1])
+        for stem in _strip_governed_trailing(base):
             for cand in (stem, _expand_st_abbreviation(stem)):
                 if cand and cand not in candidates:
                     candidates.append(cand)
-            # campus locator: 'st thomas mn' / 'st francis pa'
-            stem_parts = stem.split()
-            if len(stem_parts) >= 2 and stem_parts[-1] in _CAMPUS_LOC_TOKENS:
-                stem2 = " ".join(stem_parts[:-1])
+            # nested: mascot then campus locator (rare) or phrase then locator
+            for stem2 in _strip_governed_trailing(stem):
                 for cand in (stem2, _expand_st_abbreviation(stem2)):
                     if cand and cand not in candidates:
                         candidates.append(cand)

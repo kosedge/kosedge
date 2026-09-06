@@ -245,7 +245,8 @@ def classify_espn_reject(
         if direct is None and not in_di:
             return {
                 **base,
-                "classification": "confirmed_non_di_opponent",
+                "classification": "not_in_governed_pit_rating_universe",
+                "classification_legacy": "confirmed_non_di_opponent",
                 "deterministic_evidence": {
                     "mapped_di_side_b7": mapped_b7,
                     "unmapped_raw_name": uname,
@@ -253,6 +254,7 @@ def classify_espn_reject(
                     "odds_name_to_team_norm": uattempt,
                     "in_kenpom_2024_25_di_universe": False,
                     "governed_reference": "kenpom_2024_25_di_roster_union",
+                    "taxonomy_relabel": "confirmed_non_di_opponent→not_in_governed_pit_rating_universe",
                 },
             }
         if in_di and direct is None:

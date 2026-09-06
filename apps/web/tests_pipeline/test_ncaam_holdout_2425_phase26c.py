@@ -72,11 +72,18 @@ def test_espn_taxonomy_sum_invariant():
     if not ledger_path.exists():
         # Synthetic invariant when artifacts not yet materialized in this checkout.
         taxonomy = {k: 0 for k in ESPN_REJECT_TAXONOMY}
-        taxonomy["confirmed_non_di_opponent"] = EXPECTED_ESPN_REJECT_COUNT
+        taxonomy["not_in_governed_pit_rating_universe"] = EXPECTED_ESPN_REJECT_COUNT
+        assert "confirmed_non_di_opponent" not in ESPN_REJECT_TAXONOMY
         assert sum(taxonomy.values()) == EXPECTED_ESPN_REJECT_COUNT
         return
     ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
     counts = ledger["taxonomy_counts"]
+    # Accept either new label or legacy key still present in older ledgers.
+    if "not_in_governed_pit_rating_universe" not in counts and "confirmed_non_di_opponent" in counts:
+        counts = {
+            **counts,
+            "not_in_governed_pit_rating_universe": counts["confirmed_non_di_opponent"],
+        }
     assert sum(counts[k] for k in ESPN_REJECT_TAXONOMY) == EXPECTED_ESPN_REJECT_COUNT
     assert ledger["n_rejects"] == EXPECTED_ESPN_REJECT_COUNT
     assert ledger["taxonomy_sum"] == EXPECTED_ESPN_REJECT_COUNT

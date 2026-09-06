@@ -30,22 +30,57 @@ from ncaam_lab.holdout_2425 import venue_contract as venue  # noqa: E402
 
 
 def _raw_ingestion_receipt(raw_dir: Path) -> Dict[str, Any]:
+    """Fail-closed raw integrity: every JSON must have a matching sha256 sidecar.
+
+    Sidecar contents are verified against the file digest. Missing sidecars or
+    digest mismatches refuse the receipt (immutable_raw_preserved=False).
+    """
     files = sorted(raw_dir.glob("espn_scoreboard_*.json")) if raw_dir.exists() else []
     sha_sidecars = (
         sorted(raw_dir.glob("espn_scoreboard_*.sha256")) if raw_dir.exists() else []
     )
     n_indexed = 0
+    missing_sidecars: List[str] = []
+    digest_mismatches: List[Dict[str, str]] = []
     for fp in files:
         side = raw_dir / fp.name.replace(".json", ".sha256")
-        if side.exists() or True:
-            n_indexed += 1
+        if not side.exists():
+            missing_sidecars.append(fp.name)
+            continue
+        claimed = side.read_text(encoding="utf-8").strip().split()[0]
+        actual = io.sha256_file(fp)
+        if claimed.lower() != actual.lower():
+            digest_mismatches.append(
+                {
+                    "file": fp.name,
+                    "sidecar": side.name,
+                    "claimed_sha256": claimed,
+                    "actual_sha256": actual,
+                }
+            )
+            continue
+        n_indexed += 1
+    integrity_ok = (
+        len(files) > 0
+        and len(missing_sidecars) == 0
+        and len(digest_mismatches) == 0
+        and n_indexed == len(files)
+    )
+    try:
+        raw_dir_s = str(raw_dir.relative_to(REPO)) if raw_dir.exists() else str(raw_dir)
+    except ValueError:
+        raw_dir_s = str(raw_dir)
     return {
         "source": "espn_scoreboard_public",
-        "raw_dir": str(raw_dir.relative_to(REPO)) if raw_dir.exists() else str(raw_dir),
-        "n_day_payloads": len(files),
+        "raw_dir": raw_dir_s,        "n_day_payloads": len(files),
         "n_sha256_sidecars": len(sha_sidecars),
-        "immutable_raw_preserved": len(files) > 0,
+        "immutable_raw_preserved": integrity_ok,
         "n_day_receipts_indexed": n_indexed,
+        "n_missing_sidecars": len(missing_sidecars),
+        "n_digest_mismatches": len(digest_mismatches),
+        "missing_sidecars": missing_sidecars,
+        "digest_mismatches": digest_mismatches,
+        "checksum_policy": "every_json_requires_verified_sha256_sidecar",
         "captured_note": "HISTORICAL_STATIC_RECONSTRUCTION for static/venue fields",
     }
 
@@ -190,7 +225,10 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "complete_intersection_count": readiness["complete_intersection_count"],
         "feature_manifest_sha256": seal.get("feature_manifest_sha256"),
         "label_manifest_sha256": seal.get("label_manifest_sha256"),
-        "seal_receipt_sha256": seal.get("seal_receipt_sha256"),
+        "seal_payload_sha256": seal.get("seal_payload_sha256"),
+        "seal_file_sha256": seal.get("seal_file_sha256"),
+        # Legacy key retained for readers mid-migration; equals seal_payload_sha256.
+        "seal_receipt_sha256": seal.get("seal_payload_sha256"),
         "features_labels_joined_for_evaluation": False,
         "performance_metrics_calculated": False,
         "api_calls_made": False,

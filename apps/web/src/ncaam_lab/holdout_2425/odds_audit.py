@@ -114,12 +114,26 @@ def classify_odds_events(
                 b1_status = "MISSING_CLOSE"
             reasons.append("missing_close")
 
-        if commence and close_ts and close_ts >= commence:
+        # Fail-closed timestamp contract: tip, open, and close must all parse,
+        # and open < tip AND close < tip (equality at tip is dishonest / ineligible).
+        if commence is None:
+            if b1_status == "B1_ELIGIBLE":
+                b1_status = "TIMESTAMP_DISHONEST"
+            reasons.append("missing_or_unparseable_commence")
+        if open_ts is None:
+            if b1_status == "B1_ELIGIBLE":
+                b1_status = "TIMESTAMP_DISHONEST"
+            reasons.append("missing_or_unparseable_open")
+        if close_ts is None:
+            if b1_status == "B1_ELIGIBLE":
+                b1_status = "TIMESTAMP_DISHONEST"
+            reasons.append("missing_or_unparseable_close")
+        if commence is not None and open_ts is not None and not (open_ts < commence):
             b1_status = "TIMESTAMP_DISHONEST"
-            reasons.append("close_not_before_tip")
-        if commence and open_ts and open_ts > commence:
+            reasons.append("open_not_strictly_before_tip")
+        if commence is not None and close_ts is not None and not (close_ts < commence):
             b1_status = "TIMESTAMP_DISHONEST"
-            reasons.append("open_after_tip")
+            reasons.append("close_not_strictly_before_tip")
 
         sched_id = None
         if tip and home_id and away_id:

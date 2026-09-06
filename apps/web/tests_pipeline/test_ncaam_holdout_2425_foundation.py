@@ -177,19 +177,282 @@ def test_snapshot_asof_selection_and_future_rejection():
         {"espn_game_id": "1", "date": "2024-11-15", "home": "duke", "away": "kentucky"},
         {"espn_game_id": "2", "date": "2024-11-05", "home": "duke", "away": "unc"},
     ]
-    elig = build_game_eligibility(games, snaps)
+    # As-of selection only — team/AdjEM gate covered in dedicated tests below.
+    elig = build_game_eligibility(games, snaps, require_both_teams_ratings=False)
     by_id = {r["event_id"]: r for r in elig["rows"]}
     assert by_id["1"]["eligibility_status"] == "PIT_ELIGIBLE"
     assert by_id["1"]["selected_snapshot_id"] == "kenpom_2024-11-10.parquet"
     assert by_id["2"]["eligibility_status"] == "MISSING_PIT_SNAPSHOT"
 
 
-def test_odds_timestamp_honesty_ordering():
-    tip = datetime.fromisoformat("2024-12-01T19:00:00+00:00")
-    close_ok = datetime.fromisoformat("2024-12-01T18:00:00+00:00")
-    close_bad = datetime.fromisoformat("2024-12-01T19:30:00+00:00")
-    assert close_ok < tip
-    assert not (close_bad < tip)
+def test_odds_timestamp_honesty_fail_closed():
+    """B1 requires parseable tip+open+close with open < tip and close < tip."""
+    import polars as pl
+    from ncaam_lab.holdout_2425.odds_audit import classify_odds_events
+
+    tip = "2024-12-01T19:00:00+00:00"
+    schedule = [
+        {
+            "espn_game_id": "g1",
+            "date": "2024-12-01",
+            "home": "duke",
+            "away": "kentucky",
+        }
+    ]
+
+    def _events(**overrides):
+        base = {
+            "event_id": "e1",
+            "tip_date": "2024-12-01",
+            "commence_time": tip,
+            "home_team": "Duke Blue Devils",
+            "away_team": "Kentucky Wildcats",
+            "n_books": 3,
+            "n_open_spread": 2,
+            "n_close_spread": 2,
+            "open_time_min": "2024-11-30T12:00:00+00:00",
+            "close_time_max": "2024-12-01T18:00:00+00:00",
+            "n_rows": 4,
+        }
+        base.update(overrides)
+        return pl.DataFrame([base])
+
+    ok = classify_odds_events(_events(), schedule)
+    assert ok["rows"][0]["b1_status"] == "B1_ELIGIBLE"
+
+    missing_close = classify_odds_events(
+        _events(close_time_max=None, n_close_spread=0), schedule
+    )
+    assert missing_close["rows"][0]["b1_status"] != "B1_ELIGIBLE"
+    assert "missing_or_unparseable_close" in missing_close["rows"][0]["reasons"] or (
+        "missing_close" in missing_close["rows"][0]["reasons"]
+    )
+
+    missing_commence = classify_odds_events(_events(commence_time=None), schedule)
+    assert missing_commence["rows"][0]["b1_status"] != "B1_ELIGIBLE"
+    assert "missing_or_unparseable_commence" in missing_commence["rows"][0]["reasons"]
+
+    open_eq_tip = classify_odds_events(_events(open_time_min=tip), schedule)
+    assert open_eq_tip["rows"][0]["b1_status"] == "TIMESTAMP_DISHONEST"
+    assert "open_not_strictly_before_tip" in open_eq_tip["rows"][0]["reasons"]
+
+    close_eq_tip = classify_odds_events(_events(close_time_max=tip), schedule)
+    assert close_eq_tip["rows"][0]["b1_status"] == "TIMESTAMP_DISHONEST"
+    assert "close_not_strictly_before_tip" in close_eq_tip["rows"][0]["reasons"]
+
+
+def test_campus_schools_do_not_collapse_to_di_parents():
+    """Negative regression: strip-final-token must not map campus schools to D-I parents."""
+    from ncaam_identity import odds_name_to_team_norm, resolve_team_id
+
+    cases = [
+        ("Texas A&M Kingsville", "texas a&m"),
+        ("Texas A&M-Kingsville", "texas a&m"),
+        ("South Carolina Beaufort", "south carolina"),
+        ("North Carolina Wesleyan", "north carolina"),
+        ("Colorado State Pueblo", "colorado state"),
+        ("Colorado State-Pueblo", "colorado state"),
+    ]
+    for raw, parent in cases:
+        got = odds_name_to_team_norm(raw)
+        assert got != parent, f"{raw!r} collapsed to {parent!r}"
+        assert got is None, f"{raw!r} unexpectedly resolved to {got!r}"
+        assert resolve_team_id(raw) is None
+
+
+def test_raw_ingestion_receipt_requires_verified_sidecars(tmp_path):
+    import importlib.util
+
+    script = (
+        WEB_ROOT.parent.parent / "scripts" / "ncaam" / "build_2425_sealed_holdout.py"
+    )
+    spec = importlib.util.spec_from_file_location("build_2425_sealed_holdout", script)
+    mod = importlib.util.module_from_spec(spec)
+    assert spec.loader is not None
+    spec.loader.exec_module(mod)
+
+    raw = tmp_path / "raw"
+    raw.mkdir()
+    payload = raw / "espn_scoreboard_2024-11-04.json"
+    payload.write_text('{"events":[]}\n', encoding="utf-8")
+
+    # Missing sidecar → not preserved
+    receipt_missing = mod._raw_ingestion_receipt(raw)
+    assert receipt_missing["immutable_raw_preserved"] is False
+    assert receipt_missing["n_missing_sidecars"] == 1
+
+    # Wrong digest → refuse
+    (raw / "espn_scoreboard_2024-11-04.sha256").write_text(
+        "0" * 64 + "\n", encoding="utf-8"
+    )
+    receipt_bad = mod._raw_ingestion_receipt(raw)
+    assert receipt_bad["immutable_raw_preserved"] is False
+    assert receipt_bad["n_digest_mismatches"] == 1
+
+    # Matching digest → ok
+    import hashlib
+
+    digest = hashlib.sha256(payload.read_bytes()).hexdigest()
+    (raw / "espn_scoreboard_2024-11-04.sha256").write_text(digest + "\n", encoding="utf-8")
+    receipt_ok = mod._raw_ingestion_receipt(raw)
+    assert receipt_ok["immutable_raw_preserved"] is True
+    assert receipt_ok["n_day_receipts_indexed"] == 1
+
+
+def test_seal_payload_sha256_differs_from_file_hash(tmp_path, monkeypatch):
+    import hashlib
+    import ncaam_lab.holdout_2425.constants as constants
+    import ncaam_lab.holdout_2425.seal_package as seal_mod
+
+    monkeypatch.setattr(constants, "FEATURE_DIR", tmp_path / "feature_package")
+    monkeypatch.setattr(constants, "LABEL_DIR", tmp_path / "label_package")
+    monkeypatch.setattr(constants, "REJECTED_DIR", tmp_path / "rejected")
+    monkeypatch.setattr(constants, "SEAL_DIR", tmp_path / "seal")
+    monkeypatch.setattr(seal_mod, "FEATURE_DIR", tmp_path / "feature_package")
+    monkeypatch.setattr(seal_mod, "LABEL_DIR", tmp_path / "label_package")
+    monkeypatch.setattr(seal_mod, "REJECTED_DIR", tmp_path / "rejected")
+    monkeypatch.setattr(seal_mod, "SEAL_DIR", tmp_path / "seal")
+
+    schedule = [
+        {
+            "espn_game_id": "10",
+            "date": "2024-12-01",
+            "tipoff": "2024-12-01T19:00Z",
+            "home": "duke",
+            "away": "kentucky",
+            "status": "final",
+            "home_score": 80,
+            "away_score": 70,
+        }
+    ]
+    venue_rows = [
+        {
+            "source_event_id": "10",
+            "venue_status": "confirmed_home",
+            "validation_status": "ok",
+            "historical_reconstruction": True,
+            "b7_join_key": "2024-12-01|duke|kentucky",
+            "conflict_reason": None,
+        }
+    ]
+    kenpom_rows = [
+        {
+            "source_event_id": "10",
+            "event_id": "10",
+            "eligibility_status": "PIT_ELIGIBLE",
+            "selected_snapshot_id": "kenpom_2024-11-24.parquet",
+            "selected_snapshot_sha256": "abc",
+        }
+    ]
+    odds_by = {
+        "10": {
+            "event_id": "odds1",
+            "b1_status": "B1_ELIGIBLE",
+            "open_snapshot_ts": "2024-11-30T12:00:00Z",
+            "close_snapshot_ts": "2024-12-01T18:00:00Z",
+            "n_books": 5,
+        }
+    }
+    seal = build_feature_and_label_packages(
+        schedule_rows=schedule,
+        venue_rows=venue_rows,
+        kenpom_eligibility=kenpom_rows,
+        odds_by_espn_id=odds_by,
+    )
+    assert "seal_payload_sha256" in seal
+    assert "seal_receipt_sha256" not in json.loads(
+        (tmp_path / "seal" / "seal_receipt.json").read_text()
+    )
+    file_sha = hashlib.sha256(
+        (tmp_path / "seal" / "seal_receipt.json").read_bytes()
+    ).hexdigest()
+    assert seal["seal_file_sha256"] == file_sha
+    assert seal["seal_payload_sha256"] != file_sha
+    assert (tmp_path / "seal" / "seal_receipt.file_sha256").read_text().strip() == file_sha
+
+
+def test_kenpom_null_captured_at_requires_policy_and_team_ratings(tmp_path):
+    import polars as pl
+    from ncaam_lab.holdout_2425 import kenpom_audit as ka
+
+    snap_dir = tmp_path / "snaps"
+    snap_dir.mkdir()
+    fp = snap_dir / "kenpom_2024-11-10.parquet"
+    pl.DataFrame(
+        {
+            "team_norm": ["duke", "kentucky", "north carolina"],
+            "adjem": [30.0, 25.0, 28.0],
+            "adjtempo": [68.0, 70.0, 69.0],
+        }
+    ).write_parquet(fp)
+
+    snaps = ka.inventory_snapshots(
+        snap_dir,
+        window_start=date(2024, 11, 4),
+        window_end=date(2025, 4, 8),
+        require_captured_at=False,
+    )
+    assert len(snaps) == 1
+    assert snaps[0]["eligible"] is True
+    assert snaps[0]["captured_at"] is None
+    assert snaps[0]["archive_date_semantics"] == "filename_date_is_as_of"
+    assert snaps[0]["null_captured_at_policy"] == "allowed_when_filename_date_is_as_of"
+
+    snaps_req = ka.inventory_snapshots(
+        snap_dir,
+        window_start=date(2024, 11, 4),
+        window_end=date(2025, 4, 8),
+        require_captured_at=True,
+    )
+    assert snaps_req[0]["eligible"] is False
+    assert snaps_req[0]["quarantine_reason"] == "captured_at_required_but_null"
+
+    games = [
+        {"espn_game_id": "1", "date": "2024-11-15", "home": "duke", "away": "kentucky"},
+        {
+            "espn_game_id": "2",
+            "date": "2024-11-15",
+            "home": "duke",
+            "away": "not-a-real-team-xyz",
+        },
+    ]
+    elig = ka.build_game_eligibility(games, snaps, require_both_teams_ratings=True)
+    by_id = {r["event_id"]: r for r in elig["rows"]}
+    assert by_id["1"]["eligibility_status"] == "PIT_ELIGIBLE"
+    assert by_id["2"]["eligibility_status"] == "PIT_TEAMS_OR_RATINGS_MISSING"
+
+    # Missing AdjEM/AdjT fails closed
+    fp2 = snap_dir / "kenpom_2024-11-17.parquet"
+    pl.DataFrame(
+        {
+            "team_norm": ["duke", "kentucky"],
+            "adjem": [30.0, None],
+            "adjtempo": [68.0, 70.0],
+        }
+    ).write_parquet(fp2)
+    snaps2 = ka.inventory_snapshots(
+        snap_dir,
+        window_start=date(2024, 11, 4),
+        window_end=date(2025, 4, 8),
+    )
+    # completeness may quarantine the whole snapshot; force-eligible for team gate test
+    for s in snaps2:
+        if s["filename"] == "kenpom_2024-11-17.parquet":
+            s["eligible"] = True
+            s["path"] = fp2.as_posix()
+    elig2 = ka.build_game_eligibility(
+        [
+            {
+                "espn_game_id": "3",
+                "date": "2024-11-18",
+                "home": "duke",
+                "away": "kentucky",
+            }
+        ],
+        snaps2,
+        require_both_teams_ratings=True,
+    )
+    assert elig2["rows"][0]["eligibility_status"] == "PIT_TEAMS_OR_RATINGS_MISSING"
 
 
 def test_feature_label_separation_and_deterministic_hashes(tmp_path, monkeypatch):
