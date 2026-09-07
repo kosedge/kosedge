@@ -1,0 +1,15 @@
+{
+  "content_sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+  "holdout_id": "ncaam_holdout_2024_25_v1_1",
+  "n_label_present": 5769,
+  "n_rows": 5769,
+  "note": "Evaluation labels only; must not be joined to predictions in Phase 2.6A",
+  "package": "label",
+  "path": "data/ops/lab/ncaam/holdout_2024_25/label_package/labels.json",
+  "schema_version": "ncaam-holdout-label-v1",
+  "sealed_at": "2026-09-05T13:27:18.625658+00:00",
+  "window": {
+    "end": "2025-04-08",
+    "start": "2024-11-04"
+  }
+}

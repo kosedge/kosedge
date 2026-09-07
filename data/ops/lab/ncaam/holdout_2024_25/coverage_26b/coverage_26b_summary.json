@@ -1,0 +1,15 @@
+{
+  "after_complete_intersection_count": 3334,
+  "before_complete_intersection_count": 2318,
+  "blockers": [
+    "BLOCKED_TIMESTAMP_INTEGRITY",
+    "BLOCKED_STORAGE_ARCHITECTURE"
+  ],
+  "holdout_unseal_omitted": true,
+  "outcome_distribution_inspection_omitted": true,
+  "performance_scoring_omitted": true,
+  "phase": "2.6B",
+  "readiness_status": "BLOCKED_MULTIPLE",
+  "scores_omitted": true,
+  "storage_blocked": true
+}

@@ -1,0 +1,16 @@
+{
+  "feature_content_sha256": "8818ea1390ae333bec3bcac7b5259071d3448948cde2d0c07dd9d6ef2f3e8808",
+  "feature_manifest_sha256": "e7cc244f0e0758195fa94c6b5ddd37b6f4072a914157ba5e3f473cd031cfc010",
+  "features_labels_joined_for_evaluation": false,
+  "holdout_id": "ncaam_holdout_2024_25_v1",
+  "label_content_sha256": "aa7e10887efbb0a6790bc3be3bd0a6ce8c7612afc7e55234ce81993410bfcd12",
+  "label_manifest_sha256": "11b9818d38721e9129289ba684ad4d090ffeaa6bb4a0eee12a60af3f272e38e4",
+  "n_complete_intersection": 2318,
+  "n_features": 5769,
+  "n_labels": 5769,
+  "n_rejected": 3451,
+  "package_schema_version": "ncaam-holdout-package-v1",
+  "rejected_sha256": "caa422f95f7926edf119005f82a6754aed95e69a25636df1436b6cac52f315b2",
+  "seal_receipt_sha256": "4218281a5e4e970d9e83a88fb332013e66329fe72905fd85905e71ccd4a1705c",
+  "sealed_at": "2026-09-05T11:43:25.471492+00:00"
+}

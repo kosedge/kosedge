@@ -1,0 +1,115 @@
+{
+  "cos_strip_receipt": "r2_object_refs/COS_STRIP_RECEIPT_26F.json",
+  "items": [
+    {
+      "bytes": 104782373,
+      "lives_in": "r2:ncaam/holdout_2024_25/espn_schedule_raw_v1/",
+      "n": 312,
+      "path": "raw/espn_scoreboard/*"
+    },
+    {
+      "bytes": 6595599,
+      "lives_in": "path_B_rebuild_not_git",
+      "manual_placement": false,
+      "path": "feature_package/features.json",
+      "recovery": "path_B_deterministic_rebuild_from_governed_inputs"
+    },
+    {
+      "bytes": 1320517,
+      "lives_in": "path_B_rebuild_not_git",
+      "manual_placement": false,
+      "path": "label_package/labels.json",
+      "recovery": "path_B_deterministic_rebuild_from_governed_inputs"
+    },
+    {
+      "bytes": 4613749,
+      "lives_in": "deferred_not_git",
+      "path": "venue/venue_contract.json"
+    },
+    {
+      "bytes": 4234714,
+      "lives_in": "deferred_not_git",
+      "path": "odds_audit/odds_audit_rows.json"
+    },
+    {
+      "bytes": 2367631,
+      "lives_in": "deferred_not_git",
+      "path": "kenpom_audit/game_eligibility_rows.json"
+    },
+    {
+      "bytes": 1209583,
+      "lives_in": "deferred_not_git",
+      "path": "coverage_26c/offline_mac_recovery_manifest.json"
+    },
+    {
+      "bytes": 576357,
+      "lives_in": "deferred_not_git",
+      "path": "coverage_26c/espn_reject_ledger.json"
+    },
+    {
+      "bytes": 5276769,
+      "lives_in": "path_B_rebuild_not_git",
+      "manual_placement": false,
+      "path": "ncaam_official_schedule_2024_25.json",
+      "recovery": "path_B_deterministic_rebuild_from_governed_inputs"
+    },
+    {
+      "bytes": 218712,
+      "lives_in": "deferred_not_git",
+      "path": "rejected/rejected_events.json",
+      "replacement_manifest": "rejected/rejected_events.manifest.json",
+      "sha256": "7adad2930c9a0d54c9aa4d6c3072ee7b90637cde9352f4b6699b02fca09b4c3d",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "bytes": 99057,
+      "lives_in": "deferred_not_git",
+      "path": "schedule_sot/schedule_sot_index.json",
+      "replacement_manifest": "schedule_sot/schedule_sot_index.manifest.json",
+      "sha256": "30821f75fa3397ce8b22c8776483043eec419b27b47f0b580cdbaa7342c4c8c3",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "bytes": 99896,
+      "lives_in": "deferred_not_git",
+      "path": "coverage_26c/reversal_orientation_full.json",
+      "replacement_manifest": "coverage_26c/reversal_orientation_full.manifest.json",
+      "sha256": "2061972c914b4320a761d9553d0af3272cdbb91dcae41fff0d6eea9fd5e42073",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "bytes": 39656,
+      "lives_in": "deferred_not_git",
+      "path": "coverage_26c/feature_only_representativeness.json",
+      "replacement_manifest": "coverage_26c/feature_only_representativeness.manifest.json",
+      "sha256": "9ab7a457ef31714266ae3873566851d66e541b64f231215055ffbd8449a8b9e3",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "bytes": 28462,
+      "lives_in": "deferred_not_git",
+      "path": "kenpom_audit/snapshot_inventory.json",
+      "replacement_manifest": "kenpom_audit/snapshot_inventory.manifest.json",
+      "sha256": "337229e26ffedc8ee12a524289e00b1e57abd6096689c56cca177f49345f7824",
+      "stripped_by": "COS_STRIP_PR497"
+    },
+    {
+      "bytes": 41130,
+      "lives_in": "deferred_not_git",
+      "path": "coverage_26b/offline_archive_recovery_manifest.json",
+      "replacement_manifest": "coverage_26b/offline_archive_recovery_manifest.manifest.json",
+      "sha256": "9024bd3d8e739449f41398c2a67c0831de625c0b330d7e6a2f83be9e400ada80",
+      "stripped_by": "COS_STRIP_PR497"
+    }
+  ],
+  "manual_placement_of_seal_or_schedule_pack": false,
+  "note": "Round-3 CR3: sealed packages + canonical 2024-25 schedule pack are path-B rebuildable with frozen v1.1 identity timestamps; staging\u2192verify\u2192atomic promote. Do not manually place hash-only seal artifacts. Raw ESPN remains R2-backed.",
+  "path_b_cr3": {
+    "canonical_pack_sha256": "4016f2ab4dcfbf713fdd005b4468ab5576345bea321caa59333685f224ae828e",
+    "frozen_v1_1_identity_timestamps": true,
+    "live_seal_never_unlinked_before_verify": true,
+    "staging_verify_atomic_promote": true
+  },
+  "recovery_path": "B_deterministic_rebuild_from_governed_inputs",
+  "updated_at_utc": "2026-09-06T21:39:00Z"
+}
