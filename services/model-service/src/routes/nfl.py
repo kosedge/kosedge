@@ -3767,11 +3767,13 @@ def nfl_fair_lines(
         description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
     ),
     persist: bool = Query(
-        True,
+        False,
         description=(
-            "When true (default), land pulled Odds API events into odds_snapshots "
-            "for training. Subscriber/page-data reads should pass persist=0; "
-            "beat/worker scheduled pull_odds_snapshot remains the write path."
+            "INC-2026-09-07: customer/page-data GET defaults to read-only "
+            "(no odds_snapshots writes). Pass persist=1 only for rare ops "
+            "callers that intentionally land training snaps on this path. "
+            "Beat/worker scheduled pull_odds_snapshot remains the write path. "
+            "persist=0 continues to be honored."
         ),
     ),
 ) -> Dict[str, Any]:
@@ -3780,6 +3782,10 @@ def nfl_fair_lines(
     Returns latest LATERAL projection per game with optional live market
     comparison. If the odds feed is unavailable, Kosedge lines are still returned
     with market fields set to null.
+
+    INC-2026-09-07 SEV-2: this GET performs zero Postgres writes by default
+    (esp. `_persist_nfl_odds_events_for_training`). Warehouse persistence is
+    worker/beat-owned via `pull_odds_snapshot`.
     """
     market_events: List[Dict[str, Any]] = []
     odds_feed_error: Optional[str] = None
@@ -3806,7 +3812,7 @@ def nfl_fair_lines(
         odds_feed_error = _redact_odds_api_error(exc)
         log.warning("NFL odds feed unavailable for fair-lines endpoint: %s", odds_feed_error)
 
-    # Training snaps: default on for direct/ops callers; web page-data sends persist=0.
+    # INC-2026-09-07: default read-only. Opt-in persist=1 for ops only.
     # Beat/worker pull_odds_snapshot remains the scheduled write path.
     if market_events and persist:
         try:

@@ -346,8 +346,14 @@ def test_nfl_fair_lines_rejects_snapshot_avg_garbage(monkeypatch) -> None:
     assert spread.get("reason") == "missing_fair_or_market"
 
 
-def test_nfl_fair_lines_persist_0_skips_odds_snapshots_write(monkeypatch) -> None:
-    """Subscriber/page-data reads pass persist=0 — no odds_snapshots write on GET."""
+def test_nfl_fair_lines_get_default_zero_persist_writes(monkeypatch) -> None:
+    """INC-2026-09-07: customer GET /nfl/fair-lines → zero odds_snapshots writes.
+
+    Default (no persist param) and persist=0 both skip
+    `_persist_nfl_odds_events_for_training`. Opt-in persist=1 still lands snaps.
+    Worker/beat `pull_odds_snapshot` remains the scheduled write path
+    (see test_tasks_persistence.test_pull_odds_snapshot_persists_rows).
+    """
     monkeypatch.setattr(nfl_routes, "SessionLocal", lambda: _Session())
 
     events = [
@@ -362,45 +368,55 @@ def test_nfl_fair_lines_persist_0_skips_odds_snapshots_write(monkeypatch) -> Non
     ]
     monkeypatch.setattr(nfl_routes, "fetch_odds", lambda **_kwargs: events)
 
-    calls: list[Any] = []
+    write_calls: list[Any] = []
 
     def _persist(market_events: Any) -> Dict[str, int]:
-        calls.append(market_events)
+        write_calls.append(market_events)
         return {"events_persisted": 1, "snapshots_inserted": 2, "history_upserted": 0}
 
     monkeypatch.setattr(nfl_routes, "_persist_nfl_odds_events_for_training", _persist)
 
     client = TestClient(app)
-    skipped = client.get(
-        "/nfl/fair-lines",
-        params={"season": 2026, "days_ahead": 120, "persist": "0"},
-    )
-    assert skipped.status_code == 200
-    assert calls == []
-    assert skipped.json()["diagnostics"]["odds_persisted"] == {
-        "events_persisted": 0,
-        "snapshots_inserted": 0,
-        "history_upserted": 0,
-    }
-    ledger = skipped.json()["diagnostics"]["odds_ledger_health"]
-    assert ledger["ledger_health"] == "raw_dark"
-    assert ledger["last_odds_snapshot_captured_at"] is None
-    assert ledger["last_market_history_captured_at"] is None
-    assert ledger["history_lag_seconds"] is None
-    assert "persist=0" in ledger["note"]
-    # zeros on odds_persisted must remain readable as "this GET did not write",
-    # not "warehouse is dark" — ledger block is the warehouse SoT.
-    assert skipped.json()["diagnostics"]["odds_persisted"]["snapshots_inserted"] == 0
 
+    # Default GET — page-data path: zero writes.
     default = client.get(
         "/nfl/fair-lines",
         params={"season": 2026, "days_ahead": 120},
     )
     assert default.status_code == 200
-    assert len(calls) == 1
-    assert default.json()["diagnostics"]["odds_persisted"]["events_persisted"] == 1
-    assert "odds_ledger_health" in default.json()["diagnostics"]
-    assert default.json()["diagnostics"]["odds_ledger_health"]["ledger_health"] in {
+    assert write_calls == []
+    assert default.json()["diagnostics"]["odds_persisted"] == {
+        "events_persisted": 0,
+        "snapshots_inserted": 0,
+        "history_upserted": 0,
+    }
+    ledger = default.json()["diagnostics"]["odds_ledger_health"]
+    assert ledger["ledger_health"] == "raw_dark"
+    assert ledger["last_odds_snapshot_captured_at"] is None
+    assert ledger["last_market_history_captured_at"] is None
+    assert ledger["history_lag_seconds"] is None
+    # zeros on odds_persisted = "this GET did not write", not "warehouse dark".
+    assert "persist=0" in (ledger.get("note") or "")
+
+    # Explicit persist=0 still honored — zero writes.
+    skipped = client.get(
+        "/nfl/fair-lines",
+        params={"season": 2026, "days_ahead": 120, "persist": "0"},
+    )
+    assert skipped.status_code == 200
+    assert write_calls == []
+    assert skipped.json()["diagnostics"]["odds_persisted"]["snapshots_inserted"] == 0
+
+    # Opt-in persist=1 — ops path may still land training snaps.
+    opted = client.get(
+        "/nfl/fair-lines",
+        params={"season": 2026, "days_ahead": 120, "persist": "1"},
+    )
+    assert opted.status_code == 200
+    assert len(write_calls) == 1
+    assert opted.json()["diagnostics"]["odds_persisted"]["events_persisted"] == 1
+    assert "odds_ledger_health" in opted.json()["diagnostics"]
+    assert opted.json()["diagnostics"]["odds_ledger_health"]["ledger_health"] in {
         "ok",
         "history_lagging",
         "raw_dark",

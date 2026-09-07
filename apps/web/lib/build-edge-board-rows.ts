@@ -4,6 +4,7 @@
  * Week 1 tab = every REG Week 1 schedule-pack game (schedule-driven; no silent drop).
  * Missing KEI / odds still appear with honest empties.
  * Full slate = projection-backed REG games in the pull window (+ complete Week 1).
+ * INC-2026-09-07: Week 1 / live uses narrow fair-lines window; full uses multi-week.
  * Legacy aliases: `live` → week1, `all` → full.
  * KEI = published fair line (identity — no fake Model vs KEI split).
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
@@ -34,6 +35,7 @@ import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
+import { nflAssembleWindowForSlate } from "@/lib/nfl-edge-board-assemble-window";
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { applyCfbTrustedMarketToRows } from "@/lib/cfb-trusted-market";
@@ -151,6 +153,9 @@ async function assembleNflEdgeBoardRows(
   options?: AssembleEdgeBoardOptions,
 ): Promise<EdgeBoardRow[]> {
   const slate = normalizeNflEdgeBoardSlate(options?.slate);
+  // INC-2026-09-07 (C): Week 1 / live uses narrow customer window; full uses
+  // the multi-week window. Never pull full-slate CPU for the Week 1 tab.
+  const window = nflAssembleWindowForSlate(slate);
 
   // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
   const [pulledOdds, fair] = await Promise.all([
@@ -158,8 +163,8 @@ async function assembleNflEdgeBoardRows(
     // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
     fetchNflFairLines({
       season: NFL_EDGE_BOARD_SEASON,
-      daysAhead: 200,
-      includePastDays: 14,
+      daysAhead: window.daysAhead,
+      includePastDays: window.includePastDays,
       bookmakers: ALLOWED_BOOKS.join(","),
       timeoutMs: options?.timeoutMs,
       throwOnTransportError: options?.throwOnTransportError,

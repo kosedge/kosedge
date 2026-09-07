@@ -13,6 +13,10 @@ import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
+import {
+  assertHonestNflFullSlateWindow,
+  nflAssembleWindowForSlate,
+} from "@/lib/nfl-edge-board-assemble-window";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 import {
   pageDataCacheHeaders,
@@ -36,9 +40,25 @@ export const maxDuration = 30;
  * Cache-Control + CDN-Cache-Control s-maxage=45 on non-empty 200 only
  * (never 503/504/games=0). Dual header: Vercel strips s-maxage from
  * Cache-Control alone — see page-data-cache.ts / GO-1c ops note.
+ *
+ * INC-2026-09-07 (C): Week 1 live assemble uses a narrow window. Full slate
+ * must use the full window (CDN/governed complete assemble) — never a narrow
+ * Week-1 pull labeled full. pageData ceiling stays 25s.
  */
 function gameCount(rows: EdgeBoardRow[]): number {
   return new Set(rows.map((r) => r.game).filter(Boolean)).size;
+}
+
+function weeksOnBoard(rows: EdgeBoardRow[]): number[] {
+  return [
+    ...new Set(
+      rows
+        .map((r) => (r as { week?: number }).week)
+        .filter(
+          (w): w is number => typeof w === "number" && Number.isFinite(w),
+        ),
+    ),
+  ].sort((a, b) => a - b);
 }
 
 export async function GET(
@@ -84,6 +104,11 @@ export async function GET(
       // #12 GO-1: honor requested slate — week1 must not enrich the full slate
       // just for a tab badge (COLD hydrate paid full-slate CPU after Railway).
       // Odds ∥ fair-lines still parallel inside loadAssembled.
+      // Cache key includes ?slate= — week1 and full must never share a body.
+      const window = nflAssembleWindowForSlate(slate);
+      // Full slate must use the full window — never a narrow live pull labeled full.
+      // Transport failure → 503/504 fail closed (pageDataUpstreamErrorResponse).
+      assertHonestNflFullSlateWindow(slate, window);
       const assembled = ensureNflScheduleWeekOnBoard(
         stampNflEdgeBoardWeeksFromSchedule(
           await loadAssembledEdgeBoardRows("nfl", {
@@ -94,21 +119,14 @@ export async function GET(
         1,
       );
       const week1Rows = filterNflStrictWeekRows(assembled, 1);
+      const week1Count = gameCount(week1Rows);
       const rows = slate === "full" ? assembled : week1Rows;
-      const weeks = [
-        ...new Set(
-          rows
-            .map((r) => (r as { week?: number }).week)
-            .filter(
-              (w): w is number => typeof w === "number" && Number.isFinite(w),
-            ),
-        ),
-      ].sort((a, b) => a - b);
+      const weeks = weeksOnBoard(rows);
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
       return pageDataJsonResponse({
         // #8 Phase C / NFL-V3 — strip quarantine vocab from customer assemble.
         rows: scrubEdgeBoardAssembleCustomerRows(rows),
-        week1Count: gameCount(week1Rows),
+        week1Count,
         // Full-slate badge count only when this response is the full assemble.
         // Week1 responses omit the badge number until Full tab is opened (honest).
         fullCount: slate === "full" ? gameCount(assembled) : 0,
