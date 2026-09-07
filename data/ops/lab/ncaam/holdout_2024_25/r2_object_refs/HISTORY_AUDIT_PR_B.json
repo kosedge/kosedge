@@ -1,6 +1,6 @@
 {
   "audit_commit_is_post_audit": true,
-  "audited_at_utc": "2026-09-07T01:28:28Z",
+  "audited_at_utc": "2026-09-07T01:49:03Z",
   "audited_commits": [
     "a9a304e3c6ce012224eda124f9af4a3b00be29b2",
     "22f9c0944b45e4927713cada8704a8ebc9ab749d",
@@ -23,9 +23,11 @@
     "388095f5d1ad3011eb145109a6fc5eb9c5ec1100",
     "3708df67a37a7d11e8b63bece774c6f892b1c3e5",
     "aeebac9e9a1a264b1b14d7740dd712a65a265498",
-    "170d29b93dda0f15062ce7c04b6d01edbbefbd4f"
+    "170d29b93dda0f15062ce7c04b6d01edbbefbd4f",
+    "c40132354ea9176a7628000c6ad7cbc4170e6de5",
+    "6350b90fed34d06cbe73fec37c3ba80760ddddc9"
   ],
-  "audited_parent_tip": "170d29b93dda0f15062ce7c04b6d01edbbefbd4f",
+  "audited_parent_tip": "6350b90fed34d06cbe73fec37c3ba80760ddddc9",
   "b1_drift_event_investigation": "OPEN_TODO_non_blocking",
   "base_for_history": "cursor/ncaam-26f-foundation-fix-8a49",
   "branch": "cursor/ncaam-26f-governance-fix-8a49",
@@ -37,9 +39,9 @@
   "credential_pattern_hits": [],
   "credential_scrub_receipt_contains_revocation_narrative_only": true,
   "credential_scrub_receipt_scanned": true,
-  "expected_n_audited_commits": 22,
+  "expected_n_audited_commits": 24,
   "fat_json_ancestor_7ced9f10_in_history": false,
-  "note": "CI gate uses PR head SHA (not merge commit). Audit bound to A..HEAD^ where tip is this audit commit. Restacked on A CR8 tip 3a110b4cd3f1 (fail-closed CURRENT pack + allowlist). B1 event-row work remains OPEN / nonblocking.",
+  "note": "CR8 stack on A tip 3a110b4c; Bugbot fix: gate requires A ancestry / merge-base==A tip / behind_a==0; HISTORY_AUDIT bound to A..HEAD^",
   "oversized_blobs_gt_250kb": [],
   "path_b_cr3_determinism_atomic_promote": false,
   "path_b_cr3_release_pointer_promote": true,
@@ -50,19 +52,21 @@
   "path_b_cr5_inventory_sot": true,
   "path_b_cr6_post_pointer_atomicity": true,
   "path_b_cr7_real_consumer_wiring": true,
+  "path_b_cr8_schedule_fail_closed": true,
   "path_b_recovery": true,
   "raw_espn_paths": [],
   "resolution": {
     "ci_gate": "scripts/ncaam/check_history_audit_pr_b.py",
     "commits_command": "git rev-list --reverse cursor/ncaam-26f-foundation-fix-8a49..HEAD^",
     "head_command": "git rev-parse cursor/ncaam-26f-governance-fix-8a49",
-    "parent_command": "git rev-parse HEAD^"
+    "parent_command": "git rev-parse HEAD^",
+    "pr_head_ref": "github.event.pull_request.head.sha",
+    "stack_contract": "merge-base --is-ancestor A_tip HEAD; behind_a==0"
   },
   "seal_file_sha256": "82852e2460bf876d75aae647232860820a998814b4bef76c236bdf058f0ddca2",
   "seal_file_sha256_legacy_key_seal_receipt_sha256": "1074731f38e1194a4fce4eb16b84765c1376a1624f377ed2d0395b43540d5d09",
   "seal_payload_sha256": "af4fd4513272e8cc784de7db02d33c74c16b0a0ed7e256e851f3da73d5543d84",
   "stacked_on_a_head": "3a110b4cd3f1ad8a616d002d441d973fa8f97a5b",
   "taxonomy_relabel": "confirmed_non_di_opponent \u2192 not_in_governed_pit_rating_universe",
-  "verdict": true,
-  "path_b_cr8_schedule_fail_closed": true
+  "verdict": true
 }
