@@ -10,7 +10,7 @@
     "math_impl_sha256_unchanged": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
     "no_merge_unseal_score_promote_default": true,
     "note": "head_sha/branch_tip_attested is the branch tip at attestation write time; a following stamp commit may only refresh this receipt.",
-    "receipt_stamp_commit": "ed905b85501cbd4adf8f023f89d213476da1c855"
+    "receipt_stamp_commit": "128f6f33fcc01f427006278d550ed168f2ad0bb6"
   },
   "branch_tip_attested": "aaf04cf94ff94891045b356516cc947e27e1ec67",
   "candidate_id": "B2-PACE-v1",
