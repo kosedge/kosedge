@@ -10,7 +10,7 @@
     "possessions": "(home_adjt+away_adjt)/2",
     "weights_path_behavior": "refused"
   },
-  "generated_at_utc": "2026-09-07T12:20:39.809057+00:00",
+  "generated_at_utc": "2026-09-07T12:20:59.002182+00:00",
   "hard_locks_honored": [
     "no_merge",
     "no_unseal",
@@ -24,7 +24,8 @@
     "no_performance_calculation",
     "pr_490_remains_draft"
   ],
-  "head_sha": "9cece9ceee6c82cf896848107ac33709f687e169",
+  "hardening_commit": "4f0881d47c9a30bb9937c5cfa099edc7dafe6878",
+  "head_sha": "4f0881d47c9a30bb9937c5cfa099edc7dafe6878",
   "holdout_governance": {
     "b2_pace_neutral_v1_implemented": false,
     "current_foundation_holdout_id": "ncaam_holdout_2024_25_v1_1",
@@ -69,5 +70,6 @@
   ],
   "production_base": "beae001342cdd15ad929e53783e6973530ffda44",
   "production_base_resolved": "beae001342cdd15ad929e53783e6973530ffda44",
+  "receipt_note": "head_sha/hardening_commit is the Phase 2.7A implementation commit. A follow-up stamp commit may only refresh this JSON/MD.",
   "title": "PR #490 reconciliation + enterprise hardening"
 }

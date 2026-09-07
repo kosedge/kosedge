@@ -6,7 +6,7 @@
 
 - Candidate: `B2-PACE-v1` / `kenpom_adjem_pit_tempo_plus_game_hca_v1`
 - Production base: `beae001342cdd15ad929e53783e6973530ffda44`
-- HEAD at receipt generation: `9cece9ceee6c82cf896848107ac33709f687e169`
+- HEAD / hardening commit: `4f0881d47c9a30bb9937c5cfa099edc7dafe6878`
 - Originating formula commit (pre-rebase): `0d08b963014c5c3f51378cf4c2558cf0a8e287bc`
 - Old impl ref used for parity bytes: `0d08b963014c5c3f51378cf4c2558cf0a8e287bc`
 
