@@ -5,12 +5,12 @@
 
 ## Immutable identifiers
 
-| Field | Value |
-|---|---|
-| Candidate ID | `B2-PACE-v1` |
-| Method ID | `kenpom_adjem_pit_tempo_plus_game_hca_v1` |
-| Research alias (docs only) | `C3` |
-| Incumbent preserved | `B2-C0-v1` / `kenpom_adjem_plus_hca_v1` |
+| Field                      | Value                                     |
+| -------------------------- | ----------------------------------------- |
+| Candidate ID               | `B2-PACE-v1`                              |
+| Method ID                  | `kenpom_adjem_pit_tempo_plus_game_hca_v1` |
+| Research alias (docs only) | `C3`                                      |
+| Incumbent preserved        | `B2-C0-v1` / `kenpom_adjem_plus_hca_v1`   |
 
 ## Exact formula
 
@@ -35,10 +35,10 @@ Positive ⇒ home predicted to win by that many points. Matches incumbent B2.
 
 ### Operation order (immutable)
 
-1. Clip AdjEM differential at ±30  
-2. Scale by `(expected_possessions / 100)`  
-3. Add HCA `2.8696` **after** scaling  
-4. Clip final margin at ±28  
+1. Clip AdjEM differential at ±30
+2. Scale by `(expected_possessions / 100)`
+3. Add HCA `2.8696` **after** scaling
+4. Clip final margin at ±28
 
 ## Inputs required (fail-closed)
 
@@ -50,10 +50,10 @@ If any AdjT missing/invalid, or PIT as-of missing/post-tip: **no B2-PACE-v1 fair
 
 ### Forbidden substitutions
 
-- current / post-tip / SETTLED ratings  
-- market-implied tempo  
-- fitted β  
-- national-average pace fallback  
+- current / post-tip / SETTLED ratings
+- market-implied tempo
+- fitted β
+- national-average pace fallback
 
 ## Continuity honesty
 
@@ -73,9 +73,9 @@ Registered future challenger stub: `B2-NEUTRAL-HCA-v1` (not implemented here).
 
 ## Code entrypoints
 
-- Challenger: `apps/web/src/ncaam_lab/fair_b2_pace_v1.py`  
-- Incumbent (unchanged): `apps/web/src/ncaam_lab/fair_b2.py`  
-- Materialize still calls **only** incumbent `compute_fair_b2`  
+- Challenger: `apps/web/src/ncaam_lab/fair_b2_pace_v1.py`
+- Incumbent (unchanged): `apps/web/src/ncaam_lab/fair_b2.py`
+- Materialize still calls **only** incumbent `compute_fair_b2`
 - Explicit selection helper: `select_fair_candidate(...)` (no silent default)
 
 ## Train-A diagnostics (this freeze)
@@ -87,11 +87,11 @@ See:
 
 Summary (eligible n=3583):
 
-| Model | MAE | RMSE | bias | cal slope |
-|---|---:|---:|---:|---:|
-| C0 | 9.509 | 11.961 | -0.295 | 0.703 |
-| B2-PACE-v1 | 9.060 | 11.449 | +0.370 | 1.013 |
-| B1 | 8.746 | 11.092 | +0.375 | 1.009 |
+| Model      |   MAE |   RMSE |   bias | cal slope |
+| ---------- | ----: | -----: | -----: | --------: |
+| C0         | 9.509 | 11.961 | -0.295 |     0.703 |
+| B2-PACE-v1 | 9.060 | 11.449 | +0.370 |     1.013 |
+| B1         | 8.746 | 11.092 | +0.375 |     1.009 |
 
 Paired bootstrap (game grain, B=2000, seed=20260905):
 
@@ -104,7 +104,7 @@ AdjT coverage on Train-A Lab frame: **3676/3676 eligible (100%)**; missing AdjT 
 
 Test-A is **development-exposed** for:
 
-1. H1 / open-shrink family  
+1. H1 / open-shrink family
 2. B2 unit / possession-correction family (this candidate)
 
 Reason: Test-A residual structure and large-disagreement failures contributed to forming both hypotheses.  
@@ -120,35 +120,35 @@ Pocket: `2025-11-01` → `2025-12-31` (sealed).
 
 “Beat B1” requires frozen Predictive gate on the same pocket:
 
-- eligible n ≥ 100  
-- B2-PACE-v1 MAE ≤ pocket B1 MAE  
-- |signed bias| ≤ 2  
-- leakage = 0  
-- no SETTLED inputs  
+- eligible n ≥ 100
+- B2-PACE-v1 MAE ≤ pocket B1 MAE
+- |signed bias| ≤ 2
+- leakage = 0
+- no SETTLED inputs
 
 Report paired bootstrap CI for the MAE difference (gate itself unchanged).
 
 ### Secondary endpoints
 
-- MAE vs frozen C0  
-- RMSE vs B1 and C0  
-- signed bias  
-- calibration slope/intercept  
-- by |raw AdjEM gap|  
-- favorites with |raw AdjEM gap| ≥ 12  
-- PIT coverage / missingness  
-- neutral-site descriptive split if flag reliable  
+- MAE vs frozen C0
+- RMSE vs B1 and C0
+- signed bias
+- calibration slope/intercept
+- by |raw AdjEM gap|
+- favorites with |raw AdjEM gap| ≥ 12
+- PIT coverage / missingness
+- neutral-site descriptive split if flag reliable
 
 No result-dependent filtering or threshold selection.
 
 ## Hard locks
 
-- No Test-A challenger scoring in this phase  
-- No 2025 pocket performance access in this phase  
-- No open-shrink / market / injury / HCA retune / neutral fix / fitted β  
-- No gate changes / odds pull / scorecard rewrite  
-- No production default change / board / PLAY  
-- No merge or deploy without separate authorization  
+- No Test-A challenger scoring in this phase
+- No 2025 pocket performance access in this phase
+- No open-shrink / market / injury / HCA retune / neutral fix / fitted β
+- No gate changes / odds pull / scorecard rewrite
+- No production default change / board / PLAY
+- No merge or deploy without separate authorization
 
 ## Hashes / commit
 

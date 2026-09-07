@@ -9,11 +9,11 @@ Historical PIT KenPom for post-Test-A windows cannot be reconstructed from later
 
 ## Layers (strict separation)
 
-| Layer | Contents | Mutability |
-|---|---|---|
-| **raw** | Exact source response bytes (KenPom archive JSON, ESPN scoreboard JSON, odds snapshots) | Immutable after write |
-| **normalized** | Typed tables with schema_version, team-id resolution, quality flags | Append-only versions |
-| **model-ready** | Lab fair inputs joined as-of tip with fail-closed eligibility | Rebuildable from raw+normalized by run_id |
+| Layer           | Contents                                                                                | Mutability                                |
+| --------------- | --------------------------------------------------------------------------------------- | ----------------------------------------- |
+| **raw**         | Exact source response bytes (KenPom archive JSON, ESPN scoreboard JSON, odds snapshots) | Immutable after write                     |
+| **normalized**  | Typed tables with schema_version, team-id resolution, quality flags                     | Append-only versions                      |
+| **model-ready** | Lab fair inputs joined as-of tip with fail-closed eligibility                           | Rebuildable from raw+normalized by run_id |
 
 Reconstruction must be possible from `run_id` alone: raw objects + manifests + code SHA.
 
@@ -101,11 +101,11 @@ Every Lab parquet must embed:
 
 ## Ownership / runbook
 
-| Role | Responsibility |
-|---|---|
+| Role              | Responsibility                                    |
+| ----------------- | ------------------------------------------------- |
 | Data owner (Ryan) | License, offline archive policy, unseal authority |
-| Platform | Object store, secrets, schedulers, alerts |
-| Lab | Consume model-ready only; refuse non-PIT |
+| Platform          | Object store, secrets, schedulers, alerts         |
+| Lab               | Consume model-ready only; refuse non-PIT          |
 
 Runbook sections: daily verify, missed-run recovery, season open, season close seal, restore drill.
 
