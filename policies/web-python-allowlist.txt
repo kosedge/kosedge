@@ -21,6 +21,7 @@ apps/web/scripts/lab_ncaam_fair_scorecard.py
 apps/web/scripts/lab_ncaam_results_coverage_receipt.py
 apps/web/scripts/lab_ncaam_b2_pace_v1_train_a_diagnostics.py
 apps/web/scripts/lab_ncaam_b2_pace_v1_phase25_hardening.py
+apps/web/scripts/lab_ncaam_b2_pace_v1_phase27a_parity.py
 apps/web/scripts/ncaam_odds_lake_integrity.py
 apps/web/src/audit_data_usage.py
 apps/web/src/build_actual_margins.py
