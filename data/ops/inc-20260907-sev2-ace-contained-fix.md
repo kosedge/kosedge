@@ -60,10 +60,20 @@ Warehouse persist remains worker/beat `pull_odds_snapshot` (idempotent, observab
 4. Cold → warm → repeated: warm cron `alerts` without `cdn_bypass`; HIT within 45s band.
 5. Confirm no uncontrolled Odds spend from full-slate warm (path absent).
 
-## CI receipt (fill after green push)
+## CI receipt (HEAD `560d70e1`)
 
-| Proof | Test node | CI run URL |
-| --- | --- | --- |
-| 1 | `test_nfl_fair_lines_get_default_zero_persist_writes` | _(pending)_ |
-| 2 | `test_pull_odds_snapshot_persists_rows` | _(pending)_ |
-| HEAD | _(pending)_ | PR https://github.com/kosedge/kosedge/pull/503 |
+| Proof | Test node | Result | CI |
+| --- | --- | --- | --- |
+| 1 | `test_nfl_fair_lines_get_default_zero_persist_writes` | **1 passed** | [PR Quality run 34164442192](https://github.com/kosedge/kosedge/actions/runs/34164442192) · step `NFL fair-lines GET zero-persist + worker snapshot proofs` |
+| 2 | `test_pull_odds_snapshot_persists_rows` | **1 passed** | same run · log: `INC-2026-09-07 proofs 1+2 PASSED` |
+| Gate | Web typecheck + Next build | pass | [Production Gate twin 34164442196](https://github.com/kosedge/kosedge/actions/runs/34164442196) |
+| HEAD | `560d70e1` | draft | PR https://github.com/kosedge/kosedge/pull/503 |
+
+Log excerpt (proofs step):
+```
+INC-2026-09-07 proof 1: test_nfl_fair_lines_get_default_zero_persist_writes
+1 passed, 1 warning in 1.12s
+INC-2026-09-07 proof 2: test_pull_odds_snapshot_persists_rows
+1 passed in 1.28s
+INC-2026-09-07 proofs 1+2 PASSED
+```
