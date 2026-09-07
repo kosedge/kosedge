@@ -1,0 +1,299 @@
+{
+  "generated_at_utc": "2026-09-05T10:38:50.684069+00:00",
+  "candidate_id": "B2-PACE-v1",
+  "method_id": "kenpom_adjem_pit_tempo_plus_game_hca_v1",
+  "research_alias": "C3",
+  "window": "train_a_only",
+  "hca": 2.8696,
+  "formula": {
+    "adjem_diff": "clip(home_adjem - away_adjem, -30, +30)",
+    "expected_possessions": "(home_adjt + away_adjt) / 2",
+    "raw_home_margin": "adjem_diff * (expected_possessions / 100) + 2.8696",
+    "fair_home_margin": "clip(raw_home_margin, -28, +28)",
+    "sign_convention": "positive fair_spread_home => home predicted to win by that many points"
+  },
+  "input_manifest": {
+    "train_parquet": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-latest.parquet",
+    "train_parquet_sha256": "bbc7a3c71ba8c2af93dc04a2fbd11f706a5929f5cc35eba76c4a2ec5a3dabb66"
+  },
+  "coverage_missingness": {
+    "n_lab": 3676,
+    "n_with_both_adjem": 3676,
+    "n_with_both_adjt_positive": 3676,
+    "n_with_valid_pit_asof": 3676,
+    "n_missing_adjt_either_side": 0,
+    "fail_closed_on_missing_adjt": true,
+    "national_average_tempo_fallback": false,
+    "n_b2_pace_v1_eligible": 3676,
+    "b2_pace_v1_eligibility_rate": 1.0
+  },
+  "outcome_attach": {
+    "n_lab": 3676,
+    "n_with_actual_pack": 3583,
+    "n_with_actual_event_id_fill": 0,
+    "n_with_actual": 3583,
+    "outcome_coverage": 0.9747,
+    "pack_receipt": {
+      "packs": [
+        {
+          "path": "/workspace/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+          "exists": true,
+          "n_games": 5699,
+          "n_kept": 5699,
+          "n_omit_b7": 0,
+          "n_omit_score": 0
+        },
+        {
+          "path": "/workspace/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+          "exists": true,
+          "n_games": 3438,
+          "n_kept": 3438,
+          "n_omit_b7": 0,
+          "n_omit_score": 0
+        }
+      ],
+      "n_scored_rows_raw": 9137,
+      "n_omitted_missing_b7": 0,
+      "n_omitted_missing_score": 0,
+      "n_omitted_ambiguous_key": 1,
+      "n_unique_keys": 9135
+    },
+    "sources": [
+      "schedule_sot_packs"
+    ]
+  },
+  "bootstrap_grain": {
+    "bootstrap_resample_grain": "game_row",
+    "n_rows_with_actual": 3583,
+    "n_unique_event_id": 3583,
+    "n_duplicate_event_id_groups": 0,
+    "repeated_event_ids_impossible_in_this_frame": true
+  },
+  "overall_train_a_eligible": {
+    "C0_incumbent_b2": {
+      "n": 3583,
+      "mae": 9.508934886966228,
+      "rmse": 11.960921537945481,
+      "signed_bias": -0.295198353335194,
+      "cal_slope": 0.7034781536421855,
+      "cal_intercept": 1.2669988730389632
+    },
+    "B2_PACE_v1": {
+      "n": 3583,
+      "mae": 9.060352650206628,
+      "rmse": 11.448770945621082,
+      "signed_bias": 0.37028333626144283,
+      "cal_slope": 1.0127896282456885,
+      "cal_intercept": 0.31141365618979516
+    },
+    "B1_close_consensus": {
+      "n": 3583,
+      "mae": 8.746003889415364,
+      "rmse": 11.092108108188926,
+      "signed_bias": 0.37513173556062823,
+      "cal_slope": 1.0093919294335478,
+      "cal_intercept": 0.3319469389319428
+    }
+  },
+  "paired_bootstrap": {
+    "b2_pace_v1_minus_c0": {
+      "grain": "game_row",
+      "n_games": 3583,
+      "n_bootstrap": 2000,
+      "seed": 20260905,
+      "point_delta_mae_a_minus_b": -0.4485822367596004,
+      "ci95": [
+        -0.5619057427248882,
+        -0.33578819208480143
+      ],
+      "share_delta_lt_0": 1.0,
+      "definition": "MAE(B2-PACE-v1) - MAE(C0)"
+    },
+    "b2_pace_v1_minus_b1": {
+      "grain": "game_row",
+      "n_games": 3583,
+      "n_bootstrap": 2000,
+      "seed": 20260905,
+      "point_delta_mae_a_minus_b": 0.3143487607912636,
+      "ci95": [
+        0.23206913119759198,
+        0.39386460552238434
+      ],
+      "share_delta_lt_0": 0.0,
+      "definition": "MAE(B2-PACE-v1) - MAE(B1)"
+    }
+  },
+  "monthly_mae": [
+    {
+      "month": "2022-11",
+      "n": 578,
+      "mae_c0": 10.032768339100345,
+      "mae_b2_pace_v1": 9.489882492533564,
+      "mae_b1": 8.822303694666408
+    },
+    {
+      "month": "2022-12",
+      "n": 740,
+      "mae_c0": 9.728179054054054,
+      "mae_b2_pace_v1": 9.265586223537296,
+      "mae_b1": 9.050138454503779
+    },
+    {
+      "month": "2023-01",
+      "n": 976,
+      "mae_c0": 9.246901127049181,
+      "mae_b2_pace_v1": 8.825235003670544,
+      "mae_b1": 8.55397178214149
+    },
+    {
+      "month": "2023-02",
+      "n": 943,
+      "mae_c0": 9.231390668080595,
+      "mae_b2_pace_v1": 8.818554403021844,
+      "mae_b1": 8.645933454585071
+    },
+    {
+      "month": "2023-03",
+      "n": 346,
+      "mae_c0": 9.660532369942198,
+      "mae_b2_pace_v1": 9.226102583688728,
+      "mae_b1": 8.78250357480189
+    }
+  ],
+  "rolling_origin_folds": [
+    {
+      "fold": "roll_2022-12",
+      "train_end": "2022-11-30",
+      "test_start": "2022-12-01",
+      "test_end": "2022-12-31",
+      "n_train_prior_rows": 578,
+      "n_test": 740,
+      "mae_c0": 9.728179054054054,
+      "mae_b2_pace_v1": 9.265586223537296,
+      "mae_b1": 9.050138454503779,
+      "rmse_c0": 12.174170148680096,
+      "rmse_b2_pace_v1": 11.69398764149963,
+      "rmse_b1": 11.413425946965543,
+      "bias_c0": -0.6175733783783786,
+      "bias_b2_pace_v1": 0.5484236547310809,
+      "bias_b1": 0.23177423064226466
+    },
+    {
+      "fold": "roll_2023-01",
+      "train_end": "2022-12-31",
+      "test_start": "2023-01-01",
+      "test_end": "2023-01-31",
+      "n_train_prior_rows": 1318,
+      "n_test": 976,
+      "mae_c0": 9.246901127049181,
+      "mae_b2_pace_v1": 8.825235003670544,
+      "mae_b1": 8.55397178214149,
+      "rmse_c0": 11.712183551260281,
+      "rmse_b2_pace_v1": 11.168403701883932,
+      "rmse_b1": 10.82604523616741,
+      "bias_c0": -0.22318309426229516,
+      "bias_b2_pace_v1": -0.2446880609541498,
+      "bias_b1": -0.27457714740534533
+    },
+    {
+      "fold": "roll_2023-02",
+      "train_end": "2023-01-31",
+      "test_start": "2023-02-01",
+      "test_end": "2023-02-28",
+      "n_train_prior_rows": 2294,
+      "n_test": 943,
+      "mae_c0": 9.231390668080595,
+      "mae_b2_pace_v1": 8.818554403021844,
+      "mae_b1": 8.645933454585071,
+      "rmse_c0": 11.488602268536567,
+      "rmse_b2_pace_v1": 10.97087339301382,
+      "rmse_b1": 10.843176524814778,
+      "bias_c0": 1.2081013785790031,
+      "bias_b2_pace_v1": 1.1300135400628843,
+      "bias_b1": 1.004792363403147
+    },
+    {
+      "fold": "roll_2023-03",
+      "train_end": "2023-02-28",
+      "test_start": "2023-03-01",
+      "test_end": "2023-03-31",
+      "n_train_prior_rows": 3237,
+      "n_test": 346,
+      "mae_c0": 9.660532369942198,
+      "mae_b2_pace_v1": 9.226102583688728,
+      "mae_b1": 8.78250357480189,
+      "rmse_c0": 12.13674975505472,
+      "rmse_b2_pace_v1": 11.792811050111602,
+      "rmse_b1": 11.388843222021608,
+      "bias_c0": -2.1546751445086705,
+      "bias_b2_pace_v1": -0.7967770910965319,
+      "bias_b1": 0.38829202539160684
+    }
+  ],
+  "hca_neutral_audit": {
+    "hca_value": 2.8696,
+    "c0_applies_hca_to_all_games": true,
+    "c0_neutral_site_branch_exists": false,
+    "b2_pace_v1_changes_neutral_treatment": false,
+    "neutral_join_receipt": {
+      "packs": [
+        {
+          "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+          "exists": true,
+          "n_games": 5699,
+          "n_with_neutral_flag": 5699
+        },
+        {
+          "path": "services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+          "exists": true,
+          "n_games": 3438,
+          "n_with_neutral_flag": 3438
+        }
+      ],
+      "reliable_pit_neutral_flag_in_lab_inputs": false,
+      "reason": "neutral_site exists on Schedule SoT packs but is NOT a Lab fair-engine input. Incumbent C0 applies HCA to every game unconditionally.",
+      "n_ambiguous_keys_dropped": 1,
+      "n_joined_nonnull": 3583,
+      "n_neutral_true": 337,
+      "n_home_site": 3246,
+      "n_unknown": 0
+    },
+    "train_a_bias_split": {
+      "home_site": {
+        "n": 3246,
+        "c0_signed_bias": 0.062173937153419505,
+        "b2_pace_v1_signed_bias": 0.650840142037677,
+        "c0_mae": 9.434408256315466,
+        "b2_pace_v1_mae": 9.00243616173555
+      },
+      "neutral_site": {
+        "n": 337,
+        "c0_signed_bias": -3.737425222551929,
+        "b2_pace_v1_signed_bias": -2.3320531371796736,
+        "c0_mae": 10.22677893175074,
+        "b2_pace_v1_mae": 9.618207016904304
+      },
+      "unknown_site": {
+        "n": 0
+      }
+    },
+    "known_limitation": "Neutral games currently receive HCA under both C0 and B2-PACE-v1. Fixing that is a separate future atomic challenger.",
+    "future_challenger_stub": {
+      "candidate_id": "B2-NEUTRAL-HCA-v1",
+      "status": "registered_not_implemented"
+    }
+  },
+  "incumbent_parity": {
+    "max_abs_fair_minus_recon": 0.0,
+    "challenger_does_not_overwrite_fair_spread_home": true
+  },
+  "selection_rationale": "Chosen for game-specific PIT-tempo coherence versus fixed-tempo C1 (~0.002 MAE); not a claim of statistical superiority over C1.",
+  "governance": {
+    "test_a_scored": false,
+    "pocket_2025_scored": false,
+    "open_shrink_run": false,
+    "board_play": false,
+    "gate_changes": false,
+    "production_default_changed": false
+  }
+}
