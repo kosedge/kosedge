@@ -17,7 +17,8 @@
       "privacy": "private",
       "public_access": "disabled",
       "r2_dev_access": "disabled",
-      "retention": "indefinite_provider_verified",
+      "retention": "indefinite",
+      "provider_verified_sot": "RETENTION_CONTROLS_26F.json (not inventory objects)",
       "roles": [
         "feature_content",
         "feature_manifest",
@@ -47,7 +48,8 @@
       "privacy": "private",
       "public_access": "disabled",
       "r2_dev_access": "disabled",
-      "retention": "indefinite_provider_verified",
+      "retention": "indefinite",
+      "provider_verified_sot": "RETENTION_CONTROLS_26F.json (not inventory objects)",
       "roles": [
         "label_content",
         "label_manifest"
