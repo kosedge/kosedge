@@ -6,7 +6,7 @@
 
 - Candidate: `B2-PACE-v1` / `kenpom_adjem_pit_tempo_plus_game_hca_v1`
 - Production base: `beae001342cdd15ad929e53783e6973530ffda44`
-- HEAD / hardening commit: `4f0881d47c9a30bb9937c5cfa099edc7dafe6878`
+- HEAD at receipt generation: `515b32fb84d4f190e71608babea5f380297574f2`
 - Originating formula commit (pre-rebase): `0d08b963014c5c3f51378cf4c2558cf0a8e287bc`
 - Old impl ref used for parity bytes: `0d08b963014c5c3f51378cf4c2558cf0a8e287bc`
 
@@ -44,3 +44,19 @@ HCA pinned at `2.8696`; `weights_path` / mismatched custom HCA refused; non-fini
 ## Hard locks
 
 No merge / deploy / promote / incumbent-default change. B2-PACE-NEUTRAL-v1 remains unimplemented. PR #490 stays draft.
+
+---
+
+## Acceptance restack (append-only, procedural)
+
+- Historical production base (preserved): `beae001342cdd15ad929e53783e6973530ffda44`
+- Acceptance base (live `origin/deploy-vercel` tip): `9d379818c548b09a4155a50624961ac93f1038aa`
+- HEAD at append: `515b32fb84d4f190e71608babea5f380297574f2`
+- Hardening commit (post-restack OID): `065bd6a16b8fb1b0e0383ae1c789cebad53ba37a`
+- Impl sha256 unchanged: `4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd` (old `ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707`)
+- Train-A parity re-run: n=3676, max_abs_fair_diff=0.0
+- behind vs acceptance base: **0**; merge-base == acceptance base
+- Lab pytest: 69 passed; Holdout/DR: 70 passed; web-python-boundary: passed
+- No merge / unseal / score / promote / default / math change
+- Local Production Gate equiv: typecheck + Next build: passed
+

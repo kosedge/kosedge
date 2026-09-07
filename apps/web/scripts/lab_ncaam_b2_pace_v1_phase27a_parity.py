@@ -42,8 +42,10 @@ TRAIN_PARQUET = OUT_DIR / "ncaam-fair-lab-train_a-latest.parquet"
 IMPL_PATH = "apps/web/src/ncaam_lab/fair_b2_pace_v1.py"
 # Original frozen implementation content hash (Phase 2.5 / generating commit).
 OLD_IMPL_SHA256 = "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707"
-# Exact production rebase base required by Phase 2.7A.
+# Exact historical Phase 2.7A production base (preserved forever in receipts).
 PRODUCTION_BASE = "beae001342cdd15ad929e53783e6973530ffda44"
+# Live acceptance tip is recorded separately when HEAD has restacked past PRODUCTION_BASE.
+ACCEPTANCE_BASE_REF = "origin/deploy-vercel"
 # Generating commit that first shipped the frozen formula (pre-rebase OID).
 ORIGINATING_COMMIT_PRE_REBASE = "0d08b963014c5c3f51378cf4c2558cf0a8e287bc"
 HOLDOUT_FOUNDATION_ID = "ncaam_holdout_2024_25_v1_1"
@@ -87,7 +89,23 @@ def main() -> None:
     merge_base = subprocess.check_output(
         ["git", "-C", str(REPO), "merge-base", "HEAD", PRODUCTION_BASE], text=True
     ).strip()
-    assert merge_base == base, f"HEAD must be based on {PRODUCTION_BASE}; got {merge_base}"
+    assert merge_base == base, f"HEAD must descend from historical {PRODUCTION_BASE}; got {merge_base}"
+    try:
+        acceptance_base = git_rev_parse(ACCEPTANCE_BASE_REF)
+    except subprocess.CalledProcessError:
+        acceptance_base = None
+    acceptance_merge_base = None
+    behind_acceptance = None
+    if acceptance_base:
+        acceptance_merge_base = subprocess.check_output(
+            ["git", "-C", str(REPO), "merge-base", "HEAD", acceptance_base], text=True
+        ).strip()
+        behind_acceptance = int(
+            subprocess.check_output(
+                ["git", "-C", str(REPO), "rev-list", "--count", f"HEAD..{acceptance_base}"],
+                text=True,
+            ).strip()
+        )
 
     new_bytes = (REPO / IMPL_PATH).read_bytes()
     new_sha = sha256_bytes(new_bytes)

@@ -1,4 +1,14 @@
 {
+  "acceptance_base": "9d379818c548b09a4155a50624961ac93f1038aa",
+  "acceptance_base_note": "acceptance_base is the live origin/deploy-vercel tip used for behind=0 restack; historical Phase 2.7A production_base remains beae0013 and is not rewritten.",
+  "acceptance_restack": {
+    "acceptance_base": "9d379818c548b09a4155a50624961ac93f1038aa",
+    "appended_at_utc": "2026-09-07T12:31:52.998618+00:00",
+    "commits_restacked_onto_tip": 7,
+    "from_merge_base_before": "beae001342cdd15ad929e53783e6973530ffda44",
+    "math_impl_sha256_unchanged": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
+    "no_merge_unseal_score_promote_default": true
+  },
   "candidate_id": "B2-PACE-v1",
   "frozen_contract": {
     "adjem_diff": "clip(home_adjem-away_adjem, \u00b130)",
@@ -10,7 +20,7 @@
     "possessions": "(home_adjt+away_adjt)/2",
     "weights_path_behavior": "refused"
   },
-  "generated_at_utc": "2026-09-07T12:20:59.002182+00:00",
+  "generated_at_utc": "2026-09-07T12:33:24.796062+00:00",
   "hard_locks_honored": [
     "no_merge",
     "no_unseal",
@@ -24,8 +34,9 @@
     "no_performance_calculation",
     "pr_490_remains_draft"
   ],
-  "hardening_commit": "4f0881d47c9a30bb9937c5cfa099edc7dafe6878",
-  "head_sha": "4f0881d47c9a30bb9937c5cfa099edc7dafe6878",
+  "hardening_commit": "065bd6a16b8fb1b0e0383ae1c789cebad53ba37a",
+  "head_sha": "515b32fb84d4f190e71608babea5f380297574f2",
+  "historical_production_base": "beae001342cdd15ad929e53783e6973530ffda44",
   "holdout_governance": {
     "b2_pace_neutral_v1_implemented": false,
     "current_foundation_holdout_id": "ncaam_holdout_2024_25_v1_1",
@@ -38,6 +49,7 @@
   },
   "implementation_hashes": {
     "bytes_changed": true,
+    "math_hash_unchanged_after_acceptance_restack": true,
     "new_fair_b2_pace_v1_py_sha256": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
     "old_fair_b2_pace_v1_py_sha256": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707"
   },
@@ -60,6 +72,7 @@
     "n_valid_domain_finite_fair": 3676,
     "parquet": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-latest.parquet",
     "parquet_sha256": "bbc7a3c71ba8c2af93dc04a2fbd11f706a5929f5cc35eba76c4a2ec5a3dabb66",
+    "rerun_after_acceptance_restack_utc": "2026-09-07T12:31:52.998603+00:00",
     "row_count": 3676
   },
   "phase": "2.7A",
@@ -70,6 +83,19 @@
   ],
   "production_base": "beae001342cdd15ad929e53783e6973530ffda44",
   "production_base_resolved": "beae001342cdd15ad929e53783e6973530ffda44",
-  "receipt_note": "head_sha/hardening_commit is the Phase 2.7A implementation commit. A follow-up stamp commit may only refresh this JSON/MD.",
-  "title": "PR #490 reconciliation + enterprise hardening"
+  "title": "PR #490 reconciliation + enterprise hardening",
+  "verification_after_acceptance_restack": {
+    "behind_vs_acceptance_base": 0,
+    "holdout_dr_pytest_passed": 70,
+    "impl_sha256": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
+    "lab_pytest_passed": 69,
+    "merge_base_equals_acceptance_base": true,
+    "next_build": "passed",
+    "old_impl_sha256": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707",
+    "pr_quality_production_gate": "pending_ci",
+    "prettier_four_docs": "unchanged_already_formatted",
+    "total_pytest_passed": 139,
+    "typecheck": "passed",
+    "web_python_boundary": "passed"
+  }
 }
