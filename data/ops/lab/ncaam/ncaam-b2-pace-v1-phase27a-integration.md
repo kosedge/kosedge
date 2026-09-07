@@ -51,7 +51,7 @@ No merge / deploy / promote / incumbent-default change. B2-PACE-NEUTRAL-v1 remai
 
 - Historical production base (preserved): `beae001342cdd15ad929e53783e6973530ffda44`
 - Acceptance base (live `origin/deploy-vercel` tip): `9d379818c548b09a4155a50624961ac93f1038aa`
-- HEAD at append: `a10629c82990a4da547d6375100a4ab3928f15b2`
+- HEAD at append: `ed905b85501cbd4adf8f023f89d213476da1c855`
 - Hardening commit (post-restack OID): `065bd6a16b8fb1b0e0383ae1c789cebad53ba37a`
 - Impl sha256 unchanged: `4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd` (old `ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707`)
 - Train-A parity re-run: n=3676, max_abs_fair_diff=0.0

@@ -8,7 +8,7 @@
     "from_merge_base_before": "beae001342cdd15ad929e53783e6973530ffda44",
     "math_impl_sha256_unchanged": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
     "no_merge_unseal_score_promote_default": true,
-    "receipt_stamp_commit": "2c263df6a8fc875409a7fe601ca772ac6c1f04c3"
+    "receipt_stamp_commit": "ed905b85501cbd4adf8f023f89d213476da1c855"
   },
   "candidate_id": "B2-PACE-v1",
   "frozen_contract": {
@@ -36,7 +36,7 @@
     "pr_490_remains_draft"
   ],
   "hardening_commit": "065bd6a16b8fb1b0e0383ae1c789cebad53ba37a",
-  "head_sha": "2c263df6a8fc875409a7fe601ca772ac6c1f04c3",
+  "head_sha": "ed905b85501cbd4adf8f023f89d213476da1c855",
   "historical_production_base": "beae001342cdd15ad929e53783e6973530ffda44",
   "holdout_governance": {
     "b2_pace_neutral_v1_implemented": false,
