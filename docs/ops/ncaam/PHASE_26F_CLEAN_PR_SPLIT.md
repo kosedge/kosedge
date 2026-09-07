@@ -63,17 +63,17 @@ Excludes:
 
 ## Storage verdict (Phase 2.6F CR4 — dual private buckets)
 
-| Gate                         | Status                                                  |
-| ---------------------------- | ------------------------------------------------------- |
-| Features bucket contract     | DOCUMENTED (`…-features-v1`) — CoS UPLOADED verified    |
-| Label vault contract         | DOCUMENTED (`…-label-vault-v1`) — CoS UPLOADED verified |
-| Public / r2.dev / custom dom | disabled / none (contract)                              |
+| Gate                         | Status                                                                                             |
+| ---------------------------- | -------------------------------------------------------------------------------------------------- |
+| Features bucket contract     | DOCUMENTED (`…-features-v1`) — CoS UPLOADED verified                                               |
+| Label vault contract         | DOCUMENTED (`…-label-vault-v1`) — CoS UPLOADED verified                                            |
+| Public / r2.dev / custom dom | disabled / none (contract)                                                                         |
 | Retention locks              | indefinite (CoS); `provider_verified` on sanitized provider receipt — **not** on inventory objects |
-| Inventory SoT                | `_load_inventory` / `default_package_inventory`: 10/10 UPLOADED + non-null CAS keys              |
-| Builder label-vault creds    | FORBIDDEN                                               |
-| Temporary credential in git  | ABSENT                                                  |
-| Holdout seal                 | REMAINS SEALED                                          |
-| Legacy gap-recovery raw      | retained for forensic ESPN hydrate only                 |
+| Inventory SoT                | `_load_inventory` / `default_package_inventory`: 10/10 UPLOADED + non-null CAS keys                |
+| Builder label-vault creds    | FORBIDDEN                                                                                          |
+| Temporary credential in git  | ABSENT                                                                                             |
+| Holdout seal                 | REMAINS SEALED                                                                                     |
+| Legacy gap-recovery raw      | retained for forensic ESPN hydrate only                                                            |
 
 Exact prefixes/hashes: `data/ops/lab/ncaam/holdout_2024_25/r2_object_refs/` on PR B (CoS fills CAS keys post-upload).
 
