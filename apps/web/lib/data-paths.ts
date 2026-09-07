@@ -24,3 +24,11 @@ export function getKeiLinesPath(sportKey: string): string {
 export function getEdgeBoardFallbackPath(sportKey: string): string {
   return join(getDataProcessedDir(), `edge_board_fallback_${sportKey}.json`);
 }
+
+/**
+ * INC-2026-09-07 (C): governed NFL full-slate assemble snapshot (B/D spine follow-on).
+ * Customer `slate=full` serves this file only — never a live daysAhead=200 pull.
+ */
+export function getEdgeBoardFullSlatePath(sportKey: string): string {
+  return join(getDataProcessedDir(), `edge_board_full_slate_${sportKey}.json`);
+}

@@ -4,11 +4,13 @@ import path from "node:path";
 import {
   NFL_EDGE_BOARD_FULL_WINDOW,
   NFL_EDGE_BOARD_LIVE_WINDOW,
-  assertHonestNflFullSlateWindow,
+  loadGovernedNflFullSlate,
   nflAssembleWindowForSlate,
+  requireGovernedNflFullSlate,
 } from "@/lib/nfl-edge-board-assemble-window";
 import { edgeBoardAssembleHref } from "@/lib/edge-board-assemble-href";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import { getEdgeBoardFullSlatePath } from "@/lib/data-paths";
 
 const webRoot = path.join(__dirname, "../..");
 
@@ -16,8 +18,8 @@ function readRel(rel: string): string {
   return readFileSync(path.join(webRoot, rel), "utf8");
 }
 
-describe("INC-2026-09-07 (C) NFL assemble window + full-slate honesty", () => {
-  it("Week 1 / live window is narrow; full window is wider", () => {
+describe("INC-2026-09-07 (C) NFL assemble window + full-slate governance", () => {
+  it("Week 1 / live window is narrow", () => {
     expect(NFL_EDGE_BOARD_LIVE_WINDOW.daysAhead).toBeLessThanOrEqual(14);
     expect(NFL_EDGE_BOARD_LIVE_WINDOW.daysAhead).toBeLessThan(
       NFL_EDGE_BOARD_FULL_WINDOW.daysAhead,
@@ -25,16 +27,20 @@ describe("INC-2026-09-07 (C) NFL assemble window + full-slate honesty", () => {
     expect(nflAssembleWindowForSlate("week1")).toEqual(
       NFL_EDGE_BOARD_LIVE_WINDOW,
     );
-    expect(nflAssembleWindowForSlate("full")).toEqual(
-      NFL_EDGE_BOARD_FULL_WINDOW,
+  });
+
+  it("refuses live full-slate window (no daysAhead=200 customer path)", () => {
+    expect(() => nflAssembleWindowForSlate("full")).toThrow(
+      /governed cache\/snapshot required/i,
     );
   });
 
-  it("build-edge-board-rows uses slate-scoped window (not hard-coded 200 on week1)", () => {
+  it("build-edge-board-rows refuses live full assemble + uses narrow week1 window", () => {
     const src = readRel("lib/build-edge-board-rows.ts");
     expect(src).toContain("nflAssembleWindowForSlate");
+    expect(src).toContain('nflAssembleWindowForSlate("week1")');
+    expect(src).toContain("refusing live daysAhead=200 path");
     expect(src).toContain("daysAhead: window.daysAhead");
-    expect(src).toContain("includePastDays: window.includePastDays");
     expect(src).not.toMatch(/daysAhead:\s*200/);
   });
 
@@ -53,26 +59,25 @@ describe("INC-2026-09-07 (C) NFL assemble window + full-slate honesty", () => {
     );
   });
 
-  it("fail-closed: refuses narrow live window labeled as full slate", () => {
-    expect(() =>
-      assertHonestNflFullSlateWindow("full", NFL_EDGE_BOARD_LIVE_WINDOW),
-    ).toThrow(/full-slate assemble unavailable/i);
-
-    expect(() =>
-      assertHonestNflFullSlateWindow("full", NFL_EDGE_BOARD_FULL_WINDOW),
-    ).not.toThrow();
-
-    expect(() =>
-      assertHonestNflFullSlateWindow("week1", NFL_EDGE_BOARD_LIVE_WINDOW),
-    ).not.toThrow();
+  it("fail-closed: missing governed full snapshot throws (no invent)", () => {
+    // No edge_board_full_slate_nfl.json shipped until B/D spine — must fail closed.
+    expect(getEdgeBoardFullSlatePath("nfl")).toContain(
+      "edge_board_full_slate_nfl.json",
+    );
+    expect(loadGovernedNflFullSlate()).toBeNull();
+    expect(() => requireGovernedNflFullSlate()).toThrow(
+      /governed cache\/snapshot missing/i,
+    );
   });
 
-  it("assemble route wires honesty + keeps pageData 25s ceiling", () => {
+  it("assemble route: full = governed snapshot; week1 = live narrow; 25s pageData", () => {
     const assemble = readRel("app/api/edge-board/[sport]/assemble/route.ts");
-    expect(assemble).toContain("assertHonestNflFullSlateWindow");
-    expect(assemble).toContain("nflAssembleWindowForSlate");
+    expect(assemble).toContain("requireGovernedNflFullSlate");
+    expect(assemble).toContain('slate === "full"');
+    expect(assemble).toContain('slate: "week1"');
     expect(assemble).toContain("UPSTREAM_TIMEOUT_MS.pageData");
     expect(assemble).toContain("pageDataUpstreamErrorResponse");
+    expect(assemble).not.toContain("nflAssembleWindowForSlate(slate)");
     expect(UPSTREAM_TIMEOUT_MS.pageData).toBe(25_000);
   });
 });

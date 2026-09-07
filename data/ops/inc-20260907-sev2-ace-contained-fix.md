@@ -4,7 +4,7 @@
 
 **Scope (only):**
 - **A** — Stop persist-on-GET for model-service `/nfl/fair-lines`
-- **C** — Narrow NFL live Edge Board assemble window; full-slate fail-closed honesty
+- **C** — Narrow NFL live Edge Board assemble window; full-slate **governed snapshot or fail-closed** (no live `daysAhead=200`)
 - **E** — GO-1c warm cron hits public cache path (no Auth CDN BYPASS)
 
 **Explicitly out:** B/D snapshot spine / Odds dedupe · F pageData timeout raise · unseal/promote/KEI mint/PLAY expand
@@ -18,16 +18,24 @@
 
 Warehouse persist remains worker/beat `pull_odds_snapshot` (idempotent, observable).
 
-**Tests:** `test_nfl_fair_lines_get_default_zero_persist_writes` · `test_pull_odds_snapshot_persists_rows`
+**Tests (must appear in PR Quality CI logs):**
+- `tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes`
+- `tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows`
 
-## C — Live window + full-slate honesty
+**CI wire:** `.github/workflows/pr-check.yml` — DepthSot/NFL job includes both node ids; dedicated step `NFL fair-lines GET zero-persist + worker snapshot proofs` when `nfl_ms=1`.
+
+## C — Live window + full-slate governance
 
 | Surface | Behavior |
 | --- | --- |
-| `slate=week1` / live | Fair-lines window `daysAhead=10`, `includePastDays=2` (not 200) |
-| `slate=full` | Full window `daysAhead=200`; **fail closed** if a narrow live window would be labeled full; transport miss → 503/504 (never week1 rows as full) |
-| Cache keys | `/api/edge-board/nfl/assemble?slate=week1` ≠ `?slate=full` (sport/window never mix) |
+| `slate=week1` / live | Fair-lines window `daysAhead=10`, `includePastDays=2` (live assemble) |
+| `slate=full` | **Governed snapshot only** (`data/processed/edge_board_full_slate_nfl.json`). **No** live `daysAhead=200` customer path. Missing snapshot → **503 fail closed**. |
+| Cache keys | `/api/edge-board/nfl/assemble?slate=week1` ≠ `?slate=full` |
 | pageData | `UPSTREAM_TIMEOUT_MS.pageData` stays **25s**; maxDuration 30 |
+
+**Full-slate data source (document):** shipped governed artifact via `loadGovernedNflFullSlate` / `requireGovernedNflFullSlate`. B/D spine (writer that materializes the artifact) is follow-on — until that ships, Full tab is honestly unavailable (503), not a cold 15–16s live 200d assemble.
+
+**Fail-closed path:** `requireGovernedNflFullSlate()` throws → `pageDataUpstreamErrorResponse` → HTTP 503 `private, no-store`.
 
 ## E — Warm cron public path (bandage)
 
@@ -39,14 +47,23 @@ Warehouse persist remains worker/beat `pull_odds_snapshot` (idempotent, observab
 
 ## Rollback
 
-1. Revert this PR (or restore `persist: Query(True)` + prior assemble/warm files).
+1. Revert this PR (or restore `persist: Query(True)` + prior assemble/warm/CI files).
 2. Web already sends `persist=0` on page-data — temporary safety net if model-service rolls back alone.
-3. Warm cron Auth-forward regresses to BYPASS (perf only; correctness intact).
+3. Warm Auth-forward regresses to BYPASS (perf only; correctness intact).
+4. Full-slate live 200d path returns (undesired) if C is reverted alone.
 
 ## Prod smoke (after merge — CoS)
 
 1. `GET` model `/nfl/fair-lines` (no persist) → `odds_persisted` zeros; warehouse ledger independent.
 2. Beat/worker `pull_odds_snapshot` still inserts snapshots.
-3. `/api/edge-board/nfl/assemble?slate=week1` 200; `?slate=full` multi-week or 503 (never week1-sized full).
+3. `/api/edge-board/nfl/assemble?slate=week1` 200 (narrow); `?slate=full` 503 until governed snapshot exists (never live 200d / never week1-as-full).
 4. Cold → warm → repeated: warm cron `alerts` without `cdn_bypass`; HIT within 45s band.
 5. Confirm no uncontrolled Odds spend from full-slate warm (path absent).
+
+## CI receipt (fill after green push)
+
+| Proof | Test node | CI run URL |
+| --- | --- | --- |
+| 1 | `test_nfl_fair_lines_get_default_zero_persist_writes` | _(pending)_ |
+| 2 | `test_pull_odds_snapshot_persists_rows` | _(pending)_ |
+| HEAD | _(pending)_ | PR https://github.com/kosedge/kosedge/pull/503 |
