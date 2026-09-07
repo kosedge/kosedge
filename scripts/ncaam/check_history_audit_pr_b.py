@@ -4,6 +4,7 @@
 Ryan LOCKED comparison (against the PR head tip, NOT the merge commit):
   recorded audited_parent_tip == git rev-parse <pr-head>^
   recorded audited_commits    == git rev-list --reverse A..<pr-head>^
+  A tip is an ancestor of <pr-head> (merge-base == A tip; B 0-behind A)
 
 On pull_request workflows, actions/checkout yields a merge commit where HEAD^
 is the base branch — callers MUST pass --head-ref $PR_HEAD_SHA.
@@ -47,12 +48,27 @@ def expected_from_git(*, a_ref: str, head_ref: str = "HEAD") -> dict:
         else []
     )
     a_tip = _git("rev-parse", a_ref)
+    behind_a = int(_git("rev-list", "--count", f"{head_ref}..{a_ref}"))
+    try:
+        merge_base = _git("merge-base", head_ref, a_ref)
+    except subprocess.CalledProcessError:
+        merge_base = ""
     return {
         "audited_parent_tip": parent,
         "audited_commits": commits,
         "expected_n_audited_commits": len(commits),
         "stacked_on_a_head": a_tip,
+        "merge_base_with_a": merge_base,
+        "behind_a": behind_a,
     }
+
+
+def _is_ancestor(ancestor: str, descendant: str) -> bool:
+    try:
+        _git("merge-base", "--is-ancestor", ancestor, descendant)
+        return True
+    except subprocess.CalledProcessError:
+        return False
 
 
 def check_audit(audit_path: Path, *, a_ref: str, head_ref: str = "HEAD") -> int:
@@ -99,10 +115,30 @@ def check_audit(audit_path: Path, *, a_ref: str, head_ref: str = "HEAD") -> int:
             f"expected={expected['stacked_on_a_head']}"
         )
 
-    # Parent must be an ancestor of HEAD.
-    try:
-        _git("merge-base", "--is-ancestor", expected["audited_parent_tip"], head_ref)
-    except subprocess.CalledProcessError:
+    # Stacked contract: A tip must be an ancestor of PR head (B 0-behind A).
+    # The old parent-vs-HEAD check is always true on a linear tip and does not
+    # catch a claimed restack onto a newer A while B still sits on an older parent.
+    a_tip = expected["stacked_on_a_head"]
+    if not _is_ancestor(a_tip, head_ref):
+        errors.append(
+            "foundation A is not an ancestor of PR head "
+            f"(a_tip={a_tip} head={_git('rev-parse', head_ref)} "
+            f"merge_base={expected['merge_base_with_a']} behind_a={expected['behind_a']})"
+        )
+    elif expected["behind_a"] != 0:
+        errors.append(
+            "B is behind A "
+            f"(behind_a={expected['behind_a']} a_tip={a_tip} "
+            f"merge_base={expected['merge_base_with_a']})"
+        )
+    elif expected["merge_base_with_a"] != a_tip:
+        errors.append(
+            "merge-base(B,A) != A tip "
+            f"(merge_base={expected['merge_base_with_a']} a_tip={a_tip})"
+        )
+
+    # Parent must be an ancestor of HEAD (sanity on audit tip linkage).
+    if not _is_ancestor(expected["audited_parent_tip"], head_ref):
         errors.append(
             f"audited_parent_tip {expected['audited_parent_tip']} is not an ancestor of {head_ref}"
         )
@@ -123,6 +159,8 @@ def check_audit(audit_path: Path, *, a_ref: str, head_ref: str = "HEAD") -> int:
                 "audited_parent_tip": expected["audited_parent_tip"],
                 "expected_n_audited_commits": expected["expected_n_audited_commits"],
                 "stacked_on_a_head": expected["stacked_on_a_head"],
+                "merge_base_with_a": expected["merge_base_with_a"],
+                "behind_a": expected["behind_a"],
             },
             indent=2,
             sort_keys=True,
