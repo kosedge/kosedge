@@ -140,7 +140,9 @@ export async function GET(req: Request) {
   // Origin healthy + no CDN BYPASS. First-hit MISS is expected while populating.
   const ok =
     results.every((r) => r.status >= 200 && r.status < 500) &&
-    results.every((r) => r.alert !== "cdn_bypass" && r.alert !== "origin_error");
+    results.every(
+      (r) => r.alert !== "cdn_bypass" && r.alert !== "origin_error",
+    );
 
   return NextResponse.json(
     {

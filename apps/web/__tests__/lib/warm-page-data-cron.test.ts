@@ -33,9 +33,7 @@ describe("GO-1c / INC-2026-09-07 (E) warm-page-data cron (public cache path)", (
     expect(route).not.toMatch(
       /fetch\([^)]*authorization:\s*`Bearer \$\{process\.env\.CRON_SECRET\}`/s,
     );
-    expect(route).not.toMatch(
-      /headers:\s*\{[^}]*authorization:\s*`Bearer/s,
-    );
+    expect(route).not.toMatch(/headers:\s*\{[^}]*authorization:\s*`Bearer/s);
     // Do not warm full slate (Odds spend bound).
     expect(route).not.toContain("slate=full");
     // Freshness / alert hooks for observe.

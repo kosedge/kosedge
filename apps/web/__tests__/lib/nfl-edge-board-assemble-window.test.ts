@@ -48,9 +48,9 @@ describe("INC-2026-09-07 (C) NFL assemble window + full-slate honesty", () => {
     expect(edgeBoardAssembleHref({ sportKey: "cfb", cfbWeek: 1 })).toBe(
       "/api/edge-board/cfb/assemble?week=1",
     );
-    expect(
-      edgeBoardAssembleHref({ sportKey: "nfl", slate: "week1" }),
-    ).not.toBe(edgeBoardAssembleHref({ sportKey: "nfl", slate: "full" }));
+    expect(edgeBoardAssembleHref({ sportKey: "nfl", slate: "week1" })).not.toBe(
+      edgeBoardAssembleHref({ sportKey: "nfl", slate: "full" }),
+    );
   });
 
   it("fail-closed: refuses narrow live window labeled as full slate", () => {
