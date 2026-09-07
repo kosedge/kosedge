@@ -3,7 +3,8 @@
  * NFL: pulls REG fair-lines + Odds API overlay (projection-backed; no PRE odds-only).
  * Week 1 tab = every REG Week 1 schedule-pack game (schedule-driven; no silent drop).
  * Missing KEI / odds still appear with honest empties.
- * Full slate = projection-backed REG games in the pull window (+ complete Week 1).
+ * Full slate = governed snapshot only (INC-2026-09-07) — never live daysAhead=200.
+ * Week 1 / live uses narrow fair-lines window.
  * Legacy aliases: `live` → week1, `all` → full.
  * KEI = published fair line (identity — no fake Model vs KEI split).
  * MLB: seeds from model-service fair-lines when Odds is empty (real model vs KEI).
@@ -22,7 +23,6 @@ import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
 import {
   fairLinesToEdgeBoardRows,
-  filterNflOddsPostedRows,
   filterNflProjectionBackedRows,
   filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
@@ -34,6 +34,7 @@ import {
   ensureNflScheduleWeekOnBoard,
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
+import { nflAssembleWindowForSlate } from "@/lib/nfl-edge-board-assemble-window";
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { applyCfbTrustedMarketToRows } from "@/lib/cfb-trusted-market";
@@ -151,6 +152,16 @@ async function assembleNflEdgeBoardRows(
   options?: AssembleEdgeBoardOptions,
 ): Promise<EdgeBoardRow[]> {
   const slate = normalizeNflEdgeBoardSlate(options?.slate);
+  // INC-2026-09-07 (C): customer full slate is governed snapshot only — never
+  // live-pull fair-lines with daysAhead=200 on this path.
+  if (slate === "full") {
+    throw new Error(
+      "NFL full-slate assemble unavailable: refusing live daysAhead=200 path; " +
+        "governed cache/snapshot required (INC-2026-09-07).",
+    );
+  }
+  // Week 1 / live uses narrow customer window.
+  const window = nflAssembleWindowForSlate("week1");
 
   // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
   const [pulledOdds, fair] = await Promise.all([
@@ -158,8 +169,8 @@ async function assembleNflEdgeBoardRows(
     // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
     fetchNflFairLines({
       season: NFL_EDGE_BOARD_SEASON,
-      daysAhead: 200,
-      includePastDays: 14,
+      daysAhead: window.daysAhead,
+      includePastDays: window.includePastDays,
       bookmakers: ALLOWED_BOOKS.join(","),
       timeoutMs: options?.timeoutMs,
       throwOnTransportError: options?.throwOnTransportError,
@@ -195,13 +206,8 @@ async function assembleNflEdgeBoardRows(
     // Schedule is the driver: pad any REG Week 1 game missing after KEI filter.
     rows = ensureNflScheduleWeekOnBoard(rows, 1);
     rows = sortNflEdgeBoardRows(rows);
-    if (slate === "week1") {
-      return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
-    }
-    // Full slate without fair-lines: priced projection rows when books exist,
-    // plus schedule-complete Week 1 (empties allowed).
-    const priced = filterNflOddsPostedRows(rows);
-    return withMatchupEnrichment(ensureNflScheduleWeekOnBoard(priced, 1));
+    // Live path is Week 1 only (full refused above).
+    return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
   }
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
@@ -216,12 +222,8 @@ async function assembleNflEdgeBoardRows(
   // (sanitized) so board-level as-of matches fair-lines. Never invent now().
   rows = applyPayloadOddsAsOfToRows(rows, payloadOddsAsOf);
 
-  if (slate === "week1") {
-    // Strict Week 1 REG — count must match schedule pack (normally 16).
-    return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
-  }
-  // Full slate: every projection-backed REG game in the pull window (+ complete W1).
-  return withMatchupEnrichment(rows);
+  // Live path is Week 1 only (full refused above).
+  return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
 }
 
 /**

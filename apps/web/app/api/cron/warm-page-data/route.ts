@@ -6,14 +6,23 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 40;
 
 /**
- * #12 GO-1c — optional CDN warm for Edge Board assemble.
- * Hits public page-data assemble routes so Vercel can store HIT for the 45s band.
- * Does not remat, invent SoT, or mint as-of clocks.
+ * #12 GO-1c / INC-2026-09-07 (E) — optional CDN warm for Edge Board assemble.
+ * Hits authentic **public** page-data assemble routes (no Authorization on the
+ * warm GET) so Vercel stores HIT for the 45s band instead of CDN BYPASS.
+ * Bounded paths only (NFL week1 + CFB week1). Does not remat, invent SoT,
+ * mint as-of clocks, or warm full-slate (avoids uncontrolled Odds spend).
  */
 const WARM_PATHS = [
   "/api/edge-board/nfl/assemble?slate=week1",
   "/api/edge-board/cfb/assemble?week=1",
 ] as const;
+
+/** Soft alert when warm misses the public cache path or origin is unhealthy. */
+export type WarmAlertReason =
+  | "origin_error"
+  | "cdn_bypass"
+  | "cache_miss"
+  | null;
 
 function authorizeCron(req: Request): boolean {
   const secret = process.env.CRON_SECRET?.trim();
@@ -48,6 +57,17 @@ function originFrom(req: Request): string {
   return new URL(req.url).origin;
 }
 
+function classifyWarmAlert(args: {
+  status: number;
+  vercelCache: string | null;
+}): WarmAlertReason {
+  if (args.status === 0 || args.status >= 500) return "origin_error";
+  const cache = (args.vercelCache || "").toUpperCase();
+  if (cache === "BYPASS") return "cdn_bypass";
+  if (cache === "MISS") return "cache_miss";
+  return null;
+}
+
 export async function GET(req: Request) {
   if (!authorizeCron(req)) {
     return NextResponse.json(
@@ -63,30 +83,35 @@ export async function GET(req: Request) {
     cacheControl: string | null;
     cdnCacheControl: string | null;
     vercelCache: string | null;
+    age: string | null;
     ms: number;
+    alert: WarmAlertReason;
   }> = [];
 
   for (const path of WARM_PATHS) {
     const started = Date.now();
     try {
+      // Public cache path: do NOT forward CRON_SECRET Authorization — that
+      // forces Vercel CDN BYPASS and defeats the warm. Auth stays on this
+      // cron route only. x-kosedge-warm skips rate-limit without BYPASS.
       const res = await fetch(`${origin}${path}`, {
         method: "GET",
         headers: {
-          // Identify warm traffic; rate-limit skips x-vercel-cron / cron bearer.
           "x-kosedge-warm": "1",
-          ...(process.env.CRON_SECRET
-            ? { authorization: `Bearer ${process.env.CRON_SECRET}` }
-            : {}),
+          accept: "application/json",
         },
-        cache: "no-store",
       });
+      const vercelCache = res.headers.get("x-vercel-cache");
+      const status = res.status;
       results.push({
         path,
-        status: res.status,
+        status,
         cacheControl: res.headers.get("cache-control"),
         cdnCacheControl: res.headers.get("cdn-cache-control"),
-        vercelCache: res.headers.get("x-vercel-cache"),
+        vercelCache,
+        age: res.headers.get("age"),
         ms: Date.now() - started,
+        alert: classifyWarmAlert({ status, vercelCache }),
       });
     } catch (err) {
       results.push({
@@ -95,17 +120,40 @@ export async function GET(req: Request) {
         cacheControl: null,
         cdnCacheControl: null,
         vercelCache: null,
+        age: null,
         ms: Date.now() - started,
+        alert: "origin_error",
       });
       void err;
     }
   }
 
+  const alerts = results
+    .filter((r) => r.alert != null)
+    .map((r) => ({
+      path: r.path,
+      alert: r.alert,
+      status: r.status,
+      vercelCache: r.vercelCache,
+    }));
+
+  // Origin healthy + no CDN BYPASS. First-hit MISS is expected while populating.
+  const ok =
+    results.every((r) => r.status >= 200 && r.status < 500) &&
+    results.every(
+      (r) => r.alert !== "cdn_bypass" && r.alert !== "origin_error",
+    );
+
   return NextResponse.json(
     {
-      ok: true,
+      ok,
       warmed: results,
-      note: "Warm only — assemble SoT unchanged; as-of stays book vintage.",
+      alerts,
+      freshness: {
+        // Observe-friendly: repeated warms should flip MISS→HIT within 45s.
+        note: "Public path warm — no Authorization on assemble GET; cache key = path+query (sport/slate/week).",
+      },
+      note: "Warm only — assemble SoT unchanged; as-of stays book vintage; full-slate not warmed (Odds spend bound).",
     },
     {
       status: 200,

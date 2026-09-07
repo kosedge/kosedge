@@ -78,16 +78,19 @@ describe("Edge Board assemble href + early bootstrap (#12 GO-1)", () => {
     expect(client).toContain("Loading board…");
   });
 
-  it("NFL assemble route honors requested slate (week1 ≠ full enrich)", () => {
+  it("NFL assemble route honors requested slate (week1 live ≠ full governed)", () => {
     const assemble = readFileSync(
       path.join(webRoot, "app/api/edge-board/[sport]/assemble/route.ts"),
       "utf8",
     );
-    expect(assemble).toContain("slate,");
-    expect(assemble).toContain('slate === "full" ? gameCount(assembled) : 0');
+    expect(assemble).toContain('slate === "full"');
+    expect(assemble).toContain("requireGovernedNflFullSlate");
+    expect(assemble).toContain('slate: "week1"');
     expect(assemble).not.toMatch(
       /loadAssembledEdgeBoardRows\("nfl",\s*\{\s*slate:\s*"full"/,
     );
+    // Full must not live-pull with daysAhead=200.
+    expect(assemble).not.toContain("daysAhead: 200");
   });
 });
 
