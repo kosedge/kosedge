@@ -69,6 +69,7 @@ apps/web/src/ncaam_lab/holdout_2425/seal_package.py
 apps/web/src/ncaam_lab/holdout_2425/locked_identity.py
 apps/web/src/ncaam_lab/holdout_2425/path_b_promote.py
 apps/web/src/ncaam_lab/holdout_2425/path_b_r2_recovery.py
+apps/web/src/ncaam_lab/holdout_2425/active_release.py
 apps/web/src/ncaam_lab/holdout_2425/r2_storage_contract.py
 apps/web/src/ncaam_lab/holdout_2425/r2_hydrate.py
 apps/web/src/ncaam_lab/holdout_2425/readiness.py
@@ -78,3 +79,4 @@ apps/web/src/ncaam_lab/holdout_2425/phase26c/thresholds.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_phase26c.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_cr4_r2_recovery.py
+apps/web/tests_pipeline/test_ncaam_holdout_2425_cr7_consumer_wiring.py

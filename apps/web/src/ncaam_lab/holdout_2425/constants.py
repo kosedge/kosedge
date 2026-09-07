@@ -34,6 +34,8 @@ SCHEDULE_DIR = OUT_ROOT / "schedule_sot"
 VENUE_DIR = OUT_ROOT / "venue"
 KENPOM_DIR = OUT_ROOT / "kenpom_audit"
 ODDS_DIR = OUT_ROOT / "odds_audit"
+# Legacy flat layout under OUT_ROOT. Non-authoritative once CURRENT exists.
+# Governed readers must use ncaam_lab.holdout_2425.active_release (CR7).
 FEATURE_DIR = OUT_ROOT / "feature_package"
 LABEL_DIR = OUT_ROOT / "label_package"
 SEAL_DIR = OUT_ROOT / "seal"
@@ -42,6 +44,9 @@ REJECTED_DIR = OUT_ROOT / "rejected"
 COVERAGE_DIR = OUT_ROOT / "coverage_26b"
 SEAL_ARCHIVE_DIR = OUT_ROOT / "seal_archive"
 
+# Declared pack basename / pre-CURRENT path only. After CURRENT promote the
+# authoritative 2024–25 pack lives under the active release — not this flat
+# model-service data path. Readers: active_release.load_canonical_pack().
 CANONICAL_PACK_PATH = (
     REPO
     / "services"

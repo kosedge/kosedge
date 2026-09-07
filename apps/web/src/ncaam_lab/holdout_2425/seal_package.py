@@ -138,16 +138,33 @@ def reseal_from_content_packages(
     Does not invent content: features.json / labels.json / rejected_events.json
     must already be present. Hashes content bytes on disk, then writes manifests
     and seal through write_manifests_and_seal (frozen v1.1 sealed_at).
+
+    CR7: when CURRENT exists, callers must pass an explicit staging ``out_root``
+    (or explicit dirs). Default flat live constants are not a write target.
     """
     if out_root is not None:
         feature_dir = out_root / "feature_package"
         label_dir = out_root / "label_package"
         rejected_dir = out_root / "rejected"
         seal_dir = out_root / "seal"
-    feature_dir = feature_dir or FEATURE_DIR
-    label_dir = label_dir or LABEL_DIR
-    rejected_dir = rejected_dir or REJECTED_DIR
-    seal_dir = seal_dir or SEAL_DIR
+    elif any(p is None for p in (feature_dir, label_dir, rejected_dir, seal_dir)):
+        from ncaam_lab.holdout_2425.active_release import (
+            ActiveReleaseError,
+            current_is_set,
+        )
+
+        if current_is_set():
+            raise ActiveReleaseError(
+                "reseal_from_content_packages: CURRENT is set — pass explicit "
+                "staging out_root (do not write via legacy flat FEATURE_DIR/SEAL_DIR)"
+            )
+        feature_dir = feature_dir or FEATURE_DIR
+        label_dir = label_dir or LABEL_DIR
+        rejected_dir = rejected_dir or REJECTED_DIR
+        seal_dir = seal_dir or SEAL_DIR
+
+    assert feature_dir is not None and label_dir is not None
+    assert rejected_dir is not None and seal_dir is not None
 
     feat_path = feature_dir / "features.json"
     lab_path = label_dir / "labels.json"
@@ -197,8 +214,20 @@ def build_feature_and_label_packages(
 
     Hashed identity uses frozen v1.1 sealed_at timestamps (not datetime.now).
     When out_root is set, packages write under that staging/live root.
+
+    CR7: when CURRENT exists, ``out_root`` is required (no default flat writes).
     """
     if out_root is None:
+        from ncaam_lab.holdout_2425.active_release import (
+            ActiveReleaseError,
+            current_is_set,
+        )
+
+        if current_is_set():
+            raise ActiveReleaseError(
+                "build_feature_and_label_packages: CURRENT is set — pass explicit "
+                "staging out_root (legacy flat FEATURE_DIR is non-authoritative)"
+            )
         feature_dir = FEATURE_DIR
         label_dir = LABEL_DIR
         rejected_dir = REJECTED_DIR

@@ -26,6 +26,12 @@ from ncaam_lab.holdout_2425 import readiness as readiness_mod  # noqa: E402
 from ncaam_lab.holdout_2425 import schedule_normalize as sched  # noqa: E402
 from ncaam_lab.holdout_2425 import seal_package as seal_mod  # noqa: E402
 from ncaam_lab.holdout_2425 import venue_contract as venue  # noqa: E402
+from ncaam_lab.holdout_2425.active_release import (  # noqa: E402
+    ActiveReleaseError,
+    canonical_pack_path_for_active,
+    current_is_set,
+    load_canonical_pack,
+)
 from ncaam_lab.holdout_2425.locked_identity import (  # noqa: E402
     V1_1_BUILD_SUMMARY_BUILT_AT,
     V1_1_SCHEDULE_INDEX_BUILT_AT,
@@ -108,17 +114,31 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
             f"This Phase 2.6A builder seals {C.SEASON_KEY} only; got {season}."
         )
 
+    if current_is_set():
+        raise SystemExit(
+            "FAIL-CLOSED: CURRENT active release is set. Refusing default flat "
+            "live build (would create dual-reality vs CURRENT). Use Path B "
+            "recovery / explicit staging out_root — do not write via legacy "
+            f"FEATURE_DIR under {C.OUT_ROOT}."
+        )
+
     # Fail closed on raw integrity BEFORE any derived artifacts or sealing.
     raw_receipt = _raw_ingestion_receipt(C.RAW_ESPN_DIR)
     _refuse_if_raw_not_preserved(raw_receipt)
 
-    if not C.CANONICAL_PACK_PATH.exists():
+    # CR7: authoritative pack is the active release (CURRENT when set).
+    try:
+        pack_path = canonical_pack_path_for_active()
+        pack = load_canonical_pack()
+    except ActiveReleaseError as exc:
         raise SystemExit(
-            "FAIL-CLOSED: canonical schedule pack missing at "
-            f"{C.CANONICAL_PACK_PATH}. Rebuild from governed ESPN raw via "
-            "scripts/ncaam/rebuild_2425_sealed_holdout_from_governed_inputs.py "
-            "(path B) — do not manually place hash-only seal artifacts."
-        )
+            "FAIL-CLOSED: authoritative canonical schedule pack unavailable "
+            f"({exc}). Rebuild/recover via Path B "
+            "(scripts/ncaam/recover_2425_sealed_holdout_from_r2.py) — do not "
+            "manually place hash-only seal artifacts. Declared flat "
+            f"CANONICAL_PACK_PATH={C.CANONICAL_PACK_PATH} is non-authoritative "
+            f"once CURRENT exists (current_set={current_is_set()})."
+        ) from exc
 
     io.ensure_dirs(
         [
@@ -134,7 +154,6 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
     )
     io.write_json(C.SCHEDULE_DIR / "raw_ingestion_receipt.json", raw_receipt)
 
-    pack = json.loads(C.CANONICAL_PACK_PATH.read_text(encoding="utf-8"))
     games: List[Dict[str, Any]] = list(pack.get("games") or [])
 
     dup_ids = sched.detect_duplicate_event_ids(games)
@@ -151,9 +170,9 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
     b7_reject_count = int((pack.get("map_stats") or {}).get("omit_unmapped_or_ambiguous") or 0)
 
     try:
-        pack_rel = str(C.CANONICAL_PACK_PATH.relative_to(REPO))
+        pack_rel = str(pack_path.relative_to(REPO))
     except ValueError:
-        pack_rel = str(C.CANONICAL_PACK_PATH)
+        pack_rel = str(pack_path)
     schedule_index = {
         "holdout_id": C.HOLDOUT_ID,
         "season": season,
@@ -172,7 +191,8 @@ def build(*, season: str = C.SEASON_KEY) -> Dict[str, Any]:
         "slate_complete": bool(pack.get("slate_complete")),
         "map_stats": pack.get("map_stats"),
         "canonical_pack_path": pack_rel,
-        "canonical_pack_sha256": io.sha256_file(C.CANONICAL_PACK_PATH),
+        "canonical_pack_sha256": io.sha256_file(pack_path),
+        "active_release_current_set": current_is_set(),
         "game_ids": [
             str(g.get("espn_game_id") or g.get("game_id") or "") for g in games
         ],

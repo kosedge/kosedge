@@ -1,21 +1,22 @@
 # Phase 2.6F — clean PR A/B split (execution)
 
-**Status:** ACCEPTANCE FIX IN PROGRESS — CR4 Path B authoritative R2 disaster recovery (A/B); do not merge; #490/#491/#496/#497 untouched
+**Status:** ACCEPTANCE FIX IN PROGRESS — CR7 real consumer wiring on CR6 post-pointer A/B; do not merge; #490/#491/#496/#497 untouched
 **Supersedes plan-only:** `PR491_SPLIT_MIGRATION_PLAN_26C.md` (plan retained for history)  
 **Does not close:** PR #491 (remains draft until Ryan reviews A/B + parity)  
 **Prior drafts:** #496 / #497 failed acceptance — replaced by clean A'/B' branches from current `deploy-vercel` (no fat JSON ancestor `7ced9f10` in merge history).
 
-## PR A — Code foundation (CR4 on CR3)
+## PR A — Code foundation (CR7 on CR6)
 
 Branch: `cursor/ncaam-26f-foundation-fix-8a49`
 
-Includes prior CR3 plus CR4:
+Includes prior CR3–CR6 plus CR7:
 
 - **Authoritative Path B recovery** = private R2 hydrate of exact frozen v1.1 packages (not regenerate from raw+KenPom+odds)
 - Features-bucket hydrate vs **separate label-vault** hydrate (builders fail closed)
 - Staging → verify inventory+locked hashes → reseal (frozen identity) → release-pointer promote (`CURRENT` symlink); live seal never unlinked first
+- **CR7 real consumer wiring:** shared `active_release` read API; verify/coverage/phase26c/builder/evaluator + model-service 2024–25 schedule loader resolve CURRENT; CI forbid flat-constant authoritative reads; verifier fails when pack unavailable
 - Credential-free recovery receipt; forensic raw+KenPom+odds script cannot promote frozen holdout
-- CR4 tests (mock R2): dual recovery identity, locked hashes, fail-closed missing/corrupt/restricted, interrupt/promote preserve, builders blocked, no Odds API fallback
+- CR4/CR6/CR7 tests (mock R2): dual recovery identity, locked hashes, post-pointer atomicity, real consumer entrypoints after clean recovery
 
 Includes:
 

@@ -39,10 +39,25 @@ Unit tests use `MockR2Store` (no network). Real hydrate is the script above afte
 2. Hydrate writes into a **staging** directory (live seal untouched; never unlink live seal first).
 3. Staging verified against package inventory + locked expected hashes.
 4. **Reseal** from downloaded content packages (real identity path); no silent reuse of a pre-seeded seal.
-5. **Release-pointer promote** only after verification passes: materialize a complete immutable `releases/<id>/`, then atomically switch one `CURRENT` symlink (`os.replace` of the symlink). **No required writes after the pointer switch** (CR6) — no per-promotion compatibility-path rewrites. All governed consumers (including canonical pack) resolve one release through `CURRENT` via `resolve_live_artifacts`. Multi-file live `os.replace` is **not** an atomic promote.
+5. **Release-pointer promote** only after verification passes: materialize a complete immutable `releases/<id>/`, then atomically switch one `CURRENT` symlink (`os.replace` of the symlink). **No required writes after the pointer switch** (CR6) — no per-promotion compatibility-path rewrites. All governed consumers (including canonical pack) resolve one release through `CURRENT` via `active_release` / `resolve_live_artifacts`. Multi-file live `os.replace` is **not** an atomic promote.
 6. On any mismatch/failure/interrupt **before** the pointer switch (including mid-materialize): refuse pointer switch and **preserve** the previous live package (all of features, labels, manifests, rejected, pack, seal). A reported failure must never claim `live_package_preserved=true` if `CURRENT` already moved.
 7. Credential-free recovery receipt (no secrets in receipt or git).
 8. Inventory SoT (`default_package_inventory` / CLI `_load_inventory`) proves 10/10 `UPLOADED` with non-null CAS keys. It does **not** expose per-object `provider_verified`; provider verification is tied separately to the sanitized provider retention receipt.
+
+### CR7 — real consumer wiring (LOCKED)
+
+After Path B promote, **one shared authoritative read API** owns the active release:
+
+- Module: `apps/web/src/ncaam_lab/holdout_2425/active_release.py`
+- Governed readers: verify script, coverage/phase26c auditors, builder pack read, evaluator inputs, feature/label/rejected/seal loaders
+- Model-service `load_official_schedule_blob("2024-25")` **is** a holdout consumer: it resolves the pack through holdout `CURRENT`. The static `DATA_DIR/ncaam_official_schedule_2024_25.json` path is **not** the recovered canonical pack once `CURRENT` exists.
+- Verifier **fails** when the authoritative canonical pack is unavailable (no soft note-only pass).
+- CI forbid: `scripts/ncaam/check_active_release_flat_forbid.py` (+ pytest) blocks direct flat-constant authoritative reads in governed readers.
+
+```bash
+python scripts/ncaam/check_active_release_flat_forbid.py
+python scripts/ncaam/verify_2425_sealed_artifacts.py
+```
 
 ### Label vault separation
 

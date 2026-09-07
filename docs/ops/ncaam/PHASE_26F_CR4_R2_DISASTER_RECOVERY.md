@@ -48,6 +48,8 @@ python scripts/ncaam/recover_2425_sealed_holdout_from_r2.py \
 
 Flow: hydrate → staging → verify inventory+locked hashes → reseal (frozen v1.1 identity) → **release-pointer promote** (materialize immutable `releases/<id>/`, then atomically switch single `CURRENT` symlink; **no required writes after the switch** — CR6). Live seal never unlinked first. Multi-file live `os.replace` is **not** atomic and is not used for cutover. Credential-free receipt. Python `default_package_inventory()` / CLI `_load_inventory()` is SoT for 10/10 `UPLOADED` + non-null CAS keys (checked-in refs JSON must match); it does **not** itself expose per-object `provider_verified` — that belongs on the sanitized provider retention receipt.
 
+**CR7 consumer contract:** after promote, governed readers (verify, coverage, phase26c, builder pack read, evaluator inputs) and model-service `load_official_schedule_blob("2024-25")` resolve the active release via `active_release` / CURRENT — not legacy flat `FEATURE_DIR` / declared `CANONICAL_PACK_PATH`. Verifier fails closed when the authoritative pack is missing. CI: `scripts/ncaam/check_active_release_flat_forbid.py`.
+
 ## Forensic (non-authoritative)
 
 ```bash

@@ -3,11 +3,9 @@
 
 Does not call Odds API. Does not unseal or score.
 
-Checks:
-  1) r2_object_refs_v1.json present with exact roles/prefixes/hashes
-  2) seal_receipt.json uses seal_payload_sha256 (not ambiguous seal_receipt_sha256-as-file)
-  3) optional: seal_receipt.file_sha256 matches on-disk file digest
-  4) optional: local raw ESPN day files match sidecar digests when present
+CR7: reads the **active release** (CURRENT) via ``active_release`` — never the
+legacy flat ``seal/`` or static model-service DATA_DIR pack when CURRENT exists.
+Missing authoritative canonical pack is a **hard failure**, not a note.
 """
 
 from __future__ import annotations
@@ -20,10 +18,22 @@ from pathlib import Path
 from typing import Any, Dict, List
 
 REPO = Path(__file__).resolve().parents[2]
+WEB_SRC = REPO / "apps" / "web" / "src"
+if str(WEB_SRC) not in sys.path:
+    sys.path.insert(0, str(WEB_SRC))
+
+from ncaam_lab.holdout_2425.active_release import (  # noqa: E402
+    ActiveReleaseError,
+    active_artifacts,
+    current_is_set,
+    load_canonical_pack,
+    load_seal_receipt,
+    require_artifact,
+)
+from ncaam_lab.holdout_2425.path_b_promote import sha256_file  # noqa: E402
+
 HOLDOUT = REPO / "data" / "ops" / "lab" / "ncaam" / "holdout_2024_25"
 REFS = HOLDOUT / "r2_object_refs" / "r2_object_refs_v1.json"
-SEAL = HOLDOUT / "seal" / "seal_receipt.json"
-SEAL_FILE_SIDECAR = HOLDOUT / "seal" / "seal_receipt.file_sha256"
 RAW = HOLDOUT / "raw" / "espn_scoreboard"
 
 # Historical: payload hash of v1.1 seal membership (hash before inserting hash field).
@@ -42,14 +52,6 @@ HISTORICAL_SEAL_FILE_SHA256_LEGACY_KEY = (
 )
 
 
-def _sha256_file(path: Path) -> str:
-    h = hashlib.sha256()
-    with path.open("rb") as f:
-        for chunk in iter(lambda: f.read(1 << 20), b""):
-            h.update(chunk)
-    return h.hexdigest()
-
-
 def _payload_sha_from_seal(seal: Dict[str, Any]) -> str:
     body = {
         k: v
@@ -66,39 +68,61 @@ def _payload_sha_from_seal(seal: Dict[str, Any]) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
 
 
-def verify(*, require_raw: bool = False) -> Dict[str, Any]:
+def verify(
+    *,
+    require_raw: bool = False,
+    live_root: Path | None = None,
+) -> Dict[str, Any]:
     errors: List[str] = []
     notes: List[str] = []
+    root = live_root if live_root is not None else HOLDOUT
+    # Refs inventory lives on governance PR B; isolated live_root recoveries
+    # verify package bytes only (skip repo-level refs gate).
+    check_refs = live_root is None
 
-    if not REFS.exists():
-        errors.append(f"missing {REFS.relative_to(REPO)}")
-        refs = {}
+    if check_refs:
+        if not REFS.exists():
+            errors.append(f"missing {REFS.relative_to(REPO)}")
+            refs: Dict[str, Any] = {}
+        else:
+            refs = json.loads(REFS.read_text(encoding="utf-8"))
+            roles = {o.get("role") for o in refs.get("objects") or []}
+            if "espn_schedule_raw_v1" not in roles:
+                errors.append("r2 refs missing role espn_schedule_raw_v1")
+            for o in refs.get("objects") or []:
+                if not o.get("prefix"):
+                    errors.append(f"object missing prefix: {o.get('role')}")
     else:
-        refs = json.loads(REFS.read_text(encoding="utf-8"))
-        roles = {o.get("role") for o in refs.get("objects") or []}
-        if "espn_schedule_raw_v1" not in roles:
-            errors.append("r2 refs missing role espn_schedule_raw_v1")
-        for o in refs.get("objects") or []:
-            if not o.get("prefix"):
-                errors.append(f"object missing prefix: {o.get('role')}")
+        notes.append("skipped repo r2_object_refs gate (isolated live_root)")
 
-    seal_info: Dict[str, Any] = {}
-    if not SEAL.exists():
-        notes.append("seal_receipt.json not in this checkout (deferred/PR B)")
-    else:
-        seal = json.loads(SEAL.read_text(encoding="utf-8"))
-        file_sha = _sha256_file(SEAL)
+    seal_info: Dict[str, Any] = {
+        "current_set": current_is_set(live_root=root),
+    }
+    arts = active_artifacts(live_root=root)
+    seal_info["release_dir"] = str(arts["release_dir"])
+    seal_info["seal_receipt_path"] = str(arts["seal_receipt"])
+    seal_info["pack_path"] = str(arts["pack_path"])
+
+    # --- Authoritative seal (FAIL if unavailable) ---
+    try:
+        seal_path = require_artifact("seal_receipt", live_root=root)
+        seal = load_seal_receipt(live_root=root)
+        file_sha = sha256_file(seal_path)
         payload_claimed = seal.get("seal_payload_sha256") or seal.get(
             "seal_receipt_sha256"
         )
         payload_actual = _payload_sha_from_seal(seal)
-        seal_info = {
-            "seal_file_sha256": file_sha,
-            "seal_payload_sha256_claimed": payload_claimed,
-            "seal_payload_sha256_recomputed": payload_actual,
-            "uses_explicit_payload_key": "seal_payload_sha256" in seal,
-            "legacy_file_sha256_when_key_was_seal_receipt_sha256": HISTORICAL_SEAL_FILE_SHA256_LEGACY_KEY,
-        }
+        seal_info.update(
+            {
+                "seal_file_sha256": file_sha,
+                "seal_payload_sha256_claimed": payload_claimed,
+                "seal_payload_sha256_recomputed": payload_actual,
+                "uses_explicit_payload_key": "seal_payload_sha256" in seal,
+                "legacy_file_sha256_when_key_was_seal_receipt_sha256": (
+                    HISTORICAL_SEAL_FILE_SHA256_LEGACY_KEY
+                ),
+            }
+        )
         if payload_claimed != payload_actual:
             errors.append(
                 f"seal payload hash mismatch claimed={payload_claimed} actual={payload_actual}"
@@ -111,8 +135,9 @@ def verify(*, require_raw: bool = False) -> Dict[str, Any]:
             errors.append(
                 "seal still uses ambiguous seal_receipt_sha256; rename to seal_payload_sha256"
             )
-        if SEAL_FILE_SIDECAR.exists():
-            side = SEAL_FILE_SIDECAR.read_text(encoding="utf-8").strip().split()[0]
+        side_path = arts["seal_sidecar"]
+        if side_path.exists():
+            side = side_path.read_text(encoding="utf-8").strip().split()[0]
             if side != file_sha:
                 errors.append(
                     f"seal_receipt.file_sha256 sidecar mismatch side={side} file={file_sha}"
@@ -124,31 +149,30 @@ def verify(*, require_raw: bool = False) -> Dict[str, Any]:
                 "on-disk seal file hash matches historical 1074731f… "
                 "(legacy key seal_receipt_sha256); payload remains af4fd451…"
             )
+    except ActiveReleaseError as exc:
+        errors.append(f"authoritative seal unavailable: {exc}")
 
-    pack_path = (
-        REPO
-        / "services"
-        / "model-service"
-        / "src"
-        / "services"
-        / "ncaam_schedule"
-        / "data"
-        / "ncaam_official_schedule_2024_25.json"
-    )
-    if pack_path.exists():
-        pack_sha = _sha256_file(pack_path)
-        seal_info_pack = {"canonical_pack_sha256": pack_sha}
+    # --- Authoritative canonical pack (FAIL if unavailable) ---
+    try:
+        pack_path = require_artifact("pack_path", live_root=root)
+        pack_sha = sha256_file(pack_path)
+        seal_info["canonical_pack_sha256"] = pack_sha
+        # Touch load path used by governed pack reader.
+        pack = load_canonical_pack(live_root=root)
+        n_games = len(pack.get("games") or [])
+        seal_info["canonical_pack_n_games"] = n_games
         if pack_sha == EXPECTED_CANONICAL_PACK_SHA256:
             notes.append("canonical pack matches locked v1.1 sha256 4016f2ab…")
         else:
-            notes.append(
-                f"canonical pack present but sha256={pack_sha} "
+            errors.append(
+                f"canonical pack sha256={pack_sha} "
                 f"(locked={EXPECTED_CANONICAL_PACK_SHA256})"
             )
-    else:
-        seal_info_pack = {"canonical_pack_sha256": None}
-        notes.append("canonical pack not in this checkout (path-B rebuild)")
-    seal_info.update(seal_info_pack)
+        if n_games <= 0:
+            errors.append("authoritative canonical pack has zero games")
+    except ActiveReleaseError as exc:
+        errors.append(f"authoritative canonical pack unavailable: {exc}")
+        seal_info["canonical_pack_sha256"] = None
 
     raw_info: Dict[str, Any] = {"present": RAW.exists()}
     if RAW.exists():
@@ -162,7 +186,7 @@ def verify(*, require_raw: bool = False) -> Dict[str, Any]:
                 missing.append(fp.name)
                 continue
             claimed = side.read_text(encoding="utf-8").strip().split()[0]
-            actual = _sha256_file(fp)
+            actual = sha256_file(fp)
             if claimed.lower() != actual.lower():
                 mismatches.append(fp.name)
             else:
@@ -188,6 +212,7 @@ def verify(*, require_raw: bool = False) -> Dict[str, Any]:
         "seal": seal_info,
         "raw": raw_info,
         "odds_api_calls_made": False,
+        "authority": "active_release_CURRENT",
     }
 
 
@@ -198,8 +223,14 @@ def main(argv: List[str] | None = None) -> int:
         action="store_true",
         help="Fail if local raw ESPN archive is absent.",
     )
+    parser.add_argument(
+        "--live-root",
+        type=Path,
+        default=None,
+        help="Override holdout live_root (tests / isolated recovery).",
+    )
     args = parser.parse_args(argv)
-    result = verify(require_raw=args.require_raw)
+    result = verify(require_raw=args.require_raw, live_root=args.live_root)
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0 if result["ok"] else 2
 

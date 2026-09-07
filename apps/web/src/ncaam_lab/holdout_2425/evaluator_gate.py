@@ -2,12 +2,16 @@
 
 Must never be imported by normal materialization, CI, or pytest fixtures in a way
 that auto-scores. Tests exercise refuse paths only.
+
+CR7: when evaluating eventually proceeds, inputs must come from
+``active_release.load_evaluator_inputs()`` (one CURRENT release) — never from
+legacy flat constants after CURRENT exists.
 """
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Any, Dict, Optional
 
 from ncaam_lab.holdout_2425.constants import HOLDOUT_ID
 
@@ -49,6 +53,33 @@ def assert_may_evaluate(auth: UnsealAuthorization) -> None:
         raise HoldoutSealError(
             "prior result receipt exists; governance replication authorization required"
         )
+
+
+def bind_active_release_inputs(
+    auth: UnsealAuthorization,
+    *,
+    inputs: Optional[Dict[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Resolve evaluator inputs from the active release; still refuse to score.
+
+    Manifest hashes in ``auth`` must match the active release when provided
+    inputs are omitted (loaded via active_release).
+    """
+    from ncaam_lab.holdout_2425.active_release import load_evaluator_inputs
+
+    resolved = inputs if inputs is not None else load_evaluator_inputs()
+    assert_may_evaluate(auth)
+    feat_h = str((resolved.get("sha256") or {}).get("feature_manifest") or "")
+    lab_h = str((resolved.get("sha256") or {}).get("label_manifest") or "")
+    if auth.feature_manifest_hash != feat_h:
+        raise HoldoutSealError(
+            "feature_manifest_hash does not match active release artifact"
+        )
+    if auth.label_manifest_hash != lab_h:
+        raise HoldoutSealError(
+            "label_manifest_hash does not match active release artifact"
+        )
+    return resolved
 
 
 def evaluate_holdout_refused_by_default(

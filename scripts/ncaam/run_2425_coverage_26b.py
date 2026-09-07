@@ -16,6 +16,12 @@ sys.path.insert(0, str(REPO / "apps" / "web" / "src"))
 
 from ncaam_identity import odds_name_to_team_norm, resolve_team_id  # noqa: E402
 from ncaam_lab.holdout_2425 import constants as C  # noqa: E402
+from ncaam_lab.holdout_2425.active_release import (  # noqa: E402
+    ActiveReleaseError,
+    load_canonical_pack,
+    load_feature_content,
+    load_seal_receipt,
+)
 from ncaam_lab.holdout_2425.io_util import write_json  # noqa: E402
 
 
@@ -85,15 +91,20 @@ def main() -> int:
     out = C.COVERAGE_DIR
     out.mkdir(parents=True, exist_ok=True)
 
-    pack = load_json(C.CANONICAL_PACK_PATH)
+    # CR7: governed readers resolve one active release (CURRENT when set).
+    try:
+        pack = load_canonical_pack()
+        features = load_feature_content()
+        seal = load_seal_receipt()
+    except ActiveReleaseError as exc:
+        raise SystemExit(f"FAIL-CLOSED: active release artifacts unavailable: {exc}") from exc
+
     games = list(pack.get("games") or [])
     map_stats = pack.get("map_stats") or {}
     odds_rows = load_json(C.ODDS_DIR / "odds_audit_rows.json")
     odds_sum = load_json(C.ODDS_DIR / "odds_audit_summary.json")
-    features = load_json(C.FEATURE_DIR / "features.json")
     venue_counts = (load_json(C.VENUE_DIR / "venue_contract.json").get("coverage_counts") or {})
     kenpom_sum = load_json(C.KENPOM_DIR / "game_eligibility_summary.json")
-    seal = load_json(C.SEAL_DIR / "seal_receipt.json")
 
     arch_path = C.SEAL_ARCHIVE_DIR / "v1" / "seal_receipt.json"
     before_complete = 2318
@@ -338,8 +349,10 @@ def main() -> int:
         "outcome_distribution_inspection_omitted": True,
     })
 
-    # preserve v1 seal archive if missing
-    seal_path = C.SEAL_DIR / "seal_receipt.json"
+    # preserve v1 seal archive if missing (read from active release)
+    from ncaam_lab.holdout_2425.active_release import active_artifacts
+
+    seal_path = active_artifacts()["seal_receipt"]
     arch_dir = C.SEAL_ARCHIVE_DIR / "v1"
     arch_dir.mkdir(parents=True, exist_ok=True)
     if seal_path.exists() and not (arch_dir / "seal_receipt.json").exists():

@@ -9,6 +9,13 @@ Honesty:
   - Lab interim joins still use Odds ``event_id`` (track D). This package exposes
     ESPN ``game_id`` + null crosswalk stubs for a future E hybrid; do not invent
     Odds↔ESPN links without evidence.
+
+CR7 — 2024–25 holdout season is a **holdout consumer** of the active release:
+  ``load_official_schedule_blob("2024-25")`` resolves the pack through the
+  sealed holdout ``CURRENT`` pointer when present. The static
+  ``DATA_DIR/ncaam_official_schedule_2024_25.json`` path is **not** the
+  recovered canonical pack after Path B promote; do not describe it as such.
+  Other seasons continue to use packaged ``DATA_DIR`` JSON.
 """
 
 from __future__ import annotations
@@ -22,6 +29,9 @@ DATA_DIR = Path(__file__).resolve().parent / "data"
 
 # Season key = academic year label (start_year-end_year), e.g. "2022-23".
 DEFAULT_SEASON_KEY = "2022-23"
+# Sealed holdout season — active-release consumer (Phase 2.6F CR7).
+HOLDOUT_SEASON_KEY = "2024-25"
+HOLDOUT_PACK_BASENAME = "ncaam_official_schedule_2024_25.json"
 
 
 class ScheduledNcaamGame(TypedDict, total=False):
@@ -50,14 +60,73 @@ class ScheduledNcaamGame(TypedDict, total=False):
     map_status: str
 
 
+def _repo_root() -> Path:
+    # .../services/model-service/src/services/ncaam_schedule/data → repo
+    return DATA_DIR.parents[5]
+
+
+def _holdout_live_root() -> Path:
+    return _repo_root() / "data" / "ops" / "lab" / "ncaam" / "holdout_2024_25"
+
+
+def resolve_holdout_pack_via_current(
+    *, live_root: Optional[Path] = None
+) -> Optional[Path]:
+    """Return CURRENT-release pack path for 2024–25 when the pointer is set."""
+    root = live_root if live_root is not None else _holdout_live_root()
+    cur = root / "CURRENT"
+    if not (cur.is_symlink() or cur.exists()):
+        return None
+    try:
+        release = cur.resolve()
+    except OSError:
+        return None
+    candidate = release / HOLDOUT_PACK_BASENAME
+    if candidate.is_file():
+        return candidate
+    return None
+
+
 def schedule_path_for_season(season_key: str = DEFAULT_SEASON_KEY) -> Path:
-    """Resolve packaged path for an academic season key (``2022-23``)."""
+    """Resolve schedule path for an academic season key (``2022-23``).
+
+    For ``2024-25``, prefers the active holdout CURRENT release pack when set.
+    Static ``DATA_DIR`` remains the declared basename / pre-CURRENT fallback only.
+    """
     safe = str(season_key).strip().replace("/", "-")
+    if safe == HOLDOUT_SEASON_KEY:
+        via_current = resolve_holdout_pack_via_current()
+        if via_current is not None:
+            return via_current
     return DATA_DIR / f"ncaam_official_schedule_{safe.replace('-', '_')}.json"
 
 
 def load_official_schedule_blob(season_key: str = DEFAULT_SEASON_KEY) -> Dict[str, Any]:
     path = schedule_path_for_season(season_key)
+    safe = str(season_key).strip().replace("/", "-")
+    # Holdout season: when CURRENT is set but pack missing under the release,
+    # do not silently fall through to an absent static DATA_DIR file as if
+    # that were the recovered pack — surface missing honestly.
+    if safe == HOLDOUT_SEASON_KEY:
+        live_root = _holdout_live_root()
+        cur = live_root / "CURRENT"
+        current_set = cur.is_symlink() or cur.exists()
+        if current_set and not path.is_file():
+            return {
+                "present": False,
+                "season": season_key,
+                "official": False,
+                "slate_complete": False,
+                "games": [],
+                "source": "missing_active_release_pack",
+                "active_release_current_set": True,
+                "resolved_path": str(path),
+                "note": (
+                    "CURRENT pointer is set but authoritative pack is absent under "
+                    "the active release. Static DATA_DIR path is not the recovered "
+                    "canonical pack (Phase 2.6F CR7)."
+                ),
+            }
     if not path.is_file():
         return {
             "present": False,
@@ -66,9 +135,20 @@ def load_official_schedule_blob(season_key: str = DEFAULT_SEASON_KEY) -> Dict[st
             "slate_complete": False,
             "games": [],
             "source": "missing",
+            "resolved_path": str(path),
         }
     raw = json.loads(path.read_text(encoding="utf-8"))
     raw["present"] = True
+    raw["resolved_path"] = str(path)
+    if safe == HOLDOUT_SEASON_KEY:
+        raw["active_release_current_set"] = bool(
+            resolve_holdout_pack_via_current() is not None
+        )
+        raw["authority"] = (
+            "holdout_CURRENT_release"
+            if raw["active_release_current_set"]
+            else "static_DATA_DIR_or_flat"
+        )
     # Hard honesty: never promote thin packs.
     if not bool(raw.get("slate_complete")):
         raw["slate_complete"] = False
@@ -190,9 +270,12 @@ def documentation(blob: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
         "source": blob.get("source"),
         "as_of": blob.get("as_of"),
         "densified": False,
+        "holdout_season_is_active_release_consumer": True,
+        "authority": blob.get("authority"),
         "lab_join_note": (
             "Schedule SoT LOCKED Option A (ESPN). Lab interim joins still use Odds "
-            "event_id (D). odds_event_id on rows stays null until evidenced E hybrid."
+            "event_id (D). odds_event_id on rows stays null until evidenced E hybrid. "
+            "2024–25 sealed holdout pack resolves via holdout CURRENT when set (CR7)."
         ),
         **cov,
         "map_stats": blob.get("map_stats") or {},

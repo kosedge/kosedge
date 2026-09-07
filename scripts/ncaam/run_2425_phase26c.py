@@ -26,7 +26,6 @@ from ncaam_identity import (  # noqa: E402
     resolve_team_id,
 )
 from ncaam_lab.holdout_2425.constants import (  # noqa: E402
-    CANONICAL_PACK_PATH,
     HOLDOUT_ID,
     KENPOM_SNAPSHOT_DIR,
     ODDS_PARQUET,
@@ -35,6 +34,12 @@ from ncaam_lab.holdout_2425.constants import (  # noqa: E402
     RAW_ESPN_DIR,
     WINDOW_END,
     WINDOW_START,
+)
+from ncaam_lab.holdout_2425.active_release import (  # noqa: E402
+    ActiveReleaseError,
+    load_canonical_pack,
+    load_feature_content,
+    load_seal_receipt,
 )
 from ncaam_lab.holdout_2425.io_util import write_json  # noqa: E402
 from ncaam_lab.holdout_2425.phase26c.thresholds import (  # noqa: E402
@@ -1313,11 +1318,16 @@ def main() -> int:
     threshold_receipt = frozen_threshold_receipt()
     write_json(COVERAGE_26C / "threshold_lock.json", threshold_receipt)
 
-    features = load_json(OUT_ROOT / "feature_package" / "features.json")
+    features = load_feature_content()
     odds_rows = load_json(OUT_ROOT / "odds_audit" / "odds_audit_rows.json")
-    pack = load_json(CANONICAL_PACK_PATH)
+    try:
+        pack = load_canonical_pack()
+        seal = load_seal_receipt()
+    except ActiveReleaseError as exc:
+        raise SystemExit(
+            f"FAIL-CLOSED: active release pack/seal unavailable: {exc}"
+        ) from exc
     schedule_games = list(pack.get("games") or [])
-    seal = load_json(OUT_ROOT / "seal" / "seal_receipt.json")
     arch_path = OUT_ROOT / "seal_archive" / "v1" / "seal_receipt.json"
     arch_v1 = load_json(arch_path) if arch_path.exists() else None
 
