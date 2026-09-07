@@ -5,7 +5,7 @@
 | Candidate ID | Method | Role | Default? | Status |
 |---|---|---|---|---|
 | `B2-C0-v1` | `kenpom_adjem_plus_hca_v1` | Incumbent B2 | **YES** (materialize) | Frozen historical |
-| `B2-PACE-v1` | `kenpom_adjem_pit_tempo_plus_game_hca_v1` | Unit-correction challenger | **NO** | Frozen for Train-A diagnostics; awaiting pocket unseal auth |
+| `B2-PACE-v1` | `kenpom_adjem_pit_tempo_plus_game_hca_v1` | Unit-correction challenger | **NO** | Frozen for Train-A diagnostics; Phase 2.7A immutable HCA/clips + non-finite fail-closed; awaiting pocket/holdout unseal auth |
 
 Research alias `C3` refers to `B2-PACE-v1` in Phase 1B notes only.
 
@@ -25,7 +25,7 @@ Test-A residual structure and large-disagreement failures against B1 contributed
 
 | Candidate ID | Intent | Status |
 |---|---|---|
-| `B2-NEUTRAL-HCA-v1` | Zero HCA when reliable PIT `neutral_site=true` | registered_not_implemented |
+| `B2-NEUTRAL-HCA-v1` / `B2-PACE-NEUTRAL-v1` | Zero HCA when reliable PIT `neutral_site=true` | registered_not_implemented (Phase 2.7A hard lock) |
 
 ## Product exposure lock
 

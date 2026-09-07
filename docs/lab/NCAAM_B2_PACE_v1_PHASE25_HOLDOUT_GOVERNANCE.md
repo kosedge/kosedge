@@ -46,3 +46,22 @@ Pocket 2025 is **PARTIAL_COVERAGE** (odds tips 2025-11-03 → 2025-12-06 only; D
 3. Only after a PIT-valid sealed window exists: separate authorization phase for hierarchical prereg + one-shot unseal.
 
 Do **not**: implement B2-PACE-NEUTRAL-v1 yet; score Test-A/pocket; merge/deploy/promote; change formula; wire as default.
+
+---
+
+## Phase 2.7A additive note (2026-09-07) — governance only; no scoring
+
+Phase 2.5’s “no valid untouched OOS window currently materializable” verdict remains **historically accurate** for the Phase 2.5 evidence set (Pocket 2025 PARTIAL_COVERAGE; no sealed PIT-valid holdout then).
+
+**Current foundation (Phase 2.6F, separate from B2-PACE-v1 challenger work):** sealed package id `ncaam_holdout_2024_25_v1_1` under `data/ops/lab/ncaam/holdout_2024_25/` (`features_labels_joined_for_evaluation=false`, `performance_metrics_calculated=false`).
+
+Phase 2.7A does **not**:
+
+- unseal the holdout
+- score B2-PACE-v1 (or any challenger) on the holdout
+- open features and labels together
+- calculate performance
+- implement B2-PACE-NEUTRAL-v1
+- change incumbent / materialize default
+
+See append-only receipt: `data/ops/lab/ncaam/ncaam-b2-pace-v1-phase27a-integration.json`.

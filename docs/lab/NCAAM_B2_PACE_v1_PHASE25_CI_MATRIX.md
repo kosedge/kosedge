@@ -29,6 +29,16 @@ Generated during enterprise hardening. No merge/deploy.
 | Densify version assertion | fixed | Expect densify → v1.2 (was stale v1.1). No scorecard rewrite |
 | Ruff | not run | Absent from declared deps |
 
+## Local results (Phase 2.7A — additive)
+
+| Command | Exit | Notes |
+|---|---|---|
+| `pnpm check:web-python-boundary` | 0 | Unchanged footprint |
+| Focused Lab pytest (same four files) | 0 | 69 passed (immutability + non-finite cases added) |
+| Holdout/DR pytest (`test_ncaam_holdout_2425_*.py`) | 0 | 70 passed |
+| Train-A parity vs frozen impl | 0 | n=3676; `max_abs_fair_diff=0.0` |
+| Ruff | not run | Still absent from declared deps |
+
 ## Versions used
 
 - pytest 9.1.1, polars 1.44.1, numpy 2.4.4, scipy 1.18.1

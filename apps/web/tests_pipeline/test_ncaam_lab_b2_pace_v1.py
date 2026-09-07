@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import inspect
+import math
 from datetime import date
+from pathlib import Path
 
 import polars as pl
 import pytest
@@ -13,6 +15,10 @@ from ncaam_lab.fair_b2_pace_v1 import (
     CANDIDATE_ID,
     ELIGIBLE_COL,
     FAIR_COL,
+    FROZEN_ADJEM_DIFF_CLIP,
+    FROZEN_HCA,
+    FROZEN_SPREAD_CLIP,
+    HCA_COL,
     INCUMBENT_CANDIDATE_ID,
     METHOD_ID,
     compute_fair_b2_pace_v1,
@@ -20,7 +26,7 @@ from ncaam_lab.fair_b2_pace_v1 import (
     select_fair_candidate,
 )
 from ncaam_lab.materialize import materialize_lab_fair
-from ncaam_lab.protocol import DEFAULT_HCA
+from ncaam_lab.protocol import ADJEM_DIFF_CLIP, DEFAULT_HCA, SPREAD_CLIP
 
 
 def _base_games(**overrides) -> pl.DataFrame:
@@ -191,5 +197,124 @@ def test_materialize_still_calls_only_incumbent_engine() -> None:
 
 def test_default_hca_matches_frozen_value() -> None:
     assert DEFAULT_HCA == pytest.approx(2.8696)
+    assert FROZEN_HCA == pytest.approx(2.8696)
+    assert FROZEN_HCA == float(DEFAULT_HCA)
+    assert FROZEN_ADJEM_DIFF_CLIP == float(ADJEM_DIFF_CLIP) == 30.0
+    assert FROZEN_SPREAD_CLIP == float(SPREAD_CLIP) == 28.0
     assert CANDIDATE_ID == "B2-PACE-v1"
     assert METHOD_ID == "kenpom_adjem_pit_tempo_plus_game_hca_v1"
+
+
+def test_omitted_hca_uses_frozen_contract() -> None:
+    got = scalar_fair_home_margin(
+        adjem_home=30.0, adjem_away=10.0, adjt_home=67.5, adjt_away=67.5
+    )
+    assert got == pytest.approx(16.3696)
+    out = compute_fair_b2_pace_v1(_base_games())
+    assert out[HCA_COL][0] == pytest.approx(FROZEN_HCA)
+    assert out[FAIR_COL][0] == pytest.approx(16.3696)
+
+
+def test_custom_hca_mismatch_refused() -> None:
+    with pytest.raises(ValueError, match="refuses HCA mismatch"):
+        scalar_fair_home_margin(
+            adjem_home=30.0,
+            adjem_away=10.0,
+            adjt_home=67.5,
+            adjt_away=67.5,
+            hca=0.0,
+        )
+    with pytest.raises(ValueError, match="refuses HCA mismatch"):
+        compute_fair_b2_pace_v1(_base_games(), hca=3.0)
+
+
+def test_weights_path_refused_no_silent_fallback(tmp_path: Path) -> None:
+    missing = tmp_path / "does-not-exist.json"
+    with pytest.raises(ValueError, match="refuses weights_path"):
+        compute_fair_b2_pace_v1(_base_games(), weights_path=missing)
+
+    bad = tmp_path / "malformed.json"
+    bad.write_text("{not-json", encoding="utf-8")
+    with pytest.raises(ValueError, match="refuses weights_path"):
+        compute_fair_b2_pace_v1(_base_games(), weights_path=bad)
+
+    alt = tmp_path / "alt_hca.json"
+    alt.write_text('{"home_court": 9.99}', encoding="utf-8")
+    with pytest.raises(ValueError, match="refuses weights_path"):
+        compute_fair_b2_pace_v1(_base_games(), weights_path=alt)
+
+
+def test_nonfinite_hca_refused() -> None:
+    for bad in (float("nan"), float("inf"), float("-inf")):
+        with pytest.raises(ValueError, match="refuses non-finite hca"):
+            scalar_fair_home_margin(
+                adjem_home=30.0,
+                adjem_away=10.0,
+                adjt_home=67.5,
+                adjt_away=67.5,
+                hca=bad,
+            )
+        with pytest.raises(ValueError, match="refuses non-finite hca"):
+            compute_fair_b2_pace_v1(_base_games(), hca=bad)
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("adjem_home", float("nan")),
+        ("adjem_home", float("inf")),
+        ("adjem_home", float("-inf")),
+        ("adjem_away", float("nan")),
+        ("adjem_away", float("inf")),
+        ("adjem_away", float("-inf")),
+        ("adjt_home", float("nan")),
+        ("adjt_home", float("inf")),
+        ("adjt_home", float("-inf")),
+        ("adjt_away", float("nan")),
+        ("adjt_away", float("inf")),
+        ("adjt_away", float("-inf")),
+    ],
+)
+def test_nonfinite_inputs_fail_closed_scalar(field: str, value: float) -> None:
+    kwargs = {
+        "adjem_home": 30.0,
+        "adjem_away": 10.0,
+        "adjt_home": 67.5,
+        "adjt_away": 67.5,
+        field: value,
+    }
+    assert math.isfinite(value) is False
+    assert scalar_fair_home_margin(**kwargs) is None
+
+
+@pytest.mark.parametrize(
+    "field,value",
+    [
+        ("adjem_home", float("nan")),
+        ("adjem_home", float("inf")),
+        ("adjem_home", float("-inf")),
+        ("adjem_away", float("nan")),
+        ("adjem_away", float("inf")),
+        ("adjem_away", float("-inf")),
+        ("adjt_home", float("nan")),
+        ("adjt_home", float("inf")),
+        ("adjt_home", float("-inf")),
+        ("adjt_away", float("nan")),
+        ("adjt_away", float("inf")),
+        ("adjt_away", float("-inf")),
+    ],
+)
+def test_nonfinite_inputs_fail_closed_frame(field: str, value: float) -> None:
+    games = _base_games(**{field: value})
+    out = compute_fair_b2_pace_v1(games)
+    assert out[FAIR_COL][0] is None
+    assert out[ELIGIBLE_COL][0] is False
+
+
+def test_no_load_hca_helper_in_challenger_module() -> None:
+    import ncaam_lab.fair_b2_pace_v1 as mod
+
+    assert not hasattr(mod, "_load_hca")
+    src = inspect.getsource(mod)
+    assert "json.load" not in src
+    assert "silent" in src.lower() or "refuses weights_path" in src

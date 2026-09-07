@@ -1,0 +1,73 @@
+{
+  "candidate_id": "B2-PACE-v1",
+  "frozen_contract": {
+    "adjem_diff": "clip(home_adjem-away_adjem, \u00b130)",
+    "custom_hca_mismatch_behavior": "refused",
+    "hca": 2.8696,
+    "immutable": true,
+    "margin": "clip(adjem_diff*possessions/100 + 2.8696, \u00b128)",
+    "nonfinite_behavior": "fail_closed_fair_null",
+    "possessions": "(home_adjt+away_adjt)/2",
+    "weights_path_behavior": "refused"
+  },
+  "generated_at_utc": "2026-09-07T12:20:39.809057+00:00",
+  "hard_locks_honored": [
+    "no_merge",
+    "no_unseal",
+    "no_holdout_scoring",
+    "no_deploy",
+    "no_promote",
+    "no_incumbent_default_change",
+    "materializer_incumbent_only",
+    "b2_pace_neutral_v1_unimplemented",
+    "no_open_features_and_labels_together",
+    "no_performance_calculation",
+    "pr_490_remains_draft"
+  ],
+  "head_sha": "9cece9ceee6c82cf896848107ac33709f687e169",
+  "holdout_governance": {
+    "b2_pace_neutral_v1_implemented": false,
+    "current_foundation_holdout_id": "ncaam_holdout_2024_25_v1_1",
+    "features_labels_joined_for_evaluation": false,
+    "foundation_source_phase": "2.6F",
+    "performance_metrics_calculated": false,
+    "phase25_verdict_historically_accurate": "NO VALID UNTOUCHED OOS WINDOW CURRENTLY MATERIALIZABLE (accurate as of Phase 2.5; not rewritten)",
+    "scored": false,
+    "unsealed": false
+  },
+  "implementation_hashes": {
+    "bytes_changed": true,
+    "new_fair_b2_pace_v1_py_sha256": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
+    "old_fair_b2_pace_v1_py_sha256": "ae5a34cdc7a2d5324fe4b372e31820464c5f385fffba7583ff5ffa43cb123707"
+  },
+  "incumbent": {
+    "b2_columns_unchanged_when_challenger_attached": true,
+    "materialize_incumbent_only": true,
+    "production_default_changed": false
+  },
+  "method_id": "kenpom_adjem_pit_tempo_plus_game_hca_v1",
+  "old_impl_ref_used": "0d08b963014c5c3f51378cf4c2558cf0a8e287bc",
+  "original_diagnostics_rewritten": false,
+  "originating_commit_pre_rebase": "0d08b963014c5c3f51378cf4c2558cf0a8e287bc",
+  "parity_train_a": {
+    "elig_new_matches_elig_old_on_old_eligible": true,
+    "exact_equality": true,
+    "expected_eligible_historical": 3676,
+    "hca_all_frozen": true,
+    "max_abs_fair_diff": 0.0,
+    "n_old_eligible": 3676,
+    "n_valid_domain_finite_fair": 3676,
+    "parquet": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-latest.parquet",
+    "parquet_sha256": "bbc7a3c71ba8c2af93dc04a2fbd11f706a5929f5cc35eba76c4a2ec5a3dabb66",
+    "row_count": 3676
+  },
+  "phase": "2.7A",
+  "phase25_receipts_preserved": [
+    "data/ops/lab/ncaam/ncaam-b2-pace-v1-train-a-diagnostics.json",
+    "data/ops/lab/ncaam/ncaam-b2-pace-v1-phase25-hardening.json",
+    "data/ops/lab/ncaam/ncaam-holdout-feasibility-phase25.json"
+  ],
+  "production_base": "beae001342cdd15ad929e53783e6973530ffda44",
+  "production_base_resolved": "beae001342cdd15ad929e53783e6973530ffda44",
+  "title": "PR #490 reconciliation + enterprise hardening"
+}
