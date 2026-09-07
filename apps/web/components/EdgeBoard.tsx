@@ -540,11 +540,7 @@ export default function EdgeBoard({
   const isNhl = String(sportKey).toLowerCase() === "nhl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
   // NHL: customer "Puck Line" (internal market key stays Spread — no schema migrate).
-  const lineLabel = isMlb
-    ? "Moneyline"
-    : isNhl
-      ? NHL_PUCK_LINE_LABEL
-      : "Line";
+  const lineLabel = isMlb ? "Moneyline" : isNhl ? NHL_PUCK_LINE_LABEL : "Line";
   // KEI = final handicap when a model exists. Markets-only sports leave cells "—".
   const keiLineHeader = "KEI";
   const keiOuHeader = "KEI";

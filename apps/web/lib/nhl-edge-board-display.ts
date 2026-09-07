@@ -8,10 +8,7 @@
  * Display only: Spread → Puck Line; two-way ML → Game Moneyline — Includes OT/Shootout.
  */
 
-import {
-  NHL_LEAN_EDGE_PTS,
-  NHL_PLAY_EDGE_PTS,
-} from "@/lib/nhl-trusted-market";
+import { NHL_LEAN_EDGE_PTS, NHL_PLAY_EDGE_PTS } from "@/lib/nhl-trusted-market";
 
 /** Customer label for the NHL puck-line (internal market key remains "Spread"). */
 export const NHL_PUCK_LINE_LABEL = "Puck Line";
@@ -20,8 +17,7 @@ export const NHL_PUCK_LINE_LABEL = "Puck Line";
  * Customer label for NHL two-way game moneyline (includes OT/SO).
  * Do not use ambiguous "Regulation ML"; regulation product is 60-Minute 3-Way.
  */
-export const NHL_GAME_MONEYLINE_LABEL =
-  "Game Moneyline — Includes OT/Shootout";
+export const NHL_GAME_MONEYLINE_LABEL = "Game Moneyline — Includes OT/Shootout";
 
 /** Edge column subtitle for the puck-line market. */
 export const NHL_PUCK_LINE_EDGE_LABEL = "Puck Line edge";

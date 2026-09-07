@@ -8,10 +8,7 @@ import {
   nhlDisplayMarketLabel,
   nhlEdgeBoardTagFooter,
 } from "@/lib/nhl-edge-board-display";
-import {
-  NHL_LEAN_EDGE_PTS,
-  NHL_PLAY_EDGE_PTS,
-} from "@/lib/nhl-trusted-market";
+import { NHL_LEAN_EDGE_PTS, NHL_PLAY_EDGE_PTS } from "@/lib/nhl-trusted-market";
 
 describe("nhl-edge-board-display (honesty naming + footer cuts)", () => {
   it("footer cuts match trusted-market constants (not legacy 1 / 2.5)", () => {
