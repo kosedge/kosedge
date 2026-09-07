@@ -19,9 +19,10 @@
     "taxonomy_relabel_not_in_governed_pit_rating_universe",
     "web_python_allowlist_cr3_modules",
     "web_python_allowlist_cr4_modules",
-    "path_b_cr7_real_consumer_wiring"
+    "path_b_cr7_real_consumer_wiring",
+    "path_b_cr8_schedule_fail_closed"
   ],
-  "audited_at_utc": "2026-09-07T01:11:26Z",
+  "audited_at_utc": "2026-09-07T01:27:14Z",
   "base": "origin/deploy-vercel",
   "branch": "cursor/ncaam-26f-foundation-fix-8a49",
   "bulk_dataset_paths": [],
@@ -42,14 +43,15 @@
     "f5e016e2279e71e1a024666cb4983b6e0932b01d",
     "b4eb062fc82ef835ec8f5b5955cd406bb3f92e77",
     "4db6f15ddeaf72c80906e5f0e9daa4236e42a71f",
-    "ef791e02d9b82e040d9d29363349890221d7fccc"
+    "ef791e02d9b82e040d9d29363349890221d7fccc",
+    "7873af037aed558be4afae8ff1d44ad2541ad77b"
   ],
   "covers_all_commits_on_final_A_HEAD": true,
   "credential_pattern_hits": [],
   "fat_json_ancestor_7ced9f10_in_history": false,
-  "head": "ef791e02d9b82e040d9d29363349890221d7fccc",
-  "n_commits": 17,
-  "note": "A tip after CR7 real consumer wiring (ef791e02d9b8); active_release + schedule loader CURRENT; supersedes reviewed 4db6f15d.",
+  "head": "7873af037aed558be4afae8ff1d44ad2541ad77b",
+  "n_commits": 18,
+  "note": "A tip after CR8 fail-closed schedule loader (7873af037aed); CURRENT set \u21d2 no static DATA_DIR fallback; supersedes reviewed ef791e02.",
   "oversized_blobs_gt_250kb": [],
   "raw_espn_paths": [],
   "verdict": true
