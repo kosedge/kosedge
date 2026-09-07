@@ -1,9 +1,16 @@
-"""Path B staging → verify → release-pointer promote (Phase 2.6F CR5).
+"""Path B staging → verify → release-pointer promote (Phase 2.6F CR6).
 
 Live authority is a single CURRENT pointer (symlink) to an immutable release
 directory. Materialize the full release first; only then atomically switch the
 pointer. Mid-materialize failures leave CURRENT (and therefore all live
 artifacts) unchanged.
+
+CR6 — post-pointer atomicity:
+  After CURRENT switches, perform **no** required writes. Compatibility-path
+  mutation is not part of live cutover. Governed consumers (including the
+  canonical pack reader) resolve one immutable release through CURRENT via
+  ``resolve_live_artifacts``. Legacy flat paths under live_root are
+  non-authoritative once CURRENT exists.
 
 Never describe multi-file os.replace of live paths as "atomic".
 """
@@ -39,12 +46,16 @@ PROMOTE_PACKAGE_DIRS = (
 )
 PROMOTE_ROOT_FILES = ("build_summary.json", "readiness_report.json")
 
-# Compat publish targets under live_root that should track CURRENT after switch.
-COMPAT_LIVE_DIRS = (
-    "feature_package",
-    "label_package",
-    "rejected",
-    "seal",
+# Governed consumer logical names resolved exclusively through CURRENT when set.
+GOVERNED_CONSUMER_KEYS = (
+    "feature_content",
+    "feature_manifest",
+    "label_content",
+    "label_manifest",
+    "rejected_events",
+    "pack_path",
+    "seal_receipt",
+    "seal_sidecar",
 )
 
 
@@ -171,7 +182,11 @@ def resolve_live_artifacts(
     live_pack_path: Path,
     live_seal_dir: Path,
 ) -> Dict[str, Path]:
-    """Authoritative live artifact paths (CURRENT release when present)."""
+    """Authoritative live artifact paths (CURRENT release when present).
+
+    Once CURRENT exists, all governed consumers — including the canonical pack
+    reader — must use these paths. Legacy flat live_root paths are not SoT.
+    """
     release = resolve_current_release(live_root)
     if release is not None:
         pack_name = live_pack_path.name
@@ -209,9 +224,34 @@ def resolve_live_artifacts(
     }
 
 
+def consumer_release_identity(
+    *,
+    live_root: Path,
+    live_pack_path: Path,
+    live_seal_dir: Path,
+) -> Dict[str, Any]:
+    """Return release id + per-consumer sha256s for single-release assertions."""
+    arts = resolve_live_artifacts(
+        live_root=live_root,
+        live_pack_path=live_pack_path,
+        live_seal_dir=live_seal_dir,
+    )
+    release = arts["release_dir"]
+    hashes: Dict[str, str] = {}
+    for key in GOVERNED_CONSUMER_KEYS:
+        path = arts[key]
+        if path.exists() and path.is_file():
+            hashes[key] = sha256_file(path)
+    return {
+        "release_dir": str(release.resolve()) if release.exists() else str(release),
+        "current_set": resolve_current_release(live_root) is not None,
+        "consumer_hashes": hashes,
+    }
+
+
 def _maybe_fail(fail_at: Optional[str], boundary: str) -> None:
     if fail_at and fail_at == boundary:
-        if boundary == "during_pointer_switch":
+        if boundary in ("during_pointer_switch", "after_pointer_switch"):
             raise OSError(errno_placeholder(), f"injected OSError at {boundary}")
         raise PromoteError(f"injected promote failure at boundary={boundary}")
 
@@ -244,37 +284,6 @@ def _atomic_switch_symlink(link_path: Path, target: Path) -> None:
             except OSError:
                 pass
         raise
-
-
-def _replace_path_with_symlink(path: Path, target: Path) -> None:
-    """Publish a compatibility symlink at path → target (post-CURRENT only).
-
-    Not the live cutover. CURRENT is already switched; failures here do not
-    roll back the release pointer.
-    """
-    path.parent.mkdir(parents=True, exist_ok=True)
-    try:
-        rel_target = os.path.relpath(target, start=path.parent)
-    except ValueError:
-        rel_target = str(target)
-
-    if path.is_symlink():
-        tmp = path.parent / f".{path.name}.pubtmp.{uuid.uuid4().hex[:8]}"
-        if tmp.exists() or tmp.is_symlink():
-            tmp.unlink()
-        tmp.symlink_to(rel_target)
-        os.replace(tmp, path)
-        return
-
-    if path.exists():
-        aside = path.parent / f".{path.name}.pre_pointer_{uuid.uuid4().hex[:8]}"
-        os.rename(path, aside)
-
-    tmp = path.parent / f".{path.name}.pubtmp.{uuid.uuid4().hex[:8]}"
-    if tmp.exists() or tmp.is_symlink():
-        tmp.unlink()
-    tmp.symlink_to(rel_target)
-    os.replace(tmp, path)
 
 
 def materialize_release_tree(
@@ -339,18 +348,22 @@ def promote_staging_to_live(
     live_seal_dir: Path,
     fail_at: Optional[str] = None,
     release_id: Optional[str] = None,
-    publish_compat_symlinks: bool = True,
+    publish_compat_symlinks: bool = False,
 ) -> Dict[str, Any]:
     """Promote verified staging via immutable release + atomic CURRENT pointer.
 
     1. Materialize a complete release under live_root/releases/<id>/
     2. After full materialize, atomically switch live_root/CURRENT → that release
-    3. Optionally publish compatibility symlinks at traditional live paths
+    3. Stop. No compatibility-path rewrites (CR6). Governed consumers resolve
+       through CURRENT via ``resolve_live_artifacts``.
 
     Step 1 failures leave CURRENT unchanged (all prior live artifacts intact).
-    Step 2 is a single symlink rename. Multi-file live os.replace is not used
-    and must not be called atomic.
+    Step 2 is a single symlink rename — the only live cutover write.
+    ``publish_compat_symlinks`` is accepted for API back-compat but ignored;
+    per-promotion compatibility rewrites are removed (CR6).
     """
+    del publish_compat_symlinks  # CR6: never publish compat paths after (or during) cutover.
+
     rid = release_id or f"r-{time.strftime('%Y%m%dT%H%M%SZ')}-{uuid.uuid4().hex[:10]}"
     releases_root = live_root / RELEASES_DIRNAME
     releases_root.mkdir(parents=True, exist_ok=True)
@@ -372,8 +385,8 @@ def promote_staging_to_live(
     try:
         _atomic_switch_symlink(pointer, release_dir)
     except OSError as exc:
-        # Pointer unchanged (or never created). Drop incomplete? Release is
-        # complete but unpublished — safe to leave for inspection; live intact.
+        # Pointer unchanged (or never created). Release is complete but
+        # unpublished — safe to leave for inspection; live intact.
         raise PromoteError(
             f"CURRENT pointer switch failed; live release unchanged: {exc}"
         ) from exc
@@ -382,6 +395,9 @@ def promote_staging_to_live(
         "promotion_model": "immutable_release_plus_current_pointer",
         "atomic_unit": "CURRENT_symlink_os_replace",
         "multi_file_live_replace_called_atomic": False,
+        "required_writes_after_pointer_switch": False,
+        "compat_symlinks_published": False,
+        "post_pointer_compatibility_rewrites": False,
         "release_id": rid,
         "release_dir": str(release_dir),
         "current_pointer": str(pointer),
@@ -390,29 +406,16 @@ def promote_staging_to_live(
         "promoted": [{"release": rid, "via": "CURRENT_pointer"}],
     }
 
-    if publish_compat_symlinks:
-        # Post-cutover only: traditional paths track CURRENT. Not the atomic unit.
-        current = pointer  # relative symlink; targets resolve via CURRENT
-        for name in COMPAT_LIVE_DIRS:
-            src_in_release = release_dir / name
-            if not src_in_release.exists():
-                continue
-            dest = live_root / name
-            # Point at CURRENT/<name> so future pointer switches stay coherent.
-            _replace_path_with_symlink(dest, current / name)
-            receipt.setdefault("compat_symlinks", []).append(name)
-        # Pack may live outside live_root (model-service path) or under it.
-        pack_in_release = release_dir / pack_basename
-        if pack_in_release.exists():
-            _replace_path_with_symlink(live_pack_path, current / pack_basename)
-            receipt.setdefault("compat_symlinks", []).append(str(live_pack_path))
-        # If caller passed a seal_dir that is not live_root/seal, publish too.
-        if live_seal_dir.resolve() != (live_root / "seal").resolve():
-            if (release_dir / "seal").exists():
-                _replace_path_with_symlink(live_seal_dir, current / "seal")
-                receipt.setdefault("compat_symlinks", []).append(str(live_seal_dir))
+    # CR6: no required writes after pointer switch. Inject boundary exists only
+    # to prove nothing else runs (tests); if it fires, cutover already completed.
+    _maybe_fail(fail_at, "after_pointer_switch")
 
     receipt["current_release_resolved"] = str(pointer.resolve())
+    receipt["consumer_identity"] = consumer_release_identity(
+        live_root=live_root,
+        live_pack_path=live_pack_path,
+        live_seal_dir=live_seal_dir,
+    )
     return receipt
 
 

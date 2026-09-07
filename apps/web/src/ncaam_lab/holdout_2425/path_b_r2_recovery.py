@@ -1,12 +1,15 @@
-"""Path B authoritative disaster recovery via private R2 (Phase 2.6F CR4/CR5).
+"""Path B authoritative disaster recovery via private R2 (Phase 2.6F CR4/CR6).
 
 Flow (locked):
   R2 hydrate → staging → verify inventory + all locked hashes
   → reseal from downloaded packages with frozen v1.1 identity
   → release-pointer promote only after pass (immutable release + CURRENT)
 
-Live seal is never unlinked first. Any failure preserves the previous package
-(CURRENT pointer unchanged). Credential-free recovery receipt. No Odds API /
+Live seal is never unlinked first. Failures **before** the CURRENT pointer
+switch preserve the previous package (CURRENT target + every consumer-visible
+artifact unchanged). After the pointer switches there are no required writes
+(CR6); a reported failure must not claim ``live_package_preserved=true`` if
+CURRENT already moved. Credential-free recovery receipt. No Odds API /
 live-data fallback. Raw+KenPom+odds reconstruction is a SEPARATE forensic path
 and must not call this promote path to redefine the frozen holdout.
 """
@@ -23,7 +26,9 @@ from ncaam_lab.holdout_2425.path_b_promote import (
     PromoteVerificationError,
     cleanup_staging,
     collect_staging_hashes,
+    consumer_release_identity,
     promote_staging_to_live,
+    resolve_current_release,
     resolve_live_artifacts,
     sha256_file,
     verify_against_locked,
@@ -83,19 +88,25 @@ def _read_optional(path: Path) -> Optional[bytes]:
     return None
 
 
+def _current_release_key(live_root: Path) -> str:
+    cur = resolve_current_release(live_root)
+    return str(cur.resolve()) if cur is not None else ""
+
+
 def _snapshot_live_package(
     *,
     live_root: Path,
     live_pack_path: Path,
     live_seal_dir: Path,
-) -> Dict[str, Optional[bytes]]:
+) -> Dict[str, Any]:
     """Snapshot all governed live artifacts (features/labels/manifests/rejected/pack/seal)."""
     paths = resolve_live_artifacts(
         live_root=live_root,
         live_pack_path=live_pack_path,
         live_seal_dir=live_seal_dir,
     )
-    snap: Dict[str, Optional[bytes]] = {
+    snap: Dict[str, Any] = {
+        "current_release": _current_release_key(live_root),
         "seal": _read_optional(paths["seal_receipt"]),
         "seal_sidecar": _read_optional(paths["seal_sidecar"]),
         "pack": _read_optional(paths["pack_path"]),
@@ -133,7 +144,7 @@ def _snapshot_live_package(
 
 
 def _assert_bytes_unchanged(
-    snap: Mapping[str, Optional[bytes]],
+    snap: Mapping[str, Any],
     key: str,
     path: Path,
     label: str,
@@ -147,7 +158,7 @@ def _assert_bytes_unchanged(
 
 
 def _assert_live_unchanged(
-    snap: Mapping[str, Optional[bytes]],
+    snap: Mapping[str, Any],
     *,
     live_root: Path,
     live_pack_path: Path,
@@ -479,6 +490,12 @@ def recover_from_r2(
         )
         receipt["promote"] = promote_receipt
         receipt["status"] = "RECOVERED_VERIFIED_PROMOTED"
+        receipt["live_package_preserved"] = False  # pointer advanced on success
+        receipt["consumer_identity"] = consumer_release_identity(
+            live_root=live_root,
+            live_pack_path=live_pack_path,
+            live_seal_dir=live_seal_dir,
+        )
         return _scrub(receipt)
 
     except (
@@ -489,7 +506,34 @@ def recover_from_r2(
         PromoteError,
         OSError,
     ) as exc:
-        # Preserve previous live package bytes on any failure.
+        now_current = _current_release_key(live_root)
+        prev_current = str(snap.get("current_release") or "")
+        pointer_changed = now_current != prev_current
+
+        if pointer_changed:
+            # CR6: CURRENT already advanced — must NOT claim live preserved.
+            # Cutover completed; any post-pointer hook failure is not a preserve.
+            identity = consumer_release_identity(
+                live_root=live_root,
+                live_pack_path=live_pack_path,
+                live_seal_dir=live_seal_dir,
+            )
+            receipt.update(
+                {
+                    "status": "PROMOTE_POINTER_SWITCHED_POST_HOOK_FAILED",
+                    "error": str(exc),
+                    "live_package_preserved": False,
+                    "current_pointer_changed": True,
+                    "previous_current_release": prev_current or None,
+                    "current_release": now_current or None,
+                    "consumer_identity": identity,
+                    "error_type": type(exc).__name__,
+                }
+            )
+            exc.receipt = _scrub(receipt)  # type: ignore[attr-defined]
+            raise
+
+        # Pointer unchanged: preserve previous live package bytes.
         _assert_live_unchanged(
             snap,
             live_root=live_root,
@@ -544,6 +588,7 @@ def recover_from_r2(
                 "status": "REFUSED_OR_FAILED_LIVE_PRESERVED",
                 "error": str(exc),
                 "live_package_preserved": True,
+                "current_pointer_changed": False,
                 "error_type": type(exc).__name__,
             }
         )

@@ -31,6 +31,7 @@ from ncaam_lab.holdout_2425.locked_identity import (  # noqa: E402
 from ncaam_lab.holdout_2425.path_b_promote import (  # noqa: E402
     PromoteError,
     PromoteVerificationError,
+    consumer_release_identity,
     resolve_current_release,
     resolve_live_artifacts,
     sha256_file,
@@ -201,20 +202,19 @@ def test_cr4_two_identical_recoveries_byte_identical(tmp_path):
         assert receipt["status"] == "RECOVERED_VERIFIED_PROMOTED"
         assert receipt["credentials_included"] is False
         assert receipt["odds_api_calls_made"] is False
+        arts = resolve_live_artifacts(
+            live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+        )
         digests.append(
             {
-                "features": (live / "feature_package" / "features.json").read_bytes(),
-                "labels": (live / "label_package" / "labels.json").read_bytes(),
-                "rejected": (live / "rejected" / "rejected_events.json").read_bytes(),
-                "pack": pack.read_bytes(),
-                "feature_manifest": (
-                    live / "feature_package" / "feature_manifest.json"
-                ).read_bytes(),
-                "label_manifest": (
-                    live / "label_package" / "label_manifest.json"
-                ).read_bytes(),
-                "seal": (seal_dir / "seal_receipt.json").read_bytes(),
-                "sidecar": (seal_dir / "seal_receipt.file_sha256").read_bytes(),
+                "features": arts["feature_content"].read_bytes(),
+                "labels": arts["label_content"].read_bytes(),
+                "rejected": arts["rejected_events"].read_bytes(),
+                "pack": arts["pack_path"].read_bytes(),
+                "feature_manifest": arts["feature_manifest"].read_bytes(),
+                "label_manifest": arts["label_manifest"].read_bytes(),
+                "seal": arts["seal_receipt"].read_bytes(),
+                "sidecar": arts["seal_sidecar"].read_bytes(),
                 "hashes": receipt["staging_hashes"],
             }
         )
@@ -228,10 +228,13 @@ def test_cr4_restored_package_matches_every_locked_hash(tmp_path):
     )
     assert receipt["status"] == "RECOVERED_VERIFIED_PROMOTED"
     assert receipt["staging_hashes"] == locked_expected_hashes()
-    assert sha256_file(live / "feature_package" / "features.json") == LOCKED_FEATURE_CONTENT_SHA256
-    assert sha256_file(live / "label_package" / "labels.json") == LOCKED_LABEL_CONTENT_SHA256
-    assert sha256_file(live / "rejected" / "rejected_events.json") == LOCKED_REJECTED_SHA256
-    assert sha256_file(pack) == LOCKED_CANONICAL_PACK_SHA256
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert sha256_file(arts["feature_content"]) == LOCKED_FEATURE_CONTENT_SHA256
+    assert sha256_file(arts["label_content"]) == LOCKED_LABEL_CONTENT_SHA256
+    assert sha256_file(arts["rejected_events"]) == LOCKED_REJECTED_SHA256
+    assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
 
 
 def test_cr4_missing_feature_object_fails_closed(tmp_path):
@@ -525,18 +528,25 @@ def test_cr5_successful_promote_uses_current_pointer(tmp_path):
         "immutable_release_plus_current_pointer"
     )
     assert receipt["promote"]["multi_file_live_replace_called_atomic"] is False
+    assert receipt["promote"]["required_writes_after_pointer_switch"] is False
+    assert receipt["promote"]["compat_symlinks_published"] is False
+    assert receipt["live_package_preserved"] is False
     release = resolve_current_release(live)
     assert release is not None
     assert (release / "seal" / "seal_receipt.json").exists()
     assert (release / pack.name).exists()
-    # Compat paths resolve through CURRENT.
-    assert (seal_dir / "seal_receipt.json").exists()
-    assert pack.exists()
     arts = resolve_live_artifacts(
         live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
     )
     assert arts["release_dir"] == release
     assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
+    # Every governed consumer resolves to exactly one release.
+    identity = consumer_release_identity(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert identity["current_set"] is True
+    assert identity["release_dir"] == str(release.resolve())
+    assert sha256_file(arts["feature_content"]) == LOCKED_FEATURE_CONTENT_SHA256
 
 
 def test_cr4_builders_cannot_access_label_vault(tmp_path):
@@ -599,7 +609,10 @@ def test_cr4_no_preseeded_seal_silently_reused(tmp_path):
     )
     assert receipt["reseal"]["preseeded_seal_silently_reused"] is False
     # Promoted seal must be resealed identity, not the previous-known-good stub.
-    seal = json.loads((seal_dir / "seal_receipt.json").read_text(encoding="utf-8"))
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    seal = json.loads(arts["seal_receipt"].read_text(encoding="utf-8"))
     assert seal.get("note") != "previous-known-good"
     assert seal["seal_payload_sha256"] == locked_expected_hashes()["seal_payload_sha256"]
 
@@ -641,9 +654,12 @@ def test_cr4_clean_checkout_recovery_from_exact_r2_refs_mock(tmp_path):
     )
     assert receipt["status"] == "RECOVERED_VERIFIED_PROMOTED"
     assert receipt["live_seal_existed_before"] is False
-    assert (seal_dir / "seal_receipt.json").exists()
-    assert pack.exists()
-    assert sha256_file(pack) == LOCKED_CANONICAL_PACK_SHA256
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert arts["seal_receipt"].exists()
+    assert arts["pack_path"].exists()
+    assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
     # Documented real entrypoint exists.
     assert (REPO / "scripts" / "ncaam" / "recover_2425_sealed_holdout_from_r2.py").exists()
 
@@ -812,3 +828,313 @@ def test_cr5_cli_load_inventory_matches_locked_uploaded_contract(tmp_path):
         mod._load_inventory()
     payload = str(excinfo.value)
     assert "REFUSED_INVENTORY_DRIFT" in payload
+    # Inventory SoT proves UPLOADED + CAS keys; it does NOT expose provider_verified.
+    assert all("provider_verified" not in o for o in loaded)
+    assert all("provider_verified" not in o for o in canonical)
+
+
+# ---------------------------------------------------------------------------
+# Phase 2.6F CR6 — post-pointer atomicity
+# ---------------------------------------------------------------------------
+
+
+def _seed_legacy_live(tmp_path: Path, name: str):
+    live = tmp_path / name
+    live.mkdir()
+    seal_dir = live / "seal"
+    seal_dir.mkdir()
+    prev_seal = b'{"note":"previous-known-good","cr6":true}\n'
+    (seal_dir / "seal_receipt.json").write_bytes(prev_seal)
+    (seal_dir / "seal_receipt.file_sha256").write_bytes(b"prevfilehash\n")
+    pack = live / "pack.json"
+    prev_pack = b'{"previous":true,"pack":1}\n'
+    pack.write_bytes(prev_pack)
+    (live / "feature_package").mkdir()
+    prev_feat = b'{"previous":"features"}\n'
+    prev_feat_m = b'{"previous":"feat_manifest"}\n'
+    (live / "feature_package" / "features.json").write_bytes(prev_feat)
+    (live / "feature_package" / "feature_manifest.json").write_bytes(prev_feat_m)
+    (live / "label_package").mkdir()
+    prev_lab = b'{"previous":"labels"}\n'
+    prev_lab_m = b'{"previous":"lab_manifest"}\n'
+    (live / "label_package" / "labels.json").write_bytes(prev_lab)
+    (live / "label_package" / "label_manifest.json").write_bytes(prev_lab_m)
+    (live / "rejected").mkdir()
+    prev_rej = b'{"previous":"rejected"}\n'
+    (live / "rejected" / "rejected_events.json").write_bytes(prev_rej)
+    return {
+        "live": live,
+        "seal_dir": seal_dir,
+        "pack": pack,
+        "prev_seal": prev_seal,
+        "prev_pack": prev_pack,
+        "prev_feat": prev_feat,
+        "prev_feat_m": prev_feat_m,
+        "prev_lab": prev_lab,
+        "prev_lab_m": prev_lab_m,
+        "prev_rej": prev_rej,
+    }
+
+
+def _assert_legacy_flat_unchanged(state: dict) -> None:
+    live = state["live"]
+    assert (state["seal_dir"] / "seal_receipt.json").read_bytes() == state["prev_seal"]
+    assert (state["seal_dir"] / "seal_receipt.file_sha256").read_bytes() == b"prevfilehash\n"
+    assert state["pack"].read_bytes() == state["prev_pack"]
+    assert (live / "feature_package" / "features.json").read_bytes() == state["prev_feat"]
+    assert (
+        live / "feature_package" / "feature_manifest.json"
+    ).read_bytes() == state["prev_feat_m"]
+    assert (live / "label_package" / "labels.json").read_bytes() == state["prev_lab"]
+    assert (
+        live / "label_package" / "label_manifest.json"
+    ).read_bytes() == state["prev_lab_m"]
+    assert (live / "rejected" / "rejected_events.json").read_bytes() == state["prev_rej"]
+    # Flat paths still exist (not renamed aside / deleted).
+    assert (live / "feature_package").is_dir()
+    assert not (live / "feature_package").is_symlink()
+
+
+def test_cr6_no_compat_link_creation_remains_in_promote():
+    """CR6: per-promotion compatibility rewrites removed — no pre-switch link steps."""
+    src = (SRC / "ncaam_lab" / "holdout_2425" / "path_b_promote.py").read_text(
+        encoding="utf-8"
+    )
+    assert "_replace_path_with_symlink" not in src
+    assert "COMPAT_LIVE_DIRS" not in src
+    assert "pubtmp" not in src
+    assert "required_writes_after_pointer_switch" in src
+
+
+def test_cr6_after_pointer_switch_inject_no_required_writes(tmp_path):
+    """Inject failure immediately after CURRENT switch: cutover done; no mixed state.
+
+    Prove no further required writes run after the pointer switch. Receipt must
+    NOT claim live_package_preserved=true when CURRENT already moved.
+    """
+    store, inventory = _seed_store(tmp_path)
+    state = _seed_legacy_live(tmp_path, "live_after_pointer")
+    live, pack, seal_dir = state["live"], state["pack"], state["seal_dir"]
+
+    with pytest.raises(OSError, match="after_pointer_switch") as ei:
+        recover_from_r2(
+            features_store=store,
+            label_store=store,
+            inventory_objects=inventory,
+            live_root=live,
+            live_pack_path=pack,
+            live_seal_dir=seal_dir,
+            staging_root=tmp_path / "st_after_pointer",
+            access_role=AccessRole.GOVERNED_EVALUATOR,
+            authorize_unseal=True,
+            fail_at="after_pointer_switch",
+        )
+    receipt = getattr(ei.value, "receipt", {})
+    assert receipt.get("live_package_preserved") is False
+    assert receipt.get("current_pointer_changed") is True
+    assert receipt.get("status") == "PROMOTE_POINTER_SWITCHED_POST_HOOK_FAILED"
+
+    release = resolve_current_release(live)
+    assert release is not None
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert arts["release_dir"] == release
+    # Single release — no mixed old/new governed package.
+    assert sha256_file(arts["feature_content"]) == LOCKED_FEATURE_CONTENT_SHA256
+    assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
+    assert sha256_file(arts["seal_receipt"]) == locked_expected_hashes()[
+        "seal_file_sha256"
+    ]
+    # Legacy flat leftovers may remain but are non-authoritative; still intact.
+    _assert_legacy_flat_unchanged(state)
+    # Flat must NOT have been renamed aside (the CR5 post-pointer bug).
+    assert not any(live.glob(".feature_package.pre_pointer_*"))
+    assert not any(live.glob(".*.pubtmp.*"))
+
+
+def test_cr6_first_migration_from_legacy_flat_layout(tmp_path):
+    """First promotion: legacy flat → CURRENT; consumers resolve one release."""
+    store, inventory = _seed_store(tmp_path)
+    state = _seed_legacy_live(tmp_path, "live_first_mig")
+    live, pack, seal_dir = state["live"], state["pack"], state["seal_dir"]
+    assert resolve_current_release(live) is None
+
+    receipt = recover_from_r2(
+        features_store=store,
+        label_store=store,
+        inventory_objects=inventory,
+        live_root=live,
+        live_pack_path=pack,
+        live_seal_dir=seal_dir,
+        staging_root=tmp_path / "st_first_mig",
+        access_role=AccessRole.GOVERNED_EVALUATOR,
+        authorize_unseal=True,
+    )
+    assert receipt["status"] == "RECOVERED_VERIFIED_PROMOTED"
+    assert receipt["live_package_preserved"] is False
+    assert receipt["promote"]["required_writes_after_pointer_switch"] is False
+    assert receipt["promote"]["compat_symlinks_published"] is False
+
+    release = resolve_current_release(live)
+    assert release is not None
+    identity = consumer_release_identity(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert identity["release_dir"] == str(release.resolve())
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert sha256_file(arts["feature_content"]) == LOCKED_FEATURE_CONTENT_SHA256
+    assert sha256_file(arts["label_content"]) == LOCKED_LABEL_CONTENT_SHA256
+    assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
+    # Flat leftovers unchanged (not mutated as part of cutover).
+    assert (live / "feature_package" / "features.json").read_bytes() == state[
+        "prev_feat"
+    ]
+    assert pack.read_bytes() == state["prev_pack"]
+
+
+def test_cr6_second_promotion_when_current_already_exists(tmp_path):
+    """Second promotion: CURRENT already set; only pointer switches."""
+    store, inventory = _seed_store(tmp_path)
+    live, pack, seal_dir, receipt1 = _run_recovery(
+        tmp_path, store, inventory, run_id="second_base"
+    )
+    assert receipt1["status"] == "RECOVERED_VERIFIED_PROMOTED"
+    first_release = resolve_current_release(live)
+    assert first_release is not None
+    first_id = str(first_release.resolve())
+
+    receipt2 = recover_from_r2(
+        features_store=store,
+        label_store=store,
+        inventory_objects=inventory,
+        live_root=live,
+        live_pack_path=pack,
+        live_seal_dir=seal_dir,
+        staging_root=tmp_path / "st_second",
+        access_role=AccessRole.GOVERNED_EVALUATOR,
+        authorize_unseal=True,
+    )
+    assert receipt2["status"] == "RECOVERED_VERIFIED_PROMOTED"
+    second_release = resolve_current_release(live)
+    assert second_release is not None
+    assert str(second_release.resolve()) != first_id
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert arts["release_dir"] == second_release
+    assert sha256_file(arts["pack_path"]) == LOCKED_CANONICAL_PACK_SHA256
+    assert receipt2["promote"]["compat_symlinks_published"] is False
+    assert receipt2["live_package_preserved"] is False
+
+
+@pytest.mark.parametrize(
+    "fail_at",
+    [
+        "after_dir:feature_package",
+        "after_dir:label_package",
+        "after_dir:rejected",
+        "after_dir:seal",
+        "after_pack",
+        "after_materialize",
+        "before_pointer_switch",
+        "during_pointer_switch",
+    ],
+)
+def test_cr6_pre_pointer_failure_preserves_old_current_and_hashes(tmp_path, fail_at):
+    """On every pre-pointer failure: CURRENT unchanged; all old hashes intact."""
+    store, inventory = _seed_store(tmp_path)
+    state = _seed_legacy_live(tmp_path, f"live_cr6_{fail_at.replace(':', '_')}")
+    live, pack, seal_dir = state["live"], state["pack"], state["seal_dir"]
+
+    with pytest.raises((PromoteError, RecoveryError, OSError)) as ei:
+        recover_from_r2(
+            features_store=store,
+            label_store=store,
+            inventory_objects=inventory,
+            live_root=live,
+            live_pack_path=pack,
+            live_seal_dir=seal_dir,
+            staging_root=tmp_path / f"st_cr6_{fail_at.replace(':', '_')}",
+            access_role=AccessRole.GOVERNED_EVALUATOR,
+            authorize_unseal=True,
+            fail_at=fail_at,
+        )
+    receipt = getattr(ei.value, "receipt", {})
+    assert receipt.get("live_package_preserved") is True
+    assert receipt.get("current_pointer_changed") is False
+    assert resolve_current_release(live) is None
+    _assert_legacy_flat_unchanged(state)
+    # No mixed package: governed resolution still sees old flat bytes.
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert arts["feature_content"].read_bytes() == state["prev_feat"]
+    assert arts["pack_path"].read_bytes() == state["prev_pack"]
+    assert arts["seal_receipt"].read_bytes() == state["prev_seal"]
+
+
+def test_cr6_pre_pointer_failure_with_existing_current_preserves_old_release(tmp_path):
+    store, inventory = _seed_store(tmp_path)
+    live, pack, seal_dir, receipt1 = _run_recovery(
+        tmp_path, store, inventory, run_id="cr6_exist_base"
+    )
+    old_release = resolve_current_release(live)
+    assert old_release is not None
+    old_key = str(old_release.resolve())
+    old_feat = (old_release / "feature_package" / "features.json").read_bytes()
+    old_pack = (old_release / pack.name).read_bytes()
+
+    with pytest.raises((PromoteError, RecoveryError, OSError)) as ei:
+        recover_from_r2(
+            features_store=store,
+            label_store=store,
+            inventory_objects=inventory,
+            live_root=live,
+            live_pack_path=pack,
+            live_seal_dir=seal_dir,
+            staging_root=tmp_path / "st_cr6_exist_fail",
+            access_role=AccessRole.GOVERNED_EVALUATOR,
+            authorize_unseal=True,
+            fail_at="after_dir:feature_package",
+        )
+    receipt = getattr(ei.value, "receipt", {})
+    assert receipt.get("live_package_preserved") is True
+    assert resolve_current_release(live) is not None
+    assert str(resolve_current_release(live).resolve()) == old_key
+    arts = resolve_live_artifacts(
+        live_root=live, live_pack_path=pack, live_seal_dir=seal_dir
+    )
+    assert arts["feature_content"].read_bytes() == old_feat
+    assert arts["pack_path"].read_bytes() == old_pack
+
+
+def test_cr6_cli_never_reports_preserved_when_pointer_changed(tmp_path):
+    """CLI receipt must not claim live_package_preserved=true after pointer moves."""
+    store, inventory = _seed_store(tmp_path)
+    state = _seed_legacy_live(tmp_path, "live_cli_preserved")
+    with pytest.raises(OSError) as ei:
+        recover_from_r2(
+            features_store=store,
+            label_store=store,
+            inventory_objects=inventory,
+            live_root=state["live"],
+            live_pack_path=state["pack"],
+            live_seal_dir=state["seal_dir"],
+            staging_root=tmp_path / "st_cli_preserved",
+            access_role=AccessRole.GOVERNED_EVALUATOR,
+            authorize_unseal=True,
+            fail_at="after_pointer_switch",
+        )
+    receipt = ei.value.receipt  # type: ignore[attr-defined]
+    assert receipt["live_package_preserved"] is not True
+    assert receipt["live_package_preserved"] is False
+    # Successful path also marks preserved=false (pointer advanced).
+    live2, pack2, seal2, ok = _run_recovery(
+        tmp_path, store, inventory, run_id="cli_ok"
+    )
+    assert ok["status"] == "RECOVERED_VERIFIED_PROMOTED"
+    assert ok["live_package_preserved"] is False
+    assert resolve_current_release(live2) is not None

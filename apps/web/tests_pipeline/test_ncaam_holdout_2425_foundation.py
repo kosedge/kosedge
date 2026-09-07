@@ -1371,13 +1371,28 @@ def test_cr3_mismatch_refuses_promotion_preserves_live_seal(tmp_path):
     assert json.loads(live_seal_path.read_text())["note"] == "previous-known-good"
 
     # Control: only an explicit promote call changes live seal (release + CURRENT).
+    from ncaam_lab.holdout_2425.path_b_promote import (
+        resolve_current_release,
+        resolve_live_artifacts,
+    )
+
+    live_pack = tmp_path / "live_pack.json"
     promote_staging_to_live(
         staging_root=staging,
         staging_pack_path=staging_pack,
         live_root=live_root,
-        live_pack_path=tmp_path / "live_pack.json",
+        live_pack_path=live_pack,
         live_seal_dir=live_seal_dir,
     )
-    assert live_seal_path.read_bytes() != live_seal_bytes
-    promoted = json.loads(live_seal_path.read_text(encoding="utf-8"))
+    # Flat path is non-authoritative after CURRENT; must remain untouched (CR6).
+    assert live_seal_path.read_bytes() == live_seal_bytes
+    release = resolve_current_release(live_root)
+    assert release is not None
+    arts = resolve_live_artifacts(
+        live_root=live_root,
+        live_pack_path=live_pack,
+        live_seal_dir=live_seal_dir,
+    )
+    assert arts["seal_receipt"].read_bytes() != live_seal_bytes
+    promoted = json.loads(arts["seal_receipt"].read_text(encoding="utf-8"))
     assert promoted["seal_payload_sha256"] == payload

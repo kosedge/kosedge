@@ -1,14 +1,17 @@
 #!/usr/bin/env python3
 """Path B authoritative disaster recovery — hydrate frozen v1.1 packages from private R2.
 
-Phase 2.6F CR4/CR5 (Ryan LOCKED):
+Phase 2.6F CR4/CR6 (Ryan LOCKED):
   R2 hydrate → staging → verify inventory + locked hashes
   → reseal (frozen v1.1 identity) → release-pointer promote only after pass.
 
-Live seal is never unlinked first. Failures preserve the previous package
-(CURRENT pointer unchanged). Inventory SoT is Python default_package_inventory();
-checked-in r2_object_refs must match. Credential-free receipt. No Odds API /
-live-data fallback.
+Live seal is never unlinked first. Failures **before** CURRENT switches preserve
+the previous package. After the pointer switch there are no required writes
+(CR6); never report live_package_preserved=true when CURRENT already moved.
+Inventory SoT is Python default_package_inventory() — proves 10/10 UPLOADED with
+non-null CAS keys; it does **not** expose per-object provider_verified (that
+belongs on the sanitized provider retention receipt). Credential-free receipt.
+No Odds API / live-data fallback.
 
 CoS provisions buckets/upload separately. This script reads env-driven endpoint /
 bucket / prefix placeholders and locked refs — it does NOT invent credentials.
@@ -246,17 +249,17 @@ def main(argv: List[str] | None = None) -> int:
         PromoteError,
         OSError,
     ) as exc:
-        receipt = getattr(
-            exc,
-            "receipt",
-            {
-                "status": "REFUSED_OR_FAILED_LIVE_PRESERVED",
+        receipt = getattr(exc, "receipt", None)
+        if not isinstance(receipt, dict):
+            # Fallback only when the exception carried no receipt. Do not claim
+            # preservation without knowing whether CURRENT moved.
+            receipt = {
+                "status": "REFUSED_OR_FAILED",
                 "error": str(exc),
                 "error_type": type(exc).__name__,
-                "live_package_preserved": True,
+                "live_package_preserved": None,
                 "credentials_included": False,
-            },
-        )
+            }
         print(json.dumps(receipt, indent=2, sort_keys=True))
         return 2
 

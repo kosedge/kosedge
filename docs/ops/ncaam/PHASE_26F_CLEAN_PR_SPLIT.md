@@ -68,7 +68,8 @@ Excludes:
 | Features bucket contract     | DOCUMENTED (`…-features-v1`) — CoS UPLOADED verified    |
 | Label vault contract         | DOCUMENTED (`…-label-vault-v1`) — CoS UPLOADED verified |
 | Public / r2.dev / custom dom | disabled / none (contract)                              |
-| Retention locks              | indefinite; provider_verified true (CoS)                |
+| Retention locks              | indefinite (CoS); `provider_verified` on sanitized provider receipt — **not** on inventory objects |
+| Inventory SoT                | `_load_inventory` / `default_package_inventory`: 10/10 UPLOADED + non-null CAS keys              |
 | Builder label-vault creds    | FORBIDDEN                                               |
 | Temporary credential in git  | ABSENT                                                  |
 | Holdout seal                 | REMAINS SEALED                                          |
