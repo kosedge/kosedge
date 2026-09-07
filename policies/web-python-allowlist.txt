@@ -80,3 +80,4 @@ apps/web/tests_pipeline/test_ncaam_holdout_2425_foundation.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_phase26c.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_cr4_r2_recovery.py
 apps/web/tests_pipeline/test_ncaam_holdout_2425_cr7_consumer_wiring.py
+apps/web/tests_pipeline/test_ncaam_holdout_2425_cr8_schedule_fail_closed.py
