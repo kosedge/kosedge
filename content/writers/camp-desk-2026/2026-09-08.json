@@ -14,14 +14,38 @@
     ],
     "what_to_watch": "Wed night SEA/NE final designations (Henderson / Okada / Emmanwori). Thu Melbourne LAR/SF. Gray protocol progress before Sunday TEN vs NYJ. No chase on LAC Under 2/5 or DEN Over 2/5.",
     "sources": [
-      {"label": "Falcons — Tagovailoa named Week 1 starter", "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"},
-      {"label": "Falcons — Stefanski: Rush backup, Penix inactive", "href": "https://www.atlantafalcons.com/news/kevin-stefanski-details-plan-for-quarterback-position-michael-penix-tua-tagovailoa"},
-      {"label": "ESPN — Giants release Darius Slayton", "href": "https://www.espn.com/nfl/story/_/id/49862543/giants-release-wr-darius-slayton-team-longest-tenured-player"},
-      {"label": "Giants Wire — Slayton released", "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/09/07/new-york-giants-release-darius-slayton/91651717007/"},
-      {"label": "Patriots.com — Week 1 injury report Mon Sep 7", "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"},
-      {"label": "Seahawks.com — Week 1 injury report (Mon update)", "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"},
-      {"label": "Titans — Gray concussion protocol after UTV accident", "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"},
-      {"label": "ESPN — Titans Gray concussion protocol", "href": "https://www.espn.com/nfl/story/_/id/49862818/titans-cedric-gray-concussion-protocol-utv-accident"}
+      {
+        "label": "Falcons — Tagovailoa named Week 1 starter",
+        "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"
+      },
+      {
+        "label": "Falcons — Stefanski: Rush backup, Penix inactive",
+        "href": "https://www.atlantafalcons.com/news/kevin-stefanski-details-plan-for-quarterback-position-michael-penix-tua-tagovailoa"
+      },
+      {
+        "label": "ESPN — Giants release Darius Slayton",
+        "href": "https://www.espn.com/nfl/story/_/id/49862543/giants-release-wr-darius-slayton-team-longest-tenured-player"
+      },
+      {
+        "label": "Giants Wire — Slayton released",
+        "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/09/07/new-york-giants-release-darius-slayton/91651717007/"
+      },
+      {
+        "label": "Patriots.com — Week 1 injury report Mon Sep 7",
+        "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"
+      },
+      {
+        "label": "Seahawks.com — Week 1 injury report (Mon update)",
+        "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"
+      },
+      {
+        "label": "Titans — Gray concussion protocol after UTV accident",
+        "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"
+      },
+      {
+        "label": "ESPN — Titans Gray concussion protocol",
+        "href": "https://www.espn.com/nfl/story/_/id/49862818/titans-cedric-gray-concussion-protocol-utv-accident"
+      }
     ]
   },
   "team_notes": [
@@ -38,8 +62,14 @@
       "is_material_depth": true,
       "sot_flag": "Tagovailoa named Week 1 QB1; Rush backup; Penix inactive. Pass on minting a win-total.",
       "sources": [
-        {"label": "Falcons — Tagovailoa named Week 1 starter", "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"},
-        {"label": "Falcons — Stefanski: Rush backup, Penix inactive", "href": "https://www.atlantafalcons.com/news/kevin-stefanski-details-plan-for-quarterback-position-michael-penix-tua-tagovailoa"}
+        {
+          "label": "Falcons — Tagovailoa named Week 1 starter",
+          "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"
+        },
+        {
+          "label": "Falcons — Stefanski: Rush backup, Penix inactive",
+          "href": "https://www.atlantafalcons.com/news/kevin-stefanski-details-plan-for-quarterback-position-michael-penix-tua-tagovailoa"
+        }
       ]
     },
     {
@@ -55,9 +85,18 @@
       "is_material_depth": true,
       "sot_flag": "Slayton released. WR depth flag. Pass on inventing WR1a or a new win-total.",
       "sources": [
-        {"label": "ESPN — Giants release Darius Slayton", "href": "https://www.espn.com/nfl/story/_/id/49862543/giants-release-wr-darius-slayton-team-longest-tenured-player"},
-        {"label": "Giants Wire — Slayton released", "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/09/07/new-york-giants-release-darius-slayton/91651717007/"},
-        {"label": "PFT — Giants cut Slayton", "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/giants-cut-darius-slayton"}
+        {
+          "label": "ESPN — Giants release Darius Slayton",
+          "href": "https://www.espn.com/nfl/story/_/id/49862543/giants-release-wr-darius-slayton-team-longest-tenured-player"
+        },
+        {
+          "label": "Giants Wire — Slayton released",
+          "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/09/07/new-york-giants-release-darius-slayton/91651717007/"
+        },
+        {
+          "label": "PFT — Giants cut Slayton",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/giants-cut-darius-slayton"
+        }
       ]
     },
     {
@@ -73,8 +112,14 @@
       "is_material_depth": true,
       "sot_flag": "Brown OUT Week 1; Henderson still DNP ankle; Barmore FULL. Pass on inventing RB1 or a new win-total.",
       "sources": [
-        {"label": "Patriots.com — Week 1 injury report Mon Sep 7", "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"},
-        {"label": "Seahawks.com — Mon IR notes Brown OUT / Henderson DNP", "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"}
+        {
+          "label": "Patriots.com — Week 1 injury report Mon Sep 7",
+          "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"
+        },
+        {
+          "label": "Seahawks.com — Mon IR notes Brown OUT / Henderson DNP",
+          "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"
+        }
       ]
     },
     {
@@ -90,8 +135,14 @@
       "is_material_depth": true,
       "sot_flag": "Okada still DNP; Emmanwori limited; Bradford FULL. Safety availability flag. Pass on inventing S1 or a new win-total.",
       "sources": [
-        {"label": "Seahawks.com — Week 1 injury report (Mon update)", "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"},
-        {"label": "Patriots.com — shared Week 1 IR Mon Sep 7", "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"}
+        {
+          "label": "Seahawks.com — Week 1 injury report (Mon update)",
+          "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"
+        },
+        {
+          "label": "Patriots.com — shared Week 1 IR Mon Sep 7",
+          "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"
+        }
       ]
     },
     {
@@ -107,16 +158,47 @@
       "is_material_depth": true,
       "sot_flag": "Gray in concussion protocol (UTV). Week 1 LB availability flag. Pass on inventing LB1 or a new win-total.",
       "sources": [
-        {"label": "Titans — Gray concussion protocol after UTV accident", "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"},
-        {"label": "ESPN — Titans Gray concussion protocol", "href": "https://www.espn.com/nfl/story/_/id/49862818/titans-cedric-gray-concussion-protocol-utv-accident"}
+        {
+          "label": "Titans — Gray concussion protocol after UTV accident",
+          "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"
+        },
+        {
+          "label": "ESPN — Titans Gray concussion protocol",
+          "href": "https://www.espn.com/nfl/story/_/id/49862818/titans-cedric-gray-concussion-protocol-utv-accident"
+        }
       ]
     }
   ],
   "preview_delta": [
-    {"team_id": "ATL", "fields": ["bottom_line"], "reason": "Tagovailoa named Week 1 QB1; Rush backup; Penix inactive. Pass on minting a win-total.", "status": "flagged"},
-    {"team_id": "NYG", "fields": ["bottom_line"], "reason": "Slayton released. WR depth flag. Pass on inventing WR1a or a new win-total.", "status": "flagged"},
-    {"team_id": "NE", "fields": ["bottom_line"], "reason": "Brown OUT Week 1; Henderson still DNP ankle; Barmore FULL. Pass on inventing RB1 or a new win-total.", "status": "flagged"},
-    {"team_id": "SEA", "fields": ["bottom_line"], "reason": "Okada still DNP; Emmanwori limited; Bradford FULL. Safety availability flag. Pass.", "status": "flagged"},
-    {"team_id": "TEN", "fields": ["bottom_line"], "reason": "Gray in concussion protocol (UTV). Week 1 LB availability flag. Pass.", "status": "flagged"}
+    {
+      "team_id": "ATL",
+      "fields": ["bottom_line"],
+      "reason": "Tagovailoa named Week 1 QB1; Rush backup; Penix inactive. Pass on minting a win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NYG",
+      "fields": ["bottom_line"],
+      "reason": "Slayton released. WR depth flag. Pass on inventing WR1a or a new win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NE",
+      "fields": ["bottom_line"],
+      "reason": "Brown OUT Week 1; Henderson still DNP ankle; Barmore FULL. Pass on inventing RB1 or a new win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "SEA",
+      "fields": ["bottom_line"],
+      "reason": "Okada still DNP; Emmanwori limited; Bradford FULL. Safety availability flag. Pass.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "TEN",
+      "fields": ["bottom_line"],
+      "reason": "Gray in concussion protocol (UTV). Week 1 LB availability flag. Pass.",
+      "status": "flagged"
+    }
   ]
 }
