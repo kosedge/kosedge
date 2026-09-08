@@ -22,6 +22,18 @@ import {
   edgesMayShowPropRows,
   nflPropsSurfaceState,
 } from "@/lib/nfl-props-surface";
+import {
+  formatSelectedSideLineEdge,
+  formatSelectedSideProbEdge,
+  pickEdgeMarketLine,
+  reconcileHandicapCustomerEdge,
+  reconcileMoneylineCustomerEdge,
+  reconcileTotalCustomerEdge,
+} from "@/lib/edge-board-customer-truth";
+import {
+  sanitizeNflSpread,
+  sanitizeNflTotal,
+} from "@/lib/nfl-market-line-hygiene";
 
 export type {
   DeskEdgeRow,
@@ -81,62 +93,111 @@ export function deskEdgesFromFairLine(
   const out: DeskEdgeRow[] = [];
 
   if (row.mlEdgeProb !== null && Math.abs(row.mlEdgeProb) >= minProbEdge) {
-    const homeSide = row.mlEdgeProb >= 0;
-    out.push({
-      id: `${row.gameId}-ml`,
-      marketType: "ml",
-      matchupOrPlayer: matchup,
-      detail: "Moneyline",
-      kosedgeLine: formatAmericanOdds(
-        homeSide ? row.fairHomeMl : row.fairAwayMl,
-      ),
-      marketLine: formatAmericanOdds(
-        homeSide ? row.marketHomeMl : row.marketAwayMl,
-      ),
-      edge: row.mlEdgeProb,
-      edgeDisplay: formatEdgeProb(row.mlEdgeProb),
-      side: homeSide ? "Home" : "Away",
-      confidence: fairLineDeskConfidence(row, "ml"),
-      kickoff,
-      source: "fair-lines",
+    // ML has its own formula (prob pts) — never abs(fairAmerican−marketAmerican).
+    const ml = reconcileMoneylineCustomerEdge({
+      signedProbEdge: row.mlEdgeProb,
     });
+    if (ml.status === "ok" && ml.advantage != null && ml.side != null) {
+      const homeSide = ml.side === "Home";
+      out.push({
+        id: `${row.gameId}-ml`,
+        marketType: "ml",
+        matchupOrPlayer: matchup,
+        detail: "Moneyline",
+        kosedgeLine: formatAmericanOdds(
+          homeSide ? row.fairHomeMl : row.fairAwayMl,
+        ),
+        marketLine: formatAmericanOdds(
+          homeSide ? row.marketHomeMl : row.marketAwayMl,
+        ),
+        // Positive selected-side magnitude only (customer-truth contract).
+        edge: ml.advantage,
+        edgeDisplay: formatSelectedSideProbEdge(ml.advantage),
+        side: ml.side,
+        confidence: fairLineDeskConfidence(row, "ml"),
+        kickoff,
+        source: "fair-lines",
+      });
+    }
   }
 
   if (row.spreadEdge !== null && Math.abs(row.spreadEdge) >= minLineEdge) {
-    // Negative spreadEdge => Kosedge home line more favored than market → lean Home
-    const leanHome = row.spreadEdge < 0;
-    out.push({
-      id: `${row.gameId}-spread`,
-      marketType: "spread",
-      matchupOrPlayer: matchup,
-      detail: "Spread",
-      kosedgeLine: formatSpread(row.spreadHome),
-      marketLine: formatSpread(row.marketSpreadHome),
-      edge: row.spreadEdge,
-      edgeDisplay: `${row.spreadEdge > 0 ? "+" : ""}${row.spreadEdge.toFixed(1)} pts`,
-      side: leanHome ? "Home" : "Away",
-      confidence: fairLineDeskConfidence(row, "spread"),
-      kickoff,
-      source: "fair-lines",
+    // Market painted MUST be the stake/compare line used for spread_edge — not consensus alone.
+    const marketForEdge = pickEdgeMarketLine({
+      stake: row.stakeSpreadHome,
+      dk: row.dkSpreadHome,
+      fd: row.fdSpreadHome,
+      market: row.marketSpreadHome,
+      best: row.bestSpreadHome,
+      sanitize: (n) => sanitizeNflSpread(n).value,
     });
+    const fair = row.spreadHome ?? row.handicapSpreadHome;
+    const reconciled = reconcileHandicapCustomerEdge({
+      fairLine: fair,
+      marketLine: marketForEdge,
+      claimedEdge: row.spreadEdge,
+    });
+    // Fail closed on Fair/Book/Edge disagreement — no painted edge chrome.
+    if (
+      reconciled.status === "ok" &&
+      reconciled.advantage != null &&
+      reconciled.side != null &&
+      reconciled.advantage >= minLineEdge
+    ) {
+      out.push({
+        id: `${row.gameId}-spread`,
+        marketType: "spread",
+        matchupOrPlayer: matchup,
+        detail: "Spread",
+        kosedgeLine: formatSpread(reconciled.fairLine),
+        marketLine: formatSpread(reconciled.marketLine),
+        edge: reconciled.advantage,
+        edgeDisplay: formatSelectedSideLineEdge(reconciled.advantage, "pts"),
+        side: reconciled.side,
+        confidence: fairLineDeskConfidence(row, "spread"),
+        kickoff,
+        source: "fair-lines",
+      });
+    }
   }
 
   if (row.totalEdge !== null && Math.abs(row.totalEdge) >= minLineEdge) {
-    const over = row.totalEdge > 0;
-    out.push({
-      id: `${row.gameId}-total`,
-      marketType: "total",
-      matchupOrPlayer: matchup,
-      detail: "Total",
-      kosedgeLine: formatTotal(row.totalMean),
-      marketLine: formatTotal(row.marketTotal),
-      edge: row.totalEdge,
-      edgeDisplay: `${row.totalEdge > 0 ? "+" : ""}${row.totalEdge.toFixed(1)} pts`,
-      side: over ? "Over" : "Under",
-      confidence: fairLineDeskConfidence(row, "total"),
-      kickoff,
-      source: "fair-lines",
+    // Totals: own formula; market = stake close used for total_edge.
+    const marketForEdge = pickEdgeMarketLine({
+      stake: row.stakeTotal,
+      dk: row.dkTotal,
+      fd: row.fdTotal,
+      market: row.marketTotal,
+      best: row.bestTotal,
+      sanitize: (n) => sanitizeNflTotal(n).value,
     });
+    const fair = row.totalMean ?? row.handicapTotal;
+    const reconciled = reconcileTotalCustomerEdge({
+      fairTotal: fair,
+      marketTotal: marketForEdge,
+      claimedEdge: row.totalEdge,
+    });
+    if (
+      reconciled.status === "ok" &&
+      reconciled.advantage != null &&
+      reconciled.side != null &&
+      reconciled.advantage >= minLineEdge
+    ) {
+      out.push({
+        id: `${row.gameId}-total`,
+        marketType: "total",
+        matchupOrPlayer: matchup,
+        detail: "Total",
+        kosedgeLine: formatTotal(reconciled.fairTotal),
+        marketLine: formatTotal(reconciled.marketTotal),
+        edge: reconciled.advantage,
+        edgeDisplay: formatSelectedSideLineEdge(reconciled.advantage, "pts"),
+        side: reconciled.side,
+        confidence: fairLineDeskConfidence(row, "total"),
+        kickoff,
+        source: "fair-lines",
+      });
+    }
   }
 
   return out;
@@ -171,7 +232,8 @@ export function deskEdgeFromPropRow(
           : !takeOver && under !== null
             ? under
             : row.modelMean - row.line;
-      if (Math.abs(signed) < minProbEdge) return null;
+      const advantage = Math.abs(signed);
+      if (advantage < minProbEdge) return null;
       const kickoff =
         lookupCanonicalNflGameForTeam({
           week: row.week,
@@ -184,8 +246,8 @@ export function deskEdgeFromPropRow(
         detail: `${propMarketLabel(row.marketKey)} · ${row.team}`,
         kosedgeLine: formatPropNumber(row.modelMean),
         marketLine: formatPropNumber(row.line),
-        edge: signed,
-        edgeDisplay: formatEdgeProb(signed),
+        edge: advantage,
+        edgeDisplay: formatSelectedSideProbEdge(advantage),
         side: takeOver ? "Over" : "Under",
         confidence: row.confidence,
         kickoff,
@@ -198,6 +260,7 @@ export function deskEdgeFromPropRow(
   const takeOver = overPos >= underPos && overPos > 0;
   const edge = takeOver ? (over ?? 0) : (under ?? 0);
   if (edge <= 0 || Math.abs(edge) < minProbEdge) return null;
+  const advantage = Math.abs(edge);
 
   const kickoff =
     lookupCanonicalNflGameForTeam({
@@ -212,8 +275,8 @@ export function deskEdgeFromPropRow(
     detail: `${propMarketLabel(row.marketKey)} · ${row.team}`,
     kosedgeLine: formatPropNumber(row.modelMean),
     marketLine: formatPropNumber(row.line),
-    edge,
-    edgeDisplay: formatEdgeProb(edge),
+    edge: advantage,
+    edgeDisplay: formatSelectedSideProbEdge(advantage),
     side: takeOver ? "Over" : "Under",
     confidence: row.confidence,
     kickoff,
@@ -227,9 +290,11 @@ function normalizeEdgesTodayRow(
 ): DeskEdgeRow | null {
   const mlEdge = toNumberOrNull(raw.ml_edge_prob);
   if (mlEdge === null || Math.abs(mlEdge) < minProbEdge) return null;
+  const ml = reconcileMoneylineCustomerEdge({ signedProbEdge: mlEdge });
+  if (ml.status !== "ok" || ml.advantage == null || ml.side == null) return null;
   const home = String(raw.home_team ?? "Home");
   const away = String(raw.away_team ?? "Away");
-  const homeSide = mlEdge >= 0;
+  const homeSide = ml.side === "Home";
   return {
     id: `${String(raw.game_id ?? "game")}-today-ml`,
     marketType: "ml",
@@ -241,9 +306,9 @@ function normalizeEdgesTodayRow(
     marketLine: formatAmericanOdds(
       toNumberOrNull(homeSide ? raw.market_home_ml : raw.market_away_ml),
     ),
-    edge: mlEdge,
-    edgeDisplay: formatEdgeProb(mlEdge),
-    side: homeSide ? "Home" : "Away",
+    edge: ml.advantage,
+    edgeDisplay: formatSelectedSideProbEdge(ml.advantage),
+    side: ml.side,
     confidence: toNumberOrNull(raw.confidence_score),
     kickoff: typeof raw.start_time === "string" ? raw.start_time : null,
     source: "edges-today",
