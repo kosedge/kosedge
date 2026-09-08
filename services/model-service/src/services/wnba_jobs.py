@@ -1332,6 +1332,8 @@ def pull_wnba_historical_odds_densify(
                     if isinstance(payload, dict)
                     else None,
                     error=None,
+                    bucket="HIST_BACKFILL",
+                    caller="celery.pull_wnba_historical_odds_densify",
                 )
                 session.commit()
                 time_module.sleep(0.30)
@@ -1355,6 +1357,8 @@ def pull_wnba_historical_odds_densify(
                         response_previous_timestamp=None,
                         response_next_timestamp=None,
                         error=str(exc)[:1000],
+                        bucket="HIST_BACKFILL",
+                        caller="celery.pull_wnba_historical_odds_densify",
                     )
                     session.commit()
                 except Exception:
