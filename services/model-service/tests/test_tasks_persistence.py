@@ -277,6 +277,69 @@ def test_pull_odds_snapshot_meters_shared_run_id(monkeypatch) -> None:
     assert ncaab[0][6] == "us"
 
 
+def test_ensure_odds_api_request_tables_no_doubled_request_params() -> None:
+    """CREATE TABLE SQL must use request_params once (type fragment only in DDL var)."""
+    captured: list[str] = []
+
+    class _CapturingSession:
+        def __init__(self, inner):
+            self._inner = inner
+
+        def get_bind(self):
+            return self._inner.get_bind()
+
+        def execute(self, stmt, *args, **kwargs):
+            captured.append(str(getattr(stmt, "text", stmt)))
+            return self._inner.execute(stmt, *args, **kwargs)
+
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    session = TestSession()
+    try:
+        tasks._ensure_odds_api_request_tables(_CapturingSession(session))
+        session.commit()
+    finally:
+        session.close()
+
+    create_sqls = [s for s in captured if "CREATE TABLE IF NOT EXISTS" in s]
+    assert len(create_sqls) == 2
+    for sql in create_sqls:
+        assert "request_params request_params" not in sql
+        assert "request_params TEXT NOT NULL" in sql or "request_params jsonb NOT NULL" in sql
+
+    # Postgres path (rendered only): type fragment must not re-include column name.
+    pg_captured: list[str] = []
+
+    class _PgFakeSession:
+        def get_bind(self):
+            class _Bind:
+                dialect = type("D", (), {"name": "postgresql"})()
+
+            return _Bind()
+
+        def execute(self, stmt, *args, **kwargs):
+            pg_captured.append(str(getattr(stmt, "text", stmt)))
+
+    tasks._ensure_odds_api_request_tables(_PgFakeSession())
+    pg_creates = [s for s in pg_captured if "CREATE TABLE IF NOT EXISTS" in s]
+    assert len(pg_creates) == 2
+    for sql in pg_creates:
+        assert "request_params request_params" not in sql
+        assert "request_params jsonb NOT NULL" in sql
+
+    with engine.connect() as conn:
+        cols = {
+            row[1]
+            for row in conn.execute(text("PRAGMA table_info(odds_api_credit_ledger)")).fetchall()
+        }
+        cache_cols = {
+            row[1]
+            for row in conn.execute(text("PRAGMA table_info(odds_api_request_cache)")).fetchall()
+        }
+    assert "request_params" in cols
+    assert "request_params" in cache_cols
+
+
 def test_persist_odds_events_skips_dup_keeps_new_vintage(monkeypatch) -> None:
     engine = create_engine("sqlite+pysqlite:///:memory:")
     _create_sqlite_schema(engine)
