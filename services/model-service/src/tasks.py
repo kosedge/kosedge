@@ -1592,12 +1592,14 @@ def _ensure_odds_api_request_tables(session: Any) -> None:
     is_sqlite = _session_is_sqlite(session)
     if is_sqlite:
         ledger_id_ddl = "id TEXT PRIMARY KEY"
-        cache_params_ddl = "request_params TEXT NOT NULL"
+        # Type/nullability only — column name is in the CREATE TABLE template.
+        cache_params_ddl = "TEXT NOT NULL"
         ts_ddl = "TEXT"
         now_ddl = "CURRENT_TIMESTAMP"
     else:
         ledger_id_ddl = "id uuid PRIMARY KEY DEFAULT gen_random_uuid()"
-        cache_params_ddl = "request_params jsonb NOT NULL"
+        # Type/nullability only — column name is in the CREATE TABLE template.
+        cache_params_ddl = "jsonb NOT NULL"
         ts_ddl = "timestamptz"
         now_ddl = "now()"
 
