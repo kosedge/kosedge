@@ -1576,52 +1576,81 @@ def _normalize_markets_csv(raw: Optional[str]) -> str:
     return ",".join(tokens)
 
 
+def _session_is_sqlite(session: Any) -> bool:
+    try:
+        return str(session.get_bind().dialect.name) == "sqlite"
+    except Exception:
+        return False
+
+
 def _ensure_odds_api_request_tables(session: Any) -> None:
+    """Ensure Odds API credit ledger + request cache exist (additive, migration-safe).
+
+    Also adds nullable attribution columns on the ledger and optional
+    ``ingest_run_id`` on ``odds_snapshots`` when that table already exists.
+    """
+    is_sqlite = _session_is_sqlite(session)
+    if is_sqlite:
+        ledger_id_ddl = "id TEXT PRIMARY KEY"
+        cache_params_ddl = "request_params TEXT NOT NULL"
+        ts_ddl = "TEXT"
+        now_ddl = "CURRENT_TIMESTAMP"
+    else:
+        ledger_id_ddl = "id uuid PRIMARY KEY DEFAULT gen_random_uuid()"
+        cache_params_ddl = "request_params jsonb NOT NULL"
+        ts_ddl = "timestamptz"
+        now_ddl = "now()"
+
     session.execute(
         text(
-            """
+            f"""
             CREATE TABLE IF NOT EXISTS odds_api_credit_ledger (
-              id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+              {ledger_id_ddl},
               endpoint text NOT NULL,
               sport_key text NOT NULL,
               request_signature text NOT NULL,
-              requested_at timestamptz NOT NULL,
-              request_params jsonb NOT NULL,
+              requested_at {ts_ddl} NOT NULL,
+              request_params {cache_params_ddl},
               status text NOT NULL,
               source_key text,
               credits_last integer,
               credits_used integer,
               credits_remaining integer,
               events_count integer NOT NULL DEFAULT 0,
-              response_timestamp timestamptz,
-              response_previous_timestamp timestamptz,
-              response_next_timestamp timestamptz,
+              response_timestamp {ts_ddl},
+              response_previous_timestamp {ts_ddl},
+              response_next_timestamp {ts_ddl},
               error text,
-              created_at timestamptz NOT NULL DEFAULT now()
+              bucket text NOT NULL DEFAULT 'UNATTRIBUTED',
+              caller text,
+              run_id text,
+              markets text,
+              regions text,
+              created_at {ts_ddl} NOT NULL DEFAULT {now_ddl}
             )
             """
         )
     )
     session.execute(
         text(
-            """
+            f"""
             CREATE TABLE IF NOT EXISTS odds_api_request_cache (
               request_signature text PRIMARY KEY,
               endpoint text NOT NULL,
               sport_key text NOT NULL,
-              request_params jsonb NOT NULL,
+              request_params {cache_params_ddl},
               status text NOT NULL,
               source_key text,
               credits_last integer,
               credits_used integer,
               credits_remaining integer,
               events_count integer NOT NULL DEFAULT 0,
-              response_timestamp timestamptz,
-              response_previous_timestamp timestamptz,
-              response_next_timestamp timestamptz,
+              response_timestamp {ts_ddl},
+              response_previous_timestamp {ts_ddl},
+              response_next_timestamp {ts_ddl},
               last_error text,
-              last_requested_at timestamptz NOT NULL,
-              updated_at timestamptz NOT NULL DEFAULT now()
+              last_requested_at {ts_ddl} NOT NULL,
+              updated_at {ts_ddl} NOT NULL DEFAULT {now_ddl}
             )
             """
         )
@@ -1634,6 +1663,32 @@ def _ensure_odds_api_request_tables(session: Any) -> None:
             """
         )
     )
+    # Additive columns for existing Postgres installs (CREATE IF NOT EXISTS is a no-op).
+    # SQLite unit tests create columns in CREATE TABLE / lack ADD COLUMN IF NOT EXISTS.
+    if not is_sqlite:
+        for alter_sql in (
+            "ALTER TABLE odds_api_credit_ledger ADD COLUMN IF NOT EXISTS bucket text NOT NULL DEFAULT 'UNATTRIBUTED'",
+            "ALTER TABLE odds_api_credit_ledger ADD COLUMN IF NOT EXISTS caller text",
+            "ALTER TABLE odds_api_credit_ledger ADD COLUMN IF NOT EXISTS run_id text",
+            "ALTER TABLE odds_api_credit_ledger ADD COLUMN IF NOT EXISTS markets text",
+            "ALTER TABLE odds_api_credit_ledger ADD COLUMN IF NOT EXISTS regions text",
+        ):
+            session.execute(text(alter_sql))
+        # Optional warehouse provenance on snapshots (table may not exist in some contexts).
+        try:
+            session.execute(
+                text(
+                    "ALTER TABLE odds_snapshots ADD COLUMN IF NOT EXISTS ingest_run_id text"
+                )
+            )
+        except Exception:
+            pass
+    else:
+        # Best-effort SQLite alter for older in-memory schemas missing ingest_run_id.
+        try:
+            session.execute(text("ALTER TABLE odds_snapshots ADD COLUMN ingest_run_id text"))
+        except Exception:
+            pass
 
 
 def _record_odds_api_request(
@@ -1653,33 +1708,53 @@ def _record_odds_api_request(
     response_previous_timestamp: Optional[datetime],
     response_next_timestamp: Optional[datetime],
     error: Optional[str],
+    bucket: str = "UNATTRIBUTED",
+    caller: Optional[str] = None,
+    run_id: Optional[str] = None,
+    markets: Optional[str] = None,
+    regions: Optional[str] = None,
 ) -> None:
     safe_error = None
     if error:
         safe_error = re.sub(r"(apiKey=)[^&\\s]+", r"\\1REDACTED", str(error))
     requested_at = _now_utc()
+    params = request_params or {}
+    markets_val = markets
+    if markets_val is None and params.get("markets") is not None:
+        markets_val = str(params.get("markets"))
+    regions_val = regions
+    if regions_val is None and params.get("regions") is not None:
+        regions_val = str(params.get("regions"))
+    bucket_val = (bucket or "UNATTRIBUTED").strip() or "UNATTRIBUTED"
+    is_sqlite = _session_is_sqlite(session)
+    params_expr = ":request_params" if is_sqlite else "CAST(:request_params AS jsonb)"
+    # Always supply id so SQLite (no gen_random_uuid) and Postgres both work.
+    ledger_id = str(uuid.uuid4())
     session.execute(
         text(
-            """
+            f"""
             INSERT INTO odds_api_credit_ledger (
-              endpoint, sport_key, request_signature, requested_at, request_params,
+              id, endpoint, sport_key, request_signature, requested_at, request_params,
               status, source_key, credits_last, credits_used, credits_remaining,
               events_count, response_timestamp, response_previous_timestamp,
-              response_next_timestamp, error, created_at
+              response_next_timestamp, error, bucket, caller, run_id, markets, regions,
+              created_at
             ) VALUES (
-              :endpoint, :sport_key, :request_signature, :requested_at, CAST(:request_params AS jsonb),
+              :id, :endpoint, :sport_key, :request_signature, :requested_at, {params_expr},
               :status, :source_key, :credits_last, :credits_used, :credits_remaining,
               :events_count, :response_timestamp, :response_previous_timestamp,
-              :response_next_timestamp, :error, :created_at
+              :response_next_timestamp, :error, :bucket, :caller, :run_id, :markets, :regions,
+              :created_at
             )
             """
         ),
         {
+            "id": ledger_id,
             "endpoint": endpoint,
             "sport_key": sport_key,
             "request_signature": request_signature,
             "requested_at": requested_at,
-            "request_params": json.dumps(request_params),
+            "request_params": json.dumps(params),
             "status": status,
             "source_key": source_key,
             "credits_last": credits_last,
@@ -1690,19 +1765,24 @@ def _record_odds_api_request(
             "response_previous_timestamp": response_previous_timestamp,
             "response_next_timestamp": response_next_timestamp,
             "error": safe_error,
+            "bucket": bucket_val,
+            "caller": caller,
+            "run_id": run_id,
+            "markets": markets_val,
+            "regions": regions_val,
             "created_at": requested_at,
         },
     )
     session.execute(
         text(
-            """
+            f"""
             INSERT INTO odds_api_request_cache (
               request_signature, endpoint, sport_key, request_params, status, source_key,
               credits_last, credits_used, credits_remaining, events_count,
               response_timestamp, response_previous_timestamp, response_next_timestamp,
               last_error, last_requested_at, updated_at
             ) VALUES (
-              :request_signature, :endpoint, :sport_key, CAST(:request_params AS jsonb), :status, :source_key,
+              :request_signature, :endpoint, :sport_key, {params_expr}, :status, :source_key,
               :credits_last, :credits_used, :credits_remaining, :events_count,
               :response_timestamp, :response_previous_timestamp, :response_next_timestamp,
               :last_error, :last_requested_at, :updated_at
@@ -1726,7 +1806,7 @@ def _record_odds_api_request(
             "request_signature": request_signature,
             "endpoint": endpoint,
             "sport_key": sport_key,
-            "request_params": json.dumps(request_params),
+            "request_params": json.dumps(params),
             "status": status,
             "source_key": source_key,
             "credits_last": credits_last,
@@ -1757,9 +1837,11 @@ def _persist_odds_events(
     *,
     events: List[Dict[str, Any]],
     source_label: str,
+    ingest_run_id: Optional[str] = None,
 ) -> Dict[str, int]:
     events_persisted = 0
     snapshots_inserted = 0
+    snapshots_skipped_dup = 0
     # One batch (e.g. a single historical odds pull) can contain hundreds of
     # events for the same ~32 teams / 1 league / 1 season -- share a lookup
     # cache across the whole batch instead of re-querying per event.
@@ -1810,41 +1892,103 @@ def _persist_odds_events(
                 values = _extract_snapshot_values(market_key, market, home_team, away_team)
                 if values is None:
                     continue
-                session.execute(
+                existing = session.execute(
                     text(
                         """
-                        INSERT INTO odds_snapshots (
-                          id, game_id, sportsbook_id, market_id,
-                          price_home, price_away, spread_home, spread_away,
-                          total_points, over_price, under_price,
-                          captured_at, source, created_at
-                        ) VALUES (
-                          :id, :game_id, :sportsbook_id, :market_id,
-                          :price_home, :price_away, :spread_home, :spread_away,
-                          :total_points, :over_price, :under_price,
-                          :captured_at, :source, :created_at
-                        )
+                        SELECT 1
+                        FROM odds_snapshots
+                        WHERE game_id = :game_id
+                          AND sportsbook_id = :sportsbook_id
+                          AND market_id = :market_id
+                          AND captured_at = :captured_at
+                        LIMIT 1
                         """
                     ),
                     {
-                        "id": str(uuid.uuid4()),
                         "game_id": game_id,
                         "sportsbook_id": sportsbook_id,
                         "market_id": market_id,
-                        "price_home": values["price_home"],
-                        "price_away": values["price_away"],
-                        "spread_home": values["spread_home"],
-                        "spread_away": values["spread_away"],
-                        "total_points": values["total_points"],
-                        "over_price": values["over_price"],
-                        "under_price": values["under_price"],
                         "captured_at": captured_at,
-                        "source": source_label,
-                        "created_at": _now_utc(),
                     },
-                )
+                ).fetchone()
+                if existing is not None:
+                    snapshots_skipped_dup += 1
+                    continue
+                if ingest_run_id:
+                    session.execute(
+                        text(
+                            """
+                            INSERT INTO odds_snapshots (
+                              id, game_id, sportsbook_id, market_id,
+                              price_home, price_away, spread_home, spread_away,
+                              total_points, over_price, under_price,
+                              captured_at, source, created_at, ingest_run_id
+                            ) VALUES (
+                              :id, :game_id, :sportsbook_id, :market_id,
+                              :price_home, :price_away, :spread_home, :spread_away,
+                              :total_points, :over_price, :under_price,
+                              :captured_at, :source, :created_at, :ingest_run_id
+                            )
+                            """
+                        ),
+                        {
+                            "id": str(uuid.uuid4()),
+                            "game_id": game_id,
+                            "sportsbook_id": sportsbook_id,
+                            "market_id": market_id,
+                            "price_home": values["price_home"],
+                            "price_away": values["price_away"],
+                            "spread_home": values["spread_home"],
+                            "spread_away": values["spread_away"],
+                            "total_points": values["total_points"],
+                            "over_price": values["over_price"],
+                            "under_price": values["under_price"],
+                            "captured_at": captured_at,
+                            "source": source_label,
+                            "created_at": _now_utc(),
+                            "ingest_run_id": ingest_run_id,
+                        },
+                    )
+                else:
+                    session.execute(
+                        text(
+                            """
+                            INSERT INTO odds_snapshots (
+                              id, game_id, sportsbook_id, market_id,
+                              price_home, price_away, spread_home, spread_away,
+                              total_points, over_price, under_price,
+                              captured_at, source, created_at
+                            ) VALUES (
+                              :id, :game_id, :sportsbook_id, :market_id,
+                              :price_home, :price_away, :spread_home, :spread_away,
+                              :total_points, :over_price, :under_price,
+                              :captured_at, :source, :created_at
+                            )
+                            """
+                        ),
+                        {
+                            "id": str(uuid.uuid4()),
+                            "game_id": game_id,
+                            "sportsbook_id": sportsbook_id,
+                            "market_id": market_id,
+                            "price_home": values["price_home"],
+                            "price_away": values["price_away"],
+                            "spread_home": values["spread_home"],
+                            "spread_away": values["spread_away"],
+                            "total_points": values["total_points"],
+                            "over_price": values["over_price"],
+                            "under_price": values["under_price"],
+                            "captured_at": captured_at,
+                            "source": source_label,
+                            "created_at": _now_utc(),
+                        },
+                    )
                 snapshots_inserted += 1
-    return {"events_persisted": events_persisted, "snapshots_inserted": snapshots_inserted}
+    return {
+        "events_persisted": events_persisted,
+        "snapshots_inserted": snapshots_inserted,
+        "snapshots_skipped_dup": snapshots_skipped_dup,
+    }
 
 
 def _db_identity_payload(session: Any) -> Dict[str, Any]:
@@ -3808,6 +3952,7 @@ def pull_odds_snapshot(
     sport_keys: Optional[str] = None,
 ) -> Dict[str, Any]:
     log.info("Running scheduled pull_odds_snapshot")
+    run_id = str(uuid.uuid4())
     data: List[Dict[str, Any]] = []
     resolved_nfl_bookmakers = _resolve_nfl_odds_bookmakers_for_request(nfl_bookmakers)
     credits_diag: Dict[str, Any] = {
@@ -3827,49 +3972,140 @@ def pull_odds_snapshot(
     else:
         pull_keys = list(SPORT_MAP.keys())
 
-    for sport_key in pull_keys:
-        params: Dict[str, str] = {
-            "regions": "us",
-            "markets": "h2h,spreads,totals",
-            "oddsFormat": "american",
-        }
-        if sport_key == "americanfootball_nfl":
-            params["regions"] = NFL_ODDS_REGIONS
-            params["bookmakers"] = resolved_nfl_bookmakers
-        try:
-            payload_meta = fetch_odds_with_metadata(
-                endpoint=f"sports/{sport_key}/odds",
-                params=params,
-            )
-            payload = payload_meta.get("payload")
-            credits_diag["remaining_by_sport"][sport_key] = payload_meta.get(
-                "x_requests_remaining"
-            )
-            credits_diag["used_by_sport"][sport_key] = payload_meta.get("x_requests_used")
-        except Exception:
-            log.exception("Failed pulling odds for sport", extra={"sport_key": sport_key})
-            continue
-
-        if not isinstance(payload, list):
-            log.warning("Odds payload was not a list; skipping sport", extra={"sport_key": sport_key})
-            continue
-
-        for event in payload:
-            if isinstance(event, dict) and not event.get("sport_key"):
-                event["sport_key"] = sport_key
-        data.extend(payload)
-
-    if not data:
-        log.warning("Odds payload was empty; skipping persistence.")
-        return {
-            "events_fetched": 0,
-            "events_persisted": 0,
-            "snapshots_inserted": 0,
-            "sport_keys": pull_keys,
-        }
+    events_persisted = 0
+    snapshots_inserted = 0
+    snapshots_skipped_dup = 0
 
     session = SessionLocal()
     try:
+        # Meter tables first; no beat-path fetch cache / skip (Platform owns WS-02).
+        _ensure_odds_api_request_tables(session)
+        for sport_key in pull_keys:
+            params: Dict[str, str] = {
+                "regions": "us",
+                "markets": "h2h,spreads,totals",
+                "oddsFormat": "american",
+            }
+            if sport_key == "americanfootball_nfl":
+                params["regions"] = NFL_ODDS_REGIONS
+                params["bookmakers"] = resolved_nfl_bookmakers
+            endpoint = f"sports/{sport_key}/odds"
+            signature = _odds_request_signature(endpoint, params)
+            try:
+                payload_meta = fetch_odds_with_metadata(
+                    endpoint=endpoint,
+                    params=params,
+                )
+                payload = payload_meta.get("payload")
+                credits_diag["remaining_by_sport"][sport_key] = payload_meta.get(
+                    "x_requests_remaining"
+                )
+                credits_diag["used_by_sport"][sport_key] = payload_meta.get("x_requests_used")
+                if not isinstance(payload, list):
+                    log.warning(
+                        "Odds payload was not a list; skipping sport",
+                        extra={"sport_key": sport_key},
+                    )
+                    _record_odds_api_request(
+                        session,
+                        endpoint=endpoint,
+                        sport_key=sport_key,
+                        request_signature=signature,
+                        request_params=params,
+                        status="failed",
+                        source_key=str(payload_meta.get("source") or "") or None,
+                        credits_last=_to_int_like(payload_meta.get("x_requests_last")),
+                        credits_used=_to_int_like(payload_meta.get("x_requests_used")),
+                        credits_remaining=_to_int_like(
+                            payload_meta.get("x_requests_remaining")
+                        ),
+                        events_count=0,
+                        response_timestamp=None,
+                        response_previous_timestamp=None,
+                        response_next_timestamp=None,
+                        error="odds payload was not a list",
+                        bucket="PROD_LIVE",
+                        caller="celery.pull_odds_snapshot",
+                        run_id=run_id,
+                    )
+                    continue
+
+                for event in payload:
+                    if isinstance(event, dict) and not event.get("sport_key"):
+                        event["sport_key"] = sport_key
+                data.extend(payload)
+                _record_odds_api_request(
+                    session,
+                    endpoint=endpoint,
+                    sport_key=sport_key,
+                    request_signature=signature,
+                    request_params=params,
+                    status="success",
+                    source_key=str(payload_meta.get("source") or "") or None,
+                    credits_last=_to_int_like(payload_meta.get("x_requests_last")),
+                    credits_used=_to_int_like(payload_meta.get("x_requests_used")),
+                    credits_remaining=_to_int_like(
+                        payload_meta.get("x_requests_remaining")
+                    ),
+                    events_count=len(payload),
+                    response_timestamp=None,
+                    response_previous_timestamp=None,
+                    response_next_timestamp=None,
+                    error=None,
+                    bucket="PROD_LIVE",
+                    caller="celery.pull_odds_snapshot",
+                    run_id=run_id,
+                )
+            except Exception as exc:
+                log.exception(
+                    "Failed pulling odds for sport", extra={"sport_key": sport_key}
+                )
+                try:
+                    _record_odds_api_request(
+                        session,
+                        endpoint=endpoint,
+                        sport_key=sport_key,
+                        request_signature=signature,
+                        request_params=params,
+                        status="failed",
+                        source_key=None,
+                        credits_last=None,
+                        credits_used=None,
+                        credits_remaining=None,
+                        events_count=0,
+                        response_timestamp=None,
+                        response_previous_timestamp=None,
+                        response_next_timestamp=None,
+                        error=str(exc)[:1000],
+                        bucket="PROD_LIVE",
+                        caller="celery.pull_odds_snapshot",
+                        run_id=run_id,
+                    )
+                except Exception:
+                    log.exception(
+                        "Failed to record odds_api_request failure status",
+                        extra={"sport_key": sport_key, "run_id": run_id},
+                    )
+                continue
+
+        if not data:
+            log.warning("Odds payload was empty; skipping persistence.")
+            session.commit()
+            result = {
+                "events_fetched": 0,
+                "events_persisted": 0,
+                "snapshots_inserted": 0,
+                "snapshots_skipped_dup": 0,
+                "sport_keys": pull_keys,
+                "credits_diagnostics": credits_diag,
+                "run_id": run_id,
+            }
+            log.info(
+                "Pulled odds snapshot",
+                extra={**result, "nfl_bookmakers": resolved_nfl_bookmakers},
+            )
+            return result
+
         _assert_tables_present(
             session,
             stage="pull_odds_snapshot",
@@ -3888,9 +4124,11 @@ def pull_odds_snapshot(
             session,
             events=data,
             source_label="the-odds-api",
+            ingest_run_id=run_id,
         )
         events_persisted = int(persisted.get("events_persisted") or 0)
         snapshots_inserted = int(persisted.get("snapshots_inserted") or 0)
+        snapshots_skipped_dup = int(persisted.get("snapshots_skipped_dup") or 0)
 
         session.commit()
     except Exception:
@@ -3904,8 +4142,10 @@ def pull_odds_snapshot(
         "events_fetched": len(data),
         "events_persisted": events_persisted,
         "snapshots_inserted": snapshots_inserted,
+        "snapshots_skipped_dup": snapshots_skipped_dup,
         "sport_keys": pull_keys,
         "credits_diagnostics": credits_diag,
+        "run_id": run_id,
     }
     log.info(
         "Pulled odds snapshot",
@@ -4074,6 +4314,8 @@ def pull_historical_odds_backfill(
                     response_previous_timestamp=response_previous,
                     response_next_timestamp=response_next,
                     error=None,
+                    bucket="HIST_BACKFILL",
+                    caller="celery.pull_historical_odds_backfill",
                 )
                 session.commit()
             except Exception as exc:
@@ -4101,6 +4343,8 @@ def pull_historical_odds_backfill(
                         response_previous_timestamp=None,
                         response_next_timestamp=None,
                         error=str(exc)[:1000],
+                        bucket="HIST_BACKFILL",
+                        caller="celery.pull_historical_odds_backfill",
                     )
                     session.commit()
                 except Exception:
@@ -9417,6 +9661,8 @@ def pull_nba_historical_odds_densify(
                     if isinstance(payload, dict)
                     else None,
                     error=None,
+                    bucket="HIST_BACKFILL",
+                    caller="celery.pull_nba_historical_odds_densify",
                 )
                 session.commit()
                 time_module.sleep(0.30)
@@ -9440,6 +9686,8 @@ def pull_nba_historical_odds_densify(
                         response_previous_timestamp=None,
                         response_next_timestamp=None,
                         error=str(exc)[:1000],
+                        bucket="HIST_BACKFILL",
+                        caller="celery.pull_nba_historical_odds_densify",
                     )
                     session.commit()
                 except Exception:
@@ -11993,6 +12241,8 @@ def pull_mlb_historical_odds_densify(
                     response_previous_timestamp=_parse_iso_datetime(payload.get("previous_timestamp")) if isinstance(payload, dict) else None,
                     response_next_timestamp=_parse_iso_datetime(payload.get("next_timestamp")) if isinstance(payload, dict) else None,
                     error=None,
+                    bucket="HIST_BACKFILL",
+                    caller="celery.pull_mlb_historical_odds_densify",
                 )
                 session.commit()
             except Exception as exc:
@@ -12015,6 +12265,8 @@ def pull_mlb_historical_odds_densify(
                         response_previous_timestamp=None,
                         response_next_timestamp=None,
                         error=str(exc)[:1000],
+                        bucket="HIST_BACKFILL",
+                        caller="celery.pull_mlb_historical_odds_densify",
                     )
                     session.commit()
                 except Exception:

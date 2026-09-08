@@ -303,17 +303,22 @@ jobs:
           # Prefer targeted DepthSot / auth / week-1 in-process remat contracts; fall back to full suite.
           # INC-2026-09-07: always include fair-lines GET zero-persist + worker snapshot proofs
           # when NFL paths change (DepthSot-only was skipping these).
+          # A2 Odds API budget meter: also prove PROD_LIVE ledger + skip-dup (mocked fetch only).
           if ls tests/test_nfl_camp_sot_queue.py tests/test_nfl_depth_sot_ops_auth.py >/dev/null 2>&1; then
             pytest -q \
               tests/test_nfl_camp_sot_queue.py \
               tests/test_nfl_depth_sot_ops_auth.py \
               tests/test_nfl_props_in_process_remat_ops.py \
               tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes \
-              tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows
+              tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows \
+              tests/test_tasks_persistence.py::test_pull_odds_snapshot_meters_shared_run_id \
+              tests/test_tasks_persistence.py::test_persist_odds_events_skips_dup_keeps_new_vintage
           else
             pytest -q \
               tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes \
-              tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows
+              tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows \
+              tests/test_tasks_persistence.py::test_pull_odds_snapshot_meters_shared_run_id \
+              tests/test_tasks_persistence.py::test_persist_odds_events_skips_dup_keeps_new_vintage
           fi
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
@@ -329,7 +334,11 @@ jobs:
           pytest -q tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes
           echo "INC-2026-09-07 proof 2: test_pull_odds_snapshot_persists_rows"
           pytest -q tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows
-          echo "INC-2026-09-07 proofs 1+2 PASSED"
+          echo "A2 proof 3: test_pull_odds_snapshot_meters_shared_run_id"
+          pytest -q tests/test_tasks_persistence.py::test_pull_odds_snapshot_meters_shared_run_id
+          echo "A2 proof 4: test_persist_odds_events_skips_dup_keeps_new_vintage"
+          pytest -q tests/test_tasks_persistence.py::test_persist_odds_events_skips_dup_keeps_new_vintage
+          echo "INC-2026-09-07 + A2 proofs PASSED"
         env:
           DATABASE_URL: postgresql://test:test@localhost:5432/test
           INTERNAL_API_SECRET: test-internal-secret
