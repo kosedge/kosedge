@@ -1,0 +1,313 @@
+{
+  "status": "ok",
+  "start_date": "2026-05-20",
+  "end_date": "2026-07-17",
+  "lookback_days": 90,
+  "configs": [
+    "M0",
+    "M1",
+    "M1b"
+  ],
+  "results": {
+    "M0": {
+      "model_version": "mlb-v1-pa-sim-pitchmux-m0",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 628,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.250468,
+          "calibrated_brier_ml": 0.252345,
+          "base_mae_total_runs": 3.4828,
+          "calibrated_mae_total_runs": 3.5242,
+          "brier_improvement": -0.001878,
+          "mae_improvement": -0.0414,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.250468,
+        "calibrated_brier_ml": 0.252345,
+        "base_mae_total_runs": 3.4828,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250628,
+        "mae_total_runs": 3.5204,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.023334,
+        "max_bin_error": 0.498,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "pitch_matchup_enabled": false,
+        "batter_level": false,
+        "stuff_fallback": false,
+        "model_suffix": "pitchmux-m0"
+      },
+      "pitch_matchup_enabled": false,
+      "pitch_matchup_stuff_fallback": false,
+      "pitch_matchup_batter_level": false,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      }
+    },
+    "M1": {
+      "model_version": "mlb-v1-pa-sim-pitchmux-m1t",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 628,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.249968,
+          "calibrated_brier_ml": 0.252353,
+          "base_mae_total_runs": 3.4903,
+          "calibrated_mae_total_runs": 3.5296,
+          "brier_improvement": -0.002386,
+          "mae_improvement": -0.0393,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00392,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.0
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00392,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.0
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.249968,
+        "calibrated_brier_ml": 0.252353,
+        "base_mae_total_runs": 3.4903,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.250647,
+        "mae_total_runs": 3.5285,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.022864,
+        "max_bin_error": 0.4985,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00392,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.0,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "pitch_matchup_enabled": true,
+        "batter_level": false,
+        "stuff_fallback": false,
+        "model_suffix": "pitchmux-m1t"
+      },
+      "pitch_matchup_enabled": true,
+      "pitch_matchup_stuff_fallback": false,
+      "pitch_matchup_batter_level": false,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00392,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.0
+      }
+    },
+    "M1b": {
+      "model_version": "mlb-v1-pa-sim-pitchmux-m1b",
+      "resim": {
+        "status": "ok",
+        "simulated": 628,
+        "games_selected": 628,
+        "deleted_prior_projections": 0,
+        "leakage_rows_repaired": 0,
+        "hours_to_first_pitch": 3.0,
+        "holdout": {
+          "sample_size": 512,
+          "fold_count": 15,
+          "base_brier_ml": 0.251309,
+          "calibrated_brier_ml": 0.252787,
+          "base_mae_total_runs": 3.4822,
+          "calibrated_mae_total_runs": 3.5208,
+          "brier_improvement": -0.001477,
+          "mae_improvement": -0.0387,
+          "leakage_violations": 0
+        }
+      },
+      "full_n_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "avg_ml_clv": 0.00364,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "densify_window_clv": {
+        "count": 628,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00364,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      },
+      "walkforward": {
+        "sample_size": 512,
+        "base_brier_ml": 0.251309,
+        "calibrated_brier_ml": 0.252787,
+        "base_mae_total_runs": 3.4822,
+        "leakage_violations": 0
+      },
+      "quality": {
+        "sample_size": 628.0,
+        "brier_ml": 0.251855,
+        "mae_total_runs": 3.5205,
+        "calendar_days_covered": 55.0,
+        "last_game_date": "2026-07-16",
+        "ece": 0.023787,
+        "max_bin_error": 0.023907,
+        "bin_count": 2.0,
+        "avg_ml_clv": 0.00364,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266,
+        "ml_sample_size": 476.0,
+        "total_sample_size": 476.0,
+        "spread_sample_size": 474.0,
+        "leakage_violations": 0,
+        "leakage_rows_repaired": 0,
+        "props_play_stake_eligible": false
+      },
+      "config": {
+        "pitch_matchup_enabled": true,
+        "batter_level": true,
+        "stuff_fallback": false,
+        "model_suffix": "pitchmux-m1b"
+      },
+      "pitch_matchup_enabled": true,
+      "pitch_matchup_stuff_fallback": false,
+      "pitch_matchup_batter_level": true,
+      "intersection_clv": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00364,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      }
+    }
+  },
+  "intersection": {
+    "n": 476,
+    "by_config": {
+      "M0": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00383,
+        "avg_total_clv": 0.0042,
+        "avg_spread_clv": 0.05063
+      },
+      "M1": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00392,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.0
+      },
+      "M1b": {
+        "count": 476,
+        "ml_sample_size": 476,
+        "total_sample_size": 476,
+        "spread_sample_size": 474,
+        "avg_ml_clv": 0.00364,
+        "avg_total_clv": 0.0021,
+        "avg_spread_clv": 0.01266
+      }
+    }
+  },
+  "recommendation": {
+    "ship_pitch_matchup": false,
+    "ship_batter_level": false,
+    "stretch_target_hit": false,
+    "primary_candidate": "M1b",
+    "m1_delta_vs_m0": 9e-05,
+    "m1b_delta_vs_m0": -0.00019,
+    "note": "Ship MLB_PITCH_MATCHUP_ENABLED (+ BATTER_LEVEL for M1b) only if intersection ML CLV \u2265 +0.010 and beats M0 without torching RL/total. True pitch-type arsenal only (stuff-shape fallback off)."
+  },
+  "props_play_stake_eligible": false,
+  "unused_holdout": {
+    "title": "MLB enterprise unused holdout (fallback constants)",
+    "status": "frozen_unused",
+    "registered_at": null,
+    "source": "fallback_constants",
+    "window_count": 2,
+    "date_count": 23,
+    "first_date": "2026-07-18",
+    "last_date": "2026-08-10",
+    "props_play_stake_eligible": false,
+    "stake_marketing_requires_unused_pass": true
+  }
+}
