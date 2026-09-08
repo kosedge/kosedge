@@ -157,6 +157,21 @@ describe("Week 1 desk agreement", () => {
     expect(row!.side).toBe("Under");
   });
 
+  it("does not publish Lean from yard gap when neither edge prob is positive", () => {
+    const row = deskEdgeFromPropRow(
+      propRow({
+        playerName: "G. Holani",
+        line: 21.5,
+        modelMean: 12.9,
+        edgeOver: -0.01,
+        edgeUnder: -0.01,
+        confidence: 0.99,
+      }),
+      { minProbEdge: 0.05, minConfidence: 0.0 },
+    );
+    expect(row).toBeNull();
+  });
+
   it("NE@SEA canonical kickoff is 8:20 ET and odds overlay cannot overwrite", () => {
     const packed = canonicalKickoffForMatchup({
       season: 2026,
