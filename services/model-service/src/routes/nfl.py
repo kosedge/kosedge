@@ -3756,26 +3756,88 @@ def nfl_edges_today(
     }
 
 
-@router.get("/fair-lines")
-def nfl_fair_lines(
-    season: int = Query(2026, ge=2010, le=2100),
-    days_ahead: int = Query(14, ge=1, le=365),
-    include_past_days: int = Query(0, ge=0, le=60),
-    model_version: Optional[str] = Query(None),
-    bookmakers: Optional[str] = Query(
-        None,
-        description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
-    ),
-    persist: bool = Query(
-        False,
-        description=(
-            "INC-2026-09-07: customer/page-data GET defaults to read-only "
-            "(no odds_snapshots writes). Pass persist=1 only for rare ops "
-            "callers that intentionally land training snaps on this path. "
-            "Beat/worker scheduled pull_odds_snapshot remains the write path. "
-            "persist=0 continues to be honored."
-        ),
-    ),
+
+def _normalize_nfl_fair_lines_odds_mode(raw: Optional[str]) -> str:
+    mode = str(raw or "live").strip().lower()
+    if mode in {"live", "skip", "reuse"}:
+        return mode
+    return "live"
+
+
+def _odds_event_dicts(raw: Any) -> List[Dict[str, Any]]:
+    """Keep only dict-shaped Odds API / reuse payload rows."""
+    if not isinstance(raw, list):
+        return []
+    out: List[Dict[str, Any]] = []
+    for item in raw:
+        if isinstance(item, dict):
+            out.append(item)
+    return out
+
+
+def _resolve_nfl_fair_lines_market_events(
+    *,
+    odds_mode: str,
+    bookmakers: str,
+    supplied_events: Optional[List[Dict[str, Any]]] = None,
+) -> Tuple[List[Dict[str, Any]], Optional[str], str]:
+    """WS-02 DUP-C / S1: live|skip|reuse Odds acquire seam.
+
+    - live (default): existing fetch_odds HTTP
+    - skip: never call fetch_odds (empty events; warehouse may still paint Current)
+    - reuse: when caller supplied events list (possibly empty after payload signal),
+      use them and skip HTTP; without supply (None), fall through to live
+
+    Returns (market_events, odds_feed_error, resolved_mode).
+    """
+    mode = _normalize_nfl_fair_lines_odds_mode(odds_mode)
+
+    if mode == "skip":
+        return [], None, "skip"
+
+    if mode == "reuse":
+        # None = not supplied (customer GET) → live. list (even empty) = assemble reuse.
+        if supplied_events is not None:
+            return _odds_event_dicts(supplied_events), None, "reuse"
+        mode = "live"
+
+    try:
+        raw_market_events = fetch_odds(
+            endpoint="sports/americanfootball_nfl/odds",
+            params={
+                "regions": NFL_ODDS_REGIONS,
+                "markets": "h2h,spreads,totals",
+                "oddsFormat": "american",
+                "dateFormat": "iso",
+                "bookmakers": bookmakers,
+            },
+        )
+        if isinstance(raw_market_events, list):
+            return _odds_event_dicts(raw_market_events), None, "live"
+        return [], None, "live"
+    except Exception as exc:
+        return [], _redact_odds_api_error(exc), "live"
+
+
+class NflFairLinesReuseBody(BaseModel):
+    """Assemble-controlled fair-lines reuse — caller already acquired Odds once."""
+
+    odds_mode: str = "reuse"
+    odds_events: List[Dict[str, Any]] = Field(default_factory=list)
+    # Edge-board assemble may pass pullOddsRows payload as a reuse signal.
+    odds_payload: List[Any] = Field(default_factory=list)
+
+
+def _nfl_fair_lines_impl(
+    *,
+    season: int,
+    days_ahead: int,
+    include_past_days: int,
+    model_version: Optional[str],
+    bookmakers: Optional[str],
+    odds_mode: str,
+    persist: bool,
+    supplied_odds_events: Optional[List[Dict[str, Any]]] = None,
 ) -> Dict[str, Any]:
     """Kosedge fair-lines board for an upcoming (and optionally recent) slate.
 
@@ -3786,31 +3848,28 @@ def nfl_fair_lines(
     INC-2026-09-07 SEV-2: this GET performs zero Postgres writes by default
     (esp. `_persist_nfl_odds_events_for_training`). Warehouse persistence is
     worker/beat-owned via `pull_odds_snapshot`.
+
+    WS-02 / S1: odds_mode=reuse with supplied events skips Odds HTTP (assemble D1).
     """
-    market_events: List[Dict[str, Any]] = []
-    odds_feed_error: Optional[str] = None
     odds_persist: Dict[str, int] = {
         "events_persisted": 0,
         "snapshots_inserted": 0,
         "history_upserted": 0,
     }
     resolved_bookmakers = _resolve_nfl_odds_bookmakers_for_request(bookmakers)
-    try:
-        raw_market_events = fetch_odds(
-            endpoint="sports/americanfootball_nfl/odds",
-            params={
-                "regions": NFL_ODDS_REGIONS,
-                "markets": "h2h,spreads,totals",
-                "oddsFormat": "american",
-                "dateFormat": "iso",
-                "bookmakers": resolved_bookmakers,
-            },
-        )
-        if isinstance(raw_market_events, list):
-            market_events = raw_market_events
-    except Exception as exc:
-        odds_feed_error = _redact_odds_api_error(exc)
+    market_events, odds_feed_error, resolved_odds_mode = _resolve_nfl_fair_lines_market_events(
+        odds_mode=odds_mode,
+        bookmakers=resolved_bookmakers,
+        supplied_events=supplied_odds_events,
+    )
+    if odds_feed_error:
         log.warning("NFL odds feed unavailable for fair-lines endpoint: %s", odds_feed_error)
+    elif resolved_odds_mode in {"skip", "reuse"}:
+        log.info(
+            "NFL fair-lines odds_mode=%s: skipped Odds HTTP (events=%s)",
+            resolved_odds_mode,
+            len(market_events),
+        )
 
     # INC-2026-09-07: default read-only. Opt-in persist=1 for ops only.
     # Beat/worker pull_odds_snapshot remains the scheduled write path.
@@ -4530,7 +4589,20 @@ def nfl_fair_lines(
             "include_past_days": include_past_days,
         },
         "diagnostics": {
-            "odds_feed_status": "degraded" if odds_feed_error else ("ok" if market_events else "empty"),
+            "odds_mode": resolved_odds_mode,
+            "odds_feed_status": (
+                "degraded"
+                if odds_feed_error
+                else (
+                    "skipped"
+                    if resolved_odds_mode in {"skip", "reuse"} and not market_events
+                    else (
+                        "reuse"
+                        if resolved_odds_mode == "reuse"
+                        else ("ok" if market_events else "empty")
+                    )
+                )
+            ),
             "odds_feed_error": odds_feed_error,
             "odds_events_seen": len(market_events),
             "market_joined_count": market_joined_count,
@@ -4567,6 +4639,97 @@ def nfl_fair_lines(
             },
         },
     }
+
+
+
+
+@router.get("/fair-lines")
+def nfl_fair_lines(
+    season: int = Query(2026, ge=2010, le=2100),
+    days_ahead: int = Query(14, ge=1, le=365),
+    include_past_days: int = Query(0, ge=0, le=60),
+    model_version: Optional[str] = Query(None),
+    bookmakers: Optional[str] = Query(
+        None,
+        description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
+    ),
+    odds_mode: str = Query(
+        "live",
+        description=(
+            "WS-02 DUP-C: live (default HTTP), skip (never fetch_odds), "
+            "reuse (caller-supplied events/payload — no fetch_odds when valid)."
+        ),
+    ),
+    persist: bool = Query(
+        False,
+        description=(
+            "INC-2026-09-07: customer/page-data GET defaults to read-only "
+            "(no odds_snapshots writes). Pass persist=1 only for rare ops "
+            "callers that intentionally land training snaps on this path. "
+            "Beat/worker scheduled pull_odds_snapshot remains the write path. "
+            "persist=0 continues to be honored."
+        ),
+    ),
+) -> Dict[str, Any]:
+    """Customer/page-data fair-lines GET. Default odds_mode=live (one Odds HTTP)."""
+    return _nfl_fair_lines_impl(
+        season=season,
+        days_ahead=days_ahead,
+        include_past_days=include_past_days,
+        model_version=model_version,
+        bookmakers=bookmakers,
+        odds_mode=odds_mode,
+        persist=persist,
+        supplied_odds_events=None,
+    )
+
+
+@router.post("/fair-lines")
+def nfl_fair_lines_reuse(
+    season: int = Query(2026, ge=2010, le=2100),
+    days_ahead: int = Query(14, ge=1, le=365),
+    include_past_days: int = Query(0, ge=0, le=60),
+    model_version: Optional[str] = Query(None),
+    bookmakers: Optional[str] = Query(
+        None,
+        description="Comma-separated The Odds API bookmaker keys. Defaults to NFL_ODDS_BOOKMAKERS or draftkings.",
+    ),
+    persist: bool = Query(
+        False,
+        description=(
+            "INC-2026-09-07: defaults read-only. Assemble reuse path must keep persist=0."
+        ),
+    ),
+    body: NflFairLinesReuseBody = Body(...),
+) -> Dict[str, Any]:
+    """Assemble-controlled reuse: caller already pulled Odds once (WS-02 S1/S2).
+
+    When odds_mode=reuse and odds_events or odds_payload is non-empty, skips
+    fetch_odds. Edge-board rows may be passed as odds_payload (skip signal);
+    Odds-API-shaped dicts in odds_events are preferred for market join.
+    """
+    mode = _normalize_nfl_fair_lines_odds_mode(body.odds_mode or "reuse")
+    events = _odds_event_dicts(body.odds_events)
+    payload_rows = body.odds_payload if isinstance(body.odds_payload, list) else []
+    # Reuse + Odds-API events → join those events, no HTTP.
+    # Reuse + assemble odds_payload only → still skip HTTP (empty join list).
+    supplied: Optional[List[Dict[str, Any]]]
+    if mode == "reuse" and (events or payload_rows):
+        supplied = events  # may be [] when only overlay payload signaled reuse
+    elif mode == "skip":
+        supplied = []
+    else:
+        supplied = events if events else None
+    return _nfl_fair_lines_impl(
+        season=season,
+        days_ahead=days_ahead,
+        include_past_days=include_past_days,
+        model_version=model_version,
+        bookmakers=bookmakers,
+        odds_mode=mode,
+        persist=persist,
+        supplied_odds_events=supplied,
+    )
 
 
 @router.post("/simulations/{game_id}")

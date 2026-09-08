@@ -163,21 +163,24 @@ async function assembleNflEdgeBoardRows(
   // Week 1 / live uses narrow customer window.
   const window = nflAssembleWindowForSlate("week1");
 
-  // Parallelize Odds + fair-lines so a slow Odds API cannot stack on Railway.
-  const [pulledOdds, fair] = await Promise.all([
-    pullOddsRows("nfl"),
-    // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
-    fetchNflFairLines({
-      season: NFL_EDGE_BOARD_SEASON,
-      daysAhead: window.daysAhead,
-      includePastDays: window.includePastDays,
-      bookmakers: ALLOWED_BOOKS.join(","),
-      timeoutMs: options?.timeoutMs,
-      throwOnTransportError: options?.throwOnTransportError,
-    }),
-  ]);
+  // WS-02 DUP-C / S2: single Odds acquire then fair-lines reuse — never live∥live.
+  // D1: pullOddsRows once; fair-lines oddsMode=reuse skips model fetch_odds.
+  const pulledOdds = await pullOddsRows("nfl");
   const odds =
     countPriced(pulledOdds) >= countPriced(oddsRows) ? pulledOdds : oddsRows;
+  // Fair-lines page-data/SSR send persist=0 — odds_snapshots land via beat/worker only.
+  const fair = await fetchNflFairLines({
+    season: NFL_EDGE_BOARD_SEASON,
+    daysAhead: window.daysAhead,
+    includePastDays: window.includePastDays,
+    bookmakers: ALLOWED_BOOKS.join(","),
+    timeoutMs: options?.timeoutMs,
+    throwOnTransportError: options?.throwOnTransportError,
+    // reuse + oddsPayload → model skips fetch_odds; empty Odds → skip (still ≤1).
+    ...(odds.length > 0
+      ? { oddsMode: "reuse" as const, oddsPayload: odds }
+      : { oddsMode: "skip" as const }),
+  });
 
   let keiGames: KeiLineGame[] = [];
   let rows: EdgeBoardRow[] = [];
