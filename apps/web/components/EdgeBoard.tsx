@@ -14,6 +14,12 @@ import {
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
 import type { StatDrop } from "@/lib/edge-board-stat-drop";
 import { buildHomePreviewRows } from "@/lib/edge-board-home-preview";
+import {
+  NHL_MODEL_DISAGREEMENT_LABEL,
+  NHL_PUCK_LINE_EDGE_LABEL,
+  NHL_PUCK_LINE_LABEL,
+  nhlEdgeBoardTagFooter,
+} from "@/lib/nhl-edge-board-display";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -369,6 +375,7 @@ type EdgeMarket = "line" | "total";
  *   Total:  PASS default · PLAY only in [2.5, 3.0) · ≥3.0 PASS (toxic)
  * MLB moneyline: probability-point edge — LEAN ≥1.5pp · PLAY ≥3.0pp
  * MLB totals: still run-point edge — legacy LEAN ≥1.0 · PLAY ≥2.5
+ * NHL: goal-unit Ch4 — LEAN ≥2.5 · PLAY ≥4.0 (nhl-trusted-market / nhl_kei twin)
  * Other sports keep the legacy 1.0 / 2.5 cut for both markets.
  */
 
@@ -530,12 +537,23 @@ export default function EdgeBoard({
   const data = hasRealData ? legacy : [];
   const isNfl = String(sportKey).toLowerCase() === "nfl";
   const isMlb = String(sportKey).toLowerCase() === "mlb";
+  const isNhl = String(sportKey).toLowerCase() === "nhl";
   const marketsOnly = sportIsMarketsOnlyEdgeBoard(sportKey);
-  const lineLabel = isMlb ? "Moneyline" : "Line";
+  // NHL: customer "Puck Line" (internal market key stays Spread — no schema migrate).
+  const lineLabel = isMlb ? "Moneyline" : isNhl ? NHL_PUCK_LINE_LABEL : "Line";
   // KEI = final handicap when a model exists. Markets-only sports leave cells "—".
   const keiLineHeader = "KEI";
   const keiOuHeader = "KEI";
-  const edgeLineLabel = isMlb ? "ML edge" : "Spread edge";
+  const edgeLineLabel = isMlb
+    ? "ML edge"
+    : isNhl
+      ? NHL_PUCK_LINE_EDGE_LABEL
+      : "Spread edge";
+  const edgeHeaderLine = isMlb ? "ML" : isNhl ? NHL_PUCK_LINE_LABEL : "Line";
+  /** Model≠KEI footnote — NHL research-only, never stake PLAY chrome. */
+  const modelDisagreementPrefix = isNhl
+    ? NHL_MODEL_DISAGREEMENT_LABEL
+    : "Model";
 
   if (variant === "home") {
     // Compact-but-readable pills — must stay inside Tag track (wider than "—").
@@ -772,7 +790,8 @@ export default function EdgeBoard({
                   </div>
                   {r.modelLine || r.modelOU ? (
                     <div className="mt-2 text-[10px] leading-snug text-gray-400">
-                      Model {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
+                      {modelDisagreementPrefix}{" "}
+                      {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
                       {r.modelOU ? r.modelOU.top.label : "—"}
                     </div>
                   ) : null}
@@ -968,7 +987,7 @@ export default function EdgeBoard({
                 <th
                   className={`${TH_BASE} ${COL_DECISION} text-[14px] font-bold text-white normal-case tracking-normal`}
                 >
-                  <HeaderStack a="Edge" b={isMlb ? "ML" : "Line"} />
+                  <HeaderStack a="Edge" b={edgeHeaderLine} />
                 </th>
                 <th
                   className={`${TH_BASE} text-[14px] font-bold text-white normal-case tracking-normal`}
@@ -1133,7 +1152,7 @@ export default function EdgeBoard({
                         />
                         {r.modelLine ? (
                           <div className="mt-1 text-[10px] text-gray-400">
-                            Model {r.modelLine.bottom.label}
+                            {modelDisagreementPrefix} {r.modelLine.bottom.label}
                           </div>
                         ) : null}
                       </td>
@@ -1145,7 +1164,7 @@ export default function EdgeBoard({
                         />
                         {r.modelOU ? (
                           <div className="mt-1 text-[10px] text-gray-400">
-                            Model {r.modelOU.top.label}
+                            {modelDisagreementPrefix} {r.modelOU.top.label}
                           </div>
                         ) : null}
                       </td>
@@ -1259,17 +1278,21 @@ export default function EdgeBoard({
               ? `We bet prices, not teams. Action = KEI vs Current (stakeable book when present). Labels: ${reachableActionLabels().join(" / ")}. Confidence bands: ${reachableConfidenceBands().join(" / ")}. Edge magnitude and confidence stay separate. `
               : isMlb
                 ? "MLB tags — ML PASS / LEAN (≥1.5pp) / PLAY (≥3.0pp) vs no-vig market. Totals keep run-point LEAN ≥1.0 / PLAY ≥2.5. "
-                : String(sportKey).toLowerCase() === "cfb"
-                  ? "CFB research board — tags paint only when assemble publishes PLAY/LEAN/PASS (never invented from edge). Current paints the feed; untrusted / no book is a footnote — never invent Open. "
-                  : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
+                : isNhl
+                  ? nhlEdgeBoardTagFooter()
+                  : String(sportKey).toLowerCase() === "cfb"
+                    ? "CFB research board — tags paint only when assemble publishes PLAY/LEAN/PASS (never invented from edge). Current paints the feed; untrusted / no book is a footnote — never invent Open. "
+                    : "Tags — PASS / LEAN (≥1) / PLAY (≥2.5). "}
           {!marketsOnly &&
             (isMlb
               ? "ML edge is KEI handicap win-prob minus market no-vig (percentage points). "
               : isNfl
                 ? `${keiCode} Edge column and Action use the same market input. Open is first capture — never copied from Current. `
-                : String(sportKey).toLowerCase() === "cfb"
-                  ? "Open/Best from The Odds API (americanfootball_ncaaf) or — when empty. Never invented. "
-                  : "Edge shows pts + side favored vs KEI handicap. ")}
+                : isNhl
+                  ? "Puck Line edge is KEI vs trusted Best (goal units). "
+                  : String(sportKey).toLowerCase() === "cfb"
+                    ? "Open/Best from The Odds API (americanfootball_ncaaf) or — when empty. Never invented. "
+                    : "Edge shows pts + side favored vs KEI handicap. ")}
           {!marketsOnly
             ? isNfl
               ? "Methods → Model transparency."
