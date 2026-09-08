@@ -294,7 +294,8 @@ export function pickEdgeMarketLine(args: {
   /** Optional sanitizer (spread/total hygiene). Pass-through when omitted. */
   sanitize?: (n: number) => number | null;
 }): number | null {
-  const sanitize = args.sanitize ?? ((n: number) => (isFiniteNumber(n) ? n : null));
+  const sanitize =
+    args.sanitize ?? ((n: number) => (isFiniteNumber(n) ? n : null));
   for (const v of [args.stake, args.dk, args.fd, args.market, args.best]) {
     if (!isFiniteNumber(v)) continue;
     const cleaned = sanitize(v);
@@ -384,9 +385,7 @@ export function auditDeskHandicapRows(args: {
     const fair = parseSignedLine(row.kosedgeLine);
     const market = parseSignedLine(row.marketLine);
     const edge = row.edge;
-    const id =
-      row.id ??
-      String(row.matchupOrPlayer ?? row.matchup ?? "row");
+    const id = row.id ?? String(row.matchupOrPlayer ?? row.matchup ?? "row");
 
     if (edge != null && isFiniteNumber(edge) && edge < 0) {
       signInconsistencies += 1;

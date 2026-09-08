@@ -13,11 +13,11 @@
 
 ### SoT fields (fair-lines live, 2026-09-08 ~16:11Z)
 
-| Game | fair (home) | consensus market | stake/DK | FD | best | `spread_edge` | decision.market_line | decision.edge_mag |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| ARI @ LAC | −8.31 | −9.5 | −10.0 | −9.5 | −10.0 | **+1.69** | −10.0 | 1.69 |
-| BAL @ IND | +1.76 | +3.5 | +3.5 | +3.5 | +3.5 | **−1.74** | +3.5 | 1.74 |
-| NYJ @ TEN | −2.97 | −1.5 | −1.5 | −1.5 | −1.5 | **−1.47** | −1.5 | 1.47 |
+| Game      | fair (home) | consensus market | stake/DK |   FD |  best | `spread_edge` | decision.market_line | decision.edge_mag |
+| --------- | ----------: | ---------------: | -------: | ---: | ----: | ------------: | -------------------: | ----------------: |
+| ARI @ LAC |       −8.31 |             −9.5 |    −10.0 | −9.5 | −10.0 |     **+1.69** |                −10.0 |              1.69 |
+| BAL @ IND |       +1.76 |             +3.5 |     +3.5 | +3.5 |  +3.5 |     **−1.74** |                 +3.5 |              1.74 |
+| NYJ @ TEN |       −2.97 |             −1.5 |     −1.5 | −1.5 |  −1.5 |     **−1.47** |                 −1.5 |              1.47 |
 
 ### Desk paint path (`deskEdgesFromFairLine`)
 
@@ -44,24 +44,24 @@ Not matchup-specific. Shared **customer display contract** broke two ways:
 
 ## Before counts (live slate at trace)
 
-| Surface | Metric | Count |
-| --- | --- | ---: |
-| NFL Edges desk | Spread rows (min 1.0) | 12 |
-| NFL Edges desk | Negative selected-side spread display | **7** |
-| NFL Edges desk | Spread Fair/Book vs edge arith mismatch | **2–5** (consensus vs stake; desk API showed 5 at first trace) |
-| NFL Edges desk | Totals negative display / arith mismatch | **13** / **4** |
-| NFL Edge Board assemble | Spread+total arith mismatch | 0 |
-| All Edge Board sports | Negative `edgeMagnitude` | 0 |
+| Surface                 | Metric                                   |                                                          Count |
+| ----------------------- | ---------------------------------------- | -------------------------------------------------------------: |
+| NFL Edges desk          | Spread rows (min 1.0)                    |                                                             12 |
+| NFL Edges desk          | Negative selected-side spread display    |                                                          **7** |
+| NFL Edges desk          | Spread Fair/Book vs edge arith mismatch  | **2–5** (consensus vs stake; desk API showed 5 at first trace) |
+| NFL Edges desk          | Totals negative display / arith mismatch |                                                 **13** / **4** |
+| NFL Edge Board assemble | Spread+total arith mismatch              |                                                              0 |
+| All Edge Board sports   | Negative `edgeMagnitude`                 |                                                              0 |
 
 ## After counts (same live fair-lines, fixed contract)
 
-| Surface | Metric | Count |
-| --- | --- | ---: |
-| NFL desk spreads painted | 12 |
-| NFL desk spreads neg sign / arith | **0 / 0** |
-| NFL desk totals neg sign / arith | **0 / 0** |
+| Surface                                | Metric                                  | Count |
+| -------------------------------------- | --------------------------------------- | ----: |
+| NFL desk spreads painted               | 12                                      |
+| NFL desk spreads neg sign / arith      | **0 / 0**                               |
+| NFL desk totals neg sign / arith       | **0 / 0**                               |
 | Fail-closed omissions (unreconcilable) | **0** (all reconcile once Book = stake) |
-| Unresolved customer-truth defects | **0** |
+| Unresolved customer-truth defects      | **0**                                   |
 
 ## Fix (shared contract — see code)
 

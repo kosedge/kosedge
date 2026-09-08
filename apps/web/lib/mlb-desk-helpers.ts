@@ -141,7 +141,8 @@ export function deskRunLineFromFairLine(
   if (Math.abs(lean) < opts.minCoverLean) return null;
   // Run-line uses ML-style probability lean (not abs(fairSpread−marketSpread)).
   const ml = reconcileMoneylineCustomerEdge({ signedProbEdge: lean });
-  if (ml.status !== "ok" || ml.advantage == null || ml.side == null) return null;
+  if (ml.status !== "ok" || ml.advantage == null || ml.side == null)
+    return null;
   const homeSide = ml.side === "Home";
   return {
     id: `${row.gameId}-run-line`,

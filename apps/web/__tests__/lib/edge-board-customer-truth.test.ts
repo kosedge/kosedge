@@ -465,11 +465,11 @@ describe("full-slate audits for every Edge Board sport", () => {
   });
 
   it("reconcileMoneylineCustomerEdge keeps Home/Away from signed prob", () => {
-    expect(
-      reconcileMoneylineCustomerEdge({ signedProbEdge: 0.04 }).side,
-    ).toBe("Home");
-    expect(
-      reconcileMoneylineCustomerEdge({ signedProbEdge: -0.04 }).side,
-    ).toBe("Away");
+    expect(reconcileMoneylineCustomerEdge({ signedProbEdge: 0.04 }).side).toBe(
+      "Home",
+    );
+    expect(reconcileMoneylineCustomerEdge({ signedProbEdge: -0.04 }).side).toBe(
+      "Away",
+    );
   });
 });

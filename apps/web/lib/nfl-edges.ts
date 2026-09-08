@@ -291,7 +291,8 @@ function normalizeEdgesTodayRow(
   const mlEdge = toNumberOrNull(raw.ml_edge_prob);
   if (mlEdge === null || Math.abs(mlEdge) < minProbEdge) return null;
   const ml = reconcileMoneylineCustomerEdge({ signedProbEdge: mlEdge });
-  if (ml.status !== "ok" || ml.advantage == null || ml.side == null) return null;
+  if (ml.status !== "ok" || ml.advantage == null || ml.side == null)
+    return null;
   const home = String(raw.home_team ?? "Home");
   const away = String(raw.away_team ?? "Away");
   const homeSide = ml.side === "Home";
