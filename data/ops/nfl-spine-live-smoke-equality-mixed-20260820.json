@@ -1,0 +1,325 @@
+{
+  "n": 24,
+  "n_equal": 24,
+  "n_mismatch": 0,
+  "positions": {
+    "QB": 8,
+    "RB": 8,
+    "WR": 8
+  },
+  "spine_version": "player-production-v3-phase3c",
+  "samples": [
+    {
+      "player_name": "K.Murray",
+      "team": "ARI",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 223.062,
+        "rush_yds": 32.179,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "M.Penix",
+      "team": "ATL",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 279.293,
+        "rush_yds": 23.287,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "L.Jackson",
+      "team": "BAL",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 230.524,
+        "rush_yds": 32.172,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "J.Allen",
+      "team": "BUF",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 316.316,
+        "rush_yds": 49.665,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "B.Young",
+      "team": "CAR",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 221.986,
+        "rush_yds": 15.14,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "C.Williams",
+      "team": "CHI",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 220.945,
+        "rush_yds": 24.665,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "J.Burrow",
+      "team": "CIN",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 204.835,
+        "rush_yds": 9.008,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "D.Prescott",
+      "team": "DAL",
+      "position": "QB",
+      "equal": true,
+      "means": {
+        "pass_yds": 255.17,
+        "rush_yds": 6.465,
+        "rec_yds": 0.0,
+        "receptions": 0.0
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "J.Conner",
+      "team": "ARI",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 81.739,
+        "rec_yds": 25.966,
+        "receptions": 3.268
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "T.Benson",
+      "team": "ARI",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 30.133,
+        "rec_yds": 8.108,
+        "receptions": 1.072
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "B.Robinson",
+      "team": "ATL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 106.87,
+        "rec_yds": 47.252,
+        "receptions": 5.692
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "T.Allgeier",
+      "team": "ATL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 39.711,
+        "rec_yds": 2.856,
+        "receptions": 0.373
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "D.Henry",
+      "team": "BAL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 105.616,
+        "rec_yds": 11.349,
+        "receptions": 1.205
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "J.Hill",
+      "team": "BAL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 38.376,
+        "rec_yds": 19.086,
+        "receptions": 1.977
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "R.Ali",
+      "team": "BAL",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 22.902,
+        "rec_yds": 3.348,
+        "receptions": 0.365
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "J.Cook",
+      "team": "BUF",
+      "position": "RB",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 120.961,
+        "rec_yds": 38.579,
+        "receptions": 3.993
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "G.Dortch",
+      "team": "ARI",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 11.706,
+        "receptions": 0.878
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "M.Harrison",
+      "team": "ARI",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 51.898,
+        "receptions": 3.888
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "Mi.Wilson",
+      "team": "ARI",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 30.22,
+        "receptions": 2.266
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "Z.Jones",
+      "team": "ARI",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 9.168,
+        "receptions": 0.687
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "Cas.Washington",
+      "team": "ATL",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 51.036,
+        "receptions": 3.769
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "D.London",
+      "team": "ATL",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 129.441,
+        "receptions": 9.558
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "K.Hodge",
+      "team": "ATL",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 18.543,
+        "receptions": 1.36
+      },
+      "spine_version": "player-production-v3-phase3c"
+    },
+    {
+      "player_name": "D.Hopkins",
+      "team": "BAL",
+      "position": "WR",
+      "equal": true,
+      "means": {
+        "pass_yds": 0.0,
+        "rush_yds": 0.0,
+        "rec_yds": 20.143,
+        "receptions": 1.376
+      },
+      "spine_version": "player-production-v3-phase3c"
+    }
+  ]
+}
