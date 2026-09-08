@@ -4,7 +4,7 @@
 **Status:** draft PR only — **do not merge** until Validation skim + CoS gate  
 **Scope:** warehouse **path #3 only** — Celery `pull_odds_snapshot` (PROD_LIVE beat meter + snapshot skip-dup / `ingest_run_id`)
 
-**Call-site SoT pointer:** `CALL_SITE_INVENTORY_2026-09-08.md` → `PROD_LIVE_CALL_SITE_INVENTORY_A0.md`  
+**Call-site SoT pointer:** `odds-api-budget/CALL_SITE_INVENTORY_2026-09-08.md` → `PROD_LIVE_CALL_SITE_INVENTORY_A0.md` (+ Alex module map)  
 (A2 implements inventory path **#3** only. Paths **#1 assemble** and **#2 fair-lines** fetch de-dupe / JSONL stubs stay with Platform — WS-02.)
 
 ## What shipped (code)
