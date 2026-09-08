@@ -28,6 +28,7 @@ import { buildMatchupContext } from "@/lib/edge-board-matchup-context";
 import { buildMatchupOverview } from "@/lib/edge-board-matchup-overview";
 import { buildStatDrop, type StatDrop } from "@/lib/edge-board-stat-drop";
 import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
+import { scrubActionEdgeMagnitude } from "@/lib/edge-board-customer-truth";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -791,16 +792,28 @@ export function flatRowsToLegacy(
       decisionEdge: number | null | undefined,
       displayEdge: number | undefined,
       market: number | undefined,
+      fair: number | undefined,
+      kind: "handicap" | "total",
     ): number | undefined => {
       if (market == null) return undefined;
+      let candidate: number | undefined;
       if (decisionEdge != null && Number.isFinite(decisionEdge)) {
         // Stale 0.0 while display edge is non-zero → prefer display (KEI vs Current).
         if (decisionEdge === 0 && displayEdge != null && displayEdge > 0) {
-          return displayEdge;
+          candidate = displayEdge;
+        } else {
+          candidate = Math.abs(decisionEdge);
         }
-        return decisionEdge;
+      } else {
+        candidate = displayEdge != null ? Math.abs(displayEdge) : undefined;
       }
-      return displayEdge;
+      // Customer-truth: Fair/Mkt/Edge must reconcile or fail closed (no painted edge).
+      return scrubActionEdgeMagnitude({
+        fair,
+        market,
+        edgeMagnitude: candidate,
+        kind,
+      });
     };
     const keiSpreadHome =
       pickField((r) => r?.keiSpreadHome) ??
@@ -921,11 +934,15 @@ export function flatRowsToLegacy(
         lineRow?.edgeMagnitude,
         edgeLineNum,
         resolveActionMarket(lineRow?.decisionMarketLine, marketLineFromCurrent),
+        lineRow?.fairLine ?? keiSpreadHome ?? undefined,
+        "handicap",
       ),
       edgeMagnitudeOU: resolveActionEdge(
         totalRow?.edgeMagnitude,
         edgeOUNum,
         resolveActionMarket(totalRow?.decisionMarketLine, marketOUFromCurrent),
+        totalRow?.fairLine ?? keiTotalNum ?? undefined,
+        "total",
       ),
       modelConfidenceScore:
         lineRow?.modelConfidenceScore ?? totalRow?.modelConfidenceScore,

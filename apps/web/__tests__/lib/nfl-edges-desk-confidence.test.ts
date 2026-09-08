@@ -79,7 +79,13 @@ describe("deskEdgesFromFairLine confidence", () => {
   it("inherits per-market decision confidence with row-level fallback", () => {
     const row = fairLine({
       spreadEdge: 0.37,
+      totalMean: 46.09,
+      handicapTotal: 46.09,
       totalEdge: 2.41,
+      stakeTotal: 48.5,
+      dkTotal: 48.5,
+      fdTotal: 48.5,
+      marketTotal: 48.5,
       decision: {
         week: 1,
         weekRegime: "early",
@@ -178,10 +184,22 @@ describe("deskEdgesFromFairLine confidence", () => {
 
   it("keeps null confidence when decision is absent", () => {
     const edges = deskEdgesFromFairLine(
-      fairLine({ spreadEdge: 0.71, decision: null }),
+      fairLine({
+        spreadHome: -3.87,
+        handicapSpreadHome: -3.87,
+        // |−3.87 − (−4.5)| = 0.63 — book-shaped half-point stake close
+        spreadEdge: 0.63,
+        stakeSpreadHome: -4.5,
+        dkSpreadHome: -4.5,
+        fdSpreadHome: -4.5,
+        marketSpreadHome: -4.5,
+        bestSpreadHome: -4.5,
+        decision: null,
+      }),
       { minProbEdge: 0.02, minLineEdge: 0.5 },
     );
     const spread = edges.find((e) => e.marketType === "spread");
+    expect(spread).toBeTruthy();
     expect(spread?.confidence).toBeNull();
   });
 });

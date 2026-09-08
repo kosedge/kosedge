@@ -31,6 +31,7 @@ import {
   pickLatestIso,
   sanitizeMarketCaptureIso,
 } from "@/lib/market-asof-stamp";
+import { scrubActionEdgeMagnitude } from "@/lib/edge-board-customer-truth";
 
 const ET = "America/New_York";
 
@@ -332,7 +333,12 @@ export function syncEdgeBoardActionsWithCurrent(
         local.spread.marketLine == null &&
         local.spread.reason === "missing_fair_or_market"
           ? undefined
-          : local.spread.edgeMagnitude;
+          : scrubActionEdgeMagnitude({
+              fair: local.spread.fairLine,
+              market: local.spread.marketLine,
+              edgeMagnitude: local.spread.edgeMagnitude,
+              kind: "handicap",
+            });
       s.decision = quarantineDecisionForCustomer(
         decisionResultToApi(local.spread),
       );
@@ -380,7 +386,12 @@ export function syncEdgeBoardActionsWithCurrent(
         local.total.marketLine == null &&
         local.total.reason === "missing_fair_or_market"
           ? undefined
-          : local.total.edgeMagnitude;
+          : scrubActionEdgeMagnitude({
+              fair: local.total.fairLine,
+              market: local.total.marketLine,
+              edgeMagnitude: local.total.edgeMagnitude,
+              kind: "total",
+            });
       t.decision = quarantineDecisionForCustomer(
         decisionResultToApi(local.total),
       );
@@ -689,7 +700,12 @@ export function fairLinesToEdgeBoardRows(
         spreadDecision?.marketLine == null &&
         spreadDecision?.reason === "missing_fair_or_market"
           ? undefined
-          : spreadDecision?.edgeMagnitude,
+          : scrubActionEdgeMagnitude({
+              fair: spreadDecision?.fairLine ?? handicapSpread,
+              market: spreadDecision?.marketLine ?? compareSpread,
+              edgeMagnitude: spreadDecision?.edgeMagnitude,
+              kind: "handicap",
+            }),
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
       modelConfidenceTierConstant: decisionBundle.modelConfidence
@@ -738,7 +754,12 @@ export function fairLinesToEdgeBoardRows(
         totalDecision?.marketLine == null &&
         totalDecision?.reason === "missing_fair_or_market"
           ? undefined
-          : totalDecision?.edgeMagnitude,
+          : scrubActionEdgeMagnitude({
+              fair: totalDecision?.fairLine ?? handicapTotal,
+              market: totalDecision?.marketLine ?? compareTotal,
+              edgeMagnitude: totalDecision?.edgeMagnitude,
+              kind: "total",
+            }),
       modelConfidenceScore: decisionBundle.modelConfidence?.score,
       modelConfidenceBand: decisionBundle.modelConfidence?.band,
       modelConfidenceTierConstant: decisionBundle.modelConfidence

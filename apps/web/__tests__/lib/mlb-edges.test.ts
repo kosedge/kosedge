@@ -26,7 +26,11 @@ describe("mlb edges desk helpers", () => {
     );
     expect(rows.map((r) => r.marketType)).toEqual(["ml", "total"]);
     expect(rows[0]?.side).toBe("Home");
+    expect(rows[0]?.edge).toBeGreaterThan(0);
+    expect(rows[0]?.edgeDisplay).toBe("+3.5pp");
     expect(rows[1]?.side).toBe("Under");
+    expect(rows[1]?.edge).toBeGreaterThan(0);
+    expect(rows[1]?.edgeDisplay).toBe("+0.6 runs");
   });
 
   it("filters by quality floor", () => {

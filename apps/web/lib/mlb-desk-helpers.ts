@@ -3,6 +3,12 @@ import {
   formatTotal,
   type MlbFairLineRow,
 } from "@/lib/mlb-fair-lines-format";
+import {
+  formatSelectedSideLineEdge,
+  formatSelectedSideProbEdge,
+  reconcileMoneylineCustomerEdge,
+  reconcileTotalCustomerEdge,
+} from "@/lib/edge-board-customer-truth";
 
 export type MlbDeskMarketType = "all" | "ml" | "total" | "run_line";
 
@@ -29,11 +35,6 @@ function toNumberOrNull(value: unknown): number | null {
     return Number.isFinite(parsed) ? parsed : null;
   }
   return null;
-}
-
-function formatEdgeProb(value: number): string {
-  const pp = value * 100;
-  return `${pp > 0 ? "+" : ""}${pp.toFixed(1)}pp`;
 }
 
 export function formatQuality(value: number | null): string {
@@ -63,51 +64,67 @@ export function deskEdgesFromTodayRow(
 
   const mlEdge = toNumberOrNull(raw.ml_edge_prob);
   if (mlEdge !== null && Math.abs(mlEdge) >= opts.minProbEdge) {
-    const homeSide = mlEdge >= 0;
-    const fairHome = toNumberOrNull(raw.fair_home_ml);
-    const fairAway =
-      fairHome === null || fairHome === 0
-        ? null
-        : fairHome > 0
-          ? -fairHome
-          : Math.abs(fairHome);
-    out.push({
-      id: `${gameId}-ml`,
-      marketType: "ml",
-      matchup,
-      detail: "Moneyline",
-      kosedgeLine: formatAmericanOdds(homeSide ? fairHome : fairAway),
-      marketLine: formatAmericanOdds(
-        homeSide
-          ? toNumberOrNull(raw.market_home_ml)
-          : toNumberOrNull(raw.market_away_ml),
-      ),
-      edge: mlEdge,
-      edgeDisplay: formatEdgeProb(mlEdge),
-      side: homeSide ? "Home" : "Away",
-      qualityScore: quality,
-      stakeFraction: stake,
-      source: "edges-today",
-    });
+    const ml = reconcileMoneylineCustomerEdge({ signedProbEdge: mlEdge });
+    if (ml.status === "ok" && ml.advantage != null && ml.side != null) {
+      const homeSide = ml.side === "Home";
+      const fairHome = toNumberOrNull(raw.fair_home_ml);
+      const fairAway =
+        fairHome === null || fairHome === 0
+          ? null
+          : fairHome > 0
+            ? -fairHome
+            : Math.abs(fairHome);
+      out.push({
+        id: `${gameId}-ml`,
+        marketType: "ml",
+        matchup,
+        detail: "Moneyline",
+        kosedgeLine: formatAmericanOdds(homeSide ? fairHome : fairAway),
+        marketLine: formatAmericanOdds(
+          homeSide
+            ? toNumberOrNull(raw.market_home_ml)
+            : toNumberOrNull(raw.market_away_ml),
+        ),
+        edge: ml.advantage,
+        edgeDisplay: formatSelectedSideProbEdge(ml.advantage),
+        side: ml.side,
+        qualityScore: quality,
+        stakeFraction: stake,
+        source: "edges-today",
+      });
+    }
   }
 
   const totalEdge = toNumberOrNull(raw.total_edge);
   if (totalEdge !== null && Math.abs(totalEdge) >= opts.minLineEdge) {
-    const over = totalEdge > 0;
-    out.push({
-      id: `${gameId}-total`,
-      marketType: "total",
-      matchup,
-      detail: "Total runs",
-      kosedgeLine: formatTotal(toNumberOrNull(raw.fair_total)),
-      marketLine: formatTotal(toNumberOrNull(raw.market_total)),
-      edge: totalEdge,
-      edgeDisplay: `${totalEdge > 0 ? "+" : ""}${totalEdge.toFixed(1)} runs`,
-      side: over ? "Over" : "Under",
-      qualityScore: quality,
-      stakeFraction: stake,
-      source: "edges-today",
+    const fairTotal = toNumberOrNull(raw.fair_total);
+    const marketTotal = toNumberOrNull(raw.market_total);
+    const reconciled = reconcileTotalCustomerEdge({
+      fairTotal,
+      marketTotal,
+      claimedEdge: totalEdge,
     });
+    if (
+      reconciled.status === "ok" &&
+      reconciled.advantage != null &&
+      reconciled.side != null &&
+      reconciled.advantage >= opts.minLineEdge
+    ) {
+      out.push({
+        id: `${gameId}-total`,
+        marketType: "total",
+        matchup,
+        detail: "Total runs",
+        kosedgeLine: formatTotal(reconciled.fairTotal),
+        marketLine: formatTotal(reconciled.marketTotal),
+        edge: reconciled.advantage,
+        edgeDisplay: formatSelectedSideLineEdge(reconciled.advantage, "runs"),
+        side: reconciled.side,
+        qualityScore: quality,
+        stakeFraction: stake,
+        source: "edges-today",
+      });
+    }
   }
 
   return out;
@@ -122,7 +139,11 @@ export function deskRunLineFromFairLine(
   if (cover === null) return null;
   const lean = cover - 0.5;
   if (Math.abs(lean) < opts.minCoverLean) return null;
-  const homeSide = lean >= 0;
+  // Run-line uses ML-style probability lean (not abs(fairSpread−marketSpread)).
+  const ml = reconcileMoneylineCustomerEdge({ signedProbEdge: lean });
+  if (ml.status !== "ok" || ml.advantage == null || ml.side == null)
+    return null;
+  const homeSide = ml.side === "Home";
   return {
     id: `${row.gameId}-run-line`,
     marketType: "run_line",
@@ -130,9 +151,10 @@ export function deskRunLineFromFairLine(
     detail: "Run line (−1.5 / +1.5)",
     kosedgeLine:
       row.fairSpreadHome !== null ? row.fairSpreadHome.toFixed(1) : "−1.5",
+    // No joined market line on this path — fail closed on arithmetic paint.
     marketLine: "—",
-    edge: lean,
-    edgeDisplay: formatEdgeProb(lean),
+    edge: ml.advantage,
+    edgeDisplay: formatSelectedSideProbEdge(ml.advantage),
     side: homeSide ? "Home −1.5" : "Away +1.5",
     qualityScore: null,
     stakeFraction: null,
