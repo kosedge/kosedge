@@ -2,7 +2,10 @@
 
 **Date:** 2026-09-08  
 **Status:** draft PR only — **do not merge** until Validation skim + CoS gate  
-**Scope:** hottest warehouse path = Celery `pull_odds_snapshot` (PROD_LIVE beat)
+**Scope:** warehouse **path #3 only** — Celery `pull_odds_snapshot` (PROD_LIVE beat meter + snapshot skip-dup / `ingest_run_id`)
+
+**Call-site SoT pointer:** `CALL_SITE_INVENTORY_2026-09-08.md` → `PROD_LIVE_CALL_SITE_INVENTORY_A0.md`  
+(A2 implements inventory path **#3** only. Paths **#1 assemble** and **#2 fair-lines** fetch de-dupe / JSONL stubs stay with Platform — WS-02.)
 
 ## What shipped (code)
 
@@ -48,7 +51,8 @@ WHERE ingest_run_id IS NOT NULL;
 
 ## Out of scope (explicit)
 
-- Assemble / fair-lines Odds fetch de-dupe (WS-02)
-- Alerts thresholds
-- HIST bulk credit spend
+- Inventory **#1 assemble** live Odds fetch de-dupe / request cache (Platform / WS-02)
+- Inventory **#2 fair-lines** live Odds fetch de-dupe / JSONL stubs (Platform / WS-02)
+- Alerts thresholds 50/70/85/95
+- HIST bulk credit spend / densify / plan upgrade
 - Merging / promoting this branch
