@@ -617,6 +617,22 @@ export async function fetchNflFairLines(params: {
    * Pass true only for rare ops paths that intentionally land training snaps.
    */
   persistOdds?: boolean;
+  /**
+   * WS-02 DUP-C / S1: Odds acquire mode for model-service fair-lines.
+   * - live (default): model may HTTP The Odds API once
+   * - skip: model never calls fetch_odds
+   * - reuse: assemble already pulled Odds; POST payload so model skips fetch_odds
+   */
+  oddsMode?: "live" | "reuse" | "skip";
+  /**
+   * Odds-API-shaped events for fair-lines market join on reuse (preferred).
+   */
+  oddsEvents?: Array<Record<string, unknown>>;
+  /**
+   * Assemble overlay rows (pullOddsRows) as reuse signal when raw events unavailable.
+   * Non-empty → model odds_mode=reuse skips fetch_odds (D1).
+   */
+  oddsPayload?: unknown[];
 }): Promise<NflFairLinesResponse> {
   const base = env.MODEL_SERVICE_URL;
   const emptyDiagnostics = {
@@ -649,6 +665,14 @@ export async function fetchNflFairLines(params: {
     return softEmpty(error);
   }
 
+  const oddsMode = params.oddsMode ?? "live";
+  const oddsEvents = Array.isArray(params.oddsEvents) ? params.oddsEvents : [];
+  const oddsPayload = Array.isArray(params.oddsPayload)
+    ? params.oddsPayload
+    : [];
+  const useReusePost =
+    oddsMode === "reuse" && (oddsEvents.length > 0 || oddsPayload.length > 0);
+
   const url = new URL(`${base.replace(/\/+$/, "")}/nfl/fair-lines`);
   url.searchParams.set("season", String(params.season));
   url.searchParams.set("days_ahead", String(params.daysAhead ?? 14));
@@ -665,18 +689,32 @@ export async function fetchNflFairLines(params: {
   // Default read-only: page-data / SSR must not write odds_snapshots on GET.
   const persistOdds = params.persistOdds === true;
   url.searchParams.set("persist", persistOdds ? "1" : "0");
+  if (!useReusePost && oddsMode !== "live") {
+    url.searchParams.set("odds_mode", oddsMode);
+  }
 
   try {
     const response = await upstreamFetch(url.toString(), {
       cache: "no-store",
       // Default board cap keeps Overview / SSR from hanging on cold Railway.
       timeoutMs: params.timeoutMs ?? UPSTREAM_TIMEOUT_MS.board,
+      method: useReusePost ? "POST" : "GET",
       headers: {
         accept: "application/json",
+        ...(useReusePost ? { "content-type": "application/json" } : {}),
         ...(env.INTERNAL_API_SECRET
           ? { "x-kosedge-secret": env.INTERNAL_API_SECRET }
           : {}),
       },
+      ...(useReusePost
+        ? {
+            body: JSON.stringify({
+              odds_mode: "reuse",
+              odds_events: oddsEvents,
+              odds_payload: oddsPayload,
+            }),
+          }
+        : {}),
     });
     if (!response.ok) {
       const statusError = `Model service returned ${response.status}.`;
