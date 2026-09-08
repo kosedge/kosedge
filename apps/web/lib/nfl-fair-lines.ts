@@ -667,7 +667,9 @@ export async function fetchNflFairLines(params: {
 
   const oddsMode = params.oddsMode ?? "live";
   const oddsEvents = Array.isArray(params.oddsEvents) ? params.oddsEvents : [];
-  const oddsPayload = Array.isArray(params.oddsPayload) ? params.oddsPayload : [];
+  const oddsPayload = Array.isArray(params.oddsPayload)
+    ? params.oddsPayload
+    : [];
   const useReusePost =
     oddsMode === "reuse" && (oddsEvents.length > 0 || oddsPayload.length > 0);
 
