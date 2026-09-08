@@ -22,12 +22,21 @@ from src.services.cfb_warehouse.leakage import (
     filter_available,
     is_available_before_kickoff,
 )
+from src.services.cfb_warehouse.predictions import (
+    ImmutablePredictionError,
+    MissingPredictionIdentityError,
+    snapshot_exists,
+    write_prediction,
+    write_predictions,
+)
 
 __all__ = [
     "ERA_TAGS",
     "ESPN_ABBR_TO_CODE",
     "ESPN_NAME_TO_CODE",
+    "ImmutablePredictionError",
     "LEAKAGE_RULE",
+    "MissingPredictionIdentityError",
     "PACKAGED_CODE_ALIASES",
     "alias_rows",
     "assert_available_before_kickoff",
@@ -37,4 +46,7 @@ __all__ = [
     "is_available_before_kickoff",
     "known_engine_codes",
     "resolve_team_code",
+    "snapshot_exists",
+    "write_prediction",
+    "write_predictions",
 ]
