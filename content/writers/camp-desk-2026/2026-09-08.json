@@ -1,0 +1,122 @@
+{
+  "desk_date": "2026-09-08",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Tuesday, Sep 8",
+    "bottom_line": "Five news clubs only after Monday’s full-32: ATL names Tua Week 1 QB1 (Penix inactive); NYG cuts Slayton; NE/SEA Monday IR (Brown OUT, Henderson still DNP, Okada still DNP); TEN Gray into concussion protocol. All Pass — no new win-totals, no minted KEI.",
+    "storylines": [
+      "Falcons: Club named Tua Tagovailoa Week 1 starter at PIT (Sep 7 AM). Stefanski: Cooper Rush backs him up; Michael Penix Jr. inactive. Closes the open QB1 that Monday’s card still had as Penix vs Tua. Pass — QB identity, not a half-win lean.",
+      "Giants: Released WR Darius Slayton Monday evening (longest-tenured Giant). OBJ / Mooney / Nabers / Fields depth already on the Sep 7 53 note — this is the cut that finishes the WR room. Pass — do not invent WR1a.",
+      "Patriots @ Seahawks (Wed): Monday IR — NE OL Ben Brown OUT (knee, did not travel); RB TreVeyon Henderson DNP ankle again; DT Christian Barmore FULL after Sunday DNP. SEA S Ty Okada still DNP hamstring; Emmanwori limited (ankle, more work Mon); Bradford upgraded FULL. Pass — availability flags only.",
+      "Titans: LB Cedric Gray in concussion protocol after weekend UTV accident (club statement Sep 7 PM). Week 1 vs NYJ availability in doubt until protocol clear. Pass — LB availability flag; do not invent a replacement starter."
+    ],
+    "what_to_watch": "Wed night SEA/NE final designations (Henderson / Okada / Emmanwori). Thu Melbourne LAR/SF. Gray protocol progress before Sunday TEN vs NYJ. No chase on LAC Under 2/5 or DEN Over 2/5.",
+    "sources": [
+      {"label": "Falcons — Tagovailoa named Week 1 starter", "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"},
+      {"label": "Falcons — Stefanski: Rush backup, Penix inactive", "href": "https://www.atlantafalcons.com/news/kevin-stefanski-details-plan-for-quarterback-position-michael-penix-tua-tagovailoa"},
+      {"label": "ESPN — Giants release Darius Slayton", "href": "https://www.espn.com/nfl/story/_/id/49862543/giants-release-wr-darius-slayton-team-longest-tenured-player"},
+      {"label": "Giants Wire — Slayton released", "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/09/07/new-york-giants-release-darius-slayton/91651717007/"},
+      {"label": "Patriots.com — Week 1 injury report Mon Sep 7", "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"},
+      {"label": "Seahawks.com — Week 1 injury report (Mon update)", "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"},
+      {"label": "Titans — Gray concussion protocol after UTV accident", "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"},
+      {"label": "ESPN — Titans Gray concussion protocol", "href": "https://www.espn.com/nfl/story/_/id/49862818/titans-cedric-gray-concussion-protocol-utv-accident"}
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "ATL",
+      "title": "Falcons camp — Sep 8",
+      "bottom_line": "Club named Tua Tagovailoa the Week 1 starter at PIT. Stefanski: Cooper Rush is the backup; Michael Penix Jr. inactive. Pass — closes the open QB1; do not mint a win-total off the naming.",
+      "key_points": [
+        "Falcons.com (Sep 7, 8:11am ET): Atlanta named Tua Tagovailoa starting quarterback for Week 1 vs Pittsburgh after the camp competition that lasted past cutdowns. Tagovailoa started the first and final preseason games.",
+        "Falcons.com / Stefanski (Sep 7, 11:30am ET): Cooper Rush backs Tagovailoa for Week 1; Michael Penix Jr. will be inactive. Stefanski declined to lock the QB plan beyond Week 1.",
+        "Monday’s Sep 7 package still had QB1 as Penix vs Tagovailoa open. This is the club naming. Pass — QB identity note only; do not invent a half-win lean or crown Week 2."
+      ],
+      "what_to_watch": "Whether Stefanski extends Tagovailoa beyond Week 1; Penix 11-on-11 ramp. Do not rewrite ATL win-total off one naming.",
+      "is_material_depth": true,
+      "sot_flag": "Tagovailoa named Week 1 QB1; Rush backup; Penix inactive. Pass on minting a win-total.",
+      "sources": [
+        {"label": "Falcons — Tagovailoa named Week 1 starter", "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"},
+        {"label": "Falcons — Stefanski: Rush backup, Penix inactive", "href": "https://www.atlantafalcons.com/news/kevin-stefanski-details-plan-for-quarterback-position-michael-penix-tua-tagovailoa"}
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants camp — Sep 8",
+      "bottom_line": "Club released WR Darius Slayton Monday (longest-tenured Giant). WR room now Nabers / Mooney / OBJ / Fields path from the Sep 7 53 note. Pass — do not invent WR1a or a new win-total.",
+      "key_points": [
+        "ESPN Jordan Raanan (Sep 7, ~5:15pm ET): Giants released WR Darius Slayton, the longest-tenured player on the roster. Vested veteran — free agent, not waivers.",
+        "Giants Wire / PFT: Survived the initial 53, cut within a week. Post-June 1 structure; Nabers trending Week 1, Mooney and Odell Beckham Jr. ahead of him on the depth chart.",
+        "Sep 7 card already had OBJ on the 53 and Austin season IR. This cut is the new material. Pass — depth flag only; do not crown a WR1a from prose."
+      ],
+      "what_to_watch": "Who slots the open WR snaps Week 1 vs DAL; Nabers clearance. Do not chase a win-total.",
+      "is_material_depth": true,
+      "sot_flag": "Slayton released. WR depth flag. Pass on inventing WR1a or a new win-total.",
+      "sources": [
+        {"label": "ESPN — Giants release Darius Slayton", "href": "https://www.espn.com/nfl/story/_/id/49862543/giants-release-wr-darius-slayton-team-longest-tenured-player"},
+        {"label": "Giants Wire — Slayton released", "href": "https://giantswire.usatoday.com/story/sports/nfl/giants/2026/09/07/new-york-giants-release-darius-slayton/91651717007/"},
+        {"label": "PFT — Giants cut Slayton", "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/giants-cut-darius-slayton"}
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots camp — Sep 8",
+      "bottom_line": "Monday IR ahead of Wed @ SEA: OL Ben Brown OUT (knee, did not travel). RB TreVeyon Henderson DNP ankle again (not ruled out). DT Christian Barmore FULL after Sunday DNP. Pass — RB/OL availability flags; do not invent Week 1 RB1.",
+      "key_points": [
+        "Patriots.com Week 1 injury report (Mon Sep 7, 8:44pm ET): OUT — OL Ben Brown (knee, DNP, did not travel). DNP — RB TreVeyon Henderson (ankle). FULL — DT Christian Barmore (knee).",
+        "Henderson has been out since the Aug 24 ankle; consecutive DNPs Sunday–Monday with Brown now officially OUT for the opener. Stevenson remains the other featured back on the 53 — do not invent RB1 from one DNP string.",
+        "Sep 7 Monday package only had Henderson still out as of Sep 5 PFT. Official Mon report + Brown OUT is the delta. Pass on a new win-total."
+      ],
+      "what_to_watch": "Final Wed designations for Henderson before kickoff at Lumen. Brown is OUT — Van Roten is the interior backup path already noted in camp coverage.",
+      "is_material_depth": true,
+      "sot_flag": "Brown OUT Week 1; Henderson still DNP ankle; Barmore FULL. Pass on inventing RB1 or a new win-total.",
+      "sources": [
+        {"label": "Patriots.com — Week 1 injury report Mon Sep 7", "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"},
+        {"label": "Seahawks.com — Mon IR notes Brown OUT / Henderson DNP", "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"}
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks camp — Sep 8",
+      "bottom_line": "Monday IR: S Ty Okada still DNP (hamstring). S Nick Emmanwori limited (ankle) — Macdonald said more work than prior. G Anthony Bradford upgraded FULL. Horton / Jones still limited. Pass — safety availability into Wed opener; do not invent S1.",
+      "key_points": [
+        "Seahawks.com Monday IR update: Okada again a non-participant (hamstring). Emmanwori limited but did more than previous practices per Macdonald. Bradford (knee) upgraded from limited Sunday to full Monday.",
+        "Only three safeties on the 53 (Okada / Love / Emmanwori); PS options named if needed. Sep 7 card already flagged Sunday Okada DNP + Emmanwori limited — Monday confirmation with Bradford upgrade is the delta into Wednesday.",
+        "Pass — availability flag only. Do not crown a replacement starter or rewrite the SEA win-total."
+      ],
+      "what_to_watch": "Wed final designations for Okada and Emmanwori before Patriots kickoff. Bradford FULL is a positive OL note, not a lean.",
+      "is_material_depth": true,
+      "sot_flag": "Okada still DNP; Emmanwori limited; Bradford FULL. Safety availability flag. Pass on inventing S1 or a new win-total.",
+      "sources": [
+        {"label": "Seahawks.com — Week 1 injury report (Mon update)", "href": "https://www.seahawks.com/news/2026-week-1-injury-report-seahawks-vs-patriots"},
+        {"label": "Patriots.com — shared Week 1 IR Mon Sep 7", "href": "https://www.patriots.com/news/week-1-injury-report-patriots-at-seahawks"}
+      ]
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans camp — Sep 8",
+      "bottom_line": "LB Cedric Gray in concussion protocol after a weekend UTV accident (club statement Mon). Week 1 vs NYJ availability in doubt until cleared. Pass — LB flag; do not invent a replacement starter or a new win-total.",
+      "key_points": [
+        "Titans.com Jim Wyatt (Sep 7, 4:28pm ET): Club statement — Gray was in a UTV accident over the weekend in Tennessee, sustained a concussion and minor injuries, now in the NFL concussion protocol.",
+        "ESPN Turron Davenport (Sep 8): Gray was the driver; source said no alcohol / not reckless driving. Must complete return-to-participation phases and independent neurological consultant clearance before contact/play.",
+        "Gray was a 16-game starter last year (club/ESPN tackle lead). Depth names in fantasy coverage (Hill / Pappoe / Barton) are speculative — do not invent LB1 from prose. Pass on a win-total."
+      ],
+      "what_to_watch": "Protocol progress and Saleh’s next injury report before Sunday vs Jets. Do not chase the board off one protocol entry.",
+      "is_material_depth": true,
+      "sot_flag": "Gray in concussion protocol (UTV). Week 1 LB availability flag. Pass on inventing LB1 or a new win-total.",
+      "sources": [
+        {"label": "Titans — Gray concussion protocol after UTV accident", "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"},
+        {"label": "ESPN — Titans Gray concussion protocol", "href": "https://www.espn.com/nfl/story/_/id/49862818/titans-cedric-gray-concussion-protocol-utv-accident"}
+      ]
+    }
+  ],
+  "preview_delta": [
+    {"team_id": "ATL", "fields": ["bottom_line"], "reason": "Tagovailoa named Week 1 QB1; Rush backup; Penix inactive. Pass on minting a win-total.", "status": "flagged"},
+    {"team_id": "NYG", "fields": ["bottom_line"], "reason": "Slayton released. WR depth flag. Pass on inventing WR1a or a new win-total.", "status": "flagged"},
+    {"team_id": "NE", "fields": ["bottom_line"], "reason": "Brown OUT Week 1; Henderson still DNP ankle; Barmore FULL. Pass on inventing RB1 or a new win-total.", "status": "flagged"},
+    {"team_id": "SEA", "fields": ["bottom_line"], "reason": "Okada still DNP; Emmanwori limited; Bradford FULL. Safety availability flag. Pass.", "status": "flagged"},
+    {"team_id": "TEN", "fields": ["bottom_line"], "reason": "Gray in concussion protocol (UTV). Week 1 LB availability flag. Pass.", "status": "flagged"}
+  ]
+}
