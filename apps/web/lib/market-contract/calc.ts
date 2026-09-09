@@ -52,15 +52,27 @@ function isFiniteNumber(value: unknown): value is number {
 /** American → implied win probability (with vig). Fail closed if invalid. */
 export function americanToImpliedProb(price: unknown): AmericanProbResult {
   if (!isFiniteNumber(price) || price === 0) {
-    return { status: "DATA_GAP", impliedProb: null, reason: "non_finite_or_zero" };
+    return {
+      status: "DATA_GAP",
+      impliedProb: null,
+      reason: "non_finite_or_zero",
+    };
   }
   if (Math.abs(price) < 100) {
-    return { status: "DATA_GAP", impliedProb: null, reason: "invalid_american_abs_lt_100" };
+    return {
+      status: "DATA_GAP",
+      impliedProb: null,
+      reason: "invalid_american_abs_lt_100",
+    };
   }
   const implied =
     price > 0 ? 100 / (price + 100) : Math.abs(price) / (Math.abs(price) + 100);
   if (!Number.isFinite(implied)) {
-    return { status: "DATA_GAP", impliedProb: null, reason: "non_finite_implied" };
+    return {
+      status: "DATA_GAP",
+      impliedProb: null,
+      reason: "non_finite_implied",
+    };
   }
   return { status: "ok", impliedProb: implied };
 }
@@ -179,7 +191,8 @@ export function removeVigThreeWay(
       homeProb: null,
       awayProb: null,
       drawProb: null,
-      reason: home.reason ?? away.reason ?? draw.reason ?? "invalid_three_way_leg",
+      reason:
+        home.reason ?? away.reason ?? draw.reason ?? "invalid_three_way_leg",
     };
   }
   const total =
@@ -395,7 +408,10 @@ export function reconcileDisplayedBookVsEdgeSot(args: {
   tolerance?: number;
 }): { status: CalcStatus; reason?: string } {
   const tol = args.tolerance ?? 0.051;
-  if (!isFiniteNumber(args.displayedBook) || !isFiniteNumber(args.edgeSotMarket)) {
+  if (
+    !isFiniteNumber(args.displayedBook) ||
+    !isFiniteNumber(args.edgeSotMarket)
+  ) {
     return { status: "DATA_GAP", reason: "missing_book_or_sot" };
   }
   if (Math.abs(args.displayedBook - args.edgeSotMarket) <= tol) {
@@ -442,7 +458,10 @@ export function refuseCrossContractMix(
   if (a === b) return { status: "ok" };
   const sep = assertPeriodSettlementSeparation(a, b);
   if (sep.reason === "distinct_period_or_settlement") {
-    return { status: "DATA_GAP", reason: "cross_contract_period_or_settlement_mix" };
+    return {
+      status: "DATA_GAP",
+      reason: "cross_contract_period_or_settlement_mix",
+    };
   }
   return { status: "ok" };
 }

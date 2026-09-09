@@ -9,17 +9,17 @@
 
 Pattern: `{sport}.{family}.{period}.{settlement}.v{n}`
 
-| market_contract_id | Customer label | Settlement |
-| --- | --- | --- |
-| `mlb.ml.fg.incl_extra_innings.v1` | Game Moneyline (includes extras) | Full game incl. extras |
-| `mlb.ml.f5.regulation_only.v1` | First Five Moneyline | First five only |
-| `mlb.run_line.fg.incl_extra_innings.v1` | Run Line | Full game (desk/research) |
-| `mlb.total.fg.incl_extra_innings.v1` | Game Total | Full game |
-| `mlb.total.f5.regulation_only.v1` | First Five Total | First five only |
-| `nhl.ml.fg.incl_ot_so.v1` | Game Moneyline — Includes OT/Shootout | Incl. OT/SO |
-| `nhl.ml.regulation.three_way.v1` | Regulation Moneyline (3-way) | Regulation only |
-| `nhl.puck_line.fg.incl_ot_so.v1` | Puck Line | Incl. OT/SO |
-| `nhl.total.fg.incl_ot_so.v1` | Game Total | Incl. OT goals |
+| market_contract_id                      | Customer label                        | Settlement                |
+| --------------------------------------- | ------------------------------------- | ------------------------- |
+| `mlb.ml.fg.incl_extra_innings.v1`       | Game Moneyline (includes extras)      | Full game incl. extras    |
+| `mlb.ml.f5.regulation_only.v1`          | First Five Moneyline                  | First five only           |
+| `mlb.run_line.fg.incl_extra_innings.v1` | Run Line                              | Full game (desk/research) |
+| `mlb.total.fg.incl_extra_innings.v1`    | Game Total                            | Full game                 |
+| `mlb.total.f5.regulation_only.v1`       | First Five Total                      | First five only           |
+| `nhl.ml.fg.incl_ot_so.v1`               | Game Moneyline — Includes OT/Shootout | Incl. OT/SO               |
+| `nhl.ml.regulation.three_way.v1`        | Regulation Moneyline (3-way)          | Regulation only           |
+| `nhl.puck_line.fg.incl_ot_so.v1`        | Puck Line                             | Incl. OT/SO               |
+| `nhl.total.fg.incl_ot_so.v1`            | Game Total                            | Incl. OT goals            |
 
 ## Enums
 
@@ -33,17 +33,17 @@ Pattern: `{sport}.{family}.{period}.{settlement}.v{n}`
 
 ## Canonical calculation contract (per market)
 
-| Contract | Calc | Edge direction | Push/void |
-| --- | --- | --- | --- |
-| MLB Game ML | two-way no-vig American → P(home); `signed = model − market` | Home if signed ≥ 0 | void/cancel if game cancelled |
-| MLB First Five ML | same helper, **separate id** | same | push if F5 tied |
-| MLB Run Line | home-signed handicap; `signed = fair − market` | Home if signed < 0 | no push at ±1.5 |
-| MLB Game Total | `signed = fair − market` | Over if signed > 0 | push on exact |
-| MLB First Five Total | same helper, **separate id** | same | push on exact |
-| NHL Game ML (OT/SO) | two-way no-vig | Home if signed ≥ 0 | void/cancel |
-| NHL Regulation ML | **three-way** only; two-way helper DATA_GAP | draw is priced | no push on draw |
-| NHL Puck Line | home-signed handicap | Home if signed < 0 | no push at ±1.5 |
-| NHL Game Total | totals helper | Over if signed > 0 | push on exact |
+| Contract             | Calc                                                         | Edge direction     | Push/void                     |
+| -------------------- | ------------------------------------------------------------ | ------------------ | ----------------------------- |
+| MLB Game ML          | two-way no-vig American → P(home); `signed = model − market` | Home if signed ≥ 0 | void/cancel if game cancelled |
+| MLB First Five ML    | same helper, **separate id**                                 | same               | push if F5 tied               |
+| MLB Run Line         | home-signed handicap; `signed = fair − market`               | Home if signed < 0 | no push at ±1.5               |
+| MLB Game Total       | `signed = fair − market`                                     | Over if signed > 0 | push on exact                 |
+| MLB First Five Total | same helper, **separate id**                                 | same               | push on exact                 |
+| NHL Game ML (OT/SO)  | two-way no-vig                                               | Home if signed ≥ 0 | void/cancel                   |
+| NHL Regulation ML    | **three-way** only; two-way helper DATA_GAP                  | draw is priced     | no push on draw               |
+| NHL Puck Line        | home-signed handicap                                         | Home if signed < 0 | no push at ±1.5               |
+| NHL Game Total       | totals helper                                                | Over if signed > 0 | push on exact                 |
 
 Cross-contract mix (FG↔F5, Game ML↔Regulation) is DATA_GAP.
 

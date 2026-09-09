@@ -255,8 +255,8 @@ describe("push/void, missing market, book vs SoT disagreement", () => {
     expect(
       getMarketContract("nhl.ml.fg.incl_ot_so.v1")?.desk_research_only,
     ).toBe(true);
-    expect(
-      getMarketContract("nhl.ml.fg.incl_ot_so.v1")?.board_initial,
-    ).toBe(false);
+    expect(getMarketContract("nhl.ml.fg.incl_ot_so.v1")?.board_initial).toBe(
+      false,
+    );
   });
 });

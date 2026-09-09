@@ -6,7 +6,8 @@
  * fail-closed helpers for contract tests and future migration.
  */
 
-export const MARKET_CONTRACT_SCHEMA_VERSION = "mlb-nhl-market-contract-v1" as const;
+export const MARKET_CONTRACT_SCHEMA_VERSION =
+  "mlb-nhl-market-contract-v1" as const;
 
 /** Versioned contract id pattern: `{sport}.{family}.{period}.{settlement}.v{n}` */
 export type MarketContractId =
@@ -22,11 +23,7 @@ export type MarketContractId =
 
 export type SportCode = "mlb" | "nhl";
 
-export type MarketFamily =
-  | "moneyline"
-  | "run_line"
-  | "puck_line"
-  | "total";
+export type MarketFamily = "moneyline" | "run_line" | "puck_line" | "total";
 
 export type PeriodScope = "full_game" | "first_five" | "regulation";
 
@@ -188,7 +185,12 @@ export const MARKET_CONTRACT_CATALOG: readonly MarketContractDefinition[] = [
     period_scope: "full_game",
     settlement_scope: "includes_overtime_shootout",
     customer_label: "Puck Line",
-    internal_legacy_keys: ["Spread", "spread", "fair_spread_home", "kei_puck_home"],
+    internal_legacy_keys: [
+      "Spread",
+      "spread",
+      "fair_spread_home",
+      "kei_puck_home",
+    ],
     orientation: "home_signed",
     price_format_primary: "fair_line_points",
     push_void: "puck_line_no_push_at_1_5",
