@@ -19,8 +19,9 @@
 
 - Branch: `cursor/mlb-nhl-market-contract-prep-ae7a`
 - Generating commit: `20694a4feb08d5558617c81faad504beff5b56c7`
-- Evidence commit: _(filled at acceptance tip)_
-- Acceptance tip: _(filled once after evidence)_
+- Evidence commit: `871f5fe03e288826832dbff1fded64781d5b526b`
+- Acceptance tip: this commit (receipt stamp only)
+- Tests: vitest `market-contract.test.ts` **14 passed** (run after generating and after prettier)
 
 ## Demonstrated non-changes
 
