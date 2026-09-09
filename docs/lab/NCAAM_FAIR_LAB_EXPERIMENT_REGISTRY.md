@@ -23,10 +23,10 @@ Test-A residual structure and large-disagreement failures against B1 contributed
 
 ## Registered / research challengers (not promoted)
 
-| Candidate ID           | Intent                                                      | Status                                                                                         |
-| ---------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `B2-PACE-NEUTRAL-v1`   | Zero HCA when `venue_status=confirmed_neutral`; else 2.8696 | Frozen preregistration + research plumbing (2026-09-09). Train-A evidence only. Not promoted. |
-| `B2-NEUTRAL-HCA-v1`    | historical alias only — do not implement under this ID      | superseded by `B2-PACE-NEUTRAL-v1`                                                             |
+| Candidate ID         | Intent                                                      | Status                                                                                        |
+| -------------------- | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `B2-PACE-NEUTRAL-v1` | Zero HCA when `venue_status=confirmed_neutral`; else 2.8696 | Frozen preregistration + research plumbing (2026-09-09). Train-A evidence only. Not promoted. |
+| `B2-NEUTRAL-HCA-v1`  | historical alias only — do not implement under this ID      | superseded by `B2-PACE-NEUTRAL-v1`                                                            |
 
 ## Product exposure lock
 

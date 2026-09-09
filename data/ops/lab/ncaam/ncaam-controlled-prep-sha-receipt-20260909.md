@@ -22,9 +22,9 @@
 ## Lane A branch
 
 - Branch: `cursor/ncaam-neutral-hca-prep-ae7a`
-- Generating commit: *(stamped after first code commit)*
-- Evidence commit: *(stamped after Train-A diagnostics)*
-- Acceptance tip: *(stamped once; no receipt chase)*
+- Generating commit: `1e1e969d350e5bfca11ace0478d548a7e59bb491`
+- Evidence commit: *(filled at acceptance tip)*
+- Acceptance tip: *(filled once after evidence)*
 
 ## Demonstrated non-changes
 

@@ -6,13 +6,13 @@
 
 ## Immutable identifiers
 
-| Field | Value |
-| --- | --- |
-| Candidate ID | `B2-PACE-NEUTRAL-v1` |
-| Method ID | `kenpom_adjem_pit_tempo_gated_hca_v1` |
-| Parent (unchanged) | `B2-PACE-v1` / `kenpom_adjem_pit_tempo_plus_game_hca_v1` |
-| Incumbent materialize | `B2-C0-v1` / `kenpom_adjem_plus_hca_v1` |
-| Research aliases | none (do not reuse “C3”; do not implement under `B2-NEUTRAL-HCA-v1`) |
+| Field                 | Value                                                                |
+| --------------------- | -------------------------------------------------------------------- |
+| Candidate ID          | `B2-PACE-NEUTRAL-v1`                                                 |
+| Method ID             | `kenpom_adjem_pit_tempo_gated_hca_v1`                                |
+| Parent (unchanged)    | `B2-PACE-v1` / `kenpom_adjem_pit_tempo_plus_game_hca_v1`             |
+| Incumbent materialize | `B2-C0-v1` / `kenpom_adjem_plus_hca_v1`                              |
+| Research aliases      | none (do not reuse “C3”; do not implement under `B2-NEUTRAL-HCA-v1`) |
 
 ## Exact population
 
@@ -27,11 +27,11 @@
 
 ## Neutral-site eligibility definition
 
-| `venue_status` | Source | Eligible for fair? | HCA |
-| --- | --- | --- | --- |
-| `confirmed_home` | SoT `neutral_site` is Python `False` after venue contract | YES | `2.8696` |
-| `confirmed_neutral` | SoT `neutral_site` is Python `True` after venue contract | YES | `0.0` |
-| `unknown` | missing join, non-boolean flag, ambiguous key, or contract conflict | **NO** | — |
+| `venue_status`      | Source                                                              | Eligible for fair? | HCA      |
+| ------------------- | ------------------------------------------------------------------- | ------------------ | -------- |
+| `confirmed_home`    | SoT `neutral_site` is Python `False` after venue contract           | YES                | `2.8696` |
+| `confirmed_neutral` | SoT `neutral_site` is Python `True` after venue contract            | YES                | `0.0`    |
+| `unknown`           | missing join, non-boolean flag, ambiguous key, or contract conflict | **NO**             | —        |
 
 Tournament ≠ auto-neutral. Designated home ≠ auto home-court when postseason venue token conflicts. Non-boolean `neutral_site` is **not** coerced.
 
@@ -69,23 +69,23 @@ Primary descriptive:
 
 ## Acceptance / rejection gates
 
-| Gate | Applies now? | Rule |
-| --- | --- | --- |
-| Train-A plumbing + tests green | YES | Required to land research branch |
-| Train-A ΔMAE vs PACE | Descriptive only | No threshold shopping |
+| Gate                              | Applies now?     | Rule                                         |
+| --------------------------------- | ---------------- | -------------------------------------------- |
+| Train-A plumbing + tests green    | YES              | Required to land research branch             |
+| Train-A ΔMAE vs PACE              | Descriptive only | No threshold shopping                        |
 | Pocket / holdout predictive gates | **NO — blocked** | Require Ryan unseal + independent validation |
-| Materialize / board / PLAY | **NO** | Ryan-only |
+| Materialize / board / PLAY        | **NO**           | Ryan-only                                    |
 
 Future pocket/holdout gates (preregistered, not run): eligible n≥100; leakage=0; no SETTLED; report paired bootstrap vs B1 and vs PACE; unknown venue rate documented. Exact numeric cutoffs for promotion remain Ryan-only after independent review.
 
 ## Missing-data behavior
 
-| Condition | Behavior |
-| --- | --- |
-| Missing/non-finite AdjEM or AdjT | ineligible / fair null |
-| PIT as-of missing or > tip | ineligible |
-| Unknown venue / non-boolean site | ineligible |
-| Missing actual_margin | excluded from scored diagnostics only |
+| Condition                        | Behavior                              |
+| -------------------------------- | ------------------------------------- |
+| Missing/non-finite AdjEM or AdjT | ineligible / fair null                |
+| PIT as-of missing or > tip       | ineligible                            |
+| Unknown venue / non-boolean site | ineligible                            |
+| Missing actual_margin            | excluded from scored diagnostics only |
 
 ## Rollback / non-promotion status
 
