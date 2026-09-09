@@ -21,12 +21,13 @@ Research alias `C3` refers to `B2-PACE-v1` in Phase 1B notes only.
 
 Test-A residual structure and large-disagreement failures against B1 contributed directly to the unit/possession-correction hypothesis. Therefore Test-A may be reported historically but **cannot** serve as untouched confirmation for `B2-PACE-v1`.
 
-## Registered future stubs (not implemented)
+## Registered / research challengers (not promoted)
 
-| Candidate ID                               | Intent                                         | Status                                            |
-| ------------------------------------------ | ---------------------------------------------- | ------------------------------------------------- |
-| `B2-NEUTRAL-HCA-v1` / `B2-PACE-NEUTRAL-v1` | Zero HCA when reliable PIT `neutral_site=true` | registered_not_implemented (Phase 2.7A hard lock) |
+| Candidate ID           | Intent                                                      | Status                                                                                         |
+| ---------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `B2-PACE-NEUTRAL-v1`   | Zero HCA when `venue_status=confirmed_neutral`; else 2.8696 | Frozen preregistration + research plumbing (2026-09-09). Train-A evidence only. Not promoted. |
+| `B2-NEUTRAL-HCA-v1`    | historical alias only — do not implement under this ID      | superseded by `B2-PACE-NEUTRAL-v1`                                                             |
 
 ## Product exposure lock
 
-No board, API, article, or UI path may consume `B2-PACE-v1` without a later explicit promotion decision. Materialize remains on incumbent only.
+No board, API, article, or UI path may consume `B2-PACE-v1` or `B2-PACE-NEUTRAL-v1` without a later explicit promotion decision. Materialize remains on incumbent only. Do not use KosEdge August 31 research ratings as published Week 2 KEI or production fair lines.
