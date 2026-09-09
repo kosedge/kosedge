@@ -12,13 +12,13 @@
 ## Lane A branch
 
 - Branch: `cursor/ncaam-neutral-hca-prep-973f`
-- Working SHA: filled at commit time
+- Working SHA (generating=evidence): 
 - Artifacts: see `ncaam-b2-pace-neutral-v1-*` under `data/ops/lab/ncaam/`
 
 ## Lane B branch
 
 - Branch: `cursor/mlb-nhl-market-contract-prep-973f`
-- Working SHA: filled at commit time
+- Working SHA (generating=evidence): 
 
 ## Demonstrated non-changes
 

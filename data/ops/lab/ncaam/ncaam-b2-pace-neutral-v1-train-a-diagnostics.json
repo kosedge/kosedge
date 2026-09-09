@@ -213,8 +213,9 @@
   },
   "candidate_id": "B2-PACE-NEUTRAL-v1",
   "diagnostics_computed_against_parent_impl_sha256": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
+  "evidence_commit": "51b76a0228abada3fa663dd862d25366a382da35",
   "generated_at": "2026-09-09T20:27:07.777645+00:00",
-  "generating_commit": "PENDING_GIT_COMMIT",
+  "generating_commit": "51b76a0228abada3fa663dd862d25366a382da35",
   "hard_stops_honored": {
     "no_holdout_unseal": true,
     "no_parent_candidate_mutation": true,
