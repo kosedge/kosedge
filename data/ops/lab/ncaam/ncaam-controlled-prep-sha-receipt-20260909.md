@@ -23,8 +23,11 @@
 
 - Branch: `cursor/ncaam-neutral-hca-prep-ae7a`
 - Generating commit: `1e1e969d350e5bfca11ace0478d548a7e59bb491`
-- Evidence commit: *(filled at acceptance tip)*
-- Acceptance tip: *(filled once after evidence)*
+- Evidence commit: `1ed63cc611969f04dfe7b949bc519f6cbbdfd1ea`
+- Acceptance tip: this commit (receipt stamp only)
+- Train-A diagnostics sha256: `bebc6630d869025efe9e4c34e8d6d58a8ef3180c17bec9678dec65e19199e1d5`
+- NEUTRAL impl sha256: `b9b4c65b1f35c2fffeee51e20ae75b85eff9923a15bec5b7f5958aa4a026350a`
+- Identity impl sha256: `4a0ea96b4bf0beed0a381752d2b47ce790b971fa84da1976678be0aa61a92f30`
 
 ## Demonstrated non-changes
 
