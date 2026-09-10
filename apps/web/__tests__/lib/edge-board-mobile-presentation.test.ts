@@ -400,6 +400,104 @@ describe("publish vocabulary + sign/side through assembled rows", () => {
   });
 });
 
+describe("MLB moneyline interp — pp not pts", () => {
+  function mlbRow(
+    partial: Partial<LegacyEdgeBoardRow> = {},
+  ): LegacyEdgeBoardRow {
+    return baseRow({
+      id: "nyy-chc",
+      teamA: { name: "New York Yankees", site: "Away" },
+      teamB: { name: "Chicago Cubs", site: "Home" },
+      awayAbbr: "NYY",
+      homeAbbr: "CHC",
+      bestLine: {
+        top: { label: "+120", juice: "—" },
+        bottom: { label: "-140", juice: "—" },
+      },
+      bestLineBook: "draftkings",
+      keiLine: {
+        top: { label: "+130", juice: "—" },
+        bottom: { label: "-150", juice: "—" },
+      },
+      tagLine: "PLAY",
+      actionLabelLine: "PLAY",
+      edgeLineFavor: "Cubs",
+      ...partial,
+    });
+  }
+
+  it("labels stored ML magnitude with formatSelectedSideProbEdge (+X.Xpp)", () => {
+    const model = composeEdgeBoardMobileCard({
+      sportKey: "mlb",
+      row: mlbRow({
+        // Board stores |modelHomeProb − marketNoVigHome| × 100
+        edgeMagnitudeLine: 3.48,
+        edgeLineNum: 3.48,
+      }),
+    });
+    expect(model.isMoneyline).toBe(true);
+    expect(model.spreadInterp?.status).toBe("PLAY");
+    expect(model.spreadInterp?.sideLabel).toBe("CUBS");
+    expect(model.spreadInterp?.magnitude).toBe("+3.5pp");
+    expect(model.spreadInterp?.magnitude).not.toMatch(/pts/);
+  });
+
+  it("LEAN threshold chrome stays in pp (1.5pp), not pts", () => {
+    const model = composeEdgeBoardMobileCard({
+      sportKey: "mlb",
+      row: mlbRow({
+        tagLine: "LEAN",
+        actionLabelLine: "LEAN",
+        edgeMagnitudeLine: 1.8,
+        edgeLineNum: 1.8,
+      }),
+    });
+    expect(model.spreadInterp?.status).toBe("LEAN");
+    expect(model.spreadInterp?.magnitude).toBe("+1.8pp");
+  });
+
+  it("assembled MLB row: ML interp is pp; totals stay pts", () => {
+    const rows = flatRowsToLegacy(
+      [
+        {
+          game: "New York Yankees @ Chicago Cubs",
+          market: "Moneyline",
+          open: "+110",
+          best: "+120",
+          openJuiceHome: "-130",
+          bestJuiceHome: "-140",
+          bookKey: "draftkings",
+          book: "DraftKings",
+          kei: "-150",
+          keiAway: "+130",
+          homeWinProb: 0.6,
+        },
+        {
+          game: "New York Yankees @ Chicago Cubs",
+          market: "Total",
+          best: "8.5",
+          bookKey: "fanduel",
+          kei: "9.7",
+          period: "fg",
+          commenceTime: "2026-09-11T23:05:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
+        },
+      ],
+      "mlb",
+    );
+    expect(rows).toHaveLength(1);
+    const model = composeEdgeBoardMobileCard({
+      sportKey: "mlb",
+      row: rows[0]!,
+    });
+    expect(rows[0]!.edgeLineNum).toBeGreaterThan(3);
+    expect(model.isMoneyline).toBe(true);
+    expect(model.spreadInterp?.magnitude).toMatch(/^\+\d+\.\dpp$/);
+    expect(model.spreadInterp?.magnitude).not.toMatch(/pts/);
+    expect(model.totalInterp?.magnitude).toBe("+1.2 pts");
+  });
+});
+
 describe("locked chrome — no banned customer copy on mobile path", () => {
   it("mobile card + presentation have no Lean-to / KEI hero / giant edge tiles", () => {
     const card = readFileSync(

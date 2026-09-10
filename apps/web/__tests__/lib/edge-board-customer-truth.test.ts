@@ -161,6 +161,16 @@ describe("edge-board customer-truth contract formulas", () => {
   it("formats selected-side line edge as positive magnitude only", () => {
     expect(formatSelectedSideLineEdge(-1.74, "pts")).toBe("+1.7 pts");
     expect(formatSelectedSideLineEdge(1.69, "pts")).toBe("+1.7 pts");
+    expect(formatSelectedSideLineEdge(1.2, "runs")).toBe("+1.2 runs");
+  });
+
+  it("formats selected-side ML edge as +X.Xpp — never pts", () => {
+    expect(formatSelectedSideProbEdge(0.015)).toBe("+1.5pp");
+    expect(formatSelectedSideProbEdge(0.03)).toBe("+3.0pp");
+    expect(formatSelectedSideProbEdge(-0.0348)).toBe("+3.5pp");
+    expect(formatSelectedSideProbEdge(0.015)).not.toMatch(/pts/);
+    // Board-stored ML magnitudes are already |Δprob| × 100.
+    expect(formatSelectedSideProbEdge(3.48 / 100)).toBe("+3.5pp");
   });
 
   it("pickEdgeMarketLine prefers stake → DK → FD → consensus → best", () => {

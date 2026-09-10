@@ -12,6 +12,7 @@
 import {
   EDGE_ARITH_TOLERANCE,
   formatSelectedSideLineEdge,
+  formatSelectedSideProbEdge,
   isFiniteNumber,
   reconcileHandicapCustomerEdge,
   reconcileTotalCustomerEdge,
@@ -593,13 +594,14 @@ export function composeEdgeBoardMobileCard(args: {
           nameFallback: row.edgeLineFavor,
         })
       : null;
-    const magnitude =
+    // MLB ML magnitude is already |modelHomeProb − marketNoVigHome| × 100 (pp).
+    // formatSelectedSideProbEdge expects a 0–1 probability advantage.
+    const storedMlPp =
       row.edgeMagnitudeLine != null || row.edgeLineNum != null
-        ? formatSelectedSideLineEdge(
-            Math.abs(row.edgeMagnitudeLine ?? row.edgeLineNum ?? 0),
-            "pts",
-          )
+        ? Math.abs(row.edgeMagnitudeLine ?? row.edgeLineNum ?? 0)
         : null;
+    const magnitude =
+      storedMlPp != null ? formatSelectedSideProbEdge(storedMlPp / 100) : null;
     if (spreadStatusMl || sideLabel || magnitude) {
       spreadInterp = {
         status: spreadStatusMl,
