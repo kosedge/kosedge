@@ -27,6 +27,8 @@ type KeiProjection = {
   modelHomeMl: number | null;
   modelAwayMl: number | null;
   modelHomeWinProb: number | null;
+  /** T.period — KEI/fair totals are FG pregame unless explicitly otherwise. */
+  period?: string | null;
 };
 
 function normalizeGameKey(game: string): string {
@@ -131,6 +133,7 @@ function registerGame(
     modelHomeMl: g.modelHomeMl ?? h.homeMl,
     modelAwayMl: g.modelAwayMl ?? h.awayMl,
     modelHomeWinProb: g.modelHomeWinProb ?? h.homeWinProb,
+    period: g.period ?? (h.total != null ? "fg" : null),
   };
   const keys =
     sportKey.toLowerCase() === "nfl"
@@ -233,7 +236,9 @@ export function ensureAllKeiGamesOnBoard(
       commenceTime: g.commenceTime,
       market: "Total",
       week: g.week ?? undefined,
-    });
+      // T only — do not invent Q.period without an Odds quote.
+      modelPeriod: g.period ?? "fg",
+    } as EdgeBoardRow);
     for (const key of keys) covered.add(key);
   }
 
@@ -291,6 +296,7 @@ export function mergeKeiIntoEdgeBoardRows(
       modelKei?: string;
       modelKeiAway?: string;
       modelHomeWinProb?: number;
+      modelPeriod?: string;
     };
 
     // Handicap → row.kei (edgeboard KEI columns + PLAY/LEAN tags)
@@ -323,6 +329,8 @@ export function mergeKeiIntoEdgeBoardRows(
       if (proj.modelTotal != null) {
         mutable.modelKei = String(Math.round(proj.modelTotal * 10) / 10);
       }
+      // T.period — do not overwrite Q.period from Odds ingest.
+      mutable.modelPeriod = proj.period ?? "fg";
     }
   }
 

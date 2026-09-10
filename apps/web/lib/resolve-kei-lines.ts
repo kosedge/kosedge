@@ -65,6 +65,7 @@ export function keiGamesFromNflFairLines(
       commenceTime:
         // Single kickoff source shared with Edge Board / Weekly Slate.
         line.startTime ?? line.gameDate ?? undefined,
+      period: "fg",
       handicapSpreadHome: handicapSpread,
       handicapTotal,
       handicapHomeMl,

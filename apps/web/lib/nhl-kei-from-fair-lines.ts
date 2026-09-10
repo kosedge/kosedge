@@ -21,6 +21,7 @@ export function keiGamesFromNhlFairLines(
       homeAbbr: line.homeAbbr,
       awayAbbr: line.awayAbbr,
       commenceTime: line.startTime ?? line.gameDate ?? undefined,
+      period: "fg",
       handicapSpreadHome: handicapSpread,
       handicapTotal,
       handicapHomeWinProb: line.homeWinProb,

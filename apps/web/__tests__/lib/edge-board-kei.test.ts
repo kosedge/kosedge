@@ -126,25 +126,18 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
   });
 
   it("seeds MLB Moneyline + Total and merges fair ML + win prob", () => {
-    const seeded = ensureAllKeiGamesOnBoard(
-      [],
-      "mlb",
-      [
-        {
-          awayTeam: "New York Yankees",
-          homeTeam: "Chicago Cubs",
-          projSpreadHome: -1.5,
-          projTotal: 9.0,
-          projHomeMl: -120,
-          projAwayMl: 100,
-          homeWinProb: 0.55,
-        },
-      ],
-    );
-    expect(seeded.map((r) => r.market).sort()).toEqual([
-      "Moneyline",
-      "Total",
+    const seeded = ensureAllKeiGamesOnBoard([], "mlb", [
+      {
+        awayTeam: "New York Yankees",
+        homeTeam: "Chicago Cubs",
+        projSpreadHome: -1.5,
+        projTotal: 9.0,
+        projHomeMl: -120,
+        projAwayMl: 100,
+        homeWinProb: 0.55,
+      },
     ]);
+    expect(seeded.map((r) => r.market).sort()).toEqual(["Moneyline", "Total"]);
 
     const merged = mergeKeiIntoEdgeBoardRows(seeded as any, "mlb", [
       {
@@ -236,6 +229,7 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     expect(ml?.modelHomeWinProb).toBe(0.52);
     expect(total?.kei).toBe("9");
     expect(total?.modelKei).toBe("8.2");
+    expect(total?.modelPeriod).toBe("fg");
   });
 
   it("identity fallback: handicap missing uses model for kei", () => {

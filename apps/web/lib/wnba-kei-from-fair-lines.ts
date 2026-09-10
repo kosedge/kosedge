@@ -6,10 +6,7 @@
  * When API exposes pre_blend_* / raw model, map those to model_*.
  */
 
-import {
-  applyHandicapIdentity,
-  type KeiLineGame,
-} from "@/lib/kei-lines";
+import { applyHandicapIdentity, type KeiLineGame } from "@/lib/kei-lines";
 import type { WnbaFairLineRow } from "@/lib/wnba-fair-lines-format";
 
 export function keiGamesFromWnbaFairLines(
@@ -26,14 +23,14 @@ export function keiGamesFromWnbaFairLines(
     const handicapTotal = line.fairTotal ?? line.totalMean;
     const modelSpread =
       raw.modelSpreadHome ?? raw.preBlendSpreadHome ?? handicapSpread;
-    const modelTotal =
-      raw.modelTotal ?? raw.preBlendTotal ?? handicapTotal;
+    const modelTotal = raw.modelTotal ?? raw.preBlendTotal ?? handicapTotal;
 
     return applyHandicapIdentity({
       id: line.gameId,
       homeTeam: line.homeTeam,
       awayTeam: line.awayTeam,
       commenceTime: line.startTime ?? line.gameDate ?? undefined,
+      period: "fg",
       handicapSpreadHome: handicapSpread,
       handicapTotal,
       projSpreadHome: handicapSpread,

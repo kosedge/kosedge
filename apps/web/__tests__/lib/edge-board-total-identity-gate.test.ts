@@ -38,9 +38,11 @@ function raysAtlInPlayTotal(overrides: Record<string, unknown> = {}) {
 describe("total identity gate (INC-2026-09-10)", () => {
   it("treats only explicit FG tokens as comparable period identity", () => {
     expect(isFullGameTotalPeriod("fg")).toBe(true);
+    expect(isFullGameTotalPeriod("fg_pregame")).toBe(true);
     expect(isFullGameTotalPeriod("full_game")).toBe(true);
     expect(isFullGameTotalPeriod("1st5")).toBe(false);
     expect(isFullGameTotalPeriod("live")).toBe(false);
+    expect(isFullGameTotalPeriod("fg_live")).toBe(false);
     expect(isFullGameTotalPeriod("totals")).toBe(false);
     expect(isFullGameTotalPeriod(undefined)).toBe(false);
     expect(isFullGameTotalPeriod("")).toBe(false);
@@ -111,6 +113,46 @@ describe("total identity gate (INC-2026-09-10)", () => {
     });
     expect(v.failClosed).toBe(false);
     expect(v.reason).toBe("ok");
+  });
+
+  it("MLB: fg_pregame is equivalent FG pregame and compares when T ≡ Q", () => {
+    const v = evaluateTotalIdentityGate({
+      sport: "mlb",
+      market: "Total",
+      period: "fg_pregame",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-11T23:05:00Z",
+      linesAsOf: "2026-09-10T16:00:00Z",
+    });
+    expect(v.failClosed).toBe(false);
+    expect(v.reason).toBe("ok");
+  });
+
+  it("MLB: stamped fg_live fails closed (in-play remaining ≠ pregame T)", () => {
+    const v = evaluateTotalIdentityGate({
+      sport: "mlb",
+      market: "Total",
+      period: "fg_live",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-10T16:20:00Z",
+      linesAsOf: "2026-09-10T18:45:00Z",
+    });
+    expect(v.failClosed).toBe(true);
+    expect(v.reason).toBe("in_play");
+    expect(v.inPlay).toBe(true);
+  });
+
+  it("T.period fg vs Q.period 1st5 is target_mismatch (no shared-event fill)", () => {
+    const v = evaluateTotalIdentityGate({
+      sport: "mlb",
+      market: "Total",
+      period: "1st5",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-11T23:05:00Z",
+      linesAsOf: "2026-09-10T16:00:00Z",
+    });
+    expect(v.failClosed).toBe(true);
+    expect(v.reason).toBe("period_not_fg");
   });
 
   it("non-FG period fails closed on any sport (no range heuristic)", () => {
@@ -263,6 +305,71 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
     expect(stamped[0]?.kei).toBe("9");
   });
 
+  it("ingest-stamped fg_live 3.5 vs FG fair 9 never paints PLAY / LEAN / edge", () => {
+    const rows = flatRowsToLegacy(
+      [
+        {
+          id: "rays-atl-ml",
+          game: RAYS_ATL,
+          market: "Moneyline",
+          best: "+110",
+          bestJuiceHome: "-130",
+          bookKey: "draftkings",
+          kei: "-140",
+          keiAway: "+120",
+          homeWinProb: 0.52,
+          commenceTime: "2026-09-10T16:20:00Z",
+          linesAsOf: "2026-09-10T18:45:00Z",
+        },
+        raysAtlInPlayTotal({
+          period: "fg_live",
+          modelPeriod: "fg",
+          oddsMarketKey: "totals",
+        }),
+      ],
+      "mlb",
+    );
+    const row = rows[0]!;
+    expect(row.bestOU.top.label).toBe("o3.5");
+    expect(row.keiOU?.top.label).toBe("o9");
+    expect(row.tagOU).toBeUndefined();
+    expect(row.playOU).toBeUndefined();
+    expect(row.edgeOUNum).toBeUndefined();
+    expect(row.edgeMagnitudeOU).toBeUndefined();
+  });
+
+  it("pregame FG restore: stamped period=fg + T.period=fg compares (tag rules as before)", () => {
+    const rows = flatRowsToLegacy(
+      [
+        {
+          id: "pre-ml",
+          game: RAYS_ATL,
+          market: "Moneyline",
+          best: "+110",
+          bestJuiceHome: "-130",
+          bookKey: "draftkings",
+          commenceTime: "2026-09-11T23:05:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
+        },
+        raysAtlInPlayTotal({
+          period: "fg",
+          modelPeriod: "fg",
+          oddsMarketKey: "totals",
+          best: "8.5",
+          kei: "9",
+          fairLine: 9,
+          commenceTime: "2026-09-11T23:05:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
+        }),
+      ],
+      "mlb",
+    );
+    const row = rows[0]!;
+    expect(row.edgeOUNum).toBeCloseTo(0.5, 5);
+    expect(row.tagOU).toBeDefined();
+    expect(row.tagOU).toBe("PASS");
+  });
+
   it("does not use a 3.5-looks-low clamp: certified FG pregame 3.5 vs 9 still compares", () => {
     const rows = flatRowsToLegacy(
       [
@@ -300,6 +407,13 @@ describe("assemble source-lock", () => {
     expect(src).toContain("applyTotalIdentityGateToRows");
     expect(src).toContain("edge-board-total-identity-gate");
     expect(src).toContain("INC-2026-09-10");
+  });
+
+  it("odds ingest stamps period from canonical identity helpers", () => {
+    const src = readFileSync(path.join(webRoot, "lib/odds-api.ts"), "utf8");
+    expect(src).toContain("stampOddsMarketPeriod");
+    expect(src).toContain("selectFeaturedFullGameMarket");
+    expect(src).not.toMatch(/totals_1st_5_innings/);
   });
 
   it("flatRowsToLegacy evaluates the gate (no JSX / no range clamp)", () => {

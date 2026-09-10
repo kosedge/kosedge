@@ -1,27 +1,36 @@
 /**
- * INC-2026-09-10 — Edge Board totals identity kill switch (short-term).
+ * INC-2026-09-10 — Edge Board totals identity kill switch.
  *
  * Smoking gun: live MLB `totals` (e.g. 3.5) compared to full-game KEI/fairTotal
- * (~9) → painted PLAY Over. Odds `totals` key has no period; commence was past.
+ * (~9) → painted PLAY Over. Odds `totals` key had no period; commence was past.
  *
- * Invariant (follow-on, not this module): T ≡ Q_target.
- * This PR only fail-closes when we cannot certify that identity:
- *   - MLB totals: missing period/identity OR event in-play
- *   - Other sports totals: missing period AND in-play (same hole, narrower)
- *   - Any sport: period present but not full-game
+ * Canonical: T ≡ Q_target BEFORE Edge = f(Model, Market).
+ *   Q = (event, sport, market, period, side, line, price, book, timestamp)
+ *   T = (event, sport, market, period, side)
  *
- * Do not clamp because a number "looks low". No JSX. Canonical Q/T schema
- * is a follow-on — do not invent period=fg from the Odds `totals` key here.
+ * #517 short-term: fail-close when identity cannot be certified.
+ * This follow-on honors stamped Odds/KEI identity:
+ *   - Certified FG pregame (`fg` / `fg_pregame` / …) + T.period ≡ Q.period → compare
+ *   - Missing / live (`fg_live`) / non-FG (`1st5`) → FAIL CLOSED
+ *   - In-play still fails even if someone stamps `fg` (live FG ≠ pregame T)
+ *
+ * Do not clamp because a number "looks low". No JSX. Do not invent period
+ * from the Odds `totals` key here — ingest stamps via Odds rules.
  */
 
-export const FULL_GAME_TOTAL_PERIODS = [
-  "fg",
-  "full",
-  "full_game",
-  "full-game",
-  "regulation",
-  "game",
-] as const;
+import {
+  isFullGameLivePeriod,
+  isFullGamePregamePeriod,
+  isOddsInPlayEvent,
+  quoteTargetEqualsModel,
+} from "@/lib/edge-board-market-identity";
+
+export { FULL_GAME_PREGAME_PERIODS as FULL_GAME_TOTAL_PERIODS } from "@/lib/edge-board-market-identity";
+export {
+  isFullGamePregamePeriod as isFullGameTotalPeriod,
+  isOddsInPlayEvent,
+  MODEL_TOTAL_PERIOD_FG,
+} from "@/lib/edge-board-market-identity";
 
 export type TotalIdentityReason =
   | "ok"
@@ -29,6 +38,7 @@ export type TotalIdentityReason =
   | "in_play"
   | "in_play_missing_period"
   | "period_not_fg"
+  | "target_mismatch"
   | "compare_ineligible";
 
 export type TotalIdentityVerdict = {
@@ -40,8 +50,14 @@ export type TotalIdentityVerdict = {
 export type TotalIdentityGateInput = {
   sport?: string | null;
   market?: string | null;
-  /** Explicit period identity (fg / 1st5 / live / …). Absent = unknown. */
+  /** Q.period — explicit period identity (fg / fg_live / 1st5 / …). Absent = unknown. */
   period?: string | null;
+  /** T.period — model/KEI target. KEI totals are FG pregame when stamped. */
+  modelPeriod?: string | null;
+  event?: string | null;
+  modelEvent?: string | null;
+  side?: string | null;
+  modelSide?: string | null;
   commenceTime?: string | null;
   /** Quote vintage (book/market last_update). */
   linesAsOf?: string | null;
@@ -54,6 +70,8 @@ export type TotalIdentityGateInput = {
 export type TotalIdentityRowFields = {
   market?: string;
   period?: string | null;
+  modelPeriod?: string | null;
+  game?: string | null;
   commenceTime?: string | null;
   linesAsOf?: string | null;
   totalCompareEligible?: boolean;
@@ -65,46 +83,6 @@ export type TotalIdentityRowFields = {
   edgeMagnitude?: unknown;
 };
 
-function parseTimeMs(raw: string | null | undefined): number | null {
-  if (raw == null || !String(raw).trim()) return null;
-  const ms = Date.parse(String(raw).trim());
-  return Number.isFinite(ms) ? ms : null;
-}
-
-function normalizePeriod(raw: string | null | undefined): string | null {
-  if (raw == null) return null;
-  const p = String(raw).trim().toLowerCase();
-  return p || null;
-}
-
-export function isFullGameTotalPeriod(
-  period: string | null | undefined,
-): boolean {
-  const p = normalizePeriod(period);
-  if (!p) return false;
-  return (FULL_GAME_TOTAL_PERIODS as readonly string[]).includes(p);
-}
-
-/**
- * Odds in-play: event has commenced as of the quote.
- * Prefer commenceTime ≤ linesAsOf. MLB may fall back to wall/Odds clock
- * when as-of is missing (never invent as-of — only a commenced check).
- */
-export function isOddsInPlayEvent(args: {
-  commenceTime?: string | null;
-  linesAsOf?: string | null;
-  nowMs?: number;
-  allowWallClockOddsRule?: boolean;
-}): boolean {
-  const commenceMs = parseTimeMs(args.commenceTime);
-  if (commenceMs == null) return false;
-  const asOfMs = parseTimeMs(args.linesAsOf);
-  if (asOfMs != null) return commenceMs <= asOfMs;
-  if (!args.allowWallClockOddsRule) return false;
-  const clock = args.nowMs ?? Date.now();
-  return commenceMs <= clock;
-}
-
 export function isEdgeBoardTotalMarket(
   market: string | null | undefined,
 ): boolean {
@@ -114,6 +92,8 @@ export function isEdgeBoardTotalMarket(
 
 /**
  * Fail-closed verdict for a totals comparison (KEI/fair vs sportsbook).
+ * Kill switch is not weakened: MLB still requires certified FG pregame
+ * identity and rejects in-play even when period says `fg`.
  */
 export function evaluateTotalIdentityGate(
   args: TotalIdentityGateInput,
@@ -141,9 +121,14 @@ export function evaluateTotalIdentityGate(
     };
   }
 
-  const period = normalizePeriod(args.period);
-  const hasPeriod = period != null;
-  const isFg = isFullGameTotalPeriod(period);
+  const period = args.period;
+  const hasPeriod = period != null && String(period).trim() !== "";
+  const isFg = isFullGamePregamePeriod(period);
+  const isLivePeriod = isFullGameLivePeriod(period);
+
+  if (isLivePeriod) {
+    return { failClosed: true, reason: "in_play", inPlay: true };
+  }
 
   if (hasPeriod && !isFg) {
     return { failClosed: true, reason: "period_not_fg", inPlay };
@@ -156,14 +141,43 @@ export function evaluateTotalIdentityGate(
     if (inPlay) {
       return { failClosed: true, reason: "in_play", inPlay: true };
     }
-    return { failClosed: false, reason: "ok", inPlay: false };
+  } else if (!hasPeriod && inPlay) {
+    // Other sports: same hole only when period is missing and the event is live.
+    return { failClosed: true, reason: "in_play_missing_period", inPlay: true };
+  } else if (inPlay && isFg) {
+    // Live remaining of a featured FG quote is not pregame T, any sport.
+    return { failClosed: true, reason: "in_play", inPlay: true };
   }
 
-  // Other sports: same hole only when period is missing and the event is live.
-  if (!hasPeriod && inPlay) {
-    return { failClosed: true, reason: "in_play_missing_period", inPlay: true };
+  // T ≡ Q_target when both periods are certified. Missing Q.period on
+  // non-MLB pregame keeps the #517 hole (compare); MLB already failed above.
+  if (
+    hasPeriod &&
+    args.modelPeriod != null &&
+    String(args.modelPeriod).trim() !== ""
+  ) {
+    const compatible = quoteTargetEqualsModel(
+      {
+        event: args.modelEvent,
+        sport: args.sport,
+        market: args.market,
+        period: args.modelPeriod,
+        side: args.modelSide,
+      },
+      {
+        event: args.event,
+        sport: args.sport,
+        market: args.market,
+        period: args.period,
+        side: args.side,
+      },
+    );
+    if (!compatible) {
+      return { failClosed: true, reason: "target_mismatch", inPlay };
+    }
   }
-  return { failClosed: false, reason: "ok", inPlay };
+
+  return { failClosed: false, reason: "ok", inPlay: false };
 }
 
 /**
@@ -184,6 +198,9 @@ export function applyTotalIdentityGateToRows<T extends TotalIdentityRowFields>(
       sport,
       market: row.market,
       period: row.period,
+      modelPeriod: row.modelPeriod,
+      event: row.game,
+      modelEvent: row.game,
       commenceTime: row.commenceTime,
       linesAsOf: row.linesAsOf,
       compareEligible: row.totalCompareEligible,

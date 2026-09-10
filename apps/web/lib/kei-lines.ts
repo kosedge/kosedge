@@ -32,6 +32,11 @@ export type KeiLineGame = {
   projAwayMl?: number | null;
   /** Handicap home win probability (0–1). Used for MLB ML edge in prob points. */
   homeWinProb?: number | null;
+  /**
+   * Model target period (T.period). KEI/fair totals are full-game pregame (`fg`).
+   * Never infer from a sportsbook line size.
+   */
+  period?: string | null;
 
   // --- Handicap = KEI product line (edgeboard) ---
   handicapSpreadHome?: number | null;
@@ -64,8 +69,7 @@ export function resolveHandicapFields(game: KeiLineGame): {
     game.projSpreadHome ??
     game.modelSpreadHome ??
     null;
-  const total =
-    game.handicapTotal ?? game.projTotal ?? game.modelTotal ?? null;
+  const total = game.handicapTotal ?? game.projTotal ?? game.modelTotal ?? null;
   const homeMl =
     game.handicapHomeMl ?? game.projHomeMl ?? game.modelHomeMl ?? null;
   const awayMl =
@@ -84,7 +88,10 @@ export function resolveHandicapFields(game: KeiLineGame): {
  */
 export function applyHandicapIdentity(game: KeiLineGame): KeiLineGame {
   const handicapSpread =
-    game.handicapSpreadHome ?? game.projSpreadHome ?? game.modelSpreadHome ?? null;
+    game.handicapSpreadHome ??
+    game.projSpreadHome ??
+    game.modelSpreadHome ??
+    null;
   const handicapTotal =
     game.handicapTotal ?? game.projTotal ?? game.modelTotal ?? null;
   const handicapHomeMl =
@@ -132,13 +139,15 @@ function cfbKeiLinesFromBundledPack(): KeiLineGame[] {
         awayAbbr: g.away,
         commenceTime: g.kickoff,
         week: g.week,
+        period: "fg",
         handicapSpreadHome: g.kei?.kei_spread_home ?? null,
         handicapTotal: g.kei?.kei_total ?? g.model_total ?? null,
         handicapHomeWinProb: g.kei?.kei_home_win_prob ?? null,
         projSpreadHome: g.kei?.kei_spread_home ?? null,
         projTotal: g.kei?.kei_total ?? g.model_total ?? null,
         homeWinProb: g.kei?.kei_home_win_prob ?? null,
-        modelSpreadHome: g.model_spread_home ?? g.kei?.model_spread_home ?? null,
+        modelSpreadHome:
+          g.model_spread_home ?? g.kei?.model_spread_home ?? null,
         modelTotal: g.model_total ?? null,
         modelHomeWinProb: g.model_home_win_prob ?? null,
       }),
