@@ -275,7 +275,11 @@ export function formatSelectedSideLineEdge(
   return `+${mag.toFixed(1)} ${unit}`;
 }
 
-/** Format selected-side ML advantage (probability points). Always non-negative. */
+/**
+ * Format selected-side ML advantage (probability points). Always non-negative.
+ * `advantage` is a 0–1 probability gap (`|modelHomeProb − marketNoVigHome|`).
+ * Board rows that already store `|Δprob| × 100` must divide by 100 first.
+ */
 export function formatSelectedSideProbEdge(advantage: number): string {
   const pp = Math.abs(advantage) * 100;
   return `+${pp.toFixed(1)}pp`;
