@@ -154,7 +154,8 @@ export default function EdgeBoardSportClient({
   const rows = state.status === "ready" ? state.data.rows : [];
   const week0Count = state.status === "ready" ? state.data.week0Count : 0;
   const week1Count = state.status === "ready" ? state.data.week1Count : 0;
-  const week2Count = state.status === "ready" ? (state.data.week2Count ?? 0) : 0;
+  const week2Count =
+    state.status === "ready" ? (state.data.week2Count ?? 0) : 0;
   const fullCount = state.status === "ready" ? state.data.fullCount : 0;
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];

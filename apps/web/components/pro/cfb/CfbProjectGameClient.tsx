@@ -91,7 +91,8 @@ function coachingLabel(
   coaching: Record<string, unknown> | undefined,
   adj: number | null,
 ): string {
-  if (!coaching) return adj != null ? `${adj >= 0 ? "+" : ""}${adj.toFixed(1)} pts` : "—";
+  if (!coaching)
+    return adj != null ? `${adj >= 0 ? "+" : ""}${adj.toFixed(1)} pts` : "—";
   const flags = [
     coaching.new_hc ? "new HC" : null,
     coaching.new_oc ? "new OC" : null,
@@ -119,12 +120,12 @@ function DriverStrip({
   showHfa: boolean;
 }) {
   if (!drivers) return null;
-  const unit = (drivers.unit_grades as Record<string, unknown> | undefined) ?? {};
+  const unit =
+    (drivers.unit_grades as Record<string, unknown> | undefined) ?? {};
   const coaching =
     (drivers.coaching as Record<string, unknown> | undefined) ??
     (layers?.coaching as Record<string, unknown> | undefined);
-  const hfa =
-    (drivers.home_field as Record<string, unknown> | undefined) ?? {};
+  const hfa = (drivers.home_field as Record<string, unknown> | undefined) ?? {};
   const qbLayer = (layers?.qb as Record<string, unknown> | undefined) ?? {};
   const qbName = str(qbLayer.starter_name);
   const qbClass = formatQbClassLabel(str(drivers.qb_class));
@@ -145,14 +146,8 @@ function DriverStrip({
         ) : null}
       </div>
       <div className="mt-2.5 flex flex-wrap gap-1.5">
-        <Chip
-          label="Off Eff"
-          value={formatIndex(num(drivers.off_eff), 0)}
-        />
-        <Chip
-          label="Def Eff"
-          value={formatIndex(num(drivers.def_eff), 0)}
-        />
+        <Chip label="Off Eff" value={formatIndex(num(drivers.off_eff), 0)} />
+        <Chip label="Def Eff" value={formatIndex(num(drivers.def_eff), 0)} />
         <Chip
           label="Roster"
           value={formatIndex(num(drivers.roster_strength), 1)}
@@ -192,7 +187,9 @@ function MarketCell({
         {primary}
       </p>
       {secondary ? (
-        <p className="mt-1 text-xs tabular-nums text-kos-text/60">{secondary}</p>
+        <p className="mt-1 text-xs tabular-nums text-kos-text/60">
+          {secondary}
+        </p>
       ) : null}
     </div>
   );
@@ -217,9 +214,7 @@ function PlayerHooksTable({
   if (!rows.length) return null;
   const qbs = rows.filter((r) => r.position === "QB");
   const skill = rows.filter((r) => r.position !== "QB");
-  const scriptLabel = scriptDetail
-    ? scriptDetail.replace(/_/g, " ")
-    : null;
+  const scriptLabel = scriptDetail ? scriptDetail.replace(/_/g, " ") : null;
   return (
     <div className="rounded-xl border border-white/10 bg-black/25 px-3 py-3">
       <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-kos-gold/85">
@@ -348,9 +343,7 @@ export default function CfbProjectGameClient({
         });
         const json = (await res.json()) as ProjectPayload;
         if (!res.ok || json.error) {
-          setError(
-            json.error || json.hint || `Request failed (${res.status})`,
-          );
+          setError(json.error || json.hint || `Request failed (${res.status})`);
           return;
         }
         setResult(json);
@@ -360,7 +353,8 @@ export default function CfbProjectGameClient({
     });
   }
 
-  const uncertainty = result?.uncertainty ?? result?.early_season_uncertainty ?? {};
+  const uncertainty =
+    result?.uncertainty ?? result?.early_season_uncertainty ?? {};
   const earlyActive = uncertainty.active === true;
   const drivers = result?.drivers as
     | {
@@ -408,11 +402,7 @@ export default function CfbProjectGameClient({
   const awayMl = formatAmericanOdds(
     americanOddsFromWinProb(result?.away_win_prob),
   );
-  const favoriteSpread = formatFavoriteSpread(
-    result?.spread_home,
-    home,
-    away,
-  );
+  const favoriteSpread = formatFavoriteSpread(result?.spread_home, home, away);
   const scoreLine = formatProjectedScoreLine(
     result?.expected_away_score,
     result?.expected_home_score,
@@ -730,8 +720,8 @@ export default function CfbProjectGameClient({
                   />
                 </div>
                 <p className="mt-2 text-[11px] leading-relaxed text-kos-text/45">
-                  Role-share allocation of team pass/rush/TD pools from
-                  expected points, script-aware (lead/trail) with residual
+                  Role-share allocation of team pass/rush/TD pools from expected
+                  points, script-aware (lead/trail) with residual
                   &quot;other&quot; and coherence soft-caps. ESPN roster names.
                   Not a full box-score engine; does not change team scores or
                   spreads.

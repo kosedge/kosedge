@@ -124,12 +124,16 @@ export function cfbFuturesByCode(): Map<string, CfbFuturesTeam> {
 }
 
 export function findCfbFutures(team: string): CfbFuturesTeam | undefined {
-  return cfbFuturesByCode().get(String(team || "").trim().toUpperCase());
+  return cfbFuturesByCode().get(
+    String(team || "")
+      .trim()
+      .toUpperCase(),
+  );
 }
 
-export function stampCfbEdgeBoardWeek<T extends { game?: string; week?: number }>(
-  rows: T[],
-): T[] {
+export function stampCfbEdgeBoardWeek<
+  T extends { game?: string; week?: number },
+>(rows: T[]): T[] {
   const byKey = new Map<string, number>();
   for (const g of KEI.games ?? []) {
     if (g.week == null) continue;
@@ -157,7 +161,9 @@ export function cfbKeiVersionStrip(): {
 } {
   return {
     kei_version: String(KEI.kei_version || "cfb-kei-v1.0-2026w0"),
-    futures_version: String(FUTURES.futures_version || "cfb-futures-v1-cfp12-2026"),
+    futures_version: String(
+      FUTURES.futures_version || "cfb-futures-v1-cfp12-2026",
+    ),
     engine_version: String(KEI.engine_version || FUTURES.engine_version || "—"),
     n_sims: Number(FUTURES.n_sims ?? 0),
     as_of: String(KEI.as_of || FUTURES.as_of || "—"),

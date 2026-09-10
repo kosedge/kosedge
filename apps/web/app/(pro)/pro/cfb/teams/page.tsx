@@ -52,8 +52,10 @@ function sortRows(rows: CfbPowerSotTeam[], key: SortKey): CfbPowerSotTeam[] {
       return ac.localeCompare(bc) || a.team.localeCompare(b.team);
     }
     if (key === "qb")
-      return (a.qb_class ?? "").localeCompare(b.qb_class ?? "") ||
-        a.team.localeCompare(b.team);
+      return (
+        (a.qb_class ?? "").localeCompare(b.qb_class ?? "") ||
+        a.team.localeCompare(b.team)
+      );
     const av =
       key === "offense"
         ? a.offense_index
@@ -75,7 +77,11 @@ function sortRows(rows: CfbPowerSotTeam[], key: SortKey): CfbPowerSotTeam[] {
   return copy;
 }
 
-function querySuffix(sort: SortKey, q: string, conf: CfbConferenceFilter): string {
+function querySuffix(
+  sort: SortKey,
+  q: string,
+  conf: CfbConferenceFilter,
+): string {
   const p = new URLSearchParams();
   if (sort !== "power") p.set("sort", sort);
   if (q) p.set("q", q);
@@ -92,12 +98,21 @@ export default async function CfbTeamsPowerPage({
     | Record<string, SearchValue>;
 }) {
   const sp =
-    searchParams && typeof (searchParams as Promise<unknown>).then === "function"
+    searchParams &&
+    typeof (searchParams as Promise<unknown>).then === "function"
       ? await (searchParams as Promise<Record<string, SearchValue>>)
       : ((searchParams as Record<string, SearchValue>) ?? {});
   const sortRaw = firstValue(sp.sort) ?? "power";
   const sort: SortKey = (
-    ["power", "offense", "defense", "uncertainty", "team", "conf", "qb"] as const
+    [
+      "power",
+      "offense",
+      "defense",
+      "uncertainty",
+      "team",
+      "conf",
+      "qb",
+    ] as const
   ).includes(sortRaw as SortKey)
     ? (sortRaw as SortKey)
     : "power";
@@ -152,7 +167,8 @@ export default async function CfbTeamsPowerPage({
         {raw.length} / 136 official FBS · showing {rows.length}
         {conf !== "all" ? ` · ${conf}` : ""} · warehouse fills {warehouse} ·
         affiliation overlay {overlayCount} · {version.power_version} · as_of{" "}
-        {version.as_of} · used_in_spread=false on research · KEI is the published line
+        {version.as_of} · used_in_spread=false on research · KEI is the
+        published line
       </p>
 
       <form className="mt-3 flex flex-wrap items-end gap-2" method="get">
@@ -166,7 +182,9 @@ export default async function CfbTeamsPowerPage({
           />
         </label>
         <input type="hidden" name="sort" value={sort} />
-        {conf !== "all" ? <input type="hidden" name="conf" value={conf} /> : null}
+        {conf !== "all" ? (
+          <input type="hidden" name="conf" value={conf} />
+        ) : null}
         <button
           type="submit"
           className="min-h-11 rounded-lg border border-white/15 px-3 text-xs font-semibold text-kos-text/80"
@@ -311,7 +329,10 @@ export default async function CfbTeamsPowerPage({
                     next: row.next,
                   });
                   const fill = row.efficiency_fill ?? "";
-                  const display = displayCfbConference(row.team, row.conference);
+                  const display = displayCfbConference(
+                    row.team,
+                    row.conference,
+                  );
                   const overlay =
                     display !== (row.conference || "—") ? display : null;
                   return (
@@ -366,7 +387,9 @@ export default async function CfbTeamsPowerPage({
                       </td>
                       <td className="px-3 py-1.5 text-[11px] text-kos-text/60">
                         {fill === "warehouse" ? (
-                          <span className="text-sky-300/90">warehouse fill</span>
+                          <span className="text-sky-300/90">
+                            warehouse fill
+                          </span>
                         ) : fill === "thin" ? (
                           <span className="text-amber-200/80">thin sample</span>
                         ) : fill === "league_avg" ? (

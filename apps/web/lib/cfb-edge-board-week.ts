@@ -4,9 +4,7 @@
  * A present finite integer ≥ 0 is kept as-is. Never coerce week=2 to week=1.
  */
 
-export function parseCfbAssembleWeek(
-  raw: string | null | undefined,
-): number {
+export function parseCfbAssembleWeek(raw: string | null | undefined): number {
   if (raw == null || String(raw).trim() === "") return 1;
   const n = Number(raw);
   if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0) return 1;
