@@ -12,11 +12,11 @@ import {
   reachableConfidenceBands,
 } from "@/lib/nfl-dead-tiers";
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
+import EdgeBoardMobileCard from "@/components/EdgeBoardMobileCard";
 import type { StatDrop } from "@/lib/edge-board-stat-drop";
 import { buildHomePreviewRows } from "@/lib/edge-board-home-preview";
 import {
   NHL_MODEL_DISAGREEMENT_LABEL,
-  NHL_PUCK_LINE_EDGE_LABEL,
   NHL_PUCK_LINE_LABEL,
   nhlEdgeBoardTagFooter,
 } from "@/lib/nhl-edge-board-display";
@@ -544,11 +544,6 @@ export default function EdgeBoard({
   // KEI = final handicap when a model exists. Markets-only sports leave cells "—".
   const keiLineHeader = "KEI";
   const keiOuHeader = "KEI";
-  const edgeLineLabel = isMlb
-    ? "ML edge"
-    : isNhl
-      ? NHL_PUCK_LINE_EDGE_LABEL
-      : "Spread edge";
   const edgeHeaderLine = isMlb ? "ML" : isNhl ? NHL_PUCK_LINE_LABEL : "Line";
   /** Model≠KEI footnote — NHL research-only, never stake PLAY chrome. */
   const modelDisagreementPrefix = isNhl
@@ -642,7 +637,7 @@ export default function EdgeBoard({
       <p className="px-1 text-xs text-gray-400">
         {marketsOnly
           ? `Markets only · ${keiCode} handicap not shipped yet · ET`
-          : `KEI handicap (${keiCode}) vs Market · Open + Current · ET`}
+          : `Kosedge Fair vs Market · Open + Current · ET`}
       </p>
       {marketsOnly ? (
         <p className="px-1 text-[11px] text-amber-200/80">
@@ -658,243 +653,14 @@ export default function EdgeBoard({
           expanded?.id === r.id && expanded.panel === "overview";
         const statsOpen = expanded?.id === r.id && expanded.panel === "stats";
         return (
-          <article
+          <EdgeBoardMobileCard
             key={r.id}
-            className="rounded-2xl border border-white/14 bg-black/45 p-3.5 sm:p-4 backdrop-blur-xl"
-          >
-            <div className="flex items-start justify-between gap-3">
-              <div className="min-w-0">
-                <h3 className="text-sm font-semibold text-gray-100 leading-snug">
-                  {r.isNeutral
-                    ? `${r.teamA.name} vs ${r.teamB.name}`
-                    : `${r.teamA.name} @ ${r.teamB.name}`}
-                </h3>
-                <div className="mt-1">
-                  <KickoffStack
-                    kickoffDate={r.kickoffDate}
-                    kickoffTime={r.kickoffTime}
-                    time={r.time}
-                  />
-                </div>
-                {r.siteLabel ? (
-                  <p className="mt-1 text-[11px] text-amber-200/90">
-                    {r.siteLabel}
-                  </p>
-                ) : (
-                  <p className="mt-1 text-[11px] text-gray-400">
-                    {r.teamA.site} / {r.teamB.site}
-                  </p>
-                )}
-                {r.linesAsOf ? (
-                  <p
-                    className={`mt-1 text-[10px] ${
-                      r.linesStale ? "text-amber-300/80" : "text-gray-500"
-                    }`}
-                  >
-                    Lines as of{" "}
-                    {new Date(r.linesAsOf).toLocaleString("en-US", {
-                      month: "2-digit",
-                      day: "2-digit",
-                      hour: "numeric",
-                      minute: "2-digit",
-                    })}
-                    {r.linesStale ? " · stale" : ""}
-                  </p>
-                ) : isNfl ? (
-                  <p className="mt-1 text-[10px] text-amber-200/80">
-                    Market as-of unavailable
-                  </p>
-                ) : null}
-              </div>
-              <div className="shrink-0 text-right">
-                {isNfl ? (
-                  <ActionDecisionCell
-                    actionLabel={r.actionLabelLine}
-                    publishTag={r.tagLine}
-                    play={r.playLine}
-                    playToNotes={r.playToLine}
-                    playToNum={r.playToLineNum}
-                    leanToNum={r.leanToLineNum}
-                    fairKei={r.fairLineKei}
-                    marketCurrent={r.marketLineCurrent}
-                    edgeMagnitude={r.edgeMagnitudeLine}
-                    confidenceBand={r.modelConfidenceBand}
-                    confidenceScore={r.modelConfidenceScore}
-                    confidenceTierConstant={r.modelConfidenceTierConstant}
-                    coverProb={r.coverProbLine}
-                    compact
-                  />
-                ) : (
-                  <TagPlayCell tag={r.tagLine} play={r.playLine} compact />
-                )}
-              </div>
-            </div>
-
-            <div className="mt-3 -mx-1 overflow-x-auto px-1">
-              <div className="grid min-w-[280px] grid-cols-2 gap-2.5">
-                <div
-                  className={`rounded-xl border border-white/10 p-2.5 ${COL_MARKET}`}
-                >
-                  <div className="text-[10px] uppercase tracking-wide text-gray-500">
-                    Current
-                  </div>
-                  <div className="mt-1.5 font-semibold text-gray-50">
-                    {r.bestLine.top.label}{" "}
-                    <span className="text-[11px] font-normal text-gray-400">
-                      ({r.bestLine.top.juice})
-                    </span>
-                  </div>
-                  <div className="mt-1.5 font-semibold text-gray-50">
-                    {r.bestOU.top.label}{" "}
-                    <span className="text-[11px] font-normal text-gray-400">
-                      ({r.bestOU.top.juice})
-                    </span>
-                  </div>
-                  <div className="mt-2 text-[10px] text-gray-500">
-                    Open {r.openLine.top.label} / {r.openOU.top.label}
-                  </div>
-                  {r.bestLineTrustLabel === "untrusted" ||
-                  r.bestLineTrustLabel === "no book" ? (
-                    <div className="mt-2 text-[10px] text-gray-400">
-                      {r.bestLineTrustLabel}
-                    </div>
-                  ) : null}
-                  {r.bestOUTrustLabel === "untrusted" ||
-                  r.bestOUTrustLabel === "no book" ? (
-                    <div className="mt-2 text-[10px] text-gray-400">
-                      O/U {r.bestOUTrustLabel}
-                    </div>
-                  ) : null}
-                  {r.bestLineBook === "untrusted" ||
-                  r.bestLineBook === "no book" ? (
-                    <div className="mt-2 text-[10px] text-gray-400">
-                      {r.bestLineBook}
-                    </div>
-                  ) : r.bestLineBook ? (
-                    <div className="mt-2">
-                      <SportsbookBadge book={r.bestLineBook} compact />
-                    </div>
-                  ) : null}
-                </div>
-                <div
-                  className={`rounded-xl border border-kos-gold/25 p-2.5 ${COL_KEI}`}
-                >
-                  <div className="text-[10px] uppercase tracking-wide text-kos-gold/80">
-                    KEI · {keiCode}
-                  </div>
-                  <div className="mt-1.5 font-semibold text-kos-gold">
-                    {(r.keiLine ?? EMPTY_PAIR).top.label}
-                  </div>
-                  <div className="mt-1.5 font-semibold text-kos-gold">
-                    {(r.keiOU ?? EMPTY_PAIR).top.label}
-                  </div>
-                  {r.modelLine || r.modelOU ? (
-                    <div className="mt-2 text-[10px] leading-snug text-gray-400">
-                      {modelDisagreementPrefix}{" "}
-                      {r.modelLine ? r.modelLine.top.label : "—"} /{" "}
-                      {r.modelOU ? r.modelOU.top.label : "—"}
-                    </div>
-                  ) : null}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-3 grid grid-cols-2 gap-3">
-              <div
-                className={`rounded-xl border border-white/10 px-3 py-2.5 ${edgeCellClass(r.tagLine)}`}
-              >
-                <div className="text-[10px] uppercase text-gray-500">
-                  {edgeLineLabel}
-                </div>
-                <EdgeSideCell
-                  edgeNum={r.edgeLineNum}
-                  favor={r.edgeLineFavor}
-                  tag={r.tagLine}
-                />
-              </div>
-              <div
-                className={`rounded-xl border border-white/10 px-3 py-2.5 ${edgeCellClass(r.tagOU)}`}
-              >
-                <div className="text-[10px] uppercase text-gray-500">
-                  Total edge
-                </div>
-                <EdgeSideCell
-                  edgeNum={r.edgeOUNum}
-                  favor={r.edgeOUFavor}
-                  tag={r.tagOU}
-                />
-                <div className="mt-1">
-                  {isNfl ? (
-                    <ActionDecisionCell
-                      actionLabel={r.actionLabelOU}
-                      publishTag={r.tagOU}
-                      play={r.playOU}
-                      playToNotes={r.playToOU}
-                      playToNum={r.playToOUNum}
-                      leanToNum={r.leanToOUNum}
-                      fairKei={r.fairOUKei}
-                      marketCurrent={r.marketOUCurrent}
-                      edgeMagnitude={r.edgeMagnitudeOU}
-                      confidenceBand={r.modelConfidenceBand}
-                      confidenceScore={r.modelConfidenceScore}
-                      confidenceTierConstant={r.modelConfidenceTierConstant}
-                      coverProb={r.coverProbOU}
-                      compact
-                      caution={r.edgeOUCaution}
-                    />
-                  ) : (
-                    <TagPlayCell
-                      tag={r.tagOU}
-                      play={r.playOU}
-                      compact
-                      caution={r.edgeOUCaution}
-                    />
-                  )}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-3 flex flex-wrap items-end gap-2">
-              <button
-                type="button"
-                onClick={() => toggleExpand(r.id, "overview")}
-                aria-expanded={overviewOpen}
-                className="min-h-11 min-w-[7.5rem] rounded-xl border border-white/12 bg-white/5 px-3 text-xs font-semibold text-kos-gold hover:border-kos-gold/40"
-              >
-                {overviewOpen ? "Overview ▴" : "Overview ▾"}
-              </button>
-              <button
-                type="button"
-                onClick={() => toggleExpand(r.id, "stats")}
-                aria-expanded={statsOpen}
-                className="min-h-11 min-w-[7.5rem] rounded-xl border border-white/12 bg-white/5 px-3 text-xs font-semibold text-kos-gold hover:border-kos-gold/40"
-              >
-                {statsOpen ? "Stats ▴" : "Stats ▾"}
-              </button>
-            </div>
-
-            {overviewOpen ? (
-              <div className="mt-3 rounded-lg border border-white/10 bg-black/60 p-3.5 text-[11px] leading-relaxed whitespace-pre-wrap text-gray-300">
-                {r.siteLabel ? (
-                  <div className="mb-2 text-[10px] font-semibold uppercase tracking-wide text-amber-200/90">
-                    {r.siteLabel}
-                  </div>
-                ) : null}
-                {r.overview ?? "No overview available."}
-              </div>
-            ) : null}
-            {statsOpen ? (
-              <div className="mt-3 rounded-lg border border-white/10 bg-black/70 p-3">
-                {r.statDrop ? (
-                  <EdgeBoardStatDrop drop={r.statDrop} />
-                ) : (
-                  <div className="text-xs text-gray-500">
-                    Stat Drop unavailable.
-                  </div>
-                )}
-              </div>
-            ) : null}
-          </article>
+            row={r}
+            sportKey={sportKey}
+            overviewOpen={overviewOpen}
+            statsOpen={statsOpen}
+            onToggle={(panel) => toggleExpand(r.id, panel)}
+          />
         );
       })}
     </div>

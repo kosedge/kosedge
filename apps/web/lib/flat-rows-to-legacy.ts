@@ -162,6 +162,9 @@ export type LegacyEdgeBoardRow = {
   linesStale?: boolean;
   teamA: TeamBlock;
   teamB: TeamBlock;
+  /** Canonical abbr from assemble / matchup context — presentation only. */
+  awayAbbr?: string;
+  homeAbbr?: string;
   openOU: PricePair;
   openLine: PricePair;
   bestLine: PricePair;
@@ -904,6 +907,8 @@ export function flatRowsToLegacy(
         keiNumber:
           keiLine.bottom.label !== "—" ? keiLine.bottom.label : undefined,
       },
+      awayAbbr: matchupCtx.awayAbbr,
+      homeAbbr: matchupCtx.homeAbbr,
       openOU,
       openLine,
       bestLine,
