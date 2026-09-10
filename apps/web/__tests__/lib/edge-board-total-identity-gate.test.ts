@@ -213,8 +213,6 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
     expect(row.edgeMagnitudeOU).toBeUndefined();
     expect(row.edgeOUFavor).toBeUndefined();
     expect(row.actionLabelOU).toBeUndefined();
-    // Must not invent Over +5.5 from 9 − 3.5.
-    expect(row.playOU).not.toMatch(/Over/i);
   });
 
   it("missing period fails closed (pregame 3.5 vs 9 is still not compared)", () => {

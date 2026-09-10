@@ -122,7 +122,9 @@ export function evaluateTotalIdentityGate(
     return { failClosed: false, reason: "ok", inPlay: false };
   }
 
-  const sport = String(args.sport ?? "").trim().toLowerCase();
+  const sport = String(args.sport ?? "")
+    .trim()
+    .toLowerCase();
   const isMlb = sport === "mlb";
   const inPlay = isOddsInPlayEvent({
     commenceTime: args.commenceTime,
@@ -173,7 +175,9 @@ export function applyTotalIdentityGateToRows<T extends TotalIdentityRowFields>(
   sportKey: string,
   nowMs?: number,
 ): T[] {
-  const sport = String(sportKey ?? "").trim().toLowerCase();
+  const sport = String(sportKey ?? "")
+    .trim()
+    .toLowerCase();
   return rows.map((row) => {
     if (!isEdgeBoardTotalMarket(row.market)) return row;
     const verdict = evaluateTotalIdentityGate({
