@@ -29,6 +29,7 @@ import { buildMatchupOverview } from "@/lib/edge-board-matchup-overview";
 import { buildStatDrop, type StatDrop } from "@/lib/edge-board-stat-drop";
 import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
 import { scrubActionEdgeMagnitude } from "@/lib/edge-board-customer-truth";
+import { evaluateTotalIdentityGate } from "@/lib/edge-board-total-identity-gate";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -75,6 +76,15 @@ export type FlatEdgeBoardRow = {
   kickoffTime?: string;
   /** ISO timestamp of latest odds capture — as-of / stale hint. */
   linesAsOf?: string;
+  /**
+   * Period identity for totals (fg / 1st5 / live / …).
+   * Absent = unknown — MLB totals fail closed (INC-2026-09-10).
+   */
+  period?: string | null;
+  /** Assemble stamp: false → do not compare this total to FG fair. */
+  totalCompareEligible?: boolean;
+  totalIdentityReason?: string;
+  totalQuoteLive?: boolean;
   kei?: string;
   /** Research Model (pre-blend) when it diverges from published KEI handicap. */
   modelKei?: string;
@@ -631,6 +641,16 @@ export function flatRowsToLegacy(
         ? 2
         : 1;
     const sportLcTotal = String(sportKey).toLowerCase();
+    const totalIdentity = evaluateTotalIdentityGate({
+      sport: sportKey,
+      market: "Total",
+      period: totalRow?.period,
+      commenceTime:
+        totalRow?.commenceTime ?? lineRow?.commenceTime ?? undefined,
+      linesAsOf: totalRow?.linesAsOf ?? lineRow?.linesAsOf ?? undefined,
+      compareEligible: totalRow?.totalCompareEligible,
+    });
+    const totalIdentityFail = totalIdentity.failClosed;
     let totalTrusted = true;
     if (sportLcTotal === "cfb") {
       totalTrusted =
@@ -660,6 +680,7 @@ export function flatRowsToLegacy(
           : true;
     }
     const signedOUEdge =
+      !totalIdentityFail &&
       hasSportsbookTotal &&
       totalTrusted &&
       bestTotalNum != null &&
@@ -714,13 +735,15 @@ export function flatRowsToLegacy(
       lineRow?.seasonType ?? totalRow?.seasonType,
       lineRow?.publishTag,
     );
-    const tagOURaw = edgeToTag(
-      edgeOUNum,
-      "total",
-      sportKey,
-      totalRow?.seasonType ?? lineRow?.seasonType,
-      totalRow?.publishTag,
-    );
+    const tagOURaw = totalIdentityFail
+      ? undefined
+      : edgeToTag(
+          edgeOUNum,
+          "total",
+          sportKey,
+          totalRow?.seasonType ?? lineRow?.seasonType,
+          totalRow?.publishTag,
+        );
     // CFB Week 0 is the close tape — finals stay visible, never PLAY/LEAN.
     // NBA preseason / untrusted Best → PASS.
     // WNBA untrusted Best / Aug-1 leftovers → PASS.
@@ -756,7 +779,7 @@ export function flatRowsToLegacy(
         : undefined
       : tagOURaw;
     const playLineOut = forcePass ? undefined : playLine;
-    const playOUOut = forcePass ? undefined : playOU;
+    const playOUOut = forcePass || totalIdentityFail ? undefined : playOU;
 
     const src = (lineRow ?? totalRow) as FlatEdgeBoardRow | undefined;
     const srcSpread = entry.spread as FlatEdgeBoardRow | undefined;
@@ -934,7 +957,7 @@ export function flatRowsToLegacy(
       tagLine,
       tagOU,
       actionLabelLine: lineRow?.actionLabel,
-      actionLabelOU: totalRow?.actionLabel,
+      actionLabelOU: totalIdentityFail ? undefined : totalRow?.actionLabel,
       edgeMagnitudeLine: resolveActionEdge(
         lineRow?.edgeMagnitude,
         edgeLineNum,
@@ -942,13 +965,18 @@ export function flatRowsToLegacy(
         lineRow?.fairLine ?? keiSpreadHome ?? undefined,
         "handicap",
       ),
-      edgeMagnitudeOU: resolveActionEdge(
-        totalRow?.edgeMagnitude,
-        edgeOUNum,
-        resolveActionMarket(totalRow?.decisionMarketLine, marketOUFromCurrent),
-        totalRow?.fairLine ?? keiTotalNum ?? undefined,
-        "total",
-      ),
+      edgeMagnitudeOU: totalIdentityFail
+        ? undefined
+        : resolveActionEdge(
+            totalRow?.edgeMagnitude,
+            edgeOUNum,
+            resolveActionMarket(
+              totalRow?.decisionMarketLine,
+              marketOUFromCurrent,
+            ),
+            totalRow?.fairLine ?? keiTotalNum ?? undefined,
+            "total",
+          ),
       modelConfidenceScore:
         lineRow?.modelConfidenceScore ?? totalRow?.modelConfidenceScore,
       modelConfidenceBand:

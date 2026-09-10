@@ -101,13 +101,15 @@ describe("WS-02 DUP-C NFL Week1 Odds budget (S1+S2)", () => {
   it("CFB assemble path untouched (no NFL oddsMode reuse wiring)", () => {
     const src = readApp("lib/build-edge-board-rows.ts");
     // CFB still uses generic pullOddsRows path — oddsMode only inside assembleNfl.
-    expect(src).toContain(
-      'if (sport === "cfb") return applyCfbTrustedMarketToRows',
+    expect(src).toContain("applyCfbTrustedMarketToRows(merged)");
+    expect(src).toMatch(
+      /if \(sport === "cfb"\) \{\s*rows = applyCfbTrustedMarketToRows\(merged\);/,
     );
     const nflBlock = src.slice(
       src.indexOf("async function assembleNflEdgeBoardRows"),
       src.indexOf("export async function loadAssembledEdgeBoardRows"),
     );
     expect(nflBlock).toContain('oddsMode: "reuse"');
+    expect(nflBlock).not.toContain("applyCfbTrustedMarketToRows");
   });
 });

@@ -19,6 +19,7 @@ import {
   mergeKeiIntoEdgeBoardRows,
 } from "@/lib/edge-board-kei";
 import { loadEdgeBoardFallback } from "@/lib/edge-board-fallback";
+import { applyTotalIdentityGateToRows } from "@/lib/edge-board-total-identity-gate";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
 import {
@@ -253,27 +254,30 @@ export async function assembleEdgeBoardRows(
   options?: AssembleEdgeBoardOptions,
 ): Promise<EdgeBoardRow[]> {
   const sport = sportKey.toLowerCase();
+  let rows: EdgeBoardRow[];
   if (sport === "nfl") {
-    return assembleNflEdgeBoardRows(oddsRows, options);
+    rows = await assembleNflEdgeBoardRows(oddsRows, options);
+  } else {
+    const odds = withFallback(sport, oddsRows);
+    const keiGames = await resolveKeiGames(sport);
+    const seeded = ensureAllKeiGamesOnBoard(odds, sport, keiGames);
+    const merged = mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);
+    if (sport === "cfb") {
+      rows = applyCfbTrustedMarketToRows(merged);
+    } else if (sport === "nba") {
+      rows = applyNbaTrustedMarketToRows(merged, {
+        preseason: isNbaPreseason(),
+      });
+    } else if (sport === "wnba") {
+      rows = applyWnbaTrustedMarketToRows(merged);
+    } else if (sport === "nhl") {
+      rows = applyNhlTrustedMarketToRows(merged, {
+        preseason: isNhlPreseason(),
+      });
+    } else {
+      rows = merged;
+    }
   }
-
-  const odds = withFallback(sport, oddsRows);
-  const keiGames = await resolveKeiGames(sport);
-  const seeded = ensureAllKeiGamesOnBoard(odds, sport, keiGames);
-  const merged = mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);
-  if (sport === "cfb") return applyCfbTrustedMarketToRows(merged);
-  if (sport === "nba") {
-    return applyNbaTrustedMarketToRows(merged, {
-      preseason: isNbaPreseason(),
-    });
-  }
-  if (sport === "wnba") {
-    return applyWnbaTrustedMarketToRows(merged);
-  }
-  if (sport === "nhl") {
-    return applyNhlTrustedMarketToRows(merged, {
-      preseason: isNhlPreseason(),
-    });
-  }
-  return merged;
+  // INC-2026-09-10: totals without period identity / in-play quotes fail closed.
+  return applyTotalIdentityGateToRows(rows, sport);
 }

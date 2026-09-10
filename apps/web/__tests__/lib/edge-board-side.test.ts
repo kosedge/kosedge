@@ -193,6 +193,10 @@ describe("edge board side + play action", () => {
           best: "8.5",
           bookKey: "fanduel",
           kei: "9.0",
+          // Certified FG + not commenced — identity gate allows compare.
+          period: "fg",
+          commenceTime: "2026-09-11T23:05:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
         },
       ],
       "mlb",
@@ -230,6 +234,9 @@ describe("edge board side + play action", () => {
             best: "8.5",
             bookKey: "fanduel",
             kei: "9.7", // 1.2 run pts → LEAN under legacy total cut
+            period: "fg",
+            commenceTime: "2026-09-11T23:05:00Z",
+            linesAsOf: "2026-09-10T16:00:00Z",
           },
         ],
         "mlb",
