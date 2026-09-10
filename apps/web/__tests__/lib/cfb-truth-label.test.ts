@@ -68,18 +68,22 @@ describe("cfb truth-label wiring", () => {
     );
 
     expect(assemble).toContain("stampCfbEdgeBoardWeek");
-    expect(assemble).toMatch(
+    expect(assemble).toContain("parseCfbAssembleWeek");
+    expect(assemble).toContain("filterCfbEdgeBoardRowsByWeek");
+    expect(assemble).not.toMatch(
       /week === ["']0["'] \? 0 : 1|get\("week"\) === "0" \? 0 : 1/,
     );
 
     expect(page).toContain("EdgeBoardSportClient");
-    expect(page).toMatch(/cfbWeekRaw === "0" \? 0 : 1/);
+    expect(page).toContain("parseCfbAssembleWeek");
+    expect(page).not.toMatch(/cfbWeekRaw === "0" \? 0 : 1/);
     expect(page).not.toContain("loadAssembledEdgeBoardRows");
 
     expect(client).toContain("Research board");
     expect(client).toContain("never invented from edge");
     expect(client).toContain("/edge-board/cfb?week=0");
     expect(client).toContain("/edge-board/cfb?week=1");
+    expect(client).toContain("/edge-board/cfb?week=2");
     expect(client).toContain("week0Count");
     expect(client).toContain("waiting on Odds API");
   });

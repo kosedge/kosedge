@@ -9,7 +9,8 @@
 export type EdgeBoardAssembleHrefInput = {
   sportKey: string;
   slate?: "week1" | "full";
-  cfbWeek?: 0 | 1;
+  /** CFB assemble week. Integer ≥ 0; default 1. Never coerce 2 → 1. */
+  cfbWeek?: number;
 };
 
 /** Relative assemble href matching EdgeBoardSportClient fetch. */
@@ -20,7 +21,14 @@ export function edgeBoardAssembleHref(
   const qs = new URLSearchParams();
   if (sport === "nfl")
     qs.set("slate", input.slate === "full" ? "full" : "week1");
-  if (sport === "cfb") qs.set("week", String(input.cfbWeek === 0 ? 0 : 1));
+  if (sport === "cfb") {
+    const week = input.cfbWeek;
+    const honest =
+      typeof week === "number" && Number.isFinite(week) && week >= 0
+        ? Math.trunc(week)
+        : 1;
+    qs.set("week", String(honest));
+  }
   const q = qs.toString();
   return `/api/edge-board/${sport}/assemble${q ? `?${q}` : ""}`;
 }

@@ -85,7 +85,9 @@ describe("cfb official slate in-house SoT", () => {
     expect(parseOfficialSlateWeek("")).toBe(1);
     expect(parseOfficialSlateWeek("1")).toBe(1);
     expect(parseOfficialSlateWeek("0")).toBe(0);
-    expect(parseOfficialSlateWeek("9")).toBe(1);
+    expect(parseOfficialSlateWeek("2")).toBe(2);
+    expect(parseOfficialSlateWeek("9")).toBe(9);
+    expect(parseOfficialSlateWeek("foo")).toBe(1);
     expect(officialSlateWeekForMatchup("TCU", "UNC")).toBe(0);
     const unc = officialSlateGameForMatchup("TCU", "UNC");
     expect(unc?.neutral_site).toBe(true);

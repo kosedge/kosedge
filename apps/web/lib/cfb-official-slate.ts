@@ -140,13 +140,17 @@ export function officialSlateWeeks(): number[] {
   return weeks.length ? weeks : [0, 1];
 }
 
-/** Live desk defaults to Week 1 when present; Week 0 stays via ?week=0. */
+/**
+ * Live desk defaults to Week 1 when missing/invalid.
+ * A present integer ≥ 0 is kept (empty week board is honest — never coerce 2→1).
+ */
 export function parseOfficialSlateWeek(raw?: string): number {
   const weeks = officialSlateWeeks();
   const fallback = weeks.includes(1) ? 1 : (weeks[0] ?? 0);
   if (raw == null || String(raw).trim() === "") return fallback;
   const n = Number(raw);
-  return weeks.includes(n) ? n : fallback;
+  if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0) return fallback;
+  return n;
 }
 
 /** Resolve an official slate row for a matchup — never invent. */

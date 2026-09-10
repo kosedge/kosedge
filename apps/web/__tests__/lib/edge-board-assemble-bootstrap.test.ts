@@ -24,6 +24,9 @@ describe("Edge Board assemble href + early bootstrap (#12 GO-1)", () => {
     expect(edgeBoardAssembleHref({ sportKey: "cfb", cfbWeek: 0 })).toBe(
       "/api/edge-board/cfb/assemble?week=0",
     );
+    expect(edgeBoardAssembleHref({ sportKey: "cfb", cfbWeek: 2 })).toBe(
+      "/api/edge-board/cfb/assemble?week=2",
+    );
     expect(edgeBoardAssembleHref({ sportKey: "mlb" })).toBe(
       "/api/edge-board/mlb/assemble",
     );
