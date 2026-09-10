@@ -14,9 +14,9 @@ export function parseCfbAssembleWeek(
 }
 
 /** Rows stamped for this week only. Empty is honest — never fall through to week 1. */
-export function filterCfbEdgeBoardRowsByWeek<T extends { week?: number }>(
-  rows: T[],
+export function filterCfbEdgeBoardRowsByWeek<T>(
+  rows: readonly T[],
   week: number,
 ): T[] {
-  return rows.filter((r) => r.week === week);
+  return rows.filter((r) => (r as { week?: unknown }).week === week);
 }
