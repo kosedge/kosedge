@@ -34,6 +34,7 @@ export function keiGamesFromNbaFairLines(
       homeTeam: line.homeTeam,
       awayTeam: line.awayTeam,
       commenceTime: line.startTime ?? line.gameDate ?? undefined,
+      period: "fg",
       handicapSpreadHome: handicapSpread,
       handicapTotal,
       projSpreadHome: handicapSpread,

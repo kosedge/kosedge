@@ -48,6 +48,7 @@ describe("keiGamesFromMlbFairLines", () => {
     expect(games[0]?.modelHomeMl).toBe(-120);
     expect(games[0]?.modelHomeWinProb).toBe(0.55);
     expect(games[0]?.modelTotal).toBe(8.5);
+    expect(games[0]?.period).toBe("fg");
   });
 
   it("falls back to totalMean when fairTotal missing", () => {

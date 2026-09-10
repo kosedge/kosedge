@@ -236,6 +236,7 @@ describe("mergeKeiIntoEdgeBoardRows", () => {
     expect(ml?.modelHomeWinProb).toBe(0.52);
     expect(total?.kei).toBe("9");
     expect(total?.modelKei).toBe("8.2");
+    expect(total?.modelPeriod).toBe("fg");
   });
 
   it("identity fallback: handicap missing uses model for kei", () => {

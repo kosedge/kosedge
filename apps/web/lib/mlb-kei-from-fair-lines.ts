@@ -36,6 +36,8 @@ export function keiGamesFromMlbFairLines(
       homeTeam: line.homeTeam,
       awayTeam: line.awayTeam,
       commenceTime: line.startTime ?? line.gameDate ?? undefined,
+      // T.period — fair_fg_* / handicap totals are full-game pregame.
+      period: "fg",
       // Handicap = KEI (edgeboard)
       handicapSpreadHome: handicapSpread,
       handicapTotal,

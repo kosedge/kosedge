@@ -593,3 +593,216 @@ describe("odds-api edge board markets", () => {
     expect(best?.book).toBe("fanduel");
   });
 });
+
+describe("Odds ingest period identity (INC-2026-09-10 follow-on)", () => {
+  it("stamps fg on pregame featured MLB totals (as-of before commence)", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "pregame-fg",
+          sport_key: "baseball_mlb",
+          commence_time: "2026-09-11T23:05:00Z",
+          away_team: "Tampa Bay Rays",
+          home_team: "Atlanta Braves",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-10T16:00:00Z",
+              markets: [
+                {
+                  key: "h2h",
+                  last_update: "2026-09-10T16:00:00Z",
+                  outcomes: [
+                    { name: "Tampa Bay Rays", price: 110 },
+                    { name: "Atlanta Braves", price: -130 },
+                  ],
+                },
+                {
+                  key: "totals",
+                  last_update: "2026-09-10T16:00:00Z",
+                  outcomes: [
+                    { name: "Over", point: 8.5, price: -110 },
+                    { name: "Under", point: 8.5, price: -110 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const rows = await fetchEdgeBoard("mlb", "fake-key");
+    const total = rows.find((row) => row.market === "Total") as {
+      period?: string;
+      oddsMarketKey?: string;
+      best?: string;
+    };
+    expect(total?.best).toBe("8.5");
+    expect(total?.period).toBe("fg");
+    expect(total?.oddsMarketKey).toBe("totals");
+  });
+
+  it("stamps fg_live on in-play featured totals (Rays@ATL remaining 3.5)", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "rays-atl-live",
+          sport_key: "baseball_mlb",
+          commence_time: "2026-09-10T16:20:00Z",
+          away_team: "Tampa Bay Rays",
+          home_team: "Atlanta Braves",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-10T18:45:00Z",
+              markets: [
+                {
+                  key: "totals",
+                  last_update: "2026-09-10T18:45:00Z",
+                  outcomes: [
+                    { name: "Over", point: 3.5, price: -115 },
+                    { name: "Under", point: 3.5, price: -105 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const rows = await fetchEdgeBoard("mlb", "fake-key");
+    const total = rows.find((row) => row.market === "Total") as {
+      period?: string;
+      best?: string;
+    };
+    expect(total?.best).toBe("3.5");
+    expect(total?.period).toBe("fg_live");
+  });
+
+  it("never fills the FG total slot from totals_1st_5_innings alone", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "f5-only",
+          sport_key: "baseball_mlb",
+          commence_time: "2026-09-11T23:05:00Z",
+          away_team: "Tampa Bay Rays",
+          home_team: "Atlanta Braves",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-10T16:00:00Z",
+              markets: [
+                {
+                  key: "totals_1st_5_innings",
+                  last_update: "2026-09-10T16:00:00Z",
+                  outcomes: [
+                    { name: "Over", point: 3.5, price: -110 },
+                    { name: "Under", point: 3.5, price: -110 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const rows = await fetchEdgeBoard("mlb", "fake-key");
+    const total = rows.find((row) => row.market === "Total") as {
+      period?: string;
+      best?: string;
+      oddsMarketKey?: string;
+    };
+    expect(total?.best).toBeUndefined();
+    expect(total?.period).toBeUndefined();
+    expect(total?.oddsMarketKey).toBeUndefined();
+  });
+
+  it("keeps featured FG totals when F5 shares the event id", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "both-keys",
+          sport_key: "baseball_mlb",
+          commence_time: "2026-09-11T23:05:00Z",
+          away_team: "Tampa Bay Rays",
+          home_team: "Atlanta Braves",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-10T16:00:00Z",
+              markets: [
+                {
+                  key: "totals_1st_5_innings",
+                  last_update: "2026-09-10T16:00:00Z",
+                  outcomes: [
+                    { name: "Over", point: 3.5, price: -110 },
+                    { name: "Under", point: 3.5, price: -110 },
+                  ],
+                },
+                {
+                  key: "totals",
+                  last_update: "2026-09-10T16:00:00Z",
+                  outcomes: [
+                    { name: "Over", point: 8.5, price: -110 },
+                    { name: "Under", point: 8.5, price: -110 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const rows = await fetchEdgeBoard("mlb", "fake-key");
+    const total = rows.find((row) => row.market === "Total") as {
+      period?: string;
+      best?: string;
+      oddsMarketKey?: string;
+    };
+    expect(total?.best).toBe("8.5");
+    expect(total?.period).toBe("fg");
+    expect(total?.oddsMarketKey).toBe("totals");
+  });
+
+  it("Compare Odds FG total ignores F5 key on the same event", async () => {
+    vi.spyOn(globalThis, "fetch").mockResolvedValue(
+      jsonResponse([
+        {
+          id: "cmp-f5",
+          sport_key: "baseball_mlb",
+          commence_time: "2026-09-11T23:05:00Z",
+          away_team: "Tampa Bay Rays",
+          home_team: "Atlanta Braves",
+          bookmakers: [
+            {
+              key: "draftkings",
+              title: "DraftKings",
+              last_update: "2026-09-10T16:00:00Z",
+              markets: [
+                {
+                  key: "totals_1st_5_innings",
+                  outcomes: [
+                    { name: "Over", point: 3.5, price: -110 },
+                    { name: "Under", point: 3.5, price: -110 },
+                  ],
+                },
+              ],
+            },
+          ],
+        },
+      ]),
+    );
+
+    const result = await fetchOddsComparison("mlb", "fake-key");
+    expect(result.rows[0]?.total?.draftkings).toBeUndefined();
+  });
+});

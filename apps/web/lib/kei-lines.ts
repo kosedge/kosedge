@@ -32,6 +32,11 @@ export type KeiLineGame = {
   projAwayMl?: number | null;
   /** Handicap home win probability (0–1). Used for MLB ML edge in prob points. */
   homeWinProb?: number | null;
+  /**
+   * Model target period (T.period). KEI/fair totals are full-game pregame (`fg`).
+   * Never infer from a sportsbook line size.
+   */
+  period?: string | null;
 
   // --- Handicap = KEI product line (edgeboard) ---
   handicapSpreadHome?: number | null;
@@ -132,6 +137,7 @@ function cfbKeiLinesFromBundledPack(): KeiLineGame[] {
         awayAbbr: g.away,
         commenceTime: g.kickoff,
         week: g.week,
+        period: "fg",
         handicapSpreadHome: g.kei?.kei_spread_home ?? null,
         handicapTotal: g.kei?.kei_total ?? g.model_total ?? null,
         handicapHomeWinProb: g.kei?.kei_home_win_prob ?? null,

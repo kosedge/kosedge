@@ -81,6 +81,10 @@ export type FlatEdgeBoardRow = {
    * Absent = unknown — MLB totals fail closed (INC-2026-09-10).
    */
   period?: string | null;
+  /** T.period — model/KEI target (FG pregame when stamped). */
+  modelPeriod?: string | null;
+  /** Odds API market key that filled this quote (`totals`, never F5). */
+  oddsMarketKey?: string | null;
   /** Assemble stamp: false → do not compare this total to FG fair. */
   totalCompareEligible?: boolean;
   totalIdentityReason?: string;
@@ -645,6 +649,9 @@ export function flatRowsToLegacy(
       sport: sportKey,
       market: "Total",
       period: totalRow?.period,
+      modelPeriod: totalRow?.modelPeriod,
+      event: totalRow?.game ?? lineRow?.game,
+      modelEvent: totalRow?.game ?? lineRow?.game,
       commenceTime:
         totalRow?.commenceTime ?? lineRow?.commenceTime ?? undefined,
       linesAsOf: totalRow?.linesAsOf ?? lineRow?.linesAsOf ?? undefined,

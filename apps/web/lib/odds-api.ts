@@ -8,6 +8,10 @@
 import type { EdgeBoardRow } from "@kosedge/contracts";
 
 import { americanImpliedProb, noVigHomeProb } from "@/lib/american-odds";
+import {
+  selectFeaturedFullGameMarket,
+  stampOddsMarketPeriod,
+} from "@/lib/edge-board-market-identity";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export { americanImpliedProb, noVigHomeProb };
@@ -489,7 +493,7 @@ export async function fetchEdgeBoard(
 
     if (isMlb) {
       const mlData = bookmakers.flatMap((b) => {
-        const m = b.markets?.find((x) => x.key === "h2h");
+        const m = selectFeaturedFullGameMarket(b.markets, "h2h");
         if (!m) return [];
         const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
         const homeOutcome = m.outcomes?.find((o) => o.name === ev.home_team);
@@ -520,6 +524,12 @@ export async function fetchEdgeBoard(
         openMlEntry?.asOfMs,
         bestMlEntry?.asOfMs,
       );
+      const mlPeriod = stampOddsMarketPeriod({
+        marketKey: "h2h",
+        commenceTime: ev.commence_time,
+        linesAsOf: mlAsOf,
+        sport: normalizedSport,
+      });
       rows.push({
         id: `${ev.id}-moneyline`,
         game,
@@ -535,11 +545,13 @@ export async function fetchEdgeBoard(
         openJuiceHome: openMlEntry?.home,
         bestJuice: bestMlEntry?.away ?? openMlEntry?.away,
         bestJuiceHome: bestMlEntry?.home ?? openMlEntry?.home,
+        oddsMarketKey: "h2h",
+        ...(mlPeriod ? { period: mlPeriod } : {}),
         ...(mlAsOf ? { linesAsOf: mlAsOf } : {}),
       });
     } else {
       const spreadData = bookmakers.flatMap((b) => {
-        const m = b.markets?.find((x) => x.key === "spreads");
+        const m = selectFeaturedFullGameMarket(b.markets, "spreads");
         if (!m) return [];
         const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
         const homeOutcome = m.outcomes?.find((o) => o.name === ev.home_team);
@@ -578,6 +590,12 @@ export async function fetchEdgeBoard(
         openSpreadEntry?.asOfMs,
         bestSpreadEntry?.asOfMs,
       );
+      const spreadPeriod = stampOddsMarketPeriod({
+        marketKey: "spreads",
+        commenceTime: ev.commence_time,
+        linesAsOf: spreadAsOf,
+        sport: normalizedSport,
+      });
 
       rows.push({
         id: `${ev.id}-spread`,
@@ -593,12 +611,14 @@ export async function fetchEdgeBoard(
         openJuiceHome: openSpreadEntry?.juiceHome,
         bestJuice: bestSpreadEntry?.juiceAway ?? openSpreadEntry?.juiceAway,
         bestJuiceHome: bestSpreadEntry?.juiceHome ?? openSpreadEntry?.juiceHome,
+        oddsMarketKey: "spreads",
+        ...(spreadPeriod ? { period: spreadPeriod } : {}),
         ...(spreadAsOf ? { linesAsOf: spreadAsOf } : {}),
       });
     }
 
     const totalsData = bookmakers.flatMap((b) => {
-      const m = b.markets?.find((x) => x.key === "totals");
+      const m = selectFeaturedFullGameMarket(b.markets, "totals");
       if (!m) return [];
       const over = m.outcomes?.find((o) => o.name === "Over");
       const under = m.outcomes?.find((o) => o.name === "Under");
@@ -630,6 +650,15 @@ export async function fetchEdgeBoard(
       openTotalEntry?.asOfMs,
       bestTotalEntry?.asOfMs,
     );
+    const hadFeaturedTotals = totalsData.length > 0;
+    const totalPeriod = hadFeaturedTotals
+      ? stampOddsMarketPeriod({
+          marketKey: "totals",
+          commenceTime: ev.commence_time,
+          linesAsOf: totalAsOf,
+          sport: normalizedSport,
+        })
+      : null;
 
     rows.push({
       id: `${ev.id}-total`,
@@ -645,6 +674,8 @@ export async function fetchEdgeBoard(
       openJuiceHome: openTotalEntry?.juiceUnder,
       bestJuice: bestTotalEntry?.juiceOver ?? openTotalEntry?.juiceOver,
       bestJuiceHome: bestTotalEntry?.juiceUnder ?? openTotalEntry?.juiceUnder,
+      ...(hadFeaturedTotals ? { oddsMarketKey: "totals" } : {}),
+      ...(totalPeriod ? { period: totalPeriod } : {}),
       ...(totalAsOf ? { linesAsOf: totalAsOf } : {}),
     });
   }
@@ -864,7 +895,7 @@ export async function fetchOddsComparison(
         bookAsOfMap.set(b.key, null);
       }
 
-      const spreadM = b.markets?.find((x) => x.key === "spreads");
+      const spreadM = selectFeaturedFullGameMarket(b.markets, "spreads");
       if (spreadM) {
         const awayO = spreadM.outcomes?.find((o) => o.name === ev.away_team);
         const homeO = spreadM.outcomes?.find((o) => o.name === ev.home_team);
@@ -898,7 +929,7 @@ export async function fetchOddsComparison(
           });
         }
       }
-      const mlM = b.markets?.find((x) => x.key === "h2h");
+      const mlM = selectFeaturedFullGameMarket(b.markets, "h2h");
       if (mlM) {
         const awayO = mlM.outcomes?.find((o) => o.name === ev.away_team);
         const homeO = mlM.outcomes?.find((o) => o.name === ev.home_team);
@@ -927,7 +958,7 @@ export async function fetchOddsComparison(
           }
         }
       }
-      const totalM = b.markets?.find((x) => x.key === "totals");
+      const totalM = selectFeaturedFullGameMarket(b.markets, "totals");
       if (totalM) {
         const over = totalM.outcomes?.find((o) => o.name === "Over");
         const under = totalM.outcomes?.find((o) => o.name === "Under");

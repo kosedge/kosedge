@@ -731,6 +731,7 @@ export function fairLinesToEdgeBoardRows(
       kickoffTime: kickoff.kickoffTime,
       commenceTime,
       market: "Total",
+      modelPeriod: "fg",
       open: openTotal,
       best: bestTotal ?? marketTotal,
       book: bestTotalBook ?? (bestTotal || marketTotal ? "market" : undefined),
@@ -949,6 +950,8 @@ export function overlayOddsOntoFairLineRows(
       kickoffDate?: string;
       kickoffTime?: string;
       linesAsOf?: string;
+      period?: string | null;
+      oddsMarketKey?: string;
       /** True open from first capture — rare on Odds API path. */
       openIsImmutable?: boolean;
     };
@@ -964,6 +967,8 @@ export function overlayOddsOntoFairLineRows(
       kickoffDate?: string;
       kickoffTime?: string;
       linesAsOf?: string;
+      period?: string | null;
+      oddsMarketKey?: string;
     };
     // Current line moves with odds. Never overwrite a set Open with live books
     // (Odds API "open" is preferred-book current, not first-captured open).
@@ -996,6 +1001,9 @@ export function overlayOddsOntoFairLineRows(
     // Never copy invent-now clocks from odds overlay onto fair-line rows.
     const overlayAsOf = sanitizeMarketCaptureIso(src.linesAsOf);
     if (overlayAsOf && !tgt.linesAsOf) tgt.linesAsOf = overlayAsOf;
+    // Q.period / Odds key travel with the decision quote (T stays on fair-line).
+    if (src.period) tgt.period = src.period;
+    if (src.oddsMarketKey) tgt.oddsMarketKey = src.oddsMarketKey;
   }
 
   // Do not append odds-only extras (PRE noise, unmatched books). NFL board is
