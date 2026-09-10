@@ -1,0 +1,314 @@
+{
+  "desk_date": "2026-09-10",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Thursday, Sep 10",
+    "bottom_line": "Eight news clubs after Tuesday’s Sep 8 file (Wed routine interrupted): SEA Darnold hip (fracture ruled out, MRI Thu, Lock finished W1); SF Collins season-ending patellar + LAR Donald rest OUT Melbourne; LV Bowers meniscus trim (miss a game or two); NO Jordan OUT / Kamara returned limited; CHI Odunze limited / Trapilo not expected; NYG Nabers FULL Wed; NYJ Hall estimated FULL. All Pass — no minted KEI, no Riley stamps.",
+    "storylines": [
+      "Seahawks: Sam Darnold right hip on the opening drive Wed vs NE; ruled out before half. X-ray/CT: no fracture. MRI Thursday. Drew Lock finished the 13–10 win. Week 2 @ ARI status TBD — Pass, do not invent a Lock lean or reprice SEA win-total off one night.",
+      "Melbourne (Thu 5:35pm ET / Fri AU): SF DT Alfred Collins torn patellar Tuesday practice — season over / IR pending (Okuayinonu already IR). LAR Aaron Donald NIR-rest OUT, did not travel; Myles Garrett ready for debut. Bosa/Kittle limited, no designation. Pass — depth flags only.",
+      "Raiders: Brock Bowers meniscus trim Tuesday; expected to miss a game or two (Week 1 vs MIA + possibly Week 2). Jeanty full on Wed report. Pass — TE availability; do not invent Mayer as locked WR1a.",
+      "Saints: Cam Jordan (hamstring) ruled OUT Week 1 vs DET. Alvin Kamara (knee) back limited after 3+ weeks — Moore: response to practice gates Sunday. Pass.",
+      "Bears: Rome Odunze (calf) limited Wed after Mon/Tue rehab — trending toward Sunday vs CAR. Ozzy Trapilo (knee) limited, not expected to suit up. Pass.",
+      "Giants: Malik Nabers (knee) FULL on Wed Week 1 report ahead of SNF vs DAL. Availability still Friday-designation territory. Pass — do not invent WR1 snap share.",
+      "Jets: Breece Hall (groin) estimated FULL Wed (no practice Wed); Glenn already trending towards playing. Ossai (foot) DNP, week-to-week. Pass."
+    ],
+    "what_to_watch": "Darnold MRI readout before Week 2. Melbourne inactives / Collins IR paperwork. Bowers official club confirmation + Friday designations (Nabers, Hall, Kamara, Odunze). Do not chase live Melbourne board.",
+    "sources": [
+      {
+        "label": "Seahawks — great news on Darnold hip (no fracture)",
+        "href": "https://www.seahawks.com/news/seahawks-get-great-news-on-sam-darnold-s-hip-injury"
+      },
+      {
+        "label": "ESPN — Darnold hip, Lock in vs Patriots",
+        "href": "https://www.espn.com/nfl/story/_/id/49886582/seahawks-qb-darnold-injures-hip-opening-drive-vs-patriots"
+      },
+      {
+        "label": "49ers — Collins OUT season; Thompson questionable",
+        "href": "https://www.49ers.com/news/alfred-collins-out-james-thomas-jr-questionable-vs-rams-injury-report-ahead-of-sfvslar"
+      },
+      {
+        "label": "AP — Collins torn patellar, season over",
+        "href": "https://apnews.com/article/49ers-rams-alfred-collins-cb18e11b033f1d81d639e8ab61b53697"
+      },
+      {
+        "label": "Rams — Donald won’t play Week 1 / Garrett ready",
+        "href": "https://www.therams.com/news/aaron-donald-will-not-play-week-1-2026-49ers-myles-garrett-ready-to-go"
+      },
+      {
+        "label": "NBC Sports — Bowers meniscus trim, miss a game or two",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/report-brock-bowers-to-miss-a-game-or-two-after-meniscus-trim"
+      },
+      {
+        "label": "WWL — Saints Week 1: Jordan OUT, Kamara returns limited",
+        "href": "https://www.audacy.com/wwl/local-sports/saints/saints-week-1-injury-report"
+      },
+      {
+        "label": "CBS — Week 1 injury rundown (CHI Odunze/Trapilo)",
+        "href": "https://www.cbssports.com/nfl/news/nfl-week-1-injury-report-a-rundown-of-every-teams-current-injury-situation/"
+      },
+      {
+        "label": "Giants — Week 1 injury report (Nabers FULL)",
+        "href": "https://www.giants.com/news/injury-report-statuses-giants-vs-cowboys-sunday-night-football-week-1-malik-nabers"
+      },
+      {
+        "label": "Jets — Week 1 Wed report (Hall FULL estimated)",
+        "href": "https://www.newyorkjets.com/news/jets-injury-report-week-1-vs-titans-wednesday-09-09-2026"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "SEA",
+      "title": "Seahawks camp — Sep 10",
+      "bottom_line": "Sam Darnold (right hip) out after the opening drive Wed vs NE; X-ray/CT ruled out fracture; MRI Thursday. Drew Lock finished the 13–10 win. Week 2 @ ARI status unknown. Pass — do not invent a Lock lean or reprice SEA.",
+      "key_points": [
+        "Seahawks.com / Macdonald (Sep 9 postgame): Darnold sacked on first series, ruled out before half. Great news — fracture ruled out on X-ray/CT; more tests (MRI) still to come. Macdonald: does not know Week 2 extent yet.",
+        "ESPN (Sep 10): Right hip; Lock entered on Seattle’s second possession and closed the win (16/22, 187, TD). Jalen Milroe was emergency QB3 / inactive.",
+        "Sep 8 card had Okada/Emmanwori/Bradford IR flags for the same game — those are superseded for the shelf by the starter hip. Pass — availability only; HOUSE vs STREET, no minted KEI."
+      ],
+      "what_to_watch": "Thursday MRI + Macdonald’s next update before Week 2 @ ARI. Do not file a Lock Week 2 lean until the club does.",
+      "is_material_depth": true,
+      "sot_flag": "Darnold hip — no fracture, MRI Thu; Lock finished W1. Pass on SEA win-total / Lock lean.",
+      "sources": [
+        {
+          "label": "Seahawks — great news on Darnold hip",
+          "href": "https://www.seahawks.com/news/seahawks-get-great-news-on-sam-darnold-s-hip-injury"
+        },
+        {
+          "label": "ESPN — Darnold hip exits opening drive",
+          "href": "https://www.espn.com/nfl/story/_/id/49886582/seahawks-qb-darnold-injures-hip-opening-drive-vs-patriots"
+        },
+        {
+          "label": "NBC Sports — no fracture, more tests",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/mike-macdonald-sam-darnold-did-not-suffer-hip-fracture-more-tests-to-come"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers camp — Sep 10",
+      "bottom_line": "DT Alfred Collins torn patellar tendon in Tuesday Melbourne practice — OUT for 2026 / surgery + IR pending. Stacks on Okuayinonu IR (foot). Bosa/Kittle limited all week, no designation; Bosa said 100% ready. Pass — DL depth flag only.",
+      "key_points": [
+        "49ers.com final IR (Sep 10): Collins (knee) OUT; James Thompson Jr. (hamstring) questionable. Shanahan Wed: torn patellar, miss the season.",
+        "AP / ESPN: Injury in Tuesday AAMI Park practice before 11-on-11; surgery required. With Collins + Okuayinonu down, healthy DT depth next to Odighizuwa thins to West / Halton (Thompson Q).",
+        "Bosa (knee) and Kittle (Achilles) limited all three Melbourne practices, no game designation. Shanahan: be smart with workloads. Pass — do not invent snap shares or mint a SF lean off Collins."
+      ],
+      "what_to_watch": "Collins IR paperwork; Thompson gameday inactive call; Bosa/Kittle snap management in Melbourne. Do not chase the live Netflix board.",
+      "is_material_depth": true,
+      "sot_flag": "Collins season-ending patellar; Okuayinonu already IR. Pass on SF win-total.",
+      "sources": [
+        {
+          "label": "49ers — Collins OUT; Thompson questionable",
+          "href": "https://www.49ers.com/news/alfred-collins-out-james-thomas-jr-questionable-vs-rams-injury-report-ahead-of-sfvslar"
+        },
+        {
+          "label": "AP — Collins torn patellar, season over",
+          "href": "https://apnews.com/article/49ers-rams-alfred-collins-cb18e11b033f1d81d639e8ab61b53697"
+        },
+        {
+          "label": "ESPN — Collins out for season",
+          "href": "https://www.espn.com/nfl/story/_/id/49875661/49ers-alfred-collins-knee-injured-practice-season"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams camp — Sep 10",
+      "bottom_line": "Aaron Donald (NIR-rest) OUT Week 1 vs SF in Melbourne — did not travel. McVay: decision for Donald and the team after two years off retirement; sooner rather than later for return. Myles Garrett ready for Rams debut. Pass.",
+      "key_points": [
+        "therams.com / McVay (Sep 8): Donald will not play Week 1 and will not travel to Australia. Cited quick turnaround after the comeback ramp; confidence in Turner / Fiske / Ford / Davis / Hamilton.",
+        "Rams Week 1 injury report: Donald only player ruled OUT; Garrett full Thu with no designation after early-week DNP/knee management.",
+        "Missed the Sep 8 weekday file (that package was ATL/NYG/NE/SEA/TEN). Filing now ahead of Melbourne kick. Pass — rest designation, not a new injury lean."
+      ],
+      "what_to_watch": "Donald’s first active week after Melbourne; Garrett snap debut vs SF. Do not invent a LAR DL lean off Donald resting one.",
+      "is_material_depth": true,
+      "sot_flag": "Donald rest OUT Melbourne; Garrett ready. Pass on LAR win-total.",
+      "sources": [
+        {
+          "label": "Rams — Donald won’t play Week 1 / Garrett ready",
+          "href": "https://www.therams.com/news/aaron-donald-will-not-play-week-1-2026-49ers-myles-garrett-ready-to-go"
+        },
+        {
+          "label": "Rams — Week 1 injury report (Donald OUT)",
+          "href": "https://www.therams.com/news/rams-injury-report-week-1-vs-49ers-2026-aaron-donald-only-player-ruled-out-among-those-listed-no-designation-for-myles-garrett"
+        }
+      ]
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders camp — Sep 10",
+      "bottom_line": "Brock Bowers meniscus trim Tuesday — expected to miss a game or two (Week 1 vs MIA likely). Wed IR: Bowers DNP knee; Ashton Jeanty (ankle) FULL. Pass — TE out window only; do not invent Mayer usage.",
+      "key_points": [
+        "NBC Sports / Schefter (Sep 9): Bowers underwent a meniscus trim Tuesday after a camp bang diagnosed last week; miss a game or two. Raiders host MIA then @ LAC Week 2.",
+        "Raiders.com Wed IR: Bowers DNP (knee); Jeanty FULL (ankle) after late-camp miss — Kubiak side already leaning Jeanty available for Sunday.",
+        "Pass — availability stamps only. HOUSE vs STREET locked; never mint KEI off the TE absence."
+      ],
+      "what_to_watch": "Club confirmation of Bowers’ exact window; Jeanty Friday designation; Mayer/Thomas TE snaps if Bowers sits. Do not reprice LV win-total off one TE trim.",
+      "is_material_depth": true,
+      "sot_flag": "Bowers meniscus trim — miss a game or two; Jeanty FULL. Pass.",
+      "sources": [
+        {
+          "label": "NBC Sports — Bowers meniscus trim",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/report-brock-bowers-to-miss-a-game-or-two-after-meniscus-trim"
+        },
+        {
+          "label": "NBC Fantasy — Schefter: miss a game or two",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-09/report-bowers-knee-to-miss-a-game-or-two"
+        },
+        {
+          "label": "Raiders — Week 1 injury report vs Dolphins",
+          "href": "https://www.raiders.com/news/las-vegas-raiders-miami-dolphins-nfl-week-1-2026-injury-report"
+        }
+      ]
+    },
+    {
+      "team_id": "NO",
+      "title": "Saints camp — Sep 10",
+      "bottom_line": "Cam Jordan (hamstring) ruled OUT Week 1 vs DET. Alvin Kamara (knee) returned limited Wed after 3+ weeks — Moore: how he responds gates Sunday. Pass — do not invent an Etienne snap crown from prose.",
+      "key_points": [
+        "WWL / Moore (Sep 9): Jordan already ruled out (hamstring) — third miss in 15 seasons. Week-to-week on the recovery.",
+        "Kamara first practice since the Cowboys joint; listed LIMITED. Moore: response to first day impacts Lions availability. Kendre Miller also back.",
+        "Wed DNP also: Oscar Delp (hamstring), Audric Estime (thigh). Pass — availability flags only."
+      ],
+      "what_to_watch": "Kamara Thu/Fri participation; Friday designations vs DET. Do not rewrite NO RB SoT from one limited day.",
+      "is_material_depth": true,
+      "sot_flag": "Jordan OUT Week 1; Kamara limited return. Pass on NO win-total / RB1 invent.",
+      "sources": [
+        {
+          "label": "WWL — Jordan OUT, Kamara returns limited",
+          "href": "https://www.audacy.com/wwl/local-sports/saints/saints-week-1-injury-report"
+        },
+        {
+          "label": "CBS — Week 1 injury rundown (NO)",
+          "href": "https://www.cbssports.com/nfl/news/nfl-week-1-injury-report-a-rundown-of-every-teams-current-injury-situation/"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears camp — Sep 10",
+      "bottom_line": "Rome Odunze (calf) LIMITED Wed after Mon/Tue rehab days — trending toward Sunday vs CAR without a setback. Ozzy Trapilo (knee) LIMITED, not expected to suit up. Pass.",
+      "key_points": [
+        "CBS Week 1 rundown (Sep 9): Odunze limited Wed; used Mon/Tue as rehab after last week’s right-leg exit (Sep 4 card had all good — this is the new calf stamp). Trapilo limited, not expected vs Panthers.",
+        "CBS Fantasy / RotoWire (Sep 9): Odunze limited after Johnson called him more day-to-day Tue; Sunday status still unsettled pending more practices.",
+        "Bagent (back) DNP Wed — backup QB noise only. Pass — no half-win lean, no invented LT starter from Trapilo sitting."
+      ],
+      "what_to_watch": "Odunze Thu/Fri ramp; Trapilo Friday designation; OL plan if Trapilo sits. Do not chase CHI board off one limited WR day.",
+      "is_material_depth": true,
+      "sot_flag": "Odunze limited trending; Trapilo not expected Week 1. Pass.",
+      "sources": [
+        {
+          "label": "CBS — Week 1 injury rundown (CHI)",
+          "href": "https://www.cbssports.com/nfl/news/nfl-week-1-injury-report-a-rundown-of-every-teams-current-injury-situation/"
+        },
+        {
+          "label": "CBS Fantasy — Odunze limited Wednesday",
+          "href": "https://www.cbssports.com/fantasy/football/news/bears-rome-odunze-listed-as-limited-participant-wednesday/"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants camp — Sep 10",
+      "bottom_line": "Malik Nabers (knee) FULL on Wednesday’s Week 1 report ahead of SNF vs DAL. Friday designation still open. Pass — do not invent WR1 snap share off one FULL day (Slayton cut already on Sep 8).",
+      "key_points": [
+        "Giants.com Week 1 IR: Nabers FP (knee) Wed along with Harris, Hudson, Theo Johnson, Andrew Thomas — all FULL.",
+        "CBS / club context: Harbaugh previously ready to go tone on Nabers’ ACL return track; game status lands Friday.",
+        "Sep 8 already filed Slayton release. This card is the Nabers participation upgrade only. Pass."
+      ],
+      "what_to_watch": "Friday game designation vs DAL; Nabers snap plan if active. Do not invent a WR depth chart from the Slayton cut + one FULL day.",
+      "is_material_depth": true,
+      "sot_flag": "Nabers FULL Wed Week 1 report. Pass on inventing WR1 snaps.",
+      "sources": [
+        {
+          "label": "Giants — Week 1 injury report (Nabers FULL)",
+          "href": "https://www.giants.com/news/injury-report-statuses-giants-vs-cowboys-sunday-night-football-week-1-malik-nabers"
+        },
+        {
+          "label": "CBS — Week 1 injury rundown (NYG)",
+          "href": "https://www.cbssports.com/nfl/news/nfl-week-1-injury-report-a-rundown-of-every-teams-current-injury-situation/"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets camp — Sep 10",
+      "bottom_line": "Breece Hall (groin) estimated FULL on Wednesday’s Week 1 report (Jets did not practice Wed). Glenn already trending towards playing vs TEN. Ossai (foot) DNP, week-to-week. Pass.",
+      "key_points": [
+        "newyorkjets.com Wed IR: Hall FP (groin), Sadiq FP, Davis FP; Ossai DNP (foot), Patrick DNP (groin), Ponds LP (calf). Report is an estimation — no Wed practice.",
+        "Jets.com (Sep 8): Glenn said Hall is trending towards playing after early-practice work Tue.",
+        "NBC Sports: Ossai will miss at least one game per Glenn. Pass — RB availability upgrade + EDGE sit; no minted lean."
+      ],
+      "what_to_watch": "Thu live practice + Friday designations (Hall / Ossai). Do not invent a Jets RB committee from one estimated FULL.",
+      "is_material_depth": true,
+      "sot_flag": "Hall estimated FULL / trending Week 1; Ossai week-to-week. Pass.",
+      "sources": [
+        {
+          "label": "Jets — Week 1 Wed injury report",
+          "href": "https://www.newyorkjets.com/news/jets-injury-report-week-1-vs-titans-wednesday-09-09-2026"
+        },
+        {
+          "label": "Jets — Hall trending towards playing",
+          "href": "https://www.newyorkjets.com/news/breece-hall-trending-towards-playing-jets-vs-titans-09-08-2026"
+        },
+        {
+          "label": "NBC Sports — Hall/Sadiq full; Ossai DNP",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/breece-hall-kenyon-sadiq-fully-participate-in-jets-practice"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "SEA",
+      "fields": ["bottom_line"],
+      "reason": "Darnold hip — no fracture, MRI Thu; Lock finished W1. Pass on SEA win-total / Lock lean.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "SF",
+      "fields": ["bottom_line"],
+      "reason": "Collins season-ending patellar; Okuayinonu already IR. Pass on SF win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "LAR",
+      "fields": ["bottom_line"],
+      "reason": "Donald rest OUT Melbourne; Garrett ready. Pass on LAR win-total.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "LV",
+      "fields": ["bottom_line"],
+      "reason": "Bowers meniscus trim — miss a game or two; Jeanty FULL. Pass.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NO",
+      "fields": ["bottom_line"],
+      "reason": "Jordan OUT Week 1; Kamara limited return. Pass on NO win-total / RB1 invent.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line"],
+      "reason": "Odunze limited trending; Trapilo not expected Week 1. Pass.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NYG",
+      "fields": ["bottom_line"],
+      "reason": "Nabers FULL Wed Week 1 report. Pass on inventing WR1 snaps.",
+      "status": "flagged"
+    },
+    {
+      "team_id": "NYJ",
+      "fields": ["bottom_line"],
+      "reason": "Hall estimated FULL / trending Week 1; Ossai week-to-week. Pass.",
+      "status": "flagged"
+    }
+  ]
+}
