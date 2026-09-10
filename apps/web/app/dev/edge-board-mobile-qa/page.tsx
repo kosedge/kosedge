@@ -57,7 +57,10 @@ export default function EdgeBoardMobileQaPage() {
         Fixture-only. No Odds API. Desktop table below lg is hidden — scroll the
         last block at ≥lg for regression.
       </p>
-      <div className="mt-4 max-w-[430px] space-y-6" data-qa="mobile-cards">
+      <div
+        className="mt-4 max-w-[430px] space-y-6 lg:hidden"
+        data-qa="mobile-cards"
+      >
         {cards.map((c) => (
           <section key={c.key}>
             <h2 className="mb-2 text-[11px] uppercase tracking-wide text-gray-500">

@@ -48,3 +48,21 @@ If decision market ≠ best-cell number: paint the **decision** line, drop book/
 
 - `apps/web/__tests__/lib/edge-board-mobile-presentation.test.ts`
 - `apps/web/__tests__/components/EdgeBoardMobileCard.test.tsx`
+
+## QA screenshots
+
+Fixture gallery `/dev/edge-board-mobile-qa` (no Odds API). Production www first-paint at 393 was assemble-loading skeletons (client fetch) — not a usable before of the old 2×2 card; the removed `EdgeBoard.tsx` mobile block is the before.
+
+| File | What |
+|------|------|
+| `data/ops/qa/edge-board-mobile-hierarchy/after-393-nfl-lean-card.png` | NFL LEAN @ 393 |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-393-nfl-lean-overview.png` | same + Overview open |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-393-cfb-empty-card.png` | CFB null/empty collapse |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-393x852.png` | full gallery 393×852 |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-375x812.png` | 375 |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-390x844.png` | 390 |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-402x874.png` | 402 |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-430x932.png` | 430 |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-tablet-820x1180.png` | tablet below lg (still cards) |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-desktop-1440x900.png` | desktop ≥lg |
+| `data/ops/qa/edge-board-mobile-hierarchy/after-desktop-1440-table.png` | desktop table crop |
