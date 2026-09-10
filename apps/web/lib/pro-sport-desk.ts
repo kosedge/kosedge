@@ -407,7 +407,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/cfb/slate?week=1",
         title: "Official Slate",
         description:
-          "KosEdge W0/W1 slate (ESPN + Odds API fact-check). Open any FBS row in Project Game.",
+          "KosEdge W0–W2 slate (ESPN + Odds API fact-check). Open any FBS row in Project Game.",
         cta: "Open slate →",
         accent: "gold",
         status: "active",
@@ -416,7 +416,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/cfb/project-game",
         title: "Project Game",
         description:
-          "Model research-fair. KEI is the published line on the W0/W1 slate.",
+          "Model research-fair. KEI is the published line on the W0–W2 slate.",
         cta: "Open project game →",
         accent: "gold",
         status: "active",

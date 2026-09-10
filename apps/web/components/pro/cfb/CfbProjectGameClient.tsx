@@ -425,7 +425,7 @@ export default function CfbProjectGameClient({
       <section className="rounded-2xl border border-white/10 bg-black/30 p-4 sm:p-5">
         <p className="mb-4 text-xs leading-relaxed text-kos-text/65">
           Pick two FBS teams or load a KosEdge official-slate row. Model is
-          research-fair. Week alignment follows the same W0/W1 artifact as the
+          research-fair. Week alignment follows the same W0–W2 artifact as the
           model page and Edge Board.
         </p>
         {slateRows.length ? (
@@ -446,7 +446,7 @@ export default function CfbProjectGameClient({
                 setNeutralSite(row.neutral);
               }}
             >
-              <option value="">Load W0/W1 slate row…</option>
+              <option value="">Load W0–W2 slate row…</option>
               {slateRows.map((row) => (
                 <option key={row.key} value={row.key}>
                   {row.label}

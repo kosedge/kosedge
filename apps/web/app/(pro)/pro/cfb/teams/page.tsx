@@ -139,7 +139,7 @@ export default async function CfbTeamsPowerPage({
       sportName="CFB"
       base="/pro/cfb"
       title="Power + Teams"
-      summary="Single power source — 136 official FBS rows. Sortable, conference-filtered, warehouse-fill labeled. Next opponent opens Project Game when the game is on the W0/W1 slate. Research only."
+      summary="Single power source — 136 official FBS rows. Sortable, conference-filtered, warehouse-fill labeled. Next opponent opens Project Game when the game is on the W0–W2 slate. Research only."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}

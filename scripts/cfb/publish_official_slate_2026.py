@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Publish the in-house KosEdge CFB official slate (W0/W1).
+"""Publish the in-house KosEdge CFB official slate (W0–W2).
 
 Primary: packaged ESPN team-schedule SoT (cfb_official_schedule_2026.json).
 Fact-check: The Odds API NCAAF events (matchup + commence_time).
@@ -48,7 +48,7 @@ RAW_DIR = REPO / "data/cfb/raw"
 PRIMARY_SOURCE = "espn_team_schedule_public"
 FACTCHECK_SOURCE = "the_odds_api_ncaaf_events"
 KICKOFF_TOLERANCE_SEC = 3 * 3600
-WEEKS = (0, 1)
+WEEKS = (0, 1, 2)
 # Stamp from engine schedule as_of when present so republish cannot regress to 2026-08-17.
 # Version suffix follows that desk date (not a hardcoded Aug 17 dual stamp).
 
@@ -204,7 +204,11 @@ def main() -> int:
         timezone.utc
     ).strftime("%Y-%m-%d")
     slate_version = f"cfb-official-slate-v2-dual-{as_of.replace('-', '')}"
-    ops_path = REPO / f"data/ops/cfb-official-slate-{as_of.replace('-', '')}.md"
+    # Do not clobber the W0-close note (cfb-official-slate-20260831.md).
+    week_tag = "w" + "-w".join(str(w) for w in WEEKS)
+    ops_path = (
+        REPO / f"data/ops/cfb-official-slate-{week_tag}-{as_of.replace('-', '')}.md"
+    )
     primary = []
     for g in espn.get("games") or []:
         if not isinstance(g, dict):
@@ -232,20 +236,23 @@ def main() -> int:
         factcheck_error = "ODDS_API_KEY not set"
 
     RAW_DIR.mkdir(parents=True, exist_ok=True)
-    (RAW_DIR / "odds_api_ncaaf_events_2026.json").write_text(
-        json.dumps(
-            {
-                "as_of": as_of,
-                "source": FACTCHECK_SOURCE,
-                "n": len(events),
-                "error": factcheck_error,
-                "events": events,
-            },
-            indent=2,
+    # Do not clobber a prior Odds dump with an empty no-key run (no credit burn).
+    raw_events_path = RAW_DIR / "odds_api_ncaaf_events_2026.json"
+    if events or not raw_events_path.is_file():
+        raw_events_path.write_text(
+            json.dumps(
+                {
+                    "as_of": as_of,
+                    "source": FACTCHECK_SOURCE,
+                    "n": len(events),
+                    "error": factcheck_error,
+                    "events": events,
+                },
+                indent=2,
+            )
+            + "\n",
+            encoding="utf-8",
         )
-        + "\n",
-        encoding="utf-8",
-    )
 
     secondary: Dict[Tuple[str, str], Dict[str, Any]] = {}
     unmatched_names: List[str] = []
@@ -348,6 +355,38 @@ def main() -> int:
             }
         )
 
+    # No Odds pull: keep prior desk factcheck/status for already-published
+    # game_ids. New weeks (W2) stay unconfirmed_secondary — never invent agree.
+    if not events and WEB_OUT.is_file():
+        prior_games = load_json(WEB_OUT).get("games") or []
+        prior_by_id = {
+            str(g.get("game_id")): g
+            for g in prior_games
+            if isinstance(g, dict) and g.get("game_id")
+        }
+        for row in published:
+            prev = prior_by_id.get(str(row.get("game_id") or ""))
+            if not prev:
+                continue
+            prev_fact = prev.get("factcheck")
+            prev_status = prev.get("status")
+            if prev_fact in {"agree", "conflict", "unconfirmed"}:
+                row["factcheck"] = prev_fact
+            # Engine finals stay final; only carry schedule-status for unplayed.
+            if row.get("status") != "final" and prev_status in {
+                "accepted",
+                "needs_review",
+                "unconfirmed_secondary",
+                "final",
+            }:
+                row["status"] = prev_status
+        agreed = sum(1 for g in published if g.get("factcheck") == "agree")
+        only_primary = [
+            f"{g['away']} @ {g['home']} (W{g.get('week')})"
+            for g in published
+            if g.get("factcheck") == "unconfirmed"
+        ]
+
     used_keys = {pair_key(g["away"], g["home"]) for g in published}
     only_secondary = [
         f"{row['away']} @ {row['home']} ({row.get('kickoff')})"
@@ -357,6 +396,7 @@ def main() -> int:
 
     w0 = [g for g in published if g["week"] == 0]
     w1 = [g for g in published if g["week"] == 1]
+    w2 = [g for g in published if g["week"] == 2]
     artifact = {
         "slate_version": slate_version,
         "season": 2026,
@@ -374,11 +414,14 @@ def main() -> int:
         "n_fbs_vs_fbs": sum(1 for g in published if g["fbs_vs_fbs"]),
         "n_w0": len(w0),
         "n_w1": len(w1),
+        "n_w2": len(w2),
         "n_w0_fbs_vs_fbs": sum(1 for g in w0 if g["fbs_vs_fbs"]),
         "n_w1_fbs_vs_fbs": sum(1 for g in w1 if g["fbs_vs_fbs"]),
+        "n_w2_fbs_vs_fbs": sum(1 for g in w2 if g["fbs_vs_fbs"]),
         "factcheck": {
             "primary_w0": len(w0),
             "primary_w1": len(w1),
+            "primary_w2": len(w2),
             "secondary_events": len(events),
             "secondary_matched_names": len(secondary),
             "agreed": agreed,
@@ -425,6 +468,7 @@ def main() -> int:
 |------|-------------:|-------------------:|----------:|--------:|
 | 0 | {len(w0)} | {sum(1 for g in w0 if g["factcheck"]=="agree")} | {len(w0)} | {sum(1 for g in w0 if g["fbs_vs_fbs"])} |
 | 1 | {len(w1)} | {sum(1 for g in w1 if g["factcheck"]=="agree")} | {len(w1)} | {sum(1 for g in w1 if g["fbs_vs_fbs"])} |
+| 2 | {len(w2)} | {sum(1 for g in w2 if g["factcheck"]=="agree")} | {len(w2)} | {sum(1 for g in w2 if g["fbs_vs_fbs"])} |
 | **Total** | **{len(published)}** | **{agreed}** | **{len(published)}** | **{sum(1 for g in published if g["fbs_vs_fbs"])}** |
 
 Secondary events pulled: {len(events)} · name-matched: {len(secondary)}

@@ -42,7 +42,7 @@ const GLANCE: Record<string, GlanceItem[]> = {
     {
       href: "/pro/cfb/project-game",
       title: "2. Project Game",
-      body: "Model research-fair. KEI when the game is on the W0/W1 slate.",
+      body: "Model research-fair. KEI when the game is on the W0–W2 slate.",
     },
     {
       href: "/pro/cfb/projections",
