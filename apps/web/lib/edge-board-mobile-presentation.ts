@@ -4,6 +4,8 @@
  * Does not recalculate fair / market / edge / confidence / book / game IDs.
  * Reads already-assembled LegacyEdgeBoardRow fields and #508 customer-truth
  * helpers. Fail closed on Fair/Market/Edge or sign/side disagreement.
+ * INC-2026-09-10: totals identity gate — do not paint Over/Under magnitude
+ * when period is missing or the quote is in-play (not a recalculation).
  *
  * Team labels come from the canonical abbr truth layer already on the row
  * (awayAbbr / homeAbbr, NFL via canonicalizeNflTeam). No UI alias table.
@@ -22,6 +24,7 @@ import {
   reachableConfidenceBands,
 } from "@/lib/nfl-dead-tiers";
 import type { ActionLabel, ConfidenceBand } from "@/lib/nfl-decision-engine";
+import { evaluateTotalIdentityGate } from "@/lib/edge-board-total-identity-gate";
 import type {
   LegacyEdgeBoardRow,
   PricePair,
@@ -43,7 +46,8 @@ export type MobileTruthFlag =
   | "spread_decision_vs_best_mismatch"
   | "total_decision_vs_best_mismatch"
   | "fair_spread_pair_mismatch"
-  | "fair_total_pair_mismatch";
+  | "fair_total_pair_mismatch"
+  | "total_identity_ineligible";
 
 export type MobileLinePaint = {
   teamLabeled: string;
@@ -611,9 +615,21 @@ export function composeEdgeBoardMobileCard(args: {
     }
   }
 
+  const totalIdentity = evaluateTotalIdentityGate({
+    sport,
+    market: "Total",
+    period: row.period,
+    commenceTime: row.commenceTime,
+    linesAsOf: row.linesAsOf,
+    compareEligible: row.totalCompareEligible,
+  });
+  if (totalIdentity.failClosed) {
+    flags.push("total_identity_ineligible");
+  }
+
   const claimedTotal = row.edgeMagnitudeOU ?? row.edgeOUNum ?? undefined;
   const totalReconcile =
-    fairTotalNum != null && displayTotal != null
+    !totalIdentity.failClosed && fairTotalNum != null && displayTotal != null
       ? reconcileTotalCustomerEdge({
           fairTotal: fairTotalNum,
           marketTotal: displayTotal,
@@ -634,9 +650,14 @@ export function composeEdgeBoardMobileCard(args: {
   const totalFail =
     flags.includes("total_fair_market_edge_mismatch") ||
     flags.includes("total_side_disagrees_favor");
-  const totalStatus = toPublishActionLabel(row.actionLabelOU ?? row.tagOU);
+  const totalStatus = totalIdentity.failClosed
+    ? null
+    : toPublishActionLabel(row.actionLabelOU ?? row.tagOU);
   let totalInterp: MobileInterpretation | null = null;
-  if (totalStatus || totalReconcile?.status === "ok") {
+  if (
+    !totalIdentity.failClosed &&
+    (totalStatus || totalReconcile?.status === "ok")
+  ) {
     const totalAdv =
       !totalFail &&
       totalReconcile?.status === "ok" &&

@@ -232,6 +232,12 @@ export type LegacyEdgeBoardRow = {
   statDrop?: StatDrop;
   isNeutral?: boolean;
   siteLabel?: string;
+  /** Totals period identity when assemble stamped it (fg / 1st5 / …). */
+  period?: string | null;
+  /** INC-2026-09-10: false → do not compare this total to FG fair. */
+  totalCompareEligible?: boolean;
+  totalIdentityReason?: string;
+  totalQuoteLive?: boolean;
 };
 
 /** Empty market / KEI / edge cell — never show “Coming soon” on live boards. */
@@ -992,6 +998,10 @@ export function flatRowsToLegacy(
       playToOUNum: totalRow?.playToPlay,
       leanToLineNum: lineRow?.playToLean,
       leanToOUNum: totalRow?.playToLean,
+      period: totalRow?.period ?? undefined,
+      totalCompareEligible: !totalIdentityFail,
+      totalIdentityReason: totalIdentity.reason,
+      totalQuoteLive: totalIdentity.inPlay || totalRow?.totalQuoteLive,
       fairLineKei: lineRow?.fairLine ?? undefined,
       fairOUKei: totalRow?.fairLine ?? undefined,
       marketLineCurrent: resolveActionMarket(

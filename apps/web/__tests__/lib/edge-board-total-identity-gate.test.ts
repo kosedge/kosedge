@@ -6,6 +6,7 @@ import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
+import { composeEdgeBoardMobileCard } from "@/lib/edge-board-mobile-presentation";
 import {
   applyTotalIdentityGateToRows,
   evaluateTotalIdentityGate,
@@ -213,6 +214,8 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
     expect(row.edgeMagnitudeOU).toBeUndefined();
     expect(row.edgeOUFavor).toBeUndefined();
     expect(row.actionLabelOU).toBeUndefined();
+    expect(row.totalCompareEligible).toBe(false);
+    expect(row.totalQuoteLive).toBe(true);
   });
 
   it("missing period fails closed (pregame 3.5 vs 9 is still not compared)", () => {
@@ -288,6 +291,39 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
     expect(row.edgeOUNum).toBeCloseTo(5.5, 5);
     expect(row.tagOU).toBe("PLAY");
     expect(row.playOU).toBe("Over 3.5");
+    expect(row.totalCompareEligible).toBe(true);
+  });
+
+  it("mobile card does not paint Over +5.5 from Fair vs Market when gated", () => {
+    const rows = flatRowsToLegacy(
+      [
+        {
+          id: "rays-atl-ml",
+          game: RAYS_ATL,
+          market: "Moneyline",
+          best: "+110",
+          bestJuiceHome: "-130",
+          bookKey: "draftkings",
+          kei: "-140",
+          keiAway: "+120",
+          homeWinProb: 0.52,
+          commenceTime: "2026-09-10T16:20:00Z",
+          linesAsOf: "2026-09-10T18:45:00Z",
+        },
+        raysAtlInPlayTotal({ fairLine: 9 }),
+      ],
+      "mlb",
+    );
+    const model = composeEdgeBoardMobileCard({
+      sportKey: "mlb",
+      row: rows[0]!,
+    });
+    expect(model.marketTotal?.over).toMatch(/3\.5/);
+    expect(model.fairTotal?.over).toMatch(/9/);
+    expect(model.totalInterp).toBeNull();
+    expect(model.truthFlags).toContain("total_identity_ineligible");
+    expect(model.totalInterp?.sideLabel).not.toBe("Over");
+    expect(model.totalInterp?.magnitude).not.toBe("+5.5 pts");
   });
 });
 
