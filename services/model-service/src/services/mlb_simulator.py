@@ -6,6 +6,10 @@ import random
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 
+from .mlb_fair_total import (
+    MLB_FAIR_TOTAL_QUANTIZATION,
+    quantize_mlb_fair_total,
+)
 from .mlb_park_orientation import (
     apply_totals_park_rel_wind_flag,
     get_totals_park_rel_wind_enabled,
@@ -799,8 +803,11 @@ def simulate_mlb_game(
             "fg_total_p90": fg_p90,
             "fair_f5_home_ml": _fair_moneyline_from_prob(f5_home_prob),
             "fair_fg_home_ml": _fair_moneyline_from_prob(fg_home_prob),
-            "fair_f5_total": round(f5_mean * 2.0) / 2.0,
-            "fair_fg_total": round(fg_mean * 2.0) / 2.0,
+            # KEI / fair board total = nearest half-run of the matching mean
+            # (certified `nearest_half_run`; 9.09 → 9.0 is policy, not a stub).
+            "fair_f5_total": quantize_mlb_fair_total(f5_mean),
+            "fair_fg_total": quantize_mlb_fair_total(fg_mean),
+            "fair_total_quantization": MLB_FAIR_TOTAL_QUANTIZATION,
             "fair_f5_spread_home": fair_f5_spread_home,
             "fair_fg_spread_home": fair_fg_spread_home,
             "f5_margin_mean": round(f5_margin_mean, 4),

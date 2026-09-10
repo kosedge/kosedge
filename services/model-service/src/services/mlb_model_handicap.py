@@ -11,6 +11,8 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
+from .mlb_fair_total import MLB_FAIR_TOTAL_QUANTIZATION
+
 
 _MODEL_MARKET_KEYS = (
     "f5_home_win_prob",
@@ -205,5 +207,6 @@ def fair_lines_payload_from_row(
         "model_fg_total_mean": m_total_mean,
         "model_fair_fg_total": m_total,
         "model_fair_fg_spread_home": m_spread,
+        "fair_total_quantization": MLB_FAIR_TOTAL_QUANTIZATION,
         "projected_at": projected_at,
     }
