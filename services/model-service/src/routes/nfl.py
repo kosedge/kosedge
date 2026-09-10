@@ -5369,6 +5369,141 @@ def nfl_fantasy_rankings(
         session.close()
 
 
+class NflDfsIngestBody(BaseModel):
+    site: str
+    season: int
+    week: int
+    slate_id: str
+    source: str = "manual_upload"
+    source_version: str
+    captured_at: Optional[str] = None
+    slate_name: Optional[str] = None
+    csv_text: Optional[str] = None
+    json_payload: Optional[Dict[str, Any]] = None
+
+
+@router.get("/dfs/board")
+def nfl_dfs_board(
+    season: int = Query(..., ge=2010, le=2100),
+    week: int = Query(..., ge=1, le=18),
+    site: str = Query(..., pattern="^(?i)(dk|fd|draftkings|fanduel)$"),
+    slate_id: Optional[str] = Query(None),
+    position: Optional[str] = Query(None),
+    model_version: str = Query("nfl-player-v1"),
+) -> Dict[str, Any]:
+    """Certified DFS research board. Fail closed — never season-rate fallback."""
+    from src.services.nfl_dfs_store import build_board_from_db
+
+    session = SessionLocal()
+    try:
+        board = build_board_from_db(
+            session,
+            site=site,
+            season=int(season),
+            week=int(week),
+            slate_id=slate_id,
+            position=position,
+            model_version=model_version,
+        )
+        payload = board.as_public()
+        payload["count"] = len(board.rows)
+        return payload
+    except (ProgrammingError, SQLAlchemyError, OperationalError) as exc:
+        log.exception("nfl_dfs_board failed: %s", exc)
+        return {
+            "site": site.upper(),
+            "season": season,
+            "week": week,
+            "slate_id": slate_id,
+            "status": "schema_not_ready",
+            "live": False,
+            "rows": [],
+            "rejected": [],
+            "slates": [],
+            "summary": {},
+            "count": 0,
+            "diagnostics": {
+                "fail_closed": True,
+                "season_average_substituted": False,
+                "error": "query_failed",
+            },
+            "ownership": {"status": "unavailable", "reason": "no_defensible_source"},
+        }
+    finally:
+        session.close()
+
+
+@router.get("/dfs/slates")
+def nfl_dfs_slates(
+    season: int = Query(..., ge=2010, le=2100),
+    week: int = Query(..., ge=1, le=18),
+    site: str = Query(..., pattern="^(?i)(dk|fd|draftkings|fanduel)$"),
+) -> Dict[str, Any]:
+    from src.services.nfl_dfs_identity import canonical_dfs_site
+    from src.services.nfl_dfs_store import load_current_slates
+
+    site_c = canonical_dfs_site(site)
+    if site_c is None:
+        return {"count": 0, "slates": [], "status": "invalid_site"}
+    session = SessionLocal()
+    try:
+        slates = load_current_slates(session, site=site_c, season=season, week=week)
+        return {
+            "count": len(slates),
+            "status": "ok" if slates else "no_slate",
+            "slates": [
+                {
+                    "site": s.site,
+                    "season": s.season,
+                    "week": s.week,
+                    "slate_id": s.slate_id,
+                    "contest_style": s.contest_style,
+                }
+                for s in slates
+            ],
+        }
+    except (ProgrammingError, SQLAlchemyError, OperationalError) as exc:
+        log.exception("nfl_dfs_slates failed: %s", exc)
+        return {"count": 0, "slates": [], "status": "schema_not_ready"}
+    finally:
+        session.close()
+
+
+@router.post("/ops/dfs-ingest")
+def nfl_dfs_ingest(request: Request, body: NflDfsIngestBody) -> Dict[str, Any]:
+    """Ingest a DK or FD salary/slate payload. Site is stamped from the file."""
+    _require_kosedge_internal(request)
+    from src.services.nfl_dfs_salary_ingest import SalaryParseError, normalize_slate
+    from src.services.nfl_dfs_store import persist_normalized_slate
+
+    try:
+        slate = normalize_slate(
+            site=body.site,
+            season=body.season,
+            week=body.week,
+            slate_id=body.slate_id,
+            source=body.source,
+            source_version=body.source_version,
+            captured_at=body.captured_at,
+            csv_text=body.csv_text,
+            json_payload=body.json_payload,
+            slate_name=body.slate_name,
+        )
+    except SalaryParseError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    session = SessionLocal()
+    try:
+        result = persist_normalized_slate(session, slate)
+        return {"status": "ok", "ingest": result}
+    except (ProgrammingError, SQLAlchemyError, OperationalError) as exc:
+        session.rollback()
+        log.exception("nfl_dfs_ingest failed: %s", exc)
+        raise HTTPException(status_code=503, detail="dfs_schema_not_ready") from exc
+    finally:
+        session.close()
+
+
 @router.get("/fantasy/draft-rankings")
 def nfl_fantasy_draft_rankings(
     season: int = Query(..., ge=2010, le=2100),
