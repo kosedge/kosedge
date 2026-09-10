@@ -204,6 +204,39 @@ describe("#508 magnitude / side — fail closed", () => {
     expect(over.marketTotal?.over).toBe("O 44.5");
     expect(over.marketTotal?.under).toBe("U 44.5");
   });
+
+  it("INC-2026-09-10: gated MLB total does not paint Over magnitude on mobile", () => {
+    const model = composeEdgeBoardMobileCard({
+      sportKey: "mlb",
+      row: baseRow({
+        teamA: { name: "Tampa Bay Rays", site: "Away" },
+        teamB: { name: "Atlanta Braves", site: "Home" },
+        awayAbbr: "TB",
+        homeAbbr: "ATL",
+        commenceTime: "2026-09-10T16:20:00Z",
+        linesAsOf: "2026-09-10T18:45:00Z",
+        totalCompareEligible: false,
+        marketOUCurrent: 3.5,
+        fairOUKei: 9,
+        bestOU: {
+          top: { label: "o3.5", juice: "-110" },
+          bottom: { label: "u3.5", juice: "-110" },
+        },
+        keiOU: {
+          top: { label: "o9", juice: "—" },
+          bottom: { label: "u9", juice: "—" },
+        },
+        tagOU: "PLAY",
+        edgeMagnitudeOU: 5.5,
+        edgeOUNum: 5.5,
+        edgeOUFavor: "Over",
+      }),
+    });
+    expect(model.truthFlags).toContain("total_identity_ineligible");
+    expect(model.totalInterp).toBeNull();
+    expect(model.marketTotal?.over).toBe("O 3.5");
+    expect(model.fairTotal?.over).toBe("O 9");
+  });
 });
 
 describe("book badge = decision book of the displayed price", () => {
