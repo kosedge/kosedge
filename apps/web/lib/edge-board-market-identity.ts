@@ -81,7 +81,9 @@ export function isFeaturedFullGameOddsKey(
   marketKey: string | null | undefined,
 ): boolean {
   const k = normalizeIdentityToken(marketKey);
-  return k != null && (FEATURED_FULL_GAME_ODDS_KEYS as readonly string[]).includes(k);
+  return (
+    k != null && (FEATURED_FULL_GAME_ODDS_KEYS as readonly string[]).includes(k)
+  );
 }
 
 export function isFirstFiveInningsOddsKey(
@@ -104,7 +106,9 @@ export function selectFeaturedFullGameMarket<T extends { key?: string }>(
   featuredKey: (typeof FEATURED_FULL_GAME_ODDS_KEYS)[number],
 ): T | null {
   if (!markets?.length) return null;
-  return markets.find((m) => normalizeIdentityToken(m.key) === featuredKey) ?? null;
+  return (
+    markets.find((m) => normalizeIdentityToken(m.key) === featuredKey) ?? null
+  );
 }
 
 export function isFullGamePregamePeriod(
@@ -156,8 +160,10 @@ export function periodFamilyFromOddsMarketKey(
   if (!k) return null;
   if (isFeaturedFullGameOddsKey(k)) return "fg";
   if (isFirstFiveInningsOddsKey(k)) return "1st5";
-  if (k.includes("1st_3_innings") || k.includes("first_3_innings")) return "1st3";
-  if (k.includes("1st_7_innings") || k.includes("first_7_innings")) return "1st7";
+  if (k.includes("1st_3_innings") || k.includes("first_3_innings"))
+    return "1st3";
+  if (k.includes("1st_7_innings") || k.includes("first_7_innings"))
+    return "1st7";
   if (k.startsWith("alternate_") || k.includes("alternate")) return "alternate";
   return null;
 }
@@ -198,7 +204,9 @@ export type StampOddsPeriodArgs = {
  * - `totals_1st_5_innings` (etc.) → `1st5` regardless of commence
  * - Cannot certify → null (fail closed downstream)
  */
-export function stampOddsMarketPeriod(args: StampOddsPeriodArgs): string | null {
+export function stampOddsMarketPeriod(
+  args: StampOddsPeriodArgs,
+): string | null {
   const family = periodFamilyFromOddsMarketKey(args.marketKey);
   if (!family) return null;
   if (family !== "fg") return family;
@@ -279,10 +287,18 @@ export function quoteTargetEqualsModel(
   if (target.sport && quote.sport && !tokensEqual(target.sport, quote.sport)) {
     return false;
   }
-  if (target.market && quote.market && !marketsEquivalent(target.market, quote.market)) {
+  if (
+    target.market &&
+    quote.market &&
+    !marketsEquivalent(target.market, quote.market)
+  ) {
     return false;
   }
-  if (target.event && quote.event && !eventsEquivalent(target.event, quote.event)) {
+  if (
+    target.event &&
+    quote.event &&
+    !eventsEquivalent(target.event, quote.event)
+  ) {
     return false;
   }
   if (target.side && quote.side && !tokensEqual(target.side, quote.side)) {

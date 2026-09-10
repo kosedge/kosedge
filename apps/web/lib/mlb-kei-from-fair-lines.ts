@@ -5,10 +5,7 @@
  * Model (pure sim) → model* (Fair Lines desk; not used for edge tags)
  */
 
-import {
-  applyHandicapIdentity,
-  type KeiLineGame,
-} from "@/lib/kei-lines";
+import { applyHandicapIdentity, type KeiLineGame } from "@/lib/kei-lines";
 import type { MlbFairLineRow } from "@/lib/mlb-fair-lines-format";
 
 export function keiGamesFromMlbFairLines(
@@ -21,11 +18,9 @@ export function keiGamesFromMlbFairLines(
       line.handicapTotal ?? line.fairTotal ?? line.totalMean ?? null;
     const handicapHomeMl = line.handicapHomeMl ?? line.fairHomeMl ?? null;
     const handicapAwayMl = line.handicapAwayMl ?? line.fairAwayMl ?? null;
-    const handicapWin =
-      line.handicapHomeWinProb ?? line.homeWinProb ?? null;
+    const handicapWin = line.handicapHomeWinProb ?? line.homeWinProb ?? null;
 
-    const modelSpread =
-      line.modelSpreadHome ?? handicapSpread;
+    const modelSpread = line.modelSpreadHome ?? handicapSpread;
     const modelTotal = line.modelTotal ?? line.modelTotalMean ?? handicapTotal;
     const modelHomeMl = line.modelHomeMl ?? handicapHomeMl;
     const modelAwayMl = line.modelAwayMl ?? handicapAwayMl;
