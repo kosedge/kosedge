@@ -4,7 +4,10 @@ import {
   scoreCountingLine,
   scoreProductionForSite,
 } from "@/lib/nfl-dfs-scoring";
-import { pointsPer1k, salaryRelativePositionalValue } from "@/lib/nfl-dfs-value";
+import {
+  pointsPer1k,
+  salaryRelativePositionalValue,
+} from "@/lib/nfl-dfs-value";
 import {
   leverageFromUpsideAndOwn,
   unavailableOwnership,
@@ -115,7 +118,12 @@ describe("DFS value + ownership", () => {
     });
     expect(own.status).toBe("unavailable");
     expect(own.projectedOwn).toBeNull();
-    expect(leverageFromUpsideAndOwn({ upsideProbability: 0.4, expectedOwnership: 0.1 })).toBeNull();
+    expect(
+      leverageFromUpsideAndOwn({
+        upsideProbability: 0.4,
+        expectedOwnership: 0.1,
+      }),
+    ).toBeNull();
   });
 });
 

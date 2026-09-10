@@ -45,7 +45,10 @@ export function salaryRelativePositionalValue(input: {
   let band = peers.filter(([s]) => s >= lo && s <= hi);
   if (band.length < 3) {
     band = [...peers]
-      .sort((a, b) => Math.abs(a[0] - input.salary!) - Math.abs(b[0] - input.salary!))
+      .sort(
+        (a, b) =>
+          Math.abs(a[0] - input.salary!) - Math.abs(b[0] - input.salary!),
+      )
       .slice(0, 5);
   }
   if (band.length < 2) {

@@ -68,7 +68,10 @@ export function certifyDfsGameQuote(
   ) {
     return unavailable("in_play");
   }
-  if (isFirstFiveInningsOddsKey(quote.market) || !isFullGamePregamePeriod(quote.period)) {
+  if (
+    isFirstFiveInningsOddsKey(quote.market) ||
+    !isFullGamePregamePeriod(quote.period)
+  ) {
     return unavailable("period_not_fg");
   }
   if (!isFeaturedFullGameOddsKey(quote.market)) {
@@ -79,7 +82,8 @@ export function certifyDfsGameQuote(
   const opp = canonicalTeamCode(input.opponent);
   const home = canonicalTeamCode(quote.homeTeam);
   const away = canonicalTeamCode(quote.awayTeam);
-  if (!team || !opp || !home || !away) return unavailable("missing_event_teams");
+  if (!team || !opp || !home || !away)
+    return unavailable("missing_event_teams");
   const participants = new Set([home, away]);
   if (!participants.has(team) || !participants.has(opp)) {
     return unavailable("event_mismatch");

@@ -11,7 +11,7 @@ import {
   formatDfsNumber,
   formatSalary,
   type NflDfsBoardRow,
-} from "@/lib/nfl-dfs-board";
+} from "@/lib/nfl-dfs-types";
 
 type SortKey =
   | "playerName"
@@ -147,20 +147,53 @@ export function NflDfsBoardTable({ rows }: { rows: NflDfsBoardRow[] }) {
     <table className="min-w-full text-left text-sm">
       <thead>
         <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/60">
-          <SortTh label="Player" active={sortKey === "playerName"} onClick={() => toggle("playerName")} />
-          <SortTh label="Pos" active={sortKey === "position"} onClick={() => toggle("position")} />
+          <SortTh
+            label="Player"
+            active={sortKey === "playerName"}
+            onClick={() => toggle("playerName")}
+          />
+          <SortTh
+            label="Pos"
+            active={sortKey === "position"}
+            onClick={() => toggle("position")}
+          />
           <th className="px-3 py-3">Team/Opp</th>
-          <SortTh label="Salary" active={sortKey === "salary"} onClick={() => toggle("salary")} />
-          <SortTh label="Proj" active={sortKey === "projection"} onClick={() => toggle("projection")} />
-          <SortTh label="Floor" active={sortKey === "floor"} onClick={() => toggle("floor")} />
-          <SortTh label="Ceiling" active={sortKey === "ceiling"} onClick={() => toggle("ceiling")} />
-          <SortTh label="Value" active={sortKey === "value"} onClick={() => toggle("value")} />
+          <SortTh
+            label="Salary"
+            active={sortKey === "salary"}
+            onClick={() => toggle("salary")}
+          />
+          <SortTh
+            label="Proj"
+            active={sortKey === "projection"}
+            onClick={() => toggle("projection")}
+          />
+          <SortTh
+            label="Floor"
+            active={sortKey === "floor"}
+            onClick={() => toggle("floor")}
+          />
+          <SortTh
+            label="Ceiling"
+            active={sortKey === "ceiling"}
+            onClick={() => toggle("ceiling")}
+          />
+          <SortTh
+            label="Value"
+            active={sortKey === "value"}
+            onClick={() => toggle("value")}
+          />
         </tr>
       </thead>
       <tbody>
         {sorted.map((r) => (
-          <tr key={`${r.site}-${r.slateId}-${r.playerUid}`} className="border-b border-white/5 odd:bg-white/[0.02]">
-            <td className="px-3 py-2 font-medium text-kos-text">{r.playerName}</td>
+          <tr
+            key={`${r.site}-${r.slateId}-${r.playerUid}`}
+            className="border-b border-white/5 odd:bg-white/[0.02]"
+          >
+            <td className="px-3 py-2 font-medium text-kos-text">
+              {r.playerName}
+            </td>
             <td className="px-3 py-2 text-kos-text/70">{r.position}</td>
             <td className="px-3 py-2 text-kos-text/80">
               <Link
@@ -179,12 +212,18 @@ export function NflDfsBoardTable({ rows }: { rows: NflDfsBoardRow[] }) {
                 </span>
               ) : null}
             </td>
-            <td className="px-3 py-2 text-kos-text">{formatSalary(r.salary)}</td>
+            <td className="px-3 py-2 text-kos-text">
+              {formatSalary(r.salary)}
+            </td>
             <td className="px-3 py-2 font-semibold text-kos-gold">
               {formatDfsNumber(r.projection)}
             </td>
-            <td className="px-3 py-2 text-kos-text/75">{formatDfsNumber(r.floor)}</td>
-            <td className="px-3 py-2 text-kos-text/75">{formatDfsNumber(r.ceiling)}</td>
+            <td className="px-3 py-2 text-kos-text/75">
+              {formatDfsNumber(r.floor)}
+            </td>
+            <td className="px-3 py-2 text-kos-text/75">
+              {formatDfsNumber(r.ceiling)}
+            </td>
             <td className="px-3 py-2 text-kos-text">
               {r.value == null ? "—" : formatDfsNumber(r.value, 2)}
             </td>

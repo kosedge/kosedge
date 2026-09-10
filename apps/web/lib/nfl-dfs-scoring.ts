@@ -130,7 +130,11 @@ function outcomeHasStats(outcome?: DfsOutcome | null): boolean {
   );
 }
 
-function scaleTd(meanTd: number, outcomeTd: number | undefined, total: number): number {
+function scaleTd(
+  meanTd: number,
+  outcomeTd: number | undefined,
+  total: number,
+): number {
   if (outcomeTd == null || !(total > 0)) return meanTd;
   return Math.max(0, meanTd * (outcomeTd / total));
 }
@@ -203,7 +207,10 @@ export function scoreProductionForSite(
     });
 
   const floorPts = scoreOutcome(outcomes?.floor ?? {}, system === DK_CLASSIC);
-  const ceilingPts = scoreOutcome(outcomes?.ceiling ?? {}, system === DK_CLASSIC);
+  const ceilingPts = scoreOutcome(
+    outcomes?.ceiling ?? {},
+    system === DK_CLASSIC,
+  );
   const medianPts = outcomeHasStats(outcomes?.median)
     ? scoreOutcome(outcomes?.median ?? {}, false) + bonus
     : projection;

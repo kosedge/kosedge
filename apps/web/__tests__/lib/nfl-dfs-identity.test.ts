@@ -116,9 +116,9 @@ describe("DFS identity fail-closed joins", () => {
   });
 
   it("rejects FD salary presented as DK", () => {
-    expect(presentSalaryForSite(salary({ site: "FD", salary: 8800 }), "DK").reason).toBe(
-      "site_mismatch",
-    );
+    expect(
+      presentSalaryForSite(salary({ site: "FD", salary: 8800 }), "DK").reason,
+    ).toBe("site_mismatch");
   });
 
   it("rejects stale and missing salary / projection", () => {
@@ -130,7 +130,8 @@ describe("DFS identity fail-closed joins", () => {
       }).reason,
     ).toBe("stale_salary");
     expect(
-      certifyDfsJoin({ requested, salary: null, projection: projection() }).reason,
+      certifyDfsJoin({ requested, salary: null, projection: projection() })
+        .reason,
     ).toBe("missing_salary");
     expect(
       certifyDfsJoin({ requested, salary: salary(), projection: null }).reason,
@@ -152,11 +153,11 @@ describe("DFS identity fail-closed joins", () => {
       { site: "DK", playerUid: "a" },
       { site: "FD", playerUid: "b" },
     ];
-    expect(filterRowsForRequestedSite(rows, "FD").map((r) => r.playerUid)).toEqual([
-      "b",
-    ]);
-    expect(filterRowsForRequestedSite(rows, "draftkings").map((r) => r.site)).toEqual([
-      "DK",
-    ]);
+    expect(
+      filterRowsForRequestedSite(rows, "FD").map((r) => r.playerUid),
+    ).toEqual(["b"]);
+    expect(
+      filterRowsForRequestedSite(rows, "draftkings").map((r) => r.site),
+    ).toEqual(["DK"]);
   });
 });

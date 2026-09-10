@@ -3,12 +3,12 @@ import {
   NflDfsBoardTable,
   NflDfsDeskControls,
 } from "@/components/pro/nfl/NflDfsDeskClient";
+import { fetchNflDfsBoard } from "@/lib/nfl-dfs-board";
 import {
-  fetchNflDfsBoard,
   formatDfsNumber,
   formatSalary,
   type NflDfsSummaryCard,
-} from "@/lib/nfl-dfs-board";
+} from "@/lib/nfl-dfs-types";
 import { canonicalDfsSite } from "@/lib/nfl-dfs-identity";
 
 const DEFAULT_SEASON = 2026;
@@ -21,7 +21,10 @@ function firstValue(value: SearchValue): string | undefined {
   return value;
 }
 
-function summaryLine(card: NflDfsSummaryCard | null, kind: "proj" | "value" | "ceil") {
+function summaryLine(
+  card: NflDfsSummaryCard | null,
+  kind: "proj" | "value" | "ceil",
+) {
   if (!card) return "Unavailable — no certified row.";
   const metric =
     kind === "value"
@@ -44,7 +47,9 @@ export default async function NflDfsPage({
   const seasonRaw = Number(firstValue(search.season));
   const weekRaw = Number(firstValue(search.week));
   const season =
-    Number.isFinite(seasonRaw) && seasonRaw >= 2010 ? seasonRaw : DEFAULT_SEASON;
+    Number.isFinite(seasonRaw) && seasonRaw >= 2010
+      ? seasonRaw
+      : DEFAULT_SEASON;
   const week =
     Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 18
       ? weekRaw
@@ -80,7 +85,10 @@ export default async function NflDfsPage({
         </p>
         <div className="mt-4">
           {hasRows ? (
-            <HonestStatusBanner title={`${siteLabel} · Week ${week} priced slate`} tone="sky">
+            <HonestStatusBanner
+              title={`${siteLabel} · Week ${week} priced slate`}
+              tone="sky"
+            >
               <p>
                 {board.rows.length} certified rows. Value is points per $1K, not
                 a KosEdge rating. Floor/ceiling appear only when the weekly
@@ -90,7 +98,8 @@ export default async function NflDfsPage({
           ) : (
             <HonestStatusBanner
               title={
-                board.status === "no_slate" || board.status === "ambiguous_slate"
+                board.status === "no_slate" ||
+                board.status === "ambiguous_slate"
                   ? "No certified slate"
                   : "Slate not priced yet"
               }
@@ -120,9 +129,18 @@ export default async function NflDfsPage({
       </div>
 
       <section className="mt-6 grid gap-3 md:grid-cols-3">
-        <SummaryCard title="Top projection" body={summaryLine(board.summary.topProjection, "proj")} />
-        <SummaryCard title="Best value" body={summaryLine(board.summary.bestValue, "value")} />
-        <SummaryCard title="Highest ceiling" body={summaryLine(board.summary.highestCeiling, "ceil")} />
+        <SummaryCard
+          title="Top projection"
+          body={summaryLine(board.summary.topProjection, "proj")}
+        />
+        <SummaryCard
+          title="Best value"
+          body={summaryLine(board.summary.bestValue, "value")}
+        />
+        <SummaryCard
+          title="Highest ceiling"
+          body={summaryLine(board.summary.highestCeiling, "ceil")}
+        />
       </section>
 
       <section className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">

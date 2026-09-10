@@ -38,9 +38,10 @@ export function unavailableOwnership(input: {
 }
 
 /** Exact production formula must be validated before this returns a number. */
-export function leverageFromUpsideAndOwn(_input: {
+export function leverageFromUpsideAndOwn(input: {
   upsideProbability: number | null;
   expectedOwnership: number | null;
 }): number | null {
+  void input;
   return null;
 }

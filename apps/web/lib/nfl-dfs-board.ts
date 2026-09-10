@@ -3,77 +3,19 @@ import { env } from "@/lib/config/env";
 import {
   canonicalDfsSite,
   filterRowsForRequestedSite,
-  type DfsSite,
 } from "@/lib/nfl-dfs-identity";
+import type {
+  NflDfsBoardResponse,
+  NflDfsBoardRow,
+  NflDfsSummaryCard,
+} from "@/lib/nfl-dfs-types";
 
-export type NflDfsBoardRow = {
-  site: DfsSite;
-  slateId: string;
-  season: number;
-  week: number;
-  playerUid: string;
-  playerName: string;
-  position: string;
-  team: string;
-  opponent: string;
-  salary: number;
-  projection: number;
-  median: number | null;
-  floor: number | null;
-  ceiling: number | null;
-  value: number | null;
-  salaryRelDelta: number | null;
-  salaryRelPer1k: number | null;
-  rankPosition: number | null;
-  rankOverallValue: number | null;
-  scoringSystem: string;
-  productionVersion: string;
-  salarySource: string;
-  salarySourceVersion: string;
-  salaryCapturedAt: string;
-  ownershipStatus: string;
-  leverage: number | null;
-  gameEnv: {
-    available: boolean;
-    reason: string;
-    total: number | null;
-    spread: number | null;
-    impliedTeamTotal: number | null;
-  };
-};
-
-export type NflDfsBoardResponse = {
-  site: DfsSite | string;
-  season: number;
-  week: number;
-  slateId: string | null;
-  status: string;
-  live: boolean;
-  rows: NflDfsBoardRow[];
-  rejected: Array<{ reason: string; playerName?: string | null }>;
-  slates: Array<{ site: string; slateId: string; week: number }>;
-  summary: {
-    topProjection: NflDfsSummaryCard | null;
-    bestValue: NflDfsSummaryCard | null;
-    highestCeiling: NflDfsSummaryCard | null;
-  };
-  ownership: { status: string; reason: string };
-  diagnostics: Record<string, unknown>;
-  error?: string;
-};
-
-export type NflDfsSummaryCard = {
-  playerUid: string;
-  playerName: string;
-  position: string;
-  team: string;
-  opponent: string;
-  salary: number;
-  projection: number;
-  floor: number | null;
-  ceiling: number | null;
-  value: number | null;
-};
+export type {
+  NflDfsBoardResponse,
+  NflDfsBoardRow,
+  NflDfsSummaryCard,
+} from "@/lib/nfl-dfs-types";
+export { formatDfsNumber, formatSalary } from "@/lib/nfl-dfs-types";
 
 function toNum(value: unknown): number | null {
   if (typeof value === "number" && Number.isFinite(value)) return value;
@@ -90,7 +32,13 @@ function normalizeRow(raw: Record<string, unknown>): NflDfsBoardRow | null {
   const projection = toNum(raw.projection);
   const playerUid = raw.player_uid != null ? String(raw.player_uid) : "";
   const opponent = String(raw.opponent ?? "").trim();
-  if (!site || !playerUid || salary == null || salary <= 0 || projection == null) {
+  if (
+    !site ||
+    !playerUid ||
+    salary == null ||
+    salary <= 0 ||
+    projection == null
+  ) {
     return null;
   }
   if (!opponent) return null;
@@ -226,7 +174,9 @@ export async function fetchNflDfsBoard(params: {
       season: params.season,
       week: params.week,
       slateId:
-        typeof payload.slate_id === "string" ? payload.slate_id : params.slateId ?? null,
+        typeof payload.slate_id === "string"
+          ? payload.slate_id
+          : (params.slateId ?? null),
       status: String(payload.status ?? (rows.length ? "ok" : "empty")),
       live: false,
       rows,
@@ -293,14 +243,4 @@ function normalizeSummary(raw: unknown): NflDfsSummaryCard | null {
     ceiling: toNum(rec.ceiling),
     value: toNum(rec.value),
   };
-}
-
-export function formatDfsNumber(value: number | null | undefined, digits = 1): string {
-  if (value == null || !Number.isFinite(value)) return "—";
-  return value.toFixed(digits);
-}
-
-export function formatSalary(value: number | null | undefined): string {
-  if (value == null || !Number.isFinite(value)) return "—";
-  return `$${value.toLocaleString("en-US")}`;
 }

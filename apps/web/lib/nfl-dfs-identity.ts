@@ -60,7 +60,8 @@ export function canonicalDfsPosition(raw: unknown): string | null {
     .toUpperCase();
   if (!token) return null;
   const primary = token.split("/")[0]?.trim() ?? "";
-  if ((DFS_SKILL_POSITIONS as readonly string[]).includes(primary)) return primary;
+  if ((DFS_SKILL_POSITIONS as readonly string[]).includes(primary))
+    return primary;
   if (primary === "FB" || primary === "HB") return "RB";
   return null;
 }
@@ -136,14 +137,20 @@ export function certifyDfsJoin(input: {
   if (projection.scoringSystem !== SCORING_BY_SITE[reqSite]) {
     return verdict(false, "scoring_site_mismatch");
   }
-  if (salary.season !== requested.season || projection.season !== requested.season) {
+  if (
+    salary.season !== requested.season ||
+    projection.season !== requested.season
+  ) {
     return verdict(false, "season_mismatch");
   }
   if (salary.week !== requested.week || projection.week !== requested.week) {
     return verdict(false, "week_mismatch");
   }
   if (!requested.slateId || salary.slateId !== requested.slateId) {
-    return verdict(false, requested.slateId ? "slate_mismatch" : "missing_slate");
+    return verdict(
+      false,
+      requested.slateId ? "slate_mismatch" : "missing_slate",
+    );
   }
   if (!salary.isCurrent) return verdict(false, "stale_salary");
   if (!(salary.salary > 0)) return verdict(false, "missing_salary");
@@ -171,7 +178,11 @@ export function certifyDfsJoin(input: {
     : null;
   if (!salOpp) return verdict(false, "opponent_mismatch");
   if (projOpp && salOpp !== projOpp) return verdict(false, "opponent_mismatch");
-  if (salary.gameId && projection.gameId && salary.gameId !== projection.gameId) {
+  if (
+    salary.gameId &&
+    projection.gameId &&
+    salary.gameId !== projection.gameId
+  ) {
     return verdict(false, "game_mismatch");
   }
   return verdict(true, "ok");
