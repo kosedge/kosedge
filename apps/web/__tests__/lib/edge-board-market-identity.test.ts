@@ -4,12 +4,14 @@
  */
 import { describe, expect, it } from "vitest";
 import {
+  booksEquivalent,
   canonicalComparePeriod,
   isFeaturedFullGameOddsKey,
   isFirstFiveInningsOddsKey,
   isFullGameLivePeriod,
   isFullGamePregamePeriod,
   periodFamilyFromOddsMarketKey,
+  quoteAsOfCompatibleWithModelTarget,
   quoteTargetEqualsModel,
   selectFeaturedFullGameMarket,
   stampOddsMarketPeriod,
@@ -173,5 +175,65 @@ describe("T ≡ Q_target", () => {
         { event: "a @ b", sport: "mlb", market: "Total", period: null },
       ),
     ).toBe(false);
+  });
+
+  it("wrong event pairing cannot compare", () => {
+    expect(
+      quoteTargetEqualsModel(
+        {
+          event: "New England Patriots @ Seattle Seahawks",
+          sport: "nfl",
+          market: "Total",
+          period: "fg",
+        },
+        {
+          event: "San Francisco 49ers @ Los Angeles Rams",
+          sport: "nfl",
+          market: "Total",
+          period: "fg",
+        },
+      ),
+    ).toBe(false);
+  });
+});
+
+describe("book + quote as-of identity", () => {
+  it("displayed decision book must equal the edge-calc quote book", () => {
+    expect(booksEquivalent("draftkings", "DK")).toBe(true);
+    expect(booksEquivalent("FanDuel", "fanduel")).toBe(true);
+    expect(booksEquivalent("draftkings", "fanduel")).toBe(false);
+    expect(booksEquivalent("draftkings", null)).toBeNull();
+  });
+
+  it("unparseable or expired quote as-of is incompatible with the model target", () => {
+    expect(
+      quoteAsOfCompatibleWithModelTarget({
+        linesAsOf: "yesterday-afternoon",
+        modelAsOf: "2026-09-10T18:00:00Z",
+        commenceTime: "2026-09-11T00:20:00Z",
+      }),
+    ).toBe(false);
+    expect(
+      quoteAsOfCompatibleWithModelTarget({
+        linesAsOf: "2026-09-10T20:00:00Z",
+        modelAsOf: "2026-09-10T12:00:00Z",
+        commenceTime: "2026-09-11T00:20:00Z",
+        modelValidUntil: "2026-09-10T16:00:00Z",
+      }),
+    ).toBe(false);
+    expect(
+      quoteAsOfCompatibleWithModelTarget({
+        linesAsOf: "2026-09-10T18:00:00Z",
+        edgeCalcAsOf: "2026-09-10T12:00:00Z",
+        commenceTime: "2026-09-11T00:20:00Z",
+      }),
+    ).toBe(false);
+    expect(
+      quoteAsOfCompatibleWithModelTarget({
+        linesAsOf: "2026-09-10T16:00:00Z",
+        modelAsOf: "2026-09-10T12:00:00Z",
+        commenceTime: "2026-09-11T00:20:00Z",
+      }),
+    ).toBe(true);
   });
 });
