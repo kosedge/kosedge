@@ -24,7 +24,7 @@ const TOOLS = [
   {
     href: "/pro/cfb/slate?week=1",
     title: "Official slate",
-    body: "KosEdge W0/W1 artifact — ESPN primary, Odds API fact-check. Open a row in Project Game.",
+    body: "KosEdge W0–W2 artifact — ESPN primary, Odds API fact-check. Open a row in Project Game.",
   },
   {
     href: "/pro/cfb/projections",

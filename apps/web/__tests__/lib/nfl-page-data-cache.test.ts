@@ -91,6 +91,24 @@ describe("page-data cache headers (45s band)", () => {
     expect(res.headers.get("CDN-Cache-Control")).toContain("s-maxage=45");
   });
 
+  it("does not cache an empty requested week when sibling week1Count is nonzero", () => {
+    expect(
+      pageDataBoardOccupancy({
+        games: 0,
+        week1Count: 16,
+        rows: [],
+      }),
+    ).toBe(0);
+    const res = pageDataJsonResponse({
+      week1Count: 16,
+      week0Count: 6,
+      games: 0,
+      rows: [],
+      requestedWeek: 2,
+    });
+    expect(res.headers.get("Cache-Control")).toBe(PAGE_DATA_NO_STORE);
+  });
+
   it("never caches true-empty assemble (all occupancy signals 0)", () => {
     const res = pageDataJsonResponse({
       week1Count: 0,

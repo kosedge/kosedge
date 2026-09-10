@@ -59,6 +59,16 @@ export function isPageDataCountCacheable(
  * `rows` (and may omit `count` / `games`).
  */
 export function pageDataBoardOccupancy(body: PageDataBoardBody): number {
+  // Explicit empty requested board (games=0 + no rows) must not become
+  // cacheable just because a sibling-week badge (week1Count) is nonzero.
+  if (
+    typeof body.games === "number" &&
+    body.games === 0 &&
+    Array.isArray(body.rows) &&
+    body.rows.length === 0
+  ) {
+    return 0;
+  }
   const candidates = [
     body.count,
     body.games,

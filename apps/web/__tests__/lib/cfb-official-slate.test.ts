@@ -15,7 +15,7 @@ import {
 import { buildProjectGameBody } from "@/lib/cfb-season-engine-format";
 
 describe("cfb official slate in-house SoT", () => {
-  it("publishes W0 + W1 from the KosEdge artifact, not a remote override", () => {
+  it("publishes W0–W2 from the KosEdge artifact, not a remote override", () => {
     const board = packagedOfficialWeekBoard();
     expect(board.used_in_spread).toBe(false);
     expect(board.kei).toBe(false);
@@ -25,12 +25,17 @@ describe("cfb official slate in-house SoT", () => {
     expect(board.factcheck_source).toBe("the_odds_api_ncaaf_events");
     expect(board.as_of).toBe("2026-08-31");
     expect(board.slate_version).toMatch(/cfb-official-slate.*20260831/);
+    expect(board.weeks).toEqual([0, 1, 2]);
     const w0 = gamesForWeek(board, 0);
     const w1 = gamesForWeek(board, 1);
+    const w2 = gamesForWeek(board, 2);
     expect(w0.length).toBe(8);
     expect(w1.length).toBe(89);
+    expect(w2.length).toBe(86);
+    expect(board.n_w2).toBe(86);
     expect(w0.filter((g) => g.fbs_vs_fbs)).toHaveLength(6);
     expect(w1.filter((g) => g.fbs_vs_fbs)).toHaveLength(43);
+    expect(w2.filter((g) => g.fbs_vs_fbs)).toHaveLength(47);
     expect(w0.some((g) => g.home === "TCU" && g.away === "UNC")).toBe(true);
     expect(w0.some((g) => g.home === "USC" && g.away === "SJSU")).toBe(true);
     expect(w0.some((g) => g.home === "STAN" && g.away === "HAW")).toBe(true);
@@ -85,7 +90,9 @@ describe("cfb official slate in-house SoT", () => {
     expect(parseOfficialSlateWeek("")).toBe(1);
     expect(parseOfficialSlateWeek("1")).toBe(1);
     expect(parseOfficialSlateWeek("0")).toBe(0);
-    expect(parseOfficialSlateWeek("9")).toBe(1);
+    expect(parseOfficialSlateWeek("2")).toBe(2);
+    expect(parseOfficialSlateWeek("9")).toBe(9);
+    expect(parseOfficialSlateWeek("foo")).toBe(1);
     expect(officialSlateWeekForMatchup("TCU", "UNC")).toBe(0);
     const unc = officialSlateGameForMatchup("TCU", "UNC");
     expect(unc?.neutral_site).toBe(true);
@@ -94,6 +101,7 @@ describe("cfb official slate in-house SoT", () => {
     expect(unc?.home_score).toBe(10);
     expect(officialSlateHrefForWeek(0)).toBe("/pro/cfb/slate?week=0");
     expect(officialSlateHrefForWeek(1)).toBe("/pro/cfb/slate?week=1");
+    expect(officialSlateHrefForWeek(2)).toBe("/pro/cfb/slate?week=2");
   });
 
   it("wires slate Week 0 tab to ?week=0 (bare slate defaults to Week 1)", () => {

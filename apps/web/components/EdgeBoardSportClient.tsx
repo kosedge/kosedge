@@ -27,6 +27,9 @@ type AssemblePayload = {
   rows: EdgeBoardRow[];
   week0Count: number;
   week1Count: number;
+  week2Count?: number;
+  requestedWeek?: number;
+  requestedWeekCount?: number;
   fullCount: number;
   weeks: number[];
   linesAsOf: string | null;
@@ -38,7 +41,7 @@ type Props = {
   sportKey: string;
   sportName: string;
   slate: "week1" | "full";
-  cfbWeek: 0 | 1;
+  cfbWeek: number;
 };
 
 type ClientState =
@@ -113,6 +116,9 @@ export default function EdgeBoardSportClient({
             rows: Array.isArray(data.rows) ? data.rows : [],
             week0Count: data.week0Count ?? 0,
             week1Count: data.week1Count ?? 0,
+            week2Count: data.week2Count ?? 0,
+            requestedWeek: data.requestedWeek,
+            requestedWeekCount: data.requestedWeekCount,
             fullCount: data.fullCount ?? 0,
             weeks: Array.isArray(data.weeks) ? data.weeks : [],
             linesAsOf,
@@ -148,6 +154,8 @@ export default function EdgeBoardSportClient({
   const rows = state.status === "ready" ? state.data.rows : [];
   const week0Count = state.status === "ready" ? state.data.week0Count : 0;
   const week1Count = state.status === "ready" ? state.data.week1Count : 0;
+  const week2Count =
+    state.status === "ready" ? (state.data.week2Count ?? 0) : 0;
   const fullCount = state.status === "ready" ? state.data.fullCount : 0;
   const games = state.status === "ready" ? state.data.games : 0;
   const nflWeeks = state.status === "ready" ? state.data.weeks : [];
@@ -270,6 +278,18 @@ export default function EdgeBoardSportClient({
             >
               Week 1{week1Count ? ` (${week1Count})` : ""}
             </Link>
+            <Link
+              href="/edge-board/cfb?week=2"
+              role="tab"
+              aria-selected={cfbWeek === 2}
+              className={`min-h-11 rounded-xl px-4 py-2.5 text-sm font-semibold transition inline-flex items-center ${
+                cfbWeek === 2
+                  ? "bg-edge-green/20 border border-edge-green/40 text-edge-green"
+                  : "bg-black/30 border border-white/12 text-gray-300"
+              }`}
+            >
+              Week 2{week2Count ? ` (${week2Count})` : ""}
+            </Link>
           </div>
           <p className="text-[11px] text-gray-500">
             Week {cfbWeek} · Research board · Tags only when assemble publishes
@@ -364,7 +384,9 @@ export default function EdgeBoardSportClient({
               isNfl && slate === "week1"
                 ? "No Week 1 REG schedule games resolved. We do not fall through to later weeks or the full slate. Switch to Full slate for the multi-week board."
                 : sportKey === "cfb"
-                  ? "KEI vs trusted market when books clear. Tags stay blank until assemble publishes PLAY/LEAN/PASS — we do not invent tags from edge. Open/Best stay empty until The Odds API returns NCAAF."
+                  ? cfbWeek === 2 && rows.length === 0
+                    ? "No Week 2 house rows yet. Empty is honest — we do not recycle Week 1. KEI/Open/Best stay blank until packs and books exist for this week."
+                    : "KEI vs trusted market when books clear. Tags stay blank until assemble publishes PLAY/LEAN/PASS — we do not invent tags from edge. Open/Best stay empty until The Odds API returns NCAAF."
                   : undefined
             }
           />
@@ -385,7 +407,9 @@ export default function EdgeBoardSportClient({
                 }`
               : isNfl && slate === "week1"
                 ? "No Week 1 REG games yet — board stays empty (no silent full-slate fallthrough)."
-                : "No slate rows yet — waiting on fair-lines / Odds (or offseason empty). Boards never invent book prices."}
+                : sportKey === "cfb"
+                  ? `No Week ${cfbWeek} house rows — board stays empty (no silent Week 1 fallthrough).`
+                  : "No slate rows yet — waiting on fair-lines / Odds (or offseason empty). Boards never invent book prices."}
           </p>
         </>
       ) : null}

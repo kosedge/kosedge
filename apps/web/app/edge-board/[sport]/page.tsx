@@ -5,6 +5,7 @@ import {
   edgeBoardAssembleBootstrapScript,
   edgeBoardAssembleHref,
 } from "@/lib/edge-board-assemble-href";
+import { parseCfbAssembleWeek } from "@/lib/cfb-edge-board-week";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +46,7 @@ export default async function EdgeBoardSportPage({
   const slate =
     sportKey === "nfl" ? normalizeNflEdgeBoardSlate(slateRaw) : "week1";
   const cfbWeekRaw = Array.isArray(sp.week) ? sp.week[0] : sp.week;
-  const cfbWeek: 0 | 1 = sportKey === "cfb" ? (cfbWeekRaw === "0" ? 0 : 1) : 1;
+  const cfbWeek = sportKey === "cfb" ? parseCfbAssembleWeek(cfbWeekRaw) : 1;
   const assembleHref = edgeBoardAssembleHref({ sportKey, slate, cfbWeek });
 
   return (

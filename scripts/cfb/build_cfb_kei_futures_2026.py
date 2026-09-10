@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build frozen CFB KEI W0/W1 lines + path futures (natty / CFP / conf titles)."""
+"""Build frozen CFB KEI W0–W2 lines + path futures (natty / CFP / conf titles)."""
 
 from __future__ import annotations
 
@@ -83,7 +83,7 @@ def build_kei_board(universe, official: Dict[str, Any]) -> Dict[str, Any]:
             week = int(raw.get("week"))
         except (TypeError, ValueError):
             continue
-        if week not in (0, 1):
+        if week not in (0, 1, 2):
             continue
         home = str(raw.get("home") or "").upper()
         away = str(raw.get("away") or "").upper()
@@ -137,10 +137,11 @@ def build_kei_board(universe, official: Dict[str, Any]) -> Dict[str, Any]:
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
         "as_of": AS_OF,
         "generated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "weeks": [0, 1],
+        "weeks": [0, 1, 2],
         "n_games": len(games_out),
         "n_fbs_with_kei": len(fbs_rows),
         "n_w0_fbs_with_kei": sum(1 for g in fbs_rows if g["week"] == 0),
+        "n_w2_fbs_with_kei": sum(1 for g in fbs_rows if g["week"] == 2),
         "used_in_spread": True,
         "model_used_in_spread": False,
         "bias_guard": diagnostic_short_fav_sample(),
@@ -317,7 +318,14 @@ def main() -> None:
     print("universe", meta.get("mode"), "teams", len(universe.teams), "power_sot_fill", filled)
     official = _load_official()
     board = build_kei_board(universe, official)
-    print("KEI W0 FBS", board["n_w0_fbs_with_kei"], "all FBS", board["n_fbs_with_kei"])
+    print(
+        "KEI W0 FBS",
+        board["n_w0_fbs_with_kei"],
+        "W2 FBS",
+        board.get("n_w2_fbs_with_kei"),
+        "all FBS",
+        board["n_fbs_with_kei"],
+    )
 
     _write(MS / "src/services/cfb_season_engine/data/cfb_kei_w0_w1_2026.json", board)
     _write(ROOT / "apps/web/lib/data/cfb-kei-w0-w1-2026.json", board)

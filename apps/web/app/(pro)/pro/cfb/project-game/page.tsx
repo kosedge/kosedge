@@ -97,7 +97,7 @@ export default async function CfbProjectGamePage({
       sportName="CFB"
       base="/pro/cfb"
       title="Project Game"
-      summary="Model is research-fair. When the matchup is on the W0/W1 slate, KEI is the published line. Edge / Tag lives on the Edge Board."
+      summary="Model is research-fair. When the matchup is on the W0–W2 slate, KEI is the published line. Edge / Tag lives on the Edge Board."
       truthStates={cfbModelDeskTruthStates()}
       truthTestId="cfb-truth-state"
       honestyNote={cfbModelDeskHonestyNote()}

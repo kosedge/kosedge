@@ -1,5 +1,5 @@
 /**
- * In-house KosEdge official CFB slate (W0/W1).
+ * In-house KosEdge official CFB slate (W0–W2).
  * Desk SoT is this artifact — not a live iframe and not a Railway override.
  * Primary: ESPN team schedule. Fact-check: The Odds API NCAAF events.
  */
@@ -36,6 +36,7 @@ export type CfbWeekBoard = {
   n_fbs_vs_fbs?: number;
   n_w0?: number;
   n_w1?: number;
+  n_w2?: number;
   slate_complete?: boolean;
   official?: boolean;
   source?: string;
@@ -107,6 +108,7 @@ export function packagedOfficialWeekBoard(): CfbWeekBoard {
     n_fbs_vs_fbs: games.filter((g) => g.fbs_vs_fbs).length,
     n_w0: games.filter((g) => g.week === 0).length,
     n_w1: games.filter((g) => g.week === 1).length,
+    n_w2: games.filter((g) => g.week === 2).length,
     slate_complete: Boolean(slate.slate_complete),
     official: Boolean(slate.official),
     source: slate.source,
@@ -136,17 +138,21 @@ export function gamesForWeek(
 }
 
 export function officialSlateWeeks(): number[] {
-  const weeks = packagedOfficialWeekBoard().weeks ?? [0, 1];
-  return weeks.length ? weeks : [0, 1];
+  const weeks = packagedOfficialWeekBoard().weeks ?? [0, 1, 2];
+  return weeks.length ? weeks : [0, 1, 2];
 }
 
-/** Live desk defaults to Week 1 when present; Week 0 stays via ?week=0. */
+/**
+ * Live desk defaults to Week 1 when missing/invalid.
+ * A present integer ≥ 0 is kept (empty week board is honest — never coerce 2→1).
+ */
 export function parseOfficialSlateWeek(raw?: string): number {
   const weeks = officialSlateWeeks();
   const fallback = weeks.includes(1) ? 1 : (weeks[0] ?? 0);
   if (raw == null || String(raw).trim() === "") return fallback;
   const n = Number(raw);
-  return weeks.includes(n) ? n : fallback;
+  if (!Number.isFinite(n) || !Number.isInteger(n) || n < 0) return fallback;
+  return n;
 }
 
 /** Resolve an official slate row for a matchup — never invent. */

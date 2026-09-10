@@ -14,6 +14,10 @@ import {
   stampNflEdgeBoardWeeksFromSchedule,
 } from "@/lib/nfl-edge-board-week";
 import { requireGovernedNflFullSlate } from "@/lib/nfl-edge-board-assemble-window";
+import {
+  filterCfbEdgeBoardRowsByWeek,
+  parseCfbAssembleWeek,
+} from "@/lib/cfb-edge-board-week";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 import {
   pageDataCacheHeaders,
@@ -89,7 +93,7 @@ export async function GET(
       ? normalizeNflEdgeBoardSlate(url.searchParams.get("slate"))
       : "week1";
   const cfbWeek =
-    sport === "cfb" && url.searchParams.get("week") === "0" ? 0 : 1;
+    sport === "cfb" ? parseCfbAssembleWeek(url.searchParams.get("week")) : 1;
 
   const assembleOpts = {
     timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
@@ -155,17 +159,25 @@ export async function GET(
           ...assembleOpts,
         }),
       );
-      const rows = all.filter((r) => r.week === cfbWeek);
+      const rows = filterCfbEdgeBoardRowsByWeek(all, cfbWeek);
       // Same honesty as NFL: book last_update / row linesAsOf — never GET clock.
+      // Missing requested week → empty board (never coerce to week 1).
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
+      const week0Count = gameCount(all.filter((r) => r.week === 0));
+      const week1Count = gameCount(all.filter((r) => r.week === 1));
+      const week2Count = gameCount(all.filter((r) => r.week === 2));
+      const requestedWeekCount = gameCount(rows);
       return pageDataJsonResponse({
         rows: scrubEdgeBoardAssembleCustomerRows(rows),
-        week0Count: gameCount(all.filter((r) => r.week === 0)),
-        week1Count: gameCount(all.filter((r) => r.week === 1)),
+        week0Count,
+        week1Count,
+        week2Count,
+        requestedWeek: cfbWeek,
+        requestedWeekCount,
         fullCount: 0,
-        weeks: [],
+        weeks: weeksOnBoard(all),
         linesAsOf,
-        games: gameCount(rows),
+        games: requestedWeekCount,
       });
     }
 
