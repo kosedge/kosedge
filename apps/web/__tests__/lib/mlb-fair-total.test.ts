@@ -24,9 +24,7 @@ describe("mlb fair-total quantization (nearest_half_run)", () => {
     expect(quantizeMlbFairTotal(9.24)).toBe(9.0);
     expect(quantizeMlbFairTotal(9.26)).toBe(9.5);
     expect(quantizeMlbFairTotal(7.5)).toBe(7.5);
-    const kei = new Set(
-      [8.24, 8.26, 9.26].map((m) => quantizeMlbFairTotal(m)),
-    );
+    const kei = new Set([8.24, 8.26, 9.26].map((m) => quantizeMlbFairTotal(m)));
     expect(kei).toEqual(new Set([8.0, 8.5, 9.5]));
   });
 

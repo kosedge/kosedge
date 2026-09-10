@@ -300,9 +300,9 @@ export default async function MlbFairLinesPage({
           model. When model and KEI match, no nowcast/lineup movement has been
           applied yet. Run line uses the model’s home cover probability and fair
           spread; Edges desk joins live market ML/totals when available. KEI
-          total is nearest half-run of the full-game mean
-          (provenance: nearest_half_run); the continuous mean is shown when it
-          differs from the board line.
+          total is nearest half-run of the full-game mean (provenance:
+          nearest_half_run); the continuous mean is shown when it differs from
+          the board line.
         </p>
       </section>
     </main>
@@ -332,7 +332,8 @@ function FairLineRow({
 }) {
   const h = handicapMl(row);
   const m = modelMl(row);
-  const modelWin = row.modelHomeWinProb ?? row.handicapHomeWinProb ?? row.homeWinProb;
+  const modelWin =
+    row.modelHomeWinProb ?? row.handicapHomeWinProb ?? row.homeWinProb;
   const keiWin = row.handicapHomeWinProb ?? row.homeWinProb;
   return (
     <tr className="border-b border-white/5 transition hover:bg-white/5">
@@ -362,7 +363,10 @@ function FairLineRow({
       </td>
       <td className="px-3 py-3 text-kos-text/80">
         {formatTotal(
-          row.modelTotal ?? row.modelTotalMean ?? row.fairTotal ?? row.totalMean,
+          row.modelTotal ??
+            row.modelTotalMean ??
+            row.fairTotal ??
+            row.totalMean,
         )}
       </td>
       <td className="px-3 py-3 font-semibold text-kos-text">

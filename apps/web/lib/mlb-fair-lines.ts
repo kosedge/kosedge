@@ -54,9 +54,7 @@ function fairAwayFromHome(homeMl: number | null): number | null {
   return Math.abs(homeMl);
 }
 
-function firstNumber(
-  ...candidates: Array<unknown>
-): number | null {
+function firstNumber(...candidates: Array<unknown>): number | null {
   for (const c of candidates) {
     const n = toNumberOrNull(c);
     if (n !== null) return n;
@@ -94,10 +92,7 @@ function normalizeFairLine(
   );
 
   // Model = pure sim; identity fallback to handicap when absent.
-  const modelHomeMl = firstNumber(
-    raw.model_fair_fg_home_ml,
-    handicapHomeMl,
-  );
+  const modelHomeMl = firstNumber(raw.model_fair_fg_home_ml, handicapHomeMl);
   const modelAwayMl =
     firstNumber(raw.model_fair_fg_away_ml) ?? fairAwayFromHome(modelHomeMl);
   const modelHomeWinProb = firstNumber(
