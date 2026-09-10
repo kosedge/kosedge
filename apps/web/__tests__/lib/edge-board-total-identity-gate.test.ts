@@ -11,6 +11,7 @@ import {
   evaluateTotalIdentityGate,
   isFullGameTotalPeriod,
   isOddsInPlayEvent,
+  stripFailClosedTotalDecisionChrome,
 } from "@/lib/edge-board-total-identity-gate";
 
 const webRoot = path.join(__dirname, "../..");
@@ -291,6 +292,11 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
           publishTag: "PLAY",
           actionLabel: "PLAY",
           edgeMagnitude: 5.5,
+          decision: {
+            action_label: "PLAY",
+            edge_magnitude: 5.5,
+            numerical_edge: 5.5,
+          },
         }),
       ],
       "mlb",
@@ -301,6 +307,11 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
     expect(stamped[0]?.publishTag).toBeUndefined();
     expect(stamped[0]?.actionLabel).toBeUndefined();
     expect(stamped[0]?.edgeMagnitude).toBeUndefined();
+    const decision = stamped[0]?.decision as
+      | Record<string, unknown>
+      | undefined;
+    expect(decision?.action_label).toBeUndefined();
+    expect(decision?.edge_magnitude).toBeUndefined();
     expect(stamped[0]?.best).toBe("3.5");
     expect(stamped[0]?.kei).toBe("9");
   });
@@ -398,6 +409,255 @@ describe("Rays@ATL incident — do not paint PLAY Over", () => {
   });
 });
 
+describe("TRUTH RECERT RED check #8 — fail-closed ≠ PASS", () => {
+  const NE_SEA = "New England Patriots @ Seattle Seahawks";
+
+  function neSeaInPlayMissingPeriod(overrides: Record<string, unknown> = {}) {
+    return {
+      id: "ne-sea-total",
+      game: NE_SEA,
+      market: "Total",
+      best: "44.5",
+      bookKey: "draftkings",
+      book: "DraftKings",
+      kei: "43.3",
+      fairLine: 43.3,
+      modelPeriod: "fg",
+      commenceTime: "2026-09-10T00:20:00Z",
+      linesAsOf: "2026-09-10T19:00:00Z",
+      publishTag: "PASS",
+      actionLabel: "PASS",
+      edgeMagnitude: 1.2,
+      decision: {
+        action_label: "PASS",
+        actionLabel: "PASS",
+        edge_magnitude: 1.2,
+        numerical_edge: 1.2,
+      },
+      ...overrides,
+    };
+  }
+
+  function expectNoPassOrEdge(row: {
+    tagOU?: unknown;
+    actionLabelOU?: unknown;
+    edgeOUNum?: unknown;
+    edgeMagnitudeOU?: unknown;
+    playOU?: unknown;
+  }) {
+    expect(row.tagOU).toBeUndefined();
+    expect(row.tagOU).not.toBe("PASS");
+    expect(row.actionLabelOU).toBeUndefined();
+    expect(row.edgeOUNum).toBeUndefined();
+    expect(row.edgeMagnitudeOU).toBeUndefined();
+    expect(row.playOU).toBeUndefined();
+  }
+
+  it("NE@SEA in-play + missing period: assemble does not ship PASS or edge", () => {
+    const live = evaluateTotalIdentityGate({
+      sport: "nfl",
+      market: "Total",
+      period: undefined,
+      modelPeriod: "fg",
+      commenceTime: "2026-09-10T00:20:00Z",
+      linesAsOf: "2026-09-10T19:00:00Z",
+    });
+    expect(live.failClosed).toBe(true);
+    expect(live.reason).toBe("in_play_missing_period");
+
+    const stamped = applyTotalIdentityGateToRows(
+      [neSeaInPlayMissingPeriod()],
+      "nfl",
+    );
+    expect(stamped[0]?.totalCompareEligible).toBe(false);
+    expect(stamped[0]?.totalIdentityReason).toBe("in_play_missing_period");
+    expect(stamped[0]?.publishTag).toBeUndefined();
+    expect(stamped[0]?.actionLabel).toBeUndefined();
+    expect(stamped[0]?.edgeMagnitude).toBeUndefined();
+    const decision = stamped[0]?.decision as
+      | Record<string, unknown>
+      | undefined;
+    expect(decision?.action_label).toBeUndefined();
+    expect(decision?.actionLabel).toBeUndefined();
+    expect(decision?.edge_magnitude).toBeUndefined();
+    expect(decision?.numerical_edge).toBeUndefined();
+    expect(stamped[0]?.best).toBe("44.5");
+    expect(stamped[0]?.kei).toBe("43.3");
+  });
+
+  it("NE@SEA in-play + missing period: legacy total decision has no PASS / edge_magnitude", () => {
+    const rows = flatRowsToLegacy(
+      [
+        {
+          id: "ne-sea-spread",
+          game: NE_SEA,
+          market: "Spread",
+          best: "-3.5",
+          bookKey: "draftkings",
+          kei: "-3.8",
+          commenceTime: "2026-09-10T00:20:00Z",
+          linesAsOf: "2026-09-10T19:00:00Z",
+        },
+        neSeaInPlayMissingPeriod(),
+      ],
+      "nfl",
+    );
+    expect(rows).toHaveLength(1);
+    expectNoPassOrEdge(rows[0]!);
+  });
+
+  it("strip helper never writes PASS as a stand-in", () => {
+    const stripped = stripFailClosedTotalDecisionChrome(
+      neSeaInPlayMissingPeriod(),
+    );
+    expect(stripped.publishTag).toBeUndefined();
+    expect(stripped.actionLabel).toBeUndefined();
+    expect(stripped.edgeMagnitude).toBeUndefined();
+    const decision = stripped.decision as Record<string, unknown>;
+    expect(decision.action_label).toBeUndefined();
+    expect(JSON.stringify(stripped)).not.toMatch(/"PASS"/);
+  });
+
+  it("wrong event pairing cannot compare (no PASS stand-in)", () => {
+    const v = evaluateTotalIdentityGate({
+      sport: "nfl",
+      market: "Total",
+      period: "fg",
+      modelPeriod: "fg",
+      event: NE_SEA,
+      modelEvent: "San Francisco 49ers @ Los Angeles Rams",
+      commenceTime: "2026-09-11T00:20:00Z",
+      linesAsOf: "2026-09-10T16:00:00Z",
+    });
+    expect(v.failClosed).toBe(true);
+    expect(v.reason).toBe("target_mismatch");
+
+    const stamped = applyTotalIdentityGateToRows(
+      [
+        neSeaInPlayMissingPeriod({
+          period: "fg",
+          modelPeriod: "fg",
+          modelEvent: "San Francisco 49ers @ Los Angeles Rams",
+          commenceTime: "2026-09-11T00:20:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
+        }),
+      ],
+      "nfl",
+    );
+    expect(stamped[0]?.totalCompareEligible).toBe(false);
+    expect(stamped[0]?.publishTag).toBeUndefined();
+    expect(stamped[0]?.edgeMagnitude).toBeUndefined();
+  });
+
+  it("stale / incompatible quote as-of fails closed rather than invent", () => {
+    const unparseable = evaluateTotalIdentityGate({
+      sport: "nfl",
+      market: "Total",
+      period: "fg",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-11T00:20:00Z",
+      linesAsOf: "yesterday-afternoon",
+      modelAsOf: "2026-09-10T18:00:00Z",
+    });
+    expect(unparseable.failClosed).toBe(true);
+    expect(unparseable.reason).toBe("quote_asof_incompatible");
+
+    const expired = evaluateTotalIdentityGate({
+      sport: "nfl",
+      market: "Total",
+      period: "fg",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-11T00:20:00Z",
+      linesAsOf: "2026-09-10T20:00:00Z",
+      modelAsOf: "2026-09-10T12:00:00Z",
+      modelValidUntil: "2026-09-10T16:00:00Z",
+    });
+    expect(expired.failClosed).toBe(true);
+    expect(expired.reason).toBe("quote_asof_incompatible");
+
+    const rows = flatRowsToLegacy(
+      [
+        {
+          id: "ne-sea-spread",
+          game: NE_SEA,
+          market: "Spread",
+          best: "-3.5",
+          bookKey: "draftkings",
+          kei: "-3.8",
+          commenceTime: "2026-09-11T00:20:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
+        },
+        {
+          id: "ne-sea-total",
+          game: NE_SEA,
+          market: "Total",
+          period: "fg",
+          modelPeriod: "fg",
+          best: "44.5",
+          bookKey: "draftkings",
+          kei: "43.3",
+          commenceTime: "2026-09-11T00:20:00Z",
+          linesAsOf: "yesterday-afternoon",
+          modelAsOf: "2026-09-10T18:00:00Z",
+          publishTag: "PASS",
+        },
+      ],
+      "nfl",
+    );
+    expectNoPassOrEdge(rows[0]!);
+  });
+
+  it("book mismatch: displayed decision book ≠ edge-calc quote fails closed", () => {
+    const v = evaluateTotalIdentityGate({
+      sport: "nfl",
+      market: "Total",
+      period: "fg",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-11T00:20:00Z",
+      linesAsOf: "2026-09-10T16:00:00Z",
+      book: "draftkings",
+      decisionBook: "fanduel",
+    });
+    expect(v.failClosed).toBe(true);
+    expect(v.reason).toBe("book_mismatch");
+
+    const stamped = applyTotalIdentityGateToRows(
+      [
+        neSeaInPlayMissingPeriod({
+          period: "fg",
+          modelPeriod: "fg",
+          commenceTime: "2026-09-11T00:20:00Z",
+          linesAsOf: "2026-09-10T16:00:00Z",
+          book: "DraftKings",
+          bookKey: "draftkings",
+          decisionBook: "fanduel",
+        }),
+      ],
+      "nfl",
+    );
+    expect(stamped[0]?.totalCompareEligible).toBe(false);
+    expect(stamped[0]?.totalIdentityReason).toBe("book_mismatch");
+    expect(stamped[0]?.publishTag).toBeUndefined();
+    expect(stamped[0]?.actionLabel).toBeUndefined();
+    expect(stamped[0]?.edgeMagnitude).toBeUndefined();
+  });
+
+  it("does not invent book mismatch when only one book is stamped", () => {
+    const v = evaluateTotalIdentityGate({
+      sport: "nfl",
+      market: "Total",
+      period: "fg",
+      modelPeriod: "fg",
+      commenceTime: "2026-09-11T00:20:00Z",
+      linesAsOf: "2026-09-10T16:00:00Z",
+      book: "draftkings",
+      decisionBook: undefined,
+    });
+    expect(v.failClosed).toBe(false);
+    expect(v.reason).toBe("ok");
+  });
+});
+
 describe("assemble source-lock", () => {
   it("assembleEdgeBoardRows applies the totals identity gate", () => {
     const src = readFileSync(
@@ -423,6 +683,17 @@ describe("assemble source-lock", () => {
     );
     expect(src).toContain("evaluateTotalIdentityGate");
     expect(src).toContain("totalIdentityFail");
+    expect(src).toContain("Fail-closed / unavailable total ≠ PASS");
     expect(src).not.toMatch(/3\.5\s*[<>=].*impossible|looks low/i);
+  });
+
+  it("assemble stamp strips nested decision PASS/edge (check #8)", () => {
+    const src = readFileSync(
+      path.join(webRoot, "lib/edge-board-total-identity-gate.ts"),
+      "utf8",
+    );
+    expect(src).toContain("stripFailClosedTotalDecisionChrome");
+    expect(src).toContain("book_mismatch");
+    expect(src).toContain("quote_asof_incompatible");
   });
 });

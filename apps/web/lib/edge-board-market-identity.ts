@@ -309,3 +309,97 @@ export function quoteTargetEqualsModel(
 
 /** KEI / fair totals are full-game pregame model targets. */
 export const MODEL_TOTAL_PERIOD_FG = "fg";
+
+const BOOK_KEY_ALIASES: Record<string, string> = {
+  dk: "draftkings",
+  "draft kings": "draftkings",
+  fd: "fanduel",
+  "fan duel": "fanduel",
+  mgm: "betmgm",
+  "bet mgm": "betmgm",
+};
+
+/**
+ * Canonical sportsbook key for identity compare. Display names fold to keys.
+ * Unknown non-empty tokens stay themselves (cannot silently equal another book).
+ */
+export function normalizeBookIdentity(
+  raw: string | null | undefined,
+): string | null {
+  const p = normalizeIdentityToken(raw)?.replace(/[_-]+/g, " ");
+  if (!p) return null;
+  if (BOOK_KEY_ALIASES[p]) return BOOK_KEY_ALIASES[p];
+  return p.replace(/\s+/g, "");
+}
+
+/**
+ * Displayed decision book must equal the quote used for edge calc.
+ * Missing either side → cannot certify a mismatch (null).
+ */
+export function booksEquivalent(
+  displayed: string | null | undefined,
+  edgeQuote: string | null | undefined,
+): boolean | null {
+  const a = normalizeBookIdentity(displayed);
+  const b = normalizeBookIdentity(edgeQuote);
+  if (a == null || b == null) return null;
+  return a === b;
+}
+
+function presentTimestamp(raw: string | null | undefined): {
+  present: boolean;
+  ms: number | null;
+} {
+  if (raw == null || !String(raw).trim()) {
+    return { present: false, ms: null };
+  }
+  return { present: true, ms: parseTimeMs(raw) };
+}
+
+export type QuoteAsOfCompatArgs = {
+  linesAsOf?: string | null;
+  modelAsOf?: string | null;
+  commenceTime?: string | null;
+  /** Explicit target expiry — quote after this cannot be this T. */
+  modelValidUntil?: string | null;
+  /** Vintage of the quote actually used for Edge = f(Model, Market). */
+  edgeCalcAsOf?: string | null;
+  /** Assemble already certified incompatible. */
+  quoteAsOfCompatible?: boolean | null;
+};
+
+/**
+ * Quote as-of vs model target — fail closed when we cannot certify the vintage.
+ * Does not invent a wall-clock stale window. Missing as-of is not a mismatch.
+ */
+export function quoteAsOfCompatibleWithModelTarget(
+  args: QuoteAsOfCompatArgs,
+): boolean {
+  if (args.quoteAsOfCompatible === false) return false;
+
+  const quote = presentTimestamp(args.linesAsOf);
+  if (quote.present && quote.ms == null) return false;
+
+  const model = presentTimestamp(args.modelAsOf);
+  if (model.present && model.ms == null) return false;
+
+  const until = presentTimestamp(args.modelValidUntil);
+  if (until.present && until.ms == null) return false;
+  if (until.ms != null && quote.ms != null && quote.ms > until.ms) {
+    return false;
+  }
+
+  const calc = presentTimestamp(args.edgeCalcAsOf);
+  if (calc.present && calc.ms == null) return false;
+  if (calc.ms != null && quote.ms != null && calc.ms !== quote.ms) {
+    return false;
+  }
+
+  const commenceMs = parseTimeMs(args.commenceTime);
+  if (model.ms != null && quote.ms != null && commenceMs != null) {
+    // Pregame model vintage vs live quote — not the same target window.
+    if (model.ms < commenceMs && quote.ms >= commenceMs) return false;
+  }
+
+  return true;
+}

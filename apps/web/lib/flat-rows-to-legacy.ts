@@ -89,6 +89,14 @@ export type FlatEdgeBoardRow = {
   totalCompareEligible?: boolean;
   totalIdentityReason?: string;
   totalQuoteLive?: boolean;
+  /** T.event when it can diverge from the painted game label. */
+  modelEvent?: string | null;
+  modelAsOf?: string | null;
+  modelValidUntil?: string | null;
+  edgeCalcAsOf?: string | null;
+  quoteAsOfCompatible?: boolean | null;
+  decisionBook?: string | null;
+  edgeCalcBook?: string | null;
   kei?: string;
   /** Research Model (pre-blend) when it diverges from published KEI handicap. */
   modelKei?: string;
@@ -651,10 +659,16 @@ export function flatRowsToLegacy(
       period: totalRow?.period,
       modelPeriod: totalRow?.modelPeriod,
       event: totalRow?.game ?? lineRow?.game,
-      modelEvent: totalRow?.game ?? lineRow?.game,
+      modelEvent: totalRow?.modelEvent ?? totalRow?.game ?? lineRow?.game,
       commenceTime:
         totalRow?.commenceTime ?? lineRow?.commenceTime ?? undefined,
       linesAsOf: totalRow?.linesAsOf ?? lineRow?.linesAsOf ?? undefined,
+      modelAsOf: totalRow?.modelAsOf,
+      modelValidUntil: totalRow?.modelValidUntil,
+      edgeCalcAsOf: totalRow?.edgeCalcAsOf,
+      quoteAsOfCompatible: totalRow?.quoteAsOfCompatible,
+      book: totalRow?.bookKey ?? totalRow?.book,
+      decisionBook: totalRow?.decisionBook ?? totalRow?.edgeCalcBook,
       compareEligible: totalRow?.totalCompareEligible,
     });
     const totalIdentityFail = totalIdentity.failClosed;
@@ -742,6 +756,7 @@ export function flatRowsToLegacy(
       lineRow?.seasonType ?? totalRow?.seasonType,
       lineRow?.publishTag,
     );
+    // Fail-closed / unavailable total ≠ PASS. Leave tag undefined.
     const tagOURaw = totalIdentityFail
       ? undefined
       : edgeToTag(
@@ -780,11 +795,13 @@ export function flatRowsToLegacy(
         ? ("PASS" as Tag)
         : undefined
       : tagLineRaw;
-    const tagOU = forcePass
-      ? tagOURaw
-        ? ("PASS" as Tag)
-        : undefined
-      : tagOURaw;
+    const tagOU = totalIdentityFail
+      ? undefined
+      : forcePass
+        ? tagOURaw
+          ? ("PASS" as Tag)
+          : undefined
+        : tagOURaw;
     const playLineOut = forcePass ? undefined : playLine;
     const playOUOut = forcePass || totalIdentityFail ? undefined : playOU;
 
@@ -992,13 +1009,13 @@ export function flatRowsToLegacy(
         lineRow?.modelConfidenceTierConstant ??
         totalRow?.modelConfidenceTierConstant,
       coverProbLine: lineRow?.coverProb,
-      coverProbOU: totalRow?.coverProb,
+      coverProbOU: totalIdentityFail ? undefined : totalRow?.coverProb,
       playToLine: lineRow?.playToNotes,
-      playToOU: totalRow?.playToNotes,
+      playToOU: totalIdentityFail ? undefined : totalRow?.playToNotes,
       playToLineNum: lineRow?.playToPlay,
-      playToOUNum: totalRow?.playToPlay,
+      playToOUNum: totalIdentityFail ? undefined : totalRow?.playToPlay,
       leanToLineNum: lineRow?.playToLean,
-      leanToOUNum: totalRow?.playToLean,
+      leanToOUNum: totalIdentityFail ? undefined : totalRow?.playToLean,
       fairLineKei: lineRow?.fairLine ?? undefined,
       fairOUKei: totalRow?.fairLine ?? undefined,
       marketLineCurrent: resolveActionMarket(

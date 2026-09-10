@@ -16,12 +16,17 @@
  *
  * Do not clamp because a number "looks low". No JSX. Do not invent period
  * from the Odds `totals` key here — ingest stamps via Odds rules.
+ *
+ * TRUTH RECERT RED check #8: fail-closed / unavailable ≠ PASS. Strip
+ * publishTag / actionLabel / edgeMagnitude (including nested decision).
  */
 
 import {
+  booksEquivalent,
   isFullGameLivePeriod,
   isFullGamePregamePeriod,
   isOddsInPlayEvent,
+  quoteAsOfCompatibleWithModelTarget,
   quoteTargetEqualsModel,
 } from "@/lib/edge-board-market-identity";
 
@@ -39,6 +44,8 @@ export type TotalIdentityReason =
   | "in_play_missing_period"
   | "period_not_fg"
   | "target_mismatch"
+  | "book_mismatch"
+  | "quote_asof_incompatible"
   | "compare_ineligible";
 
 export type TotalIdentityVerdict = {
@@ -61,6 +68,15 @@ export type TotalIdentityGateInput = {
   commenceTime?: string | null;
   /** Quote vintage (book/market last_update). */
   linesAsOf?: string | null;
+  /** Model/KEI vintage when stamped — stale vs quote is fail-closed. */
+  modelAsOf?: string | null;
+  modelValidUntil?: string | null;
+  edgeCalcAsOf?: string | null;
+  quoteAsOfCompatible?: boolean | null;
+  /** Displayed decision book. */
+  book?: string | null;
+  /** Book of the quote used for Edge = f(Model, Market). */
+  decisionBook?: string | null;
   /** Assemble already stamped ineligible. */
   compareEligible?: boolean | null;
   /** Injected clock for Odds in-play fallback (MLB only). */
@@ -72,16 +88,67 @@ export type TotalIdentityRowFields = {
   period?: string | null;
   modelPeriod?: string | null;
   game?: string | null;
+  modelEvent?: string | null;
   commenceTime?: string | null;
   linesAsOf?: string | null;
+  modelAsOf?: string | null;
+  modelValidUntil?: string | null;
+  edgeCalcAsOf?: string | null;
+  quoteAsOfCompatible?: boolean | null;
+  book?: string | null;
+  bookKey?: string | null;
+  decisionBook?: string | null;
+  edgeCalcBook?: string | null;
   totalCompareEligible?: boolean;
   totalIdentityReason?: TotalIdentityReason;
   /** Quote is live / commenced — not compared to FG fair. */
   totalQuoteLive?: boolean;
   publishTag?: unknown;
+  publish_tag?: unknown;
   actionLabel?: unknown;
+  action_label?: unknown;
   edgeMagnitude?: unknown;
+  edge_magnitude?: unknown;
+  decision?: unknown;
 };
+
+const FAIL_CLOSED_DECISION_KEYS = [
+  "actionLabel",
+  "action_label",
+  "edgeMagnitude",
+  "edge_magnitude",
+  "numericalEdge",
+  "numerical_edge",
+  "playTo",
+  "play_to",
+] as const;
+
+/**
+ * Unavailable / fail-closed ≠ PASS. Strip publish + action + edge chrome
+ * (top-level and nested decision). Does not invent a stand-in tag.
+ */
+export function stripFailClosedTotalDecisionChrome<
+  T extends TotalIdentityRowFields,
+>(row: T): T {
+  const next: T = { ...row };
+  delete next.publishTag;
+  delete next.publish_tag;
+  delete next.actionLabel;
+  delete next.action_label;
+  delete next.edgeMagnitude;
+  delete next.edge_magnitude;
+  const decision = next.decision;
+  if (decision && typeof decision === "object" && !Array.isArray(decision)) {
+    const d: Record<string, unknown> = {
+      ...(decision as Record<string, unknown>),
+    };
+    for (const key of FAIL_CLOSED_DECISION_KEYS) {
+      delete d[key];
+    }
+    next.decision = d;
+  }
+  return next;
+}
 
 export function isEdgeBoardTotalMarket(
   market: string | null | undefined,
@@ -177,6 +244,24 @@ export function evaluateTotalIdentityGate(
     }
   }
 
+  const bookMatch = booksEquivalent(args.book, args.decisionBook);
+  if (bookMatch === false) {
+    return { failClosed: true, reason: "book_mismatch", inPlay };
+  }
+
+  if (
+    !quoteAsOfCompatibleWithModelTarget({
+      linesAsOf: args.linesAsOf,
+      modelAsOf: args.modelAsOf,
+      commenceTime: args.commenceTime,
+      modelValidUntil: args.modelValidUntil,
+      edgeCalcAsOf: args.edgeCalcAsOf,
+      quoteAsOfCompatible: args.quoteAsOfCompatible,
+    })
+  ) {
+    return { failClosed: true, reason: "quote_asof_incompatible", inPlay };
+  }
+
   return { failClosed: false, reason: "ok", inPlay: false };
 }
 
@@ -200,9 +285,15 @@ export function applyTotalIdentityGateToRows<T extends TotalIdentityRowFields>(
       period: row.period,
       modelPeriod: row.modelPeriod,
       event: row.game,
-      modelEvent: row.game,
+      modelEvent: row.modelEvent ?? row.game,
       commenceTime: row.commenceTime,
       linesAsOf: row.linesAsOf,
+      modelAsOf: row.modelAsOf,
+      modelValidUntil: row.modelValidUntil,
+      edgeCalcAsOf: row.edgeCalcAsOf,
+      quoteAsOfCompatible: row.quoteAsOfCompatible,
+      book: row.book ?? row.bookKey,
+      decisionBook: row.decisionBook ?? row.edgeCalcBook,
       compareEligible: row.totalCompareEligible,
       nowMs,
     });
@@ -217,13 +308,10 @@ export function applyTotalIdentityGateToRows<T extends TotalIdentityRowFields>(
       };
     }
 
-    const next: T = { ...row };
+    const next = stripFailClosedTotalDecisionChrome(row);
     next.totalCompareEligible = false;
     next.totalIdentityReason = verdict.reason;
     if (verdict.inPlay) next.totalQuoteLive = true;
-    delete next.publishTag;
-    delete next.actionLabel;
-    delete next.edgeMagnitude;
     return next;
   });
 }
