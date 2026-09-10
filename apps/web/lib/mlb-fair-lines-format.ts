@@ -10,6 +10,7 @@ export type MlbFairLineRow = {
   fairHomeMl: number | null;
   /** @deprecated Handicap away ML — use handicapAwayMl. */
   fairAwayMl: number | null;
+  /** Continuous FG sim mean (`fg_total_mean`). Not the board KEI. */
   totalMean: number | null;
   /** @deprecated Handicap total — use handicapTotal. */
   fairTotal: number | null;
@@ -24,9 +25,12 @@ export type MlbFairLineRow = {
   handicapHomeWinProb?: number | null;
   handicapHomeMl?: number | null;
   handicapAwayMl?: number | null;
+  /** Board / KEI total — nearest half-run of the matching mean. */
   handicapTotal?: number | null;
   handicapTotalMean?: number | null;
   handicapSpreadHome?: number | null;
+  /** Provenance: `nearest_half_run`. */
+  fairTotalQuantization?: string | null;
 
   // Model = pure sim / research
   modelHomeWinProb?: number | null;
@@ -49,6 +53,7 @@ export function formatRunLine(value: number | null): string {
   return rounded > 0 ? `+${rounded.toFixed(1)}` : rounded.toFixed(1);
 }
 
+/** Board / KEI total (half-run). Continuous means use `formatMlbTotalMean`. */
 export function formatTotal(value: number | null): string {
   if (value === null || !Number.isFinite(value)) return "—";
   return value.toFixed(1);

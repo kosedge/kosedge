@@ -3,10 +3,14 @@
  *
  * Handicap (KEI) → proj* / homeWinProb / handicap*
  * Model (pure sim) → model* (Fair Lines desk; not used for edge tags)
+ *
+ * KEI total is the certified nearest-half-run fair total (`resolveMlbKeiTotal`),
+ * not the raw `totalMean`. 9.09 → 9.0 is policy, not a stub constant.
  */
 
 import { applyHandicapIdentity, type KeiLineGame } from "@/lib/kei-lines";
 import type { MlbFairLineRow } from "@/lib/mlb-fair-lines-format";
+import { resolveMlbKeiTotal } from "@/lib/mlb-fair-total";
 
 export function keiGamesFromMlbFairLines(
   lines: MlbFairLineRow[],
@@ -14,8 +18,7 @@ export function keiGamesFromMlbFairLines(
   return lines.map((line) => {
     const handicapSpread =
       line.handicapSpreadHome ?? line.fairSpreadHome ?? null;
-    const handicapTotal =
-      line.handicapTotal ?? line.fairTotal ?? line.totalMean ?? null;
+    const handicapTotal = resolveMlbKeiTotal(line).kei;
     const handicapHomeMl = line.handicapHomeMl ?? line.fairHomeMl ?? null;
     const handicapAwayMl = line.handicapAwayMl ?? line.fairAwayMl ?? null;
     const handicapWin = line.handicapHomeWinProb ?? line.homeWinProb ?? null;

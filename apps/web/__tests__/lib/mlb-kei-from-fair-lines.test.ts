@@ -51,7 +51,62 @@ describe("keiGamesFromMlbFairLines", () => {
     expect(games[0]?.period).toBe("fg");
   });
 
-  it("falls back to totalMean when fairTotal missing", () => {
+  it("KEI uses published fairTotal 9.0, not raw totalMean 9.09", () => {
+    const lines: MlbFairLineRow[] = [
+      {
+        gameId: "g-909",
+        gameDate: "2026-09-10",
+        startTime: null,
+        homeTeam: "Home",
+        awayTeam: "Away",
+        homeWinProb: null,
+        fairHomeMl: null,
+        fairAwayMl: null,
+        totalMean: 9.09,
+        fairTotal: 9.0,
+        fairSpreadHome: null,
+        runLineCoverProbHome: null,
+        marginMean: null,
+        projectedAt: null,
+        modelVersion: "mlb-v1-pa-sim",
+        handicapTotal: 9.0,
+        handicapTotalMean: 9.09,
+      },
+    ];
+    const g = keiGamesFromMlbFairLines(lines)[0]!;
+    expect(g.handicapTotal).toBe(9.0);
+    expect(g.projTotal).toBe(9.0);
+    expect(g.handicapTotal).not.toBe(9.09);
+  });
+
+  it("varied published fairs stay distinct on the board (not a stub 9)", () => {
+    const means = [8.24, 8.26, 9.09, 9.26];
+    const fairs = [8.0, 8.5, 9.0, 9.5];
+    const lines: MlbFairLineRow[] = means.map((mean, i) => ({
+      gameId: `g-var-${i}`,
+      gameDate: null,
+      startTime: null,
+      homeTeam: "Home",
+      awayTeam: "Away",
+      homeWinProb: null,
+      fairHomeMl: null,
+      fairAwayMl: null,
+      totalMean: mean,
+      fairTotal: fairs[i]!,
+      fairSpreadHome: null,
+      runLineCoverProbHome: null,
+      marginMean: null,
+      projectedAt: null,
+      modelVersion: "mlb-v1-pa-sim",
+      handicapTotal: fairs[i],
+      handicapTotalMean: mean,
+    }));
+    const kei = keiGamesFromMlbFairLines(lines).map((g) => g.projTotal);
+    expect(kei).toEqual([8.0, 8.5, 9.0, 9.5]);
+    expect(new Set(kei).size).toBe(4);
+  });
+
+  it("falls back to quantized totalMean when fairTotal missing", () => {
     const lines: MlbFairLineRow[] = [
       {
         gameId: "g2",
@@ -62,7 +117,7 @@ describe("keiGamesFromMlbFairLines", () => {
         homeWinProb: null,
         fairHomeMl: null,
         fairAwayMl: null,
-        totalMean: 7.5,
+        totalMean: 9.09,
         fairTotal: null,
         fairSpreadHome: null,
         runLineCoverProbHome: null,
@@ -71,7 +126,7 @@ describe("keiGamesFromMlbFairLines", () => {
         modelVersion: "mlb-v1",
       },
     ];
-    expect(keiGamesFromMlbFairLines(lines)[0]?.projTotal).toBe(7.5);
+    expect(keiGamesFromMlbFairLines(lines)[0]?.projTotal).toBe(9.0);
   });
 
   it("identity: model equals handicap when model fields absent", () => {

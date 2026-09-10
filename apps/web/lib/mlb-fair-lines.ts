@@ -8,6 +8,10 @@ import {
   formatTotal,
   formatWinProb,
 } from "@/lib/mlb-fair-lines-format";
+import {
+  MLB_FAIR_TOTAL_QUANTIZATION,
+  formatMlbTotalMean,
+} from "@/lib/mlb-fair-total";
 import { UPSTREAM_TIMEOUT_MS, upstreamFetch } from "@/lib/upstream-fetch";
 
 export type { MlbFairLineRow };
@@ -18,6 +22,7 @@ export {
   formatTotal,
   formatWinProb,
 };
+export { formatMlbTotalMean };
 
 export type MlbFairLinesResponse = {
   gameDate: string;
@@ -49,9 +54,7 @@ function fairAwayFromHome(homeMl: number | null): number | null {
   return Math.abs(homeMl);
 }
 
-function firstNumber(
-  ...candidates: Array<unknown>
-): number | null {
+function firstNumber(...candidates: Array<unknown>): number | null {
   for (const c of candidates) {
     const n = toNumberOrNull(c);
     if (n !== null) return n;
@@ -89,10 +92,7 @@ function normalizeFairLine(
   );
 
   // Model = pure sim; identity fallback to handicap when absent.
-  const modelHomeMl = firstNumber(
-    raw.model_fair_fg_home_ml,
-    handicapHomeMl,
-  );
+  const modelHomeMl = firstNumber(raw.model_fair_fg_home_ml, handicapHomeMl);
   const modelAwayMl =
     firstNumber(raw.model_fair_fg_away_ml) ?? fairAwayFromHome(modelHomeMl);
   const modelHomeWinProb = firstNumber(
@@ -119,6 +119,7 @@ function normalizeFairLine(
     homeWinProb: handicapHomeWinProb,
     fairHomeMl: handicapHomeMl,
     fairAwayMl: handicapAwayMl,
+    // totalMean = continuous FG mean; fairTotal = nearest-half-run KEI.
     totalMean: handicapTotalMean,
     fairTotal: handicapTotal,
     fairSpreadHome: handicapSpreadHome,
@@ -138,6 +139,11 @@ function normalizeFairLine(
     modelTotal,
     modelTotalMean,
     modelSpreadHome,
+    fairTotalQuantization:
+      typeof raw.fair_total_quantization === "string" &&
+      raw.fair_total_quantization.trim()
+        ? raw.fair_total_quantization
+        : MLB_FAIR_TOTAL_QUANTIZATION,
   };
 }
 

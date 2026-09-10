@@ -83,6 +83,9 @@ def test_fair_lines_payload_aliases_fair_fg_to_handicap() -> None:
     assert row["handicap_fair_fg_home_ml"] == -140
     assert row["model_fair_fg_home_ml"] == -100
     assert row["model_fg_home_win_prob"] == 0.50
+    assert row["fair_total_quantization"] == "nearest_half_run"
+    assert row["fair_fg_total"] == 9.5
+    assert row["fg_total_mean"] == 9.5
 
 
 def test_extract_prior_from_projection_json() -> None:

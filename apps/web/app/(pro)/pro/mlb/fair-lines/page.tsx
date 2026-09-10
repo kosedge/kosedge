@@ -3,11 +3,16 @@ import {
   fetchMlbFairLines,
   formatAmericanOdds,
   formatKickoff,
+  formatMlbTotalMean,
   formatRunLine,
   formatTotal,
   formatWinProb,
   type MlbFairLineRow,
 } from "@/lib/mlb-fair-lines";
+import {
+  mlbKeiDiffersFromMean,
+  resolveMlbKeiTotal,
+} from "@/lib/mlb-fair-total";
 import {
   modelUnreachableCopy,
   shouldShowModelUnreachableBanner,
@@ -77,8 +82,9 @@ export default async function MlbFairLinesPage({
             <p className="mt-2 text-sm text-kos-text/75">
               Model = pure sim research fair. KEI handicap = the product line
               (model plus lineup/nowcast movement) shown on the Edge Board —
-              moneyline, total runs, and run line. Research only — you make the
-              picks.
+              moneyline, total runs, and run line. KEI total is the certified
+              nearest half-run of the sim mean (9.09 → 9.0), not a stub.
+              Research only — you make the picks.
             </p>
             <div className="mt-3 flex flex-wrap gap-3 text-xs">
               <Link
@@ -219,11 +225,7 @@ export default async function MlbFairLinesPage({
                       <div>
                         <div className="text-kos-gold/70">KEI total</div>
                         <div className="mt-0.5 font-semibold text-kos-gold">
-                          {formatTotal(
-                            row.handicapTotal ??
-                              row.fairTotal ??
-                              row.totalMean,
-                          )}
+                          {formatKeiTotal(row)}
                         </div>
                       </div>
                       <div>
@@ -297,10 +299,27 @@ export default async function MlbFairLinesPage({
           Edge Board tags compare KEI handicap to the best market — not raw
           model. When model and KEI match, no nowcast/lineup movement has been
           applied yet. Run line uses the model’s home cover probability and fair
-          spread; Edges desk joins live market ML/totals when available.
+          spread; Edges desk joins live market ML/totals when available. KEI
+          total is nearest half-run of the full-game mean (provenance:
+          nearest_half_run); the continuous mean is shown when it differs from
+          the board line.
         </p>
       </section>
     </main>
+  );
+}
+
+function formatKeiTotal(row: MlbFairLineRow) {
+  const { kei, mean } = resolveMlbKeiTotal(row);
+  return (
+    <>
+      {formatTotal(kei)}
+      {mlbKeiDiffersFromMean(kei, mean) ? (
+        <div className="text-[11px] font-normal text-kos-text/50">
+          mean {formatMlbTotalMean(mean)}
+        </div>
+      ) : null}
+    </>
   );
 }
 
@@ -313,7 +332,8 @@ function FairLineRow({
 }) {
   const h = handicapMl(row);
   const m = modelMl(row);
-  const modelWin = row.modelHomeWinProb ?? row.handicapHomeWinProb ?? row.homeWinProb;
+  const modelWin =
+    row.modelHomeWinProb ?? row.handicapHomeWinProb ?? row.homeWinProb;
   const keiWin = row.handicapHomeWinProb ?? row.homeWinProb;
   return (
     <tr className="border-b border-white/5 transition hover:bg-white/5">
@@ -343,11 +363,14 @@ function FairLineRow({
       </td>
       <td className="px-3 py-3 text-kos-text/80">
         {formatTotal(
-          row.modelTotal ?? row.modelTotalMean ?? row.fairTotal ?? row.totalMean,
+          row.modelTotal ??
+            row.modelTotalMean ??
+            row.fairTotal ??
+            row.totalMean,
         )}
       </td>
       <td className="px-3 py-3 font-semibold text-kos-text">
-        {formatTotal(row.handicapTotal ?? row.fairTotal ?? row.totalMean)}
+        {formatKeiTotal(row)}
       </td>
       <td
         className={`px-3 py-3 font-semibold ${emphasizeRunLine ? "text-kos-gold" : "text-kos-gold/90"}`}
