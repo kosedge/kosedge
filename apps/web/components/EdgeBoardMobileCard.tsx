@@ -18,6 +18,13 @@ import {
 
 type ExpandPanel = "overview" | "stats";
 
+/** Collapsed = quiet text. Open = 44px disclosure, shrink-wrap — not a filled CTA bar. */
+function l5DisclosureClass(open: boolean): string {
+  const base =
+    "inline-flex min-h-11 shrink-0 items-center px-0.5 text-[13px] font-medium hover:underline";
+  return open ? `${base} text-kos-gold` : `${base} text-kos-gold/65`;
+}
+
 function statusClassName(label: PublishActionLabel): string {
   const base =
     "inline-flex items-center justify-center min-h-6 px-2 rounded-md text-[11px] font-bold tracking-wide";
@@ -314,13 +321,13 @@ export default function EdgeBoardMobileCard({
         </div>
       ) : null}
 
-      {/* L5 — DETAILS */}
-      <div className="mt-2.5 flex items-center gap-2">
+      {/* L5 — DETAILS: collapsed stays quiet; open is ~44px disclosure, not a filled CTA */}
+      <div className="mt-2.5 flex items-center gap-4">
         <button
           type="button"
           onClick={() => onToggle("overview")}
           aria-expanded={overviewOpen}
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg px-2 text-[13px] font-medium text-kos-gold hover:bg-white/5"
+          className={l5DisclosureClass(overviewOpen)}
         >
           {overviewOpen ? "Overview ▴" : "Overview ▾"}
         </button>
@@ -328,7 +335,7 @@ export default function EdgeBoardMobileCard({
           type="button"
           onClick={() => onToggle("stats")}
           aria-expanded={statsOpen}
-          className="inline-flex min-h-11 flex-1 items-center justify-center rounded-lg px-2 text-[13px] font-medium text-kos-gold hover:bg-white/5"
+          className={l5DisclosureClass(statsOpen)}
         >
           {statsOpen ? "Stats ▴" : "Stats ▾"}
         </button>
