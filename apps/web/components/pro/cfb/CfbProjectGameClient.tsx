@@ -638,6 +638,7 @@ export default function CfbProjectGameClient({
               const published = findCfbKeiGame(
                 String(result.home_team || home),
                 String(result.away_team || away),
+                week,
               );
               const kei = published?.kei?.kei_spread_home;
               if (kei == null) return null;

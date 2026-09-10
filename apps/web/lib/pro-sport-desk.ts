@@ -482,7 +482,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         href: "/pro/cfb/fair-lines",
         title: "KEI Lines",
         description:
-          "Published CFB KEI (W0/W1). Aligns with Edge Board. Model column stays research.",
+          "Published CFB KEI (W0–W2). Aligns with Edge Board. Model column stays research.",
         cta: "View KEI status →",
         accent: "neutral",
       },

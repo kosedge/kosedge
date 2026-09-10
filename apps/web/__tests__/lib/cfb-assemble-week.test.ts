@@ -49,6 +49,15 @@ describe("CFB assemble week param (customer honesty)", () => {
     expect(week1.length).toBeGreaterThan(0);
   });
 
+  it("stamps Week 2 from the KEI pack without recycling Week 1", () => {
+    const stamped = stampCfbEdgeBoardWeek([
+      { game: "Rutgers Scarlet Knights @ Boston College Eagles" },
+    ]);
+    expect(stamped[0]?.week).toBe(2);
+    expect(filterCfbEdgeBoardRowsByWeek(stamped, 1)).toEqual([]);
+    expect(filterCfbEdgeBoardRowsByWeek(stamped, 2)).toHaveLength(1);
+  });
+
   it("href and SSR parse week=2 without collapsing to week=1", () => {
     expect(edgeBoardAssembleHref({ sportKey: "cfb", cfbWeek: 2 })).toBe(
       "/api/edge-board/cfb/assemble?week=2",

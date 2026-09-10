@@ -1,6 +1,7 @@
 /**
- * Frozen CFB KEI (W0/W1) + futures artifacts.
+ * Frozen CFB KEI (W0–W2) + futures artifacts.
  * Model packs stay research-fair. This file is the published KEI / futures SoT.
+ * Filename stays cfb-kei-w0-w1-2026.json (product import); pack.weeks includes 2.
  */
 
 import keiPack from "@/lib/data/cfb-kei-w0-w1-2026.json";
@@ -40,8 +41,10 @@ export type CfbKeiPack = {
   kei_version?: string;
   engine_version?: string;
   as_of?: string;
+  weeks?: number[];
   n_fbs_with_kei?: number;
   n_w0_fbs_with_kei?: number;
+  n_w2_fbs_with_kei?: number;
   used_in_spread?: boolean;
   model_used_in_spread?: boolean;
   games?: CfbKeiGame[];
@@ -95,14 +98,20 @@ export function cfbKeiGames(week?: number): CfbKeiGame[] {
   return rows.filter((g) => g.week === week);
 }
 
-export function findCfbKeiGame(home: string, away: string): CfbKeiGame | undefined {
+export function findCfbKeiGame(
+  home: string,
+  away: string,
+  week?: number,
+): CfbKeiGame | undefined {
   const h = String(home || "").toUpperCase();
   const a = String(away || "").toUpperCase();
-  return (KEI.games ?? []).find(
-    (g) =>
-      String(g.home || "").toUpperCase() === h &&
-      String(g.away || "").toUpperCase() === a,
-  );
+  return (KEI.games ?? []).find((g) => {
+    if (String(g.home || "").toUpperCase() !== h) return false;
+    if (String(g.away || "").toUpperCase() !== a) return false;
+    // Fail closed: requested week must match. Missing W2 ≠ recycle W1.
+    if (week != null && g.week !== week) return false;
+    return true;
+  });
 }
 
 export function cfbFuturesByCode(): Map<string, CfbFuturesTeam> {

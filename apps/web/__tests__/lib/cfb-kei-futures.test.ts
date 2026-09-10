@@ -27,6 +27,8 @@ describe("cfb KEI + futures artifacts", () => {
     expect(pack.model_used_in_spread).toBe(false);
     expect(pack.n_w0_fbs_with_kei).toBe(6);
     expect((pack.n_fbs_with_kei ?? 0) >= 49).toBe(true);
+    expect(pack.weeks).toEqual(expect.arrayContaining([0, 1, 2]));
+    expect(pack.n_w2_fbs_with_kei).toBe(47);
     expect(sportHasKeiSource("cfb")).toBe(true);
 
     const w0 = cfbKeiGames(0).filter((g) => g.fbs_vs_fbs);
@@ -64,5 +66,24 @@ describe("cfb KEI + futures artifacts", () => {
     expect(findCfbFutures("OSU")?.natty_pct).toBeGreaterThan(10);
     expect(findCfbFutures("ND")?.cfp_make_pct).toBeGreaterThan(80);
     expect(findCfbFutures("ND")?.conf_title_pct).toBeNull();
+  });
+
+  it("publishes builder KEI for Week 2 FBS–FBS (no W1 recycle)", () => {
+    const pack = loadCfbKeiPack();
+    expect(pack.weeks).toEqual([0, 1, 2]);
+    const w2 = cfbKeiGames(2).filter(
+      (g) => g.fbs_vs_fbs && g.kei?.kei_spread_home != null,
+    );
+    expect(w2.length).toBe(47);
+    for (const g of w2) {
+      expect(g.week).toBe(2);
+      expect(g.kei?.kei_spread_home).toEqual(expect.any(Number));
+      expect(g.model_spread_home).toEqual(expect.any(Number));
+      const byWeek = findCfbKeiGame(String(g.home), String(g.away), 2);
+      expect(byWeek?.kei?.kei_spread_home).toBe(g.kei?.kei_spread_home);
+      expect(findCfbKeiGame(String(g.home), String(g.away), 1)).toBeUndefined();
+    }
+    const lines = getKeiLines("cfb").filter((g) => g.week === 2);
+    expect(lines.length).toBe(47);
   });
 });
