@@ -46,7 +46,9 @@ function parseIsoMs(raw: string | null | undefined): number | null {
   return Number.isFinite(ms) ? ms : null;
 }
 
-export function countPricedCfbMarketRows(rows: readonly EdgeBoardRow[]): number {
+export function countPricedCfbMarketRows(
+  rows: readonly EdgeBoardRow[],
+): number {
   return rows.filter((r) => Boolean(r.best || r.open)).length;
 }
 
