@@ -88,4 +88,17 @@ describe("line-curve joint optimizer", () => {
       expect(best.lineA !== 1.5 || best.lineB !== 1.5).toBe(true);
     }
   });
+
+  it("fails closed on same-game legs — never BEST VALUE under independence", () => {
+    const { a } = legs();
+    const result = optimizeTwoLegLineCurve(
+      a,
+      { ...a, side: "Kansas" },
+      missouriOklahomaFixture.book,
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.code).toBe("same_game");
+    expect(result.label).toBe("INSUFFICIENT");
+  });
 });

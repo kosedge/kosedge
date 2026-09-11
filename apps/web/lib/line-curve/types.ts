@@ -122,7 +122,9 @@ export type LineCurveFailureCode =
   | "unbound_model_event"
   | "missing_alt_price"
   | "invalid_american"
-  | "missing_snapshot";
+  | "missing_snapshot"
+  | "unavailable_alt_market"
+  | "same_game";
 
 export type LineCurveClosed = {
   ok: false;

@@ -92,6 +92,29 @@ describe("line-curve guardrails", () => {
     expect(result.code).toBe("missing_alt_price");
   });
 
+  it("fails closed when the alternate market is only the mainline", () => {
+    const snapshot: OddsAltSnapshot = {
+      ...missouriOklahomaFixture.missouri.snapshot,
+      altsBySide: {
+        Missouri: [
+          { line: 1.5, americanOdds: -110, opposingAmericanOdds: -110 },
+        ],
+        Kansas: [
+          { line: -1.5, americanOdds: -110, opposingAmericanOdds: -110 },
+        ],
+      },
+    };
+    const result = priceAlternateSurface({
+      snapshot,
+      model: missouriOklahomaFixture.missouri.model,
+      side: "Missouri",
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.code).toBe("unavailable_alt_market");
+    expect(result.label).toBe("INSUFFICIENT");
+  });
+
   it("accepts a live snapshot inside the freshness window", () => {
     const result = priceAlternateSurface({
       snapshot: liveSnap(),

@@ -66,6 +66,12 @@ export function parseOddsEventSnapshot(args: {
   if (!spreads?.outcomes?.length) {
     return closed("missing_odds", "Mainline spreads market is missing.");
   }
+  if (!alts?.outcomes?.length) {
+    return closed(
+      "unavailable_alt_market",
+      "alternate_spreads market is unavailable — no interpolation from mainline.",
+    );
+  }
 
   const baseLineBySide: Record<string, number> = {};
   const opposingBase: Record<string, number> = {};

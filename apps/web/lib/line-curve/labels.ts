@@ -20,10 +20,23 @@ export function labelFromEdge(
   return "FAIR";
 }
 
-/** Mark the single highest-EV sufficient row as BEST VALUE when EV > 0. */
+/**
+ * Mark the single highest-EV sufficient row as BEST VALUE when EV > 0.
+ * Same-game legs under naive independence may never receive BEST VALUE.
+ */
 export function applyBestValue<
   T extends { evPerDollar: number; label: ResearchLabel },
->(rows: T[]): T[] {
+>(
+  rows: T[],
+  opts?: { sameGame?: boolean; independenceUnadjusted?: boolean },
+): T[] {
+  if (opts?.sameGame && opts.independenceUnadjusted !== false) {
+    return rows.map((row) =>
+      row.label === "BEST VALUE"
+        ? { ...row, label: "INSUFFICIENT" as const }
+        : row,
+    );
+  }
   const eligible = rows.filter(
     (r) => r.label !== "INSUFFICIENT" && Number.isFinite(r.evPerDollar),
   );

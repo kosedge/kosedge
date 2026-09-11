@@ -10,7 +10,6 @@ import {
   evaluatePostedAlt,
   priceAlternateSurface,
 } from "@/lib/line-curve/alternate-pricing";
-import { missouriOklahomaFixture } from "@/lib/line-curve/fixtures/missouri-oklahoma";
 import { optimizeTwoLegAlternateSurface } from "@/lib/line-curve/joint-optimizer";
 import { fetchAlternateSpreadSnapshot } from "@/lib/line-curve/odds-adapter";
 import { closed } from "@/lib/line-curve/guardrails";
@@ -133,36 +132,3 @@ export function optimizeTwoLegLineCurve(
   });
 }
 
-export function getMissouriOklahomaLineCurve(
-  side: "Missouri" | "Oklahoma",
-): LineCurveResult {
-  const leg =
-    side === "Missouri"
-      ? missouriOklahomaFixture.missouri
-      : missouriOklahomaFixture.oklahoma;
-  return priceAlternateSurface({
-    snapshot: leg.snapshot,
-    model: leg.model,
-    side: leg.side,
-  });
-}
-
-export function optimizeMissouriOklahomaLineCurve(): TwoLegOptimizeResult {
-  const fx = missouriOklahomaFixture;
-  return optimizeTwoLegLineCurve(
-    {
-      eventId: fx.missouri.snapshot.eventId,
-      side: fx.missouri.side,
-      snapshot: fx.missouri.snapshot,
-      model: fx.missouri.model,
-    },
-    {
-      eventId: fx.oklahoma.snapshot.eventId,
-      side: fx.oklahoma.side,
-      snapshot: fx.oklahoma.snapshot,
-      model: fx.oklahoma.model,
-    },
-    fx.book,
-    { quotedParlays: fx.quotedParlays },
-  );
-}

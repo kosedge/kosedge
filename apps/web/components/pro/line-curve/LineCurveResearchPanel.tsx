@@ -2,6 +2,15 @@
 
 import { useEffect, useState } from "react";
 import LineCurveChart from "@/components/pro/line-curve/LineCurveChart";
+import {
+  INDEPENDENT_JOINT_CAPTION,
+  INDEPENDENT_JOINT_HEADING,
+  impliesCorrelationAdjusted,
+  jointCoverColumnLabel,
+  jointProbabilityCaption,
+} from "@/lib/line-curve/joint-presentation";
+import { independentJointModel } from "@/lib/line-curve/joint-optimizer";
+import { correlationMeta } from "@/lib/line-curve/joint-optimizer";
 import type {
   LineCurveResult,
   TwoLegOptimizeResult,
@@ -34,15 +43,19 @@ function labelClass(label: string): string {
   return "text-kos-text/70";
 }
 
+const phase1Independence = correlationMeta(independentJointModel());
+
 export default function LineCurveResearchPanel({
   sport,
 }: {
   sport: "cfb" | "nfl";
 }) {
   const [mode, setMode] = useState<"one" | "two">("one");
-  const [side, setSide] = useState<"Missouri" | "Oklahoma">("Missouri");
   const [curve, setCurve] = useState<LineCurveResult | null>(null);
   const [joint, setJoint] = useState<TwoLegOptimizeResult | null>(null);
+  const [independenceCaption, setIndependenceCaption] = useState(
+    jointProbabilityCaption(phase1Independence),
+  );
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -54,15 +67,16 @@ export default function LineCurveResearchPanel({
     async function load() {
       try {
         if (mode === "one") {
-          const res = await fetch(
-            `/api/line-curve?fixture=missouri-oklahoma&side=${encodeURIComponent(side)}`,
-            { cache: "no-store" },
-          );
+          const res = await fetch(`/api/line-curve?sport=${sport}`, {
+            cache: "no-store",
+          });
           const json = (await res.json()) as {
             curve?: LineCurveResult;
             error?: string;
           };
-          if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+          if (!res.ok && res.status !== 200) {
+            throw new Error(json.error || `HTTP ${res.status}`);
+          }
           if (!cancelled) {
             setCurve(json.curve ?? null);
             setJoint(null);
@@ -72,16 +86,22 @@ export default function LineCurveResearchPanel({
             method: "POST",
             headers: { "content-type": "application/json" },
             cache: "no-store",
-            body: JSON.stringify({ fixture: "missouri-oklahoma" }),
+            body: JSON.stringify({}),
           });
           const json = (await res.json()) as {
             result?: TwoLegOptimizeResult;
+            independenceCaption?: string;
             error?: string;
           };
-          if (!res.ok) throw new Error(json.error || `HTTP ${res.status}`);
+          if (!res.ok && res.status !== 200) {
+            throw new Error(json.error || `HTTP ${res.status}`);
+          }
           if (!cancelled) {
             setJoint(json.result ?? null);
             setCurve(null);
+            if (json.independenceCaption) {
+              setIndependenceCaption(json.independenceCaption);
+            }
           }
         }
       } catch (err) {
@@ -99,7 +119,10 @@ export default function LineCurveResearchPanel({
     return () => {
       cancelled = true;
     };
-  }, [mode, side, sport]);
+  }, [mode, sport]);
+
+  const jointMeta = joint?.ok ? joint.correlation : phase1Independence;
+  const correlationAdjusted = impliesCorrelationAdjusted(jointMeta);
 
   return (
     <div className="space-y-4">
@@ -127,39 +150,39 @@ export default function LineCurveResearchPanel({
           >
             2-leg optimizer
           </button>
-          {mode === "one" ? (
-            <>
-              <button
-                type="button"
-                onClick={() => setSide("Missouri")}
-                className={`rounded-full border px-3 py-1.5 text-xs ${
-                  side === "Missouri"
-                    ? "border-white/25 bg-white/10"
-                    : "border-white/10 bg-black/40"
-                }`}
-              >
-                Missouri
-              </button>
-              <button
-                type="button"
-                onClick={() => setSide("Oklahoma")}
-                className={`rounded-full border px-3 py-1.5 text-xs ${
-                  side === "Oklahoma"
-                    ? "border-white/25 bg-white/10"
-                    : "border-white/10 bg-black/40"
-                }`}
-              >
-                Oklahoma
-              </button>
-            </>
-          ) : null}
         </div>
         <p className="mt-3 text-xs leading-relaxed text-kos-text/55">
-          Research fixture: Missouri +1.5 / Oklahoma +1.5 combined −103. Numbers
-          only — no stake recommendation. Posted sportsbook prices only; missing
-          alts are not interpolated. {sport.toUpperCase()} Phase 1 is spreads.
+          The book lets you move the number anywhere. Line Curve asks what each
+          half-point is worth on the model margin distribution, and what they
+          are charging for it. Posted alt prices only — no interpolation, no
+          teaser table, no stake recommendation. {sport.toUpperCase()} Phase 1
+          is spreads.
         </p>
       </section>
+
+      {mode === "two" ? (
+        <section
+          data-testid="line-curve-independence"
+          className="rounded-2xl border border-amber-400/25 bg-amber-400/8 px-4 py-3 text-xs leading-relaxed text-kos-text/75"
+        >
+          <p className="font-semibold text-amber-100">
+            {correlationAdjusted
+              ? "Correlation-adjusted joint"
+              : INDEPENDENT_JOINT_HEADING}
+          </p>
+          <p className="mt-1">
+            {correlationAdjusted
+              ? independenceCaption
+              : INDEPENDENT_JOINT_CAPTION}
+          </p>
+          {!correlationAdjusted ? (
+            <p className="mt-1 text-kos-text/50">
+              Same-game combinations are refused. BEST VALUE is never assigned
+              from naive independence on one game.
+            </p>
+          ) : null}
+        </section>
+      ) : null}
 
       {error ? (
         <p className="rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">
@@ -171,7 +194,10 @@ export default function LineCurveResearchPanel({
       ) : null}
 
       {curve && !curve.ok ? (
-        <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-kos-text/70">
+        <p
+          data-testid="line-curve-insufficient"
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-kos-text/70"
+        >
           INSUFFICIENT — {curve.message}
         </p>
       ) : null}
@@ -248,63 +274,66 @@ export default function LineCurveResearchPanel({
       ) : null}
 
       {joint && !joint.ok ? (
-        <p className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-kos-text/70">
+        <p
+          data-testid="line-curve-insufficient"
+          className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-kos-text/70"
+        >
           INSUFFICIENT — {joint.message}
         </p>
       ) : null}
 
       {joint?.ok ? (
-        <>
-          <p className="rounded-2xl border border-white/10 bg-black/30 px-4 py-3 text-xs leading-relaxed text-kos-text/60">
-            {joint.correlation.note}
-          </p>
-          <section className="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
-            <table className="min-w-full text-left text-xs">
-              <thead className="text-[11px] uppercase tracking-wide text-kos-text/45">
-                <tr>
-                  <th className="px-3 py-2">Rank</th>
-                  <th className="px-3 py-2">Leg A</th>
-                  <th className="px-3 py-2">Leg B</th>
-                  <th className="px-3 py-2">Book parlay</th>
-                  <th className="px-3 py-2">Joint cover</th>
-                  <th className="px-3 py-2">Fair</th>
-                  <th className="px-3 py-2">EV /$</th>
-                  <th className="px-3 py-2">Label</th>
-                </tr>
-              </thead>
-              <tbody>
-                {joint.combos.slice(0, 16).map((c) => (
-                  <tr
-                    key={`${c.lineA}-${c.lineB}`}
-                    className="border-t border-white/8"
+        <section className="overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
+          <table className="min-w-full text-left text-xs">
+            <thead className="text-[11px] uppercase tracking-wide text-kos-text/45">
+              <tr>
+                <th className="px-3 py-2">Rank</th>
+                <th className="px-3 py-2">Leg A</th>
+                <th className="px-3 py-2">Leg B</th>
+                <th className="px-3 py-2">Book parlay</th>
+                <th className="px-3 py-2">
+                  {jointCoverColumnLabel(jointMeta)}
+                </th>
+                <th className="px-3 py-2">Fair</th>
+                <th className="px-3 py-2">EV /$</th>
+                <th className="px-3 py-2">Label</th>
+              </tr>
+            </thead>
+            <tbody>
+              {joint.combos.slice(0, 16).map((c) => (
+                <tr
+                  key={`${c.lineA}-${c.lineB}`}
+                  className="border-t border-white/8"
+                >
+                  <td className="px-3 py-2">{c.rank}</td>
+                  <td className="px-3 py-2">{fmtLine(c.lineA)}</td>
+                  <td className="px-3 py-2">{fmtLine(c.lineB)}</td>
+                  <td className="px-3 py-2">
+                    {fmtAm(c.bookParlayAmerican)}
+                    <span className="ml-1 text-kos-text/35">
+                      {c.parlayPriceSource === "book_quoted"
+                        ? "quoted"
+                        : "from legs"}
+                    </span>
+                  </td>
+                  <td className="px-3 py-2">
+                    {fmtPct(c.modelJointCoverProbability)}
+                    {!impliesCorrelationAdjusted(c.correlation) ? (
+                      <span className="ml-1 text-kos-text/35">indep.</span>
+                    ) : null}
+                  </td>
+                  <td className="px-3 py-2">{fmtAm(c.fairAmericanOdds)}</td>
+                  <td className="px-3 py-2">{fmtEv(c.evPerDollar)}</td>
+                  <td
+                    className={`px-3 py-2 font-semibold ${labelClass(c.label)}`}
                   >
-                    <td className="px-3 py-2">{c.rank}</td>
-                    <td className="px-3 py-2">{fmtLine(c.lineA)}</td>
-                    <td className="px-3 py-2">{fmtLine(c.lineB)}</td>
-                    <td className="px-3 py-2">
-                      {fmtAm(c.bookParlayAmerican)}
-                      <span className="ml-1 text-kos-text/35">
-                        {c.parlayPriceSource === "book_quoted"
-                          ? "quoted"
-                          : "from legs"}
-                      </span>
-                    </td>
-                    <td className="px-3 py-2">
-                      {fmtPct(c.modelJointCoverProbability)}
-                    </td>
-                    <td className="px-3 py-2">{fmtAm(c.fairAmericanOdds)}</td>
-                    <td className="px-3 py-2">{fmtEv(c.evPerDollar)}</td>
-                    <td
-                      className={`px-3 py-2 font-semibold ${labelClass(c.label)}`}
-                    >
-                      {c.label}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </section>
-        </>
+                    {c.label}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
       ) : null}
     </div>
   );

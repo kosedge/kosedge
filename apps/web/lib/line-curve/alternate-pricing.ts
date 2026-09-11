@@ -10,6 +10,7 @@ import {
   fairAmericanFromProb,
 } from "@/lib/line-curve/american";
 import {
+  assertAlternateMarketAvailable,
   assertBaseLine,
   assertModelBound,
   assertPostedAlts,
@@ -74,6 +75,8 @@ export function priceAlternateSurface(args: {
     snapshot.baseLineBySide[sideKey] ?? snapshot.baseLineBySide[side];
   const baseCheck = assertBaseLine(baseLine, alts);
   if (baseCheck) return baseCheck;
+  const altMarket = assertAlternateMarketAvailable(alts, baseLine);
+  if (altMarket) return altMarket;
 
   const pmf = buildMarginPmf(model);
   const modelFairLine =

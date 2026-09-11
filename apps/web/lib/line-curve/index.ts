@@ -15,13 +15,18 @@ export {
   getLineCurve,
   evaluateAltLine,
   optimizeTwoLegLineCurve,
-  getMissouriOklahomaLineCurve,
-  optimizeMissouriOklahomaLineCurve,
 } from "@/lib/line-curve/service";
 export {
   independentJointModel,
   optimizeTwoLegAlternateSurface,
 } from "@/lib/line-curve/joint-optimizer";
+export {
+  INDEPENDENT_JOINT_CAPTION,
+  INDEPENDENT_JOINT_HEADING,
+  impliesCorrelationAdjusted,
+  jointCoverColumnLabel,
+  jointProbabilityCaption,
+} from "@/lib/line-curve/joint-presentation";
 export {
   buildMarginPmf,
   atsOutcomeMass,

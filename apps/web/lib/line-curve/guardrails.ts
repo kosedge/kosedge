@@ -102,9 +102,27 @@ export function assertModelBound(
   return null;
 }
 
+export function assertAlternateMarketAvailable(
+  alts: PostedAlt[],
+  baseLine: number,
+): LineCurveClosed | null {
+  const distinct = new Set(alts.map((a) => a.line));
+  const hasNonBase = [...distinct].some((line) => line !== baseLine);
+  if (!hasNonBase) {
+    return closed(
+      "unavailable_alt_market",
+      "Alternate-spread market is unavailable — refuse to invent a curve from the mainline only.",
+    );
+  }
+  return null;
+}
+
 export function assertPostedAlts(alts: PostedAlt[]): LineCurveClosed | null {
   if (!alts.length) {
-    return closed("missing_odds", "No posted alternate spreads for this side.");
+    return closed(
+      "unavailable_alt_market",
+      "No posted alternate spreads for this side.",
+    );
   }
   const byLine = new Map<number, number>();
   for (const alt of alts) {

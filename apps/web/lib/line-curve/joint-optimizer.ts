@@ -113,8 +113,8 @@ export function optimizeTwoLegAlternateSurface(args: {
   }
   if (args.legA.eventId === args.legB.eventId) {
     return closed(
-      "inconsistent_odds",
-      "Phase 1 two-leg optimizer requires distinct events (correlation reserved).",
+      "same_game",
+      "Same-game combinations cannot be labeled under naive independence. Correlation is reserved — fail closed.",
     );
   }
 

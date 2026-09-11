@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { optimizeMissouriOklahomaLineCurve } from "@/lib/line-curve/service";
+import { optimizeMissouriOklahomaLineCurve } from "@/lib/line-curve/fixtures/missouri-oklahoma";
 
 describe("Missouri +1.5 / Oklahoma +1.5 research fixture", () => {
   it("ranks the quoted -103 combo against every posted alt pair", () => {

@@ -1,14 +1,24 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
+import { optimizeTwoLegLineCurve } from "@/lib/line-curve/service";
+import { closed } from "@/lib/line-curve/guardrails";
+import { jointProbabilityCaption } from "@/lib/line-curve/joint-presentation";
 import {
-  optimizeMissouriOklahomaLineCurve,
-  optimizeTwoLegLineCurve,
-} from "@/lib/line-curve/service";
+  correlationMeta,
+  independentJointModel,
+} from "@/lib/line-curve/joint-optimizer";
 import type { QuotedParlayPrice, TwoLegInput } from "@/lib/line-curve/types";
 import { pageDataCacheHeaders } from "@/lib/page-data-cache";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
+
+function noStore(body: unknown, status = 200) {
+  return NextResponse.json(body, {
+    status,
+    headers: pageDataCacheHeaders({ cacheable: false }),
+  });
+}
 
 export async function POST(req: Request) {
   const access = await getProAccessState();
@@ -32,29 +42,38 @@ export async function POST(req: Request) {
     body = {};
   }
 
-  if (body.fixture === "missouri-oklahoma") {
-    return NextResponse.json(
-      {
-        researchOnly: true,
-        fixture: "missouri-oklahoma",
-        result: optimizeMissouriOklahomaLineCurve(),
-      },
-      { headers: pageDataCacheHeaders({ cacheable: false }) },
-    );
+  const independence = correlationMeta(independentJointModel());
+
+  if (body.fixture) {
+    return noStore({
+      researchOnly: true,
+      independenceCaption: jointProbabilityCaption(independence),
+      result: closed(
+        "unavailable_alt_market",
+        "Research fixtures are test-only and are not served on this route.",
+      ),
+    });
   }
 
   if (!body.legA || !body.legB || !body.book) {
-    return NextResponse.json(
-      { error: "legA, legB, and book are required" },
-      { status: 400, headers: pageDataCacheHeaders({ cacheable: false }) },
-    );
+    return noStore({
+      researchOnly: true,
+      independenceCaption: jointProbabilityCaption(independence),
+      result: closed(
+        "missing_odds",
+        "Two-leg optimizer requires injected legA/legB snapshots bound to model runs. No fixture, no interpolation.",
+      ),
+    });
   }
 
   const result = optimizeTwoLegLineCurve(body.legA, body.legB, body.book, {
     quotedParlays: body.quotedParlays,
   });
-  return NextResponse.json(
-    { researchOnly: true, result },
-    { headers: pageDataCacheHeaders({ cacheable: false }) },
-  );
+  return noStore({
+    researchOnly: true,
+    independenceCaption: result.ok
+      ? jointProbabilityCaption(result.correlation)
+      : jointProbabilityCaption(independence),
+    result,
+  });
 }

@@ -135,6 +135,44 @@ export const quotedPlus15Parlay: QuotedParlayPrice = {
   americanOdds: -103,
 };
 
+import { priceAlternateSurface } from "@/lib/line-curve/alternate-pricing";
+import { optimizeTwoLegLineCurve } from "@/lib/line-curve/service";
+import type { LineCurveResult, TwoLegOptimizeResult } from "@/lib/line-curve/types";
+
+export function getMissouriOklahomaLineCurve(
+  side: "Missouri" | "Oklahoma",
+): LineCurveResult {
+  const leg =
+    side === "Missouri"
+      ? missouriOklahomaFixture.missouri
+      : missouriOklahomaFixture.oklahoma;
+  return priceAlternateSurface({
+    snapshot: leg.snapshot,
+    model: leg.model,
+    side: leg.side,
+  });
+}
+
+export function optimizeMissouriOklahomaLineCurve(): TwoLegOptimizeResult {
+  const fx = missouriOklahomaFixture;
+  return optimizeTwoLegLineCurve(
+    {
+      eventId: fx.missouri.snapshot.eventId,
+      side: fx.missouri.side,
+      snapshot: fx.missouri.snapshot,
+      model: fx.missouri.model,
+    },
+    {
+      eventId: fx.oklahoma.snapshot.eventId,
+      side: fx.oklahoma.side,
+      snapshot: fx.oklahoma.snapshot,
+      model: fx.oklahoma.model,
+    },
+    fx.book,
+    { quotedParlays: fx.quotedParlays },
+  );
+}
+
 export const missouriOklahomaFixture = {
   book: MIZZOU_OKLAHOMA_BOOK,
   capturedAt: MIZZOU_OKLAHOMA_FIXTURE_AS_OF,

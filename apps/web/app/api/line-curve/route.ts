@@ -1,9 +1,7 @@
 import { NextResponse } from "next/server";
 import { getProAccessState } from "@/lib/auth/pro";
-import {
-  getLineCurve,
-  getMissouriOklahomaLineCurve,
-} from "@/lib/line-curve/service";
+import { getLineCurve } from "@/lib/line-curve/service";
+import { closed } from "@/lib/line-curve/guardrails";
 import type {
   LineCurveSport,
   ModelMarginInput,
@@ -21,35 +19,48 @@ function unauthorized() {
   );
 }
 
+function noStore(body: unknown, status = 200) {
+  return NextResponse.json(body, {
+    status,
+    headers: pageDataCacheHeaders({ cacheable: false }),
+  });
+}
+
 export async function GET(req: Request) {
   const access = await getProAccessState();
   if (access !== "authorized") return unauthorized();
 
   const url = new URL(req.url);
-  const fixture = url.searchParams.get("fixture");
-  const side = url.searchParams.get("side") ?? "Missouri";
-
-  if (fixture === "missouri-oklahoma") {
-    const curve = getMissouriOklahomaLineCurve(
-      side === "Oklahoma" ? "Oklahoma" : "Missouri",
-    );
-    return NextResponse.json(
+  if (url.searchParams.get("fixture")) {
+    return noStore(
       {
         researchOnly: true,
-        fixture: "missouri-oklahoma",
-        curve,
+        curve: closed(
+          "unavailable_alt_market",
+          "Research fixtures are test-only and are not served on this route.",
+        ),
       },
-      { headers: pageDataCacheHeaders({ cacheable: false }) },
+      200,
     );
   }
 
-  return NextResponse.json(
-    {
-      error:
-        "Phase 1 Line Curve GET requires fixture=missouri-oklahoma. POST an injected snapshot + model run to price a live event.",
-    },
-    { status: 400, headers: pageDataCacheHeaders({ cacheable: false }) },
-  );
+  const eventId = url.searchParams.get("eventId");
+  const side = url.searchParams.get("side");
+  const book = url.searchParams.get("book");
+  if (!eventId || !side || !book) {
+    return noStore({
+      researchOnly: true,
+      curve: closed(
+        "missing_odds",
+        "No live alternate-spread snapshot bound to a model run. POST an injected snapshot + model to price; do not invent a curve.",
+      ),
+    });
+  }
+
+  const curve = await getLineCurve(eventId, side, book, {
+    sport: (url.searchParams.get("sport") as LineCurveSport) || undefined,
+  });
+  return noStore({ researchOnly: true, curve });
 }
 
 export async function POST(req: Request) {
@@ -71,24 +82,20 @@ export async function POST(req: Request) {
     body = {};
   }
 
-  if (body.fixture === "missouri-oklahoma") {
-    const curve = getMissouriOklahomaLineCurve(
-      body.side === "Oklahoma" ? "Oklahoma" : "Missouri",
-    );
-    return NextResponse.json(
-      {
-        researchOnly: true,
-        fixture: "missouri-oklahoma",
-        curve,
-      },
-      { headers: pageDataCacheHeaders({ cacheable: false }) },
-    );
+  if (body.fixture) {
+    return noStore({
+      researchOnly: true,
+      curve: closed(
+        "unavailable_alt_market",
+        "Research fixtures are test-only and are not served on this route.",
+      ),
+    });
   }
 
   if (!body.eventId || !body.side || !body.book) {
-    return NextResponse.json(
+    return noStore(
       { error: "eventId, side, and book are required" },
-      { status: 400, headers: pageDataCacheHeaders({ cacheable: false }) },
+      400,
     );
   }
 
@@ -97,8 +104,5 @@ export async function POST(req: Request) {
     snapshot: body.snapshot,
     model: body.model,
   });
-  return NextResponse.json(
-    { researchOnly: true, curve },
-    { headers: pageDataCacheHeaders({ cacheable: false }) },
-  );
+  return noStore({ researchOnly: true, curve });
 }
