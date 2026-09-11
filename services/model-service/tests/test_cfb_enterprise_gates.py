@@ -9,7 +9,11 @@ import pytest
 
 from src.services.cfb_season_engine import priors as P
 from src.services.cfb_season_engine.cfb_futures import select_cfp_field
-from src.services.cfb_season_engine.cfb_kei import assert_kei_not_tail, apply_cfb_kei
+from src.services.cfb_season_engine.cfb_kei import (
+    DOCUMENTED_W2_KEI_VERSION,
+    assert_kei_not_tail,
+    apply_cfb_kei,
+)
 from src.services.cfb_season_engine.team_projection import win_prob_from_expected_scores
 
 DATA = Path(__file__).resolve().parents[1] / "src/services/cfb_season_engine/data"
@@ -20,18 +24,21 @@ def _load(name: str) -> dict:
 
 
 def test_unique_as_of_across_cfb_surfaces() -> None:
+    """Research-desk close stays week0; W2 KEI mint is a later documented as_of."""
     power = _load("cfb_power_sot_2026.json")
     proj = _load("cfb_season_projections_2026.json")
     futures = _load("cfb_futures_2026.json")
     kei = _load("cfb_kei_w0_w1_2026.json")
-    values = {
+    research = {
         power.get("power_as_of"),
         proj.get("as_of"),
         futures.get("as_of"),
-        kei.get("as_of"),
     }
-    assert None not in values
-    assert len(values) == 1
+    assert None not in research
+    assert research == {"2026-08-31"}
+    assert kei.get("as_of") == "2026-09-10"
+    assert kei.get("kei_version") == DOCUMENTED_W2_KEI_VERSION
+    assert not str(kei.get("kei_version") or "").startswith("cbb-")
 
 
 def test_cupcake_wp_saturation_reaches_nineties() -> None:
