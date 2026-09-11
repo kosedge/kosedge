@@ -1,14 +1,14 @@
 {
   "ok": true,
   "power_version": "cfb-power-sot-v0.15-20260814",
-  "power_as_of": "2026-08-14",
+  "power_as_of": "2026-08-31",
   "engine_version": "cfb-season-engine-v0.15-power-sot",
   "n_teams": 136,
   "official_fbs": 136,
   "used_in_spread": false,
   "kei": false,
   "research_only": true,
-  "method": "0.5*(offense_index+defense_index) from the composed universe (v0.14 efficiency backbone + roster/QB prior). Not a second rating.",
+  "method": "0.5*(offense_index+defense_index) from the composed universe (v0.14 efficiency backbone + roster/QB prior). Not a second rating. EFF_CARRY_SHRINK=0.85 on packaged 2025 SP+ carry.",
   "teams": [
     {
       "team": "OSU",
@@ -3010,5 +3010,6 @@
       1
     ],
     "slate_complete": true
-  }
+  },
+  "eff_carry_shrink": 0.85
 }

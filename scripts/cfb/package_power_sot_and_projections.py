@@ -2,6 +2,10 @@
 """Package the CFB Power SoT + frozen-SoT season projection artifact.
 
 Research only. used_in_spread stays false. Official ESPN slate. N=10000.
+
+Do not run this for a P0 splice. Default stamps are POWER_AS_OF=2026-08-14
+and a full remint overwrites week0-close canaries
+(cfb-season-projections-v0.15-n10000-week0-close-20260831).
 """
 
 from __future__ import annotations

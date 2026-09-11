@@ -36,10 +36,29 @@ Production mint identifier is the pack header `cfb-kei-v1.0-2026w2`.
    of the league roster pack was not rewritten. ESPN aliases: `MIZZ→MIZ`,
    `JVST→JXST`.
 4. `package_power_sot_and_projections.py` — existing-team power indices
-   unchanged (TCU 1.2981 / UNC 1.0633). P0 now finite.
+   unchanged (TCU 1.2981 / UNC 1.0633). P0 now finite. **Do not re-run**
+   this script: default stamps are `2026-08-14` and a full projection
+   remint moves week0-close canaries (USF E[wins] / USF vs OSU std).
 5. `CFB_CLOSE_AS_OF=2026-09-10 python3 scripts/cfb/build_cfb_kei_futures_2026.py --kei-only`
 
 TCU@UNC KEI stayed **−16.34 / model −15.14** (no board retune).
+
+## CI restore (PR Quality Checks)
+
+`bbde0f53` failed `tests/test_cfb_enterprise_gates.py` because the power
+header fell back to `POWER_AS_OF=2026-08-14` and projections were
+rewritten (USF std 1.352 ≮ OSU 1.323; USF E[wins] 9.339 vs canary 8.382).
+
+Fix on this branch (no second remint, no KEI rewrite):
+
+- Restore week0-close `cfb_season_projections_2026.json` + web hyphenated
+  mirror from tip `92309a01` (`as_of=2026-08-31`, canaries intact).
+- Keep rematerialized P0 finite power rows; restore power header
+  `power_as_of=2026-08-31`, EFF_CARRY_SHRINK method note, `eff_carry_shrink=0.85`.
+- Research-desk surfaces (power / projections / futures) share `2026-08-31`.
+- KEI pack header stays **`cfb-kei-v1.0-2026w2` / `as_of=2026-09-10`**.
+- `test_unique_as_of_across_cfb_surfaces` now asserts that split (do not
+  stamp KEI back to w0).
 
 ## MIZZ ≠ MOST
 
@@ -72,13 +91,13 @@ TCU@UNC KEI stayed **−16.34 / model −15.14** (no board retune).
 af5fc6f461e4c18935ecbbb0b621b90dc899cea3f8f61c2cc14f6d46bb03476d  services/model-service/src/services/cfb_season_engine/data/cfb_efficiency_snapshot_2025_carry_2026.json
 69adbb61f851b4cf3ac148af85b43cdf77686a6bbef8486bf472ee6e39969cb4  services/model-service/src/services/cfb_season_engine/data/cfb_real_roster_snapshot_2026.json
 5d1bf716440f14da3a554272b35f1645673093e857145aa956462b37983646d2  services/model-service/src/services/cfb_season_engine/data/cfb_fbs_team_priors_2026.json
-024476e0f9ee516436d65685798d5e58e2c8fc39e5dfce1c19f7fd45b056b6eb  services/model-service/src/services/cfb_season_engine/data/cfb_power_sot_2026.json
-1412d95ca54009188fb27b44ce08c506add9787c5d38466dcaa1e38c859d1eaa  services/model-service/src/services/cfb_season_engine/data/cfb_season_projections_2026.json
+66c84bbe5364e7e55f06bd3bf5154bc63f0d969dba6d750f7c0c5ef3e691d59c  services/model-service/src/services/cfb_season_engine/data/cfb_power_sot_2026.json
+eb7beb1b151ce00e242bae44e010b1d7ef8f1103ec1b18e171c9f374905b289a  services/model-service/src/services/cfb_season_engine/data/cfb_season_projections_2026.json
 dc12a178dd1681911bf665b56dc7026c69ea2b72125aa8f6d0b1d432130231c3  services/model-service/src/services/cfb_season_engine/data/cfb_kei_w0_w1_2026.json
 dc12a178dd1681911bf665b56dc7026c69ea2b72125aa8f6d0b1d432130231c3  apps/web/lib/data/cfb-kei-w0-w1-2026.json
 4412ed8bcbaf00fde20a6c96c915378867097d367c3acda9f459ff55463a634a  apps/web/data/processed/kei_lines_cfb.json
-024476e0f9ee516436d65685798d5e58e2c8fc39e5dfce1c19f7fd45b056b6eb  apps/web/lib/data/cfb-power-sot-2026.json
-1412d95ca54009188fb27b44ce08c506add9787c5d38466dcaa1e38c859d1eaa  apps/web/lib/data/cfb-season-projections-2026.json
+66c84bbe5364e7e55f06bd3bf5154bc63f0d969dba6d750f7c0c5ef3e691d59c  apps/web/lib/data/cfb-power-sot-2026.json
+eb7beb1b151ce00e242bae44e010b1d7ef8f1103ec1b18e171c9f374905b289a  apps/web/lib/data/cfb-season-projections-2026.json
 ```
 
 ## Guardrails
