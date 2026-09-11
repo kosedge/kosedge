@@ -80,6 +80,10 @@ describe("sport-pro-nav", () => {
     expect(nflTools).toContain("Weekly Fantasy");
     expect(nflTools).toContain("DFS Board");
     expect(nflTools).toContain("KEI Lines");
+    expect(nflTools).toContain("Line Curve");
+    expect(nflToolItems.find((i) => i.label === "Line Curve")?.href).toBe(
+      "/pro/nfl/line-curve",
+    );
     // Live board — never the /pro/kei-lines/nfl pipeline stub.
     expect(nflToolItems.find((i) => i.label === "KEI Lines")?.href).toBe(
       "/pro/nfl/fair-lines",
@@ -160,6 +164,7 @@ describe("sport-pro-nav", () => {
     expect(cfbPrimary).not.toContain("Edges desk");
     expect(cfbPrimary).not.toContain("KEI Lines");
     expect(cfbTools).toContain("KEI Lines");
+    expect(cfbTools).toContain("Line Curve");
     expect(cfbTools).toContain("Conferences");
     expect(cfbTools).not.toContain("Edges desk");
     expect(cfbTools).not.toContain("KEI (not shipped)");

@@ -30,6 +30,7 @@ export type CfbKeiGame = {
     kei_spread_home?: number | null;
     kei_total?: number | null;
     kei_home_win_prob?: number | null;
+    model_sigma?: number | null;
     tag?: string;
     fcs_opener?: boolean;
     reason?: string;
