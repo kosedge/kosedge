@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { publicEdgeBoardHref } from "@/lib/cfb-edge-board-public";
 import type { TonightGame } from "@/lib/edge-board-tonight";
 import { hasArticleData } from "@/lib/pro-sport-ia";
 
@@ -292,12 +293,17 @@ export default function WeeklyGamesScroller({
             {content.sectionSubtitle}
           </p>
         </div>
-        <Link
-          href={`/edge-board/${sport}`}
-          className="rounded-lg border border-kos-gold/30 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold transition hover:border-kos-gold/50 hover:bg-kos-gold/15"
-        >
-          Open full board
-        </Link>
+        {(() => {
+          const boardHref = publicEdgeBoardHref(sport);
+          return boardHref ? (
+            <Link
+              href={boardHref}
+              className="rounded-lg border border-kos-gold/30 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold transition hover:border-kos-gold/50 hover:bg-kos-gold/15"
+            >
+              Open full board
+            </Link>
+          ) : null;
+        })()}
       </div>
 
       <MatchupCards games={games} content={content} />

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import TeamPreviewSlot from "@/components/pro/team-research/TeamPreviewSlot";
 import TeamResearchSection from "@/components/pro/team-research/TeamResearchSection";
+import { customerCtaHref } from "@/lib/cfb-edge-board-public";
 import {
   assignTeamPreviewWriter,
   parkFactorForTeam,
@@ -30,7 +31,7 @@ export default function TeamResearchDetail({
     config.sections.map((section) => [section.key, section]),
   );
 
-  const edgeHref = `/edge-board/${config.sportKey}`;
+  const edgeHref = customerCtaHref(`/edge-board/${config.sportKey}`);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
@@ -49,13 +50,17 @@ export default function TeamResearchDetail({
           Teams
         </Link>
         <span>/</span>
-        <Link
-          href={edgeHref}
-          className="min-h-11 inline-flex items-center hover:text-kos-gold sm:min-h-0"
-        >
-          Edge Board
-        </Link>
-        <span>/</span>
+        {edgeHref ? (
+          <>
+            <Link
+              href={edgeHref}
+              className="min-h-11 inline-flex items-center hover:text-kos-gold sm:min-h-0"
+            >
+              Edge Board
+            </Link>
+            <span>/</span>
+          </>
+        ) : null}
         <span className="text-kos-text">{team.name}</span>
       </nav>
 
@@ -78,21 +83,25 @@ export default function TeamResearchDetail({
               >
                 ← {sportName} Overview
               </Link>
-              <Link
-                href={edgeHref}
-                className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
-              >
-                Edge Board →
-              </Link>
+              {edgeHref ? (
+                <Link
+                  href={edgeHref}
+                  className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
+                >
+                  Edge Board →
+                </Link>
+              ) : null}
             </div>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
-            <Link
-              href={edgeHref}
-              className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold"
-            >
-              Open Edge Board
-            </Link>
+            {edgeHref ? (
+              <Link
+                href={edgeHref}
+                className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold"
+              >
+                Open Edge Board
+              </Link>
+            ) : null}
             <Link
               href={`/pro/${config.sportKey}/slate/today`}
               className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text"

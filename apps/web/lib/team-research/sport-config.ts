@@ -1,3 +1,4 @@
+import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
 import type { SportKey } from "@/lib/sports";
 import type {
   TeamResearchSectionConfig,
@@ -525,8 +526,12 @@ const CONFIGS: Record<SportKey, TeamResearchSportConfig> = {
 export function getTeamResearchSportConfig(
   sportKey: string,
 ): TeamResearchSportConfig | null {
-  if (sportKey in CONFIGS) return CONFIGS[sportKey as SportKey];
-  return null;
+  if (!(sportKey in CONFIGS)) return null;
+  const config = CONFIGS[sportKey as SportKey];
+  return {
+    ...config,
+    marketLinks: withoutCfbEdgeBoardHrefs(config.marketLinks),
+  };
 }
 
 export function listTeamResearchSportKeys(): SportKey[] {

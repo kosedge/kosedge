@@ -21,6 +21,7 @@ import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { marketAsOfHeaderSuffix } from "@/lib/market-asof-stamp";
 import { MODEL_TRANSPARENCY_HREF } from "@/lib/model-transparency-hub";
 import { getSportOverviewHref } from "@/lib/sport-pro-nav";
+import { publicEdgeBoardSports } from "@/lib/cfb-edge-board-public";
 import { SPORTS } from "@/lib/sports";
 
 type AssemblePayload = {
@@ -232,7 +233,7 @@ export default function EdgeBoardSportClient({
       </div>
 
       <div className="mt-4 flex flex-wrap gap-2">
-        {SPORTS.map((s) => (
+        {publicEdgeBoardSports(SPORTS).map((s) => (
           <Link
             key={s.key}
             href={`/edge-board/${s.key}`}

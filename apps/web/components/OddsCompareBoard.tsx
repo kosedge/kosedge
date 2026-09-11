@@ -8,6 +8,7 @@ import type {
   OddsCompareBoardPayload,
   OddsCompareBoardRow,
 } from "@/lib/odds-api";
+import { publicEdgeBoardHref } from "@/lib/cfb-edge-board-public";
 import {
   getKeiLinesBoardHref,
   getSportOverviewHref,
@@ -130,12 +131,14 @@ export default function OddsCompareBoard({ sportKey, sportName }: Props) {
           >
             {sportName} Overview
           </Link>
-          <Link
-            href={`/edge-board/${sportKey}`}
-            className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
-          >
-            Edge Board
-          </Link>
+          {publicEdgeBoardHref(sportKey) ? (
+            <Link
+              href={publicEdgeBoardHref(sportKey)!}
+              className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"
+            >
+              Edge Board
+            </Link>
+          ) : null}
           <Link
             href={getKeiLinesBoardHref(sportKey)}
             className="min-h-11 px-4 py-2 rounded-xl bg-white/5 border border-white/12 hover:border-kos-gold/35 transition font-semibold inline-flex items-center"

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { publicEdgeBoardSports } from "@/lib/cfb-edge-board-public";
 import { SPORTS } from "@/lib/sports";
 import { getFeaturedDeskNote } from "@/lib/insights/content";
 import { TOP_EDGE, HIGHLIGHTED_GAMES } from "@/lib/featured-games";
@@ -150,7 +151,7 @@ export default function ProWelcomeHub() {
               {s.label} Hub
             </Link>
           ))}
-          {SPORTS.map((s) => (
+          {publicEdgeBoardSports(SPORTS).map((s) => (
             <Link
               key={`board-${s.key}`}
               href={`/edge-board/${s.key}`}

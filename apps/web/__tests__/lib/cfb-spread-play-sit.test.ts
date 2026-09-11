@@ -200,8 +200,9 @@ describe("CFB spread PLAY sit (tagger only)", () => {
       "cfb",
       1,
     );
-    expect(published[0]?.tagLine).toBe("LEAN");
-    expect(published[0]?.tagOU).toBe("PASS");
+    // Public kill switch: customer paint emits zero CFB tags while disabled.
+    expect(published[0]?.tagLine).toBeUndefined();
+    expect(published[0]?.tagOU).toBeUndefined();
     expect(Math.abs(published[0]?.edgeLineNum ?? 0)).toBeGreaterThanOrEqual(
       CFB_LEAN_EDGE_PTS,
     );

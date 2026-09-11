@@ -27,6 +27,10 @@ import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { getSport } from "@/lib/sports";
 import { isRetiredNcaamSportKey } from "@/lib/ncaam/identity";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import {
+  cfbEdgeBoardAssembleUnavailablePayload,
+  isCfbEdgeBoardCustomerDisabled,
+} from "@/lib/cfb-edge-board-public";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -87,6 +91,14 @@ export async function GET(
     );
   }
 
+  // P0: CFB public Edge Board fail-closed — no rows, no tags, no assemble.
+  if (isCfbEdgeBoardCustomerDisabled(sport)) {
+    return NextResponse.json(cfbEdgeBoardAssembleUnavailablePayload(), {
+      status: 503,
+      headers: pageDataCacheHeaders({ cacheable: false }),
+    });
+  }
+
   const url = new URL(req.url);
   const slate =
     sport === "nfl"
@@ -115,7 +127,7 @@ export async function GET(
         const linesAsOf =
           resolveEdgeBoardBoardLinesAsOf(assembled) ?? governed.linesAsOf;
         return pageDataJsonResponse({
-          rows: scrubEdgeBoardAssembleCustomerRows(assembled),
+          rows: scrubEdgeBoardAssembleCustomerRows(assembled, "nfl"),
           week1Count: gameCount(week1Rows),
           fullCount: gameCount(assembled),
           week0Count: 0,
@@ -141,7 +153,7 @@ export async function GET(
       const weeks = weeksOnBoard(week1Rows);
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(week1Rows);
       return pageDataJsonResponse({
-        rows: scrubEdgeBoardAssembleCustomerRows(week1Rows),
+        rows: scrubEdgeBoardAssembleCustomerRows(week1Rows, "nfl"),
         week1Count: gameCount(week1Rows),
         // Week1 responses omit full badge until Full tab opens (honest).
         fullCount: 0,
@@ -169,7 +181,7 @@ export async function GET(
       const week2Count = gameCount(scopeCfbLiveEdgeBoardRows(all, 2));
       const requestedWeekCount = gameCount(live);
       return pageDataJsonResponse({
-        rows: scrubEdgeBoardAssembleCustomerRows(live),
+        rows: scrubEdgeBoardAssembleCustomerRows(live, "cfb"),
         week0Count,
         week1Count,
         week2Count,
@@ -189,7 +201,7 @@ export async function GET(
     // Book last_update / row linesAsOf — never GET clock (same honesty as NFL/CFB).
     const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
     return pageDataJsonResponse({
-      rows: scrubEdgeBoardAssembleCustomerRows(rows),
+      rows: scrubEdgeBoardAssembleCustomerRows(rows, sport),
       week0Count: 0,
       week1Count: 0,
       fullCount: 0,

@@ -1,3 +1,4 @@
+import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
 import { supportsPropsFantasy, type SportKey } from "@/lib/sports";
 
 export type DeskAccent = "gold" | "green" | "neutral";
@@ -528,12 +529,19 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
 
 export function getSportDeskConfig(sportKey: string): SportDeskConfig {
   const key = sportKey as SportKey;
-  if (key in DESK_BY_SPORT) return DESK_BY_SPORT[key];
+  if (key in DESK_BY_SPORT) {
+    const desk = DESK_BY_SPORT[key];
+    return {
+      ...desk,
+      cards: withoutCfbEdgeBoardHrefs(desk.cards),
+      footerCards: withoutCfbEdgeBoardHrefs(desk.footerCards),
+    };
+  }
   return {
     pathLabel: "Fair Lines → Edges → Markets",
     pathSubtitle:
       "Translate market movement into clear model-versus-price decision support.",
-    cards: [
+    cards: withoutCfbEdgeBoardHrefs([
       stubFairLines(sportKey, "spread / total / ML"),
       stubEdges(sportKey, "Game edges pending model board connection."),
       supportsPropsFantasy(sportKey)
@@ -548,8 +556,8 @@ export function getSportDeskConfig(sportKey: string): SportDeskConfig {
             "Additional market views staged for this league.",
             `/pro/${sportKey}/execution`,
           ),
-    ],
-    footerCards: SHARED_FOOTER(sportKey),
+    ]),
+    footerCards: withoutCfbEdgeBoardHrefs(SHARED_FOOTER(sportKey)),
   };
 }
 

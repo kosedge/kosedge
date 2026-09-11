@@ -13,6 +13,10 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 import {
+  isCfbEdgeBoardCustomerDisabled,
+  stripCfbCustomerEdgeTagRows,
+} from "@/lib/cfb-edge-board-public";
+import {
   quarantineDecisionForCustomer,
   scrubCustomerDecisionReason,
 } from "@/lib/nfl-dead-tiers";
@@ -70,6 +74,13 @@ export function scrubEdgeBoardAssembleCustomerRow(
 /** Scrub all rows in an assemble customer payload. */
 export function scrubEdgeBoardAssembleCustomerRows(
   rows: EdgeBoardRow[],
+  sport?: string,
 ): EdgeBoardRow[] {
-  return rows.map(scrubEdgeBoardAssembleCustomerRow);
+  const scrubbed = rows.map(scrubEdgeBoardAssembleCustomerRow);
+  if (isCfbEdgeBoardCustomerDisabled(sport)) {
+    return stripCfbCustomerEdgeTagRows(
+      scrubbed as unknown as Record<string, unknown>[],
+    ) as EdgeBoardRow[];
+  }
+  return scrubbed;
 }

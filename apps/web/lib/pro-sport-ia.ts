@@ -1,4 +1,5 @@
 import type { LegacyEdgeBoardRow } from "@/lib/flat-rows-to-legacy";
+import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { supportsPropsFantasy } from "@/lib/sports";
@@ -488,7 +489,7 @@ function genericIntelLinks(
   const primary = desk.cards[0];
   const edges = desk.cards[1];
 
-  return [
+  return withoutCfbEdgeBoardHrefs([
     {
       href: primary?.href,
       label: primary?.title ?? "Fair lines",
@@ -543,7 +544,7 @@ function genericIntelLinks(
       premium: true,
       status: "placeholder",
     },
-  ];
+  ]);
 }
 
 function intelLinksForSport(
@@ -593,19 +594,21 @@ function marketLinksForSport({
         ]
       : [];
 
+  const publicBoard = {
+    href: edgeBoardHref,
+    label: "Public edge board",
+    hint:
+      sportKey === "cfb"
+        ? "KEI vs market on Week 0/1. Model is the research column."
+        : "Open vs best prices, KEI, and directional edge tags.",
+    premium: true as const,
+    status: "active" as const,
+  };
+
   return [
     ...modelLinks,
     ...deskLinks,
-    {
-      href: edgeBoardHref,
-      label: "Public edge board",
-      hint:
-        sportKey === "cfb"
-          ? "KEI vs market on Week 0/1. Model is the research column."
-          : "Open vs best prices, KEI, and directional edge tags.",
-      premium: true,
-      status: "active",
-    },
+    ...withoutCfbEdgeBoardHrefs([publicBoard]),
     {
       href: `/pro/${sportKey}/fair-lines`,
       label: "KEI projections",

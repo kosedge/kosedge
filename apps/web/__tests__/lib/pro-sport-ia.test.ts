@@ -389,11 +389,11 @@ describe("pro sport IA", () => {
   it("CFB hub footer advertises published KEI with research-fair model", () => {
     const desk = getSportDeskConfig("cfb");
     const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
-    expect(edge?.description.toLowerCase()).toContain("kei vs trusted market");
-    expect(edge?.description.toLowerCase()).toContain("research-fair");
-    expect(edge?.description.toLowerCase()).not.toContain(
-      "directional edge tags",
-    );
+    // P0: Public Edge Board card is hidden while the CFB kill switch is off.
+    expect(edge).toBeUndefined();
+    expect(
+      desk.footerCards.some((c) => c.href.includes("/edge-board/cfb")),
+    ).toBe(false);
     const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
     expect(kei?.description.toLowerCase()).toContain("published cfb kei");
     expect(kei?.description.toLowerCase()).not.toContain(
@@ -449,9 +449,15 @@ describe("pro sport IA", () => {
       expect(
         intel?.links.some((link) => link.href === `/odds/${sport.key}`),
       ).toBe(true);
-      expect(
-        intel?.links.some((link) => link.href === `/edge-board/${sport.key}`),
-      ).toBe(true);
+      if (sport.key === "cfb") {
+        expect(
+          intel?.links.some((link) => link.href === `/edge-board/${sport.key}`),
+        ).toBe(false);
+      } else {
+        expect(
+          intel?.links.some((link) => link.href === `/edge-board/${sport.key}`),
+        ).toBe(true);
+      }
 
       const desk = getSportDeskConfig(sport.key);
       expect(desk.cards).toHaveLength(3);

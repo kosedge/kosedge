@@ -14,6 +14,8 @@ import {
 import EdgeBoardStatDrop from "@/components/EdgeBoardStatDrop";
 import EdgeBoardMobileCard from "@/components/EdgeBoardMobileCard";
 import type { StatDrop } from "@/lib/edge-board-stat-drop";
+import CfbEdgeBoardUnavailable from "@/components/CfbEdgeBoardUnavailable";
+import { isCfbEdgeBoardCustomerEnabled } from "@/lib/cfb-edge-board-public";
 import { buildHomePreviewRows } from "@/lib/edge-board-home-preview";
 import {
   NHL_MODEL_DISAGREEMENT_LABEL,
@@ -551,6 +553,15 @@ export default function EdgeBoard({
     : "Model";
 
   if (variant === "home") {
+    if (!isCfbEdgeBoardCustomerEnabled()) {
+      return (
+        <div className="lg:col-span-5 self-start min-w-0">
+          <div className="relative p-3 sm:p-4 min-w-0">
+            <CfbEdgeBoardUnavailable compact />
+          </div>
+        </div>
+      );
+    }
     // Compact-but-readable pills — must stay inside Tag track (wider than "—").
     const homeTagClass = (tag: Tag) => {
       const base =

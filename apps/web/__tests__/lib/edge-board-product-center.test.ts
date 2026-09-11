@@ -1,6 +1,7 @@
 import { readFileSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
+import { isCfbEdgeBoardCustomerEnabled } from "@/lib/cfb-edge-board-public";
 import {
   getSportEdgeBoardHref,
   getSportPrimaryNav,
@@ -64,6 +65,10 @@ describe("Edge Board Product Center #4 — canonical URL", () => {
       expect(href).not.toMatch(/\/pro\/.+\/edge-board/);
       const primary = getSportPrimaryNav(sport.key);
       const edge = primary.find((i) => i.label === "Edge Board");
+      if (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) {
+        expect(edge).toBeUndefined();
+        continue;
+      }
       expect(edge?.href.startsWith("/edge-board/")).toBe(true);
       expect(edge?.href).not.toMatch(/\/pro\/.+\/edge-board/);
     }
@@ -74,7 +79,11 @@ describe("Edge Board Product Center #4 — canonical URL", () => {
       const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
       expect(primary).not.toContain("Edges");
       expect(primary).not.toContain("Edges desk");
-      expect(primary).toContain("Edge Board");
+      if (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) {
+        expect(primary).not.toContain("Edge Board");
+      } else {
+        expect(primary).toContain("Edge Board");
+      }
     }
     // Deep link preserved under tools for NFL (desk page stays live).
     const nflDesk = getSportToolNav("nfl").find(
