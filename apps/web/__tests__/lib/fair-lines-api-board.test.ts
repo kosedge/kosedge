@@ -57,4 +57,19 @@ describe("fair-lines API honesty envelope", () => {
     expect(board.slateStatus).toBe("no_slate");
     expect(board.message).toContain(FAIR_LINES_DO_NOT_INVENT);
   });
+
+  it("upstream error defaults to outage copy, not no-odds empty slate", () => {
+    const board = toFairLinesApiBoard({
+      sport: "nba",
+      sportLabel: "NBA",
+      lines: [],
+      slateStatus: "upstream_error",
+      error: "Model service returned 503.",
+    });
+    expect(board.slateStatus).toBe("upstream_error");
+    expect(board.message).toContain("upstream unavailable");
+    expect(board.message).not.toContain("no odds or projections");
+    expect(board.message).toContain(FAIR_LINES_DO_NOT_INVENT);
+    expect(board.error).toBe("Model service returned 503.");
+  });
 });
