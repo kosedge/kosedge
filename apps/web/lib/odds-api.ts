@@ -134,24 +134,26 @@ export function bookDisplay(key: string): string {
   return BOOK_DISPLAY[key.toLowerCase()] ?? key;
 }
 
+export type OddsBookmaker = {
+  key: string;
+  title: string;
+  /** Odds API bookmaker snapshot time (ISO). */
+  last_update?: string;
+  markets: {
+    key: string;
+    /** Odds API market snapshot time (ISO). */
+    last_update?: string;
+    outcomes: Array<{ name: string; point?: number; price?: number }>;
+  }[];
+};
+
 export type OddsEvent = {
   id: string;
   sport_key: string;
   commence_time: string;
   home_team: string;
   away_team: string;
-  bookmakers?: {
-    key: string;
-    title: string;
-    /** Odds API bookmaker snapshot time (ISO). */
-    last_update?: string;
-    markets: {
-      key: string;
-      /** Odds API market snapshot time (ISO). */
-      last_update?: string;
-      outcomes: Array<{ name: string; point?: number; price?: number }>;
-    }[];
-  }[];
+  bookmakers?: OddsBookmaker[];
 };
 
 /** Latest market/book last_update — never invents fetch time. */
@@ -270,10 +272,10 @@ function linesAsOfFromEntryMs(
   return new Date(bestMs).toISOString();
 }
 
-function filterBooksBySport<T extends { key?: string }>(
-  items: T[],
+function filterBooksBySport(
+  items: readonly OddsBookmaker[],
   sportKey: string,
-): T[] {
+): OddsBookmaker[] {
   // Only accept books we actually requested (carried for NFL).
   const allowed = new Set(
     requestBooksForSport(sportKey).map((book) => book.toLowerCase()),
@@ -434,10 +436,9 @@ export function pickBestMoneylineEntry(
   });
 }
 
-function orderBooksByPreference<T extends { book: string }>(
-  entries: T[],
-  preferred: string[],
-): T[] {
+function orderBooksByPreference<
+  T extends SpreadBookEntry | TotalBookEntry | MoneylineBookEntry,
+>(entries: readonly T[], preferred: string[]): T[] {
   const rank = new Map(preferred.map((key, i) => [key.toLowerCase(), i]));
   return [...entries].sort((a, b) => {
     const ra = rank.get(a.book.toLowerCase()) ?? 999;
@@ -477,7 +478,7 @@ export function edgeBoardRowsFromOddsEvents(
     };
 
     if (isMlb) {
-      const mlData = bookmakers.flatMap((b) => {
+      const mlData: MoneylineBookEntry[] = bookmakers.flatMap((b) => {
         const m = selectFeaturedFullGameMarket(b.markets, "h2h");
         if (!m) return [];
         const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
@@ -535,7 +536,7 @@ export function edgeBoardRowsFromOddsEvents(
         ...(mlAsOf ? { linesAsOf: mlAsOf } : {}),
       });
     } else {
-      const spreadData = bookmakers.flatMap((b) => {
+      const spreadData: SpreadBookEntry[] = bookmakers.flatMap((b) => {
         const m = selectFeaturedFullGameMarket(b.markets, "spreads");
         if (!m) return [];
         const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
@@ -556,7 +557,7 @@ export function edgeBoardRowsFromOddsEvents(
             juiceAway: formatJuice(awayOutcome.price),
             juiceHome: formatJuice(homeOutcome?.price),
             asOfMs,
-          },
+          } satisfies SpreadBookEntry,
         ];
       });
       // Open = preferred book among those that posted; Best = best across all posted.
@@ -602,7 +603,7 @@ export function edgeBoardRowsFromOddsEvents(
       });
     }
 
-    const totalsData = bookmakers.flatMap((b) => {
+    const totalsData: TotalBookEntry[] = bookmakers.flatMap((b) => {
       const m = selectFeaturedFullGameMarket(b.markets, "totals");
       if (!m) return [];
       const over = m.outcomes?.find((o) => o.name === "Over");
@@ -618,7 +619,7 @@ export function edgeBoardRowsFromOddsEvents(
           juiceOver: formatJuice(over?.price),
           juiceUnder: formatJuice(under?.price),
           asOfMs,
-        },
+        } satisfies TotalBookEntry,
       ];
     });
     const orderedTotals = orderBooksByPreference(totalsData, sportBooks);
