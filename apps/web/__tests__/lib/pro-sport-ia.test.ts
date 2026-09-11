@@ -391,9 +391,9 @@ describe("pro sport IA", () => {
     const edge = desk.footerCards.find((c) => c.title === "Public Edge Board");
     // P0: Public Edge Board card is hidden while the CFB kill switch is off.
     expect(edge).toBeUndefined();
-    expect(desk.footerCards.some((c) => c.href.includes("/edge-board/cfb"))).toBe(
-      false,
-    );
+    expect(
+      desk.footerCards.some((c) => c.href.includes("/edge-board/cfb")),
+    ).toBe(false);
     const kei = desk.footerCards.find((c) => c.title === "KEI Lines");
     expect(kei?.description.toLowerCase()).toContain("published cfb kei");
     expect(kei?.description.toLowerCase()).not.toContain(

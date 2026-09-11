@@ -151,7 +151,9 @@ describe("CFB Edge Board public kill switch", () => {
       "cfb",
     );
     expect((scrubbed[0] as { publishTag?: string }).publishTag).toBeUndefined();
-    expect((scrubbed[0] as { actionLabel?: string }).actionLabel).toBeUndefined();
+    expect(
+      (scrubbed[0] as { actionLabel?: string }).actionLabel,
+    ).toBeUndefined();
 
     const nflScrubbed = scrubEdgeBoardAssembleCustomerRows(
       [
@@ -220,7 +222,9 @@ describe("CFB Edge Board public kill switch", () => {
       expect(existsSync(path.join(webRoot, rel)), rel).toBe(true);
     }
     expect(
-      existsSync(path.join(repoRoot, "services/model-service/src/routes/edge_board.py")),
+      existsSync(
+        path.join(repoRoot, "services/model-service/src/routes/edge_board.py"),
+      ),
     ).toBe(true);
     const today = readRel("app/api/edge-board/[sport]/today/route.ts");
     expect(today).not.toContain("isCfbEdgeBoardCustomerDisabled");

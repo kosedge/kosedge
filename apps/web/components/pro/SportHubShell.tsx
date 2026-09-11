@@ -44,10 +44,7 @@ export default function SportHubShell({
   secondaryHref?: string;
   secondaryLabel?: string;
 }) {
-  const key =
-    sportKey ||
-    base.replace(/^\/pro\//, "").split("/")[0] ||
-    "nfl";
+  const key = sportKey || base.replace(/^\/pro\//, "").split("/")[0] || "nfl";
   const overviewHref = getSportOverviewHref(key);
   const edgeHref = customerCtaHref(getSportEdgeBoardHref(key));
   const primary = customerCtaHref(primaryHref);

@@ -35,7 +35,9 @@ describe("homepage Edge Board homePreviewRows sit-aware tags", () => {
 
   it("customer publish emits no PLAY/LEAN/PASS while disabled", () => {
     for (const f of HOME_PREVIEW_FIXTURES) {
-      expect(cfbCustomerPublishTag(f.edgeLineNum, cfbEdgeTag, "spread")).toBeUndefined();
+      expect(
+        cfbCustomerPublishTag(f.edgeLineNum, cfbEdgeTag, "spread"),
+      ).toBeUndefined();
     }
   });
 

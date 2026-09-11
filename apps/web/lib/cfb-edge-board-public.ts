@@ -60,14 +60,14 @@ export function isCfbEdgeBoardCustomerEnabled(): boolean {
 }
 
 export function isCfbSportKey(sport: string | null | undefined): boolean {
-  return String(sport ?? "")
-    .trim()
-    .toLowerCase() === "cfb";
+  return (
+    String(sport ?? "")
+      .trim()
+      .toLowerCase() === "cfb"
+  );
 }
 
-export function isCfbEdgeBoardCustomerDisabled(
-  sport?: string | null,
-): boolean {
+export function isCfbEdgeBoardCustomerDisabled(sport?: string | null): boolean {
   return isCfbSportKey(sport) && !isCfbEdgeBoardCustomerEnabled();
 }
 
@@ -85,9 +85,7 @@ export function publicEdgeBoardSports<T extends { key: string }>(
 }
 
 /** Public Edge Board sport keys (infrastructure list may still include cfb). */
-export function publicEdgeBoardSportKeys(
-  keys: readonly string[],
-): string[] {
+export function publicEdgeBoardSportKeys(keys: readonly string[]): string[] {
   if (isCfbEdgeBoardCustomerEnabled()) return [...keys];
   return keys.filter((k) => k !== "cfb");
 }
@@ -152,7 +150,11 @@ export function stripCfbCustomerEdgeTags<T extends Record<string, unknown>>(
   for (const key of CFB_CUSTOMER_TAG_KEYS) {
     delete out[key];
   }
-  if (out.decision && typeof out.decision === "object" && !Array.isArray(out.decision)) {
+  if (
+    out.decision &&
+    typeof out.decision === "object" &&
+    !Array.isArray(out.decision)
+  ) {
     const decision = { ...(out.decision as Record<string, unknown>) };
     delete decision.publishTag;
     delete decision.actionLabel;
