@@ -25,9 +25,9 @@ export const dynamic = "force-dynamic";
 const START_HERE = [
   {
     step: "1",
-    href: "/edge-board/cfb?week=1",
+    href: "/edge-board/cfb",
     title: "Edge Board",
-    body: "Week 1 KEI vs market (Week 0 finals on the W0 tab). Model is research. PASS default.",
+    body: "Current-week KEI vs trusted market. Completed games stay off the live board. Model is research. PASS default.",
   },
   {
     step: "2",
@@ -77,7 +77,7 @@ export default async function CfbOverviewPage() {
   const sections = buildSportOverviewSections({
     sportKey: "cfb",
     base: "/pro/cfb",
-    edgeBoardHref: "/edge-board/cfb?week=1",
+    edgeBoardHref: "/edge-board/cfb",
     content,
   }).filter((section) => {
     if (section.title === "Weekly Slate") return false;

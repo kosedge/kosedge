@@ -13,7 +13,8 @@ describe("GO-1c / INC-2026-09-07 (E) warm-page-data cron (public cache path)", (
     const route = readRel("app/api/cron/warm-page-data/route.ts");
     expect(route).toMatch(/export const maxDuration = 40/);
     expect(route).toContain("/api/edge-board/nfl/assemble?slate=week1");
-    expect(route).toContain("/api/edge-board/cfb/assemble?week=1");
+    expect(route).toContain("/api/edge-board/cfb/assemble");
+    expect(route).not.toContain("/api/edge-board/cfb/assemble?week=1");
     expect(route).toContain("CRON_SECRET");
     expect(route).not.toContain("loadAssembledEdgeBoardRows");
     expect(route).not.toContain("linesAsOf:");

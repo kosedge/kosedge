@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { loadEdgeBoardFallback } from "@/lib/edge-board-fallback";
+import {
+  loadEdgeBoardFallback,
+  loadEdgeBoardFallbackMeta,
+} from "@/lib/edge-board-fallback";
 
 describe("loadEdgeBoardFallback", () => {
   it("loads shipped CFB snapshot rows", () => {
@@ -7,6 +10,9 @@ describe("loadEdgeBoardFallback", () => {
     expect(rows.length).toBeGreaterThan(0);
     expect(rows.some((r) => r.market === "Spread")).toBe(true);
     expect(rows.some((r) => r.market === "Total")).toBe(true);
+    const meta = loadEdgeBoardFallbackMeta("cfb");
+    expect(meta?.capturedAt).toBe("2026-07-31T18:12:23Z");
+    expect(meta?.source).toBe("odds-api-live-pull");
   });
 
   it("loads shipped NHL, MLB, WNBA, and NBA snapshots", () => {

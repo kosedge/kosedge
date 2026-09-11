@@ -39,6 +39,7 @@ import { nflAssembleWindowForSlate } from "@/lib/nfl-edge-board-assemble-window"
 import { enrichNflEdgeBoardMatchupFields } from "@/lib/edge-board-matchup-enrich";
 import { fetchNflFairLines } from "@/lib/nfl-fair-lines";
 import { applyCfbTrustedMarketToRows } from "@/lib/cfb-trusted-market";
+import { loadCfbCurrentMarketRows } from "@/lib/cfb-edge-board-odds";
 import {
   applyNbaTrustedMarketToRows,
   isNbaPreseason,
@@ -243,6 +244,13 @@ export async function loadAssembledEdgeBoardRows(
     return assembleEdgeBoardRows("nfl", [], options);
   }
 
+  if (sport === "cfb") {
+    const market = await loadCfbCurrentMarketRows({
+      timeoutMs: options?.timeoutMs,
+    });
+    return assembleEdgeBoardRows("cfb", market.rows, options);
+  }
+
   const pulled = await pullOddsRows(sport);
   const odds = withFallback(sport, pulled);
   return assembleEdgeBoardRows(sport, odds, options);
@@ -258,7 +266,9 @@ export async function assembleEdgeBoardRows(
   if (sport === "nfl") {
     rows = await assembleNflEdgeBoardRows(oddsRows, options);
   } else {
-    const odds = withFallback(sport, oddsRows);
+    // CFB: caller already applied current-market freshness. Do not hydrate
+    // the July 31 NFT snapshot as live MARKET.
+    const odds = sport === "cfb" ? oddsRows : withFallback(sport, oddsRows);
     const keiGames = await resolveKeiGames(sport);
     const seeded = ensureAllKeiGamesOnBoard(odds, sport, keiGames);
     const merged = mergeKeiIntoEdgeBoardRows(seeded, sport, keiGames);

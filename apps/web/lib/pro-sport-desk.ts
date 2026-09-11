@@ -456,7 +456,7 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         accent: "neutral",
       },
       {
-        href: "/edge-board/cfb?week=1",
+        href: "/edge-board/cfb",
         title: "Public Edge Board",
         description:
           "KEI vs trusted market. Outlier books cannot PLAY. Model stays research-fair.",

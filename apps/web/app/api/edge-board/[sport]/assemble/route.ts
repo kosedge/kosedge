@@ -15,8 +15,8 @@ import {
 } from "@/lib/nfl-edge-board-week";
 import { requireGovernedNflFullSlate } from "@/lib/nfl-edge-board-assemble-window";
 import {
-  filterCfbEdgeBoardRowsByWeek,
   parseCfbAssembleWeek,
+  scopeCfbLiveEdgeBoardRows,
 } from "@/lib/cfb-edge-board-week";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 import {
@@ -159,16 +159,17 @@ export async function GET(
           ...assembleOpts,
         }),
       );
-      const rows = filterCfbEdgeBoardRowsByWeek(all, cfbWeek);
+      const live = scopeCfbLiveEdgeBoardRows(all, cfbWeek);
       // Same honesty as NFL: book last_update / row linesAsOf — never GET clock.
       // Missing requested week → empty board (never coerce to week 1).
-      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(rows);
-      const week0Count = gameCount(all.filter((r) => r.week === 0));
-      const week1Count = gameCount(all.filter((r) => r.week === 1));
-      const week2Count = gameCount(all.filter((r) => r.week === 2));
-      const requestedWeekCount = gameCount(rows);
+      // Completed / already-started games are dropped server-side.
+      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(live);
+      const week0Count = gameCount(scopeCfbLiveEdgeBoardRows(all, 0));
+      const week1Count = gameCount(scopeCfbLiveEdgeBoardRows(all, 1));
+      const week2Count = gameCount(scopeCfbLiveEdgeBoardRows(all, 2));
+      const requestedWeekCount = gameCount(live);
       return pageDataJsonResponse({
-        rows: scrubEdgeBoardAssembleCustomerRows(rows),
+        rows: scrubEdgeBoardAssembleCustomerRows(live),
         week0Count,
         week1Count,
         week2Count,

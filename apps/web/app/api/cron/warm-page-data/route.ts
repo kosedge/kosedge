@@ -9,12 +9,12 @@ export const maxDuration = 40;
  * #12 GO-1c / INC-2026-09-07 (E) — optional CDN warm for Edge Board assemble.
  * Hits authentic **public** page-data assemble routes (no Authorization on the
  * warm GET) so Vercel stores HIT for the 45s band instead of CDN BYPASS.
- * Bounded paths only (NFL week1 + CFB week1). Does not remat, invent SoT,
+ * Bounded paths only (NFL week1 + CFB current-week default). Does not remat, invent SoT,
  * mint as-of clocks, or warm full-slate (avoids uncontrolled Odds spend).
  */
 const WARM_PATHS = [
   "/api/edge-board/nfl/assemble?slate=week1",
-  "/api/edge-board/cfb/assemble?week=1",
+  "/api/edge-board/cfb/assemble",
 ] as const;
 
 /** Soft alert when warm misses the public cache path or origin is unhealthy. */

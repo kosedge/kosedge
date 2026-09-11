@@ -134,24 +134,26 @@ export function bookDisplay(key: string): string {
   return BOOK_DISPLAY[key.toLowerCase()] ?? key;
 }
 
-type OddsEvent = {
+export type OddsBookmaker = {
+  key: string;
+  title: string;
+  /** Odds API bookmaker snapshot time (ISO). */
+  last_update?: string;
+  markets: {
+    key: string;
+    /** Odds API market snapshot time (ISO). */
+    last_update?: string;
+    outcomes: Array<{ name: string; point?: number; price?: number }>;
+  }[];
+};
+
+export type OddsEvent = {
   id: string;
   sport_key: string;
   commence_time: string;
   home_team: string;
   away_team: string;
-  bookmakers?: {
-    key: string;
-    title: string;
-    /** Odds API bookmaker snapshot time (ISO). */
-    last_update?: string;
-    markets: {
-      key: string;
-      /** Odds API market snapshot time (ISO). */
-      last_update?: string;
-      outcomes: Array<{ name: string; point?: number; price?: number }>;
-    }[];
-  }[];
+  bookmakers?: OddsBookmaker[];
 };
 
 /** Latest market/book last_update — never invents fetch time. */
@@ -270,10 +272,10 @@ function linesAsOfFromEntryMs(
   return new Date(bestMs).toISOString();
 }
 
-function filterBooksBySport<T extends { key?: string }>(
-  items: T[],
+function filterBooksBySport(
+  items: readonly OddsBookmaker[],
   sportKey: string,
-): T[] {
+): OddsBookmaker[] {
   // Only accept books we actually requested (carried for NFL).
   const allowed = new Set(
     requestBooksForSport(sportKey).map((book) => book.toLowerCase()),
@@ -434,10 +436,9 @@ export function pickBestMoneylineEntry(
   });
 }
 
-function orderBooksByPreference<T extends { book: string }>(
-  entries: T[],
-  preferred: string[],
-): T[] {
+function orderBooksByPreference<
+  T extends SpreadBookEntry | TotalBookEntry | MoneylineBookEntry,
+>(entries: readonly T[], preferred: string[]): T[] {
   const rank = new Map(preferred.map((key, i) => [key.toLowerCase(), i]));
   return [...entries].sort((a, b) => {
     const ra = rank.get(a.book.toLowerCase()) ?? 999;
@@ -446,31 +447,16 @@ function orderBooksByPreference<T extends { book: string }>(
   });
 }
 
-/** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
-export async function fetchEdgeBoard(
+/** Map Odds-API (or warehouse-reconstructed) events → Edge Board rows. */
+export function edgeBoardRowsFromOddsEvents(
   sportKey: string,
-  apiKey: string,
-): Promise<EdgeBoardRow[]> {
+  events: readonly OddsEvent[],
+): EdgeBoardRow[] {
   const normalizedSport = sportKey.toLowerCase();
-  const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
-  if (!oddsSportKey) return [];
+  if (!SPORT_KEY_MAP[normalizedSport]) return [];
+  if (!Array.isArray(events) || events.length === 0) return [];
   const isMlb = normalizedSport === "mlb";
   const sportBooks = configuredBooksForSport(normalizedSport);
-  const requestBooks = requestBooksForSport(normalizedSport);
-  // MLB is a moneyline sport on the public board — request h2h, not run lines.
-  const markets = isMlb ? "h2h,totals" : "spreads,totals";
-  const regions = regionsForSport(normalizedSport);
-
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
-  const res = await upstreamFetch(url, {
-    cache: "no-store",
-    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
-  }
-  const events = (await res.json()) as OddsEvent[];
 
   const rows: EdgeBoardRow[] = [];
   const commenceTime = (e: OddsEvent) => new Date(e.commence_time).getTime();
@@ -492,7 +478,7 @@ export async function fetchEdgeBoard(
     };
 
     if (isMlb) {
-      const mlData = bookmakers.flatMap((b) => {
+      const mlData: MoneylineBookEntry[] = bookmakers.flatMap((b) => {
         const m = selectFeaturedFullGameMarket(b.markets, "h2h");
         if (!m) return [];
         const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
@@ -550,7 +536,7 @@ export async function fetchEdgeBoard(
         ...(mlAsOf ? { linesAsOf: mlAsOf } : {}),
       });
     } else {
-      const spreadData = bookmakers.flatMap((b) => {
+      const spreadData: SpreadBookEntry[] = bookmakers.flatMap((b) => {
         const m = selectFeaturedFullGameMarket(b.markets, "spreads");
         if (!m) return [];
         const awayOutcome = m.outcomes?.find((o) => o.name === ev.away_team);
@@ -571,7 +557,7 @@ export async function fetchEdgeBoard(
             juiceAway: formatJuice(awayOutcome.price),
             juiceHome: formatJuice(homeOutcome?.price),
             asOfMs,
-          },
+          } satisfies SpreadBookEntry,
         ];
       });
       // Open = preferred book among those that posted; Best = best across all posted.
@@ -617,7 +603,7 @@ export async function fetchEdgeBoard(
       });
     }
 
-    const totalsData = bookmakers.flatMap((b) => {
+    const totalsData: TotalBookEntry[] = bookmakers.flatMap((b) => {
       const m = selectFeaturedFullGameMarket(b.markets, "totals");
       if (!m) return [];
       const over = m.outcomes?.find((o) => o.name === "Over");
@@ -633,7 +619,7 @@ export async function fetchEdgeBoard(
           juiceOver: formatJuice(over?.price),
           juiceUnder: formatJuice(under?.price),
           asOfMs,
-        },
+        } satisfies TotalBookEntry,
       ];
     });
     const orderedTotals = orderBooksByPreference(totalsData, sportBooks);
@@ -681,6 +667,33 @@ export async function fetchEdgeBoard(
   }
 
   return rows;
+}
+
+/** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
+export async function fetchEdgeBoard(
+  sportKey: string,
+  apiKey: string,
+): Promise<EdgeBoardRow[]> {
+  const normalizedSport = sportKey.toLowerCase();
+  const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
+  if (!oddsSportKey) return [];
+  const isMlb = normalizedSport === "mlb";
+  const requestBooks = requestBooksForSport(normalizedSport);
+  const markets = isMlb ? "h2h,totals" : "spreads,totals";
+  const regions = regionsForSport(normalizedSport);
+
+  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
+  const res = await upstreamFetch(url, {
+    cache: "no-store",
+    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
+  }
+  const events = (await res.json()) as OddsEvent[];
+  if (!Array.isArray(events)) return [];
+  return edgeBoardRowsFromOddsEvents(normalizedSport, events);
 }
 
 /** Legacy alias for NCAAM. */

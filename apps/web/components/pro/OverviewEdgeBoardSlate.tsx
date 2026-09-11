@@ -86,10 +86,14 @@ export default function OverviewEdgeBoardSlate({
     emptyHint:
       "Slate cards appear when the schedule posts — we do not invent matchups.",
   };
-  const cfbWeek = typeof week === "number" && Number.isFinite(week) ? week : 1;
+  const cfbWeek =
+    typeof week === "number" && Number.isFinite(week) ? week : null;
+  // Bare /edge-board/cfb resolves calendar current week server-side.
   const edgeBoardHref =
     sport === "cfb"
-      ? `/edge-board/cfb?week=${cfbWeek}`
+      ? cfbWeek == null
+        ? "/edge-board/cfb"
+        : `/edge-board/cfb?week=${cfbWeek}`
       : `/edge-board/${sport}`;
   const emptyCopy =
     status === "timeout" || status === "error"

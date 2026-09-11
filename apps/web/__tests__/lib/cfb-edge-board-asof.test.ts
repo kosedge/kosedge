@@ -26,13 +26,13 @@ describe("CFB Edge Board market as-of honesty", () => {
       "utf8",
     );
     expect(assemble).toContain('sport === "cfb"');
-    expect(assemble).toContain("resolveEdgeBoardBoardLinesAsOf(rows)");
+    expect(assemble).toContain("resolveEdgeBoardBoardLinesAsOf(live)");
     // CFB block must not hardcode null.
     const cfbBlock = assemble.slice(
       assemble.indexOf('if (sport === "cfb")'),
       assemble.indexOf("const rows = await loadAssembledEdgeBoardRows(sport"),
     );
-    expect(cfbBlock).toContain("resolveEdgeBoardBoardLinesAsOf(rows)");
+    expect(cfbBlock).toContain("resolveEdgeBoardBoardLinesAsOf(live)");
     expect(cfbBlock).not.toMatch(/linesAsOf:\s*null/);
     // Default sport path also resolves — never invent-null when rows carry capture.
     const defaultBlock = assemble.slice(
