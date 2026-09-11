@@ -73,6 +73,7 @@ describe("sport-pro-nav", () => {
     const nflTools = nflToolItems.map((i) => i.label);
     expect(nflTools).toContain("Wall Chart");
     expect(nflTools).toContain("Weekly Fantasy");
+    expect(nflTools).toContain("DFS Board");
     expect(nflTools).toContain("KEI Lines");
     // Live board — never the /pro/kei-lines/nfl pipeline stub.
     expect(nflToolItems.find((i) => i.label === "KEI Lines")?.href).toBe(

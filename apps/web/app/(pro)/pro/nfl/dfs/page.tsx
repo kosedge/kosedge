@@ -1,31 +1,40 @@
-import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
-import { loadPlayerSeasonTotalsSpine } from "@/lib/nfl-player-season-totals-spine";
-import type { PlayerProjectionTotalsRow } from "@/lib/nfl-preseason-artifacts";
+import {
+  NflDfsBoardTable,
+  NflDfsDeskControls,
+} from "@/components/pro/nfl/NflDfsDeskClient";
+import { fetchNflDfsBoard } from "@/lib/nfl-dfs-board";
+import {
+  formatDfsNumber,
+  formatSalary,
+  type NflDfsSummaryCard,
+} from "@/lib/nfl-dfs-types";
+import { canonicalDfsSite } from "@/lib/nfl-dfs-identity";
+
+const DEFAULT_SEASON = 2026;
+const DEFAULT_WEEK = 1;
 
 type SearchValue = string | string[] | undefined;
-type Site = "dk" | "fd";
 
 function firstValue(value: SearchValue): string | undefined {
   if (Array.isArray(value)) return value[0];
   return value;
 }
 
-/** Half-PPR fantasy points — research projection used for the DFS board. */
-function projPoints(player: PlayerProjectionTotalsRow): number {
-  return (
-    player.passYardsTotal / 25 +
-    player.passTdsTotal * 4 +
-    player.rushYardsTotal / 10 +
-    player.rushTdsTotal * 6 +
-    player.receivingYardsTotal / 10 +
-    player.recTdsTotal * 6 +
-    player.receptionsTotal * 0.5
-  );
-}
-
-function buildHref(site: Site): string {
-  return site === "dk" ? "/pro/nfl/dfs" : "/pro/nfl/dfs?site=fd";
+function summaryLine(
+  card: NflDfsSummaryCard | null,
+  kind: "proj" | "value" | "ceil",
+) {
+  if (!card) return "Unavailable — no certified row.";
+  const metric =
+    kind === "value"
+      ? card.value == null
+        ? "—"
+        : formatDfsNumber(card.value, 2)
+      : kind === "ceil"
+        ? formatDfsNumber(card.ceiling)
+        : formatDfsNumber(card.projection);
+  return `${card.playerName} · ${card.position} ${card.team} vs ${card.opponent} · ${formatSalary(card.salary)} · ${metric}`;
 }
 
 export default async function NflDfsPage({
@@ -34,29 +43,30 @@ export default async function NflDfsPage({
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
   const search = await searchParams;
-  const site: Site = firstValue(search.site) === "fd" ? "fd" : "dk";
-  const spine = await loadPlayerSeasonTotalsSpine({ season: 2026, limit: 400 });
+  const site = canonicalDfsSite(firstValue(search.site)) ?? "DK";
+  const seasonRaw = Number(firstValue(search.season));
+  const weekRaw = Number(firstValue(search.week));
+  const season =
+    Number.isFinite(seasonRaw) && seasonRaw >= 2010
+      ? seasonRaw
+      : DEFAULT_SEASON;
+  const week =
+    Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 18
+      ? weekRaw
+      : DEFAULT_WEEK;
+  const position = (firstValue(search.pos) ?? "").toUpperCase();
+  const slateId = firstValue(search.slate) ?? "";
 
-  const rows = spine.rows
-    .filter((p) => ["QB", "RB", "WR", "TE"].includes(p.position))
-    .map((p) => {
-      const seasonPts = projPoints(p);
-      const proj =
-        p.gamesProjected > 0 ? seasonPts / p.gamesProjected : seasonPts;
-      const ceiling = proj * 1.35;
-      return {
-        ...p,
-        proj,
-        ceiling,
-        salary: null as number | null,
-        value: null as number | null,
-        own: null as number | null,
-        opp: null as string | null,
-      };
-    })
-    .sort((a, b) => b.proj - a.proj);
+  const board = await fetchNflDfsBoard({
+    season,
+    week,
+    site,
+    slateId: slateId || undefined,
+    position: position || undefined,
+  });
 
-  const topProj = rows.slice(0, 5);
+  const hasRows = board.rows.length > 0;
+  const siteLabel = site === "FD" ? "FanDuel" : "DraftKings";
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
@@ -67,125 +77,84 @@ export default async function NflDfsPage({
         <h1 className="mt-2 text-3xl font-semibold tracking-tight text-kos-text">
           DFS Board
         </h1>
-        <p className="mt-2 max-w-2xl text-sm text-kos-text/75">
-          Projection research for {site === "dk" ? "DraftKings" : "FanDuel"}.
-          Salary, ownership, and opponent fill when official slate feeds are
-          live — projections come from the Kos Edge player model.
+        <p className="mt-2 max-w-3xl text-sm text-kos-text/75">
+          {siteLabel} classic scoring on the shared NFL player-production spine.
+          Salary and opponent come from the ingested {siteLabel} slate — not
+          season averages. Ownership and leverage stay unavailable until a
+          defensible source exists. No optimizer. No betting tags.
         </p>
         <div className="mt-4">
-          <HonestStatusBanner title="Preseason · slate fields empty" tone="sky">
-            <p>
-              Opp, Salary, Value, and Own% stay blank until a live DFS slate
-              connects. Skill-position projections/ceilings below are
-              season-rate from the model — not a priced contest slate. K/DST
-              omitted.
-            </p>
-          </HonestStatusBanner>
-        </div>
-        <div className="mt-4 flex flex-wrap gap-2">
-          <Link
-            href={buildHref("dk")}
-            className={
-              site === "dk"
-                ? "rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold"
-                : "rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-kos-text/70"
-            }
-          >
-            DraftKings
-          </Link>
-          <Link
-            href={buildHref("fd")}
-            className={
-              site === "fd"
-                ? "rounded-md border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-xs font-semibold text-kos-gold"
-                : "rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-kos-text/70"
-            }
-          >
-            FanDuel
-          </Link>
-          <Link
-            href="/pro/nfl/weekly-fantasy"
-            className="rounded-md border border-white/10 bg-white/5 px-3 py-1.5 text-xs text-kos-text/70 hover:border-kos-gold/30"
-          >
-            Weekly Fantasy →
-          </Link>
+          {hasRows ? (
+            <HonestStatusBanner
+              title={`${siteLabel} · Week ${week} priced slate`}
+              tone="sky"
+            >
+              <p>
+                {board.rows.length} certified rows. Value is points per $1K, not
+                a KosEdge rating. Floor/ceiling appear only when the weekly
+                distribution exists. Ownership hidden.
+              </p>
+            </HonestStatusBanner>
+          ) : (
+            <HonestStatusBanner
+              title={
+                board.status === "no_slate" ||
+                board.status === "ambiguous_slate"
+                  ? "No certified slate"
+                  : "Slate not priced yet"
+              }
+              tone="amber"
+            >
+              <p>
+                {board.error ??
+                  "This desk does not fall back to season-rate projections. Ingest a DK or FD salary file for the selected week, then the board fills from weekly production."}
+                {board.rejected.length
+                  ? ` ${board.rejected.length} identity joins failed closed.`
+                  : ""}
+              </p>
+            </HonestStatusBanner>
+          )}
         </div>
       </section>
 
-      <section className="mt-6 grid gap-3 md:grid-cols-2">
-        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
-          <h2 className="text-sm font-semibold text-kos-gold">
-            Top projections
-          </h2>
-          <ol className="mt-3 space-y-2">
-            {topProj.map((r, i) => (
-              <li
-                key={r.playerKey}
-                className="flex justify-between gap-2 text-sm"
-              >
-                <span>
-                  {i + 1}. {r.playerName}{" "}
-                  <span className="text-kos-text/50">
-                    {r.position} · {r.team}
-                  </span>
-                </span>
-                <span className="font-semibold text-kos-text">
-                  {r.proj.toFixed(1)}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
-        <div className="rounded-xl border border-white/10 bg-black/35 p-4">
-          <h2 className="text-sm font-semibold text-kos-gold">Best value</h2>
-          <p className="mt-3 text-sm text-kos-text/60">
-            Value (proj / salary) populates when {site === "dk" ? "DK" : "FD"}{" "}
-            salary feeds join. Projection leaders are ready above.
-          </p>
-        </div>
+      <div className="mt-5">
+        <NflDfsDeskControls
+          season={season}
+          week={week}
+          site={site}
+          position={position}
+          slates={board.slates}
+          slateId={board.slateId ?? slateId}
+        />
+      </div>
+
+      <section className="mt-6 grid gap-3 md:grid-cols-3">
+        <SummaryCard
+          title="Top projection"
+          body={summaryLine(board.summary.topProjection, "proj")}
+        />
+        <SummaryCard
+          title="Best value"
+          body={summaryLine(board.summary.bestValue, "value")}
+        />
+        <SummaryCard
+          title="Highest ceiling"
+          body={summaryLine(board.summary.highestCeiling, "ceil")}
+        />
       </section>
 
       <section className="mt-6 overflow-x-auto rounded-2xl border border-white/10 bg-black/30">
-        {/* Opp / Salary / Value / Own% columns hidden until slate feeds join. */}
-        <table className="min-w-full text-left text-sm">
-          <thead>
-            <tr className="border-b border-white/10 text-xs uppercase tracking-wide text-kos-text/60">
-              <th className="px-3 py-3">Player</th>
-              <th className="px-3 py-3">Pos</th>
-              <th className="px-3 py-3">Team</th>
-              <th className="px-3 py-3">Proj</th>
-              <th className="px-3 py-3">Ceiling</th>
-            </tr>
-          </thead>
-          <tbody>
-            {rows.slice(0, 120).map((r) => (
-              <tr
-                key={r.playerKey}
-                className="border-b border-white/5 odd:bg-white/[0.02]"
-              >
-                <td className="px-3 py-2 font-medium text-kos-text">
-                  {r.playerName}
-                </td>
-                <td className="px-3 py-2 text-kos-text/70">{r.position}</td>
-                <td className="px-3 py-2">
-                  <Link
-                    href={`/pro/nfl/teams/${r.team}/overview`}
-                    className="text-kos-gold/90 hover:text-kos-gold"
-                  >
-                    {r.team}
-                  </Link>
-                </td>
-                <td className="px-3 py-2 font-semibold text-kos-gold">
-                  {r.proj.toFixed(1)}
-                </td>
-                <td className="px-3 py-2 text-kos-text/75">
-                  {r.ceiling.toFixed(1)}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <NflDfsBoardTable rows={board.rows} />
       </section>
     </main>
+  );
+}
+
+function SummaryCard({ title, body }: { title: string; body: string }) {
+  return (
+    <div className="rounded-xl border border-white/10 bg-black/35 p-4">
+      <h2 className="text-sm font-semibold text-kos-gold">{title}</h2>
+      <p className="mt-3 text-sm text-kos-text/80">{body}</p>
+    </div>
   );
 }

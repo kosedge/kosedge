@@ -307,7 +307,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/dfs",
           label: "DFS Board",
-          hint: "Season-rate proj research shell — no live slate, salaries, or ownership until feeds join.",
+          hint: "Week/slate DFS research — DK/FD site scoring and salaries on the player-production spine. Ownership unavailable until a real source exists.",
           premium: true,
           status: "active",
         },

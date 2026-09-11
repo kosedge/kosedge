@@ -209,9 +209,11 @@ describe("pro sport IA", () => {
     );
 
     const dfs = byLabel["DFS Board"]!;
-    expect(dfs.hint).toMatch(/no live slate/i);
+    expect(dfs.hint).toMatch(/week\/slate/i);
     expect(dfs.hint).toMatch(/salaries/i);
     expect(dfs.hint).toMatch(/ownership/i);
+    expect(dfs.hint).toMatch(/player-production/i);
+    expect(dfs.hint.toLowerCase()).not.toMatch(/research shell/);
     expect(dfs.hint.toLowerCase()).not.toMatch(
       /salary, projection, value, and ownership/,
     );

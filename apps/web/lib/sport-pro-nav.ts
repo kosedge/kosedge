@@ -122,6 +122,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/injuries", label: "Injuries & News" },
       // Fantasy primary nav covers Draft Desk; weekly stays in tools.
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
+      { href: "/pro/nfl/dfs", label: "DFS Board" },
       { href: "/wall-chart/nfl-2026", label: "Wall Chart" },
       { href: "/pro/model-transparency", label: "Model Transparency" },
     ],

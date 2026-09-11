@@ -17,7 +17,7 @@ from typing import Any, Dict, Mapping, Optional
 PRODUCTION_VERSION = "player-production-v3-phase3c"
 PRODUCTION_SOURCE = "nfl_player_projection_baselines"
 # Surfaces that must share this vector for weekly player numbers.
-WEEKLY_SPINE_SURFACES = ("fantasy_weekly", "props_board", "game_boxes")
+WEEKLY_SPINE_SURFACES = ("fantasy_weekly", "props_board", "game_boxes", "dfs_board")
 
 MARKET_TO_FIELD = {
     "pass_yds": "pass_yards",
