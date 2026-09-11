@@ -1,0 +1,273 @@
+{
+  "weeks": [
+    2
+  ],
+  "after_stamps": {
+    "kei_version": "cfb-kei-v1.0-2026w2",
+    "as_of": "2026-09-10",
+    "generated_at": "2026-09-11T03:41:46Z",
+    "engine_version": "cfb-season-engine-v0.15-power-sot"
+  },
+  "odds": {
+    "source": "espn_scoreboard",
+    "n_events": 85
+  },
+  "after": {
+    "n_fbs_games": 47,
+    "n_joined_spread": 47,
+    "n_joined_total": 47,
+    "n_unjoined": 0,
+    "spread_mae": 6.857,
+    "total_mae": 10.236,
+    "median_spread_residual": 2.9,
+    "median_total_residual": 9.14,
+    "mean_total_residual": 9.942,
+    "favorite_flips_vs_market": 11,
+    "gap_ge_7": 20,
+    "gap_ge_10": 12,
+    "gap_ge_14": 8,
+    "gap_ge_20": 0,
+    "team_outliers": [
+      {
+        "team": "UNLV",
+        "n": 1,
+        "mean_abs_spread_residual": 18.61
+      },
+      {
+        "team": "UNT",
+        "n": 1,
+        "mean_abs_spread_residual": 18.61
+      },
+      {
+        "team": "RUT",
+        "n": 1,
+        "mean_abs_spread_residual": 16.49
+      },
+      {
+        "team": "BC",
+        "n": 1,
+        "mean_abs_spread_residual": 16.49
+      },
+      {
+        "team": "USF",
+        "n": 1,
+        "mean_abs_spread_residual": 16.35
+      },
+      {
+        "team": "ARMY",
+        "n": 1,
+        "mean_abs_spread_residual": 16.35
+      },
+      {
+        "team": "WKU",
+        "n": 1,
+        "mean_abs_spread_residual": 15.27
+      },
+      {
+        "team": "UGA",
+        "n": 1,
+        "mean_abs_spread_residual": 15.27
+      },
+      {
+        "team": "LT",
+        "n": 1,
+        "mean_abs_spread_residual": 15.01
+      },
+      {
+        "team": "LSU",
+        "n": 1,
+        "mean_abs_spread_residual": 15.01
+      },
+      {
+        "team": "SDSU",
+        "n": 1,
+        "mean_abs_spread_residual": 14.9
+      },
+      {
+        "team": "UCLA",
+        "n": 1,
+        "mean_abs_spread_residual": 14.9
+      }
+    ],
+    "flip_pairs": [
+      "RUT@BC",
+      "USF@ARMY",
+      "MSST@MINN",
+      "ARI@BYU",
+      "CAL@SYR",
+      "UTSA@TXST",
+      "ULM@UAB",
+      "UNLV@UNT",
+      "SDSU@UCLA",
+      "OSU@TEX",
+      "NAVY@FAU"
+    ]
+  },
+  "focus": {
+    "MIZZ@KU": {
+      "after": {
+        "week": 2,
+        "pair": "MIZZ@KU",
+        "kei_version": "cfb-kei-v1.0-2026w2",
+        "as_of": "2026-09-10",
+        "model_spread_home": 1.1,
+        "kei_spread_home": 1.85,
+        "model_total": 58.32,
+        "kei_total": 58.32,
+        "tag": "PASS"
+      },
+      "before": {
+        "week": 2,
+        "pair": "MIZZ@KU",
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "as_of": "2026-08-31",
+        "model_spread_home": -15.62,
+        "kei_spread_home": -16.82,
+        "model_total": 61.56,
+        "kei_total": 61.56,
+        "tag": "PASS"
+      }
+    },
+    "RUT@BC": {
+      "after": {
+        "week": 2,
+        "pair": "RUT@BC",
+        "kei_version": "cfb-kei-v1.0-2026w2",
+        "as_of": "2026-09-10",
+        "model_spread_home": 12.49,
+        "kei_spread_home": 13.49,
+        "model_total": 63.29,
+        "kei_total": 63.29,
+        "tag": "PASS"
+      },
+      "before": {
+        "week": 2,
+        "pair": "RUT@BC",
+        "kei_version": "cfb-kei-v1.0-2026w0",
+        "as_of": "2026-08-31",
+        "model_spread_home": 12.49,
+        "kei_spread_home": 13.49,
+        "model_total": 63.29,
+        "kei_total": 63.29,
+        "tag": "PASS"
+      }
+    }
+  },
+  "power": {
+    "n_teams": 136,
+    "null_power_count": 0,
+    "null_power_codes": [],
+    "p0_independent_leftover": [],
+    "p0_null": [],
+    "power_as_of": "2026-08-31"
+  },
+  "kill_switch": "CFB_EDGE_BOARD_PUBLIC_ENABLED must stay false",
+  "before_stamps": {
+    "kei_version": "cfb-kei-v1.0-2026w0",
+    "as_of": "2026-08-31",
+    "generated_at": "2026-09-10T13:21:20Z"
+  },
+  "before": {
+    "n_fbs_games": 47,
+    "n_joined_spread": 47,
+    "n_joined_total": 47,
+    "n_unjoined": 0,
+    "spread_mae": 6.774,
+    "total_mae": 9.724,
+    "median_spread_residual": 2.94,
+    "median_total_residual": 8.49,
+    "mean_total_residual": 9.326,
+    "favorite_flips_vs_market": 11,
+    "gap_ge_7": 21,
+    "gap_ge_10": 10,
+    "gap_ge_14": 6,
+    "gap_ge_20": 1,
+    "team_outliers": [
+      {
+        "team": "MIZZ",
+        "n": 1,
+        "mean_abs_spread_residual": 21.32
+      },
+      {
+        "team": "KU",
+        "n": 1,
+        "mean_abs_spread_residual": 21.32
+      },
+      {
+        "team": "RUT",
+        "n": 1,
+        "mean_abs_spread_residual": 16.49
+      },
+      {
+        "team": "BC",
+        "n": 1,
+        "mean_abs_spread_residual": 16.49
+      },
+      {
+        "team": "USF",
+        "n": 1,
+        "mean_abs_spread_residual": 16.35
+      },
+      {
+        "team": "ARMY",
+        "n": 1,
+        "mean_abs_spread_residual": 16.35
+      },
+      {
+        "team": "WKU",
+        "n": 1,
+        "mean_abs_spread_residual": 15.27
+      },
+      {
+        "team": "UGA",
+        "n": 1,
+        "mean_abs_spread_residual": 15.27
+      },
+      {
+        "team": "LT",
+        "n": 1,
+        "mean_abs_spread_residual": 15.01
+      },
+      {
+        "team": "LSU",
+        "n": 1,
+        "mean_abs_spread_residual": 15.01
+      },
+      {
+        "team": "SDSU",
+        "n": 1,
+        "mean_abs_spread_residual": 14.9
+      },
+      {
+        "team": "UCLA",
+        "n": 1,
+        "mean_abs_spread_residual": 14.9
+      }
+    ],
+    "flip_pairs": [
+      "RUT@BC",
+      "MIZZ@KU",
+      "USF@ARMY",
+      "MSST@MINN",
+      "ARI@BYU",
+      "CAL@SYR",
+      "UTSA@TXST",
+      "ULM@UAB",
+      "SDSU@UCLA",
+      "OSU@TEX",
+      "NAVY@FAU"
+    ]
+  },
+  "favorite_flips_before_vs_after": [
+    {
+      "pair": "MIZZ@KU",
+      "before": -16.82,
+      "after": 1.85
+    },
+    {
+      "pair": "UNLV@UNT",
+      "before": 10.87,
+      "after": -15.61
+    }
+  ]
+}

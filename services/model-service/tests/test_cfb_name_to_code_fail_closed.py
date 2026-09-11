@@ -223,6 +223,25 @@ def test_w2_mint_cannot_silently_keep_w0_stamps(monkeypatch) -> None:
     assert resolve_kei_as_of(weeks=(0, 1), explicit=None) == W0_CLOSE_AS_OF
 
 
+def test_p0_projections_desk_is_not_independent_null_power() -> None:
+    import json
+    from pathlib import Path
+
+    root = Path(__file__).resolve().parents[1]
+    proj = json.loads(
+        (root / "src/services/cfb_season_engine/data/cfb_season_projections_2026.json").read_text(
+            encoding="utf-8"
+        )
+    )
+    by = {r["team"]: r for r in proj["teams"]}
+    for code, conf in P0_CONFERENCES.items():
+        row = by[code]
+        assert row["conference"] == conf, code
+        assert row["power_index"] not in (None, 0, 1.0)
+        assert row["offense_index"] not in (None, "")
+        assert row.get("season_wins_unminted") is True
+
+
 def test_public_kill_switch_stays_off() -> None:
     assert CFB_EDGE_BOARD_PUBLIC_ENABLED is False
 
