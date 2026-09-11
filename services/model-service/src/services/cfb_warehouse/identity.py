@@ -58,6 +58,7 @@ ESPN_ABBR_TO_CODE: Dict[str, str] = {
     "IU": "IU",
     "JMU": "JMU",
     "JVST": "JVST",
+    "JXST": "JVST",
     "KENN": "KENNESAW",
     "KENT": "KENT",
     "KSU": "KSU",

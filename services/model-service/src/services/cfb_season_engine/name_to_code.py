@@ -49,6 +49,14 @@ P0_REQUIRED_NAME_TO_CODE: Dict[str, str] = {
     "New Mexico Lobos": "UNM",
     "North Texas": "UNT",
     "North Texas Mean Green": "UNT",
+    # ESPN final-2025 story abbreviations (year-locked carry source).
+    "N. Texas": "UNT",
+    "Arkansas St.": "ARST",
+    "Colorado St.": "CSU",
+    "Missouri St.": "MOST",
+    "J'ville St.": "JVST",
+    "ECU": "ECU",
+    "ODU": "ODU",
 }
 
 # Public final-2025 SP+ table names (cfbupdate / ESPN story) + CFBD short names.

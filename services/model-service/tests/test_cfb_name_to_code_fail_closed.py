@@ -117,9 +117,17 @@ def test_official_fbs_missing_conference_fail_closed(monkeypatch) -> None:
         conference_for("ZZZX", mapping={})
 
 
-def test_missing_efficiency_for_official_fbs_fail_closed() -> None:
+def test_missing_efficiency_for_official_fbs_fail_closed(monkeypatch) -> None:
+    monkeypatch.setattr(
+        "src.services.cfb_season_engine.efficiency.is_official_fbs",
+        lambda team, include_transition=False: str(team).upper() == "ZZZX",
+    )
+    monkeypatch.setattr(
+        "src.services.cfb_season_engine.efficiency.load_efficiency_snapshot",
+        lambda: {"teams": {}},
+    )
     with pytest.raises(MissingRequiredTeamFeature, match="missing packaged efficiency"):
-        build_efficiency_profile("MIZZ")
+        build_efficiency_profile("ZZZX")
 
 
 def test_null_power_does_not_default_to_1() -> None:
