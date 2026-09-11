@@ -1,0 +1,388 @@
+{
+  "acceptance_gates_preregistered": {
+    "holdout_scored": false,
+    "note": "Train-A is development evidence only; pocket/holdout gates NOT evaluated",
+    "pocket_scored": false,
+    "production_default": false,
+    "promoted": false,
+    "test_a_scored": false,
+    "train_a_gates_evaluated": false
+  },
+  "attach_outcomes_receipt": {
+    "n_lab": 3676,
+    "n_with_actual": 3583,
+    "n_with_actual_event_id_fill": 0,
+    "n_with_actual_pack": 3583,
+    "outcome_coverage": 0.9747,
+    "pack_receipt": {
+      "n_omitted_ambiguous_key": 1,
+      "n_omitted_missing_b7": 0,
+      "n_omitted_missing_score": 0,
+      "n_scored_rows_raw": 9137,
+      "n_unique_keys": 9135,
+      "packs": [
+        {
+          "exists": true,
+          "n_games": 5699,
+          "n_kept": 5699,
+          "n_omit_b7": 0,
+          "n_omit_score": 0,
+          "path": "/workspace/.worktrees/lane-a/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json"
+        },
+        {
+          "exists": true,
+          "n_games": 3438,
+          "n_kept": 3438,
+          "n_omit_b7": 0,
+          "n_omit_score": 0,
+          "path": "/workspace/.worktrees/lane-a/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json"
+        }
+      ]
+    },
+    "sources": [
+      "schedule_sot_packs"
+    ]
+  },
+  "b1_comparator_convention": "negate_b1_consensus_close_spread_to_home_margin",
+  "bootstrap": {
+    "n": 2000,
+    "seed": 20260909
+  },
+  "by_venue_status": {
+    "confirmed_home": {
+      "B1_close_consensus": {
+        "bootstrap_mae": {
+          "ci95": [
+            8.48144138743176,
+            8.96478790763585
+          ],
+          "grain": "game_row",
+          "mae": 8.72422267417587,
+          "n": 3246,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": 0.3412424237277106,
+        "cal_slope": 1.0106474248436483,
+        "mae": 8.72422267417587,
+        "n": 3246,
+        "rmse": 11.041723287107773,
+        "signed_bias": 0.3915342193797329
+      },
+      "B2_PACE_NEUTRAL_v1": {
+        "bootstrap_mae": {
+          "ci95": [
+            8.753315843671855,
+            9.240747909369436
+          ],
+          "grain": "game_row",
+          "mae": 9.00243616173555,
+          "n": 3246,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": 0.5474500654503982,
+        "cal_slope": 1.0231604935872092,
+        "mae": 9.00243616173555,
+        "n": 3246,
+        "rmse": 11.368138379902765,
+        "signed_bias": 0.650840142037677
+      },
+      "B2_PACE_v1": {
+        "bootstrap_mae": {
+          "ci95": [
+            8.753315843671855,
+            9.240747909369436
+          ],
+          "grain": "game_row",
+          "mae": 9.00243616173555,
+          "n": 3246,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": 0.5474500654503982,
+        "cal_slope": 1.0231604935872092,
+        "mae": 9.00243616173555,
+        "n": 3246,
+        "rmse": 11.368138379902765,
+        "signed_bias": 0.650840142037677
+      },
+      "C0_incumbent_b2": {
+        "bootstrap_mae": {
+          "ci95": [
+            9.176989692698706,
+            9.67994664202095
+          ],
+          "grain": "game_row",
+          "mae": 9.434408256315466,
+          "n": 3246,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": 1.5224298576113173,
+        "cal_slope": 0.7109970297749164,
+        "mae": 9.434408256315466,
+        "n": 3246,
+        "rmse": 11.862840415837196,
+        "signed_bias": 0.062173937153419505
+      },
+      "n": 3246
+    },
+    "confirmed_neutral": {
+      "B1_close_consensus": {
+        "bootstrap_mae": {
+          "ci95": [
+            8.111596036965787,
+            9.710118621339134
+          ],
+          "grain": "game_row",
+          "mae": 8.95580158872515,
+          "n": 337,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": 0.27308002659525255,
+        "cal_slope": 0.9835048511969671,
+        "mae": 8.95580158872515,
+        "n": 337,
+        "rmse": 11.566183883058521,
+        "signed_bias": 0.2171422326620716
+      },
+      "B2_PACE_NEUTRAL_v1": {
+        "bootstrap_mae": {
+          "ci95": [
+            8.576174693391728,
+            10.153843889487346
+          ],
+          "grain": "game_row",
+          "mae": 9.390182253683827,
+          "n": 337,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": 0.7233668692630028,
+        "cal_slope": 0.9394873252881786,
+        "mae": 9.390182253683827,
+        "n": 337,
+        "rmse": 11.985230347803297,
+        "signed_bias": 0.5375468628203263
+      },
+      "B2_PACE_v1": {
+        "bootstrap_mae": {
+          "ci95": [
+            8.81392330237232,
+            10.385908867629803
+          ],
+          "grain": "game_row",
+          "mae": 9.618207016904304,
+          "n": 337,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": -1.9725859593839514,
+        "cal_slope": 0.9394873252881778,
+        "mae": 9.618207016904304,
+        "n": 337,
+        "rmse": 12.198166325100127,
+        "signed_bias": -2.3320531371796736
+      },
+      "C0_incumbent_b2": {
+        "bootstrap_mae": {
+          "ci95": [
+            9.402877885756677,
+            11.047922952522255
+          ],
+          "grain": "game_row",
+          "mae": 10.22677893175074,
+          "n": 337,
+          "n_bootstrap": 2000,
+          "seed": 20260909
+        },
+        "cal_intercept": -1.2199617410221208,
+        "cal_slope": 0.6572890414337488,
+        "mae": 10.22677893175074,
+        "n": 337,
+        "rmse": 12.867419192232568,
+        "signed_bias": -3.737425222551929
+      },
+      "n": 337
+    },
+    "unknown": {
+      "n": 0
+    }
+  },
+  "candidate_id": "B2-PACE-NEUTRAL-v1",
+  "diagnostics_computed_against_parent_impl_sha256": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
+  "evidence_commit": "51b76a0228abada3fa663dd862d25366a382da35",
+  "generated_at": "2026-09-09T20:27:07.777645+00:00",
+  "generating_commit": "51b76a0228abada3fa663dd862d25366a382da35",
+  "hard_stops_honored": {
+    "no_holdout_unseal": true,
+    "no_parent_candidate_mutation": true,
+    "no_play_lean_claims": true,
+    "no_promotion": true,
+    "no_test_a_scoring": true,
+    "single_run_no_retune": true
+  },
+  "identity_sha256": "8b57bdab58a14101291ac5490bad3e0926cf74afe67e85d487b172f9fc9edef3",
+  "impl_path": "apps/web/src/ncaam_lab/fair_b2_pace_neutral_v1.py",
+  "impl_sha256": "6f62d4a8e4ee896c01b4ecbf86f084e889bbd8457ec23e0a3aaf9caee8e6f8a2",
+  "method_id": "kenpom_adjem_pit_tempo_gated_hca_v1",
+  "n_scored_eligible": 3583,
+  "n_train_rows": 3676,
+  "n_unknown_venue_in_scored": 0,
+  "overall": {
+    "B1_close_consensus": {
+      "bootstrap_mae": {
+        "ci95": [
+          8.526283626549468,
+          8.969537146096668
+        ],
+        "grain": "game_row",
+        "mae": 8.746003889415364,
+        "n": 3583,
+        "n_bootstrap": 2000,
+        "seed": 20260909
+      },
+      "cal_intercept": 0.3319469389319428,
+      "cal_slope": 1.0093919294335478,
+      "mae": 8.746003889415364,
+      "n": 3583,
+      "rmse": 11.092108108188926,
+      "signed_bias": 0.37513173556062823
+    },
+    "B2_PACE_NEUTRAL_v1": {
+      "bootstrap_mae": {
+        "ci95": [
+          8.806636051111,
+          9.263985313448979
+        ],
+        "grain": "game_row",
+        "mae": 9.038905721597837,
+        "n": 3583,
+        "n_bootstrap": 2000,
+        "seed": 20260909
+      },
+      "cal_intercept": 0.5583727753312624,
+      "cal_slope": 1.0188809399962522,
+      "mae": 9.038905721597837,
+      "n": 3583,
+      "rmse": 11.42759892404836,
+      "signed_bias": 0.6401843130964973
+    },
+    "B2_PACE_v1": {
+      "bootstrap_mae": {
+        "ci95": [
+          8.827650097101005,
+          9.288917869648895
+        ],
+        "grain": "game_row",
+        "mae": 9.060352650206628,
+        "n": 3583,
+        "n_bootstrap": 2000,
+        "seed": 20260909
+      },
+      "cal_intercept": 0.31141365618979516,
+      "cal_slope": 1.0127896282456885,
+      "mae": 9.060352650206628,
+      "n": 3583,
+      "rmse": 11.448770945621082,
+      "signed_bias": 0.37028333626144283
+    },
+    "C0_incumbent_b2": {
+      "bootstrap_mae": {
+        "ci95": [
+          9.27083822425342,
+          9.738957379291097
+        ],
+        "grain": "game_row",
+        "mae": 9.508934886966228,
+        "n": 3583,
+        "n_bootstrap": 2000,
+        "seed": 20260909
+      },
+      "cal_intercept": 1.2669988730389632,
+      "cal_slope": 0.7034781536421855,
+      "mae": 9.508934886966228,
+      "n": 3583,
+      "rmse": 11.960921537945481,
+      "signed_bias": -0.295198353335194
+    }
+  },
+  "paired_delta_mae": {
+    "definition_neut_minus_pace": "MAE(NEUTRAL)-MAE(PACE) via mean(|e_n|-|e_p|)",
+    "mean_fair_diff_neut_minus_pace": -0.26990097683505443,
+    "neut_vs_b1": {
+      "ci95": [
+        0.21163783707447867,
+        0.36707319455559645
+      ],
+      "mean": 0.29290183218247284,
+      "n": 3583,
+      "n_bootstrap": 2000,
+      "seed": 20260909
+    },
+    "neut_vs_c0": {
+      "ci95": [
+        -0.5767775412701696,
+        -0.3577233879604843
+      ],
+      "mean": -0.47002916536839245,
+      "n": 3583,
+      "n_bootstrap": 2000,
+      "seed": 20260909
+    },
+    "neut_vs_pace": {
+      "ci95": [
+        -0.04833843197411459,
+        0.005715078000623768
+      ],
+      "mean": -0.021446928608791528,
+      "n": 3583,
+      "n_bootstrap": 2000,
+      "seed": 20260909
+    }
+  },
+  "parent_impl_path": "apps/web/src/ncaam_lab/fair_b2_pace_v1.py",
+  "parent_impl_sha256": "4a305870fbc55900336566531eca92cd4586d8a04edd62845bcc23a03112f5bd",
+  "population": "Train-A only",
+  "preflight_base_sha": "4bd0f87de71d23cca8d61c980530a0902b3e8b36",
+  "schema_version": "ncaam-b2-pace-neutral-v1-train-a-v1",
+  "status": "research_evidence_only_not_promoted",
+  "train_parquet": "data/ops/lab/ncaam/ncaam-fair-lab-train_a-latest.parquet",
+  "train_parquet_sha256": "bbc7a3c71ba8c2af93dc04a2fbd11f706a5929f5cc35eba76c4a2ec5a3dabb66",
+  "venue_identity_receipt": {
+    "authoritative_source": "espn_scoreboard_public_via_schedule_sot_packs",
+    "known_limitations": [
+      "semi-home tournaments may be labeled neutral inconsistently upstream",
+      "mislabeled_neutral risk inherited from ESPN scoreboard",
+      "pack as_of is retrospective pack-build time, not game-time PIT stamp",
+      "renamed venues / relocated games inherit pack snapshot only"
+    ],
+    "n_ambiguous_keys_dropped": 1,
+    "n_confirmed_home": 3246,
+    "n_confirmed_neutral": 337,
+    "n_joined_nonnull": 3583,
+    "n_unknown": 93,
+    "packs": [
+      {
+        "as_of": "2026-09-04T17:28Z",
+        "exists": true,
+        "n_games": 5699,
+        "n_with_neutral_flag": 5699,
+        "path": "/workspace/.worktrees/lane-a/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2022_23.json",
+        "source": "espn_scoreboard_public"
+      },
+      {
+        "as_of": "2026-09-04T17:29Z",
+        "exists": true,
+        "n_games": 3438,
+        "n_with_neutral_flag": 3438,
+        "path": "/workspace/.worktrees/lane-a/services/model-service/src/services/ncaam_schedule/data/ncaam_official_schedule_2023_24.json",
+        "source": "espn_scoreboard_public"
+      }
+    ],
+    "raw_field": "neutral_site",
+    "schema_version": "ncaam-neutral-site-identity-v1"
+  }
+}

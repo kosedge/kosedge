@@ -1,0 +1,40 @@
+{
+  "candidate_id": "B2-PACE-NEUTRAL-v1",
+  "method_id": "kenpom_adjem_pit_tempo_gated_hca_v1",
+  "parent_candidate_id": "B2-PACE-v1",
+  "parent_method_id": "kenpom_adjem_pit_tempo_plus_game_hca_v1",
+  "status": "frozen_preregistration_train_a_research_only",
+  "production_default": false,
+  "promoted": false,
+  "population": {
+    "train_a_only": true,
+    "tip_window": ["2022-11-07", "2023-03-12"],
+    "forbidden": ["test_a_scoring", "pocket_2025", "holdout_2024_25", "production_board"]
+  },
+  "hca_policy": {
+    "confirmed_home": 2.8696,
+    "confirmed_neutral": 0.0,
+    "unknown": "fail_closed"
+  },
+  "clips": {
+    "adjem_diff": 30.0,
+    "spread": 28.0
+  },
+  "bootstrap": {
+    "n": 2000,
+    "seed": 20260909,
+    "grain": "game_row"
+  },
+  "hard_stops": {
+    "no_parent_mutation": true,
+    "no_holdout_unseal": true,
+    "no_test_a_scoring": true,
+    "no_promotion": true,
+    "no_play_lean": true,
+    "single_run_no_retune": true
+  },
+  "impl_module": "apps/web/src/ncaam_lab/fair_b2_pace_neutral_v1.py",
+  "identity_module": "apps/web/src/ncaam_lab/neutral_site_identity.py",
+  "train_a_script": "apps/web/scripts/lab_ncaam_b2_pace_neutral_v1_train_a.py",
+  "preregistration_doc": "docs/lab/NCAAM_B2_PACE_NEUTRAL_v1_PREREGISTRATION.md"
+}
