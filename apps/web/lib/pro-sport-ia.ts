@@ -591,6 +591,13 @@ function marketLinksForSport({
             premium: true,
             status: "active",
           },
+          {
+            href: "/pro/cfb/line-curve",
+            label: "Line Curve",
+            hint: "Research: alternate-spread pricing surface vs the model margin distribution.",
+            premium: true,
+            status: "active",
+          },
         ]
       : [];
 

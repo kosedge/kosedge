@@ -487,6 +487,14 @@ const DESK_BY_SPORT: Record<SportKey, SportDeskConfig> = {
         cta: "View KEI status →",
         accent: "neutral",
       },
+      {
+        href: "/pro/cfb/line-curve",
+        title: "Line Curve",
+        description:
+          "Research: buy/sell points vs the model margin distribution. Not a teaser calculator.",
+        cta: "Open Line Curve →",
+        accent: "gold",
+      },
     ],
   },
   ncaam: {

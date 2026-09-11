@@ -108,6 +108,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     tools: [
       // Demoted from primary — live in Overview body / More tools.
       { href: "/pro/nfl/fair-lines", label: "KEI Lines" },
+      { href: "/pro/nfl/line-curve", label: "Line Curve" },
       // Desk surface — not a dual primary with Edge Board (product center).
       { href: "/pro/nfl/edges", label: "Edges desk" },
       { href: "/pro/nfl/model", label: "Season Model" },
@@ -164,6 +165,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/cfb/conferences", label: "Conferences" },
       { href: "/pro/cfb/teams", label: "Power Ratings" },
       { href: "/pro/cfb/fair-lines", label: "KEI Lines" },
+      { href: "/pro/cfb/line-curve", label: "Line Curve" },
       { href: "/pro/model-transparency", label: "Model Transparency" },
     ],
   },
