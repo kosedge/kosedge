@@ -97,6 +97,65 @@ describe("NFL Weekly Slate schedule vs model outage", () => {
     }
   });
 
+  it("fills an ISO slate from that date's week, not today's week", async () => {
+    const slate = await buildNflWeeklySlate("2026-09-20");
+    const regular = slate.sections.find((s) => s.key === "regular");
+    expect(regular).toBeDefined();
+    expect(regular!.cards.length).toBeGreaterThan(0);
+    expect(regular!.cards.every((card) => card.week === 2)).toBe(true);
+    expect(
+      regular!.cards.every((card) =>
+        (card.startTime || "").startsWith("2026-09-20"),
+      ),
+    ).toBe(true);
+  });
+
+  it("does not duplicate a painted game when fair-lines uses LA for LAR", async () => {
+    const week1 = listNflRegWeekScheduleGames(1);
+    const rams = week1.find(
+      (game) => game.homeAbbr === "LAR" || game.awayAbbr === "LAR",
+    );
+    expect(rams).toBeDefined();
+    const row = {
+      gameId: "2026-W01-SF@LA",
+      season: 2026,
+      week: 1,
+      seasonType: "REG",
+      startTime: "2026-09-11T00:35:00.000Z",
+      gameDate: "2026-09-11",
+      homeTeam: "Los Angeles Rams",
+      awayTeam: "San Francisco 49ers",
+      homeAbbr: rams!.homeAbbr === "LAR" ? "LA" : rams!.homeAbbr,
+      awayAbbr: rams!.awayAbbr === "LAR" ? "LA" : rams!.awayAbbr,
+      spreadHome: -4.5,
+      totalMean: 46.2,
+      marketSpreadHome: -3.5,
+      marketTotal: 45.5,
+      bestSpreadHome: -3.5,
+      bestTotal: 45.5,
+      modelVersion: "test",
+    } as NflFairLineRow;
+    vi.mocked(fetchNflFairLines).mockResolvedValue({
+      ...emptyFairLines,
+      modelVersion: "test",
+      currentWeek: 1,
+      count: 1,
+      lines: [row],
+      error: undefined,
+    });
+
+    const slate = await buildNflWeeklySlate("week-1");
+    const regular = slate.sections.find((s) => s.key === "regular");
+    expect(regular?.cards).toHaveLength(week1.length);
+    const ramsCards = regular!.cards.filter((card) => {
+      const pair = [card.awayAbbr, card.homeAbbr];
+      return pair.includes("LAR") || pair.includes("LA");
+    });
+    expect(ramsCards).toHaveLength(1);
+    expect(ramsCards[0].source).toBe("fair-lines");
+    expect(ramsCards[0].modelSpread).toBe("-4.50");
+  });
+
   it("uses a legitimate empty state when no schedule games exist", async () => {
     const slate = await buildNflWeeklySlate("week-99");
     expect(slate.sections.every((s) => s.cards.length === 0)).toBe(true);

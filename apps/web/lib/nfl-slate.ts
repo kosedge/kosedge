@@ -25,6 +25,7 @@ import {
   currentNflRegWeekFromSchedule,
   lookupCanonicalNflGame,
 } from "@/lib/nfl-canonical-schedule";
+import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
 import {
@@ -293,6 +294,16 @@ export function buildRegCardsFromSchedule(
   return cards;
 }
 
+function slateMatchupKey(
+  week: number | null | undefined,
+  awayAbbr: string,
+  homeAbbr: string,
+): string {
+  const away = canonicalizeNflTeam(awayAbbr) ?? safeUpperCase(awayAbbr);
+  const home = canonicalizeNflTeam(homeAbbr) ?? safeUpperCase(homeAbbr);
+  return `${week ?? "—"}|${away}|${home}`;
+}
+
 export async function buildNflWeeklySlate(
   dateToken = "today",
 ): Promise<NflWeeklySlate> {
@@ -329,6 +340,7 @@ export async function buildNflWeeklySlate(
       ? fairLines.currentWeek
       : scheduleWeek;
 
+  const windowWeeks = new Set(fairWindow.weeks);
   let regCards = fairCards.filter((card) => card.seasonType === "REG");
   if (resolved.mode === "week" && resolved.week) {
     regCards = regCards.filter((card) => card.week === resolved.week);
@@ -337,32 +349,26 @@ export async function buildNflWeeklySlate(
       (card.startTime || "").startsWith(resolved.iso!),
     );
   } else {
-    // Default "today" board: current REG week + next week for depth.
-    regCards = regCards.filter(
-      (card) => card.week === currentWeek || card.week === currentWeek + 1,
-    );
+    // Same weeks the fair-lines request was sized for (schedule SoT).
+    regCards = regCards.filter((card) => windowWeeks.has(card.week ?? -1));
   }
 
   // Fill any displayed matchup the window missed. A clipped horizon must not
   // drop scheduled games; those cards stay fail-closed (dashes, no invented KEI).
-  const displayWeeks =
-    resolved.mode === "week" && resolved.week
-      ? [resolved.week]
-      : resolved.mode === "iso"
-        ? [scheduleWeek]
-        : [currentWeek, currentWeek + 1];
-  let scheduled = buildRegCardsFromSchedule(displayWeeks, season);
+  let scheduled = buildRegCardsFromSchedule(fairWindow.weeks, season);
   if (resolved.mode === "iso" && resolved.iso) {
     scheduled = scheduled.filter((card) =>
       (card.startTime || "").startsWith(resolved.iso!),
     );
   }
   const seen = new Set(
-    regCards.map((card) => `${card.week}|${card.awayAbbr}|${card.homeAbbr}`),
+    regCards.map((card) =>
+      slateMatchupKey(card.week, card.awayAbbr, card.homeAbbr),
+    ),
   );
   let filledFromSchedule = 0;
   for (const card of scheduled) {
-    const key = `${card.week}|${card.awayAbbr}|${card.homeAbbr}`;
+    const key = slateMatchupKey(card.week, card.awayAbbr, card.homeAbbr);
     if (seen.has(key)) continue;
     regCards.push(card);
     seen.add(key);
