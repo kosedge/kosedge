@@ -124,6 +124,62 @@ describe("NFL Weekly Slate schedule vs model outage", () => {
     expect(buildRegCardsFromSchedule([1]).length).toBeGreaterThanOrEqual(16);
   });
 
+  it("fills missing matchups from schedule without inventing model numbers", async () => {
+    const row = {
+      gameId: "2026-W01-NE@SEA",
+      season: 2026,
+      week: 1,
+      seasonType: "REG",
+      startTime: "2026-09-10T00:20:00.000Z",
+      gameDate: "2026-09-09",
+      homeTeam: "Seattle Seahawks",
+      awayTeam: "New England Patriots",
+      homeAbbr: "SEA",
+      awayAbbr: "NE",
+      spreadHome: -3.87,
+      totalMean: 43.4,
+      marketSpreadHome: -2.5,
+      marketTotal: 44.5,
+      bestSpreadHome: -2.5,
+      bestTotal: 44.5,
+      publishTagSpread: "LEAN",
+      publishTagTotal: "PASS",
+      spreadEdge: 1.37,
+      totalEdge: -1.1,
+      modelVersion: "test",
+    } as NflFairLineRow;
+    vi.mocked(fetchNflFairLines).mockResolvedValue({
+      ...emptyFairLines,
+      modelVersion: "test",
+      currentWeek: 1,
+      count: 1,
+      lines: [row],
+      error: undefined,
+    });
+
+    const week1 = listNflRegWeekScheduleGames(1);
+    const slate = await buildNflWeeklySlate("week-1");
+    const regular = slate.sections.find((s) => s.key === "regular");
+    expect(regular?.cards).toHaveLength(week1.length);
+    expect(slate.modelUnavailable).toBe(false);
+
+    const painted = regular!.cards.find(
+      (card) => card.awayAbbr === "NE" && card.homeAbbr === "SEA",
+    );
+    expect(painted?.source).toBe("fair-lines");
+    expect(painted?.modelSpread).toBe("-3.87");
+    expect(painted?.publishTagSpread).toBe("LEAN");
+
+    const filled = regular!.cards.filter((card) => card.source === "schedule");
+    expect(filled.length).toBe(week1.length - 1);
+    for (const card of filled) {
+      expect(card.modelSpread).toBe("—");
+      expect(card.marketSpread).toBe("—");
+      expect(card.publishTagSpread).toBeNull();
+      expect(card.note).toBe(MODEL_DATA_UNAVAILABLE_COPY);
+    }
+  });
+
   it("paints model/market fields when fair-lines returns the displayed week", async () => {
     const row = {
       gameId: "2026-W01-NE@SEA",
@@ -161,14 +217,15 @@ describe("NFL Weekly Slate schedule vs model outage", () => {
 
     const slate = await buildNflWeeklySlate("week-1");
     const regular = slate.sections.find((s) => s.key === "regular");
-    expect(regular?.cards).toHaveLength(1);
     expect(slate.modelUnavailable).toBe(false);
-    const card = regular!.cards[0];
-    expect(card.source).toBe("fair-lines");
-    expect(card.modelSpread).toBe("-3.87");
-    expect(card.marketSpread).toBe("-2.50");
-    expect(card.publishTagSpread).toBe("LEAN");
-    expect(card.note).not.toBe(MODEL_DATA_UNAVAILABLE_COPY);
+    const card = regular!.cards.find(
+      (row) => row.awayAbbr === "NE" && row.homeAbbr === "SEA",
+    );
+    expect(card?.source).toBe("fair-lines");
+    expect(card?.modelSpread).toBe("-3.87");
+    expect(card?.marketSpread).toBe("-2.50");
+    expect(card?.publishTagSpread).toBe("LEAN");
+    expect(card?.note).not.toBe(MODEL_DATA_UNAVAILABLE_COPY);
   });
 
   it("does not fetch ESPN / Odds preseason during REG", async () => {

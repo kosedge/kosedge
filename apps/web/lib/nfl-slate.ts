@@ -343,25 +343,35 @@ export async function buildNflWeeklySlate(
     );
   }
 
-  let usedScheduleFallback = false;
-  if (regCards.length === 0) {
-    const weeks =
-      resolved.mode === "week" && resolved.week
-        ? [resolved.week]
-        : resolved.mode === "iso"
-          ? [scheduleWeek]
-          : [currentWeek, currentWeek + 1];
-    let scheduled = buildRegCardsFromSchedule(weeks, season);
-    if (resolved.mode === "iso" && resolved.iso) {
-      scheduled = scheduled.filter((card) =>
-        (card.startTime || "").startsWith(resolved.iso!),
-      );
-    }
-    if (scheduled.length > 0) {
-      regCards = scheduled;
-      usedScheduleFallback = true;
-    }
+  // Fill any displayed matchup the window missed. A clipped horizon must not
+  // drop scheduled games; those cards stay fail-closed (dashes, no invented KEI).
+  const displayWeeks =
+    resolved.mode === "week" && resolved.week
+      ? [resolved.week]
+      : resolved.mode === "iso"
+        ? [scheduleWeek]
+        : [currentWeek, currentWeek + 1];
+  let scheduled = buildRegCardsFromSchedule(displayWeeks, season);
+  if (resolved.mode === "iso" && resolved.iso) {
+    scheduled = scheduled.filter((card) =>
+      (card.startTime || "").startsWith(resolved.iso!),
+    );
   }
+  const seen = new Set(
+    regCards.map((card) => `${card.week}|${card.awayAbbr}|${card.homeAbbr}`),
+  );
+  let filledFromSchedule = 0;
+  for (const card of scheduled) {
+    const key = `${card.week}|${card.awayAbbr}|${card.homeAbbr}`;
+    if (seen.has(key)) continue;
+    regCards.push(card);
+    seen.add(key);
+    filledFromSchedule += 1;
+  }
+  const usedScheduleFallback =
+    filledFromSchedule > 0 &&
+    regCards.length > 0 &&
+    regCards.every((card) => card.source === "schedule");
 
   const now = Date.now();
   const upcomingPre = preseasonGames
