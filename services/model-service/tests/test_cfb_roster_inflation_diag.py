@@ -19,6 +19,12 @@ from cfb_2026_roster_inflation_diagnostic import (  # noqa: E402
     invert_espn_returning,
     resolve_qb_talent,
 )
+from cfb_2026_qb_talent_contract_diagnostic import (  # noqa: E402
+    decompose_talent,
+    hist_qb_index,
+    location_shift,
+    talent_from_terms,
+)
 
 
 def test_blend_invert_roundtrip_recruiting_50() -> None:
@@ -65,3 +71,34 @@ def test_script_does_not_open_2025() -> None:
     assert "open_2025" not in src
     assert '"2025_opened": False' in src or "2025_opened" in src
     assert "lambda_fitted" in src
+    src2 = (ROOT / "scripts/cfb/cfb_2026_qb_talent_contract_diagnostic.py").read_text()
+    assert "open_2025" not in src2
+    assert "matchup_response_changed" in src2
+
+
+def test_typical_starter_talent_is_near_67_not_50() -> None:
+    parts = decompose_talent(280, 2100, 18, is_portal=False)
+    assert parts["completion_term"] is None
+    talent = talent_from_terms(parts)
+    assert 63.0 <= talent <= 72.0
+
+
+def test_location_shift_preserves_rank_and_sd() -> None:
+    xs = [55.0, 62.0, 67.0, 74.0, 81.0]
+    med = 67.0
+    ys = location_shift(xs, median=med, target=50.0)
+    assert ys[2] == 50.0
+    assert [a < b for a, b in zip(ys, ys[1:])] == [True, True, True, True]
+    mean = sum(xs) / len(xs)
+    sd0 = (sum((x - mean) ** 2 for x in xs) / len(xs)) ** 0.5
+    my = sum(ys) / len(ys)
+    sd1 = (sum((y - my) ** 2 for y in ys) / len(ys)) ** 0.5
+    assert abs(sd0 - sd1) < 1e-9
+
+
+def test_hist_cal_qb_index_is_unknown_at_50() -> None:
+    row = hist_qb_index()
+    assert row["qb_class"] == "unknown"
+    assert row["qb_talent"] == 50.0
+    assert row["qb_situation_index"] < 1.0
+    assert abs(row["class_mult"] - 0.92) < 1e-9
