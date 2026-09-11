@@ -66,14 +66,14 @@ export async function getLineCurve(
   book: string,
   extras: Omit<LineCurveRequest, "eventId" | "side" | "book"> = {},
 ): Promise<LineCurveResult> {
-  const snapshot = await resolveSnapshot({ eventId, side, book, ...extras });
-  if ("ok" in snapshot && snapshot.ok === false) return snapshot;
   if (!extras.model) {
     return closed(
       "missing_model_run",
-      "Model run must be bound to this event before pricing.",
+      "Model run must be bound to this event before pricing. Live odds are not fetched until the model is bound.",
     );
   }
+  const snapshot = await resolveSnapshot({ eventId, side, book, ...extras });
+  if ("ok" in snapshot && snapshot.ok === false) return snapshot;
   return priceAlternateSurface({
     snapshot: snapshot as OddsAltSnapshot,
     model: extras.model,
@@ -92,6 +92,12 @@ export async function evaluateAltLine(
     "eventId" | "side" | "altLine" | "book"
   > = {},
 ): Promise<LineCurveResult> {
+  if (!extras.model) {
+    return closed(
+      "missing_model_run",
+      "Model run must be bound to this event before pricing. Live odds are not fetched until the model is bound.",
+    );
+  }
   const snapshot = await resolveSnapshot({
     eventId,
     side,
@@ -99,12 +105,6 @@ export async function evaluateAltLine(
     ...extras,
   });
   if ("ok" in snapshot && snapshot.ok === false) return snapshot;
-  if (!extras.model) {
-    return closed(
-      "missing_model_run",
-      "Model run must be bound to this event before pricing.",
-    );
-  }
   return evaluatePostedAlt({
     snapshot: snapshot as OddsAltSnapshot,
     model: extras.model,
@@ -131,4 +131,3 @@ export function optimizeTwoLegLineCurve(
     nowMs: extras.nowMs,
   });
 }
-

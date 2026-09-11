@@ -137,7 +137,10 @@ export const quotedPlus15Parlay: QuotedParlayPrice = {
 
 import { priceAlternateSurface } from "@/lib/line-curve/alternate-pricing";
 import { optimizeTwoLegLineCurve } from "@/lib/line-curve/service";
-import type { LineCurveResult, TwoLegOptimizeResult } from "@/lib/line-curve/types";
+import type {
+  LineCurveResult,
+  TwoLegOptimizeResult,
+} from "@/lib/line-curve/types";
 
 export function getMissouriOklahomaLineCurve(
   side: "Missouri" | "Oklahoma",

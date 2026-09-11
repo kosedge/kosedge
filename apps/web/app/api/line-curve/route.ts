@@ -44,23 +44,15 @@ export async function GET(req: Request) {
     );
   }
 
-  const eventId = url.searchParams.get("eventId");
-  const side = url.searchParams.get("side");
-  const book = url.searchParams.get("book");
-  if (!eventId || !side || !book) {
-    return noStore({
-      researchOnly: true,
-      curve: closed(
-        "missing_odds",
-        "No live alternate-spread snapshot bound to a model run. POST an injected snapshot + model to price; do not invent a curve.",
-      ),
-    });
-  }
-
-  const curve = await getLineCurve(eventId, side, book, {
-    sport: (url.searchParams.get("sport") as LineCurveSport) || undefined,
+  // GET cannot carry a model bind. Do not fetch alternate_spreads (Odds API
+  // credits) and then fail closed — require POST(snapshot + model).
+  return noStore({
+    researchOnly: true,
+    curve: closed(
+      "missing_model_run",
+      "No live alternate-spread snapshot bound to a model run. POST an injected snapshot + model to price; do not invent a curve.",
+    ),
   });
-  return noStore({ researchOnly: true, curve });
 }
 
 export async function POST(req: Request) {
@@ -92,11 +84,14 @@ export async function POST(req: Request) {
     });
   }
 
-  if (!body.eventId || !body.side || !body.book) {
-    return noStore(
-      { error: "eventId, side, and book are required" },
-      400,
-    );
+  if (!body.eventId || !body.side || !body.book || !body.model) {
+    return noStore({
+      researchOnly: true,
+      curve: closed(
+        "missing_model_run",
+        "eventId, side, book, and a bound model run are required before any live odds fetch.",
+      ),
+    });
   }
 
   const curve = await getLineCurve(body.eventId, body.side, body.book, {

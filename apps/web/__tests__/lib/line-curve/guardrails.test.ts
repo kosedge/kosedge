@@ -4,6 +4,7 @@ import {
   priceAlternateSurface,
 } from "@/lib/line-curve/alternate-pricing";
 import { missouriOklahomaFixture } from "@/lib/line-curve/fixtures/missouri-oklahoma";
+import { getLineCurve } from "@/lib/line-curve/service";
 import type { ModelMarginInput, OddsAltSnapshot } from "@/lib/line-curve/types";
 
 const freshNow = Date.parse("2026-09-11T01:05:00.000Z");
@@ -27,6 +28,16 @@ describe("line-curve guardrails", () => {
     if (result.ok) return;
     expect(result.code).toBe("stale_odds");
     expect(result.label).toBe("INSUFFICIENT");
+  });
+
+  it("does not fetch live odds when the model run is missing", async () => {
+    const result = await getLineCurve("evt", "Missouri", "draftkings", {
+      sport: "cfb",
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.code).toBe("missing_model_run");
+    expect(result.message).toMatch(/not fetched until the model is bound/);
   });
 
   it("rejects a missing model run", () => {

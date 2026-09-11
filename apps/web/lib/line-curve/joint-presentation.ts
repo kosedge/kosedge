@@ -26,6 +26,8 @@ export function jointCoverColumnLabel(meta: JointCorrelationMeta): string {
   return "Indep. joint cover";
 }
 
-export function impliesCorrelationAdjusted(meta: JointCorrelationMeta): boolean {
+export function impliesCorrelationAdjusted(
+  meta: JointCorrelationMeta,
+): boolean {
   return meta.assumption === "adjusted" && meta.adjustment != null;
 }
