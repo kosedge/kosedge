@@ -88,6 +88,8 @@ ESPN_CODE_ALIASES: Dict[str, str] = {
     "NMST": "NMSU",
     # ESPN uses FLA for the Gators; UF is Findlay (D2).
     "UF": "FLA",
+    # P0 official FBS — ESPN abbr ≠ engine code (keep MOST distinct).
+    "MIZZ": "MIZ",
 }
 
 UNIT_POS = {
@@ -1158,6 +1160,23 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             indent=2,
         )
     )
+    if not args.limit_teams:
+        ms = REPO_ROOT / "services" / "model-service"
+        sys.path.insert(0, str(ms))
+        from src.services.cfb_season_engine.fbs_universe import official_fbs_codes
+        from src.services.cfb_season_engine.name_to_code import P0_REQUIRED_CODES
+
+        official = official_fbs_codes(include_transition=True)
+        missing_p0 = [
+            c for c in P0_REQUIRED_CODES if c in official and c not in payloads
+        ]
+        if missing_p0:
+            print(
+                "ERROR: Required FBS codes missing from roster pack — "
+                f"do not hydrate 1.0: {missing_p0}",
+                file=sys.stderr,
+            )
+            return 1
     return 0
 
 

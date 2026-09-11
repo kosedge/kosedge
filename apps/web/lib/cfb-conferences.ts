@@ -57,7 +57,7 @@ export const CFB_AFFILIATION_OVERLAY: Record<string, string> = {
   JVST: "CUSA",
   ARST: "Sun Belt",
   NEV: "Mountain West",
-  CSU: "Mountain West",
+  CSU: "Pac-12",
   ARMY: "AAC",
 };
 

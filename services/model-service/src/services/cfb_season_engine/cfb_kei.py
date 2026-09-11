@@ -24,8 +24,13 @@ import os
 from datetime import datetime, timezone
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
+from src.services.cfb_season_engine.team_features import MissingRequiredTeamFeature
+
 KEI_VERSION_FAMILY = "cfb-kei-v1.0"
 W0_CLOSE_AS_OF = "2026-08-31"
+# Documented W2+ mint identity. Builder headers use kei_version_for_weeks on
+# the minted week set. Frozen pack stamps flip on rematerialize (Alex).
+DOCUMENTED_W2_KEI_VERSION = f"{KEI_VERSION_FAMILY}-2026w2"
 
 
 def kei_version_for_weeks(weeks: Iterable[Any]) -> str:
@@ -46,7 +51,12 @@ def resolve_kei_as_of(
     explicit: Optional[str] = None,
     mint_date: Optional[str] = None,
 ) -> str:
-    """W2+ mints must not silently keep the Week-0 close date."""
+    """W2+ mints must not silently keep the Week-0 close date.
+
+    ``mint_date`` is accepted for caller compatibility but is not a fallback.
+    W2+ requires ``CFB_CLOSE_AS_OF`` (or ``explicit``) distinct from Week-0.
+    """
+    _ = mint_date
     parsed: List[int] = []
     for raw in weeks:
         try:
@@ -55,10 +65,13 @@ def resolve_kei_as_of(
             continue
     max_w = max(parsed) if parsed else 0
     raw = (explicit if explicit is not None else os.environ.get("CFB_CLOSE_AS_OF") or "").strip()
-    mint = mint_date or datetime.now(timezone.utc).strftime("%Y-%m-%d")
     if max_w >= 2:
         if not raw or raw == W0_CLOSE_AS_OF:
-            return mint
+            raise MissingRequiredTeamFeature(
+                "W2+ KEI mint requires CFB_CLOSE_AS_OF distinct from Week-0 "
+                f"{W0_CLOSE_AS_OF}. Do not silently keep "
+                f"{KEI_VERSION_FAMILY}-2026w0 / {W0_CLOSE_AS_OF}."
+            )
         return raw
     return raw or W0_CLOSE_AS_OF
 

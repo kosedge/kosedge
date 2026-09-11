@@ -194,7 +194,7 @@ def require_mapped_code(name: str, mapping: Mapping[str, str] | None = None) -> 
     code = mapped_code(name, mapping)
     if not code:
         raise MissingRequiredTeamFeature(
-            f"Unmapped CFB name {name!r} — sit, do not invent Independent/1.0"
+            f"Unmapped CFB name {name!r} — hard-fail, do not invent Independent/1.0"
         )
     return code
 

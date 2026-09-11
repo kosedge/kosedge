@@ -156,7 +156,7 @@ def conference_for(team: str, mapping: Mapping[str, str] | None = None) -> str:
     if official:
         raise MissingRequiredTeamFeature(
             f"Official FBS {code} missing conference affiliation — "
-            "sit, do not invent Independent"
+            "hard-fail, do not invent Independent"
         )
     # FCS / non-FBS only. Not an official-FBS Independent.
     return "Independent"

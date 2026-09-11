@@ -230,7 +230,7 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
 
     official = official_fbs_codes()
     missing_official: List[str] = []
-    for code in sorted(codes):
+    for code in sorted(set(codes) | set(P0_REQUIRED_CODES)):
         if code in teams:
             continue
         canon = ALIASES.get(code, code)
@@ -241,9 +241,11 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             row["source"] = "packaged_sp_plus_final_2025_alias"
             teams[code] = row
             continue
-        # P0 official FBS must never take the league-average 1.0 fill.
+        # Required official FBS must never take the league-average 1.0 fill.
         if code in P0_REQUIRED_CODES and code in official:
             missing_official.append(code)
+            continue
+        if code not in codes:
             continue
         teams[code] = {
             "team": code,
@@ -267,8 +269,8 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
         }
     if missing_official:
         raise MissingRequiredTeamFeature(
-            "Official FBS codes have no mapped SP+ row — sit, do not "
-            f"league-average fill: {missing_official}"
+            "Required official FBS codes have no mapped SP+ row — hard-fail, "
+            f"do not league-average fill: {missing_official}"
         )
 
     return {
@@ -338,7 +340,11 @@ def main() -> int:
         print("ERROR: no SP+ rows fetched", file=sys.stderr)
         return 1
 
-    snap = build_snapshot(rows, source_primary=source)
+    try:
+        snap = build_snapshot(rows, source_primary=source)
+    except MissingRequiredTeamFeature as exc:
+        print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(snap, indent=2) + "\n", encoding="utf-8")
     print(

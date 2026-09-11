@@ -147,7 +147,7 @@ def build_efficiency_profile(
         if is_official_fbs(team, include_transition=True):
             raise MissingRequiredTeamFeature(
                 f"Official FBS {team} missing packaged efficiency — "
-                "sit, do not invent league-average 1.0"
+                "hard-fail, do not invent league-average 1.0"
             )
         profile = EfficiencyProfile(
             team=team,
