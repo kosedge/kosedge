@@ -1,0 +1,1541 @@
+{
+  "ok": true,
+  "research_only": true,
+  "production_model_changed": false,
+  "2025_opened": false,
+  "lambda_fitted": false,
+  "matchup_response_changed": false,
+  "kill_switch": "CFB_EDGE_BOARD_PUBLIC_ENABLED=false",
+  "universe_mode": "packaged_real_roster",
+  "pre_register": {
+    "falsify_mean_resid_lt": 3.0,
+    "recruiting_control_band": [
+      8.0,
+      10.0
+    ],
+    "established_starter": "prior-year attempts >= 80",
+    "location_map": "x' = x - (median_established - 50); rank and SD preserved"
+  },
+  "hist_qb": {
+    "qb_class": "unknown",
+    "qb_talent": 50.0,
+    "supporting_cast": 50.0,
+    "class_mult": 0.92,
+    "qb_situation_index": 0.92,
+    "qb_situation_score": 43.6,
+    "breakdown": {
+      "qb_talent": 50.0,
+      "talent_index": 1.0,
+      "qb_class": "unknown",
+      "class_mult": 0.92,
+      "supporting_cast": 50.0,
+      "cast_mult": 1.0,
+      "qb_situation_raw": 0.92,
+      "qb_situation_index": 0.92,
+      "qb_situation_score": 43.6,
+      "soft_ceiling": {
+        "knee": 1.25,
+        "tau": 0.16,
+        "rail": [
+          0.62,
+          1.55
+        ]
+      }
+    },
+    "note": "build_historical_proxy_state hard-codes this payload. 50 is a missing-value fill, not a sample mean of counting stats."
+  },
+  "contract": {
+    "calibration_event": {
+      "writeup": "data/ops/cfb-historical-calibration-20260805.md",
+      "engine": "cfb-season-engine-v0.8.1-hist-cal",
+      "primary_fit_window": "2023\u20132024 closes (2025 was in the full-sample grade; this audit does not re-open 2025 residuals)",
+      "identity_reconstruction": "league-avg roster / QB / units",
+      "efficiency": "prior-year cfb_ratings adj EPA (not SP+)",
+      "knobs_moved": {
+        "MATCHUP_RESPONSE": {
+          "before": 1.22,
+          "after": 1.4,
+          "why": "spreads compressed vs close under league-avg identity"
+        },
+        "LEAGUE_TEAM_PPG": {
+          "before": 27.5,
+          "after": 25.9
+        },
+        "WEIGHT_OFF_EFF": {
+          "before": 0.28,
+          "after": 0.34
+        },
+        "WEIGHT_QB_SITUATION": {
+          "before": 0.26,
+          "after": 0.24
+        }
+      },
+      "explicit_limit": "Hist-cal grades efficiency/HFA/PPG/matchup response \u2014 not a counterfactual of that year's portal/QB class."
+    },
+    "hist_cal_qb_payload": {
+      "qb_class": "unknown",
+      "qb_talent": 50.0,
+      "supporting_cast": 50.0,
+      "class_mult": 0.92,
+      "qb_situation_index": 0.92,
+      "qb_situation_score": 43.6,
+      "breakdown": {
+        "qb_talent": 50.0,
+        "talent_index": 1.0,
+        "qb_class": "unknown",
+        "class_mult": 0.92,
+        "supporting_cast": 50.0,
+        "cast_mult": 1.0,
+        "qb_situation_raw": 0.92,
+        "qb_situation_index": 0.92,
+        "qb_situation_score": 43.6,
+        "soft_ceiling": {
+          "knee": 1.25,
+          "tau": 0.16,
+          "rail": [
+            0.62,
+            1.55
+          ]
+        }
+      },
+      "note": "build_historical_proxy_state hard-codes this payload. 50 is a missing-value fill, not a sample mean of counting stats."
+    },
+    "inputs": [
+      {
+        "input": "qb_talent",
+        "hist_cal": "constant 50.0 (placeholder)",
+        "live_2026": "talent_from_qb_stats(2025 att/yds/td) + low-sample recruiting blend",
+        "same_definition": false,
+        "same_units": "0\u2013100 label only \u2014 hist 50 is a fill, live ~67 is a counting-stat composite",
+        "same_centering": false,
+        "same_missing_semantics": false,
+        "same_temporal_cutoff": false,
+        "same_distribution": false,
+        "same_cap_floor": false,
+        "hist_missing": "unavailable \u2192 50",
+        "live_missing": "att<=0 \u2192 48 (or 52 if portal); att<80 \u2192 sqrt blend to recruiting",
+        "live_temporal": "prior full season 2025 ESPN career-split attempts (not season-to-date 2026)"
+      },
+      {
+        "input": "pass_attempts / yards / tds",
+        "hist_cal": "not an input",
+        "live_2026": "prior-year counting stats on ESPN-listed QB1",
+        "same_definition": false,
+        "same_units": "n/a vs attempts/yards/TDs",
+        "same_centering": false,
+        "same_missing_semantics": false,
+        "same_temporal_cutoff": false,
+        "same_distribution": false,
+        "same_cap_floor": "n/a vs attempt term cap 22 @ 484 att; YPA cap 12; TD cap 10"
+      },
+      {
+        "input": "completion_pct / efficiency EPA",
+        "hist_cal": "not an input",
+        "live_2026": "not an input (YPA is the only efficiency proxy)",
+        "same_definition": true,
+        "same_units": true,
+        "note": "Neither path has completion rate. Do not invent one."
+      },
+      {
+        "input": "qb_class / class_mult",
+        "hist_cal": "unknown \u2192 0.92 for every team",
+        "live_2026": "incumbent 1.06 / portal 0.95 / open 0.87 / freshman 0.79 from ESPN class+attempts",
+        "same_definition": false,
+        "same_centering": false,
+        "same_missing_semantics": false,
+        "same_temporal_cutoff": false,
+        "same_distribution": false,
+        "same_cap_floor": true
+      },
+      {
+        "input": "supporting_cast (OL/weapons)",
+        "hist_cal": "50 / 50",
+        "live_2026": "derived unit grades (recruiting-anchored ~60)",
+        "same_definition": false,
+        "same_centering": false
+      },
+      {
+        "input": "recruiting fallback",
+        "hist_cal": "not used (talent never looks at recruiting)",
+        "live_2026": "att<80 blends to recruiting_class_score (floor often 55)",
+        "same_definition": false
+      },
+      {
+        "input": "expert override / W1 confirm",
+        "hist_cal": "not used",
+        "live_2026": "can change class / named QB1; talent still from pack stats",
+        "same_definition": false
+      },
+      {
+        "input": "qb_situation_index downstream",
+        "hist_cal": "\u22480.92 for every team (unknown@50@cast50)",
+        "live_2026": "mean \u22481.20, 58/136 at/above soft knee 1.25",
+        "same_definition": true,
+        "same_centering": false,
+        "same_distribution": false,
+        "note": "Same function, different inputs. MATCHUP_RESPONSE=1.40 was raised on the hist (narrow, 0.92) distribution."
+      }
+    ],
+    "verdict_preview": "Train/serve skew on QB talent and class. Hist-cal never saw counting-stat talent. 50 meant missing, not league-average starter."
+  },
+  "saturation": {
+    "n_fbs": 136,
+    "n_established": 101,
+    "n_zero_attempt": 3,
+    "n_attempt_capped": 4,
+    "n_ypa_capped": 3,
+    "n_td_capped": 10,
+    "n_floor_35": 0,
+    "n_cap_96": 0,
+    "established_median_talent": 70.31,
+    "established_mean_talent": 69.6007,
+    "established_sd_talent": 8.2211
+  },
+  "variant_order": [
+    "frozen",
+    "attempt_term_zero",
+    "attempt_term_uncapped",
+    "ypa_term_zero",
+    "td_term_zero",
+    "portal_bump_zero",
+    "clamp_off",
+    "zero_att_default_50",
+    "lowsample_blend_off",
+    "class_to_unknown",
+    "class_mult_identity",
+    "loc_shift_established_median_to_50",
+    "loc_shift_all_median_to_50",
+    "hist_contract_qb",
+    "recruiting_channel_50"
+  ],
+  "ablations": {
+    "frozen": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.9579,
+        "sd_model_total": 7.0058,
+        "p10_model_total": 53.839,
+        "p50_model_total": 61.635,
+        "p90_model_total": 71.142,
+        "mean_resid": 9.1357,
+        "median_resid": 8.315,
+        "mae": 9.425,
+        "rmse": 10.9693,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 18,
+          "mean_resid": 16.3783,
+          "median_resid": 16.57,
+          "mae": 16.3783
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 6,
+            "mean_resid": 0.6167,
+            "mae": 2.4467
+          },
+          "52-56": {
+            "n": 12,
+            "mean_resid": 5.3725,
+            "mae": 6.0325
+          },
+          "56-60": {
+            "n": 20,
+            "mean_resid": 4.8905,
+            "mae": 5.2475
+          },
+          "60-68": {
+            "n": 34,
+            "mean_resid": 10.63,
+            "mae": 10.63
+          },
+          ">=68": {
+            "n": 18,
+            "mean_resid": 16.3783,
+            "mae": 16.3783
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.7495,
+          "sd": 9.0043,
+          "p10": 54.615,
+          "p50": 67.125,
+          "p90": 78.625,
+          "min": 50.61,
+          "max": 84.74
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1995,
+          "sd": 0.1486,
+          "p10": 0.9517,
+          "p50": 1.2146,
+          "p90": 1.3639,
+          "min": 0.8053,
+          "max": 1.3808
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2143,
+          "sd": 0.1893,
+          "p10": 0.9958,
+          "p50": 1.1955,
+          "p90": 1.4732,
+          "min": 0.7945,
+          "max": 1.6603
+        }
+      },
+      "delta_vs_frozen": null
+    },
+    "attempt_term_zero": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 57.8766,
+        "sd_model_total": 6.5102,
+        "p10_model_total": 50.796,
+        "p50_model_total": 57.115,
+        "p90_model_total": 66.276,
+        "mean_resid": 5.0543,
+        "median_resid": 5.13,
+        "mae": 6.319,
+        "rmse": 7.5592,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 7,
+          "mean_resid": 13.1486,
+          "median_resid": 13.62,
+          "mae": 13.1486
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 9,
+            "mean_resid": 0.0289,
+            "mae": 4.0289
+          },
+          "52-56": {
+            "n": 24,
+            "mean_resid": 2.2267,
+            "mae": 3.6008
+          },
+          "56-60": {
+            "n": 18,
+            "mean_resid": 5.6106,
+            "mae": 5.9394
+          },
+          "60-68": {
+            "n": 26,
+            "mean_resid": 8.7546,
+            "mae": 8.7546
+          },
+          "<48": {
+            "n": 6,
+            "mean_resid": -3.2433,
+            "mae": 3.2433
+          },
+          ">=68": {
+            "n": 7,
+            "mean_resid": 13.1486,
+            "mae": 13.1486
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 56.4169,
+          "sd": 4.444,
+          "p10": 51.4042,
+          "p50": 55.776,
+          "p90": 62.3128,
+          "min": 47.5226,
+          "max": 68.6428
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.0888,
+          "sd": 0.1049,
+          "p10": 0.9425,
+          "p50": 1.0982,
+          "p90": 1.2258,
+          "min": 0.7929,
+          "max": 1.2873
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.1473,
+          "sd": 0.1702,
+          "p10": 0.9486,
+          "p50": 1.1321,
+          "p90": 1.3895,
+          "min": 0.7943,
+          "max": 1.5375
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -4.0814,
+        "mae": -3.106
+      }
+    },
+    "attempt_term_uncapped": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.8884,
+        "sd_model_total": 6.9971,
+        "p10_model_total": 53.827,
+        "p50_model_total": 61.635,
+        "p90_model_total": 71.196,
+        "mean_resid": 9.0662,
+        "median_resid": 8.315,
+        "mae": 9.3582,
+        "rmse": 10.9046,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 18,
+          "mean_resid": 16.2511,
+          "median_resid": 16.6,
+          "mae": 16.2511
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 5,
+            "mean_resid": 0.346,
+            "mae": 2.542
+          },
+          "52-56": {
+            "n": 12,
+            "mean_resid": 5.3325,
+            "mae": 6.0125
+          },
+          "56-60": {
+            "n": 20,
+            "mean_resid": 4.8555,
+            "mae": 5.2125
+          },
+          "60-68": {
+            "n": 34,
+            "mean_resid": 10.5888,
+            "mae": 10.5888
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.59,
+            "mae": 0.59
+          },
+          ">=68": {
+            "n": 18,
+            "mean_resid": 16.2511,
+            "mae": 16.2511
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.6159,
+          "sd": 9.1297,
+          "p10": 54.4363,
+          "p50": 66.6776,
+          "p90": 78.9826,
+          "min": 50.6073,
+          "max": 85.4679
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1976,
+          "sd": 0.1493,
+          "p10": 0.9491,
+          "p50": 1.2115,
+          "p90": 1.3639,
+          "min": 0.8053,
+          "max": 1.3808
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2131,
+          "sd": 0.1896,
+          "p10": 0.9958,
+          "p50": 1.1911,
+          "p90": 1.4679,
+          "min": 0.7945,
+          "max": 1.6603
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -0.0695,
+        "mae": -0.0668
+      }
+    },
+    "ypa_term_zero": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 59.3983,
+        "sd_model_total": 6.9134,
+        "p10_model_total": 51.412,
+        "p50_model_total": 59.075,
+        "p90_model_total": 68.475,
+        "mean_resid": 6.5761,
+        "median_resid": 6.265,
+        "mae": 7.4081,
+        "rmse": 8.9102,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 11,
+          "mean_resid": 15.1655,
+          "median_resid": 15.3,
+          "mae": 15.1655
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 5,
+            "mean_resid": 1.274,
+            "mae": 3.302
+          },
+          "52-56": {
+            "n": 21,
+            "mean_resid": 1.9981,
+            "mae": 3.7
+          },
+          "56-60": {
+            "n": 17,
+            "mean_resid": 5.3994,
+            "mae": 5.3994
+          },
+          "60-68": {
+            "n": 31,
+            "mean_resid": 9.6458,
+            "mae": 9.6458
+          },
+          "<48": {
+            "n": 5,
+            "mean_resid": -2.822,
+            "mae": 2.978
+          },
+          ">=68": {
+            "n": 11,
+            "mean_resid": 15.1655,
+            "mae": 15.1655
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 59.5624,
+          "sd": 7.9253,
+          "p10": 48.4848,
+          "p50": 59.7392,
+          "p90": 70.1227,
+          "min": 46.0773,
+          "max": 76.0
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1261,
+          "sd": 0.1453,
+          "p10": 0.9325,
+          "p50": 1.1123,
+          "p90": 1.3191,
+          "min": 0.7652,
+          "max": 1.3425
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.1705,
+          "sd": 0.1863,
+          "p10": 0.9585,
+          "p50": 1.1421,
+          "p90": 1.4282,
+          "min": 0.7868,
+          "max": 1.6044
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -2.5596,
+        "mae": -2.0169
+      }
+    },
+    "td_term_zero": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 60.6359,
+        "sd_model_total": 6.7753,
+        "p10_model_total": 53.056,
+        "p50_model_total": 60.42,
+        "p90_model_total": 70.54,
+        "mean_resid": 7.8137,
+        "median_resid": 7.375,
+        "mae": 8.2828,
+        "rmse": 9.7755,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 13,
+          "mean_resid": 15.97,
+          "median_resid": 15.99,
+          "mae": 15.97
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 7,
+            "mean_resid": 1.0114,
+            "mae": 3.36
+          },
+          "52-56": {
+            "n": 18,
+            "mean_resid": 3.1856,
+            "mae": 4.31
+          },
+          "56-60": {
+            "n": 19,
+            "mean_resid": 5.4858,
+            "mae": 5.7774
+          },
+          "60-68": {
+            "n": 32,
+            "mean_resid": 10.2012,
+            "mae": 10.2012
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.53,
+            "mae": 0.53
+          },
+          ">=68": {
+            "n": 13,
+            "mean_resid": 15.97,
+            "mae": 15.97
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 62.6294,
+          "sd": 6.2656,
+          "p10": 53.3842,
+          "p50": 64.0476,
+          "p90": 70.1493,
+          "min": 50.6073,
+          "max": 74.7406
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1638,
+          "sd": 0.1329,
+          "p10": 0.9429,
+          "p50": 1.1702,
+          "p90": 1.318,
+          "min": 0.8053,
+          "max": 1.3418
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.1924,
+          "sd": 0.1822,
+          "p10": 0.9869,
+          "p50": 1.1695,
+          "p90": 1.4409,
+          "min": 0.7945,
+          "max": 1.6197
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -1.322,
+        "mae": -1.1422
+      }
+    },
+    "portal_bump_zero": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.6573,
+        "sd_model_total": 6.9793,
+        "p10_model_total": 53.631,
+        "p50_model_total": 61.63,
+        "p90_model_total": 71.034,
+        "mean_resid": 8.8351,
+        "median_resid": 8.135,
+        "mae": 9.1702,
+        "rmse": 10.711,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 16,
+          "mean_resid": 16.1681,
+          "median_resid": 16.49,
+          "mae": 16.1681
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 7,
+            "mean_resid": 1.7843,
+            "mae": 3.5786
+          },
+          "52-56": {
+            "n": 12,
+            "mean_resid": 4.2783,
+            "mae": 5.1033
+          },
+          "56-60": {
+            "n": 19,
+            "mean_resid": 4.9516,
+            "mae": 5.3568
+          },
+          "60-68": {
+            "n": 35,
+            "mean_resid": 10.816,
+            "mae": 10.816
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.0,
+            "mae": 0.0
+          },
+          ">=68": {
+            "n": 16,
+            "mean_resid": 16.1681,
+            "mae": 16.1681
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.0022,
+          "sd": 8.9679,
+          "p10": 54.1573,
+          "p50": 65.7001,
+          "p90": 78.1024,
+          "min": 50.6073,
+          "max": 83.4492
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1911,
+          "sd": 0.1504,
+          "p10": 0.9429,
+          "p50": 1.1924,
+          "p90": 1.3639,
+          "min": 0.8053,
+          "max": 1.3808
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2093,
+          "sd": 0.1898,
+          "p10": 0.9949,
+          "p50": 1.1868,
+          "p90": 1.4642,
+          "min": 0.7924,
+          "max": 1.6519
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -0.3006,
+        "mae": -0.2548
+      }
+    },
+    "clamp_off": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.886,
+        "sd_model_total": 6.9972,
+        "p10_model_total": 53.827,
+        "p50_model_total": 61.635,
+        "p90_model_total": 71.142,
+        "mean_resid": 9.0638,
+        "median_resid": 8.315,
+        "mae": 9.3558,
+        "rmse": 10.9021,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 18,
+          "mean_resid": 16.2478,
+          "median_resid": 16.57,
+          "mae": 16.2478
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 5,
+            "mean_resid": 0.346,
+            "mae": 2.542
+          },
+          "52-56": {
+            "n": 12,
+            "mean_resid": 5.3292,
+            "mae": 6.0092
+          },
+          "56-60": {
+            "n": 20,
+            "mean_resid": 4.8505,
+            "mae": 5.2075
+          },
+          "60-68": {
+            "n": 34,
+            "mean_resid": 10.5882,
+            "mae": 10.5882
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.59,
+            "mae": 0.59
+          },
+          ">=68": {
+            "n": 18,
+            "mean_resid": 16.2478,
+            "mae": 16.2478
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.5928,
+          "sd": 9.0937,
+          "p10": 54.4363,
+          "p50": 66.6776,
+          "p90": 78.6278,
+          "min": 50.6073,
+          "max": 84.7406
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1975,
+          "sd": 0.1492,
+          "p10": 0.9491,
+          "p50": 1.2115,
+          "p90": 1.3639,
+          "min": 0.8053,
+          "max": 1.3808
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2131,
+          "sd": 0.1895,
+          "p10": 0.9958,
+          "p50": 1.1911,
+          "p90": 1.4679,
+          "min": 0.7945,
+          "max": 1.6603
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -0.0719,
+        "mae": -0.0692
+      }
+    },
+    "zero_att_default_50": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.886,
+        "sd_model_total": 6.9972,
+        "p10_model_total": 53.827,
+        "p50_model_total": 61.635,
+        "p90_model_total": 71.142,
+        "mean_resid": 9.0638,
+        "median_resid": 8.315,
+        "mae": 9.3558,
+        "rmse": 10.9021,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 18,
+          "mean_resid": 16.2478,
+          "median_resid": 16.57,
+          "mae": 16.2478
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 5,
+            "mean_resid": 0.346,
+            "mae": 2.542
+          },
+          "52-56": {
+            "n": 12,
+            "mean_resid": 5.3292,
+            "mae": 6.0092
+          },
+          "56-60": {
+            "n": 20,
+            "mean_resid": 4.8505,
+            "mae": 5.2075
+          },
+          "60-68": {
+            "n": 34,
+            "mean_resid": 10.5882,
+            "mae": 10.5882
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.59,
+            "mae": 0.59
+          },
+          ">=68": {
+            "n": 18,
+            "mean_resid": 16.2478,
+            "mae": 16.2478
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.5928,
+          "sd": 9.0937,
+          "p10": 54.4363,
+          "p50": 66.6776,
+          "p90": 78.6278,
+          "min": 50.6073,
+          "max": 84.7406
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1975,
+          "sd": 0.1492,
+          "p10": 0.9491,
+          "p50": 1.2115,
+          "p90": 1.3639,
+          "min": 0.8053,
+          "max": 1.3808
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2131,
+          "sd": 0.1895,
+          "p10": 0.9958,
+          "p50": 1.1911,
+          "p90": 1.4679,
+          "min": 0.7945,
+          "max": 1.6603
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -0.0719,
+        "mae": -0.0692
+      }
+    },
+    "lowsample_blend_off": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.1767,
+        "sd_model_total": 7.1888,
+        "p10_model_total": 51.733,
+        "p50_model_total": 61.125,
+        "p90_model_total": 69.484,
+        "mean_resid": 8.3544,
+        "median_resid": 7.45,
+        "mae": 8.7571,
+        "rmse": 10.4153,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 17,
+          "mean_resid": 15.9535,
+          "median_resid": 16.54,
+          "mae": 15.9535
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 9,
+            "mean_resid": 1.5022,
+            "mae": 2.8156
+          },
+          "52-56": {
+            "n": 12,
+            "mean_resid": 3.0342,
+            "mae": 4.9108
+          },
+          "56-60": {
+            "n": 17,
+            "mean_resid": 4.7547,
+            "mae": 4.8665
+          },
+          "60-68": {
+            "n": 34,
+            "mean_resid": 10.2768,
+            "mae": 10.2768
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.52,
+            "mae": 0.52
+          },
+          ">=68": {
+            "n": 17,
+            "mean_resid": 15.9535,
+            "mae": 15.9535
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 64.8222,
+          "sd": 10.7741,
+          "p10": 50.4235,
+          "p50": 66.0136,
+          "p90": 78.6278,
+          "min": 42.0909,
+          "max": 84.7406
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1773,
+          "sd": 0.1733,
+          "p10": 0.902,
+          "p50": 1.1995,
+          "p90": 1.3639,
+          "min": 0.7657,
+          "max": 1.3808
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2012,
+          "sd": 0.1926,
+          "p10": 0.9757,
+          "p50": 1.1706,
+          "p90": 1.4642,
+          "min": 0.7706,
+          "max": 1.6603
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -0.7813,
+        "mae": -0.6679
+      }
+    },
+    "class_to_unknown": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 59.6884,
+        "sd_model_total": 6.6438,
+        "p10_model_total": 52.213,
+        "p50_model_total": 59.485,
+        "p90_model_total": 68.955,
+        "mean_resid": 6.8662,
+        "median_resid": 7.025,
+        "mae": 7.3887,
+        "rmse": 8.9352,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 11,
+          "mean_resid": 15.5782,
+          "median_resid": 15.86,
+          "mae": 15.5782
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 8,
+            "mean_resid": -0.015,
+            "mae": 2.27
+          },
+          "52-56": {
+            "n": 20,
+            "mean_resid": 3.2335,
+            "mae": 4.2235
+          },
+          "56-60": {
+            "n": 22,
+            "mean_resid": 5.6232,
+            "mae": 5.9323
+          },
+          "60-68": {
+            "n": 28,
+            "mean_resid": 9.2646,
+            "mae": 9.2646
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": -1.07,
+            "mae": 1.07
+          },
+          ">=68": {
+            "n": 11,
+            "mean_resid": 15.5782,
+            "mae": 15.5782
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.7495,
+          "sd": 9.0043,
+          "p10": 54.615,
+          "p50": 67.125,
+          "p90": 78.625,
+          "min": 50.61,
+          "max": 84.74
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.136,
+          "sd": 0.1087,
+          "p10": 0.9825,
+          "p50": 1.1374,
+          "p90": 1.279,
+          "min": 0.9362,
+          "max": 1.3375
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.1758,
+          "sd": 0.1803,
+          "p10": 0.9484,
+          "p50": 1.1518,
+          "p90": 1.4233,
+          "min": 0.8197,
+          "max": 1.6446
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -2.2695,
+        "mae": -2.0363
+      }
+    },
+    "class_mult_identity": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 62.4194,
+        "sd_model_total": 6.6037,
+        "p10_model_total": 54.567,
+        "p50_model_total": 61.64,
+        "p90_model_total": 71.988,
+        "mean_resid": 9.5972,
+        "median_resid": 9.2,
+        "mae": 9.685,
+        "rmse": 11.161,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 19,
+          "mean_resid": 16.3568,
+          "median_resid": 17.56,
+          "mae": 16.3568
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 3,
+            "mean_resid": 2.05,
+            "mae": 2.11
+          },
+          "52-56": {
+            "n": 11,
+            "mean_resid": 4.4718,
+            "mae": 5.01
+          },
+          "56-60": {
+            "n": 19,
+            "mean_resid": 5.6332,
+            "mae": 5.7279
+          },
+          "60-68": {
+            "n": 38,
+            "mean_resid": 10.2789,
+            "mae": 10.2789
+          },
+          ">=68": {
+            "n": 19,
+            "mean_resid": 16.3568,
+            "mae": 16.3568
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 66.7495,
+          "sd": 9.0043,
+          "p10": 54.615,
+          "p50": 67.125,
+          "p90": 78.625,
+          "min": 50.61,
+          "max": 84.74
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.2159,
+          "sd": 0.0959,
+          "p10": 1.0679,
+          "p50": 1.2363,
+          "p90": 1.3215,
+          "min": 1.0176,
+          "max": 1.3371
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.2232,
+          "sd": 0.1775,
+          "p10": 0.9934,
+          "p50": 1.2094,
+          "p90": 1.4657,
+          "min": 0.8609,
+          "max": 1.6536
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": 0.4615,
+        "mae": 0.26
+      }
+    },
+    "loc_shift_established_median_to_50": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 54.0443,
+        "sd_model_total": 6.7662,
+        "p10_model_total": 46.462,
+        "p50_model_total": 53.59,
+        "p90_model_total": 62.908,
+        "mean_resid": 1.2221,
+        "median_resid": 0.99,
+        "mae": 4.9983,
+        "rmse": 5.9956,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 2,
+          "mean_resid": 9.495,
+          "median_resid": 9.495,
+          "mae": 9.495
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 18,
+            "mean_resid": -3.3544,
+            "mae": 3.8444
+          },
+          "52-56": {
+            "n": 19,
+            "mean_resid": 1.0374,
+            "mae": 2.9605
+          },
+          "56-60": {
+            "n": 17,
+            "mean_resid": 4.8035,
+            "mae": 5.0165
+          },
+          "60-68": {
+            "n": 15,
+            "mean_resid": 8.3107,
+            "mae": 8.3107
+          },
+          "<48": {
+            "n": 19,
+            "mean_resid": -3.9289,
+            "mae": 5.0247
+          },
+          ">=68": {
+            "n": 2,
+            "mean_resid": 9.495,
+            "mae": 9.495
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 46.4395,
+          "sd": 9.0043,
+          "p10": 34.305,
+          "p50": 46.815,
+          "p90": 58.315,
+          "min": 30.3,
+          "max": 64.43
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 0.9669,
+          "sd": 0.1589,
+          "p10": 0.7338,
+          "p50": 0.9606,
+          "p90": 1.1757,
+          "min": 0.62,
+          "max": 1.2483
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.0786,
+          "sd": 0.1835,
+          "p10": 0.8812,
+          "p50": 1.044,
+          "p90": 1.3298,
+          "min": 0.6924,
+          "max": 1.5143
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -7.9136,
+        "mae": -4.4267
+      }
+    },
+    "loc_shift_all_median_to_50": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 55.3938,
+        "sd_model_total": 6.8674,
+        "p10_model_total": 47.415,
+        "p50_model_total": 55.0,
+        "p90_model_total": 64.373,
+        "mean_resid": 2.5716,
+        "median_resid": 2.375,
+        "mae": 5.2667,
+        "rmse": 6.4957,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 3,
+          "mean_resid": 11.0167,
+          "median_resid": 11.02,
+          "mae": 11.0167
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 23,
+            "mean_resid": -2.0843,
+            "mae": 3.493
+          },
+          "52-56": {
+            "n": 16,
+            "mean_resid": 1.2737,
+            "mae": 2.53
+          },
+          "56-60": {
+            "n": 20,
+            "mean_resid": 5.688,
+            "mae": 5.715
+          },
+          "60-68": {
+            "n": 17,
+            "mean_resid": 9.1688,
+            "mae": 9.1688
+          },
+          "<48": {
+            "n": 11,
+            "mean_resid": -3.9709,
+            "mae": 4.5418
+          },
+          ">=68": {
+            "n": 3,
+            "mean_resid": 11.0167,
+            "mae": 11.0167
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 49.6245,
+          "sd": 9.0043,
+          "p10": 37.49,
+          "p50": 50.0,
+          "p90": 61.5,
+          "min": 33.485,
+          "max": 67.615
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.0068,
+          "sd": 0.1617,
+          "p10": 0.7675,
+          "p50": 0.9999,
+          "p90": 1.2186,
+          "min": 0.6342,
+          "max": 1.2862
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.1015,
+          "sd": 0.1867,
+          "p10": 0.9017,
+          "p50": 1.0684,
+          "p90": 1.3566,
+          "min": 0.708,
+          "max": 1.5427
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -6.5641,
+        "mae": -4.1583
+      }
+    },
+    "hist_contract_qb": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 52.5623,
+        "sd_model_total": 5.7227,
+        "p10_model_total": 46.585,
+        "p50_model_total": 51.475,
+        "p90_model_total": 60.688,
+        "mean_resid": -0.2599,
+        "median_resid": -0.295,
+        "mae": 3.9739,
+        "rmse": 4.9838,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 0,
+          "mean_resid": null,
+          "median_resid": null,
+          "mae": null
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 25,
+            "mean_resid": -1.7268,
+            "mae": 2.5756
+          },
+          "52-56": {
+            "n": 16,
+            "mean_resid": -0.0637,
+            "mae": 2.4925
+          },
+          "56-60": {
+            "n": 17,
+            "mean_resid": 3.8318,
+            "mae": 4.1294
+          },
+          "60-68": {
+            "n": 10,
+            "mean_resid": 5.743,
+            "mae": 5.743
+          },
+          "<48": {
+            "n": 22,
+            "mean_resid": -4.6259,
+            "mae": 5.7159
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 50.0,
+          "sd": 0.0,
+          "p10": 50.0,
+          "p50": 50.0,
+          "p90": 50.0,
+          "min": 50.0,
+          "max": 50.0
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 0.9402,
+          "sd": 0.012,
+          "p10": 0.9253,
+          "p50": 0.9398,
+          "p90": 0.9562,
+          "min": 0.9192,
+          "max": 0.9731
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.0601,
+          "sd": 0.1407,
+          "p10": 0.8828,
+          "p50": 1.0457,
+          "p90": 1.2726,
+          "min": 0.7632,
+          "max": 1.3927
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -9.3956,
+        "mae": -5.4511
+      }
+    },
+    "recruiting_channel_50": {
+      "board": {
+        "n": 90,
+        "mean_model_total": 61.7802,
+        "sd_model_total": 7.5729,
+        "p10_model_total": 51.886,
+        "p50_model_total": 61.65,
+        "p90_model_total": 70.203,
+        "mean_resid": 8.958,
+        "median_resid": 7.81,
+        "mae": 9.3398,
+        "rmse": 11.0475,
+        "high_total_tail_ge_68": {
+          "threshold": 68.0,
+          "n": 20,
+          "mean_resid": 16.69,
+          "median_resid": 17.805,
+          "mae": 16.69
+        },
+        "calibration_by_pred_bucket": {
+          "48-52": {
+            "n": 9,
+            "mean_resid": 1.25,
+            "mae": 2.8833
+          },
+          "52-56": {
+            "n": 13,
+            "mean_resid": 3.5,
+            "mae": 5.0123
+          },
+          "56-60": {
+            "n": 14,
+            "mean_resid": 5.2514,
+            "mae": 5.2514
+          },
+          "60-68": {
+            "n": 33,
+            "mean_resid": 10.3394,
+            "mae": 10.3394
+          },
+          "<48": {
+            "n": 1,
+            "mean_resid": 0.95,
+            "mae": 0.95
+          },
+          ">=68": {
+            "n": 20,
+            "mean_resid": 16.69,
+            "mae": 16.69
+          }
+        }
+      },
+      "team_dist": {
+        "qb_talent": {
+          "n": 136,
+          "mean": 64.77,
+          "sd": 10.7518,
+          "p10": 50.0932,
+          "p50": 66.0137,
+          "p90": 78.6277,
+          "min": 48.7495,
+          "max": 84.7406
+        },
+        "qb_index": {
+          "n": 136,
+          "mean": 1.1624,
+          "sd": 0.173,
+          "p10": 0.8749,
+          "p50": 1.1885,
+          "p90": 1.3596,
+          "min": 0.7794,
+          "max": 1.3793
+        },
+        "offense_index": {
+          "n": 136,
+          "mean": 1.1197,
+          "sd": 0.1526,
+          "p10": 0.9157,
+          "p50": 1.0983,
+          "p90": 1.3381,
+          "min": 0.757,
+          "max": 1.4612
+        }
+      },
+      "delta_vs_frozen": {
+        "mean_resid": -0.1777,
+        "mae": -0.0852
+      }
+    }
+  },
+  "conclusion": {
+    "label": "pipeline scale mismatch (train/serve skew)",
+    "text": "Hist-cal trained MATCHUP_RESPONSE=1.40 and the QB offense weight on a universe where every QB was unknown@50 (index \u22480.92). Live 2026 serves prior-year counting stats whose natural center is ~67 (index \u22481.20). The attempt-term and/or rank-preserving location diagnostic dropped W1/W2 residual below +3 while recruiting_channel_50 stayed ~+9. That is the same formula on a different feature contract \u2014 not evidence that 1.40 should become 1.18, and not a ship of median\u219250.",
+    "attempt_resid": 5.0543,
+    "location_resid": 1.2221,
+    "recruiting_resid": 8.958,
+    "attempt_gate": false,
+    "location_gate": true,
+    "recruiting_in_band": true,
+    "mechanism_survives": true
+  }
+}
