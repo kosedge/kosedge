@@ -489,7 +489,7 @@ function genericIntelLinks(
   const primary = desk.cards[0];
   const edges = desk.cards[1];
 
-  return [
+  return withoutCfbEdgeBoardHrefs([
     {
       href: primary?.href,
       label: primary?.title ?? "Fair lines",
@@ -511,15 +511,13 @@ function genericIntelLinks(
       premium: true,
       status: "active",
     },
-    ...withoutCfbEdgeBoardHrefs([
-      {
-        href: `/edge-board/${sportKey}`,
-        label: "Public edge board",
-        hint: "Open vs best prices, KEI, and directional edge tags.",
-        premium: true,
-        status: "active",
-      },
-    ]),
+    {
+      href: `/edge-board/${sportKey}`,
+      label: "Public edge board",
+      hint: "Open vs best prices, KEI, and directional edge tags.",
+      premium: true,
+      status: "active",
+    },
     {
       href: `/pro/${sportKey}/fair-lines`,
       label: "KEI projections",
@@ -546,7 +544,7 @@ function genericIntelLinks(
       premium: true,
       status: "placeholder",
     },
-  ];
+  ]);
 }
 
 function intelLinksForSport(

@@ -182,7 +182,8 @@ describe("CFB totals PLAY sit (tagger only)", () => {
       "cfb",
       1,
     );
-    expect(leanRows[0]?.tagOU).toBe("LEAN");
+    // Public kill switch: customer paint emits zero CFB tags while disabled.
+    expect(leanRows[0]?.tagOU).toBeUndefined();
     expect(leanRows[0]?.edgeOUNum).toBeCloseTo(3.8, 5);
 
     // No publishTag → blank (sit lives in cfbEdgeTag unit tests, not invent-on-board).
