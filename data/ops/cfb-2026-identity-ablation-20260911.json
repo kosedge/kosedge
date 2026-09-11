@@ -1,0 +1,72 @@
+{
+  "ok": true,
+  "research_only": true,
+  "production_model_changed": false,
+  "kill_switch": "CFB_EDGE_BOARD_PUBLIC_ENABLED=false",
+  "universe_mode": "packaged_real_roster",
+  "note": "Confirmatory 2026 W1/W2 books only. Not a \u03bb fit. 2025 historical residuals were not opened.",
+  "summary": {
+    "frozen": {
+      "n": 90,
+      "mean_total_resid": 9.1357,
+      "median_total_resid": 8.315,
+      "total_mae": 9.425,
+      "total_rmse": 10.9693,
+      "mean_matchup_inflation": 8.0763,
+      "mean_model_total": 61.9579,
+      "mean_abs_spread": 12.9846,
+      "mean_off_index": 1.2371,
+      "sd_off_index": 0.1884
+    },
+    "roster_league": {
+      "n": 90,
+      "mean_total_resid": 0.0974,
+      "median_total_resid": 0.025,
+      "total_mae": 3.7574,
+      "total_rmse": 4.8289,
+      "mean_matchup_inflation": -1.246,
+      "mean_model_total": 52.9197,
+      "mean_abs_spread": 8.3632,
+      "mean_off_index": 0.9699,
+      "sd_off_index": 0.1001
+    },
+    "efficiency_league": {
+      "n": 90,
+      "mean_total_resid": 7.1809,
+      "median_total_resid": 6.33,
+      "total_mae": 7.754,
+      "total_rmse": 9.0187,
+      "mean_matchup_inflation": 6.2384,
+      "mean_model_total": 60.0031,
+      "mean_abs_spread": 7.1909,
+      "mean_off_index": 1.2206,
+      "sd_off_index": 0.1124
+    },
+    "both_league": {
+      "n": 90,
+      "mean_total_resid": -1.6048,
+      "median_total_resid": -1.55,
+      "total_mae": 3.5748,
+      "total_rmse": 4.5098,
+      "mean_matchup_inflation": -2.8304,
+      "mean_model_total": 51.2174,
+      "mean_abs_spread": 1.9706,
+      "mean_off_index": 0.9571,
+      "sd_off_index": 0.0
+    }
+  },
+  "delta_vs_frozen": {
+    "roster_league": {
+      "mean_total_resid": -9.0383,
+      "mean_matchup_inflation": -9.3223
+    },
+    "efficiency_league": {
+      "mean_total_resid": -1.9548,
+      "mean_matchup_inflation": -1.8379
+    },
+    "both_league": {
+      "mean_total_resid": -10.7405,
+      "mean_matchup_inflation": -10.9067
+    }
+  }
+}
