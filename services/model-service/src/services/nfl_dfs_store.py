@@ -30,6 +30,16 @@ from src.services.nfl_player_production import PRODUCTION_VERSION
 
 log = logging.getLogger(__name__)
 
+# Current-flag and upsert identity. Reusing slate_id across weeks must not collide.
+SALARY_OBS_IDENTITY_KEYS = (
+    "site",
+    "season",
+    "week",
+    "slate_id",
+    "source_player_id",
+    "source_version",
+)
+
 
 def persist_normalized_slate(session: Any, slate: NormalizedSlate) -> Dict[str, Any]:
     raw_sha = payload_sha256(slate.raw_payload)
@@ -116,10 +126,20 @@ def persist_normalized_slate(session: Any, slate: NormalizedSlate) -> Dict[str, 
             """
             UPDATE nfl_dfs_salary_observations
             SET is_current = FALSE, updated_at = NOW()
-            WHERE site = :site AND slate_id = :slate_id AND source_version <> :source_version
+            WHERE site = :site
+              AND season = :season
+              AND week = :week
+              AND slate_id = :slate_id
+              AND source_version <> :source_version
             """
         ),
-        {"site": slate.site, "slate_id": slate.slate_id, "source_version": slate.source_version},
+        {
+            "site": slate.site,
+            "season": slate.season,
+            "week": slate.week,
+            "slate_id": slate.slate_id,
+            "source_version": slate.source_version,
+        },
     )
 
     upserted = 0
@@ -170,7 +190,7 @@ def persist_normalized_slate(session: Any, slate: NormalizedSlate) -> Dict[str, 
                   CAST(:captured_at AS timestamptz), TRUE, :identity_status, :identity_reason,
                   CAST(:raw_id AS uuid)
                 )
-                ON CONFLICT (site, slate_id, source_player_id, source_version) DO UPDATE SET
+                ON CONFLICT (site, season, week, slate_id, source_player_id, source_version) DO UPDATE SET
                   player_uid = EXCLUDED.player_uid,
                   player_name = EXCLUDED.player_name,
                   team = EXCLUDED.team,

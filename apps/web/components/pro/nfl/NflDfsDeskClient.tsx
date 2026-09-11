@@ -84,7 +84,7 @@ export function NflDfsDeskControls({
             { value: "FD", label: "FanDuel" },
           ]}
           pending={pending}
-          onChange={(value) => setParam("site", value)}
+          onChange={(value) => setParams({ site: value, slate: null })}
         />
         <InstantSelect
           name="pos"

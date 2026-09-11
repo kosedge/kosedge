@@ -171,3 +171,18 @@ def test_missing_slate_does_not_invent_board() -> None:
     assert board.status == "no_slate"
     assert board.rows == []
     assert board.diagnostics["season_average_substituted"] is False
+
+
+def test_certified_board_keeps_available_slate_list() -> None:
+    other = DfsSlateIdentity(season=2026, week=1, site="DK", slate_id="early-only")
+    board = assemble_dfs_board(
+        requested=DfsSlateIdentity(season=2026, week=1, site="DK", slate_id="151307"),
+        salaries=[_salary()],
+        projections=[_proj()],
+        available_slates=[
+            DfsSlateIdentity(season=2026, week=1, site="DK", slate_id="151307"),
+            other,
+        ],
+    )
+    assert board.status == "ok"
+    assert [s["slate_id"] for s in board.as_public()["slates"]] == ["151307", "early-only"]

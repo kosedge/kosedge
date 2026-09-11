@@ -382,6 +382,7 @@ def assemble_dfs_board(
         live=False,
         rows=certified,
         rejected=rejected,
+        slates=[asdict(s) for s in (available_slates or [])],
         summary=summary,
         diagnostics={
             "fail_closed": True,

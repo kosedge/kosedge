@@ -314,6 +314,7 @@ jobs:
               tests/test_nfl_dfs_salary_ingest.py \
               tests/test_nfl_dfs_board.py \
               tests/test_nfl_dfs_value_ownership_env.py \
+              tests/test_nfl_dfs_store_identity.py \
               tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes \
               tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows \
               tests/test_tasks_persistence.py::test_pull_odds_snapshot_meters_shared_run_id \

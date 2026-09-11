@@ -16,4 +16,14 @@ describe("DFS page contract", () => {
     expect(src).toMatch(/fetchNflDfsBoard/);
     expect(src).toMatch(/Ownership/);
   });
+
+  it("clears slate when the site control changes", () => {
+    const desk = readFileSync(
+      path.join(__dirname, "../../components/pro/nfl/NflDfsDeskClient.tsx"),
+      "utf8",
+    );
+    expect(desk).toMatch(
+      /setParams\(\{\s*site:\s*value,\s*slate:\s*null\s*\}\)/,
+    );
+  });
 });
