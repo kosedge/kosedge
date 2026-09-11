@@ -1,9 +1,11 @@
 import "./globals.css";
 import type { Metadata, Viewport } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import { Inter } from "next/font/google";
 import { Providers } from "./providers";
 import { ErrorBoundary } from "@/components/error/ErrorBoundary";
 import { DeploymentRecovery } from "@/components/DeploymentRecovery";
+import { GA4_MEASUREMENT_ID } from "@/lib/analytics/ga4";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -65,6 +67,7 @@ export default function RootLayout({
           <Providers>{children}</Providers>
         </ErrorBoundary>
       </body>
+      <GoogleAnalytics gaId={GA4_MEASUREMENT_ID} />
     </html>
   );
 }
