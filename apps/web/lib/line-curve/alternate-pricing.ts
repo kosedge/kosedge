@@ -16,6 +16,7 @@ import {
   assertPostedAlts,
   assertSnapshotFresh,
   assertSnapshotIdentity,
+  assertSurfaceSize,
   closed,
   uniqueAlts,
 } from "@/lib/line-curve/guardrails";
@@ -63,6 +64,8 @@ export function priceAlternateSurface(args: {
     snapshot.altsBySide[sideKey] ?? snapshot.altsBySide[side] ?? [];
   const postedCheck = assertPostedAlts(rawAlts);
   if (postedCheck) return postedCheck;
+  const sizeCheck = assertSurfaceSize(rawAlts);
+  if (sizeCheck) return sizeCheck;
 
   let alts;
   try {

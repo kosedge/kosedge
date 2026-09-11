@@ -154,6 +154,12 @@ export async function fetchAlternateSpreadSnapshot(args: {
   eventId: string;
   book: string;
 }): Promise<OddsAltSnapshot | LineCurveClosed> {
+  if (args.sport !== "cfb" && args.sport !== "nfl") {
+    return closed(
+      "missing_odds",
+      "Line Curve live fetch is limited to cfb and nfl.",
+    );
+  }
   const keys = getOddsApiKeys();
   if (!keys.length) {
     return closed("missing_odds", "Odds API key is not configured.");

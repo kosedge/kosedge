@@ -1,7 +1,11 @@
 import { describe, expect, it } from "vitest";
 import { optimizeTwoLegLineCurve } from "@/lib/line-curve/service";
 import { missouriOklahomaFixture } from "@/lib/line-curve/fixtures/missouri-oklahoma";
-import { INDEPENDENT_JOINT_NOTE } from "@/lib/line-curve/types";
+import {
+  INDEPENDENT_JOINT_NOTE,
+  LINE_CURVE_MAX_ALTS_PER_SIDE,
+  LINE_CURVE_MAX_QUOTED_PARLAYS,
+} from "@/lib/line-curve/types";
 
 function legs() {
   const fx = missouriOklahomaFixture;
@@ -100,5 +104,53 @@ describe("line-curve joint optimizer", () => {
     if (result.ok) return;
     expect(result.code).toBe("same_game");
     expect(result.label).toBe("INSUFFICIENT");
+  });
+
+  it("fails closed when quoted parlays exceed the cap", () => {
+    const { a, b } = legs();
+    const quoted = Array.from(
+      { length: LINE_CURVE_MAX_QUOTED_PARLAYS + 1 },
+      (_, i) => ({
+        lineA: 1.5,
+        lineB: 1.5 + i,
+        americanOdds: -110,
+      }),
+    );
+    const result = optimizeTwoLegLineCurve(a, b, missouriOklahomaFixture.book, {
+      quotedParlays: quoted,
+    });
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.code).toBe("surface_too_large");
+    expect(result.label).toBe("INSUFFICIENT");
+  });
+
+  it("fails closed when a 2-leg alt list exceeds the surface cap", () => {
+    const { a, b } = legs();
+    const oversized = {
+      ...a,
+      snapshot: {
+        ...a.snapshot,
+        altsBySide: {
+          ...a.snapshot.altsBySide,
+          Missouri: Array.from(
+            { length: LINE_CURVE_MAX_ALTS_PER_SIDE + 1 },
+            (_, i) => ({
+              line: i === 0 ? 1.5 : i + 0.5,
+              americanOdds: -110,
+              opposingAmericanOdds: -110,
+            }),
+          ),
+        },
+      },
+    };
+    const result = optimizeTwoLegLineCurve(
+      oversized,
+      b,
+      missouriOklahomaFixture.book,
+    );
+    expect(result.ok).toBe(false);
+    if (result.ok) return;
+    expect(result.code).toBe("surface_too_large");
   });
 });

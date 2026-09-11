@@ -33,6 +33,11 @@ export {
   teamScorePmf,
 } from "@/lib/line-curve/margin-pmf";
 export { missouriOklahomaFixture } from "@/lib/line-curve/fixtures/missouri-oklahoma";
+export {
+  LINE_CURVE_MAX_AGE_MS,
+  LINE_CURVE_MAX_ALTS_PER_SIDE,
+  LINE_CURVE_MAX_QUOTED_PARLAYS,
+} from "@/lib/line-curve/types";
 export type {
   LineCurvePoint,
   LineCurveResult,

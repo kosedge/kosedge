@@ -14,7 +14,11 @@ import {
   multiplicativeParlayAmerican,
 } from "@/lib/line-curve/american";
 import { priceAlternateSurface } from "@/lib/line-curve/alternate-pricing";
-import { closed } from "@/lib/line-curve/guardrails";
+import {
+  assertQuotedParlaySize,
+  assertSurfaceSize,
+  closed,
+} from "@/lib/line-curve/guardrails";
 import { applyBestValue, labelFromEdge } from "@/lib/line-curve/labels";
 import {
   INDEPENDENT_JOINT_NOTE,
@@ -116,6 +120,16 @@ export function optimizeTwoLegAlternateSurface(args: {
       "same_game",
       "Same-game combinations cannot be labeled under naive independence. Correlation is reserved — fail closed.",
     );
+  }
+
+  const quotedSize = assertQuotedParlaySize(args.quotedParlays);
+  if (quotedSize) return quotedSize;
+
+  for (const snapshot of [args.legA.snapshot, args.legB.snapshot]) {
+    for (const alts of Object.values(snapshot.altsBySide)) {
+      const size = assertSurfaceSize(alts);
+      if (size) return size;
+    }
   }
 
   const curveA = priceAlternateSurface({

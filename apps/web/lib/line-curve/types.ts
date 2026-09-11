@@ -124,7 +124,8 @@ export type LineCurveFailureCode =
   | "invalid_american"
   | "missing_snapshot"
   | "unavailable_alt_market"
-  | "same_game";
+  | "same_game"
+  | "surface_too_large";
 
 export type LineCurveClosed = {
   ok: false;
@@ -199,6 +200,12 @@ export type TwoLegOptimizeOk = {
 export type TwoLegOptimizeResult = TwoLegOptimizeOk | LineCurveClosed;
 
 export const LINE_CURVE_MAX_AGE_MS = 2 * 60 * 60 * 1000;
+
+/** Football alt slides are typically ≤ ~50 half-points. Refuse huge caller lists. */
+export const LINE_CURVE_MAX_ALTS_PER_SIDE = 80;
+
+/** Quoted 2-leg prices are sparse; refuse a dump that would dominate memory. */
+export const LINE_CURVE_MAX_QUOTED_PARLAYS = 256;
 
 export const INDEPENDENT_JOINT_NOTE =
   "Phase 1 joint probability uses an explicit independence assumption: the product of each leg's cover/push/loss masses. This is not a silent multiply of two cover percentages. Correlation adjustment is reserved on JointCorrelationModel and will be filled in later.";

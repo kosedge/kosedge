@@ -61,7 +61,7 @@ export async function POST(req: Request) {
       independenceCaption: jointProbabilityCaption(independence),
       result: closed(
         "missing_odds",
-        "Two-leg optimizer requires injected legA/legB snapshots bound to model runs. No fixture, no interpolation.",
+        "Two-leg optimizer requires injected legA/legB snapshots bound to model runs. No fixture, no interpolation, no live Odds API fetch.",
       ),
     });
   }

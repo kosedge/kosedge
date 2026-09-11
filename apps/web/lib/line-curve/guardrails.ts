@@ -6,11 +6,14 @@
 import { isValidAmericanOdds } from "@/lib/line-curve/american";
 import {
   LINE_CURVE_MAX_AGE_MS,
+  LINE_CURVE_MAX_ALTS_PER_SIDE,
+  LINE_CURVE_MAX_QUOTED_PARLAYS,
   type LineCurveClosed,
   type LineCurveFailureCode,
   type ModelMarginInput,
   type OddsAltSnapshot,
   type PostedAlt,
+  type QuotedParlayPrice,
 } from "@/lib/line-curve/types";
 
 export function closed(
@@ -68,23 +71,45 @@ export function assertSnapshotIdentity(
   if (!snapshot.homeTeam?.trim() || !snapshot.awayTeam?.trim()) {
     return closed("missing_odds", "Odds snapshot is missing home/away teams.");
   }
+  if (snapshot.sport !== "cfb" && snapshot.sport !== "nfl") {
+    return closed(
+      "missing_odds",
+      "Line Curve Phase 1 only prices cfb and nfl snapshots.",
+    );
+  }
   return null;
 }
 
-export function assertModelBound(
+/**
+ * Model completeness + event bind. Call this *before* any Odds API fetch.
+ * A truthy `{}` is not a bound model.
+ */
+export function assertModelReady(
   model: ModelMarginInput | null | undefined,
-  snapshot: OddsAltSnapshot,
+  eventId?: string,
 ): LineCurveClosed | null {
   if (!model || !model.modelRunId?.trim()) {
     return closed(
       "missing_model_run",
-      "Model run/version is missing — refuse to price.",
+      "Model run/version is missing — refuse to price. Live odds are not fetched until the model is bound.",
     );
   }
-  if (!model.eventId?.trim() || model.eventId !== snapshot.eventId) {
+  if (!model.eventId?.trim()) {
     return closed(
       "unbound_model_event",
       "Model run cannot be tied to this exact event.",
+    );
+  }
+  if (eventId && model.eventId !== eventId) {
+    return closed(
+      "unbound_model_event",
+      "Model run cannot be tied to this exact event.",
+    );
+  }
+  if (model.sport !== "cfb" && model.sport !== "nfl") {
+    return closed(
+      "missing_model_run",
+      "Model sport must be cfb or nfl — refuse to price.",
     );
   }
   if (
@@ -97,6 +122,35 @@ export function assertModelBound(
     return closed(
       "missing_model_run",
       "Model fair margin / scores / uncertainty are incomplete.",
+    );
+  }
+  return null;
+}
+
+export function assertModelBound(
+  model: ModelMarginInput | null | undefined,
+  snapshot: OddsAltSnapshot,
+): LineCurveClosed | null {
+  return assertModelReady(model, snapshot.eventId);
+}
+
+export function assertSurfaceSize(alts: PostedAlt[]): LineCurveClosed | null {
+  if (alts.length > LINE_CURVE_MAX_ALTS_PER_SIDE) {
+    return closed(
+      "surface_too_large",
+      `Alternate surface exceeds ${LINE_CURVE_MAX_ALTS_PER_SIDE} posted lines — refuse to price.`,
+    );
+  }
+  return null;
+}
+
+export function assertQuotedParlaySize(
+  quoted: QuotedParlayPrice[] | undefined,
+): LineCurveClosed | null {
+  if ((quoted?.length ?? 0) > LINE_CURVE_MAX_QUOTED_PARLAYS) {
+    return closed(
+      "surface_too_large",
+      `Quoted parlay list exceeds ${LINE_CURVE_MAX_QUOTED_PARLAYS} — refuse to optimize.`,
     );
   }
   return null;

@@ -12,7 +12,7 @@ import {
 } from "@/lib/line-curve/alternate-pricing";
 import { optimizeTwoLegAlternateSurface } from "@/lib/line-curve/joint-optimizer";
 import { fetchAlternateSpreadSnapshot } from "@/lib/line-curve/odds-adapter";
-import { closed } from "@/lib/line-curve/guardrails";
+import { assertModelReady, closed } from "@/lib/line-curve/guardrails";
 import type {
   LineCurveResult,
   LineCurveSport,
@@ -31,6 +31,11 @@ export type LineCurveRequest = {
   model?: ModelMarginInput;
   sport?: LineCurveSport;
   nowMs?: number;
+  /**
+   * Opt-in only. HTTP routes must never set this — Phase 1 prices injected
+   * snapshots so a stub model cannot spend Odds API alternate_spreads credits.
+   */
+  allowLiveOddsFetch?: boolean;
 };
 
 export type EvaluateAltRequest = LineCurveRequest & { altLine: number };
@@ -47,10 +52,16 @@ async function resolveSnapshot(
   req: LineCurveRequest,
 ): Promise<OddsAltSnapshot | ReturnType<typeof closed>> {
   if (req.snapshot) return req.snapshot;
-  if (!req.sport) {
+  if (!req.allowLiveOddsFetch) {
+    return closed(
+      "missing_snapshot",
+      "Injected alternate-spread snapshot is required. Live Odds API fetch is disabled on this path.",
+    );
+  }
+  if (req.sport !== "cfb" && req.sport !== "nfl") {
     return closed(
       "missing_odds",
-      "Sport is required when no snapshot is injected.",
+      "Live alternate-spread fetch is limited to cfb and nfl.",
     );
   }
   return fetchAlternateSpreadSnapshot({
@@ -66,17 +77,13 @@ export async function getLineCurve(
   book: string,
   extras: Omit<LineCurveRequest, "eventId" | "side" | "book"> = {},
 ): Promise<LineCurveResult> {
-  if (!extras.model) {
-    return closed(
-      "missing_model_run",
-      "Model run must be bound to this event before pricing. Live odds are not fetched until the model is bound.",
-    );
-  }
+  const ready = assertModelReady(extras.model, eventId);
+  if (ready) return ready;
   const snapshot = await resolveSnapshot({ eventId, side, book, ...extras });
   if ("ok" in snapshot && snapshot.ok === false) return snapshot;
   return priceAlternateSurface({
     snapshot: snapshot as OddsAltSnapshot,
-    model: extras.model,
+    model: extras.model as ModelMarginInput,
     side,
     nowMs: extras.nowMs,
   });
@@ -92,12 +99,8 @@ export async function evaluateAltLine(
     "eventId" | "side" | "altLine" | "book"
   > = {},
 ): Promise<LineCurveResult> {
-  if (!extras.model) {
-    return closed(
-      "missing_model_run",
-      "Model run must be bound to this event before pricing. Live odds are not fetched until the model is bound.",
-    );
-  }
+  const ready = assertModelReady(extras.model, eventId);
+  if (ready) return ready;
   const snapshot = await resolveSnapshot({
     eventId,
     side,
@@ -107,7 +110,7 @@ export async function evaluateAltLine(
   if ("ok" in snapshot && snapshot.ok === false) return snapshot;
   return evaluatePostedAlt({
     snapshot: snapshot as OddsAltSnapshot,
-    model: extras.model,
+    model: extras.model as ModelMarginInput,
     side,
     altLine,
     nowMs: extras.nowMs,

@@ -33,6 +33,10 @@ describe("line-curve Product/Validation containment", () => {
     expect(opt).not.toMatch(/getMissouriOklahoma|missouriOklahomaFixture/);
     expect(get).toMatch(/test-only/);
     expect(opt).toMatch(/test-only/);
+    expect(get).not.toMatch(/fetchAlternateSpreadSnapshot|allowLiveOddsFetch/);
+    expect(opt).not.toMatch(/fetchAlternateSpreadSnapshot|allowLiveOddsFetch/);
+    expect(get).toMatch(/does not live-fetch Odds API/);
+    expect(opt).toMatch(/no live Odds API fetch/);
   });
 
   it("does not write Edge Board, odds snapshots, PLAY, or Odds Lake", () => {

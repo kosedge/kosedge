@@ -44,13 +44,12 @@ export async function GET(req: Request) {
     );
   }
 
-  // GET cannot carry a model bind. Do not fetch alternate_spreads (Odds API
-  // credits) and then fail closed — require POST(snapshot + model).
+  // GET cannot carry a model bind or snapshot. Never live-fetch Odds API.
   return noStore({
     researchOnly: true,
     curve: closed(
       "missing_model_run",
-      "No live alternate-spread snapshot bound to a model run. POST an injected snapshot + model to price; do not invent a curve.",
+      "No injected alternate-spread snapshot bound to a model run. POST snapshot + model to price; do not invent a curve.",
     ),
   });
 }
@@ -89,13 +88,22 @@ export async function POST(req: Request) {
       researchOnly: true,
       curve: closed(
         "missing_model_run",
-        "eventId, side, book, and a bound model run are required before any live odds fetch.",
+        "eventId, side, book, and a bound model run are required. Live Odds API fetch is not available on this route.",
+      ),
+    });
+  }
+
+  if (!body.snapshot) {
+    return noStore({
+      researchOnly: true,
+      curve: closed(
+        "missing_snapshot",
+        "An injected alternate-spread snapshot is required. This route does not live-fetch Odds API alternate_spreads.",
       ),
     });
   }
 
   const curve = await getLineCurve(body.eventId, body.side, body.book, {
-    sport: body.sport,
     snapshot: body.snapshot,
     model: body.model,
   });
