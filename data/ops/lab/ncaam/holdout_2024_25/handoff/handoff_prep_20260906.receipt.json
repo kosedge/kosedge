@@ -1,0 +1,104 @@
+{
+  "schema_version": "ncaam-handoff-prep-receipt-v1",
+  "prepared_at_utc": "2026-09-06T02:15:00Z",
+  "prepared_by_agent": "bc-01a07472-1472-7abb-bf2e-5eb14d1f0791",
+  "prepared_on_host": {
+    "uname": "Linux",
+    "hostname": "cursor",
+    "volumes_path_present": false,
+    "private_worker_id": null,
+    "use_private_worker": false
+  },
+  "scope": {
+    "scoring": false,
+    "unseal": false,
+    "model_change": false,
+    "merge": false,
+    "deployment": false,
+    "bucket_locking": "separate_approval_required",
+    "upload_executed": false
+  },
+  "verified_inventory_hash": {
+    "algorithm": "sha256",
+    "value": "5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+    "preserved": true,
+    "reverified_this_run": false,
+    "reverify_blocker": "staged_package_not_present_on_linux_cloud_host; Mac private worker routing unavailable from this session"
+  },
+  "staged_package": {
+    "located_this_run": false,
+    "path": null,
+    "bytes": null,
+    "self_contained_verified": false,
+    "symlink_scan_kosedgedata": "not_run",
+    "runtime_deps_kosedgedata": "not_run",
+    "verified_with_external_archive_unavailable": false
+  },
+  "eligibility_reproduction_gate": {
+    "target_events": 1532,
+    "zero_mismatches_required": true,
+    "reproduced_this_run": false,
+    "deferred_until": "authorized_primary_cloud_upload_then_independent_cloud_download_verify"
+  },
+  "cloudflare_r2_account_inspection": {
+    "ryan_owned_account_confirmed": false,
+    "r2_enabled_confirmed": false,
+    "inspection_surfaces_checked": [
+      "cloud_agent_injected_secrets",
+      "railway_model_service_env_var_names",
+      "vercel_kosedge_project_env_var_names",
+      "local_aws_config",
+      "local_wrangler_config"
+    ],
+    "r2_or_cloudflare_keys_found": false,
+    "credentials_displayed": false,
+    "mac_local_inspection_still_required": true,
+    "notes": "No Cloudflare/R2 account metadata or credentials are available in cloud-accessible Kos Edge configs. Confirm on Ryan Mac via wrangler whoami / Cloudflare dashboard without pasting secrets into chat."
+  },
+  "primary_bucket_upload_proposal": {
+    "status": "AWAITING_APPROVAL_DO_NOT_EXECUTE",
+    "account": "Ryan-owned Cloudflare account (confirm R2-enabled on Mac; not confirmed from cloud configs)",
+    "bucket": {
+      "name": "kosedge-ncaam-holdout-primary",
+      "visibility": "private",
+      "create_if_absent": true
+    },
+    "prefix": "handoff/ncaam_holdout_2024_25/inventory-5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440/",
+    "objects": [
+      "package.tar.zst (or package directory sync)",
+      "inventory.sha256",
+      "handoff_prep_20260906.receipt.json"
+    ],
+    "upload_size_bytes": null,
+    "upload_size_note": "Measure on Mac after staged package path is confirmed; do not guess.",
+    "credential_scopes": [
+      "Cloudflare R2 API token — Object Read & Write",
+      "Restrict token to bucket kosedge-ncaam-holdout-primary only",
+      "No Account Admin",
+      "No Workers Scripts / DNS / zone-wide scopes"
+    ],
+    "endpoint_shape": "S3-compatible R2 endpoint via AWS CLI or wrangler r2 object put (mirror NFL_DR_REMOTE_URI pattern)",
+    "env_var_shape_optional": "NCAAM_HOLDOUT_HANDOFF_URI=s3://kosedge-ncaam-holdout-primary/handoff/ncaam_holdout_2024_25/inventory-5590fc12bff8edf3425927a85e88ced31ddff1ff47c76270d9f3798a6ef54440",
+    "bucket_locking": "NOT included — separate approval",
+    "sidecar": ".sha256 next to each object"
+  },
+  "independent_backup": {
+    "destination": "UNDECIDED",
+    "configured": false,
+    "protected": false,
+    "verified": false
+  },
+  "mac_worker_observed": {
+    "workerId": "3c358d2d-51c7-5c49-9a19-6f9fbccd8be6",
+    "machineDisplayName": "Ryan's MacBook Air",
+    "eligibleForSubagent": true,
+    "routed_this_run": false
+  },
+  "status": {
+    "EXTERNAL_DRIVE_SAFE_TO_EJECT": "no",
+    "PRIMARY_CLOUD_COPY_VERIFIED": "no",
+    "INDEPENDENT_BACKUP_VERIFIED": "no",
+    "MAC_REQUIRED_FOR_FURTHER_WORK": "yes",
+    "mac_required_reason": "Staged package + offline KosEdgeData-absent self-containment check + Cloudflare/R2 account metadata live on Ryan Mac; this Linux cloud session cannot access /Volumes or route onto privateWorkerId."
+  }
+}
