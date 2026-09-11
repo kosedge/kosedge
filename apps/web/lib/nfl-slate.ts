@@ -27,7 +27,14 @@ import {
 } from "@/lib/nfl-canonical-schedule";
 import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
-import { MODEL_DATA_UNAVAILABLE_COPY } from "@/lib/model-service-status";
+import {
+  MODEL_DATA_UNAVAILABLE_COPY,
+  isNflPreseasonDeskWindow,
+} from "@/lib/model-service-status";
+import {
+  nflWeeklySlateFairLinesWindow,
+  resolveNflSlateDateToken,
+} from "@/lib/nfl-slate-window";
 
 export type NflSlateCard = {
   id: string;
@@ -286,38 +293,33 @@ export function buildRegCardsFromSchedule(
   return cards;
 }
 
-function resolveDateToken(date: string | null | undefined): {
-  mode: "today" | "week" | "iso";
-  week?: number;
-  iso?: string;
-} {
-  const token = String(date ?? "")
-    .trim()
-    .toLowerCase();
-  if (!token || token === "today" || token === "latest") {
-    return { mode: "today" };
-  }
-  const weekMatch = token.match(/^w(?:eek)?-?(\d+)$/);
-  if (weekMatch) return { mode: "week", week: Number(weekMatch[1]) };
-  if (/^\d{4}-\d{2}-\d{2}$/.test(token)) return { mode: "iso", iso: token };
-  return { mode: "today" };
-}
-
 export async function buildNflWeeklySlate(
   dateToken = "today",
 ): Promise<NflWeeklySlate> {
   const season = 2026;
-  const resolved = resolveDateToken(dateToken);
+  const resolved = resolveNflSlateDateToken(dateToken);
+  const fairWindow = nflWeeklySlateFairLinesWindow(dateToken);
   const strength = loadPreseasonStrengthMap();
+  const loadPreseason = isNflPreseasonDeskWindow();
 
   const [fairLines, preseasonGames, preseasonOdds] = await Promise.all([
     fetchNflFairLines({
       season,
-      daysAhead: 120,
-      includePastDays: 2,
+      daysAhead: fairWindow.daysAhead,
+      includePastDays: fairWindow.includePastDays,
+      // Warehouse paints Current. SSR must not wait on Odds API HTTP.
+      oddsMode: "skip",
     }),
-    fetchEspnPreseasonSlate({ year: season, weeks: [1, 2, 3, 4] }),
-    fetchNflPreseasonOddsMarkets(),
+    loadPreseason
+      ? fetchEspnPreseasonSlate({ year: season, weeks: [1, 2, 3, 4] })
+      : Promise.resolve([]),
+    loadPreseason
+      ? fetchNflPreseasonOddsMarkets()
+      : Promise.resolve({
+          byMatchup: new Map(),
+          status: "empty" as const,
+          eventCount: 0,
+        }),
   ]);
 
   const fairCards = fairLines.lines.map(fairLineToCard);
