@@ -109,6 +109,16 @@ export type TotalIdentityRowFields = {
   action_label?: unknown;
   edgeMagnitude?: unknown;
   edge_magnitude?: unknown;
+  coverProb?: unknown;
+  cover_prob?: unknown;
+  playToNotes?: unknown;
+  playToPlay?: unknown;
+  playToLean?: unknown;
+  playToPass?: unknown;
+  play_to_notes?: unknown;
+  play_to_play?: unknown;
+  play_to_lean?: unknown;
+  play_to_pass?: unknown;
   decision?: unknown;
 };
 
@@ -121,6 +131,27 @@ const FAIL_CLOSED_DECISION_KEYS = [
   "numerical_edge",
   "playTo",
   "play_to",
+  "coverProb",
+  "cover_prob",
+] as const;
+
+const FAIL_CLOSED_ROW_KEYS = [
+  "publishTag",
+  "publish_tag",
+  "actionLabel",
+  "action_label",
+  "edgeMagnitude",
+  "edge_magnitude",
+  "coverProb",
+  "cover_prob",
+  "playToNotes",
+  "playToPlay",
+  "playToLean",
+  "playToPass",
+  "play_to_notes",
+  "play_to_play",
+  "play_to_lean",
+  "play_to_pass",
 ] as const;
 
 /**
@@ -131,12 +162,9 @@ export function stripFailClosedTotalDecisionChrome<
   T extends TotalIdentityRowFields,
 >(row: T): T {
   const next: T = { ...row };
-  delete next.publishTag;
-  delete next.publish_tag;
-  delete next.actionLabel;
-  delete next.action_label;
-  delete next.edgeMagnitude;
-  delete next.edge_magnitude;
+  for (const key of FAIL_CLOSED_ROW_KEYS) {
+    delete next[key];
+  }
   const decision = next.decision;
   if (decision && typeof decision === "object" && !Array.isArray(decision)) {
     const d: Record<string, unknown> = {
