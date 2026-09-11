@@ -2,6 +2,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { TruthStateBadges } from "@/components/pro/TruthStateBadge";
 import ModelTransparencyLink from "@/components/pro/ModelTransparencyLink";
+import { customerCtaHref } from "@/lib/cfb-edge-board-public";
 import {
   getSportEdgeBoardHref,
   getSportOverviewHref,
@@ -48,7 +49,9 @@ export default function SportHubShell({
     base.replace(/^\/pro\//, "").split("/")[0] ||
     "nfl";
   const overviewHref = getSportOverviewHref(key);
-  const edgeHref = getSportEdgeBoardHref(key);
+  const edgeHref = customerCtaHref(getSportEdgeBoardHref(key));
+  const primary = customerCtaHref(primaryHref);
+  const secondary = customerCtaHref(secondaryHref);
 
   return (
     <main className="mx-auto max-w-7xl px-4 py-4 sm:px-6 sm:py-8">
@@ -88,27 +91,29 @@ export default function SportHubShell({
               >
                 ← {sportName} Overview
               </Link>
-              <Link
-                href={edgeHref}
-                className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
-              >
-                Edge Board →
-              </Link>
+              {edgeHref ? (
+                <Link
+                  href={edgeHref}
+                  className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
+                >
+                  Edge Board →
+                </Link>
+              ) : null}
               <ModelTransparencyLink className="min-h-11 inline-flex items-center font-medium text-kos-text/45 hover:text-kos-gold sm:min-h-0" />
             </div>
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-48">
-            {primaryHref && primaryLabel ? (
+            {primary && primaryLabel ? (
               <Link
-                href={primaryHref}
+                href={primary}
                 className="min-h-11 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold transition hover:border-kos-gold/60 hover:bg-kos-gold/25"
               >
                 {primaryLabel}
               </Link>
             ) : null}
-            {secondaryHref && secondaryLabel ? (
+            {secondary && secondaryLabel ? (
               <Link
-                href={secondaryHref}
+                href={secondary}
                 className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/35 hover:bg-white/10"
               >
                 {secondaryLabel}

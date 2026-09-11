@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import { isCfbEdgeBoardCustomerEnabled } from "@/lib/cfb-edge-board-public";
 import {
   getKeiLinesBoardHref,
   getSportPrimaryNav,
@@ -9,15 +10,19 @@ import {
 import { SPORTS } from "@/lib/sports";
 
 describe("sport-pro-nav", () => {
-  it("exposes Overview + Edge Board primary nav for every sport", () => {
+  it("exposes Overview + Edge Board primary nav for every public Edge Board sport", () => {
     for (const sport of SPORTS) {
       const primary = getSportPrimaryNav(sport.key);
       const labels = primary.map((i) => i.label);
       expect(labels).toContain("Overview");
-      expect(labels).toContain("Edge Board");
       expect(labels).toContain("Teams");
-      const edgeBoard = primary.find((i) => i.label === "Edge Board");
-      expect(edgeBoard?.emphasis).toBe("green");
+      if (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) {
+        expect(labels).not.toContain("Edge Board");
+      } else {
+        expect(labels).toContain("Edge Board");
+        const edgeBoard = primary.find((i) => i.label === "Edge Board");
+        expect(edgeBoard?.emphasis).toBe("green");
+      }
       // Desk Edges demoted — not a dual primary with Edge Board.
       expect(labels).not.toContain("Edges");
       expect(labels).not.toContain("Edges desk");

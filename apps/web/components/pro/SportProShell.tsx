@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import SportProHeader from "@/components/pro/SportProHeader";
+import { customerCtaHref } from "@/lib/cfb-edge-board-public";
 import {
   getSportEdgeBoardHref,
   getSportOverviewHref,
@@ -30,7 +31,7 @@ export default function SportProShell({
 }) {
   const sportKey = (sport || "nfl").toLowerCase();
   const overviewHref = getSportOverviewHref(sportKey);
-  const edgeHref = getSportEdgeBoardHref(sportKey);
+  const edgeHref = customerCtaHref(getSportEdgeBoardHref(sportKey));
   const short = sportDisplayShort(sportKey);
   const full = sportDisplayLabel(sportKey);
 
@@ -59,12 +60,14 @@ export default function SportProShell({
                 >
                   ← {short} Overview
                 </Link>
-                <Link
-                  href={edgeHref}
-                  className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
-                >
-                  Edge Board →
-                </Link>
+                {edgeHref ? (
+                  <Link
+                    href={edgeHref}
+                    className="min-h-11 inline-flex items-center font-medium text-kos-text/65 hover:text-kos-text sm:min-h-0"
+                  >
+                    Edge Board →
+                  </Link>
+                ) : null}
                 <span className="hidden text-kos-text/35 sm:inline">
                   {full}
                 </span>

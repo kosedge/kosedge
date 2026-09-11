@@ -9,6 +9,7 @@
 import type { SportKey } from "@/lib/sports";
 import { getSport, supportsPropsFantasy } from "@/lib/sports";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
+import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
 
 export type SportNavItem = {
   href: string;
@@ -231,11 +232,11 @@ export function getSportNavConfig(sportKey: string): SportNavConfig {
 }
 
 export function getSportPrimaryNav(sportKey: string): SportNavItem[] {
-  return getSportNavConfig(sportKey).primary;
+  return withoutCfbEdgeBoardHrefs(getSportNavConfig(sportKey).primary);
 }
 
 export function getSportToolNav(sportKey: string): SportNavItem[] {
-  return getSportNavConfig(sportKey).tools;
+  return withoutCfbEdgeBoardHrefs(getSportNavConfig(sportKey).tools);
 }
 
 export function getSportOverviewHref(sportKey: string): string {

@@ -8,6 +8,10 @@
  * Do not invent KEI or flip PLAY eligibility here.
  */
 
+import {
+  cfbCustomerPublishTag,
+  isCfbEdgeBoardCustomerEnabled,
+} from "@/lib/cfb-edge-board-public";
 import { cfbEdgeTag, type CfbEdgeTag } from "@/lib/cfb-trusted-market";
 
 export type HomePreviewPricePair = {
@@ -25,7 +29,7 @@ export type HomePreviewRow = {
   bestOU: HomePreviewPricePair;
   /** Absolute spread edge (pts). Tag is derived — never hardcode PLAY. */
   edgeLineNum: number;
-  tagLine: CfbEdgeTag;
+  tagLine?: CfbEdgeTag;
 };
 
 const EMPTY_PAIR: HomePreviewPricePair = {
@@ -73,6 +77,8 @@ export const HOME_PREVIEW_FIXTURES: ReadonlyArray<{
  * PLAY-band trusted edges (≥4.0) → PASS while CFB_SPREAD_PLAY_ELIGIBLE=false.
  */
 export function buildHomePreviewRows(): HomePreviewRow[] {
+  // Homepage Edge Board is a customer CFB surface — hide while kill switch is off.
+  if (!isCfbEdgeBoardCustomerEnabled()) return [];
   return HOME_PREVIEW_FIXTURES.map((f) => ({
     id: f.id,
     teamA: { name: f.away, site: "Away" },
@@ -88,6 +94,6 @@ export function buildHomePreviewRows(): HomePreviewRow[] {
       bottom: { label: "—", juice: "—" },
     },
     edgeLineNum: f.edgeLineNum,
-    tagLine: cfbEdgeTag(f.edgeLineNum, "spread"),
+    tagLine: cfbCustomerPublishTag(f.edgeLineNum, cfbEdgeTag, "spread"),
   }));
 }

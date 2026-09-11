@@ -19,6 +19,7 @@ import {
 } from "@/lib/pro-sport-ia";
 import OverviewSportShell from "@/components/pro/OverviewSportShell";
 import { loadOverviewSlateGames } from "@/lib/overview-slate-games";
+import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
 
 export const dynamic = "force-dynamic";
 
@@ -107,7 +108,7 @@ export default async function CfbOverviewPage() {
               {version.as_of} · KEI {cfbKeiVersionStrip().kei_version}
             </p>
             <ol className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-              {START_HERE.map((item) => (
+              {withoutCfbEdgeBoardHrefs(START_HERE).map((item) => (
                 <li key={item.step}>
                   <Link
                     href={item.href}

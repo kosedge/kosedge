@@ -4,6 +4,7 @@
  * can assemble tonight games without crossing the client boundary.
  */
 
+import { isCfbEdgeBoardCustomerEnabled } from "@/lib/cfb-edge-board-public";
 import { cfbAwayBookToHome, trustCfbMarket } from "@/lib/cfb-trusted-market";
 import {
   isNbaPreseason,
@@ -295,6 +296,8 @@ function edgeToTag(
   }
   if (edgeNum == null && sport !== "cfb") return undefined;
   if (sport === "cfb") {
+    // Public kill switch: customer paint emits zero CFB tags while disabled.
+    if (!isCfbEdgeBoardCustomerEnabled()) return undefined;
     // Edge Board honesty: only paint tags assemble already published.
     // Never invent PLAY/LEAN/PASS from edge when publishTag is absent.
     if (

@@ -5,6 +5,7 @@
  */
 
 import Link from "next/link";
+import { publicEdgeBoardHref } from "@/lib/cfb-edge-board-public";
 import type { TonightGame } from "@/lib/edge-board-tonight";
 import type { OverviewSlateStatus } from "@/lib/overview-slate-games";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
@@ -18,7 +19,7 @@ const SLATE_META: Record<string, { title: string; emptyHint: string }> = {
   cfb: {
     title: "This Week’s Slate",
     emptyHint:
-      "No CFB week on the board yet — schedule not released or not pulled. Open Edge Board when Week 1 posts.",
+      "No CFB week on the board yet — schedule not released or not pulled. We do not invent matchups.",
   },
   nba: {
     title: "Today’s Slate",
@@ -89,12 +90,13 @@ export default function OverviewEdgeBoardSlate({
   const cfbWeek =
     typeof week === "number" && Number.isFinite(week) ? week : null;
   // Bare /edge-board/cfb resolves calendar current week server-side.
-  const edgeBoardHref =
-    sport === "cfb"
+  const edgeBoardHref = publicEdgeBoardHref(sport)
+    ? sport === "cfb"
       ? cfbWeek == null
         ? "/edge-board/cfb"
         : `/edge-board/cfb?week=${cfbWeek}`
-      : `/edge-board/${sport}`;
+      : `/edge-board/${sport}`
+    : null;
   const emptyCopy =
     status === "timeout" || status === "error"
       ? (STATUS_HINT[status] ?? meta.emptyHint)
@@ -114,12 +116,14 @@ export default function OverviewEdgeBoardSlate({
             </p>
           ) : null}
         </div>
-        <Link
-          href={edgeBoardHref}
-          className="min-h-9 inline-flex items-center rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55 hover:bg-kos-gold/25"
-        >
-          Full Edge Board →
-        </Link>
+        {edgeBoardHref ? (
+          <Link
+            href={edgeBoardHref}
+            className="min-h-9 inline-flex items-center rounded-lg border border-kos-gold/40 bg-kos-gold/15 px-3 py-1.5 text-sm font-semibold text-kos-gold transition hover:border-kos-gold/55 hover:bg-kos-gold/25"
+          >
+            Full Edge Board →
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-2.5">
