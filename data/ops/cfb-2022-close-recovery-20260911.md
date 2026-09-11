@@ -160,6 +160,20 @@ Unmatched lake events (lake side, no warehouse game): `0`
   "formal_actuals_only_would_require": "an explicit protocol amendment; this recovery does not make that change"
 }
 
+## Where the 2026-08-13 export was created
+
+See `data/ops/cfb-2022-odds-lake-provenance-20260911.md`.
+
+The parquet is **not** in git (PR #215: bulk warehouse not committed). It was written on the **developer Mac**:
+
+1. `scripts/odds/enterprise_training_pull.py` → local `postgresql://ryankos:postgres@127.0.0.1:5432/kosedge` (CFB mainlines completed 2026-07-28).
+2. `export_odds_lake()` via `scripts/cfb/ingest_historical_warehouse.py` → `/Volumes/KosEdgeData/clean/odds/cfb/snapshots-2022.parquet` on **2026-08-13**.
+3. Ops already says the Mac owns `/Volumes/KosEdgeData/raw/odds/**`.
+
+No sha256 exists in the committed inventory — counts only (28,322 / 838 / 717). Railway production Postgres is a different DSN and was not the export source. This VM still cannot mount the HD or open that local Postgres.
+
+Recovery action: copy `snapshots-2022.parquet` from the Mac HD (or re-export from that same local DB). Do not live-densify The Odds API.
+
 ## GO / STOP
 
 **STOP**
