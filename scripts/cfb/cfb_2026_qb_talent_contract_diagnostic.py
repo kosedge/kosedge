@@ -589,6 +589,9 @@ def write_report(payload: Mapping[str, Any]) -> None:
         td = s["team_dist"]["qb_talent"]
         od = s["team_dist"]["offense_index"]
         tail = s["board"]["high_total_tail_ge_68"]
+        tail_resid = tail.get("mean_resid")
+        if not tail.get("n"):
+            tail_resid = "—"
         lines.append(
             "| {name} | {tm}/{tsd}/{tp} | {om}/{os} | {mt} | {mr}/{md} | {mae} | {tn} / {tr} |".format(
                 name=name,
@@ -602,7 +605,7 @@ def write_report(payload: Mapping[str, Any]) -> None:
                 md=s["board"]["median_resid"],
                 mae=s["board"]["mae"],
                 tn=tail.get("n"),
-                tr=tail.get("mean_resid"),
+                tr=tail_resid,
             )
         )
     lines += [
