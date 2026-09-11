@@ -2,6 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { HonestStatusBanner } from "@/components/pro/HonestStatusBanner";
 import { buildNflWeeklySlate } from "@/lib/nfl-slate";
+import {
+  LEGITIMATE_EMPTY_SLATE_COPY,
+  MODEL_DATA_UNAVAILABLE_COPY,
+} from "@/lib/model-service-status";
 
 export const dynamic = "force-dynamic";
 
@@ -76,47 +80,18 @@ export default async function NflWeeklySlatePage({
         </div>
       </div>
 
-      {slate.error && slate.sections.length === 0 ? (
+      {slate.modelUnavailable && slate.sections.length > 0 ? (
         <div className="mt-6">
-          <HonestStatusBanner title="Slate feed note" tone="amber">
-            <p>{slate.error}</p>
-          </HonestStatusBanner>
-        </div>
-      ) : null}
-
-      {slate.error && slate.sections.length > 0 ? (
-        <div className="mt-6">
-          <HonestStatusBanner title="Fair-lines delayed" tone="neutral">
-            <p>
-              KEI fair-lines sync is delayed — cards below use schedule and camp
-              reference data. Preseason PLAY tags stay blocked.
-            </p>
+          <HonestStatusBanner title="Model status" tone="amber">
+            <p>{MODEL_DATA_UNAVAILABLE_COPY}</p>
           </HonestStatusBanner>
         </div>
       ) : null}
 
       {slate.sections.length === 0 ? (
         <div className="mt-8">
-          <HonestStatusBanner title="No games on this slate yet" tone="sky">
-            <p>
-              Preseason / early week — this token hasn&apos;t resolved any
-              matchup cards. Try{" "}
-              <Link
-                href="/pro/nfl/slate/today"
-                className="font-semibold text-sky-50 underline underline-offset-2"
-              >
-                Weekly Slate · today
-              </Link>{" "}
-              for the active preseason board when ESPN schedule joins, or a week
-              token like{" "}
-              <Link
-                href="/pro/nfl/slate/week-1"
-                className="font-semibold text-sky-50 underline underline-offset-2"
-              >
-                week-1
-              </Link>
-              .
-            </p>
+          <HonestStatusBanner title="Empty slate" tone="sky">
+            <p>{LEGITIMATE_EMPTY_SLATE_COPY}</p>
           </HonestStatusBanner>
         </div>
       ) : (
@@ -186,18 +161,20 @@ export default async function NflWeeklySlatePage({
                             : ""}
                         </p>
                       </div>
-                      <div className="flex flex-wrap gap-2">
-                        <span
-                          className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${tagClass(card.publishTagSpread)}`}
-                        >
-                          Spread {card.publishTagSpread ?? "n/a"}
-                        </span>
-                        <span
-                          className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${tagClass(card.publishTagTotal)}`}
-                        >
-                          Total {card.publishTagTotal ?? "n/a"}
-                        </span>
-                      </div>
+                      {card.publishTagSpread || card.publishTagTotal ? (
+                        <div className="flex flex-wrap gap-2">
+                          <span
+                            className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${tagClass(card.publishTagSpread)}`}
+                          >
+                            Spread {card.publishTagSpread ?? "n/a"}
+                          </span>
+                          <span
+                            className={`rounded-lg border px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide ${tagClass(card.publishTagTotal)}`}
+                          >
+                            Total {card.publishTagTotal ?? "n/a"}
+                          </span>
+                        </div>
+                      ) : null}
                     </div>
                     <div className="mt-4 flex flex-wrap gap-2 text-sm">
                       <Link

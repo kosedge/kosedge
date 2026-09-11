@@ -84,6 +84,38 @@ export function listCanonicalNflGames(): CanonicalNflGame[] {
   return GAMES;
 }
 
+/**
+ * Active REG week from the canonical kickoff pack — does not call model-service.
+ * Used when fair-lines is down so Weekly Slate / Overview still know which week
+ * to render.
+ */
+export function currentNflRegWeekFromSchedule(
+  nowMs: number = Date.now(),
+  season: number = NFL_CANONICAL_SCHEDULE_SEASON,
+): number {
+  const byWeek = new Map<number, { min: number; max: number }>();
+  for (const game of GAMES) {
+    if (game.season !== season || game.game_type !== "REG") continue;
+    if (!game.kickoff_utc) continue;
+    const t = Date.parse(game.kickoff_utc);
+    if (!Number.isFinite(t)) continue;
+    const cur = byWeek.get(game.week);
+    if (!cur) byWeek.set(game.week, { min: t, max: t });
+    else {
+      cur.min = Math.min(cur.min, t);
+      cur.max = Math.max(cur.max, t);
+    }
+  }
+  const weeks = [...byWeek.entries()].sort((a, b) => a[0] - b[0]);
+  if (!weeks.length) return 1;
+  const day = 86_400_000;
+  for (const [week, span] of weeks) {
+    if (nowMs >= span.min - 2 * day && nowMs <= span.max + day) return week;
+  }
+  const upcoming = weeks.find(([, span]) => nowMs < span.min);
+  return upcoming?.[0] ?? weeks[0][0];
+}
+
 export function lookupCanonicalNflGame(args: {
   gameId?: string | null;
   season?: number | null;
@@ -133,7 +165,11 @@ export function canonicalKickoffForMatchup(args: {
   week?: number | null;
   awayAbbr?: string | null;
   homeAbbr?: string | null;
-}): { found: boolean; kickoffUtc: string | null; game: CanonicalNflGame | null } {
+}): {
+  found: boolean;
+  kickoffUtc: string | null;
+  game: CanonicalNflGame | null;
+} {
   const game = lookupCanonicalNflGame(args);
   if (!game) return { found: false, kickoffUtc: null, game: null };
   return { found: true, kickoffUtc: game.kickoff_utc, game };

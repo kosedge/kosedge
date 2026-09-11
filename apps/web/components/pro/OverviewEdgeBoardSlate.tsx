@@ -13,8 +13,7 @@ import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
 const SLATE_META: Record<string, { title: string; emptyHint: string }> = {
   nfl: {
     title: "This Week’s Slate",
-    emptyHint:
-      "No NFL REG week on the board yet — schedule not released or not pulled. Shell stays ready; we do not invent matchups.",
+    emptyHint: "No games currently scheduled for this slate.",
   },
   cfb: {
     title: "This Week’s Slate",

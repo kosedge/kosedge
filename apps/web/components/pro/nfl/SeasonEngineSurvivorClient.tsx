@@ -220,8 +220,7 @@ export default function SeasonEngineSurvivorClient({
           <p className="font-semibold text-red-100">Could not rank picks</p>
           <p className="mt-1 text-red-200/90">{error}</p>
           <p className="mt-2 text-xs text-red-200/70">
-            Retry in a moment. If this persists, the model-service may be
-            unreachable.
+            Retry in a moment. Model data is temporarily unavailable.
           </p>
         </div>
       ) : null}
