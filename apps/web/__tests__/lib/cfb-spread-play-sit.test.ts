@@ -9,6 +9,7 @@ import {
   CFB_PLAY_EDGE_PTS,
   CFB_SPREAD_PLAY_ELIGIBLE,
   CFB_TOTALS_PLAY_ELIGIBLE,
+  CFB_EDGE_BOARD_PUBLIC_ENABLED,
 } from "@/lib/cfb-trusted-market";
 
 /**
@@ -55,6 +56,7 @@ describe("CFB spread PLAY sit (tagger only)", () => {
   it("flag is false; LEAN/|12| cuts unchanged; totals sit stays", () => {
     expect(CFB_SPREAD_PLAY_ELIGIBLE).toBe(false);
     expect(CFB_TOTALS_PLAY_ELIGIBLE).toBe(false);
+    expect(CFB_EDGE_BOARD_PUBLIC_ENABLED).toBe(false);
     expect(CFB_PLAY_EDGE_PTS).toBe(4.0);
     expect(CFB_LEAN_EDGE_PTS).toBe(2.5);
     expect(CFB_ABSURD_VS_KEI_PTS).toBe(12);

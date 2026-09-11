@@ -1,16 +1,13 @@
 {
-  "as_of": "2026-08-12",
-  "team_count": 134,
-  "unmatched": [
-    "FAY",
-    "SOUTH"
-  ],
+  "as_of": "2026-09-11",
+  "team_count": 145,
+  "unmatched": [],
   "coverage": {
-    "teams_with_roster": 134,
-    "teams_with_named_qb": 134,
-    "teams_with_portal_in": 129,
-    "total_athletes": 13353,
-    "total_depth_rows": 5903
+    "teams_with_roster": 145,
+    "teams_with_named_qb": 145,
+    "teams_with_portal_in": 140,
+    "total_athletes": 14453,
+    "total_depth_rows": 6395
   },
   "cfbd": {
     "enabled": false,

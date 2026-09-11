@@ -32,8 +32,12 @@ def test_tamu_and_packaged_aliases() -> None:
 def test_missouri_is_not_ole_miss() -> None:
     known = known_engine_codes()
     assert resolve_team_code(name="Missouri Tigers", abbr="MIZ", known_codes=known) == "MIZZ"
+    assert resolve_team_code(name="Missouri", abbr="MIZZ", known_codes=known) == "MIZZ"
+    assert resolve_team_code(name="Missouri State", abbr="MOST", known_codes=known) == "MOST"
+    assert resolve_team_code(name="Missouri State Bears", abbr="MOST", known_codes=known) == "MOST"
     assert resolve_team_code(name="Ole Miss Rebels", abbr="MISS", known_codes=known) == "MISS"
     assert resolve_team_code(name="Missouri Tigers", abbr="MIZ", known_codes=known) != "MISS"
+    assert resolve_team_code(name="Missouri State", abbr="MOST", known_codes=known) != "MIZZ"
 
 
 def test_fcs_unknown_stays_unmapped() -> None:

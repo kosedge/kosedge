@@ -19,6 +19,12 @@ from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
 from src.services.cfb_season_engine.conferences import conference_for
 from src.services.cfb_season_engine.fbs_universe import official_fbs_codes
+from src.services.cfb_season_engine.name_to_code import P0_REQUIRED_CODES
+from src.services.cfb_season_engine.team_features import (
+    MissingRequiredTeamFeature,
+    require_finite_power_for_codes,
+    require_finite_power_index,
+)
 from src.services.cfb_season_engine.home_field import resolve_hfa_points
 from src.services.cfb_season_engine.margin_calibration import (
     apply_calibrated_scores,
@@ -30,7 +36,11 @@ from src.services.cfb_season_engine.official_schedule import (
 )
 from src.services.cfb_season_engine.priors import ENGINE_VERSION, score_noise_sd_for_week
 from src.services.cfb_season_engine.team_projection import expected_team_points
-from src.services.cfb_season_engine.types import EngineUniverse, ScheduledGame
+from src.services.cfb_season_engine.types import (
+    EngineUniverse,
+    ScheduledGame,
+    TeamProjectionState,
+)
 
 USED_IN_SPREAD = False
 POWER_VERSION = "cfb-power-sot-v0.15-20260814"
@@ -63,6 +73,8 @@ def _efficiency_fill(source: str) -> str:
         return "thin"
     if src == "league_average_fill":
         return "league_avg"
+    if not src:
+        return "missing"
     return "sp_plus_or_packaged"
 
 
@@ -107,6 +119,58 @@ def _next_opponent(
                 "neutral_site": row.get("neutral_site"),
             }
     return None
+
+
+def sit_missing_power_from_sot_rows(
+    universe: EngineUniverse,
+    rows: Iterable[Mapping[str, Any]],
+    *,
+    required: Optional[Iterable[str]] = None,
+    context: str = "rebuild/pack",
+) -> int:
+    """Attach SoT rows that already have real indices.
+
+    Null power on *non-required* codes is omitted (never ``or 1.0``).
+    Required official-FBS slate codes hard-fail the rebuild/pack.
+    """
+    required_set = {str(c).upper() for c in (required or ()) if c}
+    sat = 0
+    blocked: List[str] = []
+    for row in rows:
+        code = str(row.get("team") or "").upper()
+        if not code or code in universe.teams:
+            continue
+        try:
+            off = require_finite_power_index(
+                row.get("offense_index"), field="offense_index", team=code
+            )
+            deff = require_finite_power_index(
+                row.get("defense_index"), field="defense_index", team=code
+            )
+        except MissingRequiredTeamFeature:
+            if code in required_set:
+                blocked.append(f"{code}:null_power")
+                continue
+            sat += 1
+            continue
+        universe.teams[code] = TeamProjectionState(
+            team=code,
+            offense_index=off,
+            defense_index=deff,
+            early_season_uncertainty=float(row.get("early_season_uncertainty") or 0.35),
+            source="power_sot_v0.15_fill",
+            fidelity="approximate",
+            notes={"fill": "power_sot_identity_gap"},
+        )
+    if required_set:
+        try:
+            require_finite_power_for_codes(
+                universe, required_set, context=context
+            )
+        except MissingRequiredTeamFeature as exc:
+            extra = f" blocked={blocked}" if blocked else ""
+            raise MissingRequiredTeamFeature(f"{exc}{extra}") from exc
+    return sat
 
 
 def power_row_from_universe(
@@ -439,6 +503,15 @@ def package_research_desk(
         power=power,
         as_of=stamp_as_of,
         artifact_id=stamp_artifact,
+    )
+    require_finite_power_for_codes(
+        {
+            row["team"]: row
+            for row in (power.get("teams") or [])
+            if str(row.get("team") or "") in set(P0_REQUIRED_CODES)
+        },
+        P0_REQUIRED_CODES,
+        context="package_research_desk",
     )
     paths = {
         "power": write_json(POWER_PACK_PATH, disk_power),
