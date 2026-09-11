@@ -61,23 +61,27 @@ export const CFB_AFFILIATION_OVERLAY: Record<string, string> = {
   ARMY: "AAC",
 };
 
-const FILTER_TO_CONF: Record<Exclude<CfbConferenceFilter, "all" | "p4">, string> =
-  {
-    sec: "SEC",
-    "big-ten": "Big Ten",
-    acc: "ACC",
-    "big-12": "Big 12",
-    independent: "Independent",
-    aac: "AAC",
-    mwc: "Mountain West",
-    "sun-belt": "Sun Belt",
-    mac: "MAC",
-    cusa: "CUSA",
-    "pac-12": "Pac-12",
-  };
+const FILTER_TO_CONF: Record<
+  Exclude<CfbConferenceFilter, "all" | "p4">,
+  string
+> = {
+  sec: "SEC",
+  "big-ten": "Big Ten",
+  acc: "ACC",
+  "big-12": "Big 12",
+  independent: "Independent",
+  aac: "AAC",
+  mwc: "Mountain West",
+  "sun-belt": "Sun Belt",
+  mac: "MAC",
+  cusa: "CUSA",
+  "pac-12": "Pac-12",
+};
 
 export function parseCfbConferenceFilter(raw?: string): CfbConferenceFilter {
-  const key = String(raw || "all").trim().toLowerCase();
+  const key = String(raw || "all")
+    .trim()
+    .toLowerCase();
   if (CFB_CONFERENCE_FILTERS.some((f) => f.key === key)) {
     return key as CfbConferenceFilter;
   }
@@ -105,7 +109,9 @@ export function teamMatchesConferenceFilter(
   return display === FILTER_TO_CONF[filter];
 }
 
-export function conferencePreviewHref(displayConference: string): string | null {
+export function conferencePreviewHref(
+  displayConference: string,
+): string | null {
   const map: Record<string, string> = {
     SEC: "/pro/cfb/conferences/sec",
     "Big Ten": "/pro/cfb/conferences/big-ten",
@@ -184,6 +190,8 @@ export const CFB_TEAM_DISPLAY_NAMES: Record<string, string> = {
 };
 
 export function cfbTeamDisplayName(code: string): string {
-  const key = String(code || "").trim().toUpperCase();
+  const key = String(code || "")
+    .trim()
+    .toUpperCase();
   return CFB_TEAM_DISPLAY_NAMES[key] || key;
 }

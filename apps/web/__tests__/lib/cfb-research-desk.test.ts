@@ -69,10 +69,12 @@ describe("cfb conference filter", () => {
     expect(teamMatchesConferenceFilter("USF", "AAC", "p4")).toBe(false);
     expect(CFB_AFFILIATION_OVERLAY.MIZZ).toBe("SEC");
     expect(CFB_AFFILIATION_OVERLAY.CSU).toBe("Pac-12");
-    expect(teamMatchesConferenceFilter("MIZZ", "Independent", "sec")).toBe(true);
-    expect(teamMatchesConferenceFilter("ND", "Independent", "independent")).toBe(
+    expect(teamMatchesConferenceFilter("MIZZ", "Independent", "sec")).toBe(
       true,
     );
+    expect(
+      teamMatchesConferenceFilter("ND", "Independent", "independent"),
+    ).toBe(true);
   });
 });
 
