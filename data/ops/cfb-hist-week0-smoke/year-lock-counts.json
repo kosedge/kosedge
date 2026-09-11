@@ -1,9 +1,38 @@
 {
-  "note": "Smoke only — 6 teams. Proves ESPN core athlete lists are year-locked. Not a full Week-0 pack. Site roster ?season= returns the 2026 club (~100) for every year and is forbidden.",
+  "note": "Smoke only \u2014 6 teams. Proves ESPN core athlete lists are year-locked. Not a full Week-0 pack. Site roster ?season= returns the 2026 club (~100) for every year and is forbidden. 2025 counts are preseason-year lists (not 2026 recruiting/SP+).",
   "source": "sports.core.api.espn.com seasons/{Y}/teams/{id}/athletes",
   "athlete_counts": {
-    "2023": {"AFA": 215, "AKR": 235, "ALA": 242, "APP": 207, "ARI": 193, "ARK": 218},
-    "2024": {"AFA": 196, "AKR": 159, "ALA": 182, "APP": 155, "ARI": 152, "ARK": 171},
-    "2026_live_snapshot": {"AFA": 100, "AKR": 88, "ALA": 100, "APP": 88, "ARI": 100, "ARK": 100}
+    "2023": {
+      "AFA": 215,
+      "AKR": 235,
+      "ALA": 242,
+      "APP": 207,
+      "ARI": 193,
+      "ARK": 218
+    },
+    "2024": {
+      "AFA": 196,
+      "AKR": 159,
+      "ALA": 182,
+      "APP": 155,
+      "ARI": 152,
+      "ARK": 171
+    },
+    "2025": {
+      "AFA": 199,
+      "AKR": 153,
+      "ALA": 177,
+      "APP": 178,
+      "ARI": 172,
+      "ARK": 185
+    },
+    "2026_live_snapshot": {
+      "AFA": 100,
+      "AKR": 88,
+      "ALA": 100,
+      "APP": 88,
+      "ARI": 100,
+      "ARK": 100
+    }
   }
 }

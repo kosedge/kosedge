@@ -36,7 +36,7 @@ Same-path lock: 2026 live = ESPN roster + QB + units **recruiting-anchored** + *
 
 | Field | Status | What we did |
 |---|---|---|
-| ESPN core athletes, year-locked | **Reconstructable** | `seasons/{Y}/teams/{id}/athletes`. Smoke: ALA 242 (2023) / 182 (2024) / 100 (2026). |
+| ESPN core athletes, year-locked | **Reconstructable** | `seasons/{Y}/teams/{id}/athletes`. Smoke ALA: 242 (2023) / 182 (2024) / **177 (2025)** / 100 (2026 live pack). 2025 lists exist and are year-locked; they are not a 2026 recruiting/SP+ substitute. |
 | Site roster `?season=Y` | **Forbidden** | Ignores year; returns the current 2026 club. |
 | Connelly SP+ 2022–2024 finals | **Missing** | CFBD 401. ESPN Insider HTML has 0 `<tr>`. 2025 final is public (already the 2026 carry). Must not reuse 2025 SP+ as a 2023–25 prior. |
 | SDV `cfb_ratings` adj EPA | **Available, not SP+** | Used for 2023–24 efficiency. Labeled. |
@@ -50,7 +50,9 @@ Same-path lock: 2026 live = ESPN roster + QB + units **recruiting-anchored** + *
 Full field table: `src/services/cfb_season_engine/hist_week0.py`  
 Year-lock smoke: `data/ops/cfb-hist-week0-smoke/year-lock-counts.json`
 
-A packager exists (`scripts/cfb/package_historical_week0_state.py`) that writes year-locked athletes and **leaves unit talent at 50**. That is honest. It is **not** the 2026 live stack, because 2026 unit talent is `0.62 * recruiting + …` and we refuse to copy 2026 recruiting onto 2023.
+A packager exists (`scripts/cfb/package_historical_week0_state.py`) that writes year-locked athletes and **leaves unit talent at 50**. That is honest. It is **not** the 2026 live stack, because 2026 unit talent is `0.62 * recruiting + …` and we refuse to copy 2026 recruiting onto 2023–25.
+
+2025 Week-0 *inputs* were audited the same way (year-locked ESPN lists exist). **2025 residuals were not scored.** Reconstructing the 2025 roster list is not opening the 2025 holdout.
 
 ---
 
@@ -87,12 +89,57 @@ Path actually scored: `hist_cal_league_avg_fallback_no_recon_pack`
 
 This is the same identity hist-cal already graded: league-avg roster/QB/units + prior-year SDV adj-EPA.
 
-- Frozen vs close: **slightly Under** (−0.46), MAE 5.56  
-- W1 mean resid +0.20 (n=153); W2 **−1.48** (n=100)  
-- High projected totals (≥60) only +3.4 vs close — not +10  
+### Headlines
+
+- Frozen vs close: **slightly Under** (mean −0.46 / median −0.34), MAE 5.56, RMSE 7.02; 120 Over / 132 Under  
+- Frozen vs actual: mean −0.23, MAE 13.83, RMSE 17.25  
+- Market vs actual MAE 12.61 / RMSE 15.56 — books beat the model on realized scoring, with no Over-drunk model shape  
 - Matchup inflation **−2.07**  
-- Neutralizing matchup **hurts** close MAE (5.56 → 5.88)  
-- Market vs actual totals MAE 12.61; frozen vs actual 13.83 — books beat the model on realized scoring, as expected, with no Over-drunk shape  
+- Neutralizing matchup **hurts** close MAE/RMSE (+0.32 / +0.21) and flips the mean residual to +1.61  
+- Sum-only (b) and level-offset (a): **not fit** (`lambda_b = null`)  
+- Spread identity on the sum-only transform (λ=0.5 identity check on scored rows): **0 violations**
+
+### Error tails (frozen vs close)
+
+| | p90 \|err\| | p95 \|err\| | max \|err\| | share >10 | share >15 |
+|---|---:|---:|---:|---:|---:|
+| vs close | 11.95 | 13.81 | 20.27 | 16.2% | 3.6% |
+| vs actual | 28.42 | 32.63 | 55.23 | 55.3% | 39.1% |
+
+Realized-score tails are large because early-season totals are noisy. Close-line tails are not a +10 systematic Over.
+
+### Calibration by predicted-total bucket (frozen vs close)
+
+| Bucket | n | mean | MAE |
+|---|---:|---:|---:|
+| <48 | 70 | **−4.77** | 6.13 |
+| 48–52 | 68 | −0.40 | 5.18 |
+| 52–56 | 59 | +1.49 | 5.66 |
+| 56–60 | 27 | +2.10 | 4.68 |
+| ≥60 | 29 | **+3.44** | 5.71 |
+
+The high bucket is +3.4, not +10. The low bucket is Under — opposite of 2026 live.
+
+### Week
+
+| Week | n | mean | MAE | RMSE |
+|---|---:|---:|---:|---:|
+| W1 | 153 | +0.20 | 5.20 | 6.74 |
+| W2 | 100 | **−1.48** | 6.12 | 7.43 |
+
+2023–24 W2 is slightly Under. 2026 W2 is +10 Over. Same week window, opposite sign.
+
+### Matchup family (2026 affiliation map; 2023 Pac-12 labeled by that map)
+
+| Family | n | mean | MAE |
+|---|---:|---:|---:|
+| P4 vs P4 | 81 | −0.59 | 5.50 |
+| P4 vs G5 | 99 | −0.94 | 5.17 |
+| G5 vs G5 | 73 | +0.32 | 6.17 |
+| peer \|spread\|<10 | 194 | −0.68 | 5.79 |
+| cupcake \|spread\|≥17 | 10 | +1.44 | 4.65 |
+
+No family on this path is +8 to +10.
 
 **The +8 to +10 2026 phenomenon is not in 2023–24 on this path.**
 

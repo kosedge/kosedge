@@ -47,7 +47,9 @@ from src.services.cfb_season_engine.team_projection import (  # noqa: E402
     project_game,
 )
 from src.services.cfb_season_engine.totals_guard_holdout import (  # noqa: E402
+    CUPCAKE_ABS_SPREAD_GE,
     FIT_SEASONS,
+    PEER_ABS_SPREAD_LT,
     PRIMARY_WEEK_MAX,
     apply_level_offset,
     apply_matchup_inflation_dampen,
@@ -55,8 +57,11 @@ from src.services.cfb_season_engine.totals_guard_holdout import (  # noqa: E402
     fit_lambda_ols,
     fit_level_offset,
     matchup_inflation_on_sum,
+    mismatch_bucket,
     summarize_kei_vs_close,
 )
+
+P4_CONFS = {"SEC", "Big Ten", "ACC", "Big 12"}
 from src.services.cfb_season_engine.types import EngineUniverse  # noqa: E402
 
 DATA = MS / "src/services/cfb_season_engine/data"
@@ -86,6 +91,62 @@ def _median(xs: Sequence[float]) -> Optional[float]:
     if n % 2:
         return round(s[mid], 4)
     return round(0.5 * (s[mid - 1] + s[mid]), 4)
+
+
+def _quantile(xs: Sequence[float], q: float) -> Optional[float]:
+    if not xs:
+        return None
+    s = sorted(xs)
+    if len(s) == 1:
+        return round(s[0], 4)
+    pos = (len(s) - 1) * q
+    lo = int(pos)
+    hi = min(lo + 1, len(s) - 1)
+    frac = pos - lo
+    return round(s[lo] * (1.0 - frac) + s[hi] * frac, 4)
+
+
+def _tails(xs: Sequence[float]) -> Dict[str, Any]:
+    if not xs:
+        return {
+            "n": 0,
+            "p90_abs": None,
+            "p95_abs": None,
+            "max_abs": None,
+            "share_abs_gt_10": None,
+            "share_abs_gt_15": None,
+        }
+    abs_xs = [abs(x) for x in xs]
+    n = len(abs_xs)
+    return {
+        "n": n,
+        "p90_abs": _quantile(abs_xs, 0.90),
+        "p95_abs": _quantile(abs_xs, 0.95),
+        "max_abs": round(max(abs_xs), 4),
+        "share_abs_gt_10": round(sum(1 for x in abs_xs if x > 10) / n, 4),
+        "share_abs_gt_15": round(sum(1 for x in abs_xs if x > 15) / n, 4),
+    }
+
+
+def _slice_stats(xs: Sequence[float]) -> Dict[str, Any]:
+    return {
+        "n": len(xs),
+        "mean": _mean(xs),
+        "median": _median(xs),
+        "mae": _mae(xs),
+        "rmse": _rmse(xs),
+        "tails": _tails(xs),
+    }
+
+
+def matchup_family(row: Mapping[str, Any]) -> str:
+    home_p4 = str(row.get("home_conference") or "") in P4_CONFS
+    away_p4 = str(row.get("away_conference") or "") in P4_CONFS
+    if home_p4 and away_p4:
+        return "p4_vs_p4"
+    if home_p4 or away_p4:
+        return "p4_vs_g5"
+    return "g5_vs_g5"
 
 
 def load_recon_roster(season: int) -> Dict[str, Any]:
@@ -228,6 +289,15 @@ def project_rows(
                 "total_neutral": t_neutral,
                 "resid_vs_close": model_total - float(g.close_total),
                 "resid_vs_actual": model_total - float(g.home_score + g.away_score),
+                "home_conference": g.home_conference,
+                "away_conference": g.away_conference,
+                "matchup_family": matchup_family(
+                    {
+                        "home_conference": g.home_conference,
+                        "away_conference": g.away_conference,
+                    }
+                ),
+                "spread_bucket": mismatch_bucket(model_spread),
             }
         )
         # Sum-only candidate must not change spread. Check identity after even split.
@@ -380,6 +450,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             # rewrite summarize to use pred vs close/actual
             close_xs = [float(r[key]) - float(r["close_total"]) for r in use]
             act_xs = [float(r[key]) - float(r["actual_total"]) for r in use]
+            frozen_close = comparisons.get("frozen", {}).get("vs_close") or {}
+            frozen_act = comparisons.get("frozen", {}).get("vs_actual") or {}
             comparisons[name] = {
                 "n": len(use),
                 "vs_close": {
@@ -387,20 +459,54 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                     "median_bias": _median(close_xs),
                     "mae": _mae(close_xs),
                     "rmse": _rmse(close_xs),
+                    "over_n": sum(1 for x in close_xs if x > 0),
+                    "under_n": sum(1 for x in close_xs if x < 0),
+                    "tails": _tails(close_xs),
                 },
                 "vs_actual": {
                     "mean_bias": _mean(act_xs),
                     "median_bias": _median(act_xs),
                     "mae": _mae(act_xs),
                     "rmse": _rmse(act_xs),
+                    "over_n": sum(1 for x in act_xs if x > 0),
+                    "under_n": sum(1 for x in act_xs if x < 0),
+                    "tails": _tails(act_xs),
                 },
+                "delta_vs_frozen": {
+                    "mae_vs_close": (
+                        None
+                        if _mae(close_xs) is None or frozen_close.get("mae") is None
+                        else round(float(_mae(close_xs)) - float(frozen_close["mae"]), 4)
+                    ),
+                    "rmse_vs_close": (
+                        None
+                        if _rmse(close_xs) is None or frozen_close.get("rmse") is None
+                        else round(float(_rmse(close_xs)) - float(frozen_close["rmse"]), 4)
+                    ),
+                    "mean_bias_vs_close": (
+                        None
+                        if _mean(close_xs) is None or frozen_close.get("mean_bias") is None
+                        else round(float(_mean(close_xs)) - float(frozen_close["mean_bias"]), 4)
+                    ),
+                    "mae_vs_actual": (
+                        None
+                        if _mae(act_xs) is None or frozen_act.get("mae") is None
+                        else round(float(_mae(act_xs)) - float(frozen_act["mae"]), 4)
+                    ),
+                }
+                if name != "frozen"
+                else {"note": "baseline"},
             }
 
     by_week = defaultdict(list)
     by_bucket = defaultdict(list)
+    by_family = defaultdict(list)
+    by_spread = defaultdict(list)
     for r in labeled:
         by_week[f"W{r['week']}"].append(r["resid_vs_close"])
         by_bucket[bucket_pred_total(float(r["model_total"]))].append(r["resid_vs_close"])
+        by_family[str(r.get("matchup_family") or "unknown")].append(r["resid_vs_close"])
+        by_spread[str(r.get("spread_bucket") or "unknown")].append(r["resid_vs_close"])
 
     payload = {
         "ok": True,
@@ -428,9 +534,20 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         },
         "comparisons_fit_2023_2024_w0_2": comparisons,
         "slices_frozen_vs_close": {
-            "week": {k: {"n": len(v), "mean": _mean(v), "mae": _mae(v)} for k, v in by_week.items()},
-            "pred_total_bucket": {
-                k: {"n": len(v), "mean": _mean(v), "mae": _mae(v)} for k, v in by_bucket.items()
+            "week": {k: _slice_stats(v) for k, v in by_week.items()},
+            "pred_total_bucket": {k: _slice_stats(v) for k, v in by_bucket.items()},
+            "matchup_family": {k: _slice_stats(v) for k, v in by_family.items()},
+            "spread_bucket": {k: _slice_stats(v) for k, v in by_spread.items()},
+            "notes": {
+                "matchup_family": (
+                    "P4 = SEC/B1G/ACC/Big 12 on the packaged 2026 affiliation map. "
+                    "2023 Pac-12 / 2024 realignment games are labeled by that map, "
+                    "not contemporaneous conference names."
+                ),
+                "spread_bucket": (
+                    f"peer |model_spread|<{PEER_ABS_SPREAD_LT}; "
+                    f"cupcake |model_spread|>={CUPCAKE_ABS_SPREAD_GE}."
+                ),
             },
         },
         "stop": (not inflation_reproduced) or bool(inv.get("stop_same_path")),
