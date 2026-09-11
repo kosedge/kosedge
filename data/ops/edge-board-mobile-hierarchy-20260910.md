@@ -66,3 +66,11 @@ Fixture gallery `/dev/edge-board-mobile-qa` (no Odds API). Production www first-
 | `data/ops/qa/edge-board-mobile-hierarchy/after-tablet-820x1180.png` | tablet below lg (still cards) |
 | `data/ops/qa/edge-board-mobile-hierarchy/after-desktop-1440x900.png` | desktop ≥lg |
 | `data/ops/qa/edge-board-mobile-hierarchy/after-desktop-1440-table.png` | desktop table crop |
+
+## L5 polish follow-on (draft)
+
+Open Overview/Stats is shrink-wrap `min-h-11` disclosure (`text-kos-gold`), not `flex-1` / `rounded-lg` / filled CTA. Collapsed stays muted (`text-kos-gold/65`). Desktop ActionDecisionCell / “Lean to” untouched.
+
+| File | What |
+|------|------|
+| `data/ops/qa/edge-board-mobile-l5-polish/after-393-overview-open.png` | NFL LEAN Overview open @ 393 |
