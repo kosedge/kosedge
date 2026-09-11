@@ -534,6 +534,7 @@ export function edgeBoardRowsFromOddsEvents(
         oddsMarketKey: "h2h",
         ...(mlPeriod ? { period: mlPeriod } : {}),
         ...(mlAsOf ? { linesAsOf: mlAsOf } : {}),
+        bookCount: selectedMl.length,
       });
     } else {
       const spreadData: SpreadBookEntry[] = bookmakers.flatMap((b) => {
@@ -600,6 +601,7 @@ export function edgeBoardRowsFromOddsEvents(
         oddsMarketKey: "spreads",
         ...(spreadPeriod ? { period: spreadPeriod } : {}),
         ...(spreadAsOf ? { linesAsOf: spreadAsOf } : {}),
+        bookCount: selectedSpreadData.length,
       });
     }
 
@@ -663,6 +665,7 @@ export function edgeBoardRowsFromOddsEvents(
       ...(hadFeaturedTotals ? { oddsMarketKey: "totals" } : {}),
       ...(totalPeriod ? { period: totalPeriod } : {}),
       ...(totalAsOf ? { linesAsOf: totalAsOf } : {}),
+      bookCount: orderedTotals.length,
     });
   }
 

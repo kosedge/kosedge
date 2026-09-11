@@ -32,6 +32,7 @@ import {
   sanitizeMarketCaptureIso,
 } from "@/lib/market-asof-stamp";
 import { scrubActionEdgeMagnitude } from "@/lib/edge-board-customer-truth";
+import { rowHasVerifiedMarket, sortOddsHorizonRows } from "@/lib/odds-horizon";
 
 const ET = "America/New_York";
 
@@ -798,18 +799,24 @@ function rowHasKei(row: EdgeBoardRow): boolean {
 }
 
 /**
- * NFL Edge Board is projection-backed (REG fair-lines). Drop odds-only extras
- * (common in PRE) that have Open/Best but no KEINFL — avoids empty-KEI noise.
+ * Keep REG games that have KEI **or** a verified sportsbook market.
+ * PRE odds-only extras stay dropped (exhibition noise).
+ * Odds-without-KEI rows paint MARKET + as_of with honest blank Fair.
  */
 export function filterNflProjectionBackedRows(
   rows: EdgeBoardRow[],
 ): EdgeBoardRow[] {
-  const keiGames = new Set<string>();
+  const keepGames = new Set<string>();
   for (const row of rows) {
-    if (row.game && rowHasKei(row)) keiGames.add(row.game);
+    if (!row.game) continue;
+    if (rowSeasonType(row) === "PRE") continue;
+    if (rowHasKei(row) || hasSportsbookPrice(row)) keepGames.add(row.game);
   }
-  if (keiGames.size === 0) return [];
-  return rows.filter((row) => row.game != null && keiGames.has(row.game));
+  if (keepGames.size === 0) return [];
+  return rows.filter((row) => {
+    if (row.game == null || !keepGames.has(row.game)) return false;
+    return rowSeasonType(row) !== "PRE";
+  });
 }
 
 function rowSeasonType(row: EdgeBoardRow): string {
@@ -893,23 +900,9 @@ export function filterNflLiveMarketRows(rows: EdgeBoardRow[]): EdgeBoardRow[] {
   return filterNflOddsPostedRows(rows);
 }
 
-/** Put live-book games first so Open/Best aren't buried under provisional rows. */
+/** Horizon sort: live/today → upcoming chrono. Not giant model edges first. */
 export function sortNflEdgeBoardRows(rows: EdgeBoardRow[]): EdgeBoardRow[] {
-  const rank = (row: EdgeBoardRow): number => {
-    const bookKey = String(
-      (row as EdgeBoardRow & { bookKey?: string }).bookKey ?? "",
-    ).toLowerCase();
-    if (bookKey && bookKey !== "keinfl" && bookKey !== "market") return 0;
-    if (bookKey === "market") return 1;
-    return 2;
-  };
-  return [...rows].sort((a, b) => {
-    const rd = rank(a) - rank(b);
-    if (rd !== 0) return rd;
-    return String(a.commenceTime ?? a.time ?? "").localeCompare(
-      String(b.commenceTime ?? b.time ?? ""),
-    );
-  });
+  return sortOddsHorizonRows(rows);
 }
 
 /**
@@ -1006,8 +999,22 @@ export function overlayOddsOntoFairLineRows(
     if (src.oddsMarketKey) tgt.oddsMarketKey = src.oddsMarketKey;
   }
 
-  // Do not append odds-only extras (PRE noise, unmatched books). NFL board is
-  // fair-line / KEINFL-backed; Odds overlays prices onto those rows only.
+  // Append REG odds-only games (verified books, no KEI). PRE stays off.
+  const coveredGames = new Set<string>();
+  for (const row of fairRows) {
+    if (row.game) coveredGames.add(row.game);
+  }
+  const extras: EdgeBoardRow[] = [];
+  for (const odds of oddsRows) {
+    const game = String(odds.game ?? "");
+    if (!game || coveredGames.has(game)) continue;
+    if (rowSeasonType(odds) === "PRE") continue;
+    if (!rowHasVerifiedMarket(odds)) continue;
+    extras.push({
+      ...odds,
+      oddsWithoutKei: true,
+    } as EdgeBoardRow);
+  }
   // Current may land here while server decision still has Mkt — → recompute Action.
-  return syncEdgeBoardActionsWithCurrent(fairRows);
+  return syncEdgeBoardActionsWithCurrent([...fairRows, ...extras]);
 }

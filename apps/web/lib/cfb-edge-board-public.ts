@@ -9,6 +9,8 @@
  * source status, market as_of, canonical game joins, and sanity checks on
  * extreme model-vs-market gaps.
  *
+ * P0 Odds Expansion must not flip this constant.
+ *
  * Internal QA / research:
  *   - `/api/edge-board/cfb/today` stays secret-gated (existing internal path)
  *   - set `CFB_EDGE_BOARD_INTERNAL=1` (server) to serve `/edge-board/cfb`
