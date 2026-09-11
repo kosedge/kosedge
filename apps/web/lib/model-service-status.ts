@@ -112,7 +112,7 @@ export function honestEmptySlateCopy(status?: string | null): string {
   switch (status?.trim()) {
     case "preseason_empty":
     case "no_reg_week_games":
-      return "No REG games in this pricing window. Week 1 Edge Board / KEI should load from fair-lines when the model service is healthy — KosEdge does not invent preseason exhibition edges. Use Camp Desk and the guest walkthrough for camp context.";
+      return "No games currently scheduled for this slate. Model lines will appear when they are available.";
     case "offseason_empty":
     case "no_slate":
       return "No slate games in the current window. Check back when the season schedule is live.";
@@ -127,9 +127,12 @@ export function honestEmptySlateCopy(status?: string | null): string {
   }
 }
 
-export function modelUnreachableCopy(error?: string | null): string {
-  if (error?.includes("MODEL_SERVICE_URL")) {
-    return "Model service is not configured for this environment.";
-  }
-  return "Model service is temporarily unreachable. Retry shortly — local fallbacks may still load below.";
+export const MODEL_DATA_UNAVAILABLE_COPY =
+  "Model data temporarily unavailable.";
+
+export const LEGITIMATE_EMPTY_SLATE_COPY =
+  "No games currently scheduled for this slate.";
+
+export function modelUnreachableCopy(_error?: string | null): string {
+  return MODEL_DATA_UNAVAILABLE_COPY;
 }

@@ -18,6 +18,12 @@ import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
 import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
 import { parseOfficialSlateWeek } from "@/lib/cfb-official-slate";
+import {
+  currentNflRegWeekFromSchedule,
+  lookupCanonicalNflGame,
+} from "@/lib/nfl-canonical-schedule";
+import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
+import { teamDisplayName } from "@/lib/nfl-team-intel";
 
 const OVERVIEW_SLATE_TIMEOUT_MS = 8_000;
 
@@ -155,6 +161,44 @@ export function filterCfbOverviewWeek(games: TonightGame[]): {
 
 type SportSlateLoad = { games: TonightGame[]; week: number | null };
 
+const EMPTY_PRICE = {
+  top: { label: "—", juice: "—" },
+  bottom: { label: "—", juice: "—" },
+};
+
+function nflScheduleTonightGames(week: number): TonightGame[] {
+  return listNflRegWeekScheduleGames(week).map((game) => {
+    const awayName = teamDisplayName(game.awayAbbr);
+    const homeName = teamDisplayName(game.homeAbbr);
+    const packed = lookupCanonicalNflGame({
+      gameId: game.gameId,
+      season: game.season,
+      week: game.week,
+      awayAbbr: game.awayAbbr,
+      homeAbbr: game.homeAbbr,
+    });
+    const label = `${awayName} @ ${homeName}`;
+    return {
+      slug: tonightSlug("nfl", awayName, homeName),
+      sport: "nfl",
+      row: {
+        id: game.gameId,
+        game: label,
+        week: game.week,
+        commenceTime: packed?.kickoff_utc ?? undefined,
+        awayAbbr: game.awayAbbr,
+        homeAbbr: game.homeAbbr,
+        teamA: { name: awayName, site: "Away" as const },
+        teamB: { name: homeName, site: "Home" as const },
+        openOU: EMPTY_PRICE,
+        openLine: EMPTY_PRICE,
+        bestLine: EMPTY_PRICE,
+        bestOU: EMPTY_PRICE,
+      },
+    };
+  });
+}
+
 async function loadSportGames(sportKey: string): Promise<SportSlateLoad> {
   const sport = sportKey.toLowerCase();
 
@@ -165,6 +209,8 @@ async function loadSportGames(sportKey: string): Promise<SportSlateLoad> {
     if (games.length) {
       return { games, week: dominantWeek(games) };
     }
+    const scheduledWeek = currentNflRegWeekFromSchedule();
+    const scheduled = nflScheduleTonightGames(scheduledWeek);
     try {
       const flat = await loadAssembledEdgeBoardRows("nfl", { slate: "full" });
       const legacy = flatRowsToLegacy(Array.isArray(flat) ? flat : [], "nfl");
@@ -182,9 +228,10 @@ async function loadSportGames(sportKey: string): Promise<SportSlateLoad> {
           week,
         };
       }
-      return { games, week: null };
+      if (games.length) return { games, week: null };
+      return { games: scheduled, week: scheduledWeek };
     } catch {
-      return { games: [], week: null };
+      return { games: scheduled, week: scheduledWeek };
     }
   }
 
@@ -242,6 +289,16 @@ export async function loadOverviewSlateGames(
     if (timeoutId) clearTimeout(timeoutId);
 
     if (result.kind === "timeout") {
+      if (sport === "nfl") {
+        const week = currentNflRegWeekFromSchedule();
+        const games = nflScheduleTonightGames(week);
+        return {
+          games,
+          status: games.length > 0 ? "timeout" : "empty",
+          week,
+          weekLabel: week != null ? `Week ${week}` : null,
+        };
+      }
       return { games: [], status: "timeout", week: null, weekLabel: null };
     }
 
@@ -257,6 +314,16 @@ export async function loadOverviewSlateGames(
     };
   } catch {
     if (timeoutId) clearTimeout(timeoutId);
+    if (sport === "nfl") {
+      const week = currentNflRegWeekFromSchedule();
+      const games = nflScheduleTonightGames(week);
+      return {
+        games,
+        status: games.length > 0 ? "error" : "empty",
+        week,
+        weekLabel: week != null ? `Week ${week}` : null,
+      };
+    }
     return { games: [], status: "error", week: null, weekLabel: null };
   }
 }

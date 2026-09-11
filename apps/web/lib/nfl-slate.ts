@@ -21,6 +21,13 @@ import {
 } from "@/lib/nfl-preseason-odds";
 import { safeUpperCase } from "@/lib/sports";
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
+import {
+  currentNflRegWeekFromSchedule,
+  lookupCanonicalNflGame,
+} from "@/lib/nfl-canonical-schedule";
+import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
+import { teamDisplayName } from "@/lib/nfl-team-intel";
+import { MODEL_DATA_UNAVAILABLE_COPY } from "@/lib/model-service-status";
 
 export type NflSlateCard = {
   id: string;
@@ -47,7 +54,7 @@ export type NflSlateCard = {
   matchupHref: string;
   previewAwayHref: string;
   previewHomeHref: string;
-  source: "fair-lines" | "espn" | "camp-ref";
+  source: "fair-lines" | "espn" | "camp-ref" | "schedule";
   note: string;
 };
 
@@ -57,6 +64,8 @@ export type NflWeeklySlate = {
   generatedAt: string;
   modelVersion: string;
   error?: string;
+  /** True when schedule/market cards rendered without a bound model run. */
+  modelUnavailable?: boolean;
   sections: Array<{
     key: string;
     title: string;
@@ -75,14 +84,21 @@ export type NflWeeklySlate = {
   };
 };
 
-function tagNote(row: Pick<NflFairLineRow, "publishTagSpread" | "publishTagTotal" | "seasonType">): string {
+function tagNote(
+  row: Pick<
+    NflFairLineRow,
+    "publishTagSpread" | "publishTagTotal" | "seasonType"
+  >,
+): string {
   if (safeUpperCase(row.seasonType) === "PRE") {
     return "Preseason — informational only; season PLAY tags stay blocked.";
   }
   const tags = [row.publishTagSpread, row.publishTagTotal].filter(Boolean);
   if (tags.includes("PLAY")) return "Publish desk: PLAY threshold cleared.";
-  if (tags.includes("LEAN")) return "Publish desk: LEAN — monitor juice and key numbers.";
-  if (tags.includes("PASS")) return "Publish desk: PASS — model vs market separation is thin.";
+  if (tags.includes("LEAN"))
+    return "Publish desk: LEAN — monitor juice and key numbers.";
+  if (tags.includes("PASS"))
+    return "Publish desk: PASS — model vs market separation is thin.";
   return "Model reference loaded for matchup prep.";
 }
 
@@ -105,9 +121,7 @@ function fairLineToCard(row: NflFairLineRow): NflSlateCard {
     homeAbbr,
     awayTeam: row.awayTeam || awayAbbr,
     homeTeam: row.homeTeam || homeAbbr,
-    marketSpread: formatSpread(
-      row.bestSpreadHome ?? row.marketSpreadHome,
-    ),
+    marketSpread: formatSpread(row.bestSpreadHome ?? row.marketSpreadHome),
     modelSpread: formatSpread(row.spreadHome),
     marketTotal: formatTotal(row.bestTotal ?? row.marketTotal),
     modelTotal: formatTotal(row.totalMean),
@@ -135,11 +149,7 @@ function espnToCard(
   const awayAbbr = safeUpperCase(game.awayAbbr, "AWAY");
   const homeAbbr = safeUpperCase(game.homeAbbr, "HOME");
   const slug = `${awayAbbr}-${homeAbbr}`.toLowerCase();
-  const campSpread = campReferenceSpreadHome(
-    homeAbbr,
-    awayAbbr,
-    strength,
-  );
+  const campSpread = campReferenceSpreadHome(homeAbbr, awayAbbr, strength);
   const marketSpreadNum =
     oddsSnap?.bestSpreadHome ??
     oddsSnap?.marketSpreadHome ??
@@ -153,7 +163,7 @@ function espnToCard(
       ? Math.round((campSpread! - marketSpreadNum) * 100) / 100
       : null;
   const marketBookLabel = oddsSnap
-    ? oddsSnap.bestSpreadBook ?? "Odds API PRE"
+    ? (oddsSnap.bestSpreadBook ?? "Odds API PRE")
     : game.marketDetail
       ? "ESPN consensus"
       : null;
@@ -180,7 +190,7 @@ function espnToCard(
     totalEdge: null,
     bestSpreadBook: marketBookLabel,
     bestTotalBook: oddsSnap
-      ? oddsSnap.bestTotalBook ?? marketBookLabel
+      ? (oddsSnap.bestTotalBook ?? marketBookLabel)
       : marketTotalNum != null
         ? "ESPN consensus"
         : null,
@@ -194,6 +204,86 @@ function espnToCard(
       bundleDirName: strength?.bundleDirName,
     }),
   };
+}
+
+/** Schedule-only REG card. Model fields stay em-dash — never invent KEI/tags. */
+export function scheduleGameToSlateCard(args: {
+  week: number;
+  awayAbbr: string;
+  homeAbbr: string;
+  gameId?: string;
+  season?: number;
+}): NflSlateCard {
+  const season = args.season ?? 2026;
+  const awayAbbr = safeUpperCase(args.awayAbbr, "AWAY");
+  const homeAbbr = safeUpperCase(args.homeAbbr, "HOME");
+  const packed = lookupCanonicalNflGame({
+    gameId: args.gameId,
+    season,
+    week: args.week,
+    awayAbbr,
+    homeAbbr,
+  });
+  const startTime = packed?.kickoff_utc ?? null;
+  const dateToken = (startTime || "today").slice(0, 10);
+  const slug = `${awayAbbr}-${homeAbbr}`.toLowerCase();
+  const gameId =
+    args.gameId ||
+    packed?.game_id ||
+    `${season}-W${String(args.week).padStart(2, "0")}-${awayAbbr}@${homeAbbr}`;
+  return {
+    id: gameId,
+    seasonType: "REG",
+    week: args.week,
+    startTime,
+    kickoffLabel: formatKickoff(startTime),
+    awayAbbr,
+    homeAbbr,
+    awayTeam: teamDisplayName(awayAbbr),
+    homeTeam: teamDisplayName(homeAbbr),
+    marketSpread: "—",
+    modelSpread: "—",
+    marketTotal: "—",
+    modelTotal: "—",
+    referenceLabel: "Model",
+    publishTagSpread: null,
+    publishTagTotal: null,
+    spreadEdge: null,
+    totalEdge: null,
+    bestSpreadBook: null,
+    bestTotalBook: null,
+    matchupHref: `/pro/nfl/matchups/${dateToken}/${slug}`,
+    previewAwayHref: `/pro/nfl/previews/${awayAbbr}`,
+    previewHomeHref: `/pro/nfl/previews/${homeAbbr}`,
+    source: "schedule",
+    note: MODEL_DATA_UNAVAILABLE_COPY,
+  };
+}
+
+export function buildRegCardsFromSchedule(
+  weeks: number[],
+  season = 2026,
+): NflSlateCard[] {
+  const seen = new Set<string>();
+  const cards: NflSlateCard[] = [];
+  for (const week of weeks) {
+    if (!Number.isFinite(week) || week < 1) continue;
+    for (const game of listNflRegWeekScheduleGames(week, season)) {
+      const key = `${game.week}|${game.awayAbbr}|${game.homeAbbr}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      cards.push(
+        scheduleGameToSlateCard({
+          week: game.week,
+          awayAbbr: game.awayAbbr,
+          homeAbbr: game.homeAbbr,
+          gameId: game.gameId,
+          season: game.season,
+        }),
+      );
+    }
+  }
+  return cards;
 }
 
 function resolveDateToken(date: string | null | undefined): {
@@ -231,7 +321,11 @@ export async function buildNflWeeklySlate(
   ]);
 
   const fairCards = fairLines.lines.map(fairLineToCard);
-  const currentWeek = fairLines.currentWeek || 1;
+  const scheduleWeek = currentNflRegWeekFromSchedule();
+  const currentWeek =
+    fairLines.lines.length > 0 && Number.isFinite(fairLines.currentWeek)
+      ? fairLines.currentWeek
+      : scheduleWeek;
 
   let regCards = fairCards.filter((card) => card.seasonType === "REG");
   if (resolved.mode === "week" && resolved.week) {
@@ -243,10 +337,28 @@ export async function buildNflWeeklySlate(
   } else {
     // Default "today" board: current REG week + next week for depth.
     regCards = regCards.filter(
-      (card) =>
-        card.week === currentWeek ||
-        card.week === currentWeek + 1,
+      (card) => card.week === currentWeek || card.week === currentWeek + 1,
     );
+  }
+
+  let usedScheduleFallback = false;
+  if (regCards.length === 0) {
+    const weeks =
+      resolved.mode === "week" && resolved.week
+        ? [resolved.week]
+        : resolved.mode === "iso"
+          ? [scheduleWeek]
+          : [currentWeek, currentWeek + 1];
+    let scheduled = buildRegCardsFromSchedule(weeks, season);
+    if (resolved.mode === "iso" && resolved.iso) {
+      scheduled = scheduled.filter((card) =>
+        (card.startTime || "").startsWith(resolved.iso!),
+      );
+    }
+    if (scheduled.length > 0) {
+      regCards = scheduled;
+      usedScheduleFallback = true;
+    }
   }
 
   const now = Date.now();
@@ -273,9 +385,7 @@ export async function buildNflWeeklySlate(
     (card) => card.source === "camp-ref",
   ).length;
   const preseasonOddsJoinedCount = preCards.filter((card) =>
-    Boolean(
-      preseasonOdds.byMatchup.get(`${card.awayAbbr}@${card.homeAbbr}`),
-    ),
+    Boolean(preseasonOdds.byMatchup.get(`${card.awayAbbr}@${card.homeAbbr}`)),
   ).length;
 
   const sections: NflWeeklySlate["sections"] = [];
@@ -301,8 +411,9 @@ export async function buildNflWeeklySlate(
           : resolved.mode === "week"
             ? `Regular season · ${regWeekLabel}`
             : `Regular season · ${regWeekLabel}–${formatNflBoardWeekLabel(currentWeek + 1, { season })}`,
-      subtitle:
-        "Kos Edge fair-lines with live market join, publish tags, and best-book context.",
+      subtitle: usedScheduleFallback
+        ? "Scheduled matchups. Model lines and publish tags are unavailable."
+        : "Kos Edge fair-lines with live market join, publish tags, and best-book context.",
       cards: regCards.sort((a, b) =>
         (a.startTime || "").localeCompare(b.startTime || ""),
       ),
@@ -314,7 +425,8 @@ export async function buildNflWeeklySlate(
     currentWeek,
     generatedAt: new Date().toISOString(),
     modelVersion: fairLines.modelVersion,
-    error: sections.length === 0 ? fairLines.error : undefined,
+    error: fairLines.error,
+    modelUnavailable: Boolean(fairLines.error) || usedScheduleFallback,
     sections,
     diagnostics: {
       fairLineCount: fairLines.count,

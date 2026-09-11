@@ -1092,8 +1092,8 @@ export default function EdgeBoard({
           {emptyHint
             ? emptyHint
             : isNfl
-              ? "No regular-season fair-lines in the pull window yet (common in early preseason or upstream timeout). We do not invent Open/Best or KEINFL prices, and we do not fill the board with preseason odds-only games."
-              : "No fair-lines or sportsbook rows for this sport right now (often offseason or upstream timeout). We do not invent Open/Best or KEI prices. When the model service or Odds API returns a slate, this board populates automatically."}
+              ? "No games currently scheduled for this slate. Market and model numbers appear when they are available."
+              : "No games currently scheduled for this slate."}
         </p>
       </div>
     );

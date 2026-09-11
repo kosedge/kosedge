@@ -59,16 +59,23 @@ describe("inferHonestEmptySlateStatus", () => {
 });
 
 describe("honestEmptySlateCopy", () => {
-  it("points guests at Edge Board / KEI when REG window is empty", () => {
-    expect(honestEmptySlateCopy("preseason_empty")).toContain("Edge Board");
-    expect(honestEmptySlateCopy("preseason_empty")).toContain("preseason");
+  it("uses a legitimate empty slate, not internal service language", () => {
+    expect(honestEmptySlateCopy("preseason_empty")).toBe(
+      "No games currently scheduled for this slate. Model lines will appear when they are available.",
+    );
+    expect(honestEmptySlateCopy("preseason_empty")).not.toMatch(
+      /model service|fair-lines|token/i,
+    );
   });
 });
 
 describe("modelUnreachableCopy", () => {
-  it("explains misconfiguration distinctly", () => {
-    expect(
-      modelUnreachableCopy("MODEL_SERVICE_URL is not configured."),
-    ).toContain("not configured");
+  it("never leaks env keys or service names to customers", () => {
+    expect(modelUnreachableCopy("MODEL_SERVICE_URL is not configured.")).toBe(
+      "Model data temporarily unavailable.",
+    );
+    expect(modelUnreachableCopy("Unable to reach model service.")).toBe(
+      "Model data temporarily unavailable.",
+    );
   });
 });

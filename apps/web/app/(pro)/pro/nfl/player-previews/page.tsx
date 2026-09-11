@@ -25,6 +25,10 @@ import {
   fantasyPointsPerGame,
   type NflFantasyDraftRankingRow,
 } from "@/lib/nfl-fantasy-draft";
+import {
+  isTransportFailureMessage,
+  MODEL_DATA_UNAVAILABLE_COPY,
+} from "@/lib/model-service-status";
 
 export const dynamic = "force-dynamic";
 
@@ -75,10 +79,11 @@ export default async function NflPlayerPreviewsPage() {
     .filter((row) => ["QB", "RB", "WR", "TE"].includes(row.position))
     .slice(0, 32);
 
-  const error =
-    mvp.error || opoy.error || fantasy.error || null;
-  const total =
-    mvp.rows.length + opoy.rows.length + skillFantasy.length;
+  const rawError = mvp.error || opoy.error || fantasy.error || null;
+  const error = isTransportFailureMessage(rawError)
+    ? MODEL_DATA_UNAVAILABLE_COPY
+    : rawError;
+  const total = mvp.rows.length + opoy.rows.length + skillFantasy.length;
 
   return (
     <main className="mx-auto max-w-6xl px-4 py-8 sm:px-6 sm:py-10">
@@ -141,8 +146,8 @@ export default async function NflPlayerPreviewsPage() {
 
       {total === 0 && !error ? (
         <div className="mt-8 rounded-2xl border border-white/10 bg-black/30 p-6 text-sm text-kos-text/70">
-          Player outlook rows are not available yet from the model service.
-          Check awards and fantasy boards after the next player-cycle materialize.
+          Player outlooks are not available yet. Check back when model data
+          returns.
         </div>
       ) : null}
 

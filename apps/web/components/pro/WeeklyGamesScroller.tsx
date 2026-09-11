@@ -27,8 +27,7 @@ const SPORT_SCROLLER_CONTENT: Record<string, SportScrollerContent> = {
   nfl: {
     sectionTitle: "Weekly Matchups",
     sectionSubtitle: "Board timing, key-number pressure, and model separation.",
-    emptyCopy:
-      "No live REG matchup cards on the board yet — open Weekly Slate for the preseason / camp schedule when posted.",
+    emptyCopy: "No games currently scheduled for this slate.",
     signalHigh: "High edge near key numbers",
     signalModerate: "Actionable key-number lean",
     movementSignal: "Spread shifted",
