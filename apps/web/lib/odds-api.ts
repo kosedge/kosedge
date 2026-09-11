@@ -134,7 +134,7 @@ export function bookDisplay(key: string): string {
   return BOOK_DISPLAY[key.toLowerCase()] ?? key;
 }
 
-type OddsEvent = {
+export type OddsEvent = {
   id: string;
   sport_key: string;
   commence_time: string;
@@ -446,31 +446,16 @@ function orderBooksByPreference<T extends { book: string }>(
   });
 }
 
-/** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
-export async function fetchEdgeBoard(
+/** Map Odds-API (or warehouse-reconstructed) events → Edge Board rows. */
+export function edgeBoardRowsFromOddsEvents(
   sportKey: string,
-  apiKey: string,
-): Promise<EdgeBoardRow[]> {
+  events: readonly OddsEvent[],
+): EdgeBoardRow[] {
   const normalizedSport = sportKey.toLowerCase();
-  const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
-  if (!oddsSportKey) return [];
+  if (!SPORT_KEY_MAP[normalizedSport]) return [];
+  if (!Array.isArray(events) || events.length === 0) return [];
   const isMlb = normalizedSport === "mlb";
   const sportBooks = configuredBooksForSport(normalizedSport);
-  const requestBooks = requestBooksForSport(normalizedSport);
-  // MLB is a moneyline sport on the public board — request h2h, not run lines.
-  const markets = isMlb ? "h2h,totals" : "spreads,totals";
-  const regions = regionsForSport(normalizedSport);
-
-  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
-  const res = await upstreamFetch(url, {
-    cache: "no-store",
-    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
-  }
-  const events = (await res.json()) as OddsEvent[];
 
   const rows: EdgeBoardRow[] = [];
   const commenceTime = (e: OddsEvent) => new Date(e.commence_time).getTime();
@@ -681,6 +666,33 @@ export async function fetchEdgeBoard(
   }
 
   return rows;
+}
+
+/** Fetch edge board rows for a sport. Only uses allowed books (filtered client-side). */
+export async function fetchEdgeBoard(
+  sportKey: string,
+  apiKey: string,
+): Promise<EdgeBoardRow[]> {
+  const normalizedSport = sportKey.toLowerCase();
+  const oddsSportKey = SPORT_KEY_MAP[normalizedSport];
+  if (!oddsSportKey) return [];
+  const isMlb = normalizedSport === "mlb";
+  const requestBooks = requestBooksForSport(normalizedSport);
+  const markets = isMlb ? "h2h,totals" : "spreads,totals";
+  const regions = regionsForSport(normalizedSport);
+
+  const url = `${ODDS_API_BASE}/sports/${oddsSportKey}/odds?regions=${regions}&markets=${markets}&oddsFormat=american&bookmakers=${encodeURIComponent(requestBooks.join(","))}&apiKey=${apiKey}`;
+  const res = await upstreamFetch(url, {
+    cache: "no-store",
+    timeoutMs: UPSTREAM_TIMEOUT_MS.fast,
+  });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(`Odds API ${res.status}: ${text.slice(0, 200)}`);
+  }
+  const events = (await res.json()) as OddsEvent[];
+  if (!Array.isArray(events)) return [];
+  return edgeBoardRowsFromOddsEvents(normalizedSport, events);
 }
 
 /** Legacy alias for NCAAM. */

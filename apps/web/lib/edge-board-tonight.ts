@@ -4,6 +4,11 @@ import type {
 } from "@/lib/flat-rows-to-legacy";
 import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
 import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
+import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
+import {
+  resolveCfbCurrentAssembleWeek,
+  scopeCfbLiveEdgeBoardRows,
+} from "@/lib/cfb-edge-board-week";
 import { getSport, SPORTS } from "@/lib/sports";
 
 /** Build a URL slug from away/home team names (e.g. "Duke", "UNC" -> "duke-unc"). */
@@ -32,7 +37,10 @@ export async function getEdgeBoardRows(
 ): Promise<FlatEdgeBoardRow[]> {
   if (!getSport(sport)) return [];
   try {
-    return await loadAssembledEdgeBoardRows(sport);
+    const rows = await loadAssembledEdgeBoardRows(sport);
+    if (sport.toLowerCase() !== "cfb") return rows;
+    const week = resolveCfbCurrentAssembleWeek();
+    return scopeCfbLiveEdgeBoardRows(stampCfbEdgeBoardWeek(rows), week);
   } catch {
     return [];
   }

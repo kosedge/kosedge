@@ -143,7 +143,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
     primary: [
       { href: "/pro/cfb/overview", label: "Overview", primary: true },
       {
-        href: "/edge-board/cfb?week=1",
+        href: "/edge-board/cfb",
         label: "Edge Board",
         primary: true,
         emphasis: "green",
@@ -264,7 +264,7 @@ export function getKeiLinesBoardHref(sportKey: string): string {
 
 export function getSportEdgeBoardHref(sportKey: string): string {
   const key = sportKey || "nfl";
-  if (key === "cfb") return "/edge-board/cfb?week=1";
+  if (key === "cfb") return "/edge-board/cfb";
   return `/edge-board/${key}`;
 }
 

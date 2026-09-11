@@ -419,3 +419,15 @@ def cfb_season_engine_simulate(
     payload["skeleton"] = False
     payload["season_paths"] = True
     return payload
+
+
+@router.get("/edge-board-odds")
+def cfb_edge_board_odds() -> Dict[str, Any]:
+    """Current NCAAF book observations for CFB Edge Board.
+
+    Warehouse first (beat PROD_LIVE). One cached live pull if warehouse is
+    empty/stale. Never HIST. Never persist. Never invent Fair→Market.
+    """
+    from src.services.cfb_edge_board_odds import current_cfb_odds_events
+
+    return current_cfb_odds_events()

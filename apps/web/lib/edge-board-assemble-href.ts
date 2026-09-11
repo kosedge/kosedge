@@ -1,3 +1,5 @@
+import { resolveCfbCurrentAssembleWeek } from "@/lib/cfb-edge-board-week";
+
 /**
  * Edge Board assemble URL + early bootstrap (#12 GO-1).
  *
@@ -9,7 +11,7 @@
 export type EdgeBoardAssembleHrefInput = {
   sportKey: string;
   slate?: "week1" | "full";
-  /** CFB assemble week. Integer ≥ 0; default 1. Never coerce 2 → 1. */
+  /** CFB assemble week. Integer ≥ 0; default = calendar current week. */
   cfbWeek?: number;
 };
 
@@ -26,7 +28,7 @@ export function edgeBoardAssembleHref(
     const honest =
       typeof week === "number" && Number.isFinite(week) && week >= 0
         ? Math.trunc(week)
-        : 1;
+        : resolveCfbCurrentAssembleWeek();
     qs.set("week", String(honest));
   }
   const q = qs.toString();

@@ -103,7 +103,7 @@ export default async function CfbProjectGamePage({
       honestyNote={cfbModelDeskHonestyNote()}
       primaryHref="/pro/cfb/slate?week=1"
       primaryLabel="Official slate"
-      secondaryHref="/edge-board/cfb?week=1"
+      secondaryHref="/edge-board/cfb"
       secondaryLabel="Edge Board"
     >
       <div className="mt-2 mb-4 flex flex-wrap gap-3 text-xs">

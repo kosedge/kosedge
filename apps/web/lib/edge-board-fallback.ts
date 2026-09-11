@@ -16,17 +16,31 @@ export type EdgeBoardFallbackMeta = {
   rows: EdgeBoardRow[];
 };
 
-export function loadEdgeBoardFallback(sportKey: string): EdgeBoardRow[] {
+export function loadEdgeBoardFallbackMeta(
+  sportKey: string,
+): EdgeBoardFallbackMeta | null {
   const sport = sportKey.toLowerCase();
   const path = getEdgeBoardFallbackPath(sport);
-  if (!existsSync(path)) return [];
+  if (!existsSync(path)) return null;
 
   try {
     const raw = readFileSync(path, "utf-8");
     const data = JSON.parse(raw) as EdgeBoardFallbackMeta | EdgeBoardRow[];
-    if (Array.isArray(data)) return data;
-    return Array.isArray(data.rows) ? data.rows : [];
+    if (Array.isArray(data)) {
+      return { sport, source: "legacy-array", capturedAt: "", rows: data };
+    }
+    if (!Array.isArray(data.rows)) return null;
+    return {
+      sport: data.sport || sport,
+      source: data.source || "unknown",
+      capturedAt: typeof data.capturedAt === "string" ? data.capturedAt : "",
+      rows: data.rows,
+    };
   } catch {
-    return [];
+    return null;
   }
+}
+
+export function loadEdgeBoardFallback(sportKey: string): EdgeBoardRow[] {
+  return loadEdgeBoardFallbackMeta(sportKey)?.rows ?? [];
 }

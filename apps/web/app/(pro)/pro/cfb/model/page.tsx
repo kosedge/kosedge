@@ -92,7 +92,7 @@ export default async function CfbSeasonModelHubPage({
       honestyNote={cfbModelDeskHonestyNote()}
       primaryHref="/pro/cfb/project-game"
       primaryLabel="Open Project Game"
-      secondaryHref="/edge-board/cfb?week=1"
+      secondaryHref="/edge-board/cfb"
       secondaryLabel="Edge Board (markets)"
     >
       <section className="mt-6 grid gap-3 sm:grid-cols-2">

@@ -48,7 +48,7 @@ describe("cfb truth-label wiring", () => {
     }
   });
 
-  it("CFB Edge Board publishes KEI vs market with Week 0/1 tabs defaulting to Week 1", () => {
+  it("CFB Edge Board publishes KEI vs market with Week 0/1/2 tabs", () => {
     // Board build moved off the SSR page (Alex waterfall) — stamp lives on
     // the assemble API; Week 0/1 tabs stay on the client shell.
     const page = readFileSync(
@@ -69,7 +69,7 @@ describe("cfb truth-label wiring", () => {
 
     expect(assemble).toContain("stampCfbEdgeBoardWeek");
     expect(assemble).toContain("parseCfbAssembleWeek");
-    expect(assemble).toContain("filterCfbEdgeBoardRowsByWeek");
+    expect(assemble).toContain("scopeCfbLiveEdgeBoardRows");
     expect(assemble).not.toMatch(
       /week === ["']0["'] \? 0 : 1|get\("week"\) === "0" \? 0 : 1/,
     );
