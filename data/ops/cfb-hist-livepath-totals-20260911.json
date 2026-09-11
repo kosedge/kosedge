@@ -1,0 +1,240 @@
+{
+  "ok": true,
+  "research_only": true,
+  "production_model_changed": false,
+  "kill_switch": "CFB_EDGE_BOARD_PUBLIC_ENABLED=false",
+  "inventory": {
+    "live_path": "live_style_espn_roster_qb_units_sp_plus",
+    "reconstructable_path": "year_locked_espn_core_roster_plus_sdv_adj_epa",
+    "proxy_path": "hist_cal_league_avg_roster_qb",
+    "cfbd_api_key_present": false,
+    "same_as_2026_live_path": false,
+    "fields": {
+      "espn_core_athletes_year_locked": {
+        "needed_for": "position / class / experience on Week-0 identity",
+        "status": "reconstructable",
+        "source": "sports.core.api.espn.com seasons/{Y}/teams/{id}/athletes",
+        "notes": "Year-specific counts (2024\u22602026). Site roster ?season=Y ignores the year and returns the current 2026 club \u2014 must not be used."
+      },
+      "espn_site_roster_season_param": {
+        "needed_for": "2026-style packaged roster",
+        "status": "not_year_locked",
+        "source": "site.web.api.espn.com .../roster?season=Y",
+        "notes": "HTTP 200 with empty groups or current-season athletes. Forbidden."
+      },
+      "connelly_sp_plus_prior_year": {
+        "needed_for": "live 2026 efficiency carry (off_eff/def_eff from SP+)",
+        "status": "missing_2022_2023_2024",
+        "source": "CFBD /ratings/sp or ESPN insider final tables",
+        "notes": "2025 final SP+ is public and already packaged for 2026 carry. 2022\u20132024 finals are ESPN Insider (no <tr> in HTML) and CFBD 401. Do not invent tables from search snippets. Do not reuse 2025 SP+ as a prior for 2023\u201325 (future leak)."
+      },
+      "sdv_cfb_ratings_adj_epa": {
+        "needed_for": "opponent-adjusted efficiency proxy when SP+ is missing",
+        "status": "available_not_sp_plus",
+        "source": "sportsdataverse-data cfb_ratings_{Y}.csv",
+        "notes": "Already used by hist-cal. Not Connelly SP+. Label every row. Same-path lock: this is NOT the 2026 live efficiency feed."
+      },
+      "recruiting_capital": {
+        "needed_for": "2026 unit talent (0.62 weight) and roster_strength",
+        "status": "unminted",
+        "source": "CFBD /recruiting/teams (keyed) or year-specific prior pack",
+        "notes": "2026 curated recruiting priors must not be applied to 2023\u201325. Without CFBD, recruiting stays 50 / unminted."
+      },
+      "portal_team_history": {
+        "needed_for": "2026 portal-in heuristic (athlete bio teamHistory)",
+        "status": "not_fetched",
+        "source": "ESPN athlete bio (one extra GET per player)",
+        "notes": "2026 pack already documents portal-out as incomplete. Historical portal left unminted (is_portal=false) to avoid a second 70k fetch and to avoid pretending we have a departure feed."
+      },
+      "qb_prior_year_attempts": {
+        "needed_for": "2026 QB talent from 2025 pass attempts",
+        "status": "unminted",
+        "source": "ESPN athlete overview career splits",
+        "notes": "Not fetched. QB class from experience abbreviation only."
+      },
+      "coaching_continuity": {
+        "needed_for": "new HC/OC/DC week-decayed points",
+        "status": "unminted_assume_returning",
+        "source": "year-specific staff file (not in repo)",
+        "notes": "Do not copy 2026 coaching flags onto 2023\u201325."
+      },
+      "home_field_buckets": {
+        "needed_for": "variable HFA",
+        "status": "2026_venue_prior_documented",
+        "source": "cfb_fbs_team_priors_2026 home_field",
+        "notes": "Venues persist more than rosters. Used as a contemporaneous venue prior and labeled. Not a 2026 efficiency leak."
+      },
+      "cfbd_api_key": {
+        "needed_for": "SP+ + recruiting + returning production",
+        "status": "absent",
+        "source": "CFBD_API_KEY / CFBD_KEY",
+        "notes": "Unauthorized without Bearer token."
+      }
+    },
+    "fit_seasons": [
+      2023,
+      2024
+    ],
+    "sealed_eval_seasons": [
+      2025
+    ],
+    "stop_same_path": true,
+    "stop_reason": "Connelly SP+ finals for 2022\u20132024 and year-specific recruiting are not reconstructable in this environment. A 2023\u201325 universe built here is ESPN class/position + SDV adj-EPA \u2014 not the 2026 live stack. Do not fit \u03bb on this path and call it live-path OOS."
+  },
+  "path_used": {
+    "2023": "hist_cal_league_avg_fallback_no_recon_pack",
+    "2024": "hist_cal_league_avg_fallback_no_recon_pack"
+  },
+  "recon_packs_present": {
+    "2023": false,
+    "2024": false
+  },
+  "seasons_scored": [
+    2023,
+    2024
+  ],
+  "2025_opened": false,
+  "n_fit_rows": 253,
+  "mean_matchup_inflation_fit": -2.0728,
+  "inflation_reproduced_vs_2026": false,
+  "inflation_reproduce_threshold": 6.0,
+  "lambda_fitted": false,
+  "lambda_b": null,
+  "level_offset_a": null,
+  "freeze_path": null,
+  "spread_identity_violations": 0,
+  "spread_unchanged_by_sum_only": true,
+  "load_meta": {
+    "seasons": [
+      2023,
+      2024
+    ],
+    "mapped_games": 1572
+  },
+  "comparisons_fit_2023_2024_w0_2": {
+    "frozen": {
+      "n": 253,
+      "vs_close": {
+        "mean_bias": -0.4642,
+        "median_bias": -0.34,
+        "mae": 5.5622,
+        "rmse": 7.0185
+      },
+      "vs_actual": {
+        "mean_bias": -0.2329,
+        "median_bias": 0.13,
+        "mae": 13.8279,
+        "rmse": 17.2483
+      }
+    },
+    "matchup_neutralized": {
+      "n": 253,
+      "vs_close": {
+        "mean_bias": 1.6087,
+        "median_bias": 1.4025,
+        "mae": 5.8837,
+        "rmse": 7.2315
+      },
+      "vs_actual": {
+        "mean_bias": 1.8399,
+        "median_bias": 2.2012,
+        "mae": 13.331,
+        "rmse": 16.5627
+      }
+    },
+    "sum_only_dampen_b": {
+      "n": 0,
+      "vs_close": {
+        "mean_bias": null,
+        "median_bias": null,
+        "mae": null,
+        "rmse": null
+      },
+      "vs_actual": {
+        "mean_bias": null,
+        "median_bias": null,
+        "mae": null,
+        "rmse": null
+      }
+    },
+    "level_offset_a": {
+      "n": 0,
+      "vs_close": {
+        "mean_bias": null,
+        "median_bias": null,
+        "mae": null,
+        "rmse": null
+      },
+      "vs_actual": {
+        "mean_bias": null,
+        "median_bias": null,
+        "mae": null,
+        "rmse": null
+      }
+    },
+    "market_baseline": {
+      "vs_close": {
+        "n": 253,
+        "mean_bias": 0.0,
+        "median_bias": 0.0,
+        "mae": 0.0,
+        "rmse": 0.0,
+        "over_n": 0,
+        "under_n": 0
+      },
+      "vs_actual": {
+        "n": 253,
+        "mean_bias": 0.2312,
+        "median_bias": 1.5,
+        "mae": 12.6067,
+        "rmse": 15.5624,
+        "over_n": 138,
+        "under_n": 115
+      },
+      "note": "Market vs itself on close is identically 0; vs actual is the book."
+    }
+  },
+  "slices_frozen_vs_close": {
+    "week": {
+      "W1": {
+        "n": 153,
+        "mean": 0.1982,
+        "mae": 5.2007
+      },
+      "W2": {
+        "n": 100,
+        "mean": -1.4775,
+        "mae": 6.1153
+      }
+    },
+    "pred_total_bucket": {
+      "52-56": {
+        "n": 59,
+        "mean": 1.4903,
+        "mae": 5.6558
+      },
+      "56-60": {
+        "n": 27,
+        "mean": 2.0956,
+        "mae": 4.6837
+      },
+      "<48": {
+        "n": 70,
+        "mean": -4.7741,
+        "mae": 6.1301
+      },
+      ">=60": {
+        "n": 29,
+        "mean": 3.4352,
+        "mae": 5.709
+      },
+      "48-52": {
+        "n": 68,
+        "mean": -0.4025,
+        "mae": 5.1825
+      }
+    }
+  },
+  "stop": true,
+  "stop_reason": "2026-style +8 to +10 matchup inflation did not reproduce on the reconstructable 2023\u201324 path, and/or the path is not the 2026 live SP++roster stack. \u03bb was not fit. 2025 remains sealed."
+}
