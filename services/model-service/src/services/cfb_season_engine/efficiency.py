@@ -20,6 +20,8 @@ from pathlib import Path
 from typing import Any, Dict, Mapping, Optional
 
 from src.services.cfb_season_engine import priors as P
+from src.services.cfb_season_engine.fbs_universe import is_official_fbs
+from src.services.cfb_season_engine.team_features import MissingRequiredTeamFeature
 from src.services.cfb_season_engine.types import EfficiencyProfile
 
 DATA_DIR = Path(__file__).resolve().parent / "data"
@@ -125,7 +127,8 @@ def build_efficiency_profile(
 ) -> EfficiencyProfile:
     """Build inspectable efficiency profile for one team.
 
-    Preference: explicit payload → packaged snapshot → league-average placeholder.
+    Preference: explicit payload → packaged snapshot.
+    Official FBS with no packaged row fails closed (no league-average 1.0).
     When ``apply_inseason`` is True (default), cumulative in-season deltas from
     ``in_season_update`` are layered on top of the preseason baseline.
     """
@@ -141,6 +144,11 @@ def build_efficiency_profile(
         from_pack = bool(row)
 
     if not row:
+        if is_official_fbs(team, include_transition=True):
+            raise MissingRequiredTeamFeature(
+                f"Official FBS {team} missing packaged efficiency — "
+                "hard-fail, do not invent league-average 1.0"
+            )
         profile = EfficiencyProfile(
             team=team,
             off_eff=50.0,
@@ -154,8 +162,7 @@ def build_efficiency_profile(
             source="league_average_fill",
             fidelity="placeholder",
             notes=(
-                "No packaged SP+ row; league-average efficiency fill. "
-                "Not opponent-adjusted for this code."
+                "Non-FBS / alias placeholder. Official FBS must not reach this fill."
             ),
         )
     else:

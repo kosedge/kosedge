@@ -88,6 +88,9 @@ ESPN_CODE_ALIASES: Dict[str, str] = {
     "NMST": "NMSU",
     # ESPN uses FLA for the Gators; UF is Findlay (D2).
     "UF": "FLA",
+    # P0 official FBS — ESPN abbr ≠ engine code (keep MOST distinct).
+    "MIZZ": "MIZ",
+    "JVST": "JXST",
 }
 
 UNIT_POS = {
@@ -981,14 +984,28 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         help="Non-QB athletes per team to check for portal teamHistory",
     )
     parser.add_argument("--skip-cfbd", action="store_true")
+    parser.add_argument(
+        "--only-codes",
+        default="",
+        help="Comma-separated engine codes to fetch/overlay (keeps other snapshot rows)",
+    )
     parser.add_argument("--snapshot-out", type=Path, default=SNAPSHOT_PATH)
     parser.add_argument("--priors-out", type=Path, default=PRIORS_PATH)
     args = parser.parse_args(list(argv) if argv is not None else None)
 
     if not PRIORS_PATH.is_file():
         raise SystemExit(f"Missing priors: {PRIORS_PATH}")
+    ms = REPO_ROOT / "services" / "model-service"
+    sys.path.insert(0, str(ms))
+    from src.services.cfb_season_engine.fbs_universe import official_fbs_codes
+    from src.services.cfb_season_engine.name_to_code import P0_REQUIRED_CODES
+
     priors = json.loads(PRIORS_PATH.read_text(encoding="utf-8"))
-    team_codes = sorted(priors.get("teams") or {})
+    official = official_fbs_codes(include_transition=True)
+    only_codes = [c.strip().upper() for c in str(args.only_codes or "").split(",") if c.strip()]
+    team_codes = sorted(set(priors.get("teams") or {}) | {c for c in P0_REQUIRED_CODES if c in official})
+    if only_codes:
+        team_codes = only_codes
     if args.limit_teams and args.limit_teams > 0:
         # Prefer familiar codes first for smoke runs.
         preferred = [
@@ -1020,7 +1037,18 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     cache_path = RAW_CACHE_DIR / "real_roster_team_cache.json"
     payloads: Dict[str, Dict[str, Any]] = {}
-    if cache_path.is_file():
+    if only_codes and args.snapshot_out.is_file():
+        try:
+            existing = json.loads(args.snapshot_out.read_text(encoding="utf-8"))
+            if isinstance(existing.get("teams"), dict):
+                payloads = dict(existing["teams"])
+                print(
+                    f"Keeping {len(payloads)} existing snapshot teams; overlay {only_codes}",
+                    file=sys.stderr,
+                )
+        except Exception:
+            payloads = {}
+    if cache_path.is_file() and not only_codes:
         try:
             payloads = json.loads(cache_path.read_text(encoding="utf-8"))
             if not isinstance(payloads, dict):
@@ -1158,6 +1186,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             indent=2,
         )
     )
+    required_check = (
+        [c for c in P0_REQUIRED_CODES if c in official]
+        if not args.limit_teams and not only_codes
+        else [c for c in (only_codes or []) if c in P0_REQUIRED_CODES and c in official]
+    )
+    missing_p0 = [c for c in required_check if c not in payloads]
+    if missing_p0:
+        print(
+            "ERROR: Required FBS codes missing from roster pack — "
+            f"do not hydrate 1.0: {missing_p0}",
+            file=sys.stderr,
+        )
+        return 1
     return 0
 
 
