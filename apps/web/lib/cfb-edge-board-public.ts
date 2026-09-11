@@ -102,7 +102,9 @@ export function publicEdgeBoardHref(
     .toLowerCase();
   if (!key) return null;
   if (isCfbEdgeBoardCustomerDisabled(key)) return null;
-  if (key === "cfb") return "/edge-board/cfb?week=1";
+  // Bare /edge-board/cfb resolves the calendar current week server-side.
+  // Do not pin week=1 — OddsCompareBoard and WeeklyGamesScroller use this href.
+  if (key === "cfb") return "/edge-board/cfb";
   return `/edge-board/${key}`;
 }
 

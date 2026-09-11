@@ -244,7 +244,7 @@ describe("CFB Edge Board public kill switch", () => {
     process.env.CFB_EDGE_BOARD_INTERNAL = "1";
     expect(isCfbEdgeBoardCustomerEnabled()).toBe(true);
     expect(isCfbEdgeBoardCustomerDisabled("cfb")).toBe(false);
-    expect(publicEdgeBoardHref("cfb")).toBe("/edge-board/cfb?week=1");
+    expect(publicEdgeBoardHref("cfb")).toBe("/edge-board/cfb");
     expect(publicEdgeBoardSports(SPORTS).map((s) => s.key)).toContain("cfb");
     expect(cfbCustomerPublishTag(3.0, cfbEdgeTag, "spread")).toBe("LEAN");
   });
