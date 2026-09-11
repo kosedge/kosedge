@@ -100,6 +100,8 @@ export type MobileCardModel = {
   linesAsOfLabel: string | null;
   linesStale: boolean;
   asOfUnavailable: boolean;
+  marketHorizonLabel: string | null;
+  oddsWithoutKei: boolean;
   overview: string | null;
   /** Raw model — Overview only. */
   modelNote: string | null;
@@ -721,9 +723,11 @@ export function composeEdgeBoardMobileCard(args: {
     }),
     openSpread,
     openTotal,
-    linesAsOfLabel: formatLinesAsOf(row.linesAsOf),
+    linesAsOfLabel: formatLinesAsOf(row.linesAsOf ?? row.marketAsOf),
     linesStale: Boolean(row.linesStale),
     asOfUnavailable: isNfl && !row.linesAsOf,
+    marketHorizonLabel: row.marketHorizonLabel ?? null,
+    oddsWithoutKei: Boolean(row.oddsWithoutKei),
     overview: row.overview ?? null,
     modelNote: modelBits.length ? `Model ${modelBits.join(" / ")}` : null,
     sizeDown: Boolean(

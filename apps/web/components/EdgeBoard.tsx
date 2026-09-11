@@ -457,14 +457,24 @@ function KickoffStack({
   kickoffDate,
   kickoffTime,
   time,
+  horizonLabel,
 }: {
   kickoffDate?: string;
   kickoffTime?: string;
   time?: string;
+  horizonLabel?: string;
 }) {
   const k = parseKickoffStack({ kickoffDate, kickoffTime, time });
   return (
     <div className="leading-snug tabular-nums">
+      {horizonLabel ? (
+        <div
+          className="mb-0.5 text-[10px] font-semibold uppercase tracking-wide text-kos-gold/90"
+          data-testid="odds-horizon-label"
+        >
+          {horizonLabel}
+        </div>
+      ) : null}
       <div className="text-sm font-semibold text-gray-200">{k.date}</div>
       {k.time ? (
         <div className="mt-0.5 text-xs text-gray-400">
@@ -857,6 +867,7 @@ export default function EdgeBoard({
                           kickoffDate={r.kickoffDate}
                           kickoffTime={r.kickoffTime}
                           time={r.time}
+                          horizonLabel={r.marketHorizonLabel}
                         />
                         {r.linesAsOf ? (
                           <div
@@ -927,6 +938,11 @@ export default function EdgeBoard({
                           compact
                           valueClassName="text-kos-gold font-semibold"
                         />
+                        {r.oddsWithoutKei ? (
+                          <div className="mt-0.5 text-[10px] text-gray-500">
+                            no house print
+                          </div>
+                        ) : null}
                         {r.modelLine ? (
                           <div className="mt-1 text-[10px] text-gray-400">
                             {modelDisagreementPrefix} {r.modelLine.bottom.label}

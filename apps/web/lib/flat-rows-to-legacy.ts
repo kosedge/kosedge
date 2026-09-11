@@ -77,6 +77,13 @@ export type FlatEdgeBoardRow = {
   kickoffTime?: string;
   /** ISO timestamp of latest odds capture — as-of / stale hint. */
   linesAsOf?: string;
+  /** P0 odds expansion — Current / Early Market / Futures · Advance Line. */
+  marketHorizon?: "current" | "early_market" | "futures_advance";
+  marketHorizonLabel?: string;
+  marketAsOf?: string | null;
+  /** Verified books, no house print — Fair stays blank. */
+  oddsWithoutKei?: boolean;
+  bookCount?: number;
   /**
    * Period identity for totals (fg / 1st5 / live / …).
    * Absent = unknown — MLB totals fail closed (INC-2026-09-10).
@@ -183,6 +190,11 @@ export type LegacyEdgeBoardRow = {
   game?: string;
   linesAsOf?: string;
   linesStale?: boolean;
+  marketHorizon?: "current" | "early_market" | "futures_advance";
+  marketHorizonLabel?: string;
+  marketAsOf?: string | null;
+  oddsWithoutKei?: boolean;
+  bookCount?: number;
   teamA: TeamBlock;
   teamB: TeamBlock;
   /** Canonical abbr from assemble / matchup context — presentation only. */
@@ -946,6 +958,15 @@ export function flatRowsToLegacy(
       game: `${away} @ ${home}`,
       linesAsOf,
       linesStale: isLinesStale(linesAsOf),
+      marketHorizon: lineRow?.marketHorizon ?? totalRow?.marketHorizon,
+      marketHorizonLabel:
+        lineRow?.marketHorizonLabel ?? totalRow?.marketHorizonLabel,
+      marketAsOf:
+        lineRow?.marketAsOf ?? totalRow?.marketAsOf ?? linesAsOf ?? null,
+      oddsWithoutKei: Boolean(
+        lineRow?.oddsWithoutKei || totalRow?.oddsWithoutKei,
+      ),
+      bookCount: pickField((r) => r?.bookCount) ?? undefined,
       teamA: {
         name: away,
         site: awaySiteLabel,

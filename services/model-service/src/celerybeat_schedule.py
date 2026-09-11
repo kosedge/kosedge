@@ -165,13 +165,15 @@ beat_schedule: Dict[str, Dict[str, Any]] = {
         ),
         "options": {"queue": ODDS_QUEUE},
     },
-    # 3:00am ET — odds pull (part of full site data refresh).
+    # 3:00am ET — odds pull + cheap /events catalog (far-future coverage).
+    # Hourly beat stays bulk /odds only — do not per-event poll dormant futures.
     "pull-odds-3am-refresh": {
         "task": TASK_PULL_ODDS_SNAPSHOT,
         "schedule": crontab(
             minute=LATE_MINUTE_PATTERN if LATE_MINUTE_PATTERN else LATE_MINUTE,
             hour=f"{LATE_START_HOUR}-{LATE_END_HOUR}",
         ),
+        "kwargs": {"include_catalog": True},
         "options": {"queue": ODDS_QUEUE},
     },
     # Hourly daytime board refresh (fair-lines / edges) — not a container redeploy.

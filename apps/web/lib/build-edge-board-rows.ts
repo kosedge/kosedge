@@ -1,8 +1,8 @@
 /**
  * Shared edge-board assembly.
- * NFL: pulls REG fair-lines + Odds API overlay (projection-backed; no PRE odds-only).
- * Week 1 tab = every REG Week 1 schedule-pack game (schedule-driven; no silent drop).
- * Missing KEI / odds still appear with honest empties.
+ * NFL: pulls REG fair-lines + Odds API overlay. REG odds-without-KEI stay
+ * (honest blank Fair). PRE exhibitions stay off. Week 1 schedule games are
+ * always present; posted future markets append with horizon labels.
  * Full slate = governed snapshot only (INC-2026-09-07) — never live daysAhead=200.
  * Week 1 / live uses narrow fair-lines window.
  * Legacy aliases: `live` → week1, `all` → full.
@@ -25,10 +25,8 @@ import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
 import {
   fairLinesToEdgeBoardRows,
   filterNflProjectionBackedRows,
-  filterNflStrictWeekRows,
   overlayOddsOntoFairLineRows,
   resolveEdgeBoardLinesAsOf,
-  sortNflEdgeBoardRows,
   syncEdgeBoardActionsWithCurrent,
 } from "@/lib/nfl-edge-board-from-fair-lines";
 import {
@@ -56,6 +54,7 @@ import {
 } from "@/lib/resolve-kei-lines";
 import { getNflPowerRatingsBoard } from "@/lib/power-ratings";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
+import { applyOddsHorizonToRows } from "@/lib/odds-horizon";
 
 const NFL_EDGE_BOARD_SEASON = 2026;
 
@@ -206,29 +205,19 @@ async function assembleNflEdgeBoardRows(
     rows = ensureAllKeiGamesOnBoard(odds, "nfl", keiGames);
     rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
     rows = filterNflProjectionBackedRows(rows);
-    // Stamp REG week from schedule pack BEFORE Week 1 filter (root-cause fix).
     rows = stampNflEdgeBoardWeeksFromSchedule(rows);
-    // Schedule is the driver: pad any REG Week 1 game missing after KEI filter.
     rows = ensureNflScheduleWeekOnBoard(rows, 1);
-    rows = sortNflEdgeBoardRows(rows);
-    // Live path is Week 1 only (full refused above).
-    return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
+    rows = applyOddsHorizonToRows(rows);
+    return withMatchupEnrichment(rows);
   }
 
   rows = mergeKeiIntoEdgeBoardRows(rows, "nfl", keiGames);
   rows = filterNflProjectionBackedRows(rows);
-  // Stamp missing week from 2026 schedule pack before any week filter.
   rows = stampNflEdgeBoardWeeksFromSchedule(rows);
-  // Schedule-driven Week 1 membership (no silent drop when KEI/odds missing).
   rows = ensureNflScheduleWeekOnBoard(rows, 1);
-  rows = sortNflEdgeBoardRows(rows);
-
-  // Schedule-padded rows may lack per-row capture — inherit payload odds_as_of
-  // (sanitized) so board-level as-of matches fair-lines. Never invent now().
   rows = applyPayloadOddsAsOfToRows(rows, payloadOddsAsOf);
-
-  // Live path is Week 1 only (full refused above).
-  return withMatchupEnrichment(filterNflStrictWeekRows(rows, 1));
+  rows = applyOddsHorizonToRows(rows);
+  return withMatchupEnrichment(rows);
 }
 
 /**
@@ -289,5 +278,6 @@ export async function assembleEdgeBoardRows(
     }
   }
   // INC-2026-09-10: totals without period identity / in-play quotes fail closed.
-  return applyTotalIdentityGateToRows(rows, sport);
+  rows = applyTotalIdentityGateToRows(rows, sport);
+  return applyOddsHorizonToRows(rows);
 }

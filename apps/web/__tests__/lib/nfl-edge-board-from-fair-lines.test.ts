@@ -478,9 +478,9 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(spread.kei).toBe("-3.5");
   });
 
-  it("does not append PRE / odds-only extras without fair-line KEI", () => {
+  it("does not append PRE odds-only extras; REG odds-only are allowed", () => {
     const base = fairLinesToEdgeBoardRows([line({})]);
-    const out = overlayOddsOntoFairLineRows(base, [
+    const pre = overlayOddsOntoFairLineRows(base, [
       {
         id: "pre-spread",
         game: "Dallas Cowboys @ Los Angeles Chargers",
@@ -488,10 +488,28 @@ describe("nfl-edge-board-from-fair-lines", () => {
         best: "+3",
         bookKey: "draftkings",
         book: "DraftKings",
+        seasonType: "PRE",
       } as any,
     ]);
-    expect(out).toHaveLength(2);
-    expect(out.every((r) => r.game?.includes("Seahawks"))).toBe(true);
+    expect(pre).toHaveLength(2);
+    expect(pre.every((r) => r.game?.includes("Seahawks"))).toBe(true);
+
+    const reg = overlayOddsOntoFairLineRows(base, [
+      {
+        id: "reg-spread",
+        game: "Green Bay Packers @ Minnesota Vikings",
+        market: "Spread",
+        best: "+1.5",
+        bookKey: "fanduel",
+        book: "FanDuel",
+        commenceTime: "2026-09-20T17:00:00Z",
+        seasonType: "REG",
+      } as any,
+    ]);
+    expect(reg.some((r) => r.game?.includes("Vikings"))).toBe(true);
+    const extra = reg.find((r) => r.game?.includes("Vikings"))!;
+    expect(extra.kei).toBeUndefined();
+    expect(extra.best).toBe("+1.5");
   });
 
   it("leaves Open/Best empty when no sportsbook market (KEI still set)", () => {
@@ -653,20 +671,34 @@ describe("nfl-edge-board-from-fair-lines", () => {
     expect(games.has("Green Bay Packers @ Minnesota Vikings")).toBe(false);
   });
 
-  it("drops odds-only rows from projection-backed filter", () => {
+  it("keeps REG odds-only rows; drops PRE odds-only", () => {
     const rows = [
       ...fairLinesToEdgeBoardRows([line({})]),
+      {
+        id: "reg-only",
+        game: "Green Bay Packers @ Minnesota Vikings",
+        market: "Spread",
+        best: "+2.5",
+        bookKey: "fanduel",
+        seasonType: "REG",
+      } as any,
       {
         id: "pre-only",
         game: "Dallas Cowboys @ Los Angeles Chargers",
         market: "Spread",
-        best: "+2.5",
+        best: "+3",
         bookKey: "fanduel",
+        seasonType: "PRE",
       } as any,
     ];
     const filtered = filterNflProjectionBackedRows(rows);
-    expect(filtered).toHaveLength(2);
-    expect(filtered.every((r) => r.kei)).toBe(true);
+    const games = new Set(filtered.map((r) => r.game));
+    expect(games.has("New England Patriots @ Seattle Seahawks")).toBe(true);
+    expect(games.has("Green Bay Packers @ Minnesota Vikings")).toBe(true);
+    expect(games.has("Dallas Cowboys @ Los Angeles Chargers")).toBe(false);
+    const oddsOnly = filtered.find((r) => r.game?.includes("Vikings"));
+    expect(oddsOnly?.kei).toBeUndefined();
+    expect(oddsOnly?.best).toBe("+2.5");
   });
 
   it("blanks 3.8 / 2.4-class Current and does not Action against it", () => {

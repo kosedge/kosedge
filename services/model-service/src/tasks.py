@@ -251,6 +251,13 @@ from .services.nba_possession_simulator import (
 )
 from .services.nba_schema import ensure_nba_model_tables
 from .services.odds_api import fetch_odds, fetch_odds_with_metadata, odds_key_diagnostics
+from .services.odds_expansion import (
+    catalog_coverage,
+    classify_polling_tier,
+    filter_ingestible_events,
+    should_ingest_event,
+)
+from .services.odds_expansion.polling import tier_counts
 
 log = logging.getLogger(__name__)
 
@@ -3952,7 +3959,14 @@ def _set_active_model(
 def pull_odds_snapshot(
     nfl_bookmakers: Optional[str] = None,
     sport_keys: Optional[str] = None,
+    include_catalog: bool = False,
 ) -> Dict[str, Any]:
+    """Pull all *available* future mainlines — no current-week window.
+
+    Bulk ``/odds`` already returns every upcoming event with posted books.
+    ``include_catalog`` (3am / explicit) also fetches cheap ``/events`` for
+    coverage vs ingest. Do not per-event-fetch the catalog on the hourly beat.
+    """
     log.info("Running scheduled pull_odds_snapshot")
     run_id = str(uuid.uuid4())
     data: List[Dict[str, Any]] = []
@@ -3977,6 +3991,12 @@ def pull_odds_snapshot(
     events_persisted = 0
     snapshots_inserted = 0
     snapshots_skipped_dup = 0
+    catalog_by_sport: Dict[str, List[Dict[str, Any]]] = {}
+    expansion_diag: Dict[str, Any] = {
+        "horizon": "all_available",
+        "week_filter": None,
+        "include_catalog": bool(include_catalog),
+    }
 
     session = SessionLocal()
     try:
@@ -4035,7 +4055,24 @@ def pull_odds_snapshot(
                 for event in payload:
                     if isinstance(event, dict) and not event.get("sport_key"):
                         event["sport_key"] = sport_key
+                # No commenceTimeTo / current-week window — ingest all posted markets.
                 data.extend(payload)
+                if include_catalog:
+                    try:
+                        catalog_meta = fetch_odds_with_metadata(
+                            endpoint=f"sports/{sport_key}/events",
+                            params={"dateFormat": "iso"},
+                        )
+                        catalog_payload = catalog_meta.get("payload")
+                        if isinstance(catalog_payload, list):
+                            catalog_by_sport[sport_key] = [
+                                ev for ev in catalog_payload if isinstance(ev, dict)
+                            ]
+                    except Exception:
+                        log.exception(
+                            "Odds expansion catalog fetch failed",
+                            extra={"sport_key": sport_key},
+                        )
                 _record_odds_api_request(
                     session,
                     endpoint=endpoint,
@@ -4100,6 +4137,7 @@ def pull_odds_snapshot(
                 "snapshots_skipped_dup": 0,
                 "sport_keys": pull_keys,
                 "credits_diagnostics": credits_diag,
+                "odds_expansion": expansion_diag,
                 "run_id": run_id,
             }
             log.info(
@@ -4122,9 +4160,10 @@ def pull_odds_snapshot(
                 "odds_snapshots",
             ],
         )
+        ingestible = filter_ingestible_events(data)
         persisted = _persist_odds_events(
             session,
-            events=data,
+            events=ingestible,
             source_label="the-odds-api",
             ingest_run_id=run_id,
         )
@@ -4140,6 +4179,21 @@ def pull_odds_snapshot(
     finally:
         session.close()
 
+    clock = _now_utc()
+    catalog_flat = [ev for evs in catalog_by_sport.values() for ev in evs]
+    coverage = catalog_coverage(catalog_flat, data, now=clock)
+    tiers = [
+        classify_polling_tier(_parse_iso_datetime(ev.get("commence_time")), now=clock)
+        for ev in data
+        if isinstance(ev, dict)
+    ]
+    expansion_diag.update(
+        {
+            **coverage,
+            "ingestible_events": sum(1 for ev in data if should_ingest_event(ev, now=clock)),
+            "polling_tiers": tier_counts(tiers),
+        }
+    )
     result = {
         "events_fetched": len(data),
         "events_persisted": events_persisted,
@@ -4147,6 +4201,7 @@ def pull_odds_snapshot(
         "snapshots_skipped_dup": snapshots_skipped_dup,
         "sport_keys": pull_keys,
         "credits_diagnostics": credits_diag,
+        "odds_expansion": expansion_diag,
         "run_id": run_id,
     }
     log.info(

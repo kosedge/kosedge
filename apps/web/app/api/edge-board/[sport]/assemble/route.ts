@@ -150,17 +150,17 @@ export async function GET(
         1,
       );
       const week1Rows = filterNflStrictWeekRows(assembled, 1);
-      const weeks = weeksOnBoard(week1Rows);
-      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(week1Rows);
+      const weeks = weeksOnBoard(assembled);
+      const linesAsOf = resolveEdgeBoardBoardLinesAsOf(assembled);
       return pageDataJsonResponse({
-        rows: scrubEdgeBoardAssembleCustomerRows(week1Rows, "nfl"),
+        rows: scrubEdgeBoardAssembleCustomerRows(assembled, "nfl"),
         week1Count: gameCount(week1Rows),
-        // Week1 responses omit full badge until Full tab opens (honest).
+        // Live path does not load governed full-slate snapshot.
         fullCount: 0,
         week0Count: 0,
         weeks,
         linesAsOf,
-        games: gameCount(week1Rows),
+        games: gameCount(assembled),
       });
     }
 

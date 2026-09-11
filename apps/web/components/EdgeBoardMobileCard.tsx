@@ -113,6 +113,17 @@ export default function EdgeBoardMobileCard({
         <h3 className="text-[15px] font-semibold text-gray-100 leading-snug break-words">
           {model.matchup}
         </h3>
+        {model.marketHorizonLabel ? (
+          <div
+            className="mt-1 text-[10px] font-semibold uppercase tracking-wide text-kos-gold/90"
+            data-testid="odds-horizon-label"
+          >
+            {model.marketHorizonLabel}
+          </div>
+        ) : null}
+        {model.oddsWithoutKei ? (
+          <div className="mt-0.5 text-[10px] text-gray-500">no house print</div>
+        ) : null}
         {model.kickoffDate || model.kickoffTime ? (
           <div className="mt-1 leading-snug tabular-nums">
             {model.kickoffDate ? (

@@ -488,3 +488,70 @@ def test_pull_odds_snapshot_cfb_only_filter(monkeypatch) -> None:
     assert ledger[0] == "PROD_LIVE"
     assert ledger[1] == "celery.pull_odds_snapshot"
     assert ledger[2] == result["run_id"]
+
+
+def test_pull_odds_snapshot_persists_far_future_verified_event(monkeypatch) -> None:
+    """No current-week window — months-away verified mainlines still persist."""
+    engine = create_engine("sqlite+pysqlite:///:memory:")
+    _create_sqlite_schema(engine)
+    TestSession = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    monkeypatch.setattr(tasks, "SessionLocal", TestSession)
+
+    far = {
+        "id": "nfl-future-1",
+        "sport_key": "americanfootball_nfl",
+        "commence_time": "2026-12-20T18:00:00Z",
+        "home_team": "Kansas City Chiefs",
+        "away_team": "Las Vegas Raiders",
+        "bookmakers": [
+            {
+                "key": "fanduel",
+                "last_update": "2026-09-11T12:00:00Z",
+                "markets": [
+                    {
+                        "key": "spreads",
+                        "outcomes": [
+                            {"name": "Kansas City Chiefs", "point": -10.5, "price": -110},
+                            {"name": "Las Vegas Raiders", "point": 10.5, "price": -110},
+                        ],
+                    }
+                ],
+            }
+        ],
+    }
+
+    def _payload(endpoint, params):
+        if endpoint == "sports/americanfootball_nfl/odds":
+            return [far]
+        if endpoint == "sports/americanfootball_nfl/events":
+            return [
+                {
+                    "id": "nfl-future-1",
+                    "commence_time": "2026-12-20T18:00:00Z",
+                    "home_team": "Kansas City Chiefs",
+                    "away_team": "Las Vegas Raiders",
+                }
+            ]
+        return []
+
+    _patch_fetch(monkeypatch, _payload)
+
+    result = tasks.pull_odds_snapshot(
+        sport_keys="americanfootball_nfl",
+        include_catalog=True,
+    )
+    assert result["events_fetched"] == 1
+    assert result["events_persisted"] == 1
+    assert result["snapshots_inserted"] == 1
+    exp = result["odds_expansion"]
+    assert exp["horizon"] == "all_available"
+    assert exp["week_filter"] is None
+    assert exp["far_future_ingested"] == 1
+    assert exp["include_catalog"] is True
+    assert exp["catalog_events"] == 1
+
+    with engine.connect() as conn:
+        start = conn.execute(text("SELECT start_time FROM games LIMIT 1")).scalar_one()
+        snaps = conn.execute(text("SELECT COUNT(*) FROM odds_snapshots")).scalar_one()
+    assert "2026-12-20" in str(start)
+    assert snaps == 1
