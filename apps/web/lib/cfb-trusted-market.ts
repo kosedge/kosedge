@@ -40,6 +40,12 @@ export const CFB_TOTALS_PLAY_ELIGIBLE = false;
  */
 export const CFB_SPREAD_PLAY_ELIGIBLE = false;
 
+/**
+ * Public CFB Edge Board kill switch. Stay false until Ryan/CoS unsats
+ * public reactivation (structural restore does not flip this).
+ */
+export const CFB_EDGE_BOARD_PUBLIC_ENABLED = false;
+
 export type CfbEdgeMarket = "spread" | "total";
 export type CfbEdgeTag = "PLAY" | "LEAN" | "PASS";
 

@@ -22,47 +22,40 @@ from src.services.cfb_season_engine import (  # noqa: E402
     project_game_to_dict,
     resolve_season_universe,
 )
-from src.services.cfb_season_engine.types import TeamProjectionState  # noqa: E402
 from src.services.cfb_season_engine.cfb_futures import (  # noqa: E402
     FUTURES_VERSION,
     accumulate_path,
     finalize_futures,
 )
 from src.services.cfb_season_engine.cfb_kei import (  # noqa: E402
-    KEI_VERSION,
     apply_cfb_kei,
     diagnostic_short_fav_sample,
+    kei_version_for_weeks,
+    resolve_kei_as_of,
 )
 from src.services.cfb_season_engine.conferences import conference_for  # noqa: E402
 from src.services.cfb_season_engine.product_desk import official_week_board  # noqa: E402
 from src.services.cfb_season_engine.team_projection import expected_team_points  # noqa: E402
+from src.services.cfb_season_engine.power_sot import (  # noqa: E402
+    sit_missing_power_from_sot_rows,
+)
+from src.services.cfb_season_engine.team_features import (  # noqa: E402
+    require_finite_power_index,
+)
 from src.services.cfb_season_engine import priors as P  # noqa: E402
 
-AS_OF = os.environ.get("CFB_CLOSE_AS_OF") or "2026-08-31"
+MINT_WEEKS = (0, 1, 2)
+AS_OF = resolve_kei_as_of(weeks=MINT_WEEKS)
+KEI_VERSION = kei_version_for_weeks(MINT_WEEKS)
 N_FUTURES = 2500
 SEED = int(os.environ.get("CFB_FUTURES_SEED") or 20260831)
 
 
 def hydrate_missing_from_power_sot(universe) -> int:
-    """Fill official FBS codes that the packaged roster universe omitted."""
+    """Sit official FBS omitted from the packaged universe — never invent 1.0."""
     path = MS / "src/services/cfb_season_engine/data/cfb_power_sot_2026.json"
     pack = json.loads(path.read_text(encoding="utf-8"))
-    added = 0
-    for row in pack.get("teams") or []:
-        code = str(row.get("team") or "").upper()
-        if not code or code in universe.teams:
-            continue
-        universe.teams[code] = TeamProjectionState(
-            team=code,
-            offense_index=float(row.get("offense_index") or 1.0),
-            defense_index=float(row.get("defense_index") or 1.0),
-            early_season_uncertainty=float(row.get("early_season_uncertainty") or 0.35),
-            source="power_sot_v0.15_fill",
-            fidelity="approximate",
-            notes={"fill": "power_sot_identity_gap"},
-        )
-        added += 1
-    return added
+    return sit_missing_power_from_sot_rows(universe, pack.get("teams") or [])
 
 
 def _load_official() -> Dict[str, Any]:
@@ -181,15 +174,23 @@ def kei_lines_file(board: Dict[str, Any]) -> Dict[str, Any]:
 def build_futures(universe, official: Dict[str, Any]) -> Dict[str, Any]:
     teams = list(universe.team_codes)
     conferences = universe.conferences
-    power = {
-        code: 0.5
-        * (
-            float(getattr(universe.teams[code], "offense_index", 1.0) or 1.0)
-            + float(getattr(universe.teams[code], "defense_index", 1.0) or 1.0)
+    power = {}
+    for code in teams:
+        if code not in universe.teams:
+            continue
+        st = universe.teams[code]
+        power[code] = 0.5 * (
+            require_finite_power_index(
+                getattr(st, "offense_index", None),
+                field="offense_index",
+                team=code,
+            )
+            + require_finite_power_index(
+                getattr(st, "defense_index", None),
+                field="defense_index",
+                team=code,
+            )
         )
-        for code in teams
-        if code in universe.teams
-    }
     precomputed = []
     locked = []
     for raw in official.get("games") or []:

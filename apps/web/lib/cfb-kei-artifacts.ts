@@ -160,7 +160,7 @@ export function cfbKeiVersionStrip(): {
   as_of: string;
 } {
   return {
-    kei_version: String(KEI.kei_version || "cfb-kei-v1.0-2026w0"),
+    kei_version: String(KEI.kei_version || ""),
     futures_version: String(
       FUTURES.futures_version || "cfb-futures-v1-cfp12-2026",
     ),

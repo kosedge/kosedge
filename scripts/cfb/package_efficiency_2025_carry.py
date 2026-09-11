@@ -26,6 +26,22 @@ from statistics import mean, pstdev
 from typing import Any, Dict, List, Optional, Tuple
 
 ROOT = Path(__file__).resolve().parents[2]
+MS = ROOT / "services" / "model-service"
+sys.path.insert(0, str(MS))
+
+from src.services.cfb_season_engine.fbs_universe import official_fbs_codes  # noqa: E402
+from src.services.cfb_season_engine.name_to_code import (  # noqa: E402
+    NAME_TO_CODE,
+    P0_REQUIRED_CODES,
+    P0_REQUIRED_NAME_TO_CODE,
+    assert_p0_codes_mapped,
+    mapped_code,
+    require_mapped_code,
+)
+from src.services.cfb_season_engine.team_features import (  # noqa: E402
+    MissingRequiredTeamFeature,
+)
+
 DATA = (
     ROOT
     / "services"
@@ -45,135 +61,6 @@ ALIASES = {
     "OREST": "ORST",
     "ULL": "UL",
     "FAU2": "FAU",
-}
-
-NAME_TO_CODE = {
-    "Indiana": "IU",
-    "Ohio State": "OSU",
-    "Oregon": "ORE",
-    "Texas Tech": "TTU",
-    "Ole Miss": "MISS",
-    "Notre Dame": "ND",
-    "Georgia": "UGA",
-    "Utah": "UTAH",
-    "Texas A&M": "TAMU",
-    "Vanderbilt": "VAN",
-    "Iowa": "IOWA",
-    "Washington": "WASH",
-    "Oklahoma": "OU",
-    "Penn State": "PSU",
-    "USC": "USC",
-    "Texas": "TEX",
-    "BYU": "BYU",
-    "Tennessee": "TENN",
-    "Alabama": "ALA",
-    "Arizona": "ARI",
-    "SMU": "SMU",
-    "Illinois": "ILL",
-    "Michigan": "MICH",
-    "Louisville": "LOU",
-    "James Madison": "JMU",
-    "Auburn": "AUB",
-    "South Florida": "USF",
-    "Virginia": "UVA",
-    "LSU": "LSU",
-    "Iowa State": "ISU",
-    "Clemson": "CLEM",
-    "Georgia Tech": "GT",
-    "TCU": "TCU",
-    "Pittsburgh": "PITT",
-    "Houston": "HOU",
-    "Memphis": "MEM",
-    "Florida State": "FSU",
-    "Kansas State": "KSU",
-    "Cincinnati": "CIN",
-    "San Diego State": "SDSU",
-    "Duke": "DUKE",
-    "Nebraska": "NEB",
-    "Tulane": "TULN",
-    "South Carolina": "SCAR",
-    "Northwestern": "NW",
-    "Arkansas": "ARK",
-    "UConn": "CONN",
-    "Wake Forest": "WAKE",
-    "Navy": "NAVY",
-    "Mississippi State": "MSST",
-    "NC State": "NCSU",
-    "Kansas": "KU",
-    "UNLV": "UNLV",
-    "Arizona State": "ASU",
-    "Washington State": "WSU",
-    "Florida": "UF",
-    "UTSA": "UTSA",
-    "Boise State": "BOISE",
-    "Fresno State": "FRES",
-    "Kentucky": "UK",
-    "Hawai'i": "HAW",
-    "Hawaii": "HAW",
-    "Baylor": "BAY",
-    "Minnesota": "MINN",
-    "Western Kentucky": "WKU",
-    "Rutgers": "RUT",
-    "Army": "ARMY",
-    "Texas State": "TXST",
-    "Maryland": "MD",
-    "UCF": "UCF",
-    "Louisiana Tech": "LT",
-    "Western Michigan": "WMU",
-    "Utah State": "UTAHST",
-    "Air Force": "AFA",
-    "California": "CAL",
-    "Michigan State": "MSU",
-    "Ohio": "OHIO",
-    "Wisconsin": "WIS",
-    "Marshall": "MRSH",
-    "Troy": "TROY",
-    "Temple": "TEM",
-    "Kennesaw State": "KENNESAW",
-    "Purdue": "PUR",
-    "West Virginia": "WVU",
-    "North Carolina": "UNC",
-    "Southern Miss": "USM",
-    "Buffalo": "BUFF",
-    "Colorado": "COLO",
-    "Boston College": "BC",
-    "UCLA": "UCLA",
-    "Florida Atlantic": "FAU",
-    "Central Michigan": "CMU",
-    "Liberty": "LIB",
-    "Georgia Southern": "GASO",
-    "Tulsa": "TLSA",
-    "Louisiana": "UL",
-    "Virginia Tech": "VT",
-    "Florida International": "FIU",
-    "Missouri State": "MOST",
-    "Delaware": "DEL",
-    "Wyoming": "WYO",
-    "App State": "APP",
-    "Appalachian State": "APP",
-    "Stanford": "STAN",
-    "Bowling Green": "BGSU",
-    "South Alabama": "USA",
-    "Syracuse": "SYR",
-    "Rice": "RICE",
-    "Akron": "AKR",
-    "San José State": "SJSU",
-    "San Jose State": "SJSU",
-    "Oklahoma State": "OKST",
-    "Eastern Michigan": "EMU",
-    "Coastal Carolina": "CCU",
-    "New Mexico State": "NMSU",
-    "Oregon State": "ORST",
-    "Middle Tennessee": "MTSU",
-    "Northern Illinois": "NIU",
-    "UTEP": "UTEP",
-    "Kent State": "KENT",
-    "UL Monroe": "ULM",
-    "Ball State": "BALL",
-    "Georgia State": "GAST",
-    "Charlotte": "CHAR",
-    "Sam Houston": "SHSU",
-    "Massachusetts": "MASS",
 }
 
 
@@ -215,7 +102,10 @@ def fetch_sp_plus_public() -> List[Dict[str, Any]]:
         if not m:
             continue
         name = m.group(2).strip()
-        code = NAME_TO_CODE.get(name)
+        if name in P0_REQUIRED_NAME_TO_CODE:
+            code = require_mapped_code(name)
+        else:
+            code = mapped_code(name)
         if name == "Miami":
             miami_seen += 1
             code = "MIA" if miami_seen == 1 else "M-OH"
@@ -258,7 +148,10 @@ def fetch_sp_plus_cfbd(year: int = 2025) -> Optional[List[Dict[str, Any]]]:
     out: List[Dict[str, Any]] = []
     for i, row in enumerate(sorted(rows, key=lambda r: -float(r.get("rating") or 0))):
         name = str(row.get("team") or "")
-        code = NAME_TO_CODE.get(name)
+        if name in P0_REQUIRED_NAME_TO_CODE:
+            code = require_mapped_code(name)
+        else:
+            code = mapped_code(name)
         offense = row.get("offense") or {}
         defense = row.get("defense") or {}
         specials = row.get("specialTeams") or {}
@@ -281,6 +174,7 @@ def fetch_sp_plus_cfbd(year: int = 2025) -> Optional[List[Dict[str, Any]]]:
 
 
 def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[str, Any]:
+    assert_p0_codes_mapped(NAME_TO_CODE)
     priors = json.loads(PRIORS_PATH.read_text(encoding="utf-8"))
     codes = set(priors.get("teams") or {})
     mean_off = mean(p["sp_offense"] for p in rows) if rows else 27.0
@@ -334,6 +228,8 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             ),
         }
 
+    official = official_fbs_codes()
+    missing_official: List[str] = []
     for code in sorted(codes):
         if code in teams:
             continue
@@ -344,6 +240,10 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             row["alias_of"] = canon
             row["source"] = "packaged_sp_plus_final_2025_alias"
             teams[code] = row
+            continue
+        # P0 official FBS must never take the league-average 1.0 fill.
+        if code in P0_REQUIRED_CODES and code in official:
+            missing_official.append(code)
             continue
         teams[code] = {
             "team": code,
@@ -362,10 +262,14 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             "source": "league_average_fill",
             "fidelity": "placeholder",
             "notes": (
-                "No SP+ row mapped for this packaged code (universe gap / FCS placeholder). "
-                "League-average efficiency fill."
+                "Non-FBS / alias placeholder. Official FBS must not reach this fill."
             ),
         }
+    if missing_official:
+        raise MissingRequiredTeamFeature(
+            "Official FBS codes have no mapped SP+ row — sit, do not "
+            f"league-average fill: {missing_official}"
+        )
 
     return {
         "as_of": "2026-08-31",

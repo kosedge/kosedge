@@ -20,7 +20,7 @@ from pathlib import Path
 from typing import Any, Dict, List, Mapping, Optional, Tuple
 
 from src.services.cfb_season_engine.coaching_continuity import build_coaching_continuity
-from src.services.cfb_season_engine.conferences import load_conference_map
+from src.services.cfb_season_engine.conferences import conference_for, load_conference_map
 from src.services.cfb_season_engine.efficiency import (
     build_efficiency_profile,
     snapshot_meta as efficiency_snapshot_meta,
@@ -221,7 +221,7 @@ def _build_universe_from_team_payloads(
     )
     conferences = load_conference_map()
     conferences = {
-        t: conferences.get(t, conferences.get(canonicalize_team_code(t), "Independent"))
+        t: conference_for(t, conferences)
         for t in set(teams) | set(official_codes)
     }
     if official_games:

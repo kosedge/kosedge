@@ -229,7 +229,8 @@ def engine_status_payload(
             "offense_index": state.offense_index,
             "defense_index": state.defense_index,
             "early_season_uncertainty": state.early_season_uncertainty,
-            "conference": universe.conferences.get(code, "Independent"),
+            "conference": universe.conferences.get(code)
+            or conferences.conference_for(code),
             "roster": roster_to_dict(state.roster),
             "roster_breakdown": roster_strength_breakdown(state.roster),
             "qb": qb_to_dict(state.qb),
@@ -291,7 +292,8 @@ def engine_status_payload(
                 "def_eff": round(st.efficiency.def_eff, 2) if st.efficiency else None,
                 "sp_plus": round(st.efficiency.sp_plus, 2) if st.efficiency else None,
                 "early_season_uncertainty": round(early_u, 3),
-                "conference": universe.conferences.get(code, "Independent"),
+                "conference": universe.conferences.get(code)
+                or conferences.conference_for(code),
             }
         )
 
