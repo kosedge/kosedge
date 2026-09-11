@@ -817,8 +817,11 @@ def fbs_distributions(states: Mapping[str, TeamProjectionState]) -> Dict[str, An
         ),
     }
     qb_classes: Dict[str, int] = defaultdict(int)
+    talent_by_class: Dict[str, List[float]] = defaultdict(list)
     for r in rows:
         qb_classes[str(r["qb_class"])] += 1
+        talent_by_class[str(r["qb_class"])].append(float(r["qb_talent"]))
+    qb_idx = [float(r["qb_index"]) for r in rows]
     p4 = [r for r in rows if r["p4"]]
     g5 = [r for r in rows if not r["p4"]]
     return {
@@ -826,6 +829,13 @@ def fbs_distributions(states: Mapping[str, TeamProjectionState]) -> Dict[str, An
         "recruiting_exactly_55": sum(1 for r in rows if r["recruiting_floor_55"]),
         "recruiting_gt_80": sum(1 for r in rows if r["recruiting"] >= 80),
         "qb_class_counts": dict(qb_classes),
+        "qb_talent_by_class": {k: dist(v) for k, v in sorted(talent_by_class.items())},
+        "qb_soft_ceiling": {
+            "knee": P.QB_SITUATION_SOFT_KNEE,
+            "n_at_or_above_knee": sum(1 for x in qb_idx if x >= P.QB_SITUATION_SOFT_KNEE),
+            "n_near_rail_1_37": sum(1 for x in qb_idx if x >= 1.37),
+            "max": None if not qb_idx else round(max(qb_idx), 4),
+        },
         "distributions": distributions,
         "correlations": correlations,
         "p4_vs_g5": {
@@ -897,10 +907,13 @@ def write_report(payload: Mapping[str, Any]) -> None:
         "",
         top.get("why", ""),
         "",
-        "The +7 to +9 live-roster residual is not a missing intercept. It is "
-        "recruiting-anchored width (and offense-only QB lift) entering the same "
-        "identity multiple times, then getting exponentiated by "
-        f"`MATCHUP_RESPONSE={P.MATCHUP_RESPONSE}` on the sum.",
+        "The +7 to +9 is **not** a recruiting-unit intercept and **not** SP+. "
+        "Recruiting-channel and unit-headline ablations leave the Over intact "
+        "(units_50 makes it worse). The live 2025-attempt QB talent formula "
+        "prints a typical starter near 67, not 50 — hist-cal never had that "
+        "signal — and there is no defensive twin. "
+        f"`MATCHUP_RESPONSE={P.MATCHUP_RESPONSE}` then turns the off>def gap "
+        "into sum inflation.",
         "",
         "## 1. End-to-end path (frozen, unchanged)",
         "",
@@ -937,6 +950,18 @@ def write_report(payload: Mapping[str, Any]) -> None:
         f"- recruiting exactly 55 (floor): **{d['recruiting_exactly_55']}**",
         f"- recruiting ≥ 80: {d['recruiting_gt_80']}",
         f"- QB classes: `{d['qb_class_counts']}`",
+        f"- QB index ≥ knee {d.get('qb_soft_ceiling', {}).get('knee')}: "
+        f"**{d.get('qb_soft_ceiling', {}).get('n_at_or_above_knee')}**; "
+        f"near rail ≥1.37: {d.get('qb_soft_ceiling', {}).get('n_near_rail_1_37')}",
+        "",
+        "QB talent by class:",
+        "",
+    ]
+    for cls, x in (d.get("qb_talent_by_class") or {}).items():
+        lines.append(
+            f"- `{cls}` n={x['n']} mean={x['mean']} sd={x['sd']} p10={x['p10']} p90={x['p90']}"
+        )
+    lines += [
         "",
         "| Component | mean | sd | p10 | p50 | p90 |",
         "|---|---:|---:|---:|---:|---:|",
@@ -1075,39 +1100,36 @@ def rank_causes(board: Mapping[str, Any], fbs: Mapping[str, Any]) -> List[Dict[s
     asym = fbs.get("asymmetric_centering") or {}
 
     add(
-        "Recruiting-anchored identity (channel, not the 0.26 roster weight alone)",
-        "Recruiting is written into returning/portal/experience baselines, unit talent (0.62), "
-        "unit portal_impact, and thin QB talent. Setting only the recruiting *field* to 50 "
-        "barely moves the board; rebuilding the whole channel does.",
+        "QB talent location (2025 attempts formula), no defensive twin",
+        "talent_from_qb_stats uses base 42 + attempt/YPA/TD terms. A typical "
+        "FBS starter (≈250–300 att) prints ~67, not 50. 50 means 'no signal' "
+        "in hist-cal, not 'league-average starter'. Index = 1+(talent-50)/80 "
+        "then × incumbent 1.06. Mean live QB index is ~1.20. Offense compose "
+        "gets 0.24 + blend 0.26; defense gets nothing. That is the +7 to +9.",
         (
-            f"recruiting_field_50 resid={rec_field.get('mean_resid')} "
-            f"(Δ {rec_field.get('delta_vs_frozen', {}).get('mean_resid')}); "
-            f"recruiting_channel_50 resid={rec_ch.get('mean_resid')} "
-            f"(Δ {rec_ch.get('delta_vs_frozen', {}).get('mean_resid')}); "
-            f"recruiting↔offense_index r={corr.get('recruiting_vs_offense_index')}, "
-            f"recruiting↔defense_index r={corr.get('recruiting_vs_defense_index')}, "
-            f"off↔def r={corr.get('offense_index_vs_defense_index')}"
+            f"qb_talent_50 resid={board.get('qb_talent_50', {}).get('mean_resid')} "
+            f"(Δ {board.get('qb_talent_50', {}).get('delta_vs_frozen', {}).get('mean_resid')}); "
+            f"qb_league resid={qb.get('mean_resid')}; "
+            f"mean qb_talent={ (fbs.get('distributions') or {}).get('qb_talent', {}).get('mean') }; "
+            f"mean qb_index={asym.get('mean_qb_index')}; "
+            f"recruiting↔qb_talent r={corr.get('recruiting_vs_qb_talent')} (weak)"
         ),
         "P0",
     )
     add(
-        "Unit-grade width (compose + game multipliers)",
-        "OL/skill/F7/secondary are recruiting-dominated. They lift offense_index, "
-        "defense_index, and then multiply the total again via unit_off_boost / "
-        "opp_def_dampen. Game-only flatten (indices live) is the double-count check.",
+        "Recruiting-anchored units are a net coolant on totals, not the Over",
+        "Recruiting is a common factor (r≈0.87 vs every unit) and 65/136 teams "
+        "sit on the 55 floor. But recruiting_channel_50 barely moves residual, "
+        "and flattening units to 50 *raises* the Over: defense compose weights "
+        "F7+secondary 0.44 vs offense OL+skill 0.20, so live units~60 help "
+        "defense more than they boost offense.",
         (
-            f"units_50 resid={units.get('mean_resid')}; "
+            f"recruiting_field_50 resid={rec_field.get('mean_resid')}; "
+            f"recruiting_channel_50 resid={rec_ch.get('mean_resid')}; "
+            f"units_50 resid={units.get('mean_resid')} (worse); "
             f"game_units_50_indices_live resid={game_u.get('mean_resid')}"
         ),
-        "P0",
-    )
-    add(
-        "Offense-only QB lever (no defensive twin)",
-        f"Mean QB index {asym.get('mean_qb_index')} on a 1.06 incumbent multiplier "
-        "raises offense_index without a matching defense_index lift, so "
-        "(off/def)^1.4 systematically exceeds 1 on the sum.",
-        f"qb_league resid={qb.get('mean_resid')}; qb_index↔offense r={corr.get('qb_index_vs_offense_index')}",
-        "P1",
+        "P2",
     )
     add(
         "Offense-layer vs defense-layer asymmetry",
@@ -1124,10 +1146,11 @@ def rank_causes(board: Mapping[str, Any], fbs: Mapping[str, Any]) -> List[Dict[s
     add(
         "Recruiting floor at 55 and right tail",
         f"{fbs.get('recruiting_exactly_55')} FBS teams sit on the packaged 55 floor; "
-        f"{fbs.get('recruiting_gt_80')} are ≥80. Mean recruiting > 50 plus a long right tail "
-        "is exactly the width MATCHUP_RESPONSE was calibrated without.",
+        f"{fbs.get('recruiting_gt_80')} are ≥80. That is real width and a real "
+        "double-count into units/roster_strength — but it is **not** what prints "
+        "the +9 total residual (see recruiting_channel_50).",
         f"recruiting dist={distros_line(fbs)}",
-        "P1",
+        "P2",
     )
     add(
         "Full roster/QB/unit league (replication of #538 +0.10)",
@@ -1185,7 +1208,24 @@ def minimum_reproduction(board: Mapping[str, Any]) -> Dict[str, Any]:
             "def_layers_league_off_live",
         }
     ]
-    if "recruiting_channel_50" in singles:
+    if "qb_talent_50" in singles:
+        text = (
+            "Minimum necessary component: **QB talent** "
+            f"(qb_talent_50 resid={board['qb_talent_50']['mean_resid']}). "
+            "That single field takes frozen +9.14 → ~+2. Full QB neutralize "
+            f"(qb_league resid={board.get('qb_league', {}).get('mean_resid')}) "
+            "crosses through zero. Class/cast are the leftover ~3 pts. "
+            "Recruiting channel and units do **not** reproduce or remove the +7 to +9."
+        )
+        key = "qb_talent_50"
+    elif "qb_league" in singles:
+        text = (
+            "Minimum necessary bundle: **QB situation** "
+            f"(qb_league resid={board['qb_league']['mean_resid']}). "
+            f"Frozen={frozen:.2f}."
+        )
+        key = "qb_league"
+    elif "recruiting_channel_50" in singles:
         text = (
             "Minimum necessary channel: **recruiting-anchored reconstruction** "
             f"(recruiting_channel_50 resid={board['recruiting_channel_50']['mean_resid']}). "
@@ -1320,15 +1360,14 @@ def main() -> int:
         "ranked_causes": ranked,
         "minimum_reproduction": minimum,
         "next_experiment": (
-            "Falsify the recruiting-channel claim without touching 2025 or fitting λ: "
-            "rebuild the 2026 snapshot with recruiting recentered to mean 50 **preserving rank/order** "
-            "(a location shift, not a shrink) and, separately, with unit talent "
-            "`0.62*recruiting` replaced by a residual-only ESPN class/portal mix. "
-            "Pre-register: if the location-only recenter leaves residual ≥ +6 while the "
-            "unit-talent de-anchor drops it below +3, the problem is width/reuse of recruiting "
-            "in units — not a missing intercept. Do not ship either transform. "
-            "Only after that mechanism test, decide whether a same-path 2023–24 "
-            "recruiting archive is worth minting."
+            "Falsify the QB-talent location claim without fitting to 2026 books or opening 2025: "
+            "recompute talent_from_qb_stats after zeroing one term at a time "
+            "(attempt cap, YPA, TD) and after a *formula-internal* recenter that maps the "
+            "cross-sectional median starter to 50 (location only; preserve rank). "
+            "Pre-register: if zeroing the attempt term or the median-to-50 map drops "
+            "W1/W2 residual below +3 while recruiting_channel_50 stays ~+9, the "
+            "mechanism is the QB counting-stat location, not recruiting/units. "
+            "Do not ship the recenter. Do not tune the map to street totals."
         ),
     }
     OUT_JSON.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
