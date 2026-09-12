@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-11T23:38:47Z",
+  "generated_at": "2026-09-12T01:49:52Z",
   "season": 2022,
   "qb_feature_contract_version": "cfb-qb-feature-v1",
   "matchup_response_frozen": 1.4,
@@ -10,25 +10,25 @@
   "recalibrated": false,
   "play": false,
   "lake_locate": {
-    "chosen": null,
-    "mounted": false,
+    "chosen": "hd_parquet",
+    "mounted": true,
     "tried": [
       {
         "id": "hd_parquet",
         "path": "/Volumes/KosEdgeData/clean/odds/cfb/snapshots-2022.parquet",
-        "present": false,
-        "hd_mounted": false,
+        "present": true,
+        "hd_mounted": true,
         "provenance": "2026-08-13 warehouse export on /Volumes/KosEdgeData"
       },
       {
         "id": "repo_parquet",
-        "path": "/workspace/services/model-service/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
+        "path": "/Users/ryankos/kosedge/.worktrees/cfb-2022-closes-mac/services/model-service/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
         "present": false,
         "provenance": "gitignored data/cfb/warehouse/clean/odds_cfb fallback (paths.REPO_ODDS_CFB)"
       },
       {
         "id": "monorepo_parquet",
-        "path": "/workspace/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
+        "path": "/Users/ryankos/kosedge/.worktrees/cfb-2022-closes-mac/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
         "present": false,
         "provenance": "monorepo data/cfb/warehouse/clean/odds_cfb (this VM)"
       },
@@ -68,8 +68,8 @@
       "kickoff": "ESPN schedule game_date / start (warehouse games.kickoff)",
       "rule": "strictly_before_kickoff"
     },
-    "raw_rows_loaded": 0,
-    "raw_rows_2022_window": 0
+    "raw_rows_loaded": 28322,
+    "raw_rows_2022_window": 28322
   },
   "layer_a": {
     "n": 131,
@@ -88,56 +88,123 @@
       "not_final": 4
     },
     "source": "sportsdataverse espn_cfb_betting + team_box + linescores + schedules",
-    "cache_dir": "/workspace/data/cfb/raw/sdv"
+    "cache_dir": "/Users/ryankos/kosedge/.worktrees/cfb-2022-closes-mac/data/cfb/raw/sdv"
   },
   "audit": {
     "funnel": {
-      "raw_events": 0,
-      "raw_snaps": 0,
-      "valid_pregame_closes": 0,
-      "identity_matched": 0,
-      "fbs_fbs": 0,
-      "actual_available": 0,
-      "close_actual_eval_universe_all_weeks": 0,
-      "train0_close_actual_lake": 0,
-      "train0_close_actual_lake_or_sdv_fill": 1
+      "raw_events": 773,
+      "raw_snaps": 28322,
+      "valid_pregame_closes": 717,
+      "identity_matched": 713,
+      "fbs_fbs": 713,
+      "actual_available": 713,
+      "close_actual_eval_universe_all_weeks": 713,
+      "train0_close_actual_lake": 712,
+      "train0_close_actual_lake_or_sdv_fill": 713
     },
     "availability": {
-      "spread_available_joined": 125,
-      "total_available_joined": 125,
-      "spread_and_total": 125,
+      "spread_available_joined": 838,
+      "total_available_joined": 838,
+      "spread_and_total": 838,
       "spread_only": 0,
       "total_only": 0,
-      "train0_spread_lake": 0,
-      "train0_total_lake": 0,
-      "train0_spread_fill": 1,
-      "train0_total_fill": 1
+      "train0_spread_lake": 712,
+      "train0_total_lake": 712,
+      "train0_spread_fill": 713,
+      "train0_total_fill": 713
     },
     "duplicates": {
       "duplicate_game_ids": 0,
       "conflict_multi_game": 0,
       "conflict_date_skew": 0,
-      "orientation_flip_candidates": 0,
-      "sdv_lake_spread_disagree": 0
+      "orientation_flip_candidates": 1,
+      "sdv_lake_spread_disagree": 2
     },
     "reason_counts": {
       "FCS_AWAY": 115,
-      "NO_LAKE_MATCH": 900,
-      "SDV_FILL_ONLY": 125,
+      "POST_KICK_ONLY": 2,
+      "SDV_FILL_ONLY": 121,
+      "SDV_LAKE_SPREAD_DISAGREE": 2,
+      "NO_LAKE_MATCH": 180,
+      "BOOK_DISAGREE_INFORMATIONAL": 46,
       "LAYER_A_MISSING_AWAY": 5,
+      "DATE_SKEW": 5,
+      "ORIENTATION_FLIP_CANDIDATE": 1,
       "WEEK_OUT_OF_TRAIN0": 1,
       "FCS_BOTH": 4
     },
     "unmatched_game_reason_counts": {
-      "FCS_AWAY": 115,
-      "NO_LAKE_MATCH": 900,
-      "SDV_FILL_ONLY": 125,
+      "FCS_AWAY": 111,
+      "POST_KICK_ONLY": 2,
+      "SDV_FILL_ONLY": 121,
+      "NO_LAKE_MATCH": 180,
       "LAYER_A_MISSING_AWAY": 5,
-      "WEEK_OUT_OF_TRAIN0": 1,
+      "ORIENTATION_FLIP_CANDIDATE": 1,
       "FCS_BOTH": 4
     },
-    "unmatched_lake_events": 0,
-    "unmatched_lake_event_samples": [],
+    "unmatched_lake_events": 54,
+    "unmatched_lake_event_samples": [
+      [
+        "2022-08-28",
+        "hawaii rainbow warriors",
+        "vanderbilt commodores"
+      ],
+      [
+        "2022-09-03",
+        "southern mississippi golden eagles",
+        "liberty flames"
+      ],
+      [
+        "2022-09-03",
+        "tulane green wave",
+        "umass minutemen"
+      ],
+      [
+        "2022-09-04",
+        "hawaii rainbow warriors",
+        "western kentucky hilltoppers"
+      ],
+      [
+        "2022-09-05",
+        "clemson tigers",
+        "georgia tech yellow jackets"
+      ],
+      [
+        "2022-09-10",
+        "auburn tigers",
+        "san jose state spartans"
+      ],
+      [
+        "2022-09-10",
+        "miami hurricanes",
+        "southern mississippi golden eagles"
+      ],
+      [
+        "2022-09-10",
+        "toledo rockets",
+        "umass minutemen"
+      ],
+      [
+        "2022-09-11",
+        "michigan wolverines",
+        "hawaii rainbow warriors"
+      ],
+      [
+        "2022-09-24",
+        "temple owls",
+        "umass minutemen"
+      ],
+      [
+        "2022-09-24",
+        "tulane green wave",
+        "southern mississippi golden eagles"
+      ],
+      [
+        "2022-09-25",
+        "new mexico state aggies",
+        "hawaii rainbow warriors"
+      ]
+    ],
     "fcs_exclusions": {
       "fcs_home": 0,
       "fcs_away": 115,
@@ -152,23 +219,107 @@
     },
     "orientation": {
       "convention": "negative close_spread_home = home favored",
-      "large_favorite_losses": [],
-      "n_large_favorite_losses": 0
+      "large_favorite_losses": [
+        {
+          "game_id": "401405072",
+          "close_spread_home": -23.5,
+          "home_score": 42,
+          "away_score": 45,
+          "note": "large favorite lost \u2014 possible but recorded"
+        },
+        {
+          "game_id": "401426568",
+          "close_spread_home": -25.5,
+          "home_score": 31,
+          "away_score": 45,
+          "note": "large favorite lost \u2014 possible but recorded"
+        },
+        {
+          "game_id": "401411129",
+          "close_spread_home": -21.5,
+          "home_score": 21,
+          "away_score": 26,
+          "note": "large favorite lost \u2014 possible but recorded"
+        },
+        {
+          "game_id": "401404151",
+          "close_spread_home": 24.0,
+          "home_score": 19,
+          "away_score": 14,
+          "note": "large favorite lost \u2014 possible but recorded"
+        },
+        {
+          "game_id": "401403953",
+          "close_spread_home": 22.0,
+          "home_score": 63,
+          "away_score": 38,
+          "note": "large favorite lost \u2014 possible but recorded"
+        },
+        {
+          "game_id": "401411168",
+          "close_spread_home": -21.0,
+          "home_score": 17,
+          "away_score": 21,
+          "note": "large favorite lost \u2014 possible but recorded"
+        },
+        {
+          "game_id": "401404166",
+          "close_spread_home": -24.0,
+          "home_score": 14,
+          "away_score": 49,
+          "note": "large favorite lost \u2014 possible but recorded"
+        }
+      ],
+      "n_large_favorite_losses": 7
     },
     "coverage": {
-      "lake_date_min": null,
-      "lake_date_max": null,
-      "n_distinct_lake_dates": 0,
-      "books": {},
-      "sources": {},
-      "captured_at_min": null,
-      "captured_at_max": null,
+      "lake_date_min": "2022-08-27",
+      "lake_date_max": "2023-01-10",
+      "n_distinct_lake_dates": 81,
+      "books": {
+        "draftkings": 14613,
+        "fanduel": 13709
+      },
+      "sources": {
+        "the-odds-api-historical-enterprise": 28322
+      },
+      "captured_at_min": "2022-08-26T17:45:09+00:00",
+      "captured_at_max": "2023-01-09T16:53:02+00:00",
       "joined_close_sources": {
-        "sportsdataverse_espn_cfb_betting": 125,
-        "none": 775
+        "sportsdataverse_espn_cfb_betting": 121,
+        "odds_api_lake": 717,
+        "none": 62
       }
     },
     "representative_rows": [
+      {
+        "game_id": "401405059",
+        "week": 1,
+        "game_date": "2022-08-27",
+        "kickoff": "2022-08-27T16:30Z",
+        "home_team_id": "NW",
+        "away_team_id": "NEB",
+        "home_name_raw": "Northwestern Wildcats",
+        "away_name_raw": "Nebraska Cornhuskers",
+        "home_score": 31,
+        "away_score": 28,
+        "raw_sdv_spread": null,
+        "raw_sdv_total": null,
+        "raw_lake_spread": 11.0,
+        "raw_lake_total": 51.5,
+        "close_spread_home": 11.0,
+        "close_total": 51.5,
+        "open_spread_home": 11.0,
+        "close_source": "odds_api_lake",
+        "book": "draftkings",
+        "close_captured_at": "2022-08-26 17:45:09+00:00",
+        "n_lake_snaps": 3,
+        "match_kind": "exact",
+        "reason_codes": [],
+        "train0_lake": true,
+        "train0_lake_or_sdv_fill": true,
+        "fbs_fbs": true
+      },
       {
         "game_id": "401415240",
         "week": 7,
@@ -222,45 +373,15 @@
         "book": "espn_sdv",
         "close_captured_at": null,
         "n_lake_snaps": 0,
-        "match_kind": null,
+        "match_kind": "exact",
         "reason_codes": [
           "FCS_AWAY",
-          "NO_LAKE_MATCH",
+          "POST_KICK_ONLY",
           "SDV_FILL_ONLY"
         ],
         "train0_lake": false,
         "train0_lake_or_sdv_fill": false,
         "fbs_fbs": false
-      },
-      {
-        "game_id": "401405059",
-        "week": 1,
-        "game_date": "2022-08-27",
-        "kickoff": "2022-08-27T16:30Z",
-        "home_team_id": "NW",
-        "away_team_id": "NEB",
-        "home_name_raw": "Northwestern Wildcats",
-        "away_name_raw": "Nebraska Cornhuskers",
-        "home_score": 31,
-        "away_score": 28,
-        "raw_sdv_spread": null,
-        "raw_sdv_total": null,
-        "raw_lake_spread": null,
-        "raw_lake_total": null,
-        "close_spread_home": null,
-        "close_total": null,
-        "open_spread_home": null,
-        "close_source": null,
-        "book": "espn_sdv",
-        "close_captured_at": null,
-        "n_lake_snaps": 0,
-        "match_kind": null,
-        "reason_codes": [
-          "NO_LAKE_MATCH"
-        ],
-        "train0_lake": false,
-        "train0_lake_or_sdv_fill": false,
-        "fbs_fbs": true
       },
       {
         "game_id": "401404146",
@@ -293,16 +414,46 @@
         "fbs_fbs": true
       },
       {
-        "game_id": "401405058",
-        "week": 1,
-        "game_date": "2022-08-27",
-        "kickoff": "2022-08-27T20:00Z",
-        "home_team_id": "ILL",
-        "away_team_id": "WYO",
-        "home_name_raw": "Illinois Fighting Illini",
-        "away_name_raw": "Wyoming Cowboys",
-        "home_score": 38,
-        "away_score": 6,
+        "game_id": "401403890",
+        "week": 3,
+        "game_date": "2022-09-18",
+        "kickoff": "2022-09-18T01:00Z",
+        "home_team_id": "TAMU",
+        "away_team_id": "MIA",
+        "home_name_raw": "Texas A&M Aggies",
+        "away_name_raw": "Miami Hurricanes",
+        "home_score": 17,
+        "away_score": 9,
+        "raw_sdv_spread": null,
+        "raw_sdv_total": null,
+        "raw_lake_spread": -8.5,
+        "raw_lake_total": 53.5,
+        "close_spread_home": -8.5,
+        "close_total": 53.5,
+        "open_spread_home": -8.5,
+        "close_source": "odds_api_lake",
+        "book": "fanduel",
+        "close_captured_at": "2022-08-31 16:47:36+00:00",
+        "n_lake_snaps": 15,
+        "match_kind": "date_skew",
+        "reason_codes": [
+          "DATE_SKEW"
+        ],
+        "train0_lake": true,
+        "train0_lake_or_sdv_fill": true,
+        "fbs_fbs": true
+      },
+      {
+        "game_id": "401404090",
+        "week": 6,
+        "game_date": "2022-10-08",
+        "kickoff": "2022-10-08T16:00Z",
+        "home_team_id": "OU",
+        "away_team_id": "TEX",
+        "home_name_raw": "Oklahoma Sooners",
+        "away_name_raw": "Texas Longhorns",
+        "home_score": 0,
+        "away_score": 49,
         "raw_sdv_spread": null,
         "raw_sdv_total": null,
         "raw_lake_spread": null,
@@ -316,10 +467,38 @@
         "n_lake_snaps": 0,
         "match_kind": null,
         "reason_codes": [
-          "NO_LAKE_MATCH"
+          "ORIENTATION_FLIP_CANDIDATE"
         ],
         "train0_lake": false,
         "train0_lake_or_sdv_fill": false,
+        "fbs_fbs": true
+      },
+      {
+        "game_id": "401405058",
+        "week": 1,
+        "game_date": "2022-08-27",
+        "kickoff": "2022-08-27T20:00Z",
+        "home_team_id": "ILL",
+        "away_team_id": "WYO",
+        "home_name_raw": "Illinois Fighting Illini",
+        "away_name_raw": "Wyoming Cowboys",
+        "home_score": 38,
+        "away_score": 6,
+        "raw_sdv_spread": null,
+        "raw_sdv_total": null,
+        "raw_lake_spread": -14.0,
+        "raw_lake_total": 43.0,
+        "close_spread_home": -14.0,
+        "close_total": 43.0,
+        "open_spread_home": -14.0,
+        "close_source": "odds_api_lake",
+        "book": "draftkings",
+        "close_captured_at": "2022-08-27 16:47:58+00:00",
+        "n_lake_snaps": 6,
+        "match_kind": "exact",
+        "reason_codes": [],
+        "train0_lake": true,
+        "train0_lake_or_sdv_fill": true,
         "fbs_fbs": true
       },
       {
@@ -335,21 +514,19 @@
         "away_score": 13,
         "raw_sdv_spread": null,
         "raw_sdv_total": null,
-        "raw_lake_spread": null,
-        "raw_lake_total": null,
-        "close_spread_home": null,
-        "close_total": null,
-        "open_spread_home": null,
-        "close_source": null,
-        "book": "espn_sdv",
-        "close_captured_at": null,
-        "n_lake_snaps": 0,
-        "match_kind": null,
-        "reason_codes": [
-          "NO_LAKE_MATCH"
-        ],
-        "train0_lake": false,
-        "train0_lake_or_sdv_fill": false,
+        "raw_lake_spread": -7.0,
+        "raw_lake_total": 59.0,
+        "close_spread_home": -7.0,
+        "close_total": 59.0,
+        "open_spread_home": -7.0,
+        "close_source": "odds_api_lake",
+        "book": "draftkings",
+        "close_captured_at": "2022-08-27 16:47:58+00:00",
+        "n_lake_snaps": 6,
+        "match_kind": "exact",
+        "reason_codes": [],
+        "train0_lake": true,
+        "train0_lake_or_sdv_fill": true,
         "fbs_fbs": true
       },
       {
@@ -365,21 +542,19 @@
         "away_score": 23,
         "raw_sdv_spread": null,
         "raw_sdv_total": null,
-        "raw_lake_spread": null,
-        "raw_lake_total": null,
-        "close_spread_home": null,
-        "close_total": null,
-        "open_spread_home": null,
-        "close_source": null,
-        "book": "espn_sdv",
-        "close_captured_at": null,
-        "n_lake_snaps": 0,
-        "match_kind": null,
-        "reason_codes": [
-          "NO_LAKE_MATCH"
-        ],
-        "train0_lake": false,
-        "train0_lake_or_sdv_fill": false,
+        "raw_lake_spread": 7.5,
+        "raw_lake_total": 48.0,
+        "close_spread_home": 7.5,
+        "close_total": 48.0,
+        "open_spread_home": 8.5,
+        "close_source": "odds_api_lake",
+        "book": "draftkings",
+        "close_captured_at": "2022-08-27 16:47:58+00:00",
+        "n_lake_snaps": 6,
+        "match_kind": "exact",
+        "reason_codes": [],
+        "train0_lake": true,
+        "train0_lake_or_sdv_fill": true,
         "fbs_fbs": true
       },
       {
@@ -395,81 +570,19 @@
         "away_score": 31,
         "raw_sdv_spread": null,
         "raw_sdv_total": null,
-        "raw_lake_spread": null,
-        "raw_lake_total": null,
-        "close_spread_home": null,
-        "close_total": null,
-        "open_spread_home": null,
-        "close_source": null,
-        "book": "espn_sdv",
-        "close_captured_at": null,
-        "n_lake_snaps": 0,
-        "match_kind": null,
-        "reason_codes": [
-          "NO_LAKE_MATCH"
-        ],
-        "train0_lake": false,
-        "train0_lake_or_sdv_fill": false,
-        "fbs_fbs": true
-      },
-      {
-        "game_id": "401403853",
-        "week": 1,
-        "game_date": "2022-08-28",
-        "kickoff": "2022-08-28T02:30Z",
-        "home_team_id": "HAW",
-        "away_team_id": "VAN",
-        "home_name_raw": "Hawai'i Rainbow Warriors",
-        "away_name_raw": "Vanderbilt Commodores",
-        "home_score": 10,
-        "away_score": 63,
-        "raw_sdv_spread": null,
-        "raw_sdv_total": null,
-        "raw_lake_spread": null,
-        "raw_lake_total": null,
-        "close_spread_home": null,
-        "close_total": null,
-        "open_spread_home": null,
-        "close_source": null,
-        "book": "espn_sdv",
-        "close_captured_at": null,
-        "n_lake_snaps": 0,
-        "match_kind": null,
-        "reason_codes": [
-          "NO_LAKE_MATCH"
-        ],
-        "train0_lake": false,
-        "train0_lake_or_sdv_fill": false,
-        "fbs_fbs": true
-      },
-      {
-        "game_id": "401416569",
-        "week": 1,
-        "game_date": "2022-09-01",
-        "kickoff": "2022-09-01T23:00Z",
-        "home_team_id": "OKST",
-        "away_team_id": "CMU",
-        "home_name_raw": "Oklahoma State Cowboys",
-        "away_name_raw": "Central Michigan Chippewas",
-        "home_score": 58,
-        "away_score": 44,
-        "raw_sdv_spread": null,
-        "raw_sdv_total": null,
-        "raw_lake_spread": null,
-        "raw_lake_total": null,
-        "close_spread_home": null,
-        "close_total": null,
-        "open_spread_home": null,
-        "close_source": null,
-        "book": "espn_sdv",
-        "close_captured_at": null,
-        "n_lake_snaps": 0,
-        "match_kind": null,
-        "reason_codes": [
-          "NO_LAKE_MATCH"
-        ],
-        "train0_lake": false,
-        "train0_lake_or_sdv_fill": false,
+        "raw_lake_spread": 1.5,
+        "raw_lake_total": 54.5,
+        "close_spread_home": 1.5,
+        "close_total": 54.5,
+        "open_spread_home": 1.5,
+        "close_source": "odds_api_lake",
+        "book": "draftkings",
+        "close_captured_at": "2022-08-27 16:47:58+00:00",
+        "n_lake_snaps": 6,
+        "match_kind": "exact",
+        "reason_codes": [],
+        "train0_lake": true,
+        "train0_lake_or_sdv_fill": true,
         "fbs_fbs": true
       }
     ],
@@ -478,43 +591,43 @@
       "sdv_rows_with_spread": 125,
       "sdv_fbs_fbs": 6,
       "sdv_fbs_fbs_w1_14_actual": 6,
-      "sdv_fbs_fbs_w1_14_actual_layer_a": 1,
+      "sdv_fbs_fbs_w1_14_actual_layer_a": 713,
       "sdv_fcs_any": 119
     },
-    "train0_n_lake": 0,
-    "train0_n_lake_or_fill": 1,
+    "train0_n_lake": 712,
+    "train0_n_lake_or_fill": 713,
     "gate": 700,
-    "lake_mounted": false,
-    "decision": "STOP",
+    "lake_mounted": true,
+    "decision": "GO TO FROZEN 1.40 SCORING",
     "score_frozen_140": false,
     "recalibrate": false
   },
   "gate": {
-    "decision": "STOP",
-    "train0_n_lake": 0,
-    "train0_n_lake_or_fill": 1,
+    "decision": "GO TO FROZEN 1.40 SCORING",
+    "train0_n_lake": 712,
+    "train0_n_lake_or_fill": 713,
     "gate": 700,
-    "lake_mounted": false,
+    "lake_mounted": true,
     "locate": {
-      "chosen": null,
-      "mounted": false,
+      "chosen": "hd_parquet",
+      "mounted": true,
       "tried": [
         {
           "id": "hd_parquet",
           "path": "/Volumes/KosEdgeData/clean/odds/cfb/snapshots-2022.parquet",
-          "present": false,
-          "hd_mounted": false,
+          "present": true,
+          "hd_mounted": true,
           "provenance": "2026-08-13 warehouse export on /Volumes/KosEdgeData"
         },
         {
           "id": "repo_parquet",
-          "path": "/workspace/services/model-service/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
+          "path": "/Users/ryankos/kosedge/.worktrees/cfb-2022-closes-mac/services/model-service/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
           "present": false,
           "provenance": "gitignored data/cfb/warehouse/clean/odds_cfb fallback (paths.REPO_ODDS_CFB)"
         },
         {
           "id": "monorepo_parquet",
-          "path": "/workspace/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
+          "path": "/Users/ryankos/kosedge/.worktrees/cfb-2022-closes-mac/data/cfb/warehouse/clean/odds_cfb/snapshots-2022.parquet",
           "present": false,
           "provenance": "monorepo data/cfb/warehouse/clean/odds_cfb (this VM)"
         },
