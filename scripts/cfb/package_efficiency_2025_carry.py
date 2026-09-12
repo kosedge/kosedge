@@ -35,8 +35,8 @@ from src.services.cfb_season_engine.name_to_code import (  # noqa: E402
     P0_REQUIRED_CODES,
     P0_REQUIRED_NAME_TO_CODE,
     assert_p0_codes_mapped,
-    mapped_code,
     require_mapped_code,
+    resolve_public_table_name,
 )
 from src.services.cfb_season_engine.team_features import (  # noqa: E402
     MissingRequiredTeamFeature,
@@ -102,13 +102,12 @@ def fetch_sp_plus_public() -> List[Dict[str, Any]]:
         if not m:
             continue
         name = m.group(2).strip()
+        if name == "Miami":
+            miami_seen += 1
         if name in P0_REQUIRED_NAME_TO_CODE:
             code = require_mapped_code(name)
         else:
-            code = mapped_code(name)
-        if name == "Miami":
-            miami_seen += 1
-            code = "MIA" if miami_seen == 1 else "M-OH"
+            code = resolve_public_table_name(name, miami_ordinal=miami_seen)
         off, off_r = _num_rank(cells[2])
         deff, def_r = _num_rank(cells[3])
         st, st_r = _num_rank(cells[4])
@@ -151,7 +150,7 @@ def fetch_sp_plus_cfbd(year: int = 2025) -> Optional[List[Dict[str, Any]]]:
         if name in P0_REQUIRED_NAME_TO_CODE:
             code = require_mapped_code(name)
         else:
-            code = mapped_code(name)
+            code = resolve_public_table_name(name)
         offense = row.get("offense") or {}
         defense = row.get("defense") or {}
         specials = row.get("specialTeams") or {}
@@ -175,11 +174,9 @@ def fetch_sp_plus_cfbd(year: int = 2025) -> Optional[List[Dict[str, Any]]]:
 
 def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[str, Any]:
     assert_p0_codes_mapped(NAME_TO_CODE)
-    priors = json.loads(PRIORS_PATH.read_text(encoding="utf-8"))
     official = official_fbs_codes()
-    codes = set(priors.get("teams") or {})
-    # Official P0 codes must enter the snapshot even when priors omitted them.
-    codes |= {c for c in P0_REQUIRED_CODES if c in official}
+    # Official 2026 FBS lock is the snapshot universe — not the stale priors key set.
+    codes = set(official)
     mean_off = mean(p["sp_offense"] for p in rows) if rows else 27.0
     mean_def = mean(p["sp_defense"] for p in rows) if rows else 27.0
     sd_off = pstdev(p["sp_offense"] for p in rows) if len(rows) > 1 else 1.0
@@ -232,46 +229,25 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
         }
 
     missing_official: List[str] = []
-    for code in sorted(set(codes) | set(P0_REQUIRED_CODES)):
-        if code in teams:
+    for code in sorted(official):
+        row = teams.get(code)
+        if row and str(row.get("source") or "") == "league_average_fill":
+            missing_official.append(code)
+            continue
+        if row:
             continue
         canon = ALIASES.get(code, code)
         if canon in teams and code != canon:
-            row = dict(teams[canon])
-            row["team"] = code
-            row["alias_of"] = canon
-            row["source"] = "packaged_sp_plus_final_2025_alias"
-            teams[code] = row
+            copied = dict(teams[canon])
+            copied["team"] = code
+            copied["alias_of"] = canon
+            copied["source"] = "packaged_sp_plus_final_2025_alias"
+            teams[code] = copied
             continue
-        # Required official FBS must never take the league-average 1.0 fill.
-        if code in P0_REQUIRED_CODES and code in official:
-            missing_official.append(code)
-            continue
-        if code not in codes:
-            continue
-        teams[code] = {
-            "team": code,
-            "sp_plus": 0.0,
-            "sp_offense": round(mean_off, 2),
-            "sp_defense": round(mean_def, 2),
-            "sp_special_teams": round(mean_st, 2),
-            "sp_rank": None,
-            "off_eff": 50.0,
-            "def_eff": 50.0,
-            "success_off": 50.0,
-            "success_def": 50.0,
-            "explosiveness": 50.0,
-            "prior_year": 2025,
-            "carry_to_season": 2026,
-            "source": "league_average_fill",
-            "fidelity": "placeholder",
-            "notes": (
-                "Non-FBS / alias placeholder. Official FBS must not reach this fill."
-            ),
-        }
+        missing_official.append(code)
     if missing_official:
         raise MissingRequiredTeamFeature(
-            "Required official FBS codes have no mapped SP+ row — hard-fail, "
+            "Official 2026 FBS codes have no mapped SP+ row — hard-fail, "
             f"do not league-average fill: {missing_official}"
         )
 
@@ -355,13 +331,12 @@ def fetch_sp_plus_espn_final_2025() -> List[Dict[str, Any]]:
         if not m:
             continue
         name = m.group(2).strip()
+        if name == "Miami":
+            miami_seen += 1
         if name in P0_REQUIRED_NAME_TO_CODE:
             code = require_mapped_code(name)
         else:
-            code = mapped_code(name)
-        if name == "Miami":
-            miami_seen += 1
-            code = "MIA" if miami_seen == 1 else "M-OH"
+            code = resolve_public_table_name(name, miami_ordinal=miami_seen)
         if not code:
             continue
         off, off_r = _num_rank(cells[2])

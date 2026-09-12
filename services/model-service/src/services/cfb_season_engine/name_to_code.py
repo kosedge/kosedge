@@ -57,6 +57,12 @@ P0_REQUIRED_NAME_TO_CODE: Dict[str, str] = {
     "J'ville St.": "JVST",
     "ECU": "ECU",
     "ODU": "ODU",
+    # Miami collision: Hurricanes vs RedHawks. Do not rely on table order alone.
+    "Miami (OH)": "M-OH",
+    "Miami (Ohio)": "M-OH",
+    "Miami Ohio": "M-OH",
+    "Miami-Ohio": "M-OH",
+    "Miami (OH) RedHawks": "M-OH",
 }
 
 # Public final-2025 SP+ table names (cfbupdate / ESPN story) + CFBD short names.
@@ -195,6 +201,32 @@ def mapped_code(name: str, mapping: Mapping[str, str] | None = None) -> Optional
     m = mapping if mapping is not None else NAME_TO_CODE
     code = m.get(str(name or "").strip())
     return str(code) if code else None
+
+
+def resolve_public_table_name(
+    name: str,
+    *,
+    miami_ordinal: int = 0,
+    mapping: Mapping[str, str] | None = None,
+) -> Optional[str]:
+    """Map a public SP+ / ESPN-story name, including the Miami collision.
+
+    Bare ``Miami`` is Hurricanes on the first sighting and RedHawks on later
+    sightings (legacy table order). Explicit ``Miami (OH)`` variants always
+    map to M-OH so official FBS never falls through to a 50-fill.
+    """
+    n = str(name or "").strip()
+    if n in {
+        "Miami (OH)",
+        "Miami (Ohio)",
+        "Miami Ohio",
+        "Miami-Ohio",
+        "Miami (OH) RedHawks",
+    }:
+        return "M-OH"
+    if n == "Miami":
+        return "MIA" if miami_ordinal <= 1 else "M-OH"
+    return mapped_code(n, mapping)
 
 
 def require_mapped_code(name: str, mapping: Mapping[str, str] | None = None) -> str:

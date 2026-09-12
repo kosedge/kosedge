@@ -943,6 +943,11 @@ def merge_into_priors(
         if "Portal/recruiting/returning production live feeds remain gaps" not in n
         and "Named QBs are illustrative" not in n
     ]
+    notes = [
+        n
+        for n in notes
+        if "EXTRA codes are explicit placeholder league-average rows" not in n
+    ]
     notes.extend(
         [
             "v0.6: roster/QB/position_groups overlaid from ESPN 2026 rosters + athlete teamHistory/career splits.",
@@ -950,6 +955,11 @@ def merge_into_priors(
             "Depth order is production/experience heuristic — official camp depth charts often unpublished preseason.",
             "Portal-out is incomplete without a full departure feed; portal-in from teamHistory sample (+ optional CFBD).",
             "home_field and coaching blocks retained from curated priors.",
+            "Team key set is the official 2026 FBS lock (cfb_fbs_universe_2026.json). "
+            "FCS/alias extras are pruned. Official full members are ESPN-backed — "
+            "no league-average synthetic fills.",
+            "JVST (Jacksonville State) is fbs_full / CUSA (FBS since 2023). "
+            "Transitioning 2026 programs are NDSU and SAC — not generic -25.",
         ]
     )
     out["notes"] = notes
@@ -997,13 +1007,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         raise SystemExit(f"Missing priors: {PRIORS_PATH}")
     ms = REPO_ROOT / "services" / "model-service"
     sys.path.insert(0, str(ms))
-    from src.services.cfb_season_engine.fbs_universe import official_fbs_codes
+    from src.services.cfb_season_engine.fbs_universe import (
+        official_fbs_codes,
+        prior_packaging_codes,
+        prune_non_official_prior_teams,
+    )
     from src.services.cfb_season_engine.name_to_code import P0_REQUIRED_CODES
 
     priors = json.loads(PRIORS_PATH.read_text(encoding="utf-8"))
     official = official_fbs_codes(include_transition=True)
+    official_full = official_fbs_codes(include_transition=False)
+    if not set(P0_REQUIRED_CODES) <= official_full:
+        raise SystemExit(
+            "P0 required codes missing from official FBS lock: "
+            f"{sorted(set(P0_REQUIRED_CODES) - official_full)}"
+        )
     only_codes = [c.strip().upper() for c in str(args.only_codes or "").split(",") if c.strip()]
-    team_codes = sorted(set(priors.get("teams") or {}) | {c for c in P0_REQUIRED_CODES if c in official})
+    # Official 2026 FBS lock is the key set. Stale extras/aliases are not fetched.
+    team_codes = sorted(prior_packaging_codes(include_transition=True))
     if only_codes:
         team_codes = only_codes
     if args.limit_teams and args.limit_teams > 0:
@@ -1037,25 +1058,30 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
     cache_path = RAW_CACHE_DIR / "real_roster_team_cache.json"
     payloads: Dict[str, Dict[str, Any]] = {}
-    if only_codes and args.snapshot_out.is_file():
+    if args.snapshot_out.is_file():
         try:
             existing = json.loads(args.snapshot_out.read_text(encoding="utf-8"))
             if isinstance(existing.get("teams"), dict):
                 payloads = dict(existing["teams"])
                 print(
-                    f"Keeping {len(payloads)} existing snapshot teams; overlay {only_codes}",
+                    f"Seeding {len(payloads)} teams from existing snapshot {args.snapshot_out}",
                     file=sys.stderr,
                 )
         except Exception:
             payloads = {}
     if cache_path.is_file() and not only_codes:
         try:
-            payloads = json.loads(cache_path.read_text(encoding="utf-8"))
-            if not isinstance(payloads, dict):
-                payloads = {}
-            print(f"Resuming with {len(payloads)} cached teams from {cache_path}", file=sys.stderr)
+            cached = json.loads(cache_path.read_text(encoding="utf-8"))
+            if isinstance(cached, dict):
+                payloads.update(cached)
+                print(
+                    f"Resuming with {len(payloads)} cached/snapshot teams from {cache_path}",
+                    file=sys.stderr,
+                )
         except Exception:
-            payloads = {}
+            pass
+    if only_codes:
+        print(f"Overlay restricted to {only_codes}", file=sys.stderr)
 
     unmatched: List[str] = []
     for i, code in enumerate(team_codes, start=1):
@@ -1090,6 +1116,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         except Exception as exc:  # noqa: BLE001
             print(f"  ERROR {code}: {exc}", file=sys.stderr)
             unmatched.append(code)
+
+    allowed_snapshot = prior_packaging_codes(include_transition=True)
+    for extra in list(payloads):
+        if extra not in allowed_snapshot:
+            payloads.pop(extra, None)
 
     cfbd_meta: Dict[str, Any] = {"enabled": False, "reason": "skipped"}
     if not args.skip_cfbd:
@@ -1130,17 +1161,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     args.snapshot_out.parent.mkdir(parents=True, exist_ok=True)
     args.snapshot_out.write_text(json.dumps(snapshot, indent=2) + "\n", encoding="utf-8")
 
-    # Full merge only when not a tiny smoke limit (or when covering most teams).
-    if not args.limit_teams or args.limit_teams >= 100:
-        merged = merge_into_priors(priors, payloads)
-        # For unmatched codes, leave prior rows but mark weak only if still placeholder.
-        args.priors_out.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
-        print(f"Wrote priors merge → {args.priors_out}", file=sys.stderr)
-    else:
-        # Smoke: still merge the limited set so local tests can see deltas.
-        merged = merge_into_priors(priors, payloads)
-        args.priors_out.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
-        print(f"Wrote partial priors merge → {args.priors_out}", file=sys.stderr)
+    merged = merge_into_priors(priors, payloads)
+    removed = prune_non_official_prior_teams(merged.setdefault("teams", {}))
+    if removed:
+        notes = list(merged.get("notes") or [])
+        notes.append(
+            "Pruned non-official extras/aliases from priors: " + ", ".join(removed)
+        )
+        merged["notes"] = notes
+        print(f"Pruned non-official prior codes: {removed}", file=sys.stderr)
+    args.priors_out.write_text(json.dumps(merged, indent=2) + "\n", encoding="utf-8")
+    print(f"Wrote priors merge → {args.priors_out}", file=sys.stderr)
 
     RAW_CACHE_DIR.mkdir(parents=True, exist_ok=True)
     (RAW_CACHE_DIR / "package_real_roster_summary.json").write_text(
@@ -1186,19 +1217,33 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             indent=2,
         )
     )
-    required_check = (
-        [c for c in P0_REQUIRED_CODES if c in official]
-        if not args.limit_teams and not only_codes
-        else [c for c in (only_codes or []) if c in P0_REQUIRED_CODES and c in official]
-    )
-    missing_p0 = [c for c in required_check if c not in payloads]
-    if missing_p0:
+    if not args.limit_teams and not only_codes:
+        required_check = sorted(official_full)
+    else:
+        required_check = [c for c in (only_codes or []) if c in official_full]
+    missing_full = [
+        c
+        for c in required_check
+        if c not in payloads or int((payloads.get(c) or {}).get("athlete_count") or 0) <= 0
+    ]
+    if missing_full:
         print(
-            "ERROR: Required FBS codes missing from roster pack — "
-            f"do not hydrate 1.0: {missing_p0}",
+            "ERROR: Official 2026 FBS full members missing ESPN roster — "
+            f"do not invent league-average priors: {missing_full}",
             file=sys.stderr,
         )
         return 1
+    transitioning_unmatched = [
+        c
+        for c in sorted(official - official_full)
+        if c in unmatched
+    ]
+    if transitioning_unmatched:
+        print(
+            "WARN: transitioning 2026 programs unmatched on ESPN "
+            f"(documented, not generic -25): {transitioning_unmatched}",
+            file=sys.stderr,
+        )
     return 0
 
 

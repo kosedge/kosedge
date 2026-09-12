@@ -21,6 +21,7 @@ from src.services.cfb_season_engine.name_to_code import (
     P0_REQUIRED_CODES,
     assert_p0_codes_mapped,
     require_mapped_code,
+    resolve_public_table_name,
 )
 from src.services.cfb_season_engine.power_sot import sit_missing_power_from_sot_rows
 from src.services.cfb_season_engine.team_features import (
@@ -102,6 +103,15 @@ def test_p0_codes_are_not_independent() -> None:
 def test_true_independents_stay_independent() -> None:
     assert conference_for("ND") == "Independent"
     assert conference_for("CONN") == "Independent"
+    assert conference_for("ARMY") == "AAC"
+
+
+def test_miami_oh_maps_without_table_order() -> None:
+    assert resolve_public_table_name("Miami (OH)") == "M-OH"
+    assert resolve_public_table_name("Miami (Ohio)") == "M-OH"
+    assert resolve_public_table_name("Miami", miami_ordinal=1) == "MIA"
+    assert resolve_public_table_name("Miami", miami_ordinal=2) == "M-OH"
+    assert NAME_TO_CODE["Miami (OH)"] == "M-OH"
 
 
 def test_official_fbs_missing_conference_fail_closed(monkeypatch) -> None:
