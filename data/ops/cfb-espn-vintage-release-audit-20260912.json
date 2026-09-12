@@ -1,0 +1,3509 @@
+{
+  "role": "release_audit_measure_only",
+  "do_not_fit_to_536": true,
+  "new_vs_536": {
+    "label": "NEW vs #536",
+    "n_new": 183,
+    "n_old": 183,
+    "n_common_scored": 96,
+    "model": {
+      "n": 96,
+      "n_nonzero": 96,
+      "mean": -0.0207,
+      "mean_abs": 0.1786,
+      "median_abs": 0.07,
+      "p90_abs": 0.58,
+      "p95_abs": 0.7925,
+      "p99_abs": 1.2315,
+      "max_abs": 1.26,
+      "max": 1.26,
+      "min": -1.23
+    },
+    "kei": {
+      "n": 96,
+      "n_nonzero": 96,
+      "mean": -0.0395,
+      "mean_abs": 0.1918,
+      "median_abs": 0.07,
+      "p90_abs": 0.56,
+      "p95_abs": 0.76,
+      "p99_abs": 1.342,
+      "max_abs": 2.9,
+      "max": 1.26,
+      "min": -2.9
+    },
+    "sign_flips": 1,
+    "threshold_crossings": {
+      "abs_1": 3,
+      "abs_3": 2,
+      "abs_7": 0,
+      "abs_10": 2,
+      "abs_14": 0
+    },
+    "largest": [
+      {
+        "away": "BC",
+        "home": "CIN",
+        "week": 1,
+        "new_model": -15.85,
+        "old_model": -17.11,
+        "delta": 1.26,
+        "abs_delta": 1.26,
+        "sign_flip": false,
+        "causes": [
+          "BC_sp_plus_copy_delta_0.2",
+          "CIN_sp_plus_copy_delta_-2.2"
+        ],
+        "home_power_delta": -0.0178,
+        "away_power_delta": 0.0009,
+        "home_sp_plus_new": 4.5,
+        "home_sp_plus_old": 6.7,
+        "away_sp_plus_new": -8.5,
+        "away_sp_plus_old": -8.7
+      },
+      {
+        "away": "M-OH",
+        "home": "PITT",
+        "week": 1,
+        "new_model": -17.62,
+        "old_model": -16.39,
+        "delta": -1.23,
+        "abs_delta": 1.23,
+        "sign_flip": false,
+        "causes": [
+          "M-OH_w0_fill",
+          "M-OH_sp_plus_copy_delta_-3.4",
+          "M-OH_fill_resolved"
+        ],
+        "home_power_delta": 0.0015,
+        "away_power_delta": -0.0414,
+        "home_sp_plus_new": 8.4,
+        "home_sp_plus_old": 8.3,
+        "away_sp_plus_new": -3.4,
+        "away_sp_plus_old": 0.0
+      },
+      {
+        "away": "BOISE",
+        "home": "ORE",
+        "week": 1,
+        "new_model": -19.58,
+        "old_model": -20.76,
+        "delta": 1.18,
+        "abs_delta": 1.18,
+        "sign_flip": false,
+        "causes": [
+          "ORE_sp_plus_copy_delta_-3.4"
+        ],
+        "home_power_delta": -0.0211,
+        "away_power_delta": 0.0012,
+        "home_sp_plus_new": 25.9,
+        "home_sp_plus_old": 29.3,
+        "away_sp_plus_new": 3.1,
+        "away_sp_plus_old": 3.1
+      },
+      {
+        "away": "UTSA",
+        "home": "TXST",
+        "week": 2,
+        "new_model": -0.76,
+        "old_model": 0.34,
+        "delta": -1.1,
+        "abs_delta": 1.1,
+        "sign_flip": true,
+        "causes": [
+          "TXST_sp_plus_copy_delta_1.6"
+        ],
+        "home_power_delta": 0.0119,
+        "away_power_delta": 0.0007,
+        "home_sp_plus_new": 2.3,
+        "home_sp_plus_old": 0.7,
+        "away_sp_plus_new": 3.7,
+        "away_sp_plus_old": 3.6
+      },
+      {
+        "away": "NAVY",
+        "home": "FAU",
+        "week": 2,
+        "new_model": -3.89,
+        "old_model": -4.96,
+        "delta": 1.07,
+        "abs_delta": 1.07,
+        "sign_flip": false,
+        "causes": [
+          "NAVY_sp_plus_copy_delta_1.4"
+        ],
+        "home_power_delta": -0.0004,
+        "away_power_delta": 0.0134,
+        "home_sp_plus_new": -8.7,
+        "home_sp_plus_old": -8.8,
+        "away_sp_plus_new": 6.2,
+        "away_sp_plus_old": 4.8
+      },
+      {
+        "away": "AKR",
+        "home": "WAKE",
+        "week": 1,
+        "new_model": -10.37,
+        "old_model": -9.67,
+        "delta": -0.7,
+        "abs_delta": 0.7,
+        "sign_flip": false,
+        "causes": [
+          "WAKE_sp_plus_copy_delta_0.8"
+        ],
+        "home_power_delta": 0.0088,
+        "away_power_delta": -0.0011,
+        "home_sp_plus_new": 5.7,
+        "home_sp_plus_old": 4.9,
+        "away_sp_plus_new": -13.9,
+        "away_sp_plus_old": -14.0
+      },
+      {
+        "away": "RICE",
+        "home": "ND",
+        "week": 2,
+        "new_model": -36.73,
+        "old_model": -36.07,
+        "delta": -0.66,
+        "abs_delta": 0.66,
+        "sign_flip": false,
+        "causes": [
+          "RICE_sp_plus_copy_delta_-1.1"
+        ],
+        "home_power_delta": 0.002,
+        "away_power_delta": -0.0111,
+        "home_sp_plus_new": 24.4,
+        "home_sp_plus_old": 24.5,
+        "away_sp_plus_new": -14.8,
+        "away_sp_plus_old": -13.7
+      },
+      {
+        "away": "ARI",
+        "home": "BYU",
+        "week": 2,
+        "new_model": 0.51,
+        "old_model": 1.16,
+        "delta": -0.65,
+        "abs_delta": 0.65,
+        "sign_flip": false,
+        "causes": [
+          "ARI_sp_plus_copy_delta_-1.4",
+          "BYU_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": -0.0002,
+        "away_power_delta": -0.0107,
+        "home_sp_plus_new": 15.9,
+        "home_sp_plus_old": 16.1,
+        "away_sp_plus_new": 12.0,
+        "away_sp_plus_old": 13.4
+      },
+      {
+        "away": "LOU",
+        "home": "MISS",
+        "week": 1,
+        "new_model": -10.24,
+        "old_model": -10.86,
+        "delta": 0.62,
+        "abs_delta": 0.62,
+        "sign_flip": false,
+        "causes": [
+          "MISS_sp_plus_copy_delta_-1.2"
+        ],
+        "home_power_delta": -0.0087,
+        "away_power_delta": 0.0019,
+        "home_sp_plus_new": 24.0,
+        "home_sp_plus_old": 25.2,
+        "away_sp_plus_new": 12.4,
+        "away_sp_plus_old": 12.3
+      },
+      {
+        "away": "WAKE",
+        "home": "PUR",
+        "week": 2,
+        "new_model": 1.59,
+        "old_model": 0.99,
+        "delta": 0.6,
+        "abs_delta": 0.6,
+        "sign_flip": false,
+        "causes": [
+          "WAKE_sp_plus_copy_delta_0.8"
+        ],
+        "home_power_delta": -0.0002,
+        "away_power_delta": 0.0088,
+        "home_sp_plus_new": -6.1,
+        "home_sp_plus_old": -6.1,
+        "away_sp_plus_new": 5.7,
+        "away_sp_plus_old": 4.9
+      },
+      {
+        "away": "TXST",
+        "home": "TEX",
+        "week": 1,
+        "new_model": -22.69,
+        "old_model": -23.25,
+        "delta": 0.56,
+        "abs_delta": 0.56,
+        "sign_flip": false,
+        "causes": [
+          "TXST_sp_plus_copy_delta_1.6"
+        ],
+        "home_power_delta": 0.0006,
+        "away_power_delta": 0.0119,
+        "home_sp_plus_new": 16.2,
+        "home_sp_plus_old": 16.3,
+        "away_sp_plus_new": 2.3,
+        "away_sp_plus_old": 0.7
+      },
+      {
+        "away": "ORE",
+        "home": "OKST",
+        "week": 2,
+        "new_model": 24.02,
+        "old_model": 24.58,
+        "delta": -0.56,
+        "abs_delta": 0.56,
+        "sign_flip": false,
+        "causes": [
+          "ORE_sp_plus_copy_delta_-3.4",
+          "OKST_sp_plus_copy_delta_-0.4"
+        ],
+        "home_power_delta": -0.0037,
+        "away_power_delta": -0.0211,
+        "home_sp_plus_new": -15.1,
+        "home_sp_plus_old": -14.7,
+        "away_sp_plus_new": 25.9,
+        "away_sp_plus_old": 29.3
+      },
+      {
+        "away": "MIA",
+        "home": "STAN",
+        "week": 1,
+        "new_model": 22.78,
+        "old_model": 23.21,
+        "delta": -0.43,
+        "abs_delta": 0.43,
+        "sign_flip": false,
+        "causes": [
+          "MIA_sp_plus_copy_delta_-1.6",
+          "STAN_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0005,
+        "away_power_delta": -0.0075,
+        "home_sp_plus_new": -11.8,
+        "home_sp_plus_old": -12.0,
+        "away_sp_plus_new": 20.7,
+        "away_sp_plus_old": 22.3
+      },
+      {
+        "away": "MSST",
+        "home": "MINN",
+        "week": 2,
+        "new_model": -3.17,
+        "old_model": -2.81,
+        "delta": -0.36,
+        "abs_delta": 0.36,
+        "sign_flip": false,
+        "causes": [
+          "MSST_sp_plus_copy_delta_-0.5"
+        ],
+        "home_power_delta": 0.0008,
+        "away_power_delta": -0.0045,
+        "home_sp_plus_new": 1.5,
+        "home_sp_plus_old": 1.5,
+        "away_sp_plus_new": 4.1,
+        "away_sp_plus_old": 4.6
+      },
+      {
+        "away": "OKST",
+        "home": "TLSA",
+        "week": 1,
+        "new_model": 0.75,
+        "old_model": 1.0,
+        "delta": -0.25,
+        "abs_delta": 0.25,
+        "sign_flip": false,
+        "causes": [
+          "OKST_sp_plus_copy_delta_-0.4"
+        ],
+        "home_power_delta": 0.0001,
+        "away_power_delta": -0.0037,
+        "home_sp_plus_new": -10.0,
+        "home_sp_plus_old": -10.0,
+        "away_sp_plus_new": -15.1,
+        "away_sp_plus_old": -14.7
+      }
+    ],
+    "all_abs_ge_1": [
+      {
+        "away": "BC",
+        "home": "CIN",
+        "week": 1,
+        "new_model": -15.85,
+        "old_model": -17.11,
+        "delta": 1.26,
+        "abs_delta": 1.26,
+        "sign_flip": false,
+        "causes": [
+          "BC_sp_plus_copy_delta_0.2",
+          "CIN_sp_plus_copy_delta_-2.2"
+        ],
+        "home_power_delta": -0.0178,
+        "away_power_delta": 0.0009,
+        "home_sp_plus_new": 4.5,
+        "home_sp_plus_old": 6.7,
+        "away_sp_plus_new": -8.5,
+        "away_sp_plus_old": -8.7
+      },
+      {
+        "away": "M-OH",
+        "home": "PITT",
+        "week": 1,
+        "new_model": -17.62,
+        "old_model": -16.39,
+        "delta": -1.23,
+        "abs_delta": 1.23,
+        "sign_flip": false,
+        "causes": [
+          "M-OH_w0_fill",
+          "M-OH_sp_plus_copy_delta_-3.4",
+          "M-OH_fill_resolved"
+        ],
+        "home_power_delta": 0.0015,
+        "away_power_delta": -0.0414,
+        "home_sp_plus_new": 8.4,
+        "home_sp_plus_old": 8.3,
+        "away_sp_plus_new": -3.4,
+        "away_sp_plus_old": 0.0
+      },
+      {
+        "away": "BOISE",
+        "home": "ORE",
+        "week": 1,
+        "new_model": -19.58,
+        "old_model": -20.76,
+        "delta": 1.18,
+        "abs_delta": 1.18,
+        "sign_flip": false,
+        "causes": [
+          "ORE_sp_plus_copy_delta_-3.4"
+        ],
+        "home_power_delta": -0.0211,
+        "away_power_delta": 0.0012,
+        "home_sp_plus_new": 25.9,
+        "home_sp_plus_old": 29.3,
+        "away_sp_plus_new": 3.1,
+        "away_sp_plus_old": 3.1
+      },
+      {
+        "away": "UTSA",
+        "home": "TXST",
+        "week": 2,
+        "new_model": -0.76,
+        "old_model": 0.34,
+        "delta": -1.1,
+        "abs_delta": 1.1,
+        "sign_flip": true,
+        "causes": [
+          "TXST_sp_plus_copy_delta_1.6"
+        ],
+        "home_power_delta": 0.0119,
+        "away_power_delta": 0.0007,
+        "home_sp_plus_new": 2.3,
+        "home_sp_plus_old": 0.7,
+        "away_sp_plus_new": 3.7,
+        "away_sp_plus_old": 3.6
+      },
+      {
+        "away": "NAVY",
+        "home": "FAU",
+        "week": 2,
+        "new_model": -3.89,
+        "old_model": -4.96,
+        "delta": 1.07,
+        "abs_delta": 1.07,
+        "sign_flip": false,
+        "causes": [
+          "NAVY_sp_plus_copy_delta_1.4"
+        ],
+        "home_power_delta": -0.0004,
+        "away_power_delta": 0.0134,
+        "home_sp_plus_new": -8.7,
+        "home_sp_plus_old": -8.8,
+        "away_sp_plus_new": 6.2,
+        "away_sp_plus_old": 4.8
+      }
+    ]
+  },
+  "new_vs_547": {
+    "label": "NEW vs #547",
+    "n_new": 183,
+    "n_old": 183,
+    "n_common_scored": 96,
+    "model": {
+      "n": 96,
+      "n_nonzero": 96,
+      "mean": 1.0469,
+      "mean_abs": 4.7825,
+      "median_abs": 4.35,
+      "p90_abs": 9.34,
+      "p95_abs": 9.8725,
+      "p99_abs": 16.0495,
+      "max_abs": 16.42,
+      "max": 16.42,
+      "min": -16.03
+    },
+    "kei": {
+      "n": 96,
+      "n_nonzero": 96,
+      "mean": 1.1395,
+      "mean_abs": 5.1001,
+      "median_abs": 4.95,
+      "p90_abs": 9.9,
+      "p95_abs": 10.4825,
+      "p99_abs": 17.179,
+      "max_abs": 17.92,
+      "max": 17.14,
+      "min": -17.92
+    },
+    "sign_flips": 16,
+    "threshold_crossings": {
+      "abs_1": 8,
+      "abs_3": 22,
+      "abs_7": 21,
+      "abs_10": 15,
+      "abs_14": 18
+    },
+    "largest": [
+      {
+        "away": "ODU",
+        "home": "VT",
+        "week": 2,
+        "new_model": -4.76,
+        "old_model": -21.18,
+        "delta": 16.42,
+        "abs_delta": 16.42,
+        "sign_flip": false,
+        "causes": [
+          "ODU_w0_missing_official",
+          "ODU_sp_plus_copy_delta_12.1",
+          "VT_sp_plus_copy_delta_-22.5"
+        ],
+        "home_power_delta": -0.1835,
+        "away_power_delta": 0.0907,
+        "home_sp_plus_new": -10.1,
+        "home_sp_plus_old": 12.4,
+        "away_sp_plus_new": 5.9,
+        "away_sp_plus_old": -6.2
+      },
+      {
+        "away": "UNLV",
+        "home": "UNT",
+        "week": 2,
+        "new_model": -14.45,
+        "old_model": 1.58,
+        "delta": -16.03,
+        "abs_delta": 16.03,
+        "sign_flip": true,
+        "causes": [
+          "UNLV_sp_plus_copy_delta_2.0",
+          "UNT_w0_missing_official",
+          "UNT_sp_plus_copy_delta_27.0"
+        ],
+        "home_power_delta": 0.2172,
+        "away_power_delta": 0.0082,
+        "home_sp_plus_new": 13.8,
+        "home_sp_plus_old": -13.2,
+        "away_sp_plus_new": 4.3,
+        "away_sp_plus_old": 2.3
+      },
+      {
+        "away": "WKU",
+        "home": "NEV",
+        "week": 1,
+        "new_model": 7.85,
+        "old_model": -3.13,
+        "delta": 10.98,
+        "abs_delta": 10.98,
+        "sign_flip": true,
+        "causes": [
+          "WKU_sp_plus_copy_delta_14.7",
+          "NEV_w0_missing_official",
+          "NEV_sp_plus_copy_delta_-7.3"
+        ],
+        "home_power_delta": -0.0654,
+        "away_power_delta": 0.0989,
+        "home_sp_plus_new": -13.4,
+        "home_sp_plus_old": -6.1,
+        "away_sp_plus_new": 1.6,
+        "away_sp_plus_old": -13.1
+      },
+      {
+        "away": "APP",
+        "home": "ECU",
+        "week": 2,
+        "new_model": -17.21,
+        "old_model": -6.88,
+        "delta": -10.33,
+        "abs_delta": 10.33,
+        "sign_flip": false,
+        "causes": [
+          "APP_sp_plus_copy_delta_-4.2",
+          "ECU_w0_missing_official",
+          "ECU_sp_plus_copy_delta_16.1"
+        ],
+        "home_power_delta": 0.1183,
+        "away_power_delta": -0.0395,
+        "home_sp_plus_new": 8.0,
+        "home_sp_plus_old": -8.1,
+        "away_sp_plus_new": -11.4,
+        "away_sp_plus_old": -7.2
+      },
+      {
+        "away": "ULM",
+        "home": "MSST",
+        "week": 1,
+        "new_model": -9.93,
+        "old_model": -19.9,
+        "delta": 9.97,
+        "abs_delta": 9.97,
+        "sign_flip": false,
+        "causes": [
+          "ULM_sp_plus_copy_delta_11.6",
+          "MSST_sp_plus_copy_delta_-5.3"
+        ],
+        "home_power_delta": -0.0568,
+        "away_power_delta": 0.0798,
+        "home_sp_plus_new": 4.1,
+        "home_sp_plus_old": 9.4,
+        "away_sp_plus_new": -21.6,
+        "away_sp_plus_old": -33.2
+      },
+      {
+        "away": "OHIO",
+        "home": "NEB",
+        "week": 1,
+        "new_model": -8.76,
+        "old_model": -18.6,
+        "delta": 9.84,
+        "abs_delta": 9.84,
+        "sign_flip": false,
+        "causes": [
+          "OHIO_sp_plus_copy_delta_12.4",
+          "NEB_sp_plus_copy_delta_-5.9"
+        ],
+        "home_power_delta": -0.0553,
+        "away_power_delta": 0.1001,
+        "home_sp_plus_new": 6.2,
+        "home_sp_plus_old": 12.1,
+        "away_sp_plus_new": -4.0,
+        "away_sp_plus_old": -16.4
+      },
+      {
+        "away": "SDSU",
+        "home": "UCLA",
+        "week": 2,
+        "new_model": 1.71,
+        "old_model": -8.06,
+        "delta": 9.77,
+        "abs_delta": 9.77,
+        "sign_flip": true,
+        "causes": [
+          "SDSU_sp_plus_copy_delta_3.6",
+          "UCLA_sp_plus_copy_delta_-17.9"
+        ],
+        "home_power_delta": -0.1458,
+        "away_power_delta": 0.0115,
+        "home_sp_plus_new": -8.7,
+        "home_sp_plus_old": 9.2,
+        "away_sp_plus_new": 6.7,
+        "away_sp_plus_old": 3.1
+      },
+      {
+        "away": "USF",
+        "home": "ARMY",
+        "week": 2,
+        "new_model": 12.3,
+        "old_model": 2.8,
+        "delta": 9.5,
+        "abs_delta": 9.5,
+        "sign_flip": false,
+        "causes": [
+          "USF_sp_plus_copy_delta_14.7",
+          "ARMY_sp_plus_copy_delta_-1.4"
+        ],
+        "home_power_delta": -0.0181,
+        "away_power_delta": 0.1171,
+        "home_sp_plus_new": 0.8,
+        "home_sp_plus_old": 2.2,
+        "away_sp_plus_new": 11.6,
+        "away_sp_plus_old": -3.1
+      },
+      {
+        "away": "UNC",
+        "home": "TCU",
+        "week": 0,
+        "new_model": -14.93,
+        "old_model": -5.57,
+        "delta": -9.36,
+        "abs_delta": 9.36,
+        "sign_flip": false,
+        "causes": [
+          "UNC_sp_plus_copy_delta_-12.4",
+          "TCU_sp_plus_copy_delta_4.4"
+        ],
+        "home_power_delta": 0.0351,
+        "away_power_delta": -0.1076,
+        "home_sp_plus_new": 8.3,
+        "home_sp_plus_old": 3.9,
+        "away_sp_plus_new": -6.6,
+        "away_sp_plus_old": 5.8
+      },
+      {
+        "away": "LT",
+        "home": "LSU",
+        "week": 2,
+        "new_model": -19.27,
+        "old_model": -28.62,
+        "delta": 9.35,
+        "abs_delta": 9.35,
+        "sign_flip": false,
+        "causes": [
+          "LT_sp_plus_copy_delta_2.5",
+          "LSU_sp_plus_copy_delta_-13.0"
+        ],
+        "home_power_delta": -0.12,
+        "away_power_delta": 0.0116,
+        "home_sp_plus_new": 10.3,
+        "home_sp_plus_old": 23.3,
+        "away_sp_plus_new": -1.3,
+        "away_sp_plus_old": -3.8
+      },
+      {
+        "away": "FAU",
+        "home": "UF",
+        "week": 1,
+        "new_model": -12.57,
+        "old_model": -21.9,
+        "delta": 9.33,
+        "abs_delta": 9.33,
+        "sign_flip": false,
+        "causes": [
+          "FAU_sp_plus_copy_delta_3.5",
+          "UF_sp_plus_copy_delta_-15.1"
+        ],
+        "home_power_delta": -0.1375,
+        "away_power_delta": 0.0118,
+        "home_sp_plus_new": 3.5,
+        "home_sp_plus_old": 18.6,
+        "away_sp_plus_new": -8.7,
+        "away_sp_plus_old": -12.2
+      },
+      {
+        "away": "TOL",
+        "home": "MSU",
+        "week": 1,
+        "new_model": -5.56,
+        "old_model": -14.83,
+        "delta": 9.27,
+        "abs_delta": 9.27,
+        "sign_flip": false,
+        "causes": [
+          "TOL_w0_missing_official",
+          "TOL_sp_plus_copy_delta_15.4",
+          "MSU_sp_plus_copy_delta_-4.4"
+        ],
+        "home_power_delta": -0.0346,
+        "away_power_delta": 0.1177,
+        "home_sp_plus_new": -3.4,
+        "home_sp_plus_old": 1.0,
+        "away_sp_plus_new": 6.0,
+        "away_sp_plus_old": -9.4
+      },
+      {
+        "away": "MD",
+        "home": "CONN",
+        "week": 2,
+        "new_model": 15.07,
+        "old_model": 24.15,
+        "delta": -9.08,
+        "abs_delta": 9.08,
+        "sign_flip": false,
+        "causes": [
+          "MD_sp_plus_copy_delta_-8.5",
+          "CONN_sp_plus_copy_delta_11.4"
+        ],
+        "home_power_delta": 0.067,
+        "away_power_delta": -0.0828,
+        "home_sp_plus_new": 5.1,
+        "home_sp_plus_old": -6.3,
+        "away_sp_plus_new": 0.6,
+        "away_sp_plus_old": 9.1
+      },
+      {
+        "away": "UCLA",
+        "home": "CAL",
+        "week": 1,
+        "new_model": -11.62,
+        "old_model": -2.57,
+        "delta": -9.05,
+        "abs_delta": 9.05,
+        "sign_flip": false,
+        "causes": [
+          "UCLA_sp_plus_copy_delta_-17.9",
+          "CAL_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": -0.002,
+        "away_power_delta": -0.1458,
+        "home_sp_plus_new": -3.2,
+        "home_sp_plus_old": -3.4,
+        "away_sp_plus_new": -8.7,
+        "away_sp_plus_old": 9.2
+      },
+      {
+        "away": "CAL",
+        "home": "SYR",
+        "week": 2,
+        "new_model": 8.0,
+        "old_model": -1.01,
+        "delta": 9.01,
+        "abs_delta": 9.01,
+        "sign_flip": true,
+        "causes": [
+          "CAL_sp_plus_copy_delta_0.2",
+          "SYR_sp_plus_copy_delta_-15.8"
+        ],
+        "home_power_delta": -0.1356,
+        "away_power_delta": -0.002,
+        "home_sp_plus_new": -13.1,
+        "home_sp_plus_old": 2.7,
+        "away_sp_plus_new": -3.2,
+        "away_sp_plus_old": -3.4
+      }
+    ],
+    "all_abs_ge_1": [
+      {
+        "away": "ODU",
+        "home": "VT",
+        "week": 2,
+        "new_model": -4.76,
+        "old_model": -21.18,
+        "delta": 16.42,
+        "abs_delta": 16.42,
+        "sign_flip": false,
+        "causes": [
+          "ODU_w0_missing_official",
+          "ODU_sp_plus_copy_delta_12.1",
+          "VT_sp_plus_copy_delta_-22.5"
+        ],
+        "home_power_delta": -0.1835,
+        "away_power_delta": 0.0907,
+        "home_sp_plus_new": -10.1,
+        "home_sp_plus_old": 12.4,
+        "away_sp_plus_new": 5.9,
+        "away_sp_plus_old": -6.2
+      },
+      {
+        "away": "UNLV",
+        "home": "UNT",
+        "week": 2,
+        "new_model": -14.45,
+        "old_model": 1.58,
+        "delta": -16.03,
+        "abs_delta": 16.03,
+        "sign_flip": true,
+        "causes": [
+          "UNLV_sp_plus_copy_delta_2.0",
+          "UNT_w0_missing_official",
+          "UNT_sp_plus_copy_delta_27.0"
+        ],
+        "home_power_delta": 0.2172,
+        "away_power_delta": 0.0082,
+        "home_sp_plus_new": 13.8,
+        "home_sp_plus_old": -13.2,
+        "away_sp_plus_new": 4.3,
+        "away_sp_plus_old": 2.3
+      },
+      {
+        "away": "WKU",
+        "home": "NEV",
+        "week": 1,
+        "new_model": 7.85,
+        "old_model": -3.13,
+        "delta": 10.98,
+        "abs_delta": 10.98,
+        "sign_flip": true,
+        "causes": [
+          "WKU_sp_plus_copy_delta_14.7",
+          "NEV_w0_missing_official",
+          "NEV_sp_plus_copy_delta_-7.3"
+        ],
+        "home_power_delta": -0.0654,
+        "away_power_delta": 0.0989,
+        "home_sp_plus_new": -13.4,
+        "home_sp_plus_old": -6.1,
+        "away_sp_plus_new": 1.6,
+        "away_sp_plus_old": -13.1
+      },
+      {
+        "away": "APP",
+        "home": "ECU",
+        "week": 2,
+        "new_model": -17.21,
+        "old_model": -6.88,
+        "delta": -10.33,
+        "abs_delta": 10.33,
+        "sign_flip": false,
+        "causes": [
+          "APP_sp_plus_copy_delta_-4.2",
+          "ECU_w0_missing_official",
+          "ECU_sp_plus_copy_delta_16.1"
+        ],
+        "home_power_delta": 0.1183,
+        "away_power_delta": -0.0395,
+        "home_sp_plus_new": 8.0,
+        "home_sp_plus_old": -8.1,
+        "away_sp_plus_new": -11.4,
+        "away_sp_plus_old": -7.2
+      },
+      {
+        "away": "ULM",
+        "home": "MSST",
+        "week": 1,
+        "new_model": -9.93,
+        "old_model": -19.9,
+        "delta": 9.97,
+        "abs_delta": 9.97,
+        "sign_flip": false,
+        "causes": [
+          "ULM_sp_plus_copy_delta_11.6",
+          "MSST_sp_plus_copy_delta_-5.3"
+        ],
+        "home_power_delta": -0.0568,
+        "away_power_delta": 0.0798,
+        "home_sp_plus_new": 4.1,
+        "home_sp_plus_old": 9.4,
+        "away_sp_plus_new": -21.6,
+        "away_sp_plus_old": -33.2
+      },
+      {
+        "away": "OHIO",
+        "home": "NEB",
+        "week": 1,
+        "new_model": -8.76,
+        "old_model": -18.6,
+        "delta": 9.84,
+        "abs_delta": 9.84,
+        "sign_flip": false,
+        "causes": [
+          "OHIO_sp_plus_copy_delta_12.4",
+          "NEB_sp_plus_copy_delta_-5.9"
+        ],
+        "home_power_delta": -0.0553,
+        "away_power_delta": 0.1001,
+        "home_sp_plus_new": 6.2,
+        "home_sp_plus_old": 12.1,
+        "away_sp_plus_new": -4.0,
+        "away_sp_plus_old": -16.4
+      },
+      {
+        "away": "SDSU",
+        "home": "UCLA",
+        "week": 2,
+        "new_model": 1.71,
+        "old_model": -8.06,
+        "delta": 9.77,
+        "abs_delta": 9.77,
+        "sign_flip": true,
+        "causes": [
+          "SDSU_sp_plus_copy_delta_3.6",
+          "UCLA_sp_plus_copy_delta_-17.9"
+        ],
+        "home_power_delta": -0.1458,
+        "away_power_delta": 0.0115,
+        "home_sp_plus_new": -8.7,
+        "home_sp_plus_old": 9.2,
+        "away_sp_plus_new": 6.7,
+        "away_sp_plus_old": 3.1
+      },
+      {
+        "away": "USF",
+        "home": "ARMY",
+        "week": 2,
+        "new_model": 12.3,
+        "old_model": 2.8,
+        "delta": 9.5,
+        "abs_delta": 9.5,
+        "sign_flip": false,
+        "causes": [
+          "USF_sp_plus_copy_delta_14.7",
+          "ARMY_sp_plus_copy_delta_-1.4"
+        ],
+        "home_power_delta": -0.0181,
+        "away_power_delta": 0.1171,
+        "home_sp_plus_new": 0.8,
+        "home_sp_plus_old": 2.2,
+        "away_sp_plus_new": 11.6,
+        "away_sp_plus_old": -3.1
+      },
+      {
+        "away": "UNC",
+        "home": "TCU",
+        "week": 0,
+        "new_model": -14.93,
+        "old_model": -5.57,
+        "delta": -9.36,
+        "abs_delta": 9.36,
+        "sign_flip": false,
+        "causes": [
+          "UNC_sp_plus_copy_delta_-12.4",
+          "TCU_sp_plus_copy_delta_4.4"
+        ],
+        "home_power_delta": 0.0351,
+        "away_power_delta": -0.1076,
+        "home_sp_plus_new": 8.3,
+        "home_sp_plus_old": 3.9,
+        "away_sp_plus_new": -6.6,
+        "away_sp_plus_old": 5.8
+      },
+      {
+        "away": "LT",
+        "home": "LSU",
+        "week": 2,
+        "new_model": -19.27,
+        "old_model": -28.62,
+        "delta": 9.35,
+        "abs_delta": 9.35,
+        "sign_flip": false,
+        "causes": [
+          "LT_sp_plus_copy_delta_2.5",
+          "LSU_sp_plus_copy_delta_-13.0"
+        ],
+        "home_power_delta": -0.12,
+        "away_power_delta": 0.0116,
+        "home_sp_plus_new": 10.3,
+        "home_sp_plus_old": 23.3,
+        "away_sp_plus_new": -1.3,
+        "away_sp_plus_old": -3.8
+      },
+      {
+        "away": "FAU",
+        "home": "UF",
+        "week": 1,
+        "new_model": -12.57,
+        "old_model": -21.9,
+        "delta": 9.33,
+        "abs_delta": 9.33,
+        "sign_flip": false,
+        "causes": [
+          "FAU_sp_plus_copy_delta_3.5",
+          "UF_sp_plus_copy_delta_-15.1"
+        ],
+        "home_power_delta": -0.1375,
+        "away_power_delta": 0.0118,
+        "home_sp_plus_new": 3.5,
+        "home_sp_plus_old": 18.6,
+        "away_sp_plus_new": -8.7,
+        "away_sp_plus_old": -12.2
+      },
+      {
+        "away": "TOL",
+        "home": "MSU",
+        "week": 1,
+        "new_model": -5.56,
+        "old_model": -14.83,
+        "delta": 9.27,
+        "abs_delta": 9.27,
+        "sign_flip": false,
+        "causes": [
+          "TOL_w0_missing_official",
+          "TOL_sp_plus_copy_delta_15.4",
+          "MSU_sp_plus_copy_delta_-4.4"
+        ],
+        "home_power_delta": -0.0346,
+        "away_power_delta": 0.1177,
+        "home_sp_plus_new": -3.4,
+        "home_sp_plus_old": 1.0,
+        "away_sp_plus_new": 6.0,
+        "away_sp_plus_old": -9.4
+      },
+      {
+        "away": "MD",
+        "home": "CONN",
+        "week": 2,
+        "new_model": 15.07,
+        "old_model": 24.15,
+        "delta": -9.08,
+        "abs_delta": 9.08,
+        "sign_flip": false,
+        "causes": [
+          "MD_sp_plus_copy_delta_-8.5",
+          "CONN_sp_plus_copy_delta_11.4"
+        ],
+        "home_power_delta": 0.067,
+        "away_power_delta": -0.0828,
+        "home_sp_plus_new": 5.1,
+        "home_sp_plus_old": -6.3,
+        "away_sp_plus_new": 0.6,
+        "away_sp_plus_old": 9.1
+      },
+      {
+        "away": "UCLA",
+        "home": "CAL",
+        "week": 1,
+        "new_model": -11.62,
+        "old_model": -2.57,
+        "delta": -9.05,
+        "abs_delta": 9.05,
+        "sign_flip": false,
+        "causes": [
+          "UCLA_sp_plus_copy_delta_-17.9",
+          "CAL_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": -0.002,
+        "away_power_delta": -0.1458,
+        "home_sp_plus_new": -3.2,
+        "home_sp_plus_old": -3.4,
+        "away_sp_plus_new": -8.7,
+        "away_sp_plus_old": 9.2
+      },
+      {
+        "away": "CAL",
+        "home": "SYR",
+        "week": 2,
+        "new_model": 8.0,
+        "old_model": -1.01,
+        "delta": 9.01,
+        "abs_delta": 9.01,
+        "sign_flip": true,
+        "causes": [
+          "CAL_sp_plus_copy_delta_0.2",
+          "SYR_sp_plus_copy_delta_-15.8"
+        ],
+        "home_power_delta": -0.1356,
+        "away_power_delta": -0.002,
+        "home_sp_plus_new": -13.1,
+        "home_sp_plus_old": 2.7,
+        "away_sp_plus_new": -3.2,
+        "away_sp_plus_old": -3.4
+      },
+      {
+        "away": "UNT",
+        "home": "IU",
+        "week": 1,
+        "new_model": -13.73,
+        "old_model": -22.33,
+        "delta": 8.6,
+        "abs_delta": 8.6,
+        "sign_flip": false,
+        "causes": [
+          "UNT_w0_missing_official",
+          "UNT_sp_plus_copy_delta_27.0",
+          "IU_sp_plus_copy_delta_8.3"
+        ],
+        "home_power_delta": 0.0544,
+        "away_power_delta": 0.2172,
+        "home_sp_plus_new": 32.4,
+        "home_sp_plus_old": 24.1,
+        "away_sp_plus_new": 13.8,
+        "away_sp_plus_old": -13.2
+      },
+      {
+        "away": "WKU",
+        "home": "UGA",
+        "week": 2,
+        "new_model": -23.01,
+        "old_model": -31.38,
+        "delta": 8.37,
+        "abs_delta": 8.37,
+        "sign_flip": false,
+        "causes": [
+          "WKU_sp_plus_copy_delta_14.7",
+          "UGA_sp_plus_copy_delta_-4.6"
+        ],
+        "home_power_delta": -0.0585,
+        "away_power_delta": 0.0989,
+        "home_sp_plus_new": 24.1,
+        "home_sp_plus_old": 28.7,
+        "away_sp_plus_new": 1.6,
+        "away_sp_plus_old": -13.1
+      },
+      {
+        "away": "ECU",
+        "home": "ALA",
+        "week": 1,
+        "new_model": -18.18,
+        "old_model": -26.52,
+        "delta": 8.34,
+        "abs_delta": 8.34,
+        "sign_flip": false,
+        "causes": [
+          "ECU_w0_missing_official",
+          "ECU_sp_plus_copy_delta_16.1",
+          "ALA_sp_plus_copy_delta_-5.2"
+        ],
+        "home_power_delta": -0.0454,
+        "away_power_delta": 0.1183,
+        "home_sp_plus_new": 14.8,
+        "home_sp_plus_old": 20.0,
+        "away_sp_plus_new": 8.0,
+        "away_sp_plus_old": -8.1
+      },
+      {
+        "away": "CMU",
+        "home": "UNM",
+        "week": 1,
+        "new_model": -13.12,
+        "old_model": -21.41,
+        "delta": 8.29,
+        "abs_delta": 8.29,
+        "sign_flip": false,
+        "causes": [
+          "CMU_sp_plus_copy_delta_11.2",
+          "UNM_w0_missing_official",
+          "UNM_sp_plus_copy_delta_-3.5"
+        ],
+        "home_power_delta": -0.0424,
+        "away_power_delta": 0.0785,
+        "home_sp_plus_new": 0.9,
+        "home_sp_plus_old": 4.4,
+        "away_sp_plus_new": -8.8,
+        "away_sp_plus_old": -20.0
+      },
+      {
+        "away": "KENT",
+        "home": "SCAR",
+        "week": 1,
+        "new_model": -24.66,
+        "old_model": -32.33,
+        "delta": 7.67,
+        "abs_delta": 7.67,
+        "sign_flip": false,
+        "causes": [
+          "KENT_sp_plus_copy_delta_8.2",
+          "SCAR_sp_plus_copy_delta_-10.8"
+        ],
+        "home_power_delta": -0.1085,
+        "away_power_delta": 0.0603,
+        "home_sp_plus_new": 5.9,
+        "home_sp_plus_old": 16.7,
+        "away_sp_plus_new": -19.3,
+        "away_sp_plus_old": -27.5
+      },
+      {
+        "away": "WSU",
+        "home": "KSU",
+        "week": 2,
+        "new_model": -7.73,
+        "old_model": -15.4,
+        "delta": 7.67,
+        "abs_delta": 7.67,
+        "sign_flip": false,
+        "causes": [
+          "WSU_sp_plus_copy_delta_7.5",
+          "KSU_sp_plus_copy_delta_-5.7"
+        ],
+        "home_power_delta": -0.0597,
+        "away_power_delta": 0.0535,
+        "home_sp_plus_new": 7.0,
+        "home_sp_plus_old": 12.7,
+        "away_sp_plus_new": 3.8,
+        "away_sp_plus_old": -3.7
+      },
+      {
+        "away": "TXST",
+        "home": "TEX",
+        "week": 1,
+        "new_model": -22.69,
+        "old_model": -30.26,
+        "delta": 7.57,
+        "abs_delta": 7.57,
+        "sign_flip": false,
+        "causes": [
+          "TXST_sp_plus_copy_delta_10.1",
+          "TEX_sp_plus_copy_delta_-9.2"
+        ],
+        "home_power_delta": -0.0957,
+        "away_power_delta": 0.0717,
+        "home_sp_plus_new": 16.2,
+        "home_sp_plus_old": 25.4,
+        "away_sp_plus_new": 2.3,
+        "away_sp_plus_old": -7.8
+      },
+      {
+        "away": "HAW",
+        "home": "STAN",
+        "week": 0,
+        "new_model": 5.75,
+        "old_model": -1.61,
+        "delta": 7.36,
+        "abs_delta": 7.36,
+        "sign_flip": true,
+        "causes": [
+          "HAW_sp_plus_copy_delta_8.7",
+          "STAN_sp_plus_copy_delta_-7.1"
+        ],
+        "home_power_delta": -0.0523,
+        "away_power_delta": 0.0528,
+        "home_sp_plus_new": -11.8,
+        "home_sp_plus_old": -4.7,
+        "away_sp_plus_new": 1.7,
+        "away_sp_plus_old": -7.0
+      },
+      {
+        "away": "JVST",
+        "home": "OHIO",
+        "week": 2,
+        "new_model": -5.05,
+        "old_model": 2.08,
+        "delta": -7.13,
+        "abs_delta": 7.13,
+        "sign_flip": true,
+        "causes": [
+          "JVST_w0_missing_official",
+          "JVST_sp_plus_copy_delta_0.3",
+          "OHIO_sp_plus_copy_delta_12.4"
+        ],
+        "home_power_delta": 0.1001,
+        "away_power_delta": 0.0032,
+        "home_sp_plus_new": -4.0,
+        "home_sp_plus_old": -16.4,
+        "away_sp_plus_new": -6.7,
+        "away_sp_plus_old": -7.0
+      },
+      {
+        "away": "FIU",
+        "home": "USF",
+        "week": 1,
+        "new_model": -17.32,
+        "old_model": -10.23,
+        "delta": -7.09,
+        "abs_delta": 7.09,
+        "sign_flip": false,
+        "causes": [
+          "FIU_sp_plus_copy_delta_3.0",
+          "USF_sp_plus_copy_delta_14.7"
+        ],
+        "home_power_delta": 0.1171,
+        "away_power_delta": 0.021,
+        "home_sp_plus_new": 11.6,
+        "home_sp_plus_old": -3.1,
+        "away_sp_plus_new": -10.5,
+        "away_sp_plus_old": -13.5
+      },
+      {
+        "away": "LIB",
+        "home": "JMU",
+        "week": 1,
+        "new_model": -8.77,
+        "old_model": -1.7,
+        "delta": -7.07,
+        "abs_delta": 7.07,
+        "sign_flip": false,
+        "causes": [
+          "LIB_sp_plus_copy_delta_-1.8",
+          "JMU_sp_plus_copy_delta_12.6"
+        ],
+        "home_power_delta": 0.0956,
+        "away_power_delta": -0.0152,
+        "home_sp_plus_new": 12.3,
+        "home_sp_plus_old": -0.3,
+        "away_sp_plus_new": -9.0,
+        "away_sp_plus_old": -7.2
+      },
+      {
+        "away": "TTU",
+        "home": "ORST",
+        "week": 2,
+        "new_model": 15.64,
+        "old_model": 8.75,
+        "delta": 6.89,
+        "abs_delta": 6.89,
+        "sign_flip": false,
+        "causes": [
+          "TTU_sp_plus_copy_delta_8.7",
+          "ORST_sp_plus_copy_delta_-9.1"
+        ],
+        "home_power_delta": -0.0654,
+        "away_power_delta": 0.0607,
+        "home_sp_plus_new": -15.9,
+        "home_sp_plus_old": -6.8,
+        "away_sp_plus_new": 27.6,
+        "away_sp_plus_old": 18.9
+      },
+      {
+        "away": "USA",
+        "home": "TULN",
+        "week": 2,
+        "new_model": -6.28,
+        "old_model": 0.57,
+        "delta": -6.85,
+        "abs_delta": 6.85,
+        "sign_flip": true,
+        "causes": [
+          "USA_sp_plus_copy_delta_-1.3",
+          "TULN_sp_plus_copy_delta_13.7"
+        ],
+        "home_power_delta": 0.0886,
+        "away_power_delta": -0.005,
+        "home_sp_plus_new": 6.3,
+        "home_sp_plus_old": -7.4,
+        "away_sp_plus_new": -12.7,
+        "away_sp_plus_old": -11.4
+      },
+      {
+        "away": "COLO",
+        "home": "GT",
+        "week": 1,
+        "new_model": -5.88,
+        "old_model": 0.93,
+        "delta": -6.81,
+        "abs_delta": 6.81,
+        "sign_flip": true,
+        "causes": [
+          "COLO_sp_plus_copy_delta_-10.4",
+          "GT_sp_plus_copy_delta_7.6"
+        ],
+        "home_power_delta": 0.0472,
+        "away_power_delta": -0.0844,
+        "home_sp_plus_new": 9.3,
+        "home_sp_plus_old": 1.7,
+        "away_sp_plus_new": -8.3,
+        "away_sp_plus_old": 2.1
+      },
+      {
+        "away": "CLEM",
+        "home": "LSU",
+        "week": 1,
+        "new_model": -0.43,
+        "old_model": -6.92,
+        "delta": 6.49,
+        "abs_delta": 6.49,
+        "sign_flip": false,
+        "causes": [
+          "CLEM_sp_plus_copy_delta_4.3",
+          "LSU_sp_plus_copy_delta_-13.0"
+        ],
+        "home_power_delta": -0.12,
+        "away_power_delta": 0.0242,
+        "home_sp_plus_new": 10.3,
+        "home_sp_plus_old": 23.3,
+        "away_sp_plus_new": 9.5,
+        "away_sp_plus_old": 5.2
+      },
+      {
+        "away": "DEL",
+        "home": "VAN",
+        "week": 2,
+        "new_model": -19.35,
+        "old_model": -13.05,
+        "delta": -6.3,
+        "abs_delta": 6.3,
+        "sign_flip": false,
+        "causes": [
+          "DEL_sp_plus_copy_delta_-3.3",
+          "VAN_sp_plus_copy_delta_8.2"
+        ],
+        "home_power_delta": 0.05,
+        "away_power_delta": -0.026,
+        "home_sp_plus_new": 20.3,
+        "home_sp_plus_old": 12.1,
+        "away_sp_plus_new": -10.9,
+        "away_sp_plus_old": -7.6
+      },
+      {
+        "away": "ULM",
+        "home": "UAB",
+        "week": 2,
+        "new_model": 4.1,
+        "old_model": -2.19,
+        "delta": 6.29,
+        "abs_delta": 6.29,
+        "sign_flip": true,
+        "causes": [
+          "ULM_sp_plus_copy_delta_11.6",
+          "UAB_w0_missing_official",
+          "UAB_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0049,
+        "away_power_delta": 0.0798,
+        "home_sp_plus_new": -15.8,
+        "home_sp_plus_old": -16.0,
+        "away_sp_plus_new": -21.6,
+        "away_sp_plus_old": -33.2
+      },
+      {
+        "away": "ORE",
+        "home": "OKST",
+        "week": 2,
+        "new_model": 24.02,
+        "old_model": 17.96,
+        "delta": 6.06,
+        "abs_delta": 6.06,
+        "sign_flip": false,
+        "causes": [
+          "ORE_sp_plus_copy_delta_2.0",
+          "OKST_sp_plus_copy_delta_-16.2"
+        ],
+        "home_power_delta": -0.1421,
+        "away_power_delta": 0.0035,
+        "home_sp_plus_new": -15.1,
+        "home_sp_plus_old": 1.1,
+        "away_sp_plus_new": 25.9,
+        "away_sp_plus_old": 23.9
+      },
+      {
+        "away": "SHSU",
+        "home": "TROY",
+        "week": 1,
+        "new_model": -14.69,
+        "old_model": -8.7,
+        "delta": -5.99,
+        "abs_delta": 5.99,
+        "sign_flip": false,
+        "causes": [
+          "SHSU_sp_plus_copy_delta_-6.3",
+          "TROY_sp_plus_copy_delta_6.6"
+        ],
+        "home_power_delta": 0.0417,
+        "away_power_delta": -0.0426,
+        "home_sp_plus_new": -4.8,
+        "home_sp_plus_old": -11.4,
+        "away_sp_plus_new": -27.8,
+        "away_sp_plus_old": -21.5
+      },
+      {
+        "away": "WAKE",
+        "home": "PUR",
+        "week": 2,
+        "new_model": 1.59,
+        "old_model": -4.39,
+        "delta": 5.98,
+        "abs_delta": 5.98,
+        "sign_flip": true,
+        "causes": [
+          "WAKE_sp_plus_copy_delta_4.1",
+          "PUR_sp_plus_copy_delta_-7.3"
+        ],
+        "home_power_delta": -0.0759,
+        "away_power_delta": 0.0259,
+        "home_sp_plus_new": -6.1,
+        "home_sp_plus_old": 1.2,
+        "away_sp_plus_new": 5.7,
+        "away_sp_plus_old": 1.6
+      },
+      {
+        "away": "TENN",
+        "home": "GT",
+        "week": 2,
+        "new_model": 2.74,
+        "old_model": 8.65,
+        "delta": -5.91,
+        "abs_delta": 5.91,
+        "sign_flip": false,
+        "causes": [
+          "TENN_sp_plus_copy_delta_-4.9",
+          "GT_sp_plus_copy_delta_7.6"
+        ],
+        "home_power_delta": 0.0472,
+        "away_power_delta": -0.0552,
+        "home_sp_plus_new": 9.3,
+        "home_sp_plus_old": 1.7,
+        "away_sp_plus_new": 15.0,
+        "away_sp_plus_old": 19.9
+      },
+      {
+        "away": "WYO",
+        "home": "CSU",
+        "week": 1,
+        "new_model": -0.03,
+        "old_model": -5.81,
+        "delta": 5.78,
+        "abs_delta": 5.78,
+        "sign_flip": false,
+        "causes": [
+          "WYO_sp_plus_copy_delta_3.9",
+          "CSU_w0_missing_official",
+          "CSU_sp_plus_copy_delta_-8.1"
+        ],
+        "home_power_delta": -0.0656,
+        "away_power_delta": 0.0336,
+        "home_sp_plus_new": -15.6,
+        "home_sp_plus_old": -7.5,
+        "away_sp_plus_new": -11.3,
+        "away_sp_plus_old": -15.2
+      },
+      {
+        "away": "UTSA",
+        "home": "TXST",
+        "week": 2,
+        "new_model": -0.76,
+        "old_model": 4.81,
+        "delta": -5.57,
+        "abs_delta": 5.57,
+        "sign_flip": true,
+        "causes": [
+          "UTSA_sp_plus_copy_delta_0.8",
+          "TXST_sp_plus_copy_delta_10.1"
+        ],
+        "home_power_delta": 0.0717,
+        "away_power_delta": -0.0021,
+        "home_sp_plus_new": 2.3,
+        "home_sp_plus_old": -7.8,
+        "away_sp_plus_new": 3.7,
+        "away_sp_plus_old": 2.9
+      },
+      {
+        "away": "NIU",
+        "home": "IOWA",
+        "week": 1,
+        "new_model": -21.66,
+        "old_model": -26.99,
+        "delta": 5.33,
+        "abs_delta": 5.33,
+        "sign_flip": false,
+        "causes": [
+          "NIU_sp_plus_copy_delta_5.6",
+          "IOWA_sp_plus_copy_delta_1.7"
+        ],
+        "home_power_delta": -0.0029,
+        "away_power_delta": 0.0404,
+        "home_sp_plus_new": 19.7,
+        "home_sp_plus_old": 18.0,
+        "away_sp_plus_new": -16.7,
+        "away_sp_plus_old": -22.3
+      },
+      {
+        "away": "GASO",
+        "home": "CLEM",
+        "week": 2,
+        "new_model": -27.1,
+        "old_model": -21.82,
+        "delta": -5.28,
+        "abs_delta": 5.28,
+        "sign_flip": false,
+        "causes": [
+          "GASO_sp_plus_copy_delta_-3.6",
+          "CLEM_sp_plus_copy_delta_4.3"
+        ],
+        "home_power_delta": 0.0242,
+        "away_power_delta": -0.0324,
+        "home_sp_plus_new": 9.5,
+        "home_sp_plus_old": 5.2,
+        "away_sp_plus_new": -9.4,
+        "away_sp_plus_old": -5.8
+      },
+      {
+        "away": "MOST",
+        "home": "TAMU",
+        "week": 1,
+        "new_model": -29.3,
+        "old_model": -34.57,
+        "delta": 5.27,
+        "abs_delta": 5.27,
+        "sign_flip": false,
+        "causes": [
+          "MOST_sp_plus_copy_delta_13.6",
+          "TAMU_sp_plus_copy_delta_-3.2"
+        ],
+        "home_power_delta": -0.0318,
+        "away_power_delta": 0.1024,
+        "home_sp_plus_new": 20.7,
+        "home_sp_plus_old": 23.9,
+        "away_sp_plus_new": -10.7,
+        "away_sp_plus_old": -24.3
+      },
+      {
+        "away": "M-OH",
+        "home": "PITT",
+        "week": 1,
+        "new_model": -17.62,
+        "old_model": -22.77,
+        "delta": 5.15,
+        "abs_delta": 5.15,
+        "sign_flip": false,
+        "causes": [
+          "M-OH_w0_fill",
+          "M-OH_sp_plus_copy_delta_6.6",
+          "PITT_sp_plus_copy_delta_-1.7"
+        ],
+        "home_power_delta": -0.0242,
+        "away_power_delta": 0.0368,
+        "home_sp_plus_new": 8.4,
+        "home_sp_plus_old": 10.1,
+        "away_sp_plus_new": -3.4,
+        "away_sp_plus_old": -10.0
+      },
+      {
+        "away": "TULN",
+        "home": "DUKE",
+        "week": 1,
+        "new_model": -12.74,
+        "old_model": -17.75,
+        "delta": 5.01,
+        "abs_delta": 5.01,
+        "sign_flip": false,
+        "causes": [
+          "TULN_sp_plus_copy_delta_13.7"
+        ],
+        "home_power_delta": -0.0092,
+        "away_power_delta": 0.0886,
+        "home_sp_plus_new": 6.6,
+        "home_sp_plus_old": 6.6,
+        "away_sp_plus_new": 6.3,
+        "away_sp_plus_old": -7.4
+      },
+      {
+        "away": "BAY",
+        "home": "AUB",
+        "week": 1,
+        "new_model": -8.67,
+        "old_model": -3.67,
+        "delta": -5.0,
+        "abs_delta": 5.0,
+        "sign_flip": false,
+        "causes": [
+          "BAY_sp_plus_copy_delta_-3.5",
+          "AUB_sp_plus_copy_delta_4.6"
+        ],
+        "home_power_delta": 0.029,
+        "away_power_delta": -0.0434,
+        "home_sp_plus_new": 11.6,
+        "home_sp_plus_old": 7.0,
+        "away_sp_plus_new": 1.4,
+        "away_sp_plus_old": 4.9
+      },
+      {
+        "away": "ARK",
+        "home": "UTAH",
+        "week": 2,
+        "new_model": -14.96,
+        "old_model": -10.0,
+        "delta": -4.96,
+        "abs_delta": 4.96,
+        "sign_flip": false,
+        "causes": [
+          "ARK_sp_plus_copy_delta_1.8",
+          "UTAH_sp_plus_copy_delta_9.2"
+        ],
+        "home_power_delta": 0.0713,
+        "away_power_delta": 0.0046,
+        "home_sp_plus_new": 22.2,
+        "home_sp_plus_old": 13.0,
+        "away_sp_plus_new": 5.1,
+        "away_sp_plus_old": 3.3
+      },
+      {
+        "away": "OKST",
+        "home": "TLSA",
+        "week": 1,
+        "new_model": 0.75,
+        "old_model": 5.32,
+        "delta": -4.57,
+        "abs_delta": 4.57,
+        "sign_flip": false,
+        "causes": [
+          "OKST_sp_plus_copy_delta_-16.2",
+          "TLSA_sp_plus_copy_delta_-7.7"
+        ],
+        "home_power_delta": -0.0714,
+        "away_power_delta": -0.1421,
+        "home_sp_plus_new": -10.0,
+        "home_sp_plus_old": -2.3,
+        "away_sp_plus_new": -15.1,
+        "away_sp_plus_old": 1.1
+      },
+      {
+        "away": "MRSH",
+        "home": "PSU",
+        "week": 1,
+        "new_model": -18.01,
+        "old_model": -22.48,
+        "delta": 4.47,
+        "abs_delta": 4.47,
+        "sign_flip": false,
+        "causes": [
+          "MRSH_sp_plus_copy_delta_9.9",
+          "PSU_sp_plus_copy_delta_-1.7"
+        ],
+        "home_power_delta": -0.0304,
+        "away_power_delta": 0.0648,
+        "home_sp_plus_new": 18.1,
+        "home_sp_plus_old": 19.8,
+        "away_sp_plus_new": -4.5,
+        "away_sp_plus_old": -14.4
+      },
+      {
+        "away": "NMSU",
+        "home": "HAW",
+        "week": 2,
+        "new_model": -7.35,
+        "old_model": -2.89,
+        "delta": -4.46,
+        "abs_delta": 4.46,
+        "sign_flip": false,
+        "causes": [
+          "NMSU_sp_plus_copy_delta_-0.5",
+          "HAW_sp_plus_copy_delta_8.7"
+        ],
+        "home_power_delta": 0.0528,
+        "away_power_delta": -0.0069,
+        "home_sp_plus_new": 1.7,
+        "home_sp_plus_old": -7.0,
+        "away_sp_plus_new": -15.5,
+        "away_sp_plus_old": -15.0
+      },
+      {
+        "away": "MASS",
+        "home": "RUT",
+        "week": 1,
+        "new_model": -24.49,
+        "old_model": -20.25,
+        "delta": -4.24,
+        "abs_delta": 4.24,
+        "sign_flip": false,
+        "causes": [
+          "MASS_sp_plus_copy_delta_-10.8",
+          "RUT_sp_plus_copy_delta_4.6"
+        ],
+        "home_power_delta": 0.0299,
+        "away_power_delta": -0.0519,
+        "home_sp_plus_new": 1.0,
+        "home_sp_plus_old": -3.6,
+        "away_sp_plus_new": -36.6,
+        "away_sp_plus_old": -25.8
+      },
+      {
+        "away": "ORST",
+        "home": "HOU",
+        "week": 1,
+        "new_model": -7.72,
+        "old_model": -3.56,
+        "delta": -4.16,
+        "abs_delta": 4.16,
+        "sign_flip": false,
+        "causes": [
+          "ORST_sp_plus_copy_delta_-9.1",
+          "HOU_sp_plus_copy_delta_0.9"
+        ],
+        "home_power_delta": 0.0065,
+        "away_power_delta": -0.0654,
+        "home_sp_plus_new": 7.4,
+        "home_sp_plus_old": 6.5,
+        "away_sp_plus_new": -15.9,
+        "away_sp_plus_old": -6.8
+      },
+      {
+        "away": "OSU",
+        "home": "TEX",
+        "week": 2,
+        "new_model": 3.11,
+        "old_model": -1.0,
+        "delta": 4.11,
+        "abs_delta": 4.11,
+        "sign_flip": true,
+        "causes": [
+          "TEX_sp_plus_copy_delta_-9.2"
+        ],
+        "home_power_delta": -0.0957,
+        "away_power_delta": -0.0125,
+        "home_sp_plus_new": 16.2,
+        "home_sp_plus_old": 25.4,
+        "away_sp_plus_new": 30.1,
+        "away_sp_plus_old": 30.0
+      },
+      {
+        "away": "UTEP",
+        "home": "OU",
+        "week": 1,
+        "new_model": -30.45,
+        "old_model": -34.53,
+        "delta": 4.08,
+        "abs_delta": 4.08,
+        "sign_flip": false,
+        "causes": [
+          "UTEP_sp_plus_copy_delta_6.8",
+          "OU_sp_plus_copy_delta_-3.4"
+        ],
+        "home_power_delta": -0.0454,
+        "away_power_delta": 0.0521,
+        "home_sp_plus_new": 18.3,
+        "home_sp_plus_old": 21.7,
+        "away_sp_plus_new": -17.5,
+        "away_sp_plus_old": -24.3
+      },
+      {
+        "away": "RUT",
+        "home": "BC",
+        "week": 2,
+        "new_model": 12.46,
+        "old_model": 8.53,
+        "delta": 3.93,
+        "abs_delta": 3.93,
+        "sign_flip": false,
+        "causes": [
+          "RUT_sp_plus_copy_delta_4.6",
+          "BC_sp_plus_copy_delta_-1.1"
+        ],
+        "home_power_delta": -0.0203,
+        "away_power_delta": 0.0299,
+        "home_sp_plus_new": -8.5,
+        "home_sp_plus_old": -7.4,
+        "away_sp_plus_new": 1.0,
+        "away_sp_plus_old": -3.6
+      },
+      {
+        "away": "NCSU",
+        "home": "UVA",
+        "week": 0,
+        "new_model": -3.99,
+        "old_model": -7.57,
+        "delta": 3.58,
+        "abs_delta": 3.58,
+        "sign_flip": false,
+        "causes": [
+          "NCSU_sp_plus_copy_delta_5.5",
+          "UVA_sp_plus_copy_delta_-0.4"
+        ],
+        "home_power_delta": -0.0124,
+        "away_power_delta": 0.0454,
+        "home_sp_plus_new": 11.1,
+        "home_sp_plus_old": 11.5,
+        "away_sp_plus_new": 4.8,
+        "away_sp_plus_old": -0.7
+      },
+      {
+        "away": "FRES",
+        "home": "USC",
+        "week": 1,
+        "new_model": -26.14,
+        "old_model": -29.65,
+        "delta": 3.51,
+        "abs_delta": 3.51,
+        "sign_flip": false,
+        "causes": [
+          "FRES_sp_plus_copy_delta_9.4",
+          "USC_sp_plus_copy_delta_-0.8"
+        ],
+        "home_power_delta": -0.0089,
+        "away_power_delta": 0.0633,
+        "home_sp_plus_new": 16.9,
+        "home_sp_plus_old": 17.7,
+        "away_sp_plus_new": 1.8,
+        "away_sp_plus_old": -7.6
+      },
+      {
+        "away": "UNLV",
+        "home": "HAW",
+        "week": 1,
+        "new_model": -2.23,
+        "old_model": 1.2,
+        "delta": -3.43,
+        "abs_delta": 3.43,
+        "sign_flip": true,
+        "causes": [
+          "UNLV_sp_plus_copy_delta_2.0",
+          "HAW_sp_plus_copy_delta_8.7"
+        ],
+        "home_power_delta": 0.0528,
+        "away_power_delta": 0.0082,
+        "home_sp_plus_new": 1.7,
+        "home_sp_plus_old": -7.0,
+        "away_sp_plus_new": 4.3,
+        "away_sp_plus_old": 2.3
+      },
+      {
+        "away": "MIZZ",
+        "home": "KU",
+        "week": 2,
+        "new_model": 1.24,
+        "old_model": -2.19,
+        "delta": 3.43,
+        "abs_delta": 3.43,
+        "sign_flip": true,
+        "causes": [
+          "MIZZ_w0_missing_official",
+          "MIZZ_sp_plus_copy_delta_1.5",
+          "KU_sp_plus_copy_delta_-3.4"
+        ],
+        "home_power_delta": -0.0425,
+        "away_power_delta": 0.0132,
+        "home_sp_plus_new": 4.1,
+        "home_sp_plus_old": 7.5,
+        "away_sp_plus_new": 14.4,
+        "away_sp_plus_old": 12.9
+      },
+      {
+        "away": "BGSU",
+        "home": "NEB",
+        "week": 2,
+        "new_model": -18.98,
+        "old_model": -22.4,
+        "delta": 3.42,
+        "abs_delta": 3.42,
+        "sign_flip": false,
+        "causes": [
+          "BGSU_sp_plus_copy_delta_0.2",
+          "NEB_sp_plus_copy_delta_-5.9"
+        ],
+        "home_power_delta": -0.0553,
+        "away_power_delta": -0.0076,
+        "home_sp_plus_new": 6.2,
+        "home_sp_plus_old": 12.1,
+        "away_sp_plus_new": -12.6,
+        "away_sp_plus_old": -12.8
+      },
+      {
+        "away": "LOU",
+        "home": "MISS",
+        "week": 1,
+        "new_model": -10.24,
+        "old_model": -6.86,
+        "delta": -3.38,
+        "abs_delta": 3.38,
+        "sign_flip": false,
+        "causes": [
+          "LOU_sp_plus_copy_delta_2.4",
+          "MISS_sp_plus_copy_delta_10.7"
+        ],
+        "home_power_delta": 0.0754,
+        "away_power_delta": 0.0081,
+        "home_sp_plus_new": 24.0,
+        "home_sp_plus_old": 13.3,
+        "away_sp_plus_new": 12.4,
+        "away_sp_plus_old": 10.0
+      },
+      {
+        "away": "DUKE",
+        "home": "ILL",
+        "week": 2,
+        "new_model": -4.7,
+        "old_model": -1.34,
+        "delta": -3.36,
+        "abs_delta": 3.36,
+        "sign_flip": false,
+        "causes": [
+          "ILL_sp_plus_copy_delta_5.4"
+        ],
+        "home_power_delta": 0.0291,
+        "away_power_delta": -0.0092,
+        "home_sp_plus_new": 12.9,
+        "home_sp_plus_old": 7.5,
+        "away_sp_plus_new": 6.6,
+        "away_sp_plus_old": 6.6
+      },
+      {
+        "away": "CHAR",
+        "home": "MISS",
+        "week": 2,
+        "new_model": -38.74,
+        "old_model": -35.6,
+        "delta": -3.14,
+        "abs_delta": 3.14,
+        "sign_flip": false,
+        "causes": [
+          "CHAR_sp_plus_copy_delta_-0.7",
+          "MISS_sp_plus_copy_delta_10.7"
+        ],
+        "home_power_delta": 0.0754,
+        "away_power_delta": -0.0048,
+        "home_sp_plus_new": 24.0,
+        "home_sp_plus_old": 13.3,
+        "away_sp_plus_new": -26.7,
+        "away_sp_plus_old": -26.0
+      },
+      {
+        "away": "MTSU",
+        "home": "MRSH",
+        "week": 2,
+        "new_model": -9.54,
+        "old_model": -6.41,
+        "delta": -3.13,
+        "abs_delta": 3.13,
+        "sign_flip": false,
+        "causes": [
+          "MTSU_sp_plus_copy_delta_4.8",
+          "MRSH_sp_plus_copy_delta_9.9"
+        ],
+        "home_power_delta": 0.0648,
+        "away_power_delta": 0.0266,
+        "home_sp_plus_new": -4.5,
+        "home_sp_plus_old": -14.4,
+        "away_sp_plus_new": -16.0,
+        "away_sp_plus_old": -20.8
+      },
+      {
+        "away": "MEM",
+        "home": "BOISE",
+        "week": 2,
+        "new_model": -4.45,
+        "old_model": -7.51,
+        "delta": 3.06,
+        "abs_delta": 3.06,
+        "sign_flip": false,
+        "causes": [
+          "MEM_sp_plus_copy_delta_5.5",
+          "BOISE_sp_plus_copy_delta_-2.1"
+        ],
+        "home_power_delta": -0.0189,
+        "away_power_delta": 0.0277,
+        "home_sp_plus_new": 3.1,
+        "home_sp_plus_old": 5.2,
+        "away_sp_plus_new": 7.6,
+        "away_sp_plus_old": 2.1
+      },
+      {
+        "away": "OU",
+        "home": "MICH",
+        "week": 2,
+        "new_model": 5.19,
+        "old_model": 7.77,
+        "delta": -2.58,
+        "abs_delta": 2.58,
+        "sign_flip": false,
+        "causes": [
+          "OU_sp_plus_copy_delta_-3.4",
+          "MICH_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0026,
+        "away_power_delta": -0.0454,
+        "home_sp_plus_new": 12.4,
+        "home_sp_plus_old": 12.2,
+        "away_sp_plus_new": 18.3,
+        "away_sp_plus_old": 21.7
+      },
+      {
+        "away": "AKR",
+        "home": "WAKE",
+        "week": 1,
+        "new_model": -10.37,
+        "old_model": -12.91,
+        "delta": 2.54,
+        "abs_delta": 2.54,
+        "sign_flip": false,
+        "causes": [
+          "AKR_sp_plus_copy_delta_7.5",
+          "WAKE_sp_plus_copy_delta_4.1"
+        ],
+        "home_power_delta": 0.0259,
+        "away_power_delta": 0.0594,
+        "home_sp_plus_new": 5.7,
+        "home_sp_plus_old": 1.6,
+        "away_sp_plus_new": -13.9,
+        "away_sp_plus_old": -21.4
+      },
+      {
+        "away": "BALL",
+        "home": "OSU",
+        "week": 1,
+        "new_model": -39.37,
+        "old_model": -41.89,
+        "delta": 2.52,
+        "abs_delta": 2.52,
+        "sign_flip": false,
+        "causes": [
+          "BALL_sp_plus_copy_delta_2.0"
+        ],
+        "home_power_delta": -0.0125,
+        "away_power_delta": 0.0189,
+        "home_sp_plus_new": 30.1,
+        "home_sp_plus_old": 30.0,
+        "away_sp_plus_new": -23.0,
+        "away_sp_plus_old": -25.0
+      },
+      {
+        "away": "UCF",
+        "home": "PITT",
+        "week": 2,
+        "new_model": -3.01,
+        "old_model": -0.51,
+        "delta": -2.5,
+        "abs_delta": 2.5,
+        "sign_flip": false,
+        "causes": [
+          "UCF_sp_plus_copy_delta_-7.1",
+          "PITT_sp_plus_copy_delta_-1.7"
+        ],
+        "home_power_delta": -0.0242,
+        "away_power_delta": -0.0637,
+        "home_sp_plus_new": 8.4,
+        "home_sp_plus_old": 10.1,
+        "away_sp_plus_new": -1.2,
+        "away_sp_plus_old": 5.9
+      },
+      {
+        "away": "ISU",
+        "home": "IOWA",
+        "week": 2,
+        "new_model": -3.89,
+        "old_model": -6.37,
+        "delta": 2.48,
+        "abs_delta": 2.48,
+        "sign_flip": false,
+        "causes": [
+          "ISU_sp_plus_copy_delta_6.8",
+          "IOWA_sp_plus_copy_delta_1.7"
+        ],
+        "home_power_delta": -0.0029,
+        "away_power_delta": 0.0427,
+        "home_sp_plus_new": 19.7,
+        "home_sp_plus_old": 18.0,
+        "away_sp_plus_new": 9.9,
+        "away_sp_plus_old": 3.1
+      },
+      {
+        "away": "GAST",
+        "home": "KENNESAW",
+        "week": 2,
+        "new_model": -11.7,
+        "old_model": -9.51,
+        "delta": -2.19,
+        "abs_delta": 2.19,
+        "sign_flip": false,
+        "causes": [
+          "GAST_sp_plus_copy_delta_-1.8",
+          "KENNESAW_sp_plus_copy_delta_2.0"
+        ],
+        "home_power_delta": 0.0172,
+        "away_power_delta": -0.0087,
+        "home_sp_plus_new": -5.4,
+        "home_sp_plus_old": -7.4,
+        "away_sp_plus_new": -24.5,
+        "away_sp_plus_old": -22.7
+      },
+      {
+        "away": "EMU",
+        "home": "MSU",
+        "week": 2,
+        "new_model": -12.0,
+        "old_model": -13.99,
+        "delta": 1.99,
+        "abs_delta": 1.99,
+        "sign_flip": false,
+        "causes": [
+          "EMU_sp_plus_copy_delta_0.9",
+          "MSU_sp_plus_copy_delta_-4.4"
+        ],
+        "home_power_delta": -0.0346,
+        "away_power_delta": 0.0014,
+        "home_sp_plus_new": -3.4,
+        "home_sp_plus_old": 1.0,
+        "away_sp_plus_new": -14.7,
+        "away_sp_plus_old": -15.6
+      },
+      {
+        "away": "MEM",
+        "home": "UNLV",
+        "week": 0,
+        "new_model": 0.76,
+        "old_model": -1.02,
+        "delta": 1.78,
+        "abs_delta": 1.78,
+        "sign_flip": true,
+        "causes": [
+          "MEM_sp_plus_copy_delta_5.5",
+          "UNLV_sp_plus_copy_delta_2.0"
+        ],
+        "home_power_delta": 0.0082,
+        "away_power_delta": 0.0277,
+        "home_sp_plus_new": 4.3,
+        "home_sp_plus_old": 2.3,
+        "away_sp_plus_new": 7.6,
+        "away_sp_plus_old": 2.1
+      },
+      {
+        "away": "TLSA",
+        "home": "SHSU",
+        "week": 2,
+        "new_model": 2.87,
+        "old_model": 4.6,
+        "delta": -1.73,
+        "abs_delta": 1.73,
+        "sign_flip": false,
+        "causes": [
+          "TLSA_sp_plus_copy_delta_-7.7",
+          "SHSU_sp_plus_copy_delta_-6.3"
+        ],
+        "home_power_delta": -0.0426,
+        "away_power_delta": -0.0714,
+        "home_sp_plus_new": -27.8,
+        "home_sp_plus_old": -21.5,
+        "away_sp_plus_new": -10.0,
+        "away_sp_plus_old": -2.3
+      },
+      {
+        "away": "USM",
+        "home": "AUB",
+        "week": 2,
+        "new_model": -25.0,
+        "old_model": -26.69,
+        "delta": 1.69,
+        "abs_delta": 1.69,
+        "sign_flip": false,
+        "causes": [
+          "USM_sp_plus_copy_delta_7.8",
+          "AUB_sp_plus_copy_delta_4.6"
+        ],
+        "home_power_delta": 0.029,
+        "away_power_delta": 0.0589,
+        "home_sp_plus_new": 11.6,
+        "home_sp_plus_old": 7.0,
+        "away_sp_plus_new": -7.1,
+        "away_sp_plus_old": -14.9
+      },
+      {
+        "away": "UAB",
+        "home": "ILL",
+        "week": 1,
+        "new_model": -22.11,
+        "old_model": -20.81,
+        "delta": -1.3,
+        "abs_delta": 1.3,
+        "sign_flip": false,
+        "causes": [
+          "UAB_w0_missing_official",
+          "UAB_sp_plus_copy_delta_0.2",
+          "ILL_sp_plus_copy_delta_5.4"
+        ],
+        "home_power_delta": 0.0291,
+        "away_power_delta": 0.0049,
+        "home_sp_plus_new": 12.9,
+        "home_sp_plus_old": 7.5,
+        "away_sp_plus_new": -15.8,
+        "away_sp_plus_old": -16.0
+      },
+      {
+        "away": "WMU",
+        "home": "MICH",
+        "week": 1,
+        "new_model": -11.76,
+        "old_model": -12.89,
+        "delta": 1.13,
+        "abs_delta": 1.13,
+        "sign_flip": false,
+        "causes": [
+          "WMU_sp_plus_copy_delta_2.8",
+          "MICH_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0026,
+        "away_power_delta": 0.0222,
+        "home_sp_plus_new": 12.4,
+        "home_sp_plus_old": 12.2,
+        "away_sp_plus_new": -1.4,
+        "away_sp_plus_old": -4.2
+      },
+      {
+        "away": "ALA",
+        "home": "UK",
+        "week": 2,
+        "new_model": 8.64,
+        "old_model": 7.57,
+        "delta": 1.07,
+        "abs_delta": 1.07,
+        "sign_flip": false,
+        "causes": [
+          "ALA_sp_plus_copy_delta_-5.2",
+          "UK_sp_plus_copy_delta_-6.7"
+        ],
+        "home_power_delta": -0.0631,
+        "away_power_delta": -0.0454,
+        "home_sp_plus_new": 1.8,
+        "home_sp_plus_old": 8.5,
+        "away_sp_plus_new": 14.8,
+        "away_sp_plus_old": 20.0
+      },
+      {
+        "away": "UL",
+        "home": "USC",
+        "week": 2,
+        "new_model": -30.37,
+        "old_model": -29.33,
+        "delta": -1.04,
+        "abs_delta": 1.04,
+        "sign_flip": false,
+        "causes": [
+          "UL_sp_plus_copy_delta_-4.4",
+          "USC_sp_plus_copy_delta_-0.8"
+        ],
+        "home_power_delta": -0.0089,
+        "away_power_delta": -0.0313,
+        "home_sp_plus_new": 16.9,
+        "home_sp_plus_old": 17.7,
+        "away_sp_plus_new": -10.1,
+        "away_sp_plus_old": -5.7
+      },
+      {
+        "away": "ARST",
+        "home": "MEM",
+        "week": 1,
+        "new_model": -12.13,
+        "old_model": -13.15,
+        "delta": 1.02,
+        "abs_delta": 1.02,
+        "sign_flip": false,
+        "causes": [
+          "ARST_w0_missing_official",
+          "ARST_sp_plus_copy_delta_6.3",
+          "MEM_sp_plus_copy_delta_5.5"
+        ],
+        "home_power_delta": 0.0277,
+        "away_power_delta": 0.0388,
+        "home_sp_plus_new": 7.6,
+        "home_sp_plus_old": 2.1,
+        "away_sp_plus_new": -8.8,
+        "away_sp_plus_old": -15.1
+      },
+      {
+        "away": "PSU",
+        "home": "TEM",
+        "week": 2,
+        "new_model": 16.67,
+        "old_model": 17.67,
+        "delta": -1.0,
+        "abs_delta": 1.0,
+        "sign_flip": false,
+        "causes": [
+          "PSU_sp_plus_copy_delta_-1.7",
+          "TEM_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": -0.0122,
+        "away_power_delta": -0.0304,
+        "home_sp_plus_new": -5.1,
+        "home_sp_plus_old": -4.9,
+        "away_sp_plus_new": 18.1,
+        "away_sp_plus_old": 19.8
+      }
+    ]
+  },
+  "new_vs_w0": {
+    "board": {
+      "n_common_scored": 49,
+      "model": {
+        "n": 49,
+        "n_nonzero": 49,
+        "mean": 1.3322,
+        "mean_abs": 2.3967,
+        "median_abs": 1.4,
+        "p90_abs": 5.102,
+        "p95_abs": 7.344,
+        "p99_abs": 14.0668,
+        "max_abs": 18.19,
+        "max": 18.19,
+        "min": -7.68
+      },
+      "kei": {
+        "n": 49,
+        "n_nonzero": 49,
+        "mean": 1.3276,
+        "mean_abs": 2.5541,
+        "median_abs": 1.63,
+        "p90_abs": 6.13,
+        "p95_abs": 7.824,
+        "p99_abs": 14.4556,
+        "max_abs": 18.19,
+        "max": 18.19,
+        "min": -8.48
+      },
+      "sign_flips": 3,
+      "threshold_crossings": {
+        "abs_1": 3,
+        "abs_3": 1,
+        "abs_7": 4,
+        "abs_10": 3,
+        "abs_14": 5
+      }
+    },
+    "material_abs_ge_1": [
+      {
+        "away": "UNT",
+        "home": "IU",
+        "week": 1,
+        "new_model": -13.73,
+        "old_model": -31.92,
+        "delta": 18.19,
+        "abs_delta": 18.19,
+        "sign_flip": false,
+        "causes": [
+          "UNT_w0_missing_official"
+        ],
+        "home_power_delta": -0.0002,
+        "away_power_delta": 0.0005,
+        "home_sp_plus_new": 32.4,
+        "home_sp_plus_old": 32.4,
+        "away_sp_plus_new": 13.8,
+        "away_sp_plus_old": null
+      },
+      {
+        "away": "TOL",
+        "home": "MSU",
+        "week": 1,
+        "new_model": -5.56,
+        "old_model": -15.16,
+        "delta": 9.6,
+        "abs_delta": 9.6,
+        "sign_flip": false,
+        "causes": [
+          "TOL_w0_missing_official"
+        ],
+        "home_power_delta": 0.0008,
+        "away_power_delta": 0.0011,
+        "home_sp_plus_new": -3.4,
+        "home_sp_plus_old": -3.4,
+        "away_sp_plus_new": 6.0,
+        "away_sp_plus_old": null
+      },
+      {
+        "away": "CMU",
+        "home": "UNM",
+        "week": 1,
+        "new_model": -13.12,
+        "old_model": -5.44,
+        "delta": -7.68,
+        "abs_delta": 7.68,
+        "sign_flip": false,
+        "causes": [
+          "UNM_w0_missing_official"
+        ],
+        "home_power_delta": 0.0002,
+        "away_power_delta": 0.0008,
+        "home_sp_plus_new": 0.9,
+        "home_sp_plus_old": null,
+        "away_sp_plus_new": -8.8,
+        "away_sp_plus_old": -8.9
+      },
+      {
+        "away": "ECU",
+        "home": "ALA",
+        "week": 1,
+        "new_model": -18.18,
+        "old_model": -25.02,
+        "delta": 6.84,
+        "abs_delta": 6.84,
+        "sign_flip": false,
+        "causes": [
+          "ECU_w0_missing_official",
+          "ALA_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": 0.0001,
+        "away_power_delta": 0.0007,
+        "home_sp_plus_new": 14.8,
+        "home_sp_plus_old": 15.0,
+        "away_sp_plus_new": 8.0,
+        "away_sp_plus_old": null
+      },
+      {
+        "away": "BC",
+        "home": "CIN",
+        "week": 1,
+        "new_model": -15.85,
+        "old_model": -21.96,
+        "delta": 6.11,
+        "abs_delta": 6.11,
+        "sign_flip": false,
+        "causes": [
+          "BC_sp_plus_copy_delta_0.2",
+          "CIN_sp_plus_copy_delta_-2.2"
+        ],
+        "home_power_delta": -0.0178,
+        "away_power_delta": 0.0009,
+        "home_sp_plus_new": 4.5,
+        "home_sp_plus_old": 6.7,
+        "away_sp_plus_new": -8.5,
+        "away_sp_plus_old": -8.7
+      },
+      {
+        "away": "MEM",
+        "home": "UNLV",
+        "week": 0,
+        "new_model": 0.76,
+        "old_model": -4.09,
+        "delta": 4.85,
+        "abs_delta": 4.85,
+        "sign_flip": true,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0,
+        "away_power_delta": 0.0002,
+        "home_sp_plus_new": 4.3,
+        "home_sp_plus_old": 4.2,
+        "away_sp_plus_new": 7.6,
+        "away_sp_plus_old": 7.5
+      },
+      {
+        "away": "UNC",
+        "home": "TCU",
+        "week": 0,
+        "new_model": -14.93,
+        "old_model": -19.19,
+        "delta": 4.26,
+        "abs_delta": 4.26,
+        "sign_flip": false,
+        "causes": [
+          "UNC_sp_plus_copy_delta_0.2",
+          "TCU_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": -0.001,
+        "away_power_delta": 0.0016,
+        "home_sp_plus_new": 8.3,
+        "home_sp_plus_old": 8.5,
+        "away_sp_plus_new": -6.6,
+        "away_sp_plus_old": -6.8
+      },
+      {
+        "away": "MIA",
+        "home": "STAN",
+        "week": 1,
+        "new_model": 22.78,
+        "old_model": 26.95,
+        "delta": -4.17,
+        "abs_delta": 4.17,
+        "sign_flip": false,
+        "causes": [
+          "MIA_sp_plus_copy_delta_-1.6",
+          "STAN_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0005,
+        "away_power_delta": -0.0075,
+        "home_sp_plus_new": -11.8,
+        "home_sp_plus_old": -12.0,
+        "away_sp_plus_new": 20.7,
+        "away_sp_plus_old": 22.3
+      },
+      {
+        "away": "HAW",
+        "home": "STAN",
+        "week": 0,
+        "new_model": 5.75,
+        "old_model": 9.9,
+        "delta": -4.15,
+        "abs_delta": 4.15,
+        "sign_flip": false,
+        "causes": [
+          "STAN_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0005,
+        "away_power_delta": 0.0008,
+        "home_sp_plus_new": -11.8,
+        "home_sp_plus_old": -12.0,
+        "away_sp_plus_new": 1.7,
+        "away_sp_plus_old": 1.7
+      },
+      {
+        "away": "BOISE",
+        "home": "ORE",
+        "week": 1,
+        "new_model": -19.58,
+        "old_model": -22.77,
+        "delta": 3.19,
+        "abs_delta": 3.19,
+        "sign_flip": false,
+        "causes": [
+          "ORE_sp_plus_copy_delta_-3.4"
+        ],
+        "home_power_delta": -0.0211,
+        "away_power_delta": 0.0012,
+        "home_sp_plus_new": 25.9,
+        "home_sp_plus_old": 29.3,
+        "away_sp_plus_new": 3.1,
+        "away_sp_plus_old": 3.1
+      },
+      {
+        "away": "NMSU",
+        "home": "FSU",
+        "week": 0,
+        "new_model": -12.31,
+        "old_model": -14.86,
+        "delta": 2.55,
+        "abs_delta": 2.55,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0025,
+        "away_power_delta": -0.0002,
+        "home_sp_plus_new": 7.2,
+        "home_sp_plus_old": 7.2,
+        "away_sp_plus_new": -15.5,
+        "away_sp_plus_old": -15.5
+      },
+      {
+        "away": "SJSU",
+        "home": "USC",
+        "week": 0,
+        "new_model": -30.49,
+        "old_model": -33.04,
+        "delta": 2.55,
+        "abs_delta": 2.55,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0014,
+        "away_power_delta": -0.0001,
+        "home_sp_plus_new": 16.9,
+        "home_sp_plus_old": 16.9,
+        "away_sp_plus_new": -14.3,
+        "away_sp_plus_old": -14.4
+      },
+      {
+        "away": "FRES",
+        "home": "USC",
+        "week": 1,
+        "new_model": -26.14,
+        "old_model": -28.56,
+        "delta": 2.42,
+        "abs_delta": 2.42,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0014,
+        "away_power_delta": 0.0015,
+        "home_sp_plus_new": 16.9,
+        "home_sp_plus_old": 16.9,
+        "away_sp_plus_new": 1.8,
+        "away_sp_plus_old": 1.8
+      },
+      {
+        "away": "TULN",
+        "home": "DUKE",
+        "week": 1,
+        "new_model": -12.74,
+        "old_model": -15.09,
+        "delta": 2.35,
+        "abs_delta": 2.35,
+        "sign_flip": false,
+        "causes": [
+          "DUKE_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0025,
+        "away_power_delta": 0.001,
+        "home_sp_plus_new": 6.6,
+        "home_sp_plus_old": 6.4,
+        "away_sp_plus_new": 6.3,
+        "away_sp_plus_old": 6.3
+      },
+      {
+        "away": "UAB",
+        "home": "ILL",
+        "week": 1,
+        "new_model": -22.11,
+        "old_model": -24.41,
+        "delta": 2.3,
+        "abs_delta": 2.3,
+        "sign_flip": false,
+        "causes": [
+          "UAB_w0_missing_official"
+        ],
+        "home_power_delta": 0.0012,
+        "away_power_delta": -0.0013,
+        "home_sp_plus_new": 12.9,
+        "home_sp_plus_old": 12.9,
+        "away_sp_plus_new": -15.8,
+        "away_sp_plus_old": null
+      },
+      {
+        "away": "ULM",
+        "home": "MSST",
+        "week": 1,
+        "new_model": -9.93,
+        "old_model": -12.22,
+        "delta": 2.29,
+        "abs_delta": 2.29,
+        "sign_flip": false,
+        "causes": [
+          "ULM_sp_plus_copy_delta_0.2",
+          "MSST_sp_plus_copy_delta_-0.5"
+        ],
+        "home_power_delta": -0.0045,
+        "away_power_delta": 0.0004,
+        "home_sp_plus_new": 4.1,
+        "home_sp_plus_old": 4.6,
+        "away_sp_plus_new": -21.6,
+        "away_sp_plus_old": -21.8
+      },
+      {
+        "away": "WYO",
+        "home": "CSU",
+        "week": 1,
+        "new_model": -0.03,
+        "old_model": 2.04,
+        "delta": -2.07,
+        "abs_delta": 2.07,
+        "sign_flip": true,
+        "causes": [
+          "CSU_w0_missing_official"
+        ],
+        "home_power_delta": -0.0007,
+        "away_power_delta": 0.0009,
+        "home_sp_plus_new": -15.6,
+        "home_sp_plus_old": null,
+        "away_sp_plus_new": -11.3,
+        "away_sp_plus_old": -11.4
+      },
+      {
+        "away": "UTEP",
+        "home": "OU",
+        "week": 1,
+        "new_model": -30.45,
+        "old_model": -32.41,
+        "delta": 1.96,
+        "abs_delta": 1.96,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0004,
+        "away_power_delta": -0.0011,
+        "home_sp_plus_new": 18.3,
+        "home_sp_plus_old": 18.4,
+        "away_sp_plus_new": -17.5,
+        "away_sp_plus_old": -17.5
+      },
+      {
+        "away": "SHSU",
+        "home": "TROY",
+        "week": 1,
+        "new_model": -14.69,
+        "old_model": -16.47,
+        "delta": 1.78,
+        "abs_delta": 1.78,
+        "sign_flip": false,
+        "causes": [
+          "TROY_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0022,
+        "away_power_delta": -0.0007,
+        "home_sp_plus_new": -4.8,
+        "home_sp_plus_old": -5.0,
+        "away_sp_plus_new": -27.8,
+        "away_sp_plus_old": -27.9
+      },
+      {
+        "away": "MOST",
+        "home": "TAMU",
+        "week": 1,
+        "new_model": -29.3,
+        "old_model": -31.05,
+        "delta": 1.75,
+        "abs_delta": 1.75,
+        "sign_flip": false,
+        "causes": [
+          "TAMU_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": 0.0001,
+        "away_power_delta": 0.0,
+        "home_sp_plus_new": 20.7,
+        "home_sp_plus_old": 20.9,
+        "away_sp_plus_new": -10.7,
+        "away_sp_plus_old": -10.7
+      },
+      {
+        "away": "MASS",
+        "home": "RUT",
+        "week": 1,
+        "new_model": -24.49,
+        "old_model": -26.22,
+        "delta": 1.73,
+        "abs_delta": 1.73,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0,
+        "away_power_delta": -0.001,
+        "home_sp_plus_new": 1.0,
+        "home_sp_plus_old": 1.0,
+        "away_sp_plus_new": -36.6,
+        "away_sp_plus_old": -36.6
+      },
+      {
+        "away": "WIS",
+        "home": "ND",
+        "week": 1,
+        "new_model": -13.75,
+        "old_model": -15.47,
+        "delta": 1.72,
+        "abs_delta": 1.72,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.002,
+        "away_power_delta": -0.0002,
+        "home_sp_plus_new": 24.4,
+        "home_sp_plus_old": 24.5,
+        "away_sp_plus_new": -4.4,
+        "away_sp_plus_old": -4.4
+      },
+      {
+        "away": "ORST",
+        "home": "HOU",
+        "week": 1,
+        "new_model": -7.72,
+        "old_model": -6.05,
+        "delta": -1.67,
+        "abs_delta": 1.67,
+        "sign_flip": false,
+        "causes": [
+          "HOU_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": -0.0008,
+        "away_power_delta": -0.0013,
+        "home_sp_plus_new": 7.4,
+        "home_sp_plus_old": 7.6,
+        "away_sp_plus_new": -15.9,
+        "away_sp_plus_old": -15.8
+      },
+      {
+        "away": "BALL",
+        "home": "OSU",
+        "week": 1,
+        "new_model": -39.37,
+        "old_model": -41.0,
+        "delta": 1.63,
+        "abs_delta": 1.63,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0009,
+        "away_power_delta": -0.0003,
+        "home_sp_plus_new": 30.1,
+        "home_sp_plus_old": 30.2,
+        "away_sp_plus_new": -23.0,
+        "away_sp_plus_old": -23.0
+      },
+      {
+        "away": "CCU",
+        "home": "WVU",
+        "week": 1,
+        "new_model": -14.95,
+        "old_model": -16.35,
+        "delta": 1.4,
+        "abs_delta": 1.4,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": -0.0019,
+        "away_power_delta": 0.0004,
+        "home_sp_plus_new": -6.8,
+        "home_sp_plus_old": -6.7,
+        "away_sp_plus_new": -15.1,
+        "away_sp_plus_old": -15.2
+      },
+      {
+        "away": "MRSH",
+        "home": "PSU",
+        "week": 1,
+        "new_model": -18.01,
+        "old_model": -19.36,
+        "delta": 1.35,
+        "abs_delta": 1.35,
+        "sign_flip": false,
+        "causes": [
+          "MRSH_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0006,
+        "away_power_delta": 0.0011,
+        "home_sp_plus_new": 18.1,
+        "home_sp_plus_old": 18.2,
+        "away_sp_plus_new": -4.5,
+        "away_sp_plus_old": -4.7
+      },
+      {
+        "away": "ARST",
+        "home": "MEM",
+        "week": 1,
+        "new_model": -12.13,
+        "old_model": -10.84,
+        "delta": -1.29,
+        "abs_delta": 1.29,
+        "sign_flip": false,
+        "causes": [
+          "ARST_w0_missing_official"
+        ],
+        "home_power_delta": 0.0002,
+        "away_power_delta": -0.0006,
+        "home_sp_plus_new": 7.6,
+        "home_sp_plus_old": 7.5,
+        "away_sp_plus_new": -8.8,
+        "away_sp_plus_old": null
+      },
+      {
+        "away": "TXST",
+        "home": "TEX",
+        "week": 1,
+        "new_model": -22.69,
+        "old_model": -23.95,
+        "delta": 1.26,
+        "abs_delta": 1.26,
+        "sign_flip": false,
+        "causes": [
+          "TXST_sp_plus_copy_delta_1.6"
+        ],
+        "home_power_delta": 0.0006,
+        "away_power_delta": 0.0119,
+        "home_sp_plus_new": 16.2,
+        "home_sp_plus_old": 16.3,
+        "away_sp_plus_new": 2.3,
+        "away_sp_plus_old": 0.7
+      },
+      {
+        "away": "FIU",
+        "home": "USF",
+        "week": 1,
+        "new_model": -17.32,
+        "old_model": -18.54,
+        "delta": 1.22,
+        "abs_delta": 1.22,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0013,
+        "away_power_delta": -0.001,
+        "home_sp_plus_new": 11.6,
+        "home_sp_plus_old": 11.6,
+        "away_sp_plus_new": -10.5,
+        "away_sp_plus_old": -10.5
+      },
+      {
+        "away": "NIU",
+        "home": "IOWA",
+        "week": 1,
+        "new_model": -21.66,
+        "old_model": -20.48,
+        "delta": -1.18,
+        "abs_delta": 1.18,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0002,
+        "away_power_delta": -0.0001,
+        "home_sp_plus_new": 19.7,
+        "home_sp_plus_old": 19.8,
+        "away_sp_plus_new": -16.7,
+        "away_sp_plus_old": -16.7
+      },
+      {
+        "away": "KENT",
+        "home": "SCAR",
+        "week": 1,
+        "new_model": -24.66,
+        "old_model": -25.82,
+        "delta": 1.16,
+        "abs_delta": 1.16,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0002,
+        "away_power_delta": -0.001,
+        "home_sp_plus_new": 5.9,
+        "home_sp_plus_old": 6.0,
+        "away_sp_plus_new": -19.3,
+        "away_sp_plus_old": -19.4
+      },
+      {
+        "away": "COLO",
+        "home": "GT",
+        "week": 1,
+        "new_model": -5.88,
+        "old_model": -4.78,
+        "delta": -1.1,
+        "abs_delta": 1.1,
+        "sign_flip": false,
+        "causes": [
+          "GT_sp_plus_copy_delta_0.2"
+        ],
+        "home_power_delta": 0.0013,
+        "away_power_delta": -0.0019,
+        "home_sp_plus_new": 9.3,
+        "home_sp_plus_old": 9.1,
+        "away_sp_plus_new": -8.3,
+        "away_sp_plus_old": -8.2
+      },
+      {
+        "away": "FAU",
+        "home": "UF",
+        "week": 1,
+        "new_model": -12.57,
+        "old_model": -11.47,
+        "delta": -1.1,
+        "abs_delta": 1.1,
+        "sign_flip": false,
+        "causes": [
+          "UF_sp_plus_copy_delta_-0.2"
+        ],
+        "home_power_delta": -0.0009,
+        "away_power_delta": -0.0004,
+        "home_sp_plus_new": 3.5,
+        "home_sp_plus_old": 3.7,
+        "away_sp_plus_new": -8.7,
+        "away_sp_plus_old": -8.8
+      },
+      {
+        "away": "OHIO",
+        "home": "NEB",
+        "week": 1,
+        "new_model": -8.76,
+        "old_model": -9.81,
+        "delta": 1.05,
+        "abs_delta": 1.05,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0,
+        "away_power_delta": 0.0011,
+        "home_sp_plus_new": 6.2,
+        "home_sp_plus_old": 6.3,
+        "away_sp_plus_new": -4.0,
+        "away_sp_plus_old": -4.0
+      },
+      {
+        "away": "WSU",
+        "home": "WASH",
+        "week": 1,
+        "new_model": -16.39,
+        "old_model": -17.42,
+        "delta": 1.03,
+        "abs_delta": 1.03,
+        "sign_flip": false,
+        "causes": [
+          "league_zscore_retune_or_compose"
+        ],
+        "home_power_delta": 0.0002,
+        "away_power_delta": 0.0009,
+        "home_sp_plus_new": 18.4,
+        "home_sp_plus_old": 18.5,
+        "away_sp_plus_new": 3.8,
+        "away_sp_plus_old": 3.8
+      }
+    ],
+    "class_counts": {
+      "w0_missing_official": 7,
+      "espn_vs_frozen_copy": 14,
+      "compose_or_zscore": 14
+    },
+    "unexplained": [],
+    "no_cause": [],
+    "missing_or_fill_games": [
+      {
+        "pair": "UNT@IU",
+        "week": 1,
+        "w0": -31.92,
+        "new": -13.73,
+        "delta": 18.19,
+        "missing_official": [
+          "UNT"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "TOL@MSU",
+        "week": 1,
+        "w0": -15.16,
+        "new": -5.56,
+        "delta": 9.6,
+        "missing_official": [
+          "TOL"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "CMU@UNM",
+        "week": 1,
+        "w0": -5.44,
+        "new": -13.12,
+        "delta": -7.68,
+        "missing_official": [
+          "UNM"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "ECU@ALA",
+        "week": 1,
+        "w0": -25.02,
+        "new": -18.18,
+        "delta": 6.84,
+        "missing_official": [
+          "ECU"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "UAB@ILL",
+        "week": 1,
+        "w0": -24.41,
+        "new": -22.11,
+        "delta": 2.3,
+        "missing_official": [
+          "UAB"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "WYO@CSU",
+        "week": 1,
+        "w0": 2.04,
+        "new": -0.03,
+        "delta": -2.07,
+        "missing_official": [
+          "CSU"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "ARST@MEM",
+        "week": 1,
+        "w0": -10.84,
+        "new": -12.13,
+        "delta": -1.29,
+        "missing_official": [
+          "ARST"
+        ],
+        "fill": []
+      },
+      {
+        "pair": "M-OH@PITT",
+        "week": 1,
+        "w0": -18.09,
+        "new": -17.62,
+        "delta": 0.47,
+        "missing_official": [],
+        "fill": [
+          "M-OH"
+        ]
+      },
+      {
+        "pair": "WKU@NEV",
+        "week": 1,
+        "w0": 8.03,
+        "new": 7.85,
+        "delta": -0.18,
+        "missing_official": [
+          "NEV"
+        ],
+        "fill": []
+      }
+    ],
+    "missing_or_fill_unexplained": []
+  },
+  "w2_market_residual": {
+    "new": {
+      "n_fbs_games": 47,
+      "n_joined_spread": 47,
+      "n_joined_total": 47,
+      "n_unjoined": 0,
+      "spread_mae": 6.755,
+      "total_mae": 10.265,
+      "median_spread_residual": 2.76,
+      "median_total_residual": 9.25,
+      "mean_total_residual": 9.976,
+      "favorite_flips_vs_market": 10,
+      "gap_ge_7": 19,
+      "gap_ge_10": 12,
+      "gap_ge_14": 8,
+      "gap_ge_20": 0,
+      "team_outliers": [
+        {
+          "team": "UNLV",
+          "n": 1,
+          "mean_abs_spread_residual": 18.65
+        },
+        {
+          "team": "UNT",
+          "n": 1,
+          "mean_abs_spread_residual": 18.65
+        },
+        {
+          "team": "RUT",
+          "n": 1,
+          "mean_abs_spread_residual": 16.46
+        },
+        {
+          "team": "BC",
+          "n": 1,
+          "mean_abs_spread_residual": 16.46
+        },
+        {
+          "team": "USF",
+          "n": 1,
+          "mean_abs_spread_residual": 16.3
+        },
+        {
+          "team": "ARMY",
+          "n": 1,
+          "mean_abs_spread_residual": 16.3
+        },
+        {
+          "team": "WKU",
+          "n": 1,
+          "mean_abs_spread_residual": 15.29
+        },
+        {
+          "team": "UGA",
+          "n": 1,
+          "mean_abs_spread_residual": 15.29
+        },
+        {
+          "team": "LT",
+          "n": 1,
+          "mean_abs_spread_residual": 15.03
+        },
+        {
+          "team": "LSU",
+          "n": 1,
+          "mean_abs_spread_residual": 15.03
+        },
+        {
+          "team": "SDSU",
+          "n": 1,
+          "mean_abs_spread_residual": 14.88
+        },
+        {
+          "team": "UCLA",
+          "n": 1,
+          "mean_abs_spread_residual": 14.88
+        }
+      ],
+      "flip_pairs": [
+        "RUT@BC",
+        "USF@ARMY",
+        "MSST@MINN",
+        "ARI@BYU",
+        "CAL@SYR",
+        "ULM@UAB",
+        "UNLV@UNT",
+        "SDSU@UCLA",
+        "OSU@TEX",
+        "NAVY@FAU"
+      ]
+    },
+    "p536": {
+      "n_fbs_games": 47,
+      "n_joined_spread": 47,
+      "n_joined_total": 47,
+      "n_unjoined": 0,
+      "spread_mae": 6.857,
+      "total_mae": 10.236,
+      "median_spread_residual": 2.9,
+      "median_total_residual": 9.14,
+      "mean_total_residual": 9.942,
+      "favorite_flips_vs_market": 11,
+      "gap_ge_7": 20,
+      "gap_ge_10": 12,
+      "gap_ge_14": 8,
+      "gap_ge_20": 0,
+      "team_outliers": [
+        {
+          "team": "UNLV",
+          "n": 1,
+          "mean_abs_spread_residual": 18.61
+        },
+        {
+          "team": "UNT",
+          "n": 1,
+          "mean_abs_spread_residual": 18.61
+        },
+        {
+          "team": "RUT",
+          "n": 1,
+          "mean_abs_spread_residual": 16.49
+        },
+        {
+          "team": "BC",
+          "n": 1,
+          "mean_abs_spread_residual": 16.49
+        },
+        {
+          "team": "USF",
+          "n": 1,
+          "mean_abs_spread_residual": 16.35
+        },
+        {
+          "team": "ARMY",
+          "n": 1,
+          "mean_abs_spread_residual": 16.35
+        },
+        {
+          "team": "WKU",
+          "n": 1,
+          "mean_abs_spread_residual": 15.27
+        },
+        {
+          "team": "UGA",
+          "n": 1,
+          "mean_abs_spread_residual": 15.27
+        },
+        {
+          "team": "LT",
+          "n": 1,
+          "mean_abs_spread_residual": 15.01
+        },
+        {
+          "team": "LSU",
+          "n": 1,
+          "mean_abs_spread_residual": 15.01
+        },
+        {
+          "team": "SDSU",
+          "n": 1,
+          "mean_abs_spread_residual": 14.9
+        },
+        {
+          "team": "UCLA",
+          "n": 1,
+          "mean_abs_spread_residual": 14.9
+        }
+      ],
+      "flip_pairs": [
+        "RUT@BC",
+        "USF@ARMY",
+        "MSST@MINN",
+        "ARI@BYU",
+        "CAL@SYR",
+        "UTSA@TXST",
+        "ULM@UAB",
+        "UNLV@UNT",
+        "SDSU@UCLA",
+        "OSU@TEX",
+        "NAVY@FAU"
+      ]
+    },
+    "focus": {
+      "MIZZ@KU": {
+        "after": {
+          "week": 2,
+          "pair": "MIZZ@KU",
+          "kei_version": "cfb-kei-v1.0-2026w2",
+          "as_of": "2026-09-10",
+          "model_spread_home": 1.24,
+          "kei_spread_home": 1.97,
+          "model_total": 58.32,
+          "kei_total": 58.32,
+          "tag": "PASS"
+        },
+        "before": {
+          "week": 2,
+          "pair": "MIZZ@KU",
+          "kei_version": "cfb-kei-v1.0-2026w2",
+          "as_of": "2026-09-10",
+          "model_spread_home": 1.1,
+          "kei_spread_home": 1.85,
+          "model_total": 58.32,
+          "kei_total": 58.32,
+          "tag": "PASS"
+        }
+      },
+      "RUT@BC": {
+        "after": {
+          "week": 2,
+          "pair": "RUT@BC",
+          "kei_version": "cfb-kei-v1.0-2026w2",
+          "as_of": "2026-09-10",
+          "model_spread_home": 12.46,
+          "kei_spread_home": 13.46,
+          "model_total": 63.48,
+          "kei_total": 63.48,
+          "tag": "PASS"
+        },
+        "before": {
+          "week": 2,
+          "pair": "RUT@BC",
+          "kei_version": "cfb-kei-v1.0-2026w2",
+          "as_of": "2026-09-10",
+          "model_spread_home": 12.49,
+          "kei_spread_home": 13.49,
+          "model_total": 63.29,
+          "kei_total": 63.29,
+          "tag": "PASS"
+        }
+      }
+    },
+    "power": {
+      "n_teams": 136,
+      "null_power_count": 0,
+      "null_power_codes": [],
+      "p0_independent_leftover": [],
+      "p0_null": [],
+      "power_as_of": "2026-08-31"
+    },
+    "odds": {
+      "source": "espn_scoreboard",
+      "n_events": 85
+    }
+  },
+  "totals_identity": {
+    "n_fbs_with_model_total": 96,
+    "n_identity_mismatch": 0,
+    "mismatches": [],
+    "identity": "kei_total \u2261 model_total (no totals guard)"
+  },
+  "as_of_chain": {
+    "schedule": {
+      "as_of": "2026-08-31",
+      "official": true,
+      "semantics": "week0_close_official_slate"
+    },
+    "slate": {
+      "as_of": "2026-08-31"
+    },
+    "priors": {
+      "as_of": "2026-09-12",
+      "semantics": "2026_roster_identity_overlay",
+      "note": "Stamp drifted to 2026-09-12 on the universe rematerialize. Not live 2026 SP+."
+    },
+    "roster": {
+      "as_of": "2026-09-12",
+      "team_count": 138,
+      "semantics": "2026_espn_roster_identity_plus_transitions"
+    },
+    "efficiency": {
+      "as_of": "2026-08-31",
+      "source_published": "2026-01-20",
+      "vintage": "espn_story_2025_final",
+      "legal_at_model_as_of": "2026-08-31",
+      "committed_table": "cfb_sp_plus_final_2025_espn_story.json",
+      "source_sha256": "15dd1cf99a4a63c8821613ede8c2f8c1b9124d09676e08ed1079385e0cf6ebc4",
+      "source_id": "espn_story_46128861"
+    },
+    "power": {
+      "as_of": "2026-08-31",
+      "version": "cfb-power-sot-v0.15-week0-close-20260831"
+    },
+    "projections": {
+      "as_of": "2026-08-31",
+      "artifact_id": "cfb-season-projections-v0.15-n10000-week0-close-20260831"
+    },
+    "futures": {
+      "as_of": "2026-08-31"
+    },
+    "kei": {
+      "as_of": "2026-09-10",
+      "version": "cfb-kei-v1.0-2026w2",
+      "semantics": "w2_mint_after_week0_close"
+    },
+    "compatible": true,
+    "notes": [
+      "Research desk (schedule/efficiency-as-of/power/projections/futures) is week0-close 2026-08-31.",
+      "Efficiency source published 2026-01-20; legal at 2026-08-31.",
+      "KEI header is the documented later mint 2026-09-10 / cfb-kei-v1.0-2026w2.",
+      "Priors/roster stamps are 2026-09-12 from the official-universe rematerialize; they are 2026 identity, not 2026 in-season SP+."
+    ]
+  },
+  "canary": {
+    "do_not_overwrite": true,
+    "hash_drift": [],
+    "USF_mean": 8.382,
+    "OSU_mean": 9.537,
+    "artifact_id": "cfb-season-projections-v0.15-n10000-week0-close-20260831"
+  },
+  "kill_switch": "OFF",
+  "merge_532": false
+}
