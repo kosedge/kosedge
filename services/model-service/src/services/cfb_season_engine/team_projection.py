@@ -323,14 +323,16 @@ def expected_team_points(
     ov = P.score_component_overlay()
     response = P.matchup_response_for_week(week)
     mode = str(ov.get("matchup_mode") or "power")
-    if mode == "raw_efficiency":
-        off_e = float(offense.efficiency.off_eff) if offense.efficiency else 50.0
-        def_e = (
-            float(opponent_defense.efficiency.def_eff)
-            if opponent_defense.efficiency
-            else 50.0
-        )
-        raw_ratio = efficiency_index(off_e) / max(0.50, efficiency_index(def_e))
+    off_e = float(offense.efficiency.off_eff) if offense.efficiency else 50.0
+    def_e = (
+        float(opponent_defense.efficiency.def_eff)
+        if opponent_defense.efficiency
+        else 50.0
+    )
+    off_eff_idx = efficiency_index(off_e)
+    def_eff_idx = efficiency_index(def_e)
+    if mode in {"raw_efficiency", "raw_additive", "raw_diff", "raw_sat"}:
+        raw_ratio = off_eff_idx / max(0.50, def_eff_idx)
     else:
         raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
     ratio_lo, ratio_hi = P.MATCHUP_RATIO_CLAMP
@@ -346,6 +348,16 @@ def expected_team_points(
         matchup = max(0.15, 1.0 + response * (ratio - 1.0))
     elif mode == "possessions_ppp":
         matchup = 1.0  # replaced below by explicit possessions × PPP
+    elif mode == "raw_additive":
+        # Predeclared: additive in efficiency-index space. 1.0 at (1, 1).
+        matchup = 0.5 * off_eff_idx + 0.5 * (2.0 - def_eff_idx)
+    elif mode == "raw_diff":
+        # Predeclared: linear map from raw 0–100 difference using the
+        # existing SCORE_TO_INDEX_DIVISOR identity (25.9 / 68), not a fit.
+        matchup = 1.0 + (off_e - def_e) / P.SCORE_TO_INDEX_DIVISOR
+    elif mode == "raw_sat":
+        # Predeclared squash: 1 + tanh(raw-eff ratio − 1). No fitted k.
+        matchup = 1.0 + math.tanh(ratio - 1.0)
     else:
         matchup = ratio ** response
     if ov.get("force_unit_identity"):
@@ -416,6 +428,7 @@ def expected_team_points(
         "coaching_opp_defense_penalty": opp_def_pen,
         "coaching_net_adj": round(coach_adj, 3),
         "pre_clamp": round(base, 3),
+        "clamped": abs(float(base) - float(points)) > 1e-9,
     }
     return points, diag
 

@@ -593,6 +593,12 @@ def score_joined_rows(
                     "home_def_eff": float(home_eff.def_eff) if home_eff else None,
                     "away_off_eff": float(away_eff.off_eff) if away_eff else None,
                     "away_def_eff": float(away_eff.def_eff) if away_eff else None,
+                    "home_explosiveness": (
+                        float(home_eff.explosiveness) if home_eff else None
+                    ),
+                    "away_explosiveness": (
+                        float(away_eff.explosiveness) if away_eff else None
+                    ),
                     "home_ratio_raw": home_diag.get("matchup_ratio_raw"),
                     "away_ratio_raw": away_diag.get("matchup_ratio_raw"),
                     "home_ratio": home_diag.get("matchup_ratio"),
