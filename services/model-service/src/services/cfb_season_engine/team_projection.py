@@ -122,22 +122,25 @@ def compose_team_projection(
 
     offense_index = _score_to_index(offense_score)
     # Hard QB lever.
-    blend_qb = P.QB_INDEX_BLEND
+    blend_qb = P.overlaid_float("QB_INDEX_BLEND", P.QB_INDEX_BLEND)
     offense_index = (1.0 - blend_qb) * offense_index + blend_qb * (
         offense_index * qb_index
     )
     # Softened OL / skill levers (efficiency already embeds unit quality).
     ol_idx = _unit_index(groups.ol)
     skill_idx = _unit_index(groups.skill)
-    offense_index = (1.0 - P.OL_INDEX_BLEND) * offense_index + P.OL_INDEX_BLEND * (
+    ol_blend = P.overlaid_float("OL_INDEX_BLEND", P.OL_INDEX_BLEND)
+    skill_blend = P.overlaid_float("SKILL_INDEX_BLEND", P.SKILL_INDEX_BLEND)
+    offense_index = (1.0 - ol_blend) * offense_index + ol_blend * (
         offense_index * ol_idx
     )
-    offense_index = (1.0 - P.SKILL_INDEX_BLEND) * offense_index + P.SKILL_INDEX_BLEND * (
+    offense_index = (1.0 - skill_blend) * offense_index + skill_blend * (
         offense_index * skill_idx
     )
     # Mild pull toward efficiency index (transparent complementary lever).
     off_eff_idx = efficiency_index(off_eff)
-    offense_index = (1.0 - P.EFF_OFF_INDEX_BLEND) * offense_index + P.EFF_OFF_INDEX_BLEND * (
+    eff_off_blend = P.overlaid_float("EFF_OFF_INDEX_BLEND", P.EFF_OFF_INDEX_BLEND)
+    offense_index = (1.0 - eff_off_blend) * offense_index + eff_off_blend * (
         offense_index * off_eff_idx
     )
     # Coaching continuity — mild permanent index drag for new staff.
@@ -149,11 +152,13 @@ def compose_team_projection(
     f7_idx = _unit_index(groups.front_seven)
     sec_idx = _unit_index(groups.secondary)
     def_unit = P.UNIT_FRONT_SEVEN_SHARE * f7_idx + P.UNIT_SECONDARY_SHARE * sec_idx
-    defense_index = (1.0 - P.DEF_UNIT_BLEND) * defense_index + P.DEF_UNIT_BLEND * (
+    def_unit_blend = P.overlaid_float("DEF_UNIT_BLEND", P.DEF_UNIT_BLEND)
+    defense_index = (1.0 - def_unit_blend) * defense_index + def_unit_blend * (
         defense_index * def_unit
     )
     def_eff_idx = efficiency_index(def_eff)
-    defense_index = (1.0 - P.EFF_DEF_INDEX_BLEND) * defense_index + P.EFF_DEF_INDEX_BLEND * (
+    eff_def_blend = P.overlaid_float("EFF_DEF_INDEX_BLEND", P.EFF_DEF_INDEX_BLEND)
+    defense_index = (1.0 - eff_def_blend) * defense_index + eff_def_blend * (
         defense_index * def_eff_idx
     )
     if coaching is not None:
@@ -320,17 +325,36 @@ def expected_team_points(
 
     Returns (points, diagnostics).
     """
+    ov = P.score_component_overlay()
     response = P.matchup_response_for_week(week)
     raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
     ratio_lo, ratio_hi = P.MATCHUP_RATIO_CLAMP
-    ratio = _soft_clamp_ratio(
-        raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
-    )
-    matchup = ratio ** response
-    off_boost = unit_offense_boost(offense.groups)
-    def_dampen = unit_defense_dampen(opponent_defense.groups)
-    pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
-    base = P.LEAGUE_TEAM_PPG * matchup * off_boost * def_dampen * pace
+    if ov.get("disable_ratio_clamp"):
+        ratio = float(raw_ratio)
+    else:
+        ratio = _soft_clamp_ratio(
+            raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
+        )
+    matchup_mode = str(ov.get("matchup_mode") or "power")
+    if matchup_mode == "identity":
+        matchup = 1.0
+    elif matchup_mode == "linear":
+        # Same response coefficient, first-order instead of ratio**r.
+        matchup = max(0.15, 1.0 + response * (ratio - 1.0))
+    else:
+        matchup = ratio ** response
+    if ov.get("force_unit_identity"):
+        off_boost = 1.0
+        def_dampen = 1.0
+    else:
+        off_boost = unit_offense_boost(offense.groups)
+        def_dampen = unit_defense_dampen(opponent_defense.groups)
+    if ov.get("force_pace_one"):
+        pace = 1.0
+    else:
+        pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
+    ppg = P.overlaid_float("LEAGUE_TEAM_PPG", P.LEAGUE_TEAM_PPG)
+    base = ppg * matchup * off_boost * def_dampen * pace
 
     # Variable HFA — only the designated home side, never on neutral.
     hfa_profile = home_hfa_profile
@@ -342,6 +366,10 @@ def expected_team_points(
         neutral_site=neutral_site,
         night_game=night_game,
     )
+    if ov.get("zero_hfa"):
+        hfa = dict(hfa)
+        hfa["hfa_points"] = 0.0
+        hfa["research_overlay"] = "zero_hfa"
     base += float(hfa["hfa_points"])
 
     # Coaching: own offense penalty (week-decayed) + opponent new-DC boost.
@@ -351,22 +379,31 @@ def expected_team_points(
     )
     # Opponent defense penalty → they allow more → boost our scoring.
     coach_adj = float(own_coach["points"]) + abs(float(opp_def_pen["points"]))
+    if ov.get("zero_coaching"):
+        coach_adj = 0.0
     base += coach_adj
 
-    points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
+    if ov.get("disable_clamp"):
+        points = float(base)
+    else:
+        points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
     diag: Dict[str, Any] = {
         "matchup_ratio_raw": round(raw_ratio, 4),
         "matchup_ratio": round(ratio, 4),
         "matchup_ratio_clamped": abs(raw_ratio - ratio) > 1e-9,
         "matchup_response": round(response, 4),
+        "matchup_mode": matchup_mode,
+        "matchup_mult": round(matchup, 4),
         "offense_boost": round(off_boost, 4),
         "defense_dampen": round(def_dampen, 4),
         "pace": round(pace, 4),
+        "league_team_ppg": round(ppg, 4),
         "hfa": hfa,
         "coaching_own_scoring_adj": own_coach,
         "coaching_opp_defense_penalty": opp_def_pen,
         "coaching_net_adj": round(coach_adj, 3),
         "pre_clamp": round(base, 3),
+        "clamped": abs(float(base) - float(points)) > 1e-9,
     }
     return points, diag
 
@@ -558,7 +595,10 @@ def project_game(
     # Thin special-teams nudge — split evenly so scores/total/spread stay coherent.
     st_home = home.groups.special_teams if home.groups else 50.0
     st_away = away.groups.special_teams if away.groups else 50.0
-    st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
+    if P.score_component_overlay().get("zero_special_teams"):
+        st_nudge = 0.0
+    else:
+        st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
     home_exp_adj = round(home_exp + 0.5 * st_nudge, 2)
     away_exp_adj = round(away_exp + 0.5 * st_nudge, 2)
     total = round(home_exp_adj + away_exp_adj, 2)

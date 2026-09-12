@@ -112,6 +112,11 @@ MATCHUP_RESPONSE = 1.40
 _MATCHUP_RESPONSE_OVERLAY: ContextVar[Optional[float]] = ContextVar(
     "cfb_matchup_response_overlay", default=None
 )
+# Research-only score-time knobs. Empty unless overlay_score_components() is active.
+# Must not be written as production constants.
+_SCORE_COMPONENT_OVERLAY: ContextVar[Optional[Dict[str, Any]]] = ContextVar(
+    "cfb_score_component_overlay", default=None
+)
 # Soft-cap extreme O/D ratios so placeholder mismatches don't invent 45-pt spreads.
 # Excess beyond the band is retained at MATCHUP_RATIO_EXCESS_RETAIN (keeps ordering).
 MATCHUP_RATIO_CLAMP = (0.52, 1.45)
@@ -355,6 +360,37 @@ def overlay_matchup_response(value: Optional[float]) -> Iterator[float]:
         yield float(value)
     finally:
         _MATCHUP_RESPONSE_OVERLAY.reset(token)
+
+
+def score_component_overlay() -> Dict[str, Any]:
+    """Active research overlay dict, or empty. Never mutates production priors."""
+    return dict(_SCORE_COMPONENT_OVERLAY.get() or {})
+
+
+def overlaid_float(name: str, production: float) -> float:
+    ov = _SCORE_COMPONENT_OVERLAY.get()
+    if ov and name in ov and ov[name] is not None:
+        return float(ov[name])
+    return float(production)
+
+
+@contextmanager
+def overlay_score_components(
+    overlay: Optional[Mapping[str, Any]] = None,
+) -> Iterator[Dict[str, Any]]:
+    """Score-time component overlay. Does not mutate production constants.
+
+    Keys are research-only. Missing / None overlay yields the production path.
+    """
+    if not overlay:
+        yield {}
+        return
+    payload = {k: v for k, v in dict(overlay).items() if v is not None}
+    token = _SCORE_COMPONENT_OVERLAY.set(payload)
+    try:
+        yield dict(payload)
+    finally:
+        _SCORE_COMPONENT_OVERLAY.reset(token)
 
 
 def strength_noise_sd_for_week(week: int) -> float:

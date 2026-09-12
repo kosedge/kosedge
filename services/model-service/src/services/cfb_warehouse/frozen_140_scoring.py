@@ -465,6 +465,7 @@ def score_joined_rows(
     universes: Mapping[int, EngineUniverse],
     *,
     lake_only: bool = True,
+    with_components: bool = False,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     rows: List[Dict[str, Any]] = []
     skipped = {"no_universe": 0, "missing_team": 0, "ineligible": 0}
@@ -569,6 +570,46 @@ def score_joined_rows(
                 "away_qb_class": away_qb.qb_class,
             }
         )
+        if with_components:
+            home_st = universe.teams[home]
+            away_st = universe.teams[away]
+            matchup = (proj.drivers or {}).get("matchup") or {}
+            home_diag = matchup.get("home_points_diag") or {}
+            away_diag = matchup.get("away_points_diag") or {}
+            hfa = home_diag.get("hfa") or {}
+            home_eff = home_st.efficiency
+            away_eff = away_st.efficiency
+            rows[-1].update(
+                {
+                    "home_off_idx": home_st.offense_index,
+                    "home_def_idx": home_st.defense_index,
+                    "away_off_idx": away_st.offense_index,
+                    "away_def_idx": away_st.defense_index,
+                    "home_pace_factor": home_st.pace_factor,
+                    "away_pace_factor": away_st.pace_factor,
+                    "home_qb_index": float(home_qb.qb_situation_index),
+                    "away_qb_index": float(away_qb.qb_situation_index),
+                    "home_off_eff": float(home_eff.off_eff) if home_eff else None,
+                    "home_def_eff": float(home_eff.def_eff) if home_eff else None,
+                    "away_off_eff": float(away_eff.off_eff) if away_eff else None,
+                    "away_def_eff": float(away_eff.def_eff) if away_eff else None,
+                    "home_ratio_raw": home_diag.get("matchup_ratio_raw"),
+                    "away_ratio_raw": away_diag.get("matchup_ratio_raw"),
+                    "home_ratio": home_diag.get("matchup_ratio"),
+                    "away_ratio": away_diag.get("matchup_ratio"),
+                    "home_matchup_mult": home_diag.get("matchup_mult"),
+                    "away_matchup_mult": away_diag.get("matchup_mult"),
+                    "home_pace_used": home_diag.get("pace"),
+                    "away_pace_used": away_diag.get("pace"),
+                    "home_pre_clamp": home_diag.get("pre_clamp"),
+                    "away_pre_clamp": away_diag.get("pre_clamp"),
+                    "home_clamped": bool(home_diag.get("clamped")),
+                    "away_clamped": bool(away_diag.get("clamped")),
+                    "home_hfa_pts": hfa.get("hfa_points"),
+                    "expected_home_score": float(proj.expected_home_score),
+                    "expected_away_score": float(proj.expected_away_score),
+                }
+            )
     return rows, skipped
 
 
@@ -618,6 +659,13 @@ def _block(subset: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
         "disagree_vs_close_quantiles": _quantiles(total_close),
         "error_vs_actual_quantiles": _quantiles(total_act),
         "mean_abs_disagree_total": _mae(total_close),
+        "std_model_total": (
+            statistics.pstdev([float(r["model_total"]) for r in subset])
+            if len(subset) > 1
+            else 0.0
+        ),
+        "model_total_quantiles": _quantiles([float(r["model_total"]) for r in subset]),
+        "actual_total_quantiles": _quantiles([float(r["actual_total"]) for r in subset]),
     }
 
 
