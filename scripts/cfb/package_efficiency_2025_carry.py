@@ -492,16 +492,39 @@ def main() -> int:
         )
         return 0
 
-    rows = fetch_sp_plus_cfbd(2025)
-    source = "cfbd_ratings_sp_2025"
+    official = official_fbs_codes()
+
+    def _missing_official(rows: List[Dict[str, Any]]) -> List[str]:
+        have = {str(r.get("team") or "") for r in rows if r.get("team")}
+        return sorted(official - have)
+
+    candidates = [
+        (fetch_sp_plus_cfbd(2025), "cfbd_ratings_sp_2025"),
+    ]
+    # ESPN story HTML currently parses a partial table (~87). Do not accept
+    # an incomplete year-lock over the complete public 2025 final table.
+    espn_rows = fetch_sp_plus_espn_final_2025()
+    candidates.append((espn_rows, "espn_final_2025_sp_plus_story"))
+    public_rows = fetch_sp_plus_public()
+    candidates.append((public_rows, "final_2025_sp_plus_public_table"))
+
+    rows = None
+    source = ""
+    for cand, name in candidates:
+        if not cand:
+            continue
+        missing = _missing_official(cand)
+        if missing:
+            print(
+                f"skip {name}: {len(cand)} rows, official missing {len(missing)}",
+                file=sys.stderr,
+            )
+            continue
+        rows = cand
+        source = name
+        break
     if not rows:
-        rows = fetch_sp_plus_espn_final_2025()
-        source = "espn_final_2025_sp_plus_story"
-    if not rows:
-        rows = fetch_sp_plus_public()
-        source = "final_2025_sp_plus_public_table"
-    if not rows:
-        print("ERROR: no SP+ rows fetched", file=sys.stderr)
+        print("ERROR: no SP+ source covered the official 2026 FBS lock", file=sys.stderr)
         return 1
 
     try:

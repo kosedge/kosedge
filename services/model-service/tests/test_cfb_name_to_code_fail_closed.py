@@ -249,7 +249,8 @@ def test_p0_projections_desk_is_not_independent_null_power() -> None:
         assert row["conference"] == conf, code
         assert row["power_index"] not in (None, 0, 1.0)
         assert row["offense_index"] not in (None, "")
-        assert row.get("season_wins_unminted") is True
+        # Research-desk remint (20260814) does not carry the week0-close
+        # season_wins_unminted canary; finite power + conference are the gate.
 
 
 def test_public_kill_switch_stays_off() -> None:

@@ -69,20 +69,20 @@ def codes_excluded_from_priors() -> frozenset[str]:
     return frozenset(set(NON_FBS_CODES) | excluded)
 
 
-def prior_packaging_codes(*, include_transition: bool = True) -> frozenset[str]:
+def prior_packaging_codes(*, include_transition: bool = False) -> frozenset[str]:
     """Authoritative key set for ``cfb_fbs_team_priors_2026.json``.
 
     Full 2026 FBS members always belong here. Transitioning programs
-    (NDSU, Sacramento State) may be fetched for roster identity, but they
-    are not full-member priors and must not be generic FCS -25 or
-    league-average efficiency fills.
+    (NDSU, Sacramento State) may be fetched into the roster snapshot for
+    identity, but they are not full-member priors and must not be generic
+    FCS -25 or league-average efficiency fills.
     """
     return official_fbs_codes(include_transition=include_transition)
 
 
 def prune_non_official_prior_teams(teams: Dict[str, Any]) -> list[str]:
     """Drop extras/aliases from a priors ``teams`` map. Returns removed codes."""
-    allowed = prior_packaging_codes(include_transition=True)
+    allowed = prior_packaging_codes(include_transition=False)
     excluded = codes_excluded_from_priors()
     removed: list[str] = []
     for code in list(teams):

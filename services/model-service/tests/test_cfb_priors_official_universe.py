@@ -128,6 +128,8 @@ def test_roster_and_efficiency_scripts_use_official_lock() -> None:
     assert "codes = set(official)" in efficiency
     assert "codes = set(priors.get(\"teams\") or {})" not in efficiency
     assert "do not league-average fill" in efficiency
+    assert "official missing" in efficiency
+    assert "skip {name}" in efficiency or "skip %s" in efficiency or 'skip {name}:' in efficiency
 
 
 def test_independents_are_only_nd_and_conn() -> None:

@@ -1023,8 +1023,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             f"{sorted(set(P0_REQUIRED_CODES) - official_full)}"
         )
     only_codes = [c.strip().upper() for c in str(args.only_codes or "").split(",") if c.strip()]
-    # Official 2026 FBS lock is the key set. Stale extras/aliases are not fetched.
-    team_codes = sorted(prior_packaging_codes(include_transition=True))
+    # Fetch full members + transitioning identity. Priors file keeps full members only.
+    team_codes = sorted(official_fbs_codes(include_transition=True))
     if only_codes:
         team_codes = only_codes
     if args.limit_teams and args.limit_teams > 0:
@@ -1117,7 +1117,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print(f"  ERROR {code}: {exc}", file=sys.stderr)
             unmatched.append(code)
 
-    allowed_snapshot = prior_packaging_codes(include_transition=True)
+    allowed_snapshot = official_fbs_codes(include_transition=True)
     for extra in list(payloads):
         if extra not in allowed_snapshot:
             payloads.pop(extra, None)
