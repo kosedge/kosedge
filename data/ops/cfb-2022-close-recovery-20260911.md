@@ -2,8 +2,15 @@
 
 **Generated:** `2026-09-12T01:49:52Z`  
 **Contract:** `cfb-qb-feature-v1` (untouched)  
-**MATCHUP_RESPONSE:** `1.4` frozen; not scored  
+**MATCHUP_RESPONSE:** `1.4` frozen; scored later on this PR — see `cfb-frozen-140-scoring-20260912.md`  
 **Scope:** market-data recovery + join audit only. CFB stays dark. No PLAY.
+
+**Evidence lock:** this Mac private-worker funnel is the current recovery
+result. PR #542 (`LAKE_NOT_MOUNTED`, Train-0 = 0) is superseded environment
+evidence — do not reopen it. See
+`cfb-2022-close-recovery-supersedes-542-20260912.md`. Frozen 1.40 scoring
+has already run on this PR; decision **RECALIBRATION JUSTIFIED**. Do not
+copy/densify the parquet. Do not spend Odds API credits.
 
 ## Decision
 
@@ -11,7 +18,8 @@
 
 Lake mounted this run: `True`. Chosen source: `hd_parquet`.
 
-Frozen 1.40 was **not** scored. Recalibration is **not** authorized.
+Frozen 1.40 was subsequently scored on this PR
+(`cfb-frozen-140-scoring-20260912.md`). Recalibration is **not** authorized.
 2025 remains sealed. 2026 remains outside the loss.
 
 ## Funnel (2022)
@@ -169,8 +177,8 @@ Unmatched lake events (lake side, no warehouse game): `54`
 
 ## GO / STOP
 
-**GO TO FROZEN 1.40 SCORING**
+**GO TO FROZEN 1.40 SCORING** — completed on this PR.
 
-Do not score frozen 1.40 in this assignment. Do not recalibrate.
-CFB remains dark.
+Do not rescore to reopen recovery. Do not recalibrate.
+PR #542 n=0 is superseded. CFB remains dark.
 

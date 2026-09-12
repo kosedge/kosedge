@@ -6,6 +6,11 @@
 **Primary label set:** owned Odds-API lake close+actual (lake_only=`True`)  
 **Kill switch:** ON. 2025 sealed. 2026 not in the loss. No PLAY.
 
+**Evidence lock:** PR #543 is the current scoring result. PR #542
+(`LAKE_NOT_MOUNTED`, Train-0 = 0) is superseded cloud-VM evidence.
+Do not copy/densify parquet or spend Odds API credits. See
+`cfb-2022-close-recovery-supersedes-542-20260912.md`.
+
 ## Decision
 
 **RECALIBRATION JUSTIFIED**
@@ -478,4 +483,6 @@ Model-vs-close spread disagreement buckets:
 **RECALIBRATION JUSTIFIED**
 
 Do not recalibrate in this assignment. Do not unseal 2025. Do not publish a CFB board or PLAY designation.
+
+PR #542 cloud-VM n=0 is superseded. Do not reopen recovery.
 
