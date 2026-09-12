@@ -1,0 +1,382 @@
+{
+  "role": "cfbd_acquisition_audit",
+  "scoring_equation_frozen": true,
+  "do_not_tune": true,
+  "kill_switch": "OFF",
+  "merge_532": false,
+  "used_2026_for_fitting": false,
+  "opened_2025": false,
+  "wrote_production_coefficient": false,
+  "play": false,
+  "bulk_ingest": false,
+  "high_env_rerun": false,
+  "matchup_response_frozen": 1.4,
+  "key_present": true,
+  "calls_used": 12,
+  "call_budget_max": 12,
+  "research_windows": {
+    "train_0": {
+      "seasons": [
+        2022
+      ],
+      "weeks": "1-14"
+    },
+    "val_0": {
+      "seasons": [
+        2023
+      ],
+      "weeks": "1-14"
+    },
+    "val_1": {
+      "seasons": [
+        2024
+      ],
+      "weeks": "1-14"
+    }
+  },
+  "legal_seasons": [
+    2022,
+    2023,
+    2024
+  ],
+  "feature_map": [
+    {
+      "need": "true_pace_plays",
+      "endpoint": "/stats/season/advanced",
+      "fields": "offense.plays, defense.plays, offense.drives",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1 rolling snapshot. Week 1 is missing."
+    },
+    {
+      "need": "seconds_per_play",
+      "endpoint": "/plays",
+      "fields": "clock, wallclock",
+      "class": "DERIVABLE_FROM_PBP",
+      "pit": "One /plays call per year+week. Derive only from week < W."
+    },
+    {
+      "need": "off_def_ppa",
+      "endpoint": "/stats/season/advanced + /ppa/games",
+      "fields": "offense.ppa, defense.ppa, offense.totalPPA",
+      "class": "DIRECT",
+      "pit": "Prefer advanced endWeek=W-1. /ppa/teams is full-season \u2014 do not use mid-year."
+    },
+    {
+      "need": "success_rate",
+      "endpoint": "/stats/season/advanced",
+      "fields": "offense.successRate, defense.successRate",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1"
+    },
+    {
+      "need": "explosiveness",
+      "endpoint": "/stats/season/advanced",
+      "fields": "offense.explosiveness, defense.explosiveness",
+      "class": "DIRECT",
+      "pit": "CFBD explosiveness, not 50+0.15*(off-def)."
+    },
+    {
+      "need": "pass_rush_explosiveness",
+      "endpoint": "/stats/season/advanced",
+      "fields": "offense.passingPlays.explosiveness, offense.rushingPlays.explosiveness",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1"
+    },
+    {
+      "need": "explosive_plays_created_allowed",
+      "endpoint": "/plays",
+      "fields": "ppa, yards_gained, play_type",
+      "class": "DERIVABLE_FROM_PBP",
+      "pit": "Define explosive from raw plays with week < W. Do not invent a proxy if PBP not pulled."
+    },
+    {
+      "need": "havoc",
+      "endpoint": "/stats/season/advanced",
+      "fields": "defense.havoc.total/frontSeven/db; offense.havoc is allowed",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1"
+    },
+    {
+      "need": "finishing_ppp",
+      "endpoint": "/stats/season/advanced",
+      "fields": "pointsPerOpportunity, totalOpportunies (CFBD spelling)",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1. Off and def both present."
+    },
+    {
+      "need": "field_position",
+      "endpoint": "/stats/season/advanced",
+      "fields": "fieldPosition.averageStart, averagePredictedPoints",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1"
+    },
+    {
+      "need": "stuff_power_line_yards",
+      "endpoint": "/stats/season/advanced",
+      "fields": "stuffRate, powerSuccess, lineYards, secondLevelYards, openFieldYards",
+      "class": "DIRECT",
+      "pit": "endWeek=W-1"
+    },
+    {
+      "need": "game_advanced",
+      "endpoint": "/stats/game/advanced",
+      "fields": "per-game advanced object",
+      "class": "DIRECT",
+      "pit": "Use only games with week < W when building a snapshot."
+    },
+    {
+      "need": "drives",
+      "endpoint": "/drives",
+      "fields": "drive result, start yard, scoring",
+      "class": "DIRECT",
+      "pit": "Year+week. Reconstruct finishing from week < W."
+    },
+    {
+      "need": "returning_production",
+      "endpoint": "/player/returning",
+      "fields": "percentPPA, usage, passing/rushing/receiving shares",
+      "class": "DIRECT",
+      "pit": "Season-Y preseason snapshot. Legal for all weeks of Y."
+    },
+    {
+      "need": "qb_player_success",
+      "endpoint": "/ppa/players/season + /stats/player/season",
+      "fields": "player PPA / passing category",
+      "class": "DIRECT",
+      "pit": "Player season endpoints may leak later weeks unless startWeek/endWeek used."
+    },
+    {
+      "need": "stats_player_success",
+      "endpoint": "/stats/player/success",
+      "fields": null,
+      "class": "UNAVAILABLE",
+      "pit": "Not in the current public swagger. Do not call blindly."
+    },
+    {
+      "need": "weather",
+      "endpoint": "/games/weather",
+      "fields": "kickoff-hour weather",
+      "class": "UNAVAILABLE",
+      "pit": "Swagger marks this Patreon-only. Free tier should treat as missing."
+    },
+    {
+      "need": "sp_plus",
+      "endpoint": "/ratings/sp",
+      "fields": "offense/defense pace, success, explosiveness, havoc, runRate",
+      "class": "EXTERNAL_RATING",
+      "pit": "Season-level, no throughWeek. Same-season SP+ leaks future games. Prior-year only, or diagnostic."
+    },
+    {
+      "need": "core_opponent_adjusted",
+      "endpoint": "/ratings/core",
+      "fields": "offense, defense, overall, throughWeek, modelVersion",
+      "class": "POINT_IN_TIME_RISK",
+      "pit": "throughWeek exists, but CFBD says historical CORE is retrospective methodology, not a live archive."
+    },
+    {
+      "need": "betting_lines",
+      "endpoint": "/lines",
+      "fields": "spreads/totals",
+      "class": "POINT_IN_TIME_RISK",
+      "pit": "Diagnostic only. Never a HIGH_ENV v2 predictor."
+    }
+  ],
+  "research_call_budget": {
+    "advanced_rolling_w1_14": 42,
+    "games_schedule": 3,
+    "returning_2021_2024": 4,
+    "sp_plus_prior_year_only": 3,
+    "core_optional_research": 42,
+    "plays_deferred": 42,
+    "first_pass_no_pbp_no_core": 52,
+    "monthly_free_tier": 1000
+  },
+  "probes": [
+    {
+      "id": "adv_2022_endw3",
+      "path": "/stats/season/advanced",
+      "params": {
+        "year": 2022,
+        "endWeek": 3,
+        "excludeGarbageTime": "true"
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "adv_2022_endw1",
+      "path": "/stats/season/advanced",
+      "params": {
+        "year": 2022,
+        "endWeek": 1,
+        "excludeGarbageTime": "true"
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "plays_2022_w3",
+      "path": "/plays",
+      "params": {
+        "year": 2022,
+        "week": 3,
+        "seasonType": "regular",
+        "classification": "fbs"
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "returning_2022",
+      "path": "/player/returning",
+      "params": {
+        "year": 2022
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "sp_2022",
+      "path": "/ratings/sp",
+      "params": {
+        "year": 2022
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "core_2022_w3",
+      "path": "/ratings/core",
+      "params": {
+        "year": 2022,
+        "throughWeek": 3
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "games_2022",
+      "path": "/games",
+      "params": {
+        "year": 2022,
+        "seasonType": "regular",
+        "division": "fbs"
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "drives_2022_w3",
+      "path": "/drives",
+      "params": {
+        "year": 2022,
+        "week": 3,
+        "seasonType": "regular"
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "ppa_teams_2022",
+      "path": "/ppa/teams",
+      "params": {
+        "year": 2022
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "game_adv_2022_w3",
+      "path": "/stats/game/advanced",
+      "params": {
+        "year": 2022,
+        "week": 3
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "weather_2022_w3",
+      "path": "/games/weather",
+      "params": {
+        "year": 2022,
+        "week": 3
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    },
+    {
+      "id": "lines_2022_w3",
+      "path": "/lines",
+      "params": {
+        "year": 2022,
+        "week": 3
+      },
+      "status": 401,
+      "n_rows": null,
+      "bytes": 26,
+      "error": "HTTP 401",
+      "raw_path": null,
+      "sample_fields": []
+    }
+  ],
+  "pit_rules": [
+    "game week W uses only endWeek = W-1",
+    "week 1 current-season advanced is missing",
+    "no full-season aggregate for an in-season game",
+    "no close as a predictor",
+    "2025 never opened",
+    "missing means missing"
+  ],
+  "decision": {
+    "decision": "CFBD_AUTH_FAILED_DO_NOT_INGEST",
+    "ship": false,
+    "winner": null,
+    "play": false,
+    "note": "The stored server-side key was rejected (HTTP 401) on every probe. Do not guess the key. Put the exact generated value in the gitignored local env file. Do not paste it into chat. The feature map below is from official CFBD docs and remains the plan."
+  }
+}
