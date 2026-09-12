@@ -1,0 +1,36 @@
+{
+  "qb_feature_contract_version": "cfb-qb-feature-v1",
+  "matchup_response_frozen": 1.4,
+  "kill_switch": true,
+  "opened_2025": false,
+  "used_2026_for_fitting": false,
+  "wrote_production_coefficient": false,
+  "play": false,
+  "lake_only": true,
+  "lake_mounted": false,
+  "objective": "actual MAE / RMSE / signed bias / MedAE / tail error; close is benchmark only",
+  "candidates": [],
+  "decision": {
+    "decision": "INSUFFICIENT EVIDENCE",
+    "recommended": null,
+    "best_region": null,
+    "why": [
+      "legal Odds-API lake not mounted on this cloud VM",
+      "Mac private worker 3c358d2d-51c7-5c49-9a19-6f9fbccd8be6 is connected and idle but this run cannot pin a subagent onto it",
+      "no candidates were scored; no coefficient was guessed"
+    ],
+    "sanity": {
+      "ok": false,
+      "why": ["frozen 1.40 candidate was not re-scored on this VM"],
+      "published": {
+        "n": 717,
+        "bias_vs_close": 11.34,
+        "high_tail_bias_vs_close": 17.79,
+        "bias_vs_actual": 10.1,
+        "source": "PR #543 / data/ops/cfb-frozen-140-scoring-20260912.json"
+      }
+    }
+  },
+  "generated_at": "2026-09-12T03:30:00Z",
+  "next": "relaunch python3 scripts/cfb/sweep_matchup_response.py on the Mac worker with usePrivateWorker=true"
+}
