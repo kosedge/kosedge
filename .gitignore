@@ -131,6 +131,12 @@ data/ops/nfl-daily-intel/accepted/camp-sot-log.jsonl
 data/ops/nfl-daily-intel/pending/camp-accepted-*.json
 data/ops/nfl-daily-intel/cache/
 
+# CFB SportsDataverse download cache (regenerable)
+data/cfb/raw/sdv/
+
+# CFB warehouse / CFBD raw lake (regenerable; may contain vendor payloads)
+data/cfb/warehouse/
+
 # Staged into Railway image context by deploy-railway.yml (not source of truth)
 services/model-service/content/writers/
 
