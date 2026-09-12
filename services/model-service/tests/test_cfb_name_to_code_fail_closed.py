@@ -17,6 +17,7 @@ from src.services.cfb_season_engine.cfb_kei import (
 from src.services.cfb_season_engine.conferences import conference_for, load_conference_map
 from src.services.cfb_season_engine.efficiency import build_efficiency_profile
 from src.services.cfb_season_engine.name_to_code import (
+    ESPN_FINAL_2025_STORY_NAME_TO_CODE,
     NAME_TO_CODE,
     P0_REQUIRED_CODES,
     assert_p0_codes_mapped,
@@ -109,9 +110,21 @@ def test_true_independents_stay_independent() -> None:
 def test_miami_oh_maps_without_table_order() -> None:
     assert resolve_public_table_name("Miami (OH)") == "M-OH"
     assert resolve_public_table_name("Miami (Ohio)") == "M-OH"
+    assert resolve_public_table_name("Miami-OH") == "M-OH"
     assert resolve_public_table_name("Miami", miami_ordinal=1) == "MIA"
     assert resolve_public_table_name("Miami", miami_ordinal=2) == "M-OH"
     assert NAME_TO_CODE["Miami (OH)"] == "M-OH"
+    assert NAME_TO_CODE["Miami-OH"] == "M-OH"
+
+
+def test_espn_final_2025_abbreviations_cover_the_49() -> None:
+    assert len(ESPN_FINAL_2025_STORY_NAME_TO_CODE) == 49
+    assert ESPN_FINAL_2025_STORY_NAME_TO_CODE["Ohio St."] == "OSU"
+    assert ESPN_FINAL_2025_STORY_NAME_TO_CODE["N. Carolina"] == "UNC"
+    assert ESPN_FINAL_2025_STORY_NAME_TO_CODE["Miami-OH"] == "M-OH"
+    for name, code in ESPN_FINAL_2025_STORY_NAME_TO_CODE.items():
+        assert NAME_TO_CODE[name] == code
+        assert require_mapped_code(name) == code
 
 
 def test_official_fbs_missing_conference_fail_closed(monkeypatch) -> None:

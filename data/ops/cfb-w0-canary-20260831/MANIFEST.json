@@ -1,0 +1,27 @@
+{
+  "role": "week0_close_canary",
+  "do_not_overwrite": true,
+  "preserved_at": "2026-09-12T15:08:59Z",
+  "note": "Immutable W0 close reference. Working Power SoT / KEI remints must not replace these files. Projections+power from #536 (week0-close stamps, USF E[wins] 8.382). KEI from 0a8032b1c (cfb-kei-v1.0-2026w0). Efficiency from 69b971154 (frozen cfbupdate scrape used at W0; 11 official codes absent; M-OH league_average_fill).",
+  "sources": {
+    "cfb_season_projections_2026.json": "61e339fb2 (#536 week0-close canary)",
+    "cfb_power_sot_2026.json": "61e339fb2 (#536, power_as_of=2026-08-31)",
+    "cfb_kei_w0_w1_2026.json": "0a8032b1c (original W0 close, as_of=2026-08-31, cfb-kei-v1.0-2026w0)",
+    "cfb_efficiency_snapshot_2025_carry_2026.json": "69b971154 (W0 carry input)"
+  },
+  "sha256": {
+    "cfb_season_projections_2026.json": "f27e95b3dbb8722a6531b02b47b4061b7036e9b4c39196d71f4c61ddce7af38c",
+    "cfb_power_sot_2026.json": "66c84bbe5364e7e55f06bd3bf5154bc63f0d969dba6d750f7c0c5ef3e691d59c",
+    "cfb_kei_w0_w1_2026.json": "aa1e5ce9eb29672ae0832e73dc460e363da28e4c897d94b317da7ce26e41a749",
+    "cfb_efficiency_snapshot_2025_carry_2026.json": "ab28cac66e57edef32e3f2c6b2b8bb6cdb462b297277aa9b2efa40c974b3b4b0"
+  },
+  "canaries": {
+    "USF_mean": 8.382,
+    "OSU_mean": 9.537,
+    "UTAH_mean": 9.634,
+    "kei_version": "cfb-kei-v1.0-2026w0",
+    "kei_as_of": "2026-08-31",
+    "efficiency_team_count": 136,
+    "efficiency_mapped": 130
+  }
+}

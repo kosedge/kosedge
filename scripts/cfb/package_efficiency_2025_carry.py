@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 """Package final-2025 SP+ opponent-adjusted efficiency for 2026 preseason carry.
 
-Default source: public final SP+ table (cfbupdate / ESPN story).
-Optional: when CFBD_API_KEY is set, prefer CFBD /ratings/sp?year=2025.
+Authoritative source: the committed year-locked ESPN story table
+(``cfb_sp_plus_final_2025_espn_story.json``, story 46128861, published
+2026-01-20). That is the recoverable complete final-2025 publication that
+was legal at the W0 model as-of (2026-08-31).
+
+Do not use live cfbupdate.com as a 2025 carry source — it serves the
+current 2026 board. Do not splice live rows onto a frozen snapshot.
+Optional CFBD ``/ratings/sp?year=2025`` is a compare-only vintage when
+keyed; it is not mixed into the packaged table.
 
 Writes:
   services/model-service/src/services/cfb_season_engine/data/
@@ -31,6 +38,7 @@ sys.path.insert(0, str(MS))
 
 from src.services.cfb_season_engine.fbs_universe import official_fbs_codes  # noqa: E402
 from src.services.cfb_season_engine.name_to_code import (  # noqa: E402
+    ESPN_FINAL_2025_STORY_NAME_TO_CODE,
     NAME_TO_CODE,
     P0_REQUIRED_CODES,
     P0_REQUIRED_NAME_TO_CODE,
@@ -53,6 +61,14 @@ DATA = (
 )
 PRIORS_PATH = DATA / "cfb_fbs_team_priors_2026.json"
 OUT_PATH = DATA / "cfb_efficiency_snapshot_2025_carry_2026.json"
+AUTHORITATIVE_SOURCE_PATH = DATA / "cfb_sp_plus_final_2025_espn_story.json"
+ESPN_FINAL_2025_STORY = (
+    "https://www.espn.com/college-football/story/_/id/46128861/"
+    "2025-college-football-sp+-rankings-all-136-fbs-teams"
+)
+AUTHORITATIVE_SOURCE_ID = "espn_story_46128861"
+AUTHORITATIVE_SOURCE_PUBLISHED = "2026-01-20"
+AUTHORITATIVE_SOURCE_VINTAGE = "espn_story_2025_final"
 
 ALIASES = {
     "TXAM": "TAMU",
@@ -83,7 +99,41 @@ def _apply_carry_shrink(value: float, shrink: float = CARRY_SHRINK) -> float:
     return 50.0 + float(shrink) * (float(value) - 50.0)
 
 
+class LivePublicIsNotFinal2025(RuntimeError):
+    """cfbupdate.com is the current board, not a year-locked 2025 source."""
+
+
+def load_authoritative_sp_plus() -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
+    """Load the committed ESPN final-2025 table. No live substitution."""
+    if not AUTHORITATIVE_SOURCE_PATH.is_file():
+        raise MissingRequiredTeamFeature(
+            f"Missing year-locked SP+ source {AUTHORITATIVE_SOURCE_PATH}"
+        )
+    blob = json.loads(AUTHORITATIVE_SOURCE_PATH.read_text(encoding="utf-8"))
+    rows = list(blob.get("teams") or [])
+    official = official_fbs_codes()
+    have = {str(r.get("team") or "") for r in rows if r.get("team")}
+    missing = sorted(official - have)
+    if missing:
+        raise MissingRequiredTeamFeature(
+            "Authoritative ESPN final-2025 table missing official FBS codes: "
+            f"{missing}"
+        )
+    extras = sorted(have - official)
+    if extras:
+        raise MissingRequiredTeamFeature(
+            "Authoritative ESPN final-2025 table has non-official codes "
+            f"(do not package NDSU/SAC as 2025 FBS): {extras}"
+        )
+    if len(rows) != 136:
+        raise MissingRequiredTeamFeature(
+            f"Authoritative ESPN final-2025 table has {len(rows)} rows, expected 136"
+        )
+    return rows, blob.get("source") or {}
+
+
 def fetch_sp_plus_public() -> List[Dict[str, Any]]:
+    """Live cfbupdate board — 2026 in-season after kickoff. Not a 2025 source."""
     url = "https://cfbupdate.com/sp-ratings"
     req = urllib.request.Request(url, headers={"User-Agent": "Mozilla/5.0 kosedge"})
     html = urllib.request.urlopen(req, timeout=45).read().decode("utf-8", "replace")
@@ -220,11 +270,19 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
             "carry_to_season": 2026,
             "carry_shrink": CARRY_SHRINK,
             "source": "packaged_sp_plus_final_2025",
+            "source_vintage": p.get("source_vintage") or AUTHORITATIVE_SOURCE_VINTAGE,
+            "source_published": p.get("source_published")
+            or AUTHORITATIVE_SOURCE_PUBLISHED,
+            "source_url": p.get("source_url") or ESPN_FINAL_2025_STORY,
+            "source_story_id": p.get("source_story_id") or "46128861",
+            "source_table_name": p.get("name") or p.get("mapping_key"),
+            "source_record": p.get("record") or "",
             "fidelity": "approximate",
             "notes": (
                 "Final-2025 SP+ offense/defense (opponent-adjusted efficiency). "
                 "success_* / explosiveness are SP+-correlated proxies, not PBP EPA rates. "
-                f"Preseason 2026 carry — EFF_CARRY_SHRINK={CARRY_SHRINK} toward 50."
+                f"Preseason 2026 carry — EFF_CARRY_SHRINK={CARRY_SHRINK} toward 50. "
+                f"Vintage={p.get('source_vintage') or AUTHORITATIVE_SOURCE_VINTAGE}."
             ),
         }
 
@@ -260,12 +318,15 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
         "metric_family": "sp_plus_opponent_adjusted_efficiency",
         "source": {
             "primary": source_primary,
-            "reference_url": "https://cfbupdate.com/sp-ratings",
-            "espn_story": (
-                "https://www.espn.com/college-football/story/_/id/46128861/"
-                "2025-college-football-sp+-rankings-all-136-fbs-teams"
-            ),
-            "cfbd": "optional_when_CFBD_API_KEY (ratings/sp)",
+            "id": AUTHORITATIVE_SOURCE_ID,
+            "vintage": AUTHORITATIVE_SOURCE_VINTAGE,
+            "published": AUTHORITATIVE_SOURCE_PUBLISHED,
+            "legal_at_model_as_of": "2026-08-31",
+            "committed_table": str(AUTHORITATIVE_SOURCE_PATH.name),
+            "reference_url": ESPN_FINAL_2025_STORY,
+            "espn_story": ESPN_FINAL_2025_STORY,
+            "live_public": "rejected_2026_inseason_cfbupdate",
+            "cfbd": "compare_only_when_CFBD_API_KEY (ratings/sp?year=2025); not mixed",
             "pbp": "not_used",
             "carry_shrink": (
                 f"off_eff/def_eff/success/explosiveness = "
@@ -290,11 +351,13 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
         },
         "notes": [
             "2025 final SP+ is opponent-adjusted efficiency (Bill Connelly). "
-            "Packaged for 2026 preseason carry.",
+            "Packaged for 2026 preseason carry from the year-locked ESPN story "
+            "46128861 (published 2026-01-20), not live cfbupdate.",
             f"Chapter 2 Phase 2B: EFF_CARRY_SHRINK={CARRY_SHRINK} toward league 50.",
             "No full PBP store in-repo; CFBD advanced/PPA optional when key present.",
             "success_off/def and explosiveness are approximate SP+-correlated proxies.",
             "Do not treat as live in-season SP+ updates until a refresh pipeline is wired.",
+            "NDSU and Sacramento State are 2026 transitions and have no 2025 FBS SP+ row.",
         ],
         "team_count": len(teams),
         "mapped_from_sp_plus": sum(
@@ -302,12 +365,6 @@ def build_snapshot(rows: List[Dict[str, Any]], *, source_primary: str) -> Dict[s
         ),
         "teams": teams,
     }
-
-
-ESPN_FINAL_2025_STORY = (
-    "https://www.espn.com/college-football/story/_/id/46128861/"
-    "2025-college-football-sp+-rankings-all-136-fbs-teams"
-)
 
 
 def fetch_sp_plus_espn_final_2025() -> List[Dict[str, Any]]:
@@ -333,12 +390,15 @@ def fetch_sp_plus_espn_final_2025() -> List[Dict[str, Any]]:
         name = m.group(2).strip()
         if name == "Miami":
             miami_seen += 1
-        if name in P0_REQUIRED_NAME_TO_CODE:
+        if name in ESPN_FINAL_2025_STORY_NAME_TO_CODE or name in P0_REQUIRED_NAME_TO_CODE:
             code = require_mapped_code(name)
         else:
             code = resolve_public_table_name(name, miami_ordinal=miami_seen)
         if not code:
-            continue
+            raise MissingRequiredTeamFeature(
+                f"ESPN final-2025 story name {name!r} is unmapped — "
+                "this is the 87/136 failure mode; do not drop the row"
+            )
         off, off_r = _num_rank(cells[2])
         deff, def_r = _num_rank(cells[3])
         st, st_r = _num_rank(cells[4])
@@ -460,83 +520,115 @@ def splice_p0_into_existing_snapshot(
     return snap
 
 
+def _assert_not_live_2026_board(rows: List[Dict[str, Any]]) -> None:
+    """Refuse cfbupdate-shaped 2026 records as a 2025 carry source."""
+    records = [str(r.get("record") or "") for r in rows]
+    short = sum(1 for rec in records if re.fullmatch(r"[0-2]-[0-2]", rec))
+    if short >= 20:
+        raise LivePublicIsNotFinal2025(
+            "Live public SP+ records look like 2026 in-season "
+            f"({short} teams at 0–2 games). Not a final-2025 source."
+        )
+
+
+def verify_live_espn_matches_fixture(rows: List[Dict[str, Any]]) -> None:
+    live = fetch_sp_plus_espn_final_2025()
+    by_live = {str(r["team"]): r for r in live if r.get("team")}
+    diffs: List[str] = []
+    for row in rows:
+        code = str(row.get("team") or "")
+        other = by_live.get(code)
+        if not other:
+            diffs.append(f"{code}: missing from live ESPN parse")
+            continue
+        for field in ("sp_plus", "sp_offense", "sp_defense"):
+            if abs(float(row[field]) - float(other[field])) > 1e-6:
+                diffs.append(f"{code}.{field}: fixture {row[field]} live {other[field]}")
+    if diffs:
+        raise MissingRequiredTeamFeature(
+            "Live ESPN story no longer matches the committed 2025 fixture; "
+            "do not silently retune. " + "; ".join(diffs[:12])
+        )
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, default=OUT_PATH)
     parser.add_argument(
         "--splice-p0-only",
         action="store_true",
-        help="Add missing P0 rows onto the existing snapshot; do not rebuild league z-scores",
+        help="Rejected: historical vintage mix. Use the committed ESPN table.",
+    )
+    parser.add_argument(
+        "--verify-espn-story",
+        action="store_true",
+        help="Re-fetch ESPN story 46128861 and require bit-equal SP+ vs fixture",
+    )
+    parser.add_argument(
+        "--allow-live-public",
+        action="store_true",
+        help="Rejected unless the live board is proven not to be 2026 in-season",
     )
     args = parser.parse_args()
 
     if args.splice_p0_only:
-        if not args.out.is_file():
-            print(f"ERROR: missing snapshot {args.out}", file=sys.stderr)
-            return 1
-        rows = fetch_sp_plus_espn_final_2025()
-        if not rows:
-            print("ERROR: no ESPN final-2025 SP+ rows fetched", file=sys.stderr)
-            return 1
+        print(
+            "ERROR: --splice-p0-only mixes ESPN rows onto a frozen cfbupdate "
+            "snapshot (the #536 vintage). Rebuild from the committed ESPN "
+            f"final-2025 table {AUTHORITATIVE_SOURCE_PATH.name} instead.",
+            file=sys.stderr,
+        )
+        return 1
+    if args.allow_live_public:
         try:
-            snap = splice_p0_into_existing_snapshot(
-                json.loads(args.out.read_text(encoding="utf-8")), rows
-            )
-        except MissingRequiredTeamFeature as exc:
+            live = fetch_sp_plus_public()
+            _assert_not_live_2026_board(live)
+        except LivePublicIsNotFinal2025 as exc:
             print(f"ERROR: {exc}", file=sys.stderr)
             return 1
-        args.out.write_text(json.dumps(snap, indent=2) + "\n", encoding="utf-8")
         print(
-            f"Spliced P0 into {args.out} teams={snap['team_count']} "
-            f"mapped={snap['mapped_from_sp_plus']} source=espn_final_2025_story"
+            "ERROR: live public SP+ is not the 2025 carry source even when "
+            "it does not trip the in-season guard. Use the committed ESPN table.",
+            file=sys.stderr,
         )
-        return 0
-
-    official = official_fbs_codes()
-
-    def _missing_official(rows: List[Dict[str, Any]]) -> List[str]:
-        have = {str(r.get("team") or "") for r in rows if r.get("team")}
-        return sorted(official - have)
-
-    candidates = [
-        (fetch_sp_plus_cfbd(2025), "cfbd_ratings_sp_2025"),
-    ]
-    # ESPN story HTML currently parses a partial table (~87). Do not accept
-    # an incomplete year-lock over the complete public 2025 final table.
-    espn_rows = fetch_sp_plus_espn_final_2025()
-    candidates.append((espn_rows, "espn_final_2025_sp_plus_story"))
-    public_rows = fetch_sp_plus_public()
-    candidates.append((public_rows, "final_2025_sp_plus_public_table"))
-
-    rows = None
-    source = ""
-    for cand, name in candidates:
-        if not cand:
-            continue
-        missing = _missing_official(cand)
-        if missing:
-            print(
-                f"skip {name}: {len(cand)} rows, official missing {len(missing)}",
-                file=sys.stderr,
-            )
-            continue
-        rows = cand
-        source = name
-        break
-    if not rows:
-        print("ERROR: no SP+ source covered the official 2026 FBS lock", file=sys.stderr)
         return 1
 
     try:
-        snap = build_snapshot(rows, source_primary=source)
-    except MissingRequiredTeamFeature as exc:
+        rows, src_meta = load_authoritative_sp_plus()
+        if args.verify_espn_story:
+            verify_live_espn_matches_fixture(rows)
+            print(
+                f"verified live ESPN story matches fixture "
+                f"({src_meta.get('id') or AUTHORITATIVE_SOURCE_ID})",
+                file=sys.stderr,
+            )
+        snap = build_snapshot(rows, source_primary=AUTHORITATIVE_SOURCE_VINTAGE)
+    except (MissingRequiredTeamFeature, LivePublicIsNotFinal2025) as exc:
         print(f"ERROR: {exc}", file=sys.stderr)
+        return 1
+    provenance_ok = sum(
+        1
+        for t in snap["teams"].values()
+        if t.get("source_vintage")
+        and t.get("source_published")
+        and t.get("source_url")
+        and t.get("source_table_name")
+    )
+    snap["provenance_complete"] = provenance_ok
+    if provenance_ok != snap["team_count"]:
+        print(
+            "ERROR: row-level provenance incomplete "
+            f"{provenance_ok}/{snap['team_count']}",
+            file=sys.stderr,
+        )
         return 1
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(json.dumps(snap, indent=2) + "\n", encoding="utf-8")
     print(
         f"Wrote {args.out} teams={snap['team_count']} "
-        f"mapped={snap['mapped_from_sp_plus']} source={source}"
+        f"mapped={snap['mapped_from_sp_plus']} "
+        f"provenance={snap['provenance_complete']} "
+        f"source={AUTHORITATIVE_SOURCE_VINTAGE}"
     )
     return 0
 

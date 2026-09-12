@@ -128,8 +128,9 @@ def test_roster_and_efficiency_scripts_use_official_lock() -> None:
     assert "codes = set(official)" in efficiency
     assert "codes = set(priors.get(\"teams\") or {})" not in efficiency
     assert "do not league-average fill" in efficiency
-    assert "official missing" in efficiency
-    assert "skip {name}" in efficiency or "skip %s" in efficiency or 'skip {name}:' in efficiency
+    assert "AUTHORITATIVE_SOURCE_PATH" in efficiency
+    assert "rejected_2026_inseason_cfbupdate" in efficiency or "Live public SP+" in efficiency
+    assert "--splice-p0-only" in efficiency
 
 
 def test_independents_are_only_nd_and_conn() -> None:
@@ -188,6 +189,16 @@ def test_efficiency_has_real_sp_plus_for_all_official() -> None:
     assert teams["JVST"]["sp_rank"] not in (None, "")
     assert teams["M-OH"]["source"].startswith("packaged_sp_plus")
     assert teams["M-OH"]["off_eff"] != 50.0 or teams["M-OH"]["sp_rank"] not in (None, "")
+    assert snap.get("source", {}).get("vintage") == "espn_story_2025_final"
+    assert snap.get("provenance_complete") == snap.get("team_count") == 136
+    for code in official:
+        row = teams[code]
+        assert row.get("source_vintage") == "espn_story_2025_final", code
+        assert row.get("source_published") == "2026-01-20", code
+        assert row.get("source_url"), code
+        assert row.get("source_table_name"), code
+    assert "NDSU" not in teams
+    assert "SAC" not in teams
 
 
 def test_power_sot_eleven_are_finite_and_conferenced() -> None:
