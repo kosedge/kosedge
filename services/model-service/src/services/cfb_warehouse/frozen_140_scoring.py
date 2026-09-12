@@ -741,15 +741,10 @@ def decide(summary: Mapping[str, Any]) -> Dict[str, Any]:
     }
 
 
-def run_frozen_140_scoring(
-    *,
-    cache_dir: Optional[Path] = None,
-    lake_only: bool = True,
-) -> Dict[str, Any]:
-    assert_frozen_priors()
+def load_v1_scoring_context(*, cache_dir: Optional[Path] = None) -> Dict[str, Any]:
+    """Load Layer A + lake + universes for 2022–2024. Does not score or fit."""
     refuse_sealed_or_confirm(LEGAL_SEASONS)
     cache = cache_dir or SDV_CACHE
-
     layer_by_season: Dict[int, Dict[str, Any]] = {}
     lake_locate: Dict[str, Any] = {}
     joined_all: List[Dict[str, Any]] = []
@@ -774,6 +769,28 @@ def run_frozen_140_scoring(
         }
         eff = ratings_to_efficiency_map(season - 1, cache_dir=cache)
         universes[season] = build_v1_universe(season, layer, eff)
+
+    return {
+        "joined_all": joined_all,
+        "universes": universes,
+        "lake_locate": lake_locate,
+        "load_meta": load_meta,
+        "layer_by_season": layer_by_season,
+    }
+
+
+def run_frozen_140_scoring(
+    *,
+    cache_dir: Optional[Path] = None,
+    lake_only: bool = True,
+) -> Dict[str, Any]:
+    assert_frozen_priors()
+    ctx = load_v1_scoring_context(cache_dir=cache_dir)
+    joined_all = ctx["joined_all"]
+    universes = ctx["universes"]
+    lake_locate = ctx["lake_locate"]
+    load_meta = ctx["load_meta"]
+    layer_by_season = ctx["layer_by_season"]
 
     scored, skipped = score_joined_rows(joined_all, universes, lake_only=lake_only)
     summary = summarize_scored(scored)
