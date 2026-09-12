@@ -196,6 +196,28 @@ def _median_abs(xs: Sequence[float]) -> Optional[float]:
     return float(statistics.median(abs(x) for x in xs))
 
 
+def _quantiles(
+    xs: Sequence[float],
+    probs: Sequence[float] = (0.10, 0.25, 0.50, 0.75, 0.90),
+) -> Dict[str, Optional[float]]:
+    if not xs:
+        return {f"p{int(p * 100)}": None for p in probs}
+    ordered = sorted(float(x) for x in xs)
+
+    def _q(p: float) -> float:
+        if len(ordered) == 1:
+            return ordered[0]
+        idx = p * (len(ordered) - 1)
+        lo = int(math.floor(idx))
+        hi = int(math.ceil(idx))
+        if lo == hi:
+            return ordered[lo]
+        weight = idx - lo
+        return ordered[lo] * (1.0 - weight) + ordered[hi] * weight
+
+    return {f"p{int(p * 100)}": _q(p) for p in probs}
+
+
 def roi_minus_110(hits: Sequence[bool]) -> Optional[float]:
     """Unit ROI at −110: win +100/110, lose −1. Per unit risked."""
     if not hits:
@@ -593,6 +615,9 @@ def _block(subset: Sequence[Mapping[str, Any]]) -> Dict[str, Any]:
         "ou_hit_rate": (sum(ou) / len(ou)) if ou else None,
         "ou_roi_minus_110": roi_minus_110(ou),
         "brier_home_wp": _mean([float(r["brier"]) for r in subset]),
+        "disagree_vs_close_quantiles": _quantiles(total_close),
+        "error_vs_actual_quantiles": _quantiles(total_act),
+        "mean_abs_disagree_total": _mae(total_close),
     }
 
 
@@ -741,11 +766,16 @@ def decide(summary: Mapping[str, Any]) -> Dict[str, Any]:
     }
 
 
-def run_frozen_140_scoring(
+def load_legal_scoring_bundle(
     *,
     cache_dir: Optional[Path] = None,
     lake_only: bool = True,
 ) -> Dict[str, Any]:
+    """Load 2022–24 lake joins + v1 universes once. Refuses 2025/2026.
+
+    ``lake_only`` is recorded for callers; eligibility is applied later in
+    ``score_joined_rows``. Does not change MATCHUP_RESPONSE.
+    """
     assert_frozen_priors()
     refuse_sealed_or_confirm(LEGAL_SEASONS)
     cache = cache_dir or SDV_CACHE
@@ -775,9 +805,6 @@ def run_frozen_140_scoring(
         eff = ratings_to_efficiency_map(season - 1, cache_dir=cache)
         universes[season] = build_v1_universe(season, layer, eff)
 
-    scored, skipped = score_joined_rows(joined_all, universes, lake_only=lake_only)
-    summary = summarize_scored(scored)
-    gate = decide(summary)
     qb_talent = {
         str(season): {
             "n": len(art.get("teams") or {}),
@@ -787,6 +814,29 @@ def run_frozen_140_scoring(
         }
         for season, art in layer_by_season.items()
     }
+    return {
+        "joined": joined_all,
+        "universes": universes,
+        "lake_locate": lake_locate,
+        "load": load_meta,
+        "layer_a_talent": qb_talent,
+        "lake_only": lake_only,
+        "qb_feature_contract_version": QB_FEATURE_CONTRACT_VERSION,
+        "matchup_response_frozen": P.MATCHUP_RESPONSE,
+    }
+
+
+def run_frozen_140_scoring(
+    *,
+    cache_dir: Optional[Path] = None,
+    lake_only: bool = True,
+) -> Dict[str, Any]:
+    bundle = load_legal_scoring_bundle(cache_dir=cache_dir, lake_only=lake_only)
+    scored, skipped = score_joined_rows(
+        bundle["joined"], bundle["universes"], lake_only=lake_only
+    )
+    summary = summarize_scored(scored)
+    gate = decide(summary)
     return {
         "qb_feature_contract_version": QB_FEATURE_CONTRACT_VERSION,
         "matchup_response": P.MATCHUP_RESPONSE,
@@ -798,9 +848,9 @@ def run_frozen_140_scoring(
         "recalibrated": False,
         "play": False,
         "lake_only": lake_only,
-        "lake_locate": lake_locate,
-        "load": load_meta,
-        "layer_a_talent": qb_talent,
+        "lake_locate": bundle["lake_locate"],
+        "load": bundle["load"],
+        "layer_a_talent": bundle["layer_a_talent"],
         "skipped": skipped,
         "metrics": summary,
         "decision": gate,
