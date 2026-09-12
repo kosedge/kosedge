@@ -320,17 +320,54 @@ def expected_team_points(
 
     Returns (points, diagnostics).
     """
+    ov = P.score_component_overlay()
     response = P.matchup_response_for_week(week)
-    raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
+    mode = str(ov.get("matchup_mode") or "power")
+    if mode == "raw_efficiency":
+        off_e = float(offense.efficiency.off_eff) if offense.efficiency else 50.0
+        def_e = (
+            float(opponent_defense.efficiency.def_eff)
+            if opponent_defense.efficiency
+            else 50.0
+        )
+        raw_ratio = efficiency_index(off_e) / max(0.50, efficiency_index(def_e))
+    else:
+        raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
     ratio_lo, ratio_hi = P.MATCHUP_RATIO_CLAMP
-    ratio = _soft_clamp_ratio(
-        raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
-    )
-    matchup = ratio ** response
-    off_boost = unit_offense_boost(offense.groups)
-    def_dampen = unit_defense_dampen(opponent_defense.groups)
-    pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
-    base = P.LEAGUE_TEAM_PPG * matchup * off_boost * def_dampen * pace
+    if ov.get("disable_ratio_clamp"):
+        ratio = float(raw_ratio)
+    else:
+        ratio = _soft_clamp_ratio(
+            raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
+        )
+    if mode == "identity":
+        matchup = 1.0
+    elif mode == "linear":
+        matchup = max(0.15, 1.0 + response * (ratio - 1.0))
+    elif mode == "possessions_ppp":
+        matchup = 1.0  # replaced below by explicit possessions × PPP
+    else:
+        matchup = ratio ** response
+    if ov.get("force_unit_identity"):
+        off_boost = 1.0
+        def_dampen = 1.0
+    else:
+        off_boost = unit_offense_boost(offense.groups)
+        def_dampen = unit_defense_dampen(opponent_defense.groups)
+    if ov.get("force_pace_one"):
+        pace = 1.0
+    else:
+        pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
+    ppg = P.overlaid_float("LEAGUE_TEAM_PPG", P.LEAGUE_TEAM_PPG)
+    if mode == "possessions_ppp":
+        # Research scaffold: make possessions explicit. League ~12.6 team
+        # possessions; PPP is linear in the (possibly raw) matchup ratio.
+        poss = 12.6 * pace
+        ppp = (ppg / 12.6) * ratio * off_boost * def_dampen
+        base = poss * ppp
+        matchup = ratio
+    else:
+        base = ppg * matchup * off_boost * def_dampen * pace
 
     # Variable HFA — only the designated home side, never on neutral.
     hfa_profile = home_hfa_profile
@@ -342,6 +379,10 @@ def expected_team_points(
         neutral_site=neutral_site,
         night_game=night_game,
     )
+    if ov.get("zero_hfa"):
+        hfa = dict(hfa)
+        hfa["hfa_points"] = 0.0
+        hfa["research_overlay"] = "zero_hfa"
     base += float(hfa["hfa_points"])
 
     # Coaching: own offense penalty (week-decayed) + opponent new-DC boost.
@@ -351,17 +392,25 @@ def expected_team_points(
     )
     # Opponent defense penalty → they allow more → boost our scoring.
     coach_adj = float(own_coach["points"]) + abs(float(opp_def_pen["points"]))
+    if ov.get("zero_coaching"):
+        coach_adj = 0.0
     base += coach_adj
 
-    points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
+    if ov.get("disable_clamp"):
+        points = float(base)
+    else:
+        points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
     diag: Dict[str, Any] = {
         "matchup_ratio_raw": round(raw_ratio, 4),
         "matchup_ratio": round(ratio, 4),
         "matchup_ratio_clamped": abs(raw_ratio - ratio) > 1e-9,
         "matchup_response": round(response, 4),
+        "matchup_mode": mode,
+        "matchup_mult": round(matchup, 4),
         "offense_boost": round(off_boost, 4),
         "defense_dampen": round(def_dampen, 4),
         "pace": round(pace, 4),
+        "league_team_ppg": round(ppg, 4),
         "hfa": hfa,
         "coaching_own_scoring_adj": own_coach,
         "coaching_opp_defense_penalty": opp_def_pen,
@@ -558,7 +607,10 @@ def project_game(
     # Thin special-teams nudge — split evenly so scores/total/spread stay coherent.
     st_home = home.groups.special_teams if home.groups else 50.0
     st_away = away.groups.special_teams if away.groups else 50.0
-    st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
+    if P.score_component_overlay().get("zero_special_teams"):
+        st_nudge = 0.0
+    else:
+        st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
     home_exp_adj = round(home_exp + 0.5 * st_nudge, 2)
     away_exp_adj = round(away_exp + 0.5 * st_nudge, 2)
     total = round(home_exp_adj + away_exp_adj, 2)
