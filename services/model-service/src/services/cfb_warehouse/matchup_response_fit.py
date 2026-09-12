@@ -472,7 +472,8 @@ def run_matchup_response_fit(
         coarse.append(PRODUCTION_MATCHUP_RESPONSE)
     candidates: Dict[float, Dict[str, Any]] = {}
     skipped_last: Dict[str, Any] = {}
-    for cand in coarse:
+    for i, cand in enumerate(coarse, start=1):
+        print(f"[fit] coarse {i}/{len(coarse)} MATCHUP_RESPONSE={cand:.2f}", flush=True)
         summary, _scored, skipped = score_candidate(
             joined,
             universes,
@@ -489,6 +490,7 @@ def run_matchup_response_fit(
             continue
         if extra < 0.60 or extra > 1.60:
             continue
+        print(f"[fit] refine MATCHUP_RESPONSE={extra:.2f}", flush=True)
         summary, _scored, skipped = score_candidate(
             joined,
             universes,
