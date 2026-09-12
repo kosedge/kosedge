@@ -323,6 +323,14 @@ def expected_team_points(
     ov = P.score_component_overlay()
     response = P.matchup_response_for_week(week)
     mode = str(ov.get("matchup_mode") or "power")
+    # Research-only point-space additive identities. Production default
+    # remains the composed-index power ratio. These modes never write priors.
+    point_additive = mode in {
+        "point_additive_half",
+        "point_additive_units",
+        "point_additive_full",
+        "point_additive_poss",
+    }
     off_e = float(offense.efficiency.off_eff) if offense.efficiency else 50.0
     def_e = (
         float(opponent_defense.efficiency.def_eff)
@@ -331,7 +339,7 @@ def expected_team_points(
     )
     off_eff_idx = efficiency_index(off_e)
     def_eff_idx = efficiency_index(def_e)
-    if mode in {"raw_efficiency", "raw_additive", "raw_diff", "raw_sat"}:
+    if mode in {"raw_efficiency", "raw_additive", "raw_diff", "raw_sat"} or point_additive:
         raw_ratio = off_eff_idx / max(0.50, def_eff_idx)
     else:
         raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
@@ -358,9 +366,16 @@ def expected_team_points(
     elif mode == "raw_sat":
         # Predeclared squash: 1 + tanh(raw-eff ratio − 1). No fitted k.
         matchup = 1.0 + math.tanh(ratio - 1.0)
+    elif point_additive:
+        # Not a matchup multiplier. Scoring lives in point space below.
+        matchup = 1.0
     else:
         matchup = ratio ** response
-    if ov.get("force_unit_identity"):
+    if ov.get("force_unit_identity") or mode in {
+        "point_additive_half",
+        "point_additive_full",
+        "point_additive_poss",
+    }:
         off_boost = 1.0
         def_dampen = 1.0
     else:
@@ -371,7 +386,45 @@ def expected_team_points(
     else:
         pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
     ppg = P.overlaid_float("LEAGUE_TEAM_PPG", P.LEAGUE_TEAM_PPG)
-    if mode == "possessions_ppp":
+    additive_diag: Dict[str, Any] = {}
+    if point_additive:
+        # First-principles additive scoring. Raw 0–100 efficiency, no
+        # index clamp, no offense/defense ratio.
+        #
+        #   E[pts] = pace * (μ + α(Off − 50) + β(50 − Def)) [* units] + HFA + coach
+        #
+        # μ = 25.9 (documented league team PPG).
+        # α = β because offense and defense share the packaged 0–100 scale.
+        # Half-index slope 25.9/136: each axis owns half of one linearized
+        # index unit. Full-index 25.9/68 is the C3 negative control.
+        # 12.6 possessions is the existing E4 scaffold, not a new fit.
+        if mode == "point_additive_full":
+            slope = ppg / P.SCORE_TO_INDEX_DIVISOR
+        else:
+            slope = ppg / (2.0 * P.SCORE_TO_INDEX_DIVISOR)
+        off_term = slope * (off_e - 50.0)
+        def_term = slope * (50.0 - def_e)
+        rate = ppg + off_term + def_term
+        units = off_boost * def_dampen
+        if mode == "point_additive_poss":
+            poss = 12.6 * pace
+            ppp = rate / 12.6
+            base = poss * ppp * units
+        else:
+            poss = None
+            ppp = None
+            base = rate * units * pace
+        additive_diag = {
+            "additive_mu": round(ppg, 4),
+            "additive_alpha": round(slope, 6),
+            "additive_beta": round(slope, 6),
+            "additive_off_term": round(off_term, 4),
+            "additive_def_term": round(def_term, 4),
+            "additive_rate": round(rate, 4),
+            "additive_possessions": None if poss is None else round(poss, 4),
+            "additive_ppp": None if ppp is None else round(ppp, 4),
+        }
+    elif mode == "possessions_ppp":
         # Research scaffold: make possessions explicit. League ~12.6 team
         # possessions; PPP is linear in the (possibly raw) matchup ratio.
         poss = 12.6 * pace
@@ -430,6 +483,8 @@ def expected_team_points(
         "pre_clamp": round(base, 3),
         "clamped": abs(float(base) - float(points)) > 1e-9,
     }
+    if additive_diag:
+        diag.update(additive_diag)
     return points, diag
 
 
