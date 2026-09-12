@@ -608,8 +608,11 @@ def _error_type(card: Mapping[str, Any], moments: Mapping[str, Any]) -> Dict[str
     biases = []
     for name in ("lt_48", "48_54", "54_60", "60_68", "ge_68"):
         brow = buckets.get(name) or {}
-        if brow.get("total_vs_actual_bias") is not None and (brow.get("n") or 0) >= 8:
-            biases.append((name, float(brow["total_vs_actual_bias"]), int(brow["n"])))
+        raw = brow.get("bias_vs_actual")
+        if raw is None:
+            raw = brow.get("total_vs_actual_bias")
+        if raw is not None and (brow.get("n") or 0) >= 8:
+            biases.append((name, float(raw), int(brow["n"])))
     loc = float(card.get("bias_vs_actual") or 0.0)
     mae = float(card.get("mae_vs_actual") or 0.0)
     tail_n = int(card.get("high_tail_n") or 0)

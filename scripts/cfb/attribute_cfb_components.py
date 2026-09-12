@@ -228,6 +228,68 @@ def write_report(payload: Dict[str, Any]) -> None:
         "",
         f"Error type @ frozen 1.40: **{err.get('primary')}** `{err.get('flags')}`",
         "",
+        "## Train-0 / Val-0 / Val-1 confirmation (top families)",
+        "",
+        "Identity matchup, QB neutralization, and O/D centering are the same causal chain: "
+        "Layer A talent ~69–71 → mean QB index 1.23 → mean offense index 1.14 vs defense 1.01 "
+        "→ mean ratio 1.13 → `ratio**r` lifts both sides. Turning any one of those three off "
+        "collapses location. Identity matchup also collapses prediction std to ~0.57 — a "
+        "location diagnostic, not a shippable model.",
+        "",
+    ]
+
+    def _split_row(panel, fid, split):
+        rec = _find(panel, fid)
+        if not rec:
+            return "— / — / —"
+        card = (rec.get("splits") or {}).get(split) or {}
+        return "{n} / {mae} / {bias}".format(
+            n=card.get("n", 0),
+            mae=_fmt(card.get("mae_vs_actual")),
+            bias=_fmt(card.get("bias_vs_actual")),
+        )
+
+    lines += [
+        "### Panel A vs frozen 1.40",
+        "",
+        "| family | Train-0 n / MAE / bias | Val-0 n / MAE / bias | Val-1 n / MAE / bias |",
+        "| --- | --- | --- | --- |",
+    ]
+    for fid in (
+        "frozen_140",
+        "qb_talent_scale",
+        "od_strength_centering",
+        "multiplicative_matchup",
+        "double_counted_strength",
+        "home_field",
+    ):
+        lines.append(
+            f"| {fid} | {_split_row(panel_140, fid, 'train_0')} | "
+            f"{_split_row(panel_140, fid, 'val_0')} | "
+            f"{_split_row(panel_140, fid, 'val_1')} |"
+        )
+    lines += [
+        "",
+        "### Panel B vs authorized 0.70 remaining-error reference",
+        "",
+        "| family | Train-0 n / MAE / bias | Val-0 n / MAE / bias | Val-1 n / MAE / bias |",
+        "| --- | --- | --- | --- |",
+    ]
+    for fid in (
+        "floor_070",
+        "qb_talent_scale",
+        "od_strength_centering",
+        "multiplicative_matchup",
+        "double_counted_strength",
+        "home_field",
+    ):
+        lines.append(
+            f"| {fid} | {_split_row(panel_070, fid, 'train_0')} | "
+            f"{_split_row(panel_070, fid, 'val_0')} | "
+            f"{_split_row(panel_070, fid, 'val_1')} |"
+        )
+    lines += [
+        "",
         "## Complete totals equation",
         "",
         "```",
