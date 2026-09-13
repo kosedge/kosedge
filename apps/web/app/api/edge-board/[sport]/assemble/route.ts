@@ -130,9 +130,13 @@ export async function GET(
           resolveEdgeBoardBoardLinesAsOf(assembled) ?? governed.linesAsOf;
         // SOP v1.1: full-slate snapshot bypasses assembleEdgeBoardRows —
         // still evaluate suppress on this assemble so TTL/revoke apply.
-        const suppressed = applyNflInactiveFairSuppressToRows(assembled, "nfl", {
-          store: loadNflInactiveSuppressStore(),
-        });
+        const suppressed = applyNflInactiveFairSuppressToRows(
+          assembled,
+          "nfl",
+          {
+            store: loadNflInactiveSuppressStore(),
+          },
+        );
         return pageDataJsonResponse({
           rows: scrubEdgeBoardAssembleCustomerRows(suppressed, "nfl"),
           week1Count: gameCount(week1Rows),

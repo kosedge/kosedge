@@ -235,8 +235,12 @@ export function nflInactiveGameAliases(
     const at = gameId.match(/([A-Z]{2,3})@([A-Z]{2,3})$/i);
     if (at) out.add(`${at[1]!.toUpperCase()}@${at[2]!.toUpperCase()}`);
   }
-  const away = String(row.awayAbbr ?? "").trim().toUpperCase();
-  const home = String(row.homeAbbr ?? "").trim().toUpperCase();
+  const away = String(row.awayAbbr ?? "")
+    .trim()
+    .toUpperCase();
+  const home = String(row.homeAbbr ?? "")
+    .trim()
+    .toUpperCase();
   if (away && home) {
     out.add(`${away}@${home}`);
     out.add(`${away}-${home}`);
@@ -482,7 +486,8 @@ export function applyNflInactiveFairSuppressToRows<
       ...(opts?.flags ?? {}),
     },
   };
-  const buffer = store.kickoffBufferMs ?? NFL_INACTIVE_SUPPRESS_KICKOFF_BUFFER_MS;
+  const buffer =
+    store.kickoffBufferMs ?? NFL_INACTIVE_SUPPRESS_KICKOFF_BUFFER_MS;
 
   return rows.map((row) => {
     const gameId = resolveNflInactiveGameId(row);

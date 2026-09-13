@@ -255,7 +255,11 @@ describe("PLAY triple requirement", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ baseScore: 0.4, injuryClear: true, qbClear: false }),
+      confidence: assessConfidence({
+        baseScore: 0.4,
+        injuryClear: true,
+        qbClear: false,
+      }),
       priceStillAvailable: true,
     });
     expect(low.actionLabel).not.toBe("PLAY");
@@ -362,7 +366,11 @@ describe("ALERT / STAY AWAY / doctrine price dependence", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 1,
-      confidence: assessConfidence({ baseScore: 0.7, injuryClear: true, qbClear: false }),
+      confidence: assessConfidence({
+        baseScore: 0.7,
+        injuryClear: true,
+        qbClear: false,
+      }),
     });
     expect(out.actionLabel).toBe("ALERT");
   });
@@ -372,7 +380,10 @@ describe("ALERT / STAY AWAY / doctrine price dependence", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ injuryClear: true, conflictingInputs: true }),
+      confidence: assessConfidence({
+        injuryClear: true,
+        conflictingInputs: true,
+      }),
     });
     expect(out.actionLabel).toBe("STAY AWAY");
   });

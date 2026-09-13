@@ -525,10 +525,8 @@ export function flatRowsToLegacy(
       : EMPTY_PAIR;
 
     const isNflSport = String(sportKey).toLowerCase() === "nfl";
-    const lineFairSuppress =
-      isNflSport && rowHasNflFairSuppress(lineRow);
-    const totalFairSuppress =
-      isNflSport && rowHasNflFairSuppress(totalRow);
+    const lineFairSuppress = isNflSport && rowHasNflFairSuppress(lineRow);
+    const totalFairSuppress = isNflSport && rowHasNflFairSuppress(totalRow);
     // SOP v1.1: do not paint stale house fair when suppress is stamped.
     // Street (open/best) stays. Client refresh cannot recompute edge from kei.
     if (lineFairSuppress) {
@@ -1070,13 +1068,11 @@ export function flatRowsToLegacy(
       fairOUKei: totalFairSuppress
         ? undefined
         : (totalRow?.fairLine ?? undefined),
-      inactiveSuppress:
-        lineRow?.inactiveSuppress ?? totalRow?.inactiveSuppress,
+      inactiveSuppress: lineRow?.inactiveSuppress ?? totalRow?.inactiveSuppress,
       fairCompareEligible:
         lineFairSuppress || totalFairSuppress
           ? false
-          : (lineRow?.fairCompareEligible ??
-            totalRow?.fairCompareEligible),
+          : (lineRow?.fairCompareEligible ?? totalRow?.fairCompareEligible),
       gameId: lineRow?.gameId ?? totalRow?.gameId,
       marketLineCurrent: resolveActionMarket(
         lineRow?.decisionMarketLine,

@@ -167,9 +167,7 @@ export function isTierConstantConfidence(
  * SOP v1.1: missing / unknown injury wire → false (fail closed).
  * Never silent `true`. Mirrors Python `resolve_injury_clear`.
  */
-export function resolveInjuryClear(
-  value: boolean | null | undefined,
-): boolean {
+export function resolveInjuryClear(value: boolean | null | undefined): boolean {
   return value === true;
 }
 

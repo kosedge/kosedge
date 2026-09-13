@@ -4,10 +4,7 @@ import {
   missingCanonicalNflTeams,
   NFL_CANONICAL_TEAMS,
 } from "@/lib/nfl-canonical-teams";
-import {
-  formatAmericanOdds,
-  isValidAmericanOdds,
-} from "@/lib/american-odds";
+import { formatAmericanOdds, isValidAmericanOdds } from "@/lib/american-odds";
 import {
   EDITORIAL_SNAPSHOT_NOTE,
   editorialSnapshotLineage,
@@ -28,9 +25,7 @@ describe("NFL Truth Layer — team IDs", () => {
     expect(canonicalizeNflTeam("LA")).toBe("LAR");
     expect(canonicalizeNflTeam("LAR")).toBe("LAR");
     expect(NFL_CANONICAL_TEAMS).toHaveLength(32);
-    const withAlias = NFL_CANONICAL_TEAMS.map((t) =>
-      t === "LAR" ? "LA" : t,
-    );
+    const withAlias = NFL_CANONICAL_TEAMS.map((t) => (t === "LAR" ? "LA" : t));
     expect(missingCanonicalNflTeams(withAlias)).toEqual([]);
   });
 });

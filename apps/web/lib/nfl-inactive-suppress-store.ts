@@ -86,14 +86,13 @@ function parseFlag(raw: unknown): NflInactiveSuppressFlag | null {
         : typeof o.clearedBy === "string"
           ? o.clearedBy
           : undefined,
-    state: o.state === "CLEAR" || o.state === "SUPPRESSED" ? o.state : undefined,
+    state:
+      o.state === "CLEAR" || o.state === "SUPPRESSED" ? o.state : undefined,
     aliases,
   };
 }
 
-function parseGames(
-  raw: unknown,
-): Record<string, NflInactiveSuppressFlag> {
+function parseGames(raw: unknown): Record<string, NflInactiveSuppressFlag> {
   const o = asRecord(raw);
   if (!o) return {};
   const out: Record<string, NflInactiveSuppressFlag> = {};
@@ -114,7 +113,8 @@ export function parseNflInactiveSuppressStore(
     version: typeof o.version === "number" ? o.version : 1,
     gameIdConvention: "nfl_fair_line_game_id",
     kickoffBufferMs:
-      typeof o.kickoffBufferMs === "number" && Number.isFinite(o.kickoffBufferMs)
+      typeof o.kickoffBufferMs === "number" &&
+      Number.isFinite(o.kickoffBufferMs)
         ? o.kickoffBufferMs
         : NFL_INACTIVE_SUPPRESS_KICKOFF_BUFFER_MS,
     games,
