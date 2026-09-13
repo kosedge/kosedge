@@ -33,6 +33,7 @@ import {
 } from "@/lib/cfb-edge-board-public";
 import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-suppress";
 import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
+import { appendNflInactiveSuppressProofRows } from "@/lib/nfl-inactive-suppress-proof";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -130,12 +131,11 @@ export async function GET(
           resolveEdgeBoardBoardLinesAsOf(assembled) ?? governed.linesAsOf;
         // SOP v1.1: full-slate snapshot bypasses assembleEdgeBoardRows —
         // still evaluate suppress on this assemble so TTL/revoke apply.
-        const suppressed = applyNflInactiveFairSuppressToRows(
-          assembled,
-          "nfl",
-          {
+        const suppressed = appendNflInactiveSuppressProofRows(
+          applyNflInactiveFairSuppressToRows(assembled, "nfl", {
             store: loadNflInactiveSuppressStore(),
-          },
+          }),
+          url,
         );
         return pageDataJsonResponse({
           rows: scrubEdgeBoardAssembleCustomerRows(suppressed, "nfl"),
@@ -166,7 +166,10 @@ export async function GET(
         "nfl",
         { store: loadNflInactiveSuppressStore() },
       );
-      const week1Rows = filterNflStrictWeekRows(assembled, 1);
+      const week1Rows = appendNflInactiveSuppressProofRows(
+        filterNflStrictWeekRows(assembled, 1),
+        url,
+      );
       const weeks = weeksOnBoard(week1Rows);
       const linesAsOf = resolveEdgeBoardBoardLinesAsOf(week1Rows);
       return pageDataJsonResponse({
