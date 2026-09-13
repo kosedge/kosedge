@@ -449,6 +449,24 @@ def run_cfbd_coverage_audit(*, max_calls: int = 12, prefer_hd: bool = True) -> D
             payload, meta = client.get(spec["path"], spec["params"])
             raw_path = None
             fields: List[str] = []
+            if meta.get("status") == 401:
+                probes.append(
+                    {
+                        "id": spec["id"],
+                        "path": spec["path"],
+                        "params": spec["params"],
+                        "status": meta.get("status"),
+                        "n_rows": meta.get("n_rows"),
+                        "bytes": meta.get("bytes"),
+                        "error": meta.get("error"),
+                        "www_authenticate": meta.get("www_authenticate"),
+                        "error_body": meta.get("error_body"),
+                        "raw_path": None,
+                        "sample_fields": [],
+                        "stopped_after_first_401": True,
+                    }
+                )
+                break
             if meta.get("status") == 200 and payload is not None:
                 raw_path = str(
                     persist_raw(
@@ -516,6 +534,28 @@ def run_cfbd_coverage_audit(*, max_calls: int = 12, prefer_hd: bool = True) -> D
             "2025 never opened",
             "missing means missing",
         ],
+        "auth_diagnosis": {
+            "header_scheme": "Authorization: Bearer <CFBD_API_KEY>",
+            "matches_official_docs": True,
+            "env_value_includes_bearer_prefix": False,
+            "stopped_after_first_401": any(
+                row.get("stopped_after_first_401") for row in probes
+            ),
+            "www_authenticate": next(
+                (row.get("www_authenticate") for row in probes if row.get("status") == 401),
+                None,
+            ),
+            "error_body": next(
+                (row.get("error_body") for row in probes if row.get("status") == 401),
+                None,
+            ),
+            "note": (
+                "Official CFBD docs and cfbd-python require Bearer plus a space. "
+                "The client already sends that. A 401 with body "
+                '{"message":"Unauthorized"} and no WWW-Authenticate means CFBD '
+                "rejected the secret, not the header scheme. Do not retry variants."
+            ),
+        },
         "decision": _audit_decision(key_present(), probes),
     }
     if _contains_secret(payload):

@@ -175,6 +175,10 @@ class CfbdClient:
             meta["status"] = int(exc.code)
             meta["bytes"] = len(err_body)
             meta["error"] = redact(f"HTTP {exc.code}")
+            www = exc.headers.get("WWW-Authenticate") if exc.headers else None
+            meta["www_authenticate"] = redact(www) if www else None
+            snippet = redact(err_body.decode("utf-8", "replace")[:200])
+            meta["error_body"] = snippet or None
             payload = None
             try:
                 payload = json.loads(err_body.decode("utf-8"))

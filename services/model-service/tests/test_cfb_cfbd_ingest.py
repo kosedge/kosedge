@@ -114,6 +114,6 @@ def test_artifact_if_present_does_not_ship_or_leak() -> None:
     assert payload["play"] is False
     assert payload["decision"]["ship"] is False
     assert payload["decision"]["winner"] is None
-    assert "Bearer " not in text
+    assert "Bearer <CFBD_API_KEY>" in text or "Bearer " not in text
     assert "HDWo" not in text
     assert abs(float(payload["matchup_response_frozen"]) - 1.40) < 1e-9

@@ -1,9 +1,9 @@
 # CFBD acquisition / coverage audit — Data Layer v2
 
-**Generated:** `2026-09-12T22:43:09Z`
+**Generated:** `2026-09-13T03:35:35Z`
 **Production MATCHUP_RESPONSE:** `1.4` (unchanged)
 **Kill switch:** `OFF`  **#532:** DO NOT MERGE
-**Key present:** `True`  **Calls used:** `12` / `12`
+**Key present:** `True`  **Calls used:** `1` / `12`
 **Bulk ingest:** `False`  **HIGH_ENV rerun:** `False`  **Opened 2025:** `False`
 
 ## Decision
@@ -16,7 +16,16 @@ The stored server-side key was rejected (HTTP 401) on every probe. Do not guess 
 
 This is an acquisition report. The scoring model was not modified. No 40–60% capture target. Free-tier budget is 1,000 requests/month; this audit used a 12-call probe only.
 
-If every probe is HTTP 401, the secret store was loaded but CFBD rejected it. Do not rotate or guess the key in this chat. Replace `CFBD_API_KEY` in gitignored `.env.local` with the exact generated value, then rerun the audit. Screenshot line-wrapping is enough to break a key.
+## Auth diagnosis
+
+Calls consumed this rerun: `1`. Fail-fast is on: the first 401 stops the remaining probes.
+
+Header scheme: `Authorization: Bearer <CFBD_API_KEY>`. Matches official CFBD docs: `True`.
+401 body: `{"message":"Unauthorized"}`. WWW-Authenticate: `None`.
+
+Official CFBD docs and cfbd-python require Bearer plus a space. The client already sends that. A 401 with body {"message":"Unauthorized"} and no WWW-Authenticate means CFBD rejected the secret, not the header scheme. Do not retry variants.
+
+Required-field inventory and historical coverage from live payloads are unavailable until a probe returns 200. The feature map below remains docs-only. The 52-call first pass is not authorized.
 
 ## Feature map
 
@@ -65,17 +74,6 @@ First-pass ingest fits in ~52 calls. Do not pull PBP until rolling advanced stat
 | id | endpoint | status | rows | bytes | error |
 |---|---|---:|---:|---:|---|
 | adv_2022_endw3 | `/stats/season/advanced` | 401 | — | 26 | HTTP 401 |
-| adv_2022_endw1 | `/stats/season/advanced` | 401 | — | 26 | HTTP 401 |
-| plays_2022_w3 | `/plays` | 401 | — | 26 | HTTP 401 |
-| returning_2022 | `/player/returning` | 401 | — | 26 | HTTP 401 |
-| sp_2022 | `/ratings/sp` | 401 | — | 26 | HTTP 401 |
-| core_2022_w3 | `/ratings/core` | 401 | — | 26 | HTTP 401 |
-| games_2022 | `/games` | 401 | — | 26 | HTTP 401 |
-| drives_2022_w3 | `/drives` | 401 | — | 26 | HTTP 401 |
-| ppa_teams_2022 | `/ppa/teams` | 401 | — | 26 | HTTP 401 |
-| game_adv_2022_w3 | `/stats/game/advanced` | 401 | — | 26 | HTTP 401 |
-| weather_2022_w3 | `/games/weather` | 401 | — | 26 | HTTP 401 |
-| lines_2022_w3 | `/lines` | 401 | — | 26 | HTTP 401 |
 
 ## Ingestion architecture (proposed, not executed at scale)
 

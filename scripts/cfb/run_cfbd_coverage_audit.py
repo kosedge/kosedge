@@ -54,11 +54,21 @@ def write_markdown(payload: dict) -> str:
         "No 40–60% capture target. Free-tier budget is 1,000 requests/month; "
         "this audit used a 12-call probe only.",
         "",
-        "If every probe is HTTP 401, the secret store was loaded but CFBD "
-        "rejected it. Do not rotate or guess the key in this chat. Replace "
-        "`CFBD_API_KEY` in gitignored `.env.local` with the exact generated "
-        "value, then rerun the audit. Screenshot line-wrapping is enough to "
-        "break a key.",
+        "## Auth diagnosis",
+        "",
+        f"Calls consumed this rerun: `{payload.get('calls_used')}`. "
+        "Fail-fast is on: the first 401 stops the remaining probes.",
+        "",
+        f"Header scheme: `{(payload.get('auth_diagnosis') or {}).get('header_scheme')}`. "
+        f"Matches official CFBD docs: `{(payload.get('auth_diagnosis') or {}).get('matches_official_docs')}`.",
+        f"401 body: `{(payload.get('auth_diagnosis') or {}).get('error_body')}`. "
+        f"WWW-Authenticate: `{(payload.get('auth_diagnosis') or {}).get('www_authenticate')}`.",
+        "",
+        str((payload.get("auth_diagnosis") or {}).get("note") or ""),
+        "",
+        "Required-field inventory and historical coverage from live payloads "
+        "are unavailable until a probe returns 200. The feature map below "
+        "remains docs-only. The 52-call first pass is not authorized.",
         "",
         "## Feature map",
         "",

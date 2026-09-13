@@ -12,7 +12,7 @@
   "high_env_rerun": false,
   "matchup_response_frozen": 1.4,
   "key_present": true,
-  "calls_used": 12,
+  "calls_used": 1,
   "call_budget_max": 12,
   "research_windows": {
     "train_0": {
@@ -204,164 +204,11 @@
       "n_rows": null,
       "bytes": 26,
       "error": "HTTP 401",
+      "www_authenticate": null,
+      "error_body": "{\"message\":\"Unauthorized\"}",
       "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "adv_2022_endw1",
-      "path": "/stats/season/advanced",
-      "params": {
-        "year": 2022,
-        "endWeek": 1,
-        "excludeGarbageTime": "true"
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "plays_2022_w3",
-      "path": "/plays",
-      "params": {
-        "year": 2022,
-        "week": 3,
-        "seasonType": "regular",
-        "classification": "fbs"
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "returning_2022",
-      "path": "/player/returning",
-      "params": {
-        "year": 2022
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "sp_2022",
-      "path": "/ratings/sp",
-      "params": {
-        "year": 2022
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "core_2022_w3",
-      "path": "/ratings/core",
-      "params": {
-        "year": 2022,
-        "throughWeek": 3
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "games_2022",
-      "path": "/games",
-      "params": {
-        "year": 2022,
-        "seasonType": "regular",
-        "division": "fbs"
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "drives_2022_w3",
-      "path": "/drives",
-      "params": {
-        "year": 2022,
-        "week": 3,
-        "seasonType": "regular"
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "ppa_teams_2022",
-      "path": "/ppa/teams",
-      "params": {
-        "year": 2022
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "game_adv_2022_w3",
-      "path": "/stats/game/advanced",
-      "params": {
-        "year": 2022,
-        "week": 3
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "weather_2022_w3",
-      "path": "/games/weather",
-      "params": {
-        "year": 2022,
-        "week": 3
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
-    },
-    {
-      "id": "lines_2022_w3",
-      "path": "/lines",
-      "params": {
-        "year": 2022,
-        "week": 3
-      },
-      "status": 401,
-      "n_rows": null,
-      "bytes": 26,
-      "error": "HTTP 401",
-      "raw_path": null,
-      "sample_fields": []
+      "sample_fields": [],
+      "stopped_after_first_401": true
     }
   ],
   "pit_rules": [
@@ -378,5 +225,14 @@
     "winner": null,
     "play": false,
     "note": "The stored server-side key was rejected (HTTP 401) on every probe. Do not guess the key. Put the exact generated value in the gitignored local env file. Do not paste it into chat. The feature map below is from official CFBD docs and remains the plan."
+  },
+  "auth_diagnosis": {
+    "header_scheme": "Authorization: Bearer <CFBD_API_KEY>",
+    "matches_official_docs": true,
+    "env_value_includes_bearer_prefix": false,
+    "stopped_after_first_401": true,
+    "www_authenticate": null,
+    "error_body": "{\"message\":\"Unauthorized\"}",
+    "note": "Official CFBD docs and cfbd-python require Bearer plus a space. The client already sends that. A 401 with body {\"message\":\"Unauthorized\"} and no WWW-Authenticate means CFBD rejected the secret, not the header scheme. Do not retry variants."
   }
 }
