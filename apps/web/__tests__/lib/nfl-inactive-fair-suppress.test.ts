@@ -244,6 +244,35 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
     expect(flag?.reason).toBe(NFL_INACTIVE_SUPPRESS_REASON_MAJOR);
   });
 
+  it("strip also removes win probs, keiAway, and nested decision fair", () => {
+    const stamped = applyNflInactiveFairSuppressToRows(
+      [
+        atlPitSpread({
+          homeWinProb: 0.61,
+          awayWinProb: 0.39,
+          keiAway: "+2.79",
+          decision: {
+            action_label: "PASS",
+            fair_line: -2.79,
+            cover_prob: 0.44,
+            edge_magnitude: 6.29,
+          },
+        }),
+      ],
+      "nfl",
+      { flags: { [ATL_PIT_ID]: MAJOR_FLAG } },
+    );
+    const row = stamped[0]!;
+    expect(row.homeWinProb).toBeUndefined();
+    expect(row.awayWinProb).toBeUndefined();
+    expect(row.keiAway).toBeUndefined();
+    const decision = row.decision as Record<string, unknown>;
+    expect(decision.fair_line).toBeUndefined();
+    expect(decision.cover_prob).toBeUndefined();
+    expect(decision.edge_magnitude).toBeUndefined();
+    expect(row.best).toBe("+3.5");
+  });
+
   it("listed market subset leaves other customer markets painted", () => {
     const stamped = applyNflInactiveFairSuppressToRows(
       [atlPitSpread(), atlPitTotal()],
@@ -258,6 +287,49 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
     expect(stamped[0]?.kei).toBeUndefined();
     expect(stamped[1]?.inactiveSuppress?.state).toBe("CLEAR");
     expect(stamped[1]?.kei).toBe("43.5");
+  });
+
+  it("legacy game receipt prefers SUPPRESSED total over CLEAR spread", () => {
+    const stamped = applyNflInactiveFairSuppressToRows(
+      [atlPitSpread(), atlPitTotal()],
+      "nfl",
+      {
+        flags: {
+          [ATL_PIT_ID]: { ...MAJOR_FLAG, markets: ["Total"] },
+        },
+      },
+    );
+    expect(stamped[0]?.inactiveSuppress?.state).toBe("CLEAR");
+    expect(stamped[1]?.inactiveSuppress?.state).toBe("SUPPRESSED");
+    const legacy = flatRowsToLegacy(stamped, "nfl");
+    expect(legacy[0]?.inactiveSuppress?.state).toBe("SUPPRESSED");
+    expect(legacy[0]?.fairCompareEligible).toBe(false);
+    expect(legacy[0]?.keiOU?.top.label).toBe("—");
+    expect(legacy[0]?.tagOU).toBeUndefined();
+    expect(legacy[0]?.bestOU.top.label).toBe("o45.5");
+  });
+
+  it("does not restore suppressed spread KEI from a CLEAR total sibling", () => {
+    const stamped = applyNflInactiveFairSuppressToRows(
+      [
+        atlPitSpread({ keiSpreadHome: -2.79 }),
+        atlPitTotal({ keiSpreadHome: -2.79, keiTotal: 43.5 }),
+      ],
+      "nfl",
+      {
+        flags: {
+          [ATL_PIT_ID]: { ...MAJOR_FLAG, markets: ["Spread"] },
+        },
+      },
+    );
+    expect(stamped[0]?.keiSpreadHome).toBeUndefined();
+    expect(stamped[1]?.keiSpreadHome).toBe(-2.79);
+    const legacy = flatRowsToLegacy(stamped, "nfl");
+    expect(legacy[0]?.keiLine?.top.label).toBe("—");
+    expect(legacy[0]?.fairLineKei).toBeUndefined();
+    expect(legacy[0]?.tagLine).toBeUndefined();
+    expect(legacy[0]?.keiOU?.top.label).toBe("o43.5");
+    expect(legacy[0]?.bestLine.top.label).toBe("+3.5");
   });
 
   it("injury_clear missing / unknown → false (no silent True)", () => {

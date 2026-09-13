@@ -126,6 +126,12 @@ export type NflInactiveFairSuppressRowFields = {
   fair_line?: unknown;
   keiSpreadHome?: unknown;
   keiTotal?: unknown;
+  keiAway?: unknown;
+  kei_away?: unknown;
+  homeWinProb?: unknown;
+  awayWinProb?: unknown;
+  home_win_prob?: unknown;
+  away_win_prob?: unknown;
   coverProb?: unknown;
   playToNotes?: unknown;
   playToPlay?: unknown;
@@ -148,6 +154,12 @@ const FAIL_CLOSED_DECISION_KEYS = [
   "numerical_edge",
   "playTo",
   "play_to",
+  "fairLine",
+  "fair_line",
+  "coverProb",
+  "cover_prob",
+  "coverGrade",
+  "cover_grade",
 ] as const;
 
 const FAIR_NUMBER_KEYS = [
@@ -158,6 +170,12 @@ const FAIR_NUMBER_KEYS = [
   "fair_line",
   "keiSpreadHome",
   "keiTotal",
+  "keiAway",
+  "kei_away",
+  "homeWinProb",
+  "awayWinProb",
+  "home_win_prob",
+  "away_win_prob",
   "coverProb",
   "playToNotes",
   "playToPlay",
@@ -456,6 +474,17 @@ export function receiptFromVerdict(
     ttlUntil: verdict.ttlUntil,
     rematRunId: verdict.rematRunId ?? NFL_INACTIVE_REMAT_NONE,
   };
+}
+
+/** Game-level receipt: any SUPPRESSED market wins over a sibling CLEAR. */
+export function preferNflInactiveSuppressReceipt(
+  ...receipts: Array<NflInactiveSuppressReceipt | null | undefined>
+): NflInactiveSuppressReceipt | undefined {
+  const present = receipts.filter(
+    (r): r is NflInactiveSuppressReceipt => r != null && Boolean(r.state),
+  );
+  if (present.length === 0) return undefined;
+  return present.find((r) => r.state === "SUPPRESSED") ?? present[0];
 }
 
 /**

@@ -32,6 +32,7 @@ import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
 import { scrubActionEdgeMagnitude } from "@/lib/edge-board-customer-truth";
 import { evaluateTotalIdentityGate } from "@/lib/edge-board-total-identity-gate";
 import {
+  preferNflInactiveSuppressReceipt,
   rowHasNflFairSuppress,
   type NflInactiveSuppressReceipt,
 } from "@/lib/nfl-inactive-fair-suppress";
@@ -906,13 +907,22 @@ export function flatRowsToLegacy(
         kind,
       });
     };
-    const keiSpreadHome =
-      pickField((r) => r?.keiSpreadHome) ??
-      (!isMoneyline ? parseSignedNum(keiLine.bottom.label) : null);
+    // Do not restore house fair from an unsuppressed sibling (sharedMatchup copy).
+    const keiSpreadHome = lineFairSuppress
+      ? null
+      : (lineRow?.keiSpreadHome ??
+        pickField((r) =>
+          rowHasNflFairSuppress(r) ? null : r?.keiSpreadHome,
+        ) ??
+        (!isMoneyline ? parseSignedNum(keiLine.bottom.label) : null));
     const marketSpreadHome =
       pickField((r) => r?.marketSpreadHome) ??
       (!isMoneyline ? parseSignedNum(bestLine.bottom.label) : null);
-    const matchupKeiTotal = pickField((r) => r?.keiTotal) ?? keiTotalNum;
+    const matchupKeiTotal = totalFairSuppress
+      ? null
+      : (totalRow?.keiTotal ??
+        pickField((r) => (rowHasNflFairSuppress(r) ? null : r?.keiTotal)) ??
+        keiTotalNum);
     const matchupMarketTotal = pickField((r) => r?.marketTotal) ?? bestTotalNum;
     const weekNum = (() => {
       const w = pickField((r) => r?.week as number | null | undefined);
@@ -940,8 +950,12 @@ export function flatRowsToLegacy(
       marketSpreadHome,
       keiTotal: matchupKeiTotal,
       marketTotal: matchupMarketTotal,
-      homeWinProb: pickField((r) => r?.homeWinProb),
-      awayWinProb: pickField((r) => r?.awayWinProb),
+      homeWinProb: lineFairSuppress
+        ? null
+        : pickField((r) => (rowHasNflFairSuppress(r) ? null : r?.homeWinProb)),
+      awayWinProb: lineFairSuppress
+        ? null
+        : pickField((r) => (rowHasNflFairSuppress(r) ? null : r?.awayWinProb)),
       restDaysAway: pickField((r) => r?.restDaysAway),
       restDaysHome: pickField((r) => r?.restDaysHome),
       byeAway: Boolean(pickField((r) => r?.byeAway)),
@@ -952,7 +966,10 @@ export function flatRowsToLegacy(
       neutralCity: pickField((r) => r?.neutralCity),
       neutralVenue: pickField((r) => r?.neutralVenue),
       hfaPoints: pickField((r) => r?.hfaPoints),
-      publishTagSpread: pickField((r) => r?.publishTag),
+      publishTagSpread: lineFairSuppress
+        ? undefined
+        : (lineRow?.publishTag ??
+          pickField((r) => (rowHasNflFairSuppress(r) ? null : r?.publishTag))),
       edgeSpreadAbs: edgeLineNum ?? null,
     });
     // Always rebuild from context so season/neutral gates stay honest even if
@@ -1056,11 +1073,11 @@ export function flatRowsToLegacy(
         totalRow?.modelConfidenceTierConstant,
       coverProbLine: lineFairSuppress ? undefined : lineRow?.coverProb,
       coverProbOU: totalIdentityFail ? undefined : totalRow?.coverProb,
-      playToLine: lineRow?.playToNotes,
+      playToLine: lineFairSuppress ? undefined : lineRow?.playToNotes,
       playToOU: totalIdentityFail ? undefined : totalRow?.playToNotes,
-      playToLineNum: lineRow?.playToPlay,
+      playToLineNum: lineFairSuppress ? undefined : lineRow?.playToPlay,
       playToOUNum: totalIdentityFail ? undefined : totalRow?.playToPlay,
-      leanToLineNum: lineRow?.playToLean,
+      leanToLineNum: lineFairSuppress ? undefined : lineRow?.playToLean,
       leanToOUNum: totalIdentityFail ? undefined : totalRow?.playToLean,
       fairLineKei: lineFairSuppress
         ? undefined
@@ -1068,7 +1085,10 @@ export function flatRowsToLegacy(
       fairOUKei: totalFairSuppress
         ? undefined
         : (totalRow?.fairLine ?? undefined),
-      inactiveSuppress: lineRow?.inactiveSuppress ?? totalRow?.inactiveSuppress,
+      inactiveSuppress: preferNflInactiveSuppressReceipt(
+        lineRow?.inactiveSuppress,
+        totalRow?.inactiveSuppress,
+      ),
       fairCompareEligible:
         lineFairSuppress || totalFairSuppress
           ? false
