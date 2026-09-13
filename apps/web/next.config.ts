@@ -113,6 +113,14 @@ const nextConfig: NextConfig = {
       "./lib/fantasy/data/**/*",
       "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
     ],
+    // SOP v1.1 (#548/#549): loadNflInactiveSuppressStore reads
+    // data/ops/nfl-inactive-suppress.json via runtime FS (findRepoRoot),
+    // not a static import. Without NFT, the assemble serverless bundle
+    // omits the ops JSON → empty store → CLEAR despite the armed file.
+    "/api/edge-board/[sport]/assemble": ["../../data/ops/**/*"],
+    "/api/edge-board/[sport]/today": ["../../data/ops/**/*"],
+    // NFL overview SSR-assembles via loadAssembledEdgeBoardRows (same store).
+    "/pro/nfl/overview": ["../../data/ops/**/*"],
   },
 
   async redirects() {
