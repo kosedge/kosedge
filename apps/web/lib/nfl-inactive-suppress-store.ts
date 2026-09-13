@@ -5,13 +5,21 @@
  *
  * Set a per-game flag (Product owner), then remat success / CoS clear revokes:
  *
- * 1. Edit `data/ops/nfl-inactive-suppress.json` (`games[gameId]`)
+ * 1. Edit repo-root `data/ops/nfl-inactive-suppress.json` (Product SoT)
+ *    and mirror the same object to `apps/web/lib/ops/nfl-inactive-suppress.json`
+ *    (Vercel packaged copy — CI asserts the two stay in sync).
  * 2. Or env `NFL_INACTIVE_SUPPRESS_JSON` (inline store JSON)
  * 3. Or env `NFL_INACTIVE_SUPPRESS` (comma-separated gameIds / AWAY@HOME aliases)
  * 4. Or env `NFL_INACTIVE_SUPPRESS_PATH` (alternate JSON file)
  *
  * Canonical gameId: NFL fair-lines / schedule `game_id` (e.g. `2026-W01-ATL@PIT`).
  * Revoke: set `rematRunId` to the remat receipt, or `clearedBy: "cos"`.
+ *
+ * Vercel: Root Directory is `apps/web`. `../../data/ops/**` NFT includes land
+ * outside `{cwd}/data/ops` on `/var/task`, so `findRepoRoot()` misses the
+ * repo-root file. The in-app packaged copy + static import survive that layout.
+ * Do not place a copy at `apps/web/data/ops/` — other loaders treat `data/ops`
+ * as the monorepo marker and would stop at the Next app root.
  */
 
 import "server-only";
@@ -24,22 +32,76 @@ import {
   type NflInactiveSuppressFlag,
   type NflInactiveSuppressStore,
 } from "@/lib/nfl-inactive-fair-suppress";
+import packagedStoreJson from "@/lib/ops/nfl-inactive-suppress.json";
 
-function findRepoRoot(): string | null {
-  let current = process.cwd();
+export const NFL_INACTIVE_SUPPRESS_FILENAME = "nfl-inactive-suppress.json";
+
+/** Inside the Next app (Vercel / `next start` cwd). */
+export const NFL_INACTIVE_SUPPRESS_IN_APP_REL = path.join(
+  "lib",
+  "ops",
+  NFL_INACTIVE_SUPPRESS_FILENAME,
+);
+
+/** Repo-root Product SoT (local monorepo). */
+export const NFL_INACTIVE_SUPPRESS_REPO_REL = path.join(
+  "data",
+  "ops",
+  NFL_INACTIVE_SUPPRESS_FILENAME,
+);
+
+export type ResolveNflInactiveSuppressStorePathOptions = {
+  cwd?: string;
+  exists?: (filePath: string) => boolean;
+};
+
+export type LoadNflInactiveSuppressStoreOptions =
+  ResolveNflInactiveSuppressStorePathOptions & {
+    env?: NodeJS.ProcessEnv;
+    readJson?: (filePath: string) => unknown | null;
+  };
+
+/**
+ * FS candidates for the durable JSON store (no env).
+ * In-app packaged copy first so Vercel `{cwd}/lib/ops/...` wins over a
+ * repo-root `data/ops` that NFT cannot place next to `/var/task`.
+ */
+export function resolveNflInactiveSuppressStoreCandidates(
+  cwd: string = process.cwd(),
+): string[] {
+  const seen = new Set<string>();
+  const out: string[] = [];
+  const add = (filePath: string) => {
+    const resolved = path.resolve(filePath);
+    if (seen.has(resolved)) return;
+    seen.add(resolved);
+    out.push(resolved);
+  };
+
+  add(path.join(cwd, NFL_INACTIVE_SUPPRESS_IN_APP_REL));
+
+  let current = cwd;
   for (let depth = 0; depth < 6; depth += 1) {
-    if (existsSync(path.join(current, "data", "ops"))) return current;
+    add(path.join(current, NFL_INACTIVE_SUPPRESS_IN_APP_REL));
+    add(path.join(current, "apps", "web", NFL_INACTIVE_SUPPRESS_IN_APP_REL));
+    add(path.join(current, NFL_INACTIVE_SUPPRESS_REPO_REL));
     const parent = path.dirname(current);
     if (parent === current) break;
     current = parent;
   }
-  return null;
+
+  return out;
 }
 
-function defaultStorePath(): string | null {
-  const repoRoot = findRepoRoot();
-  if (!repoRoot) return null;
-  return path.join(repoRoot, "data", "ops", "nfl-inactive-suppress.json");
+export function resolveNflInactiveSuppressStorePath(
+  options: ResolveNflInactiveSuppressStorePathOptions = {},
+): string | null {
+  const cwd = options.cwd ?? process.cwd();
+  const exists = options.exists ?? existsSync;
+  for (const candidate of resolveNflInactiveSuppressStoreCandidates(cwd)) {
+    if (exists(candidate)) return candidate;
+  }
+  return null;
 }
 
 function asRecord(raw: unknown): Record<string, unknown> | null {
@@ -146,12 +208,23 @@ function readJsonFile(filePath: string): unknown | null {
   }
 }
 
+function envOf(
+  options: LoadNflInactiveSuppressStoreOptions,
+): NodeJS.ProcessEnv {
+  return options.env ?? process.env;
+}
+
 /**
  * Load the durable per-game flag store.
- * Precedence: inline JSON env → comma-id env → path env → repo ops JSON.
+ * Precedence: inline JSON env → comma-id env → path env → in-app packaged
+ * file → repo-root ops JSON → bundled JSON import (always present in the
+ * serverless module graph).
  */
-export function loadNflInactiveSuppressStore(): NflInactiveSuppressStore {
-  const inline = process.env.NFL_INACTIVE_SUPPRESS_JSON?.trim();
+export function loadNflInactiveSuppressStore(
+  options: LoadNflInactiveSuppressStoreOptions = {},
+): NflInactiveSuppressStore {
+  const env = envOf(options);
+  const inline = env.NFL_INACTIVE_SUPPRESS_JSON?.trim();
   if (inline) {
     try {
       return parseNflInactiveSuppressStore(JSON.parse(inline));
@@ -160,14 +233,22 @@ export function loadNflInactiveSuppressStore(): NflInactiveSuppressStore {
     }
   }
 
-  const ids = process.env.NFL_INACTIVE_SUPPRESS?.trim();
+  const ids = env.NFL_INACTIVE_SUPPRESS?.trim();
   if (ids) return storeFromIdList(ids);
 
-  const pathOverride = process.env.NFL_INACTIVE_SUPPRESS_PATH?.trim();
-  const filePath = pathOverride || defaultStorePath();
-  if (!filePath || !existsSync(filePath)) {
-    return emptyNflInactiveSuppressStore();
+  const exists = options.exists ?? existsSync;
+  const readJson = options.readJson ?? readJsonFile;
+  const pathOverride = env.NFL_INACTIVE_SUPPRESS_PATH?.trim();
+  const filePath =
+    pathOverride ||
+    resolveNflInactiveSuppressStorePath({
+      cwd: options.cwd,
+      exists,
+    });
+  if (filePath && exists(filePath)) {
+    const parsed = readJson(filePath);
+    if (parsed != null) return parseNflInactiveSuppressStore(parsed);
   }
-  const parsed = readJsonFile(filePath);
-  return parseNflInactiveSuppressStore(parsed);
+
+  return parseNflInactiveSuppressStore(packagedStoreJson);
 }
