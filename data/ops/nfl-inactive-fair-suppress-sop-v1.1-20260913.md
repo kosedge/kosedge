@@ -21,9 +21,31 @@ Odds event ids are **not** the join key (not consistently on Edge Board rows).
 Product ops may also key the flag by `AWAY@HOME` (e.g. `ATL@PIT`); the
 lookup aliases to the schedule id when present.
 
+## Dual-file sync (Vercel file-store)
+
+Product SoT is repo-root `data/ops/nfl-inactive-suppress.json`.
+Vercel Root Directory is `apps/web`; `../../data/ops` NFT includes do **not**
+land at `{cwd}/data/ops` on `/var/task`, so the assemble loader cannot see
+the repo-root file (prod proof after #550).
+
+Packaged copy (inside the Next app, NFT `./lib/ops/nfl-inactive-suppress.json`):
+
+`apps/web/lib/ops/nfl-inactive-suppress.json`
+
+**Edit the repo-root SoT, then copy the same JSON object to the packaged
+path before ship.** CI asserts `games` + kickoff buffer match. Do not invent
+a copy at `apps/web/data/ops/` — other `findRepoRoot()` probes treat
+`data/ops` as the monorepo marker.
+
+Loader order (no env): in-app packaged file → repo-root ops JSON → bundled
+static import of the packaged file (survives any NFT/cwd layout). Env
+(`NFL_INACTIVE_SUPPRESS_JSON` / `NFL_INACTIVE_SUPPRESS` /
+`NFL_INACTIVE_SUPPRESS_PATH`) remains a backup and still wins.
+
 ## Manual set path (interim — no SI wire)
 
-1. Edit `data/ops/nfl-inactive-suppress.json`:
+1. Edit `data/ops/nfl-inactive-suppress.json` and mirror to
+   `apps/web/lib/ops/nfl-inactive-suppress.json`:
 
 ```json
 {

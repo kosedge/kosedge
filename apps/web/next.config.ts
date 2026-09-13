@@ -113,14 +113,25 @@ const nextConfig: NextConfig = {
       "./lib/fantasy/data/**/*",
       "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
     ],
-    // SOP v1.1 (#548/#549): loadNflInactiveSuppressStore reads
-    // data/ops/nfl-inactive-suppress.json via runtime FS (findRepoRoot),
-    // not a static import. Without NFT, the assemble serverless bundle
-    // omits the ops JSON → empty store → CLEAR despite the armed file.
-    "/api/edge-board/[sport]/assemble": ["../../data/ops/**/*"],
-    "/api/edge-board/[sport]/today": ["../../data/ops/**/*"],
+    // SOP v1.1 (#548/#550 hotfix): loadNflInactiveSuppressStore prefers
+    // apps/web/lib/ops/nfl-inactive-suppress.json. Vercel Root Directory is
+    // apps/web; ../../data/ops NFT includes do not land at {cwd}/data/ops
+    // on /var/task, so findRepoRoot() misses the repo-root file (prod proof
+    // after #550: env unset → empty store). Do NOT copy to ./data/ops —
+    // other loaders treat data/ops as the monorepo root marker.
+    "/api/edge-board/[sport]/assemble": [
+      "./lib/ops/nfl-inactive-suppress.json",
+      "../../data/ops/**/*",
+    ],
+    "/api/edge-board/[sport]/today": [
+      "./lib/ops/nfl-inactive-suppress.json",
+      "../../data/ops/**/*",
+    ],
     // NFL overview SSR-assembles via loadAssembledEdgeBoardRows (same store).
-    "/pro/nfl/overview": ["../../data/ops/**/*"],
+    "/pro/nfl/overview": [
+      "./lib/ops/nfl-inactive-suppress.json",
+      "../../data/ops/**/*",
+    ],
   },
 
   async redirects() {
