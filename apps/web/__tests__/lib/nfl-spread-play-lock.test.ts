@@ -20,7 +20,8 @@ import {
 } from "@/lib/nfl-publish-policy";
 
 describe("spread_play_v2_cap7 lock (Ryan 2026-09-03)", () => {
-  const healthy = () => assessConfidence({ baseScore: 0.72 });
+  const healthy = () =>
+    assessConfidence({ baseScore: 0.72, injuryClear: true });
 
   it("ARI@LAC shape: |edge| 2.19 is never PLAY (under 2.5 floor)", () => {
     // Market LAC -10, fair ≈ -7.81 → |edge| 2.19. Cover-prob must not mint PLAY.
@@ -107,7 +108,7 @@ describe("spread_play_v2_cap7 lock (Ryan 2026-09-03)", () => {
       fairTotal: 47.2,
       marketTotal: 44.0,
       week: 8,
-      confidence: assessConfidence({ baseScore: 0.8 }),
+      confidence: assessConfidence({ baseScore: 0.8, injuryClear: true }),
       priceStillAvailable: true,
     });
     expect(out.actionLabel).not.toBe("PLAY");
@@ -127,6 +128,7 @@ describe("spread_play_v2_cap7 lock (Ryan 2026-09-03)", () => {
       week: 1,
       confidence: assessConfidence({
         baseScore: 0.72,
+        injuryClear: true,
         conflictingInputs: true,
       }),
       priceStillAvailable: true,

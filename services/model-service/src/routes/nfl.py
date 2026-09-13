@@ -74,6 +74,7 @@ from src.services.nfl_side_total_publish_policy import (
 from src.services.nfl_decision_engine import (
     assess_confidence as nfl_assess_confidence,
     decide_game as nfl_decide_game,
+    resolve_injury_clear as nfl_resolve_injury_clear,
 )
 from src.services.nfl_market_close import stake_close_spread
 from src.services.nfl_market_line_hygiene import (
@@ -4185,7 +4186,7 @@ def _nfl_fair_lines_impl(
                 "applied": False,
                 "reason": "reprice_error",
                 "qb_clear": True,
-                "injury_clear": True,
+                "injury_clear": False,
                 "weather_clear": True,
                 "spread_delta": 0.0,
                 "total_delta": 0.0,
@@ -4307,7 +4308,9 @@ def _nfl_fair_lines_impl(
             else None
         )
         _decision_conf = nfl_assess_confidence(
-            injury_clear=bool(kei_reprice_log.get("injury_clear", True)),
+            injury_clear=nfl_resolve_injury_clear(
+                kei_reprice_log.get("injury_clear")
+            ),
             weather_clear=bool(kei_reprice_log.get("weather_clear", True)),
             qb_clear=bool(kei_reprice_log.get("qb_clear", True)),
             conflicting_inputs=bool(

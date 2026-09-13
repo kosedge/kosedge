@@ -103,9 +103,9 @@ def test_open_competition_widens_uncertainty_not_fake_spread() -> None:
     reasons = " ".join(e["reason"] for e in log["applied_factors"])
     assert "open_competition" in reasons
     assert "Tua" in reasons
-    conf = assess_confidence(qb_clear=log["qb_clear"])
+    conf = assess_confidence(qb_clear=log["qb_clear"], injury_clear=True)
     assert "qb_unresolved" in conf.unresolved_flags
-    assert conf.score < assess_confidence(qb_clear=True).score
+    assert conf.score < assess_confidence(qb_clear=True, injury_clear=True).score
 
 
 def test_qb_backup_dropoff_home_weaker() -> None:

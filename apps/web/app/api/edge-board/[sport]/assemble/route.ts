@@ -31,6 +31,8 @@ import {
   cfbEdgeBoardAssembleUnavailablePayload,
   isCfbEdgeBoardCustomerDisabled,
 } from "@/lib/cfb-edge-board-public";
+import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-suppress";
+import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -126,8 +128,13 @@ export async function GET(
         const week1Rows = filterNflStrictWeekRows(assembled, 1);
         const linesAsOf =
           resolveEdgeBoardBoardLinesAsOf(assembled) ?? governed.linesAsOf;
+        // SOP v1.1: full-slate snapshot bypasses assembleEdgeBoardRows —
+        // still evaluate suppress on this assemble so TTL/revoke apply.
+        const suppressed = applyNflInactiveFairSuppressToRows(assembled, "nfl", {
+          store: loadNflInactiveSuppressStore(),
+        });
         return pageDataJsonResponse({
-          rows: scrubEdgeBoardAssembleCustomerRows(assembled, "nfl"),
+          rows: scrubEdgeBoardAssembleCustomerRows(suppressed, "nfl"),
           week1Count: gameCount(week1Rows),
           fullCount: gameCount(assembled),
           week0Count: 0,
@@ -140,14 +147,20 @@ export async function GET(
       }
 
       // Week 1 / live: narrow fair-lines window only.
-      const assembled = ensureNflScheduleWeekOnBoard(
-        stampNflEdgeBoardWeeksFromSchedule(
-          await loadAssembledEdgeBoardRows("nfl", {
-            slate: "week1",
-            ...assembleOpts,
-          }),
+      // Re-evaluate suppress after schedule pad so a late-added row cannot
+      // paint stale fair on the same assemble as street refresh.
+      const assembled = applyNflInactiveFairSuppressToRows(
+        ensureNflScheduleWeekOnBoard(
+          stampNflEdgeBoardWeeksFromSchedule(
+            await loadAssembledEdgeBoardRows("nfl", {
+              slate: "week1",
+              ...assembleOpts,
+            }),
+          ),
+          1,
         ),
-        1,
+        "nfl",
+        { store: loadNflInactiveSuppressStore() },
       );
       const week1Rows = filterNflStrictWeekRows(assembled, 1);
       const weeks = weeksOnBoard(week1Rows);

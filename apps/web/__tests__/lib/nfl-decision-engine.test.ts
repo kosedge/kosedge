@@ -6,6 +6,7 @@ import {
   STANDARD_SIDE,
   assessConfidence,
   assessMarketConfirmation,
+  resolveInjuryClear,
   buildSidePlayToLadder,
   buildTotalPlayToLadder,
   crossesKeyNumber,
@@ -27,6 +28,21 @@ import {
   WEEK1_TOTAL_BOOST,
   totalThresholdsForWeek,
 } from "@/lib/nfl-tag-policy";
+
+describe("injury_clear fail-closed (SOP v1.1)", () => {
+  it("missing / unknown injury wire is false — never silent True", () => {
+    expect(resolveInjuryClear(undefined)).toBe(false);
+    expect(resolveInjuryClear(null)).toBe(false);
+    expect(resolveInjuryClear(false)).toBe(false);
+    expect(resolveInjuryClear(true)).toBe(true);
+    const missing = assessConfidence({ baseScore: 0.8 });
+    expect(missing.factors.injuryClear).toBe(false);
+    expect(missing.unresolvedFlags).toContain("injury_unresolved");
+    const clear = assessConfidence({ baseScore: 0.8, injuryClear: true });
+    expect(clear.factors.injuryClear).toBe(true);
+    expect(clear.unresolvedFlags).not.toContain("injury_unresolved");
+  });
+});
 
 describe("nfl-decision-engine doctrine", () => {
   it("keeps break-even at ≈52.38%", () => {
@@ -130,7 +146,7 @@ describe("cover probability bands", () => {
   });
 
   it("cover prob wins for tag when available", () => {
-    const conf = assessConfidence({ baseScore: 0.8 });
+    const conf = assessConfidence({ baseScore: 0.8, injuryClear: true });
     const out = decideSide({
       fairSpreadHome: -7,
       marketSpreadHome: -3,
@@ -185,7 +201,7 @@ describe("play-to ladders from KEI + thresholds", () => {
 
 describe("market past play-to downgrades", () => {
   it("downgrades PLAY → LEAN when market moves past play-to", () => {
-    const conf = assessConfidence({ baseScore: 0.8 });
+    const conf = assessConfidence({ baseScore: 0.8, injuryClear: true });
     const good = decideSide({
       fairSpreadHome: -6,
       marketSpreadHome: -3,
@@ -216,7 +232,7 @@ describe("market past play-to downgrades", () => {
 
 describe("PLAY triple requirement", () => {
   it("requires numerical edge + confidence + price", () => {
-    const conf = assessConfidence({ baseScore: 0.8 });
+    const conf = assessConfidence({ baseScore: 0.8, injuryClear: true });
     const play = decideSide({
       fairSpreadHome: -7,
       marketSpreadHome: -3,
@@ -239,7 +255,7 @@ describe("PLAY triple requirement", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ baseScore: 0.4, qbClear: false }),
+      confidence: assessConfidence({ baseScore: 0.4, injuryClear: true, qbClear: false }),
       priceStillAvailable: true,
     });
     expect(low.actionLabel).not.toBe("PLAY");
@@ -251,7 +267,7 @@ describe("PLAY triple requirement", () => {
       fairSpreadHome: -10,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ baseScore: 0.4 }),
+      confidence: assessConfidence({ baseScore: 0.4, injuryClear: true }),
       priceStillAvailable: true,
     });
     expect(out.modelConfidence.band).toBe("LOW");
@@ -275,7 +291,7 @@ describe("Best Bet strictness", () => {
   });
 
   it("requires all Best Bet gates", () => {
-    const conf = assessConfidence({ baseScore: 0.9 });
+    const conf = assessConfidence({ baseScore: 0.9, injuryClear: true });
     expect(
       evaluateBestBet({
         pointGrade: "STRONG PLAY",
@@ -315,7 +331,7 @@ describe("Best Bet strictness", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ baseScore: 0.9 }),
+      confidence: assessConfidence({ baseScore: 0.9, injuryClear: true }),
       priceStillAvailable: true,
       matchupSupport: true,
       liquidityOk: true,
@@ -332,7 +348,7 @@ describe("edge magnitude vs confidence", () => {
       fairSpreadHome: -6,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ baseScore: 0.9 }),
+      confidence: assessConfidence({ baseScore: 0.9, injuryClear: true }),
     });
     expect(out.edgeMagnitude).toBeCloseTo(3.0);
     expect(out.modelConfidence.score).toBeGreaterThanOrEqual(0.75);
@@ -346,7 +362,7 @@ describe("ALERT / STAY AWAY / doctrine price dependence", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 1,
-      confidence: assessConfidence({ baseScore: 0.7, qbClear: false }),
+      confidence: assessConfidence({ baseScore: 0.7, injuryClear: true, qbClear: false }),
     });
     expect(out.actionLabel).toBe("ALERT");
   });
@@ -356,13 +372,13 @@ describe("ALERT / STAY AWAY / doctrine price dependence", () => {
       fairSpreadHome: -7,
       marketSpreadHome: -3,
       week: 8,
-      confidence: assessConfidence({ conflictingInputs: true }),
+      confidence: assessConfidence({ injuryClear: true, conflictingInputs: true }),
     });
     expect(out.actionLabel).toBe("STAY AWAY");
   });
 
   it("same game PLAY or PASS depending only on market number", () => {
-    const conf = assessConfidence({ baseScore: 0.8 });
+    const conf = assessConfidence({ baseScore: 0.8, injuryClear: true });
     const good = decideSide({
       fairSpreadHome: -6,
       marketSpreadHome: -3,
@@ -390,7 +406,7 @@ describe("decideGame sample output", () => {
       marketTotal: 44,
       homeAbbr: "MIA",
       awayAbbr: "BUF",
-      confidence: assessConfidence({ baseScore: 0.8 }),
+      confidence: assessConfidence({ baseScore: 0.8, injuryClear: true }),
     });
     expect(game.doctrine).toBe("We bet prices, not teams.");
     expect(game.weekRegime).toBe("inseason");
@@ -405,7 +421,7 @@ describe("decideGame sample output", () => {
       fairTotal: 47.2,
       marketTotal: 44.5,
       week: 1,
-      confidence: assessConfidence({ baseScore: 0.8 }),
+      confidence: assessConfidence({ baseScore: 0.8, injuryClear: true }),
     });
     // edge 2.7 → LEAN under early totals (play_min 2.75)
     expect(week1.edgeMagnitude).toBeCloseTo(2.7);
@@ -415,7 +431,7 @@ describe("decideGame sample output", () => {
       fairTotal: 47.2,
       marketTotal: 44.5,
       week: 6,
-      confidence: assessConfidence({ baseScore: 0.8 }),
+      confidence: assessConfidence({ baseScore: 0.8, injuryClear: true }),
     });
     // Totals PLAY sat (Ryan lock) — would have been PLAY under point bands alone.
     expect(week6.actionLabel).not.toBe("PLAY");

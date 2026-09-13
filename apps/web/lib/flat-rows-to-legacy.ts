@@ -31,6 +31,10 @@ import { buildStatDrop, type StatDrop } from "@/lib/edge-board-stat-drop";
 import { sanitizeMarketCaptureIso } from "@/lib/market-asof-stamp";
 import { scrubActionEdgeMagnitude } from "@/lib/edge-board-customer-truth";
 import { evaluateTotalIdentityGate } from "@/lib/edge-board-total-identity-gate";
+import {
+  rowHasNflFairSuppress,
+  type NflInactiveSuppressReceipt,
+} from "@/lib/nfl-inactive-fair-suppress";
 
 /** Board revalidate cadence — matches Odds API cache TTL on /api/edge-board. */
 const EDGE_BOARD_REFRESH_MS = 6 * 60 * 60 * 1000;
@@ -90,6 +94,14 @@ export type FlatEdgeBoardRow = {
   totalCompareEligible?: boolean;
   totalIdentityReason?: string;
   totalQuoteLive?: boolean;
+  /** NFL schedule / fair-lines game_id (SOP v1.1 suppress join key). */
+  gameId?: string;
+  /** NFL inactive remat-or-failclosed receipt (assemble stamp). */
+  inactiveSuppress?: NflInactiveSuppressReceipt;
+  /** False when house fair/edge must not be compared or painted. */
+  fairCompareEligible?: boolean;
+  unresolvedFlags?: string[];
+  majorInactiveKnown?: boolean;
   /** T.event when it can diverge from the painted game label. */
   modelEvent?: string | null;
   modelAsOf?: string | null;
@@ -245,6 +257,9 @@ export type LegacyEdgeBoardRow = {
   statDrop?: StatDrop;
   isNeutral?: boolean;
   siteLabel?: string;
+  gameId?: string;
+  inactiveSuppress?: NflInactiveSuppressReceipt;
+  fairCompareEligible?: boolean;
 };
 
 /** Empty market / KEI / edge cell — never show “Coming soon” on live boards. */
@@ -502,18 +517,33 @@ export function flatRowsToLegacy(
         bottom: { label: lineKei, juice: "—" },
       };
     }
-    const keiOU: PricePair = totalKei
+    let keiOU: PricePair = totalKei
       ? {
           top: { label: `o${totalKei}`, juice: "—" },
           bottom: { label: `u${totalKei}`, juice: "—" },
         }
       : EMPTY_PAIR;
 
+    const isNflSport = String(sportKey).toLowerCase() === "nfl";
+    const lineFairSuppress =
+      isNflSport && rowHasNflFairSuppress(lineRow);
+    const totalFairSuppress =
+      isNflSport && rowHasNflFairSuppress(totalRow);
+    // SOP v1.1: do not paint stale house fair when suppress is stamped.
+    // Street (open/best) stays. Client refresh cannot recompute edge from kei.
+    if (lineFairSuppress) {
+      keiLine = EMPTY_PAIR;
+    }
+    if (totalFairSuppress) {
+      keiOU = EMPTY_PAIR;
+    }
+
     const lineModel = (lineRow as FlatEdgeBoardRow | undefined)?.modelKei;
     const totalModel = (totalRow as FlatEdgeBoardRow | undefined)?.modelKei;
     let modelLine: PricePair | undefined;
     if (
       !isMoneyline &&
+      !lineFairSuppress &&
       lineModel &&
       lineKei &&
       String(lineModel) !== String(lineKei)
@@ -524,7 +554,12 @@ export function flatRowsToLegacy(
       };
     }
     let modelOU: PricePair | undefined;
-    if (totalModel && totalKei && String(totalModel) !== String(totalKei)) {
+    if (
+      !totalFairSuppress &&
+      totalModel &&
+      totalKei &&
+      String(totalModel) !== String(totalKei)
+    ) {
       modelOU = {
         top: { label: `o${totalModel}`, juice: "—" },
         bottom: { label: `u${totalModel}`, juice: "—" },
@@ -565,6 +600,7 @@ export function flatRowsToLegacy(
           ? noVigHomeProb(bestHomeAm, bestAwayAm)
           : null;
       if (
+        !lineFairSuppress &&
         hasSportsbookLine &&
         modelHomeProb != null &&
         Number.isFinite(modelHomeProb) &&
@@ -626,6 +662,7 @@ export function flatRowsToLegacy(
             : true;
       }
       signedLineEdge =
+        !lineFairSuppress &&
         hasSportsbookLine &&
         marketTrusted &&
         bestSpreadNum != null &&
@@ -674,7 +711,7 @@ export function flatRowsToLegacy(
       decisionBook: totalRow?.decisionBook ?? totalRow?.edgeCalcBook,
       compareEligible: totalRow?.totalCompareEligible,
     });
-    const totalIdentityFail = totalIdentity.failClosed;
+    const totalIdentityFail = totalIdentity.failClosed || totalFairSuppress;
     let totalTrusted = true;
     if (sportLcTotal === "cfb") {
       totalTrusted =
@@ -752,13 +789,16 @@ export function flatRowsToLegacy(
           }
         : EMPTY_PAIR;
 
-    const tagLineRaw = edgeToTag(
-      edgeLineNum,
-      "line",
-      sportKey,
-      lineRow?.seasonType ?? totalRow?.seasonType,
-      lineRow?.publishTag,
-    );
+    // Fail-closed / unavailable ≠ PASS. Leave tag undefined.
+    const tagLineRaw = lineFairSuppress
+      ? undefined
+      : edgeToTag(
+          edgeLineNum,
+          "line",
+          sportKey,
+          lineRow?.seasonType ?? totalRow?.seasonType,
+          lineRow?.publishTag,
+        );
     // Fail-closed / unavailable total ≠ PASS. Leave tag undefined.
     const tagOURaw = totalIdentityFail
       ? undefined
@@ -983,15 +1023,20 @@ export function flatRowsToLegacy(
       edgeOUCaution: isNflTotalCaution(edgeOUNum, sportKey),
       tagLine,
       tagOU,
-      actionLabelLine: lineRow?.actionLabel,
+      actionLabelLine: lineFairSuppress ? undefined : lineRow?.actionLabel,
       actionLabelOU: totalIdentityFail ? undefined : totalRow?.actionLabel,
-      edgeMagnitudeLine: resolveActionEdge(
-        lineRow?.edgeMagnitude,
-        edgeLineNum,
-        resolveActionMarket(lineRow?.decisionMarketLine, marketLineFromCurrent),
-        lineRow?.fairLine ?? keiSpreadHome ?? undefined,
-        "handicap",
-      ),
+      edgeMagnitudeLine: lineFairSuppress
+        ? undefined
+        : resolveActionEdge(
+            lineRow?.edgeMagnitude,
+            edgeLineNum,
+            resolveActionMarket(
+              lineRow?.decisionMarketLine,
+              marketLineFromCurrent,
+            ),
+            lineRow?.fairLine ?? keiSpreadHome ?? undefined,
+            "handicap",
+          ),
       edgeMagnitudeOU: totalIdentityFail
         ? undefined
         : resolveActionEdge(
@@ -1011,7 +1056,7 @@ export function flatRowsToLegacy(
       modelConfidenceTierConstant:
         lineRow?.modelConfidenceTierConstant ??
         totalRow?.modelConfidenceTierConstant,
-      coverProbLine: lineRow?.coverProb,
+      coverProbLine: lineFairSuppress ? undefined : lineRow?.coverProb,
       coverProbOU: totalIdentityFail ? undefined : totalRow?.coverProb,
       playToLine: lineRow?.playToNotes,
       playToOU: totalIdentityFail ? undefined : totalRow?.playToNotes,
@@ -1019,8 +1064,20 @@ export function flatRowsToLegacy(
       playToOUNum: totalIdentityFail ? undefined : totalRow?.playToPlay,
       leanToLineNum: lineRow?.playToLean,
       leanToOUNum: totalIdentityFail ? undefined : totalRow?.playToLean,
-      fairLineKei: lineRow?.fairLine ?? undefined,
-      fairOUKei: totalRow?.fairLine ?? undefined,
+      fairLineKei: lineFairSuppress
+        ? undefined
+        : (lineRow?.fairLine ?? undefined),
+      fairOUKei: totalFairSuppress
+        ? undefined
+        : (totalRow?.fairLine ?? undefined),
+      inactiveSuppress:
+        lineRow?.inactiveSuppress ?? totalRow?.inactiveSuppress,
+      fairCompareEligible:
+        lineFairSuppress || totalFairSuppress
+          ? false
+          : (lineRow?.fairCompareEligible ??
+            totalRow?.fairCompareEligible),
+      gameId: lineRow?.gameId ?? totalRow?.gameId,
       marketLineCurrent: resolveActionMarket(
         lineRow?.decisionMarketLine,
         marketLineFromCurrent,

@@ -163,11 +163,21 @@ export function isTierConstantConfidence(
   return Math.abs(assessment.score - CONFIDENCE_TIER_BASE) < 1e-9;
 }
 
+/**
+ * SOP v1.1: missing / unknown injury wire → false (fail closed).
+ * Never silent `true`. Mirrors Python `resolve_injury_clear`.
+ */
+export function resolveInjuryClear(
+  value: boolean | null | undefined,
+): boolean {
+  return value === true;
+}
+
 export function assessConfidence(
   args: {
     baseScore?: number | null;
     schemeStable?: boolean;
-    injuryClear?: boolean;
+    injuryClear?: boolean | null;
     weatherClear?: boolean;
     qbClear?: boolean;
     historicalFit?: number | null;
@@ -179,11 +189,12 @@ export function assessConfidence(
   let score =
     args.baseScore == null ? CONFIDENCE_TIER_BASE : Number(args.baseScore);
   const flags: string[] = [];
+  const injuryClear = resolveInjuryClear(args.injuryClear);
   if (args.schemeStable === false) {
     score -= 0.12;
     flags.push("scheme_unstable");
   }
-  if (args.injuryClear === false) {
+  if (!injuryClear) {
     score -= 0.18;
     flags.push("injury_unresolved");
   }
@@ -214,7 +225,7 @@ export function assessConfidence(
     band: confidenceBand(score),
     factors: {
       schemeStable: args.schemeStable !== false,
-      injuryClear: args.injuryClear !== false,
+      injuryClear,
       weatherClear: args.weatherClear !== false,
       qbClear: args.qbClear !== false,
       conflictingInputs: Boolean(args.conflictingInputs),

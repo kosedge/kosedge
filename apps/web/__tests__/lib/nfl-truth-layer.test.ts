@@ -96,10 +96,14 @@ describe("NFL Truth Layer — lineage", () => {
 
 describe("NFL Truth Layer — confidence band honesty", () => {
   it("flags default 0.72 score as tier-constant band", () => {
-    const clear = assessConfidence();
+    const clear = assessConfidence({ injuryClear: true });
     expect(isTierConstantConfidence(clear)).toBe(true);
     const flagged = assessConfidence({ injuryClear: false });
     expect(isTierConstantConfidence(flagged)).toBe(false);
+    const missing = assessConfidence();
+    expect(missing.factors.injuryClear).toBe(false);
+    expect(missing.unresolvedFlags).toContain("injury_unresolved");
+    expect(isTierConstantConfidence(missing)).toBe(false);
   });
 });
 
