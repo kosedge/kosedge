@@ -507,5 +507,6 @@ describe("assemble source-lock", () => {
     expect(src).toContain("applyNflInactiveFairSuppressToRows");
     expect(src).toContain("loadNflInactiveSuppressStore");
     expect(src).toContain("appendNflInactiveSuppressProofRows");
+    expect(src).toContain("buildNflInactiveSuppressProofAssembleBody");
   });
 });

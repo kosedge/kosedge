@@ -33,7 +33,10 @@ import {
 } from "@/lib/cfb-edge-board-public";
 import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-suppress";
 import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
-import { appendNflInactiveSuppressProofRows } from "@/lib/nfl-inactive-suppress-proof";
+import {
+  appendNflInactiveSuppressProofRows,
+  buildNflInactiveSuppressProofAssembleBody,
+} from "@/lib/nfl-inactive-suppress-proof";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -114,6 +117,18 @@ export async function GET(
     timeoutMs: UPSTREAM_TIMEOUT_MS.pageData,
     throwOnTransportError: true as const,
   };
+
+  // Proof A: skip model-service entirely. A 404/empty upstream must not 503
+  // before PROOF@SYNTH can be stamped. Never when VERCEL_ENV=production.
+  if (sport === "nfl") {
+    const proofBody = buildNflInactiveSuppressProofAssembleBody(url);
+    if (proofBody) {
+      return pageDataJsonResponse({
+        ...proofBody,
+        rows: scrubEdgeBoardAssembleCustomerRows(proofBody.rows, "nfl"),
+      });
+    }
+  }
 
   try {
     if (sport === "nfl") {

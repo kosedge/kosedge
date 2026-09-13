@@ -88,3 +88,38 @@ export function appendNflInactiveSuppressProofRows(
   );
   return [...rows, ...stamped];
 }
+
+export type NflInactiveSuppressProofAssembleBody = {
+  rows: EdgeBoardRow[];
+  week1Count: number;
+  fullCount: number;
+  week0Count: number;
+  weeks: number[];
+  linesAsOf: string | null;
+  games: number;
+  proofOnly: true;
+};
+
+/**
+ * Preview-only assemble body. No model-service / fair-lines / snapshot.
+ * Returns null on production or when `inactiveProof=1` is absent.
+ */
+export function buildNflInactiveSuppressProofAssembleBody(
+  url: URL,
+  env: NodeJS.ProcessEnv = process.env,
+  opts?: { nowMs?: number },
+): NflInactiveSuppressProofAssembleBody | null {
+  if (!isNflInactiveSuppressProofRequest(url, env)) return null;
+  const rows = appendNflInactiveSuppressProofRows([], url, env, opts);
+  const games = new Set(rows.map((r) => r.game).filter(Boolean)).size;
+  return {
+    rows,
+    week1Count: games,
+    fullCount: 0,
+    week0Count: 0,
+    weeks: [1],
+    linesAsOf: null,
+    games,
+    proofOnly: true,
+  };
+}

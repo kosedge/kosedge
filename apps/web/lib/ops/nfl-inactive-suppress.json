@@ -11,7 +11,7 @@
       "classes": ["MAJOR"],
       "setBy": "product",
       "setAt": "2026-09-13T22:44:16Z",
-      "ttlUntil": "2026-09-14T00:46:13Z",
+      "ttlUntil": "2026-09-14T00:48:17Z",
       "rematRunId": null
     },
     "c0de0000-5e17-4000-8000-00000000f00f": {
@@ -21,7 +21,7 @@
       "classes": ["MAJOR"],
       "setBy": "product",
       "setAt": "2026-09-13T22:44:16Z",
-      "ttlUntil": "2026-09-14T00:46:13Z",
+      "ttlUntil": "2026-09-14T00:48:17Z",
       "rematRunId": null,
       "aliases": ["PROOF@SYNTH"]
     }
