@@ -1,0 +1,7 @@
+{
+  "version": 1,
+  "gameIdConvention": "nfl_fair_line_game_id",
+  "note": "SOP v1.1 NFL inactive remat-or-failclosed display suppress. Empty games map = no board-wide suppress. Product owner sets a per-game flag; remat receipt or CoS clear revokes. Canonical gameId = fair-lines/schedule game_id (e.g. 2026-W01-ATL@PIT). AWAY@HOME aliases also resolve.",
+  "kickoffBufferMs": 10800000,
+  "games": {}
+}

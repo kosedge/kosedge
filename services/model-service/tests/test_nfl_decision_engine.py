@@ -10,6 +10,7 @@ from src.services.nfl_decision_engine import (
     INSEASON_SIDE,
     STANDARD_SIDE,
     assess_confidence,
+    resolve_injury_clear,
     assess_market_confirmation,
     build_side_play_to_ladder,
     build_total_play_to_ladder,
@@ -32,6 +33,19 @@ from src.services.nfl_tag_policy import (
     WEEK1_TOTAL_BOOST,
     total_thresholds_for_week,
 )
+
+
+def test_injury_clear_missing_wire_fail_closed():
+    """SOP v1.1: missing/unknown injury_clear → False (no silent True)."""
+    assert resolve_injury_clear(None) is False
+    assert resolve_injury_clear(False) is False
+    assert resolve_injury_clear(True) is True
+    missing = assess_confidence(base_score=0.8)
+    assert missing.factors["injury_clear"] is False
+    assert "injury_unresolved" in missing.unresolved_flags
+    clear = assess_confidence(base_score=0.8, injury_clear=True)
+    assert clear.factors["injury_clear"] is True
+    assert "injury_unresolved" not in clear.unresolved_flags
 
 
 def test_doctrine_module_docstring():
@@ -164,7 +178,7 @@ def test_cover_prob_none():
 
 
 def test_cover_prob_wins_for_tag():
-    conf = assess_confidence(base_score=0.8)
+    conf = assess_confidence(base_score=0.8, injury_clear=True)
     out = decide_side(
         fair_spread_home=-7.0,
         market_spread_home=-3.0,
@@ -193,7 +207,7 @@ def test_key_number_elevates_lean_to_play():
         fair_spread_home=-5.0,
         market_spread_home=-2.5,
         week=1,
-        confidence=assess_confidence(base_score=0.8),
+        confidence=assess_confidence(base_score=0.8, injury_clear=True),
     )
     assert out2.point_grade in ("PLAY", "STRONG PLAY")
     assert out2.key_number_cross is True
@@ -221,7 +235,7 @@ def test_total_play_to_ladder_example():
 
 
 def test_market_past_play_to_downgrades():
-    conf = assess_confidence(base_score=0.8)
+    conf = assess_confidence(base_score=0.8, injury_clear=True)
     good = decide_side(
         fair_spread_home=-6.0,
         market_spread_home=-3.0,
@@ -252,7 +266,7 @@ def test_market_past_play_to_downgrades():
 
 
 def test_play_requires_numerical_edge_confidence_and_price():
-    conf = assess_confidence(base_score=0.8)
+    conf = assess_confidence(base_score=0.8, injury_clear=True)
     play = decide_side(
         fair_spread_home=-7.0,
         market_spread_home=-3.0,
@@ -276,7 +290,7 @@ def test_play_requires_numerical_edge_confidence_and_price():
         fair_spread_home=-7.0,
         market_spread_home=-3.0,
         week=8,
-        confidence=assess_confidence(base_score=0.4, qb_clear=False),
+        confidence=assess_confidence(base_score=0.4, injury_clear=True, qb_clear=False),
         price_still_available=True,
     )
     assert low_conf.action_label in ("ALERT", "STAY AWAY", "LEAN")
@@ -289,7 +303,7 @@ def test_low_confidence_big_edge_is_alert_not_play():
         fair_spread_home=-9.5,
         market_spread_home=-3.0,
         week=8,
-        confidence=assess_confidence(base_score=0.4),
+        confidence=assess_confidence(base_score=0.4, injury_clear=True),
         price_still_available=True,
     )
     assert out.model_confidence.band == "LOW"
@@ -312,7 +326,7 @@ def test_best_bet_rejects_raw_discrepancy_alone():
 
 
 def test_best_bet_requires_all_gates():
-    conf = assess_confidence(base_score=0.9)
+    conf = assess_confidence(base_score=0.9, injury_clear=True)
     assert conf.band == "HIGH"
     assert conf.unresolved_flags == ()
     ok = evaluate_best_bet(
@@ -350,7 +364,7 @@ def test_best_bet_label_when_all_clear():
         fair_spread_home=-7.0,
         market_spread_home=-3.0,
         week=8,
-        confidence=assess_confidence(base_score=0.9),
+        confidence=assess_confidence(base_score=0.9, injury_clear=True),
         price_still_available=True,
         matchup_support=True,
         liquidity_ok=True,
@@ -365,7 +379,7 @@ def test_edge_and_confidence_kept_separate():
         fair_spread_home=-6.0,
         market_spread_home=-3.0,
         week=8,
-        confidence=assess_confidence(base_score=0.9),
+        confidence=assess_confidence(base_score=0.9, injury_clear=True),
     )
     assert out.edge_magnitude == pytest.approx(3.0)
     assert out.model_confidence.score >= 0.75
@@ -391,7 +405,7 @@ def test_alert_on_uncertainty():
         fair_spread_home=-7.0,
         market_spread_home=-3.0,
         week=1,
-        confidence=assess_confidence(base_score=0.7, qb_clear=False),
+        confidence=assess_confidence(base_score=0.7, injury_clear=True, qb_clear=False),
         price_still_available=True,
     )
     assert out.action_label == "ALERT"
@@ -402,7 +416,7 @@ def test_stay_away_on_conflict():
         fair_spread_home=-7.0,
         market_spread_home=-3.0,
         week=8,
-        confidence=assess_confidence(conflicting_inputs=True),
+        confidence=assess_confidence(injury_clear=True, conflicting_inputs=True),
         price_still_available=True,
     )
     assert out.action_label == "STAY AWAY"
@@ -414,7 +428,7 @@ def test_model_warning_on_60_plus_cover():
         market_spread_home=-3.0,
         week=8,
         cover_prob=0.62,
-        confidence=assess_confidence(base_score=0.8),
+        confidence=assess_confidence(base_score=0.8, injury_clear=True),
     )
     assert out.model_warning is True
     assert "model_warning" in out.reason
@@ -425,7 +439,7 @@ def test_decide_total_and_game_bundle():
         fair_total=47.2,
         market_total=44.0,
         week=8,
-        confidence=assess_confidence(base_score=0.8),
+        confidence=assess_confidence(base_score=0.8, injury_clear=True),
     )
     # Totals PLAY sat (Ryan lock 2026-09-03) — LEAN/PASS/STAY AWAY only.
     assert total.action_label not in ("PLAY", "BEST VALUE")
@@ -439,7 +453,7 @@ def test_decide_total_and_game_bundle():
         market_total=44.0,
         home_abbr="MIA",
         away_abbr="BUF",
-        confidence=assess_confidence(base_score=0.8),
+        confidence=assess_confidence(base_score=0.8, injury_clear=True),
     )
     assert game["doctrine"] == "We bet prices, not teams."
     assert game["week_regime"] == "inseason"
@@ -449,7 +463,7 @@ def test_decide_total_and_game_bundle():
 
 def test_spread_play_holdout_band_lock():
     """Ryan lock: 2.19 never PLAY; 2.5 may PLAY; 7.0 never PLAY; totals never PLAY."""
-    conf = assess_confidence(base_score=0.72)
+    conf = assess_confidence(base_score=0.72, injury_clear=True)
     under = decide_side(
         fair_spread_home=-7.81,
         market_spread_home=-10.0,
@@ -486,7 +500,7 @@ def test_spread_play_holdout_band_lock():
         fair_total=50.0,
         market_total=44.0,
         week=8,
-        confidence=assess_confidence(base_score=0.8),
+        confidence=assess_confidence(base_score=0.8, injury_clear=True),
     )
     assert total.action_label not in ("PLAY", "BEST VALUE")
 
@@ -505,7 +519,7 @@ def test_publish_tag_from_action_label_sot():
 
 
 def test_same_game_different_price_different_action():
-    conf = assess_confidence(base_score=0.8)
+    conf = assess_confidence(base_score=0.8, injury_clear=True)
     at_good = decide_side(
         fair_spread_home=-6.0,
         market_spread_home=-3.0,

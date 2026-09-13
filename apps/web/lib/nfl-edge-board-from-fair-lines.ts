@@ -10,6 +10,7 @@ import {
   decideGame,
   decisionResultToApi,
   isTierConstantConfidence,
+  resolveInjuryClear,
 } from "@/lib/nfl-decision-engine";
 import {
   displayActionLabel,
@@ -302,7 +303,7 @@ export function syncEdgeBoardActionsWithCurrent(
       openingTotal: parseTotalLabel(
         typeof totalRow?.open === "string" ? totalRow.open : undefined,
       ),
-      confidence: assessConfidence(),
+      confidence: assessConfidence({ injuryClear: true }),
       priceStillAvailableSpread: currentSpreadHome != null,
       priceStillAvailableTotal: currentTotal != null,
     });
@@ -611,7 +612,13 @@ export function fairLinesToEdgeBoardRows(
             awayAbbr: line.awayAbbr,
             openingSpreadHome: line.openSpreadHome,
             openingTotal: line.openTotal,
-            confidence: assessConfidence(),
+            confidence: assessConfidence({
+              // Reprice log present: missing injury_clear → false. No log → not a wire miss.
+              injuryClear: line.keiReprice
+                ? resolveInjuryClear(line.keiReprice.injuryClear)
+                : true,
+              qbClear: line.keiReprice?.qbClear !== false,
+            }),
             priceStillAvailableSpread: compareSpread != null,
             priceStillAvailableTotal: compareTotal != null,
           });
@@ -653,6 +660,7 @@ export function fairLinesToEdgeBoardRows(
     }
 
     const sharedMatchup = {
+      gameId: line.gameId || undefined,
       awayAbbr: line.awayAbbr,
       homeAbbr: line.homeAbbr,
       homeWinProb: line.homeWinProb ?? undefined,
@@ -711,6 +719,7 @@ export function fairLinesToEdgeBoardRows(
       modelConfidenceTierConstant: decisionBundle.modelConfidence
         ? isTierConstantConfidence(decisionBundle.modelConfidence)
         : undefined,
+      unresolvedFlags: decisionBundle.modelConfidence?.unresolvedFlags,
       coverProb: spreadDecision?.coverProb ?? undefined,
       playToNotes: spreadDecision?.playTo?.notes,
       playToPlay: spreadDecision?.playTo?.playTo,
@@ -766,6 +775,7 @@ export function fairLinesToEdgeBoardRows(
       modelConfidenceTierConstant: decisionBundle.modelConfidence
         ? isTierConstantConfidence(decisionBundle.modelConfidence)
         : undefined,
+      unresolvedFlags: decisionBundle.modelConfidence?.unresolvedFlags,
       coverProb: totalDecision?.coverProb ?? undefined,
       playToNotes: totalDecision?.playTo?.notes,
       playToPlay: totalDecision?.playTo?.playTo,

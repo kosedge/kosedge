@@ -20,6 +20,8 @@ import {
 } from "@/lib/edge-board-kei";
 import { loadEdgeBoardFallback } from "@/lib/edge-board-fallback";
 import { applyTotalIdentityGateToRows } from "@/lib/edge-board-total-identity-gate";
+import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-suppress";
+import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
 import { getOddsApiKeys } from "@/lib/odds-api-keys";
 import { ALLOWED_BOOKS, fetchEdgeBoard } from "@/lib/odds-api";
 import {
@@ -289,5 +291,13 @@ export async function assembleEdgeBoardRows(
     }
   }
   // INC-2026-09-10: totals without period identity / in-play quotes fail closed.
-  return applyTotalIdentityGateToRows(rows, sport);
+  rows = applyTotalIdentityGateToRows(rows, sport);
+  // SOP v1.1: NFL per-game inactive remat-or-failclosed — display only.
+  // Re-evaluate every assemble so street refresh cannot re-paint stale fair.
+  if (sport === "nfl") {
+    rows = applyNflInactiveFairSuppressToRows(rows, "nfl", {
+      store: loadNflInactiveSuppressStore(),
+    });
+  }
+  return rows;
 }

@@ -237,11 +237,19 @@ def confidence_band(score: float) -> str:
     return ConfidenceBand.LOW.value
 
 
+def resolve_injury_clear(value: Optional[bool] = None) -> bool:
+    """SOP v1.1: missing / unknown injury wire → False (fail closed).
+
+    Never silent ``True``. Mirrors TS ``resolveInjuryClear``.
+    """
+    return value is True
+
+
 def assess_confidence(
     *,
     base_score: Optional[float] = None,
     scheme_stable: bool = True,
-    injury_clear: bool = True,
+    injury_clear: Optional[bool] = None,
     weather_clear: bool = True,
     qb_clear: bool = True,
     historical_fit: Optional[float] = None,
@@ -252,10 +260,11 @@ def assess_confidence(
     """Independent model-confidence assessment (not edge magnitude)."""
     score = CONFIDENCE_TIER_BASE if base_score is None else float(base_score)
     flags: list[str] = []
+    injury_ok = resolve_injury_clear(injury_clear)
     if not scheme_stable:
         score -= 0.12
         flags.append("scheme_unstable")
-    if not injury_clear:
+    if not injury_ok:
         score -= 0.18
         flags.append("injury_unresolved")
     if not weather_clear:
@@ -280,7 +289,7 @@ def assess_confidence(
         band=confidence_band(score),
         factors={
             "scheme_stable": scheme_stable,
-            "injury_clear": injury_clear,
+            "injury_clear": injury_ok,
             "weather_clear": weather_clear,
             "qb_clear": qb_clear,
             "conflicting_inputs": conflicting_inputs,
