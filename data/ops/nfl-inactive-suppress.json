@@ -1,7 +1,27 @@
 {
   "version": 1,
   "gameIdConvention": "nfl_fair_line_game_id",
-  "note": "SOP v1.1 NFL inactive remat-or-failclosed display suppress. Empty games map = no board-wide suppress. Product owner sets a per-game flag; remat receipt or CoS clear revokes. Canonical gameId = fair-lines/schedule game_id (e.g. 2026-W01-ATL@PIT). AWAY@HOME aliases also resolve.",
+  "note": "SOP v1.1 NFL inactive remat-or-failclosed display suppress. Empty games map = no board-wide suppress. Product owner sets a per-game flag; remat receipt or CoS clear revokes. Canonical gameId = fair-lines/schedule game_id (e.g. 2026-W01-ATL@PIT). AWAY@HOME aliases also resolve. CoS CONFIRM 2026-09-13: ATL@PIT MAJOR suppress armed — leave until remat CLEAR.",
   "kickoffBufferMs": 10800000,
-  "games": {}
+  "games": {
+    "ATL@PIT": {
+      "markets": [],
+      "reason": "major_inactive_pending_remat",
+      "players": [],
+      "classes": ["MAJOR"],
+      "setBy": "product",
+      "setAt": "2026-09-13T17:12:38Z",
+      "rematRunId": null
+    },
+    "32c54be3-4067-4128-9f3b-9cfc8a36d2cd": {
+      "markets": [],
+      "reason": "major_inactive_pending_remat",
+      "players": [],
+      "classes": ["MAJOR"],
+      "setBy": "product",
+      "setAt": "2026-09-13T17:12:38Z",
+      "rematRunId": null,
+      "aliases": ["ATL@PIT"]
+    }
+  }
 }
