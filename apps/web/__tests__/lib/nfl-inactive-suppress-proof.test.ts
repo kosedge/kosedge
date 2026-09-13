@@ -133,7 +133,7 @@ describe("nfl inactive suppress proof gate", () => {
     );
     expect(helper).not.toContain("loadAssembledEdgeBoardRows");
     expect(helper).not.toContain("requireGovernedNflFullSlate");
-    expect(helper).not.toContain("from \"@/lib/build-edge-board-rows\"");
+    expect(helper).not.toContain('from "@/lib/build-edge-board-rows"');
   });
 
   it("production cannot build a proof assemble body", () => {
@@ -150,9 +150,11 @@ describe("nfl inactive suppress proof gate", () => {
       path.join(webRoot, "app/api/edge-board/[sport]/assemble/route.ts"),
       "utf8",
     );
-    const proofAt = src.indexOf("buildNflInactiveSuppressProofAssembleBody(url)");
+    const proofAt = src.indexOf(
+      "buildNflInactiveSuppressProofAssembleBody(url)",
+    );
     const loadAt = src.indexOf('await loadAssembledEdgeBoardRows("nfl"');
-    const tryAt = src.indexOf("try {\n    if (sport === \"nfl\")");
+    const tryAt = src.indexOf('try {\n    if (sport === "nfl")');
     expect(proofAt).toBeGreaterThanOrEqual(0);
     expect(loadAt).toBeGreaterThan(proofAt);
     expect(tryAt).toBeGreaterThan(proofAt);
