@@ -121,7 +121,9 @@ export type NflInactiveFairSuppressRowFields = {
   edge_magnitude?: unknown;
   kei?: unknown;
   modelKei?: unknown;
+  model_kei?: unknown;
   fairLine?: unknown;
+  fair_line?: unknown;
   keiSpreadHome?: unknown;
   keiTotal?: unknown;
   coverProb?: unknown;
