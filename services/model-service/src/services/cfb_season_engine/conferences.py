@@ -100,10 +100,9 @@ _FALLBACK: Dict[str, str] = {
     "WVU": "Big 12",
     # Independents / others commonly packaged
     "ND": "Independent",
-    "ARMY": "Independent",
+    "ARMY": "AAC",
     "CONN": "Independent",
-    "UMASS": "Independent",
-    "MASS": "Independent",
+    "MASS": "MAC",
     # P0 leftover Independents — 2026 affiliation (FBS universe SoT)
     "MIZZ": "SEC",
     "ARST": "Sun Belt",

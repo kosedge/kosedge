@@ -57,6 +57,15 @@ def pbp_raw_dir(*, prefer_hd: bool = True) -> Path:
     return REPO_RAW_PBP
 
 
+def cfbd_raw_dir(*, prefer_hd: bool = True) -> Path:
+    """Immutable CFBD response lake. Never commit these payloads."""
+    return raw_dir(prefer_hd=prefer_hd) / "cfbd"
+
+
+def cfbd_clean_dir(*, prefer_hd: bool = True) -> Path:
+    return clean_dir(prefer_hd=prefer_hd) / "cfbd"
+
+
 def odds_lake_dir(*, prefer_hd: bool = True) -> Path:
     if prefer_hd and hd_mounted():
         return HD_ODDS_CFB

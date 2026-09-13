@@ -333,8 +333,14 @@ def build_packaged_universe(season: int = 2026) -> EngineUniverse:
     snap = load_real_roster_snapshot()
     meta = snapshot_meta(snap)
     if snap and snap.get("teams"):
+        official_full = official_fbs_codes()
         for code, snap_team in (snap.get("teams") or {}).items():
-            base = teams_raw.get(code) or {}
+            team = canonicalize_team_code(code)
+            if team not in official_full:
+                # Transitioning / extras stay in the snapshot for identity;
+                # they are not full-member engine priors.
+                continue
+            base = teams_raw.get(code) or teams_raw.get(team) or {}
             teams_raw[code] = apply_snapshot_team_payload(base, snap_team)
         mode = "packaged_real_roster"
         default_source = str(meta.get("roster_source") or ROSTER_SOURCE_PACKAGED_ESPN)

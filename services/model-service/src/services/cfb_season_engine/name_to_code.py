@@ -57,6 +57,68 @@ P0_REQUIRED_NAME_TO_CODE: Dict[str, str] = {
     "J'ville St.": "JVST",
     "ECU": "ECU",
     "ODU": "ODU",
+    # Miami collision: Hurricanes vs RedHawks. Do not rely on table order alone.
+    "Miami (OH)": "M-OH",
+    "Miami (Ohio)": "M-OH",
+    "Miami Ohio": "M-OH",
+    "Miami-Ohio": "M-OH",
+    "Miami (OH) RedHawks": "M-OH",
+    "Miami-OH": "M-OH",
+}
+
+# ESPN story 46128861 (final-2025, published 2026-01-20) uses abbreviated
+# display names. These 49 keys were the entire 87/136 "parser" miss — the
+# HTML table is complete; unmapped abbreviations were dropped.
+ESPN_FINAL_2025_STORY_NAME_TO_CODE: Dict[str, str] = {
+    "Ohio St.": "OSU",
+    "Penn St.": "PSU",
+    "JMU": "JMU",
+    "USF": "USF",
+    "Iowa St.": "ISU",
+    "Ga. Tech": "GT",
+    "Florida St.": "FSU",
+    "Kansas St.": "KSU",
+    "San Diego St.": "SDSU",
+    "S. Carolina": "SCAR",
+    "NC St.": "NCSU",
+    "Miss. St.": "MSST",
+    "Arizona St.": "ASU",
+    "Wash. St.": "WSU",
+    "Boise St.": "BOISE",
+    "Texas St.": "TXST",
+    "Fresno St.": "FRES",
+    "WKU": "WKU",
+    "La. Tech": "LT",
+    "WMU": "WMU",
+    "Utah St.": "UTAHST",
+    "Miami-OH": "M-OH",
+    "Michigan St.": "MSU",
+    "Kennesaw St.": "KENNESAW",
+    "N. Carolina": "UNC",
+    "W. Virginia": "WVU",
+    "So. Miss": "USM",
+    "Boston Coll.": "BC",
+    "FAU": "FAU",
+    "CMU": "CMU",
+    "Ga. Southern": "GASO",
+    "Va. Tech": "VT",
+    "FIU": "FIU",
+    "App. St.": "APP",
+    "BGSU": "BGSU",
+    "S. Alabama": "USA",
+    "San Jose St.": "SJSU",
+    "EMU": "EMU",
+    "Oklahoma St.": "OKST",
+    "Coastal Caro.": "CCU",
+    "NMSU": "NMSU",
+    "Oregon St.": "ORST",
+    "MTSU": "MTSU",
+    "N. Illinois": "NIU",
+    "Kent St.": "KENT",
+    "ULM": "ULM",
+    "Ball St.": "BALL",
+    "Georgia St.": "GAST",
+    "UMass": "MASS",
 }
 
 # Public final-2025 SP+ table names (cfbupdate / ESPN story) + CFBD short names.
@@ -188,6 +250,7 @@ NAME_TO_CODE: Dict[str, str] = {
     "Sam Houston": "SHSU",
     "Massachusetts": "MASS",
     **P0_REQUIRED_NAME_TO_CODE,
+    **ESPN_FINAL_2025_STORY_NAME_TO_CODE,
 }
 
 
@@ -195,6 +258,33 @@ def mapped_code(name: str, mapping: Mapping[str, str] | None = None) -> Optional
     m = mapping if mapping is not None else NAME_TO_CODE
     code = m.get(str(name or "").strip())
     return str(code) if code else None
+
+
+def resolve_public_table_name(
+    name: str,
+    *,
+    miami_ordinal: int = 0,
+    mapping: Mapping[str, str] | None = None,
+) -> Optional[str]:
+    """Map a public SP+ / ESPN-story name, including the Miami collision.
+
+    Bare ``Miami`` is Hurricanes on the first sighting and RedHawks on later
+    sightings (legacy table order). Explicit ``Miami (OH)`` variants always
+    map to M-OH so official FBS never falls through to a 50-fill.
+    """
+    n = str(name or "").strip()
+    if n in {
+        "Miami (OH)",
+        "Miami (Ohio)",
+        "Miami Ohio",
+        "Miami-Ohio",
+        "Miami-OH",
+        "Miami (OH) RedHawks",
+    }:
+        return "M-OH"
+    if n == "Miami":
+        return "MIA" if miami_ordinal <= 1 else "M-OH"
+    return mapped_code(n, mapping)
 
 
 def require_mapped_code(name: str, mapping: Mapping[str, str] | None = None) -> str:

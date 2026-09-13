@@ -58,6 +58,41 @@ def official_fbs_codes(*, include_transition: bool = False) -> frozenset[str]:
     return frozenset(codes)
 
 
+def codes_excluded_from_priors() -> frozenset[str]:
+    """Literal FCS/alias keys that must never occupy a prior slot.
+
+    Do not canonicalize these — ``FAU2``/``OLE``/``ULL`` collapse onto the
+    official FAU/MISS/UL rows and would delete real FBS teams.
+    """
+    book = load_fbs_universe()
+    excluded = {str(c).upper() for c in (book.get("excluded_from_prior") or {})}
+    return frozenset(set(NON_FBS_CODES) | excluded)
+
+
+def prior_packaging_codes(*, include_transition: bool = False) -> frozenset[str]:
+    """Authoritative key set for ``cfb_fbs_team_priors_2026.json``.
+
+    Full 2026 FBS members always belong here. Transitioning programs
+    (NDSU, Sacramento State) may be fetched into the roster snapshot for
+    identity, but they are not full-member priors and must not be generic
+    FCS -25 or league-average efficiency fills.
+    """
+    return official_fbs_codes(include_transition=include_transition)
+
+
+def prune_non_official_prior_teams(teams: Dict[str, Any]) -> list[str]:
+    """Drop extras/aliases from a priors ``teams`` map. Returns removed codes."""
+    allowed = prior_packaging_codes(include_transition=False)
+    excluded = codes_excluded_from_priors()
+    removed: list[str] = []
+    for code in list(teams):
+        key = str(code).upper()
+        if key in excluded or key not in allowed:
+            del teams[code]
+            removed.append(str(code))
+    return sorted(removed)
+
+
 def is_official_fbs(team: str, *, include_transition: bool = False) -> bool:
     code = canonical_code(team)
     if not code or code in NON_FBS_CODES:
@@ -105,4 +140,10 @@ def documentation() -> Dict[str, Any]:
         "independents": book.get("independents"),
         "notes": book.get("notes"),
         "is_official_slate": False,
+        "prior_packaging_rule": (
+            "Priors and SP+ efficiency key off official_fbs_codes(). "
+            "JVST is fbs_full / CUSA (FBS since 2023), not a 2026 transition. "
+            "NDSU and SAC are transitioning_2026 — keep history, do not invent "
+            "league-average or generic -25."
+        ),
     }

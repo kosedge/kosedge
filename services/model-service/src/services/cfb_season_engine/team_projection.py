@@ -320,17 +320,119 @@ def expected_team_points(
 
     Returns (points, diagnostics).
     """
+    ov = P.score_component_overlay()
     response = P.matchup_response_for_week(week)
-    raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
-    ratio_lo, ratio_hi = P.MATCHUP_RATIO_CLAMP
-    ratio = _soft_clamp_ratio(
-        raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
+    mode = str(ov.get("matchup_mode") or "power")
+    # Research-only point-space additive identities. Production default
+    # remains the composed-index power ratio. These modes never write priors.
+    point_additive = mode in {
+        "point_additive_half",
+        "point_additive_units",
+        "point_additive_full",
+        "point_additive_poss",
+    }
+    off_e = float(offense.efficiency.off_eff) if offense.efficiency else 50.0
+    def_e = (
+        float(opponent_defense.efficiency.def_eff)
+        if opponent_defense.efficiency
+        else 50.0
     )
-    matchup = ratio ** response
-    off_boost = unit_offense_boost(offense.groups)
-    def_dampen = unit_defense_dampen(opponent_defense.groups)
-    pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
-    base = P.LEAGUE_TEAM_PPG * matchup * off_boost * def_dampen * pace
+    off_eff_idx = efficiency_index(off_e)
+    def_eff_idx = efficiency_index(def_e)
+    if mode in {"raw_efficiency", "raw_additive", "raw_diff", "raw_sat"} or point_additive:
+        raw_ratio = off_eff_idx / max(0.50, def_eff_idx)
+    else:
+        raw_ratio = offense.offense_index / max(0.50, opponent_defense.defense_index)
+    ratio_lo, ratio_hi = P.MATCHUP_RATIO_CLAMP
+    if ov.get("disable_ratio_clamp"):
+        ratio = float(raw_ratio)
+    else:
+        ratio = _soft_clamp_ratio(
+            raw_ratio, ratio_lo, ratio_hi, P.MATCHUP_RATIO_EXCESS_RETAIN
+        )
+    if mode == "identity":
+        matchup = 1.0
+    elif mode == "linear":
+        matchup = max(0.15, 1.0 + response * (ratio - 1.0))
+    elif mode == "possessions_ppp":
+        matchup = 1.0  # replaced below by explicit possessions × PPP
+    elif mode == "raw_additive":
+        # Predeclared: additive in efficiency-index space. 1.0 at (1, 1).
+        matchup = 0.5 * off_eff_idx + 0.5 * (2.0 - def_eff_idx)
+    elif mode == "raw_diff":
+        # Predeclared: linear map from raw 0–100 difference using the
+        # existing SCORE_TO_INDEX_DIVISOR identity (25.9 / 68), not a fit.
+        matchup = 1.0 + (off_e - def_e) / P.SCORE_TO_INDEX_DIVISOR
+    elif mode == "raw_sat":
+        # Predeclared squash: 1 + tanh(raw-eff ratio − 1). No fitted k.
+        matchup = 1.0 + math.tanh(ratio - 1.0)
+    elif point_additive:
+        # Not a matchup multiplier. Scoring lives in point space below.
+        matchup = 1.0
+    else:
+        matchup = ratio ** response
+    if ov.get("force_unit_identity") or mode in {
+        "point_additive_half",
+        "point_additive_full",
+        "point_additive_poss",
+    }:
+        off_boost = 1.0
+        def_dampen = 1.0
+    else:
+        off_boost = unit_offense_boost(offense.groups)
+        def_dampen = unit_defense_dampen(opponent_defense.groups)
+    if ov.get("force_pace_one"):
+        pace = 1.0
+    else:
+        pace = 0.5 * (offense.pace_factor + opponent_defense.pace_factor)
+    ppg = P.overlaid_float("LEAGUE_TEAM_PPG", P.LEAGUE_TEAM_PPG)
+    additive_diag: Dict[str, Any] = {}
+    if point_additive:
+        # First-principles additive scoring. Raw 0–100 efficiency, no
+        # index clamp, no offense/defense ratio.
+        #
+        #   E[pts] = pace * (μ + α(Off − 50) + β(50 − Def)) [* units] + HFA + coach
+        #
+        # μ = 25.9 (documented league team PPG).
+        # α = β because offense and defense share the packaged 0–100 scale.
+        # Half-index slope 25.9/136: each axis owns half of one linearized
+        # index unit. Full-index 25.9/68 is the C3 negative control.
+        # 12.6 possessions is the existing E4 scaffold, not a new fit.
+        if mode == "point_additive_full":
+            slope = ppg / P.SCORE_TO_INDEX_DIVISOR
+        else:
+            slope = ppg / (2.0 * P.SCORE_TO_INDEX_DIVISOR)
+        off_term = slope * (off_e - 50.0)
+        def_term = slope * (50.0 - def_e)
+        rate = ppg + off_term + def_term
+        units = off_boost * def_dampen
+        if mode == "point_additive_poss":
+            poss = 12.6 * pace
+            ppp = rate / 12.6
+            base = poss * ppp * units
+        else:
+            poss = None
+            ppp = None
+            base = rate * units * pace
+        additive_diag = {
+            "additive_mu": round(ppg, 4),
+            "additive_alpha": round(slope, 6),
+            "additive_beta": round(slope, 6),
+            "additive_off_term": round(off_term, 4),
+            "additive_def_term": round(def_term, 4),
+            "additive_rate": round(rate, 4),
+            "additive_possessions": None if poss is None else round(poss, 4),
+            "additive_ppp": None if ppp is None else round(ppp, 4),
+        }
+    elif mode == "possessions_ppp":
+        # Research scaffold: make possessions explicit. League ~12.6 team
+        # possessions; PPP is linear in the (possibly raw) matchup ratio.
+        poss = 12.6 * pace
+        ppp = (ppg / 12.6) * ratio * off_boost * def_dampen
+        base = poss * ppp
+        matchup = ratio
+    else:
+        base = ppg * matchup * off_boost * def_dampen * pace
 
     # Variable HFA — only the designated home side, never on neutral.
     hfa_profile = home_hfa_profile
@@ -342,6 +444,10 @@ def expected_team_points(
         neutral_site=neutral_site,
         night_game=night_game,
     )
+    if ov.get("zero_hfa"):
+        hfa = dict(hfa)
+        hfa["hfa_points"] = 0.0
+        hfa["research_overlay"] = "zero_hfa"
     base += float(hfa["hfa_points"])
 
     # Coaching: own offense penalty (week-decayed) + opponent new-DC boost.
@@ -351,23 +457,34 @@ def expected_team_points(
     )
     # Opponent defense penalty → they allow more → boost our scoring.
     coach_adj = float(own_coach["points"]) + abs(float(opp_def_pen["points"]))
+    if ov.get("zero_coaching"):
+        coach_adj = 0.0
     base += coach_adj
 
-    points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
+    if ov.get("disable_clamp"):
+        points = float(base)
+    else:
+        points = _clamp(base, *P.EXPECTED_POINTS_CLAMP)
     diag: Dict[str, Any] = {
         "matchup_ratio_raw": round(raw_ratio, 4),
         "matchup_ratio": round(ratio, 4),
         "matchup_ratio_clamped": abs(raw_ratio - ratio) > 1e-9,
         "matchup_response": round(response, 4),
+        "matchup_mode": mode,
+        "matchup_mult": round(matchup, 4),
         "offense_boost": round(off_boost, 4),
         "defense_dampen": round(def_dampen, 4),
         "pace": round(pace, 4),
+        "league_team_ppg": round(ppg, 4),
         "hfa": hfa,
         "coaching_own_scoring_adj": own_coach,
         "coaching_opp_defense_penalty": opp_def_pen,
         "coaching_net_adj": round(coach_adj, 3),
         "pre_clamp": round(base, 3),
+        "clamped": abs(float(base) - float(points)) > 1e-9,
     }
+    if additive_diag:
+        diag.update(additive_diag)
     return points, diag
 
 
@@ -558,7 +675,10 @@ def project_game(
     # Thin special-teams nudge — split evenly so scores/total/spread stay coherent.
     st_home = home.groups.special_teams if home.groups else 50.0
     st_away = away.groups.special_teams if away.groups else 50.0
-    st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
+    if P.score_component_overlay().get("zero_special_teams"):
+        st_nudge = 0.0
+    else:
+        st_nudge = P.SPECIAL_TEAMS_TOTAL_SCALE * ((st_home + st_away) / 2.0 - 50.0)
     home_exp_adj = round(home_exp + 0.5 * st_nudge, 2)
     away_exp_adj = round(away_exp + 0.5 * st_nudge, 2)
     total = round(home_exp_adj + away_exp_adj, 2)
