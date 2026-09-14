@@ -1,0 +1,1144 @@
+{
+  "desk_date": "2026-09-14",
+  "pinned": false,
+  "package": "monday",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Monday, Sep 14",
+    "bottom_line": "Week 1 finals locked for Sunday clubs. Frame: W1 RECAP + W2 PREVIEW. All filed seats Pass on win-totals (LAC Under KEEP on Reese Mon seat). DEN/KC MNF → Tuesday — not in this package.",
+    "storylines": [
+      "NFC North: CHI 59–37 @ CAR; DET 31–30 OT vs NO; MIN 39–22 vs GB (Murray concussion OUT Q1). All Pass into W2.",
+      "NFC East: PHI 24–22 vs WAS; NYG 28–20 vs DAL (Nabers active). Smith IR-DFR / Davis season IR on DAL. All Pass.",
+      "NFC South: ATL L 13–20 @ PIT (Tua OUT / Rush started); CAR L 37–59 vs CHI; NO L 30–31 OT @ DET; TB L 27–33 @ CIN. All Pass.",
+      "NFC West: ARI W 26–14 @ LAC; SF W 27–7 vs LAR (Melbourne); SEA W 13–10 vs NE (Darnold expected miss W2); LAR L. All Pass.",
+      "AFC East: BUF W 36–31 @ HOU; NYJ W 23–10 @ TEN; NE L 10–13 @ SEA (Brown IR); MIA L 13–27 @ LV. All Pass.",
+      "AFC South: JAX W 34–10 vs CLE; HOU L 31–36 vs BUF (McDonald IR); IND L 23–41 vs BAL; TEN L 10–23 vs NYJ. All Pass.",
+      "AFC North: BAL 41–23 @ IND; CIN 33–27 vs TB; PIT 20–13 vs ATL; CLE L 34–10 @ JAX. All Pass.",
+      "AFC West Mon seat: LV W 27–13 vs MIA; LAC L 26–14 vs ARI (Biadasz/Perryman IR hold). DEN/KC MNF → Tuesday."
+    ],
+    "what_to_watch": "Monday/Tue injury cycle into Week 2 (Murray protocol, Mahogany knee, Darnold/Bowers/Flowers designations, short-week DET@BUF TNF). Do not chase street. No MNF product on Mon desk.",
+    "sources": [
+      {
+        "label": "NFL.com — Week 2 schedule",
+        "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+      },
+      {
+        "label": "FOX Sports — DK win totals as of Sep 9",
+        "href": "https://www.foxsports.com/stories/nfl/2026-nfl-win-totals-over-unders-all-32-squads"
+      },
+      {
+        "label": "NFL.com — GB@MIN Final 22–39",
+        "href": "https://www.nfl.com/games/packers-at-vikings-2026-reg-1"
+      },
+      {
+        "label": "Eagles — W1 recap W 24-22",
+        "href": "https://www.philadelphiaeagles.com/news/commanders-vs-eagles-game-recap-september-13-2026-nfl-week-1"
+      },
+      {
+        "label": "Giants — W1 recap W 28-20",
+        "href": "https://www.giants.com/news/recap-john-harbaugh-era-begins-with-a-win"
+      },
+      {
+        "label": "Local10 — MIA@LV FINAL 27–13",
+        "href": "https://www.local10.com/sports/local/2026/09/13/willis-sacked-5-times-as-dolphins-fall-to-raiders-27-13-in-season-opener/"
+      },
+      {
+        "label": "49ers.com — Melbourne 27–7 takeaways",
+        "href": "https://www.49ers.com/news/49ers-open-2026-with-27-7-win-over-rams-in-melbourne-takeaways-from-larvssf"
+      },
+      {
+        "label": "Raiders — Week 1 recap LV 27–13",
+        "href": "https://www.raiders.com/news/game-recap-raiders-get-first-win-of-the-2026-season"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "ARI",
+      "title": "Cardinals — W1 recap + W2 preview (Sep 14)",
+      "bottom_line": "W1 FINAL W 26–14 @ LAC (club). Conner IR-DTR stands; Love debuted. W2 hosts SEA (Darnold expected out). Street 3.5 vs KEI 6.55 Over-side conflict (gap 3.05). Pass.",
+      "key_points": [
+        "W1 RECAP FINAL: W 26–14 @ LAC. Brissett led debut W for LaFleur (AP). Love active; Conner IR-DTR stands.",
+        "W2 PREVIEW: vs SEA Sun Sep 20. Opponent QB: Darnold expected out; Lock bridge. Pass on inventing game lean.",
+        "NUMBER: Street 3.5 (FOX/DK Sep 9) vs KEI 6.55 — house/Over-side conflict gap 3.05. Pass. Stamp unchanged."
+      ],
+      "what_to_watch": "First official W2 injury report vs SEA. Conner practice-window clock.",
+      "is_material_depth": true,
+      "sot_flag": "W1 FINAL W 26–14. Over-side conflict 3.5 vs 6.55. Pass. Street unchanged — no Riley.",
+      "sources": [
+        {
+          "label": "AP/ABC15 — Cardinals defeat Chargers 26–14",
+          "href": "https://www.abc15.com/sports/cardinals/cardinals-defeat-chargers-26-14-to-open-2026-nfl-season"
+        },
+        {
+          "label": "AZCardinals.com — initial 53; Conner IR-DTR",
+          "href": "https://www.azcardinals.com/news/cardinals-make-moves-to-get-to-initial-53-on-roster"
+        },
+        {
+          "label": "AZCardinals.com — Bam Knight roster spot",
+          "href": "https://www.azcardinals.com/news/bam-knight-only-knows-one-way-and-it-came-with-a-roster-spot"
+        },
+        {
+          "label": "AZCardinals.com — Michael Wilson extension",
+          "href": "https://www.azcardinals.com/news/michael-wilson-signs-3-year-contract-extension-with-cardinals"
+        },
+        {
+          "label": "AZCardinals.com — W1 @ Chargers game day",
+          "href": "https://www.azcardinals.com/game-day/2026/week1/cardinals-at-chargers/box-score"
+        },
+        {
+          "label": "FOX Sports — DK win totals as of Sep 9",
+          "href": "https://www.foxsports.com/stories/nfl/2026-nfl-win-totals-over-unders-all-32-squads"
+        },
+        {
+          "label": "AZCardinals.com — schedule live W1 board",
+          "href": "https://www.azcardinals.com/schedule/"
+        },
+        {
+          "label": "AZCardinals.com — Love active vs Chargers",
+          "href": "https://www.azcardinals.com/news/jeremiyah-love-active-for-cardinals-against-chargers"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons camp — Sep 14",
+      "bottom_line": "Steelers 20, Falcons 13. Tua named then OUT. Rush started. Not a pulse. Pass.",
+      "key_points": [
+        "- \"Club Sep 7: Tua named W1 QB1. Club Sep 11: Tua OUT (oblique); Cooper Rush starts; Penix inactive; Strand backup. Cam Williams IR Sat.",
+        "Steelers club: PIT 20–13. Watt pick-six of Rush. Bijan 173 scrimmage + TD. Tua week-to-week, not IR.",
+        "W2: vs CAR Sun Sep 20 1:00 p.m. ET."
+      ],
+      "what_to_watch": "Tua vs Rush vs Penix for Week 2. Do not re-crown Tua from Sep 7.",
+      "is_material_depth": true,
+      "sot_flag": "Rush was the club-named W1 starter after Tua OUT. Tua not IR. Penix inactive.",
+      "sources": [
+        {
+          "label": "Falcons — Tua named W1 QB1",
+          "href": "https://www.atlantafalcons.com/news/falcons-name-tua-tagovailoa-starting-quarterback-week-1"
+        },
+        {
+          "label": "Falcons — Tua OUT / Rush starts",
+          "href": "https://www.atlantafalcons.com/news/falcons-game-report-qb-tua-tagovailoa-ruled-out-of-sunday-s-game"
+        },
+        {
+          "label": "Steelers — final 20-13",
+          "href": "https://www.steelers.com/news/steelers-top-falcons-20-13-in-season-opener"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: BAL 41–23 @ IND. Flowers hamstring OUT 2H after 150/1; Lane wrist OUT 2H; Madubuike (neck) official OUT (was Sep 7 DTD); Buchanan (knee) OUT; Walker (groin) inactive. Pass on a new win-total — Week 2 designations open vs NO.",
+      "key_points": [
+        "Club/Mink + PFT: Flowers cleared Week 1, then hamstring exit; ruled out second half (150 yards, TD). Ja’Kobi Lane wrist OUT 2H.",
+        "Madubuike: Minter ruled him Out Friday — ‘really, really close’ / not Week 1. Buchanan Out all week (knee). Walker inactive (groin).",
+        "Week 2 hosts Saints. Do not invent Week 2 sits or crown WR1/DT1 from one game."
+      ],
+      "what_to_watch": "First Wed report for Flowers, Lane, Madubuike, Buchanan, Walker before NO.",
+      "is_material_depth": true,
+      "sot_flag": "Flowers hamstring OUT 2H; Madubuike official OUT; Buchanan OUT. Pass on minting a win-total.",
+      "sources": [
+        {
+          "label": "Ravens — Week 1 recap BAL 41–23",
+          "href": "https://www.baltimoreravens.com/news/ravens-roll-over-colts-regular-season-opener-2026-week-1"
+        },
+        {
+          "label": "Ravens — Madubuike Out Week 1 (Mink)",
+          "href": "https://www.baltimoreravens.com/news/nnamdi-madubuike-injury-report-ravens-colts-season-opener-neck"
+        },
+        {
+          "label": "PFT — Flowers hamstring done for day",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/zay-flowers-has-big-first-half-but-hes-done-for-the-day-with-a-hamstring-injury"
+        },
+        {
+          "label": "Ravens — Lane wrist OUT 2H",
+          "href": "https://www.baltimoreravens.com/news/jakobi-lane-wrist-injury-exits-ravens-opener-first-game"
+        },
+        {
+          "label": "NFL.com — Week 1 what we learned",
+          "href": "https://www.nfl.com/news/2026-nfl-season-week-1-what-we-learned-from-sunday-s-games"
+        }
+      ]
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: Allen 4 TDs; Palmer late winner; Rousseau strip-sack sealed (AP). Depth inactives only (Johnson/Sanders/Danna). W2: host DET TNF — short week. Pass on 10.5.",
+      "key_points": [
+        "W1 FINAL locked @ HOU 36–31 (AP).",
+        "W2: vs DET TNF — short-week health is the variable.",
+        "Pass — gap under half-win vs street 10.5."
+      ],
+      "what_to_watch": "TNF DET injury report cycle; do not invent Johnson Week 2.",
+      "is_material_depth": false,
+      "sot_flag": "",
+      "sources": [
+        {
+          "label": "CBS/AP — Bills 36–31 Texans FINAL",
+          "href": "https://www.cbssports.com/nfl/news/josh-allen-totals-4-tds-as-bills-outlast-texans-36-31/"
+        },
+        {
+          "label": "Bills club — Week 1 inactives",
+          "href": "https://www.buffalobills.com/news/buffalo-bills-inactives-at-texans-week-1"
+        },
+        {
+          "label": "NFL.com — Week 2 schedule (DET @ BUF TNF)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "CAR",
+      "title": "Panthers camp — Sep 14",
+      "bottom_line": "Bears 59, Panthers 37. Franchise-worst points allowed. Okereke already on the 53. Pass.",
+      "key_points": [
+        "- \"Club (Gantt): CHI 59–37 CAR. Most points allowed in franchise history. Bears 291 rush, six rush TDs.",
+        "Young 23/37, 361, 3 TD, 1 INT. Coker 8/138/2. Okereke (signed Aug 31) forced a fumble. Sanders / Metchie inactive.",
+        "W2: @ ATL Sun Sep 20 1:00 p.m. ET."
+      ],
+      "what_to_watch": "Whether the 59 is a one-week explosion or a real Under tell.",
+      "is_material_depth": false,
+      "sot_flag": "",
+      "sources": [
+        {
+          "label": "Panthers — Rapid Reactions 59-37",
+          "href": "https://www.panthers.com/news/rapid-reactions-panthers-fall-to-bears-in-an-opening-week-shootout"
+        },
+        {
+          "label": "Panthers — W1 inactives",
+          "href": "https://www.panthers.com/news/week-1-inactives-vs-chicago-ja-tavion-sanders-leads-the-list-regular-season-opener"
+        }
+      ]
+    },
+    {
+      "team_id": "CHI",
+      "title": "Bears — Sep 14",
+      "bottom_line": "Week 1: Chicago 59–37 at Carolina. Swift extended through 2029. Week 2 hosts Minnesota. Pass.",
+      "key_points": [
+        "chicagobears.com Sep 13: Bears 59, Panthers 37. Club season-opener scoring record. Braxton Jones started at LT (club Sep 8). Odunze was questionable (calf) then featured in the recap — do not invent the full active list.",
+        "Club Sep 12: signed RB D'Andre Swift to a three-year extension through 2029. Elevated QB Miller Moss and WR Kaden Davis for Week 1.",
+        "Bryant and Hayden Large remain Reserve/Injured (Sep 1). Gordon, Noah Sewell, and Shemar Turner remain Reserve/PUP. Dexter-for-Phillips remains pending physicals. Week 2: host Minnesota."
+      ],
+      "what_to_watch": "Week 2 vs Minnesota with Gordon still on PUP, and any post-W1 soft tissue (Odunze calf after playing).",
+      "is_material_depth": true,
+      "sot_flag": "W1 win locked. Swift extended. Bryant still IR. Flag nickel/DB into W2 vs MIN. Do not invent a nickel. Dexter-Phillips still pending.",
+      "sources": [
+        {
+          "label": "Bears — W1 recap vs Panthers (Sep 13)",
+          "href": "https://www.chicagobears.com/news/game-recap-bears-offense-shines-in-season-opening-win-over-panthers"
+        },
+        {
+          "label": "Bears — Swift three-year extension through 2029 (Sep 12)",
+          "href": "https://www.chicagobears.com/news/roster-moves-chicago-bears-sign-rb-d-andre-swift-to-three-year-extension"
+        },
+        {
+          "label": "Bears — Braxton Jones starts opener at LT (Sep 8)",
+          "href": "https://www.chicagobears.com/news/braxton-jones-to-start-season-opener-at-left-tackle"
+        },
+        {
+          "label": "Bears — Bryant/Large IR (Sep 1)",
+          "href": "https://www.chicagobears.com/news/chicago-bears-announce-roster-moves-practice-squad-2026"
+        },
+        {
+          "label": "Bears — transactions 2026",
+          "href": "https://www.chicagobears.com/team/transactions/2026"
+        }
+      ]
+    },
+    {
+      "team_id": "CIN",
+      "title": "Bengals — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: CIN 33–27 vs TB. Chase/Higgins played (closes Sep 7 limiteds). Stewart (knee) doubtful → inactive is the only new sit. Quiet pulse. Pass on a new win-total.",
+      "key_points": [
+        "Club IR + inactives: Chase/Higgins full / no designation / active and played. Do not re-essay the limiteds.",
+        "Shemar Stewart (knee) Doubtful Friday → inactive. Turner (hamstring) ‘good to go’ and active.",
+        "No postgame injury notes in club recap. Week 2 @ HOU."
+      ],
+      "what_to_watch": "Stewart’s first Week 2 practice designation before Houston.",
+      "is_material_depth": false,
+      "sot_flag": "Chase/Higgins played. Stewart inactive. Pass.",
+      "sources": [
+        {
+          "label": "Bengals — Week 1 recap CIN 33–27",
+          "href": "https://www.bengals.com/news/bengals-buccaneers-recap-postgame-notes-quotes-stats-week-1-2026"
+        },
+        {
+          "label": "Bengals — Week 1 injury report",
+          "href": "https://www.bengals.com/news/buccaneers-bengals-injury-report-week-1-2026"
+        },
+        {
+          "label": "Bengals — Week 1 inactives (Stewart)",
+          "href": "https://www.bengals.com/news/bengals-buccaneers-inactives-week-1-2026"
+        },
+        {
+          "label": "PFT — Stewart doubtful; Chase/Higgins set",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/shemar-stewart-doubtful-jamarr-chase-and-tee-higgins-set-to-play-week-1"
+        }
+      ]
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: JAX 34–10. Jenkins (back) OUT; club named rookie Austin Barber RG start. Brailsford (thumb) inactive. Pass reopen Watson/Gabriel. Pass on a new win-total.",
+      "key_points": [
+        "Club Russo Sep 11: Teven Jenkins Out (back). With Jenkins out, rookie Austin Barber earns the start at right guard — club-named.",
+        "Brailsford inactive (thumb). Two rookies on OL (Fano LT + Barber RG) per Monken/PFT — do not crown the rest of the line.",
+        "Watson finished. Gabriel IR-R still stands. Do not reopen QB1."
+      ],
+      "what_to_watch": "Jenkins’ first Week 2 practice designation before @ TB.",
+      "is_material_depth": true,
+      "sot_flag": "Barber Week 1 RG start — club-named. Jenkins Out. Pass QB reopen.",
+      "sources": [
+        {
+          "label": "Browns — Jenkins Out; Barber starts RG",
+          "href": "https://www.clevelandbrowns.com/news/teven-jenkins-out-for-week-1-vs-jaguars-injury-report"
+        },
+        {
+          "label": "PFT — Browns start two rookie OLs",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/browns-will-start-two-rookie-ols-with-teven-jenkins-ruled-out"
+        },
+        {
+          "label": "Browns — Week 1 recap JAX 34–10",
+          "href": "https://www.clevelandbrowns.com/news/jaguars-34-browns-10-final-score-stats-game-recap"
+        },
+        {
+          "label": "Browns — Week 1 inactives",
+          "href": "https://www.clevelandbrowns.com/news/browns-announce-inactives-for-week-1-vs-the-jaguars"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys camp — Sep 14",
+      "bottom_line": "Cowboys 20, Giants 28. Smith IR-DFR. Davis season-ending hip. RT still Steele vs Jones. Pass.",
+      "key_points": [
+        "Club: L 20–28. Dak 175, 2 TD, 1 INT. Williams 41 rush + 2 scores. Outgained 244–394. Aubrey XP miss after taunting.",
+        "Smith IR-DFR (Bass LG plan). Davis season-ending hip. Howell QB2. RT Steele vs Jones open.",
+        "W2: vs WAS Sun Sep 20 4:25 p.m. ET."
+      ],
+      "what_to_watch": "Who starts RT vs WAS. Bass at LG. RB2 without Davis.",
+      "is_material_depth": true,
+      "sot_flag": "Smith IR-DFR; Bass projected LG. Davis season-ending IR. RT Steele vs Jones — do not crown.",
+      "sources": [
+        {
+          "label": "Cowboys — W1 recap L 20-28",
+          "href": "https://www.dallascowboys.com/news/game-recap-cowboys-lose-opener-28-20"
+        },
+        {
+          "label": "Cowboys — Tyler Smith IR-DFR",
+          "href": "https://www.dallascowboys.com/news/tyler-smith-expected-to-miss-4-6-weeks-with-injury"
+        },
+        {
+          "label": "Cowboys — Malik Davis season-ending IR",
+          "href": "https://www.dallascowboys.com/news/malik-davis-out-with-pretty-serious-injury"
+        },
+        {
+          "label": "ESPN — Giants 28 Cowboys 20",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872930"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions — Sep 14",
+      "bottom_line": "Week 1: Detroit 31–30 OT vs New Orleans. Mahogany left with a knee. Week 2 is Thursday at Buffalo. Pass.",
+      "key_points": [
+        "detroitlions.com Sep 13: Lions 31, Saints 30 (OT). Starting LG Christian Mahogany exited Q1 with a knee and did not return; Ben Bartch replaced him. Short week: at Buffalo Thu Sep 17.",
+        "Club W1 inactives included Christian Izien (groin). Pacheco remains Reserve/Injured. Branch and Joseph remain Reserve/PUP. Manu remains Reserve/NFI. Mays remains Reserve/Injured.",
+        "Sep 7–10: Bachie and Tom Kennedy signed to the active roster from the practice squad. McLaughlin is on the practice squad after the Sep 2 waive. Do not name a Week 1 center."
+      ],
+      "what_to_watch": "Mahogany severity into Thursday at Buffalo, and center snaps with Mays still on IR.",
+      "is_material_depth": true,
+      "sot_flag": "W1 OT win locked. Mahogany knee. Pacheco IR; Branch/Joseph PUP; Mays IR. Flag DET LG/C into W2 short week. Do not invent C1 or LG1.",
+      "sources": [
+        {
+          "label": "Lions — W1 OT recap vs Saints (Sep 13)",
+          "href": "https://www.detroitlions.com/news/recap-lions-vs-saints-goff-stbrown-barnes"
+        },
+        {
+          "label": "Lions — W1 inactives (Sep 13)",
+          "href": "https://www.detroitlions.com/news/inactives-lions-vs-saints-izien-rakestraw-rolder"
+        },
+        {
+          "label": "Lions — transactions",
+          "href": "https://www.detroitlions.com/team/transactions/"
+        },
+        {
+          "label": "Lions — Aug 30 cutdown",
+          "href": "https://www.detroitlions.com/news/lions-announce-roster-moves-x5389"
+        }
+      ]
+    },
+    {
+      "team_id": "GB",
+      "title": "Packers — Sep 14",
+      "bottom_line": "Week 1: Minnesota 39–22 at Green Bay. Banks inactive; Jennings started LG. Jacobs remains commissioner exempt. Week 2 at NY Jets. Pass.",
+      "key_points": [
+        "packers.com Sep 13 final: Vikings 39, Packers 22. Club recap (Hodkiewicz/Spofford): Minnesota scored 29 straight in the second half after trailing 22–10. NFL.com game center also Final 22–39.",
+        "packers.com Sep 13: starting LG Aaron Banks inactive (knee); Zach Bako-Bewele active. Club recap: Donovan Jennings started at LG in place of Banks. Do not invent other OL swaps.",
+        "Club Aug 30 locks still hold: Jacobs on Commissioner's Exempt; Kaleb Johnson in; Parsons/Musgrave/Riley Reserve/PUP. Kraft extension (Sep 12) still holds. Week 2: at Jets (club schedule)."
+      ],
+      "what_to_watch": "Banks into Week 2 at Jets; Jacobs exempt timeline; Parsons still PUP.",
+      "is_material_depth": true,
+      "sot_flag": "W1 loss locked 39–22. Banks inactive; Jennings started LG (club). Jacobs still exempt; Parsons still PUP. Flag GB LG/RB/EDGE into W2 @ NYJ. Do not invent RB1.",
+      "sources": [
+        {
+          "label": "Packers — W1 final recap vs Vikings (Sep 13)",
+          "href": "https://www.packers.com/news/in-game-updates-week-1-vikings-2026"
+        },
+        {
+          "label": "NFL.com — GB@MIN Final 22–39",
+          "href": "https://www.nfl.com/games/packers-at-vikings-2026-reg-1"
+        },
+        {
+          "label": "Packers — Banks inactive Week 1 (Sep 13)",
+          "href": "https://www.packers.com/news/packers-lg-aaron-banks-won-t-play-vs-vikings-week-1-2026"
+        },
+        {
+          "label": "Packers — Kraft extension (Sep 12)",
+          "href": "https://www.packers.com/news/packers-sign-te-tucker-kraft-to-contract-extension-sept-12-2026"
+        },
+        {
+          "label": "Packers — Aug 30 roster moves",
+          "href": "https://www.packers.com/news/packers-announce-roster-moves-aug-30-2026"
+        },
+        {
+          "label": "Packers — 2026 schedule (W2 @ Jets)",
+          "href": "https://www.packers.com/schedule/2026/"
+        }
+      ]
+    },
+    {
+      "team_id": "HOU",
+      "title": "Texans — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: lost to BUF 31–36. McDonald IR ankle Sep 11; Hummel abdomen postgame. W2: vs CIN Sun 1 CBS. Pass on 9.5 (Over −146).",
+      "key_points": [
+        "W1 FINAL L vs BUF 31–36.",
+        "McDonald IR material depth; Hummel watch.",
+        "W2: vs CIN — Pass."
+      ],
+      "what_to_watch": "Hummel abdomen; protection notes into CIN.",
+      "is_material_depth": true,
+      "sot_flag": "McDonald IR (ankle) Sep 11. Pass.",
+      "sources": [
+        {
+          "label": "CBS/AP — BUF–HOU FINAL",
+          "href": "https://www.cbssports.com/nfl/news/josh-allen-totals-4-tds-as-bills-outlast-texans-36-31/"
+        },
+        {
+          "label": "Texans club — McDonald IR",
+          "href": "https://www.houstontexans.com/news/houston-texans-transactions-9-11-2026"
+        },
+        {
+          "label": "ESPN — McDonald IR",
+          "href": "https://www.espn.com/nfl/story/_/id/49906512/texans-rookie-kayden-mcdonald-placed-ir-ankle-injury"
+        },
+        {
+          "label": "NFL.com — Week 2 (CIN @ HOU)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "IND",
+      "title": "Colts — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: lost to BAL 41–23. Ajiake only injury inactive; Pierce active; Jones started. W2: @ KC SNF. Pass (show both) on 7.5 — house/street fight unchanged.",
+      "key_points": [
+        "W1 FINAL L vs BAL 23–41.",
+        "W2: @ KC SNF.",
+        "Pass (show both) — ~2.8-win fight holds."
+      ],
+      "what_to_watch": "Ajiake; Monday IR before SNF @ KC.",
+      "is_material_depth": false,
+      "sot_flag": "",
+      "sources": [
+        {
+          "label": "Colts club — Week 1 recap FINAL",
+          "href": "https://www.colts.com/news/colts-lose-to-ravens-41-23-in-2026-season-opener"
+        },
+        {
+          "label": "Colts club — Week 1 inactives",
+          "href": "https://www.colts.com/news/colts-announce-inactives-for-week-1-vs-baltimore-ravens"
+        },
+        {
+          "label": "NFL.com — Week 2 (IND @ KC SNF)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "JAX",
+      "title": "Jaguars — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: beat CLE 34–10 (Lawrence 4 TD). Van Lanen/Allen active. Green elbow DNR; BTJ shoulder returned. W2: @ DEN Sun 4:05 CBS. Pass on 8.5.",
+      "key_points": [
+        "W1 FINAL W vs CLE 34–10.",
+        "Green elbow is the W2 flag.",
+        "W2: @ DEN — Pass."
+      ],
+      "what_to_watch": "Green elbow / BTJ Monday designations before DEN.",
+      "is_material_depth": true,
+      "sot_flag": "Green elbow DNR W1; Van Lanen active. Pass.",
+      "sources": [
+        {
+          "label": "Jaguars club — Week 1 game report FINAL",
+          "href": "https://www.jaguars.com/news/game-report-2026-week-1-jaguars-34-browns-10"
+        },
+        {
+          "label": "Jaguars club — In and Out Week 1",
+          "href": "https://www.jaguars.com/news/in-and-out-2026-week-1-allen-van-lanen-active-for-opener"
+        },
+        {
+          "label": "NFL.com — Week 2 (JAX @ DEN)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1 FINAL: ARI 26–14 at LAC (club + NFL.com). Biadasz season IR + Perryman IR-R ≥4 still hold Under pillars. Slater not on Week 1 IR — club frames healthy (softens Sep 7 August-limited leg). McConkey left Week 1 with chest injury (club). Under 2/5 KEEP — gap 1.02; Under juice worse (FD -115, was DK +115). Do not mint off one loss.",
+      "key_points": [
+        "Club/NFL.com FINAL: Cardinals 26, Chargers 14 — Week 1 home loss locked.",
+        "Club: Biadasz season IR (ACL); Slaughter starting C. Perryman IR ≥4 after Scott signing — unchanged.",
+        "Week 1 preview: Slater + Alt ‘back and healthy’; Slater never on Week 1 IR. Softens Sep 7 Under supporting bullet — say so. Club recap: McConkey exited with chest injury after 5/82/1."
+      ],
+      "what_to_watch": "McConkey Week 2 designation; who held next to Henley; Week 2 vs LV (Bowers window).",
+      "is_material_depth": true,
+      "sot_flag": "W1 FINAL ARI 26–14. Biadasz/Perryman hold. Slater softens one leg. Under 2/5 KEEP.",
+      "sources": [
+        {
+          "label": "Chargers — Week 1 recap ARI 26–14",
+          "href": "https://www.chargers.com/news/cardinals-game-recap-week-1-2026"
+        },
+        {
+          "label": "NFL.com — Cardinals at Chargers W1 FINAL",
+          "href": "https://www.nfl.com/games/cardinals-at-chargers-2026-reg-1"
+        },
+        {
+          "label": "Chargers — Biadasz IR",
+          "href": "https://www.chargers.com/news/tyler-biadasz-injured-reserve-sign-gary-jennings-2026"
+        },
+        {
+          "label": "Chargers — Biadasz / Slaughter center",
+          "href": "https://www.chargers.com/news/tyler-biadasz-injury-jake-slaughter-starting-center"
+        },
+        {
+          "label": "Chargers — Week 1 preview (Slater healthy framing)",
+          "href": "https://www.chargers.com/news/cardinals-game-preview-week-1-2026"
+        },
+        {
+          "label": "Chargers — practice squad / Perryman IR",
+          "href": "https://www.chargers.com/news/practice-squad-2026"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams — W1 recap + W2 preview (Sep 14)",
+      "bottom_line": "W1 FINAL L 7–27 at SF (Melbourne). Donald rest OUT; exempt lifted — W2 vs NYG eligible not confirmed. Garrett arthroscopic IR ≥4 (beats). Street 11.5 vs KEI 11.07. Pass. (No MNF product — next game note only.)",
+      "key_points": [
+        "W1 RECAP FINAL: L 7–27 Melbourne. Donald OUT. Offense stalled; two turnovers.",
+        "W2 PREVIEW (next game only): vs NYG Mon Sep 21. Donald eligible not locked. Garrett IR ≥4 material.",
+        "NUMBER: Street 11.5 O-125/U+105 soft vs KEI 11.07. Pass."
+      ],
+      "what_to_watch": "Official Garrett IR transaction. Donald Week 2 practice/report language. No MNF card.",
+      "is_material_depth": true,
+      "sot_flag": "W1 final L. Garrett IR beats. Donald eligible. Gap 0.43 Pass.",
+      "sources": [
+        {
+          "label": "Rams.com — Donald won’t play Week 1 / Garrett ready (pregame)",
+          "href": "https://www.therams.com/news/aaron-donald-will-not-play-week-1-2026-49ers-myles-garrett-ready-to-go"
+        },
+        {
+          "label": "SI OnSI — Donald lifted from Exempt List Sep 11",
+          "href": "https://www.si.com/nfl/rams/onsi/rams-aaron-donald-activated-exempt-list-opening-door-for-debut"
+        },
+        {
+          "label": "ESPN Schefter — Garrett knee surgery, IR",
+          "href": "https://www.espn.com/nfl/story/_/id/49928065/sources-rams-myles-garrett-knee-surgery-headed-ir"
+        },
+        {
+          "label": "CBS — Garrett arthroscopic surgery / IR (Pelissero)",
+          "href": "https://www.cbssports.com/nfl/news/rams-myles-garrett-to-undergo-arthroscopic-knee-surgery/"
+        },
+        {
+          "label": "NBC LA — Garrett IR report",
+          "href": "https://www.nbclosangeles.com/news/sports/nfl/rams-myles-garrett-knee-surgery-injured-reserve/3941374/"
+        },
+        {
+          "label": "49ers.com — Melbourne 27–7 takeaways",
+          "href": "https://www.49ers.com/news/49ers-open-2026-with-27-7-win-over-rams-in-melbourne-takeaways-from-larvssf"
+        },
+        {
+          "label": "Reuters — 49ers beat Rams 27–7 Australia",
+          "href": "https://www.reuters.com/sports/49ers-beat-rams-27-7-landmark-australia-game-2026-09-11/"
+        },
+        {
+          "label": "FOX Sports — DK win totals as of Sep 9",
+          "href": "https://www.foxsports.com/stories/nfl/2026-nfl-win-totals-over-unders-all-32-squads"
+        }
+      ]
+    },
+    {
+      "team_id": "LV",
+      "title": "Raiders — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1 FINAL: LV 27–13 vs MIA (club + NFL.com). Bowers meniscus trim — club OUT Week 1. Schefter Sep 13: realistic chance Week 2 @ LAC; Rapoport mid-week: probably miss Week 2. Contested window. Jeanty available and productive in opener. Pass on a new win-total.",
+      "key_points": [
+        "Club/NFL.com FINAL: Raiders 27, Dolphins 13 — Week 1 home win locked.",
+        "ESPN Schefter/Rapoport: meniscus trim Tue with Dr. Daniel Cooper; expected miss a game or two. Club IR: OUT vs MIA (confirmed by result).",
+        "Schefter Sep 13: Raiders believe realistic chance return Sep 20 @ Chargers. Rapoport earlier: probably out Week 2. Not cleared — say both. Jeanty FP/available; Mayer fills Bowers Week 1 role."
+      ],
+      "what_to_watch": "Bowers’ first Week 2 practice participation before @ LAC.",
+      "is_material_depth": true,
+      "sot_flag": "W1 FINAL LV 27–13. Bowers trim OUT W1; Week 2 window contested. Jeanty available. Pass.",
+      "sources": [
+        {
+          "label": "Raiders — Week 1 recap LV 27–13",
+          "href": "https://www.raiders.com/news/game-recap-raiders-get-first-win-of-the-2026-season"
+        },
+        {
+          "label": "NFL.com — Dolphins at Raiders W1 FINAL",
+          "href": "https://www.nfl.com/games/dolphins-at-raiders-2026-reg-1"
+        },
+        {
+          "label": "ESPN — Bowers meniscus trim; miss opener",
+          "href": "https://www.espn.com/nfl/story/_/id/49884014/sources-brock-bowers-knee-miss-least-raiders-opener"
+        },
+        {
+          "label": "ESPN — realistic chance Week 2 (Schefter Sep 13)",
+          "href": "https://www.espn.com/nfl/story/_/id/49927883/sources-raiders-believe-brock-bowers-play-week-2"
+        },
+        {
+          "label": "Raiders — Week 1 injury report (Bowers OUT)",
+          "href": "https://www.raiders.com/news/las-vegas-raiders-miami-dolphins-nfl-week-1-2026-injury-report"
+        },
+        {
+          "label": "Raiders — Mayer multi-year extension",
+          "href": "https://www.raiders.com/news/raiders-sign-te-michael-mayer-to-multi-year-extension-2026-nfl-transactions"
+        },
+        {
+          "label": "CBS — Bowers chance Week 2",
+          "href": "https://www.cbssports.com/fantasy/football/news/raiders-brock-bowers-chance-to-return-in-week-2/"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1 FINAL: lost at LV 27–13 (Local10). Willis sacked 5×; Crosby led rush; Achane 11/36; Douglas 5/94 debut. W2: @ SF Sun 4:25 FOX. Pass (show both) on 3.5 — one loss does not close the house/street fight.",
+      "key_points": [
+        "W1 FINAL L @ LV 13–27.",
+        "Willis sacked 5×; Douglas debut bright spot; Achane quiet.",
+        "W2: @ SF — Pass (show both) on 3.5."
+      ],
+      "what_to_watch": "Monday IR after Allegiant; OL health into @ SF.",
+      "is_material_depth": true,
+      "sot_flag": "W1 FINAL L 13–27 @ LV. Pass (show both) — house/street fight unchanged.",
+      "sources": [
+        {
+          "label": "Local10 — Dolphins fall to Raiders 27–13 FINAL",
+          "href": "https://www.local10.com/sports/local/2026/09/13/willis-sacked-5-times-as-dolphins-fall-to-raiders-27-13-in-season-opener/"
+        },
+        {
+          "label": "Dolphins club — W1 game preview (Willis context)",
+          "href": "https://www.miamidolphins.com/news/game-preview-miami-dolphins-at-las-vegas-raiders"
+        },
+        {
+          "label": "NFL.com — Week 2 schedule (MIA @ SF)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Sep 14",
+      "bottom_line": "Week 1: Minnesota 39–22 vs Green Bay. Murray ruled out concussion Q1; Wentz finished. Week 2 at Chicago. Pass.",
+      "key_points": [
+        "vikings.com / packers.com / NFL.com: Final Vikings 39, Packers 22. Club + NFL lock. Minnesota scored 29 unanswered in the second half after trailing 22–10 (Packers club recap).",
+        "NFL.com + club: Kyler Murray ruled out after a concussion on a Q1 scramble (~11 plays into his debut). Carson Wentz took over (12-of-19, 133, 3 TD per Packers club box in recap — cite club, not invent). Club inactives: J.J. McCarthy listed third QB / inactive.",
+        "vikings.com Sep 8: signed S Harrison Smith; TE Ben Yuorsek to Reserve/Injured. Jurgens remains IR-DFR; Batty remains Reserve/Injured. Week 2: at Chicago."
+      ],
+      "what_to_watch": "Murray concussion protocol and who starts Week 2 at Chicago. Do not invent a QB1 beyond Wentz as the in-game replacement.",
+      "is_material_depth": true,
+      "sot_flag": "W1 win locked 39–22. Murray concussion ruled out W1. Flag MIN QB into W2 at CHI. Wentz in-game replacement only — do not crown Week 2 starter. Jurgens still IR-DFR.",
+      "sources": [
+        {
+          "label": "NFL.com — GB@MIN Final 22–39",
+          "href": "https://www.nfl.com/games/packers-at-vikings-2026-reg-1"
+        },
+        {
+          "label": "Packers — W1 final recap (club score lock)",
+          "href": "https://www.packers.com/news/in-game-updates-week-1-vikings-2026"
+        },
+        {
+          "label": "NFL.com — Murray concussion ruled out",
+          "href": "https://www.nfl.com/news/vikings-qb-kyler-murray-evaluated-concussion-packers"
+        },
+        {
+          "label": "Vikings — W1 inactives",
+          "href": "https://www.vikings.com/news/inactives-packers-week-1-2026"
+        },
+        {
+          "label": "Vikings — Harrison Smith return",
+          "href": "https://www.vikings.com/news/harrison-smith-return-safety-15-season-nfl-2026"
+        },
+        {
+          "label": "Vikings — initial 53 / Jurgens IR-DFR",
+          "href": "https://www.vikings.com/news/53-man-roster-2026-nfl-initial"
+        }
+      ]
+    },
+    {
+      "team_id": "NE",
+      "title": "Patriots — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: lost at SEA 13–10. Brown IR (high ankle, min. 4); Henderson OUT W1; Barmore played; Ben Brown OUT W1. W2: vs PIT Sun 1 CBS. Pass on 10.5.",
+      "key_points": [
+        "W1 FINAL L @ SEA 10–13.",
+        "Material: A.J. Brown IR min.4; Henderson still no W2 stamp.",
+        "W2: vs PIT — Pass on 10.5 (juice −140 Under)."
+      ],
+      "what_to_watch": "Week 2 IR for Henderson before PIT; WR plan without Brown.",
+      "is_material_depth": true,
+      "sot_flag": "A.J. Brown IR (high ankle, min. 4); Henderson W1 OUT / W2 thin; Ben Brown was OUT W1; Barmore played. Pass.",
+      "sources": [
+        {
+          "label": "ESPN — SEA 13–10 NE FINAL",
+          "href": "https://www.espn.com/nfl/story/_/id/49882128/2026-nfl-week-1-new-england-patriots-seattle-seahawks-drake-maye-sam-darnold"
+        },
+        {
+          "label": "Patriots club — film notes",
+          "href": "https://www.patriots.com/news/after-further-review-drake-maye-breakdown-patriots-defense-review-and-quick-hit-film-notes-from-the-loss-to-the-seahawks"
+        },
+        {
+          "label": "Patriots club — Brown IR / DaQuan Jones",
+          "href": "https://www.patriots.com/news/patriots-sign-veteran-dt-daquan-jones-and-place-wr-a-j-brown-on-ir"
+        },
+        {
+          "label": "ESPN — Brown IR min. 4",
+          "href": "https://www.espn.com/nfl/story/_/id/49905144/sources-patriots-aj-brown-go-ir-miss-least-4-games"
+        },
+        {
+          "label": "NFL.com — Week 2 (PIT @ NE)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "NO",
+      "title": "Saints camp — Sep 14",
+      "bottom_line": "Lions 31, Saints 30 OT. Jordan OUT. Kamara practiced and sat. Estimé IR. Pass.",
+      "key_points": [
+        "- \"Club: L 30–31 OT at DET. Jordan (hamstring) OUT — not IR. Kamara practiced (full Fri) still inactive. Estimé IR; Donaldson elevated.",
+        "Shough 35/56, 410, 3 TD, 2 INT. Failed 2-pt to Bryce Lance in OT.",
+        "W2: @ BAL Sun Sep 20 1:00 p.m. ET."
+      ],
+      "what_to_watch": "Kamara Week 2 designation. Jordan IR vs active. Do not convert Etienne W1 into season RB1.",
+      "is_material_depth": true,
+      "sot_flag": "Jordan OUT not IR. Kamara inactive not IR. Estimé IR.",
+      "sources": [
+        {
+          "label": "Saints — Cam Jordan out W1",
+          "href": "https://www.neworleanssaints.com/news/new-orleans-saints-edge-cam-jordan-to-miss-third-career-game-will-sit-out-season-opener-against-detroit"
+        },
+        {
+          "label": "Saints — W1 inactives",
+          "href": "https://www.neworleanssaints.com/news/new-orleans-saints-inactives-detroit-lions-2026-nfl-week-1-gameday"
+        },
+        {
+          "label": "Saints — Lions 31 Saints 30 OT recap",
+          "href": "https://www.neworleanssaints.com/news/2026-nfl-week-1-detroit-lions-vs-new-orleans-saints-game-recap"
+        }
+      ]
+    },
+    {
+      "team_id": "NYG",
+      "title": "Giants camp — Sep 14",
+      "bottom_line": "Giants 28, Cowboys 20. Nabers ACTIVE (6/69). Dart three TD. Slayton already cut. Pass.",
+      "key_points": [
+        "Club: W 28–20. Nabers active (was Q) — 6/69, started. Dart 3 pass TD; historic open note. Likely 8/78/2 TD. Skattebo 18/81/1. Cambre inactive.",
+        "Slayton terminated Sep 7. W2 @ LAR Mon Sep 21 8:15 — no MNF game card (off seat).",
+        "Club: L 20–28. Dak 175, 2 TD, 1 INT. Williams 41 rush + 2 scores. Outgained 244–394. Aubrey XP miss after taunting.",
+        "Smith IR-DFR (Bass LG plan). Davis season-ending hip. Howell QB2. RT Steele vs Jones open.",
+        "W2: vs WAS Sun Sep 20 4:25 p.m. ET."
+      ],
+      "what_to_watch": "Nabers snap count into Monday. Skattebo/Likely usage holding.",
+      "is_material_depth": true,
+      "sot_flag": "Nabers played (was Q). Slayton cut Sep 7. Do not invent WR1a beyond what played.",
+      "sources": [
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/game-recap-cowboys-lose-opener-28-20"
+        },
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/tyler-smith-expected-to-miss-4-6-weeks-with-injury"
+        },
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/malik-davis-out-with-pretty-serious-injury"
+        },
+        {
+          "label": "ESPN — recap",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872930"
+        }
+      ]
+    },
+    {
+      "team_id": "NYJ",
+      "title": "Jets — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: beat TEN 23–10. Hall played (102 total + TD); Ossai OUT (still week-to-week). Fitzpatrick/Cooper exits — severity thin. W2: vs GB Sun 1 FOX. Pass on 5.5.",
+      "key_points": [
+        "W1 FINAL W @ TEN 23–10.",
+        "Hall played; Ossai OUT W1 still week-to-week.",
+        "W2: vs GB — Pass."
+      ],
+      "what_to_watch": "Monday IR — Ossai vs GB; Fitzpatrick/Cooper.",
+      "is_material_depth": true,
+      "sot_flag": "Hall cleared W1; Ossai OUT W1 week-to-week. Pass.",
+      "sources": [
+        {
+          "label": "Jets club — Week 1 recap FINAL",
+          "href": "https://www.newyorkjets.com/news/jets-titans-game-recap-green-white-stifle-tennessee-in-23-10-week-1-victory"
+        },
+        {
+          "label": "Jets club — Friday IR",
+          "href": "https://www.newyorkjets.com/news/jets-injury-report-week-1-vs-titans-friday-09-11-2026"
+        },
+        {
+          "label": "CBS — Ossai ruled out W1",
+          "href": "https://www.cbssports.com/fantasy/football/news/jets-joseph-ossai-ruled-out-for-sunday/"
+        },
+        {
+          "label": "NFL.com — Week 2 (GB @ NYJ)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "PHI",
+      "title": "Eagles camp — Sep 14",
+      "bottom_line": "Eagles 24, Commanders 22. Ojomo stuffed the late 2-pt. Dalton is QB2. Stowers IR. Greenard OUT. Pass.",
+      "key_points": [
+        "Club: PHI 24–22. Hurts 14/25, 203, 3 TD, 0 INT; 7/46 rush. Goedert 2 TD. Wicks debut TD. Barkley 15/83. Ojomo stuffed Daniels shovel 2-pt to Bates.",
+        "Club inactives: Dalton active backup; McKee emergency third inactive. Stowers IR Sat. Greenard OUT.",
+        "W2: @ TEN Sun Sep 20 1:00 p.m. ET.",
+        "Club: L 22–24. Daniels 2 TD; Diggs 4/55 + TD; Croskey-Merritt rush TD; 132 team rush. Shovel 2-pt to Bates stuffed.",
+        "Inactives: McCaffrey, Burks, Kaliakmanis emergency. Oweh available. Tunsil/Newton IR Aug 31. Coleman LT plan.",
+        "W2: @ DAL Sun Sep 20 4:25 p.m. ET.",
+        "Club: W 28–20. Nabers active (was Q) — 6/69, started. Dart 3 pass TD; historic open note. Likely 8/78/2 TD. Skattebo 18/81/1. Cambre inactive.",
+        "Slayton terminated Sep 7. W2 @ LAR Mon Sep 21 8:15 — no MNF game card (off seat).",
+        "Club: L 20–28. Dak 175, 2 TD, 1 INT. Williams 41 rush + 2 scores. Outgained 244–394. Aubrey XP miss after taunting.",
+        "Smith IR-DFR (Bass LG plan). Davis season-ending hip. Howell QB2. RT Steele vs Jones open.",
+        "W2: vs WAS Sun Sep 20 4:25 p.m. ET."
+      ],
+      "what_to_watch": "Greenard Week 2. QB2 holding. Goedert/Wicks usage.",
+      "is_material_depth": true,
+      "sot_flag": "Dalton club game-day QB2. Stowers IR. Greenard W1 OUT not season IR.",
+      "sources": [
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/game-recap-cowboys-lose-opener-28-20"
+        },
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/tyler-smith-expected-to-miss-4-6-weeks-with-injury"
+        },
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/malik-davis-out-with-pretty-serious-injury"
+        },
+        {
+          "label": "ESPN — recap",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872930"
+        }
+      ]
+    },
+    {
+      "team_id": "PIT",
+      "title": "Steelers — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: PIT 20–13 vs ATL. Porter Jr. (back) only IR name all week → Q → inactive. McCarthy: ramp-up, plan next week. Howard dressed 3QB (cleared confirmed). Pass trades. Pass on a new win-total.",
+      "key_points": [
+        "Club: Porter Jr. only Steelers name on Week 1 IR; Questionable; inactive. McCarthy (Depot/WDVE): ramp-up mode, ‘plan for next week.’",
+        "Howard dressed as emergency 3QB — Sep 7 cleared confirmed, not a new identity. Skowronek off Week 1 IR.",
+        "Sit ESPN trade thesis as card thesis. Do not crown CB1. Week 2 @ NE."
+      ],
+      "what_to_watch": "Porter’s first Week 2 practice designation before New England.",
+      "is_material_depth": true,
+      "sot_flag": "Porter inactive Week 1 — club. Week 2 open. Pass on minting CB1.",
+      "sources": [
+        {
+          "label": "Steelers — Week 1 injury report",
+          "href": "https://www.steelers.com/news/week-1-injury-report-falcons-x3059"
+        },
+        {
+          "label": "Steelers — Week 1 inactives (Porter)",
+          "href": "https://www.steelers.com/news/steelers-inactives-for-week-1-vs-falcons"
+        },
+        {
+          "label": "PFT — Porter inactive",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/joey-porter-is-inactive-for-the-steelers"
+        },
+        {
+          "label": "Steelers Depot — McCarthy on Porter ramp-up",
+          "href": "https://steelersdepot.com/2026/09/mike-mccarthy-explains-why-joey-porter-jr-didnt-play-against-falcons/"
+        },
+        {
+          "label": "Steelers — Week 1 recap PIT 20–13",
+          "href": "https://www.steelers.com/news/steelers-top-falcons-20-13-in-season-opener"
+        }
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks — W1 recap + W2 preview (Sep 14)",
+      "bottom_line": "W1 FINAL W 13–10 vs NE. Darnold glute (fracture out) — expected miss W2 @ ARI; Lock finished W1. Street 10.5 vs KEI 10.81. Pass — no Lock lean / no reprice.",
+      "key_points": [
+        "W1 RECAP FINAL: W 13–10. Darnold exits early; Lock closes.",
+        "W2 PREVIEW: @ ARI Sep 20. Darnold expected OUT; Lock bridge. Pass — no lean.",
+        "NUMBER: Street 10.5 vs KEI 10.81. Pass."
+      ],
+      "what_to_watch": "Club Week 2 designation for Darnold. Official IR sheet @ ARI.",
+      "is_material_depth": true,
+      "sot_flag": "W1 final W. Darnold miss W2 (beats). Gap 0.31 Pass.",
+      "sources": [
+        {
+          "label": "Seahawks.com — great news on Darnold hip (no fracture)",
+          "href": "https://www.seahawks.com/news/seahawks-get-great-news-on-sam-darnold-s-hip-injury"
+        },
+        {
+          "label": "ESPN — Darnold hip exits opening drive / Lock in",
+          "href": "https://www.espn.com/nfl/story/_/id/49886582/seahawks-qb-darnold-injures-hip-opening-drive-vs-patriots"
+        },
+        {
+          "label": "ESPN Schefter/Rapoport — expected miss Week 2",
+          "href": "https://www.espn.com/nfl/story/_/id/49893507/sources-seahawks-sam-darnold-expected-miss-week-2"
+        },
+        {
+          "label": "CBS/RotoWire — glute injury; miss Week 2 (Rapoport)",
+          "href": "https://www.cbssports.com/fantasy/football/news/seahawks-sam-darnold-dealing-with-glute-injury/"
+        },
+        {
+          "label": "Seattle Times — glute; miss Week 2 reports",
+          "href": "https://www.seattletimes.com/sports/seahawks/sam-darnold-dealing-with-glute-injury-expected-to-miss-week-2-reports-say/"
+        },
+        {
+          "label": "FOX Sports — Glazer glute tendon / miss next week",
+          "href": "https://www.foxsports.com/stories/nfl/seahawks-qb-sam-darnold-injury-timetable-jay-glazer"
+        },
+        {
+          "label": "FOX Sports — DK win totals as of Sep 9",
+          "href": "https://www.foxsports.com/stories/nfl/2026-nfl-win-totals-over-unders-all-32-squads"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers — W1 recap + W2 preview (Sep 14)",
+      "bottom_line": "W1 FINAL W 27–7 vs LAR (Melbourne). Collins SE/IR; Stribling ≥1 mo (Rapoport); Okuayinonu IR stands. W2 hosts MIA. Street 9.5 juiced Over vs KEI 8.53. Pass.",
+      "key_points": [
+        "W1 RECAP FINAL: W 27–7 Melbourne. Purdy 3 TD. Collins SE/IR. Stribling ≥1 mo.",
+        "W2 PREVIEW: vs MIA Sun Sep 20 home. Depth flags only — Pass on game lean.",
+        "NUMBER: Street 9.5 O-146/U+120 vs KEI 8.53. Pass."
+      ],
+      "what_to_watch": "Week 2 IR vs MIA. Any further DL/WR moves post-travel.",
+      "is_material_depth": true,
+      "sot_flag": "W1 final W. Collins SE + Stribling ≥1 mo. Gap 0.97 Pass.",
+      "sources": [
+        {
+          "label": "49ers.com — Collins OUT; Thompson Q vs Rams",
+          "href": "https://www.49ers.com/news/alfred-collins-out-james-thomas-jr-questionable-vs-rams-injury-report-ahead-of-sfvslar"
+        },
+        {
+          "label": "NBC Sports Simmons — Collins IR; two elevated",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/49ers-place-dl-alfred-collins-on-ir-elevate-two"
+        },
+        {
+          "label": "NFL.com Rapoport — Stribling out ≥1 month (ankle)",
+          "href": "https://www.nfl.com/news/niners-wr-dezhaun-stribling-out-at-least-a-month-ankle-sprain"
+        },
+        {
+          "label": "AP — Collins torn patellar, season over",
+          "href": "https://apnews.com/article/49ers-rams-alfred-collins-cb18e11b033f1d81d639e8ab61b53697"
+        },
+        {
+          "label": "49ers.com — Melbourne 27–7 takeaways",
+          "href": "https://www.49ers.com/news/49ers-open-2026-with-27-7-win-over-rams-in-melbourne-takeaways-from-larvssf"
+        },
+        {
+          "label": "Reuters — 49ers 27–7 Rams Australia",
+          "href": "https://www.reuters.com/sports/49ers-beat-rams-27-7-landmark-australia-game-2026-09-11/"
+        },
+        {
+          "label": "FOX Sports — DK win totals as of Sep 9",
+          "href": "https://www.foxsports.com/stories/nfl/2026-nfl-win-totals-over-unders-all-32-squads"
+        }
+      ]
+    },
+    {
+      "team_id": "TB",
+      "title": "Buccaneers camp — Sep 14",
+      "bottom_line": "Bengals 33, Bucs 27. Four fumbles. McMillan and Tucker inactive. Pass.",
+      "key_points": [
+        "- \"Club: L 27–33 at CIN. Four lost fumbles; three first-half giveaways became 21 Bengals points. Mayfield 23/28, 216, one rush TD.",
+        "Inactives: McMillan (knee), Tucker (hamstring), Skule (oblique). Rozeboom active. Egbuka played.",
+        "W2: vs CLE Sun Sep 20 1:00 p.m. ET."
+      ],
+      "what_to_watch": "McMillan Week 2. Ball security vs a 7.5 that already slid a win.",
+      "is_material_depth": false,
+      "sot_flag": "",
+      "sources": [
+        {
+          "label": "Bucs — W1 recap 33-27",
+          "href": "https://www.buccaneers.com/news/bucs-bengals-week-1-recap-postgame-report-2026"
+        },
+        {
+          "label": "Bucs — W1 inactives",
+          "href": "https://www.buccaneers.com/news/bucs-bengals-inactives-christian-rozeboom-cleared-to-play"
+        }
+      ]
+    },
+    {
+      "team_id": "TEN",
+      "title": "Titans — Week 1 recap / Week 2 preview — Sep 14",
+      "bottom_line": "W1: lost to NYJ 23–10. Cedric Gray OUT (concussion protocol after UTV); Hill Jr. started. Carmona RG already named. W2: vs PHI Sun 1 FOX. Pass on 6.5.",
+      "key_points": [
+        "W1 FINAL L vs NYJ 10–23.",
+        "Gray OUT W1 — protocol watch into PHI.",
+        "W2: vs PHI — Pass."
+      ],
+      "what_to_watch": "Gray concussion-protocol steps before PHI.",
+      "is_material_depth": true,
+      "sot_flag": "Gray OUT W1 (concussion protocol). Pass.",
+      "sources": [
+        {
+          "label": "Titans club — Week 1 recap FINAL",
+          "href": "https://www.tennesseetitans.com/news/titans-drop-season-opener-to-jets-23-10"
+        },
+        {
+          "label": "Titans club — Gray concussion protocol",
+          "href": "https://www.tennesseetitans.com/news/titans-lb-cedric-gray-in-concussion-protocol-after-utv-accident"
+        },
+        {
+          "label": "ESPN — Gray OUT Week 1",
+          "href": "https://www.espn.com/nfl/story/_/id/49905346/titans-lb-cedric-gray-ruled-vs-jets-utv-accident"
+        },
+        {
+          "label": "NFL.com — Week 2 (PHI @ TEN)",
+          "href": "https://www.nfl.com/schedules/2026/by-week/week-2"
+        }
+      ]
+    },
+    {
+      "team_id": "WAS",
+      "title": "Commanders camp — Sep 14",
+      "bottom_line": "Commanders 22, Eagles 24. Late 2-pt stuffed. Tunsil/Newton still IR. Coleman LT plan. Pass.",
+      "key_points": [
+        "Club: L 22–24. Daniels 2 TD; Diggs 4/55 + TD; Croskey-Merritt rush TD; 132 team rush. Shovel 2-pt to Bates stuffed.",
+        "Inactives: McCaffrey, Burks, Kaliakmanis emergency. Oweh available. Tunsil/Newton IR Aug 31. Coleman LT plan.",
+        "W2: @ DAL Sun Sep 20 4:25 p.m. ET.",
+        "Club: W 28–20. Nabers active (was Q) — 6/69, started. Dart 3 pass TD; historic open note. Likely 8/78/2 TD. Skattebo 18/81/1. Cambre inactive.",
+        "Slayton terminated Sep 7. W2 @ LAR Mon Sep 21 8:15 — no MNF game card (off seat).",
+        "Club: L 20–28. Dak 175, 2 TD, 1 INT. Williams 41 rush + 2 scores. Outgained 244–394. Aubrey XP miss after taunting.",
+        "Smith IR-DFR (Bass LG plan). Davis season-ending hip. Howell QB2. RT Steele vs Jones open.",
+        "W2: vs WAS Sun Sep 20 4:25 p.m. ET."
+      ],
+      "what_to_watch": "LT/C snaps without Tunsil. Diggs usage. Short-week clean-up vs DAL.",
+      "is_material_depth": true,
+      "sot_flag": "Tunsil and Newton remain IR. Coleman is the LT plan. Do not invent the starting five.",
+      "sources": [
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/game-recap-cowboys-lose-opener-28-20"
+        },
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/tyler-smith-expected-to-miss-4-6-weeks-with-injury"
+        },
+        {
+          "label": "Cowboys — W1",
+          "href": "https://www.dallascowboys.com/news/malik-davis-out-with-pretty-serious-injury"
+        },
+        {
+          "label": "ESPN — recap",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872930"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Flowers hamstring OUT 2H; Madubuike official OUT; Buchanan OUT. Pass on new win-total."
+    },
+    {
+      "team_id": "CHI",
+      "fields": ["bottom_line", "what_matters_most", "date"],
+      "reason": "OS amend: W1 recap + W2 preview; W1 win; Swift; W2 vs MIN; Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "CIN",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Chase/Higgins played; Stewart inactive only. Pass."
+    },
+    {
+      "team_id": "CLE",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Jenkins Out; Barber club-named RG. Pass QB reopen / new win-total."
+    },
+    {
+      "team_id": "DET",
+      "fields": ["bottom_line", "what_matters_most", "date"],
+      "reason": "OS amend: W1 recap + W2 preview; OT win; Mahogany; Thu @ BUF; Pass.",
+      "status": "touched"
+    },
+    {
+      "team_id": "GB",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most"
+      ],
+      "reason": "GB@MIN final locked MIN 39–22; Banks/Jennings LG; W2 @ NYJ; Pass; street unchanged. Merged into SoT.",
+      "status": "touched"
+    },
+    {
+      "team_id": "LAC",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "W1 FINAL ARI 26–14. Biadasz/Perryman hold; Slater softens. KEEP Under 2/5 — gap 1.02, Under juice worse FD -115."
+    },
+    {
+      "team_id": "LV",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "W1 FINAL LV 27–13. Bowers trim OUT W1; street 5.5 (was 6.5). Pass."
+    },
+    {
+      "team_id": "MIN",
+      "fields": [
+        "bottom_line",
+        "key_points",
+        "what_to_watch",
+        "sot_flag",
+        "what_matters_most"
+      ],
+      "reason": "GB@MIN final locked MIN 39–22; Murray concussion; W2 at CHI; Pass; street unchanged. Merged into SoT.",
+      "status": "touched"
+    },
+    {
+      "team_id": "PIT",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Porter inactive (back). |diff| 0.34. Pass."
+    }
+  ]
+}
