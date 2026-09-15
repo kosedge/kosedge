@@ -1,0 +1,19 @@
+{
+  "eligible_count": 84,
+  "reason_counts": {
+    "excluded_incomplete_pbp": 1,
+    "excluded_unfinished_live": 94,
+    "excluded_unfinished_live_no_pbp": 1,
+    "excluded_unfinished_parked_no_pbp": 5,
+    "included_eligible_completed_pbp_w_minus_1": 84
+  },
+  "delayed_game_id": "401868140",
+  "delayed_included": false,
+  "pbp_complete_through_final": false,
+  "pbp_max_period": 2,
+  "pbp_last_score": {
+    "home": 28,
+    "away": 0
+  },
+  "fail_closed": true
+}

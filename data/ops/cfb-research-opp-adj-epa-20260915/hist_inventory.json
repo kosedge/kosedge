@@ -1,0 +1,229 @@
+{
+  "feature_version": "cfb-research-hist-raw-features-v1",
+  "metric_version": "cfb-owned-raw-metrics-v1",
+  "success_rate_label": "EPA_success = EPA>0",
+  "research_only": true,
+  "opponent_adjusted": false,
+  "as_of": "20260915",
+  "generated_at": "2026-09-15T17:09:05.294472+00:00",
+  "path_convention": {
+    "as_of": "20260915",
+    "canonical_hd_lake": "/Volumes/KosEdgeData/raw/cfb/pbp",
+    "canonical_note": "2014\u20132025 Aug 13 lake is CANONICAL SoT. Research restore is a versioned copy and must not overwrite those files.",
+    "hd_research_mirror": "/Volumes/KosEdgeData/raw/cfb/pbp_research/as_of_20260915",
+    "vm_research_path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915",
+    "repo_warehouse_fallback": "/workspace/data/cfb/warehouse/raw/pbp",
+    "hd_mounted": false,
+    "historical_lake_write": false,
+    "versioning": "research/pbp_hist/as_of_YYYYMMDD/",
+    "release_url_pattern": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_{year}.parquet"
+  },
+  "seasons": [
+    2014,
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+  ],
+  "checksums": {
+    "2014": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2014.parquet",
+      "sha256": "cb67832ae42b6dc70ef8f8e4673683ea84a461ec141269bab703de50efd91ebe",
+      "bytes": 52690968,
+      "plays": 155538,
+      "games": 854,
+      "play_delta_vs_aug13": 17,
+      "game_delta_vs_aug13": 0
+    },
+    "2015": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2015.parquet",
+      "sha256": "340bef662ebed7dbfa30b66d42049971c7cb9c376f3edf112f4435c42641c0c8",
+      "bytes": 52825246,
+      "plays": 158518,
+      "games": 866,
+      "play_delta_vs_aug13": 17,
+      "game_delta_vs_aug13": 0
+    },
+    "2016": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2016.parquet",
+      "sha256": "71e4382d42322b189dfac550434909eaf131eb116b179172345affa75efd3274",
+      "bytes": 52074986,
+      "plays": 155646,
+      "games": 858,
+      "play_delta_vs_aug13": 24,
+      "game_delta_vs_aug13": 0
+    },
+    "2017": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2017.parquet",
+      "sha256": "3cc87892c5585563e782fa73f756b69fcdd0f2dde803d6e9b875d0e3fa750ff5",
+      "bytes": 51743262,
+      "plays": 155536,
+      "games": 872,
+      "play_delta_vs_aug13": 31,
+      "game_delta_vs_aug13": 0
+    },
+    "2018": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2018.parquet",
+      "sha256": "d59f38fb2859b5a3416ff262cfebac5658335559b63260a47cfef6526edfb71d",
+      "bytes": 52499018,
+      "plays": 158271,
+      "games": 884,
+      "play_delta_vs_aug13": 22,
+      "game_delta_vs_aug13": 0
+    },
+    "2019": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2019.parquet",
+      "sha256": "ae58ee5fb3b4dcf2e7402d9151ce9875af16ba92882257871e59bdeb117e647b",
+      "bytes": 52072547,
+      "plays": 156908,
+      "games": 890,
+      "play_delta_vs_aug13": 20,
+      "game_delta_vs_aug13": 0
+    },
+    "2020": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2020.parquet",
+      "sha256": "51455bdc8756ad499c7bf4271269d3b196e3f61121d31608b2e9cf84658feaaf",
+      "bytes": 33396809,
+      "plays": 100433,
+      "games": 565,
+      "play_delta_vs_aug13": 13,
+      "game_delta_vs_aug13": 0
+    },
+    "2021": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2021.parquet",
+      "sha256": "302f6e182b4653ae6c7d31f975c2c090e1804ed736ad35931cdbaa5d7dd26f7e",
+      "bytes": 49143293,
+      "plays": 147319,
+      "games": 842,
+      "play_delta_vs_aug13": 952,
+      "game_delta_vs_aug13": 0
+    },
+    "2022": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2022.parquet",
+      "sha256": "1e0271f3182271ee7f680e8fbeb05c7122952abda0f933be1be3987c51024a88",
+      "bytes": 49831930,
+      "plays": 149700,
+      "games": 861,
+      "play_delta_vs_aug13": 46,
+      "game_delta_vs_aug13": 0
+    },
+    "2023": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2023.parquet",
+      "sha256": "fd0b04553ba3944e8acddc1088aba60692b7a555fb945de8381055c37a98799c",
+      "bytes": 50819931,
+      "plays": 153690,
+      "games": 903,
+      "play_delta_vs_aug13": 64,
+      "game_delta_vs_aug13": 0
+    },
+    "2024": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2024.parquet",
+      "sha256": "25ae95cf175a59bbb362d5f8af3cb3e748b56635d084ebda69461c31b3c5e312",
+      "bytes": 55269115,
+      "plays": 163142,
+      "games": 946,
+      "play_delta_vs_aug13": 192,
+      "game_delta_vs_aug13": 0
+    },
+    "2025": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/play_by_play_2025.parquet",
+      "sha256": "aa037920e980acf17317747f2010a031b3b7e1013a44a7b15db18b1dd9df0e63",
+      "bytes": 59281459,
+      "plays": 166053,
+      "games": 956,
+      "play_delta_vs_aug13": 203,
+      "game_delta_vs_aug13": 0
+    }
+  },
+  "errors": {},
+  "totals": {
+    "plays": 1820754,
+    "games": 10297,
+    "team_games": 20588,
+    "inventory_plays": 1819153,
+    "inventory_games": 10297,
+    "play_delta_vs_aug13": 1601,
+    "game_delta_vs_aug13": 0
+  },
+  "reconcile_2021_2024": {
+    "inventory_plays": 612597,
+    "inventory_games": 3552,
+    "observed_plays": 613851,
+    "observed_games": 3552,
+    "play_delta": 1254,
+    "game_delta": 0,
+    "games_match": true,
+    "note": "HD SoT is 612,597 plays / 3,552 games. A later SDV copy may add plays; game-count match is the reconcile gate."
+  },
+  "epa_audits": {
+    "2014": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 121360,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2015": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 122314,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2016": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 121401,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2017": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 121050,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2018": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 123321,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2019": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 122002,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2020": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 78484,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2021": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 113837,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2022": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 115308,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2023": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 117628,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2024": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 123053,
+      "agree_EPA_gt_0": 1.0
+    },
+    "2025": {
+      "verdict": "EPA_success_matches_EPA_gt_0",
+      "usable_scrimmage": 125706,
+      "agree_EPA_gt_0": 1.0
+    }
+  },
+  "cfbd_used": false,
+  "historical_lake_write": false
+}

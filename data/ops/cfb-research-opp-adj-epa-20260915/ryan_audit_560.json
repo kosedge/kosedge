@@ -1,0 +1,166 @@
+{
+  "audit_only": true,
+  "production_promote": false,
+  "holdout_season": 2025,
+  "selection_seasons": [
+    2023,
+    2024
+  ],
+  "n_holdout_obs": 1713,
+  "n_unique_games": 930,
+  "obs_key": "season,week,game_id,offense,defense,home",
+  "obs_keys_sha256": "009ce549ab9e0b0b5a94aa0bdc88b0c9d57d11e156c291634dca5e08f2532508",
+  "obs_keys_path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/holdout_2025_obs_keys.tsv",
+  "week_n": {
+    "1": 229,
+    "2": 130,
+    "3": 115,
+    "4": 111,
+    "5": 102,
+    "6": 100,
+    "7": 110,
+    "8": 117,
+    "9": 105,
+    "10": 103,
+    "11": 101,
+    "12": 116,
+    "13": 122,
+    "14": 132,
+    "15": 18,
+    "16": 2
+  },
+  "prefix_by_week_head_n": {
+    "2025w1": 229,
+    "2025w2": 130,
+    "2025w3": 115,
+    "2025w4": 111,
+    "2025w5": 102,
+    "2025w6": 100,
+    "2025w7": 110,
+    "2025w8": 117,
+    "2025w9": 105,
+    "2025w10": 103,
+    "2025w11": 101,
+    "2025w12": 116
+  },
+  "rematerialized_by_week_head_n": {
+    "2025w1": 229,
+    "2025w2": 130,
+    "2025w3": 115,
+    "2025w4": 111,
+    "2025w5": 102,
+    "2025w6": 100,
+    "2025w7": 110,
+    "2025w8": 117,
+    "2025w9": 105,
+    "2025w10": 103,
+    "2025w11": 101,
+    "2025w12": 116
+  },
+  "week_head_n_match_prefix": true,
+  "baseline_mu_fallback": {
+    "note": "Unadj/blend fall back to adj-model \u03bc when a team has no same-season STD and no prior-season raw mean. Offense MAE was bit-identical pre-fix vs rematerialize; defense MAE moved.",
+    "offense_rows_using_mu": 0,
+    "defense_rows_using_mu": 5
+  },
+  "frozen_season_mu_hfa": [
+    {
+      "season": 2014,
+      "mu": -0.01814480121502457,
+      "hfa": 0.06606766088131333,
+      "n_obs": 1706,
+      "n_teams": 213,
+      "n_fbs": 126
+    },
+    {
+      "season": 2015,
+      "mu": -0.008962856922158736,
+      "hfa": 0.06496407720299395,
+      "n_obs": 1730,
+      "n_teams": 214,
+      "n_fbs": 126
+    },
+    {
+      "season": 2016,
+      "mu": 0.006460542914899258,
+      "hfa": 0.054238668790288005,
+      "n_obs": 1714,
+      "n_teams": 219,
+      "n_fbs": 126
+    },
+    {
+      "season": 2017,
+      "mu": -0.005872134791279362,
+      "hfa": 0.05192687953395437,
+      "n_obs": 1744,
+      "n_teams": 217,
+      "n_fbs": 129
+    },
+    {
+      "season": 2018,
+      "mu": 0.011591698773904181,
+      "hfa": 0.051203971546887654,
+      "n_obs": 1768,
+      "n_teams": 225,
+      "n_fbs": 131
+    },
+    {
+      "season": 2019,
+      "mu": 0.003286280925976882,
+      "hfa": 0.06691248277490537,
+      "n_obs": 1780,
+      "n_teams": 223,
+      "n_fbs": 131
+    },
+    {
+      "season": 2020,
+      "mu": 0.037734313227306256,
+      "hfa": 0.02183773806875536,
+      "n_obs": 1130,
+      "n_teams": 145,
+      "n_fbs": 128
+    },
+    {
+      "season": 2021,
+      "mu": 0.027526401665182602,
+      "hfa": 0.04734520121513318,
+      "n_obs": 1684,
+      "n_teams": 217,
+      "n_fbs": 133
+    },
+    {
+      "season": 2022,
+      "mu": -0.0008599177548161099,
+      "hfa": 0.0514786544179855,
+      "n_obs": 1722,
+      "n_teams": 230,
+      "n_fbs": 135
+    },
+    {
+      "season": 2023,
+      "mu": 0.0013898060101409022,
+      "hfa": 0.05884906947095078,
+      "n_obs": 1806,
+      "n_teams": 227,
+      "n_fbs": 135
+    },
+    {
+      "season": 2024,
+      "mu": 0.008077625058066737,
+      "hfa": 0.06638053324983184,
+      "n_obs": 1892,
+      "n_teams": 235,
+      "n_fbs": 134
+    },
+    {
+      "season": 2025,
+      "mu": 0.011226076223885181,
+      "hfa": 0.07051767354285932,
+      "n_obs": 1912,
+      "n_teams": 236,
+      "n_fbs": 134
+    }
+  ],
+  "hfa_units": "EPA/play on the offense observation",
+  "home_coding": "home=1 if offense is the home team else 0 (neutral/unknown=0)"
+}
