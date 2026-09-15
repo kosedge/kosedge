@@ -95,6 +95,9 @@ const MAJOR_FLAG = {
   rematRunId: null as string | null,
 };
 
+/** Before ATL kickoff+3h so unit tests do not depend on wall-clock CLEAR. */
+const BEFORE_TTL_MS = Date.parse("2026-09-13T16:50:00Z");
+
 describe("nfl inactive fair suppress (SOP v1.1)", () => {
   it("uses fair-lines / schedule game_id as the canonical join key", () => {
     expect(
@@ -132,7 +135,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
     const stamped = applyNflInactiveFairSuppressToRows(
       [atlPitSpread(), other],
       "nfl",
-      { flags: { [ATL_PIT_ID]: MAJOR_FLAG } },
+      { flags: { [ATL_PIT_ID]: MAJOR_FLAG }, nowMs: BEFORE_TTL_MS },
     );
     expect(stamped[0]?.inactiveSuppress?.state).toBe("SUPPRESSED");
     expect(stamped[0]?.kei).toBeUndefined();
@@ -146,7 +149,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
     const stamped = applyNflInactiveFairSuppressToRows(
       [atlPitSpread()],
       "nfl",
-      { flags: { [ATL_PIT_ID]: MAJOR_FLAG } },
+      { flags: { [ATL_PIT_ID]: MAJOR_FLAG }, nowMs: BEFORE_TTL_MS },
     );
     const row = stamped[0]!;
     expect(row.inactiveSuppress?.state).toBe("SUPPRESSED");
@@ -185,6 +188,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
     const stamped = applyNflInactiveFairSuppressToRows(
       [atlPitSpread({ majorInactiveKnown: true })],
       "nfl",
+      { nowMs: BEFORE_TTL_MS },
     );
     expect(stamped[0]?.inactiveSuppress?.state).toBe("SUPPRESSED");
     expect(stamped[0]?.fairCompareEligible).toBe(false);
@@ -260,7 +264,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
         }),
       ],
       "nfl",
-      { flags: { [ATL_PIT_ID]: MAJOR_FLAG } },
+      { flags: { [ATL_PIT_ID]: MAJOR_FLAG }, nowMs: BEFORE_TTL_MS },
     );
     const row = stamped[0]!;
     expect(row.homeWinProb).toBeUndefined();
@@ -281,6 +285,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
         flags: {
           [ATL_PIT_ID]: { ...MAJOR_FLAG, markets: ["Spread"] },
         },
+        nowMs: BEFORE_TTL_MS,
       },
     );
     expect(stamped[0]?.inactiveSuppress?.state).toBe("SUPPRESSED");
@@ -297,6 +302,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
         flags: {
           [ATL_PIT_ID]: { ...MAJOR_FLAG, markets: ["Total"] },
         },
+        nowMs: BEFORE_TTL_MS,
       },
     );
     expect(stamped[0]?.inactiveSuppress?.state).toBe("CLEAR");
@@ -320,6 +326,7 @@ describe("nfl inactive fair suppress (SOP v1.1)", () => {
         flags: {
           [ATL_PIT_ID]: { ...MAJOR_FLAG, markets: ["Spread"] },
         },
+        nowMs: BEFORE_TTL_MS,
       },
     );
     expect(stamped[0]?.keiSpreadHome).toBeUndefined();
@@ -355,7 +362,7 @@ describe("ATL@PIT adversarial — street moved + stale fair + qb_unresolved", ()
         atlPitTotal(),
       ],
       "nfl",
-      { flags: { [ATL_PIT_ID]: MAJOR_FLAG } },
+      { flags: { [ATL_PIT_ID]: MAJOR_FLAG }, nowMs: BEFORE_TTL_MS },
     );
     expect(stamped[0]?.best).toBe("+3.5");
     expect(stamped[0]?.open).toBe("+2.5");
@@ -499,5 +506,7 @@ describe("assemble source-lock", () => {
     );
     expect(src).toContain("applyNflInactiveFairSuppressToRows");
     expect(src).toContain("loadNflInactiveSuppressStore");
+    expect(src).toContain("appendNflInactiveSuppressProofRows");
+    expect(src).toContain("buildNflInactiveSuppressProofAssembleBody");
   });
 });

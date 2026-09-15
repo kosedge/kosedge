@@ -23,6 +23,8 @@ import { CFB_EDGE_BOARD_PUBLIC_ENABLED } from "@/lib/cfb-edge-board-public";
 const webRoot = path.join(__dirname, "../..");
 const repoRoot = path.join(webRoot, "../..");
 const ATL_PIT_ID = "2026-W01-ATL@PIT";
+const PROOF_SYNTH_KEY = "PROOF@SYNTH";
+const PROOF_SYNTH_UUID = "c0de0000-5e17-4000-8000-00000000f00f";
 
 const IN_APP_ABS = path.join(webRoot, NFL_INACTIVE_SUPPRESS_IN_APP_REL);
 const REPO_ABS = path.join(repoRoot, NFL_INACTIVE_SUPPRESS_REPO_REL);
@@ -122,36 +124,58 @@ describe("nfl inactive suppress store paths", () => {
     expect(store.games).toEqual({});
   });
 
-  it("bundled import still arms ATL@PIT when no file is on disk", () => {
+  it("bundled import still arms PROOF@SYNTH when no file is on disk", () => {
     const store = loadNflInactiveSuppressStore({
       env: {},
       cwd: "/var/task",
       exists: () => false,
       readJson: () => null,
     });
-    const flag = lookupNflInactiveSuppressFlag(store, ATL_PIT_ID, ["ATL@PIT"]);
+    const flag = lookupNflInactiveSuppressFlag(store, PROOF_SYNTH_KEY, [
+      PROOF_SYNTH_KEY,
+    ]);
     expect(flag?.reason).toBe(NFL_INACTIVE_SUPPRESS_REASON_MAJOR);
     expect(flag?.classes).toContain("MAJOR");
+    expect(flag?.setBy).toBe("product");
     expect(flag?.rematRunId ?? null).toBeNull();
+    expect(flag?.ttlUntil).toBeTruthy();
+    expect(store.games?.["ATL@PIT"]).toBeUndefined();
+    expect(store.games?.[ATL_PIT_ID]).toBeUndefined();
+    expect(
+      lookupNflInactiveSuppressFlag(store, PROOF_SYNTH_UUID, [PROOF_SYNTH_UUID])
+        ?.reason,
+    ).toBe(NFL_INACTIVE_SUPPRESS_REASON_MAJOR);
   });
 });
 
 describe("nfl inactive suppress dual-file SoT", () => {
-  it("keeps ATL@PIT armed in both JSON copies", () => {
+  it("keeps synthetic PROOF@SYNTH armed in both JSON copies and ATL absent", () => {
     const repo = parseNflInactiveSuppressStore(
       JSON.parse(readFileSync(REPO_ABS, "utf8")),
     );
     const inApp = parseNflInactiveSuppressStore(
       JSON.parse(readFileSync(IN_APP_ABS, "utf8")),
     );
-    expect(repo.games?.["ATL@PIT"]?.reason).toBe(
+    expect(repo.games?.["ATL@PIT"]).toBeUndefined();
+    expect(inApp.games?.["ATL@PIT"]).toBeUndefined();
+    expect(repo.games?.[ATL_PIT_ID]).toBeUndefined();
+    expect(inApp.games?.[ATL_PIT_ID]).toBeUndefined();
+    expect(repo.games?.[PROOF_SYNTH_KEY]?.reason).toBe(
       NFL_INACTIVE_SUPPRESS_REASON_MAJOR,
     );
-    expect(inApp.games?.["ATL@PIT"]?.reason).toBe(
+    expect(inApp.games?.[PROOF_SYNTH_KEY]?.reason).toBe(
       NFL_INACTIVE_SUPPRESS_REASON_MAJOR,
     );
-    expect(repo.games?.["ATL@PIT"]?.rematRunId ?? null).toBeNull();
-    expect(inApp.games?.["ATL@PIT"]?.rematRunId ?? null).toBeNull();
+    expect(repo.games?.[PROOF_SYNTH_KEY]?.classes).toEqual(["MAJOR"]);
+    expect(repo.games?.[PROOF_SYNTH_KEY]?.setBy).toBe("product");
+    expect(repo.games?.[PROOF_SYNTH_KEY]?.rematRunId ?? null).toBeNull();
+    expect(inApp.games?.[PROOF_SYNTH_KEY]?.rematRunId ?? null).toBeNull();
+    expect(repo.games?.[PROOF_SYNTH_KEY]?.ttlUntil).toBeTruthy();
+    expect(inApp.games?.[PROOF_SYNTH_KEY]?.ttlUntil).toBe(
+      repo.games?.[PROOF_SYNTH_KEY]?.ttlUntil,
+    );
+    expect(repo.games?.[PROOF_SYNTH_UUID]?.aliases).toEqual([PROOF_SYNTH_KEY]);
+    expect(inApp.games?.[PROOF_SYNTH_UUID]?.aliases).toEqual([PROOF_SYNTH_KEY]);
     expect(repo.games).toEqual(inApp.games);
     expect(repo.kickoffBufferMs).toBe(inApp.kickoffBufferMs);
     expect(repo.version).toBe(inApp.version);

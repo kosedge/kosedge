@@ -1,27 +1,29 @@
 {
   "version": 1,
   "gameIdConvention": "nfl_fair_line_game_id",
-  "note": "SOP v1.1 NFL inactive remat-or-failclosed display suppress. Empty games map = no board-wide suppress. Product owner sets a per-game flag; remat receipt or CoS clear revokes. Canonical gameId = fair-lines/schedule game_id (e.g. 2026-W01-ATL@PIT). AWAY@HOME aliases also resolve. CoS CONFIRM 2026-09-13: ATL@PIT MAJOR suppress armed — leave until remat CLEAR.",
+  "note": "SOP v1.1 NFL inactive remat-or-failclosed display suppress. Empty games map = no board-wide suppress. Product owner sets a per-game flag; remat receipt or CoS clear revokes. Canonical gameId = fair-lines/schedule game_id (e.g. 2026-W01-ATL@PIT). AWAY@HOME aliases also resolve. Proof A 2026-09-13: ATL@PIT / UUID arms removed (finished game → natural CLEAR). Synthetic PROOF@SYNTH + uuid alias only — never a customer matchup. Explicit ttlUntil so preview can observe SUPPRESSED then natural CLEAR.",
   "kickoffBufferMs": 10800000,
   "games": {
-    "ATL@PIT": {
+    "PROOF@SYNTH": {
       "markets": [],
       "reason": "major_inactive_pending_remat",
       "players": [],
       "classes": ["MAJOR"],
       "setBy": "product",
-      "setAt": "2026-09-13T17:12:38Z",
+      "setAt": "2026-09-13T22:44:16Z",
+      "ttlUntil": "2026-09-14T00:48:17Z",
       "rematRunId": null
     },
-    "32c54be3-4067-4128-9f3b-9cfc8a36d2cd": {
+    "c0de0000-5e17-4000-8000-00000000f00f": {
       "markets": [],
       "reason": "major_inactive_pending_remat",
       "players": [],
       "classes": ["MAJOR"],
       "setBy": "product",
-      "setAt": "2026-09-13T17:12:38Z",
+      "setAt": "2026-09-13T22:44:16Z",
+      "ttlUntil": "2026-09-14T00:48:17Z",
       "rematRunId": null,
-      "aliases": ["ATL@PIT"]
+      "aliases": ["PROOF@SYNTH"]
     }
   }
 }
