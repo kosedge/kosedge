@@ -34,6 +34,8 @@ class _Session:
         if "INSERT INTO nfl_market_outcomes" in query:
             self.inserts.append(dict(params or {}))
             return _Result()
+        if "UPDATE games" in query or "UPDATE nfl_dp_schedules" in query:
+            return _Result()
         raise AssertionError(f"Unexpected SQL in test: {query}")
 
     def commit(self):
@@ -86,6 +88,61 @@ def test_pull_nfl_outcomes_upserts_and_is_repeatable(monkeypatch) -> None:
     assert session_1.inserts[0]["source"] == "nfl-dp-schedules"
     assert session_1.committed is True
     assert session_2.committed is True
+
+
+def test_pull_nfl_outcomes_fetches_espn_when_status_is_not_final(monkeypatch) -> None:
+    """NFL #564: W1 games left as scheduled still ingest ESPN finals."""
+    row = namedtuple(
+        "Row",
+        [
+            "game_id",
+            "external_id",
+            "game_status",
+            "game_date",
+            "start_time",
+            "home_score",
+            "away_score",
+            "schedule_updated_at",
+            "home_abbr",
+            "away_abbr",
+        ],
+    )(
+        game_id="game-w1",
+        external_id="401872657",
+        game_status="scheduled",
+        game_date="2026-09-10",
+        start_time=None,
+        home_score=None,
+        away_score=None,
+        schedule_updated_at=None,
+        home_abbr="LAR",
+        away_abbr="SF",
+    )
+    session = _Session(rows=[row])
+    monkeypatch.setattr(tasks, "SessionLocal", lambda: session)
+    monkeypatch.setattr(
+        tasks,
+        "fetch_nfl_schedule",
+        lambda *_args, **_kwargs: [
+            {
+                "external_game_id": "401872657",
+                "status": "final",
+                "home_abbr": "LAR",
+                "away_abbr": "SF",
+                "home_score": 7,
+                "away_score": 27,
+                "game_time": "2026-09-11T00:35:00Z",
+            }
+        ],
+    )
+
+    result = tasks.pull_nfl_outcomes(days_back=14)
+
+    assert result["outcomes_upserted"] == 1
+    assert session.inserts[0]["actual_home_points"] == 7
+    assert session.inserts[0]["actual_away_points"] == 27
+    assert session.inserts[0]["final_total_points"] == 34
+    assert session.inserts[0]["source"] == "espn-scoreboard"
 
 
 def test_compute_nfl_quality_payload_metrics() -> None:

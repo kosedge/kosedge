@@ -105,12 +105,8 @@ def test_chi_car_actual_is_outside_equation_band_not_a_retune_license() -> None:
     assert abs(epa_total - 45.3) <= 5.5
 
 
-def test_adhoc_simulation_route_still_bypasses_epa_resolve() -> None:
-    """Foot-gun lock: POST /simulations/{id} writes context*injury, no EPA resolve.
-
-    Do not remat through this endpoint until outcomes land and the batch
-    resolver is wired. Updating this test is part of that later PR.
-    """
+def test_adhoc_simulation_route_uses_epa_or_refuse() -> None:
+    """NFL #564: POST /simulations/{id} must resolve packaged EPA or refuse persist."""
     src = ROUTES_NFL.read_text(encoding="utf-8")
     assert ADHOC_SENTINEL in src
     start = src.index("def run_nfl_simulation")
@@ -119,6 +115,7 @@ def test_adhoc_simulation_route_still_bypasses_epa_resolve() -> None:
     code_only = "\n".join(
         line for line in fn.splitlines() if not line.lstrip().startswith("#")
     )
-    assert "_resolve_team_strength_indices" not in code_only
-    assert "offense_index_home" in code_only
+    assert "resolve_adhoc_simulation_strength" in code_only
+    assert "NflWlPersistRefused" in code_only
+    assert "nfl_wl_persist_refused" in code_only
     assert "INSERT INTO nfl_market_projections" in code_only

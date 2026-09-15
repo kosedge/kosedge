@@ -368,23 +368,48 @@ def _resolve_nfl_odds_bookmakers_for_request(raw: Optional[str] = None) -> str:
 
 
 def _resolve_current_nfl_board_week(session: Any, season: int) -> int:
-    """Upcoming (or in-progress) regular-season week for the edge board Live tab."""
-    row = session.execute(
+    """Upcoming (or in-progress) regular-season week for the edge board Live tab.
+
+    NFL #564: a date-window lookback kept ``current_week`` at 1 after W1
+    Monday. Advance past weeks whose games have schedule scores or ingested
+    ``nfl_market_outcomes``.
+    """
+    from src.services.nfl_epa_authority import resolve_current_nfl_board_week_from_rows
+
+    rows = session.execute(
         text(
             """
-            SELECT week
-            FROM nfl_dp_schedules
-            WHERE season = :season
-              AND week BETWEEN 1 AND 18
-              AND game_date >= (CURRENT_DATE - INTERVAL '1 day')
-            ORDER BY game_date ASC, week ASC
-            LIMIT 1
+            SELECT
+              sch.week,
+              sch.game_date,
+              sch.home_score,
+              sch.away_score,
+              (mo.game_id IS NOT NULL) AS has_outcome
+            FROM nfl_dp_schedules sch
+            LEFT JOIN games g
+              ON g.external_id = sch.game_id
+            LEFT JOIN nfl_market_outcomes mo
+              ON mo.game_id = g.id
+            WHERE sch.season = :season
+              AND sch.week BETWEEN 1 AND 18
+            ORDER BY sch.game_date ASC, sch.week ASC
             """
         ),
         {"season": int(season)},
-    ).fetchone()
-    if row is not None and row[0] is not None:
-        return int(row[0])
+    ).fetchall()
+    mapped: List[Dict[str, Any]] = []
+    for row in rows or []:
+        if hasattr(row, "_mapping"):
+            mapped.append(dict(row._mapping))
+        elif isinstance(row, dict):
+            mapped.append(row)
+        else:
+            try:
+                mapped.append({"week": row[0]})
+            except Exception:
+                continue
+    if mapped:
+        return resolve_current_nfl_board_week_from_rows(mapped, today=date.today())
     row = session.execute(
         text(
             """
@@ -4741,12 +4766,9 @@ def run_nfl_simulation(
     simulations: int = Query(4000, ge=300, le=30000),
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
 ) -> Dict[str, Any]:
-    # NFL_REGRESSION_20260915: ad-hoc POST /simulations/{id} still multiplies
-    # nfl_game_context (ESPN W-L via pull_nfl_context_snapshot) by injury
-    # nowcast and WRITES nfl_market_projections. It does not call
-    # _resolve_team_strength_indices. Do not remat via this endpoint until
-    # Week 1 outcomes are ingested and the batch EPA resolver is wired.
-    # production_promote=false — Coming soon stays.
+    # NFL_REGRESSION_20260915 / NFL #564: packaged EPA is authoritative.
+    # Refuse persist when strength would be the ESPN W-L two-bucket book.
+    # production_promote=false — Coming soon stays. Overlays off.
     session = SessionLocal()
     try:
         row = session.execute(
@@ -4764,7 +4786,8 @@ def run_nfl_simulation(
                   c.defense_index_home,
                   c.defense_index_away,
                   c.rest_days_home,
-                  c.rest_days_away
+                  c.rest_days_away,
+                  c.context
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
@@ -4816,23 +4839,50 @@ def run_nfl_simulation(
         weather_payload = environment_payload.get("weather") if isinstance(environment_payload.get("weather"), dict) else {}
         travel_payload = environment_payload.get("travel") if isinstance(environment_payload.get("travel"), dict) else {}
         matchup_kwargs = matchup_pack_to_sim_input_kwargs(matchup_pack)
+        from src.services.nfl_epa_authority import (
+            NflWlPersistRefused,
+            resolve_adhoc_simulation_strength,
+        )
+
+        home_record = None
+        away_record = None
+        if isinstance(context_payload, dict):
+            home_record = context_payload.get("home_record_summary")
+            away_record = context_payload.get("away_record_summary")
+        try:
+            strength = resolve_adhoc_simulation_strength(
+                home_abbr=str(m.get("home_abbr") or m.get("home_team") or ""),
+                away_abbr=str(m.get("away_abbr") or m.get("away_team") or ""),
+                context_offense_home=_to_float(m.get("offense_index_home")),
+                context_offense_away=_to_float(m.get("offense_index_away")),
+                context_defense_home=_to_float(m.get("defense_index_home")),
+                context_defense_away=_to_float(m.get("defense_index_away")),
+                home_record_summary=str(home_record) if home_record else None,
+                away_record_summary=str(away_record) if away_record else None,
+            )
+        except NflWlPersistRefused as exc:
+            raise HTTPException(
+                status_code=409,
+                detail={
+                    "code": "nfl_wl_persist_refused",
+                    "reason": exc.reason,
+                    "detail": exc.detail,
+                    "message": (
+                        "Ad-hoc NFL simulation refuses to persist ESPN W-L "
+                        "two-bucket strength. Packaged EPA is required."
+                    ),
+                    "production_promote": False,
+                },
+            ) from exc
+        # Overlays stay off on this remediating path (do not multiply injury).
         inputs = NflGameInputs(
             game_id=str(m["game_id"]),
             home_team=str(m["home_team"]),
             away_team=str(m["away_team"]),
-            offense_index_home=(_to_float(m.get("offense_index_home")) or 1.0)
-            * (_to_float(home_nowcast.get("offense_multiplier")) or 1.0),
-            offense_index_away=(_to_float(m.get("offense_index_away")) or 1.0)
-            * (_to_float(away_nowcast.get("offense_multiplier")) or 1.0),
-            # See the matching comment in tasks.py::run_nfl_market_simulations --
-            # defense_index is "higher = stronger defense", so a
-            # defense_multiplier documented as "higher = weaker defense"
-            # (injury/roster-continuity nowcast) must be applied as a
-            # divisor, not a multiplier.
-            defense_index_home=(_to_float(m.get("defense_index_home")) or 1.0)
-            / (_to_float(home_nowcast.get("defense_multiplier")) or 1.0),
-            defense_index_away=(_to_float(m.get("defense_index_away")) or 1.0)
-            / (_to_float(away_nowcast.get("defense_multiplier")) or 1.0),
+            offense_index_home=strength.offense_index_home,
+            offense_index_away=strength.offense_index_away,
+            defense_index_home=strength.defense_index_home,
+            defense_index_away=strength.defense_index_away,
             rest_days_home=_to_float(m.get("rest_days_home")) or 7.0,
             rest_days_away=_to_float(m.get("rest_days_away")) or 7.0,
             injury_nowcast_confidence_home=_to_float(home_nowcast.get("confidence")),
@@ -4841,10 +4891,10 @@ def run_nfl_simulation(
             injury_nowcast_freshness_away_hours=_to_float(away_nowcast.get("freshness_hours")),
             injury_nowcast_impact_home=_to_float(home_nowcast.get("impact_score")),
             injury_nowcast_impact_away=_to_float(away_nowcast.get("impact_score")),
-            injury_nowcast_offense_multiplier_home=_to_float(home_nowcast.get("offense_multiplier")),
-            injury_nowcast_offense_multiplier_away=_to_float(away_nowcast.get("offense_multiplier")),
-            injury_nowcast_defense_multiplier_home=_to_float(home_nowcast.get("defense_multiplier")),
-            injury_nowcast_defense_multiplier_away=_to_float(away_nowcast.get("defense_multiplier")),
+            injury_nowcast_offense_multiplier_home=None,
+            injury_nowcast_offense_multiplier_away=None,
+            injury_nowcast_defense_multiplier_home=None,
+            injury_nowcast_defense_multiplier_away=None,
             injury_nowcast_source=str(injury_nowcast.get("source") or "nfl_dp_injuries"),
             injury_nowcast_home_drivers=home_nowcast.get("top_drivers") if isinstance(home_nowcast.get("top_drivers"), list) else [],
             injury_nowcast_away_drivers=away_nowcast.get("top_drivers") if isinstance(away_nowcast.get("top_drivers"), list) else [],
@@ -4871,6 +4921,18 @@ def run_nfl_simulation(
             totals_calibration=totals_calibration,
         )
         annotate_projection_model_handicap(projection, line_role="model")
+        audit = projection.get("audit") if isinstance(projection.get("audit"), dict) else {}
+        audit.update(
+            {
+                "strength_source": strength.source,
+                "overlays_off": True,
+                "personnel_overlay": False,
+                "injury_overlay": False,
+                "production_promote": False,
+                "refused_win_loss_context": bool(strength.refused_win_loss),
+            }
+        )
+        projection["audit"] = audit
         markets = projection.get("markets") or {}
         session.execute(
             text(

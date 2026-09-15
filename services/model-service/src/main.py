@@ -535,6 +535,43 @@ def health_nfl_production_readiness(
                 ),
                 {"model_version": model_version},
             ).fetchone()
+            outcomes_sample_size = 0
+            outcomes_last_game_date = None
+            outcomes_calendar_days = 0
+            try:
+                season_year = int(_safe_float(os.getenv("NFL_READINESS_SEASON")) or date.today().year)
+                outcomes_row = conn.execute(
+                    text(
+                        """
+                        SELECT
+                          COUNT(*)::int AS n,
+                          MAX(g.game_date) AS last_game_date,
+                          COUNT(DISTINCT g.game_date)::int AS calendar_days
+                        FROM nfl_market_outcomes mo
+                        JOIN games g ON g.id = mo.game_id
+                        JOIN seasons s ON s.id = g.season_id
+                        JOIN leagues l ON l.id = s.league_id
+                        WHERE l.code = 'nfl'
+                          AND s.season_year = :season
+                          AND mo.actual_home_points IS NOT NULL
+                          AND mo.actual_away_points IS NOT NULL
+                        """
+                    ),
+                    {"season": season_year},
+                ).fetchone()
+                if outcomes_row is not None:
+                    outcomes_map = (
+                        dict(outcomes_row._mapping) if hasattr(outcomes_row, "_mapping") else {}
+                    )
+                    outcomes_sample_size = int(_safe_float(outcomes_map.get("n")) or 0)
+                    outcomes_last_game_date = _safe_date(outcomes_map.get("last_game_date"))
+                    outcomes_calendar_days = int(
+                        _safe_float(outcomes_map.get("calendar_days")) or 0
+                    )
+            except Exception:
+                outcomes_sample_size = 0
+                outcomes_last_game_date = None
+                outcomes_calendar_days = 0
         payload = dict(snapshot_row._mapping).get("payload") or {}
         sample_size = int(_safe_float(payload.get("sample_size")) or 0)
         calendar_days = int(_safe_float(payload.get("calendar_days_covered")) or 0)
@@ -542,6 +579,20 @@ def health_nfl_production_readiness(
         moneyline_brier = _safe_float(payload.get("moneyline_brier"))
         total_mae = _safe_float(payload.get("total_mae"))
         clv_avg = _safe_float(payload.get("clv_avg"))
+        from src.services.nfl_epa_authority import merge_readiness_with_outcomes_coverage
+
+        merged = merge_readiness_with_outcomes_coverage(
+            snapshot_sample_size=sample_size,
+            snapshot_last_game_date=last_game_date,
+            snapshot_calendar_days=calendar_days,
+            outcomes_sample_size=outcomes_sample_size,
+            outcomes_last_game_date=outcomes_last_game_date,
+            outcomes_calendar_days=outcomes_calendar_days,
+        )
+        sample_size = int(merged["sample_size"] or 0)
+        calendar_days = int(merged["calendar_days_covered"] or 0)
+        last_game_date = merged.get("last_game_date")
+        coverage_source = str(merged.get("coverage_source") or "quality_snapshot")
         classification = _classify_nfl_readiness(
             sample_size=sample_size,
             calendar_days=calendar_days,
@@ -586,6 +637,9 @@ def health_nfl_production_readiness(
                 "moneyline_brier": moneyline_brier,
                 "total_mae": total_mae,
                 "clv_avg": clv_avg,
+                "coverage_source": coverage_source,
+                "snapshot_sample_size": int(merged.get("snapshot_sample_size") or 0),
+                "outcomes_sample_size": int(merged.get("outcomes_sample_size") or 0),
             },
             "drift_monitor": (
                 {
@@ -1263,6 +1317,14 @@ def job_run_nfl_simulations(
     game_date: Optional[str] = Query(None, description="YYYY-MM-DD (defaults to today if omitted)"),
     simulations: int = Query(4000, ge=300, le=20000),
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
+    force_overlays_off: bool = Query(
+        False,
+        description="NFL #564: keep personnel/injury overlays off for remat.",
+    ),
+    prefer_packaged_epa: bool = Query(
+        False,
+        description="NFL #564: use packaged EPA priors only (no W-L, no current-season blend).",
+    ),
 ) -> Dict[str, str]:
     try:
         async_result = celery_app.send_task(
@@ -1271,6 +1333,8 @@ def job_run_nfl_simulations(
                 "game_date": game_date,
                 "simulations": simulations,
                 "model_version": model_version,
+                "force_overlays_off": bool(force_overlays_off),
+                "prefer_packaged_epa": bool(prefer_packaged_epa),
             },
         )
         return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_SIMULATIONS}

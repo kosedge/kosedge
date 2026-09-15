@@ -5,8 +5,8 @@ publish. Used to compare the live July-31 fair stamps against:
 
 - packaged 2025 EPA priors (what ``run_nfl_market_simulations`` prefers)
 - ESPN W-L record buckets written into ``nfl_game_context`` by
-  ``pull_nfl_context_snapshot`` (what ``POST /nfl/simulations/{id}`` still
-  multiplies in)
+  ``pull_nfl_context_snapshot`` (what ``POST /nfl/simulations/{id}`` used
+  to persist; NFL #564 now EPA-or-refuse)
 
 See ``data/ops/nfl-regression-investigate-20260915.md``.
 """
@@ -133,6 +133,10 @@ def load_packaged_epa_priors(path: Optional[Path] = None) -> Dict[str, Dict[str,
         }
     if "LAR" in out and "LA" not in out:
         out["LA"] = dict(out["LAR"])
+    if "WAS" in out and "WSH" not in out:
+        out["WSH"] = dict(out["WAS"])
+    if "WSH" in out and "WAS" not in out:
+        out["WAS"] = dict(out["WSH"])
     return out
 
 

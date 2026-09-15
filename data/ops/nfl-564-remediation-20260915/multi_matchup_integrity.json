@@ -1,0 +1,76 @@
+{
+  "checksum_sha256": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+  "double_count_check": "pass",
+  "focus_keys": [
+    "DET@BUF",
+    "CAR@ATL",
+    "ATL@PIT",
+    "CHI@CAR"
+  ],
+  "matchups": [
+    {
+      "actual_total": null,
+      "classify_epa": "packaged_epa_prior",
+      "epa_spread_home": -1.5802,
+      "epa_total": 46.0993,
+      "epa_total_residual": null,
+      "key": "DET@BUF",
+      "overlay_zero": true,
+      "record_minus_epa_spread": 0.5302,
+      "record_spread_home": -1.05,
+      "remat_spread_home": -1.5802,
+      "week": 2
+    },
+    {
+      "actual_total": null,
+      "classify_epa": "packaged_epa_prior",
+      "epa_spread_home": -2.9043,
+      "epa_total": 44.5339,
+      "epa_total_residual": null,
+      "key": "CAR@ATL",
+      "overlay_zero": true,
+      "record_minus_epa_spread": 1.8543,
+      "record_spread_home": -1.05,
+      "remat_spread_home": -2.9043,
+      "week": 2
+    },
+    {
+      "actual_total": 33.0,
+      "classify_epa": "packaged_epa_prior",
+      "epa_spread_home": -0.7631,
+      "epa_total": 44.6523,
+      "epa_total_residual": -11.6523,
+      "key": "ATL@PIT",
+      "overlay_zero": true,
+      "record_minus_epa_spread": -6.7869,
+      "record_spread_home": -7.55,
+      "remat_spread_home": null,
+      "week": 1
+    },
+    {
+      "actual_total": 96.0,
+      "classify_epa": "packaged_epa_prior",
+      "epa_spread_home": 1.2736,
+      "epa_total": 45.5002,
+      "epa_total_residual": 50.4998,
+      "key": "CHI@CAR",
+      "overlay_zero": true,
+      "record_minus_epa_spread": 4.1764,
+      "record_spread_home": 5.45,
+      "remat_spread_home": null,
+      "week": 1
+    }
+  ],
+  "material_wl_vs_epa_keys": [
+    "CAR@ATL",
+    "ATL@PIT",
+    "CHI@CAR"
+  ],
+  "multi_matchup_required": true,
+  "note": "Personnel/injury remain off. Do not turn overlays on until this check stays pass on \u22652 matchups. Ryan CLEAR still required before reopen.",
+  "overlay_leaks": [],
+  "passed": true,
+  "production_promote": false,
+  "recommendation": "HOLD_PUBLIC",
+  "run_id": "nfl-564-remediation-20260915"
+}

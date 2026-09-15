@@ -1,0 +1,155 @@
+{
+  "after_ingest_sample_size": 16,
+  "before_ingest_sample_size": 0,
+  "calendar_days_covered": 4,
+  "games": [
+    {
+      "away": "NE",
+      "away_score": 10,
+      "game_date": "2026-09-09",
+      "home": "SEA",
+      "home_score": 13,
+      "key": "NE@SEA",
+      "week": 1
+    },
+    {
+      "away": "SF",
+      "away_score": 27,
+      "game_date": "2026-09-10",
+      "home": "LAR",
+      "home_score": 7,
+      "key": "SF@LAR",
+      "week": 1
+    },
+    {
+      "away": "TB",
+      "away_score": 27,
+      "game_date": "2026-09-13",
+      "home": "CIN",
+      "home_score": 33,
+      "key": "TB@CIN",
+      "week": 1
+    },
+    {
+      "away": "NO",
+      "away_score": 30,
+      "game_date": "2026-09-13",
+      "home": "DET",
+      "home_score": 31,
+      "key": "NO@DET",
+      "week": 1
+    },
+    {
+      "away": "NYJ",
+      "away_score": 23,
+      "game_date": "2026-09-13",
+      "home": "TEN",
+      "home_score": 10,
+      "key": "NYJ@TEN",
+      "week": 1
+    },
+    {
+      "away": "BAL",
+      "away_score": 41,
+      "game_date": "2026-09-13",
+      "home": "IND",
+      "home_score": 23,
+      "key": "BAL@IND",
+      "week": 1
+    },
+    {
+      "away": "ATL",
+      "away_score": 13,
+      "game_date": "2026-09-13",
+      "home": "PIT",
+      "home_score": 20,
+      "key": "ATL@PIT",
+      "week": 1
+    },
+    {
+      "away": "CHI",
+      "away_score": 59,
+      "game_date": "2026-09-13",
+      "home": "CAR",
+      "home_score": 37,
+      "key": "CHI@CAR",
+      "week": 1
+    },
+    {
+      "away": "CLE",
+      "away_score": 10,
+      "game_date": "2026-09-13",
+      "home": "JAX",
+      "home_score": 34,
+      "key": "CLE@JAX",
+      "week": 1
+    },
+    {
+      "away": "BUF",
+      "away_score": 36,
+      "game_date": "2026-09-13",
+      "home": "HOU",
+      "home_score": 31,
+      "key": "BUF@HOU",
+      "week": 1
+    },
+    {
+      "away": "MIA",
+      "away_score": 13,
+      "game_date": "2026-09-13",
+      "home": "LV",
+      "home_score": 27,
+      "key": "MIA@LV",
+      "week": 1
+    },
+    {
+      "away": "GB",
+      "away_score": 22,
+      "game_date": "2026-09-13",
+      "home": "MIN",
+      "home_score": 39,
+      "key": "GB@MIN",
+      "week": 1
+    },
+    {
+      "away": "WSH",
+      "away_score": 22,
+      "game_date": "2026-09-13",
+      "home": "PHI",
+      "home_score": 24,
+      "key": "WSH@PHI",
+      "week": 1
+    },
+    {
+      "away": "ARI",
+      "away_score": 26,
+      "game_date": "2026-09-13",
+      "home": "LAC",
+      "home_score": 14,
+      "key": "ARI@LAC",
+      "week": 1
+    },
+    {
+      "away": "DAL",
+      "away_score": 20,
+      "game_date": "2026-09-13",
+      "home": "NYG",
+      "home_score": 28,
+      "key": "DAL@NYG",
+      "week": 1
+    },
+    {
+      "away": "DEN",
+      "away_score": 10,
+      "game_date": "2026-09-14",
+      "home": "KC",
+      "home_score": 31,
+      "key": "DEN@KC",
+      "week": 1
+    }
+  ],
+  "last_game_date": "2026-09-14",
+  "sample_size": 16,
+  "season": 2026,
+  "week": 1
+}

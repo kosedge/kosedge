@@ -70,8 +70,9 @@ class _FakeResult:
 
 
 class _HealthConn:
-    def __init__(self, rows: List[Dict[str, Any]]) -> None:
+    def __init__(self, rows: List[Dict[str, Any]], outcomes: Optional[List[Dict[str, Any]]] = None) -> None:
         self._rows = rows
+        self._outcomes = outcomes
 
     def execute(self, statement: Any, params: Optional[Dict[str, Any]] = None) -> _FakeResult:
         sql = " ".join(str(statement).split()).lower()
@@ -79,16 +80,19 @@ class _HealthConn:
             return _FakeResult(self._rows)
         if "from nfl_decomposition_drift_snapshots" in sql:
             return _FakeResult([])
+        if "from nfl_market_outcomes" in sql:
+            return _FakeResult(self._outcomes or [])
         raise AssertionError(f"Unexpected SQL in NFL health test: {sql}")
 
 
 class _HealthEngine:
-    def __init__(self, rows: List[Dict[str, Any]]) -> None:
+    def __init__(self, rows: List[Dict[str, Any]], outcomes: Optional[List[Dict[str, Any]]] = None) -> None:
         self._rows = rows
+        self._outcomes = outcomes
 
     class _Ctx:
-        def __init__(self, rows: List[Dict[str, Any]]) -> None:
-            self._conn = _HealthConn(rows)
+        def __init__(self, rows: List[Dict[str, Any]], outcomes: Optional[List[Dict[str, Any]]] = None) -> None:
+            self._conn = _HealthConn(rows, outcomes)
 
         def __enter__(self) -> _HealthConn:
             return self._conn
@@ -97,7 +101,7 @@ class _HealthEngine:
             return None
 
     def connect(self) -> "_HealthEngine._Ctx":
-        return _HealthEngine._Ctx(self._rows)
+        return _HealthEngine._Ctx(self._rows, self._outcomes)
 
 
 class _NflRouteSession:
@@ -577,6 +581,40 @@ def test_nfl_readiness_staging_override_relaxes_freshness(monkeypatch) -> None:
     assert payload["freshness_policy"]["mode"] == "staging"
     assert payload["freshness_policy"]["override_active"] is True
     assert payload["freshness_policy"]["max_last_game_age_days_applied"] == 120
+
+
+def test_nfl_readiness_uses_ingested_outcomes_when_snapshot_sample_zero(monkeypatch) -> None:
+    empty_snapshot = [
+        {
+            "run_date": date.today().isoformat(),
+            "payload": {
+                "sample_size": 0,
+                "calendar_days_covered": 0,
+                "last_game_date": None,
+                "moneyline_brier": None,
+                "total_mae": None,
+                "clv_avg": None,
+            },
+            "created_at": datetime.now(timezone.utc),
+        }
+    ]
+    outcomes = [
+        {
+            "n": 16,
+            "last_game_date": date(2026, 9, 14),
+            "calendar_days": 5,
+        }
+    ]
+    monkeypatch.setattr(main_module, "engine", _HealthEngine(empty_snapshot, outcomes))
+    client = TestClient(app)
+    response = client.get("/health/nfl-production-readiness")
+    assert response.status_code == 503
+    detail = response.json()["detail"]
+    assert detail["metrics"]["sample_size"] == 16
+    assert detail["metrics"]["snapshot_sample_size"] == 0
+    assert detail["metrics"]["outcomes_sample_size"] == 16
+    assert detail["metrics"]["coverage_source"] == "nfl_market_outcomes"
+    assert detail["metrics"]["last_game_date"] == "2026-09-14"
 
 
 def test_nfl_edges_today_filters_low_confidence(monkeypatch) -> None:
