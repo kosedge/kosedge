@@ -193,7 +193,7 @@ export default async function NflPropsBoardPage({
             <p>{NFL_WEEKLY_PROPS_GATE_BODY}</p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Link
-                href="/pro/nfl/fantasy"
+                href="/pro/nfl/dfs"
                 className="rounded-lg border border-edge-green/35 bg-edge-green/10 px-3 py-1.5 text-xs font-semibold text-edge-green"
               >
                 Fantasy desk

@@ -124,7 +124,7 @@ export default async function NflPlayerPreviewsPage() {
             Awards race
           </Link>
           <Link
-            href="/pro/nfl/fantasy"
+            href="/pro/nfl/fantasy/draft"
             className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
           >
             Fantasy draft
