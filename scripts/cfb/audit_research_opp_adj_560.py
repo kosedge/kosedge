@@ -63,7 +63,7 @@ def main() -> int:
     prior_raw_off, prior_raw_def = _season_raw_means(games, HOLDOUT_SEASON - 1)
     off_mu_fallback = def_mu_fallback = 0
     for week in sorted(week_n):
-        std_off, std_def, _ = _std_to_date(
+        std_off, std_def, _n_g, _n_d = _std_to_date(
             games, season=HOLDOUT_SEASON, week=week
         )
         for g in holdout:
