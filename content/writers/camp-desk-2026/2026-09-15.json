@@ -1,0 +1,117 @@
+{
+  "desk_date": "2026-09-15",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Camp Desk — Tuesday, Sep 15",
+    "bottom_line": "Week 1 MNF locked: KC 31, DEN 10. Tue drop = DEN + KC only (held off Mon desk). DEN Over 2/5 KEEP; KC Pass. Do not chase street.",
+    "storylines": [
+      "MNF final KC 31, DEN 10 (Sep 14). Mahomes returned; Walker featured in KC debut path per filed SoT.",
+      "DEN: Cooper still on commissioner’s exempt; Over 2/5 KEEP (house vs street gap stamped; Over juice improved FD +105).",
+      "KC: Pass on 10.5 (gap stamped). Simmons/Conner inactive Week 1 per SoT.",
+      "Mon package (PR #553) already shipped Sunday clubs; this file is the MNF follow-through only."
+    ],
+    "what_to_watch": "Into-week injury cycle off MNF; do not restamp Mon street. No invent.",
+    "sources": [
+      {
+        "label": "ESPN — Chiefs vs Broncos Week 1",
+        "href": "https://www.espn.com/nfl/story/_/id/49944600/2026-nfl-week-1-kansas-city-chiefs-denver-broncos-kenneth-walker-patrick-mahomes"
+      },
+      {
+        "label": "ESPN — game recap",
+        "href": "https://www.espn.com/nfl/recap?gameId=401872931"
+      },
+      {
+        "label": "Broncos — MNF takeaways",
+        "href": "https://www.denverbroncos.com/video/analysis-takeaways-from-denver-s-week-1-game-vs-chiefs"
+      },
+      {
+        "label": "Chiefs — Week 1 inactives",
+        "href": "https://www.chiefs.com/news/week-1-inactive-players-broncos-vs-chiefs"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "DEN",
+      "title": "Broncos — Week 1 MNF recap / into-week — Sep 15",
+      "bottom_line": "W1: KC 31–10 at Arrowhead. Cooper still on commissioner’s exempt (Elliss started). One loss does not rewrite house 10.51 vs 9.5. Over 2/5 KEEP — gap 1.01; Over juice improved to FD +105.",
+      "key_points": [
+        "Final: Chiefs 31, Broncos 10 (ESPN Nate Taylor / club takeaways). Nix intercepted early; Mims left briefly (hip) and returned per ESPN recap.",
+        "Cooper remained on exempt list for MNF; Elliss started opposite Bonitto (pregame path). Do not crown a permanent edge starter from one night.",
+        "Week 2 into-week: watch Cooper exempt duration + first injury report. Over stamp is house vs street, not one MNF result."
+      ],
+      "what_to_watch": "Cooper exempt status and Wed Week 2 practice report before next opponent.",
+      "is_material_depth": true,
+      "sot_flag": "MNF loss locked. Cooper still exempt. Over 2/5 KEEP on house 10.51 vs FD 9.5.",
+      "sources": [
+        {
+          "label": "ESPN — Chiefs 31–10; Walker debut / Mahomes return (Nate Taylor)",
+          "href": "https://www.espn.com/nfl/story/_/id/49944600/2026-nfl-week-1-kansas-city-chiefs-denver-broncos-kenneth-walker-patrick-mahomes"
+        },
+        {
+          "label": "ESPN — Game recap 401872931",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872931"
+        },
+        {
+          "label": "Broncos — DiLalla takeaways video (31–10)",
+          "href": "https://www.denverbroncos.com/video/analysis-takeaways-from-denver-s-week-1-game-vs-chiefs"
+        },
+        {
+          "label": "NFL.com — Cooper commissioner exempt",
+          "href": "https://www.nfl.com/news/nfl-places-broncos-olb-jonathon-cooper-on-commissioner-s-exempt-list"
+        },
+        {
+          "label": "Chiefs — Week 1 inactives (both clubs)",
+          "href": "https://www.chiefs.com/news/week-1-inactive-players-broncos-vs-chiefs"
+        }
+      ]
+    },
+    {
+      "team_id": "KC",
+      "title": "Chiefs — Week 1 MNF recap / into-week — Sep 15",
+      "bottom_line": "W1: KC 31–10 vs DEN. Mahomes returned (184 pass, rush TD path per ESPN); Walker 191 all-purpose / 2 TD debut. Simmons (back) + Conner (knee) inactive. Pass on a new win-total — house 9.31 vs FD 10.5 still |1.19|; Under juice improved to -105 but healthy Mahomes return argues against forcing model Under.",
+      "key_points": [
+        "Club inactives: Simmons, Conner, Pounds, Wiley, Pyburn, Eason; Nussmeier emergency QB3. Chris Jones active after calf hold.",
+        "ESPN: Delane (shoulder) left after INT, DNR; Cooper McDonald (knee) left 1H, DNR — Week 2 designations open. Do not invent IR.",
+        "Pass stands: also-cover; one MNF does not mint KEI; |diff| 1.19 with improved Under juice still sits below a forced lean after Mahomes looked mobile."
+      ],
+      "what_to_watch": "Simmons’ first practice; Delane / McDonald Wed report before Week 2.",
+      "is_material_depth": true,
+      "sot_flag": "Mahomes played and won. Simmons/Conner inactive. Pass on 10.5.",
+      "sources": [
+        {
+          "label": "ESPN — Chiefs 31–10; Walker / Mahomes (Nate Taylor)",
+          "href": "https://www.espn.com/nfl/story/_/id/49944600/2026-nfl-week-1-kansas-city-chiefs-denver-broncos-kenneth-walker-patrick-mahomes"
+        },
+        {
+          "label": "ESPN — Game recap (Delane / McDonald exits)",
+          "href": "https://www.espn.com/nfl/recap?gameId=401872931"
+        },
+        {
+          "label": "Chiefs — Week 1 inactives",
+          "href": "https://www.chiefs.com/news/week-1-inactive-players-broncos-vs-chiefs"
+        },
+        {
+          "label": "ESPN — Simmons OUT pregame (Nate Taylor)",
+          "href": "https://www.espn.com/nfl/story/_/id/49917622/chiefs-set-use-undrafted-rookie-lt-josh-simmons-out"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "DEN",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "MNF loss locked. Cooper exempt still. Over 2/5 KEEP — gap 1.01; Over juice improved FD +105."
+    },
+    {
+      "team_id": "KC",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Mahomes returned in win; Simmons/Conner inactive. Pass on 10.5 — gap 1.19."
+    }
+  ]
+}
