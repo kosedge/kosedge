@@ -1,0 +1,43 @@
+{
+  "schedule_games": 185,
+  "schedule_unique_ids": 185,
+  "pbp_games": 179,
+  "completed_on_schedule": 84,
+  "not_completed_on_schedule": 101,
+  "unknown_status_on_schedule": 0,
+  "completed_in_pbp": 84,
+  "completed_missing_pbp": 0,
+  "pbp_not_on_schedule": 0,
+  "pbp_not_completed_on_schedule": 95,
+  "schedule_without_pbp": 6,
+  "coverage_rate_completed": 1.0,
+  "completed_missing_pbp_ids": [],
+  "pbp_not_on_schedule_ids": [],
+  "schedule_without_pbp_ids": [
+    "401856671",
+    "401856790",
+    "401858209",
+    "401858219",
+    "401862694",
+    "401862708"
+  ],
+  "by_week": {
+    "1": {
+      "scheduled": 99,
+      "completed": 53,
+      "completed_in_pbp": 53,
+      "completed_missing_pbp": 0
+    },
+    "2": {
+      "scheduled": 86,
+      "completed": 31,
+      "completed_in_pbp": 31,
+      "completed_missing_pbp": 0
+    }
+  },
+  "honest_gaps": [
+    "Every schedule-completed (STATUS_FINAL) game in this file is present in PBP.",
+    "95 PBP game_id(s) are still STATUS_IN_PROGRESS / DELAYED / HALFTIME / END_PERIOD on the SDV schedule snapshot. Treat those as live or stale-status \u2014 not W\u22121 completed form unless independently finalized.",
+    "6 schedule game(s) have zero PBP rows (mostly STATUS_DELAYED 0\u20130 in this snapshot)."
+  ]
+}

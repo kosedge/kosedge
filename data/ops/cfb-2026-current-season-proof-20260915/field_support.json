@@ -1,0 +1,414 @@
+{
+  "plays": 20118,
+  "columns": 498,
+  "core31_present": [
+    "season",
+    "week",
+    "game_id",
+    "id",
+    "drive.id",
+    "pos_team",
+    "def_pos_team",
+    "homeTeamAbbrev",
+    "awayTeamAbbrev",
+    "homeTeamName",
+    "awayTeamName",
+    "down",
+    "distance",
+    "start.yardsToEndzone",
+    "statYardage",
+    "type.text",
+    "EPA",
+    "EP_start",
+    "EP_end",
+    "EPA_success",
+    "rz_play",
+    "stuffed_run",
+    "pos_score_diff",
+    "start.TimeSecsRem",
+    "under_2",
+    "wpa",
+    "wp_before",
+    "wp_after",
+    "scrimmage_play",
+    "pass",
+    "rush"
+  ],
+  "core31_absent": [],
+  "core31": {
+    "season": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "week": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "game_id": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "id": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "drive.id": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "pos_team": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "def_pos_team": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "homeTeamAbbrev": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "awayTeamAbbrev": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "homeTeamName": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "awayTeamName": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "down": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "distance": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "start.yardsToEndzone": {
+      "present": true,
+      "null_rate": 0.000149,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "statYardage": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "type.text": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "EPA": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "EP_start": {
+      "present": true,
+      "null_rate": 5e-05,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "EP_end": {
+      "present": true,
+      "null_rate": 5e-05,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "EPA_success": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "rz_play": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "stuffed_run": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "pos_score_diff": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "start.TimeSecsRem": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "under_2": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "wpa": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "wp_before": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "wp_after": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "scrimmage_play": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "pass": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    },
+    "rush": {
+      "present": true,
+      "null_rate": 0.0,
+      "class": "PRESENT_LOW_NULL"
+    }
+  },
+  "extras": {
+    "half": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "period": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "scoring_opp": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "sack": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "TFL": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "int": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "havoc": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "statYardage": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "rz_play": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "pos_score_diff": {
+      "present": true,
+      "null_rate": 0.0
+    },
+    "PPA": {
+      "present": false,
+      "null_rate": null
+    },
+    "ppa": {
+      "present": false,
+      "null_rate": null
+    }
+  },
+  "metrics": {
+    "EPA": {
+      "required": [
+        "EPA"
+      ],
+      "missing": [],
+      "null_rates": {
+        "EPA": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "EPA_success": {
+      "required": [
+        "EPA_success"
+      ],
+      "missing": [],
+      "null_rates": {
+        "EPA_success": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "scrimmage_play": {
+      "required": [
+        "scrimmage_play"
+      ],
+      "missing": [],
+      "null_rates": {
+        "scrimmage_play": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "pass": {
+      "required": [
+        "pass"
+      ],
+      "missing": [],
+      "null_rates": {
+        "pass": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "rush": {
+      "required": [
+        "rush"
+      ],
+      "missing": [],
+      "null_rates": {
+        "rush": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "down": {
+      "required": [
+        "down"
+      ],
+      "missing": [],
+      "null_rates": {
+        "down": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "distance": {
+      "required": [
+        "distance"
+      ],
+      "missing": [],
+      "null_rates": {
+        "distance": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "start.yardsToEndzone": {
+      "required": [
+        "start.yardsToEndzone"
+      ],
+      "missing": [],
+      "null_rates": {
+        "start.yardsToEndzone": 0.000149
+      },
+      "class": "SUPPORTED"
+    },
+    "drive.id": {
+      "required": [
+        "drive.id"
+      ],
+      "missing": [],
+      "null_rates": {
+        "drive.id": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "type.text": {
+      "required": [
+        "type.text"
+      ],
+      "missing": [],
+      "null_rates": {
+        "type.text": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "pace": {
+      "required": [
+        "scrimmage_play",
+        "game_id",
+        "pos_team"
+      ],
+      "missing": [],
+      "null_rates": {
+        "scrimmage_play": 0.0,
+        "game_id": 0.0,
+        "pos_team": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "true_pace_competitive": {
+      "required": [
+        "scrimmage_play",
+        "game_id",
+        "pos_team",
+        "pos_score_diff"
+      ],
+      "missing": [],
+      "null_rates": {
+        "scrimmage_play": 0.0,
+        "game_id": 0.0,
+        "pos_team": 0.0,
+        "pos_score_diff": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "explosiveness": {
+      "required": [
+        "EPA",
+        "statYardage",
+        "scrimmage_play",
+        "pass",
+        "rush"
+      ],
+      "missing": [],
+      "null_rates": {
+        "EPA": 0.0,
+        "statYardage": 0.0,
+        "scrimmage_play": 0.0,
+        "pass": 0.0,
+        "rush": 0.0
+      },
+      "class": "SUPPORTED"
+    },
+    "scoring_opportunity": {
+      "required": [
+        "drive.id",
+        "start.yardsToEndzone",
+        "type.text",
+        "game_id"
+      ],
+      "missing": [],
+      "null_rates": {
+        "drive.id": 0.0,
+        "start.yardsToEndzone": 0.000149,
+        "type.text": 0.0,
+        "game_id": 0.0
+      },
+      "class": "SUPPORTED"
+    }
+  },
+  "ppa_present": false,
+  "havoc_flag_present": true,
+  "note": "SUPPORTED means columns exist at usable null rates for #555 raw unadjusted metrics. Not a fitted rating. Havoc/ST still need field verification. PPA is optional and expected absent on SDV."
+}

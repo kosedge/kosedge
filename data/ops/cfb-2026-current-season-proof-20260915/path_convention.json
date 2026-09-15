@@ -1,0 +1,12 @@
+{
+  "as_of": "20260915",
+  "historical_canonical_hd": "/Volumes/KosEdgeData/raw/cfb/pbp",
+  "historical_note": "2014\u20132025 Aug 13 lake is CANONICAL. Do not overwrite play_by_play_{2014-2025}.parquet.",
+  "current_season_hd_target": "/Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_20260915",
+  "current_season_hd_root": "/Volumes/KosEdgeData/raw/cfb/pbp_current",
+  "vm_research_path": "/workspace/data/cfb/research/pbp_current/as_of_20260915",
+  "vm_research_root": "/workspace/data/cfb/research/pbp_current",
+  "hd_mounted": false,
+  "prefer_hd_current_when_mounted": true,
+  "versioning": "raw/cfb/pbp_current/as_of_YYYYMMDD/"
+}
