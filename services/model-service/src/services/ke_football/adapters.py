@@ -12,7 +12,7 @@ from src.services.ke_football.plays import CanonicalPlay, finite, standard_succe
 
 NFL_SCRIMMAGE = frozenset({"pass", "run"})
 NFL_ST = frozenset({"field_goal", "extra_point", "punt", "kickoff"})
-NFL_DROP = frozenset({"qb_kneel", "qb_spike", "kneel", "spike", "no_play"})
+NFL_DROP = frozenset({"qb_kneel", "qb_spike", "kneel", "spike"})
 
 
 def _s(raw: Any) -> str:
@@ -70,9 +70,9 @@ def from_nfl_row(row: Mapping[str, Any]) -> Optional[CanonicalPlay]:
     week = finite(row.get("week"))
     game_id = _s(row.get("game_id"))
     play_id = _s(row.get("play_id") or row.get("id"))
-    offense = _s(row.get("posteam"))
+    possession = _s(row.get("posteam"))
     defense = _s(row.get("defteam"))
-    if season is None or week is None or not game_id or not offense:
+    if season is None or week is None or not game_id or not possession:
         return None
     play_type = _s(row.get("play_type")).lower()
     if play_type in NFL_DROP:
@@ -80,11 +80,12 @@ def from_nfl_row(row: Mapping[str, Any]) -> Optional[CanonicalPlay]:
     is_scrim = play_type in NFL_SCRIMMAGE and finite(row.get("epa")) is not None
     is_st = play_type in NFL_ST
     epa = finite(row.get("epa"))
+    offense = possession
     # Kickoff: kicking-side frame — EPA negated onto defteam (spec §7.3).
+    # Possession team stays the receiving side for drive construction.
     if play_type == "kickoff" and defense:
-        receiving = offense
         offense = defense
-        defense = receiving
+        defense = possession
         if epa is not None:
             epa = -epa
     yards = finite(row.get("yards_gained"))
@@ -112,7 +113,7 @@ def from_nfl_row(row: Mapping[str, Any]) -> Optional[CanonicalPlay]:
         down=down,
         distance=dist,
         yards_to_endzone=yte,
-        drive_id=_s(row.get("fixed_drive") or row.get("drive") or row.get("drive_id")) or None,
+        drive_id=_drive_id(row),
         score_diff=finite(row.get("score_differential")),
         game_seconds_remaining=finite(row.get("game_seconds_remaining")),
         period=_period(row, ("qtr", "quarter", "period")),
@@ -128,8 +129,27 @@ def from_nfl_row(row: Mapping[str, Any]) -> Optional[CanonicalPlay]:
         fumble_forced=truthy(row.get("fumble_forced")),
         tfl=tfl,
         pass_breakup=truthy(row.get("pass_defense") or row.get("pass_breakup")),
-        extra={"season_type": _s(row.get("season_type") or row.get("game_type"))},
+        possession_team=possession,
+        drive_result=_s(row.get("fixed_drive_result") or row.get("drive_end_transition")) or None,
+        td_team=_s(row.get("td_team")) or None,
+        extra={
+            "season_type": _s(row.get("season_type") or row.get("game_type")),
+            "drive_inside20": truthy(row.get("drive_inside20")),
+            "drive_ended_with_score": truthy(row.get("drive_ended_with_score")),
+            "two_point": _s(row.get("two_point_conv_result")).lower() in {"success", "good"},
+        },
     )
+
+
+def _drive_id(row: Mapping[str, Any]) -> Optional[str]:
+    raw = row.get("fixed_drive")
+    if raw is None or raw == "":
+        raw = row.get("drive") or row.get("drive_id")
+    val = finite(raw)
+    if val is not None and abs(val - int(val)) < 1e-9:
+        return str(int(val))
+    text = _s(raw)
+    return text or None
 
 
 def _cfb_scrimmage(row: Mapping[str, Any]) -> bool:
@@ -186,6 +206,7 @@ def from_cfb_row(row: Mapping[str, Any]) -> Optional[CanonicalPlay]:
         tfl=truthy(row.get("TFL") or row.get("tfl")),
         pass_breakup=truthy(row.get("pass_breakup") or row.get("PBU")),
         havoc_vendor=truthy(row.get("havoc")),
+        possession_team=offense,
         extra={"rz_play": truthy(row.get("rz_play"))},
     )
 

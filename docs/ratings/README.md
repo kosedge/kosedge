@@ -6,6 +6,8 @@ This folder is the ratings-research home. It is **not** a live ratings engine.
 
 **Phase 1 GO (2026-09-15):** measurement layer only. See [`KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md`](./KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md) and [`KE_FOOTBALL_V1_MEASUREMENT_PHASE1_2026-09-15.md`](./KE_FOOTBALL_V1_MEASUREMENT_PHASE1_2026-09-15.md). Team Strength / scoring / matchup / market / UI remain unauthorized.
 
+**Phase 1B GO (2026-09-15):** measurement validation and repair only. See [`KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md`](./KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md). Team Strength still **HOLD**.
+
 ## How to read
 
 | Artifact                                                                                                           | Role                                                                      |
@@ -15,6 +17,7 @@ This folder is the ratings-research home. It is **not** a live ratings engine.
 | [`KE_FOOTBALL_V1_SPEC.md`](./KE_FOOTBALL_V1_SPEC.md)                                                               | Canonical metric specs (#569). Taxonomy amended by the provenance note.   |
 | [`KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md`](./KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md)                 | **RAW → DERIVED → ADJUSTED → MODELED.** Supersedes the three-layer list.  |
 | [`KE_FOOTBALL_V1_MEASUREMENT_PHASE1_2026-09-15.md`](./KE_FOOTBALL_V1_MEASUREMENT_PHASE1_2026-09-15.md)             | Phase 1 implementation note + Ryan examples.                              |
+| [`KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md`](./KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md)           | Phase 1B finishing repair, per-component validation, bakeoff, scorecard.  |
 | [`KE_FOOTBALL_V1_METRIC_MATRIX.md`](./KE_FOOTBALL_V1_METRIC_MATRIX.md)                                             | Metric × data × validation × buildability matrix (human).                 |
 | [`KE_FOOTBALL_V1_METRIC_MATRIX.json`](./KE_FOOTBALL_V1_METRIC_MATRIX.json)                                         | Same matrix (machine companion).                                          |
 
@@ -29,4 +32,4 @@ Prior cross-sport inventories (#556 / #558) remain historical context. Football 
 - NFL remat / #564 / #567 is a **separate** track.
 - Opponent adjustment in this phase is **ADJUSTED** (PIT SOS). #560 ridge stays **MODELED** research.
 
-**STOP** after measurement + examples + leakage tests + validation are reviewable.
+**STOP** after Phase 1B scorecard is reviewable. Team Strength / composite weights remain unauthorized.

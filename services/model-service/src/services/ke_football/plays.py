@@ -86,6 +86,9 @@ class CanonicalPlay:
     tfl: Optional[bool] = None
     pass_breakup: Optional[bool] = None
     havoc_vendor: Optional[bool] = None
+    possession_team: str = ""
+    drive_result: Optional[str] = None
+    td_team: Optional[str] = None
     extra: Dict[str, Any] = field(default_factory=dict)
 
     @property

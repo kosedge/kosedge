@@ -11,6 +11,7 @@ from src.services.ke_football.aggregate import (
     snapshots_for_week,
 )
 from src.services.ke_football.disruption import inventory_report
+from src.services.ke_football.finishing import finishing_diagnosis
 from src.services.ke_football.opp_adj import adjust_league
 from src.services.ke_football.plays import CanonicalPlay
 from src.services.ke_football.validation import (
@@ -87,6 +88,7 @@ def run_measurement(
         "snapshots": snaps,
         "examples": examples,
         "disruption_inventory": inventory_report(sport=sport, plays=window),
+        "finishing_diagnosis": finishing_diagnosis(window) if sport == "nfl" else None,
         "validation": {
             "next_game_epa": next_game_epa(adj_games),
             "stability_off": week_to_week_stability(by_week, component_id="ke.off_eff"),

@@ -7,6 +7,7 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 from src.services.ke_football.adapters import is_explosive, play_standard_success
+from src.services.ke_football.finishing import attach_finishing, build_drives
 from src.services.ke_football.disruption import (
     audit_disruption_columns,
     event_rate,
@@ -115,6 +116,7 @@ class TeamGame:
     rz_td: int = 0
     rz_plays: int = 0
     drive_ids_missing: int = 0
+    points_source: str = ""
     off_plays: List[CanonicalPlay] = field(default_factory=list)
     def_plays: List[CanonicalPlay] = field(default_factory=list)
 
@@ -125,12 +127,6 @@ class TeamGame:
     @property
     def def_epa(self) -> Optional[float]:
         return _rate(self.def_epa_sum, self.def_epa_n)
-
-
-def _drive_key(play: CanonicalPlay) -> Optional[Tuple[str, str, str]]:
-    if not play.drive_id:
-        return None
-    return (play.game_id, play.drive_id, play.offense)
 
 
 def build_team_games(plays: Sequence[CanonicalPlay]) -> List[TeamGame]:
@@ -222,49 +218,13 @@ def build_team_games(plays: Sequence[CanonicalPlay]) -> List[TeamGame]:
             st.st_epa_sum += play.epa
             st.st_n += 1
 
-    # Drive finishing (offense side).
-    by_drive: Dict[Tuple[str, str, str], List[CanonicalPlay]] = defaultdict(list)
     missing_drive = defaultdict(int)
     for play in plays:
-        key = _drive_key(play)
-        if key is None:
-            if play.is_scrimmage:
-                missing_drive[(play.sport, play.season, play.week, play.game_id, play.offense)] += 1
-            continue
-        by_drive[key].append(play)
-
-    for (gid, _did, off), group in by_drive.items():
-        first = group[0]
-        tg = None
-        for play in group:
-            tg = games.get((play.sport, play.season, play.week, gid, off, play.defense))
-            if tg:
-                break
-        if tg is None:
-            continue
-        tg.n_drives += 1
-        reached_40 = False
-        reached_rz = False
-        points = 0
-        for play in group:
-            if play.yards_to_endzone is not None and play.yards_to_endzone <= OPP_YTE:
-                reached_40 = True
-            if play.yards_to_endzone is not None and play.yards_to_endzone <= RZ_YTE:
-                reached_rz = True
-            if play.extra.get("rz_play") is True:
-                reached_40 = True
-                reached_rz = True
-            points += int(play.points or 0)
-        if reached_40:
-            tg.n_opp += 1
-            tg.opp_points += points
-            if points > 0:
-                tg.finished_opp += 1
-        if reached_rz:
-            tg.n_rz += 1
+        if play.is_scrimmage and not play.drive_id:
+            missing_drive[(play.sport, play.season, play.week, play.game_id, play.possession_team or play.offense)] += 1
+    attach_finishing(list(games.values()), build_drives(list(plays)))
 
     for key, nmiss in missing_drive.items():
-        # key without opponent — stamp any matching team-game
         sport, season, week, gid, team = key
         for tg in games.values():
             if (
@@ -276,7 +236,14 @@ def build_team_games(plays: Sequence[CanonicalPlay]) -> List[TeamGame]:
             ):
                 tg.drive_ids_missing += nmiss
 
-    # Clock deltas: consecutive scrimmage on same drive.
+    # Clock deltas: consecutive scrimmage on same possession drive.
+    by_drive: Dict[Tuple[str, str, str], List[CanonicalPlay]] = defaultdict(list)
+    for play in plays:
+        if not play.drive_id:
+            continue
+        poss = play.possession_team or play.offense
+        by_drive[(play.game_id, play.drive_id, poss)].append(play)
+
     for group in by_drive.values():
         ordered = sorted(
             [p for p in group if p.is_scrimmage],
@@ -493,7 +460,11 @@ def team_game_components(tg: TeamGame) -> Dict[str, Component]:
             unit="points_per_opportunity",
             n=tg.n_opp,
             thin_n=THIN_OPPORTUNITIES_STD,
-            notes={"points_source": "nflverse_scoring_flags" if tg.sport == "nfl" else "type_text_heuristic"},
+            notes={
+                "points_source": tg.points_source
+                or ("fixed_drive_result+pat_flags" if tg.sport == "nfl" else "type_text_heuristic"),
+                "kickoff_excluded_from_opportunity": tg.sport == "nfl",
+            },
         )
         comps["ke.finish"] = derived(
             "ke.finish",
@@ -618,6 +589,8 @@ def team_week_snapshot(
             acc.drive_ids_missing += g.drive_ids_missing
             acc.off_plays.extend(g.off_plays)
             acc.def_plays.extend(g.def_plays)
+            if g.points_source:
+                acc.points_source = g.points_source
         # Pace at week grain is mean of team-game play counts, not a sum.
         merged = team_game_components(acc)
         merged["ke.pace"] = derived(
