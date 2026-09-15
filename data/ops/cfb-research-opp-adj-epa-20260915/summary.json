@@ -13,7 +13,27 @@
     "decision": "exclude",
     "reason": "excluded_delayed_incomplete_snapshot: STATUS_DELAYED 21-0 is not the official final (ESPN STATUS_FINAL 49-7). Score alone is insufficient."
   },
-  "recommendation": null,
+  "recommendation": {
+    "recommendation": "advance",
+    "reason": "Holdout next-game O/D EPA MAE beats unadjusted STD and prior-season blend by a material margin. Research-only — not a production promote.",
+    "holdout_mae_adj": 0.16591308693371715,
+    "holdout_mae_unadj": 0.19096353540881372,
+    "holdout_mae_blend": 0.1835743698690124,
+    "rel_improvement_vs_unadj": 0.13117922446014998,
+    "rel_improvement_vs_blend": 0.09620778188097437,
+    "n": 1713,
+    "selected_params": {
+      "lam": 160.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "production_promote": false
+  },
   "holdout_season": 2025,
+  "closed_559_eligible_games": 84,
+  "apply_2026_teams": 134,
+  "apply_2026_obs": 168,
   "ops": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915"
 }
