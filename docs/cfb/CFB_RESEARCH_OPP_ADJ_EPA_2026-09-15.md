@@ -29,7 +29,22 @@ Bulk (gitignored): `data/cfb/research/pbp_hist/as_of_20260915/` and `data/cfb/re
 | Sources                       | `https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868140` · [ESPN box](https://www.espn.com/college-football/boxscore/_/gameId/401868140) · [ESPN recap](https://www.espn.com/college-football/recap?gameId=401868140) · JSU athletics (lightning delay; final 49–7) |
 | **Decision on #559 snapshot** | **EXCLUDE**                                                                                                                                                                                                                                                                                                  |
 
-A score alone is insufficient. The 21–0 capture is a mid-game lightning delay, not the official final. Regenerated #559 eligibility treats **all parked DELAYED/POSTPONED games as unfinished** unless the schedule row is `STATUS_FINAL`. A later as_of may include `401868140` only when status is `STATUS_FINAL` and scores are 49–7.
+A score alone is insufficient. **DELAYED + score is not a standing eligibility rule.**
+
+### PBP vs official 49–7 (fail-closed)
+
+Same #559 PBP SHA `da0ec956…` (7,904,267 bytes). Game `401868140`:
+
+| PBP fact                     | Observed                                                                          | Official final    |
+| ---------------------------- | --------------------------------------------------------------------------------- | ----------------- |
+| Plays / drives               | **52 / 7**                                                                        | full game (Q1–Q4) |
+| Max period                   | **2**                                                                             | 4                 |
+| Last clock / type            | Q2 **10:27** Interception Return (Nix TD)                                         | End of Q4         |
+| Last score in PBP            | **28–0**                                                                          | **49–7**          |
+| Official markers reached     | 7–0, 14–0, 21–0, 28–0                                                             | 8 scoring plays   |
+| Official markers **missing** | Hensley 72yd (28–7), Likely 45yd (35–7), Gilbert 24yd (42–7), Williams 4yd (49–7) | —                 |
+
+PBP is a **partial Q2 cut**, not the finished game. Incomplete PBP for a completed game = **exclude**. Regenerated #559 set is **84** games. A later as_of may include this game only if PBP is complete through 49–7 (period ≥ 4, all 8 scoring markers) **and** schedule is `STATUS_FINAL`.
 
 ---
 
@@ -120,10 +135,10 @@ Largest play deltas: 2021 +952, 2025 +203, 2024 +192. Game counts never drifted.
 
 ### Regenerated #559 eligibility (closed)
 
-|                                   |      #559 snapshot |                                Closed |
-| --------------------------------- | -----------------: | ------------------------------------: |
-| Eligible completed∩PBP `week < 3` |                 85 |                                **84** |
-| `401868140` included              | yes (DELAYED 21–0) | **no** (`excluded_unfinished_parked`) |
+|                                   |      #559 snapshot |                                                       Closed |
+| --------------------------------- | -----------------: | -----------------------------------------------------------: |
+| Eligible completed∩PBP `week < 3` |                 85 |                                                       **84** |
+| `401868140` included              | yes (DELAYED 21–0) | **no** (`excluded_incomplete_pbp`; Q2 28–0 vs official 49–7) |
 
 ### Selected parameters (2023–2024 val only; 2025 untouched)
 

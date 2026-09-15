@@ -5,6 +5,7 @@ Research-only. **Not KE Ratings.** Not KEI. Not a point spread.
 | File | Role |
 | --- | --- |
 | `delayed_game_verification.json` | #559 delayed game close (`401868140`) |
+| `delayed_game_pbp_audit.json` | PBP vs official 49–7 (partial Q2 28–0 cut → exclude) |
 | `hist_inventory.json` | 2014–2025 restore checksums + Aug 13 reconcile |
 | `validation_report.json` | train / val / 2025 holdout + recommendation |
 | `closed_559_eligibility_summary.json` | regenerated #559 eligibility (84 games) |

@@ -3,10 +3,12 @@
 First KE-path *build* — not KE Ratings. No opponent adjustment, no SP+
 compose change, no KEI, no Edge Board, no CFBD, no NFL.
 
-Eligibility = actually completed ∩ PBP ∩ ``week < as_of_week``.
+Eligibility = actually completed ∩ **complete** PBP ∩ ``week < as_of_week``.
 Actually completed = STATUS_FINAL OR (has scores AND not live AND not parked).
 Live / HALFTIME / END_PERIOD / DELAYED (even with a mid-game score) /
 POSTPONED / unfinished are excluded unless independently verified FINAL.
+Incomplete PBP for a completed game is fail-closed exclude (401868140 Q2 cut).
+DELAYED + score is not a standing include.
 """
 
 from __future__ import annotations
@@ -35,6 +37,11 @@ from src.services.cfb_warehouse.current_season_2026 import (
     schedule_game_rows,
     today_as_of,
     write_json,
+)
+from src.services.cfb_warehouse.delayed_game_verify import (
+    DELAYED_GAME_ID,
+    audit_pbp_vs_official_final,
+    should_exclude_snapshot_game,
 )
 from src.services.cfb_warehouse.leakage import assert_available_before_kickoff
 from src.services.cfb_warehouse.owned_metrics import (
@@ -124,9 +131,28 @@ def exclude_reason(
     has_pbp: bool,
     as_of_week: int,
     unmatched: bool = False,
+    pbp_complete: Optional[bool] = None,
 ) -> str:
     if unmatched:
         return "excluded_pbp_unmatched_schedule"
+    gid = norm_game_id(row.get("game_id"))
+    if should_exclude_snapshot_game(
+        gid,
+        status=row.get("status_raw") or row.get("status_token"),
+        home_score=row.get("home_score"),
+        away_score=row.get("away_score"),
+        pbp_complete=pbp_complete,
+    ):
+        # Audited partial PBP beats parked/final status. DELAYED+score is not enough.
+        if pbp_complete is False:
+            return "excluded_incomplete_pbp"
+        if row.get("actually_completed"):
+            return (
+                "excluded_incomplete_pbp"
+                if has_pbp
+                else "excluded_completed_missing_pbp"
+            )
+        # Snapshot still DELAYED/parked and completeness unknown → fall through.
     if not has_pbp:
         if row.get("actually_completed"):
             return "excluded_completed_missing_pbp"
@@ -170,17 +196,31 @@ def build_eligibility_manifest(
     schedule_sha256: Optional[str] = None,
     pbp_path: Optional[str] = None,
     schedule_path: Optional[str] = None,
+    plays: Optional[Sequence[Mapping[str, Any]]] = None,
+    pbp_complete_by_id: Optional[Mapping[str, bool]] = None,
 ) -> Dict[str, Any]:
     pbp = {str(g) for g in pbp_ids if g}
     by_id = {str(r["game_id"]): r for r in schedule_rows if r.get("game_id")}
     games: List[Dict[str, Any]] = []
+    complete_map: Dict[str, bool] = {
+        str(k): bool(v) for k, v in (pbp_complete_by_id or {}).items()
+    }
+    pbp_audit: Optional[Dict[str, Any]] = None
+    if plays is not None and DELAYED_GAME_ID not in complete_map:
+        pbp_audit = audit_pbp_vs_official_final(plays)
+        complete_map[DELAYED_GAME_ID] = bool(pbp_audit.get("complete_through_final"))
 
     for row in schedule_rows:
         gid = norm_game_id(row.get("game_id"))
         if not gid:
             continue
         has_pbp = gid in pbp
-        reason = exclude_reason(row, has_pbp=has_pbp, as_of_week=as_of_week)
+        reason = exclude_reason(
+            row,
+            has_pbp=has_pbp,
+            as_of_week=as_of_week,
+            pbp_complete=complete_map.get(gid),
+        )
         included = reason.startswith("included_")
         games.append(
             {
@@ -236,12 +276,17 @@ def build_eligibility_manifest(
         "season": SEASON,
         "as_of": as_of,
         "as_of_week": int(as_of_week),
-        "eligibility_rule": "actually_completed ∩ PBP ∩ week < as_of_week",
+        "eligibility_rule": (
+            "actually_completed ∩ complete PBP ∩ week < as_of_week"
+        ),
         "actually_completed_definition": (
             "STATUS_FINAL OR (has scores AND not live AND not parked). "
             "Exclude IN_PROGRESS / HALFTIME / END_PERIOD / DELAYED "
-            "(score alone is insufficient) / POSTPONED / unfinished."
+            "(score alone is insufficient) / POSTPONED / unfinished. "
+            "Fail-closed: incomplete PBP for a completed game = exclude. "
+            "DELAYED + score is not a standing include."
         ),
+        "pbp_audit_401868140": pbp_audit,
         "success_rate_label": SUCCESS_RATE_LABEL,
         "pbp_sha256": pbp_sha256,
         "schedule_sha256": schedule_sha256,
@@ -680,6 +725,7 @@ def run_research_pipeline(
         schedule_sha256=sha_sched,
         pbp_path=str(used_pbp_path) if used_pbp_path else None,
         schedule_path=str(used_sched_path) if used_sched_path else None,
+        plays=plays,
     )
     eligible_ids = set(manifest["eligible_game_ids"])
     kept = filter_eligible_plays(plays, eligible_ids, as_of_week=week_w)

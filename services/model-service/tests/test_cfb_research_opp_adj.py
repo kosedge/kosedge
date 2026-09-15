@@ -10,6 +10,7 @@ from src.services.cfb_warehouse.current_season_2026 import classify_completion
 from src.services.cfb_warehouse.delayed_game_verify import (
     DELAYED_GAME_ID,
     OFFICIAL_HOME_SCORE,
+    audit_pbp_vs_official_final,
     should_exclude_snapshot_game,
     verify_delayed_game,
 )
@@ -103,11 +104,20 @@ def test_delayed_game_snapshot_excluded() -> None:
     assert should_exclude_snapshot_game(
         DELAYED_GAME_ID, status="STATUS_DELAYED", home_score=21, away_score=0
     )
+    # STATUS_FINAL 49-7 without complete PBP is still exclude (fail-closed).
+    assert should_exclude_snapshot_game(
+        DELAYED_GAME_ID,
+        status="STATUS_FINAL",
+        home_score=OFFICIAL_HOME_SCORE,
+        away_score=7,
+        pbp_complete=False,
+    )
     assert not should_exclude_snapshot_game(
         DELAYED_GAME_ID,
         status="STATUS_FINAL",
         home_score=OFFICIAL_HOME_SCORE,
         away_score=7,
+        pbp_complete=True,
     )
     verdict = verify_delayed_game(fetch=False)
     assert verdict["decision_on_559_snapshot"] == "exclude"
@@ -116,6 +126,86 @@ def test_delayed_game_snapshot_excluded() -> None:
     assert verdict["old_status"] == "STATUS_DELAYED"
     assert verdict["official_status"] == "STATUS_FINAL"
     assert verdict["official_score"] == {"home": 49, "away": 7}
+    assert "DELAYED + score is not a standing include" in verdict["standing_eligibility_rule"]
+
+
+def test_pbp_audit_partial_q2_cut_excludes() -> None:
+    """#559 SHA cut: 3 JSU pass TDs + Nix INT to 28-0, no Q3/Q4, no EKU score."""
+    plays = [
+        {
+            "game_id": DELAYED_GAME_ID,
+            "id": 1,
+            "period": 1,
+            "end.homeScore": 7,
+            "end.awayScore": 0,
+            "type.text": "Passing Touchdown",
+            "drive.id": "d1",
+            "clock.displayValue": "6:27",
+        },
+        {
+            "game_id": DELAYED_GAME_ID,
+            "id": 2,
+            "period": 1,
+            "end.homeScore": 14,
+            "end.awayScore": 0,
+            "type.text": "Passing Touchdown",
+            "drive.id": "d2",
+            "clock.displayValue": "4:25",
+        },
+        {
+            "game_id": DELAYED_GAME_ID,
+            "id": 3,
+            "period": 2,
+            "end.homeScore": 21,
+            "end.awayScore": 0,
+            "type.text": "Passing Touchdown",
+            "drive.id": "d3",
+            "clock.displayValue": "12:24",
+        },
+        {
+            "game_id": DELAYED_GAME_ID,
+            "id": 4,
+            "period": 2,
+            "end.homeScore": 28,
+            "end.awayScore": 0,
+            "type.text": "Interception Return",
+            "drive.id": "d4",
+            "clock.displayValue": "10:27",
+        },
+    ]
+    audit = audit_pbp_vs_official_final(plays)
+    assert audit["complete_through_final"] is False
+    assert audit["decision"] == "exclude"
+    assert audit["max_period"] == 2
+    assert audit["max_home_score"] == 28
+    assert audit["max_away_score"] == 0
+    assert any(m["home"] == 49 for m in audit["missing_official_markers"])
+    assert any(m["away"] == 7 for m in audit["missing_official_markers"])
+    # Full 49-7 through Q4 would include.
+    full = list(plays) + [
+        {
+            "game_id": DELAYED_GAME_ID,
+            "id": n,
+            "period": m["period"],
+            "end.homeScore": m["home"],
+            "end.awayScore": m["away"],
+            "type.text": "Rush",
+            "drive.id": f"d{n}",
+            "clock.displayValue": m["clock"],
+        }
+        for n, m in enumerate(
+            [
+                {"period": 2, "home": 28, "away": 7, "clock": "9:45"},
+                {"period": 2, "home": 35, "away": 7, "clock": "5:28"},
+                {"period": 3, "home": 42, "away": 7, "clock": "6:03"},
+                {"period": 4, "home": 49, "away": 7, "clock": "7:09"},
+            ],
+            start=5,
+        )
+    ]
+    ok = audit_pbp_vs_official_final(full)
+    assert ok["complete_through_final"] is True
+    assert ok["decision"] == "include"
 
 
 def test_overtime_and_garbage_eligible_rules() -> None:

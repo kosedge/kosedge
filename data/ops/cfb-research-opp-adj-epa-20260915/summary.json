@@ -11,7 +11,7 @@
   "delayed_game": {
     "game_id": "401868140",
     "decision": "exclude",
-    "reason": "excluded_delayed_incomplete_snapshot: STATUS_DELAYED 21-0 is not the official final (ESPN STATUS_FINAL 49-7). Score alone is insufficient."
+    "reason": "excluded_incomplete_pbp: #559 PBP SHA da0ec956 ends Q2 10:27 at 28-0 (Nix INT TD). Official ESPN FINAL is 49-7 through Q4. Fail-closed."
   },
   "recommendation": {
     "recommendation": "advance",

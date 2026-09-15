@@ -1,0 +1,77 @@
+{
+  "game_id": "401868140",
+  "n_plays": 52,
+  "n_drives": 7,
+  "max_period": 2,
+  "max_home_score": 28,
+  "max_away_score": 0,
+  "last_clock": "10:27",
+  "last_type": "Interception Return",
+  "last_end_home": 28,
+  "last_end_away": 0,
+  "reached_official_markers": [
+    {
+      "period": 1,
+      "home": 7,
+      "away": 0,
+      "clock": "6:27",
+      "note": "Williams 13yd pass"
+    },
+    {
+      "period": 1,
+      "home": 14,
+      "away": 0,
+      "clock": "4:25",
+      "note": "Williams 55yd pass"
+    },
+    {
+      "period": 2,
+      "home": 21,
+      "away": 0,
+      "clock": "12:24",
+      "note": "Williams 30yd pass"
+    },
+    {
+      "period": 2,
+      "home": 28,
+      "away": 0,
+      "clock": "10:27",
+      "note": "Nix 43yd INT return"
+    }
+  ],
+  "missing_official_markers": [
+    {
+      "period": 2,
+      "home": 28,
+      "away": 7,
+      "clock": "9:45",
+      "note": "Hensley 72yd rush"
+    },
+    {
+      "period": 2,
+      "home": 35,
+      "away": 7,
+      "clock": "5:28",
+      "note": "Likely 45yd rush"
+    },
+    {
+      "period": 3,
+      "home": 42,
+      "away": 7,
+      "clock": "6:03",
+      "note": "Gilbert 24yd pass"
+    },
+    {
+      "period": 4,
+      "home": 49,
+      "away": 7,
+      "clock": "7:09",
+      "note": "Williams 4yd pass"
+    }
+  ],
+  "complete_through_final": false,
+  "decision": "exclude",
+  "reason": "pbp_partial_vs_official_49_7",
+  "fail_closed": true,
+  "standing_rule": "DELAYED + score is not eligibility. Incomplete PBP = exclude."
+}

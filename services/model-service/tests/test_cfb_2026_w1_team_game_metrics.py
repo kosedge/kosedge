@@ -29,6 +29,11 @@ from src.services.cfb_warehouse.paths import (
     REPO_RESEARCH_PBP_CURRENT,
     hd_pbp_current_target,
 )
+from src.services.cfb_warehouse.delayed_game_verify import (
+    DELAYED_GAME_ID,
+    OFFICIAL_AWAY_SCORE,
+    OFFICIAL_HOME_SCORE,
+)
 from src.services.cfb_warehouse.team_game_w1_2026 import (
     PIPELINE_VERSION,
     PRODUCT_LABEL,
@@ -185,6 +190,58 @@ def test_eligibility_excludes_live_and_week_ge_w() -> None:
     assert manifest["eligible_count"] == 2
     assert manifest["opponent_adjusted"] is False
     assert default_as_of_week(schedule, pbp_ids) == 4  # max completed∩PBP week is 3
+
+
+def test_eligibility_excludes_401868140_when_pbp_is_partial() -> None:
+    """Official FINAL 49-7 plus a Q2 28-0 cut is fail-closed exclude."""
+    partial = [
+        {
+            "game_id": DELAYED_GAME_ID,
+            "id": n,
+            "period": period,
+            "end.homeScore": home,
+            "end.awayScore": 0,
+            "type.text": "Passing Touchdown",
+            "drive.id": f"d{n}",
+            "clock.displayValue": clock,
+        }
+        for n, (period, home, clock) in enumerate(
+            ((1, 7, "6:27"), (1, 14, "4:25"), (2, 21, "12:24"), (2, 28, "10:27")),
+            start=1,
+        )
+    ]
+    final_row = _sched(
+        DELAYED_GAME_ID,
+        status="STATUS_FINAL",
+        week=1,
+        home_score=OFFICIAL_HOME_SCORE,
+        away_score=OFFICIAL_AWAY_SCORE,
+        home="Jacksonville State Gamecocks",
+        away="Eastern Kentucky Colonels",
+    )
+    delayed_row = _sched(
+        DELAYED_GAME_ID,
+        status="STATUS_DELAYED",
+        week=1,
+        home_score=21,
+        away_score=0,
+        home="Jacksonville State Gamecocks",
+        away="Eastern Kentucky Colonels",
+    )
+    for row in (final_row, delayed_row):
+        manifest = build_eligibility_manifest(
+            [row],
+            {DELAYED_GAME_ID},
+            as_of_week=3,
+            as_of="20260915",
+            plays=partial,
+        )
+        game = manifest["games"][0]
+        assert game["included"] is False
+        assert game["reason"] == "excluded_incomplete_pbp"
+        assert manifest["eligible_count"] == 0
+        audit = manifest.get("pbp_audit_401868140") or {}
+        assert audit.get("complete_through_final") is False
 
 
 def test_filter_plays_drops_live_and_current_week() -> None:

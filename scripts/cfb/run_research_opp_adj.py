@@ -56,6 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     from src.services.cfb_warehouse.delayed_game_verify import (
         DELAYED_GAME_ID,
+        audit_pbp_vs_official_final,
         verify_delayed_game,
         should_exclude_snapshot_game,
     )
@@ -161,12 +162,29 @@ def main(argv: list[str] | None = None) -> int:
             write_artifacts=True,
             commit_ops=False,
         )
-        # Belt: drop the delayed incomplete snapshot if it slipped through.
+        plays_all = load_pbp_records(pbp_path)
+        pbp_audit = audit_pbp_vs_official_final(plays_all)
+        _write(ops / "delayed_game_pbp_audit.json", pbp_audit)
+        verdict = verify_delayed_game(fetch=False, live_summary=verdict.get("live_fetch"), plays=plays_all)
+        verdict["pbp_sha256"] = closed_559["manifest"].get("pbp_sha256")
+        _write(ops / "delayed_game_verification.json", verdict)
+        # Belt: drop 401868140 unless PBP is complete through official 49-7.
         manifest = closed_559["manifest"]
+        sched_by_id = {
+            str(r.get("game_id")): r
+            for r in schedule_game_rows(load_schedule_frame(sched_path))
+        }
+        pbp_ok = bool(pbp_audit.get("complete_through_final"))
         dropped = [
             gid
             for gid in list(manifest.get("eligible_game_ids") or [])
-            if should_exclude_snapshot_game(gid)
+            if should_exclude_snapshot_game(
+                gid,
+                status=(sched_by_id.get(str(gid)) or {}).get("status_raw"),
+                home_score=(sched_by_id.get(str(gid)) or {}).get("home_score"),
+                away_score=(sched_by_id.get(str(gid)) or {}).get("away_score"),
+                pbp_complete=pbp_ok if str(gid) == DELAYED_GAME_ID else None,
+            )
         ]
         if dropped:
             manifest["eligible_game_ids"] = [
@@ -182,21 +200,27 @@ def main(argv: list[str] | None = None) -> int:
                 "reason_counts": manifest.get("reason_counts"),
                 "delayed_game_id": DELAYED_GAME_ID,
                 "delayed_included": DELAYED_GAME_ID in set(manifest.get("eligible_game_ids") or []),
+                "pbp_complete_through_final": pbp_ok,
+                "pbp_max_period": pbp_audit.get("max_period"),
+                "pbp_last_score": {
+                    "home": pbp_audit.get("max_home_score"),
+                    "away": pbp_audit.get("max_away_score"),
+                },
+                "fail_closed": True,
             },
         )
 
-        plays = load_pbp_records(pbp_path)
         eligible_ids = set(manifest.get("eligible_game_ids") or [])
-        sched_by_id = {str(r.get("game_id")): r for r in schedule_game_rows(load_schedule_frame(sched_path))}
         plays = [
             p
-            for p in plays
+            for p in plays_all
             if str(p.get("game_id")) in eligible_ids
             and not should_exclude_snapshot_game(
                 p.get("game_id"),
                 status=(sched_by_id.get(str(p.get("game_id"))) or {}).get("status_raw"),
                 home_score=(sched_by_id.get(str(p.get("game_id"))) or {}).get("home_score"),
                 away_score=(sched_by_id.get(str(p.get("game_id"))) or {}).get("away_score"),
+                pbp_complete=pbp_ok if str(p.get("game_id")) == DELAYED_GAME_ID else None,
             )
         ]
         games_2026 = aggregate_team_game_epa(plays)
