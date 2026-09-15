@@ -5,30 +5,51 @@
   "source_type": "kosedge-desk",
   "league_wrap": {
     "title": "Camp Desk — Tuesday, Sep 15",
-    "bottom_line": "Week 1 MNF locked: KC 31, DEN 10. Tue drop = DEN + KC only (held off Mon desk). DEN Over 2/5 KEEP; KC Pass. Do not chase street.",
+    "bottom_line": "Afternoon amend on the morning DEN+KC MNF drop: IR/injury cycle — PHI Dickerson IR; LAR Garrett surgery+IR; ATL Hand season + Lindstrom protocol; DAL Hooker/Overshown timelines; DET Pacheco surgery; LAC McConkey D2D; BUF Mon TNF estimates. All Pass. DEN Over 2/5 KEEP + KC Pass unchanged. No minted KEI.",
     "storylines": [
-      "MNF final KC 31, DEN 10 (Sep 14). Mahomes returned; Walker featured in KC debut path per filed SoT.",
-      "DEN: Cooper still on commissioner’s exempt; Over 2/5 KEEP (house vs street gap stamped; Over juice improved FD +105).",
-      "KC: Pass on 10.5 (gap stamped). Simmons/Conner inactive Week 1 per SoT.",
-      "Mon package (PR #553) already shipped Sunday clubs; this file is the MNF follow-through only."
+      "MNF holdovers: KC 31–10 DEN still on the shelf (morning file). DEN Over 2/5 KEEP; KC Pass — do not chase.",
+      "PHI: Dickerson (knee) → IR ≥4 (Schefter/Inquirer Mon night). Kendall leading LG path — Pass.",
+      "LAR: McVay confirmed Garrett knee surgery + IR (≥4; timeline TBD). Curl/Landman/Allen positive — Pass.",
+      "ATL: Hand season-ending quad; Lindstrom concussion protocol — Pass.",
+      "DAL: Hooker fracture/surgery (~2wk hope); Overshown hamstring 1–2wk; neither IR — Pass.",
+      "DET: Pacheco back surgery (significant / ~Dec); Mon TNF OL DNP estimates — Pass.",
+      "LAC: McConkey D2D ribs (Harbaugh). Biadasz season IR already filed Sep 7 — Under KEEP stands.",
+      "BUF: Mon estimate TNF IR (Bernard LP). Tue/Wed official reports still due — Pass.",
+      "Quiet skip: NFC North beyond DET; AFC North; NFC West beyond LAR; AFC East beyond BUF; most AFC South/NFC South beyond ATL. No 32-card dump."
     ],
-    "what_to_watch": "Into-week injury cycle off MNF; do not restamp Mon street. No invent.",
+    "what_to_watch": "BUF/DET Tue–Wed TNF designations. Lindstrom protocol. Garrett post-op. Dickerson IR transaction + PHI LG starter. Do not restamp Mon street or mint KEI.",
     "sources": [
+      {
+        "label": "ESPN — Dickerson IR",
+        "href": "https://www.espn.com/nfl/story/_/id/49944451/philadelphia-eagles-placing-guard-landon-dickerson-injured-reserve"
+      },
+      {
+        "label": "Rams.com — Garrett surgery + IR",
+        "href": "https://www.therams.com/news/rams-injury-updates-week-2-2026-giants-myles-garrett-kam-curl-davis-allen-nate-landman-omar-speights-monday-night-football"
+      },
+      {
+        "label": "Falcons.com — Hand season; Lindstrom protocol",
+        "href": "https://www.atlantafalcons.com/news/dashawn-hand-out-for-year-chris-lindstrom-tua-tagovailoa-michael-penix"
+      },
+      {
+        "label": "Dallas Sports Journal — Hooker / Overshown",
+        "href": "https://dallassportsjournal.com/malik-hooker-surgery-overshown-injury-timeline-cowboys/"
+      },
+      {
+        "label": "PFT — Pacheco back surgery",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/lions-running-back-isiah-pacheco-had-back-surgery-will-miss-significant-time"
+      },
+      {
+        "label": "PFT — McConkey D2D ribs",
+        "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/ladd-mcconkey-day-to-day-with-rib-injury"
+      },
+      {
+        "label": "SI — Bills Week 2 IR",
+        "href": "https://www.si.com/nfl/bills/onsi/injury-report-week-2-bills-three-starters-added-short-week-lions-looming"
+      },
       {
         "label": "ESPN — Chiefs vs Broncos Week 1",
         "href": "https://www.espn.com/nfl/story/_/id/49944600/2026-nfl-week-1-kansas-city-chiefs-denver-broncos-kenneth-walker-patrick-mahomes"
-      },
-      {
-        "label": "ESPN — game recap",
-        "href": "https://www.espn.com/nfl/recap?gameId=401872931"
-      },
-      {
-        "label": "Broncos — MNF takeaways",
-        "href": "https://www.denverbroncos.com/video/analysis-takeaways-from-denver-s-week-1-game-vs-chiefs"
-      },
-      {
-        "label": "Chiefs — Week 1 inactives",
-        "href": "https://www.chiefs.com/news/week-1-inactive-players-broncos-vs-chiefs"
       }
     ]
   },
@@ -98,20 +119,245 @@
           "href": "https://www.espn.com/nfl/story/_/id/49917622/chiefs-set-use-undrafted-rookie-lt-josh-simmons-out"
         }
       ]
+    },
+    {
+      "team_id": "PHI",
+      "title": "Eagles camp — Sep 15",
+      "bottom_line": "Club placing LG Landon Dickerson (knee) on IR — miss ≥4. Drew Kendall the leading replacement path (Inquirer). Pass — OL depth flag only; do not invent a starter crown or mint a win-total.",
+      "key_points": [
+        "ESPN Tim McManus / Schefter (Sep 14 PM): Eagles placing three-time Pro Bowl LG Landon Dickerson on injured reserve with a knee injury — out at least the next four games.",
+        "Philadelphia Inquirer Jeff McLane first; Dickerson on WIP said IR was the plan after imaging — bone bruise path, unrelated to last year’s meniscus. He called himself a liability in the W1 win vs WAS.",
+        "Inquirer / NBCSP: Drew Kendall expected to replace at LG unless the club shuffles (Jurgens to guard / Lampkin also in play). Do not invent the Week 2 starter from prose — Kendall is the leading path, not a locked SoT starter."
+      ],
+      "what_to_watch": "Official IR transaction + who starts LG at TEN Week 2. Pass on win-total.",
+      "is_material_depth": true,
+      "sot_flag": "Dickerson → IR (knee) ≥4. Kendall leading LG path. Pass — do not invent starter or mint KEI.",
+      "sources": [
+        {
+          "label": "ESPN — Eagles placing Dickerson on IR (McManus / Schefter)",
+          "href": "https://www.espn.com/nfl/story/_/id/49944451/philadelphia-eagles-placing-guard-landon-dickerson-injured-reserve"
+        },
+        {
+          "label": "CBS Philly — Dickerson to IR; Inquirer first",
+          "href": "https://www.cbsnews.com/philadelphia/news/eagles-landon-dickerson-injured-reserve-knee-injury/"
+        },
+        {
+          "label": "NBC Sports Philadelphia — Dickerson IR / Kendall path",
+          "href": "https://www.nbcsportsphiladelphia.com/nfl/philadelphia-eagles/landon-dickerson-injured-reserve-nick-sirianni-drew-kendall-knee-injury/751278/"
+        }
+      ]
+    },
+    {
+      "team_id": "LAR",
+      "title": "Rams camp — Sep 15",
+      "bottom_line": "McVay confirmed Myles Garrett knee surgery + IR (≥4; timeline TBD post-op). Curl/Landman/Allen updates positive; Donald Week 2 vs NYG still undecided. Pass — edge depth flag; do not mint KEI off the IR.",
+      "key_points": [
+        "Rams.com Stu Jackson (Sep 14 AM): Sean McVay confirmed OLB Myles Garrett will undergo knee surgery and be placed on injured reserve after managing swelling through camp and a limited Melbourne debut vs SF.",
+        "McVay: no firm return timeline until surgery info lands — four-game IR minimum covers Giants / Broncos / Eagles / Bills; earliest possible return window Week 6 vs ARI if cleared.",
+        "Positive: Kam Curl (ankle soreness) “is good”; Nate Landman (shoulder/thumb) expected ready for MNF vs NYG; Davis Allen returned after concussion eval. Speights hip pointer making gains. Donald Week 2 status still open — do not invent active/inactive."
+      ],
+      "what_to_watch": "Post-op Garrett timeline; Donald designation before Giants MNF. Pass on restamping LAR win-total.",
+      "is_material_depth": true,
+      "sot_flag": "Garrett → surgery + IR ≥4; timeline TBD. Pass — no minted KEI.",
+      "sources": [
+        {
+          "label": "Rams.com — McVay: Garrett surgery + IR; Curl/Landman/Allen",
+          "href": "https://www.therams.com/news/rams-injury-updates-week-2-2026-giants-myles-garrett-kam-curl-davis-allen-nate-landman-omar-speights-monday-night-football"
+        },
+        {
+          "label": "ESPN — McVay won’t timeline Garrett until after surgery",
+          "href": "https://www.espn.com/nfl/story/_/id/49941221/rams-mcvay-line-garrett-surgery"
+        },
+        {
+          "label": "ESPN — Sources: Garrett surgery, headed to IR (Schefter)",
+          "href": "https://www.espn.com/nfl/story/_/id/49928065/sources-rams-myles-garrett-knee-surgery-headed-ir"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons camp — Sep 15",
+      "bottom_line": "Stefanski: DL Da’Shawn Hand (quad) season-ending, surgery expected. RG Chris Lindstrom in concussion protocol after W1 exit (Hinton finished). Pass — depth/availability flags only; no QB invent for Week 2.",
+      "key_points": [
+        "Falcons.com Tori McElhaney (Sep 14 PM): Kevin Stefanski confirmed Hand tore his quad in the Steelers loss (7 defensive snaps) and is out for the season — surgery expected.",
+        "Same availability: All-Pro RG Chris Lindstrom entered concussion protocol after leaving in Q2; Kyle Hinton finished. Protocol needs ≥1 full practice day after clearance before active.",
+        "Stefanski gave no Week 2 update on Tagovailoa / Penix timelines. Do not invent QB1 or restamp ATL win-total off line news."
+      ],
+      "what_to_watch": "Lindstrom protocol progress before CAR; DL snaps without Hand. Pass on minting.",
+      "is_material_depth": true,
+      "sot_flag": "Hand season-ending (quad/surgery). Lindstrom concussion protocol. Pass.",
+      "sources": [
+        {
+          "label": "Falcons.com — Hand out for year; Lindstrom protocol",
+          "href": "https://www.atlantafalcons.com/news/dashawn-hand-out-for-year-chris-lindstrom-tua-tagovailoa-michael-penix"
+        },
+        {
+          "label": "PFT — Lindstrom protocol; Hand out for year",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/falcons-say-chris-lindstrom-is-in-concussion-protocol-dashawn-hand-is-out-for-the-year"
+        }
+      ]
+    },
+    {
+      "team_id": "DAL",
+      "title": "Cowboys camp — Sep 15",
+      "bottom_line": "Schottenheimer: S Malik Hooker has a fracture — surgery Tuesday; hope ~2-week window. LB DeMarvion Overshown hamstring strain ~1–2 weeks. Neither expected on IR. Pass — depth flags; Dee Winters named first at LB experience.",
+      "key_points": [
+        "Dallas Sports Journal / Schottenheimer (Sep 14): Hooker fractured a bone in the SNF loss at NYG; surgery Tuesday; club hoping a roughly two-week window — not IR.",
+        "Overshown: hamstring strain (not structural), ~1–2 weeks; nothing long-term; not expected IR. He wore the green dot in W1.",
+        "Schottenheimer named Dee Winters first when asked about LB experience; Barham / James got W1 snaps. Do not invent IR or a permanent LB1 from prose."
+      ],
+      "what_to_watch": "Hooker post-op; Overshown Wed participation before WAS. Pass on win-total.",
+      "is_material_depth": true,
+      "sot_flag": "Hooker fracture/surgery (~2wk hope); Overshown hamstring 1–2wk; neither IR expected. Pass.",
+      "sources": [
+        {
+          "label": "Dallas Sports Journal — Hooker surgery / Overshown timeline",
+          "href": "https://dallassportsjournal.com/malik-hooker-surgery-overshown-injury-timeline-cowboys/"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions camp — Sep 15",
+      "bottom_line": "Campbell: Isiah Pacheco (already IR) had back surgery — significant time; Rapoport ~early December path. Mon TNF estimate IR: Mahogany DNP (hip), Miller DNP (knee), Scruggs limited. Pass — RB depth + OL short-week flags; do not invent Week 2 RB2.",
+      "key_points": [
+        "PFT / Campbell (Sep 14): Pacheco had back surgery and will miss a significant amount of time; already on IR with return designation. Ian Rapoport: possible early-December return window.",
+        "BillsWire Mon estimate (TNF short week; walkthrough): OL Christian Mahogany (hip) DNP; OT Blake Miller (knee) DNP; G Juice Scruggs limited (knee); S Christian Izien full (groin).",
+        "Campbell also flagged Sione Vaki as inconsistent in pass pro after Gibbs’ heavy W1 workload — depth question, not a starter invent. Pass — no win-total mint."
+      ],
+      "what_to_watch": "Tue/Wed official TNF IR for Mahogany/Miller; Pacheco recovery only for later months. Pass.",
+      "is_material_depth": true,
+      "sot_flag": "Pacheco back surgery — significant / ~Dec path. Mon OL DNP estimates for TNF. Pass.",
+      "sources": [
+        {
+          "label": "PFT — Pacheco back surgery, significant time (Campbell)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/lions-running-back-isiah-pacheco-had-back-surgery-will-miss-significant-time"
+        },
+        {
+          "label": "ESPN — Lions Pacheco ~12 weeks after back surgery",
+          "href": "https://www.espn.com/nfl/story/_/id/49943755/source-lions-pacheco-significant-back-surgery"
+        },
+        {
+          "label": "BillsWire — Mon injury reports BUF/DET (TNF)",
+          "href": "https://billswire.usatoday.com/story/sports/nfl/bills/2026/09/15/buffalo-bills-lions-injury-report-both-teams-week-1-nfl/91766586007/"
+        }
+      ]
+    },
+    {
+      "team_id": "LAC",
+      "title": "Chargers camp — Sep 15",
+      "bottom_line": "Harbaugh: WR Ladd McConkey day-to-day (ribs) after leaving W1 vs ARI; Molden D2D (hamstring); Lambert-Smith will miss time. Biadasz season IR already filed Sep 7 — no restamp. Under 2/5 KEEP stands; Pass on inventing WR snaps.",
+      "key_points": [
+        "PFT Myles Simmons (Sep 14): Jim Harbaugh said McConkey is day-to-day with a rib injury after a legal hit from Mack Wilson; led LAC with 82 yards / TD before exiting.",
+        "Same: Elijah Molden (hamstring) day-to-day; KeAndre Lambert-Smith (hamstring) will miss time.",
+        "Biadasz season-ending IR already on the Sep 7 card — do not re-litigate. Under 2/5 KEEP from that stamp; do not chase juice or mint off one loss + McConkey D2D."
+      ],
+      "what_to_watch": "McConkey Wed participation vs next opponent. Pass — no new lean.",
+      "is_material_depth": true,
+      "sot_flag": "McConkey D2D ribs; Molden D2D; KLS miss time. Biadasz season IR already filed. Under KEEP stands. Pass.",
+      "sources": [
+        {
+          "label": "PFT — McConkey day-to-day ribs (Harbaugh)",
+          "href": "https://www.nbcsports.com/nfl/profootballtalk/rumor-mill/news/ladd-mcconkey-day-to-day-with-rib-injury"
+        }
+      ]
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills camp — Sep 15",
+      "bottom_line": "First Week 2 IR for TNF vs DET is still Monday estimates (no official practice Mon): Bernard limited (calf); Bishop + Chubb full; Johnson/Sanders still limited. Pass — short-week availability flags only; Tue/Wed evening reports still due.",
+      "key_points": [
+        "SI Ralph Ventre / BillsWire (Mon estimate): ILB Terrel Bernard (calf) limited; S Cole Bishop (knee/groin) full; OLB Bradley Chubb (thumb) full — all three finished W1 at HOU after in-game checks.",
+        "Holdovers still limited: RB Ty Johnson (hamstring), DL TJ Sanders (knee) — both inactive W1. DB Jordan Hancock (quad) full.",
+        "Brady: short week into Detroit. Club will post official Tue/Wed evening updates — do not invent designations from Mon estimates. Pass on 10.5 (Mon stamp stands)."
+      ],
+      "what_to_watch": "Tue/Wed official TNF IR before Lions. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Mon estimate IR: Bernard LP; Bishop/Chubb FP; Johnson/Sanders LP. Pass.",
+      "sources": [
+        {
+          "label": "SI — Bills Week 2 IR (Bernard / Bishop / Chubb)",
+          "href": "https://www.si.com/nfl/bills/onsi/injury-report-week-2-bills-three-starters-added-short-week-lions-looming"
+        },
+        {
+          "label": "BillsWire — Mon injury reports BUF/DET",
+          "href": "https://billswire.usatoday.com/story/sports/nfl/bills/2026/09/15/buffalo-bills-lions-injury-report-both-teams-week-1-nfl/91766586007/"
+        }
+      ]
     }
   ],
   "preview_delta": [
     {
       "team_id": "DEN",
-      "fields": ["bottom_line"],
+      "fields": [
+        "bottom_line"
+      ],
       "status": "flagged",
       "reason": "MNF loss locked. Cooper exempt still. Over 2/5 KEEP — gap 1.01; Over juice improved FD +105."
     },
     {
       "team_id": "KC",
-      "fields": ["bottom_line"],
+      "fields": [
+        "bottom_line"
+      ],
       "status": "flagged",
       "reason": "Mahomes returned in win; Simmons/Conner inactive. Pass on 10.5 — gap 1.19."
+    },
+    {
+      "team_id": "PHI",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "Dickerson → IR (knee) ≥4. Kendall leading LG path. Pass — no starter invent / no mint."
+    },
+    {
+      "team_id": "LAR",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "Garrett surgery + IR ≥4; timeline TBD. Pass."
+    },
+    {
+      "team_id": "ATL",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "Hand season-ending (quad). Lindstrom concussion protocol. Pass."
+    },
+    {
+      "team_id": "DAL",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "Hooker fracture/surgery (~2wk); Overshown hamstring 1–2wk; neither IR. Pass."
+    },
+    {
+      "team_id": "DET",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "Pacheco back surgery — significant/~Dec. Mon TNF OL DNP estimates. Pass."
+    },
+    {
+      "team_id": "LAC",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "McConkey D2D ribs. Biadasz season IR already filed. Under KEEP stands. Pass."
+    },
+    {
+      "team_id": "BUF",
+      "fields": [
+        "bottom_line"
+      ],
+      "status": "flagged",
+      "reason": "Mon estimate TNF IR (Bernard LP). Pass — Tue/Wed reports due."
     }
   ]
 }
