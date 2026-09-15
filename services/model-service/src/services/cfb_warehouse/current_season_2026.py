@@ -63,22 +63,35 @@ COMPLETED_STATUSES = frozenset(
         "STATUS_FINAL_PEN",
     }
 )
-NOT_COMPLETED_STATUSES = frozenset(
+LIVE_STATUSES = frozenset(
     {
-        "STATUS_SCHEDULED",
         "STATUS_IN_PROGRESS",
         "STATUS_HALFTIME",
         "STATUS_END_PERIOD",
+        "IN_PROGRESS",
+        "IN",
+    }
+)
+PARKED_STATUSES = frozenset(
+    {
         "STATUS_DELAYED",
         "STATUS_POSTPONED",
         "STATUS_CANCELED",
         "STATUS_CANCELLED",
-        "SCHEDULED",
-        "IN_PROGRESS",
-        "PRE",
-        "IN",
+        "DELAYED",
+        "POSTPONED",
+        "CANCELED",
+        "CANCELLED",
     }
 )
+SCHEDULED_STATUSES = frozenset(
+    {
+        "STATUS_SCHEDULED",
+        "SCHEDULED",
+        "PRE",
+    }
+)
+NOT_COMPLETED_STATUSES = LIVE_STATUSES | PARKED_STATUSES | SCHEDULED_STATUSES
 
 # Fields that #555 owned raw metrics require (plus pace / explosiveness / opp).
 METRIC_FIELD_REQUIREMENTS: Dict[str, Sequence[str]] = {
@@ -180,27 +193,41 @@ def restore_sdv_file(
     *,
     dest_dir: Path,
     timeout: int = 300,
+    force: bool = False,
 ) -> Path:
     """Download-once SDV release into dest_dir. No CFBD."""
     url = f"{SDV_BASE}/{tag}/{filename}"
     _forbid_cfbd_url(url)
     dest_dir.mkdir(parents=True, exist_ok=True)
-    assert_not_historical_write(dest_dir / filename)
+    dest = dest_dir / filename
+    assert_not_historical_write(dest)
+    if force and dest.exists():
+        dest.unlink()
     return fetch_sdv_file(tag, filename, cache_dir=dest_dir, timeout=timeout)
 
 
-def restore_2026_pbp(*, dest_dir: Path, timeout: int = 300) -> Path:
-    return restore_sdv_file(PBP_TAG, PBP_FILENAME, dest_dir=dest_dir, timeout=timeout)
+def restore_2026_pbp(*, dest_dir: Path, timeout: int = 300, force: bool = False) -> Path:
+    return restore_sdv_file(
+        PBP_TAG, PBP_FILENAME, dest_dir=dest_dir, timeout=timeout, force=force
+    )
 
 
-def restore_2026_schedule(*, dest_dir: Path, timeout: int = 120) -> Path:
+def restore_2026_schedule(*, dest_dir: Path, timeout: int = 120, force: bool = False) -> Path:
     try:
         return restore_sdv_file(
-            SCHEDULE_TAG, SCHEDULE_FILENAME, dest_dir=dest_dir, timeout=timeout
+            SCHEDULE_TAG,
+            SCHEDULE_FILENAME,
+            dest_dir=dest_dir,
+            timeout=timeout,
+            force=force,
         )
     except Exception:  # noqa: BLE001 — csv fallback is same SDV tag
         return restore_sdv_file(
-            SCHEDULE_TAG, SCHEDULE_CSV_FALLBACK, dest_dir=dest_dir, timeout=timeout
+            SCHEDULE_TAG,
+            SCHEDULE_CSV_FALLBACK,
+            dest_dir=dest_dir,
+            timeout=timeout,
+            force=force,
         )
 
 
@@ -231,6 +258,100 @@ def _as_str_id(raw: Any) -> Optional[str]:
     return text
 
 
+def _normalize_status(status: Any) -> str:
+    return str(status or "").strip().upper().replace(" ", "_")
+
+
+def _truthy_flag(raw: Any) -> Optional[bool]:
+    if raw is None or raw == "":
+        return None
+    if isinstance(raw, bool):
+        return raw
+    token = str(raw).strip().lower()
+    if token in {"1", "true", "t", "yes"}:
+        return True
+    if token in {"0", "false", "f", "no"}:
+        return False
+    return None
+
+
+def _parse_score(raw: Any) -> Optional[float]:
+    if raw in (None, ""):
+        return None
+    try:
+        value = float(raw)
+    except (TypeError, ValueError):
+        return None
+    if value != value:  # NaN
+        return None
+    return value
+
+
+def classify_completion(
+    status: Any,
+    *,
+    completed_flag: Any = None,
+    home_score: Any = None,
+    away_score: Any = None,
+) -> Dict[str, Any]:
+    """Separate snapshot STATUS_FINAL from actually-completed.
+
+    Actually completed = STATUS_FINAL / completed flag / (scores present
+    and status is not live), excluding parked 0–0 unplayed games.
+    IN_PROGRESS with scores is **not** completed — the schedule feed lags.
+    """
+    token = _normalize_status(status)
+    flag = _truthy_flag(completed_flag)
+    hs = _parse_score(home_score)
+    aws = _parse_score(away_score)
+    scores_present = hs is not None and aws is not None
+    both_zero = scores_present and hs == 0 and aws == 0
+    status_final = token in COMPLETED_STATUSES
+    live = token in LIVE_STATUSES
+    parked = token in PARKED_STATUSES
+    scheduled = token in SCHEDULED_STATUSES
+    actually_completed = bool(
+        status_final
+        or flag is True
+        or (scores_present and not live and not scheduled and not (parked and both_zero))
+    )
+    if status_final:
+        snapshot_bucket = "status_final"
+    elif live:
+        snapshot_bucket = "in_progress"
+    elif parked:
+        snapshot_bucket = "postponed_or_delayed"
+    elif scheduled:
+        snapshot_bucket = "scheduled"
+    elif token:
+        snapshot_bucket = "unknown"
+    else:
+        snapshot_bucket = "unknown"
+    if actually_completed:
+        w1_eligibility = "eligible_completed"
+    elif live:
+        w1_eligibility = "excluded_unfinished_live"
+    elif parked:
+        w1_eligibility = "excluded_unfinished_parked"
+    elif scheduled:
+        w1_eligibility = "excluded_scheduled"
+    else:
+        w1_eligibility = "excluded_unknown"
+    return {
+        "status_token": token,
+        "status_final": status_final,
+        "actually_completed": actually_completed,
+        "scores_present": scores_present,
+        "both_zero": both_zero,
+        "live": live,
+        "parked": parked,
+        "scheduled": scheduled,
+        "completed_flag": flag,
+        "snapshot_bucket": snapshot_bucket,
+        "w1_eligibility": w1_eligibility,
+    }
+
+
 def classify_status(
     status: Any,
     *,
@@ -238,26 +359,24 @@ def classify_status(
     home_score: Any = None,
     away_score: Any = None,
 ) -> str:
-    token = str(status or "").strip().upper().replace(" ", "_")
-    if token in COMPLETED_STATUSES:
+    """Snapshot status class. ``completed`` here means STATUS_FINAL only."""
+    view = classify_completion(
+        status,
+        completed_flag=completed_flag,
+        home_score=home_score,
+        away_score=away_score,
+    )
+    if view["status_final"]:
         return "completed"
-    if token in NOT_COMPLETED_STATUSES:
+    if view["snapshot_bucket"] != "unknown":
         return "not_completed"
-    flag = completed_flag
-    if isinstance(flag, str):
-        flag = flag.strip().lower() in {"1", "true", "t", "yes"}
-    if flag is True:
+    if view["completed_flag"] is True:
         return "completed"
-    if flag is False and token:
+    if view["completed_flag"] is False and view["status_token"]:
         return "not_completed"
-    try:
-        hs = None if home_score in (None, "") else float(home_score)
-        aws = None if away_score in (None, "") else float(away_score)
-    except (TypeError, ValueError):
-        hs = aws = None
-    if hs is not None and aws is not None and token in {"", "STATUS_UNKNOWN"}:
+    if view["scores_present"] and view["status_token"] in {"", "STATUS_UNKNOWN"}:
         return "completed_inferred_from_scores"
-    if token:
+    if view["status_token"]:
         return "unknown_status"
     return "unknown_status"
 
@@ -307,6 +426,12 @@ def schedule_game_rows(df) -> List[Dict[str, Any]]:
             home_score=home_score,
             away_score=away_score,
         )
+        view = classify_completion(
+            status,
+            completed_flag=completed_flag,
+            home_score=home_score,
+            away_score=away_score,
+        )
         week_raw = rec.get(week_col) if week_col else None
         try:
             week = int(week_raw) if week_raw is not None and str(week_raw) != "nan" else None
@@ -324,6 +449,7 @@ def schedule_game_rows(df) -> List[Dict[str, Any]]:
                 "home_score": home_score,
                 "away_score": away_score,
                 "date": None if date_col is None else rec.get(date_col),
+                **view,
             }
         )
     return rows
@@ -341,21 +467,87 @@ def pbp_game_ids(df) -> Set[str]:
     return out
 
 
+def _row_status_final(row: Mapping[str, Any]) -> bool:
+    if "status_final" in row:
+        return bool(row["status_final"])
+    return str(row.get("status_class") or "").startswith("completed")
+
+
+def _row_actually_completed(row: Mapping[str, Any]) -> bool:
+    if "actually_completed" in row:
+        return bool(row["actually_completed"])
+    return _row_status_final(row)
+
+
+def _row_bucket(row: Mapping[str, Any]) -> str:
+    bucket = row.get("snapshot_bucket")
+    if bucket:
+        return str(bucket)
+    if _row_status_final(row):
+        return "status_final"
+    token = _normalize_status(row.get("status_raw") or row.get("status_token"))
+    if token in LIVE_STATUSES:
+        return "in_progress"
+    if token in PARKED_STATUSES:
+        return "postponed_or_delayed"
+    if token in SCHEDULED_STATUSES:
+        return "scheduled"
+    return "unknown"
+
+
 def reconcile_coverage(
     schedule_rows: Sequence[Mapping[str, Any]],
     pbp_ids: Iterable[str],
 ) -> Dict[str, Any]:
     pbp = {str(g) for g in pbp_ids}
     sched_ids = {r["game_id"] for r in schedule_rows}
-    completed = [r for r in schedule_rows if r["status_class"].startswith("completed")]
-    not_completed = [r for r in schedule_rows if r["status_class"] == "not_completed"]
-    unknown = [r for r in schedule_rows if r["status_class"] == "unknown_status"]
-    completed_ids = {r["game_id"] for r in completed}
-    completed_in_pbp = sorted(completed_ids & pbp)
-    completed_missing_pbp = sorted(completed_ids - pbp)
+    by_id = {r["game_id"]: r for r in schedule_rows}
+
+    snapshot_final = [r for r in schedule_rows if _row_status_final(r)]
+    actually = [r for r in schedule_rows if _row_actually_completed(r)]
+    not_completed = [r for r in schedule_rows if r.get("status_class") == "not_completed"]
+    unknown = [r for r in schedule_rows if r.get("status_class") == "unknown_status"]
+
+    snapshot_final_ids = {r["game_id"] for r in snapshot_final}
+    actually_ids = {r["game_id"] for r in actually}
+    snapshot_final_in_pbp = sorted(snapshot_final_ids & pbp)
+    snapshot_final_missing_pbp = sorted(snapshot_final_ids - pbp)
+    actually_in_pbp = sorted(actually_ids & pbp)
+    actually_missing_pbp = sorted(actually_ids - pbp)
     pbp_not_on_schedule = sorted(pbp - sched_ids)
-    pbp_not_completed_on_schedule = sorted(pbp & ({r["game_id"] for r in not_completed}))
+    pbp_not_final = sorted(pbp & (sched_ids - snapshot_final_ids))
     schedule_without_pbp = sorted(sched_ids - pbp)
+
+    pbp_buckets = {
+        "completed": [],
+        "in_progress": [],
+        "postponed_or_delayed": [],
+        "scheduled": [],
+        "unmatched": [],
+        "unknown": [],
+    }
+    for gid in sorted(pbp):
+        row = by_id.get(gid)
+        if row is None:
+            pbp_buckets["unmatched"].append(gid)
+            continue
+        if _row_actually_completed(row):
+            pbp_buckets["completed"].append(gid)
+            continue
+        bucket = _row_bucket(row)
+        if bucket == "status_final":
+            pbp_buckets["completed"].append(gid)
+        elif bucket == "in_progress":
+            pbp_buckets["in_progress"].append(gid)
+        elif bucket == "postponed_or_delayed":
+            pbp_buckets["postponed_or_delayed"].append(gid)
+        elif bucket == "scheduled":
+            pbp_buckets["scheduled"].append(gid)
+        else:
+            pbp_buckets["unknown"].append(gid)
+
+    w1_eligible = sorted(actually_ids & pbp)
+    w1_excluded = sorted(pbp - set(w1_eligible))
 
     by_week: Dict[str, Dict[str, int]] = {}
     for row in schedule_rows:
@@ -364,44 +556,103 @@ def reconcile_coverage(
             key,
             {
                 "scheduled": 0,
+                "status_final": 0,
+                "status_final_in_pbp": 0,
+                "actually_completed": 0,
+                "actually_completed_in_pbp": 0,
+                "actually_completed_missing_pbp": 0,
+                # legacy aliases used by the first proof snapshot
                 "completed": 0,
                 "completed_in_pbp": 0,
                 "completed_missing_pbp": 0,
             },
         )
         bucket["scheduled"] += 1
-        if row["status_class"].startswith("completed"):
+        if _row_status_final(row):
+            bucket["status_final"] += 1
             bucket["completed"] += 1
             if row["game_id"] in pbp:
+                bucket["status_final_in_pbp"] += 1
                 bucket["completed_in_pbp"] += 1
             else:
                 bucket["completed_missing_pbp"] += 1
+        if _row_actually_completed(row):
+            bucket["actually_completed"] += 1
+            if row["game_id"] in pbp:
+                bucket["actually_completed_in_pbp"] += 1
+            else:
+                bucket["actually_completed_missing_pbp"] += 1
 
     return {
         "schedule_games": len(schedule_rows),
         "schedule_unique_ids": len(sched_ids),
         "pbp_games": len(pbp),
-        "completed_on_schedule": len(completed),
+        "disclaimer": (
+            "status_final_* counts are STATUS_FINAL in this schedule snapshot ∩ PBP. "
+            "That is not proof of every actually completed game. The schedule feed lags; "
+            "many PBP games can still show IN_PROGRESS. W−1 eligibility uses "
+            "actually_completed only (STATUS_FINAL / completed flag / scores present "
+            "and not live; parked 0–0 excluded). Unfinished games are excluded."
+        ),
+        "status_final_on_schedule": len(snapshot_final),
+        "status_final_in_pbp": len(snapshot_final_in_pbp),
+        "status_final_missing_pbp": len(snapshot_final_missing_pbp),
+        "coverage_rate_status_final": (
+            round(len(snapshot_final_in_pbp) / len(snapshot_final), 6)
+            if snapshot_final
+            else None
+        ),
+        "actually_completed_on_schedule": len(actually),
+        "actually_completed_in_pbp": len(actually_in_pbp),
+        "actually_completed_missing_pbp": len(actually_missing_pbp),
+        "actually_completed_missing_pbp_ids": actually_missing_pbp[:40],
+        "coverage_rate_actually_completed": (
+            round(len(actually_in_pbp) / len(actually), 6) if actually else None
+        ),
+        "pbp_reconcile": {
+            "completed": len(pbp_buckets["completed"]),
+            "in_progress": len(pbp_buckets["in_progress"]),
+            "postponed_or_delayed": len(pbp_buckets["postponed_or_delayed"]),
+            "scheduled": len(pbp_buckets["scheduled"]),
+            "unmatched": len(pbp_buckets["unmatched"]),
+            "unknown": len(pbp_buckets["unknown"]),
+        },
+        "pbp_reconcile_ids": {
+            "in_progress": pbp_buckets["in_progress"][:40],
+            "postponed_or_delayed": pbp_buckets["postponed_or_delayed"][:40],
+            "unmatched": pbp_buckets["unmatched"][:40],
+        },
+        "w1_eligible_completed_in_pbp": len(w1_eligible),
+        "w1_excluded_unfinished_or_unmatched": len(w1_excluded),
+        # Legacy keys: these are STATUS_FINAL-in-snapshot, not actually-completed.
+        "completed_on_schedule": len(snapshot_final),
         "not_completed_on_schedule": len(not_completed),
         "unknown_status_on_schedule": len(unknown),
-        "completed_in_pbp": len(completed_in_pbp),
-        "completed_missing_pbp": len(completed_missing_pbp),
+        "completed_in_pbp": len(snapshot_final_in_pbp),
+        "completed_missing_pbp": len(snapshot_final_missing_pbp),
         "pbp_not_on_schedule": len(pbp_not_on_schedule),
-        "pbp_not_completed_on_schedule": len(pbp_not_completed_on_schedule),
+        "pbp_not_completed_on_schedule": len(pbp_not_final),
         "schedule_without_pbp": len(schedule_without_pbp),
         "coverage_rate_completed": (
-            round(len(completed_in_pbp) / len(completed), 6) if completed else None
+            round(len(snapshot_final_in_pbp) / len(snapshot_final), 6)
+            if snapshot_final
+            else None
         ),
-        "completed_missing_pbp_ids": completed_missing_pbp[:40],
+        "completed_missing_pbp_ids": snapshot_final_missing_pbp[:40],
         "pbp_not_on_schedule_ids": pbp_not_on_schedule[:40],
         "schedule_without_pbp_ids": schedule_without_pbp[:40],
         "by_week": dict(sorted(by_week.items(), key=lambda kv: (kv[0] == "unknown", kv[0]))),
         "honest_gaps": _gap_notes(
-            completed_missing=len(completed_missing_pbp),
+            completed_missing=len(snapshot_final_missing_pbp),
             extra_pbp=len(pbp_not_on_schedule),
             unknown=len(unknown),
-            pbp_not_final=len(pbp_not_completed_on_schedule),
+            pbp_not_final=len(pbp_not_final),
             schedule_without_pbp=len(schedule_without_pbp),
+            actually_missing=len(actually_missing_pbp),
+            w1_excluded=len(w1_excluded),
+            snapshot_final_in_pbp=len(snapshot_final_in_pbp),
+            snapshot_final=len(snapshot_final),
+            actually_in_pbp=len(actually_in_pbp),
         ),
     }
 
@@ -413,20 +664,37 @@ def _gap_notes(
     unknown: int,
     pbp_not_final: int = 0,
     schedule_without_pbp: int = 0,
+    actually_missing: int = 0,
+    w1_excluded: int = 0,
+    snapshot_final_in_pbp: int = 0,
+    snapshot_final: int = 0,
+    actually_in_pbp: int = 0,
 ) -> List[str]:
-    notes: List[str] = []
+    notes: List[str] = [
+        (
+            f"{snapshot_final_in_pbp}/{snapshot_final} is STATUS_FINAL-in-snapshot ∩ PBP "
+            "only — not proof of every actually completed game."
+        )
+    ]
     if completed_missing:
         notes.append(
-            f"{completed_missing} schedule-completed game(s) have no PBP rows "
+            f"{completed_missing} STATUS_FINAL game(s) have no PBP rows "
             "(SDV in-season parquet lag or ESPN feed hole)."
         )
-    else:
-        notes.append("Every schedule-completed (STATUS_FINAL) game in this file is present in PBP.")
+    if actually_missing:
+        notes.append(
+            f"{actually_missing} actually-completed game(s) (scores / flag / not-live) "
+            "are missing from PBP."
+        )
     if pbp_not_final:
         notes.append(
-            f"{pbp_not_final} PBP game_id(s) are still STATUS_IN_PROGRESS / DELAYED / "
-            "HALFTIME / END_PERIOD on the SDV schedule snapshot. Treat those as live or "
-            "stale-status — not W−1 completed form unless independently finalized."
+            f"{pbp_not_final} PBP game_id(s) are not STATUS_FINAL on this schedule "
+            "snapshot (IN_PROGRESS / DELAYED / HALFTIME / END_PERIOD). Schedule feed lags."
+        )
+    if w1_excluded:
+        notes.append(
+            f"{w1_excluded} PBP game(s) are excluded from W−1 eligibility "
+            f"(unfinished, parked, unmatched). Eligible count is {actually_in_pbp}."
         )
     if schedule_without_pbp:
         notes.append(
@@ -513,6 +781,19 @@ def field_support_matrix(df) -> Dict[str, Any]:
         "metrics": metrics,
         "ppa_present": bool(colset & {"PPA", "ppa"}),
         "havoc_flag_present": "havoc" in colset,
+        "havoc_components_present": {
+            "havoc": "havoc" in colset,
+            "TFL": "TFL" in colset,
+            "sack": "sack" in colset,
+            "int": "int" in colset,
+            "pass_breakup": "pass_breakup" in colset,
+            "forced_fumble": "forced_fumble" in colset,
+        },
+        "st_playtype_present": any(
+            str(c).lower() in {"kickoff_play", "punt_play", "fg_attempt", "fg_made"}
+            or str(c) in {"type.text"}
+            for c in colset
+        ),
         "note": (
             "SUPPORTED means columns exist at usable null rates for #555 raw "
             "unadjusted metrics. Not a fitted rating. Havoc/ST still need field "
@@ -658,6 +939,7 @@ def run_proof(
     as_of: Optional[str] = None,
     dest_dir: Optional[Path] = None,
     include_espn_sample: bool = True,
+    refresh_schedule: bool = False,
 ) -> Dict[str, Any]:
     stamp = as_of or today_as_of()
     dest = dest_dir or research_dest_dir(stamp)
@@ -665,11 +947,34 @@ def run_proof(
     dest.mkdir(parents=True, exist_ok=True)
     assert_not_historical_write(dest)
 
+    prior_sched = dest / SCHEDULE_FILENAME
+    prior_meta = None
+    if prior_sched.exists():
+        prior_meta = {
+            "path": str(prior_sched),
+            "bytes": int(prior_sched.stat().st_size),
+            "sha256": _sha256(prior_sched),
+        }
+
     pbp_path = restore_2026_pbp(dest_dir=dest)
-    sched_path = restore_2026_schedule(dest_dir=dest)
+    sched_path = restore_2026_schedule(dest_dir=dest, force=refresh_schedule)
     pbp = inspect_pbp(pbp_path)
     sched = inspect_schedule(sched_path)
     coverage = reconcile_coverage(sched["games"], pbp["game_ids"])
+    coverage["schedule_refresh"] = {
+        "forced": refresh_schedule,
+        "prior": prior_meta,
+        "current_bytes": sched.get("bytes"),
+        "current_sha256": sched.get("sha256"),
+        "bytes_changed": (
+            None
+            if prior_meta is None
+            else int(sched.get("bytes") or 0) != int(prior_meta["bytes"])
+        ),
+        "sha_changed": (
+            None if prior_meta is None else sched.get("sha256") != prior_meta["sha256"]
+        ),
+    }
 
     espn_sample: Optional[Dict[str, Any]] = None
     if include_espn_sample:
@@ -677,7 +982,7 @@ def run_proof(
         completed_in = [
             r["game_id"]
             for r in sched["games"]
-            if r["status_class"].startswith("completed")
+            if r.get("actually_completed")
             and r["game_id"] in set(pbp["game_ids"])
         ]
         if completed_in:
@@ -692,6 +997,12 @@ def run_proof(
         k: v for k, v in sched.items() if k != "games"
     }
     sched_summary["status_counts"] = _count_by(sched["games"], "status_class")
+    sched_summary["snapshot_bucket_counts"] = _count_by(
+        sched["games"], "snapshot_bucket"
+    )
+    sched_summary["actually_completed"] = sum(
+        1 for r in sched["games"] if r.get("actually_completed")
+    )
     pbp_summary = {k: v for k, v in pbp.items() if k != "game_ids"}
     pbp_summary["game_ids_head"] = pbp["game_ids"][:20]
 

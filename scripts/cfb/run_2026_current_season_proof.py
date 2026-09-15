@@ -37,6 +37,11 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Skip the public ESPN summary probe for one completed game",
     )
+    parser.add_argument(
+        "--refresh-schedule",
+        action="store_true",
+        help="Force re-download of the SDV 2026 schedule parquet (no CFBD)",
+    )
     args = parser.parse_args(argv)
 
     dest = research_dest_dir(args.as_of)
@@ -44,6 +49,7 @@ def main(argv: list[str] | None = None) -> int:
         as_of=args.as_of,
         dest_dir=dest,
         include_espn_sample=not args.skip_espn_sample,
+        refresh_schedule=args.refresh_schedule,
     )
     ops = committed_ops_dir()
     write_json(ops / "evidence.json", proof)
@@ -60,9 +66,18 @@ def main(argv: list[str] | None = None) -> int:
         f"bytes={proof['pbp']['bytes']}"
     )
     print(
-        f"schedule games={cov['schedule_games']} completed={cov['completed_on_schedule']} "
-        f"completed_in_pbp={cov['completed_in_pbp']} "
-        f"completed_missing_pbp={cov['completed_missing_pbp']}"
+        f"schedule games={cov['schedule_games']} "
+        f"status_final={cov['status_final_on_schedule']} "
+        f"status_final_in_pbp={cov['status_final_in_pbp']} "
+        f"actually_completed={cov['actually_completed_on_schedule']} "
+        f"actually_completed_in_pbp={cov['actually_completed_in_pbp']} "
+        f"w1_eligible={cov['w1_eligible_completed_in_pbp']} "
+        f"w1_excluded={cov['w1_excluded_unfinished_or_unmatched']}"
+    )
+    refresh = cov.get("schedule_refresh") or {}
+    print(
+        f"schedule_refresh sha_changed={refresh.get('sha_changed')} "
+        f"bytes_changed={refresh.get('bytes_changed')}"
     )
     print(f"ops={ops}")
     return 0

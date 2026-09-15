@@ -22,6 +22,7 @@ from src.services.cfb_warehouse.current_season_2026 import (
     SCHEDULE_FILENAME,
     SEASON,
     assert_not_historical_write,
+    classify_completion,
     classify_status,
     field_support_matrix,
     path_convention,
@@ -105,24 +106,75 @@ def test_classify_status_final_and_scheduled() -> None:
     assert "STATUS_FINAL" in COMPLETED_STATUSES
 
 
+def test_classify_completion_does_not_treat_live_scores_as_done() -> None:
+    live = classify_completion("STATUS_IN_PROGRESS", home_score=35, away_score=0)
+    assert live["status_final"] is False
+    assert live["actually_completed"] is False
+    assert live["w1_eligibility"] == "excluded_unfinished_live"
+    delayed_zero = classify_completion("STATUS_DELAYED", home_score=0, away_score=0)
+    assert delayed_zero["actually_completed"] is False
+    delayed_score = classify_completion("STATUS_DELAYED", home_score=21, away_score=0)
+    assert delayed_score["actually_completed"] is True
+    final = classify_completion("STATUS_FINAL", home_score=42, away_score=26)
+    assert final["status_final"] is True
+    assert final["actually_completed"] is True
+    assert final["w1_eligibility"] == "eligible_completed"
+
+
 def test_reconcile_coverage_reports_gaps() -> None:
     schedule = [
-        {"game_id": "1", "status_class": "completed", "week": 1},
-        {"game_id": "2", "status_class": "completed", "week": 1},
-        {"game_id": "3", "status_class": "not_completed", "week": 2},
-        {"game_id": "4", "status_class": "not_completed", "week": 2},
+        {
+            "game_id": "1",
+            "status_class": "completed",
+            "status_final": True,
+            "actually_completed": True,
+            "snapshot_bucket": "status_final",
+            "week": 1,
+        },
+        {
+            "game_id": "2",
+            "status_class": "completed",
+            "status_final": True,
+            "actually_completed": True,
+            "snapshot_bucket": "status_final",
+            "week": 1,
+        },
+        {
+            "game_id": "3",
+            "status_class": "not_completed",
+            "status_final": False,
+            "actually_completed": False,
+            "snapshot_bucket": "in_progress",
+            "week": 2,
+        },
+        {
+            "game_id": "4",
+            "status_class": "not_completed",
+            "status_final": False,
+            "actually_completed": False,
+            "snapshot_bucket": "in_progress",
+            "week": 2,
+        },
     ]
     cov = reconcile_coverage(schedule, ["1", "4", "9"])
     assert cov["completed_on_schedule"] == 2
     assert cov["completed_in_pbp"] == 1
     assert cov["completed_missing_pbp"] == 1
     assert cov["completed_missing_pbp_ids"] == ["2"]
+    assert cov["status_final_in_pbp"] == 1
+    assert cov["actually_completed_in_pbp"] == 1
+    assert cov["actually_completed_missing_pbp"] == 1
+    assert cov["pbp_reconcile"]["in_progress"] == 1
+    assert cov["pbp_reconcile"]["unmatched"] == 1
+    assert cov["w1_eligible_completed_in_pbp"] == 1
+    assert cov["w1_excluded_unfinished_or_unmatched"] == 2
     assert cov["pbp_not_on_schedule"] == 1
     assert cov["pbp_not_completed_on_schedule"] == 1
     assert cov["schedule_without_pbp"] == 2
     assert cov["coverage_rate_completed"] == 0.5
     assert cov["by_week"]["1"]["completed_missing_pbp"] == 1
-    assert any("STATUS_IN_PROGRESS" in g for g in cov["honest_gaps"])
+    assert any("STATUS_FINAL-in-snapshot" in g for g in cov["honest_gaps"])
+    assert "not proof of every actually completed game" in cov["disclaimer"]
 
 
 @pytest.mark.skipif(pd is None, reason="pandas not installed in this environment")

@@ -410,5 +410,14 @@
   },
   "ppa_present": false,
   "havoc_flag_present": true,
+  "havoc_components_present": {
+    "havoc": true,
+    "TFL": true,
+    "sack": true,
+    "int": true,
+    "pass_breakup": true,
+    "forced_fumble": true
+  },
+  "st_playtype_present": true,
   "note": "SUPPORTED means columns exist at usable null rates for #555 raw unadjusted metrics. Not a fitted rating. Havoc/ST still need field verification. PPA is optional and expected absent on SDV."
 }

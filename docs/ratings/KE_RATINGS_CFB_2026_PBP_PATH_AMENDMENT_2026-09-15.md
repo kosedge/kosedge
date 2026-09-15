@@ -1,66 +1,67 @@
-# Amendment to #556 — CFB current-season PBP path (2026-09-15)
+# Amendment to #556 — CFB current-season PBP path + classification (2026-09-15)
 
 **Amends:** [`docs/ratings/KE_RATINGS_ENGINE_EXISTING_INVENTORY_2026-09-15.md`](KE_RATINGS_ENGINE_EXISTING_INVENTORY_2026-09-15.md) (PR #556)  
-**Evidence:** [CFB 2026 current-season PBP proof](../cfb/CFB_2026_CURRENT_SEASON_PBP_PROOF_2026-09-15.md) · PR #555 raw-metric definitions  
-**Lock:** CFBD soft-parked. No ratings build. No opponent adjustment. No Edge Board / KEI.
+**Evidence:** [CFB 2026 current-season PBP proof](../cfb/CFB_2026_CURRENT_SEASON_PBP_PROOF_2026-09-15.md)  
+**Full NFL+CFB matrix + first-build recommendation:** [`KE_RATINGS_NFL_CFB_GAP_MATRIX_2026-09-15.md`](KE_RATINGS_NFL_CFB_GAP_MATRIX_2026-09-15.md)  
+**Lock:** CFBD soft-parked. Docs + evidence only. No ratings build. Production SP+ compose unchanged.
 
-This note **does not rewrite** the #556 inventory body or the Aug 13 2014–2025 warehouse inventories. It updates **gap implications** only.
+This note **does not rewrite** the #556 inventory body or the Aug 13 2014–2025 warehouse inventories.
 
----
-
-## What #555 / #556 said (still true unless crossed out)
-
-| Claim | Status after this proof |
-| --- | --- |
-| No module named KE Ratings Engine | Unchanged |
-| CFB live compose/KEI is 2025 SP+ carry + synthetic success/pace/explosiveness | Unchanged — **not** switched to PBP |
-| Owned PBP EPA warehouse is research-only (`used_in_spread: false`) | Unchanged |
-| 2025 CFB PBP was not opened by #556 | Unchanged |
-| **2026 current-season form = NEED_EXTERNAL because 2026 PBP was absent and CFBD auth was the live option** | **Superseded for retrieval** |
-| PPA required CFBD `/ppa` | Still true **if** PPA is mandatory; PPA is optional |
-| Havoc-as-published / ST need charted or verified flags | Unchanged (boolean `havoc` is unverified) |
-| Opponent-adjusted KE ratings are separate work | Unchanged |
+**Proprietary KE Ratings estimate stays ~28%.** Inputs being on disk is not an implemented/validated rating.
 
 ---
 
-## What changed: current-season PBP is SDV, not CFBD-blocked
+## Classification scheme (replaces NEED_EXTERNAL dump)
 
-2026 `espn_cfb_pbp` season parquet retrieved **without a CFBD key** (20,118 plays / 179 games / weeks 1–2 / 498 cols). Schedule reconcile: **84/84 `STATUS_FINAL` games are in PBP**. ESPN core plays works for a sample game; site summary 403s from this VM.
+Use **two axes**. Do not collapse “we have not built KE” into “we need to buy data.”
 
-CFBD authentication is **not** the blocker for 2026 play-level EPA / success / pace / explosiveness / down splits / scoring-opportunity inputs. Soft-park CFBD. Do not buy a replacement vendor.
-
----
-
-## 2026 W−1 — NEED_EXTERNAL vs OWNED_DERIVABLE
-
-Assume a versioned current-season file on  
-`/Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_YYYYMMDD/`  
-(this VM: `data/cfb/research/pbp_current/as_of_YYYYMMDD/`).  
-Filter: `season=2026` and (`week < W` **and** schedule `STATUS_FINAL`). Do not use IN_PROGRESS PBP as completed form — 95 PBP games are still non-FINAL on the SDV schedule snapshot.
-
-| Feature (2026 through W−1) | Class | Why |
+| Axis | Token | Meaning |
 | --- | --- | --- |
-| Off/def EPA (raw, unadjusted) | **OWNED_DERIVABLE** | `EPA` present, null 0 |
-| Success rate (`EPA_success` / standard SR) | **OWNED_DERIVABLE** | columns + down/distance/yards |
-| Pace / competitive pace | **OWNED_DERIVABLE** | `scrimmage_play`, `pos_score_diff` |
-| Explosiveness (EPA≥1 or yards≥15, pass/rush) | **OWNED_DERIVABLE** | same #555 knobs |
-| Early / standard / passing-down efficiency | **OWNED_DERIVABLE** | `down`, `distance` |
-| Scoring opportunities / finishing inputs | **OWNED_DERIVABLE** | `drive.id`, `start.yardsToEndzone`, `type.text` |
-| Field position / drive EPA inputs | **OWNED_DERIVABLE** | same |
-| Rolling form W−1 from those raw metrics | **OWNED_DERIVABLE** | once FINAL + `week < W` gate is applied |
-| PPA | **NEED_EXTERNAL** (optional) | not in SDV; CFBD parked — build around EPA |
-| Havoc-as-published (PBU-inclusive) | **NEED_EXTERNAL** | SDV `havoc`/`TFL`/`sack`/`int` exist; **field verification later** |
-| Special teams rating | **NEED_EXTERNAL** | not verified |
-| Opponent-adjusted EPA / KE Ratings / SOS | **NEED_EXTERNAL** (separate work) | not started; not authorized here |
-| Live compose / KEI / Edge Board / fair line | **not in this path** | still SP+ carry + proxies |
+| Data | **DATA_AVAILABLE** | Owned (or already-contracted) input exists for this concept |
+| Data | **DATA_MISSING** | Input is not in owned files. Reserved for genuinely missing feeds |
+| Metric | **NEEDS_IMPLEMENTATION** | Data exists; the KE metric / wiring is not built (or not on the live path) |
+| Metric | **NEEDS_VALIDATION** | A field or metric exists; definition / completeness / grades are not proven |
 
-Headline for #556’s CFB “EPA / PPA = PARTIAL” cell: **raw 2026 EPA is now retrievable on the owned SDV path.** That does **not** promote warehouse EPA onto KEI and does **not** raise the ~28% proprietary KE Ratings estimate. Live CFB efficiency remains vendor SP+.
+Rules from Ryan / CoS:
+
+- Opponent-adjusted KE = **NEEDS_IMPLEMENTATION / NEEDS_VALIDATION**, not DATA_MISSING.
+- Havoc and special teams: **check field completeness first**. SDV 2026 raw has `havoc` / `TFL` / `sack` / `int` / `pass_breakup` / `forced_fumble` and kick/punt/FG columns. Those are DATA_AVAILABLE + NEEDS_VALIDATION until verification says a required input is absent.
+- **PPA is optional.** Only DATA_MISSING if we insist on CFBD PPA. Default: build around EPA.
+- Live CFB SP+ compose / KEI / Edge Board are **unchanged**.
+
+---
+
+## What changed vs the first #558 draft
+
+| Claim | Correction |
+| --- | --- |
+| 84/84 completed-game coverage | **Retracted as full coverage.** 84/84 is `STATUS_FINAL`-in-snapshot ∩ PBP only |
+| 2026 form = NEED_EXTERNAL (no PBP / CFBD blocked) | **Superseded for retrieval.** SDV 2026 PBP is on the versioned current path |
+| Opponent-adj KE = NEED_EXTERNAL | **Wrong axis.** DATA_AVAILABLE (PBP + warehouse adj code) + NEEDS_IMPLEMENTATION / VALIDATION |
+| Havoc / ST = NEED_EXTERNAL | **Premature.** Field-completeness first |
+| ~28% KE Ratings | **Unchanged** |
+
+---
+
+## 2026 W−1 data vs metric (after refreshed reconcile)
+
+Forced SDV schedule refresh in-cloud: **same SHA** as the first pull. All **179** PBP games sit on the schedule (0 unmatched).
+
+| Feature (2026 through W−1) | Data | Metric | Notes |
+| --- | --- | --- | --- |
+| Raw EPA / success / pace / explosiveness / down splits / scoring-opp / field position | **DATA_AVAILABLE** | **NEEDS_IMPLEMENTATION** | Columns supported; completed-game rollup not built in this PR |
+| Rolling form W−1 | **DATA_AVAILABLE** (85 eligible games in this snapshot) | **NEEDS_IMPLEMENTATION** | Gate: `actually_completed` ∩ PBP ∩ `week < W`. **94** live-status PBP games excluded |
+| PPA | **DATA_MISSING** (optional) | n/a | CFBD parked; not required |
+| Havoc-as-published | **DATA_AVAILABLE** (flags present) | **NEEDS_VALIDATION** | Verify vs published havoc before calling data missing |
+| Special teams | **DATA_AVAILABLE** (play types + ST columns) | **NEEDS_VALIDATION** | Completeness / definition first |
+| Opponent-adjusted KE / SOS | **DATA_AVAILABLE** | **NEEDS_IMPLEMENTATION / NEEDS_VALIDATION** | Warehouse adj exists (research, unused). Not an external-data gap |
+| Live compose / KEI / Edge Board | vendor SP+ (unchanged) | not this path | Do not promote PBP onto the board here |
 
 ---
 
 ## Preserve historical
 
 Do not copy 2026 into `/Volumes/KosEdgeData/raw/cfb/pbp/`.  
-Do not edit `data/ops/cfb-historical-warehouse-v1-20260812-pbp-inventory.json` as if 2026 replaced 2021–2025.
+Do not edit `data/ops/cfb-historical-warehouse-v1-20260812-pbp-inventory.json`.
 
-**STOP.**
+**STOP** — first bounded implementation task is specified in the matrix doc and is **not** executed here.

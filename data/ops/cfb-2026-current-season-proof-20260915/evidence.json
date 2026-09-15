@@ -1,6 +1,6 @@
 {
   "proof_version": "cfb-2026-current-season-sdv-proof-v1",
-  "generated_at": "2026-09-15T14:51:13.397537+00:00",
+  "generated_at": "2026-09-15T15:14:32.665251+00:00",
   "season": 2026,
   "source": {
     "pbp": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2026.parquet",
@@ -492,6 +492,15 @@
       },
       "ppa_present": false,
       "havoc_flag_present": true,
+      "havoc_components_present": {
+        "havoc": true,
+        "TFL": true,
+        "sack": true,
+        "int": true,
+        "pass_breakup": true,
+        "forced_fumble": true
+      },
+      "st_playtype_present": true,
       "note": "SUPPORTED means columns exist at usable null rates for #555 raw unadjusted metrics. Not a fitted rating. Havoc/ST still need field verification. PPA is optional and expected absent on SDV."
     },
     "game_ids_head": [
@@ -547,12 +556,84 @@
     "status_counts": {
       "completed": 84,
       "not_completed": 101
-    }
+    },
+    "snapshot_bucket_counts": {
+      "status_final": 84,
+      "in_progress": 95,
+      "postponed_or_delayed": 6
+    },
+    "actually_completed": 85
   },
   "coverage": {
     "schedule_games": 185,
     "schedule_unique_ids": 185,
     "pbp_games": 179,
+    "disclaimer": "status_final_* counts are STATUS_FINAL in this schedule snapshot \u2229 PBP. That is not proof of every actually completed game. The schedule feed lags; many PBP games can still show IN_PROGRESS. W\u22121 eligibility uses actually_completed only (STATUS_FINAL / completed flag / scores present and not live; parked 0\u20130 excluded). Unfinished games are excluded.",
+    "status_final_on_schedule": 84,
+    "status_final_in_pbp": 84,
+    "status_final_missing_pbp": 0,
+    "coverage_rate_status_final": 1.0,
+    "actually_completed_on_schedule": 85,
+    "actually_completed_in_pbp": 85,
+    "actually_completed_missing_pbp": 0,
+    "actually_completed_missing_pbp_ids": [],
+    "coverage_rate_actually_completed": 1.0,
+    "pbp_reconcile": {
+      "completed": 85,
+      "in_progress": 94,
+      "postponed_or_delayed": 0,
+      "scheduled": 0,
+      "unmatched": 0,
+      "unknown": 0
+    },
+    "pbp_reconcile_ids": {
+      "in_progress": [
+        "401856636",
+        "401856637",
+        "401856658",
+        "401856659",
+        "401856662",
+        "401856666",
+        "401856667",
+        "401856668",
+        "401856669",
+        "401856672",
+        "401856673",
+        "401856674",
+        "401856676",
+        "401856677",
+        "401856680",
+        "401856681",
+        "401856682",
+        "401856770",
+        "401856771",
+        "401856772",
+        "401856775",
+        "401856777",
+        "401856778",
+        "401856779",
+        "401856782",
+        "401856783",
+        "401856784",
+        "401856785",
+        "401856786",
+        "401856787",
+        "401856788",
+        "401856789",
+        "401856791",
+        "401856810",
+        "401858201",
+        "401858207",
+        "401858211",
+        "401858216",
+        "401858217",
+        "401858218"
+      ],
+      "postponed_or_delayed": [],
+      "unmatched": []
+    },
+    "w1_eligible_completed_in_pbp": 85,
+    "w1_excluded_unfinished_or_unmatched": 94,
     "completed_on_schedule": 84,
     "not_completed_on_schedule": 101,
     "unknown_status_on_schedule": 0,
@@ -575,44 +656,47 @@
     "by_week": {
       "1": {
         "scheduled": 99,
+        "status_final": 53,
+        "status_final_in_pbp": 53,
+        "actually_completed": 54,
+        "actually_completed_in_pbp": 54,
+        "actually_completed_missing_pbp": 0,
         "completed": 53,
         "completed_in_pbp": 53,
         "completed_missing_pbp": 0
       },
       "2": {
         "scheduled": 86,
+        "status_final": 31,
+        "status_final_in_pbp": 31,
+        "actually_completed": 31,
+        "actually_completed_in_pbp": 31,
+        "actually_completed_missing_pbp": 0,
         "completed": 31,
         "completed_in_pbp": 31,
         "completed_missing_pbp": 0
       }
     },
     "honest_gaps": [
-      "Every schedule-completed (STATUS_FINAL) game in this file is present in PBP.",
-      "95 PBP game_id(s) are still STATUS_IN_PROGRESS / DELAYED / HALFTIME / END_PERIOD on the SDV schedule snapshot. Treat those as live or stale-status \u2014 not W\u22121 completed form unless independently finalized.",
+      "84/84 is STATUS_FINAL-in-snapshot \u2229 PBP only \u2014 not proof of every actually completed game.",
+      "95 PBP game_id(s) are not STATUS_FINAL on this schedule snapshot (IN_PROGRESS / DELAYED / HALFTIME / END_PERIOD). Schedule feed lags.",
+      "94 PBP game(s) are excluded from W\u22121 eligibility (unfinished, parked, unmatched). Eligible count is 85.",
       "6 schedule game(s) have zero PBP rows (mostly STATUS_DELAYED 0\u20130 in this snapshot)."
-    ]
+    ],
+    "schedule_refresh": {
+      "forced": false,
+      "prior": {
+        "path": "/workspace/data/cfb/research/pbp_current/as_of_20260915/cfb_schedule_2026.parquet",
+        "bytes": 16867,
+        "sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768"
+      },
+      "current_bytes": 16867,
+      "current_sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768",
+      "bytes_changed": false,
+      "sha_changed": false
+    }
   },
-  "espn_sample_game": {
-    "game_id": "401864494",
-    "cfbd_used": false,
-    "core_plays": {
-      "ok": true,
-      "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401864494/competitions/401864494/plays?limit=300",
-      "http_status": 200
-    },
-    "site_summary": {
-      "ok": false,
-      "url": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401864494",
-      "error": "HTTP 403"
-    },
-    "ok": true,
-    "url": "https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/events/401864494/competitions/401864494/plays?limit=300",
-    "route": "espn_core_plays",
-    "http_status": 200,
-    "play_count": 165,
-    "reported_count": 165,
-    "page_count": 1
-  },
+  "espn_sample_game": null,
   "historical_inventory_rewritten": false,
   "research_only": true,
   "opponent_adjusted": false,
