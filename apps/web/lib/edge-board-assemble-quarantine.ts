@@ -13,7 +13,7 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 import {
-  isFootballPublicNumbersDisabled,
+  isCfbEdgeBoardCustomerDisabled,
   stripCfbCustomerEdgeTagRows,
 } from "@/lib/cfb-edge-board-public";
 import {
@@ -77,7 +77,9 @@ export function scrubEdgeBoardAssembleCustomerRows(
   sport?: string,
 ): EdgeBoardRow[] {
   const scrubbed = rows.map(scrubEdgeBoardAssembleCustomerRow);
-  if (isFootballPublicNumbersDisabled(sport)) {
+  // Coming-soon is a page/assemble display gate. Do not strip NFL stamp /
+  // inactive-suppress chrome here — CFB public-disabled is tag-only.
+  if (isCfbEdgeBoardCustomerDisabled(sport)) {
     return stripCfbCustomerEdgeTagRows(
       scrubbed as unknown as Record<string, unknown>[],
     ) as EdgeBoardRow[];

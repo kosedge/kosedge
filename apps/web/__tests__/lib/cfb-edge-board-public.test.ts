@@ -173,12 +173,7 @@ describe("CFB Edge Board public kill switch", () => {
       ],
       "nfl",
     );
-    expect(
-      (nflScrubbed[0] as { publishTag?: string }).publishTag,
-    ).toBeUndefined();
-    expect(
-      (nflScrubbed[0] as { actionLabel?: string }).actionLabel,
-    ).toBeUndefined();
+    expect((nflScrubbed[0] as { publishTag?: string }).publishTag).toBe("LEAN");
 
     const nbaScrubbed = scrubEdgeBoardAssembleCustomerRows(
       [
