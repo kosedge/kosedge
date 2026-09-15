@@ -289,73 +289,55 @@
   "preview_delta": [
     {
       "team_id": "DEN",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "MNF loss locked. Cooper exempt still. Over 2/5 KEEP — gap 1.01; Over juice improved FD +105."
     },
     {
       "team_id": "KC",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Mahomes returned in win; Simmons/Conner inactive. Pass on 10.5 — gap 1.19."
     },
     {
       "team_id": "PHI",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Dickerson → IR (knee) ≥4. Kendall leading LG path. Pass — no starter invent / no mint."
     },
     {
       "team_id": "LAR",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Garrett surgery + IR ≥4; timeline TBD. Pass."
     },
     {
       "team_id": "ATL",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Hand season-ending (quad). Lindstrom concussion protocol. Pass."
     },
     {
       "team_id": "DAL",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Hooker fracture/surgery (~2wk); Overshown hamstring 1–2wk; neither IR. Pass."
     },
     {
       "team_id": "DET",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Pacheco back surgery — significant/~Dec. Mon TNF OL DNP estimates. Pass."
     },
     {
       "team_id": "LAC",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "McConkey D2D ribs. Biadasz season IR already filed. Under KEEP stands. Pass."
     },
     {
       "team_id": "BUF",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Mon estimate TNF IR (Bernard LP). Pass — Tue/Wed reports due."
     }
