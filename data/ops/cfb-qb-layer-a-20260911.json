@@ -1,0 +1,805 @@
+{
+  "generated_at": "2026-09-11T23:06:46Z",
+  "qb_feature_contract_version": "cfb-qb-feature-v1",
+  "kill_switch": true,
+  "opened_2025": false,
+  "used_2026_for_reconstruction": false,
+  "matchup_response_frozen": 1.4,
+  "seasons": {
+    "2022": {
+      "n_mapped_fbs": 131,
+      "n_layer_a": 131,
+      "coverage": 1.0,
+      "portal_n": 30,
+      "lowsample_n": 2,
+      "class_counts": {
+        "incumbent": 100,
+        "portal": 30,
+        "true_freshman": 1
+      },
+      "talent_all": {
+        "n": 131,
+        "mean": 70.8456,
+        "sd": 6.8713,
+        "p10": 60.75,
+        "p25": 65.16,
+        "p50": 71.97,
+        "p75": 75.13,
+        "p90": 80.35,
+        "min": 54.62,
+        "max": 84.67
+      },
+      "talent_established": {
+        "n": 129,
+        "mean": 71.0676,
+        "sd": 6.683,
+        "p10": 61.762,
+        "p25": 65.37,
+        "p50": 72.05,
+        "p75": 75.17,
+        "p90": 80.362,
+        "min": 56.75,
+        "max": 84.67
+      },
+      "misses": []
+    },
+    "2023": {
+      "n_mapped_fbs": 133,
+      "n_layer_a": 133,
+      "coverage": 1.0,
+      "portal_n": 40,
+      "lowsample_n": 10,
+      "class_counts": {
+        "incumbent": 90,
+        "portal": 40,
+        "open_competition": 2,
+        "true_freshman": 1
+      },
+      "talent_all": {
+        "n": 133,
+        "mean": 69.4098,
+        "sd": 7.9762,
+        "p10": 58.274,
+        "p25": 64.08,
+        "p50": 70.5,
+        "p75": 75.39,
+        "p90": 79.222,
+        "min": 47.5,
+        "max": 85.58
+      },
+      "talent_established": {
+        "n": 123,
+        "mean": 70.7259,
+        "sd": 6.6996,
+        "p10": 61.58,
+        "p25": 65.71,
+        "p50": 71.08,
+        "p75": 75.83,
+        "p90": 79.408,
+        "min": 56.08,
+        "max": 85.58
+      },
+      "misses": []
+    },
+    "2024": {
+      "n_mapped_fbs": 134,
+      "n_layer_a": 134,
+      "coverage": 1.0,
+      "portal_n": 54,
+      "lowsample_n": 11,
+      "class_counts": {
+        "incumbent": 74,
+        "portal": 52,
+        "open_competition": 6,
+        "true_freshman": 2
+      },
+      "talent_all": {
+        "n": 134,
+        "mean": 68.9635,
+        "sd": 8.3012,
+        "p10": 57.62,
+        "p25": 63.905,
+        "p50": 69.07,
+        "p75": 75.2775,
+        "p90": 79.29,
+        "min": 48.0,
+        "max": 83.22
+      },
+      "talent_established": {
+        "n": 123,
+        "mean": 70.4147,
+        "sd": 6.9693,
+        "p10": 61.186,
+        "p25": 65.2,
+        "p50": 69.93,
+        "p75": 75.485,
+        "p90": 79.762,
+        "min": 53.45,
+        "max": 83.22
+      },
+      "misses": []
+    }
+  },
+  "missingness": {
+    "overall": {
+      "RECRUITING_UNAVAILABLE_LAYER_B": 398,
+      "CAST_UNAVAILABLE_LAYER_B": 398,
+      "OVERRIDE_UNAVAILABLE": 398,
+      "W1_CONFIRM_UNAVAILABLE": 398,
+      "ESPN_EXPERIENCE_IGNORED": 398,
+      "PORTAL_ROSTER_JOIN": 398,
+      "EXPERIENCE_RECONSTRUCTED": 398,
+      "LAYER_A_OK": 398,
+      "CLASS_LEFT_CENSORED": 22,
+      "STATS_404": 1
+    },
+    "by_season": {
+      "2022": {
+        "RECRUITING_UNAVAILABLE_LAYER_B": 131,
+        "CAST_UNAVAILABLE_LAYER_B": 131,
+        "OVERRIDE_UNAVAILABLE": 131,
+        "W1_CONFIRM_UNAVAILABLE": 131,
+        "ESPN_EXPERIENCE_IGNORED": 131,
+        "PORTAL_ROSTER_JOIN": 131,
+        "EXPERIENCE_RECONSTRUCTED": 131,
+        "LAYER_A_OK": 131,
+        "CLASS_LEFT_CENSORED": 21
+      },
+      "2023": {
+        "RECRUITING_UNAVAILABLE_LAYER_B": 133,
+        "CAST_UNAVAILABLE_LAYER_B": 133,
+        "OVERRIDE_UNAVAILABLE": 133,
+        "W1_CONFIRM_UNAVAILABLE": 133,
+        "ESPN_EXPERIENCE_IGNORED": 133,
+        "PORTAL_ROSTER_JOIN": 133,
+        "EXPERIENCE_RECONSTRUCTED": 133,
+        "LAYER_A_OK": 133,
+        "CLASS_LEFT_CENSORED": 1
+      },
+      "2024": {
+        "RECRUITING_UNAVAILABLE_LAYER_B": 134,
+        "CAST_UNAVAILABLE_LAYER_B": 134,
+        "OVERRIDE_UNAVAILABLE": 134,
+        "W1_CONFIRM_UNAVAILABLE": 134,
+        "ESPN_EXPERIENCE_IGNORED": 134,
+        "PORTAL_ROSTER_JOIN": 134,
+        "EXPERIENCE_RECONSTRUCTED": 134,
+        "LAYER_A_OK": 134,
+        "STATS_404": 1
+      }
+    }
+  },
+  "leakage": {
+    "n_rows": 398,
+    "failures": [],
+    "ok": true
+  },
+  "game_counts": {
+    "source": "sportsdataverse espn_cfb_betting + team_box + linescores",
+    "skipped": {
+      "missing_line": 808,
+      "missing_score": 1,
+      "unmapped_team": 391,
+      "fcs_or_unknown": 0
+    },
+    "mapped_games_all_weeks": 1581,
+    "close_and_actual_note": "n is games with SDV close spread+total AND finals. 2022 SDV betting is sparse; warehouse Odds-API lake is not mounted.",
+    "actuals_only_w1_14_fbs_fbs": {
+      "2022": 780,
+      "2023": 794,
+      "2024": 789
+    },
+    "splits": {
+      "train_0": {
+        "n_close_and_actual": 9,
+        "n": 9,
+        "seasons": [
+          2022
+        ],
+        "weeks": "1-14"
+      },
+      "val_0": {
+        "n_close_and_actual": 769,
+        "n": 769,
+        "seasons": [
+          2023
+        ],
+        "weeks": "1-14"
+      },
+      "train_1": {
+        "n_close_and_actual": 778,
+        "n": 778,
+        "seasons": [
+          2022,
+          2023
+        ],
+        "weeks": "1-14"
+      },
+      "val_1": {
+        "n_close_and_actual": 792,
+        "n": 792,
+        "seasons": [
+          2024
+        ],
+        "weeks": "1-14"
+      }
+    }
+  },
+  "evidence_gate": {
+    "go": false,
+    "layer_a_reconstruction": "GO",
+    "recommendation": "STOP",
+    "blocker": "Train-0 close+actual n<700 (2022 SDV betting sparse; Layer A features are not the miss)",
+    "checks": [
+      {
+        "name": "contract_version_v1",
+        "ok": true,
+        "detail": "cfb-qb-feature-v1"
+      },
+      {
+        "name": "leakage_audit",
+        "ok": true,
+        "detail": {
+          "n_failures": 0
+        }
+      },
+      {
+        "name": "coverage_2022",
+        "ok": true,
+        "detail": {
+          "coverage": 1.0,
+          "n": 131,
+          "d": 131
+        }
+      },
+      {
+        "name": "established_location_2022",
+        "ok": true,
+        "detail": {
+          "mean": 71.0676,
+          "sd": 6.683,
+          "n": 129
+        }
+      },
+      {
+        "name": "not_placeholder_2022",
+        "ok": true,
+        "detail": {
+          "n": 131,
+          "mean": 70.8456,
+          "sd": 6.8713,
+          "p10": 60.75,
+          "p25": 65.16,
+          "p50": 71.97,
+          "p75": 75.13,
+          "p90": 80.35,
+          "min": 54.62,
+          "max": 84.67
+        }
+      },
+      {
+        "name": "coverage_2023",
+        "ok": true,
+        "detail": {
+          "coverage": 1.0,
+          "n": 133,
+          "d": 133
+        }
+      },
+      {
+        "name": "established_location_2023",
+        "ok": true,
+        "detail": {
+          "mean": 70.7259,
+          "sd": 6.6996,
+          "n": 123
+        }
+      },
+      {
+        "name": "not_placeholder_2023",
+        "ok": true,
+        "detail": {
+          "n": 133,
+          "mean": 69.4098,
+          "sd": 7.9762,
+          "p10": 58.274,
+          "p25": 64.08,
+          "p50": 70.5,
+          "p75": 75.39,
+          "p90": 79.222,
+          "min": 47.5,
+          "max": 85.58
+        }
+      },
+      {
+        "name": "coverage_2024",
+        "ok": true,
+        "detail": {
+          "coverage": 1.0,
+          "n": 134,
+          "d": 134
+        }
+      },
+      {
+        "name": "established_location_2024",
+        "ok": true,
+        "detail": {
+          "mean": 70.4147,
+          "sd": 6.9693,
+          "n": 123
+        }
+      },
+      {
+        "name": "not_placeholder_2024",
+        "ok": true,
+        "detail": {
+          "n": 134,
+          "mean": 68.9635,
+          "sd": 8.3012,
+          "p10": 57.62,
+          "p25": 63.905,
+          "p50": 69.07,
+          "p75": 75.2775,
+          "p90": 79.29,
+          "min": 48.0,
+          "max": 83.22
+        }
+      },
+      {
+        "name": "train_0_n",
+        "ok": false,
+        "detail": {
+          "n_close_and_actual": 9,
+          "n": 9,
+          "seasons": [
+            2022
+          ],
+          "weeks": "1-14"
+        }
+      },
+      {
+        "name": "val_0_n",
+        "ok": true,
+        "detail": {
+          "n_close_and_actual": 769,
+          "n": 769,
+          "seasons": [
+            2023
+          ],
+          "weeks": "1-14"
+        }
+      },
+      {
+        "name": "val_1_n",
+        "ok": true,
+        "detail": {
+          "n_close_and_actual": 792,
+          "n": 792,
+          "seasons": [
+            2024
+          ],
+          "weeks": "1-14"
+        }
+      },
+      {
+        "name": "2025_sealed",
+        "ok": true,
+        "detail": "not opened"
+      },
+      {
+        "name": "2026_not_in_objective",
+        "ok": true,
+        "detail": "confirmatory only; not read"
+      },
+      {
+        "name": "coefficients_unchanged",
+        "ok": true,
+        "detail": "MATCHUP_RESPONSE=1.40 frozen"
+      }
+    ]
+  },
+  "provenance_samples": [
+    {
+      "team": "ALA",
+      "prediction_season": 2022,
+      "starter_name": "Bryce Young",
+      "starter_key": "4685720",
+      "qb_class": "incumbent",
+      "qb_talent": 83.29,
+      "is_portal": false,
+      "pass_attempts_prior": 462,
+      "pass_yards_prior": 4322,
+      "pass_td_prior": 43,
+      "experience_abbr": "SO",
+      "reason_codes": [
+        "RECRUITING_UNAVAILABLE_LAYER_B",
+        "CAST_UNAVAILABLE_LAYER_B",
+        "OVERRIDE_UNAVAILABLE",
+        "W1_CONFIRM_UNAVAILABLE",
+        "ESPN_EXPERIENCE_IGNORED",
+        "PORTAL_ROSTER_JOIN",
+        "EXPERIENCE_RECONSTRUCTED",
+        "LAYER_A_OK"
+      ],
+      "availability": {
+        "roster_membership": "RECONSTRUCTABLE",
+        "prior_year_stats": "RECONSTRUCTABLE",
+        "portal": "RECONSTRUCTABLE",
+        "class": "RECONSTRUCTABLE",
+        "recruiting": "MISSING",
+        "ol_support": "MISSING",
+        "weapons_support": "MISSING",
+        "expert_override": "MISSING",
+        "w1_confirm": "MISSING"
+      },
+      "provenance": {
+        "roster_source": "espn_core_seasons_Y_team_athletes",
+        "stats_source": "espn_core_seasons_Ym1_athlete_statistics",
+        "stats_season": 2021,
+        "prediction_season": 2022,
+        "temporal_cutoff": "prior_season_completed_totals_only",
+        "starter_rule": "max prior-season attempts, then experience years, then name",
+        "starter_selection": "returning production starter",
+        "portal_rule": "Y vs Y-1 roster-id join (or Y-1 attempts not on this Y-1 list)",
+        "prior_team_espn_id": "333",
+        "class_reconstruction": "first_college_season=2020",
+        "first_college_season": 2020,
+        "first_appearance": {
+          "roster_first": 2021,
+          "stats_first": 2020,
+          "stats_years_found": [
+            2020,
+            2021
+          ],
+          "experience_source": "first_appearance_roster_or_stats"
+        },
+        "espn_experience_used": false,
+        "recruiting_used": false,
+        "same_season_stats_used": false,
+        "site_roster_used": false,
+        "team_history_used": false,
+        "override_used": false,
+        "w1_confirm_used": false,
+        "qb_feature_contract_version": "cfb-qb-feature-v1"
+      }
+    },
+    {
+      "team": "OSU",
+      "prediction_season": 2023,
+      "starter_name": "Kyle McCord",
+      "starter_key": "4433971",
+      "qb_class": "incumbent",
+      "qb_talent": 53.71,
+      "is_portal": false,
+      "pass_attempts_prior": 20,
+      "pass_yards_prior": 190,
+      "pass_td_prior": 1,
+      "experience_abbr": "SO",
+      "reason_codes": [
+        "RECRUITING_UNAVAILABLE_LAYER_B",
+        "CAST_UNAVAILABLE_LAYER_B",
+        "OVERRIDE_UNAVAILABLE",
+        "W1_CONFIRM_UNAVAILABLE",
+        "ESPN_EXPERIENCE_IGNORED",
+        "PORTAL_ROSTER_JOIN",
+        "EXPERIENCE_RECONSTRUCTED",
+        "LAYER_A_OK"
+      ],
+      "availability": {
+        "roster_membership": "RECONSTRUCTABLE",
+        "prior_year_stats": "RECONSTRUCTABLE",
+        "portal": "RECONSTRUCTABLE",
+        "class": "RECONSTRUCTABLE",
+        "recruiting": "MISSING",
+        "ol_support": "MISSING",
+        "weapons_support": "MISSING",
+        "expert_override": "MISSING",
+        "w1_confirm": "MISSING"
+      },
+      "provenance": {
+        "roster_source": "espn_core_seasons_Y_team_athletes",
+        "stats_source": "espn_core_seasons_Ym1_athlete_statistics",
+        "stats_season": 2022,
+        "prediction_season": 2023,
+        "temporal_cutoff": "prior_season_completed_totals_only",
+        "starter_rule": "max prior-season attempts, then experience years, then name",
+        "starter_selection": "returning depth with some prior-season work",
+        "portal_rule": "Y vs Y-1 roster-id join (or Y-1 attempts not on this Y-1 list)",
+        "prior_team_espn_id": "194",
+        "class_reconstruction": "first_college_season=2021",
+        "first_college_season": 2021,
+        "first_appearance": {
+          "roster_first": 2021,
+          "stats_first": 2021,
+          "stats_years_found": [
+            2021,
+            2022
+          ],
+          "experience_source": "first_appearance_roster_or_stats"
+        },
+        "espn_experience_used": false,
+        "recruiting_used": false,
+        "same_season_stats_used": false,
+        "site_roster_used": false,
+        "team_history_used": false,
+        "override_used": false,
+        "w1_confirm_used": false,
+        "qb_feature_contract_version": "cfb-qb-feature-v1"
+      }
+    },
+    {
+      "team": "SYR",
+      "prediction_season": 2023,
+      "starter_name": "Garrett Shrader",
+      "starter_key": "4426966",
+      "qb_class": "incumbent",
+      "qb_talent": 69.59,
+      "is_portal": false,
+      "pass_attempts_prior": 266,
+      "pass_yards_prior": 2310,
+      "pass_td_prior": 17,
+      "experience_abbr": "SR",
+      "reason_codes": [
+        "RECRUITING_UNAVAILABLE_LAYER_B",
+        "CAST_UNAVAILABLE_LAYER_B",
+        "OVERRIDE_UNAVAILABLE",
+        "W1_CONFIRM_UNAVAILABLE",
+        "ESPN_EXPERIENCE_IGNORED",
+        "PORTAL_ROSTER_JOIN",
+        "EXPERIENCE_RECONSTRUCTED",
+        "LAYER_A_OK"
+      ],
+      "availability": {
+        "roster_membership": "RECONSTRUCTABLE",
+        "prior_year_stats": "RECONSTRUCTABLE",
+        "portal": "RECONSTRUCTABLE",
+        "class": "RECONSTRUCTABLE",
+        "recruiting": "MISSING",
+        "ol_support": "MISSING",
+        "weapons_support": "MISSING",
+        "expert_override": "MISSING",
+        "w1_confirm": "MISSING"
+      },
+      "provenance": {
+        "roster_source": "espn_core_seasons_Y_team_athletes",
+        "stats_source": "espn_core_seasons_Ym1_athlete_statistics",
+        "stats_season": 2022,
+        "prediction_season": 2023,
+        "temporal_cutoff": "prior_season_completed_totals_only",
+        "starter_rule": "max prior-season attempts, then experience years, then name",
+        "starter_selection": "returning production starter",
+        "portal_rule": "Y vs Y-1 roster-id join (or Y-1 attempts not on this Y-1 list)",
+        "prior_team_espn_id": "183",
+        "class_reconstruction": "first_college_season=2019",
+        "first_college_season": 2019,
+        "first_appearance": {
+          "roster_first": 2021,
+          "stats_first": 2019,
+          "stats_years_found": [
+            2019,
+            2020,
+            2021,
+            2022
+          ],
+          "experience_source": "first_appearance_roster_or_stats"
+        },
+        "espn_experience_used": false,
+        "recruiting_used": false,
+        "same_season_stats_used": false,
+        "site_roster_used": false,
+        "team_history_used": false,
+        "override_used": false,
+        "w1_confirm_used": false,
+        "qb_feature_contract_version": "cfb-qb-feature-v1"
+      }
+    },
+    {
+      "team": "ORE",
+      "prediction_season": 2024,
+      "starter_name": "Dillon Gabriel",
+      "starter_key": "4427238",
+      "qb_class": "portal",
+      "qb_talent": 81.94,
+      "is_portal": true,
+      "pass_attempts_prior": 384,
+      "pass_yards_prior": 3660,
+      "pass_td_prior": 30,
+      "experience_abbr": "SR",
+      "reason_codes": [
+        "RECRUITING_UNAVAILABLE_LAYER_B",
+        "CAST_UNAVAILABLE_LAYER_B",
+        "OVERRIDE_UNAVAILABLE",
+        "W1_CONFIRM_UNAVAILABLE",
+        "ESPN_EXPERIENCE_IGNORED",
+        "PORTAL_ROSTER_JOIN",
+        "EXPERIENCE_RECONSTRUCTED",
+        "LAYER_A_OK"
+      ],
+      "availability": {
+        "roster_membership": "RECONSTRUCTABLE",
+        "prior_year_stats": "RECONSTRUCTABLE",
+        "portal": "RECONSTRUCTABLE",
+        "class": "RECONSTRUCTABLE",
+        "recruiting": "MISSING",
+        "ol_support": "MISSING",
+        "weapons_support": "MISSING",
+        "expert_override": "MISSING",
+        "w1_confirm": "MISSING"
+      },
+      "provenance": {
+        "roster_source": "espn_core_seasons_Y_team_athletes",
+        "stats_source": "espn_core_seasons_Ym1_athlete_statistics",
+        "stats_season": 2023,
+        "prediction_season": 2024,
+        "temporal_cutoff": "prior_season_completed_totals_only",
+        "starter_rule": "max prior-season attempts, then experience years, then name",
+        "starter_selection": "portal addition with prior production",
+        "portal_rule": "Y vs Y-1 roster-id join (or Y-1 attempts not on this Y-1 list)",
+        "prior_team_espn_id": "201",
+        "class_reconstruction": "first_college_season=2019",
+        "first_college_season": 2019,
+        "first_appearance": {
+          "roster_first": 2021,
+          "stats_first": 2019,
+          "stats_years_found": [
+            2019,
+            2020,
+            2021,
+            2022,
+            2023
+          ],
+          "experience_source": "first_appearance_roster_or_stats"
+        },
+        "espn_experience_used": false,
+        "recruiting_used": false,
+        "same_season_stats_used": false,
+        "site_roster_used": false,
+        "team_history_used": false,
+        "override_used": false,
+        "w1_confirm_used": false,
+        "qb_feature_contract_version": "cfb-qb-feature-v1"
+      }
+    },
+    {
+      "team": "ARMY",
+      "prediction_season": 2022,
+      "starter_name": "Christian Anderson",
+      "starter_key": "4258447",
+      "qb_class": "incumbent",
+      "qb_talent": 58.43,
+      "is_portal": false,
+      "pass_attempts_prior": 59,
+      "pass_yards_prior": 653,
+      "pass_td_prior": 5,
+      "experience_abbr": "JR",
+      "reason_codes": [
+        "RECRUITING_UNAVAILABLE_LAYER_B",
+        "CAST_UNAVAILABLE_LAYER_B",
+        "OVERRIDE_UNAVAILABLE",
+        "W1_CONFIRM_UNAVAILABLE",
+        "ESPN_EXPERIENCE_IGNORED",
+        "PORTAL_ROSTER_JOIN",
+        "EXPERIENCE_RECONSTRUCTED",
+        "LAYER_A_OK"
+      ],
+      "availability": {
+        "roster_membership": "RECONSTRUCTABLE",
+        "prior_year_stats": "RECONSTRUCTABLE",
+        "portal": "RECONSTRUCTABLE",
+        "class": "RECONSTRUCTABLE",
+        "recruiting": "MISSING",
+        "ol_support": "MISSING",
+        "weapons_support": "MISSING",
+        "expert_override": "MISSING",
+        "w1_confirm": "MISSING"
+      },
+      "provenance": {
+        "roster_source": "espn_core_seasons_Y_team_athletes",
+        "stats_source": "espn_core_seasons_Ym1_athlete_statistics",
+        "stats_season": 2021,
+        "prediction_season": 2022,
+        "temporal_cutoff": "prior_season_completed_totals_only",
+        "starter_rule": "max prior-season attempts, then experience years, then name",
+        "starter_selection": "returning depth with some prior-season work",
+        "portal_rule": "Y vs Y-1 roster-id join (or Y-1 attempts not on this Y-1 list)",
+        "prior_team_espn_id": "349",
+        "class_reconstruction": "first_college_season=2019",
+        "first_college_season": 2019,
+        "first_appearance": {
+          "roster_first": 2021,
+          "stats_first": 2019,
+          "stats_years_found": [
+            2019,
+            2020,
+            2021
+          ],
+          "experience_source": "first_appearance_roster_or_stats"
+        },
+        "espn_experience_used": false,
+        "recruiting_used": false,
+        "same_season_stats_used": false,
+        "site_roster_used": false,
+        "team_history_used": false,
+        "override_used": false,
+        "w1_confirm_used": false,
+        "qb_feature_contract_version": "cfb-qb-feature-v1"
+      }
+    },
+    {
+      "team": "JVST",
+      "prediction_season": 2024,
+      "starter_name": "Tyler Huff",
+      "starter_key": "4574356",
+      "qb_class": "portal",
+      "qb_talent": 67.94,
+      "is_portal": true,
+      "pass_attempts_prior": 299,
+      "pass_yards_prior": 1863,
+      "pass_td_prior": 10,
+      "experience_abbr": "SR",
+      "reason_codes": [
+        "RECRUITING_UNAVAILABLE_LAYER_B",
+        "CAST_UNAVAILABLE_LAYER_B",
+        "OVERRIDE_UNAVAILABLE",
+        "W1_CONFIRM_UNAVAILABLE",
+        "ESPN_EXPERIENCE_IGNORED",
+        "PORTAL_ROSTER_JOIN",
+        "EXPERIENCE_RECONSTRUCTED",
+        "LAYER_A_OK"
+      ],
+      "availability": {
+        "roster_membership": "RECONSTRUCTABLE",
+        "prior_year_stats": "RECONSTRUCTABLE",
+        "portal": "RECONSTRUCTABLE",
+        "class": "RECONSTRUCTABLE",
+        "recruiting": "MISSING",
+        "ol_support": "MISSING",
+        "weapons_support": "MISSING",
+        "expert_override": "MISSING",
+        "w1_confirm": "MISSING"
+      },
+      "provenance": {
+        "roster_source": "espn_core_seasons_Y_team_athletes",
+        "stats_source": "espn_core_seasons_Ym1_athlete_statistics",
+        "stats_season": 2023,
+        "prediction_season": 2024,
+        "temporal_cutoff": "prior_season_completed_totals_only",
+        "starter_rule": "max prior-season attempts, then experience years, then name",
+        "starter_selection": "portal addition with prior production",
+        "portal_rule": "Y vs Y-1 roster-id join (or Y-1 attempts not on this Y-1 list)",
+        "prior_team_espn_id": null,
+        "class_reconstruction": "first_college_season=2019",
+        "first_college_season": 2019,
+        "first_appearance": {
+          "roster_first": null,
+          "stats_first": 2019,
+          "stats_years_found": [
+            2019,
+            2021,
+            2022,
+            2023
+          ],
+          "experience_source": "first_appearance_roster_or_stats"
+        },
+        "espn_experience_used": false,
+        "recruiting_used": false,
+        "same_season_stats_used": false,
+        "site_roster_used": false,
+        "team_history_used": false,
+        "override_used": false,
+        "w1_confirm_used": false,
+        "qb_feature_contract_version": "cfb-qb-feature-v1"
+      }
+    }
+  ],
+  "limitations": [
+    "Layer B recruiting / OL / weapons / expert overrides / W1 confirms are MISSING.",
+    "ESPN group-80 mapped codes are the year-Y FBS denominator (not the 2026 136-team lock).",
+    "Class years are first-appearance reconstructions; left-censored at 2017 stats floor.",
+    "Identity/option slice not built (would need prior-year team rush/pass; not proxied from 2026).",
+    "P4/G5 year-Y affiliations not stored on Layer A rows (2026 conference map would leak realignment).",
+    "Frozen 1.40 game scoring deferred \u2014 Layer B cast is missing; filling 50 would re-introduce hist-cal semantics.",
+    "Warehouse parquet / CFBD / Odds-API lake were not used. ESPN core + SDV betting/box/linescores only.",
+    "2022 SDV espn_cfb_betting has closes on ~125/904 rows (mostly early/FCS). Train-0 close+actual n fails the 700 gate until the warehouse lake is mounted."
+  ]
+}
