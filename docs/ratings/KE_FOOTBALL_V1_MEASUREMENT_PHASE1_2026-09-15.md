@@ -179,7 +179,7 @@ Native units. Full JSON: `nfl_measurement.json` / `cfb_measurement.json`.
 
 Football read (not a seal): Bills/Pats/49ers offenses sit where a 2025 board would expect. Jets offense is a hole; Browns are a bad offense / good-ish defense. Eagles defense ADJUSTED (−0.123) is stronger than raw (−0.082) after SOS. `ke.havoc` and `ke.team_strength` are empty on purpose.
 
-**Finishing note:** NFL PPO ~2.1–2.4 and finish ~0.39–0.43 look **low** vs a typical scoring-opportunity intuition and vs CFB’s owned heuristic (Georgia 4.29 / 0.81). Likely cause: NFL points are flag-summed on `fixed_drive` and may miss FG/XP that do not share that id. Cell stays published with `points_source=nflverse_scoring_flags` for inspection — **not** filled with 3.5. A later GO can certify drive-result points. `ke.rz_td` remains the PARTIAL sibling.
+**Finishing note (Phase 1, superseded by 1B):** NFL PPO ~2.1–2.4 and finish ~0.39–0.43 were a kickoff-at-35 / shared-`fixed_drive` false-opportunity defect. Phase 1B repairs this from owned nflverse (`fixed_drive_result` + PAT flags; KO/XP ignored for opportunity yardline): PPO **3.95** / finish **0.75** / opp rate **0.52**. See [`KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md`](./KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md). Do not calibrate around the old 2.1 band. `ke.rz_td` remains the PARTIAL sibling.
 
 ### CFB 2025, as_of week 13
 

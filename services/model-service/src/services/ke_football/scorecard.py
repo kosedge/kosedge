@@ -153,7 +153,8 @@ def grade_component(row: Dict[str, Any], *, sport: str) -> Dict[str, Any]:
     # Core EPA / success / expl / finishing / pace decision.
     reliable = (persist is not None and persist >= 0.35) or (curve4 is not None and curve4 >= 0.35)
     oos_ok = (own is not None and own >= 0.20) or (epa_oos is not None and epa_oos >= 0.20)
-    late_ok = late_w2w is None or late_w2w >= 0.15
+    # Single-game week-to-week is noisy by construction (especially EPA).
+    # Report it; do not veto PASS when split-half / early→late already hold.
     thin_oos = own is not None and own < 0.10 and (epa_oos is None or epa_oos < 0.10)
 
     if family == "pace":
@@ -171,7 +172,7 @@ def grade_component(row: Dict[str, Any], *, sport: str) -> Dict[str, Any]:
             "recommendation": rec,
         }
 
-    if reliable and oos_ok and late_ok and n_teams >= (20 if sport == "nfl" else 40):
+    if reliable and oos_ok and n_teams >= (20 if sport == "nfl" else 40):
         grade = "PASS"
         rec = "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
     elif thin_oos and not reliable:

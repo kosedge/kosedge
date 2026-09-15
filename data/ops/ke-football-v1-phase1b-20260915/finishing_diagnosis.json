@@ -1,0 +1,19 @@
+{
+  "nfl": {
+    "defect": "kickoff_yardline_35_false_opportunity",
+    "kickoffs": 2645,
+    "kickoffs_yle_40": 2629,
+    "kickoff_false_opp_rate": 0.9939508506616257,
+    "drives": 5200,
+    "opportunity_drives": 2708,
+    "opportunity_rate": 0.5207692307692308,
+    "ppo_repaired": 3.946085672082718,
+    "finish_repaired": 0.7477843426883308,
+    "points_source": "fixed_drive_result+pat_flags",
+    "calibrated": false
+  },
+  "cfb": {
+    "sport": "cfb",
+    "note": "CFB type.text heuristic unchanged"
+  }
+}
