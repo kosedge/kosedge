@@ -16,11 +16,18 @@ HD_RAW_PBP = HD_ROOT / "raw" / "cfb" / "pbp"
 HD_ODDS_CFB = HD_ROOT / "clean" / "odds" / "cfb"
 
 def _resolve_repo_root() -> Path:
-    """Monorepo root locally; service root (/app) on Railway path-as-root."""
+    """Monorepo root locally; service root (/app) on Railway path-as-root.
+
+    Require ``apps/web`` for the monorepo match. ``model-service`` itself can
+    contain a nested ``services/model-service`` plus a created ``data/`` tree,
+    which used to steal the first match and drop parquet under the service.
+    """
     here = Path(__file__).resolve()
     parents = list(here.parents)
     for parent in parents:
-        if (parent / "services" / "model-service").is_dir() and (parent / "data").is_dir():
+        if (parent / "apps" / "web").is_dir() and (
+            parent / "services" / "model-service"
+        ).is_dir():
             return parent
     for parent in parents:
         if (parent / "Dockerfile").is_file() and (parent / "src").is_dir():
