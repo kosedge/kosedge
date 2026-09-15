@@ -439,6 +439,28 @@ def apply_to_season(
     fit = pregame_fit(
         games, season=int(season), week=int(as_of_week), params=params, prior_fit=prior_fit
     )
+    if prior_fit is not None:
+        for team, rating in prior_fit.ratings.items():
+            if rating.fcs or team in fit.ratings:
+                continue
+            fit.ratings[team] = TeamRating(
+                team=team,
+                off=float(params.prior_decay) * rating.off,
+                defn=float(params.prior_decay) * rating.defn,
+                off_raw=rating.off_raw,
+                def_raw=rating.def_raw,
+                n_plays=0.0,
+                n_games=0,
+                fcs_games=0,
+                prior_off=float(params.prior_decay) * rating.off,
+                prior_def=float(params.prior_decay) * rating.defn,
+                prior_weight=1.0,
+                in_season_weight=0.0,
+                cold_start=False,
+                insufficient_history=True,
+                fcs=False,
+                uncertainty=1.0 / math.sqrt(params.lam),
+            )
     rows = []
     for team, rating in sorted(fit.ratings.items()):
         if rating.fcs:

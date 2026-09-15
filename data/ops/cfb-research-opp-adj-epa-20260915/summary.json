@@ -1,0 +1,19 @@
+{
+  "pipeline_version": "cfb-research-opp-adj-epa-v1",
+  "as_of": "20260915",
+  "generated_at": "2026-09-15T17:13:18.555359+00:00",
+  "research_only": true,
+  "not_ke_ratings": true,
+  "production_sp_plus_unchanged": true,
+  "production_nfl_unchanged": true,
+  "production_kei_unchanged": true,
+  "cfbd_used": false,
+  "delayed_game": {
+    "game_id": "401868140",
+    "decision": "exclude",
+    "reason": "excluded_delayed_incomplete_snapshot: STATUS_DELAYED 21-0 is not the official final (ESPN STATUS_FINAL 49-7). Score alone is insufficient."
+  },
+  "recommendation": null,
+  "holdout_season": 2025,
+  "ops": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915"
+}

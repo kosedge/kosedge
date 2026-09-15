@@ -36,6 +36,7 @@ from src.services.cfb_warehouse.research_opp_adj import (
 )
 from src.services.cfb_warehouse.research_opp_adj_validate import (
     HOLDOUT_SEASON,
+    apply_to_season,
     recommend,
     select_params,
 )
@@ -259,6 +260,27 @@ def test_recommend_advance_revise_reject() -> None:
         {"selected": {}},
     )
     assert rej["recommendation"] == "reject"
+
+
+def test_apply_merges_prior_only_teams() -> None:
+    prior_games = [
+        _g(season=2025, week=1, offense="AAA", defense="BBB", y=0.1),
+        _g(season=2025, week=1, offense="BBB", defense="AAA", y=-0.05, home=0.0, game_id="g2"),
+        _g(season=2025, week=2, offense="CCC", defense="AAA", y=-0.02, home=0.0, game_id="g3"),
+    ]
+    from src.services.cfb_warehouse.research_opp_adj_validate import build_season_finals
+
+    finals = build_season_finals(prior_games, [2025], AdjParams(lam=40.0, iters=4))
+    current = [_g(season=2026, week=1, offense="AAA", defense="BBB", y=0.08)]
+    out = apply_to_season(
+        current, season=2026, as_of_week=2, params=AdjParams(lam=40.0, iters=4), prior_fit=finals[2025]
+    )
+    teams = {r["team"] for r in out["ratings"]}
+    assert {"AAA", "BBB", "CCC"} <= teams
+    ccc = next(r for r in out["ratings"] if r["team"] == "CCC")
+    assert ccc["n_games"] == 0
+    assert ccc["prior_weight"] == 1.0
+    assert ccc["insufficient_history"] is True
 
 
 def test_hist_paths_never_the_aug13_lake() -> None:

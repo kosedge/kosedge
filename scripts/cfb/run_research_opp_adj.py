@@ -141,6 +141,10 @@ def main(argv: list[str] | None = None) -> int:
 
     apply_2026 = None
     closed_559 = None
+    if hist_dest is None:
+        from src.services.cfb_warehouse.paths import pbp_hist_research_dir
+
+        hist_dest = pbp_hist_research_dir(as_of)
     if not args.skip_2026:
         print("== 6. Frozen method → 2026 (research) ==", flush=True)
         dest_2026 = research_dest_dir(as_of)

@@ -356,10 +356,25 @@ def restore_and_build(
                 "add plays; game-count match is the reconcile gate."
             ),
         },
-        "epa_audits": epa_audits,
-        "missing_data": missing_reports,
-        "by_season": {
-            k: {sk: sv for sk, sv in v.items() if sk not in {"inspect"}}
+        "epa_audits": {
+            k: {
+                "verdict": (v or {}).get("verdict"),
+                "usable_scrimmage": (v or {}).get("usable_scrimmage"),
+                "agree_EPA_gt_0": (v or {}).get("agree_EPA_gt_0"),
+            }
+            for k, v in epa_audits.items()
+        },
+        "missing_data_core31_absent": {
+            k: (v or {}).get("core31_absent") for k, v in missing_reports.items()
+        },
+        "by_season_status": {
+            k: {
+                "status": v.get("status"),
+                "n_team_games": v.get("n_team_games"),
+                "n_epa_team_games": v.get("n_epa_team_games"),
+                "n_games": v.get("n_games"),
+                "error": v.get("error"),
+            }
             for k, v in by_season.items()
         },
         "cfbd_used": False,

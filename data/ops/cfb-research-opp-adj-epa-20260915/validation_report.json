@@ -1,0 +1,566 @@
+{
+  "pipeline_version": "cfb-research-opp-adj-epa-v1",
+  "generated_at": "2026-09-15T17:10:28.175542+00:00",
+  "research_only": true,
+  "not_ke_ratings": true,
+  "epa_source": "SportsDataverse espn_cfb_pbp EPA (unchanged)",
+  "eligible_play_rules": "scrimmage + finite EPA + regulation; garbage-weighted; FCS kept",
+  "pregame_cutoff": "same-season week < target week; priors from earlier seasons only",
+  "selection": {
+    "selected": {
+      "lam": 160.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "selected_val_mae": 0.16646846585913752,
+    "grid": [
+      {
+        "params": {
+          "lam": 40.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 3.0,
+          "prior_decay": 0.65,
+          "iters": 12
+        },
+        "mean_mae": 0.17107667228644033,
+        "mean_mae_unadj": 0.18965679435832292,
+        "mean_mae_blend": 0.18080911611001627,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 40.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 4.0,
+          "prior_decay": 0.75,
+          "iters": 12
+        },
+        "mean_mae": 0.1712222742046513,
+        "mean_mae_unadj": 0.18965712325012274,
+        "mean_mae_blend": 0.18080952242097423,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 80.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 3.0,
+          "prior_decay": 0.75,
+          "iters": 12
+        },
+        "mean_mae": 0.1684866009503913,
+        "mean_mae_unadj": 0.1896571799029455,
+        "mean_mae_blend": 0.18080916130648936,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 80.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 4.0,
+          "prior_decay": 0.75,
+          "iters": 12
+        },
+        "mean_mae": 0.1684866009503913,
+        "mean_mae_unadj": 0.1896571799029455,
+        "mean_mae_blend": 0.18080916130648936,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 80.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 6.0,
+          "prior_decay": 0.75,
+          "iters": 12
+        },
+        "mean_mae": 0.1684866009503913,
+        "mean_mae_unadj": 0.1896571799029455,
+        "mean_mae_blend": 0.18080916130648936,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 80.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 4.0,
+          "prior_decay": 0.85,
+          "iters": 12
+        },
+        "mean_mae": 0.16873940460256265,
+        "mean_mae_unadj": 0.18965762089891566,
+        "mean_mae_blend": 0.1808097078784338,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 160.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 4.0,
+          "prior_decay": 0.75,
+          "iters": 12
+        },
+        "mean_mae": 0.16646846585913752,
+        "mean_mae_unadj": 0.1896565860471826,
+        "mean_mae_blend": 0.1808081178521891,
+        "n": 3363
+      },
+      {
+        "params": {
+          "lam": 160.0,
+          "lam_fcs_mult": 4.0,
+          "prior_n0": 6.0,
+          "prior_decay": 0.85,
+          "iters": 12
+        },
+        "mean_mae": 0.1667657569946363,
+        "mean_mae_unadj": 0.18965709174603979,
+        "mean_mae_blend": 0.18080876655653083,
+        "n": 3363
+      }
+    ],
+    "selection_seasons": [
+      2023,
+      2024
+    ],
+    "holdout_season": 2025,
+    "holdout_used_for_selection": false,
+    "note": "Adjustment strength chosen on validation only; 2025 holdout untouched."
+  },
+  "train_diagnostic": {
+    "params": {
+      "lam": 160.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "seasons": [
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "n_team_games": 10594,
+    "n_cold_start": 0,
+    "n_insufficient_history": 1700,
+    "adjusted": {
+      "off": {
+        "n": 10594,
+        "mae": 0.1657851789441316,
+        "rmse": 0.21001790821908833,
+        "bias": 0.00814574675321896
+      },
+      "def": {
+        "n": 10594,
+        "mae": 0.1657851789441316,
+        "rmse": 0.21001790821908833,
+        "bias": 0.00814574675321896
+      },
+      "early_off": {
+        "n": 3489,
+        "mae": 0.17282069410863032,
+        "rmse": 0.2165722334360663,
+        "bias": 0.000541628069428396
+      },
+      "early_def": {
+        "n": 3489,
+        "mae": 0.17282069410863032,
+        "rmse": 0.2165722334360663,
+        "bias": 0.000541628069428396
+      }
+    },
+    "unadjusted_std": {
+      "off": {
+        "n": 10594,
+        "mae": 0.1875099533646314,
+        "rmse": 0.23776787042304778,
+        "bias": 0.005522998914586341
+      },
+      "def": {
+        "n": 10594,
+        "mae": 0.1916771827898411,
+        "rmse": 0.24232708652590088,
+        "bias": -0.0199905409270369
+      }
+    },
+    "prior_blend": {
+      "off": {
+        "n": 10594,
+        "mae": 0.17932657339446348,
+        "rmse": 0.22682321234981034,
+        "bias": 0.0050281607492970075
+      },
+      "def": {
+        "n": 10594,
+        "mae": 0.18229062239516783,
+        "rmse": 0.2299475185741033,
+        "bias": -0.013680446189359997
+      },
+      "n0": 4.0
+    },
+    "by_week_head": {
+      "2016w1": {
+        "n": 196,
+        "adj_off_mae": 0.16379614301514028,
+        "adj_def_mae": 0.16379614301514028
+      },
+      "2016w2": {
+        "n": 113,
+        "adj_off_mae": 0.16285068383505788,
+        "adj_def_mae": 0.16285068383505788
+      },
+      "2016w3": {
+        "n": 118,
+        "adj_off_mae": 0.14884158739407832,
+        "adj_def_mae": 0.14884158739407832
+      },
+      "2016w4": {
+        "n": 107,
+        "adj_off_mae": 0.1700954482151162,
+        "adj_def_mae": 0.1700954482151162
+      },
+      "2016w5": {
+        "n": 112,
+        "adj_off_mae": 0.15977001270726496,
+        "adj_def_mae": 0.15977001270726496
+      },
+      "2016w6": {
+        "n": 99,
+        "adj_off_mae": 0.1647906450071008,
+        "adj_def_mae": 0.1647906450071008
+      },
+      "2016w7": {
+        "n": 93,
+        "adj_off_mae": 0.1536726167151741,
+        "adj_def_mae": 0.1536726167151741
+      },
+      "2016w8": {
+        "n": 102,
+        "adj_off_mae": 0.14412300768912345,
+        "adj_def_mae": 0.14412300768912345
+      },
+      "2016w9": {
+        "n": 100,
+        "adj_off_mae": 0.15198194464380474,
+        "adj_def_mae": 0.15198194464380474
+      },
+      "2016w10": {
+        "n": 113,
+        "adj_off_mae": 0.1615214303426394,
+        "adj_def_mae": 0.1615214303426394
+      },
+      "2016w11": {
+        "n": 106,
+        "adj_off_mae": 0.15883699965769577,
+        "adj_def_mae": 0.15883699965769577
+      },
+      "2016w12": {
+        "n": 117,
+        "adj_off_mae": 0.17333977274897844,
+        "adj_def_mae": 0.17333977274897844
+      }
+    },
+    "mean_mae": 0.1657851789441316,
+    "mean_mae_unadj": 0.18959356807723626,
+    "mean_mae_blend": 0.18080859789481565
+  },
+  "validation": {
+    "params": {
+      "lam": 160.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "seasons": [
+      2023,
+      2024
+    ],
+    "n_team_games": 3363,
+    "n_cold_start": 0,
+    "n_insufficient_history": 550,
+    "adjusted": {
+      "off": {
+        "n": 3363,
+        "mae": 0.16646846585913752,
+        "rmse": 0.21052375490910805,
+        "bias": 0.007600911802366456
+      },
+      "def": {
+        "n": 3363,
+        "mae": 0.16646846585913752,
+        "rmse": 0.21052375490910805,
+        "bias": 0.007600911802366456
+      },
+      "early_off": {
+        "n": 1185,
+        "mae": 0.1842012505823956,
+        "rmse": 0.23297778355039747,
+        "bias": -0.0019326557053642728
+      },
+      "early_def": {
+        "n": 1185,
+        "mae": 0.1842012505823956,
+        "rmse": 0.23297778355039747,
+        "bias": -0.0019326557053642728
+      }
+    },
+    "unadjusted_std": {
+      "off": {
+        "n": 3363,
+        "mae": 0.18683340101606524,
+        "rmse": 0.2365524026097559,
+        "bias": 0.004617442037250996
+      },
+      "def": {
+        "n": 3363,
+        "mae": 0.1924797710783,
+        "rmse": 0.24276787146180584,
+        "bias": -0.02752202845941995
+      }
+    },
+    "prior_blend": {
+      "off": {
+        "n": 3363,
+        "mae": 0.1790963913782051,
+        "rmse": 0.22582529094647033,
+        "bias": -0.0011129296181976852
+      },
+      "def": {
+        "n": 3363,
+        "mae": 0.18251984432617305,
+        "rmse": 0.23096601768348762,
+        "bias": -0.019811326756844265
+      },
+      "n0": 4.0
+    },
+    "by_week_head": {
+      "2023w1": {
+        "n": 225,
+        "adj_off_mae": 0.1865434893142464,
+        "adj_def_mae": 0.1865434893142464
+      },
+      "2023w2": {
+        "n": 130,
+        "adj_off_mae": 0.19747001362844668,
+        "adj_def_mae": 0.19747001362844668
+      },
+      "2023w3": {
+        "n": 125,
+        "adj_off_mae": 0.17421626660744485,
+        "adj_def_mae": 0.17421626660744485
+      },
+      "2023w4": {
+        "n": 129,
+        "adj_off_mae": 0.1643249980773971,
+        "adj_def_mae": 0.1643249980773971
+      },
+      "2023w5": {
+        "n": 114,
+        "adj_off_mae": 0.15006413770390423,
+        "adj_def_mae": 0.15006413770390423
+      },
+      "2023w6": {
+        "n": 100,
+        "adj_off_mae": 0.14808715003345715,
+        "adj_def_mae": 0.14808715003345715
+      },
+      "2023w7": {
+        "n": 109,
+        "adj_off_mae": 0.14932201112259624,
+        "adj_def_mae": 0.14932201112259624
+      },
+      "2023w8": {
+        "n": 107,
+        "adj_off_mae": 0.1579954999620745,
+        "adj_def_mae": 0.1579954999620745
+      },
+      "2023w9": {
+        "n": 107,
+        "adj_off_mae": 0.1586319683227031,
+        "adj_def_mae": 0.1586319683227031
+      },
+      "2023w10": {
+        "n": 127,
+        "adj_off_mae": 0.15189048527945834,
+        "adj_def_mae": 0.15189048527945834
+      },
+      "2023w11": {
+        "n": 126,
+        "adj_off_mae": 0.16184024215207832,
+        "adj_def_mae": 0.16184024215207832
+      },
+      "2023w12": {
+        "n": 131,
+        "adj_off_mae": 0.14832486014257992,
+        "adj_def_mae": 0.14832486014257992
+      }
+    },
+    "mean_mae": 0.16646846585913752,
+    "mean_mae_unadj": 0.1896565860471826,
+    "mean_mae_blend": 0.1808081178521891
+  },
+  "holdout": {
+    "params": {
+      "lam": 160.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "seasons": [
+      2025
+    ],
+    "n_team_games": 1713,
+    "n_cold_start": 0,
+    "n_insufficient_history": 281,
+    "adjusted": {
+      "off": {
+        "n": 1713,
+        "mae": 0.16591308693371715,
+        "rmse": 0.20882331158702824,
+        "bias": 0.014326701270922256
+      },
+      "def": {
+        "n": 1713,
+        "mae": 0.16591308693371715,
+        "rmse": 0.20882331158702824,
+        "bias": 0.014326701270922256
+      },
+      "early_off": {
+        "n": 585,
+        "mae": 0.17497186779838053,
+        "rmse": 0.22122496510745604,
+        "bias": -0.01816703154532734
+      },
+      "early_def": {
+        "n": 585,
+        "mae": 0.17497186779838053,
+        "rmse": 0.22122496510745604,
+        "bias": -0.01816703154532734
+      }
+    },
+    "unadjusted_std": {
+      "off": {
+        "n": 1713,
+        "mae": 0.19060067436327593,
+        "rmse": 0.2422287191934373,
+        "bias": 0.010847499549085456
+      },
+      "def": {
+        "n": 1713,
+        "mae": 0.19132639645435154,
+        "rmse": 0.2423278624862076,
+        "bias": -0.028649506575832408
+      }
+    },
+    "prior_blend": {
+      "off": {
+        "n": 1713,
+        "mae": 0.18387396759975136,
+        "rmse": 0.23196791863386038,
+        "bias": 0.0035994662537891606
+      },
+      "def": {
+        "n": 1713,
+        "mae": 0.18327477213827345,
+        "rmse": 0.22983565293747296,
+        "bias": -0.02123622654076487
+      },
+      "n0": 4.0
+    },
+    "by_week_head": {
+      "2025w1": {
+        "n": 229,
+        "adj_off_mae": 0.18368743223218567,
+        "adj_def_mae": 0.18368743223218567
+      },
+      "2025w2": {
+        "n": 130,
+        "adj_off_mae": 0.17086776757166625,
+        "adj_def_mae": 0.17086776757166625
+      },
+      "2025w3": {
+        "n": 115,
+        "adj_off_mae": 0.18588649232350687,
+        "adj_def_mae": 0.18588649232350687
+      },
+      "2025w4": {
+        "n": 111,
+        "adj_off_mae": 0.1504897682825423,
+        "adj_def_mae": 0.1504897682825423
+      },
+      "2025w5": {
+        "n": 102,
+        "adj_off_mae": 0.15282120073132457,
+        "adj_def_mae": 0.15282120073132457
+      },
+      "2025w6": {
+        "n": 100,
+        "adj_off_mae": 0.15995784120639173,
+        "adj_def_mae": 0.15995784120639173
+      },
+      "2025w7": {
+        "n": 110,
+        "adj_off_mae": 0.15867829878660425,
+        "adj_def_mae": 0.15867829878660425
+      },
+      "2025w8": {
+        "n": 117,
+        "adj_off_mae": 0.1649721007407342,
+        "adj_def_mae": 0.1649721007407342
+      },
+      "2025w9": {
+        "n": 105,
+        "adj_off_mae": 0.14793892771256295,
+        "adj_def_mae": 0.14793892771256295
+      },
+      "2025w10": {
+        "n": 103,
+        "adj_off_mae": 0.17368251628068,
+        "adj_def_mae": 0.17368251628068
+      },
+      "2025w11": {
+        "n": 101,
+        "adj_off_mae": 0.15820243907490003,
+        "adj_def_mae": 0.15820243907490003
+      },
+      "2025w12": {
+        "n": 116,
+        "adj_off_mae": 0.15919970753006515,
+        "adj_def_mae": 0.15919970753006515
+      }
+    },
+    "mean_mae": 0.16591308693371715,
+    "mean_mae_unadj": 0.19096353540881372,
+    "mean_mae_blend": 0.1835743698690124
+  },
+  "recommendation": {
+    "recommendation": "advance",
+    "reason": "Holdout next-game O/D EPA MAE beats unadjusted STD and prior-season blend by a material margin. Research-only \u2014 not a production promote.",
+    "holdout_mae_adj": 0.16591308693371715,
+    "holdout_mae_unadj": 0.19096353540881372,
+    "holdout_mae_blend": 0.1835743698690124,
+    "rel_improvement_vs_unadj": 0.13117922446014998,
+    "rel_improvement_vs_blend": 0.09620778188097437,
+    "n": 1713,
+    "selected_params": {
+      "lam": 160.0,
+      "lam_fcs_mult": 4.0,
+      "prior_n0": 4.0,
+      "prior_decay": 0.75,
+      "iters": 12
+    },
+    "production_promote": false
+  },
+  "production_sp_plus_unchanged": true,
+  "production_nfl_unchanged": true,
+  "production_kei_unchanged": true,
+  "spreads_totals_out_of_scope": true
+}

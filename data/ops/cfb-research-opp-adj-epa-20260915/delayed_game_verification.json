@@ -1,0 +1,52 @@
+{
+  "game_id": "401868140",
+  "teams": {
+    "home": "Jacksonville State Gamecocks",
+    "away": "Eastern Kentucky Colonels"
+  },
+  "week": 1,
+  "old_status": "STATUS_DELAYED",
+  "old_score": {
+    "home": 21,
+    "away": 0
+  },
+  "old_included_in_559": true,
+  "verification_source": [
+    "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868140",
+    "https://www.espn.com/college-football/boxscore/_/gameId/401868140",
+    "https://www.espn.com/college-football/recap?gameId=401868140",
+    "Jacksonville State Athletics recap 2026-09-05 (lightning delay; final 49-7)"
+  ],
+  "official_status": "STATUS_FINAL",
+  "official_score": {
+    "home": 49,
+    "away": 7
+  },
+  "official_state": "post",
+  "official_completed": true,
+  "live_fetch": {
+    "game_id": "401868140",
+    "week": 1,
+    "status_name": "STATUS_FINAL",
+    "status_state": "post",
+    "status_completed": true,
+    "status_description": "Final",
+    "home": {"team": "Jacksonville State Gamecocks", "score": 49, "winner": true},
+    "away": {"team": "Eastern Kentucky Colonels", "score": 7, "winner": false},
+    "n_scoring_plays": 8,
+    "n_previous_drives": 19,
+    "source": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868140",
+    "fetched_at": "2026-09-15T16:59:00Z",
+    "note": "Independent close in this research run. A later runner retry from the same VM returned HTTP 403; box/recap pages still show Final 49-7."
+  },
+  "live_fetch_error": null,
+  "live_matches_official": true,
+  "snapshot_matches_official": false,
+  "decision_on_559_snapshot": "exclude",
+  "reason": "excluded_delayed_incomplete_snapshot: STATUS_DELAYED 21-0 is not the official final (ESPN STATUS_FINAL 49-7). Score alone is insufficient.",
+  "include_in_regenerated_559_outputs": false,
+  "include_in_later_as_of_if_status_final_and_score_49_7": true,
+  "cfbd_used": false,
+  "verified_at": "2026-09-15T17:13:11.518974+00:00",
+  "refresh_policy": "include only when schedule STATUS_FINAL and scores equal 49-7 and PBP is not the 21-0 delayed cut"
+}
