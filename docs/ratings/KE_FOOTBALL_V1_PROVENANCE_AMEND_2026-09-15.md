@@ -15,12 +15,12 @@ Ryan reviewed #569 and authorized **Phase 1 measurement only**. This amend is th
 RAW → DERIVED → ADJUSTED → MODELED
 ```
 
-| Layer        | Meaning                                                                 | Allowed in Phase 1                                                                                          | Forbidden                                                                                          |
-| ------------ | ----------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| **RAW**      | Directly observed football events / statistics                          | Play flags, yards, EPA column as published by the owned PBP source, down, distance, score, clock, play type | A z-score, a 0–100, a ridge estimate, a 50                                                         |
-| **DERIVED**  | Deterministic KE calculation from RAW                                   | Means, rates, plays/game, opportunity / PPO, seconds/play when clock is certified                           | Opponent effects of any kind; silent league-average substitution; SP+ z heuristics                 |
-| **ADJUSTED** | Deterministic, point-in-time opponent adjustment of a DERIVED quantity  | Leave-one-game-out SOS using only `week < W` opponent DERIVED books                                         | Fitted `off_i`/`def_j`; ridge; decayed priors mixed into the number; `h × n_plays` as points       |
-| **MODELED**  | Estimated / fitted outputs                                              | **Not implemented in Phase 1.** #560 joint-ridge remains a research MODELED candidate (`promote=false`)     | Relabeling ADJUSTED SOS as MODELED; inventing a new fit; using #562 to retune                      |
+| Layer        | Meaning                                                                | Allowed in Phase 1                                                                                          | Forbidden                                                                                    |
+| ------------ | ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- |
+| **RAW**      | Directly observed football events / statistics                         | Play flags, yards, EPA column as published by the owned PBP source, down, distance, score, clock, play type | A z-score, a 0–100, a ridge estimate, a 50                                                   |
+| **DERIVED**  | Deterministic KE calculation from RAW                                  | Means, rates, plays/game, opportunity / PPO, seconds/play when clock is certified                           | Opponent effects of any kind; silent league-average substitution; SP+ z heuristics           |
+| **ADJUSTED** | Deterministic, point-in-time opponent adjustment of a DERIVED quantity | Leave-one-game-out SOS using only `week < W` opponent DERIVED books                                         | Fitted `off_i`/`def_j`; ridge; decayed priors mixed into the number; `h × n_plays` as points |
+| **MODELED**  | Estimated / fitted outputs                                             | **Not implemented in Phase 1.** #560 joint-ridge remains a research MODELED candidate (`promote=false`)     | Relabeling ADJUSTED SOS as MODELED; inventing a new fit; using #562 to retune                |
 
 Rules unchanged except the new middle layer:
 
@@ -56,12 +56,12 @@ Same family on defense (offense-created by opponents). Week `W` consumes only in
 
 ## Companion updates
 
-| File | Change |
-| ---- | ------ |
-| This document | Authority for the four-layer list |
-| `KE_FOOTBALL_V1_SPEC.md` §2 | Four layers; `ke.opp_adj_epa` Phase 1 = ADJUSTED; #560 = MODELED candidate |
-| `KE_FOOTBALL_V1_METRIC_MATRIX.md` / `.json` | `layers` includes ADJUSTED; opp-adj row split |
-| `README.md` | Measurement Phase 1 is authorized; Team Strength is not |
+| File                                        | Change                                                                     |
+| ------------------------------------------- | -------------------------------------------------------------------------- |
+| This document                               | Authority for the four-layer list                                          |
+| `KE_FOOTBALL_V1_SPEC.md` §2                 | Four layers; `ke.opp_adj_epa` Phase 1 = ADJUSTED; #560 = MODELED candidate |
+| `KE_FOOTBALL_V1_METRIC_MATRIX.md` / `.json` | `layers` includes ADJUSTED; opp-adj row split                              |
+| `README.md`                                 | Measurement Phase 1 is authorized; Team Strength is not                    |
 
 ---
 

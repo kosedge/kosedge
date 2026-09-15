@@ -64,12 +64,12 @@ Every KE number declares exactly one layer. Mixing them without a label is a spe
 
 **Amend (2026-09-15, #569 review):** RAW → DERIVED → **ADJUSTED** → MODELED. Opponent adjustment is **ADJUSTED** unless a genuinely fitted predictive model is involved. **MODELED** is reserved for estimated/fitted outputs (#560 joint-ridge is MODELED and is **not** Phase 1). See [`KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md`](./KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md).
 
-| Layer        | Meaning                                                     | Allowed                                                                                                     | Forbidden                                                                     |
-| ------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| **RAW**      | Directly observed football events / statistics              | Play flags, yards, EPA column as published by the owned PBP source, down, distance, score, clock, play type | A z-score, a 0–100, a ridge estimate, a 50                                    |
-| **DERIVED**  | Deterministic KE calculation from RAW                       | Means, rates, plays/game, opportunity / PPO, seconds/play when clock is certified                           | Opponent effects; silent league-average substitution; SP+ z heuristics        |
-| **ADJUSTED** | Deterministic PIT opponent adjustment of a DERIVED quantity | Leave-one-game-out SOS; `week < W` only                                                                     | Fitted `off_i`/`def_j`; ridge; silent league fill when opponent has no book   |
-| **MODELED**  | Fitted / estimated values                                   | Two-way EPA (`off_i`, `def_j`), decayed priors, ridge — **not Phase 1**                                     | A synthetic “success” invented from SP+; an identity constant named as EPA    |
+| Layer        | Meaning                                                     | Allowed                                                                                                     | Forbidden                                                                   |
+| ------------ | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| **RAW**      | Directly observed football events / statistics              | Play flags, yards, EPA column as published by the owned PBP source, down, distance, score, clock, play type | A z-score, a 0–100, a ridge estimate, a 50                                  |
+| **DERIVED**  | Deterministic KE calculation from RAW                       | Means, rates, plays/game, opportunity / PPO, seconds/play when clock is certified                           | Opponent effects; silent league-average substitution; SP+ z heuristics      |
+| **ADJUSTED** | Deterministic PIT opponent adjustment of a DERIVED quantity | Leave-one-game-out SOS; `week < W` only                                                                     | Fitted `off_i`/`def_j`; ridge; silent league fill when opponent has no book |
+| **MODELED**  | Fitted / estimated values                                   | Two-way EPA (`off_i`, `def_j`), decayed priors, ridge — **not Phase 1**                                     | A synthetic “success” invented from SP+; an identity constant named as EPA  |
 
 Rules:
 
@@ -204,13 +204,13 @@ Native unit is the rating. Display index is later.
 
 ### 7.1 KE Offensive Efficiency
 
-|                                       |                                                                                |
-| ------------------------------------- | ------------------------------------------------------------------------------ |
-| **ID**                                | `ke.off_eff`                                                                   |
-| **Question**                          | How many expected points does this offense create per eligible scrimmage play? |
+|                                       |                                                                                                                                  |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- |
+| **ID**                                | `ke.off_eff`                                                                                                                     |
+| **Question**                          | How many expected points does this offense create per eligible scrimmage play?                                                   |
 | **Layer**                             | **DERIVED** (unadjusted). ADJUSTED counterpart is Phase 1 `ke.opp_adj_epa`. MODELED counterpart is the #560 ridge (not Phase 1). |
-| **Native unit**                       | EPA/play (higher better)                                                       |
-| **Required companion (not mixed in)** | Success rate — see §7.1.1                                                      |
+| **Native unit**                       | EPA/play (higher better)                                                                                                         |
+| **Required companion (not mixed in)** | Success rate — see §7.1.1                                                                                                        |
 
 This rating **is** offensive EPA/play. It is **not** the NFL backbone composite `1.0 + 0.75*off_epa + pressure + soft additives`. It is **not** CFB `50 + 18*z(SP+ offense)`.
 
@@ -736,12 +736,12 @@ Uncertified columns → `DATA_INSUFFICIENT` for `ke.havoc`. **Omit > impute.** D
 
 ### 7.8 KE Opponent-Adjusted EPA
 
-|                 |                                                                                                  |
-| --------------- | ------------------------------------------------------------------------------------------------ |
-| **ID**          | `ke.opp_adj_epa`                                                                                 |
-| **Question**    | What offensive and defensive EPA/play would this team produce against a league-average opponent? |
+|                 |                                                                                                                    |
+| --------------- | ------------------------------------------------------------------------------------------------------------------ |
+| **ID**          | `ke.opp_adj_epa`                                                                                                   |
+| **Question**    | What offensive and defensive EPA/play would this team produce against a league-average opponent?                   |
 | **Layer**       | **ADJUSTED** in Phase 1 (PIT leave-one-out SOS). **MODELED** only if a fitted two-way is used (#560; not Phase 1). |
-| **Native unit** | EPA/play. `off` higher better. `def` = EPA allowed, lower better.                                |
+| **Native unit** | EPA/play. `off` higher better. `def` = EPA allowed, lower better.                                                  |
 
 Phase 1 publishes this ID as **ADJUSTED** (deterministic PIT SOS). A fitted two-way remains **MODELED** and is **not** implemented here. It consumes `ke.off_eff` / `ke.def_eff` team-game `y`, not SP+, not identity.
 
