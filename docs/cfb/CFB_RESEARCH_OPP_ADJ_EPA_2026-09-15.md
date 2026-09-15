@@ -80,7 +80,8 @@ y_{g,i} = μ + h · home_{g,i} + off_i + def_j + ε
 - `y` = garbage-weighted EPA/play on eligible scrimmage plays
 - Joint ridge on offense and opposing defense
 - Identifiable league baseline: FBS `off` and `def` centered at 0; `μ` is the intercept
-- Home-field `h` estimated on the fitting window only (neutral / unknown → 0)
+- Home-field `h` is **joint** weighted OLS with `μ` on `y − off − def` (sequential μ-then-h absorbs ~½ HFA into the intercept when `home` is 0/1)
+- Early-season shrink: `λ` play-weight **plus** `n0` game-equivalents toward the decayed prior (`n0=0` is λ-only)
 
 ### Eligible-play rules
 
@@ -160,7 +161,7 @@ Relative MAE cut: **13.1%** vs unadjusted, **9.6%** vs blend. Early-season still
 
 Train diagnostic (2016–2022, n=10,594) MAE 0.1658 vs unadj 0.1896 vs blend 0.1808 — same direction, not used for selection.
 
-Watch item (does not flip the call): fitted HFA ≈ **0.10 EPA/play** is large vs a typical 2–3 point CFB home edge. Research-only; do not convert to a spread.
+Watch item (does not flip the call): fitted HFA ≈ **0.10 EPA/play** is large vs a typical 2–3 point CFB home edge. That figure is from the **pre-fix** sequential μ-then-h estimator (Bugbot: intercept absorbed ~½ HFA; `n0` was display-only). Identification is now joint OLS + `n0` in the ridge. **Rematerialize 2023–2025 before treating λ=160 / n0=4 / the holdout table as the frozen method.** Research-only; do not convert to a spread.
 
 ---
 
@@ -213,7 +214,9 @@ Decision rule was locked **before** looking at 2025:
 | Beats one baseline, or the gain is thin                             | **revise**                                       |
 | Beats neither, or n < 200                                           | **reject**                                       |
 
-**Call: advance.** Holdout MAE 0.1659 beats unadjusted 0.1910 (−13.1%) and prior blend 0.1836 (−9.6%), n=1,713. `production_promote=false`. Production SP+ / NFL / KEI unchanged.
+**Call: advance** on the published holdout (pre-fix estimator). Holdout MAE 0.1659 beats unadjusted 0.1910 (−13.1%) and prior blend 0.1836 (−9.6%), n=1,713. `production_promote=false`. Production SP+ / NFL / KEI unchanged.
+
+Bugbot (2026-09-15): sequential μ-then-h absorbed ~½ HFA into the intercept; `n0` was display-only. Both are fixed in `fit_joint`. Rematerialize 2023–2025 before treating λ=160 / n0=4 as the frozen method.
 
 Do **not** convert these efficiencies into fair spreads or totals in this PR. That work comes afterward.
 

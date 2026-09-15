@@ -285,6 +285,84 @@ def test_joint_ridge_recovers_offense_and_defense() -> None:
     assert abs(sum(r.off for t, r in fit.ratings.items() if not r.fcs)) < 1e-6
 
 
+def test_mu_hfa_joint_ols_does_not_absorb_home() -> None:
+    """Balanced 0/1 home: true μ=0.10, h=0.10. Sequential μ-then-h yields ~0.15 / ~0.05."""
+    games = []
+    gid = 0
+    for _ in range(12):
+        for offense, defense, y, home in (
+            ("AAA", "BBB", 0.20, 1.0),
+            ("BBB", "AAA", 0.10, 0.0),
+            ("BBB", "AAA", 0.20, 1.0),
+            ("AAA", "BBB", 0.10, 0.0),
+        ):
+            gid += 1
+            games.append(
+                _g(
+                    game_id=str(gid),
+                    offense=offense,
+                    defense=defense,
+                    y=y,
+                    home=home,
+                    n_weighted=25.0,
+                )
+            )
+    fit = fit_joint(games, params=AdjParams(lam=1e-6, prior_n0=0.0, iters=16))
+    assert abs(fit.mu - 0.10) < 0.02
+    assert abs(fit.hfa - 0.10) < 0.02
+    pred_home = predict_game(fit, offense="AAA", defense="BBB", home=1.0)
+    pred_away = predict_game(fit, offense="AAA", defense="BBB", home=0.0)
+    assert abs((pred_home["pred_off_epa"] - pred_away["pred_off_epa"]) - 0.10) < 0.03
+
+
+def test_prior_n0_changes_early_season_ratings() -> None:
+    """n0 is estimator strength, not a display-only prior_weight.
+
+    Three FBS teams so centering does not force every rating to 0. Prior is 0;
+    NEW's in-season EPA is high. Larger n0 must pull NEW.off toward the prior.
+    """
+    games = []
+    gid = 0
+    slate = (
+        ("NEW", "WEAK", 0.45, 1.0),
+        ("WEAK", "NEW", -0.20, 0.0),
+        ("NEW", "MID", 0.30, 1.0),
+        ("MID", "NEW", -0.05, 0.0),
+        ("MID", "WEAK", 0.08, 1.0),
+        ("WEAK", "MID", -0.04, 0.0),
+    )
+    for _week in range(3):
+        for offense, defense, y, home in slate:
+            gid += 1
+            games.append(
+                _g(
+                    game_id=str(gid),
+                    offense=offense,
+                    defense=defense,
+                    y=y,
+                    home=home,
+                    n_weighted=30.0,
+                )
+            )
+    prior_off = {"NEW": 0.0, "MID": 0.0, "WEAK": 0.0}
+    prior_def = {"NEW": 0.0, "MID": 0.0, "WEAK": 0.0}
+    lo = fit_joint(
+        games,
+        params=AdjParams(lam=10.0, prior_n0=0.0, iters=10),
+        prior_off=prior_off,
+        prior_def=prior_def,
+    )
+    hi = fit_joint(
+        games,
+        params=AdjParams(lam=10.0, prior_n0=12.0, iters=10),
+        prior_off=prior_off,
+        prior_def=prior_def,
+    )
+    assert lo.ratings["NEW"].off != hi.ratings["NEW"].off
+    assert abs(hi.ratings["NEW"].off) < abs(lo.ratings["NEW"].off)
+    assert hi.ratings["NEW"].prior_weight > lo.ratings["NEW"].prior_weight
+
+
 def test_fcs_kept_and_stronger_ridge() -> None:
     games = [
         _g(offense="ALA", defense="fcs:Citadel", y=0.40, fcs_defense=True, week=1),

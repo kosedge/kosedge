@@ -9,9 +9,11 @@ Model (team-game grain):
     y_{g,i} = μ + h · home_{g,i} + off_i + def_j + ε
 
 ``y`` is garbage-weighted EPA/play on eligible scrimmage plays.
-Offense and opposing defense are estimated jointly with ridge shrinkage,
+Offense and opposing defense are estimated jointly with ridge shrinkage
+toward the decayed prior (``λ`` play-weight + ``n0`` game-equivalents),
 an identifiable league baseline (FBS off/def centered at 0), and an
-explicit home-field term fit on the training window only.
+explicit home-field term. ``μ`` and ``h`` are joint weighted OLS on
+``y − off − def`` so the intercept does not absorb HFA.
 
 Supporting raw metrics (pace, explosiveness, finishing, havoc, ST) stay
 unadjusted and are never the adjustment target.
@@ -50,7 +52,13 @@ ELIGIBLE_PLAY_RULES = {
     ),
     "home": (
         "home = 1 if offense matches home team, 0 if away, 0 if neutral/unknown. "
-        "h is estimated on the fitting window only."
+        "μ and h are joint weighted OLS on y − off − def (not sequential "
+        "μ-then-h, which absorbs ~½ HFA into the intercept)."
+    ),
+    "prior_n0": (
+        "Game-equivalent prior observations. Ridge is "
+        "(data + (λ + n0·ppg)·prior) / (data + λ + n0·ppg). "
+        "n0=0 reduces to λ-only shrinkage toward the prior."
     ),
     "target": "offensive and defensive EPA/play only",
 }
@@ -319,6 +327,43 @@ def _lambda(team: str, fcs: bool, params: AdjParams) -> float:
     return float(params.lam) * (params.lam_fcs_mult if fcs or str(team).startswith("fcs:") else 1.0)
 
 
+def _fit_mu_hfa(
+    games: Sequence[TeamGameEpa],
+    off: Mapping[str, float],
+    deff: Mapping[str, float],
+) -> Tuple[float, float]:
+    """Weighted OLS of (y − off − def) ~ μ + h·home.
+
+    Sequential μ = mean(resid) then h on (resid − μ) absorbs about half of
+    HFA into the intercept when home is a 0/1 indicator (~½ the rows).
+    """
+    sw = sx = sy = sxx = sxy = 0.0
+    for g in games:
+        resid = g.y - off.get(g.offense, 0.0) - deff.get(g.defense, 0.0)
+        w = g.n_weighted
+        x = float(g.home)
+        sw += w
+        sx += w * x
+        sy += w * resid
+        sxx += w * x * x
+        sxy += w * x * resid
+    det = sw * sxx - sx * sx
+    if sw <= 0:
+        return 0.0, 0.0
+    if abs(det) < 1e-12:
+        return (sy / sw), 0.0
+    mu = (sxx * sy - sx * sxy) / det
+    hfa = (sw * sxy - sx * sy) / det
+    return mu, hfa
+
+
+def _prior_play_weight(n0: float, play_weight: float, n_games: int) -> float:
+    """Convert n0 games into the same units as play-weighted ridge."""
+    if n_games <= 0 or play_weight <= 0 or n0 <= 0:
+        return 0.0
+    return float(n0) * (play_weight / float(n_games))
+
+
 def fit_joint(
     games: Sequence[TeamGameEpa],
     *,
@@ -367,21 +412,7 @@ def fit_joint(
     _center()
 
     for _ in range(max(1, int(params.iters))):
-        # μ, h from residuals y − off − def
-        num_mu = den_mu = num_h = den_h = 0.0
-        for g in games:
-            resid = g.y - off.get(g.offense, 0.0) - deff.get(g.defense, 0.0)
-            w = g.n_weighted
-            num_mu += w * resid
-            den_mu += w
-            # residual after intercept, regress on home
-        mu = (num_mu / den_mu) if den_mu else 0.0
-        for g in games:
-            resid = g.y - mu - off.get(g.offense, 0.0) - deff.get(g.defense, 0.0)
-            w = g.n_weighted
-            num_h += w * resid * g.home
-            den_h += w * g.home * g.home
-        hfa = (num_h / den_h) if den_h else 0.0
+        mu, hfa = _fit_mu_hfa(games, off, deff)
 
         new_off = {}
         new_def = {}
@@ -390,15 +421,22 @@ def fit_joint(
             p_off = float(prior_off.get(t, 0.0))
             p_def = float(prior_def.get(t, 0.0))
             n_o = d_o = n_d = d_d = 0.0
+            ng_o = ng_d = 0
             for g in games:
                 if g.offense == t:
                     n_o += g.n_weighted * (g.y - mu - hfa * g.home - deff.get(g.defense, 0.0))
                     d_o += g.n_weighted
+                    ng_o += 1
                 if g.defense == t:
                     n_d += g.n_weighted * (g.y - mu - hfa * g.home - off.get(g.offense, 0.0))
                     d_d += g.n_weighted
-            new_off[t] = (n_o + lam * p_off) / (d_o + lam) if (d_o + lam) else p_off
-            new_def[t] = (n_d + lam * p_def) / (d_d + lam) if (d_d + lam) else p_def
+                    ng_d += 1
+            n0_o = _prior_play_weight(params.prior_n0, d_o, ng_o)
+            n0_d = _prior_play_weight(params.prior_n0, d_d, ng_d)
+            den_o = d_o + lam + n0_o
+            den_d = d_d + lam + n0_d
+            new_off[t] = (n_o + (lam + n0_o) * p_off) / den_o if den_o else p_off
+            new_def[t] = (n_d + (lam + n0_d) * p_def) / den_d if den_d else p_def
         off, deff = new_off, new_def
         _center()
 
