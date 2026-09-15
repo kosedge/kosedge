@@ -26,10 +26,10 @@ This is the single enterprise tracker for Kos Edge football **published numbers*
 | --- | --- | --- |
 | Coming soon live for NFL + CFB public numbers | [#561](https://github.com/kosedge/kosedge/pull/561) merge `9b6669e5`; Production Smoke **PASS** [run 35002902210](https://github.com/kosedge/kosedge/actions/runs/35002902210) | Customer surfaces fail closed. No invented KEI / fair / PLAY. |
 | CFB opp-adj O/D EPA research ADVANCE (sealed) | [#560](https://github.com/kosedge/kosedge/pull/560) merge `60ec7051`; [`docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md`](../cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md); [`data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json`](../../data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json) | Efficiency research only. `production_promote=false`. Not a spread or total. |
-| CFB scoring research in flight | #560 audit next path: efficiency → scoring margin/totals conversion | Do not reopen on EPA MAE. |
+| CFB scoring research in flight | #560 audit next path + agent [CFB research: efficiency → points/margin/total](https://cursor.com/agents/bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba) | Do not reopen on EPA MAE. Status `IN_PROGRESS`. |
 | CFB kill switch / board dark until CLEAR | `CFB_EDGE_BOARD_PUBLIC_ENABLED = false` in `apps/web/lib/cfb-edge-board-public.ts` | Independent of NFL. |
 | NFL public numbers parked until CLEAR | `NFL_EDGE_BOARD_PUBLIC_ENABLED = false` (same module, #561) | Independent of CFB. |
-| NFL regression investigation | **NOT_STARTED** — no linked brief/PR/issue yet | Flip to `IN_PROGRESS` only when a link exists. |
+| NFL regression investigation | **IN_PROGRESS** — [NFL regression: find what broke (pre-model-change)](https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1) | Pre-model-change diagnosis. Not a reopen. |
 
 Parked customer surfaces (from #561; not an exhaustive product IA): `/edge-board/nfl`, `/edge-board/cfb`, `/pro/nfl/edges`, `/pro/cfb/edges`, `/pro/nfl/fair-lines`, `/pro/cfb/fair-lines`, `/pro/power-ratings/nfl`, `/pro/cfb/teams`, `/pro/nfl/slate/[date]`, homepage Edge Board hero, NFL/CFB overview widgets that painted edge pts, NFL pick’em. Assemble returns 503 empty while disabled.
 
@@ -79,12 +79,12 @@ NFL and CFB are **independent**. Shared protections apply to both but cannot reo
 
 ## NFL gates
 
-Workstream **NFL regression investigation** is `NOT_STARTED` (no link). Calculation integrity stays parked on that investigation once linked.
+Workstream **NFL regression investigation** is `IN_PROGRESS` ([find what broke — pre-model-change](https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1)). Calculation integrity is the matching gate; it is not PASS.
 
 | Gate | Status | Evidence | Unresolved blocker | Owner | Next action | Last updated |
 | --- | --- | --- | --- | --- | --- | --- |
 | Input integrity | NOT_STARTED | | Coverage, identities, freshness, and exclusion pack for the reopen candidate is not assembled. | Alex | Open/link a coverage + identity + freshness + exclusions receipt (teams, games, venues, kickoffs, inactive/injury exclusions). | 2026-09-15 |
-| Calculation integrity | NOT_STARTED | | NFL regression investigation not linked; known-bug list not closed against reproduced outputs. | Alex | Link the regression brief. Reproduce current published-path outputs. Resolve or document each known bug. | 2026-09-15 |
+| Calculation integrity | IN_PROGRESS | [NFL regression: find what broke (pre-model-change)](https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1) | Investigation running. Known-bug list not closed against reproduced outputs. No model change authorized from this row. | Alex | Diagnose what broke on the current published path. Reproduce outputs. Do not retune to “fix” the board. | 2026-09-15 |
 | Predictive validation | NOT_STARTED | Protocol exists: [`docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md`](../lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md) (spread-only, `cos_signed`). Enterprise floors: [`docs/NFL_ENTERPRISE_GATES.md`](../NFL_ENTERPRISE_GATES.md). Totals PLAY remains sat (`NFL_SPREAD_PLAY_LOCKED.md`). | No frozen reopen eval has been run against predefined criteria for the candidate that would be shown. Protocol ≠ PASS. | Validation Lead | Freeze eval rules (below), then run the unused/frozen package. Score margin and total separately. | 2026-09-15 |
 | Production rehearsal | NOT_STARTED | | No scheduled candidate runs that include weekly update, injuries, and missing-data paths. | Platform Reliability | Stand up private shadow (see §6). Exercise a weekly update, not a single snapshot. | 2026-09-15 |
 | Website verification | BLOCKED | Parked surfaces: #561. Prior display-contract work (not a reopen verify): [`docs/incidents/INC-2026-09-08-NFL-EDGE-BOARD-CUSTOMER-TRUTH/`](../incidents/INC-2026-09-08-NFL-EDGE-BOARD-CUSTOMER-TRUTH/). SOP v1.1 inactive suppress still stamps when numbers are shown. | No approved NFL numbers to paint. Coming soon is not this gate. | Product | After calculation + predictive PASS, INTERNAL-verify every parked NFL URL + assemble: same number, same provenance, no clamp. | 2026-09-15 |
@@ -95,12 +95,12 @@ Workstream **NFL regression investigation** is `NOT_STARTED` (no link). Calculat
 
 ## CFB gates
 
-Workstream **CFB scoring research** is `IN_PROGRESS`. #560 sealed **opponent-adjusted EPA/play** only. Next authorized path is scoring → margin/totals conversion. Prior draft scoring PRs (#539, #543, #544, #546) are not reopen evidence and are not promoted here.
+Workstream **CFB scoring research** is `IN_PROGRESS` ([efficiency → points/margin/total](https://cursor.com/agents/bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba)). #560 sealed **opponent-adjusted EPA/play** only. Next authorized path is scoring → margin/totals conversion. Prior draft scoring PRs (#539, #543, #544, #546) are not reopen evidence and are not promoted here.
 
 | Gate | Status | Evidence | Unresolved blocker | Owner | Next action | Last updated |
 | --- | --- | --- | --- | --- | --- | --- |
 | Input integrity | IN_PROGRESS | #560 excluded incomplete PBP `401868140` (Q2 28–0 cut vs official 49–7). Closed set 84. Owned-metrics / W1 raw work: [`docs/cfb/`](../cfb/) (`CFB_OWNED_DATA_INVENTORY_GAP_2026-09-15.md`, `CFB_2026_W1_RAW_TEAM_GAME_METRICS_2026-09-15.md`). Historical P0 name-map: [`data/ops/cfb-p0-residual-audit-20260911.md`](../../data/ops/cfb-p0-residual-audit-20260911.md). | Scoring conversion does not yet have a reopen-grade coverage / identity / freshness / exclusions pack. | | Finish scoring-path inventory: identities, freshness, explicit exclusions. Do not treat EPA holdout n as published-line coverage. | 2026-09-15 |
-| Calculation integrity | IN_PROGRESS | #560 ADVANCE sealed: holdout n=1,713 / 930 games; MAE 0.1673 vs unadj 0.1911 / blend 0.1837; λ=40, n0=4, decay=0.75; `production_promote=false`. Audit: [`docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md`](../cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md). `h≈0.244` is EPA/play on the home **offense** row — not a spread. | Scoring / margin / totals conversion not sealed. EPA ADVANCE must not be published as KEI or points. | | Continue scoring research. Reproduce conversion outputs. Close known bugs before any production candidate. | 2026-09-15 |
+| Calculation integrity | IN_PROGRESS | #560 ADVANCE sealed: holdout n=1,713 / 930 games; MAE 0.1673 vs unadj 0.1911 / blend 0.1837; λ=40, n0=4, decay=0.75; `production_promote=false`. Audit: [`docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md`](../cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md). `h≈0.244` is EPA/play on the home **offense** row — not a spread. In-flight conversion: [CFB research: efficiency → points/margin/total](https://cursor.com/agents/bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba). | Scoring / margin / totals conversion not sealed. EPA ADVANCE must not be published as KEI or points. | | Continue scoring research. Reproduce conversion outputs. Close known bugs before any production candidate. | 2026-09-15 |
 | Predictive validation | NOT_STARTED | EPA holdout is efficiency MAE, not spread/total ATS or close-MAE. CFB engine gates ([`docs/CFB_ENGINE_GATES.md`](../CFB_ENGINE_GATES.md)) are Week-0 research-engine checks, not this reopen eval. | No frozen scoring/margin/total eval against predefined reopen criteria. | Validation Lead | After conversion exists: freeze eval rules, run unused/frozen package, margin and total separately + bias + calibration. | 2026-09-15 |
 | Production rehearsal | NOT_STARTED | | No private CFB candidate shadow that survives weekly update + missing PBP/odds. | Platform Reliability | Shadow beside the dark board. One holdout score ≠ rehearsal. | 2026-09-15 |
 | Website verification | BLOCKED | Kill switch + Coming soon (#529 lineage, #561 extend). `CFB_EDGE_BOARD_PUBLIC_ENABLED=false`. | Board dark until CLEAR. No approved CFB numbers to cross-check across surfaces. | Product | After predictive PASS, INTERNAL-verify every parked CFB URL + assemble. | 2026-09-15 |
@@ -211,4 +211,4 @@ When numbers **are** shown, SOP v1.1 NFL inactive fair suppress still applies (`
 - Does not reopen NFL or CFB boards.
 - Does not change models, KEI, PLAY bands, or `production_promote`.
 - Does not treat #560 EPA ADVANCE or #561 Coming soon as number quality PASS.
-- Does not invent an NFL regression brief. Status stays `NOT_STARTED` until linked.
+- NFL regression and CFB scoring agents are evidence of work in flight, not reopen CLEAR.

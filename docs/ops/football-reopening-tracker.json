@@ -40,18 +40,31 @@
       "ryan_audit": "data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json"
     },
     "cfb_scoring_research": "IN_PROGRESS",
-    "nfl_regression_investigation": "NOT_STARTED"
+    "cfb_scoring_agent": {
+      "bcId": "bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba",
+      "title": "CFB research: efficiency \u2192 points/margin/total",
+      "url": "https://cursor.com/agents/bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba"
+    },
+    "nfl_regression_investigation": "IN_PROGRESS",
+    "nfl_regression_agent": {
+      "bcId": "bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
+      "title": "NFL regression: find what broke (pre-model-change)",
+      "url": "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1"
+    }
   },
   "workstreams": [
     {
       "id": "nfl.regression_investigation",
       "track": "NFL",
       "name": "NFL regression investigation",
-      "status": "NOT_STARTED",
-      "evidence": [],
-      "unresolved_blocker": "No linked brief, PR, or issue.",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
+        "NFL regression: find what broke (pre-model-change)"
+      ],
+      "unresolved_blocker": "Investigation running. Known-bug list not closed against reproduced outputs.",
       "owner": "Alex",
-      "next_action": "Link the investigation. Then set status IN_PROGRESS and attach the brief.",
+      "next_action": "Diagnose what broke on the current published path. Reproduce outputs. Do not retune to fix the board.",
       "last_updated": "2026-09-15"
     },
     {
@@ -61,7 +74,9 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md (next path after EPA ADVANCE)",
-        "https://github.com/kosedge/kosedge/pull/560"
+        "https://github.com/kosedge/kosedge/pull/560",
+        "https://cursor.com/agents/bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba",
+        "CFB research: efficiency \u2192 points/margin/total"
       ],
       "unresolved_blocker": "Scoring conversion not sealed. EPA MAE is not a published spread or total.",
       "owner": "",
@@ -86,11 +101,14 @@
       "id": "nfl.calculation_integrity",
       "track": "NFL",
       "gate": "Calculation integrity",
-      "status": "NOT_STARTED",
-      "evidence": [],
-      "unresolved_blocker": "NFL regression investigation not linked; known-bug list not closed against reproduced outputs.",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
+        "NFL regression: find what broke (pre-model-change)"
+      ],
+      "unresolved_blocker": "Investigation running. Known-bug list not closed against reproduced outputs. No model change authorized from this row.",
       "owner": "Alex",
-      "next_action": "Link the regression brief. Reproduce published-path outputs. Resolve or document each known bug.",
+      "next_action": "Diagnose what broke on the current published path. Reproduce outputs. Do not retune to fix the board.",
       "last_updated": "2026-09-15"
     },
     {
@@ -189,7 +207,8 @@
         "https://github.com/kosedge/kosedge/pull/560",
         "60ec7051",
         "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md",
-        "data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json"
+        "data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json",
+        "https://cursor.com/agents/bc-c2ffc94b-f6dc-52ce-877e-d72e9fbd61ba"
       ],
       "unresolved_blocker": "Scoring / margin / totals conversion not sealed. EPA ADVANCE must not be published as KEI or points.",
       "owner": "",
