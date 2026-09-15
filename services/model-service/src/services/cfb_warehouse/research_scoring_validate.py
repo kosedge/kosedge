@@ -33,6 +33,7 @@ from src.services.cfb_warehouse.research_scoring import (
     ScoringKnobs,
     apply_scoring_fit,
     fit_scoring,
+    overlay_epa_identity,
     plays_per_possession,
     predict_epa_no_hfa,
 )
@@ -673,6 +674,7 @@ def run_scoring_suite(
     scores: Mapping[str, Mapping[str, Any]],
     pace_rows: Mapping[Tuple[str, str], Mapping[str, float]],
 ) -> Dict[str, Any]:
+    scores = overlay_epa_identity(scores, epa_games)
     games = build_game_list(scores)
     games = attach_pregame_epa(games, epa_games)
     ppp = plays_per_possession(pace_rows, scores, seasons=SCORING_TRAIN_SEASONS)

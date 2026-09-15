@@ -17,11 +17,12 @@ import math
 from dataclasses import asdict, dataclass
 from typing import Any, Dict, Iterable, List, Mapping, Optional, Sequence, Tuple
 
-from src.services.cfb_warehouse.identity import known_engine_codes
+from src.services.cfb_warehouse.identity import known_engine_codes, resolve_team_code
 from src.services.cfb_warehouse.owned_metrics import is_scrimmage
 from src.services.cfb_warehouse.research_opp_adj import (
     ESTIMATOR_ID,
     FitResult,
+    TeamGameEpa,
     team_id,
 )
 from src.services.cfb_warehouse.research_opp_adj_validate import independent_league_raw_mean
@@ -82,6 +83,22 @@ def _score_from_play(play: Mapping[str, Any], keys: Sequence[str]) -> Optional[i
     return None
 
 
+def _side_id(
+    name: Any,
+    abbr: Any,
+    known: Mapping[str, Any],
+) -> Tuple[str, bool]:
+    """Prefer ESPN abbr (UGA), then full name (Georgia Bulldogs). No synthetic fill."""
+    code = resolve_team_code(
+        name=str(name or "").strip(),
+        abbr=str(abbr or "").strip(),
+        known_codes=known,
+    )
+    if code:
+        return code, False
+    return team_id(name or abbr, known)
+
+
 def extract_official_scores(
     plays: Sequence[Mapping[str, Any]],
     *,
@@ -96,10 +113,12 @@ def extract_official_scores(
             continue
         acc = games.get(gid)
         if acc is None:
-            home_name = play.get("homeTeamName") or play.get("home") or play.get("homeTeamAbbrev")
-            away_name = play.get("awayTeamName") or play.get("away") or play.get("awayTeamAbbrev")
-            home, home_fcs = team_id(home_name, known)
-            away, away_fcs = team_id(away_name, known)
+            home_name = play.get("homeTeamName") or play.get("home")
+            away_name = play.get("awayTeamName") or play.get("away")
+            home_abbr = play.get("homeTeamAbbrev")
+            away_abbr = play.get("awayTeamAbbrev")
+            home, home_fcs = _side_id(home_name, home_abbr, known)
+            away, away_fcs = _side_id(away_name, away_abbr, known)
             acc = {
                 "game_id": gid,
                 "season": int(_f(play.get("season"), 0)),
@@ -128,6 +147,40 @@ def extract_official_scores(
             prev = acc["away_points"]
             acc["away_points"] = aws if prev is None else max(int(prev), aws)
     return games
+
+
+def overlay_epa_identity(
+    scores: Mapping[str, Dict[str, Any]],
+    epa_games: Sequence[TeamGameEpa],
+) -> Dict[str, Dict[str, Any]]:
+    """Replace name/abbr IDs with the EPA offense codes for the same game_id.
+
+    Keeps scoring teams on the frozen #560 identity spine. Missing EPA sides
+    stay as the score-row IDs (no invented teams).
+    """
+    by_gid: Dict[str, List[TeamGameEpa]] = {}
+    for g in epa_games:
+        by_gid.setdefault(str(g.game_id), []).append(g)
+    out = {gid: dict(row) for gid, row in scores.items()}
+    for gid, rows in by_gid.items():
+        rec = out.get(gid)
+        if rec is None:
+            continue
+        home_row = next((r for r in rows if float(r.home) >= 0.5), None)
+        away_row = next((r for r in rows if float(r.home) < 0.5), None)
+        if home_row is not None:
+            rec["home"] = home_row.offense
+            rec["home_fcs"] = bool(home_row.fcs_offense)
+        elif away_row is not None:
+            rec["home"] = away_row.defense
+            rec["home_fcs"] = bool(away_row.fcs_defense)
+        if away_row is not None:
+            rec["away"] = away_row.offense
+            rec["away_fcs"] = bool(away_row.fcs_offense)
+        elif home_row is not None:
+            rec["away"] = home_row.defense
+            rec["away_fcs"] = bool(home_row.fcs_defense)
+    return out
 
 
 def extract_team_pace(

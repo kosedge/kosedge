@@ -22,9 +22,12 @@ from src.services.cfb_warehouse.research_scoring import (
     extract_official_scores,
     forbidden_thin_window_spread,
     margin_total,
+    overlay_epa_identity,
     predict_epa_no_hfa,
     shrink_hfa,
+    _side_id,
 )
+from src.services.cfb_warehouse.identity import known_engine_codes
 from src.services.cfb_warehouse.research_scoring_validate import (
     SCORING_CONFIRM_MIN_WEEK,
     SCORING_CONFIRM_SEASON,
@@ -363,6 +366,39 @@ def test_extract_scores_no_synthetic_fill() -> None:
     assert scores["1"]["away_points"] == 24
     assert scores["2"]["home_points"] is None
     assert scores["2"]["away_points"] is None
+
+
+def test_side_id_uses_espn_abbr_when_name_is_short() -> None:
+    known = known_engine_codes()
+    code, fcs = _side_id("Georgia", "UGA", known)
+    assert code == "UGA"
+    assert fcs is False
+    code2, fcs2 = _side_id("Alabama", "ALA", known)
+    assert code2 == "ALA"
+    assert fcs2 is False
+
+
+def test_overlay_epa_identity_wins() -> None:
+    scores = {
+        "g1": {
+            "game_id": "g1",
+            "home": "fcs:Georgia",
+            "away": "fcs:Alabama",
+            "home_fcs": True,
+            "away_fcs": True,
+            "home_points": 31,
+            "away_points": 24,
+        }
+    }
+    epa = [
+        _g(game_id="g1", offense="UGA", defense="ALA", home=1.0, fcs_offense=False),
+        _g(game_id="g1", offense="ALA", defense="UGA", home=0.0, fcs_offense=False),
+    ]
+    out = overlay_epa_identity(scores, epa)
+    assert out["g1"]["home"] == "UGA"
+    assert out["g1"]["away"] == "ALA"
+    assert out["g1"]["home_fcs"] is False
+    assert out["g1"]["away_fcs"] is False
 
 
 def test_scoring_knobs_grid_is_protocol_grid() -> None:
