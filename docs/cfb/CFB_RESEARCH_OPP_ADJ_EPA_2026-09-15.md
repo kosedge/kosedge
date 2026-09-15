@@ -208,6 +208,18 @@ No CFBD key. No write to Aug 13 `raw/cfb/pbp/`.
 
 ---
 
+## AUDIT (Ryan, 2026-09-15)
+
+Full note: `docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md`. Artifacts: `ryan_audit_560.json`, `holdout_2025_obs_keys.tsv`.
+
+1. **λ=40** — argmin of 2023–2024 val MAE on the 8-cell `PARAM_GRID`. 2025 was not an input (`holdout_used_for_selection=false`; `test_holdout_not_in_selection_contract`). λ moved 160→40 because n0 now enters the ridge, not because holdout was peeked.
+2. **Baselines** — same 1,713 obs / 930 games (obs-key SHA `009ce549…`; weeks 1–12 n match pre-fix). Offense unadj/blend MAE is bit-identical. Defense ticked because **5** defender rows fall back to adj-model μ; pair MAE is ½(off+def).
+3. **h≈0.244** — EPA/play added to the **home offense** row (`home=1/0`). Season-final h under the same knobs is ~0.05–0.07. 0.244 is the 2026 W1–2 window (168 obs). **Do not convert to a spread.**
+
+**Status: advance OK (2025 sealed).** Frozen knobs unchanged. `production_promote=false`. Next path: efficiency → margin/totals research — not board reopen on EPA MAE.
+
+---
+
 ## Recommendation
 
 Decision rule was locked **before** looking at 2025:
