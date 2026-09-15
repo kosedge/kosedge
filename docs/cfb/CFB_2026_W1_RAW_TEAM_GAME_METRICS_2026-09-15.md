@@ -6,6 +6,9 @@
 
 Follows [#555](https://github.com/kosedge/kosedge/pull/555) `owned_metrics` definitions and [#558](https://github.com/kosedge/kosedge/pull/558) completed-game eligibility. Research-only.
 
+Evidence: `data/ops/cfb-2026-w1-raw-team-game-20260915/`  
+Bulk artifacts (gitignored): `data/cfb/research/pbp_current/as_of_20260915/`
+
 ---
 
 ## Scope
@@ -26,9 +29,9 @@ Success rate is labeled **`EPA_success = EPA>0`**. Standard 50/70/100 SR is a se
 
 | Role | Path |
 | --- | --- |
-| Historical CANONICAL (2014–2025) | `/Volumes/KosEdgeData/raw/cfb/pbp/` — **do not write** |
+| Historical CANONICAL (2014–2025) | `/Volumes/KosEdgeData/raw/cfb/pbp/` — **not written** |
 | Current-season HD target | `/Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_YYYYMMDD/` |
-| VM restore (gitignored) | `data/cfb/research/pbp_current/as_of_YYYYMMDD/` |
+| VM restore (gitignored) | `data/cfb/research/pbp_current/as_of_20260915/` |
 | Committed evidence | `data/ops/cfb-2026-w1-raw-team-game-20260915/` |
 
 This VM does not mount the Mac. HD target is documented only.
@@ -47,7 +50,69 @@ Runner: `scripts/cfb/run_2026_w1_team_game_metrics.py`
 5. Write team-game table (off + def + opportunity / finish / field position) and eligibility manifest.
 6. Validate: 0 unfinished rows; included games = manifest eligible; max week < W; SHA recorded; `opponent_adjusted=false`.
 
-Default `as_of_week` = max completed intersect PBP week + 1 (current snapshot includes all completed games and none of the live-status PBP games).
+Default `as_of_week` = max completed∩PBP week + 1. This snapshot: **W = 3**.
+
+---
+
+## Live restore (as_of 20260915)
+
+Input SHA matches the #558 proof snapshot.
+
+| Input | SHA-256 | Bytes |
+| --- | --- | ---: |
+| `play_by_play_2026.parquet` | `da0ec956d441da96aa0e85232fb685cb8408000fcf28a5fe5de0f3bb1d25e0ad` | 7,904,267 |
+| `cfb_schedule_2026.parquet` | `bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768` | 16,867 |
+
+| Eligibility | Count |
+| --- | ---: |
+| Included (completed ∩ PBP ∩ week < 3) | **85** |
+| Excluded unfinished live (has PBP) | **94** |
+| Excluded unfinished live (no PBP) | 1 |
+| Excluded parked / delayed 0–0 (no PBP) | 5 |
+| Completed missing PBP | **0** |
+| Unmatched PBP | **0** |
+| Table rows (team-games) | **170** |
+| Table games | **85** |
+| Unfinished rows in metrics table | **0** |
+| Weeks in table | 1, 2 |
+| max(week) | **2** (< as_of_week 3) |
+| W−1 form teams | 133 |
+
+---
+
+## Validation (all PASS)
+
+| Check | Result |
+| --- | --- |
+| 0 unfinished rows in the metrics table | PASS |
+| included count = manifest eligible count | PASS (85 = 85) |
+| leakage: only `week < W` | PASS (max week 2 < 3; kickoff week contract) |
+| core-31 present | **31 / 31**; absent = [] |
+| EPA null rate on scrimmage used | **0** (0 / 10,748) |
+| Other core-31 nulls | `start.yardsToEndzone` 0.014%; all others 0 |
+| Input SHA recorded | PASS (table above) |
+| `opponent_adjusted=false` on all rows | PASS |
+| No write to Aug 13 `raw/cfb/pbp/` 2014–2025 | PASS (HD unmounted; repo hist lake untouched) |
+| No SP+ compose / KEI / Edge Board | PASS |
+| CFBD unused | PASS |
+| Product label is not “KE Ratings” | PASS |
+
+Eligible plays used: **14,331** (10,748 scrimmage). PPA not present; not invented.
+
+---
+
+## League rollup (unadjusted, 170 team-games)
+
+| Metric | Value |
+| --- | ---: |
+| Success rate (`EPA_success = EPA>0`) | 0.440 |
+| Standard success rate (50/70/100) | 0.418 |
+| EPA / play | 0.035 |
+| Explosive rate | 0.206 |
+| Pass / rush explosive | 0.269 / 0.152 |
+| Early / standard / passing-down SR | 0.444 / 0.453 / 0.419 |
+
+These are **raw team-game metrics**. They are not opponent-adjusted and are not KE Ratings.
 
 ---
 
@@ -59,31 +124,10 @@ Covers live/HALFTIME/END_PERIOD/DELAYED-0–0 exclusion, `week < W` leakage, `EP
 
 ---
 
-## Live SDV restore (this revision)
-
-Pending the research runner against the 2026-09-15 snapshot. Expected from #558: **~85** eligible completed∩PBP, **~94** live-status PBP excluded, 0 unmatched, 0 completed-missing-PBP.
-
-Fill-in after `python scripts/cfb/run_2026_w1_team_game_metrics.py --as-of 20260915 --commit-ops`:
-
-| Check | Result |
-| --- | --- |
-| Eligible games | *pending live restore* |
-| Table rows / games | *pending* |
-| Unfinished rows | must be 0 |
-| Included = manifest eligible | must match |
-| max(week) < as_of_week | must hold |
-| core-31 / EPA null (scrimmage) | report |
-| PBP SHA / schedule SHA | record |
-| `opponent_adjusted=false` | all rows |
-| Historical lake write | false |
-| CFBD / SP+ / KEI | unused / unchanged |
-
----
-
 ## STOP
 
 - No opponent-adjusted KE Ratings.
-- No havoc/ST productization.
+- No havoc/ST productization (flags may exist on raw 2026; not wired).
 - No PPA / CFBD.
 - No NFL work.
 - No live CFB compose / KEI / Edge Board change.

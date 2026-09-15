@@ -1,0 +1,17 @@
+{
+  "team_games": 170,
+  "success_rate": 0.43994442741527495,
+  "standard_success_rate": 0.4176099810856712,
+  "epa_per_play": 0.035059614443103196,
+  "explosive_rate": 0.2062408237867577,
+  "pass_explosive_rate": 0.26946619681993966,
+  "rush_explosive_rate": 0.15218816472860658,
+  "early_success_rate": 0.4438661427720127,
+  "standard_down_success_rate": 0.4528859701691778,
+  "passing_down_success_rate": 0.4185460851083477,
+  "opponent_adjusted": false,
+  "metric_version": "cfb-owned-raw-metrics-v1",
+  "games": 85,
+  "success_rate_label": "EPA_success = EPA>0",
+  "product_label": "raw unadjusted team-game metrics"
+}

@@ -1,0 +1,631 @@
+{
+  "passed": true,
+  "checks": {
+    "zero_unfinished_rows": true,
+    "included_count_equals_manifest_eligible": true,
+    "leakage_week_lt_as_of": true,
+    "kickoff_week_contract": true,
+    "opponent_adjusted_false_all_rows": true,
+    "input_sha_recorded": true,
+    "no_historical_lake_write": true,
+    "not_labeled_ke_ratings": true,
+    "cfbd_unused": true
+  },
+  "unfinished_row_count": 0,
+  "unfinished_game_ids": [],
+  "table_rows": 170,
+  "table_games": 85,
+  "manifest_eligible_count": 85,
+  "max_week": 2,
+  "as_of_week": 3,
+  "kickoff_week_error": null,
+  "field_stats": {
+    "plays": 14331,
+    "scrimmage_plays": 10748,
+    "core31_present": [
+      "season",
+      "week",
+      "game_id",
+      "id",
+      "drive.id",
+      "pos_team",
+      "def_pos_team",
+      "homeTeamAbbrev",
+      "awayTeamAbbrev",
+      "homeTeamName",
+      "awayTeamName",
+      "down",
+      "distance",
+      "start.yardsToEndzone",
+      "statYardage",
+      "type.text",
+      "EPA",
+      "EP_start",
+      "EP_end",
+      "EPA_success",
+      "rz_play",
+      "stuffed_run",
+      "pos_score_diff",
+      "start.TimeSecsRem",
+      "under_2",
+      "wpa",
+      "wp_before",
+      "wp_after",
+      "scrimmage_play",
+      "pass",
+      "rush"
+    ],
+    "core31_absent": [],
+    "core31_present_count": 31,
+    "core31_null_rates": {
+      "season": 0.0,
+      "week": 0.0,
+      "game_id": 0.0,
+      "id": 0.0,
+      "drive.id": 0.0,
+      "pos_team": 0.0,
+      "def_pos_team": 0.0,
+      "homeTeamAbbrev": 0.0,
+      "awayTeamAbbrev": 0.0,
+      "homeTeamName": 0.0,
+      "awayTeamName": 0.0,
+      "down": 0.0,
+      "distance": 0.0,
+      "start.yardsToEndzone": 0.00014,
+      "statYardage": 0.0,
+      "type.text": 0.0,
+      "EPA": 0.0,
+      "EP_start": 0.0,
+      "EP_end": 0.0,
+      "EPA_success": 0.0,
+      "rz_play": 0.0,
+      "stuffed_run": 0.0,
+      "pos_score_diff": 0.0,
+      "start.TimeSecsRem": 0.0,
+      "under_2": 0.0,
+      "wpa": 0.0,
+      "wp_before": 0.0,
+      "wp_after": 0.0,
+      "scrimmage_play": 0.0,
+      "pass": 0.0,
+      "rush": 0.0
+    },
+    "epa_null_rate_scrimmage": 0.0,
+    "epa_null_scrimmage_n": 0,
+    "field_support": {
+      "plays": 14331,
+      "columns": 498,
+      "core31_present": [
+        "season",
+        "week",
+        "game_id",
+        "id",
+        "drive.id",
+        "pos_team",
+        "def_pos_team",
+        "homeTeamAbbrev",
+        "awayTeamAbbrev",
+        "homeTeamName",
+        "awayTeamName",
+        "down",
+        "distance",
+        "start.yardsToEndzone",
+        "statYardage",
+        "type.text",
+        "EPA",
+        "EP_start",
+        "EP_end",
+        "EPA_success",
+        "rz_play",
+        "stuffed_run",
+        "pos_score_diff",
+        "start.TimeSecsRem",
+        "under_2",
+        "wpa",
+        "wp_before",
+        "wp_after",
+        "scrimmage_play",
+        "pass",
+        "rush"
+      ],
+      "core31_absent": [],
+      "core31": {
+        "season": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "week": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "game_id": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "id": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "drive.id": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "pos_team": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "def_pos_team": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "homeTeamAbbrev": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "awayTeamAbbrev": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "homeTeamName": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "awayTeamName": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "down": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "distance": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "start.yardsToEndzone": {
+          "present": true,
+          "null_rate": 0.00014,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "statYardage": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "type.text": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EPA": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EP_start": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EP_end": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EPA_success": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "rz_play": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "stuffed_run": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "pos_score_diff": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "start.TimeSecsRem": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "under_2": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "wpa": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "wp_before": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "wp_after": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "scrimmage_play": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "pass": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "rush": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        }
+      },
+      "extras": {
+        "half": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "period": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "scoring_opp": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "sack": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "TFL": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "int": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "havoc": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "statYardage": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "rz_play": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "pos_score_diff": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "PPA": {
+          "present": false,
+          "null_rate": null
+        },
+        "ppa": {
+          "present": false,
+          "null_rate": null
+        }
+      },
+      "metrics": {
+        "EPA": {
+          "required": [
+            "EPA"
+          ],
+          "missing": [],
+          "null_rates": {
+            "EPA": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "EPA_success": {
+          "required": [
+            "EPA_success"
+          ],
+          "missing": [],
+          "null_rates": {
+            "EPA_success": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "scrimmage_play": {
+          "required": [
+            "scrimmage_play"
+          ],
+          "missing": [],
+          "null_rates": {
+            "scrimmage_play": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "pass": {
+          "required": [
+            "pass"
+          ],
+          "missing": [],
+          "null_rates": {
+            "pass": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "rush": {
+          "required": [
+            "rush"
+          ],
+          "missing": [],
+          "null_rates": {
+            "rush": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "down": {
+          "required": [
+            "down"
+          ],
+          "missing": [],
+          "null_rates": {
+            "down": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "distance": {
+          "required": [
+            "distance"
+          ],
+          "missing": [],
+          "null_rates": {
+            "distance": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "start.yardsToEndzone": {
+          "required": [
+            "start.yardsToEndzone"
+          ],
+          "missing": [],
+          "null_rates": {
+            "start.yardsToEndzone": 0.00014
+          },
+          "class": "SUPPORTED"
+        },
+        "drive.id": {
+          "required": [
+            "drive.id"
+          ],
+          "missing": [],
+          "null_rates": {
+            "drive.id": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "type.text": {
+          "required": [
+            "type.text"
+          ],
+          "missing": [],
+          "null_rates": {
+            "type.text": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "pace": {
+          "required": [
+            "scrimmage_play",
+            "game_id",
+            "pos_team"
+          ],
+          "missing": [],
+          "null_rates": {
+            "scrimmage_play": 0.0,
+            "game_id": 0.0,
+            "pos_team": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "true_pace_competitive": {
+          "required": [
+            "scrimmage_play",
+            "game_id",
+            "pos_team",
+            "pos_score_diff"
+          ],
+          "missing": [],
+          "null_rates": {
+            "scrimmage_play": 0.0,
+            "game_id": 0.0,
+            "pos_team": 0.0,
+            "pos_score_diff": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "explosiveness": {
+          "required": [
+            "EPA",
+            "statYardage",
+            "scrimmage_play",
+            "pass",
+            "rush"
+          ],
+          "missing": [],
+          "null_rates": {
+            "EPA": 0.0,
+            "statYardage": 0.0,
+            "scrimmage_play": 0.0,
+            "pass": 0.0,
+            "rush": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "scoring_opportunity": {
+          "required": [
+            "drive.id",
+            "start.yardsToEndzone",
+            "type.text",
+            "game_id"
+          ],
+          "missing": [],
+          "null_rates": {
+            "drive.id": 0.0,
+            "start.yardsToEndzone": 0.00014,
+            "type.text": 0.0,
+            "game_id": 0.0
+          },
+          "class": "SUPPORTED"
+        }
+      },
+      "ppa_present": false,
+      "havoc_flag_present": true,
+      "havoc_components_present": {
+        "havoc": true,
+        "TFL": true,
+        "sack": true,
+        "int": true,
+        "pass_breakup": true,
+        "forced_fumble": true
+      },
+      "st_playtype_present": true,
+      "note": "SUPPORTED means columns exist at usable null rates for #555 raw unadjusted metrics. Not a fitted rating. Havoc/ST still need field verification. PPA is optional and expected absent on SDV."
+    }
+  },
+  "pbp_sha256": "da0ec956d441da96aa0e85232fb685cb8408000fcf28a5fe5de0f3bb1d25e0ad",
+  "schedule_sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768",
+  "opponent_adjusted": false,
+  "product_label": "raw unadjusted team-game metrics",
+  "success_rate_label": "EPA_success = EPA>0",
+  "generated_at": "2026-09-15T15:26:57.389845+00:00",
+  "as_of": "20260915",
+  "path_convention": {
+    "as_of": "20260915",
+    "historical_canonical_hd": "/Volumes/KosEdgeData/raw/cfb/pbp",
+    "historical_note": "2014\u20132025 Aug 13 lake is CANONICAL. Do not overwrite play_by_play_{2014-2025}.parquet.",
+    "current_season_hd_target": "/Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_20260915",
+    "current_season_hd_root": "/Volumes/KosEdgeData/raw/cfb/pbp_current",
+    "vm_research_path": "/workspace/data/cfb/research/pbp_current/as_of_20260915",
+    "vm_research_root": "/workspace/data/cfb/research/pbp_current",
+    "hd_mounted": false,
+    "prefer_hd_current_when_mounted": true,
+    "versioning": "raw/cfb/pbp_current/as_of_YYYYMMDD/"
+  },
+  "reason_counts": {
+    "excluded_unfinished_live": 94,
+    "excluded_unfinished_live_no_pbp": 1,
+    "excluded_unfinished_parked_no_pbp": 5,
+    "included_eligible_completed_pbp_w_minus_1": 85
+  },
+  "eligible_game_ids": [
+    "401864494",
+    "401856766",
+    "401858202",
+    "401864577",
+    "401862693",
+    "401856768",
+    "401856663",
+    "401858423",
+    "401856767",
+    "401858204",
+    "401864424",
+    "401864425",
+    "401866409",
+    "401856776",
+    "401858422",
+    "401858424",
+    "401858206",
+    "401856664",
+    "401858436",
+    "401864495",
+    "401858435",
+    "401866623",
+    "401856769",
+    "401858429",
+    "401858432",
+    "401858425",
+    "401856660",
+    "401856634",
+    "401858426",
+    "401856780",
+    "401858208",
+    "401858430",
+    "401861962",
+    "401862701",
+    "401866410",
+    "401869960",
+    "401856665",
+    "401864496",
+    "401856635",
+    "401868356",
+    "401868140",
+    "401870790",
+    "401856773",
+    "401860879",
+    "401856774",
+    "401864497",
+    "401864498",
+    "401866411",
+    "401858210",
+    "401864432",
+    "401858438",
+    "401856661",
+    "401858437",
+    "401858212",
+    "401858213",
+    "401856678",
+    "401858215",
+    "401858220",
+    "401858222",
+    "401858214",
+    "401858439",
+    "401856683",
+    "401856679",
+    "401858445",
+    "401858442",
+    "401856670",
+    "401856781",
+    "401858221",
+    "401858224",
+    "401862702",
+    "401864571",
+    "401866416",
+    "401867929",
+    "401868187",
+    "401866417",
+    "401864506",
+    "401865252",
+    "401868326",
+    "401856684",
+    "401864504",
+    "401864505",
+    "401864502",
+    "401860883",
+    "401864500",
+    "401864578"
+  ]
+}
