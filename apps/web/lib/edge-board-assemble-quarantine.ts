@@ -13,7 +13,7 @@
 
 import type { EdgeBoardRow } from "@kosedge/contracts";
 import {
-  isCfbEdgeBoardCustomerDisabled,
+  isFootballPublicNumbersDisabled,
   stripCfbCustomerEdgeTagRows,
 } from "@/lib/cfb-edge-board-public";
 import {
@@ -77,7 +77,7 @@ export function scrubEdgeBoardAssembleCustomerRows(
   sport?: string,
 ): EdgeBoardRow[] {
   const scrubbed = rows.map(scrubEdgeBoardAssembleCustomerRow);
-  if (isCfbEdgeBoardCustomerDisabled(sport)) {
+  if (isFootballPublicNumbersDisabled(sport)) {
     return stripCfbCustomerEdgeTagRows(
       scrubbed as unknown as Record<string, unknown>[],
     ) as EdgeBoardRow[];

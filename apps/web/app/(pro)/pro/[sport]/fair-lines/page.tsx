@@ -6,6 +6,8 @@ import { getKeiLines } from "@/lib/kei-lines";
 import { resolveKeiGames } from "@/lib/resolve-kei-lines";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 
 const SPORT_FAIR_LINES_COPY: Record<
   string,
@@ -59,6 +61,26 @@ export default async function FairLinesPage({
   if (sportKey === "mlb") redirect("/pro/mlb/fair-lines");
   if (sportKey === "nba") redirect("/pro/nba/fair-lines");
   if (sportKey === "wnba") redirect("/pro/wnba/fair-lines");
+
+  if (isFootballPublicNumbersDisabled(sportKey)) {
+    const sportName = sportDisplayLabel(sportKey);
+    const base = `/pro/${sportKey || "nfl"}`;
+    return (
+      <SportHubShell
+        sportKey={sportKey}
+        sportName={sportName}
+        base={base}
+        badge={`${sportName} Betting Desk · ET`}
+        title={`${sportName} Fair Lines`}
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable
+          sport={sportKey}
+          title={`${sportName} KEI Lines`}
+        />
+      </SportHubShell>
+    );
+  }
 
   const sportName = sportDisplayLabel(sportKey);
   const base = `/pro/${sportKey || "nfl"}`;

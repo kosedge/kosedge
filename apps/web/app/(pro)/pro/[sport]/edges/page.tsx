@@ -9,8 +9,8 @@ import {
 } from "@/lib/edges-desk-honesty";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
-import { isCfbEdgeBoardCustomerDisabled } from "@/lib/cfb-edge-board-public";
-import CfbEdgeBoardUnavailable from "@/components/CfbEdgeBoardUnavailable";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 
 /**
  * Shared Edges desk for sports without a dedicated model edges feed yet.
@@ -27,7 +27,7 @@ export default async function SportEdgesPage({
   if (sportKey === "nfl") redirect("/pro/nfl/edges");
   if (sportKey === "mlb") redirect("/pro/mlb/edges");
 
-  if (isCfbEdgeBoardCustomerDisabled(sportKey)) {
+  if (isFootballPublicNumbersDisabled(sportKey)) {
     const sportName = sportDisplayLabel(sportKey);
     const base = `/pro/${sportKey}`;
     return (
@@ -37,9 +37,12 @@ export default async function SportEdgesPage({
         base={base}
         badge={`${sportName} Betting Desk`}
         title={`${sportName} Edges`}
-        summary="Public CFB Edge Board is offline while market coverage is validated."
+        summary="Coming soon"
       >
-        <CfbEdgeBoardUnavailable />
+        <FootballNumbersUnavailable
+          sport={sportKey}
+          title={`${sportName} Edges`}
+        />
       </SportHubShell>
     );
   }

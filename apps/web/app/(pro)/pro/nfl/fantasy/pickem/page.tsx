@@ -29,6 +29,9 @@ import {
   fetchNflProductionReadiness,
   readinessBlocksPlay,
 } from "@/lib/nfl-production-readiness";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
+import SportHubShell from "@/components/pro/SportHubShell";
 
 export const dynamic = "force-dynamic";
 
@@ -77,6 +80,20 @@ export default async function NflFantasyPickemPage({
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="Pick’em"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Pick’em" />
+      </SportHubShell>
+    );
+  }
+
   const search = await searchParams;
   const tab = parsePickemTab(firstValue(search.tab));
   const [board, readiness] = await Promise.all([

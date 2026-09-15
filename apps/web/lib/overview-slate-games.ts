@@ -24,6 +24,7 @@ import {
 } from "@/lib/nfl-canonical-schedule";
 import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 
 const OVERVIEW_SLATE_TIMEOUT_MS = 8_000;
 
@@ -270,6 +271,10 @@ export async function loadOverviewSlateGames(
 ): Promise<OverviewSlateResult> {
   let timeoutId: ReturnType<typeof setTimeout> | undefined;
   const sport = (sportKey || "").toLowerCase();
+
+  if (isFootballPublicNumbersDisabled(sport)) {
+    return { games: [], status: "empty", week: null, weekLabel: null };
+  }
 
   try {
     const result = await Promise.race([

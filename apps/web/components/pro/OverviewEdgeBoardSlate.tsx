@@ -5,7 +5,11 @@
  */
 
 import Link from "next/link";
-import { publicEdgeBoardHref } from "@/lib/cfb-edge-board-public";
+import {
+  isFootballPublicNumbersDisabled,
+  publicEdgeBoardHref,
+} from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import type { TonightGame } from "@/lib/edge-board-tonight";
 import type { OverviewSlateStatus } from "@/lib/overview-slate-games";
 import WeeklyGamesScroller from "@/components/pro/WeeklyGamesScroller";
@@ -81,6 +85,18 @@ export default function OverviewEdgeBoardSlate({
   weekLabel?: string | null;
   week?: number | null;
 }) {
+  if (isFootballPublicNumbersDisabled(sport)) {
+    return (
+      <div className="relative mt-2.5 border-t border-white/10 pt-2.5 sm:mt-3 sm:pt-3">
+        <FootballNumbersUnavailable
+          sport={sport}
+          compact
+          title={`${sport === "nfl" ? "NFL" : "CFB"} slate`}
+        />
+      </div>
+    );
+  }
+
   const meta = SLATE_META[sport] ?? {
     title: "Today’s Slate",
     emptyHint:

@@ -19,7 +19,11 @@ import {
 } from "@/lib/pro-sport-ia";
 import OverviewSportShell from "@/components/pro/OverviewSportShell";
 import { loadOverviewSlateGames } from "@/lib/overview-slate-games";
-import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
+import {
+  isFootballPublicNumbersDisabled,
+  withoutCfbEdgeBoardHrefs,
+} from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 
 export const dynamic = "force-dynamic";
 
@@ -145,25 +149,35 @@ export default async function CfbOverviewPage() {
               <p className="mt-1 text-xs text-kos-text/55">
                 Top of board is Power-4 / Notre Dame — not inverted G5-over-P4.
               </p>
-              <ol className="mt-3 space-y-2">
-                {top.map((row) => (
-                  <li
-                    key={row.team}
-                    className="flex items-center justify-between gap-3 text-sm"
-                  >
-                    <Link
-                      href={`/pro/cfb/teams/${row.team.toLowerCase()}`}
-                      className="font-medium text-kos-text hover:text-kos-gold"
+              {isFootballPublicNumbersDisabled("cfb") ? (
+                <div className="mt-3">
+                  <FootballNumbersUnavailable
+                    sport="cfb"
+                    compact
+                    title="CFB Power snapshot"
+                  />
+                </div>
+              ) : (
+                <ol className="mt-3 space-y-2">
+                  {top.map((row) => (
+                    <li
+                      key={row.team}
+                      className="flex items-center justify-between gap-3 text-sm"
                     >
-                      <span className="mr-2 text-kos-text/40">{row.rank}</span>
-                      {cfbTeamDisplayName(row.team)}
-                    </Link>
-                    <span className="tabular-nums text-xs text-kos-text/60">
-                      {row.power_index?.toFixed(3)} · {row.conference}
-                    </span>
-                  </li>
-                ))}
-              </ol>
+                      <Link
+                        href={`/pro/cfb/teams/${row.team.toLowerCase()}`}
+                        className="font-medium text-kos-text hover:text-kos-gold"
+                      >
+                        <span className="mr-2 text-kos-text/40">{row.rank}</span>
+                        {cfbTeamDisplayName(row.team)}
+                      </Link>
+                      <span className="tabular-nums text-xs text-kos-text/60">
+                        {row.power_index?.toFixed(3)} · {row.conference}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              )}
             </div>
 
             <div className="rounded-2xl border border-white/10 bg-black/30 p-5">

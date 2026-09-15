@@ -7,6 +7,10 @@ import {
 } from "@/lib/page-data-cache";
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
+import {
+  isFootballPublicNumbersDisabled,
+  nflEdgeBoardAssembleUnavailablePayload,
+} from "@/lib/cfb-edge-board-public";
 
 export const dynamic = "force-dynamic";
 /** Client-fetched page-data — may wait on cold Railway beyond Overview board cap. */
@@ -30,6 +34,13 @@ export async function GET(req: Request) {
       { error: "Unauthorized" },
       { status: 401, headers: pageDataCacheHeaders({ cacheable: false }) },
     );
+  }
+
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return NextResponse.json(nflEdgeBoardAssembleUnavailablePayload(), {
+      status: 503,
+      headers: pageDataCacheHeaders({ cacheable: false }),
+    });
   }
 
   const url = new URL(req.url);

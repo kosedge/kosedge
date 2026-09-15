@@ -65,7 +65,10 @@ describe("Edge Board Product Center #4 — canonical URL", () => {
       expect(href).not.toMatch(/\/pro\/.+\/edge-board/);
       const primary = getSportPrimaryNav(sport.key);
       const edge = primary.find((i) => i.label === "Edge Board");
-      if (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) {
+      if (
+        (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) ||
+        sport.key === "nfl"
+      ) {
         expect(edge).toBeUndefined();
         continue;
       }
@@ -79,7 +82,10 @@ describe("Edge Board Product Center #4 — canonical URL", () => {
       const primary = getSportPrimaryNav(sport.key).map((i) => i.label);
       expect(primary).not.toContain("Edges");
       expect(primary).not.toContain("Edges desk");
-      if (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) {
+      if (
+        (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) ||
+        sport.key === "nfl"
+      ) {
         expect(primary).not.toContain("Edge Board");
       } else {
         expect(primary).toContain("Edge Board");
