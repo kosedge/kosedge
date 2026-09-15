@@ -12,20 +12,20 @@ This document defines the canonical KE Football Ratings Engine v1. It does **not
 
 ## 0. Hard stops
 
-| Forbidden | Why |
-| --- | --- |
-| Implementation / fitting / production writes | This assignment is design only. |
-| UI changes / board reopen | Boards stay dark (#561). Flags stay false. |
-| New scoring equation | #562 **REVISE** (margin helped, totals missed). Do not loosen. Do not retune `a`/`b`/pace because totals missed. |
-| Using #562 as coefficient justification | Scoring failure is a **scoring-layer** fact. It is not evidence that explosiveness, pace, or efficiency weights should move. |
-| Promoting #559 / #560 | Reconcile into this design. `production_promote` stays false. Not KEI. Not a spread. |
-| PFF / new vendors / CFBD purchase | Owned data only. PPA is optional and absent. Missing PPA ≠ buy a feed. |
-| Synthetic proxy labeled as the real metric | Live CFB SP+ z → fake success / explosiveness / skill−F7 pace stay **PROXY**, never KE. |
-| Silent 50-fill / identity constant | Official teams missing required information → `DATA_INSUFFICIENT` or an explicitly documented **partial** rating. |
-| ATS / close / betting ROI as construction loss | First validation is football predictive validity. Market comparison is the **last** stage, after ratings exist. |
-| Copying NFL numbers onto CFB to finish the schema | Shared **names**. Sport-specific priors, stabilization, roster handling, opponent adjustment. |
-| Relabeling returning production / units / coaching as efficiency | Identity layer. Visible. Not a substitute for measurement. |
-| Starting NFL remat / #564 / #567 from this spec | Separate track. |
+| Forbidden                                                        | Why                                                                                                                          |
+| ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Implementation / fitting / production writes                     | This assignment is design only.                                                                                              |
+| UI changes / board reopen                                        | Boards stay dark (#561). Flags stay false.                                                                                   |
+| New scoring equation                                             | #562 **REVISE** (margin helped, totals missed). Do not loosen. Do not retune `a`/`b`/pace because totals missed.             |
+| Using #562 as coefficient justification                          | Scoring failure is a **scoring-layer** fact. It is not evidence that explosiveness, pace, or efficiency weights should move. |
+| Promoting #559 / #560                                            | Reconcile into this design. `production_promote` stays false. Not KEI. Not a spread.                                         |
+| PFF / new vendors / CFBD purchase                                | Owned data only. PPA is optional and absent. Missing PPA ≠ buy a feed.                                                       |
+| Synthetic proxy labeled as the real metric                       | Live CFB SP+ z → fake success / explosiveness / skill−F7 pace stay **PROXY**, never KE.                                      |
+| Silent 50-fill / identity constant                               | Official teams missing required information → `DATA_INSUFFICIENT` or an explicitly documented **partial** rating.            |
+| ATS / close / betting ROI as construction loss                   | First validation is football predictive validity. Market comparison is the **last** stage, after ratings exist.              |
+| Copying NFL numbers onto CFB to finish the schema                | Shared **names**. Sport-specific priors, stabilization, roster handling, opponent adjustment.                                |
+| Relabeling returning production / units / coaching as efficiency | Identity layer. Visible. Not a substitute for measurement.                                                                   |
+| Starting NFL remat / #564 / #567 from this spec                  | Separate track.                                                                                                              |
 
 **NFL is the reference implementation.** The owned nflverse play-level spine is materially stronger than CFB live compose. CFB may share metric definitions and infrastructure patterns. CFB must not inherit a league-average, a 50, or an NFL knob just so a cell is non-empty.
 
@@ -43,15 +43,15 @@ data truth
             → market comparison
 ```
 
-| Stage | v1 status | What v1 specifies |
-| --- | --- | --- |
-| Data truth | **In spec** | Play/game SoT, SHA, eligibility, identity, fail-closed incomplete PBP |
-| Football measurement | **In spec** | Off / Def / ST / Pace / Explosiveness / Finishing / Havoc |
-| Opponent adjustment | **In spec** | KE Opponent-Adjusted EPA (O/D EPA/play only) |
-| Team strength | **In spec** | KE Overall from adj O/D in **native EPA units** |
-| Matchup interaction | **Boundary only** | Consumes the book. Not designed here. Not a rating. |
-| Scoring projection | **Boundary only** | Downstream. Frozen-failed CFB #562 is not the house model. NFL `expected_team_points` remat is a separate track. |
-| Market comparison | **Boundary only** | After ratings exist. Not a construction objective. Boards remain dark. |
+| Stage                | v1 status         | What v1 specifies                                                                                                |
+| -------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------- |
+| Data truth           | **In spec**       | Play/game SoT, SHA, eligibility, identity, fail-closed incomplete PBP                                            |
+| Football measurement | **In spec**       | Off / Def / ST / Pace / Explosiveness / Finishing / Havoc                                                        |
+| Opponent adjustment  | **In spec**       | KE Opponent-Adjusted EPA (O/D EPA/play only)                                                                     |
+| Team strength        | **In spec**       | KE Overall from adj O/D in **native EPA units**                                                                  |
+| Matchup interaction  | **Boundary only** | Consumes the book. Not designed here. Not a rating.                                                              |
+| Scoring projection   | **Boundary only** | Downstream. Frozen-failed CFB #562 is not the house model. NFL `expected_team_points` remat is a separate track. |
+| Market comparison    | **Boundary only** | After ratings exist. Not a construction objective. Boards remain dark.                                           |
 
 A working (or parked) board is not a ratings engine. A sealed EPA MAE is not a spread. A failed totals conversion is not permission to write a new scoring equation.
 
@@ -61,11 +61,11 @@ A working (or parked) board is not a ratings engine. A sealed EPA MAE is not a s
 
 Every KE number declares exactly one layer. Mixing them without a label is a spec violation.
 
-| Layer | Meaning | Allowed | Forbidden |
-| --- | --- | --- | --- |
-| **RAW** | Directly observed football events / statistics | Play flags, yards, EPA column as published by the owned PBP source, down, distance, score, clock, play type | A z-score, a 0–100, a ridge estimate, a 50 |
-| **DERIVED** | Deterministic KE calculation from RAW | Means, rates, plays/game, opportunity / PPO, seconds/play when clock is certified | Fitted opponent effects; silent league-average substitution; SP+ z heuristics |
-| **MODELED** | Fitted / estimated values | Two-way EPA (`off_i`, `def_j`), decayed priors, ridge / SOS estimators with frozen knobs | A synthetic “success” invented from SP+; an identity constant named as EPA |
+| Layer       | Meaning                                        | Allowed                                                                                                     | Forbidden                                                                     |
+| ----------- | ---------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| **RAW**     | Directly observed football events / statistics | Play flags, yards, EPA column as published by the owned PBP source, down, distance, score, clock, play type | A z-score, a 0–100, a ridge estimate, a 50                                    |
+| **DERIVED** | Deterministic KE calculation from RAW          | Means, rates, plays/game, opportunity / PPO, seconds/play when clock is certified                           | Fitted opponent effects; silent league-average substitution; SP+ z heuristics |
+| **MODELED** | Fitted / estimated values                      | Two-way EPA (`off_i`, `def_j`), decayed priors, ridge / SOS estimators with frozen knobs                    | A synthetic “success” invented from SP+; an identity constant named as EPA    |
 
 Rules:
 
@@ -86,13 +86,13 @@ Live CFB 0–100 SP+ carry, synthetic success / explosiveness, and skill−F7 pa
 
 ### 3.1 One play-level SoT per sport
 
-| | NFL (reference) | CFB |
-| --- | --- | --- |
-| Source | nflverse / nflreadpy PBP already ingested | SportsDataverse `espn_cfb_pbp` already owned |
-| Canonical store | `nfl_dp_play_by_play` (+ raw payloads in `nfl_dp_raw_objects`) | HD lake `/Volumes/KosEdgeData/raw/cfb/pbp/` (2014–2025, do not overwrite) + versioned `pbp_current/as_of_YYYYMMDD/` for 2026+ |
-| Worker readability | Postgres marts exist | Railway has **no** CFB parquet volume today. Research files on a laptop HD are not a production feature store. Platform copy is required before any live CFB KE; that is **not** a vendor purchase. |
-| Identity | Product aliases (`LA`→`LAR`). Official clubs hard-fail if missing. | Official FBS hard-fail (keep). FCS flagged, not deleted. No 50-fill for official FBS. |
-| SHA / as_of | Ingest run + week cap | Input SHA on every research table (#559/#560 pattern) |
+|                    | NFL (reference)                                                    | CFB                                                                                                                                                                                                 |
+| ------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Source             | nflverse / nflreadpy PBP already ingested                          | SportsDataverse `espn_cfb_pbp` already owned                                                                                                                                                        |
+| Canonical store    | `nfl_dp_play_by_play` (+ raw payloads in `nfl_dp_raw_objects`)     | HD lake `/Volumes/KosEdgeData/raw/cfb/pbp/` (2014–2025, do not overwrite) + versioned `pbp_current/as_of_YYYYMMDD/` for 2026+                                                                       |
+| Worker readability | Postgres marts exist                                               | Railway has **no** CFB parquet volume today. Research files on a laptop HD are not a production feature store. Platform copy is required before any live CFB KE; that is **not** a vendor purchase. |
+| Identity           | Product aliases (`LA`→`LAR`). Official clubs hard-fail if missing. | Official FBS hard-fail (keep). FCS flagged, not deleted. No 50-fill for official FBS.                                                                                                               |
+| SHA / as_of        | Ingest run + week cap                                              | Input SHA on every research table (#559/#560 pattern)                                                                                                                                               |
 
 PPA is **optional and absent**. KE v1 is EPA-centered. Do not buy CFBD or PFF to complete PPA.
 
@@ -113,19 +113,19 @@ NFL already gates on schedule scores. Keep that honesty. Do not loosen CFB to �
 
 ### 3.3 Shared scrimmage filter
 
-| Sport | Scrimmage | Special teams |
-| --- | --- | --- |
-| NFL | `play_type ∈ {pass, run}` with finite `epa` (and `posteam` / `defteam`) | `play_type ∈ {field_goal, extra_point, punt, kickoff}` — ST rating only |
-| CFB | truthy `scrimmage_play`, else truthy `pass` or `rush`; finite `EPA` | ST rating only; not in O/D denominators |
+| Sport | Scrimmage                                                               | Special teams                                                           |
+| ----- | ----------------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| NFL   | `play_type ∈ {pass, run}` with finite `epa` (and `posteam` / `defteam`) | `play_type ∈ {field_goal, extra_point, punt, kickoff}` — ST rating only |
+| CFB   | truthy `scrimmage_play`, else truthy `pass` or `rush`; finite `EPA`     | ST rating only; not in O/D denominators                                 |
 
 Kneel / spike / untagged / missing EPA → drop from that metric’s denominator. Do not impute EPA.
 
 ### 3.4 Garbage / blowout
 
-| Sport | v1 rule |
-| --- | --- |
-| NFL | RAW/DERIVED unadjusted rates are **unweighted**. MODELED EPA may apply a documented garbage weight later; v1 default is **unweighted** until a sealed NFL garbage study exists. Do not copy CFB weights onto NFL. |
-| CFB | RAW/DERIVED unadjusted = unweighted (same as #555/#559). MODELED opponent-adjusted EPA uses warehouse `garbage_weight` (min 0.10, not a hard drop) — research candidate only, frozen with #560. |
+| Sport | v1 rule                                                                                                                                                                                                           |
+| ----- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NFL   | RAW/DERIVED unadjusted rates are **unweighted**. MODELED EPA may apply a documented garbage weight later; v1 default is **unweighted** until a sealed NFL garbage study exists. Do not copy CFB weights onto NFL. |
+| CFB   | RAW/DERIVED unadjusted = unweighted (same as #555/#559). MODELED opponent-adjusted EPA uses warehouse `garbage_weight` (min 0.10, not a hard drop) — research candidate only, frozen with #560.                   |
 
 Garbage belongs in measurement notes, not hidden inside a z-score.
 
@@ -157,14 +157,14 @@ Construction loss and first gate are **football**, not market.
 
 ## 5. Status and failure vocabulary
 
-| Code | Meaning |
-| --- | --- |
-| `OK` | Required inputs present; rating computed |
-| `THIN` | Computed but below sample floor; `prior_weight` and `n` must be visible |
-| `PRIOR_ONLY` | No current-season eligible games; decayed prior only; labeled |
-| `PARTIAL` | Documented subset of the rating (named fields present, named fields missing) |
-| `DATA_INSUFFICIENT` | Required information missing; **no number** |
-| `EXCLUDED_GAME` | Game failed eligibility; omitted from all aggregates |
+| Code                | Meaning                                                                      |
+| ------------------- | ---------------------------------------------------------------------------- |
+| `OK`                | Required inputs present; rating computed                                     |
+| `THIN`              | Computed but below sample floor; `prior_weight` and `n` must be visible      |
+| `PRIOR_ONLY`        | No current-season eligible games; decayed prior only; labeled                |
+| `PARTIAL`           | Documented subset of the rating (named fields present, named fields missing) |
+| `DATA_INSUFFICIENT` | Required information missing; **no number**                                  |
+| `EXCLUDED_GAME`     | Game failed eligibility; omitted from all aggregates                         |
 
 `DATA_INSUFFICIENT` is a first-class output. It is not a 50, not `1.0`, not `0.0` pretending to be league average — except **MODELED EPA priors**, which are **league-centered 0 on the EPA scale** and must be labeled `PRIOR_ONLY` (honest EPA intercept, not a 50-fill).
 
@@ -176,13 +176,13 @@ Official FBS / official NFL club missing a required SoT → `DATA_INSUFFICIENT` 
 
 These may **prior** a rating early in the season if a later assignment says so. They must never **replace** measurement or fill a missing KE cell.
 
-| Signal | Sport | Class |
-| --- | --- | --- |
-| Returning snap/start, portal, recruiting, experience | CFB | PROXY / 50-fill today — **not KE** |
-| QB class multipliers | CFB | PROXY — **not KE** |
-| Curated HC / OC / DC flags | CFB | PROXY — **not KE** |
-| Injury overlay, QB premium hook, continuity flags | NFL | PROXY / PARTIAL — **not KE** |
-| SP+ 2025 snapshot | CFB | Vendor prior. Labeled vendor. Competing prior only if a later assignment says so. **Never** fake success / explosiveness |
+| Signal                                               | Sport | Class                                                                                                                    |
+| ---------------------------------------------------- | ----- | ------------------------------------------------------------------------------------------------------------------------ |
+| Returning snap/start, portal, recruiting, experience | CFB   | PROXY / 50-fill today — **not KE**                                                                                       |
+| QB class multipliers                                 | CFB   | PROXY — **not KE**                                                                                                       |
+| Curated HC / OC / DC flags                           | CFB   | PROXY — **not KE**                                                                                                       |
+| Injury overlay, QB premium hook, continuity flags    | NFL   | PROXY / PARTIAL — **not KE**                                                                                             |
+| SP+ 2025 snapshot                                    | CFB   | Vendor prior. Labeled vendor. Competing prior only if a later assignment says so. **Never** fake success / explosiveness |
 
 `ke.identity_*` stays visible and separate.
 
@@ -200,20 +200,20 @@ Native unit is the rating. Display index is later.
 
 ### 7.1 KE Offensive Efficiency
 
-| | |
-| --- | --- |
-| **ID** | `ke.off_eff` |
-| **Question** | How many expected points does this offense create per eligible scrimmage play? |
-| **Layer** | **DERIVED** (unadjusted). MODELED counterpart is `ke.opp_adj_epa` offense. |
-| **Native unit** | EPA/play (higher better) |
-| **Required companion (not mixed in)** | Success rate — see §7.1.1 |
+|                                       |                                                                                |
+| ------------------------------------- | ------------------------------------------------------------------------------ |
+| **ID**                                | `ke.off_eff`                                                                   |
+| **Question**                          | How many expected points does this offense create per eligible scrimmage play? |
+| **Layer**                             | **DERIVED** (unadjusted). MODELED counterpart is `ke.opp_adj_epa` offense.     |
+| **Native unit**                       | EPA/play (higher better)                                                       |
+| **Required companion (not mixed in)** | Success rate — see §7.1.1                                                      |
 
 This rating **is** offensive EPA/play. It is **not** the NFL backbone composite `1.0 + 0.75*off_epa + pressure + soft additives`. It is **not** CFB `50 + 18*z(SP+ offense)`.
 
 #### Raw inputs
 
-| NFL | CFB |
-| --- | --- |
+| NFL                                                                                                                                                            | CFB                                                                                                                                      |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | `nfl_dp_play_by_play.epa`, `success`, `play_type`, `posteam`, `down`, `ydstogo`, `yards_gained`, `passing_yards`, `rushing_yards`, `season`, `week`, `game_id` | SDV `EPA`, `EPA_success`, `scrimmage_play` / `pass` / `rush`, `pos_team`, `down`, `distance`, `statYardage`, `season`, `week`, `game_id` |
 
 Pass / run / early-down EPA are **diagnostic splits**, not a second offensive rating.
@@ -234,9 +234,9 @@ Window = one team-game (grain 0) or season-to-date with `week < W` (grain 1).
 
 **§7.1.1 Success companions (DERIVED, not collapsed into EPA):**
 
-| ID | Definition | NFL | CFB |
-| --- | --- | --- | --- |
-| `ke.success_native` | Sport-native success column | nflverse `success` | `EPA_success` ≡ `EPA > 0` (#555: 1.000 agreement on 2021–24 scrimmage) |
+| ID                    | Definition                    | NFL                                                                                    | CFB                                                                                             |
+| --------------------- | ----------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `ke.success_native`   | Sport-native success column   | nflverse `success`                                                                     | `EPA_success` ≡ `EPA > 0` (#555: 1.000 agreement on 2021–24 scrimmage)                          |
 | `ke.success_standard` | Football Study Hall 50/70/100 | Same family as nflverse success; **audit agreement** before treating them as identical | #555 `standard_success_rate` (1st ≥50% of `distance`, 2nd ≥70%, 3rd/4th ≥100% of `statYardage`) |
 
 Do not silently swap `EPA_success` and 50/70/100. They agreed **0.940** on 2021–24 CFB scrimmage. Both columns stay. Neither is “50.”
@@ -247,11 +247,11 @@ Do not silently swap `EPA_success` and 50/70/100. They agreed **0.940** on 2021�
 
 #### Stabilization / sample
 
-| | NFL | CFB |
-| --- | --- | --- |
-| Team-game publish | `n_plays ≥ 1` else `DATA_INSUFFICIENT` | same |
-| Season-to-date publish | `n_plays ≥ 25` or `n_games ≥ 1` with `THIN` if `n_plays < 80` | `n_plays ≥ 25` or `n_games ≥ 1`; `THIN` if `n_games < 2` or `n_plays < 80` |
-| Split publish (pass/run/early) | NFL floors already in backbone (`200` / `150` / `250`) — keep as **labels**, do not invent | Same idea; sport-specific floors; missing split → omit split, not fill |
+|                                | NFL                                                                                        | CFB                                                                        |
+| ------------------------------ | ------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Team-game publish              | `n_plays ≥ 1` else `DATA_INSUFFICIENT`                                                     | same                                                                       |
+| Season-to-date publish         | `n_plays ≥ 25` or `n_games ≥ 1` with `THIN` if `n_plays < 80`                              | `n_plays ≥ 25` or `n_games ≥ 1`; `THIN` if `n_games < 2` or `n_plays < 80` |
+| Split publish (pass/run/early) | NFL floors already in backbone (`200` / `150` / `250`) — keep as **labels**, do not invent | Same idea; sport-specific floors; missing split → omit split, not fill     |
 
 No silent league-mean EPA when `n=0`.
 
@@ -278,11 +278,11 @@ Predict **next-game offensive EPA/play** and `ke.success_native`. Baselines: lea
 
 #### Failure behavior
 
-| Condition | Output |
-| --- | --- |
-| No eligible plays | `DATA_INSUFFICIENT` |
-| Incomplete PBP game | game `EXCLUDED_GAME`; do not average a Q2 cut |
-| Official team missing SoT | hard-fail / `DATA_INSUFFICIENT` — no 50 |
+| Condition                 | Output                                                                                     |
+| ------------------------- | ------------------------------------------------------------------------------------------ |
+| No eligible plays         | `DATA_INSUFFICIENT`                                                                        |
+| Incomplete PBP game       | game `EXCLUDED_GAME`; do not average a Q2 cut                                              |
+| Official team missing SoT | hard-fail / `DATA_INSUFFICIENT` — no 50                                                    |
 | EPA column null on a play | drop play; if null rate on used scrimmage > 1%, flag `PARTIAL` and do not pretend complete |
 
 #### Buildability today
@@ -298,12 +298,12 @@ SP+ offense z, returning production, unit grades, backbone `offense_index`, `pla
 
 ### 7.2 KE Defensive Efficiency
 
-| | |
-| --- | --- |
-| **ID** | `ke.def_eff` |
-| **Question** | How many expected points does this defense allow per eligible scrimmage play? |
-| **Layer** | **DERIVED** (unadjusted) |
-| **Native unit** | EPA/play **allowed** (lower better) |
+|                 |                                                                               |
+| --------------- | ----------------------------------------------------------------------------- |
+| **ID**          | `ke.def_eff`                                                                  |
+| **Question**    | How many expected points does this defense allow per eligible scrimmage play? |
+| **Layer**       | **DERIVED** (unadjusted)                                                      |
+| **Native unit** | EPA/play **allowed** (lower better)                                           |
 
 Mirror of §7.1 with `defteam` / `def_pos_team`. Success allowed uses the same two companions.
 
@@ -333,17 +333,17 @@ NFL remaining honesty (from ops v1.1, not a fake fill): defense-allowed RZ and r
 
 ### 7.3 KE Special Teams Efficiency
 
-| | |
-| --- | --- |
-| **ID** | `ke.st` |
-| **Question** | How many expected points does this special-teams unit create per eligible ST play? |
-| **Layer** | **DERIVED** when ST EPA exists; otherwise **not published** |
-| **Native unit** | ST EPA/play (kicking-team frame; higher better) |
+|                 |                                                                                    |
+| --------------- | ---------------------------------------------------------------------------------- |
+| **ID**          | `ke.st`                                                                            |
+| **Question**    | How many expected points does this special-teams unit create per eligible ST play? |
+| **Layer**       | **DERIVED** when ST EPA exists; otherwise **not published**                        |
+| **Native unit** | ST EPA/play (kicking-team frame; higher better)                                    |
 
 #### Raw inputs
 
-| NFL | CFB |
-| --- | --- |
+| NFL                                                                                                                                              | CFB                                                                                                                                    |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------- |
 | `play_type ∈ {field_goal, extra_point, punt, kickoff}`, `epa`, `posteam`, `defteam` — already used by `build_st_kav_weekly.py` (cited 2013–2025) | SDV `type.text` plus ~83 ST-ish columns on 2026 raw; **completeness not certified**. No ST EPA product. Kickoff EPA frame not defined. |
 
 NFL kickoff frame (owned, keep): FG/XP/punt EPA as-is on `posteam`; kickoff EPA **negated** onto `defteam` (kicking side in nflverse).
@@ -408,19 +408,19 @@ Unit-grade `special_teams=50`, compose `0.015 * ((st−50))` nudge, unused packa
 
 ### 7.4 KE Pace
 
-| | |
-| --- | --- |
-| **ID** | `ke.pace` |
-| **Question** | How many scrimmage plays does this offense run per game? |
-| **Layer** | **DERIVED** |
-| **Native unit** | Plays / offense-game |
+|                 |                                                          |
+| --------------- | -------------------------------------------------------- |
+| **ID**          | `ke.pace`                                                |
+| **Question**    | How many scrimmage plays does this offense run per game? |
+| **Layer**       | **DERIVED**                                              |
+| **Native unit** | Plays / offense-game                                     |
 
 Seconds/play is a **companion** (`ke.pace_seconds`), not a replacement.
 
 #### Raw inputs
 
-| NFL | CFB |
-| --- | --- |
+| NFL                                                                                                                                                                                                 | CFB                                                                                                                                          |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
 | Eligible offensive scrimmage count per `game_id`; `game_seconds_remaining` (column exists via `043_nfl_second_order_edge.sql` — publish seconds/play only if null rate on used plays is acceptable) | #555: scrimmage as `pos_team` per team-game; `pos_score_diff` for competitive pace; `start.TimeSecsRem` in core-31 for optional seconds/play |
 
 #### Exclusions
@@ -485,12 +485,12 @@ Missing scrimmage tags → `DATA_INSUFFICIENT`. Skill−F7 / explosiveness-nudge
 
 ### 7.5 KE Explosiveness
 
-| | |
-| --- | --- |
-| **ID** | `ke.expl` |
-| **Question** | What share of eligible scrimmage plays are explosive, created and allowed, pass and rush? |
-| **Layer** | **DERIVED** |
-| **Native unit** | Rate (0–1) |
+|                 |                                                                                           |
+| --------------- | ----------------------------------------------------------------------------------------- |
+| **ID**          | `ke.expl`                                                                                 |
+| **Question**    | What share of eligible scrimmage plays are explosive, created and allowed, pass and rush? |
+| **Layer**       | **DERIVED**                                                                               |
+| **Native unit** | Rate (0–1)                                                                                |
 
 Sport-specific knobs are **required**. Do not copy NFL 20/10 onto CFB to complete the schema.
 
@@ -566,19 +566,19 @@ Predict next-game explosive **rate** (and pass/rush splits). Baselines: league r
 
 ### 7.6 KE Finishing Drives
 
-| | |
-| --- | --- |
-| **ID** | `ke.finish` |
-| **Question** | When this offense reaches a scoring opportunity, how often and how many points does it produce? |
-| **Layer** | **DERIVED** |
-| **Native unit** | Opportunity rate (0–1), points per opportunity (points), finish rate (0–1) |
+|                 |                                                                                                 |
+| --------------- | ----------------------------------------------------------------------------------------------- |
+| **ID**          | `ke.finish`                                                                                     |
+| **Question**    | When this offense reaches a scoring opportunity, how often and how many points does it produce? |
+| **Layer**       | **DERIVED**                                                                                     |
+| **Native unit** | Opportunity rate (0–1), points per opportunity (points), finish rate (0–1)                      |
 
 v1 publishes a **bundle**, not a single unnamed 0–100. Primary reported number: **points per opportunity** (`ke.ppo`). Finish rate and opportunity rate are required siblings.
 
 #### Raw inputs
 
-| NFL | CFB |
-| --- | --- |
+| NFL                                                                                        | CFB                                                                               |
+| ------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------- |
 | `fixed_drive` / `series` (043), `yardline_100`, `touchdown`, scoring play types, `posteam` | #555: `drive.id`, `start.yardsToEndzone`, `rz_play`, `type.text` points heuristic |
 
 NFL player `red_zone.py` role shares are **not** finishing. They are player TD roles (PROXY relative to this rating).
@@ -651,12 +651,12 @@ Predict next-game `ke.ppo` and `ke.finish`. Baseline: league PPO, trailing PPO. 
 
 ### 7.7 KE Havoc / Disruption
 
-| | |
-| --- | --- |
-| **ID** | `ke.havoc` |
-| **Question** | On what share of opponent scrimmage plays does this defense produce a disruption event? |
-| **Layer** | **DERIVED** only after the event bundle is certified on the SoT |
-| **Native unit** | Rate (0–1) |
+|                 |                                                                                         |
+| --------------- | --------------------------------------------------------------------------------------- |
+| **ID**          | `ke.havoc`                                                                              |
+| **Question**    | On what share of opponent scrimmage plays does this defense produce a disruption event? |
+| **Layer**       | **DERIVED** only after the event bundle is certified on the SoT                         |
+| **Native unit** | Rate (0–1)                                                                              |
 
 #### Canonical event set (definition first; columns second)
 
@@ -677,9 +677,9 @@ This is a written football definition. If the SoT cannot support TFL **and** FF 
 
 #### Allowed partial (must not use the `ke.havoc` ID)
 
-| ID | Events | When allowed |
-| --- | --- | --- |
-| `ke.disruption_proxy_nfl` | `sack OR interception OR qb_hit` | NFL mart only; **labeled proxy** |
+| ID                        | Events                            | When allowed                                        |
+| ------------------------- | --------------------------------- | --------------------------------------------------- |
+| `ke.disruption_proxy_nfl` | `sack OR interception OR qb_hit`  | NFL mart only; **labeled proxy**                    |
 | `ke.disruption_flags_cfb` | certified subset of 2025–26 flags | After null-rate audit; still not “official TFL/PBU” |
 
 Pressure-in-backbone and OL `protection_index` are **not** havoc.
@@ -732,12 +732,12 @@ Uncertified columns → `DATA_INSUFFICIENT` for `ke.havoc`. **Omit > impute.** D
 
 ### 7.8 KE Opponent-Adjusted EPA
 
-| | |
-| --- | --- |
-| **ID** | `ke.opp_adj_epa` |
-| **Question** | What offensive and defensive EPA/play would this team produce against a league-average opponent? |
-| **Layer** | **MODELED** |
-| **Native unit** | EPA/play. `off` higher better. `def` = EPA allowed, lower better. |
+|                 |                                                                                                  |
+| --------------- | ------------------------------------------------------------------------------------------------ |
+| **ID**          | `ke.opp_adj_epa`                                                                                 |
+| **Question**    | What offensive and defensive EPA/play would this team produce against a league-average opponent? |
+| **Layer**       | **MODELED**                                                                                      |
+| **Native unit** | EPA/play. `off` higher better. `def` = EPA allowed, lower better.                                |
 
 This is the **only** v1 rating that is MODELED. It consumes `ke.off_eff` / `ke.def_eff` team-game `y`, not SP+, not identity.
 
@@ -757,20 +757,20 @@ Team-game garbage-aware (CFB) or unweighted (NFL v1 default) EPA/play from §7.1
 y_{g,i} = μ + h · home_{g,i} + off_i + def_j + ε
 ```
 
-- `y` = team-game EPA/play on eligible scrimmage  
-- Identifiable baseline: league (NFL) or **FBS** (CFB) `off` and `def` centered at 0  
-- `μ` = intercept (league EPA/play)  
-- `h` = home-offense EPA/play. **Not a point spread.** Forbidden: `h × n_plays` as HFA points (#560 audit / #562).  
+- `y` = team-game EPA/play on eligible scrimmage
+- Identifiable baseline: league (NFL) or **FBS** (CFB) `off` and `def` centered at 0
+- `μ` = intercept (league EPA/play)
+- `h` = home-offense EPA/play. **Not a point spread.** Forbidden: `h × n_plays` as HFA points (#560 audit / #562).
 - Joint estimation of `off` and `def` (ridge or iterated two-way). One SoT per sport.
 
 **NFL today is not this estimator.** Live pieces:
 
-| Stack | Class vs this spec |
-| --- | --- |
-| `opponent_adjust_epa = raw − league` | PROXY center. Not full SOS. May remain a **diagnostic**. |
-| Past SOS `adj = raw + 0.70*(league_def − mean_opp_def)` | REAL_UNVALIDATED prior-side. Not the v1 SoT unless Ryan later promotes it. |
-| KAV 12-iter | REAL_UNVALIDATED. **Not** Layer-1 PR (desk forbids double-count). Not automatically `ke.opp_adj_epa`. |
-| External DVOA hook | PLACEHOLDER. Unused. |
+| Stack                                                   | Class vs this spec                                                                                    |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------- |
+| `opponent_adjust_epa = raw − league`                    | PROXY center. Not full SOS. May remain a **diagnostic**.                                              |
+| Past SOS `adj = raw + 0.70*(league_def − mean_opp_def)` | REAL_UNVALIDATED prior-side. Not the v1 SoT unless Ryan later promotes it.                            |
+| KAV 12-iter                                             | REAL_UNVALIDATED. **Not** Layer-1 PR (desk forbids double-count). Not automatically `ke.opp_adj_epa`. |
+| External DVOA hook                                      | PLACEHOLDER. Unused.                                                                                  |
 
 v1 **design SoT** for NFL: the same additive two-way family as CFB, with NFL-specific λ / n0 / decay / no-FCS. **Not fitted in this PR.** Until a sealed NFL two-way exists, NFL may publish `ke.off_eff` / `ke.def_eff` and must label any center/SOS/KAV number as **that estimator**, not as `ke.opp_adj_epa`.
 
@@ -792,12 +792,12 @@ This section **is** the opponent adjustment.
 
 #### Stabilization / sample
 
-| | NFL (proposed; not fitted) | CFB (#560 frozen research) |
-| --- | --- | --- |
-| Shrink | Sport-specific λ; do not copy 40 | λ=40 play-weight |
-| Game equivalents | Do not copy n0=4 without NFL val | n0=4 |
-| Thin | `PRIOR_ONLY` if `n_games < 2` | same; week-1 prior-only |
-| FCS | n/a | λ_fcs=4λ; not in centering set |
+|                  | NFL (proposed; not fitted)       | CFB (#560 frozen research)     |
+| ---------------- | -------------------------------- | ------------------------------ |
+| Shrink           | Sport-specific λ; do not copy 40 | λ=40 play-weight               |
+| Game equivalents | Do not copy n0=4 without NFL val | n0=4                           |
+| Thin             | `PRIOR_ONLY` if `n_games < 2`    | same; week-1 prior-only        |
+| FCS              | n/a                              | λ_fcs=4λ; not in centering set |
 
 #### Prior / decay
 
@@ -845,12 +845,12 @@ Do **not** validate `ke.opp_adj_epa` by spread MAE or totals MAE. Do not convert
 
 ### 7.9 KE Overall / Team Strength
 
-| | |
-| --- | --- |
-| **ID** | `ke.team_strength` |
-| **Question** | What is this team’s quality book, in native EPA, against a league-average opponent? |
-| **Layer** | **DERIVED from MODELED** (no new fit) |
-| **Native unit** | Net EPA/play |
+|                 |                                                                                     |
+| --------------- | ----------------------------------------------------------------------------------- |
+| **ID**          | `ke.team_strength`                                                                  |
+| **Question**    | What is this team’s quality book, in native EPA, against a league-average opponent? |
+| **Layer**       | **DERIVED from MODELED** (no new fit)                                               |
+| **Native unit** | Net EPA/play                                                                        |
 
 ```text
 ke.net_epa = ke.opp_adj_epa.off − ke.opp_adj_epa.def_allowed
@@ -896,8 +896,8 @@ Same as §7.8.
 
 #### Validation test
 
-1. **Primary:** next-game `off_adj` / `def_adj` already validated in §7.8.  
-2. **Secondary (allowed, not construction):** next-game score margin and team points vs (a) net EPA × a **frozen** play-count, (b) unadjusted net EPA, (c) prior net. Margin and totals **separately**.  
+1. **Primary:** next-game `off_adj` / `def_adj` already validated in §7.8.
+2. **Secondary (allowed, not construction):** next-game score margin and team points vs (a) net EPA × a **frozen** play-count, (b) unadjusted net EPA, (c) prior net. Margin and totals **separately**.
 3. A failed totals check **does not** authorize retuning Off/Def/ST/Pace/Expl weights (#562 lock).
 
 Do not use ATS / close as the seal.
@@ -915,11 +915,11 @@ No adj book → no team strength. No SP+ backup. No 50. No `1.0` placeholder nam
 
 ## 8. Downstream boundaries (not v1 ratings)
 
-| Stage | May consume | Must not do in this track |
-| --- | --- | --- |
-| Matchup interaction | adj O vs adj D, pace as a **volume** input, bounded situation | Re-use the same variance as a second unit boost; treat skill−F7 as pace |
-| Scoring projection | A **frozen** conversion, eval’d on margin **and** total separately | New equation because #562 missed; `h_epa × plays` as HFA; retune explosiveness |
-| Market comparison | Fair / KEI vs painted market **after** CoS CLEAR | Publish research EPA as KEI; reopen while flags are false; construct ratings on ROI |
+| Stage               | May consume                                                        | Must not do in this track                                                           |
+| ------------------- | ------------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| Matchup interaction | adj O vs adj D, pace as a **volume** input, bounded situation      | Re-use the same variance as a second unit boost; treat skill−F7 as pace             |
+| Scoring projection  | A **frozen** conversion, eval’d on margin **and** total separately | New equation because #562 missed; `h_epa × plays` as HFA; retune explosiveness      |
+| Market comparison   | Fair / KEI vs painted market **after** CoS CLEAR                   | Publish research EPA as KEI; reopen while flags are false; construct ratings on ROI |
 
 NFL remat / overlay lock (#564 / #567) stays on its own track.
 
@@ -927,17 +927,17 @@ NFL remat / overlay lock (#564 / #567) stays on its own track.
 
 ## 9. Shared names vs sport-specific knobs
 
-| Topic | Shared | Must differ |
-| --- | --- | --- |
-| Metric names / layer tags / failure codes | Yes | — |
-| EPA as the efficiency SoT | Yes | Vendor EPA column name kept (nflverse `epa` / SDV `EPA`) |
-| Success | Concept | NFL nflverse `success` vs CFB `EPA_success` **and** 50/70/100 |
-| Explosive knobs | Concept | NFL 20/10 vs CFB EPA≥1 or 15 yd |
-| Opportunity | Concept (≤40 yd) | Points-on-drive source |
-| Pace | Plays/offense-game | League mean (62 vs ~66); competitive cut audited per sport |
-| Opp-adj family | `y = μ + h·home + off + def` | λ, n0, decay, FCS, garbage, OT |
-| Roster | May prior | NFL injury/QB hook vs CFB portal/returning — never a fill for EPA |
-| Early season | Label `prior_weight` | NFL games/8 on the **product** index vs CFB n0/λ |
+| Topic                                     | Shared                       | Must differ                                                       |
+| ----------------------------------------- | ---------------------------- | ----------------------------------------------------------------- |
+| Metric names / layer tags / failure codes | Yes                          | —                                                                 |
+| EPA as the efficiency SoT                 | Yes                          | Vendor EPA column name kept (nflverse `epa` / SDV `EPA`)          |
+| Success                                   | Concept                      | NFL nflverse `success` vs CFB `EPA_success` **and** 50/70/100     |
+| Explosive knobs                           | Concept                      | NFL 20/10 vs CFB EPA≥1 or 15 yd                                   |
+| Opportunity                               | Concept (≤40 yd)             | Points-on-drive source                                            |
+| Pace                                      | Plays/offense-game           | League mean (62 vs ~66); competitive cut audited per sport        |
+| Opp-adj family                            | `y = μ + h·home + off + def` | λ, n0, decay, FCS, garbage, OT                                    |
+| Roster                                    | May prior                    | NFL injury/QB hook vs CFB portal/returning — never a fill for EPA |
+| Early season                              | Label `prior_weight`         | NFL games/8 on the **product** index vs CFB n0/λ                  |
 
 There is **no** shared football feature library today (#566). v1 does not create one in this PR. A future implementation may share infrastructure **after** this spec is accepted.
 
@@ -947,17 +947,17 @@ There is **no** shared football feature library today (#566). v1 does not create
 
 “Today” = this checkout’s owned sources and definitions, **without** new vendors, **without** treating HD-unmounted CFB as a byte-verified Railway store.
 
-| ID | NFL | CFB | Notes |
-| --- | --- | --- | --- |
-| `ke.off_eff` | **YES** | **YES_RESEARCH** | CFB needs worker volume for live |
-| `ke.def_eff` | **YES** | **YES_RESEARCH** | same |
-| `ke.st` | **YES** (unvalidated module) | **NO** | CFB omit |
-| `ke.pace` | **YES** plays/game; seconds PARTIAL | **YES_RESEARCH** | Live CFB pace is PROXY — do not keep the ID |
-| `ke.expl` | **PARTIAL** (rush split to wire) | **YES_RESEARCH** raw | Live CFB is synthetic |
-| `ke.finish` | **PARTIAL** (RZ only live) | **YES_RESEARCH** raw | NFL drive agg not built |
-| `ke.havoc` | **NO** (proxy only) | **NO** | Completeness first |
-| `ke.opp_adj_epa` | **NO** (diagnostics only) | **YES_RESEARCH** | Do not promote #560 |
-| `ke.team_strength` | **NO** (product PR ≠ KE) | **NO** live; research net only | No SP+ fallback |
+| ID                 | NFL                                 | CFB                            | Notes                                       |
+| ------------------ | ----------------------------------- | ------------------------------ | ------------------------------------------- |
+| `ke.off_eff`       | **YES**                             | **YES_RESEARCH**               | CFB needs worker volume for live            |
+| `ke.def_eff`       | **YES**                             | **YES_RESEARCH**               | same                                        |
+| `ke.st`            | **YES** (unvalidated module)        | **NO**                         | CFB omit                                    |
+| `ke.pace`          | **YES** plays/game; seconds PARTIAL | **YES_RESEARCH**               | Live CFB pace is PROXY — do not keep the ID |
+| `ke.expl`          | **PARTIAL** (rush split to wire)    | **YES_RESEARCH** raw           | Live CFB is synthetic                       |
+| `ke.finish`        | **PARTIAL** (RZ only live)          | **YES_RESEARCH** raw           | NFL drive agg not built                     |
+| `ke.havoc`         | **NO** (proxy only)                 | **NO**                         | Completeness first                          |
+| `ke.opp_adj_epa`   | **NO** (diagnostics only)           | **YES_RESEARCH**               | Do not promote #560                         |
+| `ke.team_strength` | **NO** (product PR ≠ KE)            | **NO** live; research net only | No SP+ fallback                             |
 
 **Headline:** NFL can produce honest **measurement** today for Off, Def, ST EPA, and pace. CFB can produce honest **research measurement** today for Off, Def, pace, explosiveness, and finishing, plus a **research** two-way EPA. Neither sport can honestly emit a complete KE v1 **book** (adj EPA → team strength → scored market) from this spec without later assignments. That is not a purchase gap.
 
@@ -969,13 +969,13 @@ Proprietary KE estimate remains #556’s ~**28%**. This design does not pad it.
 
 These are the calls this spec is asking for. Not implementation tickets.
 
-1. **Accept native EPA/play** as KE Off/Def Efficiency (reject backbone composite and SP+ 0–100 as the identity).  
-2. **Keep two success columns** (`native` + `standard`) rather than forcing one cross-sport success.  
-3. **Accept sport-specific explosiveness knobs** (NFL 20/10, CFB EPA≥1 or 15).  
-4. **Omit CFB ST and both-sport named havoc** until certification. Allow NFL ST EPA as unvalidated DERIVED. Allow NFL disruption **proxy** under a different ID.  
-5. **Team strength = net adj EPA only** — no silent ST / identity / pace blend.  
-6. **#560 is the CFB MODELED candidate**, not live KE. Warehouse 4-iter stays legacy. NFL two-way is unspecified/unfitted.  
-7. **Scoring and boards stay out.** #562 stays REVISE. #561 stays dark.  
+1. **Accept native EPA/play** as KE Off/Def Efficiency (reject backbone composite and SP+ 0–100 as the identity).
+2. **Keep two success columns** (`native` + `standard`) rather than forcing one cross-sport success.
+3. **Accept sport-specific explosiveness knobs** (NFL 20/10, CFB EPA≥1 or 15).
+4. **Omit CFB ST and both-sport named havoc** until certification. Allow NFL ST EPA as unvalidated DERIVED. Allow NFL disruption **proxy** under a different ID.
+5. **Team strength = net adj EPA only** — no silent ST / identity / pace blend.
+6. **#560 is the CFB MODELED candidate**, not live KE. Warehouse 4-iter stays legacy. NFL two-way is unspecified/unfitted.
+7. **Scoring and boards stay out.** #562 stays REVISE. #561 stays dark.
 8. If accepted, **next assignment** should be one stage: either NFL definition cleanup on measurement (rush expl, finishing bundle, ST validation, havoc column inventory) **or** CFB measurement-on-a-book (worker volume + raw mart, still `production_promote=false`). Not scoring. Not UI.
 
 ---
@@ -986,15 +986,15 @@ Authorized: Ryan reads this spec and the matrix.
 
 **Not authorized by this document:**
 
-- Any implementation or model fit  
-- Production or compose changes  
-- Promoting #559 / #560 / research net EPA  
-- A new scoring equation or loosening #562  
-- Board reopen / flag flips  
-- PFF or vendor shopping  
-- Unwiring SP+  
-- Relabeling identity as efficiency  
-- NFL remat from this PR  
-- Treating this folder as a live ratings engine  
+- Any implementation or model fit
+- Production or compose changes
+- Promoting #559 / #560 / research net EPA
+- A new scoring equation or loosening #562
+- Board reopen / flag flips
+- PFF or vendor shopping
+- Unwiring SP+
+- Relabeling identity as efficiency
+- NFL remat from this PR
+- Treating this folder as a live ratings engine
 
 **STOP for Ryan review.**

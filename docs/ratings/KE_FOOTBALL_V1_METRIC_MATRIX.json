@@ -140,13 +140,26 @@
       "layer": "DERIVED",
       "native_unit": "epa_per_play",
       "higher_better": true,
-      "not_this_id": [
-        "nfl_backbone_offense_index",
-        "cfb_sp_plus_z_0_100"
-      ],
+      "not_this_id": ["nfl_backbone_offense_index", "cfb_sp_plus_z_0_100"],
       "raw_inputs": {
-        "nfl": ["epa", "success", "play_type", "posteam", "down", "ydstogo", "yards_gained"],
-        "cfb": ["EPA", "EPA_success", "scrimmage_play", "pos_team", "down", "distance", "statYardage"]
+        "nfl": [
+          "epa",
+          "success",
+          "play_type",
+          "posteam",
+          "down",
+          "ydstogo",
+          "yards_gained"
+        ],
+        "cfb": [
+          "EPA",
+          "EPA_success",
+          "scrimmage_play",
+          "pos_team",
+          "down",
+          "distance",
+          "statYardage"
+        ]
       },
       "exclusions": ["incomplete_pbp", "nonfinite_epa", "special_teams_plays"],
       "definition": "sum(epa) / n eligible offensive scrimmage plays",
@@ -179,10 +192,7 @@
       "layer": "DERIVED",
       "native_unit": "epa_per_play_allowed",
       "higher_better": false,
-      "not_this_id": [
-        "nfl_backbone_defense_index",
-        "cfb_sp_plus_z_0_100"
-      ],
+      "not_this_id": ["nfl_backbone_defense_index", "cfb_sp_plus_z_0_100"],
       "raw_inputs": {
         "nfl": ["epa", "success", "play_type", "defteam"],
         "cfb": ["EPA", "EPA_success", "scrimmage_play", "def_pos_team"]
@@ -224,7 +234,15 @@
         "kav_scaled_display"
       ],
       "raw_inputs": {
-        "nfl": ["field_goal", "extra_point", "punt", "kickoff", "epa", "posteam", "defteam"],
+        "nfl": [
+          "field_goal",
+          "extra_point",
+          "punt",
+          "kickoff",
+          "epa",
+          "posteam",
+          "defteam"
+        ],
         "cfb": ["type.text", "uncertified_st_columns"]
       },
       "exclusions": ["non_st_plays", "cfb_uncertified"],
@@ -237,7 +255,10 @@
       "prior_decay": "DATA_INSUFFICIENT_if_n_st_0_default",
       "display": "native_st_epa_first",
       "point_in_time": "pregame_join_week_minus_1",
-      "update_cadence": { "nfl": "weekly_st_kav", "cfb": "none_until_certified" },
+      "update_cadence": {
+        "nfl": "weekly_st_kav",
+        "cfb": "none_until_certified"
+      },
       "validation": {
         "primary": ["next_game_st_epa_per_play"],
         "baselines": ["league_mean", "trailing_unadj"],
@@ -420,7 +441,13 @@
         "cfb_sp_plus",
         "h_times_plays_as_hfa_points"
       ],
-      "raw_inputs": ["team_game_epa_y", "home_flag", "opponent_id", "week", "season"],
+      "raw_inputs": [
+        "team_game_epa_y",
+        "home_flag",
+        "opponent_id",
+        "week",
+        "season"
+      ],
       "exclusions": ["incomplete_pbp", "cfb_period_ge_5_on_modeled"],
       "opponent_adjustment": "this_rating",
       "stabilization": {
@@ -459,7 +486,10 @@
       "failure": "PRIOR_ONLY or DATA_INSUFFICIENT; exclude incomplete PBP",
       "buildability": { "nfl": "NO", "cfb": "YES_RESEARCH" },
       "live_class": { "nfl": "PARTIAL", "cfb": "PROXY" },
-      "research_class": { "nfl": "center_sos_kav_split", "cfb": "REAL_UNVALIDATED_ADVANCE" }
+      "research_class": {
+        "nfl": "center_sos_kav_split",
+        "cfb": "REAL_UNVALIDATED_ADVANCE"
+      }
     },
     {
       "id": "ke.team_strength",
@@ -468,14 +498,26 @@
       "derived_from": ["ke.opp_adj_epa"],
       "native_unit": "net_epa_per_play",
       "definition": "off_adj - def_allowed",
-      "no_silent_blend": ["st", "pace", "explosiveness", "finishing", "havoc", "identity"],
+      "no_silent_blend": [
+        "st",
+        "pace",
+        "explosiveness",
+        "finishing",
+        "havoc",
+        "identity"
+      ],
       "not_this_id": [
         "nfl_method_b_model_pr",
         "nfl_true_pr",
         "cfb_compose_power_index",
         "sp_plus_backup"
       ],
-      "raw_inputs": ["ke.opp_adj_epa.off", "ke.opp_adj_epa.def_allowed", "n", "prior_weight"],
+      "raw_inputs": [
+        "ke.opp_adj_epa.off",
+        "ke.opp_adj_epa.def_allowed",
+        "n",
+        "prior_weight"
+      ],
       "exclusions": ["missing_either_side_without_prior"],
       "opponent_adjustment": "already_inside_opp_adj_epa",
       "stabilization": "inherit",
@@ -492,7 +534,10 @@
       "failure": "no_adj_book_means_no_team_strength",
       "buildability": { "nfl": "NO", "cfb": "NO" },
       "cfb_research_net_only": true,
-      "live_class": { "nfl": "REAL_AND_VALIDATED_PRODUCT_NOT_THIS_ID", "cfb": "REAL_UNVALIDATED_PRODUCT" },
+      "live_class": {
+        "nfl": "REAL_AND_VALIDATED_PRODUCT_NOT_THIS_ID",
+        "cfb": "REAL_UNVALIDATED_PRODUCT"
+      },
       "research_class": { "nfl": "n/a", "cfb": "not_power" }
     }
   ],
