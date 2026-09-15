@@ -1318,12 +1318,22 @@ def job_run_nfl_simulations(
     simulations: int = Query(4000, ge=300, le=20000),
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
     force_overlays_off: bool = Query(
-        False,
-        description="NFL #564: keep personnel/injury overlays off for remat.",
+        True,
+        description=(
+            "NFL #564 fail-closed: personnel/injury overlays stay off. "
+            "sample_size>=16 is not CLEAR."
+        ),
     ),
     prefer_packaged_epa: bool = Query(
+        True,
+        description="NFL #564: packaged EPA is authoritative (no W-L, no current-season blend).",
+    ),
+    unlock_overlays: bool = Query(
         False,
-        description="NFL #564: use packaged EPA priors only (no W-L, no current-season blend).",
+        description=(
+            "Ryan CLEAR opt-in only. Required (with force_overlays_off=false) "
+            "to turn personnel/injury on. Beat/remat without this stays off."
+        ),
     ),
 ) -> Dict[str, str]:
     try:
@@ -1335,6 +1345,7 @@ def job_run_nfl_simulations(
                 "model_version": model_version,
                 "force_overlays_off": bool(force_overlays_off),
                 "prefer_packaged_epa": bool(prefer_packaged_epa),
+                "unlock_overlays": bool(unlock_overlays),
             },
         )
         return {"task_id": async_result.id, "task_name": TASK_RUN_NFL_SIMULATIONS}

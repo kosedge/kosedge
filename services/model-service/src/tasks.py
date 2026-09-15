@@ -4521,8 +4521,9 @@ def run_nfl_market_simulations(
     include_completed_games: bool = False,
     projection_created_at_mode: str = "now",
     kickoff_buffer_minutes: int = 30,
-    force_overlays_off: bool = False,
-    prefer_packaged_epa: bool = False,
+    force_overlays_off: bool = True,
+    prefer_packaged_epa: bool = True,
+    unlock_overlays: bool = False,
 ) -> Dict[str, Any]:
     # Canary: proves which worker build executed (props baselines+box rebuild 2026-07-31).
     from src.services.nfl_epa_authority import overlays_must_stay_off
@@ -4668,6 +4669,7 @@ def run_nfl_market_simulations(
             overlays_off = overlays_must_stay_off(
                 completed_reg_season=completed_reg_season,
                 force_overlays_off=bool(force_overlays_off),
+                unlock_overlays=bool(unlock_overlays),
             )
             # Hydrated KAV / second-order / roster-continuity nowcasts are OOD
             # before real REG games. Keep EPA pack + market blend; drop the rest.
@@ -5244,6 +5246,7 @@ def run_nfl_market_simulations(
                         "early_season_ood_dampened": item.get("early_season_ood_dampened"),
                         "force_overlays_off": bool(force_overlays_off),
                         "prefer_packaged_epa": bool(prefer_packaged_epa),
+                        "unlock_overlays": bool(unlock_overlays),
                         "personnel_injury_overlays": (
                             "off" if item.get("overlays_off") else "on"
                         ),

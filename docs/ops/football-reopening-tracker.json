@@ -120,9 +120,9 @@
         "run_id=nfl-564-remediation-20260915-w2 checksum=11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9",
         "integrity checksum=3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190 double_count_check=pass"
       ],
-      "unresolved_blocker": "Overlays remain OFF. Live W2 remat on Railway not attested. Predictive validation not run. Not a reopen PASS.",
+      "unresolved_blocker": "Overlays remain OFF (fail-closed defaults). Live W2 remat on Railway not attested. Predictive validation not run. Not a reopen PASS.",
       "owner": "Alex",
-      "next_action": "Keep overlays off. Shadow remat W2 dates with force_overlays_off + prefer_packaged_epa. Do not retune the equation.",
+      "next_action": "Fail-closed remat defaults: overlays OFF until Ryan CLEAR (unlock_overlays). sample_size>=16 is not CLEAR. Do not retune the equation.",
       "last_updated": "2026-09-15"
     },
     {

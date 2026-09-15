@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 
+import inspect
+import os
 from datetime import date
 from pathlib import Path
 
+os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+
+from src.main import job_run_nfl_simulations
+from src.tasks import run_nfl_market_simulations
 from src.services.nfl_epa_authority import (
     NFL_2026_W1_OUTCOMES,
     NFL_2026_W2_SLATE,
@@ -157,9 +163,39 @@ def test_adhoc_route_source_is_epa_or_refuse() -> None:
 
 
 def test_overlays_stay_off_after_week1_when_forced() -> None:
-    assert overlays_must_stay_off(completed_reg_season=0, force_overlays_off=False) is True
-    assert overlays_must_stay_off(completed_reg_season=16, force_overlays_off=False) is False
+    # W1 ingest / sample_size=16 must not unlock overlays.
+    assert overlays_must_stay_off(completed_reg_season=0) is True
+    assert overlays_must_stay_off(completed_reg_season=16) is True
+    assert overlays_must_stay_off(completed_reg_season=16, force_overlays_off=False) is True
     assert overlays_must_stay_off(completed_reg_season=16, force_overlays_off=True) is True
+    assert overlays_must_stay_off(
+        completed_reg_season=16, force_overlays_off=True, unlock_overlays=True
+    ) is True
+    # Explicit Ryan CLEAR + opt-in is the only unlock after W1.
+    assert overlays_must_stay_off(
+        completed_reg_season=16, force_overlays_off=False, unlock_overlays=True
+    ) is False
+    assert overlays_must_stay_off(
+        completed_reg_season=0, force_overlays_off=False, unlock_overlays=True
+    ) is True
+
+
+def test_default_remat_path_keeps_overlays_off_after_w1_readiness() -> None:
+    """Beat / job remat without flags stays fail-closed after sample_size>=16."""
+    remat_params = inspect.signature(run_nfl_market_simulations).parameters
+    assert remat_params["force_overlays_off"].default is True
+    assert remat_params["prefer_packaged_epa"].default is True
+    assert remat_params["unlock_overlays"].default is False
+    job_params = inspect.signature(job_run_nfl_simulations).parameters
+    assert job_params["force_overlays_off"].default.default is True
+    assert job_params["prefer_packaged_epa"].default.default is True
+    assert job_params["unlock_overlays"].default.default is False
+    # Same gate beat would hit: kwargs omitted, completed_reg=16.
+    assert overlays_must_stay_off(
+        completed_reg_season=16,
+        force_overlays_off=remat_params["force_overlays_off"].default,
+        unlock_overlays=remat_params["unlock_overlays"].default,
+    ) is True
 
 
 def test_w2_remat_artifact_overlays_off_and_checksum() -> None:

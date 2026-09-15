@@ -31,7 +31,7 @@ Ingest change: `pull_nfl_outcomes` now fetches ESPN for **any** missing score / 
 
 | Path | Before | After |
 |---|---|---|
-| Batch remat `run_nfl_market_simulations` | `_resolve_team_strength_indices` prefers EPA (`f6bcb284`) | **unchanged resolver**; new `prefer_packaged_epa=true` + `force_overlays_off=true` |
+| Batch remat `run_nfl_market_simulations` | `_resolve_team_strength_indices` prefers EPA (`f6bcb284`) | **unchanged resolver**; defaults `prefer_packaged_epa=true` + `force_overlays_off=true` |
 | Ad-hoc `POST /nfl/simulations/{id}` | Multiplied ESPN W-L context × injury and **INSERTed** | Calls `resolve_adhoc_simulation_strength` — **EPA or HTTP 409 refuse** |
 
 Refuse code: `nfl_wl_persist_refused`. Tests: `tests/test_nfl_564_remediation.py` (`test_adhoc_uses_packaged_epa_not_win_loss`, `test_adhoc_refuses_when_packaged_epa_missing`, `test_adhoc_route_source_is_epa_or_refuse`).
@@ -54,16 +54,20 @@ Research remat only. No production write. No Coming soon flip.
 | Checksum SHA256 | `11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9` |
 | Artifact | `data/ops/nfl-564-remediation-20260915/w2_remat_epa_overlays_off.json` |
 
-Worker remat (when a DB is available):
+**Fail-closed defaults (Alex #567):** `run_nfl_market_simulations` and `POST /api/jobs/run-nfl-simulations` default to `force_overlays_off=true`, `prefer_packaged_epa=true`, `unlock_overlays=false`. Beat / remat without flags stays overlays OFF.
+
+`sample_size >= 16` / `_count_completed_reg_games_season >= 16` after W1 ingest does **not** unlock personnel or injury. That was the silent-unlock foot-gun. Overlays stay OFF until an explicit Ryan CLEAR opt-in: `unlock_overlays=true` **and** `force_overlays_off=false`. Early-season (`completed_reg < 3`) stays off even after CLEAR.
+
+Worker remat (when a DB is available) — flags may be omitted; defaults are already fail-closed:
 
 ```bash
-# Per slate date; overlays off; packaged EPA only
-POST /api/jobs/run-nfl-simulations?game_date=2026-09-17&force_overlays_off=true&prefer_packaged_epa=true
-POST /api/jobs/run-nfl-simulations?game_date=2026-09-20&force_overlays_off=true&prefer_packaged_epa=true
-POST /api/jobs/run-nfl-simulations?game_date=2026-09-21&force_overlays_off=true&prefer_packaged_epa=true
+# Defaults: overlays OFF, packaged EPA. Do not pass unlock_overlays.
+POST /api/jobs/run-nfl-simulations?game_date=2026-09-17
+POST /api/jobs/run-nfl-simulations?game_date=2026-09-20
+POST /api/jobs/run-nfl-simulations?game_date=2026-09-21
 ```
 
-Do **not** turn personnel/injury ON until the multi-matchup check below stays pass.
+Do **not** turn personnel/injury ON until Ryan CLEAR. No silent unlock via readiness sample_size.
 
 ---
 
@@ -98,7 +102,7 @@ PYTHONPATH=services/model-service python3 -m pytest \
 ## Next gate (HOLD)
 
 1. Run `pull_nfl_outcomes` + readiness on Railway; confirm live `sample_size=16` and `current_week=2`.
-2. Optional DB remat of W2 dates with `force_overlays_off` + `prefer_packaged_epa` (shadow only).
-3. Do **not** enable personnel/injury overlays yet.
+2. Optional DB remat of W2 dates (defaults already overlays OFF + packaged EPA; shadow only).
+3. Do **not** enable personnel/injury overlays. `unlock_overlays` is Ryan CLEAR only — sample_size≥16 is not CLEAR.
 4. Leave `NFL_EDGE_BOARD_PUBLIC_ENABLED=false`. No `production_promote`.
 5. Ryan CLEAR still required before any board reopen.

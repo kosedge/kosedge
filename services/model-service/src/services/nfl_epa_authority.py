@@ -142,9 +142,25 @@ def context_looks_like_win_loss(
     )
 
 
-def overlays_must_stay_off(*, completed_reg_season: int, force_overlays_off: bool) -> bool:
-    """Injury / personnel / tendency stay off when forced or season is too early."""
-    return bool(force_overlays_off) or int(completed_reg_season or 0) < 3
+def overlays_must_stay_off(
+    *,
+    completed_reg_season: int = 0,
+    force_overlays_off: bool = True,
+    unlock_overlays: bool = False,
+) -> bool:
+    """Fail-closed overlay gate for remat / beat / ad-hoc.
+
+    ``completed_reg_season >= 16`` (W1 ingest / readiness sample_size) does
+    **not** turn personnel or injury on. Overlays stay off until an explicit
+    Ryan CLEAR opt-in (``unlock_overlays=True``) **and**
+    ``force_overlays_off=False``. Early-season (completed_reg < 3) stays off
+    even after CLEAR.
+    """
+    if not unlock_overlays:
+        return True
+    if force_overlays_off:
+        return True
+    return int(completed_reg_season or 0) < 3
 
 
 def resolve_adhoc_simulation_strength(
