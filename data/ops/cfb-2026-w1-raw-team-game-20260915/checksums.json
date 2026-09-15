@@ -1,0 +1,12 @@
+{
+  "as_of": "20260915",
+  "pbp_filename": "play_by_play_2026.parquet",
+  "schedule_filename": "cfb_schedule_2026.parquet",
+  "pbp_sha256": "da0ec956d441da96aa0e85232fb685cb8408000fcf28a5fe5de0f3bb1d25e0ad",
+  "schedule_sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768",
+  "pbp_bytes": 7904267,
+  "schedule_bytes": 16867,
+  "matches_558_snapshot": true,
+  "historical_lake_written": false,
+  "note": "SHA of bytes actually read from the gitignored as_of_20260915 restore. Same SDV snapshot as #558 proof."
+}
