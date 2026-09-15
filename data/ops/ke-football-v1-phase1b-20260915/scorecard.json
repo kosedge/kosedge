@@ -1,0 +1,978 @@
+{
+  "nfl": {
+    "sport": "nfl",
+    "production_promote": false,
+    "forbidden_objectives": [
+      "ats",
+      "close",
+      "roi",
+      "kei",
+      "clv",
+      "market_residual"
+    ],
+    "counts": {
+      "PASS": 6,
+      "PARTIAL": 22,
+      "FAIL": 0,
+      "DATA_INSUFFICIENT": 2
+    },
+    "grades": [
+      {
+        "id": "ke.off_eff",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.007206068571272239 sd=0.09462491354019013",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.498",
+          "late week-to-week pearson=0.077",
+          "OOS own-unit pearson=0.272 n=448.0",
+          "OOS next_off_epa pearson=0.272",
+          "incremental-on-EPA partial r=-0.000 (report only)",
+          "split-half n=4 pearson=0.535",
+          "split-half n=8 pearson=0.534"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.def_eff",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.007206068571272238 sd=0.08498558494271079",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.392",
+          "late week-to-week pearson=0.159",
+          "OOS own-unit pearson=0.189 n=448.0",
+          "OOS next_def_epa pearson=0.189",
+          "incremental-on-EPA partial r=0.000 (report only)",
+          "split-half n=4 pearson=0.210",
+          "split-half n=8 pearson=0.436"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.success_native",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.43867468914196844 sd=0.034592883545541915",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.454",
+          "late week-to-week pearson=0.109",
+          "OOS own-unit pearson=0.272 n=448.0",
+          "OOS next_off_epa pearson=0.249",
+          "incremental-on-EPA partial r=0.026 (report only)",
+          "split-half n=4 pearson=0.518",
+          "split-half n=8 pearson=0.590"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.success_standard",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.42954289335261675 sd=0.035240583343193216",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.327",
+          "late week-to-week pearson=0.150",
+          "OOS own-unit pearson=0.279 n=448.0",
+          "OOS next_off_epa pearson=0.231",
+          "incremental-on-EPA partial r=0.016 (report only)",
+          "split-half n=4 pearson=0.517",
+          "split-half n=8 pearson=0.483"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.success_allowed",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.43867468914196844 sd=0.03133024938040773",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.375",
+          "late week-to-week pearson=0.188",
+          "OOS own-unit pearson=0.215 n=448.0",
+          "OOS next_def_epa pearson=0.143",
+          "incremental-on-EPA partial r=0.000 (report only)",
+          "split-half n=4 pearson=0.236",
+          "split-half n=8 pearson=0.458"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.pace",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=60.642578125 sd=2.929686848958261",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.296",
+          "late week-to-week pearson=0.062",
+          "OOS own-unit pearson=0.107 n=448.0",
+          "incremental-on-EPA partial r=0.008 (report only)",
+          "split-half n=4 pearson=0.212",
+          "split-half n=8 pearson=0.444"
+        ],
+        "recommendation": "Publish plays/game. Competitive/clock variants stay labeled."
+      },
+      {
+        "id": "ke.pace_competitive",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=52.927734375 sd=4.929857350852645",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.276",
+          "late week-to-week pearson=0.125",
+          "OOS own-unit pearson=0.089 n=448.0",
+          "incremental-on-EPA partial r=0.023 (report only)",
+          "split-half n=4 pearson=0.243",
+          "split-half n=8 pearson=0.251"
+        ],
+        "recommendation": "Publish plays/game. Competitive/clock variants stay labeled."
+      },
+      {
+        "id": "ke.pace_seconds",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=31.148148461343492 sd=1.139914536920999",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.143",
+          "late week-to-week pearson=0.194",
+          "OOS own-unit pearson=0.161 n=448.0",
+          "incremental-on-EPA partial r=0.004 (report only)",
+          "split-half n=4 pearson=0.407",
+          "split-half n=8 pearson=0.312"
+        ],
+        "recommendation": "Publish plays/game. Competitive/clock variants stay labeled."
+      },
+      {
+        "id": "ke.expl",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.09643975272839894 sd=0.015601370719516236",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.255",
+          "late week-to-week pearson=0.223",
+          "OOS own-unit pearson=0.166 n=448.0",
+          "OOS next_off_epa pearson=0.140",
+          "incremental-on-EPA partial r=-0.010 (report only)",
+          "split-half n=4 pearson=0.270",
+          "split-half n=8 pearson=0.243"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.expl_pass",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.08551752567321715 sd=0.019195172113086387",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.381",
+          "late week-to-week pearson=0.213",
+          "OOS own-unit pearson=0.165 n=448.0",
+          "OOS next_off_epa pearson=0.172",
+          "incremental-on-EPA partial r=0.026 (report only)",
+          "split-half n=4 pearson=0.423",
+          "split-half n=8 pearson=0.416"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.expl_rush",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.11060853427841848 sd=0.016015404295988134",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.044",
+          "late week-to-week pearson=-0.006",
+          "OOS own-unit pearson=-0.020 n=448.0",
+          "OOS next_off_epa pearson=0.046",
+          "incremental-on-EPA partial r=-0.032 (report only)",
+          "split-half n=4 pearson=-0.171",
+          "split-half n=8 pearson=-0.138"
+        ],
+        "recommendation": "Measurement publishes; predictive persistence is weak. Do not overweight in a later composite."
+      },
+      {
+        "id": "ke.expl_allowed",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.09643975272839894 sd=0.015835621269694365",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.308",
+          "late week-to-week pearson=0.169",
+          "OOS own-unit pearson=0.151 n=448.0",
+          "OOS next_def_epa pearson=0.060",
+          "incremental-on-EPA partial r=-0.041 (report only)",
+          "split-half n=4 pearson=0.332",
+          "split-half n=8 pearson=0.562"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.off_pass_epa",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.030911982476390886 sd=0.14077264995363917",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.494",
+          "late week-to-week pearson=0.145",
+          "OOS own-unit pearson=0.236 n=448.0",
+          "OOS next_off_epa pearson=0.257",
+          "incremental-on-EPA partial r=0.005 (report only)",
+          "split-half n=4 pearson=0.645",
+          "split-half n=8 pearson=0.485"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.off_rush_epa",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=-0.015377947243835764 sd=0.0714107359696836",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=-0.111",
+          "late week-to-week pearson=0.012",
+          "OOS own-unit pearson=0.105 n=448.0",
+          "OOS next_off_epa pearson=0.140",
+          "incremental-on-EPA partial r=-0.011 (report only)",
+          "split-half n=4 pearson=0.267",
+          "split-half n=8 pearson=0.233"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.off_early_epa",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.014704480672538838 sd=0.07663197910214159",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.270",
+          "late week-to-week pearson=0.093",
+          "OOS own-unit pearson=0.188 n=448.0",
+          "OOS next_off_epa pearson=0.223",
+          "incremental-on-EPA partial r=-0.019 (report only)",
+          "split-half n=4 pearson=0.235",
+          "split-half n=8 pearson=0.341"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.ppo",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=3.9209381200396827 sd=0.409079518959233",
+          "season_missing_rate=0.002",
+          "early\u2192late pearson=0.050",
+          "late week-to-week pearson=-0.063",
+          "OOS own-unit pearson=0.101 n=447.0",
+          "OOS next_off_epa pearson=0.143",
+          "incremental-on-EPA partial r=-0.040 (report only)",
+          "split-half n=4 pearson=0.392",
+          "split-half n=8 pearson=0.084"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.finish",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.7428723338293651 sd=0.058901813445704894",
+          "season_missing_rate=0.002",
+          "early\u2192late pearson=0.125",
+          "late week-to-week pearson=-0.022",
+          "OOS own-unit pearson=0.032 n=447.0",
+          "OOS next_off_epa pearson=0.062",
+          "incremental-on-EPA partial r=-0.087 (report only)",
+          "split-half n=4 pearson=0.227",
+          "split-half n=8 pearson=0.056"
+        ],
+        "recommendation": "Measurement publishes; predictive persistence is weak. Do not overweight in a later composite."
+      },
+      {
+        "id": "ke.opp_rate",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.5306115163048757 sd=0.06330166142936852",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.273",
+          "late week-to-week pearson=0.182",
+          "OOS own-unit pearson=0.228 n=448.0",
+          "OOS next_off_epa pearson=0.257",
+          "incremental-on-EPA partial r=0.058 (report only)",
+          "split-half n=4 pearson=0.416",
+          "split-half n=8 pearson=0.374"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.rz_td",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=0.20886874205172548 sd=0.03693858740962978",
+          "season_missing_rate=0.010",
+          "early\u2192late pearson=-0.014",
+          "late week-to-week pearson=-0.133",
+          "OOS own-unit pearson=-0.034 n=443.0",
+          "OOS next_off_epa pearson=0.176",
+          "incremental-on-EPA partial r=0.053 (report only)",
+          "split-half n=4 pearson=0.157",
+          "split-half n=8 pearson=-0.067",
+          "play-level RZ TD rate; must not be named ke.finish"
+        ],
+        "recommendation": "Keep as PARTIAL sibling. Do not substitute for drive finishing."
+      },
+      {
+        "id": "ke.st",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=32 mean=-0.1115443865340457 sd=0.09770832854810464",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.299",
+          "late week-to-week pearson=0.165",
+          "OOS own-unit pearson=0.090 n=448.0",
+          "OOS next_off_epa pearson=0.039",
+          "incremental-on-EPA partial r=0.028 (report only)",
+          "split-half n=4 pearson=0.243",
+          "split-half n=8 pearson=0.268",
+          "NFL ST EPA/play published; no 1.0 hook; module uncertified as a rating"
+        ],
+        "recommendation": "Eligible as a DERIVED component only. Do not weight into Team Strength this phase."
+      },
+      {
+        "id": "ke.havoc",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "named ke.havoc requires certified TFL \u2227 FF \u2227 INT",
+          "named_havoc_allowed=True",
+          "weights_assigned=false"
+        ],
+        "recommendation": "Keep OMIT. Do not invent KE Disruption weights."
+      },
+      {
+        "id": "ke.disruption_sack",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=1207",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_interception",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=362",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_qb_hit",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=2723",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_fumble",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=439",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_fumble_forced",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=314",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_tackle_for_loss",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=1127",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_pass_breakup",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "pass_breakup column absent"
+        ],
+        "recommendation": "Do not impute."
+      },
+      {
+        "id": "ke.disruption_proxy_nfl",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "sack \u2228 INT \u2228 qb_hit; must_not_be_named ke.havoc"
+        ],
+        "recommendation": "Keep the proxy ID. Do not promote to named havoc."
+      },
+      {
+        "id": "ke.opp_adj_epa",
+        "grade": "PARTIAL",
+        "phase2_eligible": false,
+        "evidence": [
+          "winner=NO_ADJUSTMENT_WINNER",
+          "confirmation unadjusted off MAE=0.1643506673803918",
+          "confirmation loo_sos off MAE=0.16475220565427073",
+          "Phase 1 simple SOS failed to beat unadjusted \u2014 preserved",
+          "No ATS / close / ROI used"
+        ],
+        "recommendation": "NO_ADJUSTMENT_WINNER. Do not promote an opponent adjustment because it is theoretically desirable. Phase 2 may keep the PIT SOS research cell as ADJUSTED-not-promoted.",
+        "winner": "NO_ADJUSTMENT_WINNER"
+      }
+    ],
+    "phase2_eligible_ids": [
+      "ke.off_eff",
+      "ke.def_eff",
+      "ke.success_native",
+      "ke.success_standard",
+      "ke.success_allowed",
+      "ke.pace",
+      "ke.pace_competitive",
+      "ke.pace_seconds",
+      "ke.expl",
+      "ke.expl_pass",
+      "ke.expl_rush",
+      "ke.expl_allowed",
+      "ke.off_pass_epa",
+      "ke.off_rush_epa",
+      "ke.off_early_epa",
+      "ke.ppo",
+      "ke.finish",
+      "ke.opp_rate",
+      "ke.rz_td",
+      "ke.st",
+      "ke.disruption_sack",
+      "ke.disruption_interception",
+      "ke.disruption_qb_hit",
+      "ke.disruption_fumble",
+      "ke.disruption_fumble_forced",
+      "ke.disruption_tackle_for_loss",
+      "ke.disruption_proxy_nfl"
+    ],
+    "phase2_hold_ids": [
+      "ke.havoc",
+      "ke.disruption_pass_breakup",
+      "ke.opp_adj_epa"
+    ],
+    "finishing_repair": {
+      "defect": "kickoff_yardline_35_false_opportunity",
+      "kickoffs": 2645,
+      "kickoffs_yle_40": 2629,
+      "kickoff_false_opp_rate": 0.9939508506616257,
+      "drives": 5200,
+      "opportunity_drives": 2708,
+      "opportunity_rate": 0.5207692307692308,
+      "ppo_repaired": 3.946085672082718,
+      "finish_repaired": 0.7477843426883308,
+      "points_source": "fixed_drive_result+pat_flags",
+      "calibrated": false
+    },
+    "bakeoff_winner": "NO_ADJUSTMENT_WINNER",
+    "stop": "STOP before Team Strength / composite weights, scoring integration, matchup modeling, market comparison, public KE ratings, UI, boards, and named KE Disruption weighting.",
+    "note": "PASS/PARTIAL may enter Phase 2 as independent measurements. No composite / Team Strength / named havoc in this GO."
+  },
+  "cfb": {
+    "sport": "cfb",
+    "production_promote": false,
+    "forbidden_objectives": [
+      "ats",
+      "close",
+      "roi",
+      "kei",
+      "clv",
+      "market_residual"
+    ],
+    "counts": {
+      "PASS": 8,
+      "PARTIAL": 13,
+      "FAIL": 0,
+      "DATA_INSUFFICIENT": 8
+    },
+    "grades": [
+      {
+        "id": "ke.off_eff",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=-0.025673309929014013 sd=0.19716987622679047",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.418",
+          "late week-to-week pearson=0.170",
+          "OOS own-unit pearson=0.302 n=1149.0",
+          "OOS next_off_epa pearson=0.302",
+          "incremental-on-EPA partial r=0.000 (report only)",
+          "split-half n=4 pearson=0.416"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.def_eff",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.13854596895227406 sd=0.18726186795387845",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.261",
+          "late week-to-week pearson=0.171",
+          "OOS own-unit pearson=0.231 n=1149.0",
+          "OOS next_def_epa pearson=0.231",
+          "incremental-on-EPA partial r=-0.000 (report only)",
+          "split-half n=4 pearson=0.283"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.success_native",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.4129240346348344 sd=0.07897689129822834",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.419",
+          "late week-to-week pearson=0.114",
+          "OOS own-unit pearson=0.312 n=1149.0",
+          "OOS next_off_epa pearson=0.304",
+          "incremental-on-EPA partial r=0.035 (report only)",
+          "split-half n=4 pearson=0.438"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.success_standard",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.50481259535161 sd=0.09296818498168263",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.512",
+          "late week-to-week pearson=0.170",
+          "OOS own-unit pearson=0.330 n=1149.0",
+          "OOS next_off_epa pearson=0.275",
+          "incremental-on-EPA partial r=0.035 (report only)",
+          "split-half n=4 pearson=0.397"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.success_allowed",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.4794334960481546 sd=0.07778908454149068",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.292",
+          "late week-to-week pearson=0.145",
+          "OOS own-unit pearson=0.234 n=1149.0",
+          "OOS next_def_epa pearson=0.227",
+          "incremental-on-EPA partial r=0.031 (report only)",
+          "split-half n=4 pearson=0.282"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.pace",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=63.74893203061306 sd=9.286530734801547",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.246",
+          "late week-to-week pearson=0.144",
+          "OOS own-unit pearson=0.146 n=1149.0",
+          "incremental-on-EPA partial r=0.004 (report only)",
+          "split-half n=4 pearson=0.095"
+        ],
+        "recommendation": "Publish plays/game. Competitive/clock variants stay labeled."
+      },
+      {
+        "id": "ke.pace_competitive",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=32.55401818009577 sd=14.113610694244082",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.184",
+          "late week-to-week pearson=-0.030",
+          "OOS own-unit pearson=0.081 n=1149.0",
+          "incremental-on-EPA partial r=-0.018 (report only)",
+          "split-half n=4 pearson=0.002"
+        ],
+        "recommendation": "Publish plays/game. Competitive/clock variants stay labeled."
+      },
+      {
+        "id": "ke.pace_seconds",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=230 mean=30.85375233377687 sd=6.422999452124808",
+          "season_missing_rate=0.004",
+          "early\u2192late pearson=0.310",
+          "late week-to-week pearson=0.185",
+          "OOS own-unit pearson=0.252 n=1145.0",
+          "incremental-on-EPA partial r=-0.031 (report only)",
+          "split-half n=4 pearson=0.660"
+        ],
+        "recommendation": "Eligible for Phase 2 as a distinct pace component. Do not convert to points."
+      },
+      {
+        "id": "ke.expl",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.19731940760687705 sd=0.04562163634406956",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.350",
+          "late week-to-week pearson=0.167",
+          "OOS own-unit pearson=0.276 n=1149.0",
+          "OOS next_off_epa pearson=0.248",
+          "incremental-on-EPA partial r=-0.005 (report only)",
+          "split-half n=4 pearson=0.464"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.expl_pass",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.2506102016328895 sd=0.06590573403169753",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.303",
+          "late week-to-week pearson=0.130",
+          "OOS own-unit pearson=0.222 n=1149.0",
+          "OOS next_off_epa pearson=0.225",
+          "incremental-on-EPA partial r=-0.006 (report only)",
+          "split-half n=4 pearson=0.430"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.expl_rush",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.14365486359777266 sd=0.04668108232555406",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.228",
+          "late week-to-week pearson=0.081",
+          "OOS own-unit pearson=0.212 n=1149.0",
+          "OOS next_off_epa pearson=0.208",
+          "incremental-on-EPA partial r=0.033 (report only)",
+          "split-half n=4 pearson=0.260"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.expl_allowed",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.22894306350401558 sd=0.04107773731954228",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.164",
+          "late week-to-week pearson=0.184",
+          "OOS own-unit pearson=0.166 n=1149.0",
+          "OOS next_def_epa pearson=0.177",
+          "incremental-on-EPA partial r=-0.009 (report only)",
+          "split-half n=4 pearson=0.256"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.off_pass_epa",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=-0.01781526383483619 sd=0.2709811299546777",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.294",
+          "late week-to-week pearson=0.168",
+          "OOS own-unit pearson=0.215 n=1149.0",
+          "OOS next_off_epa pearson=0.266",
+          "incremental-on-EPA partial r=-0.003 (report only)",
+          "split-half n=4 pearson=0.336"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.off_rush_epa",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=-0.021610878099905365 sd=0.18321117352546193",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.311",
+          "late week-to-week pearson=0.072",
+          "OOS own-unit pearson=0.236 n=1149.0",
+          "OOS next_off_epa pearson=0.258",
+          "incremental-on-EPA partial r=0.030 (report only)",
+          "split-half n=4 pearson=0.255"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.off_early_epa",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=-0.032215262316483355 sd=0.18595193642874489",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.410",
+          "late week-to-week pearson=0.127",
+          "OOS own-unit pearson=0.259 n=1149.0",
+          "OOS next_off_epa pearson=0.284",
+          "incremental-on-EPA partial r=0.013 (report only)",
+          "split-half n=4 pearson=0.426"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.ppo",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=3.142016445972237 sd=1.050507327464159",
+          "season_missing_rate=0.004",
+          "early\u2192late pearson=0.320",
+          "late week-to-week pearson=0.026",
+          "OOS own-unit pearson=0.098 n=1145.0",
+          "OOS next_off_epa pearson=0.201",
+          "incremental-on-EPA partial r=-0.004 (report only)",
+          "split-half n=4 pearson=0.073"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.finish",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.6224207692306243 sd=0.19131980640606577",
+          "season_missing_rate=0.004",
+          "early\u2192late pearson=0.360",
+          "late week-to-week pearson=0.081",
+          "OOS own-unit pearson=0.130 n=1145.0",
+          "OOS next_off_epa pearson=0.172",
+          "incremental-on-EPA partial r=-0.005 (report only)",
+          "split-half n=4 pearson=0.103"
+        ],
+        "recommendation": "Eligible with caveats (sample / early-season / collinearity). Validate again before weighting."
+      },
+      {
+        "id": "ke.opp_rate",
+        "grade": "PASS",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=232 mean=0.43674062320622087 sd=0.15807651535521094",
+          "season_missing_rate=0.000",
+          "early\u2192late pearson=0.314",
+          "late week-to-week pearson=0.075",
+          "OOS own-unit pearson=0.268 n=1149.0",
+          "OOS next_off_epa pearson=0.283",
+          "incremental-on-EPA partial r=0.042 (report only)",
+          "split-half n=4 pearson=0.379"
+        ],
+        "recommendation": "Eligible to enter Phase 2 as an independent DERIVED component. No composite weight yet."
+      },
+      {
+        "id": "ke.rz_td",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "n_teams=223 mean=0.23534536798773742 sd=0.11633505055430446",
+          "season_missing_rate=0.034",
+          "early\u2192late pearson=-0.055",
+          "late week-to-week pearson=0.058",
+          "OOS own-unit pearson=-0.010 n=1114.0",
+          "OOS next_off_epa pearson=0.152",
+          "incremental-on-EPA partial r=-0.011 (report only)",
+          "split-half n=4 pearson=0.018",
+          "play-level RZ TD rate; must not be named ke.finish"
+        ],
+        "recommendation": "Keep as PARTIAL sibling. Do not substitute for drive finishing."
+      },
+      {
+        "id": "ke.st",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "CFB ST uncertified \u2014 omit; do not manufacture"
+        ],
+        "recommendation": "Do not manufacture. Leave OMIT / DATA_INSUFFICIENT."
+      },
+      {
+        "id": "ke.havoc",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "named ke.havoc requires certified TFL \u2227 FF \u2227 INT",
+          "named_havoc_allowed=False",
+          "weights_assigned=false"
+        ],
+        "recommendation": "Keep OMIT. Do not invent KE Disruption weights."
+      },
+      {
+        "id": "ke.disruption_sack",
+        "grade": "PARTIAL",
+        "phase2_eligible": true,
+        "evidence": [
+          "present null_rate=0.0 n_true=3161",
+          "inventory-ok, not official-charting certified"
+        ],
+        "recommendation": "Eligible as a per-event DERIVED rate only. Not named ke.havoc."
+      },
+      {
+        "id": "ke.disruption_interception",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "present=True null_rate=0.9887193036699741 n_true=1204",
+          "event-only / sparse flag \u2014 publishing 1.0 on non-null is forbidden"
+        ],
+        "recommendation": "Leave DATA_INSUFFICIENT. Do not substitute fake rates or a havoc bundle."
+      },
+      {
+        "id": "ke.disruption_qb_hit",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "qb_hit column absent"
+        ],
+        "recommendation": "Do not impute."
+      },
+      {
+        "id": "ke.disruption_fumble",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "fumble column absent"
+        ],
+        "recommendation": "Do not impute."
+      },
+      {
+        "id": "ke.disruption_fumble_forced",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "present=True null_rate=0.9970205469826011 n_true=318",
+          "event-only / sparse flag \u2014 publishing 1.0 on non-null is forbidden"
+        ],
+        "recommendation": "Leave DATA_INSUFFICIENT. Do not substitute fake rates or a havoc bundle."
+      },
+      {
+        "id": "ke.disruption_tackle_for_loss",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "present=True null_rate=0.914439103915451 n_true=9132",
+          "event-only / sparse flag \u2014 publishing 1.0 on non-null is forbidden"
+        ],
+        "recommendation": "Leave DATA_INSUFFICIENT. Do not substitute fake rates or a havoc bundle."
+      },
+      {
+        "id": "ke.disruption_pass_breakup",
+        "grade": "DATA_INSUFFICIENT",
+        "phase2_eligible": false,
+        "evidence": [
+          "present=True null_rate=0.9792656304166549 n_true=2213",
+          "event-only / sparse flag \u2014 publishing 1.0 on non-null is forbidden"
+        ],
+        "recommendation": "Leave DATA_INSUFFICIENT. Do not substitute fake rates or a havoc bundle."
+      },
+      {
+        "id": "ke.opp_adj_epa",
+        "grade": "PARTIAL",
+        "phase2_eligible": false,
+        "evidence": [
+          "winner=NO_ADJUSTMENT_WINNER",
+          "confirmation unadjusted off MAE=0.17225957589881952",
+          "confirmation loo_sos off MAE=0.17907494578813773",
+          "Phase 1 simple SOS failed to beat unadjusted \u2014 preserved",
+          "No ATS / close / ROI used"
+        ],
+        "recommendation": "NO_ADJUSTMENT_WINNER. Do not promote an opponent adjustment because it is theoretically desirable. Phase 2 may keep the PIT SOS research cell as ADJUSTED-not-promoted.",
+        "winner": "NO_ADJUSTMENT_WINNER"
+      }
+    ],
+    "phase2_eligible_ids": [
+      "ke.off_eff",
+      "ke.def_eff",
+      "ke.success_native",
+      "ke.success_standard",
+      "ke.success_allowed",
+      "ke.pace",
+      "ke.pace_competitive",
+      "ke.pace_seconds",
+      "ke.expl",
+      "ke.expl_pass",
+      "ke.expl_rush",
+      "ke.expl_allowed",
+      "ke.off_pass_epa",
+      "ke.off_rush_epa",
+      "ke.off_early_epa",
+      "ke.ppo",
+      "ke.finish",
+      "ke.opp_rate",
+      "ke.rz_td",
+      "ke.disruption_sack"
+    ],
+    "phase2_hold_ids": [
+      "ke.st",
+      "ke.havoc",
+      "ke.disruption_interception",
+      "ke.disruption_qb_hit",
+      "ke.disruption_fumble",
+      "ke.disruption_fumble_forced",
+      "ke.disruption_tackle_for_loss",
+      "ke.disruption_pass_breakup",
+      "ke.opp_adj_epa"
+    ],
+    "finishing_repair": {
+      "sport": "cfb",
+      "note": "CFB type.text heuristic unchanged"
+    },
+    "bakeoff_winner": "NO_ADJUSTMENT_WINNER",
+    "stop": "STOP before Team Strength / composite weights, scoring integration, matchup modeling, market comparison, public KE ratings, UI, boards, and named KE Disruption weighting.",
+    "note": "PASS/PARTIAL may enter Phase 2 as independent measurements. No composite / Team Strength / named havoc in this GO."
+  }
+}

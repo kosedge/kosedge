@@ -1,0 +1,6903 @@
+{
+  "sport": "nfl",
+  "season": 2025,
+  "forbidden_objectives": [
+    "ats",
+    "close",
+    "roi",
+    "kei",
+    "clv",
+    "issue_562",
+    "market_residual"
+  ],
+  "n_team_games": 512,
+  "components": [
+    {
+      "id": "ke.off_eff",
+      "family": "epa",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.03064074548803706,
+          "spearman": -0.06671554252199412
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.34869978410430685,
+          "spearman": 0.3475073313782991
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.32485170082714204,
+          "spearman": 0.3669354838709677
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.5352138842778668,
+          "spearman": 0.5153958944281524
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.5297782956831965,
+          "spearman": 0.48533724340175943
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.5342454834879038,
+          "spearman": 0.5084310850439882
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.03064074548803706
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.0845934539897421
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.07379653322439504
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.40465358872056884
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.4121438271254197
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.37017212837747593
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.3899865292235136
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.19447543042235657
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": -0.0508454004505558
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": -0.21981693261223362
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.036730177988513045
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.2563198392044002
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": -0.20924375838541362
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.2603730505401846
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.2666255916095023
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.1556825994683167
+          }
+        ],
+        "late_mean_pearson": 0.07670006642056337,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.03064074548803706
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.4975078315304791,
+        "spearman": 0.43841642228739
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.17318862481576952,
+          "rmse": 0.2168425512135415,
+          "bias": 0.007962211592093356,
+          "pearson": 0.2719184866625841,
+          "spearman": 0.24230753010311612
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.17318862481576952,
+          "rmse": 0.2168425512135415,
+          "bias": 0.007962211592093356,
+          "pearson": 0.2719184866625841,
+          "spearman": 0.24230753010311612
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -1.5195389000267066e-17,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.2719184866625841,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.007206068571272239,
+        "sd": 0.09462491354019013,
+        "min": -0.2119997134893797,
+        "p05": -0.17587389895080552,
+        "p50": 0.013315138154644765,
+        "p95": 0.13284556686482835,
+        "max": 0.15990943402982968,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.def_eff",
+      "family": "epa",
+      "side": "def",
+      "higher_better": false,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.30890634675477907,
+          "spearman": -0.23826979472140758
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.2260805485404646,
+          "spearman": 0.1759530791788856
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.05299359056655165,
+          "spearman": -0.030058651026392956
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.20975634629568837,
+          "spearman": 0.1671554252199413
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.2762501487750325,
+          "spearman": 0.32514662756598234
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.43609484398309023,
+          "spearman": 0.41715542521994126
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.30890634675477907
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.12299697578903201
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.04852541391361069
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.07243088501678159
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": -0.2848402412194998
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": -0.2510063071746064
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.1779002932639742
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.28278524992698006
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.3154712520150812
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.13122771807896533
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.03679604156413214
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.017793379282450623
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.4300057077880851
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.16326075932738246
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": -0.07786698362197367
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.12786478282122213
+          }
+        ],
+        "late_mean_pearson": 0.15859310079803615,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.30890634675477907
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.39208430193427096,
+        "spearman": 0.39406158357771254
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.1777499088408558,
+          "rmse": 0.22089466614357095,
+          "bias": 0.006981605043566581,
+          "pearson": 0.18924249658006664,
+          "spearman": 0.18700166237105148
+        },
+        "next_def_epa": {
+          "n": 448,
+          "mae": 0.1777499088408558,
+          "rmse": 0.22089466614357095,
+          "bias": 0.006981605043566581,
+          "pearson": 0.18924249658006664,
+          "spearman": 0.18700166237105148
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 1.756551507996883e-17,
+        "base_epa_pearson": 0.18924249658006664,
+        "raw_component_pearson": 0.18924249658006664,
+        "conditioned_on": "ke.def_eff",
+        "target": "next_def_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.007206068571272238,
+        "sd": 0.08498558494271079,
+        "min": -0.1434662299084593,
+        "p05": -0.11330085767194414,
+        "p50": 0.00011382161736705663,
+        "p95": 0.1477084723773165,
+        "max": 0.1719708466510923,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.success_native",
+      "family": "success",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.011834117828589345,
+          "spearman": -0.011736659509382288
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.2648327451245732,
+          "spearman": 0.2725022914757103
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.41792574437622015,
+          "spearman": 0.4606216675434921
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.518091851844135,
+          "spearman": 0.5263929618768327
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.6250081791818308,
+          "spearman": 0.5146627565982403
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.5900739245230575,
+          "spearman": 0.4901026392961876
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.011834117828589345
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.12167258690441572
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.2482364768972458
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.330314779348078
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.17766394623412712
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.4074377973013953
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.06093602040335619
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.049249864510039244
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.1057358286231413
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.002932166557760575
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.16376272436067452
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.18115277236013355
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.0969927417262002
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.08080433021885007
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.11066081634617314
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.18661526440387155
+          }
+        ],
+        "late_mean_pearson": 0.10865627878964935,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.011834117828589345
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.45433610252130086,
+        "spearman": 0.28335777126099704
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.0630829946614055,
+          "rmse": 0.07951849381210659,
+          "bias": 0.0032239734786452907,
+          "pearson": 0.27228787270945437,
+          "spearman": 0.2349938175752355
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.43728239351102316,
+          "rmse": 0.4861296647207152,
+          "bias": 0.4367452252801927,
+          "pearson": 0.2493732255963163,
+          "spearman": 0.22635472278288576
+        },
+        "next_success": {
+          "n": 448,
+          "mae": 0.0630829946614055,
+          "rmse": 0.07951849381210659,
+          "bias": 0.0032239734786452907,
+          "pearson": 0.27228787270945437,
+          "spearman": 0.2349938175752355
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.026484193393971636,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.2493732255963163,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.43867468914196844,
+        "sd": 0.034592883545541915,
+        "min": 0.33970597919836826,
+        "p05": 0.37611053513839776,
+        "p50": 0.44200910838609153,
+        "p95": 0.48433224987259216,
+        "max": 0.5142867370142238,
+        "outliers_z25": [
+          {
+            "team": "CLE",
+            "value": 0.33970597919836826,
+            "z": -2.8609557747132235
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.success_standard",
+      "family": "success",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.14338409105475056,
+          "spearman": -0.08580858230043517
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.42093773924677697,
+          "spearman": 0.3607038123167155
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.4258564739172354,
+          "spearman": 0.3827681026581118
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.516533032883189,
+          "spearman": 0.4252589148096071
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.5256896036558906,
+          "spearman": 0.47287390029325505
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.4826627477312198,
+          "spearman": 0.48313782991202336
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.14338409105475056
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.22475955676044626
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.10987879517062626
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.4097699175800186
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.13494922441545024
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.35067142563578224
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.1831041793334645
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.21054706575121768
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.09659930665351497
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.031434915469184574
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.1767793528837225
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.10969208790547892
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.11228037877574751
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.18070386524705398
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.15152494944928624
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.2826276961579991
+          }
+        ],
+        "late_mean_pearson": 0.15024329092146727,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.14338409105475056
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.3272128755565344,
+        "spearman": 0.20674486803519057
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.0648213233721416,
+          "rmse": 0.08163192529833566,
+          "bias": 0.004472697896994144,
+          "pearson": 0.27942713612073156,
+          "spearman": 0.24186144678742172
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.428907715576918,
+          "rmse": 0.47865890729019434,
+          "bias": 0.42805055256566776,
+          "pearson": 0.2306025191361812,
+          "spearman": 0.2086513743613421
+        },
+        "next_success": {
+          "n": 448,
+          "mae": 0.06399836312308214,
+          "rmse": 0.08025631731325891,
+          "bias": -0.005470699235879616,
+          "pearson": 0.25706792509732584,
+          "spearman": 0.22593136125915128
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.01644230454372392,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.2306025191361812,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.42954289335261675,
+        "sd": 0.035240583343193216,
+        "min": 0.33437084629153097,
+        "p05": 0.3707485580511922,
+        "p50": 0.4288126824137555,
+        "p95": 0.47945726073619876,
+        "max": 0.5051350798772559,
+        "outliers_z25": [
+          {
+            "team": "CLE",
+            "value": 0.33437084629153097,
+            "z": -2.7006376748717598
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.success_allowed",
+      "family": "success",
+      "side": "def",
+      "higher_better": false,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.272323014387732,
+          "spearman": -0.27819550743332705
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.47549897510019656,
+          "spearman": 0.4097158570119156
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.22869530555998122,
+          "spearman": 0.24090200852886917
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.23647820664406694,
+          "spearman": 0.2976539589442815
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.4251661322392011,
+          "spearman": 0.42599211983514085
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.45810338228496317,
+          "spearman": 0.4288856304985337
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.272323014387732
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.28012744357811986
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.02515450395666904
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.09491802914832313
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.07366996690548196
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.04489845382914776
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.012416625800772551
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.29742327326457835
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.14087668333934503
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.19820212932958262
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.0057912180520220576
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.3088722121897746
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.22614065976122977
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.2520445310670309
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": -0.07897523599323339
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.3380250092184317
+          }
+        ],
+        "late_mean_pearson": 0.1876000533587513,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.272323014387732
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.3745363656148326,
+        "spearman": 0.37173494794563927
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.06357725136980749,
+          "rmse": 0.08080463401619177,
+          "bias": 0.0024610446271732095,
+          "pearson": 0.21493162981274355,
+          "spearman": 0.23593221969864345
+        },
+        "next_def_epa": {
+          "n": 448,
+          "mae": 0.4364698720254916,
+          "rmse": 0.4872456620126406,
+          "bias": 0.4359822964287206,
+          "pearson": 0.14262984201148424,
+          "spearman": 0.13643996916019746
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.0001990790321532933,
+        "base_epa_pearson": 0.18924249658006664,
+        "raw_component_pearson": 0.14262984201148424,
+        "conditioned_on": "ke.def_eff",
+        "target": "next_def_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.43867468914196844,
+        "sd": 0.03133024938040773,
+        "min": 0.36653974063732364,
+        "p05": 0.3857176639517939,
+        "p50": 0.44352094080640303,
+        "p95": 0.4836515883085175,
+        "max": 0.48739846775113965,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.pace",
+      "family": "pace",
+      "side": "off",
+      "higher_better": null,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.17049546530706092,
+          "spearman": 0.23144912387651692
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.0047942485587752475,
+          "spearman": -0.03410028431230568
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.028963819317025016,
+          "spearman": 0.03226102112348743
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.2117499792381493,
+          "spearman": 0.25696480938416416
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.2023119177981835,
+          "spearman": 0.252199413489736
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.44429572412548807,
+          "spearman": 0.4618768328445747
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.17049546530706092
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.042362836463199785
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.02905471774308896
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.36438918976365436
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.02305645272450193
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.24571776220995034
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.0134149593250661
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": -0.004077826183732591
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.21978449602771305
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": -0.0847812275412357
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.07735436186532632
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.0037000337318367268
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.07754564785325707
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.07471495137345201
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.2498788057813478
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.10563936028710072
+          }
+        ],
+        "late_mean_pearson": 0.061961090222304366,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.17049546530706092
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.29580572007402384,
+        "spearman": 0.2917888563049853
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 7.192637797538462,
+          "rmse": 9.148590679531853,
+          "bias": 0.7345974739220685,
+          "pearson": 0.10684189686126165,
+          "spearman": 0.11920167616873888
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.008025857737922566,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.041214160604059295,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 60.642578125,
+        "sd": 2.929686848958261,
+        "min": 54.9375,
+        "p05": 55.303125,
+        "p50": 61.15625,
+        "p95": 64.471875,
+        "max": 65.6875,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.pace_competitive",
+      "family": "pace",
+      "side": "off",
+      "higher_better": null,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.21563714522915406,
+          "spearman": -0.23442954648814213
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.0015648497150331734,
+          "spearman": -0.06268902968314036
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.2969917265688924,
+          "spearman": 0.3049853372434017
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.24260715652569223,
+          "spearman": 0.26246334310850433
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.03296878199508894,
+          "spearman": 0.041055718475073305
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.25087504679099215,
+          "spearman": 0.3999266862170087
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.21563714522915406
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.14939517010533543
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.02773557291094732
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.28730302389658235
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": -0.12064203184527993
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.2351018957115238
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.1655973076923224
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.2931581561156038
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.23396325643780397
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.030404157193708217
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.25477961953732076
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.036152545342361925
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.1756799715741141
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.2312260472763909
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.2479218468296199
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.13084749270558585
+          }
+        ],
+        "late_mean_pearson": 0.12495265043754089,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.21563714522915406
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.27624549507566926,
+        "spearman": 0.313782991202346
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 12.324440401394503,
+          "rmse": 16.068095617655903,
+          "bias": 0.8738099057596196,
+          "pearson": 0.08902127043357848,
+          "spearman": 0.1321638348097956
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.023181683781056214,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.10412208054064141,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 52.927734375,
+        "sd": 4.929857350852645,
+        "min": 43.1875,
+        "p05": 44.059375,
+        "p50": 53.6875,
+        "p95": 59.628125,
+        "max": 61.375,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.pace_seconds",
+      "family": "pace",
+      "side": "off",
+      "higher_better": null,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.09250396899364242,
+          "spearman": 0.14992668621700878
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": -0.14201358426151173,
+          "spearman": -0.22177419354838707
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.18897727333499703,
+          "spearman": 0.17192082111436946
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.40720462648938144,
+          "spearman": 0.3427419354838709
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.3062321551486025,
+          "spearman": 0.1851173020527859
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.3120691569840065,
+          "spearman": 0.314882697947214
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.09250396899364242
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.027191185032364933
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.19917966786419508
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.19054323886561503
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.38980346556731627
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": -0.039819892851865414
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.019375645284892797
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.1375103221242194
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.1672337526681925
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.2854683506999854
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.28210863585464674
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.04576596020388858
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.34479387468292605
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.3150837802813477
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.17694118572545414
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.08642176915946634
+          }
+        ],
+        "late_mean_pearson": 0.19442174566581663,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.09250396899364242
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.1433246660361724,
+        "spearman": 0.17998533724340174
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 2.522390757127364,
+          "rmse": 3.178229559436975,
+          "bias": -0.08297758589954193,
+          "pearson": 0.16095899325257346,
+          "spearman": 0.14733764107297775
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.004071576203482986,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.12368548048845589,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 31.148148461343492,
+        "sd": 1.139914536920999,
+        "min": 27.857015808837392,
+        "p05": 29.434752438689696,
+        "p50": 31.33971368757336,
+        "p95": 32.78528646753418,
+        "max": 32.977272125458526,
+        "outliers_z25": [
+          {
+            "team": "NO",
+            "value": 27.857015808837392,
+            "z": -2.8871749117225174
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl",
+      "family": "expl",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.1891664768017038,
+          "spearman": -0.1086458242395301
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.40321223930095035,
+          "spearman": 0.34030071961668745
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.22499853658754354,
+          "spearman": 0.20936841228308112
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.27007490593616135,
+          "spearman": 0.35893676130152063
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.19499779508435264,
+          "spearman": 0.16827055336000832
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.2428383913824908,
+          "spearman": 0.219574780058651
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.1891664768017038
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.1363864463063184
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.10303116245333162
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": -0.2606355675127567
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.0923402429243733
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.15515962305320727
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.3778260827305837
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.22074194547707418
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.24736768652249155
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.13516789799318274
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.29773150653116764
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.20991734419467545
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.3596896013728315
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.13322728199535785
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.07601234570604107
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.3286125122798498
+          }
+        ],
+        "late_mean_pearson": 0.2231631246747413,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.1891664768017038
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.254555506600152,
+        "spearman": 0.28265053734328194
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.03531761014647258,
+          "rmse": 0.04381864621177381,
+          "bias": -0.0006938026134879181,
+          "pearson": 0.16554419014597063,
+          "spearman": 0.15702991813823747
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.18538898387343886,
+          "rmse": 0.23587086983764258,
+          "bias": 0.09028447740078534,
+          "pearson": 0.14017542889421641,
+          "spearman": 0.13689354971226503
+        },
+        "next_expl": {
+          "n": 448,
+          "mae": 0.03531761014647258,
+          "rmse": 0.04381864621177381,
+          "bias": -0.0006938026134879181,
+          "pearson": 0.16554419014597063,
+          "spearman": 0.15702991813823747
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.01040603319424011,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.14017542889421641,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.09643975272839894,
+        "sd": 0.015601370719516236,
+        "min": 0.06675067938934831,
+        "p05": 0.07226966319048173,
+        "p50": 0.09407971694514261,
+        "p95": 0.12007731862123347,
+        "max": 0.124623762847394,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl_pass",
+      "family": "expl",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.08952227164591725,
+          "spearman": 0.08844036846124685
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.10785560917894828,
+          "spearman": 0.02108544223194454
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.22456379135547946,
+          "spearman": 0.26157089285918506
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.42293897980529177,
+          "spearman": 0.35362053162236473
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.3297041802869007,
+          "spearman": 0.29398826979472137
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.4155922654142185,
+          "spearman": 0.3625698851264667
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.08952227164591725
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.02755507817181837
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.03212152003230547
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.26158158905818535
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.29775313441365103
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": -0.005176941030009978
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.11115038291667205
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.03279818482225943
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.42260565356778523
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.12043951754505547
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.2695013090591382
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.03336499519212763
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.31694494956639924
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.31805210468851464
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": -0.048293662422099606
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.519274708922407
+          }
+        ],
+        "late_mean_pearson": 0.21310641895081467,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.08952227164591725
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.3808100047690793,
+        "spearman": 0.34530791788856297
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.04176414397006145,
+          "rmse": 0.053438155172735695,
+          "bias": -0.002294538191221642,
+          "pearson": 0.16455868165346482,
+          "spearman": 0.1706738761402665
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.18139487874976784,
+          "rmse": 0.23039863676319988,
+          "bias": 0.07736905365331577,
+          "pearson": 0.17159503373744767,
+          "spearman": 0.18619789377212878
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.026395631536818565,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.17159503373744767,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.08551752567321715,
+        "sd": 0.019195172113086387,
+        "min": 0.05300126664659608,
+        "p05": 0.05883524960079181,
+        "p50": 0.0852218043253949,
+        "p95": 0.1194703293095029,
+        "max": 0.12842379066730156,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl_rush",
+      "family": "expl",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.14047601533644402,
+          "spearman": -0.04842594152989278
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.22851454842338104,
+          "spearman": 0.03429934488447782
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": -0.10410879284544748,
+          "spearman": -0.04124278268627655
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": -0.17070497279536928,
+          "spearman": 0.026771798940633012
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": -0.13329794148669985,
+          "spearman": -0.07937671994053035
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": -0.13822233493157216,
+          "spearman": -0.16021998436033147
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.14047601533644402
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.0835243109320393
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.03515976504841363
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": -0.04103762478873803
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": -0.16998375791550294
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.26597714605111805
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.45046108847190214
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": -0.17890579716596375
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.24358569391020043
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.13896365639480246
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.2318374180417951
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.04125907087075198
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.015545717133361057
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": -0.13870577316958038
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.09427107331622499
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": -0.03711976699546866
+          }
+        ],
+        "late_mean_pearson": -0.005882615971940775,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.14047601533644402
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.04414360219698819,
+        "spearman": 0.023460410557184747
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.05869646549452907,
+          "rmse": 0.07465842558064183,
+          "bias": 0.0023273180621123752,
+          "pearson": -0.01957532084225317,
+          "spearman": -0.04443223034157887
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.1922746240063458,
+          "rmse": 0.24533793772503912,
+          "bias": 0.1081450881879666,
+          "pearson": 0.04620878920372745,
+          "spearman": 0.02807217898838086
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.03211715813591898,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.04620878920372745,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.11060853427841848,
+        "sd": 0.016015404295988134,
+        "min": 0.07384589337302319,
+        "p05": 0.08351768414237742,
+        "p50": 0.10985740627187024,
+        "p95": 0.13321612343148276,
+        "max": 0.15397910125769565,
+        "outliers_z25": [
+          {
+            "team": "BAL",
+            "value": 0.15397910125769565,
+            "z": 2.708053207881959
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl_allowed",
+      "family": "expl",
+      "side": "def",
+      "higher_better": false,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.10182478729820606,
+          "spearman": 0.21234069952637277
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.13618517173167924,
+          "spearman": 0.18775212116782758
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.15615193982005326,
+          "spearman": 0.024195765842615576
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.3316487059251093,
+          "spearman": 0.2653958944281524
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.40502393713316553,
+          "spearman": 0.4802052785923753
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.5616341049680602,
+          "spearman": 0.5806983802227738
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.10182478729820606
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.09970927914234376
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.06739681732735461
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": -0.30684999699832916
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": -0.04101753914294131
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": -0.0700230483940067
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": -0.056054367534338956
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.09645852744157858
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.2609559064086079
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.3641718762290195
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.06167795188067698
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.1774334480906416
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.35237888103046977
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.3111267655217854
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": -0.10385803547960953
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.12677826027694264
+          }
+        ],
+        "late_mean_pearson": 0.16930751973763986,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.10182478729820606
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.3084947788187209,
+        "spearman": 0.38489736070381225
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.035680086527972624,
+          "rmse": 0.044346127564566074,
+          "bias": -0.0009347123186340646,
+          "pearson": 0.1511206400204709,
+          "spearman": 0.14510141246960087
+        },
+        "next_def_epa": {
+          "n": 448,
+          "mae": 0.18583347191959493,
+          "rmse": 0.23723945721219142,
+          "bias": 0.09004356769563918,
+          "pearson": 0.06019707987039737,
+          "spearman": 0.07158834882711224
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.04074413223280691,
+        "base_epa_pearson": 0.18924249658006664,
+        "raw_component_pearson": 0.06019707987039737,
+        "conditioned_on": "ke.def_eff",
+        "target": "next_def_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.09643975272839894,
+        "sd": 0.015835621269694365,
+        "min": 0.06234607519806361,
+        "p05": 0.07160978507046681,
+        "p50": 0.0939387436731717,
+        "p95": 0.11995953085409736,
+        "max": 0.12521605836560953,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.off_pass_epa",
+      "family": "epa_split",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.066878323511139,
+          "spearman": 0.07478005865102638
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.17539560909465968,
+          "spearman": 0.15212609970674484
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.24223454554739682,
+          "spearman": 0.2954545454545454
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.6446423780730145,
+          "spearman": 0.6675219941348972
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.4478795855150105,
+          "spearman": 0.502199413489736
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.4846169588546435,
+          "spearman": 0.4149560117302052
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.06687832351113902
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.1266823670764582
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.08469819233629058
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.4488912397364986
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.34594864610786347
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.2547484872451839
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.2647150229573934
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.1453269988376497
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.2584702437346695
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": -0.07526478321489444
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.2080583741289215
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.1386660367891245
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": -0.13150580811362161
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.23669944616739264
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.19051589344165182
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.33797932842542655
+          }
+        ],
+        "late_mean_pearson": 0.1454384144662578,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.06687832351113902
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.4941558209171294,
+        "spearman": 0.4516129032258064
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.26844229478389237,
+          "rmse": 0.3421026542096814,
+          "bias": 0.011489657614003187,
+          "pearson": 0.2360424138143011,
+          "spearman": 0.23565591054585988
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.19159809658388133,
+          "rmse": 0.23970526062335887,
+          "bias": 0.036370460439804894,
+          "pearson": 0.25707506432882316,
+          "spearman": 0.24573944015357446
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.004762223000488491,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.25707506432882316,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.030911982476390886,
+        "sd": 0.14077264995363917,
+        "min": -0.2764476492889277,
+        "p05": -0.21105420534788852,
+        "p50": 0.028247029536102294,
+        "p95": 0.23405241816978956,
+        "max": 0.3299896662584405,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.off_rush_epa",
+      "family": "epa_split",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.18359226766441733,
+          "spearman": -0.2620967741935483
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.051578740396432475,
+          "spearman": 0.035557184750733134
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.023508409818970337,
+          "spearman": 0.0784457478005865
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.2665509929842013,
+          "spearman": 0.2877565982404692
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.31327694712664395,
+          "spearman": 0.15139296187683282
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.23272036255327078,
+          "spearman": 0.04655425219941348
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.18359226766441733
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.004171854538119302
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.13561155149225496
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.18253343434342884
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.005172439127501507
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.1881325725947448
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.2715320761271243
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.16350686064718528
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": -0.09644103011256291
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": -0.15393223312261706
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.47108344202210295
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.0222371099884768
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.3351148036041068
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.14327991080353056
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.007776119255880672
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.2020094706486935
+          }
+        ],
+        "late_mean_pearson": 0.011999261079293009,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.18359226766441733
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": -0.11057127820498464,
+        "spearman": -0.3167155425219941
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.17826951273966965,
+          "rmse": 0.23399087847075992,
+          "bias": 0.0032208815579806136,
+          "pearson": 0.10511193350008524,
+          "spearman": 0.07776989773802229
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.17945047273240117,
+          "rmse": 0.22693642496880126,
+          "bias": -0.01984802807742386,
+          "pearson": 0.13961843953691588,
+          "spearman": 0.10593237982776256
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.010933526668376168,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.13961843953691588,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": -0.015377947243835764,
+        "sd": 0.0714107359696836,
+        "min": -0.2555461747304705,
+        "p05": -0.11895023555212716,
+        "p50": -0.010942046331556508,
+        "p95": 0.09503190712375187,
+        "max": 0.10694300008285049,
+        "outliers_z25": [
+          {
+            "team": "LV",
+            "value": -0.2555461747304705,
+            "z": -3.3631949625696995
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.off_early_epa",
+      "family": "epa_split",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": -0.08038409710048958,
+          "spearman": -0.07771260997067447
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.3168418199039395,
+          "spearman": 0.2892228739002932
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.31964331232801435,
+          "spearman": 0.31268328445747795
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.23494664545328361,
+          "spearman": 0.22470674486803516
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.2773190434233723,
+          "spearman": 0.27712609970674484
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.34058915181580535,
+          "spearman": 0.31598240469208205
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": -0.08038409710048959
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.029855081063900713
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.026170676502074663
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.04873323769671234
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.45754830507350647
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.3260344149312398
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.16526703653344912
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": -0.24507440643421682
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": -0.1328957286226883
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.1464403086131412
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.1434981440957127
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.17914898901815232
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.0770975102518088
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.19263648852006623
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.3550204159070127
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.1249249009758702
+          }
+        ],
+        "late_mean_pearson": 0.09342184692498434,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": -0.08038409710048959
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.2698705748894444,
+        "spearman": 0.2353372434017595
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.16465254451061076,
+          "rmse": 0.20661374473278213,
+          "bias": 0.0018478976011417243,
+          "pearson": 0.18823886329782122,
+          "spearman": 0.18457123211910137
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.17378000636528093,
+          "rmse": 0.2190619090688199,
+          "bias": 0.010826079994031268,
+          "pearson": 0.2231689003434418,
+          "spearman": 0.20468157106342635
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.01930007152088029,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.2231689003434418,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.014704480672538838,
+        "sd": 0.07663197910214159,
+        "min": -0.17014165751887975,
+        "p05": -0.11856430642843183,
+        "p50": 0.02598934796874543,
+        "p95": 0.11668493668412014,
+        "max": 0.14572365447850433,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.ppo",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.045196497302806796,
+          "spearman": 0.03428309055222019
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.20037128135430976,
+          "spearman": 0.26627544918677803
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.028540757271271828,
+          "spearman": 0.17838482062297542
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.39182513309986,
+          "spearman": 0.47424381301558194
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.26285459276507195,
+          "spearman": 0.188743240319993
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.08443222422290513,
+          "spearman": 0.11163046513752185
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.045196497302806796
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.08324631415389623
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.10297071355125428
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.04385122745255435
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.30791850181764063
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 27,
+            "pearson": 0.26682886526506916
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.3755573285407352
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.11342381268532871
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": -0.018442990471859756
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": -0.2774039816066615
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.19822032369803
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.003496705639447218
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": -0.08612491137324386
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.06516073470895416
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": -0.3502935741169144
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.18543748183320188
+          }
+        ],
+        "late_mean_pearson": -0.06332893974207467,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.045196497302806796
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.050055419673609006,
+        "spearman": 0.11989000916590282
+      },
+      "oos": {
+        "own_unit": {
+          "n": 447,
+          "mae": 1.1939225384410448,
+          "rmse": 1.4819068633279482,
+          "bias": 0.02780264929799111,
+          "pearson": 0.10059358516311272,
+          "spearman": 0.09300762113776348
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 3.944769968834047,
+          "rmse": 3.9876220526337023,
+          "bias": 3.944769968834047,
+          "pearson": 0.14316264888361627,
+          "spearman": 0.15400264131898583
+        },
+        "next_ppo": {
+          "n": 447,
+          "mae": 1.1939225384410448,
+          "rmse": 1.4819068633279482,
+          "bias": 0.02780264929799111,
+          "pearson": 0.10059358516311272,
+          "spearman": 0.09300762113776348
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.04021178108685661,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.14316264888361627,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 511,
+        "mean": 3.9209381200396827,
+        "sd": 0.409079518959233,
+        "min": 2.955208333333333,
+        "p05": 3.2812425595238093,
+        "p50": 4.022048611111111,
+        "p95": 4.406506696428571,
+        "max": 4.744642857142857,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 29,
+            "missing": 1,
+            "missing_rate": 0.03333333333333333
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.001953125
+      }
+    },
+    {
+      "id": "ke.finish",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.06919287906724743,
+          "spearman": 0.06318851104441878
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": -0.011683395190348656,
+          "spearman": -0.014856596695900497
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": -0.06370845651751282,
+          "spearman": 0.012405811108342088
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.22660761072217447,
+          "spearman": 0.20516119345341952
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.201732644908416,
+          "spearman": 0.06275230308510682
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.055776868098384676,
+          "spearman": -0.0357601320374106
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.06919287906724743
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": -0.2538252154049662
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.29436146998731666
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": -0.07730986776912838
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.11582533312642189
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 27,
+            "pearson": 0.17264800049497153
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.41098849790808106
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.3018714419179938
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.053645393076798095
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": -0.5242960807567509
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.014722233825136304
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.027422136440850908
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": -0.13553720165059407
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.10739990307314833
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": -0.2579527307625226
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.27276246296269446
+          }
+        ],
+        "late_mean_pearson": -0.021645190528327505,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.06919287906724743
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.12525282912025718,
+        "spearman": 0.13503348828021808
+      },
+      "oos": {
+        "own_unit": {
+          "n": 447,
+          "mae": 0.18145654837216835,
+          "rmse": 0.23034331346195056,
+          "bias": 0.013486179566854132,
+          "pearson": 0.03167719981932,
+          "spearman": 0.006735063778038151
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.7472451281276073,
+          "rmse": 0.7818038685263103,
+          "bias": 0.7472451281276073,
+          "pearson": 0.06164431790089254,
+          "spearman": 0.04507860325315727
+        },
+        "next_finish": {
+          "n": 447,
+          "mae": 0.18145654837216835,
+          "rmse": 0.23034331346195056,
+          "bias": 0.013486179566854132,
+          "pearson": 0.03167719981932,
+          "spearman": 0.006735063778038151
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": -0.08739182681652741,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.06164431790089254,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 511,
+        "mean": 0.7428723338293651,
+        "sd": 0.058901813445704894,
+        "min": 0.6081845238095238,
+        "p05": 0.6375515873015873,
+        "p50": 0.7606274801587302,
+        "p95": 0.8133147321428571,
+        "max": 0.8852678571428572,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 29,
+            "missing": 1,
+            "missing_rate": 0.03333333333333333
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.001953125
+      }
+    },
+    {
+      "id": "ke.opp_rate",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.10019614087154213,
+          "spearman": -9.248985143728139e-05
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.19138189100440142,
+          "spearman": 0.12155467608268451
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.23683466098832753,
+          "spearman": 0.2775636254314361
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.4158688350174868,
+          "spearman": 0.43422019079572755
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.4774129616801432,
+          "spearman": 0.5075174525317839
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.3737871570963191,
+          "spearman": 0.3325999322499773
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.10019614087154213
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.19397614559086743
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": 0.06054637819627642
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": 0.2796878616734863
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.1651215349595598
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": 0.09729970316617653
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": 0.12196545389503567
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": -0.0031420038394344343
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.20549913668078038
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.07206671696125368
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.23782697293208435
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.3240619724904585
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.19720275220520017
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": 0.3662362433475337
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.15287246908036425
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.08694405051004182
+          }
+        ],
+        "late_mean_pearson": 0.1821742567075869,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.10019614087154213
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.2726805575757179,
+        "spearman": 0.188782991202346
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.13285156574357074,
+          "rmse": 0.16323689307589295,
+          "bias": -0.008389238853604522,
+          "pearson": 0.22824729391848886,
+          "spearman": 0.20421216799531433
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.516170241111655,
+          "rmse": 0.5583930093535534,
+          "bias": 0.5160466473507842,
+          "pearson": 0.2566417364531996,
+          "spearman": 0.2423487710208705
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.05819498674288687,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.2566417364531996,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": 0.5306115163048757,
+        "sd": 0.06330166142936852,
+        "min": 0.39616910866910865,
+        "p05": 0.4032359654234654,
+        "p50": 0.5387558621933621,
+        "p95": 0.60866590007215,
+        "max": 0.6330650252525253,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.rz_td",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.13627970171153464,
+          "spearman": 0.16282726413817128
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": -0.34691690242236567,
+          "spearman": -0.3111111163578539
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": -0.14030954384755687,
+          "spearman": -0.2307621826925868
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.1570482327231557,
+          "spearman": 0.25449541712811075
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": -0.1605383502102521,
+          "spearman": -0.1330641735497448
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": -0.06653574205077595,
+          "spearman": -0.08729940431019934
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.13627970171153464
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 31,
+            "pearson": -0.1329203019924481
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 30,
+            "pearson": -0.28105417564529994
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 27,
+            "pearson": 0.22014422408804354
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": 0.17431932487766205
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 26,
+            "pearson": 0.20486115277849432
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 23,
+            "pearson": 0.2803447314616972
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.1870135154504017
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": -0.2728455569733806
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.15612810208144723
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": -0.3335773982973724
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": -0.23056693787129987
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": -0.29323949397964505
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 27,
+            "pearson": -0.18506801024968145
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 31,
+            "pearson": -0.10969047298027554
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": -0.11872172027501462
+          }
+        ],
+        "late_mean_pearson": -0.13339644145498009,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.13627970171153464
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": -0.013932687390784996,
+        "spearman": -0.03503301599648921
+      },
+      "oos": {
+        "own_unit": {
+          "n": 443,
+          "mae": 0.11592514227161907,
+          "rmse": 0.15538920286211522,
+          "bias": -0.0067421807614743414,
+          "pearson": -0.03370990231621962,
+          "spearman": 0.012477486885158007
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.2338352571575239,
+          "rmse": 0.29141621746344804,
+          "bias": 0.19503930085793736,
+          "pearson": 0.17551289905779832,
+          "spearman": 0.18128115162489
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.0526698659391081,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.17551289905779832,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 507,
+        "mean": 0.20886874205172548,
+        "sd": 0.03693858740962978,
+        "min": 0.11133866133866134,
+        "p05": 0.16241244259481488,
+        "p50": 0.20432233975819503,
+        "p95": 0.2704809901355954,
+        "max": 0.2962921626984127,
+        "outliers_z25": [
+          {
+            "team": "NYJ",
+            "value": 0.11133866133866134,
+            "z": -2.6403305473353953
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 31,
+            "missing": 1,
+            "missing_rate": 0.03125
+          },
+          {
+            "week": 4,
+            "present": 31,
+            "missing": 1,
+            "missing_rate": 0.03125
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 28,
+            "missing": 2,
+            "missing_rate": 0.06666666666666667
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 31,
+            "missing": 1,
+            "missing_rate": 0.03125
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.009765625
+      }
+    },
+    {
+      "id": "ke.st",
+      "family": "st",
+      "side": "st",
+      "higher_better": true,
+      "sport": "nfl",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 32,
+          "pearson": 0.43784830206078423,
+          "spearman": 0.43841642228739
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 32,
+          "pearson": 0.1529740180954679,
+          "spearman": 0.08980938416422286
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 32,
+          "pearson": 0.039053484844865996,
+          "spearman": 0.09457478005865101
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 32,
+          "pearson": 0.24307511754569128,
+          "spearman": 0.3115835777126099
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 32,
+          "pearson": 0.39754642505979154,
+          "spearman": 0.4578445747800586
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 32,
+          "pearson": 0.267667839210398,
+          "spearman": 0.3966275659824046
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 32,
+            "pearson": 0.43784830206078423
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 32,
+            "pearson": 0.10600097987510669
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 32,
+            "pearson": -0.33798045921376635
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 28,
+            "pearson": -0.14816191718091345
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 26,
+            "pearson": -0.05851234981115394
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 28,
+            "pearson": -0.18095500265484096
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 24,
+            "pearson": -0.14924493139335843
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 22,
+            "pearson": 0.47787916221309046
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 24,
+            "pearson": 0.16038803831259824
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 26,
+            "pearson": 0.18628794106894206
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 26,
+            "pearson": 0.008104138296158652
+          },
+          {
+            "from": 12,
+            "to": 13,
+            "n": 28,
+            "pearson": 0.01225670842165941
+          },
+          {
+            "from": 13,
+            "to": 14,
+            "n": 28,
+            "pearson": 0.43627901266799646
+          },
+          {
+            "from": 14,
+            "to": 15,
+            "n": 28,
+            "pearson": -0.05385555792644159
+          },
+          {
+            "from": 15,
+            "to": 16,
+            "n": 32,
+            "pearson": 0.11769115579911782
+          },
+          {
+            "from": 16,
+            "to": 17,
+            "n": 32,
+            "pearson": 0.13999471396090835
+          }
+        ],
+        "late_mean_pearson": 0.1650028125348922,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 32,
+          "pearson": 0.43784830206078423
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 6,
+        "late_from_week": 10,
+        "n_teams": 32,
+        "pearson": 0.29886851253630375,
+        "spearman": 0.3541055718475073
+      },
+      "oos": {
+        "own_unit": {
+          "n": 448,
+          "mae": 0.22424678256618488,
+          "rmse": 0.3053102102014548,
+          "bias": 0.017086923310038336,
+          "pearson": 0.0904894735251316,
+          "spearman": 0.10379569385040155
+        },
+        "next_off_epa": {
+          "n": 448,
+          "mae": 0.22562341104378336,
+          "rmse": 0.2769791944613206,
+          "bias": -0.10652003496625302,
+          "pearson": 0.038743771766425114,
+          "spearman": 0.010198304744537237
+        }
+      },
+      "incremental_on_epa": {
+        "n": 448,
+        "partial_pearson": 0.027762544226600388,
+        "base_epa_pearson": 0.2719184866625841,
+        "raw_component_pearson": 0.038743771766425114,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 32,
+        "n_team_games": 512,
+        "mean": -0.1115443865340457,
+        "sd": 0.09770832854810464,
+        "min": -0.2979408861783316,
+        "p05": -0.2695303770518995,
+        "p50": -0.09801877088271185,
+        "p95": -0.0014698231916007208,
+        "max": 0.061853298278790346,
+        "outliers_z25": []
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 26,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 30,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 13,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 14,
+            "present": 28,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 15,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 16,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 17,
+            "present": 32,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    }
+  ],
+  "correlation_matrix": {
+    "n_teams": 32,
+    "pearson": {
+      "ke.off_eff": {
+        "ke.off_eff": 1.0,
+        "ke.def_eff": -0.05602467395415177,
+        "ke.success_native": 0.9053136276075934,
+        "ke.success_standard": 0.8930374280239114,
+        "ke.success_allowed": 0.10155573467076211,
+        "ke.pace": 0.35262705851977705,
+        "ke.pace_competitive": 0.5443794001275553,
+        "ke.pace_seconds": 0.27622441230919104,
+        "ke.expl": 0.7054825072256066,
+        "ke.expl_pass": 0.7730684726632328,
+        "ke.expl_rush": 0.3226092004147042,
+        "ke.expl_allowed": -0.09233467347985032,
+        "ke.off_pass_epa": 0.9465791804320693,
+        "ke.off_rush_epa": 0.6176411266013432,
+        "ke.off_early_epa": 0.9301121924269558,
+        "ke.ppo": 0.7988558786485693,
+        "ke.finish": 0.597726475229454,
+        "ke.opp_rate": 0.8196558631161267,
+        "ke.rz_td": 0.3562130450229928,
+        "ke.st": 0.15759653226476966
+      },
+      "ke.def_eff": {
+        "ke.off_eff": -0.05602467395415177,
+        "ke.def_eff": 1.0,
+        "ke.success_native": -0.005931360609688832,
+        "ke.success_standard": 0.023311175399408933,
+        "ke.success_allowed": 0.8664795708993461,
+        "ke.pace": -0.03524358096154202,
+        "ke.pace_competitive": -0.310755593059126,
+        "ke.pace_seconds": -0.21361894934899472,
+        "ke.expl": -0.14869038771722257,
+        "ke.expl_pass": -0.23701871683815795,
+        "ke.expl_rush": 0.032600540369932,
+        "ke.expl_allowed": 0.6723280447811876,
+        "ke.off_pass_epa": -0.1222133760341254,
+        "ke.off_rush_epa": 0.06578147409599529,
+        "ke.off_early_epa": -0.06572649930623206,
+        "ke.ppo": -0.17422581272843438,
+        "ke.finish": -0.316194266778065,
+        "ke.opp_rate": -0.006246089309882945,
+        "ke.rz_td": 0.12306402239845506,
+        "ke.st": 0.053603299552951435
+      },
+      "ke.success_native": {
+        "ke.off_eff": 0.9053136276075934,
+        "ke.def_eff": -0.005931360609688832,
+        "ke.success_native": 1.0,
+        "ke.success_standard": 0.9828790772615857,
+        "ke.success_allowed": 0.15495137172606366,
+        "ke.pace": 0.23914562499311426,
+        "ke.pace_competitive": 0.37623807922820734,
+        "ke.pace_seconds": 0.24847495820726623,
+        "ke.expl": 0.6599836148432133,
+        "ke.expl_pass": 0.7038993191837156,
+        "ke.expl_rush": 0.3362540659789982,
+        "ke.expl_allowed": -0.1226227404504939,
+        "ke.off_pass_epa": 0.8503450886202139,
+        "ke.off_rush_epa": 0.540797968411813,
+        "ke.off_early_epa": 0.8667774340927237,
+        "ke.ppo": 0.7206481901534533,
+        "ke.finish": 0.5089519286712453,
+        "ke.opp_rate": 0.8476762365196413,
+        "ke.rz_td": 0.4385748604425815,
+        "ke.st": 0.19165801237671334
+      },
+      "ke.success_standard": {
+        "ke.off_eff": 0.8930374280239114,
+        "ke.def_eff": 0.023311175399408933,
+        "ke.success_native": 0.9828790772615857,
+        "ke.success_standard": 0.9999999999999998,
+        "ke.success_allowed": 0.18779763737446106,
+        "ke.pace": 0.21042354874214397,
+        "ke.pace_competitive": 0.3620129436446713,
+        "ke.pace_seconds": 0.29537850899602325,
+        "ke.expl": 0.6639791758665283,
+        "ke.expl_pass": 0.6828488785196705,
+        "ke.expl_rush": 0.36207109765487794,
+        "ke.expl_allowed": -0.10616029098364309,
+        "ke.off_pass_epa": 0.8271952602784085,
+        "ke.off_rush_epa": 0.5635816868725495,
+        "ke.off_early_epa": 0.8623279800639105,
+        "ke.ppo": 0.7203674950579732,
+        "ke.finish": 0.5023106281411719,
+        "ke.opp_rate": 0.8342276684568579,
+        "ke.rz_td": 0.41621547360528977,
+        "ke.st": 0.15192255352960124
+      },
+      "ke.success_allowed": {
+        "ke.off_eff": 0.10155573467076211,
+        "ke.def_eff": 0.8664795708993461,
+        "ke.success_native": 0.15495137172606366,
+        "ke.success_standard": 0.18779763737446106,
+        "ke.success_allowed": 1.0000000000000002,
+        "ke.pace": -0.006936558494709584,
+        "ke.pace_competitive": -0.20932198797989507,
+        "ke.pace_seconds": -0.1045115927899258,
+        "ke.expl": -0.03081368020063639,
+        "ke.expl_pass": -0.0684182550907166,
+        "ke.expl_rush": 0.006731401777559095,
+        "ke.expl_allowed": 0.6090618054760197,
+        "ke.off_pass_epa": 0.0454131964052731,
+        "ke.off_rush_epa": 0.13199521209890341,
+        "ke.off_early_epa": 0.08304125439501422,
+        "ke.ppo": -0.03085908090770259,
+        "ke.finish": -0.2035420575700199,
+        "ke.opp_rate": 0.2177938858733348,
+        "ke.rz_td": 0.2730944738831095,
+        "ke.st": -0.059350976481679904
+      },
+      "ke.pace": {
+        "ke.off_eff": 0.35262705851977705,
+        "ke.def_eff": -0.03524358096154202,
+        "ke.success_native": 0.23914562499311426,
+        "ke.success_standard": 0.21042354874214397,
+        "ke.success_allowed": -0.006936558494709584,
+        "ke.pace": 1.0,
+        "ke.pace_competitive": 0.7038779119234161,
+        "ke.pace_seconds": -0.4684600004952202,
+        "ke.expl": -0.07608204184216558,
+        "ke.expl_pass": 0.09624876777100316,
+        "ke.expl_rush": -0.28958057308652146,
+        "ke.expl_allowed": 0.12383695779257851,
+        "ke.off_pass_epa": 0.3242235270921391,
+        "ke.off_rush_epa": 0.20486774038239042,
+        "ke.off_early_epa": 0.2782354376741242,
+        "ke.ppo": 0.11361950236149047,
+        "ke.finish": 0.13332911408373993,
+        "ke.opp_rate": 0.45851212203498143,
+        "ke.rz_td": -0.11952452250712915,
+        "ke.st": -0.24770582639630107
+      },
+      "ke.pace_competitive": {
+        "ke.off_eff": 0.5443794001275553,
+        "ke.def_eff": -0.310755593059126,
+        "ke.success_native": 0.37623807922820734,
+        "ke.success_standard": 0.3620129436446713,
+        "ke.success_allowed": -0.20932198797989507,
+        "ke.pace": 0.7038779119234161,
+        "ke.pace_competitive": 1.0000000000000002,
+        "ke.pace_seconds": -0.10491859642634238,
+        "ke.expl": 0.2558667230690006,
+        "ke.expl_pass": 0.35448438975244984,
+        "ke.expl_rush": 0.026840890355960125,
+        "ke.expl_allowed": -0.16180480368497388,
+        "ke.off_pass_epa": 0.49326993081220505,
+        "ke.off_rush_epa": 0.40502308507476303,
+        "ke.off_early_epa": 0.43571664035076824,
+        "ke.ppo": 0.3099780329262787,
+        "ke.finish": 0.29073722598667967,
+        "ke.opp_rate": 0.570477387835337,
+        "ke.rz_td": -0.039050151718731066,
+        "ke.st": -0.15985605036659556
+      },
+      "ke.pace_seconds": {
+        "ke.off_eff": 0.27622441230919104,
+        "ke.def_eff": -0.21361894934899472,
+        "ke.success_native": 0.24847495820726623,
+        "ke.success_standard": 0.29537850899602325,
+        "ke.success_allowed": -0.1045115927899258,
+        "ke.pace": -0.4684600004952202,
+        "ke.pace_competitive": -0.10491859642634238,
+        "ke.pace_seconds": 1.0,
+        "ke.expl": 0.6161797554455308,
+        "ke.expl_pass": 0.521761686205203,
+        "ke.expl_rush": 0.4906176722055796,
+        "ke.expl_allowed": -0.20890881127177824,
+        "ke.off_pass_epa": 0.24098090544498926,
+        "ke.off_rush_epa": 0.32704876947135425,
+        "ke.off_early_epa": 0.21854646499807223,
+        "ke.ppo": 0.4019413416390481,
+        "ke.finish": 0.33431923317925494,
+        "ke.opp_rate": 0.12225744555169374,
+        "ke.rz_td": 0.1574464439253849,
+        "ke.st": 0.2707892281305002
+      },
+      "ke.expl": {
+        "ke.off_eff": 0.7054825072256066,
+        "ke.def_eff": -0.14869038771722257,
+        "ke.success_native": 0.6599836148432133,
+        "ke.success_standard": 0.6639791758665283,
+        "ke.success_allowed": -0.03081368020063639,
+        "ke.pace": -0.07608204184216558,
+        "ke.pace_competitive": 0.2558667230690006,
+        "ke.pace_seconds": 0.6161797554455308,
+        "ke.expl": 1.0000000000000002,
+        "ke.expl_pass": 0.8921581965147132,
+        "ke.expl_rush": 0.7464374004084628,
+        "ke.expl_allowed": -0.022955158333776267,
+        "ke.off_pass_epa": 0.6135577738257837,
+        "ke.off_rush_epa": 0.5707066600128133,
+        "ke.off_early_epa": 0.7583348607770419,
+        "ke.ppo": 0.5765320450732078,
+        "ke.finish": 0.4085026420736271,
+        "ke.opp_rate": 0.5061809503195753,
+        "ke.rz_td": 0.21493574292755957,
+        "ke.st": 0.17564910461051253
+      },
+      "ke.expl_pass": {
+        "ke.off_eff": 0.7730684726632328,
+        "ke.def_eff": -0.23701871683815795,
+        "ke.success_native": 0.7038993191837156,
+        "ke.success_standard": 0.6828488785196705,
+        "ke.success_allowed": -0.0684182550907166,
+        "ke.pace": 0.09624876777100316,
+        "ke.pace_competitive": 0.35448438975244984,
+        "ke.pace_seconds": 0.521761686205203,
+        "ke.expl": 0.8921581965147132,
+        "ke.expl_pass": 1.0,
+        "ke.expl_rush": 0.3872254672668401,
+        "ke.expl_allowed": -0.18285336008371736,
+        "ke.off_pass_epa": 0.786284587787068,
+        "ke.off_rush_epa": 0.36763459849751484,
+        "ke.off_early_epa": 0.7894416459577034,
+        "ke.ppo": 0.5921227966195846,
+        "ke.finish": 0.4195523038786414,
+        "ke.opp_rate": 0.6045063753490048,
+        "ke.rz_td": 0.24994843762236826,
+        "ke.st": 0.09085074794917229
+      },
+      "ke.expl_rush": {
+        "ke.off_eff": 0.3226092004147042,
+        "ke.def_eff": 0.032600540369932,
+        "ke.success_native": 0.3362540659789982,
+        "ke.success_standard": 0.36207109765487794,
+        "ke.success_allowed": 0.006731401777559095,
+        "ke.pace": -0.28958057308652146,
+        "ke.pace_competitive": 0.026840890355960125,
+        "ke.pace_seconds": 0.4906176722055796,
+        "ke.expl": 0.7464374004084628,
+        "ke.expl_pass": 0.3872254672668401,
+        "ke.expl_rush": 1.0000000000000002,
+        "ke.expl_allowed": 0.1699130877277278,
+        "ke.off_pass_epa": 0.12086766985912227,
+        "ke.off_rush_epa": 0.6426114989939032,
+        "ke.off_early_epa": 0.4004520278516609,
+        "ke.ppo": 0.34479453194298343,
+        "ke.finish": 0.3250901501655092,
+        "ke.opp_rate": 0.16160940525464199,
+        "ke.rz_td": 0.10197379081838717,
+        "ke.st": 0.3356108051832606
+      },
+      "ke.expl_allowed": {
+        "ke.off_eff": -0.09233467347985032,
+        "ke.def_eff": 0.6723280447811876,
+        "ke.success_native": -0.1226227404504939,
+        "ke.success_standard": -0.10616029098364309,
+        "ke.success_allowed": 0.6090618054760197,
+        "ke.pace": 0.12383695779257851,
+        "ke.pace_competitive": -0.16180480368497388,
+        "ke.pace_seconds": -0.20890881127177824,
+        "ke.expl": -0.022955158333776267,
+        "ke.expl_pass": -0.18285336008371736,
+        "ke.expl_rush": 0.1699130877277278,
+        "ke.expl_allowed": 1.0000000000000002,
+        "ke.off_pass_epa": -0.23122437973430937,
+        "ke.off_rush_epa": 0.21820864932765213,
+        "ke.off_early_epa": -0.040408454455718334,
+        "ke.ppo": -0.22529590522932008,
+        "ke.finish": -0.3180000090698421,
+        "ke.opp_rate": -0.06140154485331816,
+        "ke.rz_td": 0.024177762233512624,
+        "ke.st": -0.05327617805403541
+      },
+      "ke.off_pass_epa": {
+        "ke.off_eff": 0.9465791804320693,
+        "ke.def_eff": -0.1222133760341254,
+        "ke.success_native": 0.8503450886202139,
+        "ke.success_standard": 0.8271952602784085,
+        "ke.success_allowed": 0.0454131964052731,
+        "ke.pace": 0.3242235270921391,
+        "ke.pace_competitive": 0.49326993081220505,
+        "ke.pace_seconds": 0.24098090544498926,
+        "ke.expl": 0.6135577738257837,
+        "ke.expl_pass": 0.786284587787068,
+        "ke.expl_rush": 0.12086766985912227,
+        "ke.expl_allowed": -0.23122437973430937,
+        "ke.off_pass_epa": 1.0000000000000002,
+        "ke.off_rush_epa": 0.34843401848129546,
+        "ke.off_early_epa": 0.8734760044766258,
+        "ke.ppo": 0.7309986195562196,
+        "ke.finish": 0.5522791108738102,
+        "ke.opp_rate": 0.760135159569178,
+        "ke.rz_td": 0.3366612868309911,
+        "ke.st": 0.11642905420223537
+      },
+      "ke.off_rush_epa": {
+        "ke.off_eff": 0.6176411266013432,
+        "ke.def_eff": 0.06578147409599529,
+        "ke.success_native": 0.540797968411813,
+        "ke.success_standard": 0.5635816868725495,
+        "ke.success_allowed": 0.13199521209890341,
+        "ke.pace": 0.20486774038239042,
+        "ke.pace_competitive": 0.40502308507476303,
+        "ke.pace_seconds": 0.32704876947135425,
+        "ke.expl": 0.5707066600128133,
+        "ke.expl_pass": 0.36763459849751484,
+        "ke.expl_rush": 0.6426114989939032,
+        "ke.expl_allowed": 0.21820864932765213,
+        "ke.off_pass_epa": 0.34843401848129546,
+        "ke.off_rush_epa": 1.0,
+        "ke.off_early_epa": 0.5540565608030975,
+        "ke.ppo": 0.5586486005213556,
+        "ke.finish": 0.4640368025908494,
+        "ke.opp_rate": 0.5403026787412073,
+        "ke.rz_td": 0.20909097068915436,
+        "ke.st": 0.2526097756654519
+      },
+      "ke.off_early_epa": {
+        "ke.off_eff": 0.9301121924269558,
+        "ke.def_eff": -0.06572649930623206,
+        "ke.success_native": 0.8667774340927237,
+        "ke.success_standard": 0.8623279800639105,
+        "ke.success_allowed": 0.08304125439501422,
+        "ke.pace": 0.2782354376741242,
+        "ke.pace_competitive": 0.43571664035076824,
+        "ke.pace_seconds": 0.21854646499807223,
+        "ke.expl": 0.7583348607770419,
+        "ke.expl_pass": 0.7894416459577034,
+        "ke.expl_rush": 0.4004520278516609,
+        "ke.expl_allowed": -0.040408454455718334,
+        "ke.off_pass_epa": 0.8734760044766258,
+        "ke.off_rush_epa": 0.5540565608030975,
+        "ke.off_early_epa": 0.9999999999999999,
+        "ke.ppo": 0.6937791497425959,
+        "ke.finish": 0.5112112872442819,
+        "ke.opp_rate": 0.7458493457441263,
+        "ke.rz_td": 0.39023419681949034,
+        "ke.st": 0.09569573232445641
+      },
+      "ke.ppo": {
+        "ke.off_eff": 0.7988558786485693,
+        "ke.def_eff": -0.17422581272843438,
+        "ke.success_native": 0.7206481901534533,
+        "ke.success_standard": 0.7203674950579732,
+        "ke.success_allowed": -0.03085908090770259,
+        "ke.pace": 0.11361950236149047,
+        "ke.pace_competitive": 0.3099780329262787,
+        "ke.pace_seconds": 0.4019413416390481,
+        "ke.expl": 0.5765320450732078,
+        "ke.expl_pass": 0.5921227966195846,
+        "ke.expl_rush": 0.34479453194298343,
+        "ke.expl_allowed": -0.22529590522932008,
+        "ke.off_pass_epa": 0.7309986195562196,
+        "ke.off_rush_epa": 0.5586486005213556,
+        "ke.off_early_epa": 0.6937791497425959,
+        "ke.ppo": 1.0,
+        "ke.finish": 0.8107246659828728,
+        "ke.opp_rate": 0.5346432201231821,
+        "ke.rz_td": 0.39803515081099905,
+        "ke.st": 0.23957618691950033
+      },
+      "ke.finish": {
+        "ke.off_eff": 0.597726475229454,
+        "ke.def_eff": -0.316194266778065,
+        "ke.success_native": 0.5089519286712453,
+        "ke.success_standard": 0.5023106281411719,
+        "ke.success_allowed": -0.2035420575700199,
+        "ke.pace": 0.13332911408373993,
+        "ke.pace_competitive": 0.29073722598667967,
+        "ke.pace_seconds": 0.33431923317925494,
+        "ke.expl": 0.4085026420736271,
+        "ke.expl_pass": 0.4195523038786414,
+        "ke.expl_rush": 0.3250901501655092,
+        "ke.expl_allowed": -0.3180000090698421,
+        "ke.off_pass_epa": 0.5522791108738102,
+        "ke.off_rush_epa": 0.4640368025908494,
+        "ke.off_early_epa": 0.5112112872442819,
+        "ke.ppo": 0.8107246659828728,
+        "ke.finish": 0.9999999999999999,
+        "ke.opp_rate": 0.387537150820336,
+        "ke.rz_td": 0.16974244707120212,
+        "ke.st": 0.5052891220074692
+      },
+      "ke.opp_rate": {
+        "ke.off_eff": 0.8196558631161267,
+        "ke.def_eff": -0.006246089309882945,
+        "ke.success_native": 0.8476762365196413,
+        "ke.success_standard": 0.8342276684568579,
+        "ke.success_allowed": 0.2177938858733348,
+        "ke.pace": 0.45851212203498143,
+        "ke.pace_competitive": 0.570477387835337,
+        "ke.pace_seconds": 0.12225744555169374,
+        "ke.expl": 0.5061809503195753,
+        "ke.expl_pass": 0.6045063753490048,
+        "ke.expl_rush": 0.16160940525464199,
+        "ke.expl_allowed": -0.06140154485331816,
+        "ke.off_pass_epa": 0.760135159569178,
+        "ke.off_rush_epa": 0.5403026787412073,
+        "ke.off_early_epa": 0.7458493457441263,
+        "ke.ppo": 0.5346432201231821,
+        "ke.finish": 0.387537150820336,
+        "ke.opp_rate": 1.0,
+        "ke.rz_td": 0.30438037421863695,
+        "ke.st": 0.11807768986189682
+      },
+      "ke.rz_td": {
+        "ke.off_eff": 0.3562130450229928,
+        "ke.def_eff": 0.12306402239845506,
+        "ke.success_native": 0.4385748604425815,
+        "ke.success_standard": 0.41621547360528977,
+        "ke.success_allowed": 0.2730944738831095,
+        "ke.pace": -0.11952452250712915,
+        "ke.pace_competitive": -0.039050151718731066,
+        "ke.pace_seconds": 0.1574464439253849,
+        "ke.expl": 0.21493574292755957,
+        "ke.expl_pass": 0.24994843762236826,
+        "ke.expl_rush": 0.10197379081838717,
+        "ke.expl_allowed": 0.024177762233512624,
+        "ke.off_pass_epa": 0.3366612868309911,
+        "ke.off_rush_epa": 0.20909097068915436,
+        "ke.off_early_epa": 0.39023419681949034,
+        "ke.ppo": 0.39803515081099905,
+        "ke.finish": 0.16974244707120212,
+        "ke.opp_rate": 0.30438037421863695,
+        "ke.rz_td": 1.0,
+        "ke.st": 0.0007623218151494862
+      },
+      "ke.st": {
+        "ke.off_eff": 0.15759653226476966,
+        "ke.def_eff": 0.053603299552951435,
+        "ke.success_native": 0.19165801237671334,
+        "ke.success_standard": 0.15192255352960124,
+        "ke.success_allowed": -0.059350976481679904,
+        "ke.pace": -0.24770582639630107,
+        "ke.pace_competitive": -0.15985605036659556,
+        "ke.pace_seconds": 0.2707892281305002,
+        "ke.expl": 0.17564910461051253,
+        "ke.expl_pass": 0.09085074794917229,
+        "ke.expl_rush": 0.3356108051832606,
+        "ke.expl_allowed": -0.05327617805403541,
+        "ke.off_pass_epa": 0.11642905420223537,
+        "ke.off_rush_epa": 0.2526097756654519,
+        "ke.off_early_epa": 0.09569573232445641,
+        "ke.ppo": 0.23957618691950033,
+        "ke.finish": 0.5052891220074692,
+        "ke.opp_rate": 0.11807768986189682,
+        "ke.rz_td": 0.0007623218151494862,
+        "ke.st": 1.0000000000000002
+      }
+    }
+  },
+  "off_def_symmetry": {
+    "league_mean_off_epa": 0.007206068571272238,
+    "league_mean_def_epa": 0.007206068571272238,
+    "identity_gap": 0.0,
+    "team_off_def_pearson": -0.05602467395415177,
+    "n_teams": 32,
+    "note": "same-play identity: league off mean should match league def mean"
+  },
+  "production_promote": false,
+  "no_composite_weights": true
+}

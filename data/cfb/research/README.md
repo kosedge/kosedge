@@ -24,5 +24,9 @@ Per as_of folder (gitignored):
 
 These are **raw unadjusted team-game metrics**, not KE Ratings.
 
+Phase 1 KE measurement may also cache nflverse / SDV parquet under
+`ke_football_pbp/` (gitignored). That cache is research-only and must not
+write 2026 into `raw/cfb/pbp/`.
+
 Committed summaries live under `data/ops/cfb-2026-w1-raw-team-game-YYYYMMDD/`
 (and the #558 proof folder).
