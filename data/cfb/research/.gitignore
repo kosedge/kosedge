@@ -1,0 +1,12 @@
+# Current-season SDV restores. Canonical Mac target:
+# /Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_YYYYMMDD/
+# Historical research restore (never the Aug 13 lake):
+# /Volumes/KosEdgeData/raw/cfb/pbp_research/as_of_YYYYMMDD/
+# Do not write 2026 into raw/cfb/pbp/ (2014–2025 historical lake).
+as_of_*/
+pbp_hist/
+pbp_current/
+*.parquet
+*.csv
+*.csv.gz
+proof_summary.json

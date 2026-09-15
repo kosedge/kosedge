@@ -1,0 +1,80 @@
+{
+  "as_of": "2026-09-15",
+  "copy": "sportsdataverse espn_cfb_pbp restore on cloud agent (HD not mounted)",
+  "inventory_as_of": "2026-08-13",
+  "note": "Checksums are of the restore copy, not the Aug 13 HD bytes. Game counts match inventory; play/column/byte counts drifted.",
+  "seasons": {
+    "2021": {
+      "raw_sha256": "302f6e182b4653ae6c7d31f975c2c090e1804ed736ad35931cdbaa5d7dd26f7e",
+      "core_sha256": "34fb28fee56a08474343b088f2bc3ffbbc721aaeaa0894d5f6b8ddda5b1d25ac",
+      "plays_restore": 147319,
+      "plays_inventory": 146367,
+      "games": 842,
+      "games_match": true,
+      "raw_cols_restore": 497,
+      "raw_cols_inventory": 477,
+      "duplicate_id": 0
+    },
+    "2022": {
+      "raw_sha256": "1e0271f3182271ee7f680e8fbeb05c7122952abda0f933be1be3987c51024a88",
+      "core_sha256": "7d4fff6cc88fd4cf8eea3fd7930a01bbdc0db336c968ba30119266c98fe6aecf",
+      "plays_restore": 149700,
+      "plays_inventory": 149654,
+      "games": 861,
+      "games_match": true,
+      "raw_cols_restore": 497,
+      "raw_cols_inventory": 477,
+      "duplicate_id": 0
+    },
+    "2023": {
+      "raw_sha256": "fd0b04553ba3944e8acddc1088aba60692b7a555fb945de8381055c37a98799c",
+      "core_sha256": "7546d29a20a745bcc5e197c6e379ecf84b87a220895c24a59c9cafc911c54ff5",
+      "plays_restore": 153690,
+      "plays_inventory": 153626,
+      "games": 903,
+      "games_match": true,
+      "raw_cols_restore": 497,
+      "raw_cols_inventory": 477,
+      "duplicate_id": 0
+    },
+    "2024": {
+      "raw_sha256": "25ae95cf175a59bbb362d5f8af3cb3e748b56635d084ebda69461c31b3c5e312",
+      "core_sha256": "5e959a43c24d1eba2aa09aae35e9cbab276c248029548a2a07f709ff54481b2a",
+      "plays_restore": 163142,
+      "plays_inventory": 162950,
+      "games": 946,
+      "games_match": true,
+      "raw_cols_restore": 497,
+      "raw_cols_inventory": 477,
+      "duplicate_id": 0,
+      "unique_pos_team": 235
+    },
+    "2025": {
+      "raw_sha256": "aa037920e980acf17317747f2010a031b3b7e1013a44a7b15db18b1dd9df0e63",
+      "core_sha256": "56d953583e6803a31bff878335774e2015a7ca12066eb07dcea195c5f2e41684",
+      "plays_restore": 166053,
+      "plays_inventory": 165850,
+      "games": 956,
+      "games_match": true,
+      "raw_cols_restore": 496,
+      "raw_cols_inventory": 476,
+      "raw_bytes_restore": 59281459,
+      "raw_bytes_inventory": 59265929,
+      "duplicate_id": 0,
+      "unique_pos_team": 236
+    }
+  },
+  "hist_2021_2024": {
+    "plays_restore": 613851,
+    "plays_inventory": 612597,
+    "play_delta": 1254,
+    "games": 3552,
+    "games_match": true
+  },
+  "sdv_2026_head": {
+    "url": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2026.parquet",
+    "http_status": 200,
+    "content_length": 7904267,
+    "loaded_this_pr": false
+  }
+}
