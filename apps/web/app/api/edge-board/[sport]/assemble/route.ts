@@ -28,8 +28,8 @@ import { getSport } from "@/lib/sports";
 import { isRetiredNcaamSportKey } from "@/lib/ncaam/identity";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 import {
-  cfbEdgeBoardAssembleUnavailablePayload,
-  isCfbEdgeBoardCustomerDisabled,
+  footballPublicNumbersAssembleUnavailablePayload,
+  isFootballPublicNumbersDisabled,
 } from "@/lib/cfb-edge-board-public";
 import { applyNflInactiveFairSuppressToRows } from "@/lib/nfl-inactive-fair-suppress";
 import { loadNflInactiveSuppressStore } from "@/lib/nfl-inactive-suppress-store";
@@ -93,12 +93,15 @@ export async function GET(
     );
   }
 
-  // P0: CFB public Edge Board fail-closed — no rows, no tags, no assemble.
-  if (isCfbEdgeBoardCustomerDisabled(sport)) {
-    return NextResponse.json(cfbEdgeBoardAssembleUnavailablePayload(), {
-      status: 503,
-      headers: pageDataCacheHeaders({ cacheable: false }),
-    });
+  // P0: NFL/CFB public number surfaces fail-closed — no rows, no tags, no assemble.
+  if (isFootballPublicNumbersDisabled(sport)) {
+    return NextResponse.json(
+      footballPublicNumbersAssembleUnavailablePayload(sport),
+      {
+        status: 503,
+        headers: pageDataCacheHeaders({ cacheable: false }),
+      },
+    );
   }
 
   const url = new URL(req.url);

@@ -6,6 +6,9 @@ import {
   LEGITIMATE_EMPTY_SLATE_COPY,
   MODEL_DATA_UNAVAILABLE_COPY,
 } from "@/lib/model-service-status";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
+import SportHubShell from "@/components/pro/SportHubShell";
 
 export const dynamic = "force-dynamic";
 
@@ -29,6 +32,19 @@ export default async function NflWeeklySlatePage({
   params: Promise<{ date: string }>;
 }) {
   const { date } = await params;
+  if (isFootballPublicNumbersDisabled("nfl")) {
+    return (
+      <SportHubShell
+        sportKey="nfl"
+        sportName="NFL"
+        base="/pro/nfl"
+        title="Weekly Slate"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="nfl" title="NFL Weekly Slate" />
+      </SportHubShell>
+    );
+  }
   const slate = await buildNflWeeklySlate(date);
 
   return (

@@ -24,6 +24,8 @@ import {
   cfbModelDeskHonestyNote,
   cfbModelDeskTruthStates,
 } from "@/lib/cfb-truth-label";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 
 export const dynamic = "force-dynamic";
 
@@ -97,6 +99,20 @@ export default async function CfbTeamsPowerPage({
     | Promise<Record<string, SearchValue>>
     | Record<string, SearchValue>;
 }) {
+  if (isFootballPublicNumbersDisabled("cfb")) {
+    return (
+      <SportHubShell
+        sportKey="cfb"
+        sportName="CFB"
+        base="/pro/cfb"
+        title="Power + Teams"
+        summary="Coming soon"
+      >
+        <FootballNumbersUnavailable sport="cfb" title="CFB Power Ratings" />
+      </SportHubShell>
+    );
+  }
+
   const sp =
     searchParams &&
     typeof (searchParams as Promise<unknown>).then === "function"

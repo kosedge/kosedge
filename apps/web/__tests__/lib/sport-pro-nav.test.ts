@@ -16,7 +16,10 @@ describe("sport-pro-nav", () => {
       const labels = primary.map((i) => i.label);
       expect(labels).toContain("Overview");
       expect(labels).toContain("Teams");
-      if (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) {
+      if (
+        (sport.key === "cfb" && !isCfbEdgeBoardCustomerEnabled()) ||
+        sport.key === "nfl"
+      ) {
         expect(labels).not.toContain("Edge Board");
       } else {
         expect(labels).toContain("Edge Board");
@@ -48,7 +51,6 @@ describe("sport-pro-nav", () => {
     const labels = nflPrimary.map((i) => i.label);
     expect(labels).toEqual([
       "Overview",
-      "Edge Board",
       "Weekly Slate",
       "Survivor",
       "Fantasy",
@@ -56,6 +58,7 @@ describe("sport-pro-nav", () => {
       "Camp Desk",
       "Teams",
     ]);
+    expect(labels).not.toContain("Edge Board");
     // Demoted from primary — live in Overview body / More tools.
     expect(labels).not.toContain("KEI Lines");
     expect(labels).not.toContain("Edges");

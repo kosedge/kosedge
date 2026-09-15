@@ -77,6 +77,8 @@ export function scrubEdgeBoardAssembleCustomerRows(
   sport?: string,
 ): EdgeBoardRow[] {
   const scrubbed = rows.map(scrubEdgeBoardAssembleCustomerRow);
+  // Coming-soon is a page/assemble display gate. Do not strip NFL stamp /
+  // inactive-suppress chrome here — CFB public-disabled is tag-only.
   if (isCfbEdgeBoardCustomerDisabled(sport)) {
     return stripCfbCustomerEdgeTagRows(
       scrubbed as unknown as Record<string, unknown>[],

@@ -49,24 +49,27 @@ describe("CFB Edge Board public kill switch", () => {
     expect(isCfbSportKey("cfb")).toBe(true);
   });
 
-  it("does not disable other sports", () => {
-    for (const sport of ["nfl", "nba", "mlb", "nhl", "wnba", "ncaam"]) {
+  it("does not disable non-football sports", () => {
+    for (const sport of ["nba", "mlb", "nhl", "wnba", "ncaam"]) {
       expect(isCfbEdgeBoardCustomerDisabled(sport)).toBe(false);
       expect(publicEdgeBoardHref(sport)).toBe(`/edge-board/${sport}`);
     }
   });
 
-  it("omits CFB from the public Edge Board selector and keeps other sports", () => {
+  it("omits CFB and NFL from the public Edge Board selector and keeps other sports", () => {
     const keys = publicEdgeBoardSports(SPORTS).map((s) => s.key);
     expect(keys).not.toContain("cfb");
+    expect(keys).not.toContain("nfl");
     expect(keys).toEqual(
-      expect.arrayContaining(["nfl", "nba", "mlb", "nhl", "wnba", "ncaam"]),
+      expect.arrayContaining(["nba", "mlb", "nhl", "wnba", "ncaam"]),
     );
     expect(publicEdgeBoardSportKeys(EDGE_BOARD_SPORTS)).not.toContain("cfb");
+    expect(publicEdgeBoardSportKeys(EDGE_BOARD_SPORTS)).not.toContain("nfl");
     expect(publicEdgeBoardSportKeys(EDGE_BOARD_SPORTS)).toEqual(
-      expect.arrayContaining(["nfl", "nba", "mlb", "nhl", "wnba", "ncaam"]),
+      expect.arrayContaining(["nba", "mlb", "nhl", "wnba", "ncaam"]),
     );
     expect(EDGE_BOARD_SPORTS).toContain("cfb");
+    expect(EDGE_BOARD_SPORTS).toContain("nfl");
   });
 
   it("fail-closes direct CFB Edge Board URLs with the exact customer message", () => {
@@ -80,18 +83,22 @@ describe("CFB Edge Board public kill switch", () => {
     expect(payload.games).toBe(0);
 
     const page = readRel("app/edge-board/[sport]/page.tsx");
-    expect(page).toContain("isCfbEdgeBoardCustomerDisabled");
-    expect(page).toContain("CfbEdgeBoardUnavailable");
-    expect(page).toContain("cfbPublicDisabled");
+    expect(page).toContain("isFootballPublicNumbersDisabled");
+    expect(page).toContain("FootballNumbersUnavailable");
+    expect(page).toContain("footballPublicDisabled");
 
     const assemble = readRel("app/api/edge-board/[sport]/assemble/route.ts");
-    expect(assemble).toContain("isCfbEdgeBoardCustomerDisabled");
-    expect(assemble).toContain("cfbEdgeBoardAssembleUnavailablePayload");
+    expect(assemble).toContain("isFootballPublicNumbersDisabled");
+    expect(assemble).toContain(
+      "footballPublicNumbersAssembleUnavailablePayload",
+    );
     expect(assemble).toContain("status: 503");
 
-    const unavailable = readRel("components/CfbEdgeBoardUnavailable.tsx");
-    expect(unavailable).toContain("CFB_EDGE_BOARD_UNAVAILABLE_MESSAGE");
+    const unavailable = readRel("components/FootballNumbersUnavailable.tsx");
+    expect(unavailable).toContain("FOOTBALL_PUBLIC_NUMBERS_HEADING");
+    expect(unavailable).toContain("Coming soon");
     expect(unavailable).toContain("cfb-edge-board-unavailable-message");
+    expect(unavailable).toContain("nfl-edge-board-unavailable-message");
   });
 
   it("publishes zero CFB PLAY/LEAN/PASS/value tags while disabled", () => {
@@ -167,6 +174,19 @@ describe("CFB Edge Board public kill switch", () => {
       "nfl",
     );
     expect((nflScrubbed[0] as { publishTag?: string }).publishTag).toBe("LEAN");
+
+    const nbaScrubbed = scrubEdgeBoardAssembleCustomerRows(
+      [
+        {
+          game: "BOS @ NYK",
+          market: "Spread",
+          publishTag: "LEAN",
+          actionLabel: "LEAN",
+        } as never,
+      ],
+      "nba",
+    );
+    expect((nbaScrubbed[0] as { publishTag?: string }).publishTag).toBe("LEAN");
   });
 
   it("does not change CFB tagger math (sit-aware PASS still exists internally)", () => {
@@ -181,7 +201,7 @@ describe("CFB Edge Board public kill switch", () => {
     expect(cfbPrimary).toContain("Overview");
     expect(cfbPrimary).toContain("Model");
 
-    expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain(
+    expect(getSportPrimaryNav("nfl").map((i) => i.label)).not.toContain(
       "Edge Board",
     );
     expect(getSportPrimaryNav("nba").map((i) => i.label)).toContain(
@@ -192,9 +212,10 @@ describe("CFB Edge Board public kill switch", () => {
     );
 
     expect(publicEdgeBoardHref("cfb")).toBeNull();
+    expect(publicEdgeBoardHref("nfl")).toBeNull();
     expect(customerCtaHref("/edge-board/cfb")).toBeNull();
     expect(customerCtaHref("/edge-board/cfb?week=1")).toBeNull();
-    expect(customerCtaHref("/edge-board/nfl")).toBe("/edge-board/nfl");
+    expect(customerCtaHref("/edge-board/nfl")).toBeNull();
     expect(isCfbEdgeBoardHref("/edge-board/cfb?week=2")).toBe(true);
     expect(isCfbEdgeBoardHref("/edge-board/nfl")).toBe(false);
 
@@ -203,7 +224,7 @@ describe("CFB Edge Board public kill switch", () => {
       { href: "/edge-board/nfl", label: "NFL" },
       { href: "/pro/cfb/model", label: "Model" },
     ]);
-    expect(filtered.map((i) => i.label)).toEqual(["NFL", "Model"]);
+    expect(filtered.map((i) => i.label)).toEqual(["Model"]);
   });
 
   it("leaves underlying CFB lib/API/research modules in place (not deleted)", () => {

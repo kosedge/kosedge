@@ -5,6 +5,8 @@ import { getKeiCode, getKeiProductLabel } from "@/lib/kei-brand";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 import { getKeiLines } from "@/lib/kei-lines";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import { KeiLinesTable } from "./KeiLinesTable";
 import { NcaamKeiLinesClient } from "./NcaamKeiLinesClient";
 
@@ -20,6 +22,23 @@ export default async function KeiLinesSportPage({
   // NFL live KEI board is fair-lines — never land paying subscribers on the
   // pipeline-export stub that reads missing kei_lines_nfl.json.
   if (sportKey === "nfl") redirect("/pro/nfl/fair-lines");
+  if (isFootballPublicNumbersDisabled(sportKey)) {
+    const sportName = sportDisplayLabel(sportKey);
+    return (
+      <SportProShell
+        sport={sportKey}
+        pageTitle={`${sportName} — Coming soon`}
+        pageSubtitle="Coming soon"
+      >
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+          <FootballNumbersUnavailable
+            sport={sportKey}
+            title={`${sportName} KEI Lines`}
+          />
+        </main>
+      </SportProShell>
+    );
+  }
   const sportName = sportDisplayLabel(sportKey);
   const keiCode = getKeiCode(sportKey);
   const games = getKeiLines(sportKey);

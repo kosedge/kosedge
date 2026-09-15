@@ -10,6 +10,7 @@ import {
   scopeCfbLiveEdgeBoardRows,
 } from "@/lib/cfb-edge-board-week";
 import { getSport, SPORTS } from "@/lib/sports";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 
 /** Build a URL slug from away/home team names (e.g. "Duke", "UNC" -> "duke-unc"). */
 export function slugifyGame(away: string, home: string): string {
@@ -36,6 +37,7 @@ export async function getEdgeBoardRows(
   sport: string,
 ): Promise<FlatEdgeBoardRow[]> {
   if (!getSport(sport)) return [];
+  if (isFootballPublicNumbersDisabled(sport)) return [];
   try {
     const rows = await loadAssembledEdgeBoardRows(sport);
     if (sport.toLowerCase() !== "cfb") return rows;
@@ -56,6 +58,7 @@ export type TonightGame = {
 export async function getTonightGames(sport: string): Promise<TonightGame[]> {
   const valid = getSport(sport);
   if (!valid) return [];
+  if (isFootballPublicNumbersDisabled(sport)) return [];
 
   try {
     const flat = await getEdgeBoardRows(sport);

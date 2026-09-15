@@ -1,13 +1,13 @@
 import SportProHeader from "@/components/pro/SportProHeader";
 import EdgeBoardSportClient from "@/components/EdgeBoardSportClient";
-import CfbEdgeBoardUnavailable from "@/components/CfbEdgeBoardUnavailable";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 import { normalizeNflEdgeBoardSlate } from "@/lib/build-edge-board-rows";
 import {
   edgeBoardAssembleBootstrapScript,
   edgeBoardAssembleHref,
 } from "@/lib/edge-board-assemble-href";
 import { parseCfbAssembleWeek } from "@/lib/cfb-edge-board-week";
-import { isCfbEdgeBoardCustomerDisabled } from "@/lib/cfb-edge-board-public";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
 import { resolveSportKey, sportDisplayLabel } from "@/lib/sports";
 
 export const dynamic = "force-dynamic";
@@ -50,13 +50,13 @@ export default async function EdgeBoardSportPage({
   const cfbWeekRaw = Array.isArray(sp.week) ? sp.week[0] : sp.week;
   const cfbWeek = sportKey === "cfb" ? parseCfbAssembleWeek(cfbWeekRaw) : 1;
   const assembleHref = edgeBoardAssembleHref({ sportKey, slate, cfbWeek });
-  const cfbPublicDisabled = isCfbEdgeBoardCustomerDisabled(sportKey);
+  const footballPublicDisabled = isFootballPublicNumbersDisabled(sportKey);
 
   return (
     <div className="min-h-screen bg-[#070A0F] text-gray-100 relative overflow-hidden">
       {/* #12 GO-1: start assemble with HTML — do not await (Alex waterfall). */}
-      {/* CFB public kill switch: do not bootstrap assemble while fail-closed. */}
-      {!cfbPublicDisabled ? (
+      {/* Football public kill switch: do not bootstrap assemble while fail-closed. */}
+      {!footballPublicDisabled ? (
         <>
           <link
             rel="preload"
@@ -88,8 +88,12 @@ export default async function EdgeBoardSportPage({
       </div>
 
       <main className="relative z-10 w-full px-5 sm:px-6 pt-6 pb-16 sm:pt-8">
-        {cfbPublicDisabled ? (
-          <CfbEdgeBoardUnavailable showSelector />
+        {footballPublicDisabled ? (
+          <FootballNumbersUnavailable
+            sport={sportKey}
+            showSelector
+            title={`${sportName} Edge Board`}
+          />
         ) : (
           <EdgeBoardSportClient
             sportKey={sportKey}

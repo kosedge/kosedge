@@ -22,6 +22,8 @@ import {
   isNflCalendarPreseason,
   NFL_PRODUCT_SEASON,
 } from "@/lib/nfl-truth-label";
+import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
 
 export const dynamic = "force-dynamic";
 
@@ -137,6 +139,23 @@ export default async function PowerRatingsSportPage({
     redirect("/pro/cfb/teams");
   }
   const sportName = sportDisplayLabel(sportKey);
+
+  if (isFootballPublicNumbersDisabled(sportKey)) {
+    return (
+      <SportProShell
+        sport={sportKey}
+        pageTitle={`${sportName} Power Ratings`}
+        pageSubtitle="Coming soon"
+      >
+        <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6">
+          <FootballNumbersUnavailable
+            sport={sportKey}
+            title={`${sportName} Power Ratings`}
+          />
+        </main>
+      </SportProShell>
+    );
+  }
   const sp = searchParams ? await searchParams : {};
   const bundleRaw = Array.isArray(sp.bundle) ? sp.bundle[0] : sp.bundle;
 
