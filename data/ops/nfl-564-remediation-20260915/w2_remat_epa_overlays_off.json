@@ -1,0 +1,351 @@
+{
+  "checksum_sha256": "11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9",
+  "game_count": 16,
+  "games": [
+    {
+      "defense_index_away": 1.042411,
+      "defense_index_home": 1.024429,
+      "expected_away_points": 22.2596,
+      "expected_home_points": 23.8397,
+      "game_date": "2026-09-17",
+      "key": "DET@BUF",
+      "offense_index_away": 1.046448,
+      "offense_index_home": 1.099357,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 46.0993,
+      "spread_home": -1.5802,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.944959,
+      "defense_index_home": 1.019391,
+      "expected_away_points": 20.8148,
+      "expected_home_points": 23.7191,
+      "game_date": "2026-09-20",
+      "key": "CAR@ATL",
+      "offense_index_away": 0.923131,
+      "offense_index_home": 0.965244,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 44.5339,
+      "spread_home": -2.9043,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 1.134605,
+      "defense_index_home": 0.985284,
+      "expected_away_points": 20.4275,
+      "expected_home_points": 22.2754,
+      "game_date": "2026-09-20",
+      "key": "MIN@CHI",
+      "offense_index_away": 0.838866,
+      "offense_index_home": 1.022582,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 42.703,
+      "spread_home": -1.8479,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 1.11204,
+      "defense_index_home": 0.908192,
+      "expected_away_points": 24.023,
+      "expected_home_points": 19.9976,
+      "game_date": "2026-09-20",
+      "key": "PHI@TEN",
+      "offense_index_away": 0.996906,
+      "offense_index_home": 0.867913,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 44.0206,
+      "spread_home": 4.0254,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.986833,
+      "defense_index_home": 1.054089,
+      "expected_away_points": 21.0599,
+      "expected_home_points": 23.9437,
+      "game_date": "2026-09-20",
+      "key": "PIT@NE",
+      "offense_index_away": 0.978812,
+      "offense_index_home": 1.029462,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 45.0037,
+      "spread_home": -2.8838,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.966732,
+      "defense_index_home": 0.858569,
+      "expected_away_points": 25.833,
+      "expected_home_points": 20.582,
+      "game_date": "2026-09-20",
+      "key": "GB@NYJ",
+      "offense_index_away": 1.095833,
+      "offense_index_home": 0.827705,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 46.415,
+      "spread_home": 5.251,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 1.135589,
+      "defense_index_home": 0.989724,
+      "expected_away_points": 20.2241,
+      "expected_home_points": 21.8577,
+      "game_date": "2026-09-20",
+      "key": "CLE@TB",
+      "offense_index_away": 0.82,
+      "offense_index_home": 0.98227,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 42.0818,
+      "spread_home": -1.6336,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 1.070791,
+      "defense_index_home": 0.984407,
+      "expected_away_points": 20.9675,
+      "expected_home_points": 22.5563,
+      "game_date": "2026-09-20",
+      "key": "NO@BAL",
+      "offense_index_away": 0.884573,
+      "offense_index_home": 0.998255,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 43.5239,
+      "spread_home": -1.5888,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.861283,
+      "defense_index_home": 1.193767,
+      "expected_away_points": 19.832,
+      "expected_home_points": 24.7739,
+      "game_date": "2026-09-20",
+      "key": "CIN@HOU",
+      "offense_index_away": 1.009125,
+      "offense_index_home": 0.937566,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 44.6059,
+      "spread_home": -4.9419,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 1.08301,
+      "defense_index_home": 1.106398,
+      "expected_away_points": 21.0567,
+      "expected_home_points": 22.9529,
+      "game_date": "2026-09-20",
+      "key": "JAX@DEN",
+      "offense_index_away": 1.009157,
+      "offense_index_home": 1.045102,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 44.0096,
+      "spread_home": -1.8962,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.983481,
+      "defense_index_home": 1.087003,
+      "expected_away_points": 19.0572,
+      "expected_home_points": 22.9505,
+      "game_date": "2026-09-20",
+      "key": "LV@LAC",
+      "offense_index_away": 0.82,
+      "offense_index_home": 0.916679,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 42.0077,
+      "spread_home": -3.8933,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.866072,
+      "defense_index_home": 0.82,
+      "expected_away_points": 24.5897,
+      "expected_home_points": 25.684,
+      "game_date": "2026-09-20",
+      "key": "WSH@DAL",
+      "offense_index_away": 1.013077,
+      "offense_index_home": 1.072396,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 50.2737,
+      "spread_home": -1.0943,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 1.158411,
+      "defense_index_home": 0.912063,
+      "expected_away_points": 24.2398,
+      "expected_home_points": 20.4376,
+      "game_date": "2026-09-20",
+      "key": "SEA@ARI",
+      "offense_index_away": 1.023325,
+      "offense_index_home": 0.948419,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 44.6775,
+      "spread_home": 3.8022,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.887959,
+      "defense_index_home": 0.914899,
+      "expected_away_points": 21.8535,
+      "expected_home_points": 25.8169,
+      "game_date": "2026-09-20",
+      "key": "MIA@SF",
+      "offense_index_away": 0.934871,
+      "offense_index_home": 1.069037,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 47.6704,
+      "spread_home": -3.9635,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.983191,
+      "defense_index_home": 1.036537,
+      "expected_away_points": 22.628,
+      "expected_home_points": 23.4242,
+      "game_date": "2026-09-20",
+      "key": "IND@KC",
+      "offense_index_away": 1.081889,
+      "offense_index_home": 1.010609,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 46.0522,
+      "spread_home": -0.7961,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "defense_index_away": 0.917175,
+      "defense_index_home": 1.057293,
+      "expected_away_points": 20.1352,
+      "expected_home_points": 26.5767,
+      "game_date": "2026-09-21",
+      "key": "NYG@LAR",
+      "offense_index_away": 0.950239,
+      "offense_index_home": 1.13337,
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "predicted_total": 46.7119,
+      "spread_home": -6.4415,
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    }
+  ],
+  "injury_overlay": false,
+  "live_scoring": {
+    "base_efficiency_margin_weight": 16.0,
+    "base_efficiency_max_margin_points": 6.5,
+    "base_efficiency_max_total_points": 5.0,
+    "base_efficiency_total_weight": 10.5,
+    "base_total_points": 45.3,
+    "framework_version": "nfl-handicap-core-v3.1",
+    "hfa_margin_points": 1.05,
+    "home_field_points": 1.05
+  },
+  "locked_scoring": {
+    "base_efficiency_margin_weight": 16.0,
+    "base_efficiency_max_margin_points": 6.5,
+    "base_efficiency_max_total_points": 5.0,
+    "base_efficiency_total_weight": 10.5,
+    "base_total_points": 45.3,
+    "framework_version": "nfl-handicap-core-v3.1",
+    "home_field_points": 1.05
+  },
+  "overlays_off": true,
+  "personnel_overlay": false,
+  "production_promote": false,
+  "run_id": "nfl-564-remediation-20260915-w2",
+  "strength_source": "packaged_epa_prior"
+}

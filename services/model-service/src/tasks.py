@@ -666,6 +666,10 @@ def _count_completed_reg_games_season(session: Any, season_year: int) -> int:
     Require a past ``game_date`` so placeholder scores on future hydrated
     rows (or mislabeled preseason) cannot unlock OOD KAV/injury/supervised
     paths before the season has actually been played.
+
+    NFL #564: if the schedule table still lacks scores after Week 1, fall
+    back to ingested ``nfl_market_outcomes`` so readiness / remat gates
+    can see completed games.
     """
     try:
         n = session.execute(
@@ -683,9 +687,33 @@ def _count_completed_reg_games_season(session: Any, season_year: int) -> int:
             ),
             {"season": int(season_year)},
         ).scalar()
+        schedule_n = int(n or 0)
+        if schedule_n > 0:
+            return schedule_n
+    except Exception:
+        schedule_n = 0
+    try:
+        n = session.execute(
+            text(
+                """
+                SELECT COUNT(*)::int AS n
+                FROM nfl_market_outcomes mo
+                JOIN games g ON g.id = mo.game_id
+                JOIN seasons s ON s.id = g.season_id
+                JOIN leagues l ON l.id = s.league_id
+                WHERE l.code = 'nfl'
+                  AND s.season_year = :season
+                  AND mo.actual_home_points IS NOT NULL
+                  AND mo.actual_away_points IS NOT NULL
+                  AND g.game_date IS NOT NULL
+                  AND g.game_date < CURRENT_DATE
+                """
+            ),
+            {"season": int(season_year)},
+        ).scalar()
         return int(n or 0)
     except Exception:
-        return 0
+        return int(schedule_n or 0)
 
 
 def _count_completed_reg_games_by_team(
@@ -4493,8 +4521,13 @@ def run_nfl_market_simulations(
     include_completed_games: bool = False,
     projection_created_at_mode: str = "now",
     kickoff_buffer_minutes: int = 30,
+    force_overlays_off: bool = True,
+    prefer_packaged_epa: bool = True,
+    unlock_overlays: bool = False,
 ) -> Dict[str, Any]:
     # Canary: proves which worker build executed (props baselines+box rebuild 2026-07-31).
+    from src.services.nfl_epa_authority import overlays_must_stay_off
+
     worker_build_id = "props-under-bias-20260731c-baselines-box-rebuild"
     target_date = date.fromisoformat(game_date) if game_date else date.today()
     session = SessionLocal()
@@ -4633,10 +4666,16 @@ def run_nfl_market_simulations(
                 int(completed_reg_cache.get(int(season_year), 0)) if season_year is not None else 0
             )
             season_too_early = completed_reg_season < 3
+            overlays_off = overlays_must_stay_off(
+                completed_reg_season=completed_reg_season,
+                force_overlays_off=bool(force_overlays_off),
+                unlock_overlays=bool(unlock_overlays),
+            )
             # Hydrated KAV / second-order / roster-continuity nowcasts are OOD
             # before real REG games. Keep EPA pack + market blend; drop the rest.
+            # NFL #564 remat: force overlays off even after W1 outcomes land.
             early_season_ood_dampened = False
-            if season_too_early and isinstance(matchup_kwargs, dict):
+            if overlays_off and isinstance(matchup_kwargs, dict):
                 early_season_ood_dampened = True
                 for _k in (
                     "home_kav_offense_5g",
@@ -4672,6 +4711,25 @@ def run_nfl_market_simulations(
                     as_of_week=matchup_week_for_priors,
                 )
             team_priors = priors_cache.get(cache_key, {})
+            if prefer_packaged_epa and season_year is not None:
+                from src.services.nfl_season_engine.loaders import load_packaged_epa_priors
+
+                try:
+                    packaged_book, _packaged_meta = load_packaged_epa_priors(int(season_year))
+                except Exception:
+                    packaged_book = {}
+                if packaged_book:
+                    prior_source = "packaged_epa_prior"
+                    team_priors = {
+                        str(team): dict(row)
+                        for team, row in packaged_book.items()
+                        if isinstance(row, dict)
+                    }
+                    for team, row in list(team_priors.items()):
+                        if team == "LA" and "LAR" not in team_priors:
+                            team_priors["LAR"] = dict(row)
+                        if team == "LAR" and "LA" not in team_priors:
+                            team_priors["LA"] = dict(row)
             home_prior = (
                 team_priors.get(str(m.get("home_abbr") or ""))
                 or team_priors.get(str(m.get("home_team") or ""))
@@ -4735,7 +4793,8 @@ def run_nfl_market_simulations(
             # Neutralize injury/roster-continuity nowcast before REG games —
             # preseason depth charts and continuity shocks were swinging
             # margins several points past the EPA pack + market.
-            if season_too_early:
+            # NFL #564: force_overlays_off keeps this neutralization after W1.
+            if overlays_off:
                 home_off_mult = 1.0
                 away_off_mult = 1.0
                 home_def_mult = 1.0
@@ -4813,14 +4872,14 @@ def run_nfl_market_simulations(
                 injury_nowcast_freshness_away_hours=_to_float(away_nowcast.get("freshness_hours")),
                 injury_nowcast_impact_home=home_injury_impact,
                 injury_nowcast_impact_away=away_injury_impact,
-                injury_nowcast_offense_multiplier_home=home_off_mult if not season_too_early else None,
-                injury_nowcast_offense_multiplier_away=away_off_mult if not season_too_early else None,
-                injury_nowcast_defense_multiplier_home=home_def_mult if not season_too_early else None,
-                injury_nowcast_defense_multiplier_away=away_def_mult if not season_too_early else None,
+                injury_nowcast_offense_multiplier_home=home_off_mult if not overlays_off else None,
+                injury_nowcast_offense_multiplier_away=away_off_mult if not overlays_off else None,
+                injury_nowcast_defense_multiplier_home=home_def_mult if not overlays_off else None,
+                injury_nowcast_defense_multiplier_away=away_def_mult if not overlays_off else None,
                 injury_nowcast_source=str(injury_nowcast.get("source") or "nfl_dp_injuries"),
                 injury_nowcast_home_drivers=(
                     []
-                    if season_too_early
+                    if overlays_off
                     else (
                         home_nowcast.get("top_drivers")
                         if isinstance(home_nowcast.get("top_drivers"), list)
@@ -4829,7 +4888,7 @@ def run_nfl_market_simulations(
                 ),
                 injury_nowcast_away_drivers=(
                     []
-                    if season_too_early
+                    if overlays_off
                     else (
                         away_nowcast.get("top_drivers")
                         if isinstance(away_nowcast.get("top_drivers"), list)
@@ -4850,13 +4909,13 @@ def run_nfl_market_simulations(
                 travel_miles_away=_to_float(travel_payload.get("travel_miles_away")),
                 travel_timezone_delta_home=_to_float(travel_payload.get("timezone_delta_home")),
                 travel_timezone_delta_away=_to_float(travel_payload.get("timezone_delta_away")),
-                tendency_proe_home=home_proe if not season_too_early else None,
-                tendency_proe_away=away_proe if not season_too_early else None,
+                tendency_proe_home=home_proe if not overlays_off else None,
+                tendency_proe_away=away_proe if not overlays_off else None,
                 tendency_total_signal=(
-                    0.0 if season_too_early else float(tendency_signals.get("total_signal") or 0.0)
+                    0.0 if overlays_off else float(tendency_signals.get("total_signal") or 0.0)
                 ),
                 tendency_spread_signal=(
-                    0.0 if season_too_early else float(tendency_signals.get("spread_signal") or 0.0)
+                    0.0 if overlays_off else float(tendency_signals.get("spread_signal") or 0.0)
                 ),
                 **matchup_kwargs,
             )
@@ -4897,7 +4956,7 @@ def run_nfl_market_simulations(
                 model_version=model_version,
                 totals_calibration=totals_calibration,
                 apply_linear_totals_calibration=False,
-                config_overrides=None if season_too_early else tuning_config_overrides,
+                config_overrides=None if overlays_off else tuning_config_overrides,
                 market_spread_home=market_lines.get("market_spread_home"),
                 market_total=market_lines.get("market_total"),
             )
@@ -4913,7 +4972,8 @@ def run_nfl_market_simulations(
             matchup_week_for_supervised = matchup_week_for_priors
             season_for_supervised = season_year
             skip_supervised_early = bool(
-                season_too_early
+                overlays_off
+                or season_too_early
                 or (
                     matchup_week_for_supervised is not None
                     and int(matchup_week_for_supervised) <= 4
@@ -5071,6 +5131,7 @@ def run_nfl_market_simulations(
                     "supervised_applied": bool(supervised_applied),
                     "completed_reg_games_season": int(completed_reg_season),
                     "early_season_ood_dampened": bool(early_season_ood_dampened),
+                    "overlays_off": bool(overlays_off),
                     "home_abbr": str(m.get("home_abbr") or ""),
                     "away_abbr": str(m.get("away_abbr") or ""),
                     "market_spread_home": market_lines.get("market_spread_home"),
@@ -5183,6 +5244,12 @@ def run_nfl_market_simulations(
                         "completed_reg_games_season": item.get("completed_reg_games_season"),
                         "prior_source": item.get("prior_source"),
                         "early_season_ood_dampened": item.get("early_season_ood_dampened"),
+                        "force_overlays_off": bool(force_overlays_off),
+                        "prefer_packaged_epa": bool(prefer_packaged_epa),
+                        "unlock_overlays": bool(unlock_overlays),
+                        "personnel_injury_overlays": (
+                            "off" if item.get("overlays_off") else "on"
+                        ),
                     },
                 }
             )
@@ -5398,6 +5465,127 @@ def _build_nfl_score_lookup_from_schedule(
     return lookup
 
 
+def _normalize_espn_abbr(raw: Any) -> str:
+    team = str(raw or "").strip().upper()
+    if team == "LA":
+        return "LAR"
+    if team == "WAS":
+        return "WSH"
+    return team
+
+
+def _build_nfl_score_lookup_by_matchup(
+    schedule: List[Dict[str, Any]],
+) -> Dict[Tuple[Any, str, str], Dict[str, Any]]:
+    lookup: Dict[Tuple[Any, str, str], Dict[str, Any]] = {}
+    for game in schedule:
+        if not _is_final_status(game.get("status")):
+            continue
+        home_score = _to_int_like(game.get("home_score"))
+        away_score = _to_int_like(game.get("away_score"))
+        if home_score is None or away_score is None:
+            continue
+        home = _normalize_espn_abbr(game.get("home_abbr"))
+        away = _normalize_espn_abbr(game.get("away_abbr"))
+        if not home or not away:
+            continue
+        completed_at = _parse_iso_datetime(game.get("game_time")) or _now_utc()
+        game_date = completed_at.date() if hasattr(completed_at, "date") else None
+        payload = {
+            "home_score": home_score,
+            "away_score": away_score,
+            "completed_at": completed_at,
+            "source": "espn-scoreboard",
+        }
+        if game_date is not None:
+            lookup[(game_date, home, away)] = payload
+    return lookup
+
+
+def _lookup_espn_score_by_matchup(
+    lookup: Dict[Tuple[Any, str, str], Dict[str, Any]],
+    *,
+    game_date: Any,
+    home_abbr: Any,
+    away_abbr: Any,
+) -> Optional[Dict[str, Any]]:
+    if not lookup:
+        return None
+    home = _normalize_espn_abbr(home_abbr)
+    away = _normalize_espn_abbr(away_abbr)
+    if not home or not away:
+        return None
+    parsed: Optional[date] = None
+    if isinstance(game_date, datetime):
+        parsed = game_date.date()
+    elif isinstance(game_date, date):
+        parsed = game_date
+    else:
+        raw = str(game_date or "").strip()
+        if raw:
+            try:
+                parsed = date.fromisoformat(raw[:10])
+            except ValueError:
+                parsed = None
+    if parsed is None:
+        return None
+    for candidate in (parsed, parsed - timedelta(days=1), parsed + timedelta(days=1)):
+        hit = lookup.get((candidate, home, away))
+        if hit is not None:
+            return hit
+    return None
+
+
+def _sync_nfl_completed_game_scores(
+    session: Any,
+    *,
+    game_id: str,
+    external_id: str,
+    home_score: int,
+    away_score: int,
+) -> None:
+    """Best-effort: mark the game final and stamp schedule scores.
+
+    Readiness / current_week / completed_reg counts read these tables.
+    Failures here must not roll back the outcomes upsert.
+    """
+    try:
+        session.execute(
+            text(
+                """
+                UPDATE games
+                SET status = 'final'
+                WHERE id = :game_id
+                  AND LOWER(COALESCE(status, '')) NOT IN ('final', 'closed', 'completed')
+                """
+            ),
+            {"game_id": game_id},
+        )
+    except Exception:
+        log.warning("NFL outcomes ingest: games.status update skipped for %s", game_id)
+    if not external_id:
+        return
+    try:
+        session.execute(
+            text(
+                """
+                UPDATE nfl_dp_schedules
+                SET home_score = :home_score,
+                    away_score = :away_score
+                WHERE game_id = :external_id
+                  AND (home_score IS NULL OR away_score IS NULL)
+                """
+            ),
+            {
+                "external_id": external_id,
+                "home_score": int(home_score),
+                "away_score": int(away_score),
+            },
+        )
+    except Exception:
+        log.warning("NFL outcomes ingest: nfl_dp_schedules score stamp skipped for %s", external_id)
+
+
 @celery_app.task(name="src.tasks.materialize_nfl_market_history")
 def materialize_nfl_market_history(lookback_days: int = 45) -> Dict[str, int]:
     session = SessionLocal()
@@ -5511,10 +5699,14 @@ def pull_nfl_outcomes(days_back: int = 60) -> Dict[str, int]:
                   g.start_time,
                   ds.home_score,
                   ds.away_score,
-                  ds.updated_at AS schedule_updated_at
+                  ds.updated_at AS schedule_updated_at,
+                  home.abbr AS home_abbr,
+                  away.abbr AS away_abbr
                 FROM games g
                 JOIN seasons s ON s.id = g.season_id
                 JOIN leagues l ON l.id = s.league_id
+                JOIN teams home ON home.id = g.home_team_id
+                JOIN teams away ON away.id = g.away_team_id
                 LEFT JOIN nfl_dp_schedules ds ON ds.game_id = g.external_id
                 WHERE l.code = 'nfl'
                   AND g.game_date BETWEEN :start_date AND :end_date
@@ -5524,15 +5716,21 @@ def pull_nfl_outcomes(days_back: int = 60) -> Dict[str, int]:
             {"start_date": start, "end_date": end},
         ).fetchall()
 
-        unresolved_final = [
-            r
+        # NFL #564: Week 1 games stayed "scheduled" in games.status while ESPN
+        # already had finals. Fetch ESPN for ANY missing score — not only rows
+        # already marked final — so readiness sample_size can leave 0.
+        needs_espn = any(
+            _to_int_like(getattr(r, "home_score", None)) is None
+            or _to_int_like(getattr(r, "away_score", None)) is None
+            or not _is_final_status(getattr(r, "game_status", None))
             for r in rows
-            if _is_final_status(r.game_status) and (_to_int_like(r.home_score) is None or _to_int_like(r.away_score) is None)
-        ]
+        )
         espn_lookup: Dict[str, Dict[str, Any]] = {}
-        if unresolved_final:
+        espn_matchup_lookup: Dict[Tuple[Any, str, str], Dict[str, Any]] = {}
+        if needs_espn:
             espn_schedule = fetch_nfl_schedule(start, end)
             espn_lookup = _build_nfl_score_lookup_from_schedule(espn_schedule)
+            espn_matchup_lookup = _build_nfl_score_lookup_by_matchup(espn_schedule)
 
         for row in rows:
             games_seen += 1
@@ -5543,8 +5741,15 @@ def pull_nfl_outcomes(days_back: int = 60) -> Dict[str, int]:
             completed_at = row.schedule_updated_at or row.start_time or _now_utc()
             source = "nfl-dp-schedules"
 
-            if home_score is None or away_score is None:
+            if home_score is None or away_score is None or not status_final:
                 espn = espn_lookup.get(external_id) if external_id else None
+                if espn is None:
+                    espn = _lookup_espn_score_by_matchup(
+                        espn_matchup_lookup,
+                        game_date=getattr(row, "game_date", None),
+                        home_abbr=getattr(row, "home_abbr", None),
+                        away_abbr=getattr(row, "away_abbr", None),
+                    )
                 if espn is not None:
                     home_score = _to_int_like(espn.get("home_score"))
                     away_score = _to_int_like(espn.get("away_score"))
@@ -5588,6 +5793,13 @@ def pull_nfl_outcomes(days_back: int = 60) -> Dict[str, int]:
                     "created_at": _now_utc(),
                     "updated_at": _now_utc(),
                 },
+            )
+            _sync_nfl_completed_game_scores(
+                session,
+                game_id=str(row.game_id),
+                external_id=external_id,
+                home_score=int(home_score),
+                away_score=int(away_score),
             )
             upserted += 1
             if source == "nfl-dp-schedules":

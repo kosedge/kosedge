@@ -44,6 +44,17 @@
       "bcId": "bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
       "title": "NFL regression: find what broke (pre-model-change)",
       "url": "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1"
+    },
+    "nfl_564_remediation": {
+      "status": "IN_PROGRESS",
+      "production_promote": false,
+      "recommendation": "HOLD_PUBLIC",
+      "evidence": "data/ops/nfl-564-remediation-20260915.md",
+      "w2_remat_run_id": "nfl-564-remediation-20260915-w2",
+      "w2_remat_checksum_sha256": "11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9",
+      "integrity_checksum_sha256": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+      "readiness_sample_size_before": 0,
+      "readiness_sample_size_after": 16
     }
   },
   "workstreams": [
@@ -54,11 +65,12 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
-        "NFL regression: find what broke (pre-model-change)"
+        "NFL regression: find what broke (pre-model-change)",
+        "data/ops/nfl-564-remediation-20260915.md"
       ],
-      "unresolved_blocker": "Investigation running. Known-bug list not closed against reproduced outputs.",
+      "unresolved_blocker": "Remediating path landed in code. Live Railway ingest + shadow remat not attested. Not a reopen.",
       "owner": "Alex",
-      "next_action": "Diagnose what broke on the current published path. Reproduce outputs. Do not retune to fix the board.",
+      "next_action": "Attest live W1 outcomes ingest and keep overlays off. Do not flip Coming soon.",
       "last_updated": "2026-09-15"
     },
     {
@@ -84,11 +96,15 @@
       "id": "nfl.input_integrity",
       "track": "NFL",
       "gate": "Input integrity",
-      "status": "NOT_STARTED",
-      "evidence": [],
-      "unresolved_blocker": "Coverage, identities, freshness, and exclusion pack for the reopen candidate is not assembled.",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "data/ops/nfl-564-remediation-20260915.md",
+        "data/ops/nfl-564-remediation-20260915/week1_outcomes_coverage.json",
+        "sample_size 0 -> 16; last_game_date 2026-09-14; current_week advances past completed W1"
+      ],
+      "unresolved_blocker": "Live Railway ingest not yet attested. Reopen-grade identity/venue/exclusion pack still incomplete.",
       "owner": "Alex",
-      "next_action": "Open/link a coverage + identity + freshness + exclusions receipt.",
+      "next_action": "Run pull_nfl_outcomes on Railway. Confirm live readiness sample_size=16 and current_week=2. Do not treat ingest as Release.",
       "last_updated": "2026-09-15"
     },
     {
@@ -98,11 +114,15 @@
       "status": "IN_PROGRESS",
       "evidence": [
         "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
-        "NFL regression: find what broke (pre-model-change)"
+        "data/ops/nfl-564-remediation-20260915.md",
+        "data/ops/nfl-564-remediation-20260915/w2_remat_epa_overlays_off.json",
+        "data/ops/nfl-564-remediation-20260915/multi_matchup_integrity.json",
+        "run_id=nfl-564-remediation-20260915-w2 checksum=11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9",
+        "integrity checksum=3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190 double_count_check=pass"
       ],
-      "unresolved_blocker": "Investigation running. Known-bug list not closed against reproduced outputs. No model change authorized from this row.",
+      "unresolved_blocker": "Overlays remain OFF (fail-closed defaults). Live W2 remat on Railway not attested. Predictive validation not run. Not a reopen PASS.",
       "owner": "Alex",
-      "next_action": "Diagnose what broke on the current published path. Reproduce outputs. Do not retune to fix the board.",
+      "next_action": "Fail-closed remat defaults: overlays OFF until Ryan CLEAR (unlock_overlays). sample_size>=16 is not CLEAR. Do not retune the equation.",
       "last_updated": "2026-09-15"
     },
     {

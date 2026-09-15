@@ -1,0 +1,18 @@
+{
+  "after_readiness_sample_size": 16,
+  "before_readiness_sample_size": 0,
+  "checksum_sha256": "51a83a4ec903c8c9b1773808500f362643fee34f768da5879405a2064e8ad9ab",
+  "coming_soon": true,
+  "double_count_check": "pass",
+  "integrity_checksum_sha256": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+  "integrity_passed": true,
+  "overlays_off": true,
+  "production_promote": false,
+  "recommendation": "HOLD_PUBLIC",
+  "run_id": "nfl-564-remediation-20260915",
+  "scoring_equation_changed": false,
+  "w2_game_count": 16,
+  "w2_remat_checksum_sha256": "11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9",
+  "w2_remat_run_id": "nfl-564-remediation-20260915-w2",
+  "week1_last_game_date": "2026-09-14"
+}
