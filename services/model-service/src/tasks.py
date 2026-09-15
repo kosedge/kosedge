@@ -13,7 +13,7 @@ from datetime import date, datetime, time, timedelta, timezone
 from typing import Any, Dict, List, Optional, Tuple
 
 import requests
-from sqlalchemy import text
+from sqlalchemy import Integer, bindparam, text
 
 from .celery_app import celery_app
 from .db import SessionLocal
@@ -762,6 +762,21 @@ def _count_completed_reg_games_by_team(
     return out
 
 
+def _week_cap_nullable_predicate() -> str:
+    """Typed nullable week bind.
+
+    Untyped ``:week_cap IS NULL OR week <= :week_cap`` becomes
+    ``$2 IS NULL OR week <= $2``. psycopg raises AmbiguousParameter when
+    the remat prior-season path binds week_cap=None (Alex live after #567).
+    CAST + Integer bindparam is the ``$2::int`` / ``NULL::int`` pattern.
+    """
+    return "(CAST(:week_cap AS int) IS NULL OR week <= CAST(:week_cap AS int))"
+
+
+def _week_cap_bindparam() -> Any:
+    return bindparam("week_cap", type_=Integer)
+
+
 def _fetch_rolling_feature_latest_rows(
     session: Any,
     *,
@@ -771,7 +786,7 @@ def _fetch_rolling_feature_latest_rows(
     return list(
         session.execute(
             text(
-                """
+                f"""
                 WITH ranked AS (
                   SELECT
                     season,
@@ -792,7 +807,7 @@ def _fetch_rolling_feature_latest_rows(
                     ) AS rn
                   FROM nfl_dp_team_rolling_features_weekly
                   WHERE season = ANY(:seasons)
-                    AND (:week_cap IS NULL OR week <= :week_cap)
+                    AND {_week_cap_nullable_predicate()}
                 )
                 SELECT
                   season,
@@ -810,7 +825,7 @@ def _fetch_rolling_feature_latest_rows(
                 FROM ranked
                 WHERE rn = 1
                 """
-            ),
+            ).bindparams(_week_cap_bindparam()),
             {"seasons": list(seasons), "week_cap": week_cap},
         ).fetchall()
     )
@@ -827,15 +842,15 @@ def _fetch_st_kav_by_team_season(
     try:
         st_rows = session.execute(
             text(
-                """
+                f"""
                 SELECT DISTINCT ON (season, team)
                   season, team, week, raw_st_epa_per_play, st_kav_net_5g
                 FROM nfl_dp_team_st_kav_weekly
                 WHERE season = ANY(:seasons)
-                  AND (:week_cap IS NULL OR week <= :week_cap)
+                  AND {_week_cap_nullable_predicate()}
                 ORDER BY season, team, week DESC
                 """
-            ),
+            ).bindparams(_week_cap_bindparam()),
             {"seasons": list(seasons), "week_cap": week_cap},
         ).fetchall()
         for sr in st_rows:
