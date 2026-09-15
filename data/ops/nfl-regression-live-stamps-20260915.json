@@ -1,0 +1,52 @@
+{
+  "captured_at_utc": "2026-09-15T18:01:54Z",
+  "production_promote": false,
+  "www_fair_lines": {
+    "url": "https://www.kosedge.com/api/nfl/fair-lines?season=2026",
+    "http": 503,
+    "code": "nfl_edge_board_unavailable",
+    "message": "NFL numbers temporarily unavailable while market coverage is being validated.",
+    "kill_switch_sha": "8dd128ce4677ac6f61b497f36065cbb9fb44f22d",
+    "kill_switch_pr": 561
+  },
+  "model_service": {
+    "url": "https://model-service-production-e253.up.railway.app",
+    "health_git_sha": "60ec70510478",
+    "full_sha": "60ec705104783508d0326990373aadcb280dc684",
+    "active_model_version": "nfl-v1.5-matchup-sim",
+    "active_run_id": null,
+    "current_week_reported": 1,
+    "readiness_http": 503,
+    "readiness_sample_size": 0,
+    "readiness_last_game_date": null,
+    "fair_lines_window": { "days_ahead": 14, "include_past_days": 0 },
+    "fair_lines_count": 32,
+    "projection_created_at_all": "2026-07-31",
+    "kei_week1_reprice_applied_games": 0,
+    "payload_sha256": {
+      "w2w3_days_ahead_14": "2d7bf46187b001fc62566cc68fba35c3f551ec34d8668cd72a1a0f7bcaf69f6b",
+      "w1_include_past_days_14": "be0cb5f7f46113bec4fa16c921826884415e2f7980e0d2423f764e5b40a80fab"
+    }
+  },
+  "code_anchors": {
+    "epa_prefer_resolve": "f6bcb2849015cd0dbe73d571f5d44a2ead06140a",
+    "totals_prior_45_3": "4f348b28182a7704d440ce14c2d9a0d38def710c",
+    "july31_worker_canary": "props-under-bias-20260731c-baselines-box-rebuild",
+    "packaged_epa_priors_as_of": "2026-08-08",
+    "coming_soon_web": "8dd128ce4677ac6f61b497f36065cbb9fb44f22d"
+  },
+  "last_reasonable_customer_trace": {
+    "doc": "docs/incidents/INC-2026-09-08-NFL-EDGE-BOARD-CUSTOMER-TRUTH/README.md",
+    "as_of": "2026-09-08T16:11:00Z",
+    "note": "Same July-31 KEI stamps; market joins were still sane (ARI@LAC mkt −9.5, BAL@IND +3.5, NYJ@TEN −1.5).",
+    "rows": [
+      { "game": "ARI@LAC", "kei_spread_home": -8.31, "market_spread_home": -9.5 },
+      { "game": "BAL@IND", "kei_spread_home": 1.76, "market_spread_home": 3.5 },
+      { "game": "NYJ@TEN", "kei_spread_home": -2.97, "market_spread_home": -1.5 }
+    ]
+  },
+  "first_abnormal": {
+    "pipeline": "After Week 1 kickoff: outcomes not ingested (sample_size=0); context snapshot overwrote team indices with 1-0/0-1 W-L buckets; completed-game market joins went garbage (SF@LAR mkt +15.5, BAL@IND +17.5).",
+    "research_vs_actual": "July-31 model totals clustered 40–46 vs Week 1 actuals 33–96."
+  }
+}

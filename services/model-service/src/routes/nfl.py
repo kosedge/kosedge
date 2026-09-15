@@ -4741,6 +4741,12 @@ def run_nfl_simulation(
     simulations: int = Query(4000, ge=300, le=30000),
     model_version: str = Query(DEFAULT_NFL_MODEL_VERSION),
 ) -> Dict[str, Any]:
+    # NFL_REGRESSION_20260915: ad-hoc POST /simulations/{id} still multiplies
+    # nfl_game_context (ESPN W-L via pull_nfl_context_snapshot) by injury
+    # nowcast and WRITES nfl_market_projections. It does not call
+    # _resolve_team_strength_indices. Do not remat via this endpoint until
+    # Week 1 outcomes are ingested and the batch EPA resolver is wired.
+    # production_promote=false — Coming soon stays.
     session = SessionLocal()
     try:
         row = session.execute(
