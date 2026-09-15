@@ -1,0 +1,571 @@
+{
+  "spec_id": "ke-football-v1",
+  "as_of": "2026-09-15",
+  "status": "DESIGN_ONLY",
+  "production_promote": false,
+  "boards_public": false,
+  "built_on": [
+    "docs/ratings/KE_FOOTBALL_RATINGS_ENGINE_INVENTORY_2026-09-15.md",
+    "docs/ratings/KE_FOOTBALL_GAP_MATRIX_AND_ARCHITECTURE_2026-09-15.md",
+    "docs/cfb/CFB_OWNED_METRICS_VALIDATION_2026-09-15.md",
+    "docs/cfb/CFB_2026_W1_RAW_TEAM_GAME_METRICS_2026-09-15.md",
+    "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_2026-09-15.md",
+    "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md"
+  ],
+  "hard_stops": [
+    "no_implementation",
+    "no_fitting",
+    "no_production_writes",
+    "no_ui",
+    "no_scoring_equation",
+    "no_board_reopen",
+    "no_pff",
+    "no_new_vendors",
+    "no_promote_559_560",
+    "no_562_coefficient_justification",
+    "no_ats_construction_loss",
+    "no_silent_50_fill",
+    "no_synthetic_proxy_as_real_metric"
+  ],
+  "architecture": [
+    "data_truth",
+    "football_measurement",
+    "opponent_adjustment",
+    "team_strength",
+    "matchup_interaction",
+    "scoring_projection",
+    "market_comparison"
+  ],
+  "v1_in_scope_stages": [
+    "data_truth",
+    "football_measurement",
+    "opponent_adjustment",
+    "team_strength"
+  ],
+  "v1_boundary_only_stages": [
+    "matchup_interaction",
+    "scoring_projection",
+    "market_comparison"
+  ],
+  "layers": ["RAW", "DERIVED", "MODELED"],
+  "buildability_codes": ["YES", "YES_RESEARCH", "PARTIAL", "NO"],
+  "failure_codes": [
+    "OK",
+    "THIN",
+    "PRIOR_ONLY",
+    "PARTIAL",
+    "DATA_INSUFFICIENT",
+    "EXCLUDED_GAME"
+  ],
+  "eligibility": {
+    "required": [
+      "true_final_status",
+      "official_final_score",
+      "pbp_complete_to_official_final",
+      "week_strictly_less_than_as_of"
+    ],
+    "exclude": [
+      "live",
+      "HALFTIME",
+      "END_PERIOD",
+      "delayed_without_complete_pbp",
+      "completed_missing_pbp",
+      "unmatched_pbp"
+    ],
+    "learned_on": {
+      "game_id": "401868140",
+      "rule": "DELAYED_plus_score_is_not_eligibility",
+      "closed_2026_eligible": 84
+    }
+  },
+  "owned_sources": {
+    "nfl": [
+      "nflverse_pbp",
+      "nfl_dp_play_by_play",
+      "nfl_dp_raw_objects",
+      "nfl_dp_team_situational_weekly",
+      "nfl_dp_team_rolling_features_weekly",
+      "nfl_dp_team_st_kav_weekly"
+    ],
+    "cfb": [
+      "sportsdataverse_espn_cfb_pbp_2014_2025_hd",
+      "pbp_current_versioned_2026",
+      "owned_metrics_v1",
+      "team_game_w1_2026",
+      "research_opp_adj_560"
+    ],
+    "not_required": ["ppa", "cfbd", "pff"],
+    "do_not_purchase": ["pff", "new_historical_vendor"]
+  },
+  "success_companions": [
+    {
+      "id": "ke.success_native",
+      "layer": "DERIVED",
+      "nfl": "nflverse success",
+      "cfb": "EPA_success == EPA > 0",
+      "do_not_swap": true
+    },
+    {
+      "id": "ke.success_standard",
+      "layer": "DERIVED",
+      "nfl": "audit_agreement_vs_nflverse_success",
+      "cfb": "50/70/100 of distance",
+      "cfb_2021_24_agreement_vs_epa_success": 0.94
+    }
+  ],
+  "allowed_partials_not_named_as_canonical": [
+    {
+      "id": "ke.disruption_proxy_nfl",
+      "events": ["sack", "interception", "qb_hit"],
+      "must_not_be_named": "ke.havoc"
+    },
+    {
+      "id": "ke.disruption_flags_cfb",
+      "must_not_be_named": "ke.havoc",
+      "requires": "flag_completeness_audit"
+    },
+    {
+      "id": "ke.rz_td",
+      "must_not_be_named": "ke.finish"
+    },
+    {
+      "id": "ke.expl_pass",
+      "must_not_be_named": "ke.expl"
+    }
+  ],
+  "ratings": [
+    {
+      "id": "ke.off_eff",
+      "name": "KE Offensive Efficiency",
+      "layer": "DERIVED",
+      "native_unit": "epa_per_play",
+      "higher_better": true,
+      "not_this_id": ["nfl_backbone_offense_index", "cfb_sp_plus_z_0_100"],
+      "raw_inputs": {
+        "nfl": [
+          "epa",
+          "success",
+          "play_type",
+          "posteam",
+          "down",
+          "ydstogo",
+          "yards_gained"
+        ],
+        "cfb": [
+          "EPA",
+          "EPA_success",
+          "scrimmage_play",
+          "pos_team",
+          "down",
+          "distance",
+          "statYardage"
+        ]
+      },
+      "exclusions": ["incomplete_pbp", "nonfinite_epa", "special_teams_plays"],
+      "definition": "sum(epa) / n eligible offensive scrimmage plays",
+      "opponent_adjustment": "none",
+      "stabilization": {
+        "thin_plays": 80,
+        "min_plays_or_insufficient": 0,
+        "no_league_mean_fill": true
+      },
+      "prior_decay": "none_inside_derived_number",
+      "display": "native_epa_per_play_first",
+      "point_in_time": "week < W",
+      "update_cadence": {
+        "nfl": "after_each_eligible_game_weekly_remat",
+        "cfb": "versioned_pbp_current_cut"
+      },
+      "validation": {
+        "primary": ["next_game_off_epa_per_play", "next_game_success_native"],
+        "baselines": ["league_mean", "trailing_unadj"],
+        "forbidden": ["ats", "totals"]
+      },
+      "failure": "DATA_INSUFFICIENT if n=0",
+      "buildability": { "nfl": "YES", "cfb": "YES_RESEARCH" },
+      "live_class": { "nfl": "REAL_AND_VALIDATED", "cfb": "PARTIAL" },
+      "research_class": { "nfl": "same_spine", "cfb": "REAL_UNVALIDATED" }
+    },
+    {
+      "id": "ke.def_eff",
+      "name": "KE Defensive Efficiency",
+      "layer": "DERIVED",
+      "native_unit": "epa_per_play_allowed",
+      "higher_better": false,
+      "not_this_id": ["nfl_backbone_defense_index", "cfb_sp_plus_z_0_100"],
+      "raw_inputs": {
+        "nfl": ["epa", "success", "play_type", "defteam"],
+        "cfb": ["EPA", "EPA_success", "scrimmage_play", "def_pos_team"]
+      },
+      "exclusions": ["incomplete_pbp", "nonfinite_epa", "special_teams_plays"],
+      "definition": "sum(epa) / n eligible scrimmage plays faced",
+      "opponent_adjustment": "none",
+      "stabilization": {
+        "thin_plays": 80,
+        "no_league_mean_fill": true
+      },
+      "prior_decay": "none_inside_derived_number",
+      "display": "native_epa_per_play_allowed_first",
+      "point_in_time": "week < W",
+      "update_cadence": {
+        "nfl": "after_each_eligible_game_weekly_remat",
+        "cfb": "versioned_pbp_current_cut"
+      },
+      "validation": {
+        "primary": ["next_game_epa_allowed", "next_game_success_allowed"],
+        "baselines": ["league_mean", "trailing_unadj"],
+        "forbidden": ["ats"]
+      },
+      "failure": "DATA_INSUFFICIENT if n=0",
+      "buildability": { "nfl": "YES", "cfb": "YES_RESEARCH" },
+      "live_class": { "nfl": "REAL_AND_VALIDATED", "cfb": "PARTIAL" },
+      "research_class": { "nfl": "same_spine", "cfb": "REAL_UNVALIDATED" }
+    },
+    {
+      "id": "ke.st",
+      "name": "KE Special Teams Efficiency",
+      "layer": "DERIVED",
+      "native_unit": "st_epa_per_play",
+      "higher_better": true,
+      "not_this_id": [
+        "st_index_1_0_neutral_hook",
+        "cfb_unit_grade_50",
+        "cfb_compose_st_nudge",
+        "kav_scaled_display"
+      ],
+      "raw_inputs": {
+        "nfl": [
+          "field_goal",
+          "extra_point",
+          "punt",
+          "kickoff",
+          "epa",
+          "posteam",
+          "defteam"
+        ],
+        "cfb": ["type.text", "uncertified_st_columns"]
+      },
+      "exclusions": ["non_st_plays", "cfb_uncertified"],
+      "definition": "sum(st_epa) / n_st; NFL kickoff EPA negated onto kicking team",
+      "opponent_adjustment": "none_in_v1",
+      "stabilization": {
+        "nfl_thin_st_plays": 40,
+        "no_1_0_fill": true
+      },
+      "prior_decay": "DATA_INSUFFICIENT_if_n_st_0_default",
+      "display": "native_st_epa_first",
+      "point_in_time": "pregame_join_week_minus_1",
+      "update_cadence": {
+        "nfl": "weekly_st_kav",
+        "cfb": "none_until_certified"
+      },
+      "validation": {
+        "primary": ["next_game_st_epa_per_play"],
+        "baselines": ["league_mean", "trailing_unadj"],
+        "forbidden": ["pff_grades"]
+      },
+      "failure": {
+        "nfl": "DATA_INSUFFICIENT not 1.0",
+        "cfb": "DATA_INSUFFICIENT omit"
+      },
+      "buildability": { "nfl": "YES", "cfb": "NO" },
+      "nfl_needs_validation": true,
+      "live_class": { "nfl": "REAL_UNVALIDATED", "cfb": "PROXY" },
+      "research_class": { "nfl": "st_kav_2013_2025", "cfb": "NEEDS_VALIDATION" }
+    },
+    {
+      "id": "ke.pace",
+      "name": "KE Pace",
+      "layer": "DERIVED",
+      "native_unit": "plays_per_offense_game",
+      "companions": ["ke.pace_competitive", "ke.pace_seconds"],
+      "not_this_id": [
+        "nfl_structural_pace_ui_pack",
+        "cfb_skill_minus_front_seven",
+        "plays_over_62_as_identity"
+      ],
+      "raw_inputs": {
+        "nfl": ["scrimmage_play_count", "game_seconds_remaining"],
+        "cfb": ["scrimmage_as_pos_team", "pos_score_diff", "start.TimeSecsRem"]
+      },
+      "exclusions": ["st_as_pace", "identity_pace"],
+      "definition": {
+        "pace": "n_scrimmage_off per team-game",
+        "competitive": "|score_diff| < 16",
+        "seconds": "mean clock delta if completeness passes"
+      },
+      "opponent_adjustment": "none_in_v1",
+      "stabilization": {
+        "thin_games": 2,
+        "clock_null_rate_max_for_seconds": 0.02
+      },
+      "prior_decay": "none_inside_derived_number",
+      "display": "plays_per_game_first",
+      "point_in_time": "week < W",
+      "update_cadence": "per_eligible_game",
+      "validation": {
+        "primary": ["next_game_offensive_scrimmage_count"],
+        "baselines": ["league_mean", "trailing_unadj"],
+        "forbidden": ["coaching_overlay_as_pace"]
+      },
+      "failure": "DATA_INSUFFICIENT if scrimmage tags missing; never emit PROXY under this id",
+      "buildability": { "nfl": "YES", "cfb": "YES_RESEARCH" },
+      "nfl_seconds": "PARTIAL",
+      "live_class": { "nfl": "PARTIAL", "cfb": "PROXY" },
+      "research_class": { "nfl": "n/a", "cfb": "REAL_UNVALIDATED" }
+    },
+    {
+      "id": "ke.expl",
+      "name": "KE Explosiveness",
+      "layer": "DERIVED",
+      "native_unit": "rate",
+      "sport_specific_knobs": {
+        "nfl": { "pass_yards": 20, "rush_yards": 10, "not_kav_12": true },
+        "cfb": { "epa_min": 1.0, "yards_min": 15, "rule": "epa_or_yards" }
+      },
+      "not_this_id": ["kav_explosive_12", "cfb_sp_plus_z_synthetic"],
+      "raw_inputs": {
+        "nfl": ["play_type", "yards_gained"],
+        "cfb": ["EPA", "statYardage", "pass", "rush"]
+      },
+      "exclusions": ["missing_yards_and_epa"],
+      "definition": "pass/rush/combined explosive rates created and allowed",
+      "opponent_adjustment": "none_in_v1",
+      "stabilization": {
+        "omit_split_if_n_lt": 40,
+        "no_0_085_fill": true
+      },
+      "prior_decay": "none_inside_derived_number",
+      "display": "native_rate_first",
+      "point_in_time": "week < W",
+      "update_cadence": "per_eligible_game",
+      "validation": {
+        "primary": ["next_game_explosive_rate", "pass_rush_splits"],
+        "baselines": ["league_rate", "trailing_rate"],
+        "forbidden": ["totals_mae", "562_retune"]
+      },
+      "failure": "PARTIAL if rush split missing; never publish SP+ z as this id",
+      "buildability": { "nfl": "PARTIAL", "cfb": "YES_RESEARCH" },
+      "live_class": { "nfl": "PARTIAL", "cfb": "PROXY" },
+      "research_class": { "nfl": "tendency_10_20", "cfb": "REAL_UNVALIDATED" }
+    },
+    {
+      "id": "ke.finish",
+      "name": "KE Finishing Drives",
+      "layer": "DERIVED",
+      "native_unit": "points_per_opportunity",
+      "bundle": ["ke.opp_rate", "ke.ppo", "ke.finish"],
+      "not_this_id": ["nfl_red_zone_td_only", "player_rz_td_shares"],
+      "raw_inputs": {
+        "nfl": ["fixed_drive", "series", "yardline_100", "scoring_flags"],
+        "cfb": ["drive.id", "start.yardsToEndzone", "rz_play", "type.text"]
+      },
+      "exclusions": ["no_drive_id", "ineligible_game"],
+      "definition": {
+        "opportunity": "drive reaches opponent 40 or red-zone flag",
+        "cfb_points_source": "type_text_heuristic",
+        "nfl_points_source": "official_scoring_flags"
+      },
+      "opponent_adjustment": "none_in_v1",
+      "stabilization": {
+        "thin_opportunities": 8,
+        "no_3_5_fill": true
+      },
+      "prior_decay": "none_inside_derived_number",
+      "display": "native_ppo_and_rates",
+      "point_in_time": "week < W",
+      "update_cadence": "per_eligible_game",
+      "validation": {
+        "primary": ["next_game_ppo", "next_game_finish_rate"],
+        "baselines": ["league_ppo", "trailing_ppo"],
+        "forbidden": ["player_td_share"]
+      },
+      "failure": "DATA_INSUFFICIENT without drives; ke.rz_td may remain PARTIAL",
+      "buildability": { "nfl": "PARTIAL", "cfb": "YES_RESEARCH" },
+      "live_class": { "nfl": "PARTIAL", "cfb": "MISSING" },
+      "research_class": { "nfl": "n/a", "cfb": "REAL_UNVALIDATED" }
+    },
+    {
+      "id": "ke.havoc",
+      "name": "KE Havoc / Disruption",
+      "layer": "DERIVED",
+      "native_unit": "rate",
+      "required_events": ["tackle_for_loss", "forced_fumble", "interception"],
+      "optional_events": ["sack_if_not_in_tfl", "pass_breakup_if_certified"],
+      "not_this_id": [
+        "backbone_pressure",
+        "ol_protection_index",
+        "cfb_ui_havoc_pending"
+      ],
+      "raw_inputs": {
+        "nfl_normalized": ["sack", "qb_hit", "interception", "fumble"],
+        "nfl_normalized_missing": ["tackle_for_loss", "fumble_forced"],
+        "cfb_core31": [],
+        "cfb_raw_2025_2026_uncertified": [
+          "havoc",
+          "TFL",
+          "sack",
+          "int",
+          "pass_breakup",
+          "forced_fumble"
+        ]
+      },
+      "exclusions": ["uncertified_columns", "pff"],
+      "definition": "certified havoc events / scrimmage snaps faced",
+      "opponent_adjustment": "none_in_v1",
+      "stabilization": { "thin_snaps": 80, "no_50_fill": true },
+      "prior_decay": "none",
+      "display": "native_rate",
+      "point_in_time": "after_certification",
+      "update_cadence": "after_certification",
+      "validation": {
+        "primary": ["next_game_havoc_rate"],
+        "proxy_under_own_id": true,
+        "forbidden": ["flags_exist_as_seal"]
+      },
+      "failure": "DATA_INSUFFICIENT omit greater than impute",
+      "buildability": { "nfl": "NO", "cfb": "NO" },
+      "live_class": { "nfl": "PROXY", "cfb": "MISSING" },
+      "research_class": { "nfl": "n/a", "cfb": "PARTIAL_NEEDS_VALIDATION" }
+    },
+    {
+      "id": "ke.opp_adj_epa",
+      "name": "KE Opponent-Adjusted EPA",
+      "layer": "MODELED",
+      "native_unit": "epa_per_play",
+      "formula": "y = mu + h * home + off_i + def_j",
+      "def_sign": "epa_allowed_lower_better",
+      "not_this_id": [
+        "nfl_league_center_only",
+        "nfl_kav_as_layer1",
+        "cfb_sp_plus",
+        "h_times_plays_as_hfa_points"
+      ],
+      "raw_inputs": [
+        "team_game_epa_y",
+        "home_flag",
+        "opponent_id",
+        "week",
+        "season"
+      ],
+      "exclusions": ["incomplete_pbp", "cfb_period_ge_5_on_modeled"],
+      "opponent_adjustment": "this_rating",
+      "stabilization": {
+        "nfl": "unfitted_do_not_copy_cfb_lambda",
+        "cfb_research_frozen": {
+          "estimator": "fit_joint_v2_joint_mu_hfa_n0_ridge",
+          "lambda": 40,
+          "lambda_fcs_mult": 4,
+          "n0": 4,
+          "decay": 0.75,
+          "iters": 12,
+          "selection_seasons": [2023, 2024],
+          "holdout_season": 2025,
+          "holdout_mae": 0.1673,
+          "unadj_mae": 0.1911,
+          "blend_mae": 0.1837,
+          "production_promote": false
+        }
+      },
+      "prior_decay": {
+        "nfl": "last_year_REG_decay_not_copied_from_0_75",
+        "cfb": "decay_0_75_season_final"
+      },
+      "display": "native_epa_centered_0",
+      "point_in_time": "week < W plus decayed prior",
+      "update_cadence": {
+        "nfl": "not_scheduled_by_this_spec",
+        "cfb": "research_runners_only"
+      },
+      "validation": {
+        "primary": ["next_game_off_epa", "next_game_def_epa"],
+        "baselines": ["unadj_std", "prior_blend"],
+        "early_season": "W1-W4",
+        "forbidden": ["spread_mae", "totals_mae", "h_as_points"]
+      },
+      "failure": "PRIOR_ONLY or DATA_INSUFFICIENT; exclude incomplete PBP",
+      "buildability": { "nfl": "NO", "cfb": "YES_RESEARCH" },
+      "live_class": { "nfl": "PARTIAL", "cfb": "PROXY" },
+      "research_class": {
+        "nfl": "center_sos_kav_split",
+        "cfb": "REAL_UNVALIDATED_ADVANCE"
+      }
+    },
+    {
+      "id": "ke.team_strength",
+      "name": "KE Overall / Team Strength",
+      "layer": "DERIVED",
+      "derived_from": ["ke.opp_adj_epa"],
+      "native_unit": "net_epa_per_play",
+      "definition": "off_adj - def_allowed",
+      "no_silent_blend": [
+        "st",
+        "pace",
+        "explosiveness",
+        "finishing",
+        "havoc",
+        "identity"
+      ],
+      "not_this_id": [
+        "nfl_method_b_model_pr",
+        "nfl_true_pr",
+        "cfb_compose_power_index",
+        "sp_plus_backup"
+      ],
+      "raw_inputs": [
+        "ke.opp_adj_epa.off",
+        "ke.opp_adj_epa.def_allowed",
+        "n",
+        "prior_weight"
+      ],
+      "exclusions": ["missing_either_side_without_prior"],
+      "opponent_adjustment": "already_inside_opp_adj_epa",
+      "stabilization": "inherit",
+      "prior_decay": "inherit_no_second_games_over_8",
+      "display": "native_net_epa_first",
+      "point_in_time": "inherit",
+      "update_cadence": "inherit",
+      "validation": {
+        "primary": "inherit_ke.opp_adj_epa",
+        "secondary_allowed": ["margin", "points"],
+        "secondary_gated_separately": true,
+        "forbidden": ["ats", "close", "retune_from_562_totals"]
+      },
+      "failure": "no_adj_book_means_no_team_strength",
+      "buildability": { "nfl": "NO", "cfb": "NO" },
+      "cfb_research_net_only": true,
+      "live_class": {
+        "nfl": "REAL_AND_VALIDATED_PRODUCT_NOT_THIS_ID",
+        "cfb": "REAL_UNVALIDATED_PRODUCT"
+      },
+      "research_class": { "nfl": "n/a", "cfb": "not_power" }
+    }
+  ],
+  "never_occupy_ke_cell": [
+    "cfb_live_synthetic_success",
+    "cfb_live_synthetic_explosiveness",
+    "cfb_live_skill_f7_pace",
+    "returning_production",
+    "unit_grades",
+    "coaching_constants",
+    "league_average_fill_50",
+    "nfl_st_index_1_0",
+    "pr560_epa_as_spread",
+    "pr562_as_house_scoring",
+    "nfl_kav_as_second_model_pr",
+    "player_production_spine",
+    "pff"
+  ],
+  "proprietary_ke_estimate_pct": 28,
+  "proprietary_ke_estimate_note": "Unchanged from #556. This design does not pad.",
+  "ryan_decisions": [
+    "accept_native_epa_as_off_def_identity",
+    "keep_two_success_columns",
+    "accept_sport_specific_expl_knobs",
+    "omit_cfb_st_and_named_havoc_until_certified",
+    "team_strength_is_net_adj_epa_only",
+    "pr560_is_cfb_modeled_candidate_not_live",
+    "scoring_and_boards_stay_out",
+    "next_assignment_one_stage_measurement_not_scoring"
+  ]
+}
