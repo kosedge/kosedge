@@ -1,6 +1,6 @@
 # Camp Desk day files
 
-Dated KosEdge packages for `/pro/nfl/camp`.
+Dated KosEdge packages for Club Desk (`/pro/nfl/club`; `/pro/nfl/camp` redirects). Folder path may stay until a later alias.
 
 ## Add tomorrow’s package
 

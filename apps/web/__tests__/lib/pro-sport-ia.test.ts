@@ -39,7 +39,7 @@ function buildRow(
 }
 
 const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
-  "Weekly Slate": ["Weekly Slate", "Camp Desk", "Team Previews"],
+  "Weekly Slate": ["Weekly Slate", "Club Desk", "Team Previews"],
   "Betting Desk": [
     "KEI Lines",
     "Edges",
@@ -49,9 +49,8 @@ const NFL_SECTION_STRUCTURE: Record<string, string[]> = {
     "MVP/Awards",
   ],
   Fantasy: [
-    "Fantasy Draft Desk",
-    "Weekly Fantasy",
     "DFS Board",
+    "Weekly Fantasy",
     "Guillotine League",
     "Sleepers",
     "Pick’em",
@@ -121,7 +120,7 @@ describe("pro sport IA", () => {
     );
 
     expect(byLabel["Weekly Slate"]).toBe("/pro/nfl/slate/today");
-    expect(byLabel["Camp Desk"]).toBe("/pro/nfl/camp");
+    expect(byLabel["Club Desk"]).toBe("/pro/nfl/club");
     expect(byLabel["Team Previews"]).toBe("/pro/nfl/previews");
     expect(byLabel["Player Previews"]).toBeUndefined();
     expect(byLabel["KEI Lines"]).toBe("/pro/nfl/fair-lines");
@@ -133,9 +132,9 @@ describe("pro sport IA", () => {
     expect(byLabel["Execution Monitor"]).toBeUndefined();
     expect(byLabel.Futures).toBe("/pro/nfl/projections");
     expect(byLabel["Player Props Board"]).toBeUndefined();
-    expect(byLabel["Fantasy Draft Desk"]).toBe("/pro/nfl/fantasy");
-    expect(byLabel["Weekly Fantasy"]).toBe("/pro/nfl/weekly-fantasy");
     expect(byLabel["DFS Board"]).toBe("/pro/nfl/dfs");
+    expect(byLabel["Weekly Fantasy"]).toBe("/pro/nfl/weekly-fantasy");
+    expect(byLabel["Fantasy Draft Desk"]).toBeUndefined();
     expect(byLabel["Guillotine League"]).toBe("/pro/nfl/fantasy/guillotine");
     expect(byLabel.Sleepers).toBe("/pro/nfl/fantasy/sleepers");
     expect(byLabel["Pick’em"]).toBe("/pro/nfl/fantasy/pickem");

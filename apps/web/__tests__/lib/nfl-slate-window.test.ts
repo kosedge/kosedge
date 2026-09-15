@@ -41,6 +41,11 @@ describe("nflWeeklySlateFairLinesWindow", () => {
     expect(resolveNflWeeklySlateWeeks("today", SEP_11_2026)).toEqual([1, 2]);
     expect(resolveNflWeeklySlateWeeks("week-99", SEP_11_2026)).toEqual([99]);
   });
+
+  it("flips today to Week 2+3 after Week 1 last game is FINAL", () => {
+    const tue = Date.parse("2026-09-15T16:00:00.000Z");
+    expect(resolveNflWeeklySlateWeeks("today", tue)).toEqual([2, 3]);
+  });
 });
 
 describe("Weekly Slate SSR request shape", () => {

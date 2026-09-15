@@ -130,14 +130,23 @@ describe("Aug 17 live Camp Desk day", () => {
     expect(live.preview_delta?.some((row) => row.team_id === "MIN")).toBe(true);
   });
 
-  it("Camp Desk page heroes KosEdge cards and kills wire-ESPN branding", () => {
+  it("legacy /pro/nfl/camp page redirects to Club Desk", () => {
     const src = readFileSync(
       path.join(__dirname, "../../app/(pro)/pro/nfl/camp/page.tsx"),
       "utf8",
     );
+    expect(src).toContain('redirect("/pro/nfl/club")');
+  });
+
+  it("Club Desk page heroes KosEdge cards and kills wire-ESPN branding", () => {
+    const src = readFileSync(
+      path.join(__dirname, "../../app/(pro)/pro/nfl/club/page.tsx"),
+      "utf8",
+    );
     expect(src).toContain("KosEdge daily desk");
     expect(src).toContain("camp-desk-wrap");
-    expect(src).toContain("PRESEASON");
+    expect(src).toContain("NFL Club Desk");
+    expect(src).toContain("Club Desk");
     expect(src).toContain("CampDeskControls");
     expect(src).toContain("call sheet");
     expect(src).toContain("Desk updating");

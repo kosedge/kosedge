@@ -1,5 +1,7 @@
 # Training Camp Desk — Kos Edge AI Writers
 
+**In-season product name (2026-09-15):** customer chrome is **Club Desk** (`/pro/nfl/club`). This file remains the writer SoT for daily notes. Weekly OS: `docs/ops/NFL_INSEASON_WEEKLY_OS_v1.md`. Content folder `content/writers/camp-desk-2026/` may stay until a path alias.
+
 How to assign and ship NFL training-camp news breaks and camp notebooks without breaking Edge Threshold Discipline.
 
 **Desk OS (2026-08-30):** Handicapping product is **LOCKED**; body prose is **UNLOCKED** per writer voice pack. See `style-bible.md` and `.cursor/rules/ai-writer-team.mdc`. Do not flatten writers into one house voice. **HOUSE vs STREET** (pull KEI before outline; never mint; stamp at pull; chrome shows both) is LOCKED — Ryan 2026-08-30. **Cadence** (weekday vs Monday) is LOCKED below — execution only, not a new product. CFB is off this desk. NFL trusted X list only (`data/writers/nfl-beat-writers.*`).

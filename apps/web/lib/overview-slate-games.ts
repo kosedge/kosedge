@@ -3,7 +3,8 @@
  * Soft timeout / honest status — does not change assemble or model logic.
  *
  * Daily sports (NBA/MLB/NHL/WNBA/NCAAM): next day with games (today, else opening day).
- * Weekly sports (NFL/CFB): current desk week (Week 1 default; advances with board weeks).
+ * Weekly sports (NFL/CFB): current desk week (NFL uses fail-closed
+ * `resolveCurrentNflRegWeek` — never a silent Week 1 pin).
  *
  * At 8s without a response we stop blocking SSR and return `timeout`
  * (empty games + distinct copy), not a silent "no slate" empty state.
@@ -14,14 +15,10 @@ import {
   tonightSlug,
   type TonightGame,
 } from "@/lib/edge-board-tonight";
-import { loadAssembledEdgeBoardRows } from "@/lib/build-edge-board-rows";
 import { stampCfbEdgeBoardWeek } from "@/lib/cfb-kei-artifacts";
-import { flatRowsToLegacy } from "@/lib/flat-rows-to-legacy";
 import { parseOfficialSlateWeek } from "@/lib/cfb-official-slate";
-import {
-  currentNflRegWeekFromSchedule,
-  lookupCanonicalNflGame,
-} from "@/lib/nfl-canonical-schedule";
+import { lookupCanonicalNflGame } from "@/lib/nfl-canonical-schedule";
+import { resolveCurrentNflRegWeek } from "@/lib/nfl-current-week";
 import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
 
@@ -203,36 +200,15 @@ async function loadSportGames(sportKey: string): Promise<SportSlateLoad> {
   const sport = sportKey.toLowerCase();
 
   if (sport === "nfl") {
-    // Default assemble is Week 1 REG. If empty, fall back to full projection
-    // slate and keep the earliest REG week present (opening week).
-    let games = await getTonightGames("nfl");
-    if (games.length) {
-      return { games, week: dominantWeek(games) };
+    const resolved = resolveCurrentNflRegWeek();
+    if (!resolved.proven || resolved.week == null) {
+      return { games: [], week: null };
     }
-    const scheduledWeek = currentNflRegWeekFromSchedule();
-    const scheduled = nflScheduleTonightGames(scheduledWeek);
-    try {
-      const flat = await loadAssembledEdgeBoardRows("nfl", { slate: "full" });
-      const legacy = flatRowsToLegacy(Array.isArray(flat) ? flat : [], "nfl");
-      games = legacy
-        .filter((row) => row?.teamA?.name && row?.teamB?.name)
-        .map((row) => ({
-          slug: tonightSlug("nfl", row.teamA.name, row.teamB.name),
-          row,
-          sport,
-        }));
-      const week = dominantWeek(games);
-      if (week != null) {
-        return {
-          games: games.filter((g) => Number(g.row.week) === week),
-          week,
-        };
-      }
-      if (games.length) return { games, week: null };
-      return { games: scheduled, week: scheduledWeek };
-    } catch {
-      return { games: scheduled, week: scheduledWeek };
-    }
+    const week = resolved.week;
+    const games = await getTonightGames("nfl");
+    const atWeek = games.filter((g) => Number(g.row.week) === week);
+    if (atWeek.length) return { games: atWeek, week };
+    return { games: nflScheduleTonightGames(week), week };
   }
 
   if (sport === "cfb") {
@@ -290,8 +266,8 @@ export async function loadOverviewSlateGames(
 
     if (result.kind === "timeout") {
       if (sport === "nfl") {
-        const week = currentNflRegWeekFromSchedule();
-        const games = nflScheduleTonightGames(week);
+        const week = resolveCurrentNflRegWeek().week;
+        const games = week == null ? [] : nflScheduleTonightGames(week);
         return {
           games,
           status: games.length > 0 ? "timeout" : "empty",
@@ -315,8 +291,8 @@ export async function loadOverviewSlateGames(
   } catch {
     if (timeoutId) clearTimeout(timeoutId);
     if (sport === "nfl") {
-      const week = currentNflRegWeekFromSchedule();
-      const games = nflScheduleTonightGames(week);
+      const week = resolveCurrentNflRegWeek().week;
+      const games = week == null ? [] : nflScheduleTonightGames(week);
       return {
         games,
         status: games.length > 0 ? "error" : "empty",

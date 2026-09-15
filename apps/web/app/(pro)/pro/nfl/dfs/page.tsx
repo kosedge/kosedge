@@ -10,9 +10,9 @@ import {
   type NflDfsSummaryCard,
 } from "@/lib/nfl-dfs-types";
 import { canonicalDfsSite } from "@/lib/nfl-dfs-identity";
+import { currentNflRegWeekFromSchedule } from "@/lib/nfl-current-week";
 
 const DEFAULT_SEASON = 2026;
-const DEFAULT_WEEK = 1;
 
 type SearchValue = string | string[] | undefined;
 
@@ -50,12 +50,27 @@ export default async function NflDfsPage({
     Number.isFinite(seasonRaw) && seasonRaw >= 2010
       ? seasonRaw
       : DEFAULT_SEASON;
+  const provenWeek = currentNflRegWeekFromSchedule();
   const week =
     Number.isFinite(weekRaw) && weekRaw >= 1 && weekRaw <= 18
       ? weekRaw
-      : DEFAULT_WEEK;
+      : provenWeek;
   const position = (firstValue(search.pos) ?? "").toUpperCase();
   const slateId = firstValue(search.slate) ?? "";
+
+  if (week == null) {
+    return (
+      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+        <HonestStatusBanner title="NFL week not proven" tone="amber">
+          <p>
+            DFS does not default to Week 1 when the current REG week cannot be
+            proven from the schedule pack. Retry after kickoffs are on the
+            canonical slate.
+          </p>
+        </HonestStatusBanner>
+      </main>
+    );
+  }
 
   const board = await fetchNflDfsBoard({
     season,

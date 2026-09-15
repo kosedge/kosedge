@@ -124,7 +124,7 @@ export default async function NflPlayerPreviewsPage() {
             Awards race
           </Link>
           <Link
-            href="/pro/nfl/fantasy"
+            href="/pro/nfl/fantasy/draft"
             className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
           >
             Fantasy draft
@@ -193,8 +193,8 @@ export default async function NflPlayerPreviewsPage() {
                     className="px-3 py-6 text-sm text-kos-text/60 sm:px-4"
                   >
                     Skill-position outlook table is empty for this cycle — not a
-                    ready preview board. Check Fantasy Draft Desk after the next
-                    player materialize.
+                    ready preview board. Check this week&apos;s DFS after the
+                    next player materialize.
                   </td>
                 </tr>
               ) : null}

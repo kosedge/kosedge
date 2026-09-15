@@ -59,10 +59,10 @@ export default function NflNewsIndexPage() {
 
       <footer className="mt-10 flex flex-wrap gap-4 text-sm">
         <Link
-          href="/pro/nfl/camp"
+          href="/pro/nfl/club"
           className="text-kos-gold hover:text-kos-gold/90"
         >
-          ← Back to Camp Desk
+          ← Back to Club Desk
         </Link>
         <Link href="/pro/desk" className="text-kos-text/70 hover:text-kos-gold">
           Multi-sport desk handicaps →

@@ -95,10 +95,7 @@ export default async function FantasyPlayerDetailPage({
             }
           />
           <Stat label="VOR" value={`+${row.valueOverReplacement.toFixed(1)}`} />
-          <Stat
-            label="Games projected"
-            value={String(row.gamesProjected)}
-          />
+          <Stat label="Games projected" value={String(row.gamesProjected)} />
         </div>
 
         {row.adpQaFlag ? (
@@ -175,10 +172,10 @@ export default async function FantasyPlayerDetailPage({
             Open Builder
           </Link>
           <Link
-            href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
+            href="/pro/nfl/dfs"
             className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-semibold text-kos-text"
           >
-            Start Mock
+            This week&apos;s DFS
           </Link>
           <Link
             href={`/pro/nfl/teams/${row.team.toLowerCase()}`}

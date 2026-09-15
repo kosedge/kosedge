@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { currentNflRegWeekFromSchedule } from "@/lib/nfl-canonical-schedule";
+import { currentNflRegWeekFromSchedule } from "@/lib/nfl-current-week";
 import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
 import {
   LEGITIMATE_EMPTY_SLATE_COPY,

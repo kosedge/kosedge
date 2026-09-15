@@ -66,10 +66,10 @@ export default async function NflWeeklySlatePage({
             Team Previews
           </Link>
           <Link
-            href="/pro/nfl/camp"
+            href="/pro/nfl/club"
             className="rounded-xl border border-white/15 bg-white/5 px-4 py-2 text-sm hover:border-kos-gold/35"
           >
-            Camp Desk
+            Club Desk
           </Link>
           <Link
             href="/pro/nfl/fair-lines"

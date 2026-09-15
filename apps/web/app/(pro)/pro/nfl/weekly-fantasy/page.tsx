@@ -86,12 +86,6 @@ export default async function NflWeeklyFantasyPage({
             Player Props Board
           </Link>
           <Link
-            href="/pro/nfl/fantasy"
-            className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text hover:border-kos-gold/40"
-          >
-            Fantasy Draft Desk
-          </Link>
-          <Link
             href="/pro/nfl/dfs"
             className="rounded-lg border border-kos-gold/30 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
           >
