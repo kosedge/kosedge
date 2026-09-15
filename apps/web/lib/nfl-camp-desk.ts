@@ -261,7 +261,7 @@ export async function buildNflCampDesk(opts?: {
   return {
     generatedAt: now.toISOString(),
     eraLabel: registry?.era ?? "training-camp",
-    hubHref: "/pro/nfl/camp",
+    hubHref: "/pro/nfl/club",
     kosedgeCards,
     archiveCards: shelf.archive,
     latestDeskDate: shelf.latestDeskDate,
@@ -278,7 +278,7 @@ export async function buildNflCampDesk(opts?: {
     beats,
     writers: WRITER_COVERAGE,
     notes: [
-      "Camp Desk hero is KosEdge-dated notes. Beat, official, and multi-source desks are citations — not an X timeline.",
+      "Club Desk hero is KosEdge-dated notes. Beat, official, and multi-source desks are citations — not an X timeline.",
       "Camp/Monday refresh prefers data/writers/nfl-beat-writers.json (research index) over any single outlet. ESPN may be one input, never the branded wire. No X profile links on the product.",
       "Customer shelf shows one desk day (newest package). Prior days are archive navigation, not a stacked dump.",
       "Material depth flags queue the existing SoT job. Prose does not publish a new active_run.",

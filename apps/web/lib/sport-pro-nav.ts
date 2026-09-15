@@ -100,9 +100,9 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/slate/today", label: "Weekly Slate", primary: true },
       { href: "/pro/nfl/survivor", label: "Survivor", primary: true },
       // Draft Desk for now; post-kickoff can retarget to Weekly Fantasy Projections.
-      { href: "/pro/nfl/fantasy", label: "Fantasy", primary: true },
+      { href: "/pro/nfl/dfs", label: "Fantasy", primary: true },
       { href: "/pro/power-ratings/nfl", label: "Power Ratings" },
-      { href: "/pro/nfl/camp", label: "Camp Desk", primary: true },
+      { href: "/pro/nfl/club", label: "Club Desk", primary: true },
       { href: "/pro/nfl/teams", label: "Teams" },
     ],
     tools: [
@@ -122,7 +122,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       { href: "/pro/nfl/standings", label: "Standings" },
       { href: "/pro/nfl/depth-charts", label: "Depth Charts" },
       { href: "/pro/nfl/injuries", label: "Injuries & News" },
-      // Fantasy primary nav covers Draft Desk; weekly stays in tools.
+      // Fantasy primary nav is in-season DFS; weekly stays in tools.
       { href: "/pro/nfl/weekly-fantasy", label: "Weekly Fantasy" },
       { href: "/pro/nfl/dfs", label: "DFS Board" },
       { href: "/wall-chart/nfl-2026", label: "Wall Chart" },
@@ -304,6 +304,22 @@ export function isSportNavActive(
 
   if (href.startsWith(`/pro/${sportKey}/slate`)) {
     return pathname.startsWith(`/pro/${sportKey}/slate`);
+  }
+
+  if (sportKey === "nfl" && href === "/pro/nfl/club") {
+    return (
+      pathname.startsWith("/pro/nfl/club") ||
+      pathname.startsWith("/pro/nfl/camp")
+    );
+  }
+
+  if (sportKey === "nfl" && href === "/pro/nfl/dfs") {
+    return (
+      pathname === "/pro/nfl/dfs" ||
+      pathname.startsWith("/pro/nfl/dfs/") ||
+      pathname === "/pro/nfl/fantasy" ||
+      pathname.startsWith("/pro/nfl/fantasy/")
+    );
   }
 
   if (href.includes("?")) {

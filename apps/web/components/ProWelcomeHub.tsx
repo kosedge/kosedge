@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { publicEdgeBoardSports } from "@/lib/cfb-edge-board-public";
+import { nflRegWeekPostureLine } from "@/lib/nfl-current-week";
 import { SPORTS } from "@/lib/sports";
 import { getFeaturedDeskNote } from "@/lib/insights/content";
 import { TOP_EDGE, HIGHLIGHTED_GAMES } from "@/lib/featured-games";
@@ -84,8 +85,8 @@ export default function ProWelcomeHub() {
               NFL guest walkthrough
             </h2>
             <p className="mt-1 text-sm text-kos-text/70">
-              Edge Board → Survivor → Fantasy → Season Model. Week 1 REG live ·
-              PRE off board.
+              Edge Board → Survivor → Fantasy → Season Model.{" "}
+              {nflRegWeekPostureLine()}
             </p>
           </div>
           <Link

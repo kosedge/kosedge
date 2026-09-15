@@ -18,8 +18,8 @@ const SPORT_INJURY_CONFIG: Record<string, SportInjuryNewsConfig> = {
     sourceSummary:
       "Multi-source desk: trusted beats, RotoWire, Rotoworld, VSiN, and public feeds.",
     emptyHint:
-      "No injury headlines in the current multi-source pull. Check Camp Desk beats for club-specific hubs.",
-    campHref: "/pro/nfl/camp",
+      "No injury headlines in the current multi-source pull. Check Club Desk beats for club-specific hubs.",
+    campHref: "/pro/nfl/club",
   },
   cfb: {
     sportLabel: "CFB",

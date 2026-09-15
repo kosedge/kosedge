@@ -56,6 +56,11 @@ const nextConfig: NextConfig = {
       "../../data/ops/**/*",
       "../../data/fantasy/**/*",
     ],
+    "/pro/nfl/club": [
+      "./data/**/*",
+      "../../data/ops/**/*",
+      "../../data/fantasy/**/*",
+    ],
   },
 
   outputFileTracingIncludes: {
@@ -66,8 +71,12 @@ const nextConfig: NextConfig = {
     ],
     "/pro/nfl/stats": ["../../data/ops/**/*"],
     "/pro/nfl/slate/[date]": ["../../data/ops/**/*"],
-    // Camp Desk: beat registry + daily JSON only (no season-previews / data/ops).
+    // Club Desk: beat registry + daily JSON only (no season-previews / data/ops).
     "/pro/nfl/camp": [
+      "../../data/writers/**/*",
+      "../../content/writers/camp-desk-2026/**/*",
+    ],
+    "/pro/nfl/club": [
       "../../data/writers/**/*",
       "../../content/writers/camp-desk-2026/**/*",
     ],
@@ -90,6 +99,10 @@ const nextConfig: NextConfig = {
     // Fantasy desk: depth SoT for colliding abbrevs (Bijan vs Brian Robinson).
     // Static import of lib/fantasy/data also bundles; NFT include covers FS reads.
     "/pro/nfl/fantasy": [
+      "./lib/fantasy/data/**/*",
+      "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
+    ],
+    "/pro/nfl/fantasy/draft": [
       "./lib/fantasy/data/**/*",
       "../../services/model-service/src/services/nfl_season_engine/data/nfl_depth_chart_2026_w1.json",
     ],
@@ -187,6 +200,18 @@ const nextConfig: NextConfig = {
       {
         source: "/pro/nfl/hub",
         destination: "/pro/nfl/overview",
+        permanent: false,
+      },
+      {
+        // In-season rename: Camp Desk → Club Desk. Keep old links alive.
+        source: "/pro/nfl/camp",
+        destination: "/pro/nfl/club",
+        permanent: false,
+      },
+      {
+        // In-season Fantasy landing is this week's DFS slate, not mock/draft.
+        source: "/pro/nfl/fantasy",
+        destination: "/pro/nfl/dfs",
         permanent: false,
       },
       {

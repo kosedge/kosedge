@@ -80,12 +80,12 @@ export default function NewsUpdateArticle({ article }: NewsUpdateArticleProps) {
       accent="neutral"
       breadcrumbs={[
         { label: "NFL Overview", href: "/pro/nfl/overview" },
-        { label: "Camp Desk", href: "/pro/nfl/camp" },
+        { label: "Club Desk", href: "/pro/nfl/club" },
         { label: "News", href: "/pro/nfl/news" },
         { label: article.shortTitle ?? "Update" },
       ]}
       footerLinks={[
-        { label: "← Camp desk", href: "/pro/nfl/camp" },
+        { label: "← Club Desk", href: "/pro/nfl/club" },
         { label: "All news", href: "/pro/nfl/news" },
         ...(article.team
           ? [

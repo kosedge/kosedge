@@ -1,6 +1,7 @@
 import type { LegacyEdgeBoardRow } from "@/lib/flat-rows-to-legacy";
 import { withoutCfbEdgeBoardHrefs } from "@/lib/cfb-edge-board-public";
 import { sportIsMarketsOnlyEdgeBoard } from "@/lib/edge-board-kei-availability";
+import { nflRegWeekPostureLine } from "@/lib/nfl-current-week";
 import { getSportDeskConfig } from "@/lib/pro-sport-desk";
 import { supportsPropsFantasy } from "@/lib/sports";
 
@@ -58,7 +59,7 @@ type SportCopyOverride = Omit<Partial<OverviewContent>, "sectionTitles"> & {
 const SPORT_COPY: Record<string, SportCopyOverride> = {
   nfl: {
     heroBadge: "Pro NFL intelligence hub",
-    heroSummary: "Week 1 REG live · PRE off board.",
+    heroSummary: "REG live · PRE off board.",
     slateCta: "Open weekly slate",
     articleToneBadge: "NFL analyst desk",
     sectionTitles: {
@@ -139,6 +140,10 @@ function sportCopy(sportKey: string, sportName: string): OverviewContent {
     heroBadge: copy.heroBadge ?? `Pro ${sportName} intelligence hub`,
     articleToneBadge: copy.articleToneBadge ?? `${sportName} analyst tone`,
     ...copy,
+    heroSummary:
+      sportKey === "nfl"
+        ? nflRegWeekPostureLine()
+        : (copy.heroSummary ?? DEFAULT_OVERVIEW_CONTENT.heroSummary),
     sectionTitles: {
       ...DEFAULT_OVERVIEW_CONTENT.sectionTitles,
       ...(copy.sectionTitles ?? {}),
@@ -213,7 +218,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Weekly Slate",
       subtitle:
-        "Move from macro board context into matchup-level detail, camp cadence, and preview coverage.",
+        "Move from macro board context into matchup-level detail, club cadence, and preview coverage.",
       links: [
         {
           href: "/pro/nfl/slate/today",
@@ -223,8 +228,8 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           status: "active",
         },
         {
-          href: "/pro/nfl/camp",
-          label: "Camp Desk",
+          href: "/pro/nfl/club",
+          label: "Club Desk",
           hint: "KosEdge daily wrap and team notes — ESPN is a source, not the product.",
           premium: true,
           status: "active",
@@ -289,12 +294,12 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
     {
       title: "Fantasy",
       subtitle:
-        "Draft desk, educational guillotine stay-alive lists, late-round sleepers, and weekly ATS pick’em.",
+        "This week’s DFS slate, educational guillotine stay-alive lists, late-round sleepers, and weekly ATS pick’em.",
       links: [
         {
-          href: "/pro/nfl/fantasy",
-          label: "Fantasy Draft Desk",
-          hint: "Draft board: Model + ADP + value advice → Builder → Mock.",
+          href: "/pro/nfl/dfs",
+          label: "DFS Board",
+          hint: "This week’s DFS research — DK/FD site scoring and salaries on the player-production spine. Ownership unavailable until a real source exists. Mocks are hidden in-season.",
           premium: true,
           status: "active",
         },
@@ -302,13 +307,6 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
           href: "/pro/nfl/weekly-fantasy",
           label: "Weekly Fantasy",
           hint: "Season-rate PPG from the player-production spine — not week-specific projections.",
-          premium: true,
-          status: "active",
-        },
-        {
-          href: "/pro/nfl/dfs",
-          label: "DFS Board",
-          hint: "Week/slate DFS research — DK/FD site scoring and salaries on the player-production spine. Ownership unavailable until a real source exists.",
           premium: true,
           status: "active",
         },
@@ -378,7 +376,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/injuries",
           label: "Injuries & News",
-          hint: "Weekly injury feed when posted — use Camp Desk for live practice notes now.",
+          hint: "Weekly injury feed when posted — use Club Desk for live practice notes now.",
           premium: true,
           status: "active",
         },

@@ -140,7 +140,7 @@ export default async function NflIntelTablePage({
                     href={campHref}
                     className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
                   >
-                    Camp Desk
+                    Club Desk
                   </Link>
                   .
                 </>

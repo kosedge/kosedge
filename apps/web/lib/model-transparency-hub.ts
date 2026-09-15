@@ -144,10 +144,10 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
     },
     {
       id: "camp-desk",
-      title: "Camp Desk / Injuries & News",
-      href: "/pro/nfl/camp",
+      title: "Club Desk / Injuries & News",
+      href: "/pro/nfl/club",
       lines: [
-        "Camp Desk: dated KosEdge notes with citations, not an X timeline.",
+        "Club Desk: dated KosEdge notes with citations, not an X timeline.",
         "Injuries & News: the feed when it is posted.",
         "Neither is a pricing engine.",
       ],

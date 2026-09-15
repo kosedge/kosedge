@@ -66,16 +66,10 @@ export default async function NflSleepersPage({
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link
-              href={`/pro/nfl/fantasy?scoring=${scoring}`}
+              href="/pro/nfl/dfs"
               className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
             >
-              Draft Desk →
-            </Link>
-            <Link
-              href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text hover:border-kos-gold/35"
-            >
-              Mock Draft
+              This week&apos;s DFS →
             </Link>
           </div>
         </div>
@@ -115,20 +109,14 @@ export default async function NflSleepersPage({
           <HonestStatusBanner title="No sleeper rows yet" tone="neutral">
             <p>
               Late-round value names appear when the fantasy desk + ADP match.
-              Open Draft Desk or Mock while the board loads.
+              Open this week&apos;s DFS while the board loads.
             </p>
             <div className="mt-3 flex flex-wrap gap-2">
               <Link
-                href={`/pro/nfl/fantasy?scoring=${scoring}`}
+                href="/pro/nfl/dfs"
                 className="rounded-lg border border-kos-gold/35 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
               >
-                Draft Desk
-              </Link>
-              <Link
-                href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
-                className="rounded-lg border border-white/15 bg-white/5 px-3 py-1.5 text-xs font-semibold text-kos-text"
-              >
-                Mock
+                DFS Board
               </Link>
             </div>
           </HonestStatusBanner>
