@@ -1,0 +1,704 @@
+{
+  "proof_version": "cfb-2026-current-season-sdv-proof-v1",
+  "generated_at": "2026-09-15T15:14:32.665251+00:00",
+  "season": 2026,
+  "source": {
+    "pbp": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_pbp/play_by_play_2026.parquet",
+    "schedule": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_schedules/cfb_schedule_2026.parquet",
+    "schedule_fallback": "https://github.com/sportsdataverse/sportsdataverse-data/releases/download/espn_cfb_schedules/cfb_schedule_2026.csv",
+    "stack": "sportsdataverse espn_cfb_pbp + espn_cfb_schedules",
+    "cfbd_used": false,
+    "cfbd_parked": true
+  },
+  "path_convention": {
+    "as_of": "20260915",
+    "historical_canonical_hd": "/Volumes/KosEdgeData/raw/cfb/pbp",
+    "historical_note": "2014\u20132025 Aug 13 lake is CANONICAL. Do not overwrite play_by_play_{2014-2025}.parquet.",
+    "current_season_hd_target": "/Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_20260915",
+    "current_season_hd_root": "/Volumes/KosEdgeData/raw/cfb/pbp_current",
+    "vm_research_path": "/workspace/data/cfb/research/pbp_current/as_of_20260915",
+    "vm_research_root": "/workspace/data/cfb/research/pbp_current",
+    "hd_mounted": false,
+    "prefer_hd_current_when_mounted": true,
+    "versioning": "raw/cfb/pbp_current/as_of_YYYYMMDD/"
+  },
+  "vm_dest": "/workspace/data/cfb/research/pbp_current/as_of_20260915",
+  "pbp": {
+    "path": "/workspace/data/cfb/research/pbp_current/as_of_20260915/play_by_play_2026.parquet",
+    "bytes": 7904267,
+    "sha256": "da0ec956d441da96aa0e85232fb685cb8408000fcf28a5fe5de0f3bb1d25e0ad",
+    "plays": 20118,
+    "games": 179,
+    "seasons_in_file": [
+      2026
+    ],
+    "weeks_in_file": [
+      1,
+      2
+    ],
+    "columns": 498,
+    "column_names_head": [
+      "season",
+      "game_id",
+      "game_play_number",
+      "pos_team_id",
+      "pos_team",
+      "def_pos_team_id",
+      "def_pos_team",
+      "pos_team_score",
+      "def_pos_team_score",
+      "half",
+      "period",
+      "down",
+      "distance",
+      "EPA",
+      "wpa",
+      "wp_before",
+      "wp_after",
+      "def_wp_before",
+      "def_wp_after",
+      "penalty_detail",
+      "yds_penalty",
+      "penalty_1st_conv",
+      "new_series",
+      "firstD_by_kickoff",
+      "firstD_by_poss",
+      "firstD_by_penalty",
+      "firstD_by_yards",
+      "def_EPA",
+      "rz_play",
+      "scoring_opp",
+      "middle_8",
+      "stuffed_run",
+      "change_of_pos_team",
+      "downs_turnover",
+      "pos_score_diff_start",
+      "pos_score_pts",
+      "home_wp_before",
+      "away_wp_before",
+      "home_wp_after",
+      "away_wp_after"
+    ],
+    "duplicate_id": 0,
+    "field_support": {
+      "plays": 20118,
+      "columns": 498,
+      "core31_present": [
+        "season",
+        "week",
+        "game_id",
+        "id",
+        "drive.id",
+        "pos_team",
+        "def_pos_team",
+        "homeTeamAbbrev",
+        "awayTeamAbbrev",
+        "homeTeamName",
+        "awayTeamName",
+        "down",
+        "distance",
+        "start.yardsToEndzone",
+        "statYardage",
+        "type.text",
+        "EPA",
+        "EP_start",
+        "EP_end",
+        "EPA_success",
+        "rz_play",
+        "stuffed_run",
+        "pos_score_diff",
+        "start.TimeSecsRem",
+        "under_2",
+        "wpa",
+        "wp_before",
+        "wp_after",
+        "scrimmage_play",
+        "pass",
+        "rush"
+      ],
+      "core31_absent": [],
+      "core31": {
+        "season": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "week": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "game_id": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "id": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "drive.id": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "pos_team": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "def_pos_team": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "homeTeamAbbrev": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "awayTeamAbbrev": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "homeTeamName": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "awayTeamName": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "down": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "distance": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "start.yardsToEndzone": {
+          "present": true,
+          "null_rate": 0.000149,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "statYardage": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "type.text": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EPA": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EP_start": {
+          "present": true,
+          "null_rate": 5e-05,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EP_end": {
+          "present": true,
+          "null_rate": 5e-05,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "EPA_success": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "rz_play": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "stuffed_run": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "pos_score_diff": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "start.TimeSecsRem": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "under_2": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "wpa": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "wp_before": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "wp_after": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "scrimmage_play": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "pass": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        },
+        "rush": {
+          "present": true,
+          "null_rate": 0.0,
+          "class": "PRESENT_LOW_NULL"
+        }
+      },
+      "extras": {
+        "half": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "period": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "scoring_opp": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "sack": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "TFL": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "int": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "havoc": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "statYardage": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "rz_play": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "pos_score_diff": {
+          "present": true,
+          "null_rate": 0.0
+        },
+        "PPA": {
+          "present": false,
+          "null_rate": null
+        },
+        "ppa": {
+          "present": false,
+          "null_rate": null
+        }
+      },
+      "metrics": {
+        "EPA": {
+          "required": [
+            "EPA"
+          ],
+          "missing": [],
+          "null_rates": {
+            "EPA": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "EPA_success": {
+          "required": [
+            "EPA_success"
+          ],
+          "missing": [],
+          "null_rates": {
+            "EPA_success": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "scrimmage_play": {
+          "required": [
+            "scrimmage_play"
+          ],
+          "missing": [],
+          "null_rates": {
+            "scrimmage_play": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "pass": {
+          "required": [
+            "pass"
+          ],
+          "missing": [],
+          "null_rates": {
+            "pass": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "rush": {
+          "required": [
+            "rush"
+          ],
+          "missing": [],
+          "null_rates": {
+            "rush": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "down": {
+          "required": [
+            "down"
+          ],
+          "missing": [],
+          "null_rates": {
+            "down": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "distance": {
+          "required": [
+            "distance"
+          ],
+          "missing": [],
+          "null_rates": {
+            "distance": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "start.yardsToEndzone": {
+          "required": [
+            "start.yardsToEndzone"
+          ],
+          "missing": [],
+          "null_rates": {
+            "start.yardsToEndzone": 0.000149
+          },
+          "class": "SUPPORTED"
+        },
+        "drive.id": {
+          "required": [
+            "drive.id"
+          ],
+          "missing": [],
+          "null_rates": {
+            "drive.id": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "type.text": {
+          "required": [
+            "type.text"
+          ],
+          "missing": [],
+          "null_rates": {
+            "type.text": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "pace": {
+          "required": [
+            "scrimmage_play",
+            "game_id",
+            "pos_team"
+          ],
+          "missing": [],
+          "null_rates": {
+            "scrimmage_play": 0.0,
+            "game_id": 0.0,
+            "pos_team": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "true_pace_competitive": {
+          "required": [
+            "scrimmage_play",
+            "game_id",
+            "pos_team",
+            "pos_score_diff"
+          ],
+          "missing": [],
+          "null_rates": {
+            "scrimmage_play": 0.0,
+            "game_id": 0.0,
+            "pos_team": 0.0,
+            "pos_score_diff": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "explosiveness": {
+          "required": [
+            "EPA",
+            "statYardage",
+            "scrimmage_play",
+            "pass",
+            "rush"
+          ],
+          "missing": [],
+          "null_rates": {
+            "EPA": 0.0,
+            "statYardage": 0.0,
+            "scrimmage_play": 0.0,
+            "pass": 0.0,
+            "rush": 0.0
+          },
+          "class": "SUPPORTED"
+        },
+        "scoring_opportunity": {
+          "required": [
+            "drive.id",
+            "start.yardsToEndzone",
+            "type.text",
+            "game_id"
+          ],
+          "missing": [],
+          "null_rates": {
+            "drive.id": 0.0,
+            "start.yardsToEndzone": 0.000149,
+            "type.text": 0.0,
+            "game_id": 0.0
+          },
+          "class": "SUPPORTED"
+        }
+      },
+      "ppa_present": false,
+      "havoc_flag_present": true,
+      "havoc_components_present": {
+        "havoc": true,
+        "TFL": true,
+        "sack": true,
+        "int": true,
+        "pass_breakup": true,
+        "forced_fumble": true
+      },
+      "st_playtype_present": true,
+      "note": "SUPPORTED means columns exist at usable null rates for #555 raw unadjusted metrics. Not a fitted rating. Havoc/ST still need field verification. PPA is optional and expected absent on SDV."
+    },
+    "game_ids_head": [
+      "401856634",
+      "401856635",
+      "401856636",
+      "401856637",
+      "401856658",
+      "401856659",
+      "401856660",
+      "401856661",
+      "401856662",
+      "401856663",
+      "401856664",
+      "401856665",
+      "401856666",
+      "401856667",
+      "401856668",
+      "401856669",
+      "401856670",
+      "401856672",
+      "401856673",
+      "401856674"
+    ]
+  },
+  "schedule": {
+    "path": "/workspace/data/cfb/research/pbp_current/as_of_20260915/cfb_schedule_2026.parquet",
+    "bytes": 16867,
+    "sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768",
+    "rows": 185,
+    "columns": [
+      "game_id",
+      "season",
+      "week",
+      "season_type",
+      "game_date",
+      "neutral_site",
+      "conference_competition",
+      "home_id",
+      "away_id",
+      "home_team",
+      "away_team",
+      "home_abbreviation",
+      "away_abbreviation",
+      "home_score",
+      "away_score",
+      "home_winner",
+      "away_winner",
+      "venue",
+      "attendance",
+      "status"
+    ],
+    "status_counts": {
+      "completed": 84,
+      "not_completed": 101
+    },
+    "snapshot_bucket_counts": {
+      "status_final": 84,
+      "in_progress": 95,
+      "postponed_or_delayed": 6
+    },
+    "actually_completed": 85
+  },
+  "coverage": {
+    "schedule_games": 185,
+    "schedule_unique_ids": 185,
+    "pbp_games": 179,
+    "disclaimer": "status_final_* counts are STATUS_FINAL in this schedule snapshot \u2229 PBP. That is not proof of every actually completed game. The schedule feed lags; many PBP games can still show IN_PROGRESS. W\u22121 eligibility uses actually_completed only (STATUS_FINAL / completed flag / scores present and not live; parked 0\u20130 excluded). Unfinished games are excluded.",
+    "status_final_on_schedule": 84,
+    "status_final_in_pbp": 84,
+    "status_final_missing_pbp": 0,
+    "coverage_rate_status_final": 1.0,
+    "actually_completed_on_schedule": 85,
+    "actually_completed_in_pbp": 85,
+    "actually_completed_missing_pbp": 0,
+    "actually_completed_missing_pbp_ids": [],
+    "coverage_rate_actually_completed": 1.0,
+    "pbp_reconcile": {
+      "completed": 85,
+      "in_progress": 94,
+      "postponed_or_delayed": 0,
+      "scheduled": 0,
+      "unmatched": 0,
+      "unknown": 0
+    },
+    "pbp_reconcile_ids": {
+      "in_progress": [
+        "401856636",
+        "401856637",
+        "401856658",
+        "401856659",
+        "401856662",
+        "401856666",
+        "401856667",
+        "401856668",
+        "401856669",
+        "401856672",
+        "401856673",
+        "401856674",
+        "401856676",
+        "401856677",
+        "401856680",
+        "401856681",
+        "401856682",
+        "401856770",
+        "401856771",
+        "401856772",
+        "401856775",
+        "401856777",
+        "401856778",
+        "401856779",
+        "401856782",
+        "401856783",
+        "401856784",
+        "401856785",
+        "401856786",
+        "401856787",
+        "401856788",
+        "401856789",
+        "401856791",
+        "401856810",
+        "401858201",
+        "401858207",
+        "401858211",
+        "401858216",
+        "401858217",
+        "401858218"
+      ],
+      "postponed_or_delayed": [],
+      "unmatched": []
+    },
+    "w1_eligible_completed_in_pbp": 85,
+    "w1_excluded_unfinished_or_unmatched": 94,
+    "completed_on_schedule": 84,
+    "not_completed_on_schedule": 101,
+    "unknown_status_on_schedule": 0,
+    "completed_in_pbp": 84,
+    "completed_missing_pbp": 0,
+    "pbp_not_on_schedule": 0,
+    "pbp_not_completed_on_schedule": 95,
+    "schedule_without_pbp": 6,
+    "coverage_rate_completed": 1.0,
+    "completed_missing_pbp_ids": [],
+    "pbp_not_on_schedule_ids": [],
+    "schedule_without_pbp_ids": [
+      "401856671",
+      "401856790",
+      "401858209",
+      "401858219",
+      "401862694",
+      "401862708"
+    ],
+    "by_week": {
+      "1": {
+        "scheduled": 99,
+        "status_final": 53,
+        "status_final_in_pbp": 53,
+        "actually_completed": 54,
+        "actually_completed_in_pbp": 54,
+        "actually_completed_missing_pbp": 0,
+        "completed": 53,
+        "completed_in_pbp": 53,
+        "completed_missing_pbp": 0
+      },
+      "2": {
+        "scheduled": 86,
+        "status_final": 31,
+        "status_final_in_pbp": 31,
+        "actually_completed": 31,
+        "actually_completed_in_pbp": 31,
+        "actually_completed_missing_pbp": 0,
+        "completed": 31,
+        "completed_in_pbp": 31,
+        "completed_missing_pbp": 0
+      }
+    },
+    "honest_gaps": [
+      "84/84 is STATUS_FINAL-in-snapshot \u2229 PBP only \u2014 not proof of every actually completed game.",
+      "95 PBP game_id(s) are not STATUS_FINAL on this schedule snapshot (IN_PROGRESS / DELAYED / HALFTIME / END_PERIOD). Schedule feed lags.",
+      "94 PBP game(s) are excluded from W\u22121 eligibility (unfinished, parked, unmatched). Eligible count is 85.",
+      "6 schedule game(s) have zero PBP rows (mostly STATUS_DELAYED 0\u20130 in this snapshot)."
+    ],
+    "schedule_refresh": {
+      "forced": false,
+      "prior": {
+        "path": "/workspace/data/cfb/research/pbp_current/as_of_20260915/cfb_schedule_2026.parquet",
+        "bytes": 16867,
+        "sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768"
+      },
+      "current_bytes": 16867,
+      "current_sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768",
+      "bytes_changed": false,
+      "sha_changed": false
+    }
+  },
+  "espn_sample_game": null,
+  "historical_inventory_rewritten": false,
+  "research_only": true,
+  "opponent_adjusted": false,
+  "kei_or_edge_board": false
+}

@@ -1,0 +1,19 @@
+{
+  "as_of": "20260915",
+  "note": "In-cloud refresh of SDV espn_cfb_schedules. CoS Mac twin: inventory/cfb/sdv-2026-schedule-reconcile-refresh-20260915.json and /Volumes/KosEdgeData/raw/cfb/pbp_current/as_of_20260915/.",
+  "cfbd_used": false,
+  "pbp_games": 179,
+  "schedule_games": 185,
+  "schedule_sha256": "bbc26106ca135be8a4da0202452b0fd4bbfe49081b7e1eb276cfb184409db768",
+  "schedule_bytes": 16867,
+  "schedule_sha_changed_on_refresh": false,
+  "status_final_intersect_pbp": 84,
+  "status_final_is_not_full_completed_coverage": true,
+  "actually_completed_intersect_pbp": 85,
+  "actually_completed_missing_pbp": 0,
+  "pbp_in_progress_excluded_from_w1": 94,
+  "pbp_unmatched": 0,
+  "schedule_without_pbp": 6,
+  "w1_eligible": 85,
+  "disclaimer": "84/84 is STATUS_FINAL-in-snapshot ∩ PBP only. Do not claim every actually completed game is covered."
+}
