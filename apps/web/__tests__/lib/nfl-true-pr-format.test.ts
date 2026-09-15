@@ -47,7 +47,7 @@ describe("nfl-true-pr-format", () => {
     );
     expect(chip?.value).toMatch(/Sat/i);
     expect(chip?.muted).toBe(true);
-    expect(chip?.detail).toMatch(/Camp Desk/i);
+    expect(chip?.detail).toMatch(/Club Desk/i);
   });
 
   it("frames projected SOS as outlook", () => {

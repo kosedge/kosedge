@@ -193,7 +193,7 @@ export default async function NflPlayerPreviewsPage() {
                     className="px-3 py-6 text-sm text-kos-text/60 sm:px-4"
                   >
                     Skill-position outlook table is empty for this cycle — not a
-                    ready preview board. Check Fantasy Draft Desk after the next
+                    ready preview board. Check this week&apos;s DFS after the next
                     player materialize.
                   </td>
                 </tr>

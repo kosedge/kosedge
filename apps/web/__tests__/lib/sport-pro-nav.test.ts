@@ -53,7 +53,7 @@ describe("sport-pro-nav", () => {
       "Survivor",
       "Fantasy",
       "Power Ratings",
-      "Camp Desk",
+      "Club Desk",
       "Teams",
     ]);
     // Demoted from primary — live in Overview body / More tools.
@@ -70,7 +70,9 @@ describe("sport-pro-nav", () => {
     expect(labels).not.toContain("Player Previews");
     expect(labels).not.toContain("Sport Tracking");
     const fantasy = nflPrimary.find((i) => i.label === "Fantasy");
-    expect(fantasy?.href).toBe("/pro/nfl/fantasy");
+    expect(fantasy?.href).toBe("/pro/nfl/dfs");
+    const club = nflPrimary.find((i) => i.label === "Club Desk");
+    expect(club?.href).toBe("/pro/nfl/club");
   });
 
   it("keeps Wall Chart as NFL-only tool; Fantasy on primary; demoted desks in tools", () => {
@@ -102,9 +104,10 @@ describe("sport-pro-nav", () => {
     expect(nflTools).not.toContain("Draft Desk");
     expect(nflTools).not.toContain("Fantasy");
     expect(nflTools).not.toContain("Survivor");
-    // Camp Desk is primary — not duplicated in tools.
+    // Club Desk is primary — not duplicated in tools.
     expect(nflTools).not.toContain("Camp");
     expect(nflTools).not.toContain("Camp Desk");
+    expect(nflTools).not.toContain("Club Desk");
     // Unfinished surfaces demoted until live (no tools chrome that looks ready).
     expect(nflTools).not.toContain("Awards");
     expect(nflTools).not.toContain("DFS");
@@ -232,13 +235,14 @@ describe("sport-pro-nav", () => {
     ).toBe(true);
   });
 
-  it("keeps Fantasy nav active across Draft Desk subpages", () => {
-    const href = "/pro/nfl/fantasy";
+  it("keeps Fantasy nav active across DFS and remaining fantasy subpages", () => {
+    const href = "/pro/nfl/dfs";
+    expect(isSportNavActive("/pro/nfl/dfs", href, "nfl")).toBe(true);
     expect(isSportNavActive("/pro/nfl/fantasy", href, "nfl")).toBe(true);
     expect(isSportNavActive("/pro/nfl/fantasy/builder", href, "nfl")).toBe(
       true,
     );
-    expect(isSportNavActive("/pro/nfl/fantasy/mock", href, "nfl")).toBe(true);
+    expect(isSportNavActive("/pro/nfl/fantasy/draft", href, "nfl")).toBe(true);
     expect(isSportNavActive("/pro/nfl/fantasy/player/abc", href, "nfl")).toBe(
       true,
     );
@@ -250,6 +254,15 @@ describe("sport-pro-nav", () => {
     );
     expect(isSportNavActive("/pro/nfl/weekly-fantasy", href, "nfl")).toBe(
       false,
+    );
+  });
+
+  it("keeps Club Desk nav active on the legacy camp redirect path", () => {
+    expect(isSportNavActive("/pro/nfl/club", "/pro/nfl/club", "nfl")).toBe(
+      true,
+    );
+    expect(isSportNavActive("/pro/nfl/camp", "/pro/nfl/club", "nfl")).toBe(
+      true,
     );
   });
 });

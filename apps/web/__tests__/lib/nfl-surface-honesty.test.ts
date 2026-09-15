@@ -58,12 +58,12 @@ describe("NFL awards vs futures source stamps", () => {
 });
 
 describe("NFL depth charts are not claimed as live camp", () => {
-  it("labels packaged model depth — not live Camp Desk", () => {
+  it("labels packaged model depth — not live Club Desk", () => {
     expect(NFL_DEPTH_SOURCE_NAME).toMatch(/packaged|model/i);
     expect(NFL_DEPTH_SOURCE_STAMP).toMatch(/Source:/i);
     expect(NFL_DEPTH_SOURCE_STAMP).toContain(NFL_DEPTH_NOT_LIVE_CAMP_PHRASE);
     expect(NFL_DEPTH_SOURCE_STAMP).toMatch(/Named QB1, IR, and claims/i);
-    expect(NFL_DEPTH_SOURCE_STAMP).toMatch(/Camp Desk/i);
+    expect(NFL_DEPTH_SOURCE_STAMP).toMatch(/Club Desk/i);
     expect(NFL_DEPTH_SOURCE_STAMP).not.toMatch(ENGINEERING_NOTE);
   });
 
@@ -78,7 +78,7 @@ describe("NFL depth charts are not claimed as live camp", () => {
 
     const stale = nflDepthPackFreshnessStamp(new Date("2026-09-04T12:00:00Z"));
     expect(stale).toMatch(/Pack past/i);
-    expect(stale).toMatch(/Camp Desk/i);
+    expect(stale).toMatch(/Club Desk/i);
     expect(stale).not.toMatch(ENGINEERING_NOTE);
   });
 
@@ -90,13 +90,13 @@ describe("NFL depth charts are not claimed as live camp", () => {
 
     expect(league).toContain("nflDepthPackFreshnessStamp");
     expect(league).toContain('sourceHonestyTestId="nfl-depth-source-stamp"');
-    expect(league).toContain('campHref="/pro/nfl/camp"');
+    expect(league).toContain('campHref="/pro/nfl/club"');
     expect(league).not.toMatch(/hidden|coming soon|paywall/i);
 
     expect(teamHub).toContain("nflDepthPackFreshnessStamp");
     expect(teamHub).toContain('data-testid="nfl-depth-source-stamp"');
     expect(teamHub).toContain("DepthChartRenderer");
-    expect(teamHub).toContain("/pro/nfl/camp");
+    expect(teamHub).toContain("/pro/nfl/club");
     expect(teamHub).not.toMatch(/live roster SoT/i);
     // Must not misuse season-week truth as pack as-of.
     expect(teamHub).not.toMatch(/As-of: \{truth\.period_line\}/);

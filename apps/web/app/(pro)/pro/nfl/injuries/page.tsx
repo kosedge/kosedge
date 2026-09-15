@@ -36,15 +36,15 @@ export default async function NflInjuriesPage({
         sportLabel="NFL"
         items={injuryNews}
         sourceSummary="Multi-source desk: trusted beats, RotoWire, Rotoworld, VSiN, and public feeds."
-        emptyHint="No injury headlines in the current multi-source pull. Check Camp Desk beats for club-specific hubs."
-        campHref="/pro/nfl/camp"
+        emptyHint="No injury headlines in the current multi-source pull. Check Club Desk beats for club-specific hubs."
+        campHref="/pro/nfl/club"
       />
 
       <NflIntelTablePage
         endpoint="injuries"
         title="NFL Team Intel · Injuries & News"
         description="Weekly injury designations and practice participation status. During camp the desk may show a prior report — badged ARCHIVE or PRESEASON with an honest as-of, never as a finished 2026 week."
-        emptyHint="Injury intel is not available yet for the selected season/week. Check Camp Desk for live practice notes until weekly reports land."
+        emptyHint="Injury intel is not available yet for the selected season/week. Check Club Desk for live practice notes until weekly reports land."
         season={season}
         week={week}
         team={team}

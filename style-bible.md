@@ -96,9 +96,9 @@ Live matrix after PR #330 — five hired desks + Riley. Do **not** reassign beat
 
 **PHI** season-preview byline going forward: **Avery Cole** (NFC East also-cover). Coverage/docs pointer — Monday NUMBER pass owns the file; do not rewrite `PHI.md` solely to flip the byline.
 
-### NFL Camp Desk cadence (LOCKED 2026-08-30 — Ryan)
+### NFL Club Desk cadence (in-season name; camp lock 2026-08-30 — Ryan)
 
-Execution lock only — not a new product. Full SoT: `docs/writers/TRAINING_CAMP_DESK.md`.
+Customer chrome is **Club Desk**. Execution lock only — not a new product. Writer SoT: `docs/writers/TRAINING_CAMP_DESK.md`. In-season weekly OS: `docs/ops/NFL_INSEASON_WEEKLY_OS_v1.md`.
 
 | Slot                  | Ships                                                                                      | Forbidden                                         |
 | --------------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------------- |

@@ -61,7 +61,7 @@ export default async function InjuriesPage({
           endpoint="injuries"
           title="NFL Team Intel · Injuries & News"
           description="Weekly injury designations and practice participation status. During camp the desk may show a prior report — badged ARCHIVE or PRESEASON with an honest as-of, never as a finished 2026 week."
-          emptyHint="Injury intel is not available yet for the selected season/week. Check Camp Desk for live practice notes until weekly reports land."
+          emptyHint="Injury intel is not available yet for the selected season/week. Check Club Desk for live practice notes until weekly reports land."
           season={season}
           week={week}
           team={team}

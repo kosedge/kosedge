@@ -160,9 +160,9 @@ describe("NflIntelTablePage", () => {
       description: "Depth",
       emptyHint: "No data",
       sourceHonesty:
-        "Source: packaged / model depth chart — not live Camp Desk.",
+        "Source: packaged / model depth chart — not live Club Desk.",
       sourceHonestyTestId: "nfl-depth-source-stamp",
-      campHref: "/pro/nfl/camp",
+      campHref: "/pro/nfl/club",
       columns: [
         { key: "team", label: "Team" },
         { key: "player_name", label: "Player" },
@@ -180,14 +180,14 @@ describe("NflIntelTablePage", () => {
     expect(screen.queryByText(/Week 18/)).not.toBeInTheDocument();
     expect(screen.queryByText(/2026 W18/)).not.toBeInTheDocument();
     expect(screen.getByTestId("nfl-depth-source-stamp")).toHaveTextContent(
-      /not live Camp Desk/i,
+      /not live Club Desk/i,
     );
     expect(screen.getByTestId("nfl-depth-source-stamp")).toHaveTextContent(
       /As-of: Season 2026 · Preseason/i,
     );
-    expect(screen.getByRole("link", { name: "Camp Desk" })).toHaveAttribute(
+    expect(screen.getByRole("link", { name: "Club Desk" })).toHaveAttribute(
       "href",
-      "/pro/nfl/camp",
+      "/pro/nfl/club",
     );
     expect(screen.getByText("Stafford")).toBeInTheDocument();
     vi.useRealTimers();

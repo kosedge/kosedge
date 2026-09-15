@@ -10,6 +10,7 @@ import {
   scopeCfbLiveEdgeBoardRows,
 } from "@/lib/cfb-edge-board-week";
 import { getSport, SPORTS } from "@/lib/sports";
+import { resolveCurrentNflRegWeek } from "@/lib/nfl-current-week";
 
 /** Build a URL slug from away/home team names (e.g. "Duke", "UNC" -> "duke-unc"). */
 export function slugifyGame(away: string, home: string): string {
@@ -60,13 +61,17 @@ export async function getTonightGames(sport: string): Promise<TonightGame[]> {
   try {
     const flat = await getEdgeBoardRows(sport);
     const legacy = flatRowsToLegacy(Array.isArray(flat) ? flat : [], sport);
-    return legacy
+    const games = legacy
       .filter((row) => row?.teamA?.name && row?.teamB?.name)
       .map((row) => ({
         slug: tonightSlug(sport, row.teamA.name, row.teamB.name),
         row,
         sport,
       }));
+    if (sport.toLowerCase() !== "nfl") return games;
+    const resolved = resolveCurrentNflRegWeek();
+    if (!resolved.proven || resolved.week == null) return [];
+    return games.filter((game) => Number(game.row.week) === resolved.week);
   } catch {
     // Overview / slate must empty-state — never throw into the error boundary.
     return [];

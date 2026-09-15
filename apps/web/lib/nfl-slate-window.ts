@@ -8,10 +8,8 @@
  * kickoffs so we only ask for games the page will paint.
  */
 
-import {
-  currentNflRegWeekFromSchedule,
-  listCanonicalNflGames,
-} from "@/lib/nfl-canonical-schedule";
+import { listCanonicalNflGames } from "@/lib/nfl-canonical-schedule";
+import { currentNflRegWeekFromSchedule } from "@/lib/nfl-current-week";
 
 /** Never request more than two NFL weeks plus a one-day kickoff buffer. */
 export const NFL_WEEKLY_SLATE_MAX_DAYS_AHEAD = 16;
@@ -61,9 +59,10 @@ export function resolveNflWeeklySlateWeeks(
   if (resolved.mode === "iso" && resolved.iso) {
     const week =
       weekForIsoKickoff(resolved.iso) ?? currentNflRegWeekFromSchedule(nowMs);
-    return [week];
+    return week == null ? [] : [week];
   }
   const current = currentNflRegWeekFromSchedule(nowMs);
+  if (current == null) return [];
   return [current, current + 1].filter((week) => week >= 1 && week <= 18);
 }
 

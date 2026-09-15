@@ -60,16 +60,10 @@ export default async function NflGuillotinePage({
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link
-              href={`/pro/nfl/fantasy?scoring=${scoring}`}
+              href="/pro/nfl/dfs"
               className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
             >
-              Fantasy Draft Desk →
-            </Link>
-            <Link
-              href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
-              className="rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text hover:border-kos-gold/35"
-            >
-              Mock Draft
+              This week&apos;s DFS →
             </Link>
           </div>
         </div>
@@ -185,14 +179,14 @@ export default async function NflGuillotinePage({
         <div className="mt-6">
           <HonestStatusBanner title="Fantasy board unavailable" tone="neutral">
             <p>
-              Open the Draft Desk once rankings load — stay-alive lists pull
-              from the same board.
+              Open this week&apos;s DFS once the board loads — stay-alive lists
+              pull from the same spine.
             </p>
             <Link
-              href={`/pro/nfl/fantasy?scoring=${scoring}`}
+              href="/pro/nfl/dfs"
               className="mt-3 inline-flex rounded-lg border border-kos-gold/35 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
             >
-              Fantasy Draft Desk
+              DFS Board
             </Link>
           </HonestStatusBanner>
         </div>
