@@ -7,3 +7,7 @@ data/mlb/statcast_cache/**/pitcher_raw_counts.json
 # Staged copy of repo-root infra/db for Railway path-as-root uploads.
 # Source of truth remains /infra/db; see scripts/db/stage_migrations_into_model_service.sh
 /infra/db/
+
+# CFB PBP restore fallback when /Volumes/KosEdgeData is unmounted.
+# Canonical bulk store is HD or repo-root data/cfb/warehouse (also gitignored).
+/data/cfb/warehouse/

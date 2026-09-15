@@ -5,6 +5,8 @@
 **Scope:** Inventory of CFB historical assets already owned in the repository and documented data-lake paths. No model fit. No scoring-equation change. No 2025 PBP/file access. No synthetic fills.  
 **This checkout:** `/Volumes/KosEdgeData` is **not mounted**. Repo fallback `data/cfb/warehouse/{raw,clean}/` is **gitignored and empty**. Railway production has **no CFB parquet volume** (Postgres + Redis only). Bulk PBP is therefore **documented, not byte-verified here**.
 
+**Follow-on (same PR / branch):** research loader + raw metrics + 2025 validation — `docs/cfb/CFB_OWNED_METRICS_VALIDATION_2026-09-15.md`. Not opponent-adjusted. Not a model.
+
 ---
 
 ## 1. Executive summary
