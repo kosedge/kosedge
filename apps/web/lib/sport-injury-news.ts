@@ -114,7 +114,10 @@ function parseRssItems(xml: string): Array<{
     items.push({
       title,
       link,
-      description: description.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      description: description
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim(),
       pubDate: pubDateRaw || null,
     });
   }
@@ -180,7 +183,10 @@ function dedupeNews(items: InjuryNewsItem[]): InjuryNewsItem[] {
   const seen = new Set<string>();
   const out: InjuryNewsItem[] = [];
   for (const item of items) {
-    const key = item.headline.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    const key = item.headline
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
     if (!key || seen.has(key)) continue;
     seen.add(key);
     out.push(item);

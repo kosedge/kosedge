@@ -95,10 +95,7 @@ export default async function FantasyPlayerDetailPage({
             }
           />
           <Stat label="VOR" value={`+${row.valueOverReplacement.toFixed(1)}`} />
-          <Stat
-            label="Games projected"
-            value={String(row.gamesProjected)}
-          />
+          <Stat label="Games projected" value={String(row.gamesProjected)} />
         </div>
 
         {row.adpQaFlag ? (

@@ -28,13 +28,17 @@ function HandicapperStrip({ note }: { note: HandicappersNote }) {
         {note.marketNumber ? (
           <div>
             <dt className="text-xs text-kos-text/60">Market</dt>
-            <dd className="mt-1 font-semibold text-kos-text">{note.marketNumber}</dd>
+            <dd className="mt-1 font-semibold text-kos-text">
+              {note.marketNumber}
+            </dd>
           </div>
         ) : null}
         {note.fairNumber ? (
           <div>
             <dt className="text-xs text-kos-text/60">Fair</dt>
-            <dd className="mt-1 font-semibold text-kos-gold">{note.fairNumber}</dd>
+            <dd className="mt-1 font-semibold text-kos-gold">
+              {note.fairNumber}
+            </dd>
           </div>
         ) : null}
         {note.lean ? (
@@ -46,7 +50,9 @@ function HandicapperStrip({ note }: { note: HandicappersNote }) {
         {note.confidence ? (
           <div>
             <dt className="text-xs text-kos-text/60">Confidence</dt>
-            <dd className="mt-1 font-semibold text-kos-text">{note.confidence}</dd>
+            <dd className="mt-1 font-semibold text-kos-text">
+              {note.confidence}
+            </dd>
           </div>
         ) : null}
       </dl>
@@ -75,7 +81,9 @@ export default function NewsUpdateArticle({ article }: NewsUpdateArticleProps) {
       eyebrow={`KosEdge · ${article.category}`}
       title={article.title}
       date={formatArticleDate(article.publishedAt, { includeTime: true })}
-      metaLine={article.team ? `${article.teamName ?? article.team} desk` : undefined}
+      metaLine={
+        article.team ? `${article.teamName ?? article.team} desk` : undefined
+      }
       bottomLine={bottomLine}
       accent="neutral"
       breadcrumbs={[

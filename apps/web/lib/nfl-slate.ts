@@ -412,8 +412,7 @@ export async function buildNflWeeklySlate(
     });
   }
   if (regCards.length > 0) {
-    const boardWeek =
-      resolved.mode === "week" ? resolved.week : currentWeek;
+    const boardWeek = resolved.mode === "week" ? resolved.week : currentWeek;
     const regWeekLabel =
       boardWeek == null
         ? "week not proven"
