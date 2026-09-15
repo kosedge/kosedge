@@ -13,6 +13,7 @@ data/cfb/research/pbp_hist/as_of_YYYYMMDD/ (gitignored).
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import sys
 from datetime import datetime, timezone
@@ -27,6 +28,30 @@ if str(MS) not in sys.path:
 def _write(path: Path, payload) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+
+def _sha256(path: Path, *, chunk: int = 1024 * 1024) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as fh:
+        while True:
+            block = fh.read(chunk)
+            if not block:
+                break
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def _artifact_checksums(paths: list[Path]) -> dict:
+    out = {}
+    for path in paths:
+        if not path.exists():
+            continue
+        out[path.name] = {
+            "path": str(path),
+            "sha256": _sha256(path),
+            "bytes": path.stat().st_size,
+        }
+    return out
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -69,6 +94,7 @@ def main(argv: list[str] | None = None) -> int:
     )
     from src.services.cfb_warehouse.research_opp_adj import (
         AdjParams,
+        ESTIMATOR_ID,
         PIPELINE_VERSION,
         aggregate_team_game_epa,
     )
@@ -150,8 +176,8 @@ def main(argv: list[str] | None = None) -> int:
         print("== 6. Frozen method → 2026 (research) ==", flush=True)
         dest_2026 = research_dest_dir(as_of)
         dest_2026.mkdir(parents=True, exist_ok=True)
-        pbp_path = restore_2026_pbp(dest_dir=dest_2026, force=True)
-        sched_path = restore_2026_schedule(dest_dir=dest_2026, force=True)
+        pbp_path = restore_2026_pbp(dest_dir=dest_2026, force=False)
+        sched_path = restore_2026_schedule(dest_dir=dest_2026, force=False)
         closed_559 = run_research_pipeline(
             as_of=as_of,
             as_of_week=int(args.as_of_week),
@@ -239,6 +265,7 @@ def main(argv: list[str] | None = None) -> int:
         )
         apply_2026["eligible_2026_games"] = len({g.game_id for g in games_2026})
         apply_2026["delayed_game_excluded_if_incomplete"] = True
+        apply_2026["estimator_id"] = ESTIMATOR_ID
         _write(ops / "cfb_2026_adj_epa.json", apply_2026)
         print(
             f"2026 teams={apply_2026['n_teams']} "
@@ -247,8 +274,21 @@ def main(argv: list[str] | None = None) -> int:
             flush=True,
         )
 
+    checksum_paths = [
+        ops / "validation_report.json",
+        ops / "cfb_2026_adj_epa.json",
+        ops / "closed_559_eligibility_summary.json",
+        ops / "delayed_game_pbp_audit.json",
+    ]
+    if hist_dest is not None:
+        checksum_paths.append(Path(hist_dest) / "team_game_epa_eligible.parquet")
+    checksums = _artifact_checksums(checksum_paths)
+    _write(ops / "artifact_checksums.json", checksums)
+
     summary = {
         "pipeline_version": PIPELINE_VERSION,
+        "estimator_id": ESTIMATOR_ID,
+        "pre_fix_holdout_mae_not_frozen": True,
         "as_of": as_of,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "research_only": True,
@@ -264,9 +304,21 @@ def main(argv: list[str] | None = None) -> int:
         },
         "recommendation": None if report is None else report.get("recommendation"),
         "holdout_season": HOLDOUT_SEASON,
+        "closed_559_eligible_games": None
+        if closed_559 is None
+        else (closed_559.get("manifest") or {}).get("eligible_count"),
+        "apply_2026_teams": None if apply_2026 is None else apply_2026.get("n_teams"),
+        "apply_2026_obs": None if apply_2026 is None else apply_2026.get("n_obs"),
+        "artifact_checksums": checksums,
         "ops": str(ops),
     }
     _write(ops / "summary.json", summary)
+    checksums["summary.json"] = {
+        "path": str(ops / "summary.json"),
+        "sha256": _sha256(ops / "summary.json"),
+        "bytes": (ops / "summary.json").stat().st_size,
+    }
+    _write(ops / "artifact_checksums.json", checksums)
     if args.write_ops:
         print(f"ops written → {ops}", flush=True)
     return 0

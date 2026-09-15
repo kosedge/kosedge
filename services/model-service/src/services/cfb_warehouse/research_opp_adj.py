@@ -30,6 +30,7 @@ from src.services.cfb_warehouse.identity import known_engine_codes, resolve_team
 from src.services.cfb_warehouse.owned_metrics import is_scrimmage
 
 PIPELINE_VERSION = "cfb-research-opp-adj-epa-v1"
+ESTIMATOR_ID = "fit_joint_v2_joint_mu_hfa_n0_ridge"
 PRODUCT_LABEL = "research opponent-adjusted EPA/play"
 SUCCESS_RATE_LABEL = "EPA_success = EPA>0"
 RESEARCH_ONLY = True

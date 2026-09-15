@@ -23,6 +23,7 @@ from src.services.cfb_warehouse.research_opp_adj import (
     DEFAULT_PRIOR_DECAY,
     DEFAULT_PRIOR_N0,
     EPA_SOURCE_NAME,
+    ESTIMATOR_ID,
     PIPELINE_VERSION,
     PRODUCT_LABEL,
     AdjParams,
@@ -372,7 +373,10 @@ def select_params(
         "selection_seasons": list(val_seasons),
         "holdout_season": HOLDOUT_SEASON,
         "holdout_used_for_selection": False,
-        "note": "Adjustment strength chosen on validation only; 2025 holdout untouched.",
+        "note": (
+            "Adjustment strength chosen on validation only; 2025 holdout untouched. "
+            f"Estimator {ESTIMATOR_ID} (joint μ/h OLS + n0 in ridge)."
+        ),
     }
 
 
@@ -511,6 +515,8 @@ def run_validation_suite(
     rec = recommend(holdout, selection)
     report = {
         "pipeline_version": PIPELINE_VERSION,
+        "estimator_id": ESTIMATOR_ID,
+        "pre_fix_holdout_mae_not_frozen": True,
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "research_only": True,
         "not_ke_ratings": True,
