@@ -969,7 +969,6 @@ function TeamBuilderPanel({
   byValue,
   byNeed,
   rosterSet,
-  scoring,
   onSelect,
   onToggle,
   onBrowse,

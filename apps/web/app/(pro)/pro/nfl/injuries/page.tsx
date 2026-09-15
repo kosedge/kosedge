@@ -1,4 +1,3 @@
-import Link from "next/link";
 import InjuryNewsFeedSection from "@/components/pro/InjuryNewsFeedSection";
 import NflIntelTablePage from "@/components/pro/NflIntelTablePage";
 import { fetchInjuryNewsFeed } from "@/lib/nfl-injury-news";

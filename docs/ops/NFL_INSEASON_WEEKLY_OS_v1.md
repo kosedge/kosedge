@@ -41,11 +41,11 @@ Out of scope for the helper: Edge Board assemble default, Edges PLAY tags, CFB w
 Customer name: **Club Desk**. Canonical route: `/pro/nfl/club`.  
 Legacy `/pro/nfl/camp` redirects. Content folder `content/writers/camp-desk-2026/` may stay until a path alias.
 
-| Slot | Ships | Notes |
-| --- | --- | --- |
-| **Monday** | Recap of week W (all Sunday clubs) + preview of W+1 | Not a 32-card dump unless news warrants. NUMBER pass still Monday. |
-| **Tuesday** | MNF clubs drop | After last game of W is FINAL, product week is W+1. |
-| **3pm ET news** | Real-news clubs only | Quiet skip. Same weekday rule as camp OS — real news, not 32 essays. |
+| Slot            | Ships                                               | Notes                                                                |
+| --------------- | --------------------------------------------------- | -------------------------------------------------------------------- |
+| **Monday**      | Recap of week W (all Sunday clubs) + preview of W+1 | Not a 32-card dump unless news warrants. NUMBER pass still Monday.   |
+| **Tuesday**     | MNF clubs drop                                      | After last game of W is FINAL, product week is W+1.                  |
+| **3pm ET news** | Real-news clubs only                                | Quiet skip. Same weekday rule as camp OS — real news, not 32 essays. |
 
 Writer SoT for notes remains `docs/writers/TRAINING_CAMP_DESK.md` until that file is renamed. Product chrome says Club Desk.
 

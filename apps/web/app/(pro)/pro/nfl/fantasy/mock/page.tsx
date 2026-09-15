@@ -19,8 +19,8 @@ export default function NflFantasyMockHiddenPage() {
         Drafts are over — DFS is live
       </h1>
       <p className="mt-3 text-sm leading-relaxed text-kos-text/75">
-        Mock draft rooms are parked for the regular season. This week&apos;s
-        DFS slate is the Fantasy landing.
+        Mock draft rooms are parked for the regular season. This week&apos;s DFS
+        slate is the Fantasy landing.
       </p>
       <div className="mt-6 flex flex-wrap gap-3">
         <Link
