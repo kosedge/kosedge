@@ -4,13 +4,7 @@
   "authority": "Ryan OS 2026-09-15",
   "sot_markdown": "docs/ops/FOOTBALL_NUMBERS_REOPENING_TRACKER.md",
   "posture": "coming_soon_live_boards_dark_until_per_sport_clear",
-  "status_vocab": [
-    "NOT_STARTED",
-    "IN_PROGRESS",
-    "BLOCKED",
-    "PASS",
-    "FAIL"
-  ],
+  "status_vocab": ["NOT_STARTED", "IN_PROGRESS", "BLOCKED", "PASS", "FAIL"],
   "owners": {
     "CoS": "execution call; only CLEAR enables a sport/market",
     "Product": "website verification",
@@ -306,9 +300,7 @@
       "track": "SHARED",
       "gate": "Provenance on every published number",
       "status": "NOT_STARTED",
-      "evidence": [
-        "apps/web/lib/edge-board-customer-truth.ts"
-      ],
+      "evidence": ["apps/web/lib/edge-board-customer-truth.ts"],
       "unresolved_blocker": "No reopen candidate is publishing, so store↔page provenance for an approved snapshot is unproven on parked surfaces.",
       "owner": "Platform Reliability",
       "next_action": "When a candidate exists, stamp version / snapshot / cutoff / gen time on store and page.",
@@ -332,9 +324,7 @@
       "track": "SHARED",
       "gate": "Rollback",
       "status": "NOT_STARTED",
-      "evidence": [
-        "https://github.com/kosedge/kosedge/pull/561"
-      ],
+      "evidence": ["https://github.com/kosedge/kosedge/pull/561"],
       "unresolved_blocker": "No drilled rollback of a cleared sport because nothing is cleared.",
       "owner": "Platform Reliability",
       "next_action": "Write/attest: flip flag false, assemble 503/empty, pages Coming soon, no ghost table.",
