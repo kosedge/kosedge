@@ -1,0 +1,37 @@
+{
+  "validation_report.json": {
+    "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/validation_report.json",
+    "sha256": "b74648e689958f9e70683a5a878b2be668ac76d8eebba49a48fabf5c2c80ff24",
+    "bytes": 14623
+  },
+  "cfb_2026_adj_epa.json": {
+    "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/cfb_2026_adj_epa.json",
+    "sha256": "1bd9dd5974619444c2e10bb792037b983033b2d5a2aaeb83129b32ffe864169b",
+    "bytes": 139067
+  },
+  "closed_559_eligibility_summary.json": {
+    "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/closed_559_eligibility_summary.json",
+    "sha256": "889a644e28b8cd50170b66712e884ae50f74edb9053ff5cf5989a82d991935f6",
+    "bytes": 466
+  },
+  "delayed_game_pbp_audit.json": {
+    "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/delayed_game_pbp_audit.json",
+    "sha256": "3ee0dc54271e6eff57652c2a9160b409fc0c6b7438c887ed7f1ffc73000dff73",
+    "bytes": 1517
+  },
+  "team_game_epa_eligible.parquet": {
+    "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/team_game_epa_eligible.parquet",
+    "sha256": "512f54c3fbf1b4850cdd3da0931904f422c2d8b8c2b9228f2af01b528adab48c",
+    "bytes": 712156
+  },
+  "summary.json": {
+    "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/summary.json",
+    "sha256": "47548c3b8c8d60c6533c1bab9a99721e04a50af27cf9866f5d06374d763955f5",
+    "bytes": 2747
+  },
+  "frozen_method.json": {
+    "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/frozen_method.json",
+    "sha256": "ff728c23bf3cd9a63a42207d8bc854b6b3c5b87529629ec79794a86b667dba1c",
+    "bytes": 784
+  }
+}

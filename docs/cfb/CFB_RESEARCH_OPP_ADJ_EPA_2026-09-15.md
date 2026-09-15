@@ -143,33 +143,37 @@ Largest play deltas: 2021 +952, 2025 +203, 2024 +192. Game counts never drifted.
 
 ### Selected parameters (2023–2024 val only; 2025 untouched)
 
-`λ=160`, `λ_fcs=4λ`, `n0=4`, `decay=0.75`, 12 iters.
+Estimator `fit_joint_v2_joint_mu_hfa_n0_ridge`. Pre-fix 0.1659 / λ=160 is **not frozen**.
 
-Val n = 3,363 team-games. Selected val MAE **0.1665** vs unadj 0.1897 vs blend 0.1808.
+**Frozen knobs:** `λ=40`, `λ_fcs=4λ`, `n0=4`, `decay=0.75`, 12 iters.
 
-### 2025 holdout (untouched)
+Val n = 3,363 team-games (same as pre-fix). Selected val MAE **0.1669** vs unadj 0.1898 vs blend 0.1810.
 
-n = **1,713** FBS team-games.
+Grid cells that differ only in `n0` now produce different val MAE (λ=80 / decay=0.75: n0=3 → 0.16729, n0=4 → 0.16739, n0=6 → 0.16781).
 
-| Predictor                   | Next-game EPA MAE |   RMSE |              Bias | Early (W1–4) MAE |
-| --------------------------- | ----------------: | -----: | ----------------: | ---------------: |
-| Opponent-adjusted           |        **0.1659** | 0.2088 |           +0.0143 |           0.1750 |
-| Unadjusted STD              |            0.1910 | 0.2423 | +0.0108 / −0.0286 |                — |
-| Prior-season blend (`n0=4`) |            0.1836 | 0.2309 | +0.0036 / −0.0212 |                — |
+### 2025 holdout (untouched; rematerialized)
 
-Relative MAE cut: **13.1%** vs unadjusted, **9.6%** vs blend. Early-season still better than the full-season unadjusted baseline.
+n = **1,713** FBS team-games (same games as pre-fix).
 
-Train diagnostic (2016–2022, n=10,594) MAE 0.1658 vs unadj 0.1896 vs blend 0.1808 — same direction, not used for selection.
+| Predictor                   | Next-game EPA MAE |   RMSE |            Bias | Early (W1–4) MAE |
+| --------------------------- | ----------------: | -----: | --------------: | ---------------: |
+| Opponent-adjusted           |        **0.1673** | 0.2097 |         −0.0107 |           0.1775 |
+| Unadjusted STD              |            0.1911 | 0.2424 | +0.011 / −0.029 |                — |
+| Prior-season blend (`n0=4`) |            0.1837 | 0.2310 | +0.004 / −0.021 |                — |
 
-Watch item (does not flip the call): fitted HFA ≈ **0.10 EPA/play** is large vs a typical 2–3 point CFB home edge. That figure is from the **pre-fix** sequential μ-then-h estimator (Bugbot: intercept absorbed ~½ HFA; `n0` was display-only). Identification is now joint OLS + `n0` in the ridge. **Rematerialize 2023–2025 before treating λ=160 / n0=4 / the holdout table as the frozen method.** Research-only; do not convert to a spread.
+Relative MAE cut: **12.4%** vs unadjusted, **8.9%** vs blend. Early-season 0.1775 still beats full-season unadjusted 0.1911.
+
+Train diagnostic (2016–2022, n=10,594) MAE 0.1656 vs unadj 0.1897 vs blend 0.1810 — same direction, not used for selection.
+
+Watch item (does not flip the MAE call): identified HFA ≈ **0.24 EPA/play** on the 2026 window (μ ≈ −0.11). That is large vs a typical 2–3 point CFB home edge. Research-only; do not convert to a spread.
 
 ---
 
 ## 6. 2026 research application
 
-Frozen `λ=160 / n0=4 / decay=0.75` on the **84** closed eligible 2026 games (168 team-game observations).  
+Frozen `λ=40 / n0=4 / decay=0.75` on the **84** closed eligible 2026 games (168 team-game observations). `401868140` remains excluded (PBP still Q2 28–0).  
 134 FBS teams (92 with 2026 games; **42 prior-only**, `prior_weight=1`).  
-`μ = 0.032`, `h = 0.099`.
+`μ = −0.106`, `h = 0.244`.
 
 These are **efficiency estimates**. Not spreads. Not KEI.
 
@@ -177,10 +181,10 @@ Sample (teams with ≥1 2026 game; off = higher better, def = EPA allowed, lower
 
 | Team | off adj | def adj | n games | prior weight |
 | ---- | ------: | ------: | ------: | -----------: |
-| IU   |  +0.221 |  −0.164 |       2 |         0.67 |
-| MIA  |  +0.218 |  −0.155 |       2 |         0.67 |
-| OSU  |  +0.138 |  −0.181 |       1 |         0.80 |
-| OU   |       — |  −0.171 |       2 |         0.67 |
+| IU   |  +0.186 |  −0.127 |       2 |         0.67 |
+| MIA  |  +0.198 |  −0.141 |       2 |         0.67 |
+| OSU  |  +0.124 |  −0.166 |       1 |         0.80 |
+| OU   |  −0.022 |  −0.156 |       2 |         0.67 |
 
 Full table: `data/ops/cfb-research-opp-adj-epa-20260915/cfb_2026_adj_epa.json`.
 
@@ -195,9 +199,9 @@ python3 -m pytest tests/test_cfb_research_opp_adj.py \
   tests/test_cfb_2026_w1_team_game_metrics.py \
   tests/test_cfb_owned_pbp_metrics.py -q
 
-# Full research run (SDV restore + validation + 2026 apply)
+# Rematerialize val/holdout/2026 on the fixed estimator (reuse restored hist)
 PYTHONPATH=services/model-service python3 scripts/cfb/run_research_opp_adj.py \
-  --as-of 20260915 --as-of-week 3 --write-ops
+  --as-of 20260915 --as-of-week 3 --skip-hist --no-fetch --write-ops
 ```
 
 No CFBD key. No write to Aug 13 `raw/cfb/pbp/`.
@@ -214,9 +218,9 @@ Decision rule was locked **before** looking at 2025:
 | Beats one baseline, or the gain is thin                             | **revise**                                       |
 | Beats neither, or n < 200                                           | **reject**                                       |
 
-**Call: advance** on the published holdout (pre-fix estimator). Holdout MAE 0.1659 beats unadjusted 0.1910 (−13.1%) and prior blend 0.1836 (−9.6%), n=1,713. `production_promote=false`. Production SP+ / NFL / KEI unchanged.
+**Call: advance.** Rematerialized holdout MAE **0.1673** beats unadjusted 0.1911 (−12.4%) and prior blend 0.1837 (−8.9%), n=1,713. Locked knobs: `λ=40`, `n0=4`, `decay=0.75`, `λ_fcs=4λ`, 12 iters. Estimator `fit_joint_v2_joint_mu_hfa_n0_ridge`. `production_promote=false`. Production SP+ / NFL / KEI unchanged.
 
-Bugbot (2026-09-15): sequential μ-then-h absorbed ~½ HFA into the intercept; `n0` was display-only. Both are fixed in `fit_joint`. Rematerialize 2023–2025 before treating λ=160 / n0=4 as the frozen method.
+Checksums: `data/ops/cfb-research-opp-adj-epa-20260915/artifact_checksums.json`.
 
 Do **not** convert these efficiencies into fair spreads or totals in this PR. That work comes afterward.
 

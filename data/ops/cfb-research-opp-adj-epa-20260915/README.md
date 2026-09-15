@@ -7,11 +7,13 @@ Research-only. **Not KE Ratings.** Not KEI. Not a point spread.
 | `delayed_game_verification.json` | #559 delayed game close (`401868140`) |
 | `delayed_game_pbp_audit.json` | PBP vs official 49–7 (partial Q2 28–0 cut → exclude) |
 | `hist_inventory.json` | 2014–2025 restore checksums + Aug 13 reconcile |
-| `validation_report.json` | train / val / 2025 holdout + recommendation |
+| `validation_report.json` | rematerialized train / val / 2025 holdout (`fit_joint_v2`) |
 | `closed_559_eligibility_summary.json` | regenerated #559 eligibility (84 games) |
-| `cfb_2026_adj_epa.json` | frozen 2026 efficiency estimates |
+| `cfb_2026_adj_epa.json` | frozen 2026 efficiency estimates (`λ=40 / n0=4`) |
+| `frozen_method.json` | locked knobs + holdout call |
+| `artifact_checksums.json` | SHA-256 of locked artifacts |
 | `summary.json` | one-page rollup |
 
-Recommendation: **advance** (research; `production_promote=false`).
+Recommendation: **advance** (research; `production_promote=false`). Frozen: `λ=40`, `n0=4`, `decay=0.75`. Pre-fix 0.1659 is not frozen.
 
 See `docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_2026-09-15.md`.

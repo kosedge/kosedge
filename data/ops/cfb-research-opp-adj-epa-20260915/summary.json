@@ -1,7 +1,9 @@
 {
   "pipeline_version": "cfb-research-opp-adj-epa-v1",
+  "estimator_id": "fit_joint_v2_joint_mu_hfa_n0_ridge",
+  "pre_fix_holdout_mae_not_frozen": true,
   "as_of": "20260915",
-  "generated_at": "2026-09-15T17:13:18.555359+00:00",
+  "generated_at": "2026-09-15T17:29:32.168732+00:00",
   "research_only": true,
   "not_ke_ratings": true,
   "production_sp_plus_unchanged": true,
@@ -15,15 +17,15 @@
   },
   "recommendation": {
     "recommendation": "advance",
-    "reason": "Holdout next-game O/D EPA MAE beats unadjusted STD and prior-season blend by a material margin. Research-only — not a production promote.",
-    "holdout_mae_adj": 0.16591308693371715,
-    "holdout_mae_unadj": 0.19096353540881372,
-    "holdout_mae_blend": 0.1835743698690124,
-    "rel_improvement_vs_unadj": 0.13117922446014998,
-    "rel_improvement_vs_blend": 0.09620778188097437,
+    "reason": "Holdout next-game O/D EPA MAE beats unadjusted STD and prior-season blend by a material margin. Research-only \u2014 not a production promote.",
+    "holdout_mae_adj": 0.16728386119705843,
+    "holdout_mae_unadj": 0.191058774041983,
+    "holdout_mae_blend": 0.1836882878268385,
+    "rel_improvement_vs_unadj": 0.12443769182618271,
+    "rel_improvement_vs_blend": 0.08930578440169461,
     "n": 1713,
     "selected_params": {
-      "lam": 160.0,
+      "lam": 40.0,
       "lam_fcs_mult": 4.0,
       "prior_n0": 4.0,
       "prior_decay": 0.75,
@@ -35,5 +37,32 @@
   "closed_559_eligible_games": 84,
   "apply_2026_teams": 134,
   "apply_2026_obs": 168,
+  "artifact_checksums": {
+    "validation_report.json": {
+      "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/validation_report.json",
+      "sha256": "b74648e689958f9e70683a5a878b2be668ac76d8eebba49a48fabf5c2c80ff24",
+      "bytes": 14623
+    },
+    "cfb_2026_adj_epa.json": {
+      "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/cfb_2026_adj_epa.json",
+      "sha256": "1bd9dd5974619444c2e10bb792037b983033b2d5a2aaeb83129b32ffe864169b",
+      "bytes": 139067
+    },
+    "closed_559_eligibility_summary.json": {
+      "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/closed_559_eligibility_summary.json",
+      "sha256": "889a644e28b8cd50170b66712e884ae50f74edb9053ff5cf5989a82d991935f6",
+      "bytes": 466
+    },
+    "delayed_game_pbp_audit.json": {
+      "path": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915/delayed_game_pbp_audit.json",
+      "sha256": "3ee0dc54271e6eff57652c2a9160b409fc0c6b7438c887ed7f1ffc73000dff73",
+      "bytes": 1517
+    },
+    "team_game_epa_eligible.parquet": {
+      "path": "/workspace/data/cfb/research/pbp_hist/as_of_20260915/team_game_epa_eligible.parquet",
+      "sha256": "512f54c3fbf1b4850cdd3da0931904f422c2d8b8c2b9228f2af01b528adab48c",
+      "bytes": 712156
+    }
+  },
   "ops": "/workspace/data/ops/cfb-research-opp-adj-epa-20260915"
 }

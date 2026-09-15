@@ -24,31 +24,9 @@
   },
   "official_state": "post",
   "official_completed": true,
-  "live_fetch": {
-    "game_id": "401868140",
-    "week": 1,
-    "status_name": "STATUS_FINAL",
-    "status_state": "post",
-    "status_completed": true,
-    "status_description": "Final",
-    "home": {
-      "team": "Jacksonville State Gamecocks",
-      "score": 49,
-      "winner": true
-    },
-    "away": {
-      "team": "Eastern Kentucky Colonels",
-      "score": 7,
-      "winner": false
-    },
-    "n_scoring_plays": 8,
-    "n_previous_drives": 19,
-    "source": "https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=401868140",
-    "fetched_at": "2026-09-15T16:59:00Z",
-    "note": "Independent close in this research run. A later runner retry from the same VM returned HTTP 403; box/recap pages still show Final 49-7."
-  },
+  "live_fetch": null,
   "live_fetch_error": null,
-  "live_matches_official": true,
+  "live_matches_official": null,
   "snapshot_matches_official": false,
   "decision_on_559_snapshot": "exclude",
   "reason": "excluded_incomplete_pbp: #559 PBP SHA da0ec956 ends Q2 10:27 at 28-0 (Nix INT TD). Official ESPN FINAL is 49-7 through Q4. Fail-closed.",
@@ -56,7 +34,7 @@
   "include_in_later_as_of_if_pbp_complete_through_49_7": true,
   "standing_eligibility_rule": "DELAYED + score is not a standing include. Fail-closed: incomplete PBP for a completed game = exclude.",
   "cfbd_used": false,
-  "verified_at": "2026-09-15T17:18:25.350999+00:00",
+  "verified_at": "2026-09-15T17:29:31.569849+00:00",
   "refresh_policy": "include only when schedule STATUS_FINAL and PBP is complete through official 49-7 (period>=4, scores 49-7, all 8 scoring markers)",
   "pbp_audit": {
     "game_id": "401868140",

@@ -1,0 +1,31 @@
+{
+  "estimator_id": "fit_joint_v2_joint_mu_hfa_n0_ridge",
+  "as_of": "20260915",
+  "research_only": true,
+  "production_promote": false,
+  "pre_fix_holdout_mae_not_frozen": true,
+  "recommendation": "advance",
+  "locked_knobs": {
+    "lam": 40.0,
+    "lam_fcs_mult": 4.0,
+    "prior_n0": 4.0,
+    "prior_decay": 0.75,
+    "iters": 12
+  },
+  "holdout_2025": {
+    "n": 1713,
+    "mae_adj": 0.16728386119705843,
+    "mae_unadj": 0.191058774041983,
+    "mae_blend": 0.1836882878268385,
+    "rel_vs_unadj": 0.12443769182618271,
+    "rel_vs_blend": 0.08930578440169461
+  },
+  "closed_559_eligible_games": 84,
+  "delayed_game_401868140": "excluded_incomplete_pbp",
+  "apply_2026": {
+    "n_teams": 134,
+    "n_obs": 168,
+    "mu": -0.10603161136973324,
+    "hfa": 0.24396414545182993
+  }
+}

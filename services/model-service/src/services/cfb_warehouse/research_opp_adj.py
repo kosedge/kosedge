@@ -64,7 +64,7 @@ ELIGIBLE_PLAY_RULES = {
     "target": "offensive and defensive EPA/play only",
 }
 
-DEFAULT_LAMBDA = 80.0
+DEFAULT_LAMBDA = 40.0
 DEFAULT_LAMBDA_FCS_MULT = 4.0
 DEFAULT_PRIOR_N0 = 4.0
 DEFAULT_PRIOR_DECAY = 0.75
