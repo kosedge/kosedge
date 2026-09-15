@@ -89,7 +89,9 @@ describe("CFB Edge Board public kill switch", () => {
 
     const assemble = readRel("app/api/edge-board/[sport]/assemble/route.ts");
     expect(assemble).toContain("isFootballPublicNumbersDisabled");
-    expect(assemble).toContain("footballPublicNumbersAssembleUnavailablePayload");
+    expect(assemble).toContain(
+      "footballPublicNumbersAssembleUnavailablePayload",
+    );
     expect(assemble).toContain("status: 503");
 
     const unavailable = readRel("components/FootballNumbersUnavailable.tsx");
@@ -171,7 +173,9 @@ describe("CFB Edge Board public kill switch", () => {
       ],
       "nfl",
     );
-    expect((nflScrubbed[0] as { publishTag?: string }).publishTag).toBeUndefined();
+    expect(
+      (nflScrubbed[0] as { publishTag?: string }).publishTag,
+    ).toBeUndefined();
     expect(
       (nflScrubbed[0] as { actionLabel?: string }).actionLabel,
     ).toBeUndefined();

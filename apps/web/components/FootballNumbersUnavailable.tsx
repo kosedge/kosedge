@@ -30,16 +30,17 @@ export default function FootballNumbersUnavailable({
   const sportLabel = key === "nfl" ? "NFL" : key === "cfb" ? "CFB" : "Football";
   const message = footballPublicNumbersUnavailableMessage(key);
   const testId =
-    key === "nfl"
-      ? "nfl-edge-board-unavailable"
-      : "cfb-edge-board-unavailable";
+    key === "nfl" ? "nfl-edge-board-unavailable" : "cfb-edge-board-unavailable";
   const messageTestId =
     key === "nfl"
       ? "nfl-edge-board-unavailable-message"
       : "cfb-edge-board-unavailable-message";
 
   return (
-    <div data-testid={testId} data-football-numbers-unavailable={key || "football"}>
+    <div
+      data-testid={testId}
+      data-football-numbers-unavailable={key || "football"}
+    >
       {showSelector ? (
         <div className="flex flex-wrap gap-2">
           {selectorSports.map((s) => (
@@ -71,9 +72,7 @@ export default function FootballNumbersUnavailable({
           {FOOTBALL_PUBLIC_NUMBERS_HEADING}
         </h1>
         {title ? (
-          <p className="mt-2 text-sm font-semibold text-kos-text/80">
-            {title}
-          </p>
+          <p className="mt-2 text-sm font-semibold text-kos-text/80">{title}</p>
         ) : (
           <p className="mt-2 text-sm font-semibold text-kos-text/80">
             {sportLabel} numbers

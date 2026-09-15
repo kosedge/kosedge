@@ -168,7 +168,9 @@ export default async function CfbOverviewPage() {
                         href={`/pro/cfb/teams/${row.team.toLowerCase()}`}
                         className="font-medium text-kos-text hover:text-kos-gold"
                       >
-                        <span className="mr-2 text-kos-text/40">{row.rank}</span>
+                        <span className="mr-2 text-kos-text/40">
+                          {row.rank}
+                        </span>
                         {cfbTeamDisplayName(row.team)}
                       </Link>
                       <span className="tabular-nums text-xs text-kos-text/60">

@@ -68,11 +68,15 @@ describe("football public numbers kill switch", () => {
     );
     expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain("Overview");
     expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain("Fantasy");
-    expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain("Camp Desk");
+    expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain(
+      "Camp Desk",
+    );
     expect(getSportToolNav("nba").map((i) => i.label)).toContain("Edges desk");
     expect(publicEdgeBoardHref("nfl")).toBeNull();
     expect(customerCtaHref("/edge-board/nfl")).toBeNull();
-    expect(publicEdgeBoardSports(SPORTS).map((s) => s.key)).not.toContain("nfl");
+    expect(publicEdgeBoardSports(SPORTS).map((s) => s.key)).not.toContain(
+      "nfl",
+    );
   });
 
   it("customer pages render Coming soon and do not bootstrap house numbers", () => {

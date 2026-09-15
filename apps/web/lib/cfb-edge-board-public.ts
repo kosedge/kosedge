@@ -142,13 +142,15 @@ export function isFootballPublicNumberHref(
 ): boolean {
   if (!href) return false;
   if (isFootballEdgeBoardHref(href)) return true;
-  return /(?:^|\/)pro\/(?:nfl|cfb)\/(?:edges|fair-lines|slate)(?:[/?#]|$)/.test(
-    href,
-  ) ||
+  return (
+    /(?:^|\/)pro\/(?:nfl|cfb)\/(?:edges|fair-lines|slate)(?:[/?#]|$)/.test(
+      href,
+    ) ||
     /(?:^|\/)pro\/power-ratings\/(?:nfl|cfb)(?:[/?#]|$)/.test(href) ||
     /(?:^|\/)pro\/kei-lines\/(?:nfl|cfb)(?:[/?#]|$)/.test(href) ||
     /(?:^|\/)pro\/nfl\/fantasy\/pickem(?:[/?#]|$)/.test(href) ||
-    /(?:^|\/)pro\/cfb\/teams(?:[/?#]|$)/.test(href);
+    /(?:^|\/)pro\/cfb\/teams(?:[/?#]|$)/.test(href)
+  );
 }
 
 function footballCustomerEnabledForKey(key: string): boolean {
