@@ -1,0 +1,314 @@
+{
+  "nfl": {
+    "sport": "nfl",
+    "named_ke_havoc": "OMIT",
+    "named_havoc_allowed": true,
+    "weights_assigned": false,
+    "rule": "validate components before any weighting \u2014 no arbitrary composite",
+    "events": [
+      {
+        "event_id": "sack",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": false,
+        "optional_if_tfl_includes_sacks": true,
+        "weight": null,
+        "audit": {
+          "name": "sack",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 1207,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "interception",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "interception",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 362,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "qb_hit",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": false,
+        "required_for_named_havoc": false,
+        "weight": null,
+        "notes": "Allowed inside ke.disruption_proxy_nfl only",
+        "audit": {
+          "name": "qb_hit",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 2723,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "fumble",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": false,
+        "required_for_named_havoc": false,
+        "weight": null,
+        "notes": "Not forced fumble; not a havoc substitute",
+        "audit": {
+          "name": "fumble",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 439,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "fumble_forced",
+        "nfl_mart": false,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "fumble_forced",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 314,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "tackle_for_loss",
+        "nfl_mart": false,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "tackle_for_loss",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 1127,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "pass_breakup",
+        "nfl_mart": false,
+        "nfl_raw_typical": false,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": false,
+        "optional_add_if_certified": true,
+        "weight": null,
+        "audit": {
+          "name": "pass_breakup",
+          "present": false,
+          "n_scrimmage": 31049,
+          "n_non_null": 0,
+          "n_true": 0,
+          "null_rate": null,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      }
+    ],
+    "proxy_id_nfl": "ke.disruption_proxy_nfl",
+    "flags_id_cfb": null,
+    "production_promote": false
+  },
+  "cfb": {
+    "sport": "cfb",
+    "named_ke_havoc": "OMIT",
+    "named_havoc_allowed": false,
+    "weights_assigned": false,
+    "rule": "validate components before any weighting \u2014 no arbitrary composite",
+    "events": [
+      {
+        "event_id": "sack",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": false,
+        "optional_if_tfl_includes_sacks": true,
+        "weight": null,
+        "audit": {
+          "name": "sack",
+          "present": true,
+          "n_scrimmage": 106731,
+          "n_non_null": 106731,
+          "n_true": 3161,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "interception",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "interception",
+          "present": true,
+          "n_scrimmage": 106731,
+          "n_non_null": 1204,
+          "n_true": 1204,
+          "null_rate": 0.9887193036699741,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      },
+      {
+        "event_id": "qb_hit",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": false,
+        "required_for_named_havoc": false,
+        "weight": null,
+        "notes": "Allowed inside ke.disruption_proxy_nfl only",
+        "audit": {
+          "name": "qb_hit",
+          "present": false,
+          "n_scrimmage": 106731,
+          "n_non_null": 0,
+          "n_true": 0,
+          "null_rate": null,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      },
+      {
+        "event_id": "fumble",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": false,
+        "required_for_named_havoc": false,
+        "weight": null,
+        "notes": "Not forced fumble; not a havoc substitute",
+        "audit": {
+          "name": "fumble",
+          "present": false,
+          "n_scrimmage": 106731,
+          "n_non_null": 0,
+          "n_true": 0,
+          "null_rate": null,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      },
+      {
+        "event_id": "fumble_forced",
+        "nfl_mart": false,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "fumble_forced",
+          "present": true,
+          "n_scrimmage": 106731,
+          "n_non_null": 318,
+          "n_true": 318,
+          "null_rate": 0.9970205469826011,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      },
+      {
+        "event_id": "tackle_for_loss",
+        "nfl_mart": false,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "tackle_for_loss",
+          "present": true,
+          "n_scrimmage": 106731,
+          "n_non_null": 9132,
+          "n_true": 9132,
+          "null_rate": 0.914439103915451,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      },
+      {
+        "event_id": "pass_breakup",
+        "nfl_mart": false,
+        "nfl_raw_typical": false,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": false,
+        "optional_add_if_certified": true,
+        "weight": null,
+        "audit": {
+          "name": "pass_breakup",
+          "present": true,
+          "n_scrimmage": 106731,
+          "n_non_null": 2213,
+          "n_true": 2213,
+          "null_rate": 0.9792656304166549,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      }
+    ],
+    "proxy_id_nfl": null,
+    "flags_id_cfb": "ke.disruption_flags_cfb",
+    "production_promote": false
+  }
+}

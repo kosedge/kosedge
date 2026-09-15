@@ -1,0 +1,6957 @@
+{
+  "pipeline_version": "ke-football-v1-measurement-phase1",
+  "production_promote": false,
+  "taxonomy": [
+    "RAW",
+    "DERIVED",
+    "ADJUSTED",
+    "MODELED"
+  ],
+  "sport": "nfl",
+  "season": 2025,
+  "as_of_week": 18,
+  "n_plays_window": 39032,
+  "n_team_games": 512,
+  "n_snapshots": 32,
+  "examples": [
+    {
+      "team": "KC",
+      "n_games": 16,
+      "opponents": [
+        "BAL",
+        "BUF",
+        "DAL",
+        "DEN",
+        "DET",
+        "HOU",
+        "IND",
+        "JAX",
+        "LAC",
+        "LV",
+        "NYG",
+        "PHI",
+        "TEN",
+        "WAS"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.0665173088895814,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": 0.012186177094957054,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.45740365111561865,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4598168870803662,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 61.625,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 58.0,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.09432048681541583,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.08614864864864864,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 592,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.1065989847715736,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 394,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.08942202835332606,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": 0.08076331894058804,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 592,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": 0.04511213642715522,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 394,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.04724280060181501,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 753,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.144578313253012,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 166,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.40963855421686746,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 166,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.7094017094017094,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 234,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.1891891891891892,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 185,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.10094000963038205,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 200,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.1079607415485278,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 99
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.03489640130861505,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 32,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.009814612868047983,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 9,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.03707742639040349,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 34,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.006543075245365322,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 917,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 6,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.07931485166295808,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.005168454155401865,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_KC_LAC",
+          "opponent": "LAC",
+          "off_epa": 0.2152383075185205,
+          "def_epa": 0.3200720840759058,
+          "n_off": 58,
+          "n_def": 59,
+          "pace": 58,
+          "ppo": 2.1,
+          "expl": 0.13793103448275862
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_PHI_KC",
+          "opponent": "PHI",
+          "off_epa": -0.13529401133630306,
+          "def_epa": -0.004139964306438783,
+          "n_off": 57,
+          "n_def": 56,
+          "pace": 57,
+          "ppo": 1.8888888888888888,
+          "expl": 0.12280701754385964
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_KC_NYG",
+          "opponent": "NYG",
+          "off_epa": 0.15135256593116517,
+          "def_epa": -0.2496859000924146,
+          "n_off": 64,
+          "n_def": 61,
+          "pace": 64,
+          "ppo": 2.0,
+          "expl": 0.078125
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_BAL_KC",
+          "opponent": "BAL",
+          "off_epa": 0.2306042405934028,
+          "def_epa": -0.06252122664137569,
+          "n_off": 68,
+          "n_def": 53,
+          "pace": 68,
+          "ppo": 2.3125,
+          "expl": 0.058823529411764705
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_KC_JAX",
+          "opponent": "JAX",
+          "off_epa": 0.1889954635324622,
+          "def_epa": 0.02829413494960063,
+          "n_off": 63,
+          "n_def": 54,
+          "pace": 63,
+          "ppo": 3.4,
+          "expl": 0.14285714285714285
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_DET_KC",
+          "opponent": "DET",
+          "off_epa": 0.2675266565339692,
+          "def_epa": 0.11232516020075155,
+          "n_off": 58,
+          "n_def": 53,
+          "pace": 58,
+          "ppo": 2.5,
+          "expl": 0.10344827586206896
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_LV_KC",
+          "opponent": "LV",
+          "off_epa": 0.22474235083627978,
+          "def_epa": -0.6687030068550182,
+          "n_off": 74,
+          "n_def": 30,
+          "pace": 74,
+          "ppo": 2.3846153846153846,
+          "expl": 0.08108108108108109
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_WAS_KC",
+          "opponent": "WAS",
+          "off_epa": 0.2507716672817795,
+          "def_epa": -0.18105482519828142,
+          "n_off": 66,
+          "n_def": 52,
+          "pace": 66,
+          "ppo": 2.8,
+          "expl": 0.13636363636363635
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_KC_BUF",
+          "opponent": "BUF",
+          "off_epa": 0.03537957011217095,
+          "def_epa": 0.23137387021057962,
+          "n_off": 58,
+          "n_def": 63,
+          "pace": 58,
+          "ppo": 1.9090909090909092,
+          "expl": 0.13793103448275862
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_KC_DEN",
+          "opponent": "DEN",
+          "off_epa": 0.04535642096272473,
+          "def_epa": 0.032746005734641585,
+          "n_off": 62,
+          "n_def": 60,
+          "pace": 62,
+          "ppo": 1.9,
+          "expl": 0.04838709677419355
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_IND_KC",
+          "opponent": "IND",
+          "off_epa": 0.013962667228276833,
+          "def_epa": -0.004252268632973299,
+          "n_off": 92,
+          "n_def": 49,
+          "pace": 92,
+          "ppo": 1.7692307692307692,
+          "expl": 0.07608695652173914
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_KC_DAL",
+          "opponent": "DAL",
+          "off_epa": 0.24995369634610445,
+          "def_epa": 0.23159094574665268,
+          "n_off": 60,
+          "n_def": 63,
+          "pace": 60,
+          "ppo": 3.111111111111111,
+          "expl": 0.15
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_HOU_KC",
+          "opponent": "HOU",
+          "off_epa": -0.2928953694636975,
+          "def_epa": -0.07540147642134276,
+          "n_off": 63,
+          "n_def": 65,
+          "pace": 63,
+          "ppo": 1.6666666666666667,
+          "expl": 0.06349206349206349
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_LAC_KC",
+          "opponent": "LAC",
+          "off_epa": -0.10570821223760266,
+          "def_epa": -0.04516146843279172,
+          "n_off": 59,
+          "n_def": 61,
+          "pace": 59,
+          "ppo": 1.4444444444444444,
+          "expl": 0.06779661016949153
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_KC_TEN",
+          "opponent": "TEN",
+          "off_epa": -0.31250395935260805,
+          "def_epa": 0.04466097440533517,
+          "n_off": 43,
+          "n_def": 68,
+          "pace": 43,
+          "ppo": 1.0,
+          "expl": 0.046511627906976744
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_DEN_KC",
+          "opponent": "DEN",
+          "off_epa": -0.1994587992753669,
+          "def_epa": 0.0965345055469601,
+          "n_off": 41,
+          "n_def": 70,
+          "pace": 41,
+          "ppo": 1.625,
+          "expl": 0.04878048780487805
+        }
+      ]
+    },
+    {
+      "team": "BUF",
+      "n_games": 16,
+      "opponents": [
+        "ATL",
+        "BAL",
+        "CAR",
+        "CIN",
+        "CLE",
+        "HOU",
+        "KC",
+        "MIA",
+        "NE",
+        "NO",
+        "NYJ",
+        "PHI",
+        "PIT",
+        "TB"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.12013125956206214,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 995,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": -0.003840695130643376,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.4763819095477387,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 995,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4767206477732793,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 988,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 62.1875,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 53.75,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.11959798994974874,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 995,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.111328125,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 512,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.12836438923395446,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 483,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.11406423034330011,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": 0.12568576863758635,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 512,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": 0.11424324994163064,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 483,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.10518119507460129,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 768,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.3910614525139664,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 179,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.4245810055865922,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 179,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.7131474103585658,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 251,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.22033898305084745,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 177,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.173258100446587,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 211,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.10852713178294573,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 98
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.03875968992248062,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 35,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.014396456256921373,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 13,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.048726467331118496,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 44,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.013289036544850499,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 903,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 12,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.12897428698049898,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.011236102603622452,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_BAL_BUF",
+          "opponent": "BAL",
+          "off_epa": 0.2349865763823882,
+          "def_epa": 0.38569869854813377,
+          "n_off": 77,
+          "n_def": 50,
+          "pace": 77,
+          "ppo": 2.7333333333333334,
+          "expl": 0.11688311688311688
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_BUF_NYJ",
+          "opponent": "NYJ",
+          "off_epa": 0.19778235719753626,
+          "def_epa": -0.2953253710950093,
+          "n_off": 67,
+          "n_def": 47,
+          "pace": 67,
+          "ppo": 2.3076923076923075,
+          "expl": 0.07462686567164178
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_MIA_BUF",
+          "opponent": "MIA",
+          "off_epa": 0.27727751626378644,
+          "def_epa": 0.05354211520170793,
+          "n_off": 57,
+          "n_def": 59,
+          "pace": 57,
+          "ppo": 2.5833333333333335,
+          "expl": 0.14035087719298245
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_NO_BUF",
+          "opponent": "NO",
+          "off_epa": 0.19637072308012193,
+          "def_epa": -0.09360413658291644,
+          "n_off": 54,
+          "n_def": 66,
+          "pace": 54,
+          "ppo": 2.8181818181818183,
+          "expl": 0.14814814814814814
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_NE_BUF",
+          "opponent": "NE",
+          "off_epa": 0.03892745436064732,
+          "def_epa": 0.061872875329927024,
+          "n_off": 61,
+          "n_def": 56,
+          "pace": 61,
+          "ppo": 2.0,
+          "expl": 0.11475409836065574
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_BUF_ATL",
+          "opponent": "ATL",
+          "off_epa": -0.11888455337019102,
+          "def_epa": 0.06679594271918607,
+          "n_off": 54,
+          "n_def": 65,
+          "pace": 54,
+          "ppo": 2.3333333333333335,
+          "expl": 0.07407407407407407
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_BUF_CAR",
+          "opponent": "CAR",
+          "off_epa": 0.3438355488205429,
+          "def_epa": -0.3448128232429677,
+          "n_off": 60,
+          "n_def": 59,
+          "pace": 60,
+          "ppo": 2.6666666666666665,
+          "expl": 0.15
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_KC_BUF",
+          "opponent": "KC",
+          "off_epa": 0.23137387021057962,
+          "def_epa": 0.03537957011217095,
+          "n_off": 63,
+          "n_def": 58,
+          "pace": 63,
+          "ppo": 2.8,
+          "expl": 0.14285714285714285
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_BUF_MIA",
+          "opponent": "MIA",
+          "off_epa": -0.07363759618535438,
+          "def_epa": 0.3123163272150317,
+          "n_off": 66,
+          "n_def": 51,
+          "pace": 66,
+          "ppo": 1.8571428571428572,
+          "expl": 0.13636363636363635
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_TB_BUF",
+          "opponent": "TB",
+          "off_epa": 0.2434394903518991,
+          "def_epa": 0.053903744437404276,
+          "n_off": 54,
+          "n_def": 69,
+          "pace": 54,
+          "ppo": 2.933333333333333,
+          "expl": 0.16666666666666666
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_BUF_HOU",
+          "opponent": "HOU",
+          "off_epa": -0.16421365248832998,
+          "def_epa": -0.06426352002561553,
+          "n_off": 65,
+          "n_def": 55,
+          "pace": 65,
+          "ppo": 1.1818181818181819,
+          "expl": 0.12307692307692308
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_BUF_PIT",
+          "opponent": "PIT",
+          "off_epa": 0.10006494115789154,
+          "def_epa": -0.4242491542746118,
+          "n_off": 74,
+          "n_def": 43,
+          "pace": 74,
+          "ppo": 2.2222222222222223,
+          "expl": 0.10810810810810811
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_CIN_BUF",
+          "opponent": "CIN",
+          "off_epa": 0.2549044671400213,
+          "def_epa": 0.1188889532990819,
+          "n_off": 58,
+          "n_def": 57,
+          "pace": 58,
+          "ppo": 2.5384615384615383,
+          "expl": 0.15517241379310345
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_BUF_NE",
+          "opponent": "NE",
+          "off_epa": 0.2610677966958974,
+          "def_epa": 0.24429784937200227,
+          "n_off": 64,
+          "n_def": 51,
+          "pace": 64,
+          "ppo": 2.9166666666666665,
+          "expl": 0.09375
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_BUF_CLE",
+          "opponent": "CLE",
+          "off_epa": 0.06078290143606924,
+          "def_epa": -0.09587976092174261,
+          "n_off": 48,
+          "n_def": 64,
+          "pace": 48,
+          "ppo": 1.9166666666666667,
+          "expl": 0.08333333333333333
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_PHI_BUF",
+          "opponent": "PHI",
+          "off_epa": -0.12071316199451174,
+          "def_epa": -0.11959278373005545,
+          "n_off": 73,
+          "n_def": 53,
+          "pace": 73,
+          "ppo": 1.5,
+          "expl": 0.0958904109589041
+        }
+      ]
+    },
+    {
+      "team": "PHI",
+      "n_games": 16,
+      "opponents": [
+        "BUF",
+        "CHI",
+        "DAL",
+        "DEN",
+        "DET",
+        "GB",
+        "KC",
+        "LA",
+        "LAC",
+        "LV",
+        "MIN",
+        "NYG",
+        "TB",
+        "WAS"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.03438220085448725,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 933,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": -0.08225482820404638,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.43086816720257237,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 933,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4172043010752688,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 930,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 58.3125,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 53.75,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.09860664523043944,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 933,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.081799591002045,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 489,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.11711711711711711,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 444,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.0955223880597015,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": 0.06006530886160716,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 489,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": 0.006096075143942995,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 444,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.002713140620997683,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 720,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.1635220125786163,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 159,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.389937106918239,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 159,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.6516393442622951,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 244,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.20863309352517986,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 139,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.09172503671937088,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 213,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.10746268656716418,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 108
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.041791044776119404,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 42,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.010945273631840797,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 11,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.027860696517412936,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 28,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.009950248756218905,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1005,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 10,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.015459650314540083,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": -0.12280929212436628,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_DAL_PHI",
+          "opponent": "DAL",
+          "off_epa": 0.1604501459603092,
+          "def_epa": 0.03527811786923904,
+          "n_off": 59,
+          "n_def": 55,
+          "pace": 59,
+          "ppo": 2.4,
+          "expl": 0.1016949152542373
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_PHI_KC",
+          "opponent": "KC",
+          "off_epa": -0.004139964306438783,
+          "def_epa": -0.13529401133630306,
+          "n_off": 56,
+          "n_def": 57,
+          "pace": 56,
+          "ppo": 2.2222222222222223,
+          "expl": 0.07142857142857142
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_LA_PHI",
+          "opponent": "LA",
+          "off_epa": 0.01663911148849579,
+          "def_epa": -0.034832609048073275,
+          "n_off": 63,
+          "n_def": 65,
+          "pace": 63,
+          "ppo": 3.0,
+          "expl": 0.1111111111111111
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_PHI_TB",
+          "opponent": "TB",
+          "off_epa": -0.07388661178406931,
+          "def_epa": -0.14611229033813666,
+          "n_off": 58,
+          "n_def": 67,
+          "pace": 58,
+          "ppo": 2.5,
+          "expl": 0.08620689655172414
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_DEN_PHI",
+          "opponent": "DEN",
+          "off_epa": 0.0031612224057886522,
+          "def_epa": 0.07152680677414251,
+          "n_off": 54,
+          "n_def": 71,
+          "pace": 54,
+          "ppo": 2.125,
+          "expl": 0.09259259259259259
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_PHI_NYG",
+          "opponent": "NYG",
+          "off_epa": -0.09667333842203421,
+          "def_epa": 0.25234636336153926,
+          "n_off": 56,
+          "n_def": 64,
+          "pace": 56,
+          "ppo": 1.8888888888888888,
+          "expl": 0.10714285714285714
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_PHI_MIN",
+          "opponent": "MIN",
+          "off_epa": 0.28287289558438616,
+          "def_epa": -0.08892315779743926,
+          "n_off": 48,
+          "n_def": 67,
+          "pace": 48,
+          "ppo": 2.0,
+          "expl": 0.14583333333333334
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_NYG_PHI",
+          "opponent": "NYG",
+          "off_epa": 0.4562564310064932,
+          "def_epa": 0.09014255693196387,
+          "n_off": 54,
+          "n_def": 49,
+          "pace": 54,
+          "ppo": 2.7142857142857144,
+          "expl": 0.18518518518518517
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_PHI_GB",
+          "opponent": "GB",
+          "off_epa": -0.07821261090718394,
+          "def_epa": -0.17316197424657584,
+          "n_off": 60,
+          "n_def": 65,
+          "pace": 60,
+          "ppo": 1.4285714285714286,
+          "expl": 0.08333333333333333
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_DET_PHI",
+          "opponent": "DET",
+          "off_epa": -0.2294467512284283,
+          "def_epa": -0.400764525954852,
+          "n_off": 68,
+          "n_def": 59,
+          "pace": 68,
+          "ppo": 1.7777777777777777,
+          "expl": 0.07352941176470588
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_PHI_DAL",
+          "opponent": "DAL",
+          "off_epa": 0.06195237126258659,
+          "def_epa": -0.021556584924375653,
+          "n_off": 58,
+          "n_def": 65,
+          "pace": 58,
+          "ppo": 2.3333333333333335,
+          "expl": 0.034482758620689655
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_CHI_PHI",
+          "opponent": "CHI",
+          "off_epa": -0.03649872552729947,
+          "def_epa": 0.04194522476468253,
+          "n_off": 50,
+          "n_def": 84,
+          "pace": 50,
+          "ppo": 1.6666666666666667,
+          "expl": 0.1
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_PHI_LAC",
+          "opponent": "LAC",
+          "off_epa": -0.26299179564461084,
+          "def_epa": -0.2722896922987969,
+          "n_off": 65,
+          "n_def": 71,
+          "pace": 65,
+          "ppo": 1.2666666666666666,
+          "expl": 0.1076923076923077
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_LV_PHI",
+          "opponent": "LV",
+          "off_epa": 0.24604142609317212,
+          "def_epa": -0.41019967069483493,
+          "n_off": 66,
+          "n_def": 42,
+          "pace": 66,
+          "ppo": 2.5833333333333335,
+          "expl": 0.10606060606060606
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_PHI_WAS",
+          "opponent": "WAS",
+          "off_epa": 0.28968110060465024,
+          "def_epa": -0.12504454409910207,
+          "n_off": 65,
+          "n_def": 51,
+          "pace": 65,
+          "ppo": 2.6363636363636362,
+          "expl": 0.12307692307692308
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_PHI_BUF",
+          "opponent": "BUF",
+          "off_epa": -0.11959278373005545,
+          "def_epa": -0.12071316199451174,
+          "n_off": 53,
+          "n_def": 73,
+          "pace": 53,
+          "ppo": 1.8571428571428572,
+          "expl": 0.05660377358490566
+        }
+      ]
+    },
+    {
+      "team": "BAL",
+      "n_games": 16,
+      "opponents": [
+        "BUF",
+        "CHI",
+        "CIN",
+        "CLE",
+        "DET",
+        "GB",
+        "HOU",
+        "KC",
+        "LA",
+        "MIA",
+        "MIN",
+        "NE",
+        "NYJ",
+        "PIT"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.028538309022249665,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 909,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": 0.022665005065121684,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.45104510451045104,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 909,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4498346196251378,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 907,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 56.8125,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 52.0,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.11771177117711772,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 909,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.08764044943820225,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 445,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.14655172413793102,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 464,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.10458167330677291,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": -0.05622977840522296,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 445,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": 0.10983528942144216,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 464,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.04303394984003978,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 696,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.1555555555555554,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 180,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.4111111111111111,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 180,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.7058823529411765,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 255,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.15819209039548024,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 177,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.07255610849909587,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 213,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.10159362549800798,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 102
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.027888446215139442,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 28,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.010956175298804782,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 11,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.03286852589641434,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 33,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.010956175298804782,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1004,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 11,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.041078774571154636,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.027184027979589447,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_BAL_BUF",
+          "opponent": "BUF",
+          "off_epa": 0.38569869854813377,
+          "def_epa": 0.2349865763823882,
+          "n_off": 50,
+          "n_def": 77,
+          "pace": 50,
+          "ppo": 2.6666666666666665,
+          "expl": 0.3
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_CLE_BAL",
+          "opponent": "CLE",
+          "off_epa": 0.12490885511974023,
+          "def_epa": -0.26294704133987706,
+          "n_off": 50,
+          "n_def": 72,
+          "pace": 50,
+          "ppo": 2.5,
+          "expl": 0.08
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_DET_BAL",
+          "opponent": "DET",
+          "off_epa": 0.06822748655965248,
+          "def_epa": 0.39179975683166285,
+          "n_off": 55,
+          "n_def": 65,
+          "pace": 55,
+          "ppo": 2.5,
+          "expl": 0.12727272727272726
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_BAL_KC",
+          "opponent": "KC",
+          "off_epa": -0.06252122664137569,
+          "def_epa": 0.2306042405934028,
+          "n_off": 53,
+          "n_def": 68,
+          "pace": 53,
+          "ppo": 2.0,
+          "expl": 0.1320754716981132
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_HOU_BAL",
+          "opponent": "HOU",
+          "off_epa": -0.33574280385889443,
+          "def_epa": 0.3914223138318197,
+          "n_off": 40,
+          "n_def": 64,
+          "pace": 40,
+          "ppo": 1.6666666666666667,
+          "expl": 0.05
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_LA_BAL",
+          "opponent": "LA",
+          "off_epa": -0.33207327289524907,
+          "def_epa": -0.0331867793169627,
+          "n_off": 74,
+          "n_def": 49,
+          "pace": 74,
+          "ppo": 0.42857142857142855,
+          "expl": 0.08108108108108109
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_CHI_BAL",
+          "opponent": "CHI",
+          "off_epa": 0.21501733361346967,
+          "def_epa": 0.02440001071221833,
+          "n_off": 59,
+          "n_def": 62,
+          "pace": 59,
+          "ppo": 2.142857142857143,
+          "expl": 0.15254237288135594
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_BAL_MIA",
+          "opponent": "MIA",
+          "off_epa": 0.21235004634945653,
+          "def_epa": -0.20004813488724682,
+          "n_off": 54,
+          "n_def": 61,
+          "pace": 54,
+          "ppo": 3.111111111111111,
+          "expl": 0.16666666666666666
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_BAL_MIN",
+          "opponent": "MIN",
+          "off_epa": -0.004003643395188539,
+          "def_epa": -0.16057756580649465,
+          "n_off": 66,
+          "n_def": 62,
+          "pace": 66,
+          "ppo": 2.076923076923077,
+          "expl": 0.09090909090909091
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_BAL_CLE",
+          "opponent": "CLE",
+          "off_epa": -0.0883295588667408,
+          "def_epa": -0.40910965357742174,
+          "n_off": 58,
+          "n_def": 54,
+          "pace": 58,
+          "ppo": 1.7692307692307692,
+          "expl": 0.08620689655172414
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_NYJ_BAL",
+          "opponent": "NYJ",
+          "off_epa": -0.049538823772300976,
+          "def_epa": -0.17015552693500374,
+          "n_off": 56,
+          "n_def": 57,
+          "pace": 56,
+          "ppo": 2.090909090909091,
+          "expl": 0.07142857142857142
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_CIN_BAL",
+          "opponent": "CIN",
+          "off_epa": -0.34010369241566096,
+          "def_epa": -0.002346606773383658,
+          "n_off": 56,
+          "n_def": 80,
+          "pace": 56,
+          "ppo": 2.0,
+          "expl": 0.10714285714285714
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_PIT_BAL",
+          "opponent": "PIT",
+          "off_epa": 0.013068931791815798,
+          "def_epa": 0.26883418334592607,
+          "n_off": 75,
+          "n_def": 50,
+          "pace": 75,
+          "ppo": 1.6923076923076923,
+          "expl": 0.06666666666666667
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_BAL_CIN",
+          "opponent": "CIN",
+          "off_epa": 0.2074522312475908,
+          "def_epa": -0.3091005075363849,
+          "n_off": 37,
+          "n_def": 71,
+          "pace": 37,
+          "ppo": 1.6363636363636365,
+          "expl": 0.32432432432432434
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_NE_BAL",
+          "opponent": "NE",
+          "off_epa": 0.10519732781124119,
+          "def_epa": 0.22312592925385946,
+          "n_off": 53,
+          "n_def": 69,
+          "pace": 53,
+          "ppo": 2.4,
+          "expl": 0.07547169811320754
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_BAL_GB",
+          "opponent": "GB",
+          "off_epa": 0.3670992137249119,
+          "def_epa": 0.11056126722974989,
+          "n_off": 73,
+          "n_def": 43,
+          "pace": 73,
+          "ppo": 2.7333333333333334,
+          "expl": 0.0821917808219178
+        }
+      ]
+    },
+    {
+      "team": "SF",
+      "n_games": 16,
+      "opponents": [
+        "ARI",
+        "ATL",
+        "CAR",
+        "CHI",
+        "CLE",
+        "HOU",
+        "IND",
+        "JAX",
+        "LA",
+        "NO",
+        "NYG",
+        "SEA",
+        "TB",
+        "TEN"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.10630436564778965,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1023,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": 0.07055399013119266,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.48778103616813295,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1023,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4793713163064833,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1018,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 63.9375,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 59.9375,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.09188660801564028,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 1023,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.08726003490401396,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 573,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.09777777777777778,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 450,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.0774869109947644,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": 0.1906652012148557,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 573,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": -0.0011150983076077894,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 450,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.04241465230655399,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 798,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.2135416666666665,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 192,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.4166666666666667,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 192,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.7559055118110236,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 254,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.21608040201005024,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 199,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.10919435544902116,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 213,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.06387434554973823,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 61
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.018848167539267015,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 18,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.0062827225130890054,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 6,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.032460732984293195,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 31,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.011518324607329843,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 11,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.1367465174592358,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.09081618511959204,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_SF_SEA",
+          "opponent": "SEA",
+          "off_epa": 0.11244347842868568,
+          "def_epa": -0.26539118609444406,
+          "n_off": 70,
+          "n_def": 49,
+          "pace": 70,
+          "ppo": 1.7,
+          "expl": 0.08571428571428572
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_SF_NO",
+          "opponent": "NO",
+          "off_epa": 0.047801000334729976,
+          "def_epa": -0.07787490714871895,
+          "n_off": 64,
+          "n_def": 67,
+          "pace": 64,
+          "ppo": 2.3636363636363638,
+          "expl": 0.0625
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_ARI_SF",
+          "opponent": "ARI",
+          "off_epa": -0.05528022227968054,
+          "def_epa": -0.011040268516559676,
+          "n_off": 60,
+          "n_def": 64,
+          "pace": 60,
+          "ppo": 1.4545454545454546,
+          "expl": 0.1
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_JAX_SF",
+          "opponent": "JAX",
+          "off_epa": -0.06949312499371713,
+          "def_epa": 0.07789484320528943,
+          "n_off": 64,
+          "n_def": 60,
+          "pace": 64,
+          "ppo": 1.9090909090909092,
+          "expl": 0.125
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_SF_LA",
+          "opponent": "LA",
+          "off_epa": 0.12498951755959781,
+          "def_epa": 0.07494362587992892,
+          "n_off": 82,
+          "n_def": 63,
+          "pace": 82,
+          "ppo": 2.090909090909091,
+          "expl": 0.012195121951219513
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_SF_TB",
+          "opponent": "TB",
+          "off_epa": -0.08532056090353136,
+          "def_epa": 0.29436442984952194,
+          "n_off": 67,
+          "n_def": 50,
+          "pace": 67,
+          "ppo": 1.4615384615384615,
+          "expl": 0.07462686567164178
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_ATL_SF",
+          "opponent": "ATL",
+          "off_epa": 0.03446365946299321,
+          "def_epa": -0.11414267221860112,
+          "n_off": 64,
+          "n_def": 60,
+          "pace": 64,
+          "ppo": 1.8181818181818181,
+          "expl": 0.125
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_SF_HOU",
+          "opponent": "HOU",
+          "off_epa": -0.04005459639431081,
+          "def_epa": 0.23502567702044333,
+          "n_off": 45,
+          "n_def": 74,
+          "pace": 45,
+          "ppo": 2.5,
+          "expl": 0.08888888888888889
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_SF_NYG",
+          "opponent": "NYG",
+          "off_epa": 0.32996125118861946,
+          "def_epa": 0.17014770252894712,
+          "n_off": 63,
+          "n_def": 56,
+          "pace": 63,
+          "ppo": 2.4285714285714284,
+          "expl": 0.15873015873015872
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_LA_SF",
+          "opponent": "LA",
+          "off_epa": 0.12663357083177285,
+          "def_epa": 0.4108707699297156,
+          "n_off": 61,
+          "n_def": 64,
+          "pace": 61,
+          "ppo": 2.3636363636363638,
+          "expl": 0.06557377049180328
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_SF_ARI",
+          "opponent": "ARI",
+          "off_epa": 0.19118915616353557,
+          "def_epa": 0.06146275520746003,
+          "n_off": 50,
+          "n_def": 73,
+          "pace": 50,
+          "ppo": 2.411764705882353,
+          "expl": 0.12
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_CAR_SF",
+          "opponent": "CAR",
+          "off_epa": -0.0013478750223231482,
+          "def_epa": -0.20065023830438197,
+          "n_off": 68,
+          "n_def": 44,
+          "pace": 68,
+          "ppo": 2.0,
+          "expl": 0.058823529411764705
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_SF_CLE",
+          "opponent": "CLE",
+          "off_epa": 0.008921418854560902,
+          "def_epa": -0.19539794753917078,
+          "n_off": 64,
+          "n_def": 61,
+          "pace": 64,
+          "ppo": 2.3636363636363638,
+          "expl": 0.03125
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_TEN_SF",
+          "opponent": "TEN",
+          "off_epa": 0.24785541111916856,
+          "def_epa": 0.23221759362338285,
+          "n_off": 70,
+          "n_def": 49,
+          "pace": 70,
+          "ppo": 2.466666666666667,
+          "expl": 0.08571428571428572
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_SF_IND",
+          "opponent": "IND",
+          "off_epa": 0.4026968567348456,
+          "def_epa": -0.03678054620523284,
+          "n_off": 63,
+          "n_def": 58,
+          "pace": 63,
+          "ppo": 2.4705882352941178,
+          "expl": 0.14285714285714285
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_CHI_SF",
+          "opponent": "CHI",
+          "off_epa": 0.28495281093808655,
+          "def_epa": 0.3625783731220248,
+          "n_off": 68,
+          "n_def": 63,
+          "pace": 68,
+          "ppo": 3.230769230769231,
+          "expl": 0.16176470588235295
+        }
+      ]
+    },
+    {
+      "team": "DET",
+      "n_games": 16,
+      "opponents": [
+        "BAL",
+        "CHI",
+        "CIN",
+        "CLE",
+        "DAL",
+        "GB",
+        "KC",
+        "LA",
+        "MIN",
+        "NYG",
+        "PHI",
+        "PIT",
+        "TB",
+        "WAS"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.07763262806423486,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 979,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": -0.009390883092934722,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.4463738508682329,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 979,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4294478527607362,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 978,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 61.1875,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 56.0,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.10725229826353422,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 979,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.10801393728222997,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 574,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.10617283950617284,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 405,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.10953346855983773,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": 0.1645228631220396,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 574,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": -0.04551550754855504,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 405,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.09579413111448241,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 747,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.3645833333333335,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 192,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.4114583333333333,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 192,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.7084870848708487,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 271,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.22346368715083798,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 179,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.11475834355854113,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 232,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.11156186612576065,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 110
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.0486815415821501,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 48,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.012170385395537525,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 12,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.019269776876267748,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 19,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.015212981744421906,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 986,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 15,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.06905348996113056,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": -0.022069790463756473,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_DET_GB",
+          "opponent": "GB",
+          "off_epa": -0.0622777864609656,
+          "def_epa": 0.19962787307459212,
+          "n_off": 64,
+          "n_def": 46,
+          "pace": 64,
+          "ppo": 1.625,
+          "expl": 0.03125
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_CHI_DET",
+          "opponent": "CHI",
+          "off_epa": 0.4094902379067139,
+          "def_epa": -0.16596288634355005,
+          "n_off": 58,
+          "n_def": 64,
+          "pace": 58,
+          "ppo": 2.888888888888889,
+          "expl": 0.1724137931034483
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_DET_BAL",
+          "opponent": "BAL",
+          "off_epa": 0.39179975683166285,
+          "def_epa": 0.06822748655965248,
+          "n_off": 65,
+          "n_def": 55,
+          "pace": 65,
+          "ppo": 2.923076923076923,
+          "expl": 0.09230769230769231
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_CLE_DET",
+          "opponent": "CLE",
+          "off_epa": -0.12780117351946355,
+          "def_epa": -0.36304271292973606,
+          "n_off": 54,
+          "n_def": 64,
+          "pace": 54,
+          "ppo": 2.0,
+          "expl": 0.09259259259259259
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_DET_CIN",
+          "opponent": "CIN",
+          "off_epa": 0.226807719230715,
+          "def_epa": -0.12007004935986142,
+          "n_off": 59,
+          "n_def": 58,
+          "pace": 59,
+          "ppo": 2.5,
+          "expl": 0.0847457627118644
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_DET_KC",
+          "opponent": "KC",
+          "off_epa": 0.11232516020075155,
+          "def_epa": 0.2675266565339692,
+          "n_off": 53,
+          "n_def": 58,
+          "pace": 53,
+          "ppo": 2.4285714285714284,
+          "expl": 0.09433962264150944
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_TB_DET",
+          "opponent": "TB",
+          "off_epa": -0.12031188230506579,
+          "def_epa": -0.41947932219072487,
+          "n_off": 65,
+          "n_def": 66,
+          "pace": 65,
+          "ppo": 1.8461538461538463,
+          "expl": 0.12307692307692308
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_MIN_DET",
+          "opponent": "MIN",
+          "off_epa": -0.00707745663285691,
+          "def_epa": -0.021526931048336046,
+          "n_off": 62,
+          "n_def": 55,
+          "pace": 62,
+          "ppo": 2.4,
+          "expl": 0.06451612903225806
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_DET_WAS",
+          "opponent": "WAS",
+          "off_epa": 0.4905528639903231,
+          "def_epa": 0.17317353615379832,
+          "n_off": 68,
+          "n_def": 52,
+          "pace": 68,
+          "ppo": 2.933333333333333,
+          "expl": 0.11764705882352941
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_DET_PHI",
+          "opponent": "PHI",
+          "off_epa": -0.400764525954852,
+          "def_epa": -0.2294467512284283,
+          "n_off": 59,
+          "n_def": 68,
+          "pace": 59,
+          "ppo": 1.2857142857142858,
+          "expl": 0.11864406779661017
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_NYG_DET",
+          "opponent": "NYG",
+          "off_epa": 0.14838901343405755,
+          "def_epa": 0.11667236768513446,
+          "n_off": 63,
+          "n_def": 76,
+          "pace": 63,
+          "ppo": 2.4285714285714284,
+          "expl": 0.14285714285714285
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_GB_DET",
+          "opponent": "GB",
+          "off_epa": 0.03874003898290967,
+          "def_epa": 0.28877528950808073,
+          "n_off": 60,
+          "n_def": 57,
+          "pace": 60,
+          "ppo": 2.4,
+          "expl": 0.16666666666666666
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_DAL_DET",
+          "opponent": "DAL",
+          "off_epa": 0.33324613417997195,
+          "def_epa": -0.013462049760708193,
+          "n_off": 55,
+          "n_def": 77,
+          "pace": 55,
+          "ppo": 2.588235294117647,
+          "expl": 0.16363636363636364
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_DET_LA",
+          "opponent": "LA",
+          "off_epa": 0.1559829393661675,
+          "def_epa": 0.1972362266317537,
+          "n_off": 62,
+          "n_def": 69,
+          "pace": 62,
+          "ppo": 2.4285714285714284,
+          "expl": 0.11290322580645161
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_PIT_DET",
+          "opponent": "PIT",
+          "off_epa": 0.10131214237048737,
+          "def_epa": 0.21174516583752792,
+          "n_off": 68,
+          "n_def": 70,
+          "pace": 68,
+          "ppo": 2.0,
+          "expl": 0.10294117647058823
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_DET_MIN",
+          "opponent": "MIN",
+          "off_epa": -0.4637179825861598,
+          "def_epa": -0.2773751509675688,
+          "n_off": 64,
+          "n_def": 51,
+          "pace": 64,
+          "ppo": 1.6666666666666667,
+          "expl": 0.046875
+        }
+      ]
+    },
+    {
+      "team": "NYJ",
+      "n_games": 16,
+      "opponents": [
+        "ATL",
+        "BAL",
+        "BUF",
+        "CAR",
+        "CIN",
+        "CLE",
+        "DAL",
+        "DEN",
+        "JAX",
+        "MIA",
+        "NE",
+        "NO",
+        "PIT",
+        "TB"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": -0.12018853512380509,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 962,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": 0.1324539963107089,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.4106029106029106,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 962,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.39790575916230364,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 955,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 60.125,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 44.3125,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.08212058212058213,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 962,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.04887218045112782,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 532,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.12325581395348838,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 430,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.11393692777212615,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": -0.17611552289516855,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 532,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": -0.05099514560202519,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 430,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": -0.07369449824329204,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 701,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 1.8732394366197183,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 142,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.4014084507042254,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 142,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.5867768595041323,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 242,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.12903225806451613,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 124,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": 0.010174242891196877,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 188,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.059003051881993895,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 58
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.026449643947100712,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 26,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.0,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 0,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.042726347914547304,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 42,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.008138351983723296,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 983,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 8,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": -0.136351636338395,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.13574905643827018,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_PIT_NYJ",
+          "opponent": "PIT",
+          "off_epa": 0.21197511287386878,
+          "def_epa": 0.17033562458164134,
+          "n_off": 64,
+          "n_def": 53,
+          "pace": 64,
+          "ppo": 2.4615384615384617,
+          "expl": 0.171875
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_BUF_NYJ",
+          "opponent": "BUF",
+          "off_epa": -0.2953253710950093,
+          "def_epa": 0.19778235719753626,
+          "n_off": 47,
+          "n_def": 67,
+          "pace": 47,
+          "ppo": 2.0,
+          "expl": 0.0851063829787234
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_NYJ_TB",
+          "opponent": "TB",
+          "off_epa": -0.1851099196315639,
+          "def_epa": 0.01762462073073161,
+          "n_off": 61,
+          "n_def": 63,
+          "pace": 61,
+          "ppo": 2.1,
+          "expl": 0.06557377049180328
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_NYJ_MIA",
+          "opponent": "MIA",
+          "off_epa": 0.15883865643107647,
+          "def_epa": 0.1296868522222619,
+          "n_off": 58,
+          "n_def": 56,
+          "pace": 58,
+          "ppo": 2.1,
+          "expl": 0.1206896551724138
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_DAL_NYJ",
+          "opponent": "DAL",
+          "off_epa": 0.011919381357202812,
+          "def_epa": 0.3599104924790044,
+          "n_off": 73,
+          "n_def": 56,
+          "pace": 73,
+          "ppo": 2.2,
+          "expl": 0.1095890410958904
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_DEN_NYJ",
+          "opponent": "DEN",
+          "off_epa": -0.42066146779731944,
+          "def_epa": -0.08565105830495115,
+          "n_off": 57,
+          "n_def": 55,
+          "pace": 57,
+          "ppo": 1.2857142857142858,
+          "expl": 0.0
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_CAR_NYJ",
+          "opponent": "CAR",
+          "off_epa": -0.25576603516145946,
+          "def_epa": -0.06082142597444249,
+          "n_off": 60,
+          "n_def": 68,
+          "pace": 60,
+          "ppo": 0.8571428571428571,
+          "expl": 0.03333333333333333
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_NYJ_CIN",
+          "opponent": "CIN",
+          "off_epa": 0.34124363766295374,
+          "def_epa": 0.2645132378994239,
+          "n_off": 70,
+          "n_def": 58,
+          "pace": 70,
+          "ppo": 2.7857142857142856,
+          "expl": 0.14285714285714285
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_CLE_NYJ",
+          "opponent": "CLE",
+          "off_epa": -0.29455701669196743,
+          "def_epa": -0.0823937505071805,
+          "n_off": 45,
+          "n_def": 70,
+          "pace": 45,
+          "ppo": 1.5,
+          "expl": 0.15555555555555556
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_NYJ_NE",
+          "opponent": "NE",
+          "off_epa": -0.08509738697760265,
+          "def_epa": 0.1668583017939271,
+          "n_off": 57,
+          "n_def": 60,
+          "pace": 57,
+          "ppo": 2.3333333333333335,
+          "expl": 0.08771929824561403
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_NYJ_BAL",
+          "opponent": "BAL",
+          "off_epa": -0.17015552693500374,
+          "def_epa": -0.049538823772300976,
+          "n_off": 57,
+          "n_def": 56,
+          "pace": 57,
+          "ppo": 1.4285714285714286,
+          "expl": 0.03508771929824561
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_ATL_NYJ",
+          "opponent": "ATL",
+          "off_epa": 0.009249043064762529,
+          "def_epa": 0.17422654433470755,
+          "n_off": 62,
+          "n_def": 67,
+          "pace": 62,
+          "ppo": 2.4545454545454546,
+          "expl": 0.04838709677419355
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_MIA_NYJ",
+          "opponent": "MIA",
+          "off_epa": -0.45283942731835725,
+          "def_epa": 0.20675522446731306,
+          "n_off": 57,
+          "n_def": 61,
+          "pace": 57,
+          "ppo": 0.5714285714285714,
+          "expl": 0.05263157894736842
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_NYJ_JAX",
+          "opponent": "JAX",
+          "off_epa": -0.15684513110884288,
+          "def_epa": 0.3273718464182312,
+          "n_off": 68,
+          "n_def": 56,
+          "pace": 68,
+          "ppo": 1.8181818181818181,
+          "expl": 0.08823529411764706
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_NYJ_NO",
+          "opponent": "NO",
+          "off_epa": -0.3565103556337593,
+          "def_epa": -0.005796187007592138,
+          "n_off": 63,
+          "n_def": 77,
+          "pace": 63,
+          "ppo": 0.8571428571428571,
+          "expl": 0.031746031746031744
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_NE_NYJ",
+          "opponent": "NE",
+          "off_epa": -0.19830819677414527,
+          "def_epa": 0.48764402833789583,
+          "n_off": 63,
+          "n_def": 60,
+          "pace": 63,
+          "ppo": 1.4285714285714286,
+          "expl": 0.07936507936507936
+        }
+      ]
+    },
+    {
+      "team": "CAR",
+      "n_games": 16,
+      "opponents": [
+        "ARI",
+        "ATL",
+        "BUF",
+        "DAL",
+        "GB",
+        "JAX",
+        "LA",
+        "MIA",
+        "NE",
+        "NO",
+        "NYJ",
+        "SEA",
+        "SF",
+        "TB"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": -0.04015283490898099,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 949,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": 0.07163038912687138,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.4309799789251844,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 949,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.4258474576271186,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 944,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 59.3125,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 49.0,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.08956796628029505,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 949,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.07736943907156674,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 517,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.10416666666666667,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 432,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.09120171673819742,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": -0.06542821861193744,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 517,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": -0.009904285431137257,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 432,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": -0.04304367153407507,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 712,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 1.9387755102040816,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 147,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.3877551020408163,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 147,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.6621621621621622,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 222,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.15384615384615385,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 143,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.00683745709719838,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 180,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.06759656652360516,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 63
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.030042918454935622,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 28,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.015021459227467811,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 14,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.028969957081545063,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 27,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.0075107296137339056,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 932,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 7,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": -0.04846996203325391,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.059853381907022045,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_CAR_JAX",
+          "opponent": "JAX",
+          "off_epa": -0.2563797084211179,
+          "def_epa": 0.1524579965232107,
+          "n_off": 60,
+          "n_def": 60,
+          "pace": 60,
+          "ppo": 1.1111111111111112,
+          "expl": 0.05
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_CAR_ARI",
+          "opponent": "ARI",
+          "off_epa": -0.01826121165157123,
+          "def_epa": 0.12701131969957394,
+          "n_off": 78,
+          "n_def": 47,
+          "pace": 78,
+          "ppo": 2.4444444444444446,
+          "expl": 0.0641025641025641
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_ATL_CAR",
+          "opponent": "ATL",
+          "off_epa": -0.008956547344796546,
+          "def_epa": -0.3391001895957404,
+          "n_off": 54,
+          "n_def": 66,
+          "pace": 54,
+          "ppo": 1.8461538461538463,
+          "expl": 0.037037037037037035
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_CAR_NE",
+          "opponent": "NE",
+          "off_epa": -0.024340105037695417,
+          "def_epa": 0.39204877451993525,
+          "n_off": 65,
+          "n_def": 45,
+          "pace": 65,
+          "ppo": 1.625,
+          "expl": 0.09230769230769231
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_MIA_CAR",
+          "opponent": "MIA",
+          "off_epa": 0.15926762393042973,
+          "def_epa": 0.095273431587789,
+          "n_off": 62,
+          "n_def": 53,
+          "pace": 62,
+          "ppo": 2.4545454545454546,
+          "expl": 0.16129032258064516
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_DAL_CAR",
+          "opponent": "DAL",
+          "off_epa": 0.1593848109816331,
+          "def_epa": 0.17961180428658052,
+          "n_off": 62,
+          "n_def": 52,
+          "pace": 62,
+          "ppo": 2.5,
+          "expl": 0.14516129032258066
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_CAR_NYJ",
+          "opponent": "NYJ",
+          "off_epa": -0.06082142597444249,
+          "def_epa": -0.25576603516145946,
+          "n_off": 68,
+          "n_def": 60,
+          "pace": 68,
+          "ppo": 1.625,
+          "expl": 0.08823529411764706
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_BUF_CAR",
+          "opponent": "BUF",
+          "off_epa": -0.3448128232429677,
+          "def_epa": 0.3438355488205429,
+          "n_off": 59,
+          "n_def": 60,
+          "pace": 59,
+          "ppo": 1.2857142857142858,
+          "expl": 0.05084745762711865
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_CAR_GB",
+          "opponent": "GB",
+          "off_epa": 0.09463535318914694,
+          "def_epa": 0.042524528103241595,
+          "n_off": 54,
+          "n_def": 63,
+          "pace": 54,
+          "ppo": 2.2857142857142856,
+          "expl": 0.07407407407407407
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_NO_CAR",
+          "opponent": "NO",
+          "off_epa": -0.41942340922414667,
+          "def_epa": 0.16176368779471467,
+          "n_off": 50,
+          "n_def": 64,
+          "pace": 50,
+          "ppo": 1.4,
+          "expl": 0.04
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_CAR_ATL",
+          "opponent": "ATL",
+          "off_epa": 0.12748949193676207,
+          "def_epa": 0.12681769830328793,
+          "n_off": 76,
+          "n_def": 58,
+          "pace": 76,
+          "ppo": 2.3076923076923075,
+          "expl": 0.11842105263157894
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_CAR_SF",
+          "opponent": "SF",
+          "off_epa": -0.20065023830438197,
+          "def_epa": -0.0013478750223231482,
+          "n_off": 44,
+          "n_def": 68,
+          "pace": 44,
+          "ppo": 1.125,
+          "expl": 0.06818181818181818
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_LA_CAR",
+          "opponent": "LA",
+          "off_epa": 0.2375984378085488,
+          "def_epa": 0.13982017444446682,
+          "n_off": 59,
+          "n_def": 50,
+          "pace": 59,
+          "ppo": 2.0833333333333335,
+          "expl": 0.1016949152542373
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_CAR_NO",
+          "opponent": "NO",
+          "off_epa": 0.11013014508381673,
+          "def_epa": 0.10643883001799215,
+          "n_off": 56,
+          "n_def": 61,
+          "pace": 56,
+          "ppo": 2.125,
+          "expl": 0.14285714285714285
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_TB_CAR",
+          "opponent": "TB",
+          "off_epa": 0.10059068346236223,
+          "def_epa": 0.10685435090192215,
+          "n_off": 53,
+          "n_def": 60,
+          "pace": 53,
+          "ppo": 2.090909090909091,
+          "expl": 0.11320754716981132
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_SEA_CAR",
+          "opponent": "SEA",
+          "off_epa": -0.5107222867168542,
+          "def_epa": -0.05358890314740905,
+          "n_off": 49,
+          "n_def": 65,
+          "pace": 49,
+          "ppo": 1.6666666666666667,
+          "expl": 0.061224489795918366
+        }
+      ]
+    },
+    {
+      "team": "NE",
+      "n_games": 16,
+      "opponents": [
+        "ATL",
+        "BAL",
+        "BUF",
+        "CAR",
+        "CIN",
+        "CLE",
+        "LV",
+        "MIA",
+        "NO",
+        "NYG",
+        "NYJ",
+        "PIT",
+        "TB",
+        "TEN"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": 0.1479530632169211,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 963,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": -0.029538813536126383,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.4766355140186916,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 963,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.47291666666666665,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 960,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 60.1875,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 52.5625,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.11838006230529595,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 963,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.12287334593572778,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 529,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.11290322580645161,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 434,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.08881578947368421,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": 0.2826196702792296,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 529,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": -0.016191257372851237,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 434,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": 0.11771128003805008,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 751,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 2.282608695652174,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 184,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.42934782608695654,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 184,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.7330677290836654,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 251,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.19393939393939394,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 165,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.1534725207403985,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 218,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.09649122807017543,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 88
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.03399122807017544,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 31,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.009868421052631578,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 9,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.03728070175438596,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 34,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.007675438596491228,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 912,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 7,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": 0.12158049473761208,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": 0.019553907066274676,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_LV_NE",
+          "opponent": "LV",
+          "off_epa": -0.06607576636094871,
+          "def_epa": 0.11466681462113604,
+          "n_off": 68,
+          "n_def": 60,
+          "pace": 68,
+          "ppo": 1.625,
+          "expl": 0.058823529411764705
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_NE_MIA",
+          "opponent": "MIA",
+          "off_epa": 0.3439231203229157,
+          "def_epa": 0.16988271840078062,
+          "n_off": 53,
+          "n_def": 52,
+          "pace": 53,
+          "ppo": 2.076923076923077,
+          "expl": 0.09433962264150944
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_PIT_NE",
+          "opponent": "PIT",
+          "off_epa": -0.15746352048861323,
+          "def_epa": -0.05209427356084748,
+          "n_off": 71,
+          "n_def": 46,
+          "pace": 71,
+          "ppo": 1.5555555555555556,
+          "expl": 0.08450704225352113
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_CAR_NE",
+          "opponent": "CAR",
+          "off_epa": 0.39204877451993525,
+          "def_epa": -0.024340105037695417,
+          "n_off": 45,
+          "n_def": 65,
+          "pace": 45,
+          "ppo": 2.769230769230769,
+          "expl": 0.17777777777777778
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_NE_BUF",
+          "opponent": "BUF",
+          "off_epa": 0.061872875329927024,
+          "def_epa": 0.03892745436064732,
+          "n_off": 56,
+          "n_def": 61,
+          "pace": 56,
+          "ppo": 2.3,
+          "expl": 0.08928571428571429
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_NE_NO",
+          "opponent": "NO",
+          "off_epa": 0.15764914514767533,
+          "def_epa": -0.041147434425387104,
+          "n_off": 56,
+          "n_def": 51,
+          "pace": 56,
+          "ppo": 2.272727272727273,
+          "expl": 0.08928571428571429
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_NE_TEN",
+          "opponent": "TEN",
+          "off_epa": 0.2674770223241579,
+          "def_epa": -0.28418670217351055,
+          "n_off": 62,
+          "n_def": 51,
+          "pace": 62,
+          "ppo": 2.0833333333333335,
+          "expl": 0.14516129032258066
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_CLE_NE",
+          "opponent": "CLE",
+          "off_epa": 0.0732997381371432,
+          "def_epa": -0.3489714522845772,
+          "n_off": 62,
+          "n_def": 53,
+          "pace": 62,
+          "ppo": 2.142857142857143,
+          "expl": 0.1774193548387097
+        },
+        {
+          "week": 9,
+          "game_id": "2025_09_ATL_NE",
+          "opponent": "ATL",
+          "off_epa": 0.013419395030301828,
+          "def_epa": 0.06972141226584215,
+          "n_off": 65,
+          "n_def": 54,
+          "pace": 65,
+          "ppo": 2.6666666666666665,
+          "expl": 0.07692307692307693
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_NE_TB",
+          "opponent": "TB",
+          "off_epa": 0.17789473459285138,
+          "def_epa": 0.044337669336884676,
+          "n_off": 58,
+          "n_def": 67,
+          "pace": 58,
+          "ppo": 3.111111111111111,
+          "expl": 0.10344827586206896
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_NYJ_NE",
+          "opponent": "NYJ",
+          "off_epa": 0.1668583017939271,
+          "def_epa": -0.08509738697760265,
+          "n_off": 60,
+          "n_def": 57,
+          "pace": 60,
+          "ppo": 2.25,
+          "expl": 0.08333333333333333
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_NE_CIN",
+          "opponent": "CIN",
+          "off_epa": 0.003567308900269411,
+          "def_epa": -0.19337428153972736,
+          "n_off": 66,
+          "n_def": 61,
+          "pace": 66,
+          "ppo": 1.5384615384615385,
+          "expl": 0.10606060606060606
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_NYG_NE",
+          "opponent": "NYG",
+          "off_epa": 0.16901200826397503,
+          "def_epa": -0.10817574793003776,
+          "n_off": 61,
+          "n_def": 54,
+          "pace": 61,
+          "ppo": 2.076923076923077,
+          "expl": 0.11475409836065574
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_BUF_NE",
+          "opponent": "BUF",
+          "off_epa": 0.24429784937200227,
+          "def_epa": 0.2610677966958974,
+          "n_off": 51,
+          "n_def": 64,
+          "pace": 51,
+          "ppo": 3.1,
+          "expl": 0.13725490196078433
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_NE_BAL",
+          "opponent": "BAL",
+          "off_epa": 0.22312592925385946,
+          "def_epa": 0.10519732781124119,
+          "n_off": 69,
+          "n_def": 53,
+          "pace": 69,
+          "ppo": 2.0,
+          "expl": 0.17391304347826086
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_NE_NYJ",
+          "opponent": "NYJ",
+          "off_epa": 0.48764402833789583,
+          "def_epa": -0.19830819677414527,
+          "n_off": 60,
+          "n_def": 63,
+          "pace": 60,
+          "ppo": 3.0,
+          "expl": 0.2
+        }
+      ]
+    },
+    {
+      "team": "CLE",
+      "n_games": 16,
+      "opponents": [
+        "BAL",
+        "BUF",
+        "CHI",
+        "CIN",
+        "DET",
+        "GB",
+        "LV",
+        "MIA",
+        "MIN",
+        "NE",
+        "NYJ",
+        "PIT",
+        "SF",
+        "TEN"
+      ],
+      "components": {
+        "ke.off_eff": {
+          "id": "ke.off_eff",
+          "value": -0.19368196456690356,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 976,
+          "missing_fields": [],
+          "notes": {
+            "higher_better": true
+          },
+          "production_promote": false
+        },
+        "ke.def_eff": {
+          "id": "ke.def_eff",
+          "value": -0.09457926676645627,
+          "unit": "epa_per_play_allowed",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {
+            "lower_better": true
+          },
+          "production_promote": false
+        },
+        "ke.success_native": {
+          "id": "ke.success_native",
+          "value": 0.3452868852459016,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 976,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.success_standard": {
+          "id": "ke.success_standard",
+          "value": 0.3395061728395062,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 972,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace": {
+          "id": "ke.pace",
+          "value": 61.0,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.pace_competitive": {
+          "id": "ke.pace_competitive",
+          "value": 51.6875,
+          "unit": "plays_per_offense_game",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "margin": 16
+          },
+          "production_promote": false
+        },
+        "ke.expl": {
+          "id": "ke.expl",
+          "value": 0.07377049180327869,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 976,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.expl_pass": {
+          "id": "ke.expl_pass",
+          "value": 0.058519793459552494,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 581,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "pass>=20",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_rush": {
+          "id": "ke.expl_rush",
+          "value": 0.09620253164556962,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 395,
+          "missing_fields": [],
+          "notes": {
+            "nfl_knob": "rush>=10",
+            "cfb_knob": "EPA>=1 or yards>=15"
+          },
+          "production_promote": false
+        },
+        "ke.expl_allowed": {
+          "id": "ke.expl_allowed",
+          "value": 0.09061488673139159,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.off_pass_epa": {
+          "id": "ke.off_pass_epa",
+          "value": -0.28541615493380834,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 581,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "not_a_second_rating": true
+          },
+          "production_promote": false
+        },
+        "ke.off_rush_epa": {
+          "id": "ke.off_rush_epa",
+          "value": -0.05875142126773471,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 395,
+          "missing_fields": [],
+          "notes": {
+            "split": true
+          },
+          "production_promote": false
+        },
+        "ke.off_early_epa": {
+          "id": "ke.off_early_epa",
+          "value": -0.14726334486579346,
+          "unit": "epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 723,
+          "missing_fields": [],
+          "notes": {
+            "split": true,
+            "down": "1-2"
+          },
+          "production_promote": false
+        },
+        "ke.ppo": {
+          "id": "ke.ppo",
+          "value": 1.9185185185185185,
+          "unit": "points_per_opportunity",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 135,
+          "missing_fields": [],
+          "notes": {
+            "points_source": "nflverse_scoring_flags"
+          },
+          "production_promote": false
+        },
+        "ke.finish": {
+          "id": "ke.finish",
+          "value": 0.3851851851851852,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 135,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.opp_rate": {
+          "id": "ke.opp_rate",
+          "value": 0.5487804878048781,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 246,
+          "missing_fields": [],
+          "notes": {},
+          "production_promote": false
+        },
+        "ke.rz_td": {
+          "id": "ke.rz_td",
+          "value": 0.15873015873015872,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 126,
+          "missing_fields": [],
+          "notes": {
+            "must_not_be_named": "ke.finish",
+            "partial_rz_only": true
+          },
+          "production_promote": false
+        },
+        "ke.st": {
+          "id": "ke.st",
+          "value": -0.24657186814114018,
+          "unit": "st_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 201,
+          "missing_fields": [],
+          "notes": {
+            "no_1_0_hook": true
+          },
+          "production_promote": false
+        },
+        "ke.havoc": {
+          "id": "ke.havoc",
+          "value": null,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "TFL\u2227FF\u2227INT inventory-ok but named havoc waits for a certify/weight GO",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        },
+        "ke.disruption_proxy_nfl": {
+          "id": "ke.disruption_proxy_nfl",
+          "value": 0.11434735706580366,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {
+            "events": [
+              "sack",
+              "interception",
+              "qb_hit"
+            ],
+            "must_not_be_named": "ke.havoc",
+            "weight": null,
+            "numerator": 106
+          },
+          "production_promote": false
+        },
+        "ke.disruption_sack": {
+          "id": "ke.disruption_sack",
+          "value": 0.05501618122977346,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 51,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_interception": {
+          "id": "ke.disruption_interception",
+          "value": 0.010787486515641856,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 10,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_tfl": {
+          "id": "ke.disruption_tfl",
+          "value": 0.06580366774541532,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 61,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.disruption_fumble_forced": {
+          "id": "ke.disruption_fumble_forced",
+          "value": 0.014023732470334413,
+          "unit": "rate",
+          "layer": "DERIVED",
+          "status": "OK",
+          "n": 927,
+          "missing_fields": [],
+          "notes": {
+            "weight": null,
+            "numerator": 13,
+            "null_rate": 0.0
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.off": {
+          "id": "ke.opp_adj_epa.off",
+          "value": -0.23320764706642086,
+          "unit": "epa_per_play",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.opp_adj_epa.def": {
+          "id": "ke.opp_adj_epa.def",
+          "value": -0.09832172960725956,
+          "unit": "epa_per_play_allowed",
+          "layer": "ADJUSTED",
+          "status": "OK",
+          "n": 16,
+          "missing_fields": [],
+          "notes": {
+            "id": "ke.opp_adj_epa",
+            "layer": "ADJUSTED",
+            "estimator": "pit_leave_one_game_out_sos",
+            "formula": "raw - (opp_other_week_lt_W - league)",
+            "not_used": [
+              "fit_joint_v2_joint_mu_hfa_n0_ridge",
+              "lambda",
+              "n0",
+              "prior_decay",
+              "h_times_plays",
+              "issue_562_coefficients"
+            ],
+            "cutoff": "week < as_of_week",
+            "same_game_excluded": true
+          },
+          "production_promote": false
+        },
+        "ke.team_strength": {
+          "id": "ke.team_strength",
+          "value": null,
+          "unit": "net_epa_per_play",
+          "layer": "DERIVED",
+          "status": "OMIT",
+          "n": 0,
+          "missing_fields": [],
+          "notes": {
+            "reason": "Phase 1 hard stop \u2014 no Team Strength composite",
+            "do_not_impute": true
+          },
+          "production_promote": false
+        }
+      },
+      "team_games": [
+        {
+          "week": 1,
+          "game_id": "2025_01_CIN_CLE",
+          "opponent": "CIN",
+          "off_epa": -0.05120213650842479,
+          "def_epa": -0.10886814770917332,
+          "n_off": 71,
+          "n_def": 49,
+          "pace": 71,
+          "ppo": 1.7777777777777777,
+          "expl": 0.04225352112676056
+        },
+        {
+          "week": 2,
+          "game_id": "2025_02_CLE_BAL",
+          "opponent": "BAL",
+          "off_epa": -0.26294704133987706,
+          "def_epa": 0.12490885511974023,
+          "n_off": 72,
+          "n_def": 50,
+          "pace": 72,
+          "ppo": 2.5555555555555554,
+          "expl": 0.05555555555555555
+        },
+        {
+          "week": 3,
+          "game_id": "2025_03_GB_CLE",
+          "opponent": "GB",
+          "off_epa": -0.15162070701623168,
+          "def_epa": -0.07903598365834229,
+          "n_off": 56,
+          "n_def": 60,
+          "pace": 56,
+          "ppo": 2.1666666666666665,
+          "expl": 0.03571428571428571
+        },
+        {
+          "week": 4,
+          "game_id": "2025_04_CLE_DET",
+          "opponent": "DET",
+          "off_epa": -0.36304271292973606,
+          "def_epa": -0.12780117351946355,
+          "n_off": 64,
+          "n_def": 54,
+          "pace": 64,
+          "ppo": 1.6666666666666667,
+          "expl": 0.0625
+        },
+        {
+          "week": 5,
+          "game_id": "2025_05_MIN_CLE",
+          "opponent": "MIN",
+          "off_epa": -0.011413968600349553,
+          "def_epa": 0.03647955072198828,
+          "n_off": 66,
+          "n_def": 60,
+          "pace": 66,
+          "ppo": 2.4285714285714284,
+          "expl": 0.10606060606060606
+        },
+        {
+          "week": 6,
+          "game_id": "2025_06_CLE_PIT",
+          "opponent": "PIT",
+          "off_epa": -0.18536203440857055,
+          "def_epa": 0.13015411187084536,
+          "n_off": 75,
+          "n_def": 55,
+          "pace": 75,
+          "ppo": 1.2857142857142858,
+          "expl": 0.02666666666666667
+        },
+        {
+          "week": 7,
+          "game_id": "2025_07_MIA_CLE",
+          "opponent": "MIA",
+          "off_epa": -0.0790437820964866,
+          "def_epa": -0.558327655649518,
+          "n_off": 52,
+          "n_def": 57,
+          "pace": 52,
+          "ppo": 2.0833333333333335,
+          "expl": 0.057692307692307696
+        },
+        {
+          "week": 8,
+          "game_id": "2025_08_CLE_NE",
+          "opponent": "NE",
+          "off_epa": -0.3489714522845772,
+          "def_epa": 0.0732997381371432,
+          "n_off": 53,
+          "n_def": 62,
+          "pace": 53,
+          "ppo": 1.625,
+          "expl": 0.07547169811320754
+        },
+        {
+          "week": 10,
+          "game_id": "2025_10_CLE_NYJ",
+          "opponent": "NYJ",
+          "off_epa": -0.0823937505071805,
+          "def_epa": -0.29455701669196743,
+          "n_off": 70,
+          "n_def": 45,
+          "pace": 70,
+          "ppo": 2.888888888888889,
+          "expl": 0.11428571428571428
+        },
+        {
+          "week": 11,
+          "game_id": "2025_11_BAL_CLE",
+          "opponent": "BAL",
+          "off_epa": -0.40910965357742174,
+          "def_epa": -0.0883295588667408,
+          "n_off": 54,
+          "n_def": 58,
+          "pace": 54,
+          "ppo": 1.0,
+          "expl": 0.12962962962962962
+        },
+        {
+          "week": 12,
+          "game_id": "2025_12_CLE_LV",
+          "opponent": "LV",
+          "off_epa": -0.21827911542994152,
+          "def_epa": -0.3811776929274506,
+          "n_off": 47,
+          "n_def": 75,
+          "pace": 47,
+          "ppo": 2.4,
+          "expl": 0.10638297872340426
+        },
+        {
+          "week": 13,
+          "game_id": "2025_13_SF_CLE",
+          "opponent": "SF",
+          "off_epa": -0.19539794753917078,
+          "def_epa": 0.008921418854560902,
+          "n_off": 61,
+          "n_def": 64,
+          "pace": 61,
+          "ppo": 1.3333333333333333,
+          "expl": 0.03278688524590164
+        },
+        {
+          "week": 14,
+          "game_id": "2025_14_TEN_CLE",
+          "opponent": "TEN",
+          "off_epa": -0.056927669762951834,
+          "def_epa": -0.09271315196570791,
+          "n_off": 66,
+          "n_def": 64,
+          "pace": 66,
+          "ppo": 2.6363636363636362,
+          "expl": 0.10606060606060606
+        },
+        {
+          "week": 15,
+          "game_id": "2025_15_CLE_CHI",
+          "opponent": "CHI",
+          "off_epa": -0.466044770482573,
+          "def_epa": 0.05207934172665348,
+          "n_off": 56,
+          "n_def": 63,
+          "pace": 56,
+          "ppo": 0.5,
+          "expl": 0.05357142857142857
+        },
+        {
+          "week": 16,
+          "game_id": "2025_16_BUF_CLE",
+          "opponent": "BUF",
+          "off_epa": -0.09587976092174261,
+          "def_epa": 0.06078290143606924,
+          "n_off": 64,
+          "n_def": 48,
+          "pace": 64,
+          "ppo": 1.8181818181818181,
+          "expl": 0.125
+        },
+        {
+          "week": 17,
+          "game_id": "2025_17_PIT_CLE",
+          "opponent": "PIT",
+          "off_epa": -0.2336614750163306,
+          "def_epa": -0.2044288532304102,
+          "n_off": 49,
+          "n_def": 63,
+          "pace": 49,
+          "ppo": 1.625,
+          "expl": 0.061224489795918366
+        }
+      ]
+    }
+  ],
+  "disruption_inventory": {
+    "sport": "nfl",
+    "named_ke_havoc": "OMIT",
+    "named_havoc_allowed": true,
+    "weights_assigned": false,
+    "rule": "validate components before any weighting \u2014 no arbitrary composite",
+    "events": [
+      {
+        "event_id": "sack",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": false,
+        "optional_if_tfl_includes_sacks": true,
+        "weight": null,
+        "audit": {
+          "name": "sack",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 1207,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "interception",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "interception",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 362,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "qb_hit",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": false,
+        "required_for_named_havoc": false,
+        "weight": null,
+        "notes": "Allowed inside ke.disruption_proxy_nfl only",
+        "audit": {
+          "name": "qb_hit",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 2723,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "fumble",
+        "nfl_mart": true,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": false,
+        "required_for_named_havoc": false,
+        "weight": null,
+        "notes": "Not forced fumble; not a havoc substitute",
+        "audit": {
+          "name": "fumble",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 439,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "fumble_forced",
+        "nfl_mart": false,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "fumble_forced",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 314,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "tackle_for_loss",
+        "nfl_mart": false,
+        "nfl_raw_typical": true,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": true,
+        "weight": null,
+        "audit": {
+          "name": "tackle_for_loss",
+          "present": true,
+          "n_scrimmage": 31049,
+          "n_non_null": 31049,
+          "n_true": 1127,
+          "null_rate": 0.0,
+          "certified": true,
+          "weight": null,
+          "notes": "inventory_ok_not_official_charting"
+        }
+      },
+      {
+        "event_id": "pass_breakup",
+        "nfl_mart": false,
+        "nfl_raw_typical": false,
+        "cfb_core31": false,
+        "cfb_raw_2025_26_flag": true,
+        "required_for_named_havoc": false,
+        "optional_add_if_certified": true,
+        "weight": null,
+        "audit": {
+          "name": "pass_breakup",
+          "present": false,
+          "n_scrimmage": 31049,
+          "n_non_null": 0,
+          "n_true": 0,
+          "null_rate": null,
+          "certified": false,
+          "weight": null,
+          "notes": "uncertified_or_absent"
+        }
+      }
+    ],
+    "proxy_id_nfl": "ke.disruption_proxy_nfl",
+    "flags_id_cfb": null,
+    "production_promote": false
+  },
+  "validation": {
+    "next_game_epa": {
+      "objective": "next_game_epa_per_play",
+      "forbidden": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "issue_562_totals"
+      ],
+      "offense": {
+        "adjusted": {
+          "n": 448,
+          "mae": 0.17687159295896895,
+          "rmse": 0.22434398843346243,
+          "bias": 0.009327386175637551
+        },
+        "unadjusted": {
+          "n": 448,
+          "mae": 0.17345438212057843,
+          "rmse": 0.2169754942812176,
+          "bias": 0.008791496436780358
+        },
+        "league_mean": {
+          "n": 448,
+          "mae": 0.17499897312380042,
+          "rmse": 0.2205405718052175,
+          "bias": 0.009519881953729664
+        }
+      },
+      "defense": {
+        "adjusted": {
+          "n": 448,
+          "mae": 0.18071755272869,
+          "rmse": 0.22710103680374283,
+          "bias": 0.00812599667572539
+        },
+        "unadjusted": {
+          "n": 448,
+          "mae": 0.177664691813658,
+          "rmse": 0.22093058679177827,
+          "bias": 0.007782924911151462
+        },
+        "league_mean": {
+          "n": 448,
+          "mae": 0.17499897312380042,
+          "rmse": 0.2205405718052175,
+          "bias": 0.009519881953729667
+        }
+      }
+    },
+    "stability_off": {
+      "component": "ke.off_eff",
+      "pairs": [
+        {
+          "from": 2,
+          "to": 3,
+          "n": 32,
+          "pearson": 0.6804118604333693
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "n": 32,
+          "pearson": 0.8243723476075732
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 32,
+          "pearson": 0.9154960817234454
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 32,
+          "pearson": 0.9559192195368968
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 32,
+          "pearson": 0.9609558675471215
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 32,
+          "pearson": 0.9350761797103919
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 32,
+          "pearson": 0.9626074479838953
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 32,
+          "pearson": 0.9744564479874895
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 32,
+          "pearson": 0.9757318931515153
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 32,
+          "pearson": 0.9828828417403066
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 32,
+          "pearson": 0.991106434730309
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "n": 32,
+          "pearson": 0.9901009804479325
+        },
+        {
+          "from": 14,
+          "to": 15,
+          "n": 32,
+          "pearson": 0.9844250259065592
+        },
+        {
+          "from": 15,
+          "to": 16,
+          "n": 32,
+          "pearson": 0.9911518584623363
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "n": 32,
+          "pearson": 0.9917292816458256
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "n": 32,
+          "pearson": 0.98643337392841
+        }
+      ]
+    },
+    "stability_def": {
+      "component": "ke.def_eff",
+      "pairs": [
+        {
+          "from": 2,
+          "to": 3,
+          "n": 32,
+          "pearson": 0.5391114387166077
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "n": 32,
+          "pearson": 0.7844685688892251
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 32,
+          "pearson": 0.8907064799973897
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 32,
+          "pearson": 0.920583266735514
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 32,
+          "pearson": 0.936547487990925
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 32,
+          "pearson": 0.89231000599172
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 32,
+          "pearson": 0.9255949070279792
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 32,
+          "pearson": 0.9757973403581507
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 32,
+          "pearson": 0.965023205309404
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 32,
+          "pearson": 0.977159811189376
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 32,
+          "pearson": 0.9857039561487595
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "n": 32,
+          "pearson": 0.9767812038569039
+        },
+        {
+          "from": 14,
+          "to": 15,
+          "n": 32,
+          "pearson": 0.984752738348312
+        },
+        {
+          "from": 15,
+          "to": 16,
+          "n": 32,
+          "pearson": 0.9869969171827345
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "n": 32,
+          "pearson": 0.9866325001346995
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "n": 32,
+          "pearson": 0.9878167240624545
+        }
+      ]
+    },
+    "ranking_sanity": {
+      "best_offense": [
+        {
+          "team": "NE",
+          "off_epa_raw": 0.14795306321692112,
+          "def_epa_raw": -0.029538813536126383,
+          "n_games": 16,
+          "n_off_plays": 963
+        },
+        {
+          "team": "LA",
+          "off_epa_raw": 0.1385009339527498,
+          "def_epa_raw": -0.06595162746812466,
+          "n_games": 16,
+          "n_off_plays": 988
+        },
+        {
+          "team": "GB",
+          "off_epa_raw": 0.1378970065502824,
+          "def_epa_raw": 0.03914494075747014,
+          "n_games": 16,
+          "n_off_plays": 944
+        },
+        {
+          "team": "BUF",
+          "off_epa_raw": 0.12013125956206214,
+          "def_epa_raw": -0.0038406951306433736,
+          "n_games": 16,
+          "n_off_plays": 995
+        },
+        {
+          "team": "DAL",
+          "off_epa_raw": 0.10930825906246946,
+          "def_epa_raw": 0.16978187700689065,
+          "n_games": 16,
+          "n_off_plays": 1051
+        },
+        {
+          "team": "SF",
+          "off_epa_raw": 0.10630436564778965,
+          "def_epa_raw": 0.07055399013119266,
+          "n_games": 16,
+          "n_off_plays": 1023
+        }
+      ],
+      "worst_offense": [
+        {
+          "team": "LV",
+          "off_epa_raw": -0.19632734392708276,
+          "def_epa_raw": 0.05503701061613077,
+          "n_games": 16,
+          "n_off_plays": 881
+        },
+        {
+          "team": "CLE",
+          "off_epa_raw": -0.19368196456690356,
+          "def_epa_raw": -0.09457926676645627,
+          "n_games": 16,
+          "n_off_plays": 976
+        },
+        {
+          "team": "TEN",
+          "off_epa_raw": -0.14904245913562758,
+          "def_epa_raw": 0.09444799651980583,
+          "n_games": 16,
+          "n_off_plays": 942
+        },
+        {
+          "team": "MIN",
+          "off_epa_raw": -0.12079768054880975,
+          "def_epa_raw": -0.08784121532628007,
+          "n_games": 16,
+          "n_off_plays": 879
+        },
+        {
+          "team": "NYJ",
+          "off_epa_raw": -0.12018853512380509,
+          "def_epa_raw": 0.1324539963107089,
+          "n_games": 16,
+          "n_off_plays": 962
+        },
+        {
+          "team": "NO",
+          "off_epa_raw": -0.08633983883464211,
+          "def_epa_raw": -0.047772716562859086,
+          "n_games": 16,
+          "n_off_plays": 999
+        }
+      ],
+      "best_defense": [
+        {
+          "team": "HOU",
+          "off_epa_raw": -0.01257985746760586,
+          "def_epa_raw": -0.13551221967391786,
+          "n_games": 16,
+          "n_off_plays": 1015
+        },
+        {
+          "team": "SEA",
+          "off_epa_raw": 0.030333675524531586,
+          "def_epa_raw": -0.10591384560393645,
+          "n_games": 16,
+          "n_off_plays": 933
+        },
+        {
+          "team": "CLE",
+          "off_epa_raw": -0.19368196456690356,
+          "def_epa_raw": -0.09457926676645627,
+          "n_games": 16,
+          "n_off_plays": 976
+        },
+        {
+          "team": "JAX",
+          "off_epa_raw": 0.02134152487425751,
+          "def_epa_raw": -0.09218174814420639,
+          "n_games": 16,
+          "n_off_plays": 1019
+        },
+        {
+          "team": "MIN",
+          "off_epa_raw": -0.12079768054880975,
+          "def_epa_raw": -0.08784121532628007,
+          "n_games": 16,
+          "n_off_plays": 879
+        },
+        {
+          "team": "PHI",
+          "off_epa_raw": 0.03438220085448724,
+          "def_epa_raw": -0.08225482820404638,
+          "n_games": 16,
+          "n_off_plays": 933
+        }
+      ],
+      "worst_defense": [
+        {
+          "team": "DAL",
+          "off_epa_raw": 0.10930825906246946,
+          "def_epa_raw": 0.16978187700689065,
+          "n_games": 16,
+          "n_off_plays": 1051
+        },
+        {
+          "team": "WAS",
+          "off_epa_raw": 0.008581938288600436,
+          "def_epa_raw": 0.15843752410432238,
+          "n_games": 16,
+          "n_off_plays": 918
+        },
+        {
+          "team": "CIN",
+          "off_epa_raw": -0.0013025413925902226,
+          "def_epa_raw": 0.1433181596240856,
+          "n_games": 16,
+          "n_off_plays": 982
+        },
+        {
+          "team": "NYJ",
+          "off_epa_raw": -0.12018853512380509,
+          "def_epa_raw": 0.1324539963107089,
+          "n_games": 16,
+          "n_off_plays": 962
+        },
+        {
+          "team": "NYG",
+          "off_epa_raw": 0.0038533978689710637,
+          "def_epa_raw": 0.09914762832681903,
+          "n_games": 16,
+          "n_off_plays": 1009
+        },
+        {
+          "team": "TEN",
+          "off_epa_raw": -0.14904245913562758,
+          "def_epa_raw": 0.09444799651980583,
+          "n_games": 16,
+          "n_off_plays": 942
+        }
+      ],
+      "note": "sanity only \u2014 not a seal; not Team Strength"
+    },
+    "missingness": {
+      "ke.off_eff": {
+        "OK": 32
+      },
+      "ke.def_eff": {
+        "OK": 32
+      },
+      "ke.success_native": {
+        "OK": 32
+      },
+      "ke.success_standard": {
+        "OK": 32
+      },
+      "ke.success_allowed": {
+        "OK": 32
+      },
+      "ke.pace": {
+        "OK": 32
+      },
+      "ke.pace_competitive": {
+        "OK": 32
+      },
+      "ke.pace_seconds": {
+        "OK": 32
+      },
+      "ke.expl_pass": {
+        "OK": 32
+      },
+      "ke.expl_rush": {
+        "OK": 32
+      },
+      "ke.expl": {
+        "OK": 32
+      },
+      "ke.expl_allowed": {
+        "OK": 32
+      },
+      "ke.off_pass_epa": {
+        "OK": 32
+      },
+      "ke.off_rush_epa": {
+        "OK": 32
+      },
+      "ke.off_early_epa": {
+        "OK": 32
+      },
+      "ke.st": {
+        "OK": 32
+      },
+      "ke.opp_rate": {
+        "OK": 32
+      },
+      "ke.ppo": {
+        "OK": 32
+      },
+      "ke.finish": {
+        "OK": 32
+      },
+      "ke.rz_td": {
+        "OK": 32
+      },
+      "ke.havoc": {
+        "OMIT": 32
+      },
+      "ke.disruption_proxy_nfl": {
+        "OK": 32
+      },
+      "ke.disruption_sack": {
+        "OK": 32
+      },
+      "ke.disruption_interception": {
+        "OK": 32
+      },
+      "ke.disruption_qb_hit": {
+        "OK": 32
+      },
+      "ke.disruption_fumble": {
+        "OK": 32
+      },
+      "ke.disruption_fumble_forced": {
+        "OK": 32
+      },
+      "ke.disruption_tfl": {
+        "OK": 32
+      },
+      "ke.disruption_pass_breakup": {
+        "DATA_INSUFFICIENT": 32
+      },
+      "ke.team_strength": {
+        "OMIT": 32
+      },
+      "ke.opp_adj_epa.off": {
+        "OK": 32
+      },
+      "ke.opp_adj_epa.def": {
+        "OK": 32
+      }
+    },
+    "provenance": {
+      "layers_by_id": {
+        "ke.off_eff": "DERIVED",
+        "ke.def_eff": "DERIVED",
+        "ke.success_native": "DERIVED",
+        "ke.success_standard": "DERIVED",
+        "ke.success_allowed": "DERIVED",
+        "ke.pace": "DERIVED",
+        "ke.pace_competitive": "DERIVED",
+        "ke.pace_seconds": "DERIVED",
+        "ke.expl_pass": "DERIVED",
+        "ke.expl_rush": "DERIVED",
+        "ke.expl": "DERIVED",
+        "ke.expl_allowed": "DERIVED",
+        "ke.off_pass_epa": "DERIVED",
+        "ke.off_rush_epa": "DERIVED",
+        "ke.off_early_epa": "DERIVED",
+        "ke.st": "DERIVED",
+        "ke.opp_rate": "DERIVED",
+        "ke.ppo": "DERIVED",
+        "ke.finish": "DERIVED",
+        "ke.rz_td": "DERIVED",
+        "ke.havoc": "DERIVED",
+        "ke.disruption_proxy_nfl": "DERIVED",
+        "ke.disruption_sack": "DERIVED",
+        "ke.disruption_interception": "DERIVED",
+        "ke.disruption_qb_hit": "DERIVED",
+        "ke.disruption_fumble": "DERIVED",
+        "ke.disruption_fumble_forced": "DERIVED",
+        "ke.disruption_tfl": "DERIVED",
+        "ke.disruption_pass_breakup": "DERIVED",
+        "ke.team_strength": "DERIVED",
+        "ke.opp_adj_epa.off": "ADJUSTED",
+        "ke.opp_adj_epa.def": "ADJUSTED"
+      },
+      "violations": [],
+      "taxonomy": [
+        "RAW",
+        "DERIVED",
+        "ADJUSTED",
+        "MODELED"
+      ],
+      "ok": true
+    }
+  },
+  "hard_stops": {
+    "team_strength": false,
+    "scoring": false,
+    "matchup": false,
+    "market": false,
+    "ui": false,
+    "issue_562_tuning": false
+  },
+  "source": {
+    "url": "https://github.com/nflverse/nflverse-data/releases/download/pbp/play_by_play_2025.parquet",
+    "path": "/workspace/data/cfb/research/ke_football_pbp/nfl_pbp_2025.parquet",
+    "bytes": 20337029,
+    "n_plays_adapted": 41402
+  },
+  "leakage_live": {
+    "future_week_changes_snapshot": false,
+    "expected": false
+  },
+  "snapshot_count": 32,
+  "ranking": {
+    "best_offense": [
+      {
+        "team": "NE",
+        "off_epa_raw": 0.14795306321692112,
+        "def_epa_raw": -0.029538813536126383,
+        "n_games": 16,
+        "n_off_plays": 963
+      },
+      {
+        "team": "LA",
+        "off_epa_raw": 0.1385009339527498,
+        "def_epa_raw": -0.06595162746812466,
+        "n_games": 16,
+        "n_off_plays": 988
+      },
+      {
+        "team": "GB",
+        "off_epa_raw": 0.1378970065502824,
+        "def_epa_raw": 0.03914494075747014,
+        "n_games": 16,
+        "n_off_plays": 944
+      },
+      {
+        "team": "BUF",
+        "off_epa_raw": 0.12013125956206214,
+        "def_epa_raw": -0.0038406951306433736,
+        "n_games": 16,
+        "n_off_plays": 995
+      },
+      {
+        "team": "DAL",
+        "off_epa_raw": 0.10930825906246946,
+        "def_epa_raw": 0.16978187700689065,
+        "n_games": 16,
+        "n_off_plays": 1051
+      },
+      {
+        "team": "SF",
+        "off_epa_raw": 0.10630436564778965,
+        "def_epa_raw": 0.07055399013119266,
+        "n_games": 16,
+        "n_off_plays": 1023
+      }
+    ],
+    "worst_offense": [
+      {
+        "team": "LV",
+        "off_epa_raw": -0.19632734392708276,
+        "def_epa_raw": 0.05503701061613077,
+        "n_games": 16,
+        "n_off_plays": 881
+      },
+      {
+        "team": "CLE",
+        "off_epa_raw": -0.19368196456690356,
+        "def_epa_raw": -0.09457926676645627,
+        "n_games": 16,
+        "n_off_plays": 976
+      },
+      {
+        "team": "TEN",
+        "off_epa_raw": -0.14904245913562758,
+        "def_epa_raw": 0.09444799651980583,
+        "n_games": 16,
+        "n_off_plays": 942
+      },
+      {
+        "team": "MIN",
+        "off_epa_raw": -0.12079768054880975,
+        "def_epa_raw": -0.08784121532628007,
+        "n_games": 16,
+        "n_off_plays": 879
+      },
+      {
+        "team": "NYJ",
+        "off_epa_raw": -0.12018853512380509,
+        "def_epa_raw": 0.1324539963107089,
+        "n_games": 16,
+        "n_off_plays": 962
+      },
+      {
+        "team": "NO",
+        "off_epa_raw": -0.08633983883464211,
+        "def_epa_raw": -0.047772716562859086,
+        "n_games": 16,
+        "n_off_plays": 999
+      }
+    ],
+    "best_defense": [
+      {
+        "team": "HOU",
+        "off_epa_raw": -0.01257985746760586,
+        "def_epa_raw": -0.13551221967391786,
+        "n_games": 16,
+        "n_off_plays": 1015
+      },
+      {
+        "team": "SEA",
+        "off_epa_raw": 0.030333675524531586,
+        "def_epa_raw": -0.10591384560393645,
+        "n_games": 16,
+        "n_off_plays": 933
+      },
+      {
+        "team": "CLE",
+        "off_epa_raw": -0.19368196456690356,
+        "def_epa_raw": -0.09457926676645627,
+        "n_games": 16,
+        "n_off_plays": 976
+      },
+      {
+        "team": "JAX",
+        "off_epa_raw": 0.02134152487425751,
+        "def_epa_raw": -0.09218174814420639,
+        "n_games": 16,
+        "n_off_plays": 1019
+      },
+      {
+        "team": "MIN",
+        "off_epa_raw": -0.12079768054880975,
+        "def_epa_raw": -0.08784121532628007,
+        "n_games": 16,
+        "n_off_plays": 879
+      },
+      {
+        "team": "PHI",
+        "off_epa_raw": 0.03438220085448724,
+        "def_epa_raw": -0.08225482820404638,
+        "n_games": 16,
+        "n_off_plays": 933
+      }
+    ],
+    "worst_defense": [
+      {
+        "team": "DAL",
+        "off_epa_raw": 0.10930825906246946,
+        "def_epa_raw": 0.16978187700689065,
+        "n_games": 16,
+        "n_off_plays": 1051
+      },
+      {
+        "team": "WAS",
+        "off_epa_raw": 0.008581938288600436,
+        "def_epa_raw": 0.15843752410432238,
+        "n_games": 16,
+        "n_off_plays": 918
+      },
+      {
+        "team": "CIN",
+        "off_epa_raw": -0.0013025413925902226,
+        "def_epa_raw": 0.1433181596240856,
+        "n_games": 16,
+        "n_off_plays": 982
+      },
+      {
+        "team": "NYJ",
+        "off_epa_raw": -0.12018853512380509,
+        "def_epa_raw": 0.1324539963107089,
+        "n_games": 16,
+        "n_off_plays": 962
+      },
+      {
+        "team": "NYG",
+        "off_epa_raw": 0.0038533978689710637,
+        "def_epa_raw": 0.09914762832681903,
+        "n_games": 16,
+        "n_off_plays": 1009
+      },
+      {
+        "team": "TEN",
+        "off_epa_raw": -0.14904245913562758,
+        "def_epa_raw": 0.09444799651980583,
+        "n_games": 16,
+        "n_off_plays": 942
+      }
+    ],
+    "note": "sanity only \u2014 not a seal; not Team Strength"
+  }
+}
