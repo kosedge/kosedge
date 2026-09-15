@@ -1,0 +1,339 @@
+{
+  "tracker_id": "football-numbers-reopening-v1",
+  "as_of": "2026-09-15",
+  "authority": "Ryan OS 2026-09-15",
+  "sot_markdown": "docs/ops/FOOTBALL_NUMBERS_REOPENING_TRACKER.md",
+  "posture": "coming_soon_live_boards_dark_until_per_sport_clear",
+  "status_vocab": [
+    "NOT_STARTED",
+    "IN_PROGRESS",
+    "BLOCKED",
+    "PASS",
+    "FAIL"
+  ],
+  "owners": {
+    "CoS": "execution call; only CLEAR enables a sport/market",
+    "Product": "website verification",
+    "Alex": "NFL model and NFL data",
+    "Validation Lead": "predictive gates",
+    "Platform Reliability": "rehearsal, observability, rollback, smoke contract"
+  },
+  "public_flags": {
+    "NFL_EDGE_BOARD_PUBLIC_ENABLED": false,
+    "CFB_EDGE_BOARD_PUBLIC_ENABLED": false,
+    "note": "Flip only after the matching Release row is PASS and CoS CLEAR. INTERNAL overrides are QA-only."
+  },
+  "seeded_state": {
+    "coming_soon_pr": {
+      "pr": 561,
+      "merge": "9b6669e5",
+      "production_smoke": "PASS",
+      "production_smoke_url": "https://github.com/kosedge/kosedge/actions/runs/35002902210"
+    },
+    "cfb_opp_adj_epa": {
+      "pr": 560,
+      "merge": "60ec7051",
+      "call": "ADVANCE",
+      "production_promote": false,
+      "audit": "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md",
+      "evidence_dir": "data/ops/cfb-research-opp-adj-epa-20260915/",
+      "ryan_audit": "data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json"
+    },
+    "cfb_scoring_research": "IN_PROGRESS",
+    "nfl_regression_investigation": "NOT_STARTED"
+  },
+  "workstreams": [
+    {
+      "id": "nfl.regression_investigation",
+      "track": "NFL",
+      "name": "NFL regression investigation",
+      "status": "NOT_STARTED",
+      "evidence": [],
+      "unresolved_blocker": "No linked brief, PR, or issue.",
+      "owner": "Alex",
+      "next_action": "Link the investigation. Then set status IN_PROGRESS and attach the brief.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.scoring_research",
+      "track": "CFB",
+      "name": "CFB scoring / margin / totals conversion research",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md (next path after EPA ADVANCE)",
+        "https://github.com/kosedge/kosedge/pull/560"
+      ],
+      "unresolved_blocker": "Scoring conversion not sealed. EPA MAE is not a published spread or total.",
+      "owner": "",
+      "next_action": "Continue scoring research. Do not promote. Do not reopen.",
+      "last_updated": "2026-09-15",
+      "note": "Prior draft PRs 539/543/544/546 are not reopen evidence."
+    }
+  ],
+  "rows": [
+    {
+      "id": "nfl.input_integrity",
+      "track": "NFL",
+      "gate": "Input integrity",
+      "status": "NOT_STARTED",
+      "evidence": [],
+      "unresolved_blocker": "Coverage, identities, freshness, and exclusion pack for the reopen candidate is not assembled.",
+      "owner": "Alex",
+      "next_action": "Open/link a coverage + identity + freshness + exclusions receipt.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "nfl.calculation_integrity",
+      "track": "NFL",
+      "gate": "Calculation integrity",
+      "status": "NOT_STARTED",
+      "evidence": [],
+      "unresolved_blocker": "NFL regression investigation not linked; known-bug list not closed against reproduced outputs.",
+      "owner": "Alex",
+      "next_action": "Link the regression brief. Reproduce published-path outputs. Resolve or document each known bug.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "nfl.predictive_validation",
+      "track": "NFL",
+      "gate": "Predictive validation",
+      "status": "NOT_STARTED",
+      "evidence": [
+        "docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md",
+        "docs/NFL_ENTERPRISE_GATES.md",
+        "NFL_SPREAD_PLAY_LOCKED.md"
+      ],
+      "unresolved_blocker": "No frozen reopen eval has been run against predefined criteria for the candidate that would be shown. Protocol is not PASS.",
+      "owner": "Validation Lead",
+      "next_action": "Freeze eval rules, then run the unused/frozen package. Score margin and total separately.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "nfl.production_rehearsal",
+      "track": "NFL",
+      "gate": "Production rehearsal",
+      "status": "NOT_STARTED",
+      "evidence": [],
+      "unresolved_blocker": "No scheduled candidate runs that include weekly update, injuries, and missing-data paths.",
+      "owner": "Platform Reliability",
+      "next_action": "Stand up private shadow. Exercise a weekly update, not a single snapshot.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "nfl.website_verification",
+      "track": "NFL",
+      "gate": "Website verification",
+      "status": "BLOCKED",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/561",
+        "docs/incidents/INC-2026-09-08-NFL-EDGE-BOARD-CUSTOMER-TRUTH/"
+      ],
+      "unresolved_blocker": "No approved NFL numbers to paint. Coming soon is not this gate.",
+      "owner": "Product",
+      "next_action": "After calculation + predictive PASS, INTERNAL-verify every parked NFL URL + assemble.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "nfl.release_spread",
+      "track": "NFL",
+      "gate": "Release",
+      "market": "spread",
+      "status": "BLOCKED",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/561",
+        "apps/web/lib/cfb-edge-board-public.ts (NFL_EDGE_BOARD_PUBLIC_ENABLED=false)"
+      ],
+      "unresolved_blocker": "Upstream NFL gates not PASS.",
+      "owner": "CoS",
+      "next_action": "Review evidence pack. Enable NFL spread only if that market's gates PASS.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "nfl.release_total",
+      "track": "NFL",
+      "gate": "Release",
+      "market": "total",
+      "status": "BLOCKED",
+      "evidence": [
+        "NFL_SPREAD_PLAY_LOCKED.md",
+        "https://github.com/kosedge/kosedge/pull/561"
+      ],
+      "unresolved_blocker": "Totals may stay dark after spreads CLEAR. Totals need their own predictive PASS.",
+      "owner": "CoS",
+      "next_action": "Do not piggyback totals on a spread CLEAR.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.input_integrity",
+      "track": "CFB",
+      "gate": "Input integrity",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/560",
+        "data/ops/cfb-research-opp-adj-epa-20260915/delayed_game_pbp_audit.json",
+        "docs/cfb/CFB_OWNED_DATA_INVENTORY_GAP_2026-09-15.md",
+        "docs/cfb/CFB_2026_W1_RAW_TEAM_GAME_METRICS_2026-09-15.md",
+        "data/ops/cfb-p0-residual-audit-20260911.md"
+      ],
+      "unresolved_blocker": "Scoring conversion does not yet have a reopen-grade coverage / identity / freshness / exclusions pack.",
+      "owner": "",
+      "next_action": "Finish scoring-path inventory: identities, freshness, explicit exclusions.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.calculation_integrity",
+      "track": "CFB",
+      "gate": "Calculation integrity",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/560",
+        "60ec7051",
+        "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md",
+        "data/ops/cfb-research-opp-adj-epa-20260915/ryan_audit_560.json"
+      ],
+      "unresolved_blocker": "Scoring / margin / totals conversion not sealed. EPA ADVANCE must not be published as KEI or points.",
+      "owner": "",
+      "next_action": "Continue scoring research. Reproduce conversion outputs. Close known bugs before any production candidate.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.predictive_validation",
+      "track": "CFB",
+      "gate": "Predictive validation",
+      "status": "NOT_STARTED",
+      "evidence": [
+        "docs/cfb/CFB_RESEARCH_OPP_ADJ_EPA_AUDIT_2026-09-15.md",
+        "docs/CFB_ENGINE_GATES.md"
+      ],
+      "unresolved_blocker": "No frozen scoring/margin/total eval against predefined reopen criteria. EPA holdout is efficiency MAE only.",
+      "owner": "Validation Lead",
+      "next_action": "After conversion exists: freeze eval rules, run unused/frozen package, margin and total separately.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.production_rehearsal",
+      "track": "CFB",
+      "gate": "Production rehearsal",
+      "status": "NOT_STARTED",
+      "evidence": [],
+      "unresolved_blocker": "No private CFB candidate shadow that survives weekly update + missing PBP/odds.",
+      "owner": "Platform Reliability",
+      "next_action": "Shadow beside the dark board. One holdout score is not rehearsal.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.website_verification",
+      "track": "CFB",
+      "gate": "Website verification",
+      "status": "BLOCKED",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/561",
+        "apps/web/lib/cfb-edge-board-public.ts (CFB_EDGE_BOARD_PUBLIC_ENABLED=false)"
+      ],
+      "unresolved_blocker": "Board dark until CLEAR. No approved CFB numbers to cross-check across surfaces.",
+      "owner": "Product",
+      "next_action": "After predictive PASS, INTERNAL-verify every parked CFB URL + assemble.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.release_spread",
+      "track": "CFB",
+      "gate": "Release",
+      "market": "spread",
+      "status": "BLOCKED",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/560",
+        "https://github.com/kosedge/kosedge/pull/561",
+        "apps/web/lib/cfb-edge-board-public.ts"
+      ],
+      "unresolved_blocker": "Scoring research in flight; predictive + website gates not PASS. production_promote=false.",
+      "owner": "CoS",
+      "next_action": "CLEAR CFB spread only from a reviewed evidence pack. Never from EPA MAE alone.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "cfb.release_total",
+      "track": "CFB",
+      "gate": "Release",
+      "market": "total",
+      "status": "BLOCKED",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/560",
+        "https://github.com/kosedge/kosedge/pull/561"
+      ],
+      "unresolved_blocker": "Totals conversion is its own bar.",
+      "owner": "CoS",
+      "next_action": "CLEAR CFB totals independently if evidence supports it.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "shared.coming_soon_kill_switch",
+      "track": "SHARED",
+      "gate": "Coming soon / kill-switch independence",
+      "status": "PASS",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/561",
+        "9b6669e5",
+        "https://github.com/kosedge/kosedge/actions/runs/35002902210",
+        "apps/web/__tests__/lib/football-public-numbers.test.ts"
+      ],
+      "unresolved_blocker": "",
+      "owner": "CoS",
+      "next_action": "Keep both public flags false. Do not flip either from a research PR.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "shared.provenance",
+      "track": "SHARED",
+      "gate": "Provenance on every published number",
+      "status": "NOT_STARTED",
+      "evidence": [
+        "apps/web/lib/edge-board-customer-truth.ts"
+      ],
+      "unresolved_blocker": "No reopen candidate is publishing, so store↔page provenance for an approved snapshot is unproven on parked surfaces.",
+      "owner": "Platform Reliability",
+      "next_action": "When a candidate exists, stamp version / snapshot / cutoff / gen time on store and page.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "shared.pre_publish",
+      "track": "SHARED",
+      "gate": "Pre-publish checks",
+      "status": "NOT_STARTED",
+      "evidence": [
+        "docs/ops/FOOTBALL_NUMBERS_REOPENING_TRACKER.md#4-pre-publish-protection-checklist"
+      ],
+      "unresolved_blocker": "Formal pre-publish job is not wired as the reopen gate; clamp-and-publish remains forbidden.",
+      "owner": "Platform Reliability",
+      "next_action": "Implement/attest the checklist against the candidate. Fail → withhold + explain.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "shared.rollback",
+      "track": "SHARED",
+      "gate": "Rollback",
+      "status": "NOT_STARTED",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/561"
+      ],
+      "unresolved_blocker": "No drilled rollback of a cleared sport because nothing is cleared.",
+      "owner": "Platform Reliability",
+      "next_action": "Write/attest: flip flag false, assemble 503/empty, pages Coming soon, no ghost table.",
+      "last_updated": "2026-09-15"
+    },
+    {
+      "id": "shared.smoke_contract",
+      "track": "SHARED",
+      "gate": "Observability / smoke contract vs parked football",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/actions/runs/35002902210",
+        "https://github.com/kosedge/kosedge/actions/runs/35004134896"
+      ],
+      "unresolved_blocker": "Smoke still assumes a live CFB teams census (needle 136) after #561 parked /pro/cfb/teams.",
+      "owner": "Platform Reliability",
+      "next_action": "Retarget smoke needles for parked football pages without treating that edit as a reopen.",
+      "last_updated": "2026-09-15"
+    }
+  ]
+}
