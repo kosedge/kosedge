@@ -94,10 +94,19 @@ describe("EdgeBoardMobileCard composition", () => {
     expect(screen.queryByText(/Lean to/)).not.toBeInTheDocument();
     expect(screen.queryByText(/KEINFL/)).not.toBeInTheDocument();
     expect(screen.queryByText(/Spread edge/i)).not.toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /Overview/ }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: /Stats/ })).toBeInTheDocument();
+    const overview = screen.getByRole("button", { name: /Overview/ });
+    const stats = screen.getByRole("button", { name: /Stats/ });
+    expect(overview).toBeInTheDocument();
+    expect(stats).toBeInTheDocument();
+    expect(overview).toHaveAttribute("aria-expanded", "false");
+    expect(overview.className).toMatch(/min-h-11/);
+    expect(overview.className).toMatch(/text-kos-gold\/65/);
+    expect(overview.className).not.toMatch(/flex-1/);
+    expect(overview.className).not.toMatch(/justify-center/);
+    expect(overview.className).not.toMatch(/rounded-lg/);
+    expect(overview.className).not.toMatch(/bg-kos-gold/);
+    expect(stats.className).toMatch(/text-kos-gold\/65/);
+    expect(stats.className).not.toMatch(/flex-1/);
     const card = screen.getByTestId("edge-board-mobile-card");
     expect(card.textContent).toContain("DK");
     expect(card.textContent).toMatch(/Open/);
@@ -179,6 +188,19 @@ describe("EdgeBoardMobileCard composition", () => {
       />,
     );
     expect(screen.getByText(/Model /)).toBeInTheDocument();
+    const overviewOpenBtn = screen.getByRole("button", { name: /Overview/ });
+    const statsQuiet = screen.getByRole("button", { name: /Stats/ });
+    expect(overviewOpenBtn).toHaveAttribute("aria-expanded", "true");
+    expect(overviewOpenBtn.className).toMatch(/min-h-11/);
+    expect(overviewOpenBtn.className).toMatch(/text-kos-gold/);
+    expect(overviewOpenBtn.className).not.toMatch(/text-kos-gold\/65/);
+    expect(overviewOpenBtn.className).not.toMatch(/flex-1/);
+    expect(overviewOpenBtn.className).not.toMatch(/justify-center/);
+    expect(overviewOpenBtn.className).not.toMatch(/rounded-lg/);
+    expect(overviewOpenBtn.className).not.toMatch(/bg-kos-gold/);
+    expect(overviewOpenBtn.className).not.toMatch(/hover:bg-white/);
+    expect(statsQuiet.className).toMatch(/text-kos-gold\/65/);
+    expect(statsQuiet.className).not.toMatch(/flex-1/);
   });
 
   it("does not paint a mismatched book when decision line ≠ best display", () => {
