@@ -79,7 +79,7 @@ export function FantasyDraftDeskClient({
   initialScoring = "ppr",
   initialTab = "draft",
   compactHero = false,
-  basePath = "/pro/nfl/fantasy",
+  basePath = "/pro/nfl/fantasy/draft",
 }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(
     board.rows[0]?.playerId ?? null,
@@ -996,7 +996,8 @@ function TeamBuilderPanel({
             <h2 className="text-lg font-semibold text-kos-text">Your roster</h2>
             <p className="text-sm text-kos-text/60">
               Private scratchpad — suggestions below are ADP-aware. Model rank
-              stays projection order. Next step is Mock.
+              stays projection order. In-season next step is this week&apos;s
+              DFS.
             </p>
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-center">

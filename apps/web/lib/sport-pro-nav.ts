@@ -99,7 +99,7 @@ const SPORT_NAV: Record<SportKey, SportNavConfig> = {
       },
       { href: "/pro/nfl/slate/today", label: "Weekly Slate", primary: true },
       { href: "/pro/nfl/survivor", label: "Survivor", primary: true },
-      // Draft Desk for now; post-kickoff can retarget to Weekly Fantasy Projections.
+      // In-season Fantasy landing is this week's DFS slate.
       { href: "/pro/nfl/dfs", label: "Fantasy", primary: true },
       { href: "/pro/power-ratings/nfl", label: "Power Ratings" },
       { href: "/pro/nfl/club", label: "Club Desk", primary: true },

@@ -127,7 +127,7 @@ export default async function NflGuillotinePage({
           </ul>
           <div className="mt-4 flex flex-wrap gap-2">
             <Link
-              href={`/pro/nfl/fantasy?scoring=${scoring}`}
+              href={`/pro/nfl/fantasy/draft?scoring=${scoring}`}
               className="rounded-lg border border-kos-gold/35 bg-kos-gold/10 px-3 py-1.5 text-xs font-semibold text-kos-gold"
             >
               Rankings

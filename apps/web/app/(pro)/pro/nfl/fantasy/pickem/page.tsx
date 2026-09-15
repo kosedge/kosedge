@@ -154,10 +154,10 @@ export default async function NflFantasyPickemPage({
           </div>
           <div className="grid w-full gap-2 sm:w-auto sm:min-w-44">
             <Link
-              href="/pro/nfl/fantasy"
+              href="/pro/nfl/dfs"
               className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-4 py-2.5 text-center text-sm font-semibold text-kos-gold hover:border-kos-gold/55"
             >
-              Draft Desk →
+              This week&apos;s DFS →
             </Link>
             <Link
               href="/pro/nfl/fantasy/sleepers"
