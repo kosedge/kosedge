@@ -316,6 +316,10 @@ def engine_status_payload(
 
     return {
         "engine_version": DEFAULT_SEASON_ENGINE_VERSION,
+        "qb_feature_contract": __import__(
+            "src.services.cfb_season_engine.qb_feature_contract",
+            fromlist=["documentation"],
+        ).documentation(),
         "sport": "cfb",
         "scope": (
             "FBS season sim + projection UI + ESPN 2026 real-roster overlay + "
