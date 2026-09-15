@@ -299,7 +299,7 @@ function buildNflOverviewSections(deskPathSubtitle: string): OverviewSection[] {
         {
           href: "/pro/nfl/dfs",
           label: "DFS Board",
-          hint: "This week’s DFS research — DK/FD site scoring and salaries on the player-production spine. Ownership unavailable until a real source exists. Mocks are hidden in-season.",
+          hint: "Week/slate DFS research — DK/FD site scoring and salaries on the player-production spine. Ownership unavailable until a real source exists. Mocks are hidden in-season.",
           premium: true,
           status: "active",
         },
