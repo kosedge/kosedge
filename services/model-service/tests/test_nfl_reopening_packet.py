@@ -1,0 +1,154 @@
+"""NFL 2026-09-16 reopening packet — integrity, leak, W-L refuse, shadow audit."""
+
+from __future__ import annotations
+
+import os
+from pathlib import Path
+
+os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
+
+from src.services.nfl_epa_authority import NFL_2026_W1_OUTCOMES, NFL_2026_W2_SLATE
+from src.services.nfl_reopening_packet import (
+    PACKET_RUN_ID,
+    assemble_packet,
+    audit_shadow,
+    authorize_candidate_row,
+    build_gate1_integrity,
+    build_shadow_slate,
+    classify_live_leak,
+    frozen_eval_w1,
+    is_july31_stale,
+    load_canonical_slate,
+    prove_wl_refuse_holds,
+    records_after_week1,
+)
+from src.services.nfl_regression_diagnose import LOCKED_SCORING, locked_scoring_snapshot
+
+PUBLIC_FLAG = (
+    Path(__file__).resolve().parents[3]
+    / "apps"
+    / "web"
+    / "lib"
+    / "cfb-edge-board-public.ts"
+)
+
+
+def test_july31_stale_filter_rejects_live_and_authorizes_only_packet_run() -> None:
+    stale = {
+        "key": "CLE@TB",
+        "projection_created_at": "2026-07-31T06:05:49.707238Z",
+        "run_id": None,
+        "strength_source": "other_or_blended",
+    }
+    unauthorized = {
+        "key": "DET@BUF",
+        "projection_created_at": "2026-09-15T21:15:16.688269Z",
+        "run_id": None,
+        "strength_source": "packaged_epa_prior",
+    }
+    candidate = {
+        "key": "DET@BUF",
+        "projection_created_at": "2026-09-16T15:00:00Z",
+        "run_id": PACKET_RUN_ID,
+        "strength_source": "packaged_epa_prior",
+        "personnel_overlay": False,
+        "injury_overlay": False,
+    }
+    assert is_july31_stale(stale) is True
+    assert authorize_candidate_row(stale)["authorized"] is False
+    assert "july31_stale_projection" in authorize_candidate_row(stale)["reasons"]
+    assert authorize_candidate_row(unauthorized)["authorized"] is False
+    assert "unauthorized_partial_remat_null_run_id" in authorize_candidate_row(unauthorized)["reasons"]
+    assert authorize_candidate_row(candidate)["authorized"] is True
+    leak = classify_live_leak()
+    assert leak["july31_cannot_enter_candidate"] is True
+    assert leak["upcoming_authorized_as_candidate_n"] == 0
+    assert leak["week1_july31_n"] == 16
+    assert leak["candidate_filter_rejects_all_live_rows"] is True
+
+
+def test_atl_pit_wl_refuse_still_holds() -> None:
+    proof = prove_wl_refuse_holds()
+    assert proof["passed"] is True
+    assert proof["material_wl_vs_epa"] is True
+    assert proof["adhoc_source"] == "packaged_epa_prior"
+    assert proof["adhoc_refused_win_loss"] is True
+    assert proof["missing_epa_refuse_reason"] == "packaged_epa_unavailable"
+    assert abs(float(proof["wl_spread_home"]) + 7.55) < 0.05
+
+
+def test_gate1_resolves_atl_pit_remat_and_keeps_reopen_fail() -> None:
+    report = build_gate1_integrity()
+    assert report["candidate_path"] == "PASS"
+    assert report["focus_integrity"]["atl_pit_hold_resolved"] is True
+    assert report["focus_integrity"]["atl_pit_remat_spread_home"] is not None
+    assert report["focus_integrity"]["chi_car_remat_spread_home"] is not None
+    assert report["focus_integrity"]["passed"] is True
+    assert "ATL@PIT" in report["focus_integrity"]["material_wl_vs_epa_keys"]
+    assert report["wl_refuse"]["passed"] is True
+    assert report["july31_leak"]["july31_cannot_enter_candidate"] is True
+    assert report["live_production_isolation"] == "FAIL"
+    assert report["reopen_gate"] == "FAIL"
+    assert report["recommendation"] == "HOLD"
+    assert report["production_promote"] is False
+    assert report["scoring_equation_changed"] is False
+    assert locked_scoring_snapshot()["base_total_points"] == LOCKED_SCORING["base_total_points"]
+
+
+def test_w2_shadow_has_every_game_and_no_absurdities() -> None:
+    shadow = build_shadow_slate(weeks=(2,))
+    keys = {g["key"] for g in shadow["games"]}
+    expected = {f"{g['away']}@{g['home']}" for g in NFL_2026_W2_SLATE}
+    assert keys == expected
+    assert shadow["game_count"] == 16
+    assert shadow["run_id"] == PACKET_RUN_ID
+    for game in shadow["games"]:
+        assert game["run_id"] == PACKET_RUN_ID
+        assert game["injury_personnel_status"] == "OFF"
+        assert game["strength_source"] == "packaged_epa_prior"
+        assert game["data_timestamp"]["live_projection_used_as_fair"] is False
+        assert game["overlays"]["personnel_margin_points"] == 0.0
+        assert game["overlays"]["injuries_margin_points"] == 0.0
+        assert abs(float(game["ke_fair_spread_home"])) < 20
+        assert 28 < float(game["ke_fair_total"]) < 70
+    audit = audit_shadow(shadow)
+    assert audit["sanity"] == "PASS"
+    assert not audit["absurdities"]
+    assert not audit["provenance_fail"]
+
+
+def test_canonical_w2_matches_locked_slate() -> None:
+    canon = {(r["away"], r["home"]) for r in load_canonical_slate((2,))}
+    locked = {(g["away"], g["home"]) for g in NFL_2026_W2_SLATE}
+    assert canon == locked
+
+
+def test_frozen_eval_does_not_fit_ats_or_change_coeffs() -> None:
+    ev = frozen_eval_w1()
+    assert ev["ats_fitting"] is False
+    assert ev["coefficient_changes"] is False
+    assert ev["n_w1"] == len(NFL_2026_W1_OUTCOMES) == 16
+    assert ev["w1_oos"]["epa_margin_mae"] is not None
+    assert ev["w1_oos"]["epa_total_mae"] is not None
+    assert ev["w1_oos"]["wl_margin_mae"] is not None
+    records = records_after_week1()
+    assert records["PIT"] == "1-0"
+    assert records["ATL"] == "0-1"
+    assert records["CHI"] == "1-0"
+    assert records["CAR"] == "0-1"
+
+
+def test_packet_recommendation_is_hold_not_go() -> None:
+    bundle = assemble_packet()
+    packet = bundle["packet"]
+    assert packet["recommendation"] == "HOLD"
+    assert packet["production_promote"] is False
+    assert packet["coming_soon"] is True
+    assert packet["public_flags"]["NFL_EDGE_BOARD_PUBLIC_ENABLED"] is False
+    assert packet["cfb"] == "separate_do_not_bless"
+    assert packet["gate1"]["candidate_path"] == "PASS"
+    assert packet["gate1"]["reopen_gate"] == "FAIL"
+    assert packet["gate2"]["sanity"] == "PASS"
+    assert packet["gate3"]["verdict"] == "IN_PROGRESS_THIN"
+    assert "NFL_EDGE_BOARD_PUBLIC_ENABLED = false" in PUBLIC_FLAG.read_text(encoding="utf-8")
+    assert "CFB_EDGE_BOARD_PUBLIC_ENABLED = false" in PUBLIC_FLAG.read_text(encoding="utf-8")

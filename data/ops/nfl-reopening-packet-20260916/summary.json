@@ -1,0 +1,89 @@
+{
+  "as_of": "2026-09-16",
+  "cfb": "separate_do_not_bless",
+  "checksum_sha256": "9ed27f59ed308a9a3b5152bce33e3df4c06771ae7631eeddf395154c3ddfadf8",
+  "coming_soon": true,
+  "controlled_reopen_order_if_go": [
+    "model_fair_internal_only",
+    "overview_widgets",
+    "edge_board_last"
+  ],
+  "gate1": {
+    "atl_pit_hold_resolved": true,
+    "candidate_path": "PASS",
+    "checksum_sha256": "3e9b4a8a9e623204eec739b07ae4e425ee1084a5e643c306c7966b16e352bd98",
+    "july31_rejected_from_candidate": true,
+    "live_production_isolation": "FAIL",
+    "reopen_gate": "FAIL",
+    "wl_refuse_passed": true
+  },
+  "gate2": {
+    "absurdities": [],
+    "checksum_sha256": "6e6b9ed1f8cef75504284ae51b59272091524fbcb6e017c687722e5d4bbbc027",
+    "flagged_games": [
+      "CAR@ATL",
+      "CLE@TB",
+      "DET@BUF",
+      "IND@KC",
+      "MIA@SF",
+      "NO@BAL"
+    ],
+    "flagged_later_weeks": [
+      "ARI@NYG",
+      "ARI@SF",
+      "ATL@GB",
+      "CAR@CLE",
+      "CIN@PIT",
+      "DEN@SF",
+      "JAX@CIN",
+      "KC@MIA",
+      "MIA@MIN"
+    ],
+    "sanity": "PASS",
+    "shadow_game_count": 48,
+    "w2_game_count": 16
+  },
+  "gate3": {
+    "ats_fitting": false,
+    "checksum_sha256": "dff1afb6d73a863e294bc147509171939030b1bf424bb8635a71dd61cb532b0d",
+    "coefficient_changes": false,
+    "n_w1": 16,
+    "pre_repair": {
+      "enterprise_overall": "RED",
+      "evidence_quality": "GREEN",
+      "generated_at": "2026-09-04T04:46:39.131508+00:00",
+      "lab_scorecard": "data/ops/lab/nfl-spread-scorecard-v1.json",
+      "market_edge_evidence": "GREEN",
+      "note": "Pre-repair baseline is the 2026-09-04 frozen protocol fill + 2026-07-28 enterprise gates. Repair did not retune coefficients, so historical ATS/CLV is inherited \u2014 not a new fit.",
+      "predictive_quality": "YELLOW",
+      "subscriber_influence": "LIMITED"
+    },
+    "verdict": "IN_PROGRESS_THIN",
+    "w1_oos": {
+      "epa_margin_bias": 0.8431,
+      "epa_margin_mae": 12.6044,
+      "epa_total_bias": -4.4865,
+      "epa_total_mae": 13.2488,
+      "july31_margin_bias": 2.1963,
+      "july31_margin_mae": 12.1913,
+      "july31_total_bias": -6.275,
+      "july31_total_mae": 13.5125,
+      "wl_margin_bias": 1.8625,
+      "wl_margin_mae": 7.7,
+      "wl_total_bias": -3.9174,
+      "wl_total_mae": 13.4375
+    }
+  },
+  "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
+  "overlays_off": true,
+  "packet_id": "nfl-reopening-packet-20260916",
+  "production_promote": false,
+  "public_flags": {
+    "CFB_EDGE_BOARD_PUBLIC_ENABLED": false,
+    "NFL_EDGE_BOARD_PUBLIC_ENABLED": false
+  },
+  "recommendation": "HOLD",
+  "run_id": "nfl-reopening-packet-20260916-shadow",
+  "scoring_equation_changed": false,
+  "stop": "Ryan CLEAR required. No customer-facing reopen in this PR."
+}

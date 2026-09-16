@@ -1,0 +1,118 @@
+{
+  "absurdities": [],
+  "checksum_sha256": "6e6b9ed1f8cef75504284ae51b59272091524fbcb6e017c687722e5d4bbbc027",
+  "flagged": [
+    {
+      "delta": -8.4007,
+      "ke_fair_total": 46.0993,
+      "key": "DET@BUF",
+      "market_total": 54.5,
+      "reason": "total_vs_market_compressed_or_wide"
+    },
+    {
+      "delta": -5.4043,
+      "ke_fair_spread_home": -2.9043,
+      "key": "CAR@ATL",
+      "market_spread_home": 2.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 6.8664,
+      "ke_fair_spread_home": -1.6336,
+      "key": "CLE@TB",
+      "market_spread_home": -8.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 9.5365,
+      "ke_fair_spread_home": -3.9635,
+      "key": "MIA@SF",
+      "market_spread_home": -13.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 6.9112,
+      "ke_fair_spread_home": -1.5888,
+      "key": "NO@BAL",
+      "market_spread_home": -8.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 5.7039,
+      "ke_fair_spread_home": -0.7961,
+      "key": "IND@KC",
+      "market_spread_home": -6.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 4.2256,
+      "ke_fair_spread_home": -2.2744,
+      "key": "ATL@GB",
+      "market_spread_home": -6.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 5.2825,
+      "ke_fair_spread_home": -3.2175,
+      "key": "ARI@SF",
+      "market_spread_home": -8.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": -4.9276,
+      "ke_fair_spread_home": -1.9276,
+      "key": "CAR@CLE",
+      "market_spread_home": 3.0,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": -5.3719,
+      "ke_fair_spread_home": -2.8719,
+      "key": "CIN@PIT",
+      "market_spread_home": 2.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": -5.7707,
+      "ke_fair_spread_home": 2.7293,
+      "key": "KC@MIA",
+      "market_spread_home": 8.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 5.3253,
+      "ke_fair_spread_home": -1.1747,
+      "key": "ARI@NYG",
+      "market_spread_home": -6.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 4.2673,
+      "ke_fair_spread_home": 1.7673,
+      "key": "DEN@SF",
+      "market_spread_home": -2.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 5.2886,
+      "ke_fair_spread_home": 2.7886,
+      "key": "JAX@CIN",
+      "market_spread_home": -2.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "delta": 4.018,
+      "ke_fair_spread_home": -2.982,
+      "key": "MIA@MIN",
+      "market_spread_home": -7.0,
+      "reason": "spread_vs_market"
+    }
+  ],
+  "note": "PASS means no \u221237 / ~81-class absurdity and every candidate row traces to the shadow run_id with overlays OFF. Market deltas are flags, not automatic FAIL (compressed totals are a known residual).",
+  "production_promote": false,
+  "provenance_fail": [],
+  "run_id": "nfl-reopening-packet-20260916-shadow",
+  "sanity": "PASS",
+  "shadow_game_count": 48,
+  "w2_game_count": 16
+}
