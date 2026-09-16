@@ -1,0 +1,324 @@
+{
+  "desk_date": "2026-09-16",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Wednesday, Sep 16",
+    "bottom_line": "Week 2 REG live. Afternoon IR/availability only: MIN Mason thumb IR; SF Tonges IR; ARI Crawford IR; KC McDonald IR (Tue card was DNR — do not invent); MIA Louis IR; CLE Sampson IR (Tue quiet-skip); DET TNF OUT Mahogany+Miller; BUF TNF Q Bishop/Johnson/Sanders; ATL Wed DNP Lindstrom/Terrell/Tua. All Pass. DEN Over 2/5 KEEP + LAC Under 2/5 KEEP + KC Pass unchanged. No minted KEI.",
+    "storylines": [
+      "MIN: O'Connell — Mason thumb fracture, surgery done, IR ≥4 (CBS: earliest W7 after bye). Dallas promoted; Ford to PS. Murray still protocol — do not invent QB1.",
+      "SF: Club placed TE Tonges on IR; Hodge to 53, Stoll to PS. NBC Sports: knee/MCL from W1; no timeline on the club note.",
+      "ARI: Club IR S Crawford (right ankle, blocked-punt play). King promoted. Timeline TBD pending LaFleur.",
+      "KC: Club/SI — Cooper McDonald (knee) → IR ≥4 after MNF DNR. VanSumeren signed. Pass on 10.5 stands.",
+      "MIA: Club IR S Kyle Louis; Simpson to 53. SI/NBC: MCL sprain, ≥4.",
+      "CLE: Club IR RB Sampson (knee) Tue 3:10p — missed the Tue amend. McLaughlin signed. AP: min. 4.",
+      "TNF: Lions OUT Mahogany (hip) + Miller (knee); Reed Q. Bills Q Bishop / Johnson / Sanders; Bernard LP no designation. Pass.",
+      "ATL: Wed DNP Lindstrom (concussion), Terrell (shoulder), Tua (oblique). Penix/Rush FP. Stefanski: all QBs still in play. Hand season already filed. Pass."
+    ],
+    "what_to_watch": "TNF inactives Thu. Murray protocol + ATL QB week. Crawford/Tonges timelines. Do not restamp Mon street or mint KEI. Quiet skip: NFC East; AFC North; AFC South; NFC South beyond ATL; NFC West beyond SF/ARI; AFC East beyond BUF/MIA; AFC West beyond KC; NFC North beyond MIN/DET.",
+    "sources": [
+      {
+        "label": "ESPN — Mason IR after thumb surgery (Seifert)",
+        "href": "https://www.espn.com/nfl/story/_/id/49959077/vikings-rb-jordan-mason-put-ir-having-surgery-thumb"
+      },
+      {
+        "label": "CBS Sports — Mason IR ≥4; earliest W7",
+        "href": "https://www.cbssports.com/nfl/news/vikings-jordan-mason-on-injured-reserve-thumb-fracture-whos-up-next/"
+      },
+      {
+        "label": "49ers.com — Tonges IR; Hodge / Stoll",
+        "href": "https://www.49ers.com/news/49ers-promote-wr-khadarel-hodge-to-active-roster-sign-te-jack-stoll-place-te-jake-tonges-on-ir"
+      },
+      {
+        "label": "azcardinals.com — Crawford IR (Urban)",
+        "href": "https://www.azcardinals.com/news/cardinals-place-kitan-crawford-on-injured-reserve"
+      },
+      {
+        "label": "SI — Chiefs McDonald IR; VanSumeren",
+        "href": "https://www.si.com/nfl/chiefs/onsi/chiefs-place-cooper-mcdonald-on-injured-reserve-shake-up-roster-for-week-2"
+      },
+      {
+        "label": "Dolphins.com — Louis IR; Simpson signed",
+        "href": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x1408"
+      },
+      {
+        "label": "Browns.com — Sampson IR; McLaughlin signed",
+        "href": "https://www.clevelandbrowns.com/news/browns-place-rb-dylan-sampson-on-injured-reserve"
+      },
+      {
+        "label": "Lions.com — Wed TNF designations",
+        "href": "https://www.detroitlions.com/news/lions-at-bills-injury-report-sept-16-mahogany-miller-reed"
+      },
+      {
+        "label": "Bills.com — Week 2 injury report",
+        "href": "https://www.buffalobills.com/team/injury-report/week/reg-2"
+      },
+      {
+        "label": "Falcons.com — Wed IR (Lindstrom / Terrell / Tua)",
+        "href": "https://www.atlantafalcons.com/news/falcons-injury-report-a-j-terrell-chris-lindstrom-tua-tagovailoa-panthers"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "MIN",
+      "title": "Vikings — Sep 16",
+      "bottom_line": "O'Connell: Jordan Mason (thumb fracture) had surgery and is on IR — miss ≥4; not expected longer than four weeks (CBS: earliest W7 after the bye). Dallas promoted; Ford to PS. Murray still in concussion protocol. Pass — RB depth flag only; do not invent QB1 or mint a win-total.",
+      "key_points": [
+        "ESPN Kevin Seifert (Wed 3:13p ET): O'Connell said Mason will miss at least the next four weeks after surgery to repair a fractured thumb. Mason reported soreness Monday; it is unclear when the injury occurred. He led MIN with 15 carries / 59 yards in the W1 win vs GB.",
+        "CBS Tyler Sullivan: IR parameters cover CHI / TB / MIA / NO; bye in W6 so earliest return window is W7 vs IND if cleared. Corresponding: DeeJay Dallas to the 53; Jerome Ford to the practice squad. Rookie Demond Claiborne was inactive W1 — do not crown RB2.",
+        "Murray remains in concussion protocol for Sunday at CHI. ESPN: status in doubt; do not invent a Week 2 starter. Wentz finished W1. Pass — no minted KEI."
+      ],
+      "what_to_watch": "Murray protocol progress before CHI. Jones / Dallas usage only after the club names it. Pass on win-total.",
+      "is_material_depth": true,
+      "sot_flag": "Mason → IR (thumb surgery) ≥4. Dallas promoted. Murray still protocol. Pass — no QB1 / RB2 invent.",
+      "sources": [
+        {
+          "label": "ESPN — Mason IR after thumb surgery (Seifert)",
+          "href": "https://www.espn.com/nfl/story/_/id/49959077/vikings-rb-jordan-mason-put-ir-having-surgery-thumb"
+        },
+        {
+          "label": "CBS Sports — Mason IR; earliest W7 after bye",
+          "href": "https://www.cbssports.com/nfl/news/vikings-jordan-mason-on-injured-reserve-thumb-fracture-whos-up-next/"
+        }
+      ]
+    },
+    {
+      "team_id": "SF",
+      "title": "49ers — Sep 16",
+      "bottom_line": "Club placed TE Jake Tonges on IR and promoted WR KhaDarel Hodge; TE Jack Stoll to the practice squad. NBC Sports: knee/MCL from W1; no return timeline on the club note. Pass — TE depth flag; do not invent a Kittle snap path or mint KEI.",
+      "key_points": [
+        "49ers.com (Wed 11:02a): promoted Hodge to the active roster and signed Stoll to the practice squad, placing Tonges on injured reserve to make room. Tonges appeared in the Melbourne Week 1 win vs LAR.",
+        "NBC Sports: Tonges injured his MCL in Week 1; timeline not yet reported. Club release does not stamp a week window — do not invent one.",
+        "Do not treat Hodge/Stoll as named replacements in SoT. Pass on restamping the SF win-total."
+      ],
+      "what_to_watch": "Any club timeline on Tonges before MIA. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Tonges → IR. Hodge promoted; Stoll PS. Pass — no TE invent / no minted KEI.",
+      "sources": [
+        {
+          "label": "49ers.com — Tonges IR; Hodge / Stoll",
+          "href": "https://www.49ers.com/news/49ers-promote-wr-khadarel-hodge-to-active-roster-sign-te-jack-stoll-place-te-jake-tonges-on-ir"
+        },
+        {
+          "label": "NBC Sports — Tonges IR (knee/MCL)",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-16/49ers-place-jake-tonges-knee-on-injured-reserve"
+        }
+      ]
+    },
+    {
+      "team_id": "ARI",
+      "title": "Cardinals — Sep 16",
+      "bottom_line": "Club placed S Kitan Crawford (right ankle) on IR after the W1 blocked-punt play vs LAC. King promoted; Green + Reed II to PS. Timeline TBD until LaFleur. Pass — secondary depth flag only.",
+      "key_points": [
+        "azcardinals.com Darren Urban (Wed 10:33a): Crawford hurt the right ankle on the Fehoko blocked-punt play in the opener; placed on injured reserve Wednesday.",
+        "Urban: in-season IR is technically eligible to return later; Crawford's situation will not be addressed until Mike LaFleur talks later Wednesday. Do not invent a week window.",
+        "Corresponding: CB Kalen King from the practice squad. PS adds CB Art Green and S Jerrick Reed II after releasing WR Ihmir Smith-Marsette Tuesday. Taylor-Demerson (ribs) missed W1; Williams was inactive (Achilles ramp) — holdovers, not new IR."
+      ],
+      "what_to_watch": "LaFleur timeline on Crawford before SEA. Pass on win-total.",
+      "is_material_depth": true,
+      "sot_flag": "Crawford → IR (right ankle). King promoted. Timeline TBD. Pass.",
+      "sources": [
+        {
+          "label": "azcardinals.com — Crawford IR (Urban)",
+          "href": "https://www.azcardinals.com/news/cardinals-place-kitan-crawford-on-injured-reserve"
+        }
+      ]
+    },
+    {
+      "team_id": "KC",
+      "title": "Chiefs — Sep 16",
+      "bottom_line": "Club/SI: LB Cooper McDonald (knee) placed on IR — miss ≥4 after the MNF DNR. VanSumeren signed to the 53. Tue card said do not invent IR; the transaction is now locked. Pass on 10.5 stands — no mint.",
+      "key_points": [
+        "SI Jordan Foote: Chiefs acknowledged Wednesday that McDonald is on Reserve/Injured. Knee on his second snap of MNF (kickoff coverage vs DEN). Out at least vs IND / MIA / LV / LAC.",
+        "NBC Sports (Schultz): expected to return this season. Corresponding: FB Ben VanSumeren signed from the practice squad; DE Michael Heldman and CB Melvin Smith to PS.",
+        "Tue desk: Delane / McDonald DNR — do not invent IR. McDonald IR is the new fact; Delane Week 2 designation still open. Pass on 10.5 (house/street gap unchanged)."
+      ],
+      "what_to_watch": "Delane / Simmons first Week 2 designations before IND. Pass — no restamp.",
+      "is_material_depth": true,
+      "sot_flag": "Cooper McDonald → IR (knee) ≥4. VanSumeren signed. Pass on 10.5.",
+      "sources": [
+        {
+          "label": "SI — McDonald IR; VanSumeren signed",
+          "href": "https://www.si.com/nfl/chiefs/onsi/chiefs-place-cooper-mcdonald-on-injured-reserve-shake-up-roster-for-week-2"
+        },
+        {
+          "label": "NBC Sports — McDonald IR; expected back this season",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-16/kc-places-cooper-mcdonald-on-ir"
+        }
+      ]
+    },
+    {
+      "team_id": "MIA",
+      "title": "Dolphins — Sep 16",
+      "bottom_line": "Club placed S Kyle Louis on IR and signed CB Jaylin Simpson off the practice squad. SI/NBC: MCL sprain from W1 at LV — miss ≥4. Pass — safety depth flag; do not restamp 3.5.",
+      "key_points": [
+        "MiamiDolphins.com (Wed 1:00p): Louis to injured reserve; Simpson to the active roster; LS Cal Adomitis to the practice squad. Louis debuted in the opener after a fourth-round pick (138th).",
+        "SI: Hafley said Monday Louis would miss a few weeks; IR now locks four. Misses SF / KC / MIN / CIN; first eligible after the bye vs NYJ if cleared. NBC Sports: MCL sprain.",
+        "Louis is a depth/availability flag next to already-filed IR names. Pass (show both) on 3.5 stands — one IR does not close the house/street fight."
+      ],
+      "what_to_watch": "Safety snaps without Louis at SF. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Louis → IR (MCL) ≥4. Simpson promoted. Pass on 3.5.",
+      "sources": [
+        {
+          "label": "Dolphins.com — Louis IR; Simpson signed",
+          "href": "https://www.miamidolphins.com/news/dolphins-make-roster-moves-x1408"
+        },
+        {
+          "label": "NBC Sports — Louis IR (MCL)",
+          "href": "https://www.nbcsports.com/fantasy/football/player-news/2026-09-16/dolphins-place-s-kyle-louis-on-ir"
+        },
+        {
+          "label": "SI — Louis IR; first eligible after bye",
+          "href": "https://www.si.com/nfl/dolphins/onsi/breaking-down-the-dolphins-roster-moves-headed-by-rookie-kyle-louis-going-on-ir-01m2nk2rt2gw"
+        }
+      ]
+    },
+    {
+      "team_id": "CLE",
+      "title": "Browns — Sep 16",
+      "bottom_line": "Club placed RB Dylan Sampson (knee) on IR Tuesday 3:10p — missed the Tue afternoon amend (quiet skip). McLaughlin signed from the PS. AP: miss ≥4. Pass — RB depth flag; do not invent a committee or reopen QB1.",
+      "key_points": [
+        "ClevelandBrowns.com (Tue 3:10p): Sampson (knee) to injured reserve; Jaleel McLaughlin signed from the practice squad. Sampson hurt the knee in Q1 of the 34–10 loss at JAX.",
+        "AP / Spectrum: miss a minimum of four games; eligible before BAL on Oct 18 if cleared. Sanders took over kick-return duty in W1 (74-yarder).",
+        "Watson/Gabriel remain Pass — do not reopen QB1. Jenkins W2 designation still the OL watch from Monday. Pass on a new win-total."
+      ],
+      "what_to_watch": "McLaughlin usage vs TB; Jenkins Week 2 designation. Pass.",
+      "is_material_depth": true,
+      "sot_flag": "Sampson → IR (knee) ≥4. McLaughlin signed. Pass — no QB reopen.",
+      "sources": [
+        {
+          "label": "Browns.com — Sampson IR; McLaughlin signed",
+          "href": "https://www.clevelandbrowns.com/news/browns-place-rb-dylan-sampson-on-injured-reserve"
+        },
+        {
+          "label": "AP — Sampson IR, min. 4 (Spectrum)",
+          "href": "https://spectrumnews1.com/oh/columbus/news/2026/09/16/browns-place-running-back-dylan-sampson-on-injured-reserve"
+        }
+      ]
+    },
+    {
+      "team_id": "DET",
+      "title": "Lions — Sep 16",
+      "bottom_line": "Official TNF designations: LG Christian Mahogany (hip) OUT; RT Blake Miller (knee) OUT; CB D.J. Reed (foot) questionable. Scruggs FP / Izien FP — no game designation. Pass — OL/CB availability flags; do not invent W2 starters.",
+      "key_points": [
+        "Lions.com (Wed 3:10p): walkthrough-week estimates locked as NP/NP/NP + OUT for Mahogany and Miller. Reed LP Tue/Wed → questionable. Izien full all three days; Scruggs limited Mon/Tue, full Wed — neither carries a designation.",
+        "Tue desk had Mon DNP estimates only. This is the official short-week stamp. Pacheco back-surgery / ~Dec path already filed Tue — do not re-litigate.",
+        "Pride of Detroit names Bartch / Borom as the expected OL path — beat path only, not a club-named starter on the IR sheet. Pass — no win-total mint."
+      ],
+      "what_to_watch": "Thursday inactives (Reed). Pass on inventing LG/RT.",
+      "is_material_depth": true,
+      "sot_flag": "Mahogany OUT (hip); Miller OUT (knee); Reed Q. Pass — no OL invent.",
+      "sources": [
+        {
+          "label": "Lions.com — Wed TNF designations",
+          "href": "https://www.detroitlions.com/news/lions-at-bills-injury-report-sept-16-mahogany-miller-reed"
+        },
+        {
+          "label": "Pride of Detroit — Mahogany / Miller OUT",
+          "href": "https://www.prideofdetroit.com/detroit-lions-injuries/173303/lions-bills-week-2-injury-report-christian-mahogany-blake-miller"
+        }
+      ]
+    },
+    {
+      "team_id": "BUF",
+      "title": "Bills — Sep 16",
+      "bottom_line": "Official TNF report: S Cole Bishop (knee/groin) Q; RB Ty Johnson (hamstring) Q; DL T.J. Sanders (knee/illness) Q. ILB Terrel Bernard (calf) limited all three days — no game designation. Pass — short-week flags only; Mon 10.5 stamp stands.",
+      "key_points": [
+        "buffalobills.com Week 2 IR: Bishop FP/LP/LP → questionable; Johnson LP/LP/LP → questionable; Sanders LP/DNP/LP → questionable (knee/illness).",
+        "Bernard LP/LP/LP with no designation. Hancock full all three days, no designation. Chubb has no Wednesday participation stamp on the club table — do not invent FP/OUT.",
+        "Tue desk was Monday estimates only. Official sheet is the upgrade. Pass on 10.5 — no mint / no chase."
+      ],
+      "what_to_watch": "Thursday inactives for Bishop / Johnson / Sanders. Pass.",
+      "is_material_depth": true,
+      "sot_flag": "Bishop / Johnson / Sanders Q. Bernard LP no designation. Pass on 10.5.",
+      "sources": [
+        {
+          "label": "Bills.com — Week 2 injury report",
+          "href": "https://www.buffalobills.com/team/injury-report/week/reg-2"
+        },
+        {
+          "label": "Lions.com — both-club Wed designations",
+          "href": "https://www.detroitlions.com/news/lions-at-bills-injury-report-sept-16-mahogany-miller-reed"
+        }
+      ]
+    },
+    {
+      "team_id": "ATL",
+      "title": "Falcons — Sep 16",
+      "bottom_line": "Wed IR: Lindstrom DNP (concussion), Terrell DNP (shoulder), Tua DNP (oblique). Penix (knee) and Rush (back) full. Stefanski: all three QBs still under consideration — not ruling anyone out. Hand season-ending already filed Tue. Pass — do not invent QB1.",
+      "key_points": [
+        "Falcons.com Will McFadden (Wed 3:51p): Lindstrom held out after the W1 concussion (Q4 exit). Terrell (shoulder) also DNP after leaving and returning vs PIT. Tua DNP as he continues the oblique recovery from last Thursday.",
+        "Stefanski Wednesday: \"I'm not ruling anyone out. Tua is not going to practice today, though he's getting better. Cooper and Mike will practice today, so we'll work through it.\" Full: Bowman (Achilles), Penix, Rush.",
+        "Hand season-ending quad already on the Tue card — do not re-litigate. Pass — availability only; no minted KEI."
+      ],
+      "what_to_watch": "Thu/Fri participation for Lindstrom protocol + QB designation before CAR. Pass.",
+      "is_material_depth": true,
+      "sot_flag": "Lindstrom DNP (concussion); Terrell DNP (shoulder); Tua DNP. Penix/Rush FP. QB1 unset. Pass.",
+      "sources": [
+        {
+          "label": "Falcons.com — Wed IR (McFadden)",
+          "href": "https://www.atlantafalcons.com/news/falcons-injury-report-a-j-terrell-chris-lindstrom-tua-tagovailoa-panthers"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "MIN",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Mason → IR (thumb surgery) ≥4. Dallas promoted. Murray still protocol. Pass."
+    },
+    {
+      "team_id": "SF",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Tonges → IR. Hodge promoted. Pass — no TE invent."
+    },
+    {
+      "team_id": "ARI",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Crawford → IR (right ankle). Timeline TBD. Pass."
+    },
+    {
+      "team_id": "KC",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Cooper McDonald → IR (knee) ≥4. Pass on 10.5 stands."
+    },
+    {
+      "team_id": "MIA",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Louis → IR (MCL) ≥4. Pass on 3.5 stands."
+    },
+    {
+      "team_id": "CLE",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Sampson → IR (knee) ≥4. McLaughlin signed. Pass."
+    },
+    {
+      "team_id": "DET",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Mahogany OUT; Miller OUT; Reed Q. Pass — no OL invent."
+    },
+    {
+      "team_id": "BUF",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Bishop / Johnson / Sanders Q. Pass on 10.5."
+    },
+    {
+      "team_id": "ATL",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Lindstrom/Terrell/Tua DNP. QB1 unset. Pass."
+    }
+  ]
+}

@@ -40,6 +40,16 @@ describe("resolveCurrentNflRegWeek", () => {
     );
   });
 
+  it("stays proven Week 2 on Wednesday Sep 16 (TNF not yet kicked)", () => {
+    const wed = Date.parse("2026-09-16T21:00:00.000Z");
+    const resolved = resolveCurrentNflRegWeek(wed);
+    expect(resolved.week).toBe(2);
+    expect(resolved.proven).toBe(true);
+    expect(resolved.reason).toBe("prior_week_final");
+    expect(currentNflRegWeekFromSchedule(wed)).toBe(2);
+    expect(nflRegWeekPostureLine(wed)).toBe("Week 2 REG live · PRE off board");
+  });
+
   it("treats pre-kickoff as upcoming Week 1, not a silent pin", () => {
     const resolved = resolveCurrentNflRegWeek(PRE_WEEK1);
     expect(resolved).toEqual({
