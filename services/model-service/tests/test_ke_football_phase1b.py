@@ -9,7 +9,7 @@ import os
 
 os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/test")
 
-from src.services.ke_football import PHASE, PRODUCTION_PROMOTE, TAXONOMY
+from src.services.ke_football import MEASUREMENT_PHASE, PRODUCTION_PROMOTE, TAXONOMY
 from src.services.ke_football.adapters import from_cfb_row, from_nfl_row
 from src.services.ke_football.aggregate import build_team_games, team_game_components
 from src.services.ke_football.bakeoff import (
@@ -32,7 +32,7 @@ from tests.test_ke_football_measurement import _cfb, _nfl, _slate
 def test_phase1b_flags() -> None:
     assert PRODUCTION_PROMOTE is False
     assert TAXONOMY == ("RAW", "DERIVED", "ADJUSTED", "MODELED")
-    assert PHASE == "measurement_phase1b"
+    assert MEASUREMENT_PHASE == "measurement_phase1b"
 
 
 def _drive_plays(*, result: str, yte_scrim: float, kickoff_yte: float = 35.0, xp: bool = False):

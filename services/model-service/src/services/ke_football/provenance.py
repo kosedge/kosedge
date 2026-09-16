@@ -174,3 +174,40 @@ def modeled_forbidden(metric_id: str, *, unit: str = "epa_per_play") -> Componen
             "see": "docs/ratings/KE_FOOTBALL_V1_PROVENANCE_AMEND_2026-09-15.md",
         },
     )
+
+
+def modeled(
+    metric_id: str,
+    value: Optional[float],
+    *,
+    unit: str,
+    n: int,
+    notes: Optional[Dict[str, Any]] = None,
+    missing_fields: Optional[List[str]] = None,
+    thin_n: Optional[int] = None,
+) -> Component:
+    """Publish a MODELED cell. Never fills a missing mean. Not a production promote."""
+    extra = dict(notes or {})
+    extra.setdefault("production_promote", False)
+    if value is None or n <= 0:
+        return Component(
+            id=metric_id,
+            value=None,
+            unit=unit,
+            layer=Layer.MODELED,
+            status=Status.DATA_INSUFFICIENT,
+            n=int(n),
+            missing_fields=list(missing_fields or []),
+            notes=extra,
+        )
+    status = Status.THIN if (thin_n is not None and n < thin_n) else Status.OK
+    return Component(
+        id=metric_id,
+        value=float(value),
+        unit=unit,
+        layer=Layer.MODELED,
+        status=status,
+        n=int(n),
+        missing_fields=list(missing_fields or []),
+        notes=extra,
+    )
