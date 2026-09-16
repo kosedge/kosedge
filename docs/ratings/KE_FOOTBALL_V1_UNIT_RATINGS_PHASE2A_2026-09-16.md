@@ -12,6 +12,16 @@ Hierarchy: plays → measurements → **unit ratings** → (later) team strength
 
 This note constructs **KE Offensive Efficiency** (`ke.off_unit`) and **KE Defensive Efficiency** (`ke.def_unit`) only. It does **not** weight them into Team Strength.
 
+### Ryan PARTIAL amend (docs only — no refit)
+
+| #   | Required                                                         | Lock                                                                                                                                                                                                 |
+| --- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | Trailing EPA vs shrunken EPA MAE per unit (Δ, %, n, uncertainty) | Confirmation table below. NFL −0.54% / −0.34% (n=214). CFB −2.04% / −2.33% (n=446). MAE SE / bootstrap **missing**.                                                                                  |
+| 2   | `k=160` selected **before** frozen confirmation                  | 2025 only. Objective = next-game EPA/play MAE. NFL weeks 5–10 (n=170). CFB weeks 4–8 (n=577). Grid `{0,20,40,80,160}` (cap). **No folds.** Confirmation NFL 11–18 / CFB 9–13 **not used to pick k**. |
+| 3   | Exact formula + defensive sign                                   | Trailing EPA is **not** league-centered. `unit = μ + n/(n+160)×(EPA − μ)`. `ke.def_unit` = EPA **allowed** (lower better; not flipped).                                                              |
+| 4   | `n/(n+k)` label                                                  | **Shrinkage weight / sample-strength.** Not calibrated uncertainty, SE, or CI.                                                                                                                       |
+| 5   | PARTIAL permit vs forbid                                         | Unvalidated + permit/forbid listed under Scorecard. Frozen `scorecard.json` `phase2b_eligible=true` is **superseded** — Phase 2B remains **forbidden**.                                              |
+
 ---
 
 ## Hard stops honored

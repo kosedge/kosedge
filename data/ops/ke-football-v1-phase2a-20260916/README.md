@@ -5,7 +5,7 @@ Opponent adjustment not reopened (`NO_ADJUSTMENT_WINNER`).
 
 | File | What |
 | --- | --- |
-| `SCORECARD.md` | Unit-rating PARTIAL lock + trailing vs shrunken + k provenance |
+| `SCORECARD.md` | Unit-rating PARTIAL lock + Ryan 5-item amend (trailing vs shrink, k, formula, weight, permit/forbid) |
 | `scorecard.json` | Machine companion (grades) |
 | `baseline_comparison.json` | Frozen trailing vs shrunken MAE / Δ / n (no refit) |
 | `nfl_phase2a.json` / `cfb_phase2a.json` | Fits, bakeoff, stability, examples, leakage |

@@ -9,6 +9,16 @@ Complexity did not earn inclusion. That does **not** by itself validate shrinkag
 
 Numbers below are from frozen `nfl_phase2a.json` / `cfb_phase2a.json` (no refit). Companion: `baseline_comparison.json`.
 
+### Ryan PARTIAL amend (docs only — no refit)
+
+| # | Required | Lock |
+| - | -------- | ---- |
+| 1 | Trailing vs shrunken MAE per unit (Δ, %, n, uncertainty) | Confirmation: NFL off −0.54% / def −0.34% (n=214); CFB off −2.04% / def −2.33% (n=446). MAE SE / bootstrap **missing**. |
+| 2 | `k=160` before frozen confirmation | 2025 only; next-game EPA/play MAE; NFL weeks 5–10 (n=170); CFB weeks 4–8 (n=577); grid cap 160; no folds. Confirmation **not** used to pick k. |
+| 3 | Exact formula + defensive sign | Trailing EPA **not** league-centered. `μ + n/(n+160)×(EPA − μ)`. Defense = EPA allowed, **lower better** (not flipped). |
+| 4 | `n/(n+k)` label | Shrinkage weight / sample-strength. **Not** calibrated uncertainty / SE / CI. |
+| 5 | PARTIAL permit vs forbid | Research unit measurement only. Forbids Team Strength, public KE, scoring/market/ATS, boards, opp-adj reopen, Phase 2B. Frozen `scorecard.json` still has `phase2b_eligible=true` from the run — **superseded**; Phase 2B is forbidden. |
+
 ---
 
 ## Definition
