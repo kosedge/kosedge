@@ -1,77 +1,123 @@
 # KE Football v1 — Phase 2A unit rating scorecard
 
 **Status:** `UNIT_RATINGS_PHASE2A` · `production_promote=false`
-**STOP:** Team Strength, overall weights, matchup, scoring, market, ATS, UI, boards.
+**Ryan (2026-09-16):** ACCEPT as **PARTIAL v1 unit measurement only**. No Phase 2B.
+**STOP:** Team Strength, overall weights, matchup, scoring, market, ATS, UI, boards, opp-adj reopen.
 
-`NO_ADJUSTMENT_WINNER` accepted. Opponent adjustment was not reopened.
-Complexity must beat trailing EPA. If it does not, the unit rating is shrunken/raw EPA.
+`NO_ADJUSTMENT_WINNER` held. Unadjusted trailing EPA is the baseline.
+Complexity did not earn inclusion. That does **not** by itself validate shrinkage.
 
-### NFL 2025 as_of 18
+Numbers below are from frozen `nfl_phase2a.json` / `cfb_phase2a.json` (no refit). Companion: `baseline_comparison.json`.
 
-Off winner: `epa_shrunken` · Def winner: `epa_shrunken`
+---
 
-**off unit** — PARTIAL · No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.
+## Definition
 
-| Method | Conf MAE | Conf r | n | Beats EPA? |
-| --- | --- | --- | --- | --- |
-| epa_raw | 0.164 | 0.296 | 214 | False |
-| epa_shrunken | 0.163 | 0.292 | 214 | False |
-| z_pass | 0.164 | 0.298 | 214 | False |
-| z_earned | 0.164 | 0.298 | 214 | False |
-| pca_earned | 0.193 | 0.303 | 214 | False |
-| ridge_earned | 0.163 | 0.313 | 214 | False |
+```text
+w = n / (n + 160)                                 # shrinkage weight / sample-strength
+unit = μ + w × (EPA_trailing − μ)
+```
 
-Earned PARTIAL features: []
-Finishing earned: {'ke.ppo': False, 'ke.finish': False}
-shrink k: 160.0
+Trailing EPA is play-weighted, **not** league-centered. `μ` is the unweighted mean of teams' trailing EPA at as_of W (`week < W`).
 
-**def unit** — PARTIAL · No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.
+| Side | Native unit | Better |
+| --- | --- | --- |
+| `ke.off_unit` | EPA per play | **higher** |
+| `ke.def_unit` | EPA **allowed** per play | **lower** (not flipped) |
 
-| Method | Conf MAE | Conf r | n | Beats EPA? |
-| --- | --- | --- | --- | --- |
-| epa_raw | 0.165 | 0.282 | 214 | False |
-| epa_shrunken | 0.164 | 0.282 | 214 | False |
-| z_pass | 0.167 | 0.258 | 214 | False |
-| z_earned | 0.170 | 0.230 | 214 | False |
-| pca_earned | 0.180 | 0.239 | 214 | False |
-| ridge_earned | 0.170 | 0.159 | 214 | False |
+`w` is **not** a confidence interval, SE, or calibrated uncertainty.
 
-Earned PARTIAL features: ['ke.expl_allowed', 'ke.disruption_proxy_nfl']
-Finishing earned: {}
-shrink k: 160.0
+---
 
-### CFB 2025 as_of 13
+## Trailing vs shrunken (the comparison that must be explicit)
 
-Off winner: `epa_shrunken` · Def winner: `epa_shrunken`
+Δ = shrunken − trailing. Negative = shrinkage better. MAE SE / bootstrap: **missing** (residuals not persisted).
 
-**off unit** — PARTIAL · No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.
+### Frozen confirmation (sealed; k already locked)
 
-| Method | Conf MAE | Conf r | n | Beats EPA? |
-| --- | --- | --- | --- | --- |
-| epa_raw | 0.172 | 0.339 | 446 | False |
-| epa_shrunken | 0.169 | 0.341 | 446 | False |
-| z_pass | 0.173 | 0.319 | 446 | False |
-| z_earned | 0.173 | 0.319 | 446 | False |
-| pca_earned | 0.285 | 0.320 | 446 | False |
-| ridge_earned | 0.173 | 0.318 | 446 | False |
+| Unit | n | Trailing MAE | Shrunken MAE | Abs Δ | Rel % |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| NFL off | 214 | 0.16435 | 0.16346 | −0.00090 | **−0.54%** |
+| NFL def | 214 | 0.16499 | 0.16442 | −0.00057 | **−0.34%** |
+| CFB off | 446 | 0.17226 | 0.16875 | −0.00351 | **−2.04%** |
+| CFB def | 446 | 0.17626 | 0.17215 | −0.00411 | **−2.33%** |
 
-Earned PARTIAL features: []
-Finishing earned: {'ke.ppo': False, 'ke.finish': False}
-shrink k: 160.0
+NFL confirmation move is well under 2%. CFB is about 2%. Point estimates only.
 
-**def unit** — PARTIAL · No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.
+### Selection window (where k was chosen)
 
-| Method | Conf MAE | Conf r | n | Beats EPA? |
-| --- | --- | --- | --- | --- |
-| epa_raw | 0.176 | 0.286 | 446 | False |
-| epa_shrunken | 0.172 | 0.322 | 446 | False |
-| z_pass | 0.176 | 0.286 | 446 | False |
-| z_earned | 0.175 | 0.292 | 446 | False |
-| pca_earned | 0.185 | 0.292 | 446 | False |
-| ridge_earned | 0.173 | 0.293 | 446 | False |
+| Unit | n | Trailing MAE | Shrunken MAE | Abs Δ | Rel % |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| NFL off | 170 | 0.18131 | 0.17679 | −0.00451 | −2.49% |
+| NFL def | 170 | 0.19682 | 0.18874 | −0.00808 | −4.11% |
+| CFB off | 577 | 0.17694 | 0.17067 | −0.00627 | −3.54% |
+| CFB def | 577 | 0.18808 | 0.17361 | −0.01447 | −7.70% |
 
-Earned PARTIAL features: ['ke.success_allowed']
-Finishing earned: {}
-shrink k: 160.0
+---
+
+## Shrinkage selection
+
+| | |
+| --- | --- |
+| Season | 2025 only |
+| Folds | none (no nested holdout) |
+| Grid | `{0, 20, 40, 80, 160}` — 160 is the cap |
+| Objective | next-game EPA/play MAE |
+| NFL selection | weeks 5–10 |
+| CFB selection | weeks 4–8 |
+| Confirmation | NFL 11–18; CFB 9–13 — **not used to pick k** |
+| Per-k table persisted? | **no** (only winning `shrink_k_selection_mae`) |
+
+**Peek:** confirmation MAE was used to **label** the published winner `epa_shrunken` vs trailing. That is a label peek, not a k peek.
+
+---
+
+## Method bakeoff (complexity did not earn)
+
+A composite needed ≥2% confirmation MAE vs the strongest constituent on **both** sides. None did.
+
+### NFL 2025 as_of 18 — confirmation n=214
+
+Off winner: `epa_shrunken` · Def winner: `epa_shrunken` · k=160
+
+| Method | Off MAE | Off r | Def MAE | Def r | Beats trailing 2%? |
+| --- | ---: | ---: | ---: | ---: | --- |
+| epa_raw (trailing) | 0.164 | 0.296 | 0.165 | 0.282 | baseline |
+| epa_shrunken | 0.163 | 0.292 | 0.164 | 0.282 | no (see Δ table) |
+| z_pass | 0.164 | 0.298 | 0.167 | 0.258 | no |
+| z_earned | 0.164 | 0.298 | 0.170 | 0.230 | no |
+| pca_earned | 0.193 | 0.303 | 0.180 | 0.239 | no |
+| ridge_earned | 0.163 | 0.313 | 0.170 | 0.159 | no |
+
+Earned PARTIAL features: off none; def `expl_allowed`, `disruption_proxy_nfl` (selection only — lost confirmation). Finishing not earned.
+
+### CFB 2025 as_of 13 — confirmation n=446
+
+| Method | Off MAE | Off r | Def MAE | Def r | Beats trailing 2%? |
+| --- | ---: | ---: | ---: | ---: | --- |
+| epa_raw (trailing) | 0.172 | 0.339 | 0.176 | 0.286 | baseline |
+| epa_shrunken | 0.169 | 0.341 | 0.172 | 0.322 | ~2% (see Δ table) |
+| z_pass | 0.173 | 0.319 | 0.176 | 0.286 | no |
+| z_earned | 0.173 | 0.319 | 0.175 | 0.292 | no |
+| pca_earned | 0.285 | 0.320 | 0.185 | 0.292 | no |
+| ridge_earned | 0.173 | 0.318 | 0.173 | 0.293 | no |
+
+Earned PARTIAL features: off none; def `success_allowed` (selection only). Finishing not earned.
+
+---
+
+## PARTIAL — permit vs forbid
+
+| Permits | Forbids |
+| --- | --- |
+| Research / internal unit measurement | Team Strength input |
+| Docs, leakage, football sanity | Public KE / UI / boards |
+| Holding unadjusted as baseline | Scoring / matchup / market consume |
+| | ATS / ROI / CLV / close |
+| | Treating `n/(n+k)` as a CI |
+| | Opp-adj reopen |
+| | Phase 2B |
+
+**Unvalidated:** shrinkage vs trailing without MAE SE; single-season grid-cap k; missing per-k table; label peek on confirmation; no earned latent composite.
 
 Narrative: `docs/ratings/KE_FOOTBALL_V1_UNIT_RATINGS_PHASE2A_2026-09-16.md`.
