@@ -1,0 +1,5857 @@
+{
+  "sport": "cfb",
+  "season": 2025,
+  "forbidden_objectives": [
+    "ats",
+    "close",
+    "roi",
+    "kei",
+    "clv",
+    "issue_562",
+    "market_residual"
+  ],
+  "n_team_games": 1624,
+  "components": [
+    {
+      "id": "ke.off_eff",
+      "family": "epa",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.30053406115936904,
+          "spearman": 0.31090806063181753
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.14298522859164378,
+          "spearman": 0.16879191029911714
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.3744502856572985,
+          "spearman": 0.37716700647733165
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.4164023379848611,
+          "spearman": 0.40571566865834535
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.33865270487609933,
+          "spearman": 0.24848484848484848
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.24131146864785175
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.208979352069501
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.21304024808188948
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.10496553913274177
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.23710091634385735
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.30884800090438935
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.14046942576990598
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.13435408896025647
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.0738522394194936
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.25662429269556336
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.21489205685573112
+          }
+        ],
+        "late_mean_pearson": 0.16993066948276114,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.24131146864785175
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.4178057204162008,
+        "spearman": 0.40531942583363056
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.1825111756494188,
+          "rmse": 0.2341286937522467,
+          "bias": 0.016010628880806413,
+          "pearson": 0.30181755887223816,
+          "spearman": 0.29953784199957045
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.1825111756494188,
+          "rmse": 0.2341286937522467,
+          "bias": 0.016010628880806413,
+          "pearson": 0.30181755887223816,
+          "spearman": 0.29953784199957045
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 5.790331933371198e-18,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.30181755887223816,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": -0.025673309929014013,
+        "sd": 0.19716987622679047,
+        "min": -0.750959566536736,
+        "p05": -0.38348311035434723,
+        "p50": -0.0011069184821904594,
+        "p95": 0.266855950695214,
+        "max": 0.5212109871208668,
+        "outliers_z25": [
+          {
+            "team": "Northwestern State Demons",
+            "value": -0.750959566536736,
+            "z": -3.678484109679497
+          },
+          {
+            "team": "Alabama State Hornets",
+            "value": 0.5212109871208668,
+            "z": 2.7736706413551673
+          },
+          {
+            "team": "Tennessee State Tigers",
+            "value": -0.5430188567742057,
+            "z": -2.62385693365312
+          },
+          {
+            "team": "Stephen F. Austin Lumberjacks",
+            "value": -0.5395790419129075,
+            "z": -2.606410988424947
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.def_eff",
+      "family": "epa",
+      "side": "def",
+      "higher_better": false,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.12996718375111724,
+          "spearman": 0.13056685487624714
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.10506826294083342,
+          "spearman": 0.10310076280454533
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.3055996809310578,
+          "spearman": 0.30169022509697735
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.28337068482181293,
+          "spearman": 0.24055626967800564
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.6472909857947167,
+          "spearman": 0.6848484848484848
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.0439394425005202
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.1503238171284108
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.06590723762314969
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.012985804869940777
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.25528967418921933
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.15596509660362465
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.08169220714680915
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.11491245709031692
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.20240068963372676
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.19690818537442506
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.16999541670321275
+          }
+        ],
+        "late_mean_pearson": 0.17105418720042037,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.0439394425005202
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.26123928207876507,
+        "spearman": 0.3641444863254702
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.18956060691217505,
+          "rmse": 0.23860933514233867,
+          "bias": -0.019854322298746722,
+          "pearson": 0.23077483721752565,
+          "spearman": 0.23896275704725492
+        },
+        "next_def_epa": {
+          "n": 1149,
+          "mae": 0.18956060691217505,
+          "rmse": 0.23860933514233867,
+          "bias": -0.019854322298746722,
+          "pearson": 0.23077483721752565,
+          "spearman": 0.23896275704725492
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": -4.707826861103908e-18,
+        "base_epa_pearson": 0.23077483721752565,
+        "raw_component_pearson": 0.23077483721752565,
+        "conditioned_on": "ke.def_eff",
+        "target": "next_def_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.13854596895227406,
+        "sd": 0.18726186795387845,
+        "min": -0.25013501865750803,
+        "p05": -0.12471244564468936,
+        "p50": 0.10345583505232221,
+        "p95": 0.5057004603858462,
+        "max": 0.712807084465849,
+        "outliers_z25": [
+          {
+            "team": "Arkansas-Pine Bluff Golden Lions",
+            "value": 0.712807084465849,
+            "z": 3.0666206729018217
+          },
+          {
+            "team": "Alcorn State Braves",
+            "value": 0.6734119312906707,
+            "z": 2.8562460055676215
+          },
+          {
+            "team": "UC Davis Aggies",
+            "value": 0.6125878524780274,
+            "z": 2.531438400702631
+          },
+          {
+            "team": "Grambling Tigers",
+            "value": 0.6108330011367797,
+            "z": 2.522067291888957
+          },
+          {
+            "team": "Alabama State Hornets",
+            "value": 0.6071082702998457,
+            "z": 2.5021767990853103
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.success_native",
+      "family": "success",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.3468831683271182,
+          "spearman": 0.3332859411764359
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.18004045355760545,
+          "spearman": 0.18343598554794863
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.36200886338545035,
+          "spearman": 0.32903178670214894
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.4384356988302769,
+          "spearman": 0.40611486319435625
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.04685417847215926,
+          "spearman": -0.2
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.2179541936518167
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.1764099203391372
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.08958892266165132
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.17331557598846295
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.3031786158270511
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.2756269391817811
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.08835561441147692
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.19274005696694438
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": -0.030178079469371843
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.10192471608948424
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.19269350134268345
+          }
+        ],
+        "late_mean_pearson": 0.11429504873243505,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.2179541936518167
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.41889120742087,
+        "spearman": 0.3788035367927475
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.0704860813257607,
+          "rmse": 0.08945645177141937,
+          "bias": 0.007432453529881545,
+          "pearson": 0.31189892199642005,
+          "spearman": 0.29400171765726507
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.39701890079508384,
+          "rmse": 0.4480107774632055,
+          "bias": 0.390267778552612,
+          "pearson": 0.30440868997611775,
+          "spearman": 0.28345466696497984
+        },
+        "next_success": {
+          "n": 1149,
+          "mae": 0.0704860813257607,
+          "rmse": 0.08945645177141937,
+          "bias": 0.007432453529881545,
+          "pearson": 0.31189892199642005,
+          "spearman": 0.29400171765726507
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.035325303876752,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.30440868997611775,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.4129240346348344,
+        "sd": 0.07897689129822834,
+        "min": 0.1609926168990976,
+        "p05": 0.27010953070199856,
+        "p50": 0.43179529451652654,
+        "p95": 0.524026003473357,
+        "max": 0.625,
+        "outliers_z25": [
+          {
+            "team": "Wagner Seahawks",
+            "value": 0.1609926168990976,
+            "z": -3.1899383933004755
+          },
+          {
+            "team": "Robert Morris Colonials",
+            "value": 0.1724137931034483,
+            "z": -3.0453242407729637
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": 0.1923519263944796,
+            "z": -2.792868959699137
+          },
+          {
+            "team": "Wofford Terriers",
+            "value": 0.2,
+            "z": -2.6960295744080627
+          },
+          {
+            "team": "Alabama State Hornets",
+            "value": 0.625,
+            "z": 2.685291379276194
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.success_standard",
+      "family": "success",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.2897750684962237,
+          "spearman": 0.25437495351839845
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.19509791319853212,
+          "spearman": 0.19985341579523633
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.3680574446603492,
+          "spearman": 0.32684096848556216
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.3974276197510518,
+          "spearman": 0.3571400847098207
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": -0.03574824321307075,
+          "spearman": -0.3939393939393939
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.19171727278207729
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.19156738600604087
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.09186656079772045
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.3054214153986639
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.21346902595070494
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.15303299136540724
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.10952680231434538
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.23755997416116556
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.14260950604529563
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.10824676332241465
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.19130705060744607
+          }
+        ],
+        "late_mean_pearson": 0.16993082353408048,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.19171727278207729
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.5124057892827912,
+        "spearman": 0.43279370610468887
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.07553529010422931,
+          "rmse": 0.09623227241168239,
+          "bias": 0.00846674423964364,
+          "pearson": 0.33009359328892085,
+          "spearman": 0.29341849683087906
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.49200382613178584,
+          "rmse": 0.5374019515306715,
+          "bias": 0.4895318212834004,
+          "pearson": 0.274765614983807,
+          "spearman": 0.2576536291999939
+        },
+        "next_success": {
+          "n": 1149,
+          "mae": 0.12047985716792642,
+          "rmse": 0.14180982721944627,
+          "bias": 0.10669649626066993,
+          "pearson": 0.27457863954035344,
+          "spearman": 0.25194157271795736
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.035333038008719446,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.274765614983807,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.50481259535161,
+        "sd": 0.09296818498168263,
+        "min": 0.20972222222222223,
+        "p05": 0.3058948863636364,
+        "p50": 0.527330710041349,
+        "p95": 0.6216199563409635,
+        "max": 0.6872294372294372,
+        "outliers_z25": [
+          {
+            "team": "Wagner Seahawks",
+            "value": 0.20972222222222223,
+            "z": -3.1741006150386712
+          },
+          {
+            "team": "Robert Morris Colonials",
+            "value": 0.225,
+            "z": -3.009767216674619
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": 0.23651960784313725,
+            "z": -2.88585807673167
+          },
+          {
+            "team": "Wofford Terriers",
+            "value": 0.23684210526315788,
+            "z": -2.882389175837411
+          },
+          {
+            "team": "Stony Brook Seawolves",
+            "value": 0.25,
+            "z": -2.740858019351624
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.success_allowed",
+      "family": "success",
+      "side": "def",
+      "higher_better": false,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.17532523647019735,
+          "spearman": 0.15715711106779054
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.1442358714412674,
+          "spearman": 0.13777805688106287
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.20923060831575474,
+          "spearman": 0.1693528317179812
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.2815780583126046,
+          "spearman": 0.29239819490264096
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.6596957304485543,
+          "spearman": 0.45454545454545453
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.041143591233155606
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.16462015833714405
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": -0.02928858278328847
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.10739679336462148
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.16544051649402733
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.0699430626751592
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.10749160820468462
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": -0.0470774721280636
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.06313126514585453
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.2777923985929501
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.28559180616982893
+          }
+        ],
+        "late_mean_pearson": 0.14485949944514248,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.041143591233155606
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.29210906759971483,
+        "spearman": 0.27804920371933867
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.07203058927101137,
+          "rmse": 0.09118076511953918,
+          "bias": -0.007368449975942031,
+          "pearson": 0.23448050082536345,
+          "spearman": 0.22268843209641814
+        },
+        "next_def_epa": {
+          "n": 1149,
+          "mae": 0.38678518129103234,
+          "rmse": 0.4419222763167318,
+          "bias": 0.3808669914162326,
+          "pearson": 0.2273966350100086,
+          "spearman": 0.21670105940316547
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.030603730148053804,
+        "base_epa_pearson": 0.23077483721752565,
+        "raw_component_pearson": 0.2273966350100086,
+        "conditioned_on": "ke.def_eff",
+        "target": "next_def_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.4794334960481546,
+        "sd": 0.07778908454149068,
+        "min": 0.3259438006333697,
+        "p05": 0.3751597767665984,
+        "p50": 0.4620150507597791,
+        "p95": 0.6281666666666667,
+        "max": 0.7692307692307693,
+        "outliers_z25": [
+          {
+            "team": "Grambling Tigers",
+            "value": 0.7692307692307693,
+            "z": 3.7254233661542107
+          },
+          {
+            "team": "Arkansas-Pine Bluff Golden Lions",
+            "value": 0.7413793103448276,
+            "z": 3.3673852294399724
+          },
+          {
+            "team": "Bucknell Bison",
+            "value": 0.7368421052631579,
+            "z": 3.3090582146870258
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": 0.703412512546002,
+            "z": 2.8793116388763105
+          },
+          {
+            "team": "Southern Jaguars",
+            "value": 0.6875,
+            "z": 2.674751929248738
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.pace",
+      "family": "pace",
+      "side": "off",
+      "higher_better": null,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.1232930634736496,
+          "spearman": 0.06447678097155475
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.1587531625760607,
+          "spearman": 0.16797840034880718
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.08548255009452653,
+          "spearman": 0.08369683471305553
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.095451250937144,
+          "spearman": 0.11026545217518605
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": -0.1958467350669646,
+          "spearman": 0.05454545454545454
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.0055201623936962894
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.20274623388994764
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": -0.11289510382405925
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.07855311231303783
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": -0.04577939458317171
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.20928049816111804
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.16989528736970108
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.22291733627905225
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.005079962369300502
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.19477348789100526
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.15403557421192204
+          }
+        ],
+        "late_mean_pearson": 0.14420159018782003,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.0055201623936962894
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.24576140828653506,
+        "spearman": 0.22414147130169398
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 8.334376020456496,
+          "rmse": 10.689802339482517,
+          "bias": 0.7952742886568781,
+          "pearson": 0.14630460425549124,
+          "spearman": 0.14827123151464194
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.004380268574511123,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.09212898267286489,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 63.74893203061306,
+        "sd": 9.286530734801547,
+        "min": 42.0,
+        "p05": 49.275000000000006,
+        "p50": 64.18181818181819,
+        "p95": 73.44545454545454,
+        "max": 158.0,
+        "outliers_z25": [
+          {
+            "team": "New Hampshire Wildcats",
+            "value": 158.0,
+            "z": 10.14922263878138
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.pace_competitive",
+      "family": "pace",
+      "side": "off",
+      "higher_better": null,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.0077373677903462635,
+          "spearman": 0.01937207175518896
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": -0.2159304524779128,
+          "spearman": -0.1920333160984874
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": -0.11776613536596653,
+          "spearman": -0.14851742851989436
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.002136346409124079,
+          "spearman": -0.035112753973273306
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.29040010169082153,
+          "spearman": 0.07878787878787878
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.02870678530078806
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": -0.08379789305582301
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.14330864776283836
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": -0.17272202471055256
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.10221225070283152
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.04633752159293519
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.023177460539038842
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.020982672994544024
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.002829573038388911
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": -0.16179052489917797
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.01979900277410942
+          }
+        ],
+        "late_mean_pearson": -0.029544819023033905,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.02870678530078806
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.18425823381284087,
+        "spearman": 0.12329152728639874
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 16.08175843801553,
+          "rmse": 19.252020843952767,
+          "bias": -1.7508787988703434,
+          "pearson": 0.08050026248309233,
+          "spearman": 0.05327464056916673
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": -0.01765936536369247,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.032190092631994315,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 32.55401818009577,
+        "sd": 14.113610694244082,
+        "min": 3.5,
+        "p05": 6.775,
+        "p50": 35.904545454545456,
+        "p95": 50.16363636363636,
+        "max": 100.0,
+        "outliers_z25": [
+          {
+            "team": "New Hampshire Wildcats",
+            "value": 100.0,
+            "z": 4.778790012070445
+          },
+          {
+            "team": "Mercyhurst Lakers",
+            "value": 70.0,
+            "z": 2.653182281354532
+          },
+          {
+            "team": "North Dakota Fighting Hawks",
+            "value": 68.5,
+            "z": 2.546901894818736
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.pace_seconds",
+      "family": "pace",
+      "side": "off",
+      "higher_better": null,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 180,
+          "pearson": 0.03120036528759028,
+          "spearman": 0.19686809871403146
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.16261955255926305,
+          "spearman": 0.35542526279351433
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.5099025700892235,
+          "spearman": 0.4801878585991886
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.6596979943034449,
+          "spearman": 0.66416508177146
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.7968578979875405,
+          "spearman": 0.7212121212121212
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.019423692445641634
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 115,
+            "pearson": 0.13130545646594724
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 94,
+            "pearson": 0.18210400436906574
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.33658696482986505
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 69,
+            "pearson": 0.29817965012402214
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 77,
+            "pearson": 0.28755655883957737
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 96,
+            "pearson": 0.20017459636269344
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.24905869411596282
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.03185319885809079
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.3164158546605576
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.1432692999472329
+          }
+        ],
+        "late_mean_pearson": 0.18514926189546102,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.019423692445641634
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.31022126652866944,
+        "spearman": 0.6216864450078567
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1145,
+          "mae": 3.8004709860581567,
+          "rmse": 6.484145421367133,
+          "bias": -0.7862345208262005,
+          "pearson": 0.2519543535238309,
+          "spearman": 0.44933436916110214
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1148,
+        "partial_pearson": -0.031028893041668296,
+        "base_epa_pearson": 0.302647949407455,
+        "raw_component_pearson": -0.008852185481530982,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 230,
+        "n_team_games": 1618,
+        "mean": 30.85375233377687,
+        "sd": 6.422999452124808,
+        "min": 20.87142857142857,
+        "p05": 24.20751420225168,
+        "p50": 29.597693351424695,
+        "p95": 39.69936073243525,
+        "max": 75.0,
+        "outliers_z25": [
+          {
+            "team": "Robert Morris Colonials",
+            "value": 75.0,
+            "z": 6.873151398388958
+          },
+          {
+            "team": "Tennessee State Tigers",
+            "value": 65.0,
+            "z": 5.316246392474334
+          },
+          {
+            "team": "William & Mary Tribe",
+            "value": 65.0,
+            "z": 5.316246392474334
+          },
+          {
+            "team": "Mercyhurst Lakers",
+            "value": 55.5,
+            "z": 3.837186636855441
+          },
+          {
+            "team": "Houston Christian Huskies",
+            "value": 54.0,
+            "z": 3.6036508859682472
+          },
+          {
+            "team": "Youngstown State Penguins",
+            "value": 47.76326530612245,
+            "z": 2.6326505394223103
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 283,
+            "missing": 3,
+            "missing_rate": 0.01048951048951049
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 143,
+            "missing": 1,
+            "missing_rate": 0.006944444444444444
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 103,
+            "missing": 1,
+            "missing_rate": 0.009615384615384616
+          },
+          {
+            "week": 7,
+            "present": 115,
+            "missing": 1,
+            "missing_rate": 0.008620689655172414
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.003694581280788177
+      }
+    },
+    {
+      "id": "ke.expl",
+      "family": "expl",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.30165123878388067,
+          "spearman": 0.281567006052406
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.10976640325248908,
+          "spearman": 0.10782384142355149
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.33940724766438657,
+          "spearman": 0.3086585498163771
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.4641223279909677,
+          "spearman": 0.4483218013565995
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.26925733142342223,
+          "spearman": 0.2727272727272727
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.19736486393025382
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.2211259487071595
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.06742760604001614
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.1920908379197435
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.11959805131811628
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.04122988200057026
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.059963856022104654
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.14834201764385027
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.13634236790720844
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.32788615622403255
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.05722865000972469
+          }
+        ],
+        "late_mean_pearson": 0.167449797946204,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.19736486393025382
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.3501890440988305,
+        "spearman": 0.2896417027324086
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.04538103716367543,
+          "rmse": 0.05733651508911502,
+          "bias": 0.003663218952870132,
+          "pearson": 0.27627594930454763,
+          "spearman": 0.24385083732992008
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.2171661197093125,
+          "rmse": 0.2717839781623371,
+          "bias": 0.15307555756911173,
+          "pearson": 0.24781630152569234,
+          "spearman": 0.221799234431642
+        },
+        "next_expl": {
+          "n": 1149,
+          "mae": 0.04538103716367543,
+          "rmse": 0.05733651508911502,
+          "bias": 0.003663218952870132,
+          "pearson": 0.27627594930454763,
+          "spearman": 0.24385083732992008
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": -0.004521281768733645,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.24781630152569234,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.19731940760687705,
+        "sd": 0.04562163634406956,
+        "min": 0.06557377049180328,
+        "p05": 0.10907697213500786,
+        "p50": 0.2057854570496938,
+        "p95": 0.2625306820805809,
+        "max": 0.29480273671034296,
+        "outliers_z25": [
+          {
+            "team": "Stephen F. Austin Lumberjacks",
+            "value": 0.06557377049180328,
+            "z": -2.8877885072221794
+          },
+          {
+            "team": "Saint Francis Red Flash",
+            "value": 0.07191489361702127,
+            "z": -2.7487947394977064
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": 0.07245543415756181,
+            "z": -2.7369464020890284
+          },
+          {
+            "team": "Lamar Cardinals",
+            "value": 0.07547169811320754,
+            "z": -2.670831632927799
+          },
+          {
+            "team": "Wagner Seahawks",
+            "value": 0.08121410992616898,
+            "z": -2.5449612724336403
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl_pass",
+      "family": "expl",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.31738982760326456,
+          "spearman": 0.29925989652309926
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.1025049547956493,
+          "spearman": 0.15825063819487892
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.2952595817406155,
+          "spearman": 0.25802735797642895
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.429894206658192,
+          "spearman": 0.37105004794836205
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.4831068637224116,
+          "spearman": 0.5757575757575758
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.17909756129291457
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.19712131597710378
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.011360933782903575
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.14296899123875356
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.25376092784513865
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.25346507652401723
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.19664518356501898
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.05182180258253204
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.1657514350895934
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.2676472187369101
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.03446514822195724
+          }
+        ],
+        "late_mean_pearson": 0.1299214011577482,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.17909756129291457
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.3031314161718495,
+        "spearman": 0.2470064599356528
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.07434020295431328,
+          "rmse": 0.09600350993350369,
+          "bias": 0.000996332474151383,
+          "pearson": 0.22192052340301538,
+          "spearman": 0.21322609247078253
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.24952958160027255,
+          "rmse": 0.3072225466948639,
+          "bias": 0.2095483286200529,
+          "pearson": 0.2254870181347726,
+          "spearman": 0.2093138915019564
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": -0.006287596842469222,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.2254870181347726,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.2506102016328895,
+        "sd": 0.06590573403169753,
+        "min": 0.03125,
+        "p05": 0.11875000000000001,
+        "p50": 0.2576086303637145,
+        "p95": 0.3400113869562399,
+        "max": 0.46153846153846156,
+        "outliers_z25": [
+          {
+            "team": "Stony Brook Seawolves",
+            "value": 0.03125,
+            "z": -3.3283932704154036
+          },
+          {
+            "team": "Alabama State Hornets",
+            "value": 0.46153846153846156,
+            "z": 3.2004538452469946
+          },
+          {
+            "team": "The Citadel Bulldogs",
+            "value": 0.05,
+            "z": -3.0438960217999473
+          },
+          {
+            "team": "Houston Christian Huskies",
+            "value": 0.05,
+            "z": -3.0438960217999473
+          },
+          {
+            "team": "Stephen F. Austin Lumberjacks",
+            "value": 0.07894736842105263,
+            "z": -2.604672199376085
+          },
+          {
+            "team": "North Alabama Lions",
+            "value": 0.07894736842105263,
+            "z": -2.604672199376085
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl_rush",
+      "family": "expl",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.2174488033855726,
+          "spearman": 0.19584483992213828
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.1085085290461596,
+          "spearman": 0.09774691048842657
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.25583279664841513,
+          "spearman": 0.21504352543967248
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.2598268325135788,
+          "spearman": 0.23995090908420738
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.3531835377559617,
+          "spearman": 0.21212121212121213
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.04740993170949492
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.17951225323201553
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.03602858116860434
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.22913240701536208
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.056130064110319976
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": -0.06411327219710543
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.19212967015458945
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.06587798937754279
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.04665128227938701
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.13820382798853276
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.07460929459676832
+          }
+        ],
+        "late_mean_pearson": 0.08133559856055772,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.04740993170949492
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.22758003216857747,
+        "spearman": 0.19407317577754882
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.056857443673224456,
+          "rmse": 0.07098294509600497,
+          "bias": 0.0056319575217907,
+          "pearson": 0.21196485554283218,
+          "spearman": 0.1929433560744343
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.1952257875211844,
+          "rmse": 0.24631959565330364,
+          "bias": 0.09852535514280183,
+          "pearson": 0.20821389129336118,
+          "spearman": 0.18692828231264652
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.0328114939147524,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.20821389129336118,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.14365486359777266,
+        "sd": 0.04668108232555406,
+        "min": 0.0,
+        "p05": 0.05144736842105263,
+        "p50": 0.14755445085357502,
+        "p95": 0.21276542407160604,
+        "max": 0.24980486884892864,
+        "outliers_z25": [
+          {
+            "team": "VMI Keydets",
+            "value": 0.0,
+            "z": -3.0773678852585946
+          },
+          {
+            "team": "Lamar Cardinals",
+            "value": 0.0,
+            "z": -3.0773678852585946
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": 0.016129032258064516,
+            "z": -2.7318524975565572
+          },
+          {
+            "team": "Saint Francis Red Flash",
+            "value": 0.020833333333333332,
+            "z": -2.6310771761434637
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.expl_allowed",
+      "family": "expl",
+      "side": "def",
+      "higher_better": false,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.04070725169442886,
+          "spearman": 0.05455774582511206
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.1626080058405329,
+          "spearman": 0.17468685641744564
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.1848037821804666,
+          "spearman": 0.16099799647252647
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.25586071317494397,
+          "spearman": 0.2108031897376834
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.14727032437822818,
+          "spearman": 0.1393939393939394
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": -0.053120575136188536
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.038103955519806436
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.18388962431277334
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.04148483380106922
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.24251305751730487
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.0890624239684213
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.056949221781140404
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.26853755194115836
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.2493331436470341
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.19448182091276375
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.02536157901040099
+          }
+        ],
+        "late_mean_pearson": 0.1844285238778393,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": -0.053120575136188536
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.1644472921121322,
+        "spearman": 0.15704770711237676
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.047005651872193355,
+          "rmse": 0.059717171265278896,
+          "bias": -0.002779275336841645,
+          "pearson": 0.16581876045093014,
+          "spearman": 0.15590440884292345
+        },
+        "next_def_epa": {
+          "n": 1149,
+          "mae": 0.21853210422891392,
+          "rmse": 0.2740803408424943,
+          "bias": 0.15401768329894583,
+          "pearson": 0.17725568923169716,
+          "spearman": 0.18225735317655636
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": -0.009218129112538323,
+        "base_epa_pearson": 0.23077483721752565,
+        "raw_component_pearson": 0.17725568923169716,
+        "conditioned_on": "ke.def_eff",
+        "target": "next_def_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.22894306350401558,
+        "sd": 0.04107773731954228,
+        "min": 0.15611061552185548,
+        "p05": 0.17360087458716056,
+        "p50": 0.22390276499177797,
+        "p95": 0.30704163008486973,
+        "max": 0.41379310344827586,
+        "outliers_z25": [
+          {
+            "team": "Arkansas-Pine Bluff Golden Lions",
+            "value": 0.41379310344827586,
+            "z": 4.50000540454111
+          },
+          {
+            "team": "UC Davis Aggies",
+            "value": 0.37333333333333335,
+            "z": 3.5150492517664964
+          },
+          {
+            "team": "Monmouth Hawks",
+            "value": 0.3380281690140845,
+            "z": 2.6555772695438336
+          },
+          {
+            "team": "Alcorn State Braves",
+            "value": 0.3333333333333333,
+            "z": 2.541285782546139
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.off_pass_epa",
+      "family": "epa_split",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.34499936998868075,
+          "spearman": 0.3312407665998826
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.10307060004460965,
+          "spearman": 0.133375495731628
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.33249721404604393,
+          "spearman": 0.27752523465201184
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.33600810315421736,
+          "spearman": 0.3151882809842257
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.23954471018822024,
+          "spearman": 0.23636363636363636
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.2780552909687175
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.21713213380856697
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.1384029396730062
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.11554623350746077
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.3108817780528106
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.2666504879127051
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.14109260674737475
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.07700580174779796
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.09981860815101447
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.3815153481274858
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.11519648478600228
+          }
+        ],
+        "late_mean_pearson": 0.16838406070307513,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.2780552909687175
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.2941946370790382,
+        "spearman": 0.25214155572479346
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.3040878071382117,
+          "rmse": 0.38800254092930997,
+          "bias": 0.01641322676471735,
+          "pearson": 0.2151449978989673,
+          "spearman": 0.21229442647150149
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.2163434854376866,
+          "rmse": 0.2771543274965628,
+          "bias": 0.04421739588000675,
+          "pearson": 0.265585933611376,
+          "spearman": 0.2626818707348321
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": -0.0031989374612217025,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.265585933611376,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": -0.01781526383483619,
+        "sd": 0.2709811299546777,
+        "min": -0.9397661755792797,
+        "p05": -0.5200915878815086,
+        "p50": 0.009497136498838234,
+        "p95": 0.3594015497042574,
+        "max": 1.1078340325217981,
+        "outliers_z25": [
+          {
+            "team": "Alabama State Hornets",
+            "value": 1.1078340325217981,
+            "z": 4.15397668666044
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": -0.9397661755792797,
+            "z": -3.4022697886699422
+          },
+          {
+            "team": "Indiana State Sycamores",
+            "value": -0.7050615916276972,
+            "z": -2.5361409036407987
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.off_rush_epa",
+      "family": "epa_split",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.16452463154850486,
+          "spearman": 0.16866411673041506
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.18233120996246316,
+          "spearman": 0.19626291984501895
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.32084594562864815,
+          "spearman": 0.36160953813908575
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.25471471969710713,
+          "spearman": 0.2958681610725384
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.5098681710968427,
+          "spearman": 0.3939393939393939
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.05372208599673178
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.1648665419866406
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.12699103366784772
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.1744487058445439
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": -0.008479304347525593
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.25002981998210694
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.09775642590442893
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.13339890272817118
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.08860124590823691
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": -0.0761113495594298
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.14326424172014404
+          }
+        ],
+        "late_mean_pearson": 0.07228826019928059,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.05372208599673178
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.3111529677907908,
+        "spearman": 0.2606248734732438
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.19092270171761713,
+          "rmse": 0.2470086680779893,
+          "bias": 0.005340509445400922,
+          "pearson": 0.23627979335595165,
+          "spearman": 0.24202044709579967
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.18770427912864654,
+          "rmse": 0.2382345453885289,
+          "bias": -0.0027684941214027566,
+          "pearson": 0.25822712789753477,
+          "spearman": 0.25731025799951984
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.030199360321936937,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.25822712789753477,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": -0.021610878099905365,
+        "sd": 0.18321117352546193,
+        "min": -0.6737232614647258,
+        "p05": -0.37662769279478303,
+        "p50": 0.005804386304418475,
+        "p95": 0.23658856267910128,
+        "max": 0.30520260289063617,
+        "outliers_z25": [
+          {
+            "team": "Towson Tigers",
+            "value": -0.6737232614647258,
+            "z": -3.5593483236664745
+          },
+          {
+            "team": "Lamar Cardinals",
+            "value": -0.605743266021212,
+            "z": -3.1883011100309684
+          },
+          {
+            "team": "Wofford Terriers",
+            "value": -0.5304076263779088,
+            "z": -2.7771054487967297
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": -0.5291327972445756,
+            "z": -2.7701471988777855
+          },
+          {
+            "team": "Tennessee State Tigers",
+            "value": -0.5037573587011408,
+            "z": -2.631643427218312
+          },
+          {
+            "team": "Robert Morris Colonials",
+            "value": -0.501711489576282,
+            "z": -2.620476700399794
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.off_early_epa",
+      "family": "epa_split",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.26070117319892766,
+          "spearman": 0.26767045109586546
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.07050123163514871,
+          "spearman": 0.09348864925831472
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.34094780776754047,
+          "spearman": 0.3074711921988909
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.4260052921504014,
+          "spearman": 0.4110263043135787
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.5095519325202316,
+          "spearman": 0.5757575757575758
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.2062654439141504
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.27243225962878126
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.1477783228056914
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": 0.02587766879255872
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.2587360178209793
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.18851240465991928
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.16246831864197192
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.12989500965454015
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.0708242755353549
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.10644252654223864
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.199836893338282
+          }
+        ],
+        "late_mean_pearson": 0.12674967626760392,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.2062654439141504
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.4102925397239219,
+        "spearman": 0.34086934726654006
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.1781262684447572,
+          "rmse": 0.22780511408048523,
+          "bias": 0.007289027938498139,
+          "pearson": 0.25863221843382905,
+          "spearman": 0.255461175081076
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.18254319950937523,
+          "rmse": 0.23269998302018166,
+          "bias": -0.005869705072023428,
+          "pearson": 0.2840953333770524,
+          "spearman": 0.2697566117642592
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.01305236080380685,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.2840953333770524,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": -0.032215262316483355,
+        "sd": 0.18595193642874489,
+        "min": -0.7537630390908037,
+        "p05": -0.38959476649761204,
+        "p50": -0.0005571192933893289,
+        "p95": 0.20636988729029876,
+        "max": 0.35208320893623213,
+        "outliers_z25": [
+          {
+            "team": "Northwestern State Demons",
+            "value": -0.7537630390908037,
+            "z": -3.8802918142818643
+          },
+          {
+            "team": "Wofford Terriers",
+            "value": -0.5894844225474767,
+            "z": -2.9968451575901387
+          },
+          {
+            "team": "Villanova Wildcats",
+            "value": -0.5862638146378273,
+            "z": -2.9795255858152916
+          },
+          {
+            "team": "Wagner Seahawks",
+            "value": -0.5653456945098942,
+            "z": -2.8670335057129224
+          },
+          {
+            "team": "Richmond Spiders",
+            "value": -0.5420152681029361,
+            "z": -2.741568684775722
+          },
+          {
+            "team": "Robert Morris Colonials",
+            "value": -0.538017217408527,
+            "z": -2.72006823271702
+          },
+          {
+            "team": "Alcorn State Braves",
+            "value": -0.5101987127324238,
+            "z": -2.5704677219056515
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.ppo",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 176,
+          "pearson": 0.1880959500193103,
+          "spearman": 0.16013115386492813
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": -0.06897687665531665,
+          "spearman": 0.03661753193815004
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.14790470890073715,
+          "spearman": 0.17716284511186703
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.07330913529612176,
+          "spearman": 0.053516285262782126
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.5221011883375067,
+          "spearman": 0.41945482513924454
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 143,
+            "pearson": 0.19880066540803676
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 115,
+            "pearson": 0.10506783851681772
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.06579884024690438
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": -0.10560986644700107
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": -0.15292134242321062
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 77,
+            "pearson": 0.03911895877237644
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 96,
+            "pearson": 0.10282942911917543
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": -0.09394557480688899
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": -0.055426504146162854
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.23375591468871154
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.0204341317228376
+          }
+        ],
+        "late_mean_pearson": 0.026204491864624323,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 143,
+          "pearson": 0.19880066540803676
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.31959700332202756,
+        "spearman": 0.26482548116322335
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1145,
+          "mae": 1.072014841450719,
+          "rmse": 1.3778086591322138,
+          "bias": 0.14192992249522327,
+          "pearson": 0.09770627797176319,
+          "spearman": 0.12396508506367558
+        },
+        "next_off_epa": {
+          "n": 1147,
+          "mae": 3.536988986638,
+          "rmse": 3.6009937666226692,
+          "bias": 3.5368244355713547,
+          "pearson": 0.2014198535328808,
+          "spearman": 0.2333634243799752
+        },
+        "next_ppo": {
+          "n": 1145,
+          "mae": 1.072014841450719,
+          "rmse": 1.3778086591322138,
+          "bias": 0.14192992249522327,
+          "pearson": 0.09770627797176319,
+          "spearman": 0.12396508506367558
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1147,
+        "partial_pearson": -0.004058962940367614,
+        "base_epa_pearson": 0.289764676763407,
+        "raw_component_pearson": 0.2014198535328808,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1617,
+        "mean": 3.142016445972237,
+        "sd": 1.050507327464159,
+        "min": 0.0,
+        "p05": 1.1375000000000002,
+        "p50": 3.312857142857143,
+        "p95": 4.416341991341992,
+        "max": 7.5,
+        "outliers_z25": [
+          {
+            "team": "UC Davis Aggies",
+            "value": 7.5,
+            "z": 4.148456122193444
+          },
+          {
+            "team": "The Citadel Bulldogs",
+            "value": 0.0,
+            "z": -2.990951480135616
+          },
+          {
+            "team": "Stephen F. Austin Lumberjacks",
+            "value": 0.0,
+            "z": -2.990951480135616
+          },
+          {
+            "team": "Stony Brook Seawolves",
+            "value": 0.0,
+            "z": -2.990951480135616
+          },
+          {
+            "team": "VMI Keydets",
+            "value": 0.0,
+            "z": -2.990951480135616
+          },
+          {
+            "team": "Lamar Cardinals",
+            "value": 0.0,
+            "z": -2.990951480135616
+          },
+          {
+            "team": "Grambling Tigers",
+            "value": 0.0,
+            "z": -2.990951480135616
+          },
+          {
+            "team": "Houston Christian Huskies",
+            "value": 0.0,
+            "z": -2.990951480135616
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 283,
+            "missing": 3,
+            "missing_rate": 0.01048951048951049
+          },
+          {
+            "week": 2,
+            "present": 164,
+            "missing": 2,
+            "missing_rate": 0.012048192771084338
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 125,
+            "missing": 1,
+            "missing_rate": 0.007936507936507936
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 115,
+            "missing": 1,
+            "missing_rate": 0.008620689655172414
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.004310344827586207
+      }
+    },
+    {
+      "id": "ke.finish",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 176,
+          "pearson": 0.17916742990316864,
+          "spearman": 0.12924862384507127
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": -0.007174280017774635,
+          "spearman": 0.03990900304436593
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.19315782612792462,
+          "spearman": 0.19066053646331504
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.10309610735400479,
+          "spearman": 0.11509101176398796
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.3853971165297876,
+          "spearman": 0.2
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 143,
+            "pearson": 0.14070460589716377
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 115,
+            "pearson": 0.10844959795942417
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.07410751274753578
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": -0.1734968188956423
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": -0.009106073266606783
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 77,
+            "pearson": 0.026635777793114716
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 96,
+            "pearson": 0.23097671174901177
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": -0.0067304892014436015
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": -0.10735966197495313
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": 0.3196198889877483
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.11885630641074332
+          }
+        ],
+        "late_mean_pearson": 0.08109651105552372,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 143,
+          "pearson": 0.14070460589716377
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.3602263946034191,
+        "spearman": 0.24396684845046548
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1145,
+          "mae": 0.18322105551265783,
+          "rmse": 0.2349186823285474,
+          "bias": 0.020254266903641738,
+          "pearson": 0.12982941674300705,
+          "spearman": 0.1330896268838753
+        },
+        "next_off_epa": {
+          "n": 1147,
+          "mae": 0.6326700547466267,
+          "rmse": 0.6738748357839235,
+          "bias": 0.6300878612378011,
+          "pearson": 0.17165520078162227,
+          "spearman": 0.20602862159471805
+        },
+        "next_finish": {
+          "n": 1145,
+          "mae": 0.18322105551265783,
+          "rmse": 0.2349186823285474,
+          "bias": 0.020254266903641738,
+          "pearson": 0.12982941674300705,
+          "spearman": 0.1330896268838753
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1147,
+        "partial_pearson": -0.005379805700067738,
+        "base_epa_pearson": 0.289764676763407,
+        "raw_component_pearson": 0.17165520078162227,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1617,
+        "mean": 0.6224207692306243,
+        "sd": 0.19131980640606577,
+        "min": 0.0,
+        "p05": 0.2729166666666667,
+        "p50": 0.6629816017316017,
+        "p95": 0.8304761904761904,
+        "max": 1.0,
+        "outliers_z25": [
+          {
+            "team": "The Citadel Bulldogs",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "Stephen F. Austin Lumberjacks",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "Stony Brook Seawolves",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "VMI Keydets",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "Lamar Cardinals",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "Grambling Tigers",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "Houston Christian Huskies",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          },
+          {
+            "team": "Northwestern State Demons",
+            "value": 0.0,
+            "z": -3.2533002250147085
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 283,
+            "missing": 3,
+            "missing_rate": 0.01048951048951049
+          },
+          {
+            "week": 2,
+            "present": 164,
+            "missing": 2,
+            "missing_rate": 0.012048192771084338
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 125,
+            "missing": 1,
+            "missing_rate": 0.007936507936507936
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 115,
+            "missing": 1,
+            "missing_rate": 0.008620689655172414
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.004310344827586207
+      }
+    },
+    {
+      "id": "ke.opp_rate",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 181,
+          "pearson": 0.3495800465516628,
+          "spearman": 0.35281226433497936
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": 0.2403639657501509,
+          "spearman": 0.2159562305086385
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": 0.37042786837689784,
+          "spearman": 0.3437600623873907
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.3787055665154961,
+          "spearman": 0.36967754448371254
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.42617712617452175,
+          "spearman": 0.4303030303030303
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 145,
+            "pearson": 0.23871039879443048
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 116,
+            "pearson": 0.0024217206093256403
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 95,
+            "pearson": 0.23723386296020862
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 81,
+            "pearson": -0.05312128871871877
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 70,
+            "pearson": 0.20445000520694753
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 78,
+            "pearson": 0.21109591451150528
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 97,
+            "pearson": 0.1439975967723987
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 91,
+            "pearson": 0.22216275244347167
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 76,
+            "pearson": 0.07327293874865061
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 73,
+            "pearson": -0.053664238405615336
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 86,
+            "pearson": 0.05975991753065289
+          }
+        ],
+        "late_mean_pearson": 0.07538284257928995,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 145,
+          "pearson": 0.23871039879443048
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": 0.31437591174147556,
+        "spearman": 0.33089275298057674
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1149,
+          "mae": 0.1491750321892847,
+          "rmse": 0.18685528021041395,
+          "bias": -0.015225779762964294,
+          "pearson": 0.26770382802919646,
+          "spearman": 0.258180453851553
+        },
+        "next_off_epa": {
+          "n": 1149,
+          "mae": 0.44512306280245456,
+          "rmse": 0.49478308195851783,
+          "bias": 0.4399165726181584,
+          "pearson": 0.2827946813125918,
+          "spearman": 0.2595715868817163
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1149,
+        "partial_pearson": 0.04174209267905205,
+        "base_epa_pearson": 0.30181755887223816,
+        "raw_component_pearson": 0.2827946813125918,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 232,
+        "n_team_games": 1624,
+        "mean": 0.43674062320622087,
+        "sd": 0.15807651535521094,
+        "min": 0.06666666666666667,
+        "p05": 0.12958333333333333,
+        "p50": 0.4693713706080016,
+        "p95": 0.6483585858585859,
+        "max": 0.8888888888888888,
+        "outliers_z25": [
+          {
+            "team": "New Hampshire Wildcats",
+            "value": 0.8888888888888888,
+            "z": 2.8603127078469157
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 286,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 2,
+            "present": 166,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 3,
+            "present": 144,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 4,
+            "present": 126,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 5,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 6,
+            "present": 104,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 7,
+            "present": 116,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 8,
+            "present": 124,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 9,
+            "present": 110,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 10,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 11,
+            "present": 108,
+            "missing": 0,
+            "missing_rate": 0.0
+          },
+          {
+            "week": 12,
+            "present": 122,
+            "missing": 0,
+            "missing_rate": 0.0
+          }
+        ],
+        "season_missing_rate": 0.0
+      }
+    },
+    {
+      "id": "ke.rz_td",
+      "family": "finishing",
+      "side": "off",
+      "higher_better": true,
+      "sport": "cfb",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ],
+      "sample_size_curve": [
+        {
+          "n_prior_games": 1,
+          "n_teams": 163,
+          "pearson": -0.048143439946801654,
+          "spearman": 0.00516673874764246
+        },
+        {
+          "n_prior_games": 2,
+          "n_teams": 138,
+          "pearson": -0.03564550345479787,
+          "spearman": -0.0490300250650068
+        },
+        {
+          "n_prior_games": 3,
+          "n_teams": 138,
+          "pearson": -0.04208765948960482,
+          "spearman": -0.005996100821392264
+        },
+        {
+          "n_prior_games": 4,
+          "n_teams": 138,
+          "pearson": 0.01815713446787922,
+          "spearman": 0.05437323365497181
+        },
+        {
+          "n_prior_games": 6,
+          "n_teams": 10,
+          "pearson": 0.5705939975204354,
+          "spearman": 0.5515151515151515
+        },
+        {
+          "n_prior_games": 8,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        },
+        {
+          "n_prior_games": 10,
+          "n_teams": 0,
+          "pearson": null,
+          "spearman": null
+        }
+      ],
+      "week_to_week": {
+        "pairs": [
+          {
+            "from": 1,
+            "to": 2,
+            "n": 139,
+            "pearson": -0.04931970611018682
+          },
+          {
+            "from": 2,
+            "to": 3,
+            "n": 111,
+            "pearson": 0.04433095484998392
+          },
+          {
+            "from": 3,
+            "to": 4,
+            "n": 89,
+            "pearson": -0.042089852491428
+          },
+          {
+            "from": 4,
+            "to": 5,
+            "n": 80,
+            "pearson": 0.060838831495355974
+          },
+          {
+            "from": 5,
+            "to": 6,
+            "n": 69,
+            "pearson": 0.06324571422019622
+          },
+          {
+            "from": 6,
+            "to": 7,
+            "n": 72,
+            "pearson": 0.04639526968572738
+          },
+          {
+            "from": 7,
+            "to": 8,
+            "n": 90,
+            "pearson": -0.0901184227596595
+          },
+          {
+            "from": 8,
+            "to": 9,
+            "n": 87,
+            "pearson": 0.0045750072942324
+          },
+          {
+            "from": 9,
+            "to": 10,
+            "n": 74,
+            "pearson": 0.06835027305038681
+          },
+          {
+            "from": 10,
+            "to": 11,
+            "n": 72,
+            "pearson": 0.14490152071930337
+          },
+          {
+            "from": 11,
+            "to": 12,
+            "n": 82,
+            "pearson": 0.0136667651814388
+          }
+        ],
+        "late_mean_pearson": 0.057873391561340345,
+        "early_pair": {
+          "from": 1,
+          "to": 2,
+          "n": 139,
+          "pearson": -0.04931970611018682
+        }
+      },
+      "early_late_persistence": {
+        "early_through_week": 5,
+        "late_from_week": 9,
+        "n_teams": 146,
+        "pearson": -0.05532391063821851,
+        "spearman": 0.07220758084674095
+      },
+      "oos": {
+        "own_unit": {
+          "n": 1114,
+          "mae": 0.1289357414376069,
+          "rmse": 0.17528826199615843,
+          "bias": -0.018504012673630887,
+          "pearson": -0.01041434027655551,
+          "spearman": 0.015194718959578229
+        },
+        "next_off_epa": {
+          "n": 1143,
+          "mae": 0.2259610824187249,
+          "rmse": 0.2812047951318649,
+          "bias": 0.1641974011479491,
+          "pearson": 0.1517353987231011,
+          "spearman": 0.15838433762116394
+        }
+      },
+      "incremental_on_epa": {
+        "n": 1143,
+        "partial_pearson": -0.010748914893881979,
+        "base_epa_pearson": 0.28504670616437994,
+        "raw_component_pearson": 0.1517353987231011,
+        "conditioned_on": "ke.off_eff",
+        "target": "next_off_epa"
+      },
+      "distribution": {
+        "n_teams": 223,
+        "n_team_games": 1569,
+        "mean": 0.23534536798773742,
+        "sd": 0.11633505055430446,
+        "min": 0.0,
+        "p05": 0.0,
+        "p50": 0.2451190476190476,
+        "p95": 0.3734589577089574,
+        "max": 1.0,
+        "outliers_z25": [
+          {
+            "team": "Montana State Bobcats",
+            "value": 1.0,
+            "z": 6.572865429368827
+          },
+          {
+            "team": "East Tennessee State Buccaneers",
+            "value": 0.6666666666666666,
+            "z": 3.707578211586294
+          },
+          {
+            "team": "UC Davis Aggies",
+            "value": 0.6666666666666666,
+            "z": 3.707578211586294
+          },
+          {
+            "team": "Montana Grizzlies",
+            "value": 0.5714285714285714,
+            "z": 2.8889247207912847
+          },
+          {
+            "team": "South Dakota State Jackrabbits",
+            "value": 0.5555555555555556,
+            "z": 2.75248247232545
+          }
+        ]
+      },
+      "missingness": {
+        "weeks": [
+          {
+            "week": 1,
+            "present": 269,
+            "missing": 17,
+            "missing_rate": 0.05944055944055944
+          },
+          {
+            "week": 2,
+            "present": 161,
+            "missing": 5,
+            "missing_rate": 0.030120481927710843
+          },
+          {
+            "week": 3,
+            "present": 137,
+            "missing": 7,
+            "missing_rate": 0.04861111111111111
+          },
+          {
+            "week": 4,
+            "present": 120,
+            "missing": 6,
+            "missing_rate": 0.047619047619047616
+          },
+          {
+            "week": 5,
+            "present": 109,
+            "missing": 1,
+            "missing_rate": 0.00909090909090909
+          },
+          {
+            "week": 6,
+            "present": 102,
+            "missing": 2,
+            "missing_rate": 0.019230769230769232
+          },
+          {
+            "week": 7,
+            "present": 110,
+            "missing": 6,
+            "missing_rate": 0.05172413793103448
+          },
+          {
+            "week": 8,
+            "present": 122,
+            "missing": 2,
+            "missing_rate": 0.016129032258064516
+          },
+          {
+            "week": 9,
+            "present": 108,
+            "missing": 2,
+            "missing_rate": 0.01818181818181818
+          },
+          {
+            "week": 10,
+            "present": 107,
+            "missing": 1,
+            "missing_rate": 0.009259259259259259
+          },
+          {
+            "week": 11,
+            "present": 107,
+            "missing": 1,
+            "missing_rate": 0.009259259259259259
+          },
+          {
+            "week": 12,
+            "present": 117,
+            "missing": 5,
+            "missing_rate": 0.040983606557377046
+          }
+        ],
+        "season_missing_rate": 0.033866995073891626
+      }
+    },
+    {
+      "id": "ke.st",
+      "family": "st",
+      "sport": "cfb",
+      "status_hint": "DATA_INSUFFICIENT",
+      "reason": "CFB ST uncertified \u2014 omit; do not manufacture",
+      "forbidden_objectives": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "issue_562",
+        "market_residual"
+      ]
+    }
+  ],
+  "correlation_matrix": {
+    "n_teams": 232,
+    "pearson": {
+      "ke.off_eff": {
+        "ke.off_eff": 1.0,
+        "ke.def_eff": -0.3723010184274984,
+        "ke.success_native": 0.8947774097201499,
+        "ke.success_standard": 0.840296532347288,
+        "ke.success_allowed": -0.4019881681946368,
+        "ke.pace": 0.43313289485942086,
+        "ke.pace_competitive": 0.584441889895569,
+        "ke.pace_seconds": -0.22158644590615398,
+        "ke.expl": 0.8734679848334689,
+        "ke.expl_pass": 0.7928902759445856,
+        "ke.expl_rush": 0.6967159703134341,
+        "ke.expl_allowed": -0.3056007360944102,
+        "ke.off_pass_epa": 0.92076075243563,
+        "ke.off_rush_epa": 0.8202168220838024,
+        "ke.off_early_epa": 0.8897507868863084,
+        "ke.ppo": 0.6679182120995386,
+        "ke.finish": 0.5820652359291549,
+        "ke.opp_rate": 0.825652984756002,
+        "ke.rz_td": 0.4020430374475204
+      },
+      "ke.def_eff": {
+        "ke.off_eff": -0.3723010184274984,
+        "ke.def_eff": 1.0,
+        "ke.success_native": -0.38361369189477434,
+        "ke.success_standard": -0.3884599975953216,
+        "ke.success_allowed": 0.9073581649569311,
+        "ke.pace": -0.25460489223078175,
+        "ke.pace_competitive": -0.4513276750941265,
+        "ke.pace_seconds": 0.2448002227321158,
+        "ke.expl": -0.3885984165337599,
+        "ke.expl_pass": -0.3288682906813967,
+        "ke.expl_rush": -0.3522521703970101,
+        "ke.expl_allowed": 0.8265453043991938,
+        "ke.off_pass_epa": -0.3082493289059663,
+        "ke.off_rush_epa": -0.3802272175767039,
+        "ke.off_early_epa": -0.42566070709260717,
+        "ke.ppo": -0.26455091537049197,
+        "ke.finish": -0.27737292988783574,
+        "ke.opp_rate": -0.5106353087625081,
+        "ke.rz_td": -0.06590980389515348
+      },
+      "ke.success_native": {
+        "ke.off_eff": 0.8947774097201499,
+        "ke.def_eff": -0.38361369189477434,
+        "ke.success_native": 1.0,
+        "ke.success_standard": 0.9238117824058198,
+        "ke.success_allowed": -0.4011686621746411,
+        "ke.pace": 0.44165741126245195,
+        "ke.pace_competitive": 0.5409490481990621,
+        "ke.pace_seconds": -0.2427993308417415,
+        "ke.expl": 0.8175385928081484,
+        "ke.expl_pass": 0.7524764830786513,
+        "ke.expl_rush": 0.6482048323645732,
+        "ke.expl_allowed": -0.31384915246970435,
+        "ke.off_pass_epa": 0.8115065402007297,
+        "ke.off_rush_epa": 0.7783716912681592,
+        "ke.off_early_epa": 0.8519357679103726,
+        "ke.ppo": 0.5787207845892088,
+        "ke.finish": 0.5134981964692779,
+        "ke.opp_rate": 0.8496031006774083,
+        "ke.rz_td": 0.30394469558347004
+      },
+      "ke.success_standard": {
+        "ke.off_eff": 0.840296532347288,
+        "ke.def_eff": -0.3884599975953216,
+        "ke.success_native": 0.9238117824058198,
+        "ke.success_standard": 1.0000000000000002,
+        "ke.success_allowed": -0.4065939202917891,
+        "ke.pace": 0.4938304397839426,
+        "ke.pace_competitive": 0.5663487749125123,
+        "ke.pace_seconds": -0.280177916934109,
+        "ke.expl": 0.8128709243590208,
+        "ke.expl_pass": 0.7136735435780779,
+        "ke.expl_rush": 0.6061513018010782,
+        "ke.expl_allowed": -0.31483355036567123,
+        "ke.off_pass_epa": 0.7546596798662684,
+        "ke.off_rush_epa": 0.738176566621596,
+        "ke.off_early_epa": 0.8145307419019877,
+        "ke.ppo": 0.5559544645264547,
+        "ke.finish": 0.4983954104223513,
+        "ke.opp_rate": 0.8250526007034044,
+        "ke.rz_td": 0.24122595710477784
+      },
+      "ke.success_allowed": {
+        "ke.off_eff": -0.4019881681946368,
+        "ke.def_eff": 0.9073581649569311,
+        "ke.success_native": -0.4011686621746411,
+        "ke.success_standard": -0.4065939202917891,
+        "ke.success_allowed": 1.0,
+        "ke.pace": -0.3445601816342008,
+        "ke.pace_competitive": -0.4872562140422052,
+        "ke.pace_seconds": 0.2545716519031579,
+        "ke.expl": -0.42168175028672117,
+        "ke.expl_pass": -0.342192083532662,
+        "ke.expl_rush": -0.4027553660086367,
+        "ke.expl_allowed": 0.7154167785343661,
+        "ke.off_pass_epa": -0.32877296845177767,
+        "ke.off_rush_epa": -0.402955305651181,
+        "ke.off_early_epa": -0.4442692555296792,
+        "ke.ppo": -0.30209699385577465,
+        "ke.finish": -0.28945203117203855,
+        "ke.opp_rate": -0.5047502061837817,
+        "ke.rz_td": -0.12572511488339663
+      },
+      "ke.pace": {
+        "ke.off_eff": 0.43313289485942086,
+        "ke.def_eff": -0.25460489223078175,
+        "ke.success_native": 0.44165741126245195,
+        "ke.success_standard": 0.4938304397839426,
+        "ke.success_allowed": -0.3445601816342008,
+        "ke.pace": 1.0,
+        "ke.pace_competitive": 0.6559662585904876,
+        "ke.pace_seconds": -0.2615691087713307,
+        "ke.expl": 0.4147302229579583,
+        "ke.expl_pass": 0.28919142900119726,
+        "ke.expl_rush": 0.41774036022547556,
+        "ke.expl_allowed": -0.1703326585143225,
+        "ke.off_pass_epa": 0.3446566028294396,
+        "ke.off_rush_epa": 0.463773936701196,
+        "ke.off_early_epa": 0.37417695959549696,
+        "ke.ppo": 0.2566286156291744,
+        "ke.finish": 0.28208597281449527,
+        "ke.opp_rate": 0.5673484498208093,
+        "ke.rz_td": 0.01666112981528077
+      },
+      "ke.pace_competitive": {
+        "ke.off_eff": 0.584441889895569,
+        "ke.def_eff": -0.4513276750941265,
+        "ke.success_native": 0.5409490481990621,
+        "ke.success_standard": 0.5663487749125123,
+        "ke.success_allowed": -0.4872562140422052,
+        "ke.pace": 0.6559662585904876,
+        "ke.pace_competitive": 1.0000000000000002,
+        "ke.pace_seconds": -0.17992730915294133,
+        "ke.expl": 0.4941911964207175,
+        "ke.expl_pass": 0.3995743128448825,
+        "ke.expl_rush": 0.4427884535354129,
+        "ke.expl_allowed": -0.39397037591936257,
+        "ke.off_pass_epa": 0.4997749431831207,
+        "ke.off_rush_epa": 0.5741132426103449,
+        "ke.off_early_epa": 0.5085313053865924,
+        "ke.ppo": 0.37834859416050315,
+        "ke.finish": 0.38934394823373425,
+        "ke.opp_rate": 0.6627522696602722,
+        "ke.rz_td": 0.04350592240814386
+      },
+      "ke.pace_seconds": {
+        "ke.off_eff": -0.22158644590615398,
+        "ke.def_eff": 0.2448002227321158,
+        "ke.success_native": -0.2427993308417415,
+        "ke.success_standard": -0.280177916934109,
+        "ke.success_allowed": 0.2545716519031579,
+        "ke.pace": -0.2615691087713307,
+        "ke.pace_competitive": -0.17992730915294133,
+        "ke.pace_seconds": 1.0,
+        "ke.expl": -0.25111972306186386,
+        "ke.expl_pass": -0.1788930308933301,
+        "ke.expl_rush": -0.18270756772003222,
+        "ke.expl_allowed": 0.17176017784288486,
+        "ke.off_pass_epa": -0.16506379669273843,
+        "ke.off_rush_epa": -0.2068035399581299,
+        "ke.off_early_epa": -0.24141333076454966,
+        "ke.ppo": -0.15016799937503064,
+        "ke.finish": -0.09885750793510659,
+        "ke.opp_rate": -0.2313755553992224,
+        "ke.rz_td": -0.11362729168640491
+      },
+      "ke.expl": {
+        "ke.off_eff": 0.8734679848334689,
+        "ke.def_eff": -0.3885984165337599,
+        "ke.success_native": 0.8175385928081484,
+        "ke.success_standard": 0.8128709243590208,
+        "ke.success_allowed": -0.42168175028672117,
+        "ke.pace": 0.4147302229579583,
+        "ke.pace_competitive": 0.4941911964207175,
+        "ke.pace_seconds": -0.25111972306186386,
+        "ke.expl": 0.9999999999999999,
+        "ke.expl_pass": 0.87571306646037,
+        "ke.expl_rush": 0.7601168646591913,
+        "ke.expl_allowed": -0.2876658348256852,
+        "ke.off_pass_epa": 0.8139538458951392,
+        "ke.off_rush_epa": 0.7017055970637545,
+        "ke.off_early_epa": 0.8196430388677765,
+        "ke.ppo": 0.6163527031506736,
+        "ke.finish": 0.5571566354488039,
+        "ke.opp_rate": 0.8063562811109461,
+        "ke.rz_td": 0.33933199942836373
+      },
+      "ke.expl_pass": {
+        "ke.off_eff": 0.7928902759445856,
+        "ke.def_eff": -0.3288682906813967,
+        "ke.success_native": 0.7524764830786513,
+        "ke.success_standard": 0.7136735435780779,
+        "ke.success_allowed": -0.342192083532662,
+        "ke.pace": 0.28919142900119726,
+        "ke.pace_competitive": 0.3995743128448825,
+        "ke.pace_seconds": -0.1788930308933301,
+        "ke.expl": 0.87571306646037,
+        "ke.expl_pass": 1.0000000000000002,
+        "ke.expl_rush": 0.4432898565479957,
+        "ke.expl_allowed": -0.29813783451863474,
+        "ke.off_pass_epa": 0.8355461339482951,
+        "ke.off_rush_epa": 0.5104924533269487,
+        "ke.off_early_epa": 0.7185851237978353,
+        "ke.ppo": 0.6138419696179708,
+        "ke.finish": 0.5575270597082252,
+        "ke.opp_rate": 0.7373621918572995,
+        "ke.rz_td": 0.29431399306004263
+      },
+      "ke.expl_rush": {
+        "ke.off_eff": 0.6967159703134341,
+        "ke.def_eff": -0.3522521703970101,
+        "ke.success_native": 0.6482048323645732,
+        "ke.success_standard": 0.6061513018010782,
+        "ke.success_allowed": -0.4027553660086367,
+        "ke.pace": 0.41774036022547556,
+        "ke.pace_competitive": 0.4427884535354129,
+        "ke.pace_seconds": -0.18270756772003222,
+        "ke.expl": 0.7601168646591913,
+        "ke.expl_pass": 0.4432898565479957,
+        "ke.expl_rush": 0.9999999999999998,
+        "ke.expl_allowed": -0.22416505753841917,
+        "ke.off_pass_epa": 0.5082554777688828,
+        "ke.off_rush_epa": 0.8008447050783911,
+        "ke.off_early_epa": 0.6591483571510616,
+        "ke.ppo": 0.39417337969435473,
+        "ke.finish": 0.37275481610249683,
+        "ke.opp_rate": 0.6473198749884476,
+        "ke.rz_td": 0.2102333190485963
+      },
+      "ke.expl_allowed": {
+        "ke.off_eff": -0.3056007360944102,
+        "ke.def_eff": 0.8265453043991938,
+        "ke.success_native": -0.31384915246970435,
+        "ke.success_standard": -0.31483355036567123,
+        "ke.success_allowed": 0.7154167785343661,
+        "ke.pace": -0.1703326585143225,
+        "ke.pace_competitive": -0.39397037591936257,
+        "ke.pace_seconds": 0.17176017784288486,
+        "ke.expl": -0.2876658348256852,
+        "ke.expl_pass": -0.29813783451863474,
+        "ke.expl_rush": -0.22416505753841917,
+        "ke.expl_allowed": 1.0000000000000002,
+        "ke.off_pass_epa": -0.2980764697452426,
+        "ke.off_rush_epa": -0.2584009137933291,
+        "ke.off_early_epa": -0.35947314102213973,
+        "ke.ppo": -0.23514686227634654,
+        "ke.finish": -0.2818467526775698,
+        "ke.opp_rate": -0.40250260667384036,
+        "ke.rz_td": -0.03752849846832642
+      },
+      "ke.off_pass_epa": {
+        "ke.off_eff": 0.92076075243563,
+        "ke.def_eff": -0.3082493289059663,
+        "ke.success_native": 0.8115065402007297,
+        "ke.success_standard": 0.7546596798662684,
+        "ke.success_allowed": -0.32877296845177767,
+        "ke.pace": 0.3446566028294396,
+        "ke.pace_competitive": 0.4997749431831207,
+        "ke.pace_seconds": -0.16506379669273843,
+        "ke.expl": 0.8139538458951392,
+        "ke.expl_pass": 0.8355461339482951,
+        "ke.expl_rush": 0.5082554777688828,
+        "ke.expl_allowed": -0.2980764697452426,
+        "ke.off_pass_epa": 1.0,
+        "ke.off_rush_epa": 0.5651838096479181,
+        "ke.off_early_epa": 0.7938420084129253,
+        "ke.ppo": 0.6346659579637743,
+        "ke.finish": 0.5569453941735063,
+        "ke.opp_rate": 0.7286592238253671,
+        "ke.rz_td": 0.3978682267628873
+      },
+      "ke.off_rush_epa": {
+        "ke.off_eff": 0.8202168220838024,
+        "ke.def_eff": -0.3802272175767039,
+        "ke.success_native": 0.7783716912681592,
+        "ke.success_standard": 0.738176566621596,
+        "ke.success_allowed": -0.402955305651181,
+        "ke.pace": 0.463773936701196,
+        "ke.pace_competitive": 0.5741132426103449,
+        "ke.pace_seconds": -0.2068035399581299,
+        "ke.expl": 0.7017055970637545,
+        "ke.expl_pass": 0.5104924533269487,
+        "ke.expl_rush": 0.8008447050783911,
+        "ke.expl_allowed": -0.2584009137933291,
+        "ke.off_pass_epa": 0.5651838096479181,
+        "ke.off_rush_epa": 1.0,
+        "ke.off_early_epa": 0.7522008349606645,
+        "ke.ppo": 0.4887764527600139,
+        "ke.finish": 0.41859661686159977,
+        "ke.opp_rate": 0.7488184430212925,
+        "ke.rz_td": 0.22448054753365626
+      },
+      "ke.off_early_epa": {
+        "ke.off_eff": 0.8897507868863084,
+        "ke.def_eff": -0.42566070709260717,
+        "ke.success_native": 0.8519357679103726,
+        "ke.success_standard": 0.8145307419019877,
+        "ke.success_allowed": -0.4442692555296792,
+        "ke.pace": 0.37417695959549696,
+        "ke.pace_competitive": 0.5085313053865924,
+        "ke.pace_seconds": -0.24141333076454966,
+        "ke.expl": 0.8196430388677765,
+        "ke.expl_pass": 0.7185851237978353,
+        "ke.expl_rush": 0.6591483571510616,
+        "ke.expl_allowed": -0.35947314102213973,
+        "ke.off_pass_epa": 0.7938420084129253,
+        "ke.off_rush_epa": 0.7522008349606645,
+        "ke.off_early_epa": 1.0,
+        "ke.ppo": 0.6156168286472719,
+        "ke.finish": 0.5440543676771448,
+        "ke.opp_rate": 0.7697422123139268,
+        "ke.rz_td": 0.4666565336157777
+      },
+      "ke.ppo": {
+        "ke.off_eff": 0.6679182120995386,
+        "ke.def_eff": -0.26455091537049197,
+        "ke.success_native": 0.5787207845892088,
+        "ke.success_standard": 0.5559544645264547,
+        "ke.success_allowed": -0.30209699385577465,
+        "ke.pace": 0.2566286156291744,
+        "ke.pace_competitive": 0.37834859416050315,
+        "ke.pace_seconds": -0.15016799937503064,
+        "ke.expl": 0.6163527031506736,
+        "ke.expl_pass": 0.6138419696179708,
+        "ke.expl_rush": 0.39417337969435473,
+        "ke.expl_allowed": -0.23514686227634654,
+        "ke.off_pass_epa": 0.6346659579637743,
+        "ke.off_rush_epa": 0.4887764527600139,
+        "ke.off_early_epa": 0.6156168286472719,
+        "ke.ppo": 1.0000000000000002,
+        "ke.finish": 0.9204988452726469,
+        "ke.opp_rate": 0.48498343086587614,
+        "ke.rz_td": 0.5251386756787523
+      },
+      "ke.finish": {
+        "ke.off_eff": 0.5820652359291549,
+        "ke.def_eff": -0.27737292988783574,
+        "ke.success_native": 0.5134981964692779,
+        "ke.success_standard": 0.4983954104223513,
+        "ke.success_allowed": -0.28945203117203855,
+        "ke.pace": 0.28208597281449527,
+        "ke.pace_competitive": 0.38934394823373425,
+        "ke.pace_seconds": -0.09885750793510659,
+        "ke.expl": 0.5571566354488039,
+        "ke.expl_pass": 0.5575270597082252,
+        "ke.expl_rush": 0.37275481610249683,
+        "ke.expl_allowed": -0.2818467526775698,
+        "ke.off_pass_epa": 0.5569453941735063,
+        "ke.off_rush_epa": 0.41859661686159977,
+        "ke.off_early_epa": 0.5440543676771448,
+        "ke.ppo": 0.9204988452726469,
+        "ke.finish": 0.9999999999999998,
+        "ke.opp_rate": 0.47608882181428547,
+        "ke.rz_td": 0.3653646103309916
+      },
+      "ke.opp_rate": {
+        "ke.off_eff": 0.825652984756002,
+        "ke.def_eff": -0.5106353087625081,
+        "ke.success_native": 0.8496031006774083,
+        "ke.success_standard": 0.8250526007034044,
+        "ke.success_allowed": -0.5047502061837817,
+        "ke.pace": 0.5673484498208093,
+        "ke.pace_competitive": 0.6627522696602722,
+        "ke.pace_seconds": -0.2313755553992224,
+        "ke.expl": 0.8063562811109461,
+        "ke.expl_pass": 0.7373621918572995,
+        "ke.expl_rush": 0.6473198749884476,
+        "ke.expl_allowed": -0.40250260667384036,
+        "ke.off_pass_epa": 0.7286592238253671,
+        "ke.off_rush_epa": 0.7488184430212925,
+        "ke.off_early_epa": 0.7697422123139268,
+        "ke.ppo": 0.48498343086587614,
+        "ke.finish": 0.47608882181428547,
+        "ke.opp_rate": 1.0000000000000002,
+        "ke.rz_td": 0.19083512863396002
+      },
+      "ke.rz_td": {
+        "ke.off_eff": 0.4020430374475204,
+        "ke.def_eff": -0.06590980389515348,
+        "ke.success_native": 0.30394469558347004,
+        "ke.success_standard": 0.24122595710477784,
+        "ke.success_allowed": -0.12572511488339663,
+        "ke.pace": 0.01666112981528077,
+        "ke.pace_competitive": 0.04350592240814386,
+        "ke.pace_seconds": -0.11362729168640491,
+        "ke.expl": 0.33933199942836373,
+        "ke.expl_pass": 0.29431399306004263,
+        "ke.expl_rush": 0.2102333190485963,
+        "ke.expl_allowed": -0.03752849846832642,
+        "ke.off_pass_epa": 0.3978682267628873,
+        "ke.off_rush_epa": 0.22448054753365626,
+        "ke.off_early_epa": 0.4666565336157777,
+        "ke.ppo": 0.5251386756787523,
+        "ke.finish": 0.3653646103309916,
+        "ke.opp_rate": 0.19083512863396002,
+        "ke.rz_td": 1.0
+      }
+    }
+  },
+  "off_def_symmetry": {
+    "league_mean_off_epa": 0.05544242049349746,
+    "league_mean_def_epa": 0.05544242049349746,
+    "identity_gap": 0.0,
+    "team_off_def_pearson": -0.3723010184274984,
+    "n_teams": 232,
+    "note": "same-play identity: league off mean should match league def mean"
+  },
+  "production_promote": false,
+  "no_composite_weights": true
+}

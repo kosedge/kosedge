@@ -1,0 +1,1124 @@
+{
+  "forbidden_objectives": [
+    "ats",
+    "close",
+    "roi",
+    "kei",
+    "issue_562_totals"
+  ],
+  "nfl": {
+    "next_game_epa": {
+      "objective": "next_game_epa_per_play",
+      "forbidden": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "issue_562_totals"
+      ],
+      "offense": {
+        "adjusted": {
+          "n": 448,
+          "mae": 0.17687159295896895,
+          "rmse": 0.22434398843346243,
+          "bias": 0.009327386175637551
+        },
+        "unadjusted": {
+          "n": 448,
+          "mae": 0.17345438212057843,
+          "rmse": 0.2169754942812176,
+          "bias": 0.008791496436780358
+        },
+        "league_mean": {
+          "n": 448,
+          "mae": 0.17499897312380042,
+          "rmse": 0.2205405718052175,
+          "bias": 0.009519881953729664
+        }
+      },
+      "defense": {
+        "adjusted": {
+          "n": 448,
+          "mae": 0.18071755272869,
+          "rmse": 0.22710103680374283,
+          "bias": 0.00812599667572539
+        },
+        "unadjusted": {
+          "n": 448,
+          "mae": 0.177664691813658,
+          "rmse": 0.22093058679177827,
+          "bias": 0.007782924911151462
+        },
+        "league_mean": {
+          "n": 448,
+          "mae": 0.17499897312380042,
+          "rmse": 0.2205405718052175,
+          "bias": 0.009519881953729667
+        }
+      }
+    },
+    "stability_off": {
+      "component": "ke.off_eff",
+      "pairs": [
+        {
+          "from": 2,
+          "to": 3,
+          "n": 32,
+          "pearson": 0.6804118604333693
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "n": 32,
+          "pearson": 0.8243723476075732
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 32,
+          "pearson": 0.9154960817234454
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 32,
+          "pearson": 0.9559192195368968
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 32,
+          "pearson": 0.9609558675471215
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 32,
+          "pearson": 0.9350761797103919
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 32,
+          "pearson": 0.9626074479838953
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 32,
+          "pearson": 0.9744564479874895
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 32,
+          "pearson": 0.9757318931515153
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 32,
+          "pearson": 0.9828828417403066
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 32,
+          "pearson": 0.991106434730309
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "n": 32,
+          "pearson": 0.9901009804479325
+        },
+        {
+          "from": 14,
+          "to": 15,
+          "n": 32,
+          "pearson": 0.9844250259065592
+        },
+        {
+          "from": 15,
+          "to": 16,
+          "n": 32,
+          "pearson": 0.9911518584623363
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "n": 32,
+          "pearson": 0.9917292816458256
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "n": 32,
+          "pearson": 0.98643337392841
+        }
+      ]
+    },
+    "stability_def": {
+      "component": "ke.def_eff",
+      "pairs": [
+        {
+          "from": 2,
+          "to": 3,
+          "n": 32,
+          "pearson": 0.5391114387166077
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "n": 32,
+          "pearson": 0.7844685688892251
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 32,
+          "pearson": 0.8907064799973897
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 32,
+          "pearson": 0.920583266735514
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 32,
+          "pearson": 0.936547487990925
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 32,
+          "pearson": 0.89231000599172
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 32,
+          "pearson": 0.9255949070279792
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 32,
+          "pearson": 0.9757973403581507
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 32,
+          "pearson": 0.965023205309404
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 32,
+          "pearson": 0.977159811189376
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 32,
+          "pearson": 0.9857039561487595
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "n": 32,
+          "pearson": 0.9767812038569039
+        },
+        {
+          "from": 14,
+          "to": 15,
+          "n": 32,
+          "pearson": 0.984752738348312
+        },
+        {
+          "from": 15,
+          "to": 16,
+          "n": 32,
+          "pearson": 0.9869969171827345
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "n": 32,
+          "pearson": 0.9866325001346995
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "n": 32,
+          "pearson": 0.9878167240624545
+        }
+      ]
+    },
+    "ranking_sanity": {
+      "best_offense": [
+        {
+          "team": "NE",
+          "off_epa_raw": 0.14795306321692112,
+          "def_epa_raw": -0.029538813536126383,
+          "n_games": 16,
+          "n_off_plays": 963
+        },
+        {
+          "team": "LA",
+          "off_epa_raw": 0.1385009339527498,
+          "def_epa_raw": -0.06595162746812466,
+          "n_games": 16,
+          "n_off_plays": 988
+        },
+        {
+          "team": "GB",
+          "off_epa_raw": 0.1378970065502824,
+          "def_epa_raw": 0.03914494075747014,
+          "n_games": 16,
+          "n_off_plays": 944
+        },
+        {
+          "team": "BUF",
+          "off_epa_raw": 0.12013125956206214,
+          "def_epa_raw": -0.0038406951306433736,
+          "n_games": 16,
+          "n_off_plays": 995
+        },
+        {
+          "team": "DAL",
+          "off_epa_raw": 0.10930825906246946,
+          "def_epa_raw": 0.16978187700689065,
+          "n_games": 16,
+          "n_off_plays": 1051
+        },
+        {
+          "team": "SF",
+          "off_epa_raw": 0.10630436564778965,
+          "def_epa_raw": 0.07055399013119266,
+          "n_games": 16,
+          "n_off_plays": 1023
+        }
+      ],
+      "worst_offense": [
+        {
+          "team": "LV",
+          "off_epa_raw": -0.19632734392708276,
+          "def_epa_raw": 0.05503701061613077,
+          "n_games": 16,
+          "n_off_plays": 881
+        },
+        {
+          "team": "CLE",
+          "off_epa_raw": -0.19368196456690356,
+          "def_epa_raw": -0.09457926676645627,
+          "n_games": 16,
+          "n_off_plays": 976
+        },
+        {
+          "team": "TEN",
+          "off_epa_raw": -0.14904245913562758,
+          "def_epa_raw": 0.09444799651980583,
+          "n_games": 16,
+          "n_off_plays": 942
+        },
+        {
+          "team": "MIN",
+          "off_epa_raw": -0.12079768054880975,
+          "def_epa_raw": -0.08784121532628007,
+          "n_games": 16,
+          "n_off_plays": 879
+        },
+        {
+          "team": "NYJ",
+          "off_epa_raw": -0.12018853512380509,
+          "def_epa_raw": 0.1324539963107089,
+          "n_games": 16,
+          "n_off_plays": 962
+        },
+        {
+          "team": "NO",
+          "off_epa_raw": -0.08633983883464211,
+          "def_epa_raw": -0.047772716562859086,
+          "n_games": 16,
+          "n_off_plays": 999
+        }
+      ],
+      "best_defense": [
+        {
+          "team": "HOU",
+          "off_epa_raw": -0.01257985746760586,
+          "def_epa_raw": -0.13551221967391786,
+          "n_games": 16,
+          "n_off_plays": 1015
+        },
+        {
+          "team": "SEA",
+          "off_epa_raw": 0.030333675524531586,
+          "def_epa_raw": -0.10591384560393645,
+          "n_games": 16,
+          "n_off_plays": 933
+        },
+        {
+          "team": "CLE",
+          "off_epa_raw": -0.19368196456690356,
+          "def_epa_raw": -0.09457926676645627,
+          "n_games": 16,
+          "n_off_plays": 976
+        },
+        {
+          "team": "JAX",
+          "off_epa_raw": 0.02134152487425751,
+          "def_epa_raw": -0.09218174814420639,
+          "n_games": 16,
+          "n_off_plays": 1019
+        },
+        {
+          "team": "MIN",
+          "off_epa_raw": -0.12079768054880975,
+          "def_epa_raw": -0.08784121532628007,
+          "n_games": 16,
+          "n_off_plays": 879
+        },
+        {
+          "team": "PHI",
+          "off_epa_raw": 0.03438220085448724,
+          "def_epa_raw": -0.08225482820404638,
+          "n_games": 16,
+          "n_off_plays": 933
+        }
+      ],
+      "worst_defense": [
+        {
+          "team": "DAL",
+          "off_epa_raw": 0.10930825906246946,
+          "def_epa_raw": 0.16978187700689065,
+          "n_games": 16,
+          "n_off_plays": 1051
+        },
+        {
+          "team": "WAS",
+          "off_epa_raw": 0.008581938288600436,
+          "def_epa_raw": 0.15843752410432238,
+          "n_games": 16,
+          "n_off_plays": 918
+        },
+        {
+          "team": "CIN",
+          "off_epa_raw": -0.0013025413925902226,
+          "def_epa_raw": 0.1433181596240856,
+          "n_games": 16,
+          "n_off_plays": 982
+        },
+        {
+          "team": "NYJ",
+          "off_epa_raw": -0.12018853512380509,
+          "def_epa_raw": 0.1324539963107089,
+          "n_games": 16,
+          "n_off_plays": 962
+        },
+        {
+          "team": "NYG",
+          "off_epa_raw": 0.0038533978689710637,
+          "def_epa_raw": 0.09914762832681903,
+          "n_games": 16,
+          "n_off_plays": 1009
+        },
+        {
+          "team": "TEN",
+          "off_epa_raw": -0.14904245913562758,
+          "def_epa_raw": 0.09444799651980583,
+          "n_games": 16,
+          "n_off_plays": 942
+        }
+      ],
+      "note": "sanity only \u2014 not a seal; not Team Strength"
+    },
+    "missingness": {
+      "ke.off_eff": {
+        "OK": 32
+      },
+      "ke.def_eff": {
+        "OK": 32
+      },
+      "ke.success_native": {
+        "OK": 32
+      },
+      "ke.success_standard": {
+        "OK": 32
+      },
+      "ke.success_allowed": {
+        "OK": 32
+      },
+      "ke.pace": {
+        "OK": 32
+      },
+      "ke.pace_competitive": {
+        "OK": 32
+      },
+      "ke.pace_seconds": {
+        "OK": 32
+      },
+      "ke.expl_pass": {
+        "OK": 32
+      },
+      "ke.expl_rush": {
+        "OK": 32
+      },
+      "ke.expl": {
+        "OK": 32
+      },
+      "ke.expl_allowed": {
+        "OK": 32
+      },
+      "ke.off_pass_epa": {
+        "OK": 32
+      },
+      "ke.off_rush_epa": {
+        "OK": 32
+      },
+      "ke.off_early_epa": {
+        "OK": 32
+      },
+      "ke.st": {
+        "OK": 32
+      },
+      "ke.opp_rate": {
+        "OK": 32
+      },
+      "ke.ppo": {
+        "OK": 32
+      },
+      "ke.finish": {
+        "OK": 32
+      },
+      "ke.rz_td": {
+        "OK": 32
+      },
+      "ke.havoc": {
+        "OMIT": 32
+      },
+      "ke.disruption_proxy_nfl": {
+        "OK": 32
+      },
+      "ke.disruption_sack": {
+        "OK": 32
+      },
+      "ke.disruption_interception": {
+        "OK": 32
+      },
+      "ke.disruption_qb_hit": {
+        "OK": 32
+      },
+      "ke.disruption_fumble": {
+        "OK": 32
+      },
+      "ke.disruption_fumble_forced": {
+        "OK": 32
+      },
+      "ke.disruption_tfl": {
+        "OK": 32
+      },
+      "ke.disruption_pass_breakup": {
+        "DATA_INSUFFICIENT": 32
+      },
+      "ke.team_strength": {
+        "OMIT": 32
+      },
+      "ke.opp_adj_epa.off": {
+        "OK": 32
+      },
+      "ke.opp_adj_epa.def": {
+        "OK": 32
+      }
+    },
+    "provenance": {
+      "layers_by_id": {
+        "ke.off_eff": "DERIVED",
+        "ke.def_eff": "DERIVED",
+        "ke.success_native": "DERIVED",
+        "ke.success_standard": "DERIVED",
+        "ke.success_allowed": "DERIVED",
+        "ke.pace": "DERIVED",
+        "ke.pace_competitive": "DERIVED",
+        "ke.pace_seconds": "DERIVED",
+        "ke.expl_pass": "DERIVED",
+        "ke.expl_rush": "DERIVED",
+        "ke.expl": "DERIVED",
+        "ke.expl_allowed": "DERIVED",
+        "ke.off_pass_epa": "DERIVED",
+        "ke.off_rush_epa": "DERIVED",
+        "ke.off_early_epa": "DERIVED",
+        "ke.st": "DERIVED",
+        "ke.opp_rate": "DERIVED",
+        "ke.ppo": "DERIVED",
+        "ke.finish": "DERIVED",
+        "ke.rz_td": "DERIVED",
+        "ke.havoc": "DERIVED",
+        "ke.disruption_proxy_nfl": "DERIVED",
+        "ke.disruption_sack": "DERIVED",
+        "ke.disruption_interception": "DERIVED",
+        "ke.disruption_qb_hit": "DERIVED",
+        "ke.disruption_fumble": "DERIVED",
+        "ke.disruption_fumble_forced": "DERIVED",
+        "ke.disruption_tfl": "DERIVED",
+        "ke.disruption_pass_breakup": "DERIVED",
+        "ke.team_strength": "DERIVED",
+        "ke.opp_adj_epa.off": "ADJUSTED",
+        "ke.opp_adj_epa.def": "ADJUSTED"
+      },
+      "violations": [],
+      "taxonomy": [
+        "RAW",
+        "DERIVED",
+        "ADJUSTED",
+        "MODELED"
+      ],
+      "ok": true
+    }
+  },
+  "cfb": {
+    "next_game_epa": {
+      "objective": "next_game_epa_per_play",
+      "forbidden": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "issue_562_totals"
+      ],
+      "offense": {
+        "adjusted": {
+          "n": 1147,
+          "mae": 0.1955477522622597,
+          "rmse": 0.24726563769946508,
+          "bias": 0.022088294756315498
+        },
+        "unadjusted": {
+          "n": 1149,
+          "mae": 0.18211785520791915,
+          "rmse": 0.23332665417034712,
+          "bias": 0.016048049324886637
+        },
+        "league_mean": {
+          "n": 1172,
+          "mae": 0.1847215787977739,
+          "rmse": 0.2323280896114933,
+          "bias": 0.0002592150603433262
+        }
+      },
+      "defense": {
+        "adjusted": {
+          "n": 1147,
+          "mae": 0.1933427307863579,
+          "rmse": 0.24516859154527626,
+          "bias": -0.014652507150607457
+        },
+        "unadjusted": {
+          "n": 1149,
+          "mae": 0.18879275709142895,
+          "rmse": 0.2379790348370101,
+          "bias": -0.020108542680503768
+        },
+        "league_mean": {
+          "n": 1172,
+          "mae": 0.1847215787977739,
+          "rmse": 0.2323280896114933,
+          "bias": 0.0002592150603433262
+        }
+      }
+    },
+    "stability_off": {
+      "component": "ke.off_eff",
+      "pairs": [
+        {
+          "from": 2,
+          "to": 3,
+          "n": 188,
+          "pearson": 0.8962493999244541
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "n": 209,
+          "pearson": 0.9394083331924431
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 227,
+          "pearson": 0.9801134714061536
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 229,
+          "pearson": 0.9845738381213657
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 230,
+          "pearson": 0.9909363997542042
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 230,
+          "pearson": 0.9929450354977037
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 230,
+          "pearson": 0.9926689003312056
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 230,
+          "pearson": 0.9960557346601141
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 231,
+          "pearson": 0.996085690968827
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 231,
+          "pearson": 0.9945247188782718
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 231,
+          "pearson": 0.9961471454559345
+        }
+      ]
+    },
+    "stability_def": {
+      "component": "ke.def_eff",
+      "pairs": [
+        {
+          "from": 2,
+          "to": 3,
+          "n": 188,
+          "pearson": 0.8565572003375153
+        },
+        {
+          "from": 3,
+          "to": 4,
+          "n": 209,
+          "pearson": 0.9418237976936953
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 227,
+          "pearson": 0.9686400907637966
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 229,
+          "pearson": 0.9833341837729218
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 230,
+          "pearson": 0.9901608883550926
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 230,
+          "pearson": 0.991904472146174
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 230,
+          "pearson": 0.9892658996106287
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 230,
+          "pearson": 0.9770314466257903
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 231,
+          "pearson": 0.9928128712723814
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 231,
+          "pearson": 0.9947185148000868
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 231,
+          "pearson": 0.9964102524165354
+        }
+      ]
+    },
+    "ranking_sanity": {
+      "best_offense": [
+        {
+          "team": "Vanderbilt Commodores",
+          "off_epa_raw": 0.32600437009152566,
+          "def_epa_raw": 0.15256554954393808,
+          "n_games": 11,
+          "n_off_plays": 655
+        },
+        {
+          "team": "North Dakota State Bison",
+          "off_epa_raw": 0.320982551991063,
+          "def_epa_raw": -0.13152048811076922,
+          "n_games": 11,
+          "n_off_plays": 680
+        },
+        {
+          "team": "Ohio State Buckeyes",
+          "off_epa_raw": 0.29167333137584645,
+          "def_epa_raw": -0.15285185644581373,
+          "n_games": 11,
+          "n_off_plays": 678
+        },
+        {
+          "team": "Navy Midshipmen",
+          "off_epa_raw": 0.2860473481481471,
+          "def_epa_raw": 0.18952801897273971,
+          "n_games": 11,
+          "n_off_plays": 681
+        },
+        {
+          "team": "Georgia Tech Yellow Jackets",
+          "off_epa_raw": 0.2756868190951701,
+          "def_epa_raw": 0.17813883407685097,
+          "n_games": 10,
+          "n_off_plays": 667
+        },
+        {
+          "team": "USC Trojans",
+          "off_epa_raw": 0.27414269805333374,
+          "def_epa_raw": 0.043316036773683224,
+          "n_games": 11,
+          "n_off_plays": 708
+        }
+      ],
+      "worst_offense": [
+        {
+          "team": "Massachusetts Minutemen",
+          "off_epa_raw": -0.1877179922316018,
+          "def_epa_raw": 0.17891252615002237,
+          "n_games": 10,
+          "n_off_plays": 635
+        },
+        {
+          "team": "Sam Houston Bearkats",
+          "off_epa_raw": -0.15299251979521716,
+          "def_epa_raw": 0.12394521464420254,
+          "n_games": 10,
+          "n_off_plays": 631
+        },
+        {
+          "team": "Wisconsin Badgers",
+          "off_epa_raw": -0.1409437142585109,
+          "def_epa_raw": 0.08076584937735501,
+          "n_games": 10,
+          "n_off_plays": 574
+        },
+        {
+          "team": "New Mexico State Aggies",
+          "off_epa_raw": -0.1338223373411117,
+          "def_epa_raw": -0.019270815615579064,
+          "n_games": 10,
+          "n_off_plays": 666
+        },
+        {
+          "team": "Oklahoma State Cowboys",
+          "off_epa_raw": -0.1235034006151432,
+          "def_epa_raw": 0.16744387361128427,
+          "n_games": 10,
+          "n_off_plays": 668
+        },
+        {
+          "team": "Charlotte 49ers",
+          "off_epa_raw": -0.11170914525595996,
+          "def_epa_raw": 0.1739039543595114,
+          "n_games": 10,
+          "n_off_plays": 650
+        }
+      ],
+      "best_defense": [
+        {
+          "team": "Texas Tech Red Raiders",
+          "off_epa_raw": 0.12216380740182183,
+          "def_epa_raw": -0.23845672415835517,
+          "n_games": 12,
+          "n_off_plays": 854
+        },
+        {
+          "team": "Toledo Rockets",
+          "off_epa_raw": 0.10842064168920909,
+          "def_epa_raw": -0.16330323602480085,
+          "n_games": 11,
+          "n_off_plays": 743
+        },
+        {
+          "team": "Ohio State Buckeyes",
+          "off_epa_raw": 0.29167333137584645,
+          "def_epa_raw": -0.15285185644581373,
+          "n_games": 11,
+          "n_off_plays": 678
+        },
+        {
+          "team": "Oklahoma Sooners",
+          "off_epa_raw": 0.017684406288738908,
+          "def_epa_raw": -0.15079100933140036,
+          "n_games": 11,
+          "n_off_plays": 725
+        },
+        {
+          "team": "San Diego State Aztecs",
+          "off_epa_raw": 0.01058514798673975,
+          "def_epa_raw": -0.13489964332721188,
+          "n_games": 11,
+          "n_off_plays": 713
+        },
+        {
+          "team": "Indiana Hoosiers",
+          "off_epa_raw": 0.2684493592702719,
+          "def_epa_raw": -0.13347592392780316,
+          "n_games": 14,
+          "n_off_plays": 937
+        }
+      ],
+      "worst_defense": [
+        {
+          "team": "Air Force Falcons",
+          "off_epa_raw": 0.2536593803983421,
+          "def_epa_raw": 0.32634411188980417,
+          "n_games": 10,
+          "n_off_plays": 684
+        },
+        {
+          "team": "UAB Blazers",
+          "off_epa_raw": 0.1746917159797193,
+          "def_epa_raw": 0.27081062370594944,
+          "n_games": 10,
+          "n_off_plays": 666
+        },
+        {
+          "team": "Rutgers Scarlet Knights",
+          "off_epa_raw": 0.1742397291452022,
+          "def_epa_raw": 0.26677047712252044,
+          "n_games": 10,
+          "n_off_plays": 724
+        },
+        {
+          "team": "Georgia State Panthers",
+          "off_epa_raw": 0.07694532418794908,
+          "def_epa_raw": 0.24196132380421237,
+          "n_games": 10,
+          "n_off_plays": 674
+        },
+        {
+          "team": "Boston College Eagles",
+          "off_epa_raw": 0.06401514206224543,
+          "def_epa_raw": 0.23169915011124825,
+          "n_games": 11,
+          "n_off_plays": 782
+        },
+        {
+          "team": "Arkansas Razorbacks",
+          "off_epa_raw": 0.23292727751645798,
+          "def_epa_raw": 0.22694697645098458,
+          "n_games": 10,
+          "n_off_plays": 644
+        }
+      ],
+      "note": "sanity only \u2014 not a seal; not Team Strength"
+    },
+    "missingness": {
+      "ke.off_eff": {
+        "OK": 183,
+        "THIN": 49
+      },
+      "ke.def_eff": {
+        "OK": 187,
+        "THIN": 45
+      },
+      "ke.success_native": {
+        "OK": 232
+      },
+      "ke.success_standard": {
+        "OK": 232
+      },
+      "ke.success_allowed": {
+        "OK": 232
+      },
+      "ke.pace": {
+        "OK": 181,
+        "THIN": 51
+      },
+      "ke.pace_competitive": {
+        "OK": 181,
+        "THIN": 51
+      },
+      "ke.pace_seconds": {
+        "OK": 215,
+        "DATA_INSUFFICIENT": 17
+      },
+      "ke.expl_pass": {
+        "OK": 186,
+        "THIN": 46
+      },
+      "ke.expl_rush": {
+        "OK": 185,
+        "THIN": 47
+      },
+      "ke.expl": {
+        "OK": 183,
+        "THIN": 49
+      },
+      "ke.expl_allowed": {
+        "OK": 187,
+        "THIN": 45
+      },
+      "ke.off_pass_epa": {
+        "OK": 186,
+        "THIN": 46
+      },
+      "ke.off_rush_epa": {
+        "OK": 185,
+        "THIN": 47
+      },
+      "ke.off_early_epa": {
+        "OK": 232
+      },
+      "ke.st": {
+        "OMIT": 232
+      },
+      "ke.opp_rate": {
+        "OK": 232
+      },
+      "ke.ppo": {
+        "OK": 160,
+        "THIN": 72
+      },
+      "ke.finish": {
+        "OK": 160,
+        "THIN": 72
+      },
+      "ke.rz_td": {
+        "OK": 223,
+        "DATA_INSUFFICIENT": 9
+      },
+      "ke.havoc": {
+        "OMIT": 232
+      },
+      "ke.disruption_flags_cfb": {
+        "OMIT": 232
+      },
+      "ke.disruption_sack": {
+        "OK": 187,
+        "THIN": 45
+      },
+      "ke.disruption_interception": {
+        "DATA_INSUFFICIENT": 232
+      },
+      "ke.disruption_qb_hit": {
+        "DATA_INSUFFICIENT": 232
+      },
+      "ke.disruption_fumble": {
+        "DATA_INSUFFICIENT": 232
+      },
+      "ke.disruption_fumble_forced": {
+        "DATA_INSUFFICIENT": 232
+      },
+      "ke.disruption_tfl": {
+        "DATA_INSUFFICIENT": 232
+      },
+      "ke.disruption_pass_breakup": {
+        "DATA_INSUFFICIENT": 232
+      },
+      "ke.team_strength": {
+        "OMIT": 232
+      },
+      "ke.opp_adj_epa.off": {
+        "OK": 181,
+        "THIN": 51
+      },
+      "ke.opp_adj_epa.def": {
+        "OK": 181,
+        "THIN": 51
+      }
+    },
+    "provenance": {
+      "layers_by_id": {
+        "ke.off_eff": "DERIVED",
+        "ke.def_eff": "DERIVED",
+        "ke.success_native": "DERIVED",
+        "ke.success_standard": "DERIVED",
+        "ke.success_allowed": "DERIVED",
+        "ke.pace": "DERIVED",
+        "ke.pace_competitive": "DERIVED",
+        "ke.pace_seconds": "DERIVED",
+        "ke.expl_pass": "DERIVED",
+        "ke.expl_rush": "DERIVED",
+        "ke.expl": "DERIVED",
+        "ke.expl_allowed": "DERIVED",
+        "ke.off_pass_epa": "DERIVED",
+        "ke.off_rush_epa": "DERIVED",
+        "ke.off_early_epa": "DERIVED",
+        "ke.st": "DERIVED",
+        "ke.opp_rate": "DERIVED",
+        "ke.ppo": "DERIVED",
+        "ke.finish": "DERIVED",
+        "ke.rz_td": "DERIVED",
+        "ke.havoc": "DERIVED",
+        "ke.disruption_flags_cfb": "DERIVED",
+        "ke.disruption_sack": "DERIVED",
+        "ke.disruption_interception": "DERIVED",
+        "ke.disruption_qb_hit": "DERIVED",
+        "ke.disruption_fumble": "DERIVED",
+        "ke.disruption_fumble_forced": "DERIVED",
+        "ke.disruption_tfl": "DERIVED",
+        "ke.disruption_pass_breakup": "DERIVED",
+        "ke.team_strength": "DERIVED",
+        "ke.opp_adj_epa.off": "ADJUSTED",
+        "ke.opp_adj_epa.def": "ADJUSTED"
+      },
+      "violations": [],
+      "taxonomy": [
+        "RAW",
+        "DERIVED",
+        "ADJUSTED",
+        "MODELED"
+      ],
+      "ok": true
+    }
+  },
+  "nfl_leakage_live": {
+    "future_week_changes_snapshot": false,
+    "expected": false
+  },
+  "cfb_leakage_live": {
+    "future_week_changes_snapshot": false,
+    "expected": false
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "nfl": {
+    "off": {
+      "id": "ke.off_unit",
+      "side": "off",
+      "grade": "PARTIAL",
+      "phase2b_eligible": true,
+      "winner": "epa_shrunken",
+      "complexity_earned": false,
+      "evidence": [
+        "winner=epa_shrunken",
+        "complexity_earned=False",
+        "confirmation MAE=0.1634553735272457 pearson=0.2922980417650324 n=214",
+        "strongest_constituent=epa_shrunken",
+        "earned_partial=[]",
+        "finishing_earned={'ke.ppo': False, 'ke.finish': False}",
+        "early\u2192late persist=0.4975078315304791",
+        "incremental-on-EPA partial r=-0.0036802064556566267"
+      ],
+      "recommendation": "No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.",
+      "production_promote": false
+    },
+    "def": {
+      "id": "ke.def_unit",
+      "side": "def",
+      "grade": "PARTIAL",
+      "phase2b_eligible": true,
+      "winner": "epa_shrunken",
+      "complexity_earned": false,
+      "evidence": [
+        "winner=epa_shrunken",
+        "complexity_earned=False",
+        "confirmation MAE=0.16441948489593375 pearson=0.2817125732342901 n=214",
+        "strongest_constituent=epa_shrunken",
+        "earned_partial=['ke.expl_allowed', 'ke.disruption_proxy_nfl']",
+        "finishing_earned={}",
+        "early\u2192late persist=0.39208430193427096",
+        "incremental-on-EPA partial r=-4.1287161462066414e-05"
+      ],
+      "recommendation": "No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.",
+      "production_promote": false
+    }
+  },
+  "cfb": {
+    "off": {
+      "id": "ke.off_unit",
+      "side": "off",
+      "grade": "PARTIAL",
+      "phase2b_eligible": true,
+      "winner": "epa_shrunken",
+      "complexity_earned": false,
+      "evidence": [
+        "winner=epa_shrunken",
+        "complexity_earned=False",
+        "confirmation MAE=0.16874990862757386 pearson=0.34071994993934945 n=446",
+        "strongest_constituent=epa_shrunken",
+        "earned_partial=[]",
+        "finishing_earned={'ke.ppo': False, 'ke.finish': False}",
+        "early\u2192late persist=0.4178057204162008",
+        "incremental-on-EPA partial r=0.006694176007906879"
+      ],
+      "recommendation": "No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.",
+      "production_promote": false
+    },
+    "def": {
+      "id": "ke.def_unit",
+      "side": "def",
+      "grade": "PARTIAL",
+      "phase2b_eligible": true,
+      "winner": "epa_shrunken",
+      "complexity_earned": false,
+      "evidence": [
+        "winner=epa_shrunken",
+        "complexity_earned=False",
+        "confirmation MAE=0.17214550521217853 pearson=0.32218788746284727 n=446",
+        "strongest_constituent=epa_shrunken",
+        "earned_partial=['ke.success_allowed']",
+        "finishing_earned={}",
+        "early\u2192late persist=0.26123928207876507",
+        "incremental-on-EPA partial r=0.048359161286817394"
+      ],
+      "recommendation": "No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.",
+      "production_promote": false
+    }
+  }
+}

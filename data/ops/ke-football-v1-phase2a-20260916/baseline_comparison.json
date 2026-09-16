@@ -1,0 +1,177 @@
+{
+  "source": "frozen Phase 2A artifacts \u2014 no refit",
+  "derived_from": [
+    "nfl_phase2a.json",
+    "cfb_phase2a.json"
+  ],
+  "objective": "next_game_epa_per_play MAE",
+  "forbidden": [
+    "ats",
+    "close",
+    "roi",
+    "kei",
+    "clv"
+  ],
+  "mae_se_or_bootstrap": null,
+  "mae_se_note": "Pair-level residuals were not persisted. MAE SE / bootstrap CI is missing.",
+  "k_grid": [
+    0.0,
+    20.0,
+    40.0,
+    80.0,
+    160.0
+  ],
+  "k_grid_full_mae_table_persisted": false,
+  "confirmation_used_to_pick_k": false,
+  "confirmation_used_to_label_winner_epa_shrunken_vs_raw": true,
+  "units": {
+    "nfl_off": {
+      "sport": "nfl",
+      "side": "off",
+      "season": 2025,
+      "selection_weeks": [
+        5,
+        10
+      ],
+      "confirmation_weeks": [
+        11,
+        18
+      ],
+      "k": 160.0,
+      "k_selection_mae": 0.1767934536312977,
+      "selection": {
+        "n": 170,
+        "trailing_mae": 0.18130630186044472,
+        "shrunken_mae": 0.1767934536312977,
+        "abs_delta": -0.004512848229147021,
+        "rel_pct": -2.4890741153722584,
+        "trailing_rmse": 0.22451900801383365,
+        "shrunken_rmse": 0.21977738671827568,
+        "trailing_pearson": 0.26286492173562276,
+        "shrunken_pearson": 0.2614985432677672
+      },
+      "confirmation": {
+        "n": 214,
+        "trailing_mae": 0.1643506673803918,
+        "shrunken_mae": 0.1634553735272457,
+        "abs_delta": -0.0008952938531461008,
+        "rel_pct": -0.544746101379638,
+        "trailing_rmse": 0.2088410307583623,
+        "shrunken_rmse": 0.207053527410773,
+        "trailing_pearson": 0.2959815265798492,
+        "shrunken_pearson": 0.2922980417650324
+      }
+    },
+    "nfl_def": {
+      "sport": "nfl",
+      "side": "def",
+      "season": 2025,
+      "selection_weeks": [
+        5,
+        10
+      ],
+      "confirmation_weeks": [
+        11,
+        18
+      ],
+      "k": 160.0,
+      "k_selection_mae": 0.1887373555270444,
+      "selection": {
+        "n": 170,
+        "trailing_mae": 0.1968201236422379,
+        "shrunken_mae": 0.1887373555270444,
+        "abs_delta": -0.008082768115193484,
+        "rel_pct": -4.106677694139457,
+        "trailing_rmse": 0.23480976023937858,
+        "shrunken_rmse": 0.22840344827362405,
+        "trailing_pearson": 0.10107085469458081,
+        "shrunken_pearson": 0.10981330472470495
+      },
+      "confirmation": {
+        "n": 214,
+        "trailing_mae": 0.1649874099502944,
+        "shrunken_mae": 0.16441948489593375,
+        "abs_delta": -0.0005679250543606518,
+        "rel_pct": -0.3442232680249663,
+        "trailing_rmse": 0.20800253583452244,
+        "shrunken_rmse": 0.2071730036290001,
+        "trailing_pearson": 0.28191010010792206,
+        "shrunken_pearson": 0.2817125732342901
+      }
+    },
+    "cfb_off": {
+      "sport": "cfb",
+      "side": "off",
+      "season": 2025,
+      "selection_weeks": [
+        4,
+        8
+      ],
+      "confirmation_weeks": [
+        9,
+        13
+      ],
+      "k": 160.0,
+      "k_selection_mae": 0.17067124664192881,
+      "selection": {
+        "n": 577,
+        "trailing_mae": 0.1769416056451287,
+        "shrunken_mae": 0.17067124664192881,
+        "abs_delta": -0.006270359003199888,
+        "rel_pct": -3.543744830583046,
+        "trailing_rmse": 0.22676976356423617,
+        "shrunken_rmse": 0.2162934722049774,
+        "trailing_pearson": 0.32234414812892315,
+        "shrunken_pearson": 0.3020349693183281
+      },
+      "confirmation": {
+        "n": 446,
+        "trailing_mae": 0.17225957589881952,
+        "shrunken_mae": 0.16874990862757386,
+        "abs_delta": -0.003509667271245659,
+        "rel_pct": -2.037429416003636,
+        "trailing_rmse": 0.21880109213966747,
+        "shrunken_rmse": 0.21174765952716015,
+        "trailing_pearson": 0.339164228034848,
+        "shrunken_pearson": 0.34071994993934945
+      }
+    },
+    "cfb_def": {
+      "sport": "cfb",
+      "side": "def",
+      "season": 2025,
+      "selection_weeks": [
+        4,
+        8
+      ],
+      "confirmation_weeks": [
+        9,
+        13
+      ],
+      "k": 160.0,
+      "k_selection_mae": 0.17360552684062772,
+      "selection": {
+        "n": 577,
+        "trailing_mae": 0.18807948890230214,
+        "shrunken_mae": 0.17360552684062772,
+        "abs_delta": -0.014473962061674422,
+        "rel_pct": -7.695662161860148,
+        "trailing_rmse": 0.23698900453849647,
+        "shrunken_rmse": 0.22040898491997285,
+        "trailing_pearson": 0.2310395826054822,
+        "shrunken_pearson": 0.2423809387198045
+      },
+      "confirmation": {
+        "n": 446,
+        "trailing_mae": 0.17625578591588692,
+        "shrunken_mae": 0.17214550521217853,
+        "abs_delta": -0.004110280703708391,
+        "rel_pct": -2.3319976035679795,
+        "trailing_rmse": 0.2197195891701244,
+        "shrunken_rmse": 0.21304153455131764,
+        "trailing_pearson": 0.2859200785440932,
+        "shrunken_pearson": 0.32218788746284727
+      }
+    }
+  }
+}

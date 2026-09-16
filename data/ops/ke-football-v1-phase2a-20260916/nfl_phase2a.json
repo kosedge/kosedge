@@ -1,0 +1,2501 @@
+{
+  "pipeline": "ke-football-v1-unit-ratings-phase2a",
+  "pipeline_version": "ke-football-v1-unit-ratings-phase2a",
+  "production_promote": false,
+  "sport": "nfl",
+  "season": 2025,
+  "as_of_week": 18,
+  "feature_policy": {
+    "sport": "nfl",
+    "pass_off": [
+      "ke.off_eff",
+      "ke.success_native",
+      "ke.success_standard",
+      "ke.off_pass_epa",
+      "ke.opp_rate"
+    ],
+    "partial_off": [
+      "ke.expl",
+      "ke.expl_pass",
+      "ke.off_early_epa",
+      "ke.ppo",
+      "ke.finish"
+    ],
+    "pass_def": [
+      "ke.def_eff",
+      "ke.success_allowed"
+    ],
+    "partial_def": [
+      "ke.expl_allowed",
+      "ke.disruption_proxy_nfl"
+    ],
+    "excluded": [
+      "ke.disruption_flags_cfb",
+      "ke.disruption_fumble",
+      "ke.disruption_fumble_forced",
+      "ke.disruption_interception",
+      "ke.disruption_pass_breakup",
+      "ke.disruption_qb_hit",
+      "ke.disruption_tackle_for_loss",
+      "ke.disruption_tfl",
+      "ke.havoc",
+      "ke.opp_adj_epa",
+      "ke.opp_adj_epa.def",
+      "ke.opp_adj_epa.off",
+      "ke.pace",
+      "ke.pace_competitive",
+      "ke.pace_seconds",
+      "ke.rz_td",
+      "ke.st",
+      "ke.team_strength"
+    ],
+    "cfb_disruption_out": false,
+    "opp_adj_reopened": false,
+    "opp_adj_result": "NO_ADJUSTMENT_WINNER",
+    "pace_in_unit_rating": false,
+    "named_havoc": false,
+    "team_strength": false,
+    "finishing_auto_promote": false,
+    "note": "PARTIAL finishing stays available; it must earn incremental signal"
+  },
+  "methods": {
+    "off": "epa_shrunken",
+    "def": "epa_shrunken"
+  },
+  "fits": {
+    "off": {
+      "shrink_k": 160.0,
+      "earned_partial": [],
+      "ridge_lam": 16.0,
+      "ridge_beta": [
+        0.020725384026640353,
+        0.030306188598769768,
+        0.011936733431177102,
+        -0.021099942648725816,
+        0.017415443596835917,
+        0.02535002890028349
+      ],
+      "ridge_cids": [
+        "ke.off_eff",
+        "ke.success_native",
+        "ke.success_standard",
+        "ke.off_pass_epa",
+        "ke.opp_rate"
+      ],
+      "pca_w": [
+        0.4629257989216027,
+        0.458478826952941,
+        0.4454175055536069,
+        0.4491863795640704,
+        0.41872629734610206
+      ],
+      "notes": {
+        "shrink_k_selection_mae": 0.1767934536312977,
+        "partial_gate": {
+          "ke.expl": {
+            "selection_mae": 0.1803603863442589,
+            "base_mae": 0.17949195387457612,
+            "earned": false
+          },
+          "ke.expl_pass": {
+            "selection_mae": 0.17936809820464664,
+            "base_mae": 0.17949195387457612,
+            "earned": false
+          },
+          "ke.off_early_epa": {
+            "selection_mae": 0.181129308050179,
+            "base_mae": 0.17949195387457612,
+            "earned": false
+          },
+          "ke.ppo": {
+            "selection_mae": 0.17881911157318336,
+            "base_mae": 0.17949195387457612,
+            "earned": false
+          },
+          "ke.finish": {
+            "selection_mae": 0.17949000133814363,
+            "base_mae": 0.17949195387457612,
+            "earned": false
+          }
+        },
+        "finishing_earned": {
+          "ke.ppo": false,
+          "ke.finish": false
+        },
+        "ridge_selection_mae": 0.17376467512168323
+      }
+    },
+    "def": {
+      "shrink_k": 160.0,
+      "earned_partial": [
+        "ke.expl_allowed",
+        "ke.disruption_proxy_nfl"
+      ],
+      "ridge_lam": 1.0,
+      "ridge_beta": [
+        0.021176608745381645,
+        0.004198941428525321,
+        -0.009377997933095007,
+        0.0026977372793832526,
+        -0.0422085026055824
+      ],
+      "ridge_cids": [
+        "ke.def_eff",
+        "ke.success_allowed",
+        "ke.expl_allowed",
+        "ke.disruption_proxy_nfl"
+      ],
+      "pca_w": [
+        0.5486161670658475,
+        0.5167223577536563,
+        0.44966703247274586,
+        0.4793932270471027
+      ],
+      "notes": {
+        "shrink_k_selection_mae": 0.1887373555270444,
+        "partial_gate": {
+          "ke.expl_allowed": {
+            "selection_mae": 0.1911023300889582,
+            "base_mae": 0.194570644176839,
+            "earned": true
+          },
+          "ke.disruption_proxy_nfl": {
+            "selection_mae": 0.18707975335030608,
+            "base_mae": 0.194570644176839,
+            "earned": true
+          }
+        },
+        "finishing_earned": {},
+        "ridge_selection_mae": 0.17877972286752233
+      }
+    }
+  },
+  "bakeoff": {
+    "off": {
+      "side": "off",
+      "forbidden": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "market_residual",
+        "issue_562"
+      ],
+      "selection_weeks": [
+        5,
+        10
+      ],
+      "confirmation_weeks": [
+        11,
+        18
+      ],
+      "relative_cut": 0.02,
+      "strongest_constituent": "epa_shrunken",
+      "complexity_earned": false,
+      "winner": "epa_shrunken",
+      "earned_composites": [],
+      "earned_partial_features": [],
+      "shrink_k": 160.0,
+      "partial_gate": {
+        "ke.expl": {
+          "selection_mae": 0.1803603863442589,
+          "base_mae": 0.17949195387457612,
+          "earned": false
+        },
+        "ke.expl_pass": {
+          "selection_mae": 0.17936809820464664,
+          "base_mae": 0.17949195387457612,
+          "earned": false
+        },
+        "ke.off_early_epa": {
+          "selection_mae": 0.181129308050179,
+          "base_mae": 0.17949195387457612,
+          "earned": false
+        },
+        "ke.ppo": {
+          "selection_mae": 0.17881911157318336,
+          "base_mae": 0.17949195387457612,
+          "earned": false
+        },
+        "ke.finish": {
+          "selection_mae": 0.17949000133814363,
+          "base_mae": 0.17949195387457612,
+          "earned": false
+        }
+      },
+      "finishing_earned": {
+        "ke.ppo": false,
+        "ke.finish": false
+      },
+      "candidates": {
+        "epa_raw": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.18130630186044472,
+            "rmse": 0.22451900801383365,
+            "pearson": 0.26286492173562276,
+            "spearman": 0.2375034348837635
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.1643506673803918,
+            "rmse": 0.2088410307583623,
+            "pearson": 0.2959815265798492,
+            "spearman": 0.25128217686908233
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.17318862481576952,
+            "rmse": 0.2168425512135415,
+            "pearson": 0.2719184866625841,
+            "spearman": 0.24230753010311612
+          },
+          "beats_strongest_constituent": false
+        },
+        "epa_shrunken": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.1767934536312977,
+            "rmse": 0.21977738671827568,
+            "pearson": 0.2614985432677672,
+            "spearman": 0.23164123326066643
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.1634553735272457,
+            "rmse": 0.207053527410773,
+            "pearson": 0.2922980417650324,
+            "spearman": 0.24804956668942146
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.16918397816166025,
+            "rmse": 0.21195395673344747,
+            "pearson": 0.27539053152692305,
+            "spearman": 0.23931803816727062
+          },
+          "beats_strongest_constituent": false
+        },
+        "z_pass": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.17949195387457612,
+            "rmse": 0.2235464018680271,
+            "pearson": 0.252845907771727,
+            "spearman": 0.23783806889308196
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.16397613308171352,
+            "rmse": 0.2076201062898511,
+            "pearson": 0.29830297564219593,
+            "spearman": 0.26784440614563276
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.17000448081650127,
+            "rmse": 0.2142126565556437,
+            "pearson": 0.27918641187584375,
+            "spearman": 0.2535400122142099
+          },
+          "beats_strongest_constituent": false
+        },
+        "z_earned": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.17949195387457612,
+            "rmse": 0.2235464018680271,
+            "pearson": 0.252845907771727,
+            "spearman": 0.23783806889308196
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.16397613308171352,
+            "rmse": 0.2076201062898511,
+            "pearson": 0.29830297564219593,
+            "spearman": 0.26784440614563276
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.17000448081650127,
+            "rmse": 0.2142126565556437,
+            "pearson": 0.27918641187584375,
+            "spearman": 0.2535400122142099
+          },
+          "beats_strongest_constituent": false
+        },
+        "pca_earned": {
+          "layer": "MODELED",
+          "selection": {
+            "n": 170,
+            "mae": 0.22086687000706992,
+            "rmse": 0.2723911662891973,
+            "pearson": 0.2566837269146867,
+            "spearman": 0.2388370857530181
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.19288164862126597,
+            "rmse": 0.24690396221916147,
+            "pearson": 0.3029235213231883,
+            "spearman": 0.27335086371303235
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.20692138152329767,
+            "rmse": 0.26181920058002417,
+            "pearson": 0.2820852628960982,
+            "spearman": 0.257195600322011
+          },
+          "beats_strongest_constituent": false
+        },
+        "ridge_earned": {
+          "layer": "MODELED",
+          "selection": {
+            "n": 170,
+            "mae": 0.17376467512168323,
+            "rmse": 0.2174768328479044,
+            "pearson": 0.28948102624311794,
+            "spearman": 0.28462088042940625
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.16264413105379166,
+            "rmse": 0.2061460140597929,
+            "pearson": 0.31274911169862835,
+            "spearman": 0.2628461051026874
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.16789174121505668,
+            "rmse": 0.21078446891371655,
+            "pearson": 0.29150648229223236,
+            "spearman": 0.2651136167086975
+          },
+          "beats_strongest_constituent": false
+        }
+      },
+      "production_promote": false
+    },
+    "def": {
+      "side": "def",
+      "forbidden": [
+        "ats",
+        "close",
+        "roi",
+        "kei",
+        "clv",
+        "market_residual",
+        "issue_562"
+      ],
+      "selection_weeks": [
+        5,
+        10
+      ],
+      "confirmation_weeks": [
+        11,
+        18
+      ],
+      "relative_cut": 0.02,
+      "strongest_constituent": "epa_shrunken",
+      "complexity_earned": false,
+      "winner": "epa_shrunken",
+      "earned_composites": [],
+      "earned_partial_features": [
+        "ke.expl_allowed",
+        "ke.disruption_proxy_nfl"
+      ],
+      "shrink_k": 160.0,
+      "partial_gate": {
+        "ke.expl_allowed": {
+          "selection_mae": 0.1911023300889582,
+          "base_mae": 0.194570644176839,
+          "earned": true
+        },
+        "ke.disruption_proxy_nfl": {
+          "selection_mae": 0.18707975335030608,
+          "base_mae": 0.194570644176839,
+          "earned": true
+        }
+      },
+      "finishing_earned": {},
+      "candidates": {
+        "epa_raw": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.1968201236422379,
+            "rmse": 0.23480976023937858,
+            "pearson": 0.10107085469458081,
+            "spearman": 0.07552836145358173
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.1649874099502944,
+            "rmse": 0.20800253583452244,
+            "pearson": 0.28191010010792206,
+            "spearman": 0.2921526551178403
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.1777499088408558,
+            "rmse": 0.22089466614357095,
+            "pearson": 0.18924249658006664,
+            "spearman": 0.18700166237105148
+          },
+          "beats_strongest_constituent": false
+        },
+        "epa_shrunken": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.1887373555270444,
+            "rmse": 0.22840344827362405,
+            "pearson": 0.10981330472470495,
+            "spearman": 0.07704276353954848
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.16441948489593375,
+            "rmse": 0.2071730036290001,
+            "pearson": 0.2817125732342901,
+            "spearman": 0.28821842159236666
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.1731071897442089,
+            "rmse": 0.2160479784506125,
+            "pearson": 0.20261630867850242,
+            "spearman": 0.19728444695466862
+          },
+          "beats_strongest_constituent": false
+        },
+        "z_pass": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.194570644176839,
+            "rmse": 0.23309245745420432,
+            "pearson": 0.10179973011715998,
+            "spearman": 0.055039966780857465
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.16724817244265927,
+            "rmse": 0.20955586772929155,
+            "pearson": 0.2577279299889168,
+            "spearman": 0.27537246954887334
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.17776353645986462,
+            "rmse": 0.2207301430500109,
+            "pearson": 0.17838861131099032,
+            "spearman": 0.17643901329683306
+          },
+          "beats_strongest_constituent": false
+        },
+        "z_earned": {
+          "layer": "DERIVED",
+          "selection": {
+            "n": 170,
+            "mae": 0.18650927519528546,
+            "rmse": 0.22837135786020663,
+            "pearson": 0.13492717801565632,
+            "spearman": 0.12144894083450881
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.169708515478262,
+            "rmse": 0.2106657845348663,
+            "pearson": 0.23025946361742353,
+            "spearman": 0.24716427231067342
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.17480898817111143,
+            "rmse": 0.21892908094367786,
+            "pearson": 0.17530077815502695,
+            "spearman": 0.1864212471733286
+          },
+          "beats_strongest_constituent": false
+        },
+        "pca_earned": {
+          "layer": "MODELED",
+          "selection": {
+            "n": 170,
+            "mae": 0.20357344843007324,
+            "rmse": 0.24900090291324004,
+            "pearson": 0.13859461933943934,
+            "spearman": 0.12191791696435658
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.17989710232888187,
+            "rmse": 0.22457329703067888,
+            "pearson": 0.23896464986090427,
+            "spearman": 0.25485151727579125
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.1910585746918268,
+            "rmse": 0.2394248555256097,
+            "pearson": 0.18110308010199186,
+            "spearman": 0.18990040187313023
+          },
+          "beats_strongest_constituent": false
+        },
+        "ridge_earned": {
+          "layer": "MODELED",
+          "selection": {
+            "n": 170,
+            "mae": 0.17877972286752233,
+            "rmse": 0.22283951522026654,
+            "pearson": 0.19436406187962893,
+            "spearman": 0.20029555266516444
+          },
+          "confirmation": {
+            "n": 214,
+            "mae": 0.17000181553323143,
+            "rmse": 0.21435203236780284,
+            "pearson": 0.1591366214513656,
+            "spearman": 0.1595495161798874
+          },
+          "full": {
+            "n": 448,
+            "mae": 0.17122985240851402,
+            "rmse": 0.2170789944990588,
+            "pearson": 0.17331868618282037,
+            "spearman": 0.187229077293314
+          },
+          "beats_strongest_constituent": false
+        }
+      },
+      "production_promote": false
+    }
+  },
+  "grades": {
+    "off": {
+      "id": "ke.off_unit",
+      "side": "off",
+      "grade": "PARTIAL",
+      "phase2b_eligible": true,
+      "winner": "epa_shrunken",
+      "complexity_earned": false,
+      "evidence": [
+        "winner=epa_shrunken",
+        "complexity_earned=False",
+        "confirmation MAE=0.1634553735272457 pearson=0.2922980417650324 n=214",
+        "strongest_constituent=epa_shrunken",
+        "earned_partial=[]",
+        "finishing_earned={'ke.ppo': False, 'ke.finish': False}",
+        "early\u2192late persist=0.4975078315304791",
+        "incremental-on-EPA partial r=-0.0036802064556566267"
+      ],
+      "recommendation": "No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.",
+      "production_promote": false
+    },
+    "def": {
+      "id": "ke.def_unit",
+      "side": "def",
+      "grade": "PARTIAL",
+      "phase2b_eligible": true,
+      "winner": "epa_shrunken",
+      "complexity_earned": false,
+      "evidence": [
+        "winner=epa_shrunken",
+        "complexity_earned=False",
+        "confirmation MAE=0.16441948489593375 pearson=0.2817125732342901 n=214",
+        "strongest_constituent=epa_shrunken",
+        "earned_partial=['ke.expl_allowed', 'ke.disruption_proxy_nfl']",
+        "finishing_earned={}",
+        "early\u2192late persist=0.39208430193427096",
+        "incremental-on-EPA partial r=-4.1287161462066414e-05"
+      ],
+      "recommendation": "No composite earned inclusion over the strongest constituent. Publish epa_shrunken as the honest v1 unit rating (shrunken/raw EPA). Do not invent weights.",
+      "production_promote": false
+    }
+  },
+  "ranking_sanity": {
+    "best_offense": [
+      {
+        "team": "NE",
+        "off_epa_raw": 0.12833968054091113,
+        "def_epa_raw": -0.02341576836661982,
+        "n_games": 16,
+        "n_off_plays": 963
+      },
+      {
+        "team": "LA",
+        "off_epa_raw": 0.12063204191190326,
+        "def_epa_raw": -0.055406985212098483,
+        "n_games": 16,
+        "n_off_plays": 988
+      },
+      {
+        "team": "GB",
+        "off_epa_raw": 0.11940347423280319,
+        "def_epa_raw": 0.03530669594804741,
+        "n_games": 16,
+        "n_off_plays": 944
+      },
+      {
+        "team": "BUF",
+        "off_epa_raw": 0.10491538063532464,
+        "def_epa_raw": -0.0015338226218627963,
+        "n_games": 16,
+        "n_off_plays": 995
+      },
+      {
+        "team": "DAL",
+        "off_epa_raw": 0.09622596337258757,
+        "def_epa_raw": 0.14710738634872442,
+        "n_games": 16,
+        "n_off_plays": 1051
+      },
+      {
+        "team": "SF",
+        "off_epa_raw": 0.09331870450315888,
+        "def_epa_raw": 0.06207780702351552,
+        "n_games": 16,
+        "n_off_plays": 1023
+      },
+      {
+        "team": "CHI",
+        "off_epa_raw": 0.0746970828956455,
+        "def_epa_raw": 0.008950927966524356,
+        "n_games": 16,
+        "n_off_plays": 1042
+      },
+      {
+        "team": "IND",
+        "off_epa_raw": 0.07157137161592016,
+        "def_epa_raw": 0.00645061618710961,
+        "n_games": 16,
+        "n_off_plays": 947
+      }
+    ],
+    "worst_offense": [
+      {
+        "team": "CLE",
+        "off_epa_raw": -0.16495328877442758,
+        "def_epa_raw": -0.0789671444678695,
+        "n_games": 16,
+        "n_off_plays": 976
+      },
+      {
+        "team": "LV",
+        "off_epa_raw": -0.1645703445054868,
+        "def_epa_raw": 0.04898820207216366,
+        "n_games": 16,
+        "n_off_plays": 881
+      },
+      {
+        "team": "TEN",
+        "off_epa_raw": -0.12590865257369604,
+        "def_epa_raw": 0.0823477365496708,
+        "n_games": 16,
+        "n_off_plays": 942
+      },
+      {
+        "team": "NYJ",
+        "off_epa_raw": -0.10158173745058142,
+        "def_epa_raw": 0.11552053598368998,
+        "n_games": 16,
+        "n_off_plays": 962
+      },
+      {
+        "team": "MIN",
+        "off_epa_raw": -0.10061068318850397,
+        "def_epa_raw": -0.07375230689708183,
+        "n_games": 16,
+        "n_off_plays": 879
+      },
+      {
+        "team": "NO",
+        "off_epa_raw": -0.07299985990186308,
+        "def_epa_raw": -0.03938957871494726,
+        "n_games": 16,
+        "n_off_plays": 999
+      },
+      {
+        "team": "CAR",
+        "off_epa_raw": -0.03287500356995024,
+        "def_epa_raw": 0.06281796421444592,
+        "n_games": 16,
+        "n_off_plays": 949
+      },
+      {
+        "team": "ARI",
+        "off_epa_raw": -0.017057469282137333,
+        "def_epa_raw": 0.0689171276734072,
+        "n_games": 16,
+        "n_off_plays": 1021
+      }
+    ],
+    "best_defense": [
+      {
+        "team": "HOU",
+        "off_epa_raw": -0.009465441668146217,
+        "def_epa_raw": -0.1136943630841612,
+        "n_games": 16,
+        "n_off_plays": 1015
+      },
+      {
+        "team": "SEA",
+        "off_epa_raw": 0.027399799299118125,
+        "def_epa_raw": -0.08998177643297746,
+        "n_games": 16,
+        "n_off_plays": 933
+      },
+      {
+        "team": "CLE",
+        "off_epa_raw": -0.16495328877442758,
+        "def_epa_raw": -0.0789671444678695,
+        "n_games": 16,
+        "n_off_plays": 976
+      },
+      {
+        "team": "JAX",
+        "off_epa_raw": 0.01984196371197332,
+        "def_epa_raw": -0.0775935564476331,
+        "n_games": 16,
+        "n_off_plays": 1019
+      },
+      {
+        "team": "MIN",
+        "off_epa_raw": -0.10061068318850397,
+        "def_epa_raw": -0.07375230689708183,
+        "n_games": 16,
+        "n_off_plays": 879
+      },
+      {
+        "team": "PHI",
+        "off_epa_raw": 0.030855676822309913,
+        "def_epa_raw": -0.0693806078018333,
+        "n_games": 16,
+        "n_off_plays": 933
+      },
+      {
+        "team": "LAC",
+        "off_epa_raw": 0.0030501861285725925,
+        "def_epa_raw": -0.06332503065922677,
+        "n_games": 16,
+        "n_off_plays": 1014
+      },
+      {
+        "team": "LA",
+        "off_epa_raw": 0.12063204191190326,
+        "def_epa_raw": -0.055406985212098483,
+        "n_games": 16,
+        "n_off_plays": 988
+      }
+    ],
+    "worst_defense": [
+      {
+        "team": "DAL",
+        "off_epa_raw": 0.09622596337258757,
+        "def_epa_raw": 0.14710738634872442,
+        "n_games": 16,
+        "n_off_plays": 1051
+      },
+      {
+        "team": "WAS",
+        "off_epa_raw": 0.008835696399335197,
+        "def_epa_raw": 0.13835869438548312,
+        "n_games": 16,
+        "n_off_plays": 918
+      },
+      {
+        "team": "CIN",
+        "off_epa_raw": 0.0003218614028235934,
+        "def_epa_raw": 0.12486390653228954,
+        "n_games": 16,
+        "n_off_plays": 982
+      },
+      {
+        "team": "NYJ",
+        "off_epa_raw": -0.10158173745058142,
+        "def_epa_raw": 0.11552053598368998,
+        "n_games": 16,
+        "n_off_plays": 962
+      },
+      {
+        "team": "NYG",
+        "off_epa_raw": 0.0047345935152608605,
+        "def_epa_raw": 0.08683338225450979,
+        "n_games": 16,
+        "n_off_plays": 1009
+      },
+      {
+        "team": "TEN",
+        "off_epa_raw": -0.12590865257369604,
+        "def_epa_raw": 0.0823477365496708,
+        "n_games": 16,
+        "n_off_plays": 942
+      },
+      {
+        "team": "ARI",
+        "off_epa_raw": -0.017057469282137333,
+        "def_epa_raw": 0.0689171276734072,
+        "n_games": 16,
+        "n_off_plays": 1021
+      },
+      {
+        "team": "MIA",
+        "off_epa_raw": 0.004186340508771361,
+        "def_epa_raw": 0.06418934606020019,
+        "n_games": 16,
+        "n_off_plays": 888
+      }
+    ],
+    "note": "sanity only \u2014 not a seal; not Team Strength"
+  },
+  "examples": [
+    {
+      "team": "KC",
+      "off": {
+        "id": "ke.off_unit",
+        "value": 0.05866730186271849,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 986,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 986,
+          "sample_strength": 0.8603839441535777,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": 0.06651730888958139,
+              "z": 0.6192737130856286,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.45740365111561865,
+              "z": 0.5087552461095786,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.4598168870803662,
+              "z": 0.8402002425488985,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": 0.08726514271436867,
+              "z": 0.3938987932846219,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.5704697986577181,
+              "z": 0.759076531218244,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": 0.012082097169922406,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 917,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 917,
+          "sample_strength": 0.851439182915506,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": 0.012186177094957054,
+              "z": -0.008583447870637327,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.44711014176663033,
+              "z": -0.21169667399554518,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "BUF",
+      "off": {
+        "id": "ke.off_unit",
+        "value": 0.10491538063532464,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 995,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 995,
+          "sample_strength": 0.8614718614718615,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": 0.12013125956206214,
+              "z": 1.2097816991849517,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.4763819095477387,
+              "z": 1.0758773421323642,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.4767206477732793,
+              "z": 1.3366831405031863,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": 0.13399093804978418,
+              "z": 0.7399809233730571,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.5220125786163522,
+              "z": -0.0024675944020583654,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": -0.0015338226218627963,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 903,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 903,
+          "sample_strength": 0.8494825964252116,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": -0.0038406951306433736,
+              "z": 0.18777421623882384,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.42857142857142855,
+              "z": 0.3962611105517515,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "PHI",
+      "off": {
+        "id": "ke.off_unit",
+        "value": 0.030855676822309913,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 933,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 933,
+          "sample_strength": 0.8536139066788655,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": 0.03438220085448724,
+              "z": 0.26533527559182646,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.43086816720257237,
+              "z": -0.2841973480165532,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.4172043010752688,
+              "z": -0.4113804307392014,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": 0.09162219908386326,
+              "z": 0.4261700331521469,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.4634146341463415,
+              "z": -0.9233813477388559,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": -0.0693806078018333,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 1005,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 1005,
+          "sample_strength": 0.8626609442060086,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": -0.08225482820404638,
+              "z": 1.1484866863156242,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.41492537313432837,
+              "z": 0.8437692813721652,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "NE",
+      "off": {
+        "id": "ke.off_unit",
+        "value": 0.12833968054091113,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 963,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 963,
+          "sample_strength": 0.8575244879786287,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": 0.14795306321692112,
+              "z": 1.5162130857888554,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.4766355140186916,
+              "z": 1.083455735041386,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.47291666666666665,
+              "z": 1.2249558392307411,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": 0.3130313208658031,
+              "z": 2.066072359848885,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.564935064935065,
+              "z": 0.6720937462016675,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": -0.02341576836661982,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 912,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 912,
+          "sample_strength": 0.8507462686567164,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": -0.029538813536126383,
+              "z": 0.5026218316112582,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.4473684210526316,
+              "z": -0.22016667408985693,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "SF",
+      "off": {
+        "id": "ke.off_unit",
+        "value": 0.09331870450315888,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 1023,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 1023,
+          "sample_strength": 0.8647506339814032,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": 0.10630436564778965,
+              "z": 1.0574912752017598,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.48778103616813295,
+              "z": 1.4165143191716199,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.4793713163064833,
+              "z": 1.4145363247021956,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": 0.20906747264484313,
+              "z": 1.2960473707347935,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.6305732484076433,
+              "z": 1.7036505089969414,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": 0.06207780702351552,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 955,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 955,
+          "sample_strength": 0.8565022421524664,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": 0.07055399013119266,
+              "z": -0.723692875689365,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.4848167539267016,
+              "z": -1.4482457348847504,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "HOU",
+      "off": {
+        "id": "ke.off_unit",
+        "value": -0.009465441668146217,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 1015,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 1015,
+          "sample_strength": 0.8638297872340426,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": -0.01257985746760586,
+              "z": -0.2519082801436084,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.41083743842364534,
+              "z": -0.8827701269994158,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.398414271555996,
+              "z": -0.9632652141227186,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": 0.06159345642739219,
+              "z": 0.20375731341504472,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.5,
+              "z": -0.3484129441503057,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": -0.1136943630841612,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 918,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 918,
+          "sample_strength": 0.8515769944341373,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": -0.13551221967391786,
+              "z": 1.800984368856756,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.38344226579520696,
+              "z": 1.876224985660796,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "CLE",
+      "off": {
+        "id": "ke.off_unit",
+        "value": -0.16495328877442758,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 976,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 976,
+          "sample_strength": 0.8591549295774648,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": -0.19368196456690356,
+              "z": -2.246580174308686,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.3452868852459016,
+              "z": -2.8415993444737353,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.3395061728395062,
+              "z": -2.693463842407954,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": -0.2738915525869092,
+              "z": -2.2810664482557605,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.38461538461538464,
+              "z": -2.161774832391119,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": -0.0789671444678695,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 927,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 927,
+          "sample_strength": 0.8528058877644894,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": -0.09457926676645627,
+              "z": 1.2994829589201942,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.389428263214671,
+              "z": 1.6799204368431842,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    },
+    {
+      "team": "LV",
+      "off": {
+        "id": "ke.off_unit",
+        "value": -0.1645703445054868,
+        "unit": "epa_per_play",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 881,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 881,
+          "sample_strength": 0.8463016330451489,
+          "higher_better": true
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [],
+          "features": [
+            {
+              "id": "ke.off_eff",
+              "value": -0.19632734392708276,
+              "z": -2.2757165766602094,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_native",
+              "value": 0.38251986379114644,
+              "z": -1.7289764497399822,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.success_standard",
+              "value": 0.38496583143507973,
+              "z": -1.358261371811849,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.off_pass_epa",
+              "value": -0.1579180170843335,
+              "z": -1.4220897756811348,
+              "earned_partial": false,
+              "grade": "PASS"
+            },
+            {
+              "id": "ke.opp_rate",
+              "value": 0.3987730061349693,
+              "z": -1.9392764411959278,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "def": {
+        "id": "ke.def_unit",
+        "value": 0.04898820207216366,
+        "unit": "epa_per_play_allowed",
+        "layer": "DERIVED",
+        "status": "OK",
+        "n": 992,
+        "missing_fields": [],
+        "notes": {
+          "method": "epa_shrunken",
+          "layer_reason": "DERIVED",
+          "shrink_k": 160.0,
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "not_team_strength": true,
+          "opp_adj_used": false,
+          "forbidden_objectives": [
+            "ats",
+            "close",
+            "roi",
+            "kei",
+            "clv",
+            "market_residual",
+            "issue_562"
+          ],
+          "n_games": 16,
+          "n_plays": 992,
+          "sample_strength": 0.8611111111111112,
+          "higher_better": false
+        },
+        "production_promote": false,
+        "contributions": {
+          "method": "epa_shrunken",
+          "earned_partial": [
+            "ke.expl_allowed",
+            "ke.disruption_proxy_nfl"
+          ],
+          "features": [
+            {
+              "id": "ke.def_eff",
+              "value": 0.05503701061613077,
+              "z": -0.5335823033504278,
+              "earned_partial": false,
+              "grade": "CORE"
+            },
+            {
+              "id": "ke.success_allowed",
+              "value": 0.4627016129032258,
+              "z": -0.7230027258358135,
+              "earned_partial": false,
+              "grade": "PASS"
+            }
+          ],
+          "shrink_k": 160.0,
+          "ridge_lam": null,
+          "ridge_beta": null,
+          "pca_loadings": null
+        }
+      },
+      "team_strength": {
+        "id": "ke.team_strength",
+        "value": null,
+        "unit": "net_epa_per_play",
+        "layer": "DERIVED",
+        "status": "OMIT",
+        "n": 0,
+        "missing_fields": [],
+        "notes": {
+          "reason": "Phase 2A hard stop \u2014 unit ratings only, no Team Strength",
+          "do_not_impute": true
+        },
+        "production_promote": false
+      }
+    }
+  ],
+  "leakage_live": {
+    "future_week_changes_unit": {
+      "off": false,
+      "def": false
+    },
+    "expected": false
+  },
+  "hard_stops": {
+    "team_strength": false,
+    "off_def_st_overall_weights": false,
+    "matchup": false,
+    "scoring": false,
+    "market": false,
+    "ui": false,
+    "boards": false,
+    "opp_adj_reopen": false
+  },
+  "source": {
+    "path": "/workspace/data/cfb/research/ke_football_pbp/nfl_pbp_2025.parquet",
+    "bytes": 20337029,
+    "n_plays_window": 43336,
+    "n_team_games": 512,
+    "historical_lake_write": false
+  },
+  "incremental_over_epa": {
+    "off": {
+      "n": 214,
+      "partial_pearson": -0.0036802064556566267,
+      "base_epa_pearson": 0.2959815265798492,
+      "unit_pearson": 0.2922980417650324,
+      "epa_mae": 0.1643506673803918,
+      "unit_mae": 0.1634553735272457,
+      "conditioned_on": "ke.off_eff",
+      "target": "next_off_epa"
+    },
+    "def": {
+      "n": 214,
+      "partial_pearson": -4.1287161462066414e-05,
+      "base_epa_pearson": 0.28191010010792206,
+      "unit_pearson": 0.2817125732342901,
+      "epa_mae": 0.1649874099502944,
+      "unit_mae": 0.16441948489593375,
+      "conditioned_on": "ke.def_eff",
+      "target": "next_def_epa"
+    }
+  },
+  "persistence": {
+    "off": {
+      "early_through_week": 6,
+      "late_from_week": 10,
+      "n_teams": 32,
+      "pearson": 0.4975078315304791,
+      "spearman": 0.43841642228739
+    },
+    "def": {
+      "early_through_week": 6,
+      "late_from_week": 10,
+      "n_teams": 32,
+      "pearson": 0.39208430193427096,
+      "spearman": 0.39406158357771254
+    }
+  },
+  "stability": {
+    "off": {
+      "pairs": [
+        {
+          "from": 3,
+          "to": 4,
+          "n": 32,
+          "pearson": 0.8340149481847838
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 32,
+          "pearson": 0.9151060225721274
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 32,
+          "pearson": 0.9562067350914536
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 32,
+          "pearson": 0.9620299287112706
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 32,
+          "pearson": 0.9377307993581179
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 32,
+          "pearson": 0.9630877852266623
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 32,
+          "pearson": 0.9753976590484629
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 32,
+          "pearson": 0.9757662166869813
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 32,
+          "pearson": 0.9830224573776382
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 32,
+          "pearson": 0.9911188483626292
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "n": 32,
+          "pearson": 0.9901860568354858
+        },
+        {
+          "from": 14,
+          "to": 15,
+          "n": 32,
+          "pearson": 0.9845036913637274
+        },
+        {
+          "from": 15,
+          "to": 16,
+          "n": 32,
+          "pearson": 0.991147667521205
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "n": 32,
+          "pearson": 0.9916005826320037
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "n": 32,
+          "pearson": 0.9863728295052291
+        }
+      ],
+      "late_mean_pearson": 0.9832203794560025
+    },
+    "def": {
+      "pairs": [
+        {
+          "from": 3,
+          "to": 4,
+          "n": 32,
+          "pearson": 0.7903799748094911
+        },
+        {
+          "from": 4,
+          "to": 5,
+          "n": 32,
+          "pearson": 0.8911394910398883
+        },
+        {
+          "from": 5,
+          "to": 6,
+          "n": 32,
+          "pearson": 0.9226467566778088
+        },
+        {
+          "from": 6,
+          "to": 7,
+          "n": 32,
+          "pearson": 0.9368209058427533
+        },
+        {
+          "from": 7,
+          "to": 8,
+          "n": 32,
+          "pearson": 0.8942040820158116
+        },
+        {
+          "from": 8,
+          "to": 9,
+          "n": 32,
+          "pearson": 0.9272485847000247
+        },
+        {
+          "from": 9,
+          "to": 10,
+          "n": 32,
+          "pearson": 0.976182509442164
+        },
+        {
+          "from": 10,
+          "to": 11,
+          "n": 32,
+          "pearson": 0.9654789247313224
+        },
+        {
+          "from": 11,
+          "to": 12,
+          "n": 32,
+          "pearson": 0.9772516479513773
+        },
+        {
+          "from": 12,
+          "to": 13,
+          "n": 32,
+          "pearson": 0.9858626918389557
+        },
+        {
+          "from": 13,
+          "to": 14,
+          "n": 32,
+          "pearson": 0.9769570024952127
+        },
+        {
+          "from": 14,
+          "to": 15,
+          "n": 32,
+          "pearson": 0.9847344687898093
+        },
+        {
+          "from": 15,
+          "to": 16,
+          "n": 32,
+          "pearson": 0.9870779224725243
+        },
+        {
+          "from": 16,
+          "to": 17,
+          "n": 32,
+          "pearson": 0.9866226188640062
+        },
+        {
+          "from": 17,
+          "to": 18,
+          "n": 32,
+          "pearson": 0.9877543106660436
+        }
+      ],
+      "late_mean_pearson": 0.975517068195144
+    }
+  },
+  "outlier_sensitivity": {
+    "off": [
+      {
+        "team": "CIN",
+        "base": 0.0003218614028235934,
+        "dropped_game": "2025_03_CIN_MIN",
+        "dropped_week": 3,
+        "after": 0.03810467582370476,
+        "delta": 0.03778281442088117,
+        "base_rank": 21
+      },
+      {
+        "team": "MIA",
+        "base": 0.004186340508771361,
+        "dropped_game": "2025_07_MIA_CLE",
+        "dropped_week": 7,
+        "after": 0.0367351199933094,
+        "delta": 0.032548779484538035,
+        "base_rank": 19
+      },
+      {
+        "team": "DET",
+        "base": 0.06817296246218972,
+        "dropped_game": "2025_17_DET_MIN",
+        "dropped_week": 17,
+        "after": 0.100015144124347,
+        "delta": 0.031842181662157285,
+        "base_rank": 9
+      },
+      {
+        "team": "MIN",
+        "base": -0.10061068318850397,
+        "dropped_game": "2025_13_MIN_SEA",
+        "dropped_week": 13,
+        "after": -0.07063696752940463,
+        "delta": 0.029973715659099343,
+        "base_rank": 28
+      },
+      {
+        "team": "NYJ",
+        "base": -0.10158173745058142,
+        "dropped_game": "2025_08_NYJ_CIN",
+        "dropped_week": 8,
+        "after": -0.1312194099626495,
+        "delta": -0.029637672512068072,
+        "base_rank": 29
+      },
+      {
+        "team": "TB",
+        "base": -0.007084075067140644,
+        "dropped_game": "2025_12_TB_LA",
+        "dropped_week": 12,
+        "after": 0.018997279794194973,
+        "delta": 0.026081354861335615,
+        "base_rank": 23
+      },
+      {
+        "team": "CHI",
+        "base": 0.0746970828956455,
+        "dropped_game": "2025_09_CHI_CIN",
+        "dropped_week": 9,
+        "after": 0.04866413583692737,
+        "delta": -0.02603294705871813,
+        "base_rank": 7
+      },
+      {
+        "team": "NO",
+        "base": -0.07299985990186308,
+        "dropped_game": "2025_08_TB_NO",
+        "dropped_week": 8,
+        "after": -0.04717566758308535,
+        "delta": 0.025824192318777736,
+        "base_rank": 27
+      }
+    ],
+    "def": [
+      {
+        "team": "MIN",
+        "base": -0.07375230689708183,
+        "dropped_game": "2025_03_CIN_MIN",
+        "dropped_week": 3,
+        "after": -0.03907739363865568,
+        "delta": 0.03467491325842615,
+        "base_rank": 5
+      },
+      {
+        "team": "TB",
+        "base": 0.01449725385951248,
+        "dropped_game": "2025_08_TB_NO",
+        "dropped_week": 8,
+        "after": 0.04769891121588534,
+        "delta": 0.03320165735637286,
+        "base_rank": 19
+      },
+      {
+        "team": "MIA",
+        "base": 0.06418934606020019,
+        "dropped_game": "2025_14_MIA_NYJ",
+        "dropped_week": 14,
+        "after": 0.09201678433890062,
+        "delta": 0.027827438278700434,
+        "base_rank": 25
+      },
+      {
+        "team": "LAC",
+        "base": -0.06332503065922677,
+        "dropped_game": "2025_07_IND_LAC",
+        "dropped_week": 7,
+        "after": -0.09077756640599625,
+        "delta": -0.02745253574676948,
+        "base_rank": 7
+      },
+      {
+        "team": "SEA",
+        "base": -0.08998177643297746,
+        "dropped_game": "2025_13_MIN_SEA",
+        "dropped_week": 13,
+        "after": -0.06327933096791434,
+        "delta": 0.026702445465063118,
+        "base_rank": 2
+      },
+      {
+        "team": "CLE",
+        "base": -0.0789671444678695,
+        "dropped_game": "2025_07_MIA_CLE",
+        "dropped_week": 7,
+        "after": -0.052291934066876725,
+        "delta": 0.02667521040099277,
+        "base_rank": 3
+      },
+      {
+        "team": "CAR",
+        "base": 0.06281796421444592,
+        "dropped_game": "2025_03_ATL_CAR",
+        "dropped_week": 3,
+        "after": 0.08882489609879406,
+        "delta": 0.026006931884348133,
+        "base_rank": 24
+      },
+      {
+        "team": "CHI",
+        "base": 0.008950927966524356,
+        "dropped_game": "2025_15_CLE_CHI",
+        "dropped_week": 15,
+        "after": 0.03432891054640377,
+        "delta": 0.02537798257987941,
+        "base_rank": 16
+      }
+    ]
+  },
+  "stop": "STOP before Team Strength, overall weights, matchup, scoring, market, ATS, UI, boards, production promote.",
+  "opp_adj_reopened": false,
+  "opp_adj_result": "NO_ADJUSTMENT_WINNER",
+  "n_snapshots": 32
+}
