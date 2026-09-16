@@ -31,6 +31,9 @@ def main() -> int:
         "shadow_slate.json": bundle["shadow"],
         "numerical_audit.json": bundle["audit"],
         "frozen_eval.json": bundle["gate3"],
+        "customer_view_slate.json": bundle["customer_view"],
+        "predictive_validation.json": bundle["predictive"],
+        "slate_sanity.json": bundle["slate_audit"],
     }
     for name, payload in written.items():
         (OUT_DIR / name).write_text(
@@ -52,6 +55,13 @@ def main() -> int:
     )
     print(f"gate3 {packet['gate3']['verdict']} n_w1={packet['gate3']['n_w1']}")
     print(f"recommendation={packet['recommendation']} production_promote=false")
+    final = packet.get("final") or {}
+    print(
+        f"FINAL integrity={final.get('system_integrity')} "
+        f"predictive={final.get('predictive_validation')} "
+        f"slate={final.get('current_slate_sanity_provenance')} "
+        f"clear={final.get('clear')}"
+    )
     if packet.get("alex_live"):
         print(
             f"alex fold live_sha={packet['alex_live'].get('live_git_sha')} "

@@ -9,14 +9,20 @@ os.environ.setdefault("DATABASE_URL", "postgresql://test:test@localhost:5432/tes
 
 from src.services.nfl_epa_authority import NFL_2026_W1_OUTCOMES, NFL_2026_W2_SLATE
 from src.services.nfl_reopening_packet import (
+    ATL_GB_FILL_RUN_ID,
     PACKET_RUN_ID,
+    PROD_CANDIDATE_RUN_ID,
+    PROD_CANDIDATE_SHA,
     assemble_packet,
+    audit_customer_view_slate,
     audit_shadow,
     authorize_candidate_row,
+    build_customer_view_slate,
     build_gate1_integrity,
     build_shadow_slate,
     classify_live_leak,
     frozen_eval_w1,
+    grade_predictive_validation,
     is_july31_stale,
     load_canonical_slate,
     prove_wl_refuse_holds,
@@ -158,11 +164,74 @@ def test_packet_folds_alex_live_as_conditional_no_board_go() -> None:
     assert packet["gate2"]["sanity"] == "PASS"
     assert packet["gate2"]["alex_live_shadow"] == "PASS"
     assert packet["gate2"]["alex_live_game_count"] == 17
-    assert packet["gate3"]["verdict"] == "IN_PROGRESS_THIN"
-    assert packet["gate3"]["alex_status"] == "NOT_STARTED"
+    assert packet["gate3"]["verdict"] == "FAIL"
+    assert packet["gate3"]["alex_status"] == "RUN_ON_CANDIDATE"
     assert packet["gate4"]["release_spread"] == "BLOCKED"
     assert packet["gate4"]["website_verification"] == "BLOCKED"
     assert packet["alex_live"]["cited_not_recomputed"] is True
     assert packet["alex_live"]["live_git_sha"] == "153b6a884a8e"
+    assert packet["system_integrity"] == "PASS"
+    assert packet["predictive_validation"] == "FAIL"
+    assert packet["current_slate_sanity_provenance"] == "PASS"
+    assert packet["clear"] == "NO-GO"
+    assert packet["coming_soon"] is True
+    assert packet["final"]["public_paint"] is False
     assert "NFL_EDGE_BOARD_PUBLIC_ENABLED = false" in PUBLIC_FLAG.read_text(encoding="utf-8")
     assert "CFB_EDGE_BOARD_PUBLIC_ENABLED = false" in PUBLIC_FLAG.read_text(encoding="utf-8")
+
+
+def test_frozen_predictive_fails_thin_n_and_floors() -> None:
+    ev = frozen_eval_w1()
+    grade = grade_predictive_validation(eval_report=ev)
+    assert grade["tuning"] is False
+    assert grade["ats_fitting"] is False
+    assert grade["coefficient_changes"] is False
+    assert grade["feature_additions"] is False
+    assert grade["market_fitting"] is False
+    assert grade["candidate_sha"] == PROD_CANDIDATE_SHA
+    assert grade["n_w1"] == 16
+    assert grade["can_protocol_green"] is False
+    assert grade["can_protocol_yellow"] is False
+    assert grade["floors"]["margin_floor_ok"] is False
+    assert grade["floors"]["total_floor_ok"] is False
+    assert grade["calibration"]["status"] == "N/A"
+    assert grade["regression_checks"]["wl_circular_refused"]["refused"] is True
+    assert float(grade["w1_oos"]["epa_margin_mae"]) > 9.5
+    assert float(grade["w1_oos"]["epa_total_mae"]) > 10.5
+    assert grade["verdict"] == "FAIL"
+    assert grade["clear_blocks"] is True
+
+
+def test_customer_view_17_uses_live_w2_and_rejects_july31_atl_gb() -> None:
+    slate = build_customer_view_slate()
+    keys = [g["key"] for g in slate["games"]]
+    assert len(keys) == 17
+    assert keys.count("ATL@GB") == 1
+    w2 = [g for g in slate["games"] if g["week"] == 2]
+    assert len(w2) == 16
+    for game in w2:
+        assert game["run_id"] == PROD_CANDIDATE_RUN_ID
+        assert game["candidate_sha"] == PROD_CANDIDATE_SHA
+        assert game["overlay_status"] == "OFF"
+        assert game["freshness"]["july31_used_as_fair"] is False
+        assert game["freshness"]["live_projection_used_as_fair"] is True
+        assert game["fair_spread_home"] is not None
+        assert game["fair_total"] is not None
+        assert game["projected_score"]
+        assert game["model_edge_spread"] is not None
+        assert game["model_edge_total"] is not None
+    atl = next(g for g in slate["games"] if g["key"] == "ATL@GB")
+    assert atl["week"] == 3
+    assert atl["run_id"] == ATL_GB_FILL_RUN_ID
+    assert atl["freshness"]["july31_stale"] is True
+    assert atl["freshness"]["july31_used_as_fair"] is False
+    assert atl["freshness"]["live_projection_used_as_fair"] is False
+    assert abs(float(atl["fair_spread_home"]) + 2.2744) < 0.01
+    assert abs(float(atl["fair_total"]) - 46.0712) < 0.01
+    assert abs(float(atl["fair_spread_home"]) - (-4.59)) > 1.0
+    audit = audit_customer_view_slate(slate)
+    assert audit["verdict"] == "PASS"
+    assert audit["complete_17"] is True
+    assert audit["atl_gb_july31_rejected"] is True
+    assert not audit["absurdities"]
+    assert not audit["provenance_fail"]

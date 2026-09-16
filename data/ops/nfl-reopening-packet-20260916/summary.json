@@ -18,13 +18,27 @@
   },
   "as_of": "2026-09-16",
   "cfb": "separate_do_not_bless",
-  "checksum_sha256": "7364e7bce681f0de3d9f1c71ca9d8cfd903d48fb06bfe273336339df0e6771c5",
+  "checksum_sha256": "bf99cea9ce6e7e1eb4cdbe3b1e84d2523cabb542cdd7ce10ba5d24d966b8a289",
+  "clear": "NO-GO",
   "coming_soon": true,
   "controlled_reopen_order_if_go": [
     "model_fair_internal_only",
     "overview_widgets",
     "edge_board_last"
   ],
+  "current_slate_sanity_provenance": "PASS",
+  "final": {
+    "clear": "NO-GO",
+    "coming_soon": true,
+    "current_slate_sanity_provenance": "PASS",
+    "customer_view_checksum": "2bf14fbfed9932cb262ee7a4ff0f3869773783bea4817905266dc89658be9016",
+    "customer_view_game_count": 17,
+    "predictive_checksum": "d59843ef7f0f3c4cd8155e6fe2e641615c3e12294c20b6a904dc4c7d09a93fb8",
+    "predictive_validation": "FAIL",
+    "public_paint": false,
+    "slate_audit_checksum": "dda7fe902e5e1203d56097bd56fec30ce469c845610ec2a42b66975581af55c1",
+    "system_integrity": "PASS"
+  },
   "gate1": {
     "alex_remat_integrity": "GO",
     "atl_pit_delta": -6.79,
@@ -80,10 +94,17 @@
     "w2_game_count": 16
   },
   "gate3": {
-    "alex_status": "NOT_STARTED",
+    "alex_status": "RUN_ON_CANDIDATE",
     "ats_fitting": false,
     "checksum_sha256": "dff1afb6d73a863e294bc147509171939030b1bf424bb8635a71dd61cb532b0d",
     "coefficient_changes": false,
+    "fail_reasons": [
+      "n=16 < protocol YELLOW min 100 and GREEN min 200",
+      "W1 EPA margin MAE 12.6044 > supervised floor 9.5",
+      "W1 EPA total MAE 13.2488 > supervised floor 10.5",
+      "W1 EPA margin MAE 12.6044 does not beat market-implied MAE 5.6875",
+      "margin MAE worse than July-31 previous production stamps"
+    ],
     "n_w1": 16,
     "pre_repair": {
       "enterprise_overall": "RED",
@@ -95,8 +116,40 @@
       "predictive_quality": "YELLOW",
       "subscriber_influence": "LIMITED"
     },
+    "protocol_band": "THIN_CANNOT_YELLOW",
+    "regression_checks": {
+      "vs_inherited_historical_production": {
+        "enterprise_overall": "RED",
+        "historical_market_spread_mae": 9.7764,
+        "historical_model_spread_mae": 9.5513,
+        "historical_supervised_margin_mae": 7.4801,
+        "historical_supervised_total_mae": 9.2029,
+        "lab_predictive_quality": "YELLOW",
+        "note": "Repair did not retune. Historical ATS/CLV/supervised floors are inherited, not a new fit. W1 OOS of this candidate does not meet those floors."
+      },
+      "vs_july31_previous_production": {
+        "margin_mae_delta": 0.4131,
+        "margin_regressed": true,
+        "note": "Positive delta = worse than July-31 live stamps. Margin slightly worse; total slightly better. Neither clears floors.",
+        "total_mae_delta": -0.2637,
+        "total_regressed": false
+      },
+      "wl_circular_refused": {
+        "note": "W-L post-game 1-0/0-1 margin MAE is circular and is not a regression win or a CLEAR input.",
+        "refused": true,
+        "wl_margin_mae": 7.7
+      }
+    },
     "research_thin": "IN_PROGRESS_THIN",
-    "verdict": "IN_PROGRESS_THIN",
+    "verdict": "FAIL",
+    "w1_market_relative": {
+      "epa_beats_market": false,
+      "epa_margin_mae": 12.6044,
+      "market_margin_mae": 5.6875,
+      "model_vs_close_mae": 8.1508,
+      "n_with_market": 16,
+      "note": "Market lines from week1_july31 stamps (joined books). Spread-vs-close MAE is reported; it does not gate GREEN in v1.0."
+    },
     "w1_oos": {
       "epa_margin_bias": 0.8431,
       "epa_margin_mae": 12.6044,
@@ -123,6 +176,7 @@
   "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
   "overlays_off": true,
   "packet_id": "nfl-reopening-packet-20260916",
+  "predictive_validation": "FAIL",
   "production_promote": false,
   "public_flags": {
     "CFB_EDGE_BOARD_PUBLIC_ENABLED": false,
@@ -132,5 +186,6 @@
   "research_recommendation": "HOLD",
   "run_id": "nfl-reopening-packet-20260916-shadow",
   "scoring_equation_changed": false,
-  "stop": "CONDITIONAL: remat+integrity GO; board reopen NO-GO. Ryan CLEAR required. No customer-facing reopen in this PR."
+  "stop": "NO-GO CLEAR: SYSTEM INTEGRITY PASS; PREDICTIVE VALIDATION FAIL; CURRENT SLATE SANITY/PROVENANCE PASS with flags. Coming soon ON. STOP for Ryan CLEAR.",
+  "system_integrity": "PASS"
 }

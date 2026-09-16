@@ -57,9 +57,12 @@
       "readiness_sample_size_after": 16
     },
     "nfl_reopening_packet_20260916": {
-      "status": "CONDITIONAL",
+      "status": "NO-GO_CLEAR",
       "production_promote": false,
-      "recommendation": "CONDITIONAL",
+      "recommendation": "NO-GO_CLEAR",
+      "system_integrity": "PASS",
+      "predictive_validation": "FAIL",
+      "current_slate_sanity_provenance": "PASS",
       "remat_integrity_evidence": "GO",
       "board_reopen": "NO-GO",
       "packet": "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
@@ -70,7 +73,7 @@
       "gate1_integrity": "PASS",
       "gate2_alex_live_shadow": "PASS",
       "gate2_alex_live_games": 17,
-      "gate3": "NOT_STARTED",
+      "gate3": "FAIL",
       "gate4_release": "BLOCKED",
       "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570"
     }
@@ -87,9 +90,9 @@
         "data/ops/nfl-564-remediation-20260915.md",
         "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md"
       ],
-      "unresolved_blocker": "2026-09-16 packet CONDITIONAL. Remat+integrity GO; board reopen NO-GO. No Ryan CLEAR.",
+      "unresolved_blocker": "2026-09-16 packet NO-GO CLEAR. Integrity PASS; Predictive FAIL; slate PASS with flags. No Ryan CLEAR.",
       "owner": "Alex",
-      "next_action": "Ryan CLEAR required. Keep overlays off. Do not flip Coming soon.",
+      "next_action": "Ryan CLEAR required. Predictive FAIL blocks reopen. Keep overlays off. Do not flip Coming soon.",
       "last_updated": "2026-09-16"
     },
     {
@@ -146,16 +149,15 @@
       "id": "nfl.predictive_validation",
       "track": "NFL",
       "gate": "Predictive validation",
-      "status": "NOT_STARTED",
+      "status": "FAIL",
       "evidence": [
-        "docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md",
-        "docs/NFL_ENTERPRISE_GATES.md",
-        "NFL_SPREAD_PLAY_LOCKED.md",
-        "Alex live FROZEN_EVAL NOT_STARTED; research W1 OOS in this PR is not the freeze"
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
+        "data/ops/nfl-reopening-packet-20260916/predictive_validation.json",
+        "Frozen eval SHA 153b6a884a8e packaged EPA overlays OFF; no tuning; W1 n=16 EPA margin MAE 12.60 total 13.25 vs floors 9.5/10.5; market-implied 5.69; July-31 12.19/13.51 margin regressed; W-L 7.70 circular refuse"
       ],
-      "unresolved_blocker": "No frozen reopen eval has been run against predefined criteria for the candidate that would be shown. Protocol is not PASS.",
+      "unresolved_blocker": "Thin n + missed floors + margin vs July-31 regression. Protocol cannot YELLOW/GREEN. Do not ATS-fit.",
       "owner": "Validation Lead",
-      "next_action": "Do not ATS-fit. Do not retune. Run the unused/frozen package before predictive PASS.",
+      "next_action": "Stay dark. Do not reopen on this FAIL. Do not retune.",
       "last_updated": "2026-09-16"
     },
     {
@@ -166,7 +168,8 @@
       "evidence": [
         "data/ops/nfl-reopening-packet-20260916/alex_live_receipts.json",
         "Alex live W2 shadow 17 games 2026-09-17/20/21 SUCCESS packaged EPA dampened@16",
-        "data/ops/nfl-reopening-packet-20260916/shadow_slate.json"
+        "data/ops/nfl-reopening-packet-20260916/shadow_slate.json",
+        "data/ops/nfl-reopening-packet-20260916/customer_view_slate.json"
       ],
       "unresolved_blocker": "Not a weekly-update drill with injuries ON or missing-data paths. Overlays remain OFF.",
       "owner": "Platform Reliability",
@@ -196,9 +199,9 @@
       "evidence": [
         "https://github.com/kosedge/kosedge/pull/561",
         "apps/web/lib/cfb-edge-board-public.ts (NFL_EDGE_BOARD_PUBLIC_ENABLED=false)",
-        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md CONDITIONAL board NO-GO"
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md NO-GO CLEAR predictive FAIL"
       ],
-      "unresolved_blocker": "No Ryan CLEAR. Predictive NOT_STARTED. Website BLOCKED.",
+      "unresolved_blocker": "No Ryan CLEAR. Predictive FAIL. Website BLOCKED.",
       "owner": "CoS",
       "next_action": "Review the packet. Do not enable NFL spread from this PR. If later CLEAR: fair -> overview -> Edge Board last.",
       "last_updated": "2026-09-16"

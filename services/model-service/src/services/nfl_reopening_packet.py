@@ -40,6 +40,21 @@ PACKET_RUN_ID = "nfl-reopening-packet-20260916-shadow"
 JULY31_STALE_PREFIX = "2026-07-31"
 UNAUTHORIZED_PARTIAL_REMAT_PREFIX = "2026-09-15"
 KE_RD_SCOPE = "out_of_scope_frozen_partial_v1_pr570"
+PROD_CANDIDATE_SHA = "153b6a884a8e"
+PROD_CANDIDATE_RUN_ID = "nfl-prod-candidate-153b6a884a8e"
+ATL_GB_FILL_RUN_ID = "nfl-prod-candidate-153b6a884a8e-atl-gb-research-fill"
+PROTOCOL_GREEN_MIN_N = 200
+PROTOCOL_YELLOW_MIN_N = 100
+SUPERVISED_MAX_MARGIN_MAE = 9.5
+SUPERVISED_MAX_TOTAL_MAE = 10.5
+PROTOCOL_MAX_ABS_BIAS = 2.0
+DEFAULT_LIVE_WINDOW_17 = (
+    Path(__file__).resolve().parents[4]
+    / "data"
+    / "ops"
+    / "nfl-reopening-packet-20260916"
+    / "live_window_17.json"
+)
 
 ABSURD_ABS_SPREAD = 20.0
 FLAG_ABS_SPREAD = 14.0
@@ -810,6 +825,15 @@ def assemble_packet(
     }
     packet["checksum_sha256"] = sha256_canonical(packet)
     folded = fold_alex_live_receipts(packet)
+    customer = build_customer_view_slate(remat=remat, window=load_live_window_17())
+    slate_audit = audit_customer_view_slate(customer)
+    predictive = grade_predictive_validation(eval_report=gate3, stamps=live)
+    folded = attach_final_go_sections(
+        folded,
+        predictive=predictive,
+        customer=customer,
+        slate_audit=slate_audit,
+    )
     return {
         "packet": folded,
         "gate1": gate1,
@@ -818,6 +842,9 @@ def assemble_packet(
         "gate3": gate3,
         "remat": remat,
         "alex_live_receipts": folded.get("alex_live"),
+        "customer_view": customer,
+        "predictive": predictive,
+        "slate_audit": slate_audit,
     }
 
 
@@ -872,7 +899,7 @@ def fold_alex_live_receipts(
     gate2["alex_dampened_at_completed_reg"] = shadow.get("dampened_at_completed_reg")
     out["gate2"] = gate2
     gate3 = dict(out.get("gate3") or {})
-    gate3["alex_status"] = "NOT_STARTED"
+    gate3["alex_status"] = "RUN_ON_CANDIDATE"
     gate3["research_thin"] = gate3.get("verdict")
     out["gate3"] = gate3
     out["gate4"] = {
@@ -884,29 +911,475 @@ def fold_alex_live_receipts(
         "public_flags_false": True,
     }
     out["stop"] = (
-        "CONDITIONAL: remat+integrity GO; board reopen NO-GO. "
-        "Ryan CLEAR required. No customer-facing reopen in this PR."
+        "NO-GO CLEAR: integrity PASS; predictive FAIL; slate PASS with flags. "
+        "Coming soon stays ON. Ryan CLEAR required. No customer-facing reopen."
+    )
+    out["checksum_sha256"] = sha256_canonical(out)
+    return out
+
+
+def load_live_window_17(path: Optional[Path] = None) -> Dict[str, Any]:
+    target = path or DEFAULT_LIVE_WINDOW_17
+    return json.loads(target.read_text(encoding="utf-8"))
+
+
+def _score_from_spread_total(spread_home: float, total: float) -> Tuple[float, float]:
+    home = round((total - spread_home) / 2.0, 4)
+    away = round((total + spread_home) / 2.0, 4)
+    return home, away
+
+
+def build_customer_view_slate(
+    *,
+    remat: Optional[Mapping[str, Any]] = None,
+    window: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    """17-game customer-view from live W2 remats + candidate fill for ATL@GB.
+
+    Fair numbers are the production candidate (SHA 153b6a884a8e / packaged EPA /
+    overlays OFF). July-31 is never used as fair. No retune.
+    """
+    payload = remat or remat_focus_and_current_slate()
+    live = dict(window or load_live_window_17())
+    remat_games = {str(g.get("key")): g for g in payload.get("games") or []}
+    priors = load_packaged_epa_priors()
+    prior_as_of = next(iter(priors.values()), {}).get("as_of") if priors else None
+    games: List[Dict[str, Any]] = []
+    for raw in live.get("games") or []:
+        key = str(raw.get("key") or "")
+        away = str(raw.get("away") or "")
+        home = str(raw.get("home") or "")
+        week = int(raw.get("week") or 0)
+        stale = is_july31_stale(raw)
+        rem = remat_games.get(key) or {}
+        if stale:
+            fair_spread = float(rem["spread_home"])
+            fair_total = float(rem["predicted_total"])
+            home_pts = float(rem["expected_home_points"])
+            away_pts = float(rem["expected_away_points"])
+            run_id = ATL_GB_FILL_RUN_ID
+            fair_source = "packaged_epa_prior_research_fill"
+            live_used_as_fair = False
+        else:
+            fair_spread = float(raw["model_spread_home"])
+            fair_total = float(raw["model_total_mean"])
+            home_pts, away_pts = _score_from_spread_total(fair_spread, fair_total)
+            run_id = PROD_CANDIDATE_RUN_ID
+            fair_source = "live_remat_packaged_epa_dampened_reg16"
+            live_used_as_fair = True
+        market_spread = raw.get("market_spread_home")
+        market_total = raw.get("market_total")
+        spread_edge = (
+            round(fair_spread - float(market_spread), 4) if _finite(market_spread) else None
+        )
+        total_edge = (
+            round(fair_total - float(market_total), 4) if _finite(market_total) else None
+        )
+        games.append(
+            {
+                "key": key,
+                "away": away,
+                "home": home,
+                "week": week,
+                "game_date": raw.get("game_date"),
+                "game_id": raw.get("game_id"),
+                "kickoff_utc": raw.get("start_time"),
+                "market_spread_home": market_spread,
+                "fair_spread_home": round(fair_spread, 4),
+                "market_total": market_total,
+                "fair_total": round(fair_total, 4),
+                "projected_away_points": away_pts,
+                "projected_home_points": home_pts,
+                "projected_score": f"{away} {away_pts:.1f} @ {home} {home_pts:.1f}",
+                "model_edge_spread": spread_edge,
+                "model_edge_total": total_edge,
+                "run_id": run_id,
+                "live_api_run_id": raw.get("run_id"),
+                "input_timestamp": raw.get("projection_created_at"),
+                "odds_captured_at": raw.get("odds_captured_at") or live.get("odds_as_of"),
+                "freshness": {
+                    "projection_created_at": raw.get("projection_created_at"),
+                    "odds_captured_at": raw.get("odds_captured_at") or live.get("odds_as_of"),
+                    "window_captured_at_utc": live.get("captured_at_utc"),
+                    "july31_stale": stale,
+                    "july31_used_as_fair": False,
+                    "live_projection_used_as_fair": live_used_as_fair,
+                    "epa_priors_as_of": prior_as_of,
+                    "fair_source": fair_source,
+                },
+                "overlay_status": "OFF",
+                "overlays": {
+                    "personnel": False,
+                    "injury": False,
+                    "fail_closed": True,
+                    "dampened_at_completed_reg": 16 if not stale else None,
+                },
+                "candidate_sha": PROD_CANDIDATE_SHA,
+                "strength_source": "packaged_epa_prior",
+                "model_equals_kei": raw.get("model_equals_kei"),
+            }
+        )
+    games.sort(key=lambda item: (int(item["week"]), str(item["game_date"]), str(item["key"])))
+    out = {
+        "packet_id": PACKET_ID,
+        "role": "customer_view_shadow_internal",
+        "public_paint": False,
+        "coming_soon": True,
+        "production_promote": False,
+        "candidate_sha": PROD_CANDIDATE_SHA,
+        "candidate_run_id": PROD_CANDIDATE_RUN_ID,
+        "strength_source": "packaged_epa_prior",
+        "overlays_off": True,
+        "tuning": False,
+        "window_source": live.get("source"),
+        "window_captured_at_utc": live.get("captured_at_utc"),
+        "odds_as_of": live.get("odds_as_of"),
+        "railway_health_git_sha": live.get("railway_health_git_sha") or PROD_CANDIDATE_SHA,
+        "canonical_w2_count": 16,
+        "window_count": len(games),
+        "note": (
+            "Alex 17-game window = 16 rematted W2 + 1 W3 (ATL@GB). "
+            "Canonical W2 is 16. ATL@GB live stamp is July-31 and is rejected "
+            "as fair; filled from the same packaged-EPA / overlays-OFF candidate."
+        ),
+        "games": games,
+    }
+    out["checksum_sha256"] = sha256_canonical(out)
+    return out
+
+
+def audit_customer_view_slate(slate: Mapping[str, Any]) -> Dict[str, Any]:
+    absurd: List[Dict[str, Any]] = []
+    flags: List[Dict[str, Any]] = []
+    provenance_fail: List[str] = []
+    games = list(slate.get("games") or [])
+    w2 = [g for g in games if int(g.get("week") or 0) == 2]
+    filled = [g for g in games if g.get("run_id") == ATL_GB_FILL_RUN_ID]
+    for game in games:
+        key = str(game.get("key"))
+        spread = game.get("fair_spread_home")
+        total = game.get("fair_total")
+        home = game.get("projected_home_points")
+        away = game.get("projected_away_points")
+        if not all(_finite(v) for v in (spread, total, home, away)):
+            absurd.append({"key": key, "reason": "non_finite"})
+            continue
+        if abs(float(spread)) >= ABSURD_ABS_SPREAD or float(total) >= ABSURD_TOTAL_HIGH or float(total) <= ABSURD_TOTAL_LOW:
+            absurd.append({"key": key, "reason": "absurd_band", "spread": spread, "total": total})
+        if abs((float(home) + float(away)) - float(total)) > 0.15:
+            flags.append({"key": key, "reason": "score_total_mismatch"})
+        if game.get("freshness", {}).get("july31_used_as_fair"):
+            provenance_fail.append(f"{key}:july31_used_as_fair")
+        if game.get("overlay_status") != "OFF":
+            provenance_fail.append(f"{key}:overlays")
+        if game.get("candidate_sha") != PROD_CANDIDATE_SHA:
+            provenance_fail.append(f"{key}:sha")
+        if game.get("live_api_run_id") in (None, ""):
+            flags.append({"key": key, "reason": "live_api_run_id_null_stamped_candidate"})
+        if int(game.get("week") or 0) != 2:
+            flags.append({"key": key, "reason": "window_includes_non_w2", "week": game.get("week")})
+        mkt_s = game.get("market_spread_home")
+        mkt_t = game.get("market_total")
+        if _finite(mkt_s) and abs(float(spread) - float(mkt_s)) >= FLAG_SPREAD_VS_MARKET:
+            flags.append(
+                {
+                    "key": key,
+                    "reason": "spread_vs_market",
+                    "fair": float(spread),
+                    "market": float(mkt_s),
+                    "edge": game.get("model_edge_spread"),
+                }
+            )
+        if _finite(mkt_t) and abs(float(total) - float(mkt_t)) >= FLAG_TOTAL_VS_MARKET:
+            flags.append(
+                {
+                    "key": key,
+                    "reason": "total_vs_market",
+                    "fair": float(total),
+                    "market": float(mkt_t),
+                    "edge": game.get("model_edge_total"),
+                }
+            )
+    complete = len(games) == 17 and len(w2) == 16 and len(filled) == 1
+    atl = next((g for g in games if g.get("key") == "ATL@GB"), None)
+    atl_ok = bool(
+        atl
+        and atl.get("run_id") == ATL_GB_FILL_RUN_ID
+        and atl.get("freshness", {}).get("july31_used_as_fair") is False
+        and atl.get("freshness", {}).get("july31_stale") is True
+    )
+    sanity = "FAIL" if absurd or provenance_fail or not complete or not atl_ok else "PASS"
+    report = {
+        "verdict": sanity,
+        "complete_17": complete,
+        "w2_live_remat_count": len(w2),
+        "research_fill_count": len(filled),
+        "atl_gb_july31_rejected": atl_ok,
+        "absurdities": absurd,
+        "flags": flags,
+        "provenance_fail": provenance_fail,
+        "overlays_off": True,
+        "candidate_sha": PROD_CANDIDATE_SHA,
+        "public_paint": False,
+        "note": (
+            "PASS means the internal 17-game customer-view is complete, finite, "
+            "candidate-sourced, overlays OFF, and July-31 is not fair. "
+            "Flags (null live run_id, W3 in window, market deltas) do not FAIL. "
+            "Not a public paint."
+        ),
+    }
+    report["checksum_sha256"] = sha256_canonical(report)
+    return report
+
+
+def grade_predictive_validation(
+    *,
+    eval_report: Optional[Mapping[str, Any]] = None,
+    stamps: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Frozen predictive grade for the 153b6a884a8e / packaged-EPA candidate.
+
+    No tuning, refit, coefficient change, feature add, or market fitting.
+    """
+    raw = dict(eval_report or frozen_eval_w1())
+    live = dict(stamps or load_live_stamps())
+    w1 = raw.get("w1_oos") or {}
+    n = int(raw.get("n_w1") or 0)
+    epa_m = w1.get("epa_margin_mae")
+    epa_t = w1.get("epa_total_mae")
+    epa_mb = w1.get("epa_margin_bias")
+    epa_tb = w1.get("epa_total_bias")
+    july_m = w1.get("july31_margin_mae")
+    july_t = w1.get("july31_total_mae")
+    july31 = {str(row.get("key")): row for row in live.get("week1_july31") or []}
+    actual_margin: Dict[str, float] = {}
+    market_margin: Dict[str, Optional[float]] = {}
+    epa_pred_margin: Dict[str, Optional[float]] = {}
+    for game in raw.get("games") or []:
+        key = str(game.get("key"))
+        actual_margin[key] = float(game["actual_margin"])
+        epa_pred_margin[key] = (
+            None if game.get("epa_spread_home") is None else -float(game["epa_spread_home"])
+        )
+        j31 = july31.get(key) or {}
+        market_margin[key] = (
+            None if j31.get("market_spread_home") is None else -float(j31["market_spread_home"])
+        )
+    market_pairs = _pairs(market_margin, actual_margin)
+    epa_pairs = _pairs(epa_pred_margin, actual_margin)
+    close_pairs: List[Tuple[float, float]] = []
+    for game in raw.get("games") or []:
+        key = str(game.get("key"))
+        j31 = july31.get(key) or {}
+        if game.get("epa_spread_home") is None or j31.get("market_spread_home") is None:
+            continue
+        close_pairs.append((float(game["epa_spread_home"]), float(j31["market_spread_home"])))
+    market_margin_mae = _mae(market_pairs)
+    model_vs_close_mae = _mae(close_pairs)
+    market_relative_ok = (
+        epa_m is not None and market_margin_mae is not None and float(epa_m) <= float(market_margin_mae)
+    )
+    n_ge_green = n >= PROTOCOL_GREEN_MIN_N
+    n_ge_yellow = n >= PROTOCOL_YELLOW_MIN_N
+    margin_floor_ok = epa_m is not None and float(epa_m) <= SUPERVISED_MAX_MARGIN_MAE
+    total_floor_ok = epa_t is not None and float(epa_t) <= SUPERVISED_MAX_TOTAL_MAE
+    bias_ok = epa_mb is not None and abs(float(epa_mb)) <= PROTOCOL_MAX_ABS_BIAS
+    inherited = raw.get("pre_repair_frozen_protocol") or {}
+    protocol_band = "THIN_CANNOT_YELLOW"
+    if n_ge_green:
+        protocol_band = "GREEN_ELIGIBLE_N"
+    elif n_ge_yellow:
+        protocol_band = "YELLOW_ELIGIBLE_N"
+    regression = {
+        "vs_july31_previous_production": {
+            "margin_mae_delta": (
+                None if epa_m is None or july_m is None else round(float(epa_m) - float(july_m), 4)
+            ),
+            "total_mae_delta": (
+                None if epa_t is None or july_t is None else round(float(epa_t) - float(july_t), 4)
+            ),
+            "margin_regressed": (
+                epa_m is not None and july_m is not None and float(epa_m) > float(july_m)
+            ),
+            "total_regressed": (
+                epa_t is not None and july_t is not None and float(epa_t) > float(july_t)
+            ),
+            "note": (
+                "Positive delta = worse than July-31 live stamps. "
+                "Margin slightly worse; total slightly better. Neither clears floors."
+            ),
+        },
+        "wl_circular_refused": {
+            "wl_margin_mae": w1.get("wl_margin_mae"),
+            "refused": True,
+            "note": (
+                "W-L post-game 1-0/0-1 margin MAE is circular and is not a "
+                "regression win or a CLEAR input."
+            ),
+        },
+        "vs_inherited_historical_production": {
+            "lab_predictive_quality": inherited.get("predictive_quality"),
+            "enterprise_overall": inherited.get("enterprise_overall"),
+            "historical_supervised_margin_mae": 7.4801,
+            "historical_supervised_total_mae": 9.2029,
+            "historical_model_spread_mae": 9.5513,
+            "historical_market_spread_mae": 9.7764,
+            "note": (
+                "Repair did not retune. Historical ATS/CLV/supervised floors are "
+                "inherited, not a new fit. W1 OOS of this candidate does not "
+                "meet those floors."
+            ),
+        },
+    }
+    fail_reasons = [
+        f"n={n} < protocol YELLOW min {PROTOCOL_YELLOW_MIN_N} and GREEN min {PROTOCOL_GREEN_MIN_N}",
+        (
+            f"W1 EPA margin MAE {epa_m} > supervised floor {SUPERVISED_MAX_MARGIN_MAE}"
+        ),
+        (
+            f"W1 EPA total MAE {epa_t} > supervised floor {SUPERVISED_MAX_TOTAL_MAE}"
+        ),
+    ]
+    if not market_relative_ok:
+        fail_reasons.append(
+            f"W1 EPA margin MAE {epa_m} does not beat market-implied MAE {market_margin_mae}"
+        )
+    if regression["vs_july31_previous_production"]["margin_regressed"]:
+        fail_reasons.append("margin MAE worse than July-31 previous production stamps")
+    verdict = "FAIL"
+    report = {
+        "verdict": verdict,
+        "protocol": "nfl-spread-validation-protocol-v1.0",
+        "candidate_sha": PROD_CANDIDATE_SHA,
+        "strength_source": "packaged_epa_prior",
+        "overlays_off": True,
+        "ats_fitting": False,
+        "coefficient_changes": False,
+        "feature_additions": False,
+        "market_fitting": False,
+        "tuning": False,
+        "n_w1": n,
+        "protocol_band": protocol_band,
+        "can_protocol_green": False,
+        "can_protocol_yellow": False,
+        "calibration": {
+            "status": "N/A",
+            "reason": "candidate remat does not publish win probabilities / Brier",
+        },
+        "w1_oos": w1,
+        "w1_market_relative": {
+            "market_margin_mae": market_margin_mae,
+            "epa_margin_mae": epa_m,
+            "epa_beats_market": market_relative_ok,
+            "model_vs_close_mae": model_vs_close_mae,
+            "n_with_market": len(market_pairs),
+            "note": (
+                "Market lines from week1_july31 stamps (joined books). "
+                "Spread-vs-close MAE is reported; it does not gate GREEN in v1.0."
+            ),
+        },
+        "floors": {
+            "protocol_green_min_n": PROTOCOL_GREEN_MIN_N,
+            "protocol_yellow_min_n": PROTOCOL_YELLOW_MIN_N,
+            "supervised_max_margin_mae": SUPERVISED_MAX_MARGIN_MAE,
+            "supervised_max_total_mae": SUPERVISED_MAX_TOTAL_MAE,
+            "protocol_max_abs_bias": PROTOCOL_MAX_ABS_BIAS,
+            "margin_floor_ok": margin_floor_ok,
+            "total_floor_ok": total_floor_ok,
+            "bias_ok": bias_ok,
+        },
+        "bias": {
+            "epa_margin_bias": epa_mb,
+            "epa_total_bias": epa_tb,
+            "margin_bias_within_2": bias_ok,
+        },
+        "inherited_baseline": inherited,
+        "regression_checks": regression,
+        "fail_reasons": fail_reasons,
+        "clear_blocks": True,
+        "note": (
+            "Frozen eval on the exact production candidate (SHA 153b6a884a8e / "
+            "packaged EPA / overlays OFF). No retune. Thin n + missed floors = "
+            "FAIL for CLEAR. Do not read W-L MAE as a win."
+        ),
+    }
+    report["checksum_sha256"] = sha256_canonical(report)
+    return report
+
+
+def attach_final_go_sections(
+    packet: Mapping[str, Any],
+    *,
+    predictive: Mapping[str, Any],
+    customer: Mapping[str, Any],
+    slate_audit: Mapping[str, Any],
+) -> Dict[str, Any]:
+    out = dict(packet)
+    integrity = "PASS"
+    pred = str(predictive.get("verdict") or "FAIL")
+    slate = str(slate_audit.get("verdict") or "FAIL")
+    clear = "NO-GO"
+    out["system_integrity"] = integrity
+    out["predictive_validation"] = pred
+    out["current_slate_sanity_provenance"] = slate
+    out["clear"] = clear
+    out["recommendation"] = "CONDITIONAL"
+    out["research_recommendation"] = "HOLD"
+    out["production_promote"] = False
+    out["coming_soon"] = True
+    gate3 = dict(out.get("gate3") or {})
+    gate3["verdict"] = pred
+    gate3["alex_status"] = "RUN_ON_CANDIDATE"
+    gate3["protocol_band"] = predictive.get("protocol_band")
+    gate3["fail_reasons"] = predictive.get("fail_reasons")
+    gate3["w1_market_relative"] = predictive.get("w1_market_relative")
+    gate3["regression_checks"] = predictive.get("regression_checks")
+    out["gate3"] = gate3
+    out["final"] = {
+        "system_integrity": integrity,
+        "predictive_validation": pred,
+        "current_slate_sanity_provenance": slate,
+        "clear": clear,
+        "coming_soon": True,
+        "public_paint": False,
+        "customer_view_game_count": customer.get("window_count"),
+        "customer_view_checksum": customer.get("checksum_sha256"),
+        "predictive_checksum": predictive.get("checksum_sha256"),
+        "slate_audit_checksum": slate_audit.get("checksum_sha256"),
+    }
+    out["stop"] = (
+        "NO-GO CLEAR: SYSTEM INTEGRITY PASS; PREDICTIVE VALIDATION FAIL; "
+        "CURRENT SLATE SANITY/PROVENANCE PASS with flags. Coming soon ON. "
+        "STOP for Ryan CLEAR."
     )
     out["checksum_sha256"] = sha256_canonical(out)
     return out
 
 
 __all__ = [
+    "ATL_GB_FILL_RUN_ID",
     "KE_RD_SCOPE",
     "PACKET_ID",
     "PACKET_RUN_ID",
+    "PROD_CANDIDATE_RUN_ID",
+    "PROD_CANDIDATE_SHA",
     "assemble_packet",
+    "attach_final_go_sections",
+    "audit_customer_view_slate",
     "audit_shadow",
     "authorize_candidate_row",
+    "build_customer_view_slate",
     "fold_alex_live_receipts",
     "load_alex_live_receipts",
     "build_gate1_integrity",
     "build_shadow_slate",
     "classify_live_leak",
     "frozen_eval_w1",
+    "grade_predictive_validation",
     "is_july31_stale",
     "load_canonical_slate",
     "load_live_stamps",
+    "load_live_window_17",
     "prove_wl_refuse_holds",
     "records_after_week1",
     "remat_focus_and_current_slate",

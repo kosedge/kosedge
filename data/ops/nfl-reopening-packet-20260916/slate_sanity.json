@@ -1,0 +1,159 @@
+{
+  "absurdities": [],
+  "atl_gb_july31_rejected": true,
+  "candidate_sha": "153b6a884a8e",
+  "checksum_sha256": "dda7fe902e5e1203d56097bd56fec30ce469c845610ec2a42b66975581af55c1",
+  "complete_17": true,
+  "flags": [
+    {
+      "key": "DET@BUF",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": -8.9,
+      "fair": 45.6,
+      "key": "DET@BUF",
+      "market": 54.5,
+      "reason": "total_vs_market"
+    },
+    {
+      "key": "CAR@ATL",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": -6.36,
+      "fair": -3.86,
+      "key": "CAR@ATL",
+      "market": 2.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "key": "CIN@HOU",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": -5.26,
+      "fair": -7.76,
+      "key": "CIN@HOU",
+      "market": -2.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "key": "CLE@TB",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": 5.03,
+      "fair": -3.47,
+      "key": "CLE@TB",
+      "market": -8.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "key": "GB@NYJ",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "IND@KC",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": 4.07,
+      "fair": -2.43,
+      "key": "IND@KC",
+      "market": -6.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "key": "JAX@DEN",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "LV@LAC",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "MIA@SF",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": 7.0,
+      "fair": -6.5,
+      "key": "MIA@SF",
+      "market": -13.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "key": "MIN@CHI",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": -9.85,
+      "fair": 38.15,
+      "key": "MIN@CHI",
+      "market": 48.0,
+      "reason": "total_vs_market"
+    },
+    {
+      "key": "NO@BAL",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "edge": 4.93,
+      "fair": -3.57,
+      "key": "NO@BAL",
+      "market": -8.5,
+      "reason": "spread_vs_market"
+    },
+    {
+      "edge": -8.73,
+      "fair": 38.77,
+      "key": "NO@BAL",
+      "market": 47.5,
+      "reason": "total_vs_market"
+    },
+    {
+      "key": "PHI@TEN",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "PIT@NE",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "SEA@ARI",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "WSH@DAL",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "NYG@LAR",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "ATL@GB",
+      "reason": "live_api_run_id_null_stamped_candidate"
+    },
+    {
+      "key": "ATL@GB",
+      "reason": "window_includes_non_w2",
+      "week": 3
+    },
+    {
+      "edge": 4.2256,
+      "fair": -2.2744,
+      "key": "ATL@GB",
+      "market": -6.5,
+      "reason": "spread_vs_market"
+    }
+  ],
+  "note": "PASS means the internal 17-game customer-view is complete, finite, candidate-sourced, overlays OFF, and July-31 is not fair. Flags (null live run_id, W3 in window, market deltas) do not FAIL. Not a public paint.",
+  "overlays_off": true,
+  "provenance_fail": [],
+  "public_paint": false,
+  "research_fill_count": 1,
+  "verdict": "PASS",
+  "w2_live_remat_count": 16
+}

@@ -1,0 +1,100 @@
+{
+  "ats_fitting": false,
+  "bias": {
+    "epa_margin_bias": 0.8431,
+    "epa_total_bias": -4.4865,
+    "margin_bias_within_2": true
+  },
+  "calibration": {
+    "reason": "candidate remat does not publish win probabilities / Brier",
+    "status": "N/A"
+  },
+  "can_protocol_green": false,
+  "can_protocol_yellow": false,
+  "candidate_sha": "153b6a884a8e",
+  "checksum_sha256": "d59843ef7f0f3c4cd8155e6fe2e641615c3e12294c20b6a904dc4c7d09a93fb8",
+  "clear_blocks": true,
+  "coefficient_changes": false,
+  "fail_reasons": [
+    "n=16 < protocol YELLOW min 100 and GREEN min 200",
+    "W1 EPA margin MAE 12.6044 > supervised floor 9.5",
+    "W1 EPA total MAE 13.2488 > supervised floor 10.5",
+    "W1 EPA margin MAE 12.6044 does not beat market-implied MAE 5.6875",
+    "margin MAE worse than July-31 previous production stamps"
+  ],
+  "feature_additions": false,
+  "floors": {
+    "bias_ok": true,
+    "margin_floor_ok": false,
+    "protocol_green_min_n": 200,
+    "protocol_max_abs_bias": 2.0,
+    "protocol_yellow_min_n": 100,
+    "supervised_max_margin_mae": 9.5,
+    "supervised_max_total_mae": 10.5,
+    "total_floor_ok": false
+  },
+  "inherited_baseline": {
+    "enterprise_overall": "RED",
+    "evidence_quality": "GREEN",
+    "generated_at": "2026-09-04T04:46:39.131508+00:00",
+    "lab_scorecard": "data/ops/lab/nfl-spread-scorecard-v1.json",
+    "market_edge_evidence": "GREEN",
+    "note": "Pre-repair baseline is the 2026-09-04 frozen protocol fill + 2026-07-28 enterprise gates. Repair did not retune coefficients, so historical ATS/CLV is inherited \u2014 not a new fit.",
+    "predictive_quality": "YELLOW",
+    "subscriber_influence": "LIMITED"
+  },
+  "market_fitting": false,
+  "n_w1": 16,
+  "note": "Frozen eval on the exact production candidate (SHA 153b6a884a8e / packaged EPA / overlays OFF). No retune. Thin n + missed floors = FAIL for CLEAR. Do not read W-L MAE as a win.",
+  "overlays_off": true,
+  "protocol": "nfl-spread-validation-protocol-v1.0",
+  "protocol_band": "THIN_CANNOT_YELLOW",
+  "regression_checks": {
+    "vs_inherited_historical_production": {
+      "enterprise_overall": "RED",
+      "historical_market_spread_mae": 9.7764,
+      "historical_model_spread_mae": 9.5513,
+      "historical_supervised_margin_mae": 7.4801,
+      "historical_supervised_total_mae": 9.2029,
+      "lab_predictive_quality": "YELLOW",
+      "note": "Repair did not retune. Historical ATS/CLV/supervised floors are inherited, not a new fit. W1 OOS of this candidate does not meet those floors."
+    },
+    "vs_july31_previous_production": {
+      "margin_mae_delta": 0.4131,
+      "margin_regressed": true,
+      "note": "Positive delta = worse than July-31 live stamps. Margin slightly worse; total slightly better. Neither clears floors.",
+      "total_mae_delta": -0.2637,
+      "total_regressed": false
+    },
+    "wl_circular_refused": {
+      "note": "W-L post-game 1-0/0-1 margin MAE is circular and is not a regression win or a CLEAR input.",
+      "refused": true,
+      "wl_margin_mae": 7.7
+    }
+  },
+  "strength_source": "packaged_epa_prior",
+  "tuning": false,
+  "verdict": "FAIL",
+  "w1_market_relative": {
+    "epa_beats_market": false,
+    "epa_margin_mae": 12.6044,
+    "market_margin_mae": 5.6875,
+    "model_vs_close_mae": 8.1508,
+    "n_with_market": 16,
+    "note": "Market lines from week1_july31 stamps (joined books). Spread-vs-close MAE is reported; it does not gate GREEN in v1.0."
+  },
+  "w1_oos": {
+    "epa_margin_bias": 0.8431,
+    "epa_margin_mae": 12.6044,
+    "epa_total_bias": -4.4865,
+    "epa_total_mae": 13.2488,
+    "july31_margin_bias": 2.1963,
+    "july31_margin_mae": 12.1913,
+    "july31_total_bias": -6.275,
+    "july31_total_mae": 13.5125,
+    "wl_margin_bias": 1.8625,
+    "wl_margin_mae": 7.7,
+    "wl_total_bias": -3.9174,
+    "wl_total_mae": 13.4375
+  }
+}
