@@ -69,8 +69,11 @@ describe("football public numbers kill switch", () => {
     expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain("Overview");
     expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain("Fantasy");
     expect(getSportPrimaryNav("nfl").map((i) => i.label)).toContain(
-      "Camp Desk",
+      "Club Desk",
     );
+    expect(
+      getSportPrimaryNav("nfl").find((i) => i.label === "Club Desk")?.href,
+    ).toBe("/pro/nfl/club");
     expect(getSportToolNav("nba").map((i) => i.label)).toContain("Edges desk");
     expect(publicEdgeBoardHref("nfl")).toBeNull();
     expect(customerCtaHref("/edge-board/nfl")).toBeNull();
