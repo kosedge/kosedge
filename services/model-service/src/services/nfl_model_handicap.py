@@ -11,8 +11,9 @@ Honesty limits:
     a handicap-role reprice ran (injury cadence or Week 1 Gate B desk factors).
   - Win probs and fair MLs are post-blend only today → Model ML = KEI (identity).
   - Injury report cadence may reprice KEI via line_role=handicap while freezing
-    stamped model_markets (see nfl_injury_kei_cadence). Week 1 REG Gate B
-    applies the same freeze at fair-lines read time (nfl_kei_week1_reprice).
+    stamped model_markets (see nfl_injury_kei_cadence). That path stays
+    library-only (not wired). Week 1 KEI read-time mix is fail-closed for
+    published fair/edge (``apply_week1_kei_reprice_for_published_fair``).
   - Full research re-sims still stamp line_role=model.
   - If blend was not applied and no desk factor fires, Model = KEI (identity).
     Do not invent cosmetic deltas.

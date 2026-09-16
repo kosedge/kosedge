@@ -17,8 +17,8 @@
 - When blend was **not** applied, Model = KEI (identity). We do **not** invent cosmetic deltas.
 - Fair ML / win probs are computed **after** blend today → Model ML = KEI (identity). No dual ML columns on Fair Lines yet.
 - Injury nowcast / weather remain **inputs** to full research sims (`line_role=model`).
-- **Kickoff Injury → KEI cadence** (2026-08-11) can reprice KEI only via `line_role=handicap`, freezing stamped `model_markets`. See `data/ops/nfl-injury-kei-cadence-20260811.md` and `nfl_injury_kei_cadence`.
-- **Week 1 Gate B desk reprice** (2026-08-13) applies injury / QB confirmation / rest-travel on `/nfl/fair-lines` read, freezing Model. See `data/ops/nfl-kei-week1-reprice-20260813.md`. Weather and refs are honest stubs (not invented).
+- **Kickoff Injury → KEI cadence** (2026-08-11) can reprice KEI only via `line_role=handicap`, freezing stamped `model_markets`. Library-only — not wired. See `data/ops/nfl-injury-kei-cadence-20260811.md`.
+- **Week 1 Gate B desk reprice** (2026-08-13) is library / ops-table only. Publish fair/edge is fail-closed (2026-09-16): `apply_week1_kei_reprice` must not write handicap columns that drive published fair/edge. See `data/ops/nfl-v1-handicap-overlay-week1-kei-fail-closed-20260916.md`. Mutate-fair V1.0: injury/rest/weather bake into B0 at remat; stamped `model_*` already carries overlay-class factors — overlay is not an independent layer on frozen fair.
 - Legacy projection rows without stamped `model_markets` still resolve Model from `diagnostics.market_blend` on `/nfl/fair-lines` read.
 
 ## Pipeline stamp
@@ -40,6 +40,6 @@ No new DB columns required — JSON projection + fair-lines payload fields.
 ## Remaining limitations
 
 1. No separate Model ML / win-prob distribution (would need pre-blend win rates).
-2. Injury→KEI handicap path is shipped for report windows (fixture / SoT JSON dry-run ready); live DB upsert enqueue still follows Railway job wiring — see `docs/runbooks/nfl-kickoff-injury-kei.md`.
+2. Injury→KEI handicap path (`run_injury_kei_window`) stays library-only / not wired. See `data/ops/nfl-v1-handicap-overlay-week1-kei-fail-closed-20260916.md`.
 3. Supervised overlay / slate totals cal after blend move KEI further from Model; that is intentional (product line) and documented.
 4. Rows with empty/missing `market_blend` stay identity until the next sim stamps or diagnostics carry pre_blend.

@@ -315,12 +315,14 @@ jobs:
               tests/test_nfl_dfs_board.py \
               tests/test_nfl_dfs_value_ownership_env.py \
               tests/test_nfl_dfs_store_identity.py \
+              tests/test_nfl_week1_kei_publish_fail_closed.py \
               tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes \
               tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows \
               tests/test_tasks_persistence.py::test_pull_odds_snapshot_meters_shared_run_id \
               tests/test_tasks_persistence.py::test_persist_odds_events_skips_dup_keeps_new_vintage
           else
             pytest -q \
+              tests/test_nfl_week1_kei_publish_fail_closed.py \
               tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes \
               tests/test_tasks_persistence.py::test_pull_odds_snapshot_persists_rows \
               tests/test_tasks_persistence.py::test_pull_odds_snapshot_meters_shared_run_id \
@@ -336,6 +338,8 @@ jobs:
         run: |
           set -euo pipefail
           cd services/model-service
+          echo "V1 handicap-overlay: Week1 KEI publish fail-closed"
+          pytest -q tests/test_nfl_week1_kei_publish_fail_closed.py
           echo "INC-2026-09-07 proof 1: test_nfl_fair_lines_get_default_zero_persist_writes"
           pytest -q tests/test_nfl_projection_endpoints.py::test_nfl_fair_lines_get_default_zero_persist_writes
           echo "INC-2026-09-07 proof 2: test_pull_odds_snapshot_persists_rows"

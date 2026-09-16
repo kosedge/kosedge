@@ -8,6 +8,14 @@ Doctrine
 - Identity fallback when Model/spread is missing.
 - Week 1 REG 2026 only. Other weeks/slates pass through unchanged.
 
+V1 handicap-overlay cert (2026-09-16)
+-------------------------------------
+``apply_week1_kei_reprice`` is **library / ops-table only**. Publish assemblers
+(fair-lines, survivor KEI win%) must use
+``apply_week1_kei_reprice_for_published_fair``, which is a hard fail-closed
+identity. Week 1 KEI cannot write handicap columns that drive published
+fair/edge. Coming soon / env flags cannot unlock the mix.
+
 SoT
 ---
 QB1 / injury names come from the packaged depth chart (#220), not a second map.
@@ -1147,6 +1155,64 @@ def _ref_factor(
 # Public apply
 # ---------------------------------------------------------------------------
 
+# V1 handicap-overlay cert (Ryan ACCEPT CONDITIONAL 2026-09-16).
+# Hard lock — not env-gated, not Coming-soon gated. Tests assert False.
+# Flipping this True must not remutate published fair/edge (dead path below).
+WEEK1_KEI_PUBLISH_MUTATE_FAIR = False
+
+PUBLISHED_FAIR_EDGE_HANDICAP_KEYS = (
+    "spread_home",
+    "total_mean",
+    "home_win_prob",
+    "away_win_prob",
+    "fair_home_ml",
+    "fair_away_ml",
+)
+
+WEEK1_KEI_PUBLISH_FAIL_CLOSED_REASON = "v1_handicap_overlay_fail_closed"
+
+
+def apply_week1_kei_reprice_for_published_fair(
+    *,
+    handicap: Mapping[str, Any],
+    **_ignored: Any,
+) -> Tuple[Dict[str, Any], Dict[str, Any]]:
+    """Identity-only binder for published fair/edge handicap columns.
+
+    Dead path: never calls ``apply_week1_kei_reprice``, never writes deltas
+    into ``PUBLISHED_FAIR_EDGE_HANDICAP_KEYS``. ``WEEK1_KEI_PUBLISH_MUTATE_FAIR``
+    cannot unlock mix. Coming soon cannot unlock mix.
+
+    Mutate-fair V1.0 limitation: injury/rest/weather bake into B0 at remat, so
+    stamped ``model_*`` already carries overlay-class factors. Do not describe
+    Week 1 KEI as an independent layer on frozen fair.
+    """
+    # Copy stamped handicap only. Extra kwargs (week/pack/game_card) are ignored
+    # so a rewired publish caller cannot sneak a live mix through this name.
+    identity = dict(handicap)
+    log = {
+        "scope": "week1_reg_2026",
+        "applied": False,
+        "skipped": True,
+        "reason": WEEK1_KEI_PUBLISH_FAIL_CLOSED_REASON,
+        "doctrine": "week1_kei_cannot_mutate_published_fair_edge",
+        "spread_delta": 0.0,
+        "total_delta": 0.0,
+        "confidence_delta": 0.0,
+        "qb_clear": True,
+        "injury_clear": True,
+        "weather_clear": True,
+        "capped": False,
+        "applied_factors": [],
+        "considered_not_applied": [],
+        "pack_snapshot_id": "",
+        "pack_as_of": "",
+        "fail_closed": True,
+        "coming_soon_independent": True,
+        "publish_mutate_fair": bool(WEEK1_KEI_PUBLISH_MUTATE_FAIR),
+    }
+    return identity, log
+
 
 def in_week1_scope(
     *,
@@ -1179,6 +1245,10 @@ def apply_week1_kei_reprice(
     market_as_of: Any = None,
 ) -> Tuple[Dict[str, Any], Dict[str, Any]]:
     """Return (new_handicap, log). Model markets are not touched.
+
+    Library / ops-table only. Publish assemblers must call
+    ``apply_week1_kei_reprice_for_published_fair`` (identity). This function
+    must not be reachable from fair-lines or survivor published columns.
 
     ``spread_pts`` on the log net is home-spread convention (positive = home weaker).
 

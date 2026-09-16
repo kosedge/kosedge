@@ -62,8 +62,7 @@ from src.services.nfl_model_handicap import (
     resolve_model_and_handicap,
 )
 from src.services.nfl_kei_week1_reprice import (
-    apply_week1_kei_reprice,
-    load_week1_pack,
+    apply_week1_kei_reprice_for_published_fair,
 )
 from src.services.nfl_moneyline_publish_policy import publish_moneyline_tag as nfl_publish_moneyline_tag
 from src.services.nfl_side_total_publish_policy import (
@@ -4050,10 +4049,7 @@ def _nfl_fair_lines_impl(
     snapshot_current_count = 0
     current_hygiene = CurrentHygieneStats()
     week1_current_log: List[Dict[str, Any]] = []
-    try:
-        week1_pack = load_week1_pack(int(season))
-    except Exception:
-        week1_pack = None
+    # Week 1 KEI pack is not loaded on the publish path (V1 fail-closed).
     # Week-1 rest/weather cards from canonical venue (Melbourne ≠ SoFi).
     # Railway image lacks apps/web — build_week1_game_cards bakes Melbourne and
     # indexes (LAR, SF) the same way this loop looks up cards. Never legacy LA.
@@ -4167,7 +4163,9 @@ def _nfl_fair_lines_impl(
                     total_reason,
                 )
 
-        # Published columns = KEI handicap. Model = pre-blend research when available.
+        # Published fair/edge = stamped handicap only. Week 1 KEI mix is
+        # fail-closed (V1 handicap-overlay cert). Overlay-class factors already
+        # bake into B0 at remat — not an independent layer on frozen fair.
         spread_home = _to_float(mapped.get("spread_home"))
         total_mean = _to_float(mapped.get("total_mean"))
         model_markets, handicap_markets = resolve_model_and_handicap(
@@ -4179,7 +4177,6 @@ def _nfl_fair_lines_impl(
             fair_home_ml=mapped.get("fair_home_ml"),
             fair_away_ml=mapped.get("fair_away_ml"),
         )
-        # Gate B: KEI = Model + Week 1 desk factors. Model stays frozen.
         # Canonical kickoff wins over odds/DB commence (Melbourne 8:35 ET, NE@SEA 8:20).
         _canonical_kickoff = week1_kickoffs.get((home_abbr, away_abbr))
         _line_start_time = _canonical_kickoff or mapped.get("start_time")
@@ -4191,36 +4188,12 @@ def _nfl_fair_lines_impl(
             _venue = _game_card.get("_venue")
             _location = _game_card.get("_location")
             _international = bool(_game_card.get("_international"))
-        try:
-            handicap_markets, kei_reprice_log = apply_week1_kei_reprice(
-                handicap=handicap_markets,
-                home_abbr=home_abbr,
-                away_abbr=away_abbr,
-                week=mapped.get("week"),
-                season=int(mapped.get("season") or season),
-                season_type=str(mapped.get("season_type") or "REG"),
-                projection=mapped.get("projection"),
-                start_time=_line_start_time,
-                pack=week1_pack,
-                game_card=_game_card,
-            )
-        except Exception:
-            log.exception("NFL Week 1 KEI reprice failed; using identity handicap")
-            kei_reprice_log = {
-                "skipped": True,
-                "applied": False,
-                "reason": "reprice_error",
-                "qb_clear": True,
-                "injury_clear": False,
-                "weather_clear": True,
-                "spread_delta": 0.0,
-                "total_delta": 0.0,
-                "applied_factors": [],
-                "considered_not_applied": [],
-            }
+        handicap_markets, kei_reprice_log = apply_week1_kei_reprice_for_published_fair(
+            handicap=handicap_markets,
+        )
         if kei_reprice_log.get("applied"):
             kei_reprice_applied_games += 1
-        # Edges / publish tags always use handicap (KEI), never Model.
+        # Edges / publish tags use stamped handicap only (Week 1 KEI mix dead).
         spread_home = _to_float(handicap_markets.get("spread_home", spread_home))
         total_mean = _to_float(handicap_markets.get("total_mean", total_mean))
         home_win_prob = _to_float(handicap_markets.get("home_win_prob", home_win_prob))
@@ -4663,7 +4636,10 @@ def _nfl_fair_lines_impl(
                 "applied_games": kei_reprice_applied_games,
                 "game_card_source": week1_card_source,
                 "game_card_count": len(week1_game_cards),
-                "doctrine": "KEI = model + Week 1 desk factors; Edge/Tag = KEI vs market",
+                "doctrine": (
+                    "V1 fail-closed: Week1 KEI does not mutate published "
+                    "fair/edge; stamped handicap only"
+                ),
             },
         },
     }
@@ -7361,12 +7337,6 @@ def _load_kei_week_win_prob_lines(*, season: int, week: int) -> List[Dict[str, A
             },
         ).mappings().all()
 
-        week1_pack = None
-        try:
-            week1_pack = load_week1_pack(season=int(season))
-        except Exception:  # noqa: BLE001
-            week1_pack = None
-
         for mapped in rows:
             home_abbr = _normalize_kei_team_abbr(mapped.get("home_abbr"))
             away_abbr = _normalize_kei_team_abbr(mapped.get("away_abbr"))
@@ -7385,20 +7355,9 @@ def _load_kei_week_win_prob_lines(*, season: int, week: int) -> List[Dict[str, A
                 fair_home_ml=mapped.get("fair_home_ml"),
                 fair_away_ml=mapped.get("fair_away_ml"),
             )
-            try:
-                handicap_markets, _log = apply_week1_kei_reprice(
-                    handicap=handicap_markets,
-                    home_abbr=home_abbr,
-                    away_abbr=away_abbr,
-                    week=mapped.get("week"),
-                    season=int(mapped.get("season") or season),
-                    season_type=str(mapped.get("season_type") or "REG"),
-                    projection=mapped.get("projection"),
-                    start_time=mapped.get("start_time"),
-                    pack=week1_pack,
-                )
-            except Exception:  # noqa: BLE001
-                pass
+            handicap_markets, _log = apply_week1_kei_reprice_for_published_fair(
+                handicap=handicap_markets,
+            )
             home_wp = _to_float(handicap_markets.get("home_win_prob", home_win_prob))
             away_wp = _to_float(handicap_markets.get("away_win_prob", away_win_prob))
             if home_wp is None and away_wp is None:

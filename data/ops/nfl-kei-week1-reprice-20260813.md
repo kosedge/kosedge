@@ -1,5 +1,11 @@
 # NFL KEI Week 1 reprice — Gate B (2026-08-13)
 
+> **2026-09-16 supersede (publish path):** Week 1 KEI must not write published
+> fair/edge handicap columns. Library math in this note remains for tests/ops
+> tables. Publish assemblers use a hard fail-closed identity. See
+> `data/ops/nfl-v1-handicap-overlay-week1-kei-fail-closed-20260916.md`.
+> CONDITIONAL does not become CLEAR.
+
 **Branch / PR:** `feat/nfl-kei-week1-reprice-factors` → `deploy-vercel`  
 **Scope:** 2026 Week 1 REG only (16 games). Model untouched. No 100k republish in this PR.
 
