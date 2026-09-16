@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { FantasyScoringProfile } from "@/lib/fantasy/types";
 import { Fragment } from "react";
 
-type DeskSurface = "rankings" | "builder" | "mock";
+type DeskSurface = "rankings" | "builder" | "dfs" | "mock";
 type ResearchSurface = "guillotine" | "sleepers" | "pickem";
 
 type Props = {
@@ -25,19 +25,19 @@ const LINKS: {
   href: (s: FantasyScoringProfile) => string;
 }[] = [
   {
+    id: "dfs",
+    label: "DFS",
+    href: () => `/pro/nfl/dfs`,
+  },
+  {
     id: "rankings",
     label: "Draft board",
-    href: (s) => `/pro/nfl/fantasy?scoring=${s}`,
+    href: (s) => `/pro/nfl/fantasy/draft?scoring=${s}`,
   },
   {
     id: "builder",
     label: "Builder",
     href: (s) => `/pro/nfl/fantasy/builder?scoring=${s}`,
-  },
-  {
-    id: "mock",
-    label: "Mock",
-    href: (s) => `/pro/nfl/fantasy/mock?scoring=${s}`,
   },
 ];
 
@@ -63,7 +63,7 @@ const RESEARCH_LINKS: {
   },
 ];
 
-/** Shared Draft board → Builder → Mock flow strip; preserves scoring. */
+/** Shared DFS → Draft board → Builder strip; preserves scoring. Mock is hidden in-season. */
 export function FantasyDeskNav({
   active,
   scoring,
@@ -75,10 +75,10 @@ export function FantasyDeskNav({
   return (
     <div className={className}>
       <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-kos-text/40">
-        Draft flow
+        Fantasy desk
       </p>
       <nav
-        aria-label="Draft board, Builder, Mock"
+        aria-label="DFS, Draft board, Builder"
         className="flex flex-wrap items-center gap-1.5 sm:gap-2"
       >
         {LINKS.map((link, index) => {

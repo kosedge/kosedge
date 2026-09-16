@@ -18,8 +18,8 @@ const SPORT_INJURY_CONFIG: Record<string, SportInjuryNewsConfig> = {
     sourceSummary:
       "Multi-source desk: trusted beats, RotoWire, Rotoworld, VSiN, and public feeds.",
     emptyHint:
-      "No injury headlines in the current multi-source pull. Check Camp Desk beats for club-specific hubs.",
-    campHref: "/pro/nfl/camp",
+      "No injury headlines in the current multi-source pull. Check Club Desk beats for club-specific hubs.",
+    campHref: "/pro/nfl/club",
   },
   cfb: {
     sportLabel: "CFB",
@@ -114,7 +114,10 @@ function parseRssItems(xml: string): Array<{
     items.push({
       title,
       link,
-      description: description.replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim(),
+      description: description
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim(),
       pubDate: pubDateRaw || null,
     });
   }
@@ -180,7 +183,10 @@ function dedupeNews(items: InjuryNewsItem[]): InjuryNewsItem[] {
   const seen = new Set<string>();
   const out: InjuryNewsItem[] = [];
   for (const item of items) {
-    const key = item.headline.toLowerCase().replace(/[^a-z0-9]+/g, " ").trim();
+    const key = item.headline
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, " ")
+      .trim();
     if (!key || seen.has(key)) continue;
     seen.add(key);
     out.push(item);

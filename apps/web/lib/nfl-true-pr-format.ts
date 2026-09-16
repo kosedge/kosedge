@@ -64,7 +64,7 @@ export function qbPremiumChip(
       title: "QB premium",
       value: "Sat — pack stale",
       detail:
-        "Packaged depth past freshness window — named QB1 / IR / claims on Camp Desk.",
+        "Packaged depth past freshness window — named QB1 / IR / claims on Club Desk.",
       approximate: true,
       muted: true,
     };

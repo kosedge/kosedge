@@ -104,10 +104,10 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
     {
       id: "fantasy",
       title: "Fantasy",
-      href: "/pro/nfl/fantasy",
+      href: "/pro/nfl/dfs",
       lines: [
-        "Draft board default is Value Δ + Wait/Take. Model rank is projection order, not pick order.",
-        "Builder and Mock use the same projections with ADP-aware take / wait / reach advice.",
+        "In-season landing is this week’s DFS slate. Mock rooms are parked.",
+        "Draft board (hidden) still uses Value Δ + Wait/Take. Model rank is projection order, not pick order.",
         "ADP source and freshness stay on the board. Missing K/DST stay empty until they exist.",
       ],
     },
@@ -144,10 +144,10 @@ export const MODEL_TRANSPARENCY_GLOSSARY: readonly ModelTransparencyGlossaryEntr
     },
     {
       id: "camp-desk",
-      title: "Camp Desk / Injuries & News",
-      href: "/pro/nfl/camp",
+      title: "Club Desk / Injuries & News",
+      href: "/pro/nfl/club",
       lines: [
-        "Camp Desk: dated KosEdge notes with citations, not an X timeline.",
+        "Club Desk: dated KosEdge notes with citations, not an X timeline.",
         "Injuries & News: the feed when it is posted.",
         "Neither is a pricing engine.",
       ],

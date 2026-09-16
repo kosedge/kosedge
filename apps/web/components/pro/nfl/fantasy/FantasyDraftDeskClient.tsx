@@ -79,7 +79,7 @@ export function FantasyDraftDeskClient({
   initialScoring = "ppr",
   initialTab = "draft",
   compactHero = false,
-  basePath = "/pro/nfl/fantasy",
+  basePath = "/pro/nfl/fantasy/draft",
 }: Props) {
   const [selectedId, setSelectedId] = useState<string | null>(
     board.rows[0]?.playerId ?? null,
@@ -229,10 +229,10 @@ export function FantasyDraftDeskClient({
                 Open Builder
               </Link>
               <Link
-                href={`/pro/nfl/fantasy/mock?scoring=${board.scoringProfile}`}
+                href="/pro/nfl/dfs"
                 className="min-h-11 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-center text-sm font-semibold text-kos-text transition hover:border-kos-gold/40 active:scale-[0.98]"
               >
-                Start Mock
+                This week&apos;s DFS
               </Link>
             </div>
           </div>
@@ -969,7 +969,6 @@ function TeamBuilderPanel({
   byValue,
   byNeed,
   rosterSet,
-  scoring,
   onSelect,
   onToggle,
   onBrowse,
@@ -997,7 +996,8 @@ function TeamBuilderPanel({
             <h2 className="text-lg font-semibold text-kos-text">Your roster</h2>
             <p className="text-sm text-kos-text/60">
               Private scratchpad — suggestions below are ADP-aware. Model rank
-              stays projection order. Next step is Mock.
+              stays projection order. In-season next step is this week&apos;s
+              DFS.
             </p>
           </div>
           <div className="rounded-xl border border-kos-gold/35 bg-kos-gold/10 px-3 py-2 text-center">
@@ -1023,10 +1023,10 @@ function TeamBuilderPanel({
             ← Draft board
           </button>
           <Link
-            href={`/pro/nfl/fantasy/mock?scoring=${scoring}`}
+            href="/pro/nfl/dfs"
             className="min-h-10 rounded-xl border border-kos-gold/40 bg-kos-gold/15 px-3 py-2 text-xs font-semibold text-kos-gold active:scale-[0.98]"
           >
-            Start Mock →
+            This week&apos;s DFS →
           </Link>
         </div>
         <div className="mt-3 flex flex-wrap gap-1.5">

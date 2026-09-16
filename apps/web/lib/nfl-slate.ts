@@ -21,10 +21,8 @@ import {
 } from "@/lib/nfl-preseason-odds";
 import { safeUpperCase } from "@/lib/sports";
 import { formatNflBoardWeekLabel } from "@/lib/nfl-board-week-label";
-import {
-  currentNflRegWeekFromSchedule,
-  lookupCanonicalNflGame,
-} from "@/lib/nfl-canonical-schedule";
+import { lookupCanonicalNflGame } from "@/lib/nfl-canonical-schedule";
+import { currentNflRegWeekFromSchedule } from "@/lib/nfl-current-week";
 import { canonicalizeNflTeam } from "@/lib/nfl-canonical-teams";
 import { listNflRegWeekScheduleGames } from "@/lib/nfl-edge-board-week";
 import { teamDisplayName } from "@/lib/nfl-team-intel";
@@ -68,7 +66,7 @@ export type NflSlateCard = {
 
 export type NflWeeklySlate = {
   season: number;
-  currentWeek: number;
+  currentWeek: number | null;
   generatedAt: string;
   modelVersion: string;
   error?: string;
@@ -334,11 +332,8 @@ export async function buildNflWeeklySlate(
   ]);
 
   const fairCards = fairLines.lines.map(fairLineToCard);
-  const scheduleWeek = currentNflRegWeekFromSchedule();
-  const currentWeek =
-    fairLines.lines.length > 0 && Number.isFinite(fairLines.currentWeek)
-      ? fairLines.currentWeek
-      : scheduleWeek;
+  // Schedule-proven week wins over a stale fair-lines currentWeek pin.
+  const currentWeek = currentNflRegWeekFromSchedule();
 
   const windowWeeks = new Set(fairWindow.weeks);
   let regCards = fairCards.filter((card) => card.seasonType === "REG");
@@ -417,18 +412,26 @@ export async function buildNflWeeklySlate(
     });
   }
   if (regCards.length > 0) {
-    const regWeekLabel = formatNflBoardWeekLabel(
-      resolved.mode === "week" ? resolved.week : currentWeek,
-      { season, lineCount: regCards.length },
-    );
+    const boardWeek = resolved.mode === "week" ? resolved.week : currentWeek;
+    const regWeekLabel =
+      boardWeek == null
+        ? "week not proven"
+        : formatNflBoardWeekLabel(boardWeek, {
+            season,
+            lineCount: regCards.length,
+          });
+    const nextWeekLabel =
+      currentWeek == null
+        ? null
+        : formatNflBoardWeekLabel(currentWeek + 1, { season });
     sections.push({
       key: "regular",
       title:
         regWeekLabel === "Preseason"
           ? "Regular season (upcoming)"
-          : resolved.mode === "week"
+          : resolved.mode === "week" || !nextWeekLabel
             ? `Regular season · ${regWeekLabel}`
-            : `Regular season · ${regWeekLabel}–${formatNflBoardWeekLabel(currentWeek + 1, { season })}`,
+            : `Regular season · ${regWeekLabel}–${nextWeekLabel}`,
       subtitle: usedScheduleFallback
         ? "Scheduled matchups. Model lines and publish tags are unavailable."
         : "Kos Edge fair-lines with live market join, publish tags, and best-book context.",

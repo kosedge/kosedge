@@ -55,10 +55,10 @@ export default function TruePrDriversBoard({
       >
         {nflDepthPackFreshnessStamp()}{" "}
         <Link
-          href="/pro/nfl/camp"
+          href="/pro/nfl/club"
           className="underline decoration-kos-gold/40 underline-offset-2 hover:decoration-kos-gold"
         >
-          Camp Desk
+          Club Desk
         </Link>
         .
       </p>

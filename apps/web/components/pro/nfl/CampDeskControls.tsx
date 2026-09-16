@@ -20,7 +20,7 @@ function buildCampHref(
   if (team) params.set("team", team);
   if (date && latest && date !== latest) params.set("date", date);
   const qs = params.toString();
-  return qs ? `/pro/nfl/camp?${qs}` : "/pro/nfl/camp";
+  return qs ? `/pro/nfl/club?${qs}` : "/pro/nfl/club";
 }
 
 export default function CampDeskControls({
@@ -85,7 +85,7 @@ export default function CampDeskControls({
         <button
           type="button"
           className="min-h-11 text-sm text-kos-text/60 hover:text-kos-text"
-          onClick={() => router.push("/pro/nfl/camp")}
+          onClick={() => router.push("/pro/nfl/club")}
         >
           Clear
         </button>
