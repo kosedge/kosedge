@@ -8,7 +8,11 @@
     "stage2/nfl-regression-2026-09-15/reopen/INTEGRITY_ATL_PIT_MULTI",
     "stage2/nfl-regression-2026-09-15/reopen/FULL_SLATE_SHADOW",
     "stage2/nfl-regression-2026-09-15/reopen/PROVENANCE_SANITY",
-    "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL"
+    "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL",
+    "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.md",
+    "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.json",
+    "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.md",
+    "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.json"
   ],
   "verdict": "CONDITIONAL",
   "remat_integrity_evidence": "GO",

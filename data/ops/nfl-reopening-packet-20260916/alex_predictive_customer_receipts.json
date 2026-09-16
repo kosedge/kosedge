@@ -1,0 +1,41 @@
+{
+  "cited_not_recomputed": true,
+  "note": "Alex predictive + customer-view filings. stage2/ paths were not in this checkout. Numbers below are Alex's attested receipts. This PR does not invent W2 grades or remats.",
+  "source_agent": "Alex",
+  "source_dir": "stage2/nfl-regression-2026-09-15/reopen/",
+  "source_paths_not_in_repo": [
+    "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.md",
+    "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.json",
+    "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.md",
+    "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.json",
+    "stage2/nfl-regression-2026-09-15/reopen/README",
+    "stage2/nfl-regression-2026-09-15/reopen/GO_NO_GO",
+    "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL"
+  ],
+  "live_git_sha": "153b6a884a8e",
+  "board_reopen": "NO-GO",
+  "coming_soon": true,
+  "overlays": "OFF",
+  "tuning": false,
+  "customer_view_slate_w2": {
+    "rows": 17,
+    "unique_games": 16,
+    "fair_coverage": "16/17",
+    "fair_coverage_n": 16,
+    "fair_coverage_d": 17,
+    "duplicate": {
+      "key": "IND@KC",
+      "lacks_exact_canonical_fair": true
+    },
+    "absurdity_flags_cited": [],
+    "status": "FILED"
+  },
+  "predictive_eval_frozen_w2": {
+    "verdict": "PARTIAL",
+    "fail_closed": true,
+    "can_pass": false,
+    "reason": "W2 has no settled outcomes or closing grades. Cannot PASS. Do not invent grades from unsettled W2.",
+    "outcomes": false,
+    "closing_grades": false
+  }
+}

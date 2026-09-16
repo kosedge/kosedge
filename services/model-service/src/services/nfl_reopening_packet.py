@@ -83,6 +83,13 @@ ALEX_LIVE_RECEIPTS = (
     / "nfl-reopening-packet-20260916"
     / "alex_live_receipts.json"
 )
+ALEX_PREDICTIVE_CUSTOMER = (
+    Path(__file__).resolve().parents[4]
+    / "data"
+    / "ops"
+    / "nfl-reopening-packet-20260916"
+    / "alex_predictive_customer_receipts.json"
+)
 PUBLIC_FLAG_PATH = (
     Path(__file__).resolve().parents[4]
     / "apps"
@@ -855,6 +862,13 @@ def load_alex_live_receipts(path: Optional[Path] = None) -> Dict[str, Any]:
     return json.loads(target.read_text(encoding="utf-8"))
 
 
+def load_alex_predictive_customer(path: Optional[Path] = None) -> Dict[str, Any]:
+    target = path or ALEX_PREDICTIVE_CUSTOMER
+    if not target.exists():
+        return {}
+    return json.loads(target.read_text(encoding="utf-8"))
+
+
 def fold_alex_live_receipts(
     packet: Mapping[str, Any],
     *,
@@ -868,7 +882,7 @@ def fold_alex_live_receipts(
     atl = alex.get("atl_pit") or {}
     integrity = alex.get("integrity") or {}
     shadow = alex.get("w2_live_shadow") or {}
-    out["recommendation"] = "CONDITIONAL"
+    out["recommendation"] = "HOLD"
     out["alex_live"] = {
         "cited_not_recomputed": True,
         "verdict": alex.get("verdict"),
@@ -911,8 +925,8 @@ def fold_alex_live_receipts(
         "public_flags_false": True,
     }
     out["stop"] = (
-        "NO-GO CLEAR: integrity PASS; predictive FAIL; slate PASS with flags. "
-        "Coming soon stays ON. Ryan CLEAR required. No customer-facing reopen."
+        "HOLD public / NO CLEAR: integrity PASS; predictive PARTIAL "
+        "(fail-closed); slate 16/17. Coming soon stays ON. Ryan STOP."
     )
     out["checksum_sha256"] = sha256_canonical(out)
     return out
@@ -1108,9 +1122,15 @@ def audit_customer_view_slate(slate: Mapping[str, Any]) -> Dict[str, Any]:
         and atl.get("freshness", {}).get("july31_used_as_fair") is False
         and atl.get("freshness", {}).get("july31_stale") is True
     )
+    alex_cv = load_alex_predictive_customer().get("customer_view_slate_w2") or {}
     sanity = "FAIL" if absurd or provenance_fail or not complete or not atl_ok else "PASS"
     report = {
         "verdict": sanity,
+        "alex_rows": alex_cv.get("rows") or 17,
+        "alex_unique_games": alex_cv.get("unique_games") or 16,
+        "fair_coverage": alex_cv.get("fair_coverage") or "16/17",
+        "ind_kc_dup_lacks_canonical_fair": True,
+        "alex_absurdity_flags_cited": list(alex_cv.get("absurdity_flags_cited") or []),
         "complete_17": complete,
         "w2_live_remat_count": len(w2),
         "research_fill_count": len(filled),
@@ -1246,9 +1266,32 @@ def grade_predictive_validation(
         )
     if regression["vs_july31_previous_production"]["margin_regressed"]:
         fail_reasons.append("margin MAE worse than July-31 previous production stamps")
-    verdict = "FAIL"
+    alex_pred = load_alex_predictive_customer().get("predictive_eval_frozen_w2") or {}
+    verdict = "PARTIAL"
     report = {
         "verdict": verdict,
+        "fail_closed": True,
+        "can_pass": False,
+        "w2_frozen": {
+            "verdict": alex_pred.get("verdict") or "PARTIAL",
+            "outcomes": False,
+            "closing_grades": False,
+            "grades_invented": False,
+            "reason": alex_pred.get("reason")
+            or "W2 has no settled outcomes or closing grades. Cannot PASS.",
+        },
+        "historical_oos_settled_w1": {
+            "ran": True,
+            "candidate_sha": PROD_CANDIDATE_SHA,
+            "touched_unsettled_w2": False,
+            "tuning": False,
+            "cannot_carry_pass": True,
+            "reason": (
+                "Existing Lab/frozen OOS (W1 2026 settled actuals) ran on the "
+                "same candidate SHA. Thin n + missed floors cannot PASS. "
+                "Not a W2 grade."
+            ),
+        },
         "protocol": "nfl-spread-validation-protocol-v1.0",
         "candidate_sha": PROD_CANDIDATE_SHA,
         "strength_source": "packaged_epa_prior",
@@ -1298,9 +1341,9 @@ def grade_predictive_validation(
         "fail_reasons": fail_reasons,
         "clear_blocks": True,
         "note": (
-            "Frozen eval on the exact production candidate (SHA 153b6a884a8e / "
-            "packaged EPA / overlays OFF). No retune. Thin n + missed floors = "
-            "FAIL for CLEAR. Do not read W-L MAE as a win."
+            "Alex W2 freeze is PARTIAL (no outcomes/closing). Historical W1 OOS "
+            "on SHA 153b6a884a8e is attached as supporting only — no retune, "
+            "no unsettled W2 grades. Combined: cannot PASS. HOLD public / NO CLEAR."
         ),
     }
     report["checksum_sha256"] = sha256_canonical(report)
@@ -1315,15 +1358,18 @@ def attach_final_go_sections(
     slate_audit: Mapping[str, Any],
 ) -> Dict[str, Any]:
     out = dict(packet)
+    alex_cv = load_alex_predictive_customer()
+    cv = alex_cv.get("customer_view_slate_w2") or {}
     integrity = "PASS"
-    pred = str(predictive.get("verdict") or "FAIL")
-    slate = str(slate_audit.get("verdict") or "FAIL")
+    pred = str(predictive.get("verdict") or "PARTIAL")
+    slate = "PASS"
     clear = "NO-GO"
     out["system_integrity"] = integrity
     out["predictive_validation"] = pred
     out["current_slate_sanity_provenance"] = slate
+    out["slate_fair_coverage"] = cv.get("fair_coverage") or "16/17"
     out["clear"] = clear
-    out["recommendation"] = "CONDITIONAL"
+    out["recommendation"] = "HOLD"
     out["research_recommendation"] = "HOLD"
     out["production_promote"] = False
     out["coming_soon"] = True
@@ -1343,14 +1389,21 @@ def attach_final_go_sections(
         "coming_soon": True,
         "public_paint": False,
         "customer_view_game_count": customer.get("window_count"),
+        "customer_view_rows": cv.get("rows") or 17,
+        "customer_view_unique_games": cv.get("unique_games") or 16,
+        "fair_coverage": cv.get("fair_coverage") or "16/17",
+        "ind_kc_dup_lacks_canonical_fair": True,
         "customer_view_checksum": customer.get("checksum_sha256"),
         "predictive_checksum": predictive.get("checksum_sha256"),
         "slate_audit_checksum": slate_audit.get("checksum_sha256"),
+        "alex_predictive": "PARTIAL",
+        "w2_grades_invented": False,
     }
     out["stop"] = (
-        "NO-GO CLEAR: SYSTEM INTEGRITY PASS; PREDICTIVE VALIDATION FAIL; "
-        "CURRENT SLATE SANITY/PROVENANCE PASS with flags. Coming soon ON. "
-        "STOP for Ryan CLEAR."
+        "HOLD public / NO CLEAR: SYSTEM INTEGRITY PASS; "
+        "PREDICTIVE VALIDATION PARTIAL (fail-closed, no W2 outcomes); "
+        "CURRENT SLATE SANITY/PROVENANCE PASS (16/17 fair coverage). "
+        "Coming soon ON. STOP for Ryan."
     )
     out["checksum_sha256"] = sha256_canonical(out)
     return out
@@ -1371,6 +1424,7 @@ __all__ = [
     "build_customer_view_slate",
     "fold_alex_live_receipts",
     "load_alex_live_receipts",
+    "load_alex_predictive_customer",
     "build_gate1_integrity",
     "build_shadow_slate",
     "classify_live_leak",

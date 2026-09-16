@@ -1,9 +1,13 @@
 {
   "absurdities": [],
+  "alex_absurdity_flags_cited": [],
+  "alex_rows": 17,
+  "alex_unique_games": 16,
   "atl_gb_july31_rejected": true,
   "candidate_sha": "153b6a884a8e",
-  "checksum_sha256": "dda7fe902e5e1203d56097bd56fec30ce469c845610ec2a42b66975581af55c1",
+  "checksum_sha256": "1cb2a66611942952048f060e719a1961b8b78dbe237c0964f38a4aab00fbef32",
   "complete_17": true,
+  "fair_coverage": "16/17",
   "flags": [
     {
       "key": "DET@BUF",
@@ -149,6 +153,7 @@
       "reason": "spread_vs_market"
     }
   ],
+  "ind_kc_dup_lacks_canonical_fair": true,
   "note": "PASS means the internal 17-game customer-view is complete, finite, candidate-sourced, overlays OFF, and July-31 is not fair. Flags (null live run_id, W3 in window, market deltas) do not FAIL. Not a public paint.",
   "overlays_off": true,
   "provenance_fail": [],

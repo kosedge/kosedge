@@ -9,12 +9,14 @@
     "reason": "candidate remat does not publish win probabilities / Brier",
     "status": "N/A"
   },
+  "can_pass": false,
   "can_protocol_green": false,
   "can_protocol_yellow": false,
   "candidate_sha": "153b6a884a8e",
-  "checksum_sha256": "d59843ef7f0f3c4cd8155e6fe2e641615c3e12294c20b6a904dc4c7d09a93fb8",
+  "checksum_sha256": "d8e605d8f5fa7e2a8e4d937cabc83c7c5e00a46055e6910a647e3b7623191bce",
   "clear_blocks": true,
   "coefficient_changes": false,
+  "fail_closed": true,
   "fail_reasons": [
     "n=16 < protocol YELLOW min 100 and GREEN min 200",
     "W1 EPA margin MAE 12.6044 > supervised floor 9.5",
@@ -33,6 +35,14 @@
     "supervised_max_total_mae": 10.5,
     "total_floor_ok": false
   },
+  "historical_oos_settled_w1": {
+    "candidate_sha": "153b6a884a8e",
+    "cannot_carry_pass": true,
+    "ran": true,
+    "reason": "Existing Lab/frozen OOS (W1 2026 settled actuals) ran on the same candidate SHA. Thin n + missed floors cannot PASS. Not a W2 grade.",
+    "touched_unsettled_w2": false,
+    "tuning": false
+  },
   "inherited_baseline": {
     "enterprise_overall": "RED",
     "evidence_quality": "GREEN",
@@ -45,7 +55,7 @@
   },
   "market_fitting": false,
   "n_w1": 16,
-  "note": "Frozen eval on the exact production candidate (SHA 153b6a884a8e / packaged EPA / overlays OFF). No retune. Thin n + missed floors = FAIL for CLEAR. Do not read W-L MAE as a win.",
+  "note": "Alex W2 freeze is PARTIAL (no outcomes/closing). Historical W1 OOS on SHA 153b6a884a8e is attached as supporting only \u2014 no retune, no unsettled W2 grades. Combined: cannot PASS. HOLD public / NO CLEAR.",
   "overlays_off": true,
   "protocol": "nfl-spread-validation-protocol-v1.0",
   "protocol_band": "THIN_CANNOT_YELLOW",
@@ -74,7 +84,7 @@
   },
   "strength_source": "packaged_epa_prior",
   "tuning": false,
-  "verdict": "FAIL",
+  "verdict": "PARTIAL",
   "w1_market_relative": {
     "epa_beats_market": false,
     "epa_margin_mae": 12.6044,
@@ -96,5 +106,12 @@
     "wl_margin_mae": 7.7,
     "wl_total_bias": -3.9174,
     "wl_total_mae": 13.4375
+  },
+  "w2_frozen": {
+    "closing_grades": false,
+    "grades_invented": false,
+    "outcomes": false,
+    "reason": "W2 has no settled outcomes or closing grades. Cannot PASS. Do not invent grades from unsettled W2.",
+    "verdict": "PARTIAL"
   }
 }

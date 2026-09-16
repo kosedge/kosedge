@@ -148,7 +148,7 @@ def test_packet_folds_alex_live_as_conditional_no_board_go() -> None:
     bundle = assemble_packet()
     packet = bundle["packet"]
     assert packet["research_recommendation"] == "HOLD"
-    assert packet["recommendation"] == "CONDITIONAL"
+    assert packet["recommendation"] == "HOLD"
     assert packet["production_promote"] is False
     assert packet["coming_soon"] is True
     assert packet["public_flags"]["NFL_EDGE_BOARD_PUBLIC_ENABLED"] is False
@@ -164,15 +164,18 @@ def test_packet_folds_alex_live_as_conditional_no_board_go() -> None:
     assert packet["gate2"]["sanity"] == "PASS"
     assert packet["gate2"]["alex_live_shadow"] == "PASS"
     assert packet["gate2"]["alex_live_game_count"] == 17
-    assert packet["gate3"]["verdict"] == "FAIL"
+    assert packet["gate3"]["verdict"] == "PARTIAL"
     assert packet["gate3"]["alex_status"] == "RUN_ON_CANDIDATE"
     assert packet["gate4"]["release_spread"] == "BLOCKED"
     assert packet["gate4"]["website_verification"] == "BLOCKED"
     assert packet["alex_live"]["cited_not_recomputed"] is True
     assert packet["alex_live"]["live_git_sha"] == "153b6a884a8e"
     assert packet["system_integrity"] == "PASS"
-    assert packet["predictive_validation"] == "FAIL"
+    assert packet["predictive_validation"] == "PARTIAL"
     assert packet["current_slate_sanity_provenance"] == "PASS"
+    assert packet["slate_fair_coverage"] == "16/17"
+    assert packet["final"]["fair_coverage"] == "16/17"
+    assert packet["final"]["w2_grades_invented"] is False
     assert packet["clear"] == "NO-GO"
     assert packet["coming_soon"] is True
     assert packet["final"]["public_paint"] is False
@@ -198,7 +201,12 @@ def test_frozen_predictive_fails_thin_n_and_floors() -> None:
     assert grade["regression_checks"]["wl_circular_refused"]["refused"] is True
     assert float(grade["w1_oos"]["epa_margin_mae"]) > 9.5
     assert float(grade["w1_oos"]["epa_total_mae"]) > 10.5
-    assert grade["verdict"] == "FAIL"
+    assert grade["verdict"] == "PARTIAL"
+    assert grade["fail_closed"] is True
+    assert grade["can_pass"] is False
+    assert grade["w2_frozen"]["grades_invented"] is False
+    assert grade["historical_oos_settled_w1"]["ran"] is True
+    assert grade["historical_oos_settled_w1"]["touched_unsettled_w2"] is False
     assert grade["clear_blocks"] is True
 
 
@@ -231,6 +239,9 @@ def test_customer_view_17_uses_live_w2_and_rejects_july31_atl_gb() -> None:
     assert abs(float(atl["fair_spread_home"]) - (-4.59)) > 1.0
     audit = audit_customer_view_slate(slate)
     assert audit["verdict"] == "PASS"
+    assert audit["fair_coverage"] == "16/17"
+    assert audit["ind_kc_dup_lacks_canonical_fair"] is True
+    assert audit["alex_absurdity_flags_cited"] == []
     assert audit["complete_17"] is True
     assert audit["atl_gb_july31_rejected"] is True
     assert not audit["absurdities"]

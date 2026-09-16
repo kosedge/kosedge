@@ -11,14 +11,18 @@
       "stage2/nfl-regression-2026-09-15/reopen/INTEGRITY_ATL_PIT_MULTI",
       "stage2/nfl-regression-2026-09-15/reopen/FULL_SLATE_SHADOW",
       "stage2/nfl-regression-2026-09-15/reopen/PROVENANCE_SANITY",
-      "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL"
+      "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL",
+      "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.md",
+      "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.json",
+      "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.md",
+      "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.json"
     ],
     "verdict": "CONDITIONAL",
     "w2_live_game_count": 17
   },
   "as_of": "2026-09-16",
   "cfb": "separate_do_not_bless",
-  "checksum_sha256": "bf99cea9ce6e7e1eb4cdbe3b1e84d2523cabb542cdd7ce10ba5d24d966b8a289",
+  "checksum_sha256": "67819f8715b94069f1160542494b6f5e9ef1ab4e96a4e470dbc947c935f37260",
   "clear": "NO-GO",
   "coming_soon": true,
   "controlled_reopen_order_if_go": [
@@ -28,16 +32,22 @@
   ],
   "current_slate_sanity_provenance": "PASS",
   "final": {
+    "alex_predictive": "PARTIAL",
     "clear": "NO-GO",
     "coming_soon": true,
     "current_slate_sanity_provenance": "PASS",
     "customer_view_checksum": "2bf14fbfed9932cb262ee7a4ff0f3869773783bea4817905266dc89658be9016",
     "customer_view_game_count": 17,
-    "predictive_checksum": "d59843ef7f0f3c4cd8155e6fe2e641615c3e12294c20b6a904dc4c7d09a93fb8",
-    "predictive_validation": "FAIL",
+    "customer_view_rows": 17,
+    "customer_view_unique_games": 16,
+    "fair_coverage": "16/17",
+    "ind_kc_dup_lacks_canonical_fair": true,
+    "predictive_checksum": "d8e605d8f5fa7e2a8e4d937cabc83c7c5e00a46055e6910a647e3b7623191bce",
+    "predictive_validation": "PARTIAL",
     "public_paint": false,
-    "slate_audit_checksum": "dda7fe902e5e1203d56097bd56fec30ce469c845610ec2a42b66975581af55c1",
-    "system_integrity": "PASS"
+    "slate_audit_checksum": "1cb2a66611942952048f060e719a1961b8b78dbe237c0964f38a4aab00fbef32",
+    "system_integrity": "PASS",
+    "w2_grades_invented": false
   },
   "gate1": {
     "alex_remat_integrity": "GO",
@@ -141,7 +151,7 @@
       }
     },
     "research_thin": "IN_PROGRESS_THIN",
-    "verdict": "FAIL",
+    "verdict": "PARTIAL",
     "w1_market_relative": {
       "epa_beats_market": false,
       "epa_margin_mae": 12.6044,
@@ -176,16 +186,17 @@
   "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
   "overlays_off": true,
   "packet_id": "nfl-reopening-packet-20260916",
-  "predictive_validation": "FAIL",
+  "predictive_validation": "PARTIAL",
   "production_promote": false,
   "public_flags": {
     "CFB_EDGE_BOARD_PUBLIC_ENABLED": false,
     "NFL_EDGE_BOARD_PUBLIC_ENABLED": false
   },
-  "recommendation": "CONDITIONAL",
+  "recommendation": "HOLD",
   "research_recommendation": "HOLD",
   "run_id": "nfl-reopening-packet-20260916-shadow",
   "scoring_equation_changed": false,
-  "stop": "NO-GO CLEAR: SYSTEM INTEGRITY PASS; PREDICTIVE VALIDATION FAIL; CURRENT SLATE SANITY/PROVENANCE PASS with flags. Coming soon ON. STOP for Ryan CLEAR.",
+  "slate_fair_coverage": "16/17",
+  "stop": "HOLD public / NO CLEAR: SYSTEM INTEGRITY PASS; PREDICTIVE VALIDATION PARTIAL (fail-closed, no W2 outcomes); CURRENT SLATE SANITY/PROVENANCE PASS (16/17 fair coverage). Coming soon ON. STOP for Ryan.",
   "system_integrity": "PASS"
 }

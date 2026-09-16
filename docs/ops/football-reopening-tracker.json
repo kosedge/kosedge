@@ -57,12 +57,12 @@
       "readiness_sample_size_after": 16
     },
     "nfl_reopening_packet_20260916": {
-      "status": "NO-GO_CLEAR",
+      "status": "HOLD_PUBLIC",
       "production_promote": false,
-      "recommendation": "NO-GO_CLEAR",
+      "recommendation": "HOLD_PUBLIC_NO_CLEAR",
       "system_integrity": "PASS",
-      "predictive_validation": "FAIL",
-      "current_slate_sanity_provenance": "PASS",
+      "predictive_validation": "PARTIAL",
+      "current_slate_sanity_provenance": "PASS_16_OF_17",
       "remat_integrity_evidence": "GO",
       "board_reopen": "NO-GO",
       "packet": "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
@@ -74,6 +74,8 @@
       "gate2_alex_live_shadow": "PASS",
       "gate2_alex_live_games": 17,
       "gate3": "FAIL",
+      "historical_oos_verdict": "MODEL_SIGNAL_WEAK",
+      "historical_oos_path": "data/ops/nfl-reopening-packet-20260916/historical-oos/",
       "gate4_release": "BLOCKED",
       "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570"
     }
@@ -90,9 +92,9 @@
         "data/ops/nfl-564-remediation-20260915.md",
         "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md"
       ],
-      "unresolved_blocker": "2026-09-16 packet NO-GO CLEAR. Integrity PASS; Predictive FAIL; slate PASS with flags. No Ryan CLEAR.",
+      "unresolved_blocker": "2026-09-16 packet HOLD public / NO CLEAR. Integrity PASS; Predictive PARTIAL (fail-closed); slate 16/17. No Ryan CLEAR.",
       "owner": "Alex",
-      "next_action": "Ryan CLEAR required. Predictive FAIL blocks reopen. Keep overlays off. Do not flip Coming soon.",
+      "next_action": "STOP for Ryan. Keep overlays off. Do not flip Coming soon.",
       "last_updated": "2026-09-16"
     },
     {
@@ -153,11 +155,24 @@
       "evidence": [
         "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
         "data/ops/nfl-reopening-packet-20260916/predictive_validation.json",
-        "Frozen eval SHA 153b6a884a8e packaged EPA overlays OFF; no tuning; W1 n=16 EPA margin MAE 12.60 total 13.25 vs floors 9.5/10.5; market-implied 5.69; July-31 12.19/13.51 margin regressed; W-L 7.70 circular refuse"
+        "Alex PREDICTIVE_EVAL_FROZEN_W2 PARTIAL — W2 no outcomes/closing, cannot PASS, no invented W2 grades",
+        "data/ops/nfl-reopening-packet-20260916/historical-oos/HISTORICAL_OOS_DIAGNOSTIC.md",
+        "Historical OOS diagnostic MODEL_SIGNAL_WEAK — SHA 153b6a88 packaged EPA overlays OFF; n=586 spread MAE 10.9463 vs market 9.7474; research only, not a CLEAR",
+        "Historical W1 OOS SHA 153b6a884a8e supporting only: n=16 EPA margin MAE 12.60 total 13.25 vs floors 9.5/10.5"
       ],
-      "unresolved_blocker": "Thin n + missed floors + margin vs July-31 regression. Protocol cannot YELLOW/GREEN. Do not ATS-fit.",
+      "historical_oos": {
+        "verdict": "MODEL_SIGNAL_WEAK",
+        "candidate_sha": "153b6a884a8e",
+        "public": "HOLD",
+        "n_packaged": 586,
+        "packaged_spread_mae": 10.9463,
+        "market_spread_mae": 9.7474,
+        "path": "data/ops/nfl-reopening-packet-20260916/historical-oos/",
+        "production_promote": false
+      },
+      "unresolved_blocker": "W2 ungradeable; historical OOS MODEL_SIGNAL_WEAK cannot carry PASS. Tracker vocab FAIL = fail-closed stay dark. Do not ATS-fit.",
       "owner": "Validation Lead",
-      "next_action": "Stay dark. Do not reopen on this FAIL. Do not retune.",
+      "next_action": "Stay dark. HOLD public / NO CLEAR. Do not retune.",
       "last_updated": "2026-09-16"
     },
     {
@@ -199,9 +214,9 @@
       "evidence": [
         "https://github.com/kosedge/kosedge/pull/561",
         "apps/web/lib/cfb-edge-board-public.ts (NFL_EDGE_BOARD_PUBLIC_ENABLED=false)",
-        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md NO-GO CLEAR predictive FAIL"
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md HOLD public / NO CLEAR predictive PARTIAL"
       ],
-      "unresolved_blocker": "No Ryan CLEAR. Predictive FAIL. Website BLOCKED.",
+      "unresolved_blocker": "No Ryan CLEAR. Predictive PARTIAL/fail-closed. Website BLOCKED.",
       "owner": "CoS",
       "next_action": "Review the packet. Do not enable NFL spread from this PR. If later CLEAR: fair -> overview -> Edge Board last.",
       "last_updated": "2026-09-16"
