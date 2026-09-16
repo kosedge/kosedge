@@ -428,11 +428,18 @@ describe("TRUTH RECERT RED check #8 — fail-closed ≠ PASS", () => {
       publishTag: "PASS",
       actionLabel: "PASS",
       edgeMagnitude: 1.2,
+      coverProb: 0.58,
+      playToNotes: "Under 44.5",
+      playToPlay: 43.0,
+      playToLean: 43.5,
+      playToPass: 44.0,
       decision: {
         action_label: "PASS",
         actionLabel: "PASS",
         edge_magnitude: 1.2,
         numerical_edge: 1.2,
+        cover_prob: 0.58,
+        play_to: { notes: "Under 44.5" },
       },
       ...overrides,
     };
@@ -474,6 +481,11 @@ describe("TRUTH RECERT RED check #8 — fail-closed ≠ PASS", () => {
     expect(stamped[0]?.publishTag).toBeUndefined();
     expect(stamped[0]?.actionLabel).toBeUndefined();
     expect(stamped[0]?.edgeMagnitude).toBeUndefined();
+    expect(stamped[0]?.coverProb).toBeUndefined();
+    expect(stamped[0]?.playToNotes).toBeUndefined();
+    expect(stamped[0]?.playToPlay).toBeUndefined();
+    expect(stamped[0]?.playToLean).toBeUndefined();
+    expect(stamped[0]?.playToPass).toBeUndefined();
     const decision = stamped[0]?.decision as
       | Record<string, unknown>
       | undefined;
@@ -481,8 +493,11 @@ describe("TRUTH RECERT RED check #8 — fail-closed ≠ PASS", () => {
     expect(decision?.actionLabel).toBeUndefined();
     expect(decision?.edge_magnitude).toBeUndefined();
     expect(decision?.numerical_edge).toBeUndefined();
+    expect(decision?.cover_prob).toBeUndefined();
+    expect(decision?.play_to).toBeUndefined();
     expect(stamped[0]?.best).toBe("44.5");
     expect(stamped[0]?.kei).toBe("43.3");
+    expect(stamped[0]?.fairLine).toBe(43.3);
   });
 
   it("NE@SEA in-play + missing period: legacy total decision has no PASS / edge_magnitude", () => {
@@ -504,6 +519,10 @@ describe("TRUTH RECERT RED check #8 — fail-closed ≠ PASS", () => {
     );
     expect(rows).toHaveLength(1);
     expectNoPassOrEdge(rows[0]!);
+    expect(rows[0]!.coverProbOU).toBeUndefined();
+    expect(rows[0]!.playToOU).toBeUndefined();
+    expect(rows[0]!.playToOUNum).toBeUndefined();
+    expect(rows[0]!.leanToOUNum).toBeUndefined();
   });
 
   it("strip helper never writes PASS as a stand-in", () => {
@@ -513,8 +532,13 @@ describe("TRUTH RECERT RED check #8 — fail-closed ≠ PASS", () => {
     expect(stripped.publishTag).toBeUndefined();
     expect(stripped.actionLabel).toBeUndefined();
     expect(stripped.edgeMagnitude).toBeUndefined();
+    expect(stripped.coverProb).toBeUndefined();
+    expect(stripped.playToNotes).toBeUndefined();
+    expect(stripped.playToPlay).toBeUndefined();
     const decision = stripped.decision as Record<string, unknown>;
     expect(decision.action_label).toBeUndefined();
+    expect(decision.cover_prob).toBeUndefined();
+    expect(decision.play_to).toBeUndefined();
     expect(JSON.stringify(stripped)).not.toMatch(/"PASS"/);
   });
 
