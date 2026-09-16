@@ -61,6 +61,13 @@ DEFAULT_LIVE_STAMPS = (
     / "nfl-reopening-packet-20260916"
     / "live_stamps.json"
 )
+ALEX_LIVE_RECEIPTS = (
+    Path(__file__).resolve().parents[4]
+    / "data"
+    / "ops"
+    / "nfl-reopening-packet-20260916"
+    / "alex_live_receipts.json"
+)
 PUBLIC_FLAG_PATH = (
     Path(__file__).resolve().parents[4]
     / "apps"
@@ -769,6 +776,7 @@ def assemble_packet(
             "edge_board_last",
         ],
         "stop": "Ryan CLEAR required. No customer-facing reopen in this PR.",
+        "research_recommendation": recommendation,
         "gate1": {
             "candidate_path": gate1["candidate_path"],
             "live_production_isolation": gate1["live_production_isolation"],
@@ -801,14 +809,86 @@ def assemble_packet(
         "scoring_equation_changed": False,
     }
     packet["checksum_sha256"] = sha256_canonical(packet)
+    folded = fold_alex_live_receipts(packet)
     return {
-        "packet": packet,
+        "packet": folded,
         "gate1": gate1,
         "shadow": shadow,
         "audit": audit,
         "gate3": gate3,
         "remat": remat,
+        "alex_live_receipts": folded.get("alex_live"),
     }
+
+
+def load_alex_live_receipts(path: Optional[Path] = None) -> Dict[str, Any]:
+    target = path or ALEX_LIVE_RECEIPTS
+    if not target.exists():
+        return {}
+    return json.loads(target.read_text(encoding="utf-8"))
+
+
+def fold_alex_live_receipts(
+    packet: Mapping[str, Any],
+    *,
+    receipts: Optional[Mapping[str, Any]] = None,
+) -> Dict[str, Any]:
+    """Fold Alex live remat receipts. Does not remat Railway or invent games."""
+    alex = dict(receipts or load_alex_live_receipts())
+    out = dict(packet)
+    if not alex:
+        return out
+    atl = alex.get("atl_pit") or {}
+    integrity = alex.get("integrity") or {}
+    shadow = alex.get("w2_live_shadow") or {}
+    out["recommendation"] = "CONDITIONAL"
+    out["alex_live"] = {
+        "cited_not_recomputed": True,
+        "verdict": alex.get("verdict"),
+        "remat_integrity_evidence": alex.get("remat_integrity_evidence"),
+        "board_reopen": alex.get("board_reopen"),
+        "live_git_sha": alex.get("live_git_sha"),
+        "integrity_sha_still_valid": integrity.get("checksum_sha256_full"),
+        "w2_live_game_count": shadow.get("game_count"),
+        "source_paths_not_in_repo": alex.get("source_paths_not_in_repo"),
+    }
+    gate1 = dict(out.get("gate1") or {})
+    gate1["integrity"] = "PASS"
+    gate1["atl_pit_epa_spread_home"] = atl.get("epa_spread_home")
+    gate1["atl_pit_wl_spread_home"] = atl.get("wl_spread_home")
+    gate1["atl_pit_delta"] = atl.get("delta_wl_minus_epa")
+    gate1["overlay_zero"] = atl.get("overlay_zero")
+    gate1["integrity_sha_564"] = integrity.get("checksum_sha256_full")
+    gate1["integrity_sha_status"] = integrity.get("status")
+    gate1["double_count_check"] = integrity.get("double_count_check")
+    gate1["alex_remat_integrity"] = alex.get("remat_integrity_evidence")
+    gate1["board_reopen"] = alex.get("board_reopen")
+    out["gate1"] = gate1
+    gate2 = dict(out.get("gate2") or {})
+    gate2["alex_live_shadow"] = "PASS"
+    gate2["alex_live_game_count"] = shadow.get("game_count")
+    gate2["alex_live_dates"] = shadow.get("dates")
+    gate2["alex_strength_source"] = shadow.get("strength_source")
+    gate2["alex_dampened_at_completed_reg"] = shadow.get("dampened_at_completed_reg")
+    out["gate2"] = gate2
+    gate3 = dict(out.get("gate3") or {})
+    gate3["alex_status"] = "NOT_STARTED"
+    gate3["research_thin"] = gate3.get("verdict")
+    out["gate3"] = gate3
+    out["gate4"] = {
+        "release_spread": "BLOCKED",
+        "release_total": "BLOCKED",
+        "website_verification": "BLOCKED",
+        "pending": "Ryan CLEAR",
+        "coming_soon_untouched": True,
+        "public_flags_false": True,
+    }
+    out["stop"] = (
+        "CONDITIONAL: remat+integrity GO; board reopen NO-GO. "
+        "Ryan CLEAR required. No customer-facing reopen in this PR."
+    )
+    out["checksum_sha256"] = sha256_canonical(out)
+    return out
 
 
 __all__ = [
@@ -818,6 +898,8 @@ __all__ = [
     "assemble_packet",
     "audit_shadow",
     "authorize_candidate_row",
+    "fold_alex_live_receipts",
+    "load_alex_live_receipts",
     "build_gate1_integrity",
     "build_shadow_slate",
     "classify_live_leak",

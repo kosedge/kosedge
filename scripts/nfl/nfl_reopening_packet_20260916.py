@@ -52,6 +52,13 @@ def main() -> int:
     )
     print(f"gate3 {packet['gate3']['verdict']} n_w1={packet['gate3']['n_w1']}")
     print(f"recommendation={packet['recommendation']} production_promote=false")
+    if packet.get("alex_live"):
+        print(
+            f"alex fold live_sha={packet['alex_live'].get('live_git_sha')} "
+            f"integrity={packet['gate1'].get('integrity')} "
+            f"w2_live={packet['gate2'].get('alex_live_game_count')} "
+            f"gate4={packet.get('gate4', {}).get('release_spread')}"
+        )
     print(f"wrote {OUT_DIR}")
     if packet["recommendation"] == "NO-GO":
         return 1

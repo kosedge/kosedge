@@ -138,17 +138,31 @@ def test_frozen_eval_does_not_fit_ats_or_change_coeffs() -> None:
     assert records["CAR"] == "0-1"
 
 
-def test_packet_recommendation_is_hold_not_go() -> None:
+def test_packet_folds_alex_live_as_conditional_no_board_go() -> None:
     bundle = assemble_packet()
     packet = bundle["packet"]
-    assert packet["recommendation"] == "HOLD"
+    assert packet["research_recommendation"] == "HOLD"
+    assert packet["recommendation"] == "CONDITIONAL"
     assert packet["production_promote"] is False
     assert packet["coming_soon"] is True
     assert packet["public_flags"]["NFL_EDGE_BOARD_PUBLIC_ENABLED"] is False
     assert packet["cfb"] == "separate_do_not_bless"
     assert packet["gate1"]["candidate_path"] == "PASS"
+    assert packet["gate1"]["integrity"] == "PASS"
+    assert packet["gate1"]["integrity_sha_status"] == "STILL_VALID"
+    assert str(packet["gate1"]["integrity_sha_564"]).startswith("3ee91339")
+    assert packet["gate1"]["atl_pit_epa_spread_home"] == -0.76
+    assert packet["gate1"]["atl_pit_wl_spread_home"] == -7.55
+    assert packet["gate1"]["board_reopen"] == "NO-GO"
     assert packet["gate1"]["reopen_gate"] == "FAIL"
     assert packet["gate2"]["sanity"] == "PASS"
+    assert packet["gate2"]["alex_live_shadow"] == "PASS"
+    assert packet["gate2"]["alex_live_game_count"] == 17
     assert packet["gate3"]["verdict"] == "IN_PROGRESS_THIN"
+    assert packet["gate3"]["alex_status"] == "NOT_STARTED"
+    assert packet["gate4"]["release_spread"] == "BLOCKED"
+    assert packet["gate4"]["website_verification"] == "BLOCKED"
+    assert packet["alex_live"]["cited_not_recomputed"] is True
+    assert packet["alex_live"]["live_git_sha"] == "153b6a884a8e"
     assert "NFL_EDGE_BOARD_PUBLIC_ENABLED = false" in PUBLIC_FLAG.read_text(encoding="utf-8")
     assert "CFB_EDGE_BOARD_PUBLIC_ENABLED = false" in PUBLIC_FLAG.read_text(encoding="utf-8")

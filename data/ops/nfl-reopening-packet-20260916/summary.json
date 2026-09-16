@@ -1,7 +1,24 @@
 {
+  "alex_live": {
+    "board_reopen": "NO-GO",
+    "cited_not_recomputed": true,
+    "integrity_sha_still_valid": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+    "live_git_sha": "153b6a884a8e",
+    "remat_integrity_evidence": "GO",
+    "source_paths_not_in_repo": [
+      "stage2/nfl-regression-2026-09-15/reopen/README",
+      "stage2/nfl-regression-2026-09-15/reopen/GO_NO_GO",
+      "stage2/nfl-regression-2026-09-15/reopen/INTEGRITY_ATL_PIT_MULTI",
+      "stage2/nfl-regression-2026-09-15/reopen/FULL_SLATE_SHADOW",
+      "stage2/nfl-regression-2026-09-15/reopen/PROVENANCE_SANITY",
+      "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL"
+    ],
+    "verdict": "CONDITIONAL",
+    "w2_live_game_count": 17
+  },
   "as_of": "2026-09-16",
   "cfb": "separate_do_not_bless",
-  "checksum_sha256": "9ed27f59ed308a9a3b5152bce33e3df4c06771ae7631eeddf395154c3ddfadf8",
+  "checksum_sha256": "7364e7bce681f0de3d9f1c71ca9d8cfd903d48fb06bfe273336339df0e6771c5",
   "coming_soon": true,
   "controlled_reopen_order_if_go": [
     "model_fair_internal_only",
@@ -9,16 +26,35 @@
     "edge_board_last"
   ],
   "gate1": {
+    "alex_remat_integrity": "GO",
+    "atl_pit_delta": -6.79,
+    "atl_pit_epa_spread_home": -0.76,
     "atl_pit_hold_resolved": true,
+    "atl_pit_wl_spread_home": -7.55,
+    "board_reopen": "NO-GO",
     "candidate_path": "PASS",
     "checksum_sha256": "3e9b4a8a9e623204eec739b07ae4e425ee1084a5e643c306c7966b16e352bd98",
+    "double_count_check": "pass",
+    "integrity": "PASS",
+    "integrity_sha_564": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+    "integrity_sha_status": "STILL_VALID",
     "july31_rejected_from_candidate": true,
     "live_production_isolation": "FAIL",
+    "overlay_zero": true,
     "reopen_gate": "FAIL",
     "wl_refuse_passed": true
   },
   "gate2": {
     "absurdities": [],
+    "alex_dampened_at_completed_reg": 16,
+    "alex_live_dates": [
+      "2026-09-17",
+      "2026-09-20",
+      "2026-09-21"
+    ],
+    "alex_live_game_count": 17,
+    "alex_live_shadow": "PASS",
+    "alex_strength_source": "packaged_epa_prior",
     "checksum_sha256": "6e6b9ed1f8cef75504284ae51b59272091524fbcb6e017c687722e5d4bbbc027",
     "flagged_games": [
       "CAR@ATL",
@@ -44,6 +80,7 @@
     "w2_game_count": 16
   },
   "gate3": {
+    "alex_status": "NOT_STARTED",
     "ats_fitting": false,
     "checksum_sha256": "dff1afb6d73a863e294bc147509171939030b1bf424bb8635a71dd61cb532b0d",
     "coefficient_changes": false,
@@ -58,6 +95,7 @@
       "predictive_quality": "YELLOW",
       "subscriber_influence": "LIMITED"
     },
+    "research_thin": "IN_PROGRESS_THIN",
     "verdict": "IN_PROGRESS_THIN",
     "w1_oos": {
       "epa_margin_bias": 0.8431,
@@ -74,6 +112,14 @@
       "wl_total_mae": 13.4375
     }
   },
+  "gate4": {
+    "coming_soon_untouched": true,
+    "pending": "Ryan CLEAR",
+    "public_flags_false": true,
+    "release_spread": "BLOCKED",
+    "release_total": "BLOCKED",
+    "website_verification": "BLOCKED"
+  },
   "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
   "overlays_off": true,
   "packet_id": "nfl-reopening-packet-20260916",
@@ -82,8 +128,9 @@
     "CFB_EDGE_BOARD_PUBLIC_ENABLED": false,
     "NFL_EDGE_BOARD_PUBLIC_ENABLED": false
   },
-  "recommendation": "HOLD",
+  "recommendation": "CONDITIONAL",
+  "research_recommendation": "HOLD",
   "run_id": "nfl-reopening-packet-20260916-shadow",
   "scoring_equation_changed": false,
-  "stop": "Ryan CLEAR required. No customer-facing reopen in this PR."
+  "stop": "CONDITIONAL: remat+integrity GO; board reopen NO-GO. Ryan CLEAR required. No customer-facing reopen in this PR."
 }
