@@ -1,0 +1,130 @@
+{
+  "candidate_path": "PASS",
+  "checksum_sha256": "3e9b4a8a9e623204eec739b07ae4e425ee1084a5e643c306c7966b16e352bd98",
+  "focus_integrity": {
+    "atl_pit_hold_resolved": true,
+    "atl_pit_remat_spread_home": -0.7631,
+    "chi_car_remat_spread_home": 1.2736,
+    "double_count_check": "pass",
+    "matchups": [
+      {
+        "actual_total": null,
+        "classify_epa": "packaged_epa_prior",
+        "epa_spread_home": -1.5802,
+        "epa_total": 46.0993,
+        "epa_total_residual": null,
+        "key": "DET@BUF",
+        "overlay_zero": true,
+        "record_minus_epa_spread": 0.5302,
+        "record_spread_home": -1.05,
+        "remat_spread_home": -1.5802,
+        "week": 2
+      },
+      {
+        "actual_total": null,
+        "classify_epa": "packaged_epa_prior",
+        "epa_spread_home": -2.9043,
+        "epa_total": 44.5339,
+        "epa_total_residual": null,
+        "key": "CAR@ATL",
+        "overlay_zero": true,
+        "record_minus_epa_spread": 1.8543,
+        "record_spread_home": -1.05,
+        "remat_spread_home": -2.9043,
+        "week": 2
+      },
+      {
+        "actual_total": 33.0,
+        "classify_epa": "packaged_epa_prior",
+        "epa_spread_home": -0.7631,
+        "epa_total": 44.6523,
+        "epa_total_residual": -11.6523,
+        "key": "ATL@PIT",
+        "overlay_zero": true,
+        "record_minus_epa_spread": -6.7869,
+        "record_spread_home": -7.55,
+        "remat_spread_home": -0.7631,
+        "week": 1
+      },
+      {
+        "actual_total": 96.0,
+        "classify_epa": "packaged_epa_prior",
+        "epa_spread_home": 1.2736,
+        "epa_total": 45.5002,
+        "epa_total_residual": 50.4998,
+        "key": "CHI@CAR",
+        "overlay_zero": true,
+        "record_minus_epa_spread": 4.1764,
+        "record_spread_home": 5.45,
+        "remat_spread_home": 1.2736,
+        "week": 1
+      }
+    ],
+    "material_wl_vs_epa_keys": [
+      "CAR@ATL",
+      "ATL@PIT",
+      "CHI@CAR"
+    ],
+    "overlay_leaks": [],
+    "passed": true
+  },
+  "july31_leak": {
+    "candidate_filter_rejects_all_live_rows": true,
+    "captured_at_utc": "2026-09-16T14:55:38Z",
+    "july31_cannot_enter_candidate": true,
+    "live_active_run_id": null,
+    "live_current_week": 2,
+    "passed": true,
+    "railway_health_git_sha": "c4ead605fce4",
+    "unauthorized_partial_remats": [
+      {
+        "key": "DET@BUF",
+        "model_spread_home": -2.5,
+        "projection_created_at": "2026-09-15T21:15:16.688269Z",
+        "run_id": null
+      }
+    ],
+    "upcoming_authorized_as_candidate_n": 0,
+    "upcoming_july31_n": 47,
+    "upcoming_n": 48,
+    "upcoming_non_july31_n": 1,
+    "week1_july31_n": 16
+  },
+  "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
+  "live_filter_rejects_stale": true,
+  "live_production_isolation": "FAIL",
+  "locked_scoring": {
+    "base_efficiency_margin_weight": 16.0,
+    "base_efficiency_max_margin_points": 6.5,
+    "base_efficiency_max_total_points": 5.0,
+    "base_efficiency_total_weight": 10.5,
+    "base_total_points": 45.3,
+    "framework_version": "nfl-handicap-core-v3.1",
+    "home_field_points": 1.05
+  },
+  "note": "Candidate path: packaged EPA, overlays OFF, W-L refuse, July-31 rejected as input. Live Railway still serves July-31 (plus one unauthorized DET@BUF remat with null run_id). Not a reopen PASS.",
+  "overlays_off": true,
+  "packet_id": "nfl-reopening-packet-20260916",
+  "passed": true,
+  "production_promote": false,
+  "public_board_flag_false": true,
+  "recommendation": "HOLD",
+  "reopen_gate": "FAIL",
+  "reopen_passed": false,
+  "run_id": "nfl-reopening-packet-20260916-shadow",
+  "scoring_equation_changed": false,
+  "wl_refuse": {
+    "actual": "ATL 13 @ PIT 20",
+    "adhoc_overlays_off": true,
+    "adhoc_refused_win_loss": true,
+    "adhoc_source": "packaged_epa_prior",
+    "epa_spread_home": -0.7631,
+    "key": "ATL@PIT",
+    "material_wl_vs_epa": true,
+    "missing_epa_refuse_reason": "packaged_epa_unavailable",
+    "passed": true,
+    "week": 1,
+    "wl_minus_epa_spread": -6.7869,
+    "wl_spread_home": -7.55
+  }
+}

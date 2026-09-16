@@ -1,0 +1,50 @@
+{
+  "cited_not_recomputed": true,
+  "note": "Alex live reopen receipts. This PR does not reinvent live remats. stage2/ paths were not in this checkout; numbers below are Alex's attested receipts.",
+  "source_agent": "Alex",
+  "source_paths_not_in_repo": [
+    "stage2/nfl-regression-2026-09-15/reopen/README",
+    "stage2/nfl-regression-2026-09-15/reopen/GO_NO_GO",
+    "stage2/nfl-regression-2026-09-15/reopen/INTEGRITY_ATL_PIT_MULTI",
+    "stage2/nfl-regression-2026-09-15/reopen/FULL_SLATE_SHADOW",
+    "stage2/nfl-regression-2026-09-15/reopen/PROVENANCE_SANITY",
+    "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL",
+    "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.md",
+    "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.json",
+    "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.md",
+    "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.json"
+  ],
+  "verdict": "CONDITIONAL",
+  "remat_integrity_evidence": "GO",
+  "board_reopen": "NO-GO",
+  "board_reopen_reason": "no Ryan CLEAR",
+  "live_git_sha": "153b6a884a8e",
+  "coming_soon_untouched": true,
+  "overlays": "OFF",
+  "atl_pit": {
+    "epa_spread_home": -0.76,
+    "wl_spread_home": -7.55,
+    "delta_wl_minus_epa": -6.79,
+    "overlay_zero": true
+  },
+  "integrity": {
+    "checksum_sha256_prefix": "3ee91339",
+    "checksum_sha256_full": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+    "status": "STILL_VALID",
+    "double_count_check": "pass",
+    "artifact": "data/ops/nfl-564-remediation-20260915/multi_matchup_integrity.json"
+  },
+  "w2_live_shadow": {
+    "dates": ["2026-09-17", "2026-09-20", "2026-09-21"],
+    "status": "SUCCESS",
+    "game_count": 17,
+    "strength_source": "packaged_epa_prior",
+    "dampened_at_completed_reg": 16
+  },
+  "this_pr_read_only_attest": {
+    "railway_health_git_sha": "153b6a884a8e",
+    "www_fair_lines_http": 503,
+    "www_code": "nfl_edge_board_unavailable",
+    "NFL_EDGE_BOARD_PUBLIC_ENABLED": false
+  }
+}

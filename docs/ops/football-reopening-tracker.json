@@ -1,6 +1,6 @@
 {
   "tracker_id": "football-numbers-reopening-v1",
-  "as_of": "2026-09-15",
+  "as_of": "2026-09-16",
   "authority": "Ryan OS 2026-09-15",
   "sot_markdown": "docs/ops/FOOTBALL_NUMBERS_REOPENING_TRACKER.md",
   "posture": "coming_soon_live_boards_dark_until_per_sport_clear",
@@ -55,6 +55,29 @@
       "integrity_checksum_sha256": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
       "readiness_sample_size_before": 0,
       "readiness_sample_size_after": 16
+    },
+    "nfl_reopening_packet_20260916": {
+      "status": "HOLD_PUBLIC",
+      "production_promote": false,
+      "recommendation": "HOLD_PUBLIC_NO_CLEAR",
+      "system_integrity": "PASS",
+      "predictive_validation": "PARTIAL",
+      "current_slate_sanity_provenance": "PASS_16_OF_17",
+      "remat_integrity_evidence": "GO",
+      "board_reopen": "NO-GO",
+      "packet": "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
+      "evidence_dir": "data/ops/nfl-reopening-packet-20260916/",
+      "alex_live_receipts": "data/ops/nfl-reopening-packet-20260916/alex_live_receipts.json",
+      "live_git_sha": "153b6a884a8e",
+      "integrity_sha_564": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+      "gate1_integrity": "PASS",
+      "gate2_alex_live_shadow": "PASS",
+      "gate2_alex_live_games": 17,
+      "gate3": "FAIL",
+      "historical_oos_verdict": "MODEL_SIGNAL_WEAK",
+      "historical_oos_path": "data/ops/nfl-reopening-packet-20260916/historical-oos/",
+      "gate4_release": "BLOCKED",
+      "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570"
     }
   },
   "workstreams": [
@@ -66,12 +89,13 @@
       "evidence": [
         "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
         "NFL regression: find what broke (pre-model-change)",
-        "data/ops/nfl-564-remediation-20260915.md"
+        "data/ops/nfl-564-remediation-20260915.md",
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md"
       ],
-      "unresolved_blocker": "Remediating path landed in code. Live Railway ingest + shadow remat not attested. Not a reopen.",
+      "unresolved_blocker": "2026-09-16 packet HOLD public / NO CLEAR. Integrity PASS; Predictive PARTIAL (fail-closed); slate 16/17. No Ryan CLEAR.",
       "owner": "Alex",
-      "next_action": "Attest live W1 outcomes ingest and keep overlays off. Do not flip Coming soon.",
-      "last_updated": "2026-09-15"
+      "next_action": "STOP for Ryan. Keep overlays off. Do not flip Coming soon.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "cfb.scoring_research",
@@ -98,58 +122,74 @@
       "gate": "Input integrity",
       "status": "IN_PROGRESS",
       "evidence": [
-        "data/ops/nfl-564-remediation-20260915.md",
-        "data/ops/nfl-564-remediation-20260915/week1_outcomes_coverage.json",
-        "sample_size 0 -> 16; last_game_date 2026-09-14; current_week advances past completed W1"
+        "data/ops/nfl-reopening-packet-20260916/alex_live_receipts.json",
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
+        "Alex live git_sha=153b6a884a8e W2 remat 2026-09-17/20/21 SUCCESS 17 games packaged EPA dampened@16"
       ],
-      "unresolved_blocker": "Live Railway ingest not yet attested. Reopen-grade identity/venue/exclusion pack still incomplete.",
+      "unresolved_blocker": "Identity/venue/exclusion pack still incomplete. Live remats cited, not reinvented. Board still dark.",
       "owner": "Alex",
-      "next_action": "Run pull_nfl_outcomes on Railway. Confirm live readiness sample_size=16 and current_week=2. Do not treat ingest as Release.",
-      "last_updated": "2026-09-15"
+      "next_action": "Do not paint customer boards. Keep overlays OFF. Ryan CLEAR is the next input-to-release step.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "nfl.calculation_integrity",
       "track": "NFL",
       "gate": "Calculation integrity",
-      "status": "IN_PROGRESS",
+      "status": "PASS",
       "evidence": [
-        "https://cursor.com/agents/bc-55c5b060-4375-5bb4-9396-39cb9c8ba5b1",
-        "data/ops/nfl-564-remediation-20260915.md",
-        "data/ops/nfl-564-remediation-20260915/w2_remat_epa_overlays_off.json",
-        "data/ops/nfl-564-remediation-20260915/multi_matchup_integrity.json",
-        "run_id=nfl-564-remediation-20260915-w2 checksum=11878ee10c52b541f9d48466d009728ef52d34963a3288d65359a2838ec833c9",
-        "integrity checksum=3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190 double_count_check=pass"
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
+        "data/ops/nfl-reopening-packet-20260916/alex_live_receipts.json",
+        "ATL@PIT EPA -0.76 vs W-L -7.55 delta -6.79 overlay_zero",
+        "integrity sha 3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190 STILL_VALID double_count=pass"
       ],
-      "unresolved_blocker": "Overlays remain OFF (fail-closed defaults). Live W2 remat on Railway not attested. Predictive validation not run. Not a reopen PASS.",
+      "unresolved_blocker": "Board reopen remains NO-GO (no Ryan CLEAR). Overlays OFF. Not a Release PASS.",
       "owner": "Alex",
-      "next_action": "Fail-closed remat defaults: overlays OFF until Ryan CLEAR (unlock_overlays). sample_size>=16 is not CLEAR. Do not retune the equation.",
-      "last_updated": "2026-09-15"
+      "next_action": "Integrity evidence stands. Do not retune. Do not flip Coming soon.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "nfl.predictive_validation",
       "track": "NFL",
       "gate": "Predictive validation",
-      "status": "NOT_STARTED",
+      "status": "FAIL",
       "evidence": [
-        "docs/lab/NFL_SPREAD_VALIDATION_PROTOCOL_v1.md",
-        "docs/NFL_ENTERPRISE_GATES.md",
-        "NFL_SPREAD_PLAY_LOCKED.md"
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md",
+        "data/ops/nfl-reopening-packet-20260916/predictive_validation.json",
+        "Alex PREDICTIVE_EVAL_FROZEN_W2 PARTIAL — W2 no outcomes/closing, cannot PASS, no invented W2 grades",
+        "data/ops/nfl-reopening-packet-20260916/historical-oos/HISTORICAL_OOS_DIAGNOSTIC.md",
+        "Historical OOS diagnostic MODEL_SIGNAL_WEAK — SHA 153b6a88 packaged EPA overlays OFF; n=586 spread MAE 10.9463 vs market 9.7474; research only, not a CLEAR",
+        "Historical W1 OOS SHA 153b6a884a8e supporting only: n=16 EPA margin MAE 12.60 total 13.25 vs floors 9.5/10.5"
       ],
-      "unresolved_blocker": "No frozen reopen eval has been run against predefined criteria for the candidate that would be shown. Protocol is not PASS.",
+      "historical_oos": {
+        "verdict": "MODEL_SIGNAL_WEAK",
+        "candidate_sha": "153b6a884a8e",
+        "public": "HOLD",
+        "n_packaged": 586,
+        "packaged_spread_mae": 10.9463,
+        "market_spread_mae": 9.7474,
+        "path": "data/ops/nfl-reopening-packet-20260916/historical-oos/",
+        "production_promote": false
+      },
+      "unresolved_blocker": "W2 ungradeable; historical OOS MODEL_SIGNAL_WEAK cannot carry PASS. Tracker vocab FAIL = fail-closed stay dark. Do not ATS-fit.",
       "owner": "Validation Lead",
-      "next_action": "Freeze eval rules, then run the unused/frozen package. Score margin and total separately.",
-      "last_updated": "2026-09-15"
+      "next_action": "Stay dark. HOLD public / NO CLEAR. Do not retune.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "nfl.production_rehearsal",
       "track": "NFL",
       "gate": "Production rehearsal",
-      "status": "NOT_STARTED",
-      "evidence": [],
-      "unresolved_blocker": "No scheduled candidate runs that include weekly update, injuries, and missing-data paths.",
+      "status": "IN_PROGRESS",
+      "evidence": [
+        "data/ops/nfl-reopening-packet-20260916/alex_live_receipts.json",
+        "Alex live W2 shadow 17 games 2026-09-17/20/21 SUCCESS packaged EPA dampened@16",
+        "data/ops/nfl-reopening-packet-20260916/shadow_slate.json",
+        "data/ops/nfl-reopening-packet-20260916/customer_view_slate.json"
+      ],
+      "unresolved_blocker": "Not a weekly-update drill with injuries ON or missing-data paths. Overlays remain OFF.",
       "owner": "Platform Reliability",
-      "next_action": "Stand up private shadow. Exercise a weekly update, not a single snapshot.",
-      "last_updated": "2026-09-15"
+      "next_action": "Keep shadow INTERNAL. Do not replace production means. Injury/missing-data rehearsal still open.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "nfl.website_verification",
@@ -160,10 +200,10 @@
         "https://github.com/kosedge/kosedge/pull/561",
         "docs/incidents/INC-2026-09-08-NFL-EDGE-BOARD-CUSTOMER-TRUTH/"
       ],
-      "unresolved_blocker": "No approved NFL numbers to paint. Coming soon is not this gate.",
+      "unresolved_blocker": "No approved NFL numbers to paint. Packet Gate 4 BLOCKED. No Ryan CLEAR.",
       "owner": "Product",
-      "next_action": "After calculation + predictive PASS, INTERNAL-verify every parked NFL URL + assemble.",
-      "last_updated": "2026-09-15"
+      "next_action": "After Ryan CLEAR, INTERNAL-verify every parked NFL URL + assemble.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "nfl.release_spread",
@@ -173,12 +213,13 @@
       "status": "BLOCKED",
       "evidence": [
         "https://github.com/kosedge/kosedge/pull/561",
-        "apps/web/lib/cfb-edge-board-public.ts (NFL_EDGE_BOARD_PUBLIC_ENABLED=false)"
+        "apps/web/lib/cfb-edge-board-public.ts (NFL_EDGE_BOARD_PUBLIC_ENABLED=false)",
+        "docs/ops/NFL_PRODUCTION_REOPENING_PACKET_2026-09-16.md HOLD public / NO CLEAR predictive PARTIAL"
       ],
-      "unresolved_blocker": "Upstream NFL gates not PASS.",
+      "unresolved_blocker": "No Ryan CLEAR. Predictive PARTIAL/fail-closed. Website BLOCKED.",
       "owner": "CoS",
-      "next_action": "Review evidence pack. Enable NFL spread only if that market's gates PASS.",
-      "last_updated": "2026-09-15"
+      "next_action": "Review the packet. Do not enable NFL spread from this PR. If later CLEAR: fair -> overview -> Edge Board last.",
+      "last_updated": "2026-09-16"
     },
     {
       "id": "nfl.release_total",
@@ -190,10 +231,10 @@
         "NFL_SPREAD_PLAY_LOCKED.md",
         "https://github.com/kosedge/kosedge/pull/561"
       ],
-      "unresolved_blocker": "Totals may stay dark after spreads CLEAR. Totals need their own predictive PASS.",
+      "unresolved_blocker": "Totals may stay dark after spreads CLEAR. Packet board NO-GO. Totals need their own predictive PASS.",
       "owner": "CoS",
       "next_action": "Do not piggyback totals on a spread CLEAR.",
-      "last_updated": "2026-09-15"
+      "last_updated": "2026-09-16"
     },
     {
       "id": "cfb.input_integrity",

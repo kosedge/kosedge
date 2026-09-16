@@ -1,0 +1,202 @@
+{
+  "alex_live": {
+    "board_reopen": "NO-GO",
+    "cited_not_recomputed": true,
+    "integrity_sha_still_valid": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+    "live_git_sha": "153b6a884a8e",
+    "remat_integrity_evidence": "GO",
+    "source_paths_not_in_repo": [
+      "stage2/nfl-regression-2026-09-15/reopen/README",
+      "stage2/nfl-regression-2026-09-15/reopen/GO_NO_GO",
+      "stage2/nfl-regression-2026-09-15/reopen/INTEGRITY_ATL_PIT_MULTI",
+      "stage2/nfl-regression-2026-09-15/reopen/FULL_SLATE_SHADOW",
+      "stage2/nfl-regression-2026-09-15/reopen/PROVENANCE_SANITY",
+      "stage2/nfl-regression-2026-09-15/reopen/FROZEN_EVAL",
+      "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.md",
+      "stage2/nfl-regression-2026-09-15/reopen/CUSTOMER_VIEW_SLATE_W2.json",
+      "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.md",
+      "stage2/nfl-regression-2026-09-15/reopen/PREDICTIVE_EVAL_FROZEN_W2.json"
+    ],
+    "verdict": "CONDITIONAL",
+    "w2_live_game_count": 17
+  },
+  "as_of": "2026-09-16",
+  "cfb": "separate_do_not_bless",
+  "checksum_sha256": "67819f8715b94069f1160542494b6f5e9ef1ab4e96a4e470dbc947c935f37260",
+  "clear": "NO-GO",
+  "coming_soon": true,
+  "controlled_reopen_order_if_go": [
+    "model_fair_internal_only",
+    "overview_widgets",
+    "edge_board_last"
+  ],
+  "current_slate_sanity_provenance": "PASS",
+  "final": {
+    "alex_predictive": "PARTIAL",
+    "clear": "NO-GO",
+    "coming_soon": true,
+    "current_slate_sanity_provenance": "PASS",
+    "customer_view_checksum": "2bf14fbfed9932cb262ee7a4ff0f3869773783bea4817905266dc89658be9016",
+    "customer_view_game_count": 17,
+    "customer_view_rows": 17,
+    "customer_view_unique_games": 16,
+    "fair_coverage": "16/17",
+    "ind_kc_dup_lacks_canonical_fair": true,
+    "predictive_checksum": "d8e605d8f5fa7e2a8e4d937cabc83c7c5e00a46055e6910a647e3b7623191bce",
+    "predictive_validation": "PARTIAL",
+    "public_paint": false,
+    "slate_audit_checksum": "1cb2a66611942952048f060e719a1961b8b78dbe237c0964f38a4aab00fbef32",
+    "system_integrity": "PASS",
+    "w2_grades_invented": false
+  },
+  "gate1": {
+    "alex_remat_integrity": "GO",
+    "atl_pit_delta": -6.79,
+    "atl_pit_epa_spread_home": -0.76,
+    "atl_pit_hold_resolved": true,
+    "atl_pit_wl_spread_home": -7.55,
+    "board_reopen": "NO-GO",
+    "candidate_path": "PASS",
+    "checksum_sha256": "3e9b4a8a9e623204eec739b07ae4e425ee1084a5e643c306c7966b16e352bd98",
+    "double_count_check": "pass",
+    "integrity": "PASS",
+    "integrity_sha_564": "3ee913394af5a8a9c5fdee5d880f39b1c8541d8641938952772158b369ed0190",
+    "integrity_sha_status": "STILL_VALID",
+    "july31_rejected_from_candidate": true,
+    "live_production_isolation": "FAIL",
+    "overlay_zero": true,
+    "reopen_gate": "FAIL",
+    "wl_refuse_passed": true
+  },
+  "gate2": {
+    "absurdities": [],
+    "alex_dampened_at_completed_reg": 16,
+    "alex_live_dates": [
+      "2026-09-17",
+      "2026-09-20",
+      "2026-09-21"
+    ],
+    "alex_live_game_count": 17,
+    "alex_live_shadow": "PASS",
+    "alex_strength_source": "packaged_epa_prior",
+    "checksum_sha256": "6e6b9ed1f8cef75504284ae51b59272091524fbcb6e017c687722e5d4bbbc027",
+    "flagged_games": [
+      "CAR@ATL",
+      "CLE@TB",
+      "DET@BUF",
+      "IND@KC",
+      "MIA@SF",
+      "NO@BAL"
+    ],
+    "flagged_later_weeks": [
+      "ARI@NYG",
+      "ARI@SF",
+      "ATL@GB",
+      "CAR@CLE",
+      "CIN@PIT",
+      "DEN@SF",
+      "JAX@CIN",
+      "KC@MIA",
+      "MIA@MIN"
+    ],
+    "sanity": "PASS",
+    "shadow_game_count": 48,
+    "w2_game_count": 16
+  },
+  "gate3": {
+    "alex_status": "RUN_ON_CANDIDATE",
+    "ats_fitting": false,
+    "checksum_sha256": "dff1afb6d73a863e294bc147509171939030b1bf424bb8635a71dd61cb532b0d",
+    "coefficient_changes": false,
+    "fail_reasons": [
+      "n=16 < protocol YELLOW min 100 and GREEN min 200",
+      "W1 EPA margin MAE 12.6044 > supervised floor 9.5",
+      "W1 EPA total MAE 13.2488 > supervised floor 10.5",
+      "W1 EPA margin MAE 12.6044 does not beat market-implied MAE 5.6875",
+      "margin MAE worse than July-31 previous production stamps"
+    ],
+    "n_w1": 16,
+    "pre_repair": {
+      "enterprise_overall": "RED",
+      "evidence_quality": "GREEN",
+      "generated_at": "2026-09-04T04:46:39.131508+00:00",
+      "lab_scorecard": "data/ops/lab/nfl-spread-scorecard-v1.json",
+      "market_edge_evidence": "GREEN",
+      "note": "Pre-repair baseline is the 2026-09-04 frozen protocol fill + 2026-07-28 enterprise gates. Repair did not retune coefficients, so historical ATS/CLV is inherited \u2014 not a new fit.",
+      "predictive_quality": "YELLOW",
+      "subscriber_influence": "LIMITED"
+    },
+    "protocol_band": "THIN_CANNOT_YELLOW",
+    "regression_checks": {
+      "vs_inherited_historical_production": {
+        "enterprise_overall": "RED",
+        "historical_market_spread_mae": 9.7764,
+        "historical_model_spread_mae": 9.5513,
+        "historical_supervised_margin_mae": 7.4801,
+        "historical_supervised_total_mae": 9.2029,
+        "lab_predictive_quality": "YELLOW",
+        "note": "Repair did not retune. Historical ATS/CLV/supervised floors are inherited, not a new fit. W1 OOS of this candidate does not meet those floors."
+      },
+      "vs_july31_previous_production": {
+        "margin_mae_delta": 0.4131,
+        "margin_regressed": true,
+        "note": "Positive delta = worse than July-31 live stamps. Margin slightly worse; total slightly better. Neither clears floors.",
+        "total_mae_delta": -0.2637,
+        "total_regressed": false
+      },
+      "wl_circular_refused": {
+        "note": "W-L post-game 1-0/0-1 margin MAE is circular and is not a regression win or a CLEAR input.",
+        "refused": true,
+        "wl_margin_mae": 7.7
+      }
+    },
+    "research_thin": "IN_PROGRESS_THIN",
+    "verdict": "PARTIAL",
+    "w1_market_relative": {
+      "epa_beats_market": false,
+      "epa_margin_mae": 12.6044,
+      "market_margin_mae": 5.6875,
+      "model_vs_close_mae": 8.1508,
+      "n_with_market": 16,
+      "note": "Market lines from week1_july31 stamps (joined books). Spread-vs-close MAE is reported; it does not gate GREEN in v1.0."
+    },
+    "w1_oos": {
+      "epa_margin_bias": 0.8431,
+      "epa_margin_mae": 12.6044,
+      "epa_total_bias": -4.4865,
+      "epa_total_mae": 13.2488,
+      "july31_margin_bias": 2.1963,
+      "july31_margin_mae": 12.1913,
+      "july31_total_bias": -6.275,
+      "july31_total_mae": 13.5125,
+      "wl_margin_bias": 1.8625,
+      "wl_margin_mae": 7.7,
+      "wl_total_bias": -3.9174,
+      "wl_total_mae": 13.4375
+    }
+  },
+  "gate4": {
+    "coming_soon_untouched": true,
+    "pending": "Ryan CLEAR",
+    "public_flags_false": true,
+    "release_spread": "BLOCKED",
+    "release_total": "BLOCKED",
+    "website_verification": "BLOCKED"
+  },
+  "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
+  "overlays_off": true,
+  "packet_id": "nfl-reopening-packet-20260916",
+  "predictive_validation": "PARTIAL",
+  "production_promote": false,
+  "public_flags": {
+    "CFB_EDGE_BOARD_PUBLIC_ENABLED": false,
+    "NFL_EDGE_BOARD_PUBLIC_ENABLED": false
+  },
+  "recommendation": "HOLD",
+  "research_recommendation": "HOLD",
+  "run_id": "nfl-reopening-packet-20260916-shadow",
+  "scoring_equation_changed": false,
+  "slate_fair_coverage": "16/17",
+  "stop": "HOLD public / NO CLEAR: SYSTEM INTEGRITY PASS; PREDICTIVE VALIDATION PARTIAL (fail-closed, no W2 outcomes); CURRENT SLATE SANITY/PROVENANCE PASS (16/17 fair coverage). Coming soon ON. STOP for Ryan.",
+  "system_integrity": "PASS"
+}

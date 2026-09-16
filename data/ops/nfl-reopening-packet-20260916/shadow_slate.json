@@ -1,0 +1,1842 @@
+{
+  "checksum_sha256": "2866349becb74b2c2cdbc1131bdf748e23b32f68887f147d6a03326434268ff1",
+  "game_count": 48,
+  "games": [
+    {
+      "away": "DET",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-09-15T21:15:16.688269Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-18",
+      "home": "BUF",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.5802,
+      "ke_fair_total": 46.0993,
+      "key": "DET@BUF",
+      "market_spread_home": -4.5,
+      "market_total": 54.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": false,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.2596,
+      "projected_home_points": 23.8397,
+      "projected_score": "DET 22.3 @ BUF 23.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "CAR",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.683218Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "ATL",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.9043,
+      "ke_fair_total": 44.5339,
+      "key": "CAR@ATL",
+      "market_spread_home": 2.5,
+      "market_total": 44.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.8148,
+      "projected_home_points": 23.7191,
+      "projected_score": "CAR 20.8 @ ATL 23.7",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "CIN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.695168Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "HOU",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -4.9419,
+      "ke_fair_total": 44.6059,
+      "key": "CIN@HOU",
+      "market_spread_home": -2.5,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 19.832,
+      "projected_home_points": 24.7739,
+      "projected_score": "CIN 19.8 @ HOU 24.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "CLE",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.707238Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "TB",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.6336,
+      "ke_fair_total": 42.0818,
+      "key": "CLE@TB",
+      "market_spread_home": -8.5,
+      "market_total": 41.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.2241,
+      "projected_home_points": 21.8577,
+      "projected_score": "CLE 20.2 @ TB 21.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "GB",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.655190Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "NYJ",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 5.251,
+      "ke_fair_total": 46.415,
+      "key": "GB@NYJ",
+      "market_spread_home": 3.5,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 25.833,
+      "projected_home_points": 20.582,
+      "projected_score": "GB 25.8 @ NYJ 20.6",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "JAX",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.587733Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "DEN",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.8962,
+      "ke_fair_total": 44.0096,
+      "key": "JAX@DEN",
+      "market_spread_home": -2.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.0567,
+      "projected_home_points": 22.9529,
+      "projected_score": "JAX 21.1 @ DEN 23.0",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "LV",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.639907Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "LAC",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -3.8933,
+      "ke_fair_total": 42.0077,
+      "key": "LV@LAC",
+      "market_spread_home": -6.5,
+      "market_total": 43.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 19.0572,
+      "projected_home_points": 22.9505,
+      "projected_score": "LV 19.1 @ LAC 23.0",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "MIA",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.603000Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "SF",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -3.9635,
+      "ke_fair_total": 47.6704,
+      "key": "MIA@SF",
+      "market_spread_home": -13.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.8535,
+      "projected_home_points": 25.8169,
+      "projected_score": "MIA 21.9 @ SF 25.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "MIN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.721051Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "CHI",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.8479,
+      "ke_fair_total": 42.703,
+      "key": "MIN@CHI",
+      "market_spread_home": -5.5,
+      "market_total": 48.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.4275,
+      "projected_home_points": 22.2754,
+      "projected_score": "MIN 20.4 @ CHI 22.3",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "NO",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.733429Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "BAL",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.5888,
+      "ke_fair_total": 43.5239,
+      "key": "NO@BAL",
+      "market_spread_home": -8.5,
+      "market_total": 47.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.9675,
+      "projected_home_points": 22.5563,
+      "projected_score": "NO 21.0 @ BAL 22.6",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "PHI",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.627144Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "TEN",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 4.0254,
+      "ke_fair_total": 44.0206,
+      "key": "PHI@TEN",
+      "market_spread_home": 7.0,
+      "market_total": 39.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.023,
+      "projected_home_points": 19.9976,
+      "projected_score": "PHI 24.0 @ TEN 20.0",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "PIT",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.559288Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "NE",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.8838,
+      "ke_fair_total": 45.0037,
+      "key": "PIT@NE",
+      "market_spread_home": -5.0,
+      "market_total": 41.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.0599,
+      "projected_home_points": 23.9437,
+      "projected_score": "PIT 21.1 @ NE 23.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "SEA",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.668462Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "ARI",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 3.8022,
+      "ke_fair_total": 44.6775,
+      "key": "SEA@ARI",
+      "market_spread_home": 3.5,
+      "market_total": 41.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.2398,
+      "projected_home_points": 20.4376,
+      "projected_score": "SEA 24.2 @ ARI 20.4",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "WSH",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.615066Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-20",
+      "home": "DAL",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.0943,
+      "ke_fair_total": 50.2737,
+      "key": "WSH@DAL",
+      "market_spread_home": -4.0,
+      "market_total": 50.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.5897,
+      "projected_home_points": 25.684,
+      "projected_score": "WSH 24.6 @ DAL 25.7",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "IND",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:49.572989Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-21",
+      "home": "KC",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -0.7961,
+      "ke_fair_total": 46.0522,
+      "key": "IND@KC",
+      "market_spread_home": -6.5,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.628,
+      "projected_home_points": 23.4242,
+      "projected_score": "IND 22.6 @ KC 23.4",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "NYG",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:05:55.201983Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-22",
+      "home": "LAR",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -6.4415,
+      "ke_fair_total": 46.7119,
+      "key": "NYG@LAR",
+      "market_spread_home": -7.0,
+      "market_total": 48.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.1352,
+      "projected_home_points": 26.5767,
+      "projected_score": "NYG 20.1 @ LAR 26.6",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 2
+    },
+    {
+      "away": "ATL",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:00.945763Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-25",
+      "home": "GB",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.2744,
+      "ke_fair_total": 46.0712,
+      "key": "ATL@GB",
+      "market_spread_home": -6.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.8984,
+      "projected_home_points": 24.1728,
+      "projected_score": "ATL 21.9 @ GB 24.2",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "ARI",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.645870Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "SF",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -3.2175,
+      "ke_fair_total": 47.4918,
+      "key": "ARI@SF",
+      "market_spread_home": -8.5,
+      "market_total": 47.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.1371,
+      "projected_home_points": 25.3546,
+      "projected_score": "ARI 22.1 @ SF 25.4",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "BAL",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.561383Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:54:51Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "DAL",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 0.998,
+      "ke_fair_total": 48.5211,
+      "key": "BAL@DAL",
+      "market_spread_home": 3.0,
+      "market_total": 52.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.7595,
+      "projected_home_points": 23.7615,
+      "projected_score": "BAL 24.8 @ DAL 23.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "CAR",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.669904Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "CLE",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.9276,
+      "ke_fair_total": 41.9471,
+      "key": "CAR@CLE",
+      "market_spread_home": 3.0,
+      "market_total": 39.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.0098,
+      "projected_home_points": 21.9373,
+      "projected_score": "CAR 20.0 @ CLE 21.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "CIN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.685240Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "PIT",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.8719,
+      "ke_fair_total": 46.97,
+      "key": "CIN@PIT",
+      "market_spread_home": 2.5,
+      "market_total": 46.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.0491,
+      "projected_home_points": 24.9209,
+      "projected_score": "CIN 22.0 @ PIT 24.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "HOU",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.574779Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "IND",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -0.293,
+      "ke_fair_total": 43.8287,
+      "key": "HOU@IND",
+      "market_spread_home": 2.5,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.7678,
+      "projected_home_points": 22.0608,
+      "projected_score": "HOU 21.8 @ IND 22.1",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "KC",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.632613Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "MIA",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 2.7293,
+      "ke_fair_total": 45.7205,
+      "key": "KC@MIA",
+      "market_spread_home": 8.5,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.2249,
+      "projected_home_points": 21.4956,
+      "projected_score": "KC 24.2 @ MIA 21.5",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "LAC",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.620745Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "BUF",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.9147,
+      "ke_fair_total": 44.3149,
+      "key": "LAC@BUF",
+      "market_spread_home": -4.5,
+      "market_total": 49.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.7001,
+      "projected_home_points": 23.6148,
+      "projected_score": "LAC 20.7 @ BUF 23.6",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "LV",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.608661Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "NO",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -3.1883,
+      "ke_fair_total": 41.7848,
+      "key": "LV@NO",
+      "market_spread_home": -3.0,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 19.2982,
+      "projected_home_points": 22.4865,
+      "projected_score": "LV 19.3 @ NO 22.5",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "MIN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.698712Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "TB",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.3406,
+      "ke_fair_total": 42.2898,
+      "key": "MIN@TB",
+      "market_spread_home": -1.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.4746,
+      "projected_home_points": 21.8152,
+      "projected_score": "MIN 20.5 @ TB 21.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "NE",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.710639Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "JAX",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.1591,
+      "ke_fair_total": 44.3333,
+      "key": "NE@JAX",
+      "market_spread_home": -2.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.5871,
+      "projected_home_points": 22.7462,
+      "projected_score": "NE 21.6 @ JAX 22.7",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "NYJ",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.722194Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "DET",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -7.55,
+      "ke_fair_total": 45.435,
+      "key": "NYJ@DET",
+      "market_spread_home": -7.0,
+      "market_total": 47.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 18.9425,
+      "projected_home_points": 26.4925,
+      "projected_score": "NYJ 18.9 @ DET 26.5",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "SEA",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.657893Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "WSH",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 3.8625,
+      "ke_fair_total": 45.8892,
+      "key": "SEA@WSH",
+      "market_spread_home": 1.5,
+      "market_total": 41.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.8758,
+      "projected_home_points": 21.0133,
+      "projected_score": "SEA 24.9 @ WSH 21.0",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "TEN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.587853Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-27",
+      "home": "NYG",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.6501,
+      "ke_fair_total": 45.2222,
+      "key": "TEN@NYG",
+      "market_spread_home": -5.5,
+      "market_total": 43.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.286,
+      "projected_home_points": 23.9361,
+      "projected_score": "TEN 21.3 @ NYG 23.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "LAR",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:06.595454Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-28",
+      "home": "DEN",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -0.4755,
+      "ke_fair_total": 45.4349,
+      "key": "LAR@DEN",
+      "market_spread_home": 2.5,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.4797,
+      "projected_home_points": 22.9552,
+      "projected_score": "LAR 22.5 @ DEN 23.0",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "PHI",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:12.447911Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-16T14:55:38Z",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-09-29",
+      "home": "CHI",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 0.4258,
+      "ke_fair_total": 44.5792,
+      "key": "PHI@CHI",
+      "market_spread_home": -1.5,
+      "market_total": 47.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.5025,
+      "projected_home_points": 22.0767,
+      "projected_score": "PHI 22.5 @ CHI 22.1",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 3
+    },
+    {
+      "away": "PIT",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:18.290608Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-02",
+      "home": "CLE",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -0.554,
+      "ke_fair_total": 42.0753,
+      "key": "PIT@CLE",
+      "market_spread_home": 2.5,
+      "market_total": 38.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.7606,
+      "projected_home_points": 21.3147,
+      "projected_score": "PIT 20.8 @ CLE 21.3",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "ARI",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.810124Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "NYG",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.1747,
+      "ke_fair_total": 46.0972,
+      "key": "ARI@NYG",
+      "market_spread_home": -6.5,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.4612,
+      "projected_home_points": 23.6359,
+      "projected_score": "ARI 22.5 @ NYG 23.6",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "DAL",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.830276Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "HOU",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -4.9707,
+      "ke_fair_total": 45.7379,
+      "key": "DAL@HOU",
+      "market_spread_home": -2.5,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.3836,
+      "projected_home_points": 25.3543,
+      "projected_score": "DAL 20.4 @ HOU 25.4",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "DEN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.846785Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-10T19:59:19+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "SF",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 1.7673,
+      "ke_fair_total": 46.4397,
+      "key": "DEN@SF",
+      "market_spread_home": -2.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.1035,
+      "projected_home_points": 22.3362,
+      "projected_score": "DEN 24.1 @ SF 22.3",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "GB",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.868313Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "TB",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 0.4082,
+      "ke_fair_total": 46.5945,
+      "key": "GB@TB",
+      "market_spread_home": 1.5,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 23.5013,
+      "projected_home_points": 23.0931,
+      "projected_score": "GB 23.5 @ TB 23.1",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "IND",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.884431Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "WSH",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 2.4507,
+      "ke_fair_total": 48.2357,
+      "key": "IND@WSH",
+      "market_spread_home": -1.5,
+      "market_total": 50.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 25.3432,
+      "projected_home_points": 22.8925,
+      "projected_score": "IND 25.3 @ WSH 22.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "JAX",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.896004Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "CIN",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 2.7886,
+      "ke_fair_total": 46.3864,
+      "key": "JAX@CIN",
+      "market_spread_home": -2.5,
+      "market_total": 51.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 24.5875,
+      "projected_home_points": 21.7989,
+      "projected_score": "JAX 24.6 @ CIN 21.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "KC",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.909926Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "LV",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 2.7338,
+      "ke_fair_total": 43.3961,
+      "key": "KC@LV",
+      "market_spread_home": 5.5,
+      "market_total": 42.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 23.0649,
+      "projected_home_points": 20.3311,
+      "projected_score": "KC 23.1 @ LV 20.3",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "LAC",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.935792Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-09T23:59:57+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "SEA",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -3.4515,
+      "ke_fair_total": 42.4938,
+      "key": "LAC@SEA",
+      "market_spread_home": -3.0,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 19.5211,
+      "projected_home_points": 22.9727,
+      "projected_score": "LAC 19.5 @ SEA 23.0",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "LAR",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.921545Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-10T19:59:19+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "PHI",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 0.1707,
+      "ke_fair_total": 44.9017,
+      "key": "LAR@PHI",
+      "market_spread_home": 1.5,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.5362,
+      "projected_home_points": 22.3655,
+      "projected_score": "LAR 22.5 @ PHI 22.4",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "MIA",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.947047Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "MIN",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -2.982,
+      "ke_fair_total": 42.8711,
+      "key": "MIA@MIN",
+      "market_spread_home": -7.0,
+      "market_total": 42.0,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 19.9445,
+      "projected_home_points": 22.9265,
+      "projected_score": "MIA 19.9 @ MIN 22.9",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "NE",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.958435Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-09T23:59:57+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "BUF",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -1.6585,
+      "ke_fair_total": 45.8025,
+      "key": "NE@BUF",
+      "market_spread_home": -3.0,
+      "market_total": 49.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 22.072,
+      "projected_home_points": 23.7305,
+      "projected_score": "NE 22.1 @ BUF 23.7",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "NYJ",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.970196Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "CHI",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -6.6654,
+      "ke_fair_total": 45.6265,
+      "key": "NYJ@CHI",
+      "market_spread_home": -8.5,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 19.4806,
+      "projected_home_points": 26.1459,
+      "projected_score": "NYJ 19.5 @ CHI 26.1",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "TEN",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.985442Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-04",
+      "home": "BAL",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -4.5301,
+      "ke_fair_total": 45.0987,
+      "key": "TEN@BAL",
+      "market_spread_home": -8.5,
+      "market_total": 45.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 20.2843,
+      "projected_home_points": 24.8144,
+      "projected_score": "TEN 20.3 @ BAL 24.8",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "DET",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:24.854469Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-05",
+      "home": "CAR",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": 2.4992,
+      "ke_fair_total": 45.2262,
+      "key": "DET@CAR",
+      "market_spread_home": 3.0,
+      "market_total": 46.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 23.8627,
+      "projected_home_points": 21.3635,
+      "projected_score": "DET 23.9 @ CAR 21.4",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    },
+    {
+      "away": "ATL",
+      "data_timestamp": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_projection_created_at": "2026-07-31T06:06:30.970226Z",
+        "live_projection_used_as_fair": false,
+        "market_odds_as_of": "2026-09-13T16:59:23+00:00",
+        "packet_generated_role": "research_shadow"
+      },
+      "game_date": "2026-10-06",
+      "home": "NO",
+      "injury_personnel_status": "OFF",
+      "ke_fair_spread_home": -0.5111,
+      "ke_fair_total": 42.8764,
+      "key": "ATL@NO",
+      "market_spread_home": -2.5,
+      "market_total": 44.5,
+      "model_input_freshness": {
+        "epa_priors_as_of": "2026-08-08",
+        "live_active_run_id": null,
+        "live_fair_is_july31": true,
+        "overlays": "fail_closed_off",
+        "strength_source": "packaged_epa_prior"
+      },
+      "overlays": {
+        "injuries_depth": false,
+        "injuries_margin_points": 0.0,
+        "personnel_efficiency": false,
+        "personnel_margin_points": 0.0
+      },
+      "projected_away_points": 21.1826,
+      "projected_home_points": 21.6937,
+      "projected_score": "ATL 21.2 @ NO 21.7",
+      "provenance_ok": true,
+      "run_id": "nfl-reopening-packet-20260916-shadow",
+      "strength_source": "packaged_epa_prior",
+      "week": 4
+    }
+  ],
+  "ke_rd_scope": "out_of_scope_frozen_partial_v1_pr570",
+  "market_source": "GET https://model-service-production-e253.up.railway.app/nfl/fair-lines?season=2026&days_ahead=21",
+  "odds_as_of": "2026-09-16T14:55:38Z",
+  "overlays_off": true,
+  "packet_id": "nfl-reopening-packet-20260916",
+  "production_promote": false,
+  "run_id": "nfl-reopening-packet-20260916-shadow",
+  "weeks": [
+    2,
+    3,
+    4
+  ]
+}
