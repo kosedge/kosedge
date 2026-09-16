@@ -1,8 +1,10 @@
 # KE Football v1 — Phase 2A unit ratings (Off/Def Efficiency)
 
 **Date:** 2026-09-16
-**Status:** `UNIT_RATINGS_PHASE2A` · `production_promote=false`
-**Ryan (2026-09-16):** ACCEPT in scope as **PARTIAL v1 unit measurement only**. Do not advance phases.
+**Status:** `LOCKED` · `UNIT_MEASUREMENT_PARTIAL_V1` · `production_promote=false`
+**Version id:** `ke-football-v1-unit-measurement-partial-2026-09-16`
+**Ryan (2026-09-16):** FINAL LOCK. Phase 2A accepted as **PARTIAL v1**. No phase advance.
+**Lock:** [`KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md`](./KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md)
 **GO:** Ryan review of #570 Phase 1B → KE unit ratings research only. Team Strength **HOLD**.
 **Continues:** [`KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md`](./KE_FOOTBALL_V1_MEASUREMENT_PHASE1B_2026-09-15.md)
 **Evidence:** `data/ops/ke-football-v1-phase2a-20260916/`
@@ -248,23 +250,30 @@ Full component z-contributions (for research composites that were **not** select
 - No latent composite earned inclusion
 - Defense is allowed-EPA (lower better) — not a flipped “higher = better D” rating
 
-#### What PARTIAL permits
+#### What PARTIAL v1 permits
 
-- Research / internal unit measurement on this branch
-- Documentation, leakage tests, football sanity tables
-- Holding `NO_ADJUSTMENT_WINNER`; unadjusted trailing remains the baseline
+- Research team-week unit measurement
+- Internal ranking / sanity
+- Component comparison
+- Continued OOS validation
+- Use as a candidate input in future _separately authorized_ research
 
-#### What PARTIAL forbids
+#### What PARTIAL v1 does NOT permit
 
-- Team Strength input / Off+Def+ST overall weights
-- Public KE ratings, UI, boards
-- Scoring-model consume / matchup / market comparison
-- ATS / ROI / CLV / close fitting
-- Treating `n/(n+k)` as a CI
-- Reopening opponent adjustment
-- Advancing to Phase 2B
+- Production promotion
+- Customer-facing KE Off/Def Efficiency
+- Team Strength
+- Scoring-model replacement or integration
+- Matchup or market integration
+- Board reopening
+- Claims of calibrated uncertainty
+- Claims that shrinkage materially or statistically beats trailing EPA
+- Retuning `k=160` against confirmation
+- Phase 2B
 
-Eligible as the v1 **unit measurement continuation**. Not eligible as a new latent composite. Not Team Strength.
+Trailing EPA remains the explicit baseline alongside every evaluation of the shrunken measurement. Eligible as frozen **PARTIAL v1 unit measurement**. Not Team Strength.
+
+Canonical lock: [`KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md`](./KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md).
 
 ---
 
@@ -281,8 +290,4 @@ PYTHONPATH=services/model-service python3 scripts/ke_football/run_unit_ratings_p
 
 ## STOP
 
-Ryan lock after this amend. **No Phase 2B.**
-
-Reviewable: trailing-vs-shrunken baseline, k-selection provenance, exact formula, shrinkage-weight label, PARTIAL permit/forbid.
-
-**Not authorized:** Team Strength, Off/Def/ST overall weights, matchup, scoring projection, market comparison, ATS fitting, public UI, boards, production promote, opponent-adjustment reopen.
+**LOCKED.** Version `ke-football-v1-unit-measurement-partial-2026-09-16`. **No Phase 2B.** No retune of `k`. No Team Strength / scoring / boards / ATS.

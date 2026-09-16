@@ -1,0 +1,57 @@
+{
+  "version_id": "ke-football-v1-unit-measurement-partial-2026-09-16",
+  "status": "LOCKED",
+  "grade": "PARTIAL",
+  "locked_at": "2026-09-16",
+  "pr": 570,
+  "production_promote": false,
+  "phase_advance": false,
+  "k_retune": false,
+  "formulation": "unit = \u03bc + [n/(n+160)] \u00d7 (EPA \u2212 \u03bc)",
+  "k": 160,
+  "k_selected_on": {
+    "season": 2025,
+    "objective": "next_game_epa_per_play MAE",
+    "grid": [
+      0.0,
+      20.0,
+      40.0,
+      80.0,
+      160.0
+    ],
+    "folds": 0,
+    "nfl_selection_weeks": [
+      5,
+      10
+    ],
+    "cfb_selection_weeks": [
+      4,
+      8
+    ],
+    "confirmation_excluded_from_parameter_selection": true
+  },
+  "orientation": {
+    "offense": "EPA produced, higher better",
+    "defense": "EPA allowed, lower better"
+  },
+  "shrinkage_weight": "n/(n+k) is shrinkage/sample-strength only \u2014 not probability, confidence, calibrated uncertainty, or CI",
+  "confirmation_directional_only": {
+    "nfl_offense_rel_pct": -0.54,
+    "nfl_defense_rel_pct": -0.34,
+    "cfb_offense_rel_pct": -2.04,
+    "cfb_defense_rel_pct": -2.33,
+    "statistically_established": false,
+    "mae_se_or_bootstrap": null
+  },
+  "trailing_epa_is_explicit_baseline": true,
+  "lock_doc": "docs/ratings/KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md",
+  "checksums_sha256": {
+    "services/model-service/src/services/ke_football/unit_ratings.py": "5d48a28137c69f127ff2ebd7602c6e144c597ea6d885f4eef8f6e4f1ec19634f",
+    "data/ops/ke-football-v1-phase2a-20260916/scorecard.json": "ec7f0747215c38ba9d0b3f1a1691217a89a6485d505b51f8d0477af579b8763a",
+    "data/ops/ke-football-v1-phase2a-20260916/baseline_comparison.json": "7522e84126a06a7e9501658737941883a3071fc81ad5c07d9321a3ac66d8584c",
+    "data/ops/ke-football-v1-phase2a-20260916/nfl_phase2a.json": "de1c5c3ed1b00d61e3eada82c32400910daec4c52341b8281a622798f61eeced",
+    "data/ops/ke-football-v1-phase2a-20260916/cfb_phase2a.json": "81cd20d29dc207013ee7c096764df31fa09e1173d1aa0458c0de2752b164bea5",
+    "docs/ratings/KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md": "be12975aedb479f22294dffdea38bc4f2e9b6c7e391637ba1dfcf3eca8373f0e"
+  },
+  "scorecard_json_phase2b_eligible_superseded": true
+}

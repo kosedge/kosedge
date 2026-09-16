@@ -1,8 +1,10 @@
 # KE Football v1 — Phase 2A unit rating scorecard
 
-**Status:** `UNIT_RATINGS_PHASE2A` · `production_promote=false`
-**Ryan (2026-09-16):** ACCEPT as **PARTIAL v1 unit measurement only**. No Phase 2B.
-**STOP:** Team Strength, overall weights, matchup, scoring, market, ATS, UI, boards, opp-adj reopen.
+**Status:** `LOCKED` · `UNIT_MEASUREMENT_PARTIAL_V1` · `production_promote=false`
+**Version id:** `ke-football-v1-unit-measurement-partial-2026-09-16`
+**Ryan (2026-09-16):** FINAL LOCK. Phase 2A accepted as **PARTIAL v1**. No Phase 2B.
+**Lock:** `docs/ratings/KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md`
+**STOP:** Team Strength, overall weights, matchup, scoring, market, ATS, UI, boards, opp-adj reopen. No retune of `k`.
 
 `NO_ADJUSTMENT_WINNER` held. Unadjusted trailing EPA is the baseline.
 Complexity did not earn inclusion. That does **not** by itself validate shrinkage.
@@ -116,17 +118,24 @@ Earned PARTIAL features: off none; def `success_allowed` (selection only). Finis
 
 ---
 
-## PARTIAL — permit vs forbid
+## PARTIAL v1 — permit vs forbid
 
-| Permits | Forbids |
+Canonical lock: `docs/ratings/KE_FOOTBALL_V1_UNIT_MEASUREMENT_PARTIAL_LOCK_2026-09-16.md`.
+
+| Permits | Does NOT permit |
 | --- | --- |
-| Research / internal unit measurement | Team Strength input |
-| Docs, leakage, football sanity | Public KE / UI / boards |
-| Holding unadjusted as baseline | Scoring / matchup / market consume |
-| | ATS / ROI / CLV / close |
-| | Treating `n/(n+k)` as a CI |
-| | Opp-adj reopen |
+| Research team-week unit measurement | Production promotion |
+| Internal ranking / sanity | Customer-facing KE Off/Def Efficiency |
+| Component comparison | Team Strength |
+| Continued OOS validation | Scoring-model replacement / integration |
+| Candidate input in future *separately authorized* research | Matchup or market integration |
+| | Board reopening |
+| | Claims of calibrated uncertainty |
+| | Claims that shrinkage materially or statistically beats trailing EPA |
+| | Retuning `k=160` against confirmation |
 | | Phase 2B |
+
+Trailing EPA remains the explicit baseline alongside every evaluation of the shrunken measurement.
 
 **Unvalidated:** shrinkage vs trailing without MAE SE; single-season grid-cap k; missing per-k table; label peek on confirmation; no earned latent composite.
 
