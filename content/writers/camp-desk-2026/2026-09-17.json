@@ -1,0 +1,130 @@
+{
+  "desk_date": "2026-09-17",
+  "pinned": false,
+  "package": "daily",
+  "source_type": "kosedge-desk",
+  "league_wrap": {
+    "title": "Club Desk — Thursday, Sep 17",
+    "bottom_line": "Week 2 REG live (pre-TNF). Afternoon availability only: SF Stribling ankle surgery / ~10w IR-expected (no club IR transaction verified yet); BAL Lane IR + Moore up; SEA Darnold OUT / Lock starts. All Pass. DEN Over 2/5 KEEP + LAC Under 2/5 KEEP + KC Pass unchanged. No minted KEI.",
+    "storylines": [
+      "SF: Shanahan — WR De'Zhaun Stribling had left-ankle surgery Wed; expected ~10 weeks; will be placed on IR this week (ESPN Wagoner / NBC Maiocco). Do not cite a club IR transaction until the club posts it. Pass — WR depth flag only.",
+      "BAL: Club IR WR Ja'Kobi Lane (wrist surgery Wed); Chris Moore promoted from PS (ravens.com). Minter targeting min IR stay. Pass — no WR invent.",
+      "SEA: Macdonald ruled Sam Darnold OUT vs ARI (glute soft-tissue); Drew Lock starts; not placing Darnold on IR (ESPN / seahawks.com). Pass — QB1 week only.",
+      "Quiet skip: other 29 clubs. TNF DET@BUF tonight — no new DET/BUF amend beyond Wed card. Do not restamp Mon street or mint KEI."
+    ],
+    "what_to_watch": "TNF inactives. Any verified club Stribling IR post. Lane timeline vs min-4. Darnold return window (club: short-term; no firm date). Quiet skip rest.",
+    "sources": [
+      {
+        "label": "ESPN — Stribling surgery / ~10 weeks (Wagoner)",
+        "href": "https://www.espn.com/nfl/story/_/id/49960208/49ers-dezhaun-stribling-surgery-miss-10-weeks"
+      },
+      {
+        "label": "NBC Sports Bay Area — Stribling ~10 weeks; IR expected",
+        "href": "https://www.nbcsportsbayarea.com/nfl/san-francisco-49ers/dezhaun-stribling-injury-update-jake-tonges/1963700/"
+      },
+      {
+        "label": "ravens.com — Lane IR; Moore promoted",
+        "href": "https://www.baltimoreravens.com/news/jakobi-lane-injured-reserve-wrist-surgery-ravens-rookie-wide-receiver-2026"
+      },
+      {
+        "label": "ESPN — Darnold OUT vs Cardinals; Lock to start",
+        "href": "https://www.espn.com/nfl/story/_/id/49959236/seahawks-rule-qb-sam-darnold-glute-vs-cardinals"
+      },
+      {
+        "label": "seahawks.com — Darnold short-term soft-tissue",
+        "href": "https://www.seahawks.com/news/sam-darnold-dealing-with-short-term-soft-tissue-injury"
+      }
+    ]
+  },
+  "team_notes": [
+    {
+      "team_id": "SF",
+      "title": "49ers — Sep 17",
+      "bottom_line": "Shanahan (Wed): De'Zhaun Stribling had left-ankle surgery and is expected to miss about 10 weeks; the club plans to place him on IR this week. ESPN Wagoner / NBC Maiocco — no verified club IR transaction post yet, so do not claim one. Pass — WR depth flag only; do not invent a snap path or mint KEI.",
+      "key_points": [
+        "ESPN Nick Wagoner (Wed): Shanahan said Stribling had ankle surgery and is expected to miss about 10 weeks; will be placed on injured reserve this week; hope is he returns this season.",
+        "NBC Sports Bay Area (Maiocco): surgery Wednesday morning; ~10 weeks; expected IR later this week. Deltoid sprain in left ankle from W1 vs LAR (sources to NFL Network).",
+        "Do not cite a club IR roster post until it exists. Hodge already promoted Wed for Tonges IR — do not invent a further corresponding Stribling move. Pass on SF win-total."
+      ],
+      "what_to_watch": "Verified club IR transaction. Any timeline refine before W3. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Stribling surgery / ~10w; IR-expected (Shanahan). No club IR transaction verified. Pass — no WR invent / no minted KEI.",
+      "sources": [
+        {
+          "label": "ESPN — Stribling surgery / ~10 weeks (Wagoner)",
+          "href": "https://www.espn.com/nfl/story/_/id/49960208/49ers-dezhaun-stribling-surgery-miss-10-weeks"
+        },
+        {
+          "label": "NBC Sports Bay Area — Stribling update (Maiocco)",
+          "href": "https://www.nbcsportsbayarea.com/nfl/san-francisco-49ers/dezhaun-stribling-injury-update-jake-tonges/1963700/"
+        }
+      ]
+    },
+    {
+      "team_id": "BAL",
+      "title": "Ravens — Sep 17",
+      "bottom_line": "Club placed WR Ja'Kobi Lane on IR after Wednesday wrist surgery and promoted WR Chris Moore from the practice squad (ravens.com). Minter targeting the minimum IR stay (≥4). Pass — WR depth flag; do not invent a target pecking order or mint KEI.",
+      "key_points": [
+        "ravens.com (Wed): Lane to injured reserve after wrist surgery; Moore elevated from PS to the 53.",
+        "NFL.com / Minter: minimum IR stay is the target (≥4); Lane eligible no earlier than Week 6 vs CLE if cleared. Do not invent a return week.",
+        "Corresponding: Oruwariye filled Moore's PS spot. Pass on BAL win-total — no restamp."
+      ],
+      "what_to_watch": "Lane rehab vs min-4. Moore role vs Walker/Sarratt. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Lane → IR (wrist surgery) ≥4. Moore promoted. Pass — no WR invent / no minted KEI.",
+      "sources": [
+        {
+          "label": "ravens.com — Lane IR; Moore promoted",
+          "href": "https://www.baltimoreravens.com/news/jakobi-lane-injured-reserve-wrist-surgery-ravens-rookie-wide-receiver-2026"
+        },
+        {
+          "label": "NFL.com — Lane IR (wrist)",
+          "href": "https://www.nfl.com/news/ravens-place-rookie-wr-ja-kobi-lane-on-injured-reserve-with-wrist-injury"
+        }
+      ]
+    },
+    {
+      "team_id": "SEA",
+      "title": "Seahawks — Sep 17",
+      "bottom_line": "Macdonald: Sam Darnold (glute soft-tissue) OUT vs Arizona; Drew Lock starts. Club is not placing Darnold on IR (ESPN / seahawks.com). Pass — Week 2 QB flag only; do not invent a multi-week IR or mint KEI.",
+      "key_points": [
+        "ESPN: Seahawks ruled Darnold out for Sunday at ARI with the glute injury from the opener; Lock in line to start; no plans to place Darnold on IR.",
+        "seahawks.com (Mon): injury clarified as short-term soft-tissue in the glute area; hip joint unaffected; no firm return date.",
+        "Do not invent a return week or crown Lock beyond the named Week 2 start. Pass on SEA win-total."
+      ],
+      "what_to_watch": "Darnold practice window after ARI. Lock usage only as named. Pass — no mint.",
+      "is_material_depth": true,
+      "sot_flag": "Darnold OUT vs ARI; Lock starts; not IR. Pass — no QB invent / no minted KEI.",
+      "sources": [
+        {
+          "label": "ESPN — Darnold OUT; Lock to start",
+          "href": "https://www.espn.com/nfl/story/_/id/49959236/seahawks-rule-qb-sam-darnold-glute-vs-cardinals"
+        },
+        {
+          "label": "seahawks.com — short-term soft-tissue",
+          "href": "https://www.seahawks.com/news/sam-darnold-dealing-with-short-term-soft-tissue-injury"
+        }
+      ]
+    }
+  ],
+  "preview_delta": [
+    {
+      "team_id": "SF",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Stribling surgery / ~10w; IR-expected (no club IR transaction verified). Pass."
+    },
+    {
+      "team_id": "BAL",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Lane → IR (wrist); Moore promoted. Pass."
+    },
+    {
+      "team_id": "SEA",
+      "fields": ["bottom_line"],
+      "status": "flagged",
+      "reason": "Darnold OUT; Lock starts; not IR. Pass."
+    }
+  ]
+}
