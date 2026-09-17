@@ -1,6 +1,6 @@
 import SportHubShell from "@/components/pro/SportHubShell";
 import FootballNumbersUnavailable from "@/components/FootballNumbersUnavailable";
-import { isFootballPublicNumbersDisabled } from "@/lib/cfb-edge-board-public";
+import { isNflFairLinesCustomerSurfaceClosed } from "@/lib/cfb-edge-board-public";
 import NflFairLinesClient from "@/components/pro/nfl/NflFairLinesClient";
 
 export const dynamic = "force-dynamic";
@@ -26,7 +26,7 @@ export default async function NflFairLinesPage({
 }: {
   searchParams: Promise<Record<string, SearchValue>>;
 }) {
-  if (isFootballPublicNumbersDisabled("nfl")) {
+  if (isNflFairLinesCustomerSurfaceClosed()) {
     return (
       <SportHubShell
         sportKey="nfl"

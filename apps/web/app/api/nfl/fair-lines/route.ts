@@ -8,7 +8,7 @@ import {
 import { pageDataUpstreamErrorResponse } from "@/lib/page-data-upstream";
 import { UPSTREAM_TIMEOUT_MS } from "@/lib/upstream-fetch";
 import {
-  isFootballPublicNumbersDisabled,
+  isNflFairLinesCustomerSurfaceClosed,
   nflEdgeBoardAssembleUnavailablePayload,
 } from "@/lib/cfb-edge-board-public";
 
@@ -36,7 +36,7 @@ export async function GET(req: Request) {
     );
   }
 
-  if (isFootballPublicNumbersDisabled("nfl")) {
+  if (isNflFairLinesCustomerSurfaceClosed()) {
     return NextResponse.json(nflEdgeBoardAssembleUnavailablePayload(), {
       status: 503,
       headers: pageDataCacheHeaders({ cacheable: false }),

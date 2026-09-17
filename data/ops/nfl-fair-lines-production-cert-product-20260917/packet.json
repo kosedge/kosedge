@@ -1,0 +1,101 @@
+{
+  "packet_id": "nfl-fair-lines-production-cert-product-20260917",
+  "track": "Product",
+  "as_of": "2026-09-17",
+  "authority": "Ryan OS 2026-09-17",
+  "recommendation": "NO_CLEAR",
+  "coming_soon": true,
+  "production_promote": false,
+  "public_flags": {
+    "NFL_EDGE_BOARD_PUBLIC_ENABLED": false,
+    "CFB_EDGE_BOARD_PUBLIC_ENABLED": false
+  },
+  "market_gates": {
+    "spread": false,
+    "ml": false,
+    "total": false
+  },
+  "stake": {
+    "play": false,
+    "kelly": false
+  },
+  "certified_run": {
+    "run_id": null,
+    "sha256": null,
+    "certified_at": null,
+    "max_age_hours": 168,
+    "status": "unbound"
+  },
+  "approvers": {
+    "cos": "",
+    "ryan": ""
+  },
+  "release_slots": [
+    {
+      "slot": "public_numbers_master",
+      "status": "HOLD",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "fair_lines_spread",
+      "status": "HOLD",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "fair_lines_ml",
+      "status": "HOLD",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "fair_lines_total",
+      "status": "HOLD",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "play_chrome",
+      "status": "HOLD",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "kelly_stake",
+      "status": "HOLD",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "certified_run_bind",
+      "status": "UNBOUND",
+      "cos": "",
+      "ryan": ""
+    }
+  ],
+  "surfaces": {
+    "fair_lines_page": "/pro/nfl/fair-lines",
+    "fair_lines_api": "/api/nfl/fair-lines",
+    "customer_helper": "isNflFairLinesCustomerSurfaceClosed",
+    "fail_closed_status": 503
+  },
+  "harness": {
+    "module": "apps/web/lib/cfb-edge-board-public.ts",
+    "tests": "apps/web/__tests__/lib/nfl-fair-lines-production-cert.test.ts",
+    "smoke": "scripts/nfl/nfl-fair-lines-production-cert-smoke.sh"
+  },
+  "out_of_scope": ["dfs", "line_curve", "cfb", "remat", "invented_numbers", "public_clear"],
+  "rollback": {
+    "remat_required": false,
+    "steps": [
+      "Keep NFL_EDGE_BOARD_PUBLIC_ENABLED = false",
+      "Keep CFB_EDGE_BOARD_PUBLIC_ENABLED = false",
+      "Keep spread / ml / total gates false",
+      "Keep PLAY / Kelly false",
+      "Unbind certified run_id + sha256 + certifiedAt",
+      "Redeploy deploy-vercel",
+      "Verify Coming soon on /pro/nfl/fair-lines and 503 on /api/nfl/fair-lines"
+    ]
+  }
+}
