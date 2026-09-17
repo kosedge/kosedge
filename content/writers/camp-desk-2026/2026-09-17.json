@@ -110,25 +110,19 @@
   "preview_delta": [
     {
       "team_id": "SF",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Stribling surgery / ~10w; IR-expected (no club IR transaction verified). Pass."
     },
     {
       "team_id": "BAL",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Lane → IR (wrist); Moore promoted. Pass."
     },
     {
       "team_id": "SEA",
-      "fields": [
-        "bottom_line"
-      ],
+      "fields": ["bottom_line"],
       "status": "flagged",
       "reason": "Darnold OUT; Lock starts; not IR. Pass."
     }

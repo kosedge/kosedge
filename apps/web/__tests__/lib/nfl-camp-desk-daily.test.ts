@@ -499,7 +499,6 @@ describe("Sep 16 live Club Desk day", () => {
   });
 });
 
-
 describe("Sep 17 live Club Desk day", () => {
   const live = JSON.parse(
     readFileSync(
