@@ -34,10 +34,19 @@
     "alex_note": "all five gates FAIL",
     "status": "REJECTED_PRACTICE_SHA"
   },
-  "production_binding_target": {
+  "v2_diagnostic": {
     "artifact_id": "pe_drive_poss_v2",
+    "status": "DIAGNOSTIC_STOP",
+    "bind": false
+  },
+  "clock_play_engine": {
+    "status": "AUTHORIZED_RESEARCH_ONLY",
+    "production_bind": false
+  },
+  "production_binding_target": {
+    "artifact_id": null,
     "sha256": null,
-    "status": "PENDING_FREEZE"
+    "status": "UNBOUND_AWAIT_CLOCK_PLAY_FREEZE"
   },
   "approvers": {
     "cos": "",
@@ -93,8 +102,14 @@
       "ryan": ""
     },
     {
-      "slot": "production_pe_drive_poss_v2",
-      "status": "PENDING_FREEZE",
+      "slot": "pe_drive_poss_v2_diagnostic",
+      "status": "DIAGNOSTIC_STOP",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "production_clock_play_bind",
+      "status": "UNBOUND_AWAIT_CLOCK_PLAY_FREEZE",
       "cos": "",
       "ryan": ""
     }

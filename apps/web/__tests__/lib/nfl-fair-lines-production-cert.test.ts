@@ -17,6 +17,8 @@ import {
   NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID,
   NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256,
   NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS,
+  NFL_FAIR_LINES_V2_DIAGNOSTIC_ID,
+  NFL_FAIR_LINES_V2_DIAGNOSTIC_STATUS,
   NFL_FAIR_LINES_PUBLIC_ML_ENABLED,
   NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED,
   NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED,
@@ -105,9 +107,13 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
     expect(NFL_FAIR_LINES_CERTIFIED_SHA256).not.toBe(
       NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
     );
-    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID).toBe("pe_drive_poss_v2");
+    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID).toBeNull();
     expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256).toBeNull();
-    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS).toBe("PENDING_FREEZE");
+    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS).toBe(
+      "UNBOUND_AWAIT_CLOCK_PLAY_FREEZE",
+    );
+    expect(NFL_FAIR_LINES_V2_DIAGNOSTIC_ID).toBe("pe_drive_poss_v2");
+    expect(NFL_FAIR_LINES_V2_DIAGNOSTIC_STATUS).toBe("DIAGNOSTIC_STOP");
   });
 
   it("records pe_drive_poss_v1 as a rejected practice SHA (not a production bind)", () => {
@@ -153,6 +159,17 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
         fixtureBinding(),
       ).reason,
     ).toBe("rejected_practice_sha");
+
+    expect(
+      bindNflFairLinesCertifiedRun(
+        {
+          runId: NFL_FAIR_LINES_V2_DIAGNOSTIC_ID,
+          sha256: FIXTURE_SHA256,
+          at: FIXTURE_AT,
+        },
+        fixtureBinding({ runId: NFL_FAIR_LINES_V2_DIAGNOSTIC_ID }),
+      ).reason,
+    ).toBe("diagnostic_stop");
   });
 
   it("fail-closes missing / mismatched / stale certified run_id + sha256", () => {
@@ -275,7 +292,9 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
     expect(pub).toContain("pe_drive_poss_v1");
     expect(pub).toContain("pe_drive_poss_v2");
     expect(pub).toContain("REJECTED_NO_CLEAR");
-    expect(pub).toContain("PENDING_FREEZE");
+    expect(pub).toContain("DIAGNOSTIC_STOP");
+    expect(pub).toContain("UNBOUND_AWAIT_CLOCK_PLAY_FREEZE");
+    expect(pub).not.toContain("NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID = \"pe_drive_poss_v2\"");
     expect(pub).not.toMatch(
       /NFL_FAIR_LINES_CERTIFIED_SHA256: string \| null = "b5ee9d80/,
     );
@@ -317,10 +336,11 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
         status: string;
       };
       production_binding_target: {
-        artifact_id: string;
+        artifact_id: string | null;
         sha256: string | null;
         status: string;
       };
+      v2_diagnostic: { artifact_id: string; status: string };
     };
 
     expect(packet).toContain("NO CLEAR");
@@ -331,6 +351,7 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
       "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
     );
     expect(packet).toContain("pe_drive_poss_v2");
+    expect(packet).toContain("diagnostic STOP");
     expect(packet).toContain("rejected practice SHA");
     expect(packet).toMatch(/CoS:\s*$/m);
     expect(receipt).toContain("Coming soon");
@@ -355,11 +376,13 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
     );
     expect(machine.warroom_artifact.alex).toBe("NO_CLEAR");
     expect(machine.warroom_artifact.status).toBe("REJECTED_PRACTICE_SHA");
-    expect(machine.production_binding_target.artifact_id).toBe(
-      "pe_drive_poss_v2",
-    );
+    expect(machine.production_binding_target.artifact_id).toBeNull();
     expect(machine.production_binding_target.sha256).toBeNull();
-    expect(machine.production_binding_target.status).toBe("PENDING_FREEZE");
+    expect(machine.production_binding_target.status).toBe(
+      "UNBOUND_AWAIT_CLOCK_PLAY_FREEZE",
+    );
+    expect(machine.v2_diagnostic.artifact_id).toBe("pe_drive_poss_v2");
+    expect(machine.v2_diagnostic.status).toBe("DIAGNOSTIC_STOP");
     for (const slot of machine.release_slots) {
       expect(slot.cos).toBe("");
       expect(slot.ryan).toBe("");

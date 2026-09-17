@@ -16,8 +16,9 @@
  * suppressed; certified `run_id` + `sha256` slot stays unbound. Public paint
  * fail-closes on missing / mismatched / stale / rejected-practice cert.
  * `pe_drive_poss_v1` sha `b5ee9d80…` is a rejected practice SHA only.
- * Production target is `pe_drive_poss_v2` (pending freeze). No remat, no
- * invented numbers, no DFS / Line Curve / CFB work from this harness.
+ * `pe_drive_poss_v2` is diagnostic STOP — do not bind. Production bind
+ * waits a new clock/play freeze + checksum. No remat, no invented
+ * numbers, no DFS / Line Curve / CFB work from this harness.
  *
  * Internal QA / research:
  *   - `/api/edge-board/{sport}/today` stays secret-gated
@@ -43,8 +44,9 @@ export const NFL_FAIR_LINES_KELLY_ENABLED = false;
 /**
  * Certified public Fair Lines run. Unbound until CoS / Ryan stamp a real
  * `run_id` + sha256. Do not invent a production hash here.
- * Do **not** bind this slot to `pe_drive_poss_v1` (rejected practice SHA).
- * Production target is `pe_drive_poss_v2` pending freeze.
+ * Do **not** bind this slot to `pe_drive_poss_v1` (rejected practice SHA)
+ * or `pe_drive_poss_v2` (diagnostic STOP). Bind only when a new clock/play
+ * artifact freezes with a checksum.
  */
 export const NFL_FAIR_LINES_CERTIFIED_RUN_ID: string | null = null;
 export const NFL_FAIR_LINES_CERTIFIED_SHA256: string | null = null;
@@ -63,11 +65,15 @@ export const NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256 =
 export const NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS =
   "REJECTED_NO_CLEAR" as const;
 
-/** Authorized production target once v2 freezes with a new checksum. */
-export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID = "pe_drive_poss_v2";
+/** v2 diagnostic STOP — not frozen; do not bind production to v2. */
+export const NFL_FAIR_LINES_V2_DIAGNOSTIC_ID = "pe_drive_poss_v2";
+export const NFL_FAIR_LINES_V2_DIAGNOSTIC_STATUS = "DIAGNOSTIC_STOP" as const;
+
+/** Production bind waits a new clock/play freeze. Not v1. Not v2. */
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID: string | null = null;
 export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256: string | null = null;
 export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS =
-  "PENDING_FREEZE" as const;
+  "UNBOUND_AWAIT_CLOCK_PLAY_FREEZE" as const;
 
 export type NflFairLinesMarket = "spread" | "ml" | "total";
 
@@ -80,6 +86,7 @@ export type NflFairLinesCertBindReason =
   | "run_id_mismatch"
   | "sha256_mismatch"
   | "rejected_practice_sha"
+  | "diagnostic_stop"
   | "missing_certified_at"
   | "stale";
 
@@ -523,6 +530,9 @@ export function bindNflFairLinesCertifiedRun(
   if (expectedSha256 === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256) {
     return certBindResult("rejected_practice_sha", expected, observed);
   }
+  if (expectedRunId === NFL_FAIR_LINES_V2_DIAGNOSTIC_ID) {
+    return certBindResult("diagnostic_stop", expected, observed);
+  }
 
   const observedRunId = normalizeCertToken(observed.runId);
   const observedSha256 = normalizeSha256Hex(observed.sha256);
@@ -537,6 +547,9 @@ export function bindNflFairLinesCertifiedRun(
   }
   if (observedSha256 === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256) {
     return certBindResult("rejected_practice_sha", expected, observed);
+  }
+  if (observedRunId === NFL_FAIR_LINES_V2_DIAGNOSTIC_ID) {
+    return certBindResult("diagnostic_stop", expected, observed);
   }
   if (observedRunId !== expectedRunId) {
     return certBindResult("run_id_mismatch", expected, observed);
