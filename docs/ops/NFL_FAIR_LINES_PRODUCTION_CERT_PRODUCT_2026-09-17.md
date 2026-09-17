@@ -18,18 +18,18 @@ Ryan:
 
 ## Hard locks held
 
-| Lock | Value | Notes |
-| ---- | ----- | ----- |
-| `NFL_EDGE_BOARD_PUBLIC_ENABLED` | `false` | Coming soon ON |
-| `CFB_EDGE_BOARD_PUBLIC_ENABLED` | `false` | Independent; untouched |
-| Spread / ML / total public gates | `false` | Independent; not bundled |
-| PLAY / Kelly | `false` | Separate authorization required |
-| Certified `run_id` + `sha256` | unbound (`null`) | Do not invent a hash. Do not bind v1. |
-| War-room practice SHA | `pe_drive_poss_v1` / `b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b` | **Rejected practice SHA.** Alex NO CLEAR (all five gates FAIL). Fail-closed / provenance fixture only. |
-| `pe_drive_poss_v2` | diagnostic STOP | Not frozen. Do **not** bind production to v2. |
-| Production bind target | unbound | Waits a **new clock/play** freeze + checksum. Richer clock/play engine is authorized as research only. |
-| Remat / invented numbers | none | Product harness only |
-| DFS / Line Curve / CFB | out of scope | Not this PR |
+| Lock                             | Value                                                                                   | Notes                                                                                                  |
+| -------------------------------- | --------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `NFL_EDGE_BOARD_PUBLIC_ENABLED`  | `false`                                                                                 | Coming soon ON                                                                                         |
+| `CFB_EDGE_BOARD_PUBLIC_ENABLED`  | `false`                                                                                 | Independent; untouched                                                                                 |
+| Spread / ML / total public gates | `false`                                                                                 | Independent; not bundled                                                                               |
+| PLAY / Kelly                     | `false`                                                                                 | Separate authorization required                                                                        |
+| Certified `run_id` + `sha256`    | unbound (`null`)                                                                        | Do not invent a hash. Do not bind v1.                                                                  |
+| War-room practice SHA            | `pe_drive_poss_v1` / `b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b` | **Rejected practice SHA.** Alex NO CLEAR (all five gates FAIL). Fail-closed / provenance fixture only. |
+| `pe_drive_poss_v2`               | diagnostic STOP                                                                         | Not frozen. Do **not** bind production to v2.                                                          |
+| Production bind target           | unbound                                                                                 | Waits a **new clock/play** freeze + checksum. Richer clock/play engine is authorized as research only. |
+| Remat / invented numbers         | none                                                                                    | Product harness only                                                                                   |
+| DFS / Line Curve / CFB           | out of scope                                                                            | Not this PR                                                                                            |
 
 ---
 
@@ -46,6 +46,7 @@ Ryan:
    - stale (default max age 168h)
 
    Production default cert config stays unbound. v1 is a smoke fixture only. `pe_drive_poss_v2` is diagnostic STOP — do not bind. Bind only when a new clock/play artifact freezes with a checksum.
+
 2. **Independent market gates** (default false): `NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED`, `NFL_FAIR_LINES_PUBLIC_ML_ENABLED`, `NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED`.
 3. **Fair Lines paths** — `/api/nfl/fair-lines` and `/pro/nfl/fair-lines` use `isNflFairLinesCustomerSurfaceClosed()`. Customer chrome stays Coming soon. INTERNAL QA is not a CLEAR.
 4. **Smoke harness** — `scripts/nfl/nfl-fair-lines-production-cert-smoke.sh` + `apps/web/__tests__/lib/nfl-fair-lines-production-cert.test.ts`.
@@ -58,18 +59,18 @@ Public certified paint still requires **all** of: master NFL public flag + at le
 
 Approver slots stay empty. Filling a name here is not a CLEAR.
 
-| Slot | Status | CoS | Ryan |
-| ---- | ------ | --- | ---- |
-| Public numbers (master `NFL_EDGE_BOARD_PUBLIC_ENABLED`) | HOLD |  |  |
-| Fair Lines spread | HOLD |  |  |
-| Fair Lines moneyline | HOLD |  |  |
-| Fair Lines total | HOLD |  |  |
-| PLAY chrome | HOLD |  |  |
-| Kelly / stake | HOLD |  |  |
-| Certified run bind (`run_id` + sha256) | UNBOUND |  |  |
-| War-room `pe_drive_poss_v1` (`b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b`) | REJECTED practice SHA — Alex NO CLEAR |  |  |
-| `pe_drive_poss_v2` | DIAGNOSTIC_STOP — do not bind |  |  |
-| Production target (new clock/play freeze) | UNBOUND |  |  |
+| Slot                                                                                             | Status                                | CoS | Ryan |
+| ------------------------------------------------------------------------------------------------ | ------------------------------------- | --- | ---- |
+| Public numbers (master `NFL_EDGE_BOARD_PUBLIC_ENABLED`)                                          | HOLD                                  |     |      |
+| Fair Lines spread                                                                                | HOLD                                  |     |      |
+| Fair Lines moneyline                                                                             | HOLD                                  |     |      |
+| Fair Lines total                                                                                 | HOLD                                  |     |      |
+| PLAY chrome                                                                                      | HOLD                                  |     |      |
+| Kelly / stake                                                                                    | HOLD                                  |     |      |
+| Certified run bind (`run_id` + sha256)                                                           | UNBOUND                               |     |      |
+| War-room `pe_drive_poss_v1` (`b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b`) | REJECTED practice SHA — Alex NO CLEAR |     |      |
+| `pe_drive_poss_v2`                                                                               | DIAGNOSTIC_STOP — do not bind         |     |      |
+| Production target (new clock/play freeze)                                                        | UNBOUND                               |     |      |
 
 Do not piggyback ML or total on a later spread CLEAR. Do not treat INTERNAL=`1` as a public CLEAR.
 

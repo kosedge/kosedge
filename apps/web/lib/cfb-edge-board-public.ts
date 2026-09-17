@@ -58,8 +58,7 @@ export const NFL_FAIR_LINES_CERT_MAX_AGE_HOURS = 168;
  * Recorded for fail-closed / provenance smoke only. Not a production bind.
  */
 export const NFL_FAIR_LINES_WARROOM_ARTIFACT_ID = "pe_drive_poss_v1";
-export const NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION =
-  "1.0.0-warroom-20260917";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION = "1.0.0-warroom-20260917";
 export const NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256 =
   "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b";
 export const NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS =
@@ -429,17 +428,13 @@ export function nflEdgeBoardAssembleUnavailablePayload(): AssembleUnavailablePay
   return footballPublicNumbersAssembleUnavailablePayload("nfl");
 }
 
-function normalizeCertToken(
-  value: string | null | undefined,
-): string | null {
+function normalizeCertToken(value: string | null | undefined): string | null {
   if (typeof value !== "string") return null;
   const n = value.trim();
   return n ? n : null;
 }
 
-function normalizeSha256Hex(
-  value: string | null | undefined,
-): string | null {
+function normalizeSha256Hex(value: string | null | undefined): string | null {
   const n = normalizeCertToken(value);
   return n ? n.toLowerCase() : null;
 }

@@ -54,7 +54,9 @@ const FIXTURE_RUN_ID = "nfl-fair-lines-cert-fixture-not-production";
 const FIXTURE_SHA256 = "a".repeat(64);
 const FIXTURE_AT = "2026-09-17T12:00:00.000Z";
 
-function fixtureBinding(overrides: Partial<ReturnType<typeof nflFairLinesCertifiedBinding>> = {}) {
+function fixtureBinding(
+  overrides: Partial<ReturnType<typeof nflFairLinesCertifiedBinding>> = {},
+) {
   return {
     runId: FIXTURE_RUN_ID,
     sha256: FIXTURE_SHA256,
@@ -294,7 +296,9 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
     expect(pub).toContain("REJECTED_NO_CLEAR");
     expect(pub).toContain("DIAGNOSTIC_STOP");
     expect(pub).toContain("UNBOUND_AWAIT_CLOCK_PLAY_FREEZE");
-    expect(pub).not.toContain("NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID = \"pe_drive_poss_v2\"");
+    expect(pub).not.toContain(
+      'NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID = "pe_drive_poss_v2"',
+    );
     expect(pub).not.toMatch(
       /NFL_FAIR_LINES_CERTIFIED_SHA256: string \| null = "b5ee9d80/,
     );
