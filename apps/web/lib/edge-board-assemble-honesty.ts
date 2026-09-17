@@ -16,33 +16,33 @@ const LAST_ASOF_PREFIX = "kosedge:edge-board:linesAsOf:";
 
 export function edgeBoardAssembleHonestyCopy(
   reason: EdgeBoardAssembleHonestyReason,
+  lastLinesAsOf?: string | null,
 ): string {
+  const hasLast = Boolean(lastLinesAsOf?.trim());
   if (reason === "timeout") {
-    return "Board is taking longer than usual. Lines as-of stay unavailable until assemble returns — we do not invent rows.";
+    return hasLast
+      ? "Board is taking longer than usual. Showing last known market as-of — we do not invent rows."
+      : "Board is taking longer than usual. Lines as-of stay unavailable until assemble returns — we do not invent rows.";
   }
-  return "Board temporarily unavailable. We do not invent rows — refresh to try again.";
+  return hasLast
+    ? "Board temporarily unavailable. Showing last known market as-of — we do not invent rows. Refresh to try again."
+    : "Board temporarily unavailable. We do not invent rows — refresh to try again.";
 }
 
 /**
  * Persist last good board as-of (stamp only — never rows).
- * Used so a fail-closed path can still show the prior market vintage.
+ * Blank/null does **not** wipe a prior vintage (empty Week 1 must not erase
+ * Full-slate as-of for a later slow/fail path).
  */
 export function rememberEdgeBoardLinesAsOf(
   sportKey: string,
   linesAsOf: string | null | undefined,
-  storage: Pick<Storage, "setItem" | "removeItem"> | null = defaultStorage(),
+  storage: Pick<Storage, "setItem"> | null = defaultStorage(),
 ): void {
   if (!storage) return;
-  const key = LAST_ASOF_PREFIX + (sportKey || "nfl").toLowerCase();
   const clean = linesAsOf?.trim();
-  if (!clean) {
-    try {
-      storage.removeItem(key);
-    } catch {
-      /* ignore quota / private mode */
-    }
-    return;
-  }
+  if (!clean) return;
+  const key = LAST_ASOF_PREFIX + (sportKey || "nfl").toLowerCase();
   try {
     storage.setItem(key, clean);
   } catch {
