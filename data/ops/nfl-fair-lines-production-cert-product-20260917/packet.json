@@ -26,6 +26,19 @@
     "max_age_hours": 168,
     "status": "unbound"
   },
+  "warroom_artifact": {
+    "artifact_id": "pe_drive_poss_v1",
+    "version": "1.0.0-warroom-20260917",
+    "artifact_sha256": "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    "alex": "NO_CLEAR",
+    "alex_note": "all five gates FAIL",
+    "status": "REJECTED_PRACTICE_SHA"
+  },
+  "production_binding_target": {
+    "artifact_id": "pe_drive_poss_v2",
+    "sha256": null,
+    "status": "PENDING_FREEZE"
+  },
   "approvers": {
     "cos": "",
     "ryan": ""
@@ -70,6 +83,18 @@
     {
       "slot": "certified_run_bind",
       "status": "UNBOUND",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "warroom_pe_drive_poss_v1",
+      "status": "REJECTED_PRACTICE_SHA",
+      "cos": "",
+      "ryan": ""
+    },
+    {
+      "slot": "production_pe_drive_poss_v2",
+      "status": "PENDING_FREEZE",
       "cos": "",
       "ryan": ""
     }

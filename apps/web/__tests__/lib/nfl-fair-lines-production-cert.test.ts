@@ -14,10 +14,19 @@ import {
   NFL_FAIR_LINES_CERT_MAX_AGE_HOURS,
   NFL_FAIR_LINES_KELLY_ENABLED,
   NFL_FAIR_LINES_PLAY_ENABLED,
+  NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID,
+  NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256,
+  NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS,
   NFL_FAIR_LINES_PUBLIC_ML_ENABLED,
   NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED,
   NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED,
+  NFL_FAIR_LINES_WARROOM_ARTIFACT_ID,
+  NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+  NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS,
+  NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION,
   bindNflFairLinesCertifiedRun,
+  isNflFairLinesRejectedPracticeSha,
+  nflFairLinesWarroomPracticeArtifact,
   isNflFairLinesAnyMarketPublicEnabled,
   isNflFairLinesCertifiedPublicPaintAllowed,
   isNflFairLinesCustomerSurfaceClosed,
@@ -93,6 +102,57 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
       "unbound_certified_slot",
     );
     expect(bindNflFairLinesCertifiedRun({}).ok).toBe(false);
+    expect(NFL_FAIR_LINES_CERTIFIED_SHA256).not.toBe(
+      NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+    );
+    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID).toBe("pe_drive_poss_v2");
+    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256).toBeNull();
+    expect(NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS).toBe("PENDING_FREEZE");
+  });
+
+  it("records pe_drive_poss_v1 as a rejected practice SHA (not a production bind)", () => {
+    const warroom = nflFairLinesWarroomPracticeArtifact();
+    expect(warroom.artifactId).toBe("pe_drive_poss_v1");
+    expect(warroom.version).toBe("1.0.0-warroom-20260917");
+    expect(warroom.sha256).toBe(
+      "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    );
+    expect(warroom.status).toBe("REJECTED_NO_CLEAR");
+    expect(warroom.alex).toBe("NO_CLEAR");
+    expect(NFL_FAIR_LINES_WARROOM_ARTIFACT_ID).toBe("pe_drive_poss_v1");
+    expect(NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION).toBe(
+      "1.0.0-warroom-20260917",
+    );
+    expect(NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256).toBe(warroom.sha256);
+    expect(NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS).toBe("REJECTED_NO_CLEAR");
+    expect(isNflFairLinesRejectedPracticeSha(warroom.sha256)).toBe(true);
+    expect(isNflFairLinesRejectedPracticeSha(FIXTURE_SHA256)).toBe(false);
+
+    const rejectedExpected = fixtureBinding({
+      runId: NFL_FAIR_LINES_WARROOM_ARTIFACT_ID,
+      sha256: NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+    });
+    expect(
+      bindNflFairLinesCertifiedRun(
+        {
+          runId: NFL_FAIR_LINES_WARROOM_ARTIFACT_ID,
+          sha256: NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+          at: FIXTURE_AT,
+        },
+        rejectedExpected,
+      ),
+    ).toMatchObject({ ok: false, reason: "rejected_practice_sha" });
+
+    expect(
+      bindNflFairLinesCertifiedRun(
+        {
+          runId: FIXTURE_RUN_ID,
+          sha256: NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+          at: FIXTURE_AT,
+        },
+        fixtureBinding(),
+      ).reason,
+    ).toBe("rejected_practice_sha");
   });
 
   it("fail-closes missing / mismatched / stale certified run_id + sha256", () => {
@@ -209,6 +269,16 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
     );
     expect(pub).toContain("Do not invent a production hash");
     expect(pub).toContain("no DFS / Line Curve / CFB work");
+    expect(pub).toContain(
+      "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    );
+    expect(pub).toContain("pe_drive_poss_v1");
+    expect(pub).toContain("pe_drive_poss_v2");
+    expect(pub).toContain("REJECTED_NO_CLEAR");
+    expect(pub).toContain("PENDING_FREEZE");
+    expect(pub).not.toMatch(
+      /NFL_FAIR_LINES_CERTIFIED_SHA256: string \| null = "b5ee9d80/,
+    );
   });
 
   it("does not touch DFS / Line Curve / CFB public constants", () => {
@@ -240,14 +310,35 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
       certified_run: { run_id: string | null; sha256: string | null };
       approvers: { cos: string; ryan: string };
       release_slots: Array<{ slot: string; cos: string; ryan: string }>;
+      warroom_artifact: {
+        artifact_id: string;
+        artifact_sha256: string;
+        alex: string;
+        status: string;
+      };
+      production_binding_target: {
+        artifact_id: string;
+        sha256: string | null;
+        status: string;
+      };
     };
 
     expect(packet).toContain("NO CLEAR");
     expect(packet).toContain("Rollback");
     expect(packet).toContain("NFL_EDGE_BOARD_PUBLIC_ENABLED = false");
+    expect(packet).toContain("pe_drive_poss_v1");
+    expect(packet).toContain(
+      "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    );
+    expect(packet).toContain("pe_drive_poss_v2");
+    expect(packet).toContain("rejected practice SHA");
     expect(packet).toMatch(/CoS:\s*$/m);
     expect(receipt).toContain("Coming soon");
     expect(receipt).toContain("unbound");
+    expect(receipt).toContain(
+      "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    );
+    expect(receipt).toContain("Alex NO CLEAR");
     expect(machine.recommendation).toBe("NO_CLEAR");
     expect(machine.public_flags.NFL_EDGE_BOARD_PUBLIC_ENABLED).toBe(false);
     expect(machine.public_flags.CFB_EDGE_BOARD_PUBLIC_ENABLED).toBe(false);
@@ -258,6 +349,17 @@ describe("NFL Fair Lines PRODUCTION-CERT Product harness", () => {
     expect(machine.certified_run.sha256).toBeNull();
     expect(machine.approvers.cos).toBe("");
     expect(machine.approvers.ryan).toBe("");
+    expect(machine.warroom_artifact.artifact_id).toBe("pe_drive_poss_v1");
+    expect(machine.warroom_artifact.artifact_sha256).toBe(
+      "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
+    );
+    expect(machine.warroom_artifact.alex).toBe("NO_CLEAR");
+    expect(machine.warroom_artifact.status).toBe("REJECTED_PRACTICE_SHA");
+    expect(machine.production_binding_target.artifact_id).toBe(
+      "pe_drive_poss_v2",
+    );
+    expect(machine.production_binding_target.sha256).toBeNull();
+    expect(machine.production_binding_target.status).toBe("PENDING_FREEZE");
     for (const slot of machine.release_slots) {
       expect(slot.cos).toBe("");
       expect(slot.ryan).toBe("");

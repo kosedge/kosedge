@@ -14,8 +14,10 @@
  * Product 2026-09-17 — NFL Fair Lines PRODUCTION-CERT harness (not a CLEAR):
  * independent spread / ML / total gates default false; PLAY / Kelly stay
  * suppressed; certified `run_id` + `sha256` slot stays unbound. Public paint
- * fail-closes on missing / mismatched / stale cert. No remat, no invented
- * numbers, no DFS / Line Curve / CFB work from this harness.
+ * fail-closes on missing / mismatched / stale / rejected-practice cert.
+ * `pe_drive_poss_v1` sha `b5ee9d80…` is a rejected practice SHA only.
+ * Production target is `pe_drive_poss_v2` (pending freeze). No remat, no
+ * invented numbers, no DFS / Line Curve / CFB work from this harness.
  *
  * Internal QA / research:
  *   - `/api/edge-board/{sport}/today` stays secret-gated
@@ -41,11 +43,31 @@ export const NFL_FAIR_LINES_KELLY_ENABLED = false;
 /**
  * Certified public Fair Lines run. Unbound until CoS / Ryan stamp a real
  * `run_id` + sha256. Do not invent a production hash here.
+ * Do **not** bind this slot to `pe_drive_poss_v1` (rejected practice SHA).
+ * Production target is `pe_drive_poss_v2` pending freeze.
  */
 export const NFL_FAIR_LINES_CERTIFIED_RUN_ID: string | null = null;
 export const NFL_FAIR_LINES_CERTIFIED_SHA256: string | null = null;
 export const NFL_FAIR_LINES_CERTIFIED_AT: string | null = null;
 export const NFL_FAIR_LINES_CERT_MAX_AGE_HOURS = 168;
+
+/**
+ * War-room practice artifact (Alex 2026-09-17). All five gates FAIL.
+ * Recorded for fail-closed / provenance smoke only. Not a production bind.
+ */
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_ID = "pe_drive_poss_v1";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION =
+  "1.0.0-warroom-20260917";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256 =
+  "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS =
+  "REJECTED_NO_CLEAR" as const;
+
+/** Authorized production target once v2 freezes with a new checksum. */
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID = "pe_drive_poss_v2";
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256: string | null = null;
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS =
+  "PENDING_FREEZE" as const;
 
 export type NflFairLinesMarket = "spread" | "ml" | "total";
 
@@ -57,6 +79,7 @@ export type NflFairLinesCertBindReason =
   | "invalid_sha256"
   | "run_id_mismatch"
   | "sha256_mismatch"
+  | "rejected_practice_sha"
   | "missing_certified_at"
   | "stale";
 
@@ -414,6 +437,22 @@ function normalizeSha256Hex(
   return n ? n.toLowerCase() : null;
 }
 
+export function isNflFairLinesRejectedPracticeSha(
+  sha256: string | null | undefined,
+): boolean {
+  return normalizeSha256Hex(sha256) === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256;
+}
+
+export function nflFairLinesWarroomPracticeArtifact() {
+  return {
+    artifactId: NFL_FAIR_LINES_WARROOM_ARTIFACT_ID,
+    version: NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION,
+    sha256: NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+    status: NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS,
+    alex: "NO_CLEAR" as const,
+  };
+}
+
 export function nflFairLinesCertifiedBinding(): NflFairLinesCertifiedBinding {
   return {
     runId: NFL_FAIR_LINES_CERTIFIED_RUN_ID,
@@ -481,6 +520,9 @@ export function bindNflFairLinesCertifiedRun(
   if (!SHA256_HEX.test(expectedSha256)) {
     return certBindResult("invalid_sha256", expected, observed);
   }
+  if (expectedSha256 === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256) {
+    return certBindResult("rejected_practice_sha", expected, observed);
+  }
 
   const observedRunId = normalizeCertToken(observed.runId);
   const observedSha256 = normalizeSha256Hex(observed.sha256);
@@ -492,6 +534,9 @@ export function bindNflFairLinesCertifiedRun(
   }
   if (!SHA256_HEX.test(observedSha256)) {
     return certBindResult("invalid_sha256", expected, observed);
+  }
+  if (observedSha256 === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256) {
+    return certBindResult("rejected_practice_sha", expected, observed);
   }
   if (observedRunId !== expectedRunId) {
     return certBindResult("run_id_mismatch", expected, observed);
