@@ -10,11 +10,17 @@ import {
   NFL_EDGE_BOARD_PUBLIC_ENABLED,
   NFL_EDGE_BOARD_UNAVAILABLE_CODE,
   NFL_EDGE_BOARD_UNAVAILABLE_MESSAGE,
+  NFL_FAIR_LINES_KELLY_ENABLED,
+  NFL_FAIR_LINES_PLAY_ENABLED,
+  NFL_FAIR_LINES_PUBLIC_ML_ENABLED,
+  NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED,
+  NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED,
   customerCtaHref,
   footballPublicNumbersAssembleUnavailablePayload,
   isFootballPublicNumbersDisabled,
   isNflEdgeBoardCustomerDisabled,
   isNflEdgeBoardCustomerEnabled,
+  isNflFairLinesCustomerSurfaceClosed,
   isNflSportKey,
   publicEdgeBoardHref,
   publicEdgeBoardSports,
@@ -45,6 +51,12 @@ describe("football public numbers kill switch", () => {
     expect(isFootballPublicNumbersDisabled("nfl")).toBe(true);
     expect(isFootballPublicNumbersDisabled("cfb")).toBe(true);
     expect(FOOTBALL_PUBLIC_NUMBERS_HEADING).toBe("Coming soon");
+    expect(NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED).toBe(false);
+    expect(NFL_FAIR_LINES_PUBLIC_ML_ENABLED).toBe(false);
+    expect(NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED).toBe(false);
+    expect(NFL_FAIR_LINES_PLAY_ENABLED).toBe(false);
+    expect(NFL_FAIR_LINES_KELLY_ENABLED).toBe(false);
+    expect(isNflFairLinesCustomerSurfaceClosed()).toBe(true);
   });
 
   it("does not park other sports", () => {

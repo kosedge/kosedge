@@ -237,6 +237,21 @@
       "last_updated": "2026-09-16"
     },
     {
+      "id": "nfl.release_ml",
+      "track": "NFL",
+      "gate": "Release",
+      "market": "ml",
+      "status": "BLOCKED",
+      "evidence": [
+        "apps/web/lib/cfb-edge-board-public.ts (NFL_FAIR_LINES_PUBLIC_ML_ENABLED=false)",
+        "docs/ops/NFL_FAIR_LINES_PRODUCTION_CERT_PRODUCT_2026-09-17.md"
+      ],
+      "unresolved_blocker": "No Ryan / CoS CLEAR. Independent of spread/total. Approver slots empty.",
+      "owner": "CoS",
+      "next_action": "Do not piggyback ML on a spread CLEAR.",
+      "last_updated": "2026-09-17"
+    },
+    {
       "id": "cfb.input_integrity",
       "track": "CFB",
       "gate": "Input integrity",
@@ -385,11 +400,32 @@
       "track": "SHARED",
       "gate": "Rollback",
       "status": "NOT_STARTED",
-      "evidence": ["https://github.com/kosedge/kosedge/pull/561"],
-      "unresolved_blocker": "No drilled rollback of a cleared sport because nothing is cleared.",
+      "evidence": [
+        "https://github.com/kosedge/kosedge/pull/561",
+        "docs/ops/NFL_FAIR_LINES_PRODUCTION_CERT_PRODUCT_2026-09-17.md"
+      ],
+      "unresolved_blocker": "No drilled rollback of a cleared sport because nothing is cleared. Product Fair Lines rollback is written only.",
       "owner": "Platform Reliability",
-      "next_action": "Write/attest: flip flag false, assemble 503/empty, pages Coming soon, no ghost table.",
-      "last_updated": "2026-09-15"
+      "next_action": "Written rollback: flags false, cert unbound, 503/Coming soon, no remat. Drill only after a CLEAR.",
+      "last_updated": "2026-09-17"
+    },
+    {
+      "id": "shared.nfl_fair_lines_prod_cert",
+      "track": "SHARED",
+      "gate": "NFL Fair Lines cert-binding harness",
+      "status": "PASS",
+      "evidence": [
+        "docs/ops/NFL_FAIR_LINES_PRODUCTION_CERT_PRODUCT_2026-09-17.md",
+        "data/ops/nfl-fair-lines-production-cert-product-20260917.md",
+        "apps/web/lib/cfb-edge-board-public.ts",
+        "apps/web/__tests__/lib/nfl-fair-lines-production-cert.test.ts",
+        "scripts/nfl/nfl-fair-lines-production-cert-smoke.sh"
+      ],
+      "unresolved_blocker": "Certified slot remains unbound. No Ryan / CoS CLEAR.",
+      "owner": "Product",
+      "next_action": "Keep public + market gates false. Do not stamp a production hash without CLEAR.",
+      "last_updated": "2026-09-17",
+      "note": "Protection / harness only. Not a reopen PASS."
     },
     {
       "id": "shared.smoke_contract",

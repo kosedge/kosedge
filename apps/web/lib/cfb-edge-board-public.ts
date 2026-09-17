@@ -11,6 +11,15 @@
  * trustworthy source status, market as_of, canonical game joins, and
  * sanity checks on extreme model-vs-market gaps).
  *
+ * Product 2026-09-17 — NFL Fair Lines PRODUCTION-CERT harness (not a CLEAR):
+ * independent spread / ML / total gates default false; PLAY / Kelly stay
+ * suppressed; certified `run_id` + `sha256` slot stays unbound. Public paint
+ * fail-closes on missing / mismatched / stale / rejected-practice cert.
+ * `pe_drive_poss_v1` sha `b5ee9d80…` is a rejected practice SHA only.
+ * `pe_drive_poss_v2` is diagnostic STOP — do not bind. Production bind
+ * waits a new clock/play freeze + checksum. No remat, no invented
+ * numbers, no DFS / Line Curve / CFB work from this harness.
+ *
  * Internal QA / research:
  *   - `/api/edge-board/{sport}/today` stays secret-gated
  *   - set `CFB_EDGE_BOARD_INTERNAL=1` or `NFL_EDGE_BOARD_INTERNAL=1`
@@ -22,6 +31,87 @@
 
 export const CFB_EDGE_BOARD_PUBLIC_ENABLED = false;
 export const NFL_EDGE_BOARD_PUBLIC_ENABLED = false;
+
+/** Independent NFL Fair Lines market gates. Not a public CLEAR. */
+export const NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED = false;
+export const NFL_FAIR_LINES_PUBLIC_ML_ENABLED = false;
+export const NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED = false;
+
+/** Stake chrome — stays suppressed until a separate Ryan / CoS authorization. */
+export const NFL_FAIR_LINES_PLAY_ENABLED = false;
+export const NFL_FAIR_LINES_KELLY_ENABLED = false;
+
+/**
+ * Certified public Fair Lines run. Unbound until CoS / Ryan stamp a real
+ * `run_id` + sha256. Do not invent a production hash here.
+ * Do **not** bind this slot to `pe_drive_poss_v1` (rejected practice SHA)
+ * or `pe_drive_poss_v2` (diagnostic STOP). Bind only when a new clock/play
+ * artifact freezes with a checksum.
+ */
+export const NFL_FAIR_LINES_CERTIFIED_RUN_ID: string | null = null;
+export const NFL_FAIR_LINES_CERTIFIED_SHA256: string | null = null;
+export const NFL_FAIR_LINES_CERTIFIED_AT: string | null = null;
+export const NFL_FAIR_LINES_CERT_MAX_AGE_HOURS = 168;
+
+/**
+ * War-room practice artifact (Alex 2026-09-17). All five gates FAIL.
+ * Recorded for fail-closed / provenance smoke only. Not a production bind.
+ */
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_ID = "pe_drive_poss_v1";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION = "1.0.0-warroom-20260917";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256 =
+  "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b";
+export const NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS =
+  "REJECTED_NO_CLEAR" as const;
+
+/** v2 diagnostic STOP — not frozen; do not bind production to v2. */
+export const NFL_FAIR_LINES_V2_DIAGNOSTIC_ID = "pe_drive_poss_v2";
+export const NFL_FAIR_LINES_V2_DIAGNOSTIC_STATUS = "DIAGNOSTIC_STOP" as const;
+
+/** Production bind waits a new clock/play freeze. Not v1. Not v2. */
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_ID: string | null = null;
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_SHA256: string | null = null;
+export const NFL_FAIR_LINES_PRODUCTION_ARTIFACT_STATUS =
+  "UNBOUND_AWAIT_CLOCK_PLAY_FREEZE" as const;
+
+export type NflFairLinesMarket = "spread" | "ml" | "total";
+
+export type NflFairLinesCertBindReason =
+  | "ok"
+  | "unbound_certified_slot"
+  | "missing_run_id"
+  | "missing_sha256"
+  | "invalid_sha256"
+  | "run_id_mismatch"
+  | "sha256_mismatch"
+  | "rejected_practice_sha"
+  | "diagnostic_stop"
+  | "missing_certified_at"
+  | "stale";
+
+export type NflFairLinesCertifiedBinding = {
+  runId: string | null;
+  sha256: string | null;
+  certifiedAt: string | null;
+  maxAgeHours: number;
+};
+
+export type NflFairLinesCertObserved = {
+  runId?: string | null;
+  sha256?: string | null;
+  at?: Date | string | null;
+};
+
+export type NflFairLinesCertBindResult = {
+  ok: boolean;
+  reason: NflFairLinesCertBindReason;
+  expectedRunId: string | null;
+  expectedSha256: string | null;
+  observedRunId: string | null;
+  observedSha256: string | null;
+};
+
+const SHA256_HEX = /^[a-f0-9]{64}$/;
 
 /** Customer heading on parked NFL/CFB number surfaces. */
 export const FOOTBALL_PUBLIC_NUMBERS_HEADING = "Coming soon";
@@ -336,4 +426,187 @@ export function cfbEdgeBoardAssembleUnavailablePayload(): AssembleUnavailablePay
 
 export function nflEdgeBoardAssembleUnavailablePayload(): AssembleUnavailablePayload {
   return footballPublicNumbersAssembleUnavailablePayload("nfl");
+}
+
+function normalizeCertToken(value: string | null | undefined): string | null {
+  if (typeof value !== "string") return null;
+  const n = value.trim();
+  return n ? n : null;
+}
+
+function normalizeSha256Hex(value: string | null | undefined): string | null {
+  const n = normalizeCertToken(value);
+  return n ? n.toLowerCase() : null;
+}
+
+export function isNflFairLinesRejectedPracticeSha(
+  sha256: string | null | undefined,
+): boolean {
+  return normalizeSha256Hex(sha256) === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256;
+}
+
+export function nflFairLinesWarroomPracticeArtifact() {
+  return {
+    artifactId: NFL_FAIR_LINES_WARROOM_ARTIFACT_ID,
+    version: NFL_FAIR_LINES_WARROOM_ARTIFACT_VERSION,
+    sha256: NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256,
+    status: NFL_FAIR_LINES_WARROOM_ARTIFACT_STATUS,
+    alex: "NO_CLEAR" as const,
+  };
+}
+
+export function nflFairLinesCertifiedBinding(): NflFairLinesCertifiedBinding {
+  return {
+    runId: NFL_FAIR_LINES_CERTIFIED_RUN_ID,
+    sha256: NFL_FAIR_LINES_CERTIFIED_SHA256,
+    certifiedAt: NFL_FAIR_LINES_CERTIFIED_AT,
+    maxAgeHours: NFL_FAIR_LINES_CERT_MAX_AGE_HOURS,
+  };
+}
+
+export function isNflFairLinesMarketPublicEnabled(
+  market: NflFairLinesMarket,
+): boolean {
+  if (market === "spread") return NFL_FAIR_LINES_PUBLIC_SPREAD_ENABLED;
+  if (market === "ml") return NFL_FAIR_LINES_PUBLIC_ML_ENABLED;
+  return NFL_FAIR_LINES_PUBLIC_TOTAL_ENABLED;
+}
+
+export function nflFairLinesPublicEnabledMarkets(): NflFairLinesMarket[] {
+  return (["spread", "ml", "total"] as const).filter((market) =>
+    isNflFairLinesMarketPublicEnabled(market),
+  );
+}
+
+export function isNflFairLinesAnyMarketPublicEnabled(): boolean {
+  return nflFairLinesPublicEnabledMarkets().length > 0;
+}
+
+export function isNflFairLinesPlayEnabled(): boolean {
+  return NFL_FAIR_LINES_PLAY_ENABLED;
+}
+
+export function isNflFairLinesKellyEnabled(): boolean {
+  return NFL_FAIR_LINES_KELLY_ENABLED;
+}
+
+function certBindResult(
+  reason: NflFairLinesCertBindReason,
+  expected: NflFairLinesCertifiedBinding,
+  observed: NflFairLinesCertObserved,
+): NflFairLinesCertBindResult {
+  return {
+    ok: reason === "ok",
+    reason,
+    expectedRunId: normalizeCertToken(expected.runId),
+    expectedSha256: normalizeSha256Hex(expected.sha256),
+    observedRunId: normalizeCertToken(observed.runId),
+    observedSha256: normalizeSha256Hex(observed.sha256),
+  };
+}
+
+/**
+ * Bind an observed Fair Lines run to the certified `run_id` + sha256.
+ * Fail-closed on unbound / missing / mismatched / stale. Does not invent
+ * a certified hash and does not rematerialize numbers.
+ */
+export function bindNflFairLinesCertifiedRun(
+  observed: NflFairLinesCertObserved = {},
+  expected: NflFairLinesCertifiedBinding = nflFairLinesCertifiedBinding(),
+): NflFairLinesCertBindResult {
+  const expectedRunId = normalizeCertToken(expected.runId);
+  const expectedSha256 = normalizeSha256Hex(expected.sha256);
+  if (!expectedRunId || !expectedSha256) {
+    return certBindResult("unbound_certified_slot", expected, observed);
+  }
+  if (!SHA256_HEX.test(expectedSha256)) {
+    return certBindResult("invalid_sha256", expected, observed);
+  }
+  if (expectedSha256 === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256) {
+    return certBindResult("rejected_practice_sha", expected, observed);
+  }
+  if (expectedRunId === NFL_FAIR_LINES_V2_DIAGNOSTIC_ID) {
+    return certBindResult("diagnostic_stop", expected, observed);
+  }
+
+  const observedRunId = normalizeCertToken(observed.runId);
+  const observedSha256 = normalizeSha256Hex(observed.sha256);
+  if (!observedRunId) {
+    return certBindResult("missing_run_id", expected, observed);
+  }
+  if (!observedSha256) {
+    return certBindResult("missing_sha256", expected, observed);
+  }
+  if (!SHA256_HEX.test(observedSha256)) {
+    return certBindResult("invalid_sha256", expected, observed);
+  }
+  if (observedSha256 === NFL_FAIR_LINES_WARROOM_ARTIFACT_SHA256) {
+    return certBindResult("rejected_practice_sha", expected, observed);
+  }
+  if (observedRunId === NFL_FAIR_LINES_V2_DIAGNOSTIC_ID) {
+    return certBindResult("diagnostic_stop", expected, observed);
+  }
+  if (observedRunId !== expectedRunId) {
+    return certBindResult("run_id_mismatch", expected, observed);
+  }
+  if (observedSha256 !== expectedSha256) {
+    return certBindResult("sha256_mismatch", expected, observed);
+  }
+
+  const certifiedAtMs = expected.certifiedAt
+    ? Date.parse(expected.certifiedAt)
+    : Number.NaN;
+  if (!Number.isFinite(certifiedAtMs)) {
+    return certBindResult("missing_certified_at", expected, observed);
+  }
+
+  const atMs =
+    observed.at instanceof Date
+      ? observed.at.getTime()
+      : observed.at
+        ? Date.parse(String(observed.at))
+        : Date.now();
+  if (!Number.isFinite(atMs)) {
+    return certBindResult("stale", expected, observed);
+  }
+
+  const maxAgeHours = Number.isFinite(expected.maxAgeHours)
+    ? expected.maxAgeHours
+    : NFL_FAIR_LINES_CERT_MAX_AGE_HOURS;
+  const maxAgeMs = Math.max(0, maxAgeHours) * 60 * 60 * 1000;
+  if (atMs - certifiedAtMs > maxAgeMs) {
+    return certBindResult("stale", expected, observed);
+  }
+
+  return certBindResult("ok", expected, observed);
+}
+
+/**
+ * Public certified paint — requires the master NFL public flag, at least one
+ * independent market gate, and a valid cert bind. INTERNAL is not a CLEAR.
+ */
+export function isNflFairLinesCertifiedPublicPaintAllowed(
+  observed: NflFairLinesCertObserved = {},
+  market?: NflFairLinesMarket,
+): boolean {
+  if (!NFL_EDGE_BOARD_PUBLIC_ENABLED) return false;
+  if (market) {
+    if (!isNflFairLinesMarketPublicEnabled(market)) return false;
+  } else if (!isNflFairLinesAnyMarketPublicEnabled()) {
+    return false;
+  }
+  return bindNflFairLinesCertifiedRun(observed).ok;
+}
+
+/**
+ * NFL Fair Lines customer page / API. Coming soon stays on while the public
+ * flag is off. INTERNAL QA may inspect the research board without a CLEAR.
+ * A later public flip still fail-closes without market gates + cert bind.
+ */
+export function isNflFairLinesCustomerSurfaceClosed(
+  observed: NflFairLinesCertObserved = {},
+): boolean {
+  if (isFootballPublicNumbersDisabled("nfl")) return true;
+  if (isNflEdgeBoardInternalOverride()) return false;
+  return !isNflFairLinesCertifiedPublicPaintAllowed(observed);
 }
