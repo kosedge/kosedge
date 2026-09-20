@@ -1,0 +1,40 @@
+{
+  "id": "nfl-r11-r14-frozen-gate-set",
+  "status": "UNBOUND_DIMENSIONS_ONLY",
+  "bind_allowed": false,
+  "execute_holdout": false,
+  "thresholds_source": null,
+  "dimensions": [
+    {
+      "id": "key_3",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "key_7",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "ot",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "mae",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    },
+    {
+      "id": "total",
+      "requested": true,
+      "threshold": null,
+      "threshold_source": null
+    }
+  ],
+  "notes": "Requested dimensions only. Thresholds are not invented. Compare is illegal until a sourced BOUND gate set is filed."
+}

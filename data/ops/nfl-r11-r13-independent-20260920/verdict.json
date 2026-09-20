@@ -1,0 +1,37 @@
+{
+  "packet_id": "nfl-r11-r13-independent-20260920",
+  "as_of": "2026-09-20T14:45:00Z",
+  "agent": "cursor-cloud NFL R11/R13 provenance + cert runner",
+  "lane": "provenance_reproducibility_only",
+  "checkout": {
+    "repo": "kosedge/kosedge",
+    "branch": "deploy-vercel",
+    "commit": "4aeab78f2011ac593c708f24acc01bf5117f9728",
+    "working_tree": "clean_at_search"
+  },
+  "verdict": "FAIL_CLOSED",
+  "exact_reproduction_established": false,
+  "model_behavior_edited": false,
+  "holdout_executed": false,
+  "deploy_push_merge_promotion": false,
+  "slots": {
+    "R11": "UNBOUND",
+    "R13": "UNBOUND",
+    "R14": "UNBOUND",
+    "gate_set": "UNBOUND_DIMENSIONS_ONLY"
+  },
+  "bind_allowed": {
+    "R11": false,
+    "R13": false,
+    "R14": false,
+    "gate_set": false
+  },
+  "cert_runner": "scripts/nfl/prepare_r11_r14_cert.py",
+  "docs": "docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.md",
+  "concurrent_independent_search": {
+    "pr": 576,
+    "branch": "cursor/nfl-r11-r13-lineage-7c4b",
+    "used_as_authority": false,
+    "note": "Recorded as a concurrent independent FAIL_CLOSED search. Not used as a lineage source."
+  }
+}

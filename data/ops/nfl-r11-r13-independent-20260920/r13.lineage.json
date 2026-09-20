@@ -1,0 +1,36 @@
+{
+  "label": "R13",
+  "role": "prior_experiment",
+  "status": "UNBOUND",
+  "bind_allowed": false,
+  "exact_reproduction_established": false,
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": null,
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": []
+  },
+  "random_seeds": [],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "Label R13 was not found in this checkout or connected research surfaces. If the label exists, it is outside this environment."
+  ],
+  "evidence": [
+    "Independent search 2026-09-20 on kosedge/kosedge @ 4aeab78f2011ac593c708f24acc01bf5117f9728 (deploy-vercel). Zero experiment-round hits."
+  ],
+  "notes": "Do not alias pe_drive_poss_v2, personnel r13 rates, or WR13 ranks as prior R13."
+}

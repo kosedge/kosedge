@@ -1,0 +1,36 @@
+{
+  "label": "R14",
+  "role": "candidate",
+  "status": "UNBOUND",
+  "bind_allowed": false,
+  "exact_reproduction_established": false,
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": null,
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": []
+  },
+  "random_seeds": [],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "No R14 candidate source, runner, config, seeds, hashes, or metrics were filed. This lane does not invent or bind a candidate."
+  ],
+  "evidence": [
+    "Independent search 2026-09-20. No R14 experiment label in repo, Linear, Notion, Gmail, Drive, or X."
+  ],
+  "notes": "No R14 behavior edits were made. Do not treat current nfl_simulator.py (nfl-v1.5-matchup-sim) as R14."
+}

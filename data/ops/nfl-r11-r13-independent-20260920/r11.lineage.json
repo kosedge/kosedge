@@ -1,0 +1,36 @@
+{
+  "label": "R11",
+  "role": "frozen_source",
+  "status": "UNBOUND",
+  "bind_allowed": false,
+  "exact_reproduction_established": false,
+  "git": {
+    "commit": null,
+    "branch": null,
+    "worktree": null
+  },
+  "simulator_source_files": [],
+  "experiment_runner": null,
+  "config_parameter_set": null,
+  "data_inputs": {
+    "paths": [],
+    "hashes": []
+  },
+  "random_seeds": [],
+  "command_used": null,
+  "calibration_artifacts": [],
+  "metrics": {
+    "key_3": null,
+    "key_7": null,
+    "ot": null,
+    "mae": null,
+    "total": null
+  },
+  "uncommitted_or_external_dependencies": [
+    "Label R11 was not found in this checkout, git history/tags/worktrees, Linear, Notion, Gmail, Drive titles, X, or connected workers. If the label exists, it is outside this environment."
+  ],
+  "evidence": [
+    "Independent search 2026-09-20 on kosedge/kosedge @ 4aeab78f2011ac593c708f24acc01bf5117f9728 (deploy-vercel). Zero experiment-round hits."
+  ],
+  "notes": "Do not alias pe_drive_poss_v1, pe_drive_poss_v2, live SHA 153b6a884a8e, market-risk R11, personnel r11 rates, or WR11 ranks as frozen R11."
+}
