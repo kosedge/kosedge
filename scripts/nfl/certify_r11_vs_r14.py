@@ -6,6 +6,7 @@ scores games, and never reads held-out outcomes.
 
 Compare is legal only when:
   * R11, R13, and R14 lineage slots are status=EXACT and bind_allowed=true
+  * each lineage slot's label matches its R11/R13/R14 file
   * every required lineage field is populated
   * the frozen gate set is BOUND with sourced thresholds
 
@@ -82,11 +83,15 @@ def _numeric_value_supplied(values: dict[str, Any], key: str) -> bool:
     return key in values and values[key] is not None
 
 
-def lineage_gaps(slot: dict[str, Any]) -> list[str]:
+def lineage_gaps(
+    slot: dict[str, Any], *, expected_label: str | None = None
+) -> list[str]:
     gaps: list[str] = []
     for field in REQUIRED_LINEAGE_FIELDS:
         if field not in slot:
             gaps.append(f"missing field {field}")
+    if expected_label is not None and slot.get("label") != expected_label:
+        gaps.append(f"label (expected {expected_label})")
     git = slot.get("git") if isinstance(slot.get("git"), dict) else {}
     for key in REQUIRED_GIT:
         if not _populated(git.get(key)):
@@ -131,11 +136,11 @@ def assert_not_alias(slot: dict[str, Any]) -> None:
                 )
 
 
-def slot_exact(slot: dict[str, Any]) -> bool:
+def slot_exact(slot: dict[str, Any], *, expected_label: str | None = None) -> bool:
     return (
         slot.get("status") == "EXACT"
         and slot.get("bind_allowed") is True
-        and not lineage_gaps(slot)
+        and not lineage_gaps(slot, expected_label=expected_label)
     )
 
 
@@ -176,19 +181,28 @@ def evaluate_pack(pack: Path = PACK) -> dict[str, Any]:
     for slot in (r11, r13, r14):
         assert_not_alias(slot)
 
-    r11_exact = slot_exact(r11)
-    r13_exact = slot_exact(r13)
-    r14_exact = slot_exact(r14)
+    r11_exact = slot_exact(r11, expected_label="R11")
+    r13_exact = slot_exact(r13, expected_label="R13")
+    r14_exact = slot_exact(r14, expected_label="R14")
     gates_ok = gate_set_bound(gates)
 
     compare_legal = r11_exact and r13_exact and r14_exact and gates_ok
     reasons: list[str] = []
     if not r11_exact:
-        reasons.append("R11 lineage is not EXACT: " + ", ".join(lineage_gaps(r11) or ["status/bind"]))
+        reasons.append(
+            "R11 lineage is not EXACT: "
+            + ", ".join(lineage_gaps(r11, expected_label="R11") or ["status/bind"])
+        )
     if not r13_exact:
-        reasons.append("R13 lineage is not EXACT: " + ", ".join(lineage_gaps(r13) or ["status/bind"]))
+        reasons.append(
+            "R13 lineage is not EXACT: "
+            + ", ".join(lineage_gaps(r13, expected_label="R13") or ["status/bind"])
+        )
     if not r14_exact:
-        reasons.append("R14 lineage is not EXACT: " + ", ".join(lineage_gaps(r14) or ["status/bind"]))
+        reasons.append(
+            "R14 lineage is not EXACT: "
+            + ", ".join(lineage_gaps(r14, expected_label="R14") or ["status/bind"])
+        )
     if not gates_ok:
         reasons.append(
             "frozen gate set is not BOUND with sourced thresholds for key_3/key_7/ot/mae/total"
@@ -216,9 +230,9 @@ def evaluate_pack(pack: Path = PACK) -> dict[str, Any]:
             "gate_set": gates.get("status"),
         },
         "gaps": {
-            "R11": lineage_gaps(r11),
-            "R13": lineage_gaps(r13),
-            "R14": lineage_gaps(r14),
+            "R11": lineage_gaps(r11, expected_label="R11"),
+            "R13": lineage_gaps(r13, expected_label="R13"),
+            "R14": lineage_gaps(r14, expected_label="R14"),
         },
         "reasons": reasons,
         "packet_verdict": verdict_doc.get("verdict"),
@@ -258,7 +272,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--compare",
         action="store_true",
-        help="compare EXACT R11 vs EXACT R14 on a BOUND gate set; fail-closed otherwise",
+        help="compare EXACT R11/R13/R14 lineage on a BOUND gate set; fail-closed otherwise",
     )
     parser.add_argument(
         "--execute-holdout",

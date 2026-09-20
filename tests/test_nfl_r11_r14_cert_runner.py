@@ -64,6 +64,25 @@ def _exact_slot(label: str) -> dict:
     }
 
 
+def _bound_gates() -> dict:
+    return {
+        "gate_set_id": "fixture",
+        "status": "BOUND",
+        "execute_holdout": False,
+        "dimensions": [
+            {
+                "id": dim,
+                "requested": True,
+                "threshold": 0.0,
+                "threshold_source": "fixture",
+            }
+            for dim in ("key_3", "key_7", "ot", "mae", "total")
+        ],
+        "thresholds_source": "fixture",
+        "notes": "synthetic",
+    }
+
+
 class TestNflR11R14CertRunner(unittest.TestCase):
     def test_pack_files_exist(self) -> None:
         for name in (
@@ -144,22 +163,7 @@ class TestNflR11R14CertRunner(unittest.TestCase):
         self.assertIn("metrics.key_3", lineage_gaps(slot))
 
     def test_compare_ready_only_when_exact_and_bound(self) -> None:
-        bound_gates = {
-            "gate_set_id": "fixture",
-            "status": "BOUND",
-            "execute_holdout": False,
-            "dimensions": [
-                {
-                    "id": dim,
-                    "requested": True,
-                    "threshold": 0.0,
-                    "threshold_source": "fixture",
-                }
-                for dim in ("key_3", "key_7", "ot", "mae", "total")
-            ],
-            "thresholds_source": "fixture",
-            "notes": "synthetic",
-        }
+        bound_gates = _bound_gates()
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)
             _write_pack(
@@ -183,22 +187,7 @@ class TestNflR11R14CertRunner(unittest.TestCase):
             self.assertEqual(main(["--pack", str(path), "--execute-holdout"]), 2)
 
     def test_compare_requires_exact_r13_lineage(self) -> None:
-        bound_gates = {
-            "gate_set_id": "fixture",
-            "status": "BOUND",
-            "execute_holdout": False,
-            "dimensions": [
-                {
-                    "id": dim,
-                    "requested": True,
-                    "threshold": 0.0,
-                    "threshold_source": "fixture",
-                }
-                for dim in ("key_3", "key_7", "ot", "mae", "total")
-            ],
-            "thresholds_source": "fixture",
-            "notes": "synthetic",
-        }
+        bound_gates = _bound_gates()
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)
             _write_pack(
@@ -220,6 +209,27 @@ class TestNflR11R14CertRunner(unittest.TestCase):
             self.assertTrue(
                 any(reason.startswith("R13 lineage is not EXACT:") for reason in report["reasons"])
             )
+
+    def test_compare_requires_matching_lineage_slot_labels(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp)
+            _write_pack(
+                path,
+                {
+                    "r11.lineage.json": _exact_slot("R13"),
+                    "r13.lineage.json": _exact_slot("R13"),
+                    "r14.lineage.json": _exact_slot("R14"),
+                    "frozen_gate_set.json": _bound_gates(),
+                    "verdict.json": {
+                        "verdict": "FAIL_CLOSED",
+                        "exact_reproduction_established": False,
+                    },
+                },
+            )
+            report = evaluate_pack(path)
+            self.assertEqual(report["status"], "FAIL_CLOSED")
+            self.assertFalse(report["compare_legal"])
+            self.assertIn("label (expected R11)", report["gaps"]["R11"])
 
     def test_incomplete_exact_status_still_fail_closed(self) -> None:
         slot = _load("r11.lineage.json")

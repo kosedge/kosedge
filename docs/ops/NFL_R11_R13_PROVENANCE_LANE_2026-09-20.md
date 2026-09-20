@@ -83,6 +83,7 @@ python scripts/nfl/certify_r11_vs_r14.py
 What it does:
 
 - Loads the three lineage slots + requested gate-set dimensions
+- Verifies each slot's declared label matches its R11 / R13 / R14 filename
 - Requires every lineage field to be present and `status=EXACT` before a compare is legal
 - Prints **FAIL_CLOSED** while slots are UNBOUND
 - Hard-refuses `--execute-holdout` (no held-out data path)
