@@ -1,0 +1,154 @@
+{
+  "as_of": "2026-08-13",
+  "source": "committed_inventory",
+  "inventories": {
+    "games": "data/ops/cfb-historical-warehouse-v1-20260812-inventory.json",
+    "pbp": "data/ops/cfb-historical-warehouse-v1-20260812-pbp-inventory.json"
+  },
+  "totals": {
+    "games_2020_2025": 5196,
+    "close_spread": 4994,
+    "open_spread": 4184,
+    "odds_lake_snaps": 174606,
+    "odds_lake_games": 4736,
+    "lake_matched": 4184,
+    "lake_unmatched": 1012,
+    "pbp_plays": 1819153,
+    "pbp_games": 10297,
+    "fcs_flagged": 701
+  },
+  "by_season": {
+    "2014": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 0,
+      "pbp_plays": 155521,
+      "pbp_games": 854
+    },
+    "2015": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 0,
+      "pbp_plays": 158501,
+      "pbp_games": 866
+    },
+    "2016": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 0,
+      "pbp_plays": 155622,
+      "pbp_games": 858
+    },
+    "2017": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 0,
+      "pbp_plays": 155505,
+      "pbp_games": 872
+    },
+    "2018": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 0,
+      "pbp_plays": 158249,
+      "pbp_games": 884
+    },
+    "2019": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 0,
+      "pbp_plays": 156888,
+      "pbp_games": 890
+    },
+    "2020": {
+      "games": 571,
+      "close_spread": 512,
+      "open_spread": 477,
+      "lake_primary": 477,
+      "fcs_flagged": 34,
+      "odds_lake_snaps": 18058,
+      "pbp_plays": 100420,
+      "pbp_games": 565
+    },
+    "2021": {
+      "games": 891,
+      "close_spread": 814,
+      "open_spread": 696,
+      "lake_primary": 696,
+      "fcs_flagged": 116,
+      "odds_lake_snaps": 31601,
+      "pbp_plays": 146367,
+      "pbp_games": 842
+    },
+    "2022": {
+      "games": 900,
+      "close_spread": 838,
+      "open_spread": 717,
+      "lake_primary": 717,
+      "fcs_flagged": 119,
+      "odds_lake_snaps": 28322,
+      "pbp_plays": 149654,
+      "pbp_games": 861
+    },
+    "2023": {
+      "games": 911,
+      "close_spread": 907,
+      "open_spread": 713,
+      "lake_primary": 713,
+      "fcs_flagged": 116,
+      "odds_lake_snaps": 28840,
+      "pbp_plays": 153626,
+      "pbp_games": 903
+    },
+    "2024": {
+      "games": 965,
+      "close_spread": 965,
+      "open_spread": 793,
+      "lake_primary": 793,
+      "fcs_flagged": 166,
+      "odds_lake_snaps": 32284,
+      "pbp_plays": 162950,
+      "pbp_games": 946
+    },
+    "2025": {
+      "games": 958,
+      "close_spread": 958,
+      "open_spread": 788,
+      "lake_primary": 788,
+      "fcs_flagged": 150,
+      "odds_lake_snaps": 35492,
+      "pbp_plays": 165850,
+      "pbp_games": 956
+    },
+    "2026": {
+      "games": 0,
+      "close_spread": 0,
+      "open_spread": 0,
+      "lake_primary": 0,
+      "fcs_flagged": 0,
+      "odds_lake_snaps": 9,
+      "pbp_plays": 0,
+      "pbp_games": 0
+    }
+  },
+  "leakage_rule": "strictly_before_kickoff",
+  "hd_overlay": null
+}
