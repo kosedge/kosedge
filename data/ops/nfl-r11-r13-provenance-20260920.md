@@ -1,14 +1,14 @@
 # NFL R11 / R13 provenance receipt — 2026-09-20
 
-**Lane:** provenance / reproducibility only  
-**Checkout audited:** `deploy-vercel` @ `4aeab78f` (clean)  
-**Verdict:** **FAIL_CLOSED**  
-**Exact reproduction established:** no  
-**Model edits:** none  
-**Holdout run:** none  
+**Lane:** provenance / reproducibility only
+**Checkout audited:** `deploy-vercel` @ `4aeab78f` (clean)
+**Verdict:** **FAIL_CLOSED**
+**Exact reproduction established:** no
+**Model edits:** none
+**Holdout run:** none
 **Promotion:** none
 
-Packet: [`docs/ops/NFL_R11_R13_PROVENANCE_LANE_2026-09-20.md`](../../docs/ops/NFL_R11_R13_PROVENANCE_LANE_2026-09-20.md)  
+Packet: [`docs/ops/NFL_R11_R13_PROVENANCE_LANE_2026-09-20.md`](../../docs/ops/NFL_R11_R13_PROVENANCE_LANE_2026-09-20.md)
 Machine: [`nfl-r11-r13-provenance-20260920/verdict.json`](./nfl-r11-r13-provenance-20260920/verdict.json)
 
 ## Slots

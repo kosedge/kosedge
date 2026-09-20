@@ -1,13 +1,13 @@
 # KosEdge NFL — R11 / R13 provenance lane (2026-09-20)
 
-**Lane:** provenance / reproducibility only  
-**Model behavior:** unchanged  
-**Holdout execution:** not run  
-**Deploy / merge / promotion:** not requested and not performed  
+**Lane:** provenance / reproducibility only
+**Model behavior:** unchanged
+**Holdout execution:** not run
+**Deploy / merge / promotion:** not requested and not performed
 **Verdict:** **FAIL_CLOSED** — exact reproduction is **not** established
 
-Machine twin: [`data/ops/nfl-r11-r13-provenance-20260920/verdict.json`](../../data/ops/nfl-r11-r13-provenance-20260920/verdict.json)  
-Ops receipt: [`data/ops/nfl-r11-r13-provenance-20260920.md`](../../data/ops/nfl-r11-r13-provenance-20260920.md)  
+Machine twin: [`data/ops/nfl-r11-r13-provenance-20260920/verdict.json`](../../data/ops/nfl-r11-r13-provenance-20260920/verdict.json)
+Ops receipt: [`data/ops/nfl-r11-r13-provenance-20260920.md`](../../data/ops/nfl-r11-r13-provenance-20260920.md)
 Cert runner (prepare-only): [`scripts/nfl/certify_r11_vs_r14.py`](../../scripts/nfl/certify_r11_vs_r14.py)
 
 This packet does **not** edit `nfl_simulator.py`, retune coefficients, rematerialize, bind Fair Lines, or treat any near-miss artifact as frozen R11 / prior R13 / candidate R14.
@@ -54,8 +54,8 @@ Self-hosted Cursor workers were not connected. `/Volumes/KosEdgeData` (cited els
 
 These exist in-repo and must **not** be treated as R11 / R13 / R14:
 
-1. **`pe_drive_poss_v1`** sha `b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b`  
-   Fair Lines PRODUCTION-CERT war-room practice SHA. Status: **REJECTED_PRACTICE_SHA** / Alex NO CLEAR / “all five gates FAIL”.  
+1. **`pe_drive_poss_v1`** sha `b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b`
+   Fair Lines PRODUCTION-CERT war-room practice SHA. Status: **REJECTED_PRACTICE_SHA** / Alex NO CLEAR / “all five gates FAIL”.
    Missing from that packet: git SHA of the simulator that produced it, runner path, config, data hashes, seeds, command, and the five numeric metrics. The phrase “five gates” is not mapped to key-3 / key-7 / OT / MAE / total in any filed artifact.
 
 2. **`pe_drive_poss_v2`** — diagnostic STOP. Not frozen. Not R13. Not R14.
