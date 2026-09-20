@@ -48,11 +48,21 @@ REQUIRED_LINEAGE_FIELDS = (
 REQUIRED_GIT = ("commit", "branch", "worktree")
 REQUIRED_METRICS = ("key_3", "key_7", "ot", "mae", "total")
 REQUIRED_GATE_IDS = ("key_3", "key_7", "ot", "mae", "total")
+LINEAGE_FIELDS = frozenset(REQUIRED_LINEAGE_FIELDS)
+GIT_FIELDS = frozenset(REQUIRED_GIT)
+DATA_INPUT_FIELDS = frozenset(("paths", "hashes"))
+METRIC_FIELDS = frozenset(REQUIRED_METRICS)
+GATE_SET_FIELDS = frozenset(
+    ("gate_set_id", "status", "execute_holdout", "dimensions", "thresholds_source", "notes")
+)
+GATE_DIMENSION_FIELDS = frozenset(("id", "requested", "threshold", "threshold_source"))
 REJECTED_ALIASES = (
     "pe_drive_poss_v1",
     "pe_drive_poss_v2",
     "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
     "153b6a884a8e8a66336fcfc3fa9907742ae978c3",
+    "market_risk_R11",
+    "docs/NFL_ENTERPRISE_GATES.md",
 )
 
 
@@ -99,6 +109,10 @@ def _valid_seed_list(value: Any) -> bool:
     )
 
 
+def _unexpected_fields(value: dict[str, Any], allowed: frozenset[str]) -> list[str]:
+    return sorted(set(value) - allowed)
+
+
 def _numeric_value_supplied(values: dict[str, Any], key: str) -> bool:
     """Only an absent or null numeric field is missing; zero is valid."""
     return key in values and values[key] is not None
@@ -122,9 +136,17 @@ def lineage_gaps(
     for field in REQUIRED_LINEAGE_FIELDS:
         if field not in slot:
             gaps.append(f"missing field {field}")
+    unexpected_slot_fields = _unexpected_fields(slot, LINEAGE_FIELDS)
+    if unexpected_slot_fields:
+        gaps.append("unexpected fields: " + ", ".join(unexpected_slot_fields))
     if expected_label is not None and slot.get("label") != expected_label:
         gaps.append(f"label (expected {expected_label})")
-    git = slot.get("git") if isinstance(slot.get("git"), dict) else {}
+    git_value = slot.get("git")
+    git = git_value if isinstance(git_value, dict) else {}
+    if isinstance(git_value, dict):
+        unexpected_git_fields = _unexpected_fields(git_value, GIT_FIELDS)
+        if unexpected_git_fields:
+            gaps.append("git unexpected fields: " + ", ".join(unexpected_git_fields))
     for key in REQUIRED_GIT:
         if not _nonempty_string(git.get(key)):
             gaps.append(f"git.{key}")
@@ -137,7 +159,14 @@ def lineage_gaps(
         _nonempty_string(config) or (isinstance(config, dict) and bool(config))
     ):
         gaps.append("config_parameter_set")
-    inputs = slot.get("data_inputs") if isinstance(slot.get("data_inputs"), dict) else {}
+    inputs_value = slot.get("data_inputs")
+    inputs = inputs_value if isinstance(inputs_value, dict) else {}
+    if isinstance(inputs_value, dict):
+        unexpected_input_fields = _unexpected_fields(inputs_value, DATA_INPUT_FIELDS)
+        if unexpected_input_fields:
+            gaps.append(
+                "data_inputs unexpected fields: " + ", ".join(unexpected_input_fields)
+            )
     if not _nonempty_string_list(inputs.get("paths")):
         gaps.append("data_inputs.paths")
     if not _nonempty_string_map(inputs.get("hashes")):
@@ -148,7 +177,12 @@ def lineage_gaps(
         gaps.append("command_used")
     if not _nonempty_string_list(slot.get("calibration_artifacts")):
         gaps.append("calibration_artifacts")
-    metrics = slot.get("metrics") if isinstance(slot.get("metrics"), dict) else {}
+    metrics_value = slot.get("metrics")
+    metrics = metrics_value if isinstance(metrics_value, dict) else {}
+    if isinstance(metrics_value, dict):
+        unexpected_metric_fields = _unexpected_fields(metrics_value, METRIC_FIELDS)
+        if unexpected_metric_fields:
+            gaps.append("metrics unexpected fields: " + ", ".join(unexpected_metric_fields))
     for key in REQUIRED_METRICS:
         if not _numeric_value_supplied(metrics, key):
             gaps.append(f"metrics.{key}")
@@ -188,6 +222,8 @@ def slot_exact(slot: dict[str, Any], *, expected_label: str | None = None) -> bo
 
 
 def gate_set_bound(gate: dict[str, Any]) -> bool:
+    if _unexpected_fields(gate, GATE_SET_FIELDS):
+        return False
     if gate.get("status") != "BOUND":
         return False
     if gate.get("execute_holdout") is True:
@@ -200,6 +236,8 @@ def gate_set_bound(gate: dict[str, Any]) -> bool:
     seen: set[str] = set()
     for row in dims:
         if not isinstance(row, dict):
+            return False
+        if _unexpected_fields(row, GATE_DIMENSION_FIELDS):
             return False
         dim_id = row.get("id")
         if dim_id not in REQUIRED_GATE_IDS:

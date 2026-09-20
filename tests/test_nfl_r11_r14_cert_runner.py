@@ -126,6 +126,14 @@ class TestNflR11R14CertRunner(unittest.TestCase):
         gates["dimensions"][0]["threshold"] = False
         self.assertFalse(gate_set_bound(gates))
 
+        gates = _bound_gates()
+        gates["unexpected"] = "forbidden"
+        self.assertFalse(gate_set_bound(gates))
+
+        gates = _bound_gates()
+        gates["dimensions"][0]["unexpected"] = "forbidden"
+        self.assertFalse(gate_set_bound(gates))
+
     def test_evaluate_pack_fail_closed(self) -> None:
         report = evaluate_pack()
         self.assertEqual(report["status"], "FAIL_CLOSED")
@@ -180,10 +188,12 @@ class TestNflR11R14CertRunner(unittest.TestCase):
         slot["git"]["commit"] = True
         slot["evidence"] = []
         slot["notes"] = ""
+        slot["unexpected"] = "forbidden"
         gaps = lineage_gaps(slot, expected_label="R11")
         self.assertIn("git.commit", gaps)
         self.assertIn("evidence", gaps)
         self.assertIn("notes", gaps)
+        self.assertIn("unexpected fields: unexpected", gaps)
         self.assertFalse(slot_exact(slot, expected_label="R11"))
 
     def test_compare_ready_only_when_exact_and_bound(self) -> None:
@@ -279,6 +289,7 @@ class TestNflR11R14CertRunner(unittest.TestCase):
         for alias in (
             "pe_drive_poss_v1",
             "153b6a884a8e8a66336fcfc3fa9907742ae978c3",
+            "market_risk_R11",
         ):
             slot = _exact_slot("R11")
             slot["git"]["commit"] = alias
