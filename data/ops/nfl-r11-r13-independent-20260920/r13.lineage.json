@@ -1,16 +1,27 @@
 {
   "label": "R13",
   "role": "prior_experiment",
-  "status": "UNBOUND",
+  "status": "PARTIAL_EXTERNAL",
   "bind_allowed": false,
   "exact_reproduction_established": false,
+  "external_artifact_id": "pe_clock_play_v3.5",
+  "discarded": true,
   "git": {
     "commit": null,
     "branch": null,
     "worktree": null
   },
   "simulator_source_files": [],
-  "experiment_runner": null,
+  "experiment_runner": {
+    "path": null,
+    "hash_prefix": "35700d8b",
+    "hash_full": null
+  },
+  "engine": {
+    "id": "V35",
+    "hash_prefix": "4db68127",
+    "hash_full": null
+  },
   "config_parameter_set": null,
   "data_inputs": {
     "paths": [],
@@ -19,6 +30,7 @@
   "random_seeds": [],
   "command_used": null,
   "calibration_artifacts": [],
+  "packet_labels_unverified": ["gate", "STOP", "KEY7", "ENDGAME"],
   "metrics": {
     "key_3": null,
     "key_7": null,
@@ -27,10 +39,13 @@
     "total": null
   },
   "uncommitted_or_external_dependencies": [
-    "Label R13 was not found in this checkout or connected research surfaces. If the label exists, it is outside this environment."
+    "Alex Academy/research store files are not in this git checkout. R13 labeled pe_clock_play_v3.5 (discarded) / V35 prefix 4db68127 / runner prefix 35700d8b.",
+    "Full sha256, git SHAs, Mac/Drive absolute paths, CLOCK_PLAY_R13 freeze dir, and original argv remain unrecovered.",
+    "KEY7 here is a named packet label, not a numeric key-7 gate threshold.",
+    "Do not invent truncated hashes."
   ],
   "evidence": [
-    "Independent search 2026-09-20 on kosedge/kosedge @ 4aeab78f2011ac593c708f24acc01bf5117f9728 (deploy-vercel). Zero experiment-round hits."
+    "Alex external provenance bind filed 2026-09-20 (documentation only). Prior experiment discarded. Prefixes recorded; full hashes not invented."
   ],
-  "notes": "Do not alias pe_drive_poss_v2, personnel r13 rates, or WR13 ranks as prior R13."
+  "notes": "Do not alias pe_drive_poss_v2, personnel r13 rates, WR13 ranks, or services/model-service/src/services/nfl_simulator.py as prior R13."
 }

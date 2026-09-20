@@ -89,6 +89,12 @@
       "surface": "local_volumes",
       "query": "/Volumes/KosEdgeData",
       "result": "/Volumes not mounted in this environment"
+    },
+    {
+      "surface": "alex_external_bind_followup",
+      "as_of": "2026-09-20T14:50:00Z",
+      "query": "permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.{md,json}; pe_clock_play_v3.3/v3.5; CLOCK_PLAY_R11|R13",
+      "result": "Academy paths absent from this checkout, Drive titles, and Gmail. Hash prefixes recorded from the bind note only. Full sha256 not invented. CLOCK_PLAY_R11/R13 dirs not found."
     }
   ],
   "near_misses_not_aliased": [

@@ -16,6 +16,7 @@ from prepare_r11_r14_cert import (  # noqa: E402
     assert_not_alias,
     evaluate_pack,
     gate_set_bound,
+    inspect_academy_files,
     lineage_gaps,
     main,
     refuse_holdout,
@@ -40,7 +41,7 @@ def _exact_slot(label: str) -> dict:
             "branch": "research/example",
             "worktree": "/tmp/example",
         },
-        "simulator_source_files": ["services/model-service/src/services/nfl_simulator.py"],
+        "simulator_source_files": ["research/pe_clock_play_example.py"],
         "experiment_runner": "scripts/nfl/example_runner.py",
         "config_parameter_set": "data/ops/example-config.json",
         "data_inputs": {
@@ -90,11 +91,16 @@ class TestFiledPackFailClosed(unittest.TestCase):
         self.assertFalse(report["exact_reproduction_established"])
         self.assertFalse(report["holdout_executed"])
         self.assertFalse(report["model_behavior_edited"])
-        self.assertEqual(report["slots"]["R11"], "UNBOUND")
-        self.assertEqual(report["slots"]["R13"], "UNBOUND")
+        self.assertEqual(report["slots"]["R11"], "PARTIAL_EXTERNAL")
+        self.assertEqual(report["slots"]["R13"], "PARTIAL_EXTERNAL")
         self.assertEqual(report["slots"]["R14"], "UNBOUND")
         self.assertTrue(report["gaps"]["R11"])
+        self.assertFalse(report["academy_store"]["present_in_checkout"])
+        self.assertTrue(report["alex_external_bind_present"])
         self.assertIn("key_3", report["dimensions_requested"])
+        self.assertNotIn("random_seeds", report["gaps"]["R11"])
+        self.assertIn("command_used", report["gaps"]["R11"])
+        self.assertIn("git.commit", report["gaps"]["R11"])
 
     def test_cli_default_exits_2(self) -> None:
         self.assertEqual(main([]), 2)
@@ -110,12 +116,16 @@ class TestFiledPackFailClosed(unittest.TestCase):
 
 
 class TestLineageAndGates(unittest.TestCase):
-    def test_unbound_slot_is_not_exact(self) -> None:
+    def test_partial_external_slot_is_not_exact(self) -> None:
         slot = json.loads((PACK / "r11.lineage.json").read_text())
+        self.assertEqual(slot["status"], "PARTIAL_EXTERNAL")
+        self.assertFalse(slot.get("bind_allowed"))
         self.assertFalse(slot_exact(slot))
         gaps = lineage_gaps(slot)
         self.assertIn("git.commit", gaps)
         self.assertIn("metrics.key_3", gaps)
+        self.assertIn("experiment_runner", gaps)
+        self.assertNotIn("random_seeds", gaps)
 
     def test_filed_gate_set_is_not_bound(self) -> None:
         gates = json.loads((PACK / "frozen_gate_set.json").read_text())
@@ -125,6 +135,15 @@ class TestLineageAndGates(unittest.TestCase):
         slot = _exact_slot("R11")
         slot["notes"] = "binds pe_drive_poss_v1"
         slot["command_used"] = "pe_drive_poss_v1"
+        with self.assertRaises(CertError):
+            assert_not_alias(slot)
+
+    def test_nfl_simulator_cannot_alias_as_exact_r11(self) -> None:
+        slot = _exact_slot("R11")
+        slot["notes"] = "current nfl_simulator.py is the frozen source"
+        slot["simulator_source_files"] = [
+            "services/model-service/src/services/nfl_simulator.py"
+        ]
         with self.assertRaises(CertError):
             assert_not_alias(slot)
 
@@ -162,6 +181,16 @@ class TestLineageAndGates(unittest.TestCase):
             report = evaluate_pack(pack)
             self.assertEqual(report["status"], "FAIL_CLOSED")
             self.assertFalse(report["compare_legal"])
+
+    def test_hash_prefix_does_not_satisfy_full_sha(self) -> None:
+        slot = json.loads((PACK / "r11.lineage.json").read_text())
+        slot["data_inputs"] = {"paths": ["pbp_clock"], "hashes": ["6f98bb19"]}
+        self.assertIn("data_inputs.hashes", lineage_gaps(slot))
+
+    def test_academy_files_absent_from_checkout(self) -> None:
+        academy = inspect_academy_files(ROOT)
+        self.assertFalse(academy["present_in_checkout"])
+        self.assertFalse(academy["prefix_match"])
 
 
 if __name__ == "__main__":

@@ -9,7 +9,9 @@ A compare is legal only when:
   * every required lineage field is populated
   * the frozen gate set is BOUND with sourced thresholds
 
-Until those are filed, the runner fail-closes.
+Until those are filed, the runner fail-closes. Hash prefixes and
+PARTIAL_EXTERNAL Academy labels do not satisfy EXACT. Missing Academy
+files keep the filed pack refuse-closed.
 
 Holdout execution is refused even if lineage later becomes EXACT — that
 requires a separate authorization outside this lane.
@@ -18,7 +20,9 @@ requires a separate authorization outside this lane.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import re
 import sys
 from pathlib import Path
 from typing import Any
@@ -46,11 +50,25 @@ REQUIRED_LINEAGE_FIELDS = (
 REQUIRED_GIT = ("commit", "branch", "worktree")
 REQUIRED_METRICS = ("key_3", "key_7", "ot", "mae", "total")
 REQUIRED_GATE_IDS = ("key_3", "key_7", "ot", "mae", "total")
+FULL_SHA256 = re.compile(r"^[0-9a-f]{64}$")
+FULL_GIT_SHA = re.compile(r"^[0-9a-f]{40}$")
 REJECTED_ALIASES = (
     "pe_drive_poss_v1",
     "pe_drive_poss_v2",
     "b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b",
     "153b6a884a8e8a66336fcfc3fa9907742ae978c3",
+    "nfl_simulator.py",
+    "personnel_efficiency.py",
+)
+ACADEMY_CANDIDATES = (
+    {
+        "rel": "permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.md",
+        "sha256_prefix": "bb6ebda9",
+    },
+    {
+        "rel": "permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.json",
+        "sha256_prefix": "d1dfc752",
+    },
 )
 
 
@@ -77,6 +95,52 @@ def _populated(value: Any) -> bool:
     return True
 
 
+def _full_sha256(value: Any) -> bool:
+    return isinstance(value, str) and bool(FULL_SHA256.match(value.lower()))
+
+
+def _full_git_sha(value: Any) -> bool:
+    return isinstance(value, str) and bool(FULL_GIT_SHA.match(value.lower()))
+
+
+def _runner_path(value: Any) -> str | None:
+    if isinstance(value, str) and value.strip():
+        return value.strip()
+    if isinstance(value, dict) and _populated(value.get("path")):
+        return str(value["path"]).strip()
+    return None
+
+
+def inspect_academy_files(root: Path = ROOT) -> dict[str, Any]:
+    files: list[dict[str, Any]] = []
+    for spec in ACADEMY_CANDIDATES:
+        path = root / spec["rel"]
+        row: dict[str, Any] = {
+            "rel": spec["rel"],
+            "sha256_prefix": spec["sha256_prefix"],
+            "present": path.is_file(),
+            "sha256": None,
+            "prefix_match": None,
+        }
+        if path.is_file():
+            digest = hashlib.sha256(path.read_bytes()).hexdigest()
+            row["sha256"] = digest
+            row["prefix_match"] = digest.startswith(spec["sha256_prefix"])
+        files.append(row)
+    present = all(row["present"] for row in files)
+    prefixes_ok = all(row["prefix_match"] is True for row in files) if present else False
+    return {
+        "present_in_checkout": present,
+        "prefix_match": prefixes_ok if present else False,
+        "files": files,
+        "note": (
+            "Academy files attached; prefixes match. Full sha256 still required for EXACT."
+            if present and prefixes_ok
+            else "Academy/research store files are not in this checkout. Prefixes only; full hashes not invented."
+        ),
+    }
+
+
 def lineage_gaps(slot: dict[str, Any]) -> list[str]:
     gaps: list[str] = []
     for field in REQUIRED_LINEAGE_FIELDS:
@@ -84,18 +148,23 @@ def lineage_gaps(slot: dict[str, Any]) -> list[str]:
             gaps.append(f"missing field {field}")
     git = slot.get("git") if isinstance(slot.get("git"), dict) else {}
     for key in REQUIRED_GIT:
-        if not _populated(git.get(key)):
+        value = git.get(key)
+        if key == "commit":
+            if not _full_git_sha(value):
+                gaps.append("git.commit")
+        elif not _populated(value):
             gaps.append(f"git.{key}")
     if not _populated(slot.get("simulator_source_files")):
         gaps.append("simulator_source_files")
-    if not _populated(slot.get("experiment_runner")):
+    if _runner_path(slot.get("experiment_runner")) is None:
         gaps.append("experiment_runner")
     if not _populated(slot.get("config_parameter_set")):
         gaps.append("config_parameter_set")
     inputs = slot.get("data_inputs") if isinstance(slot.get("data_inputs"), dict) else {}
     if not _populated(inputs.get("paths")):
         gaps.append("data_inputs.paths")
-    if not _populated(inputs.get("hashes")):
+    hashes = inputs.get("hashes") if isinstance(inputs.get("hashes"), list) else []
+    if not any(_full_sha256(item) for item in hashes):
         gaps.append("data_inputs.hashes")
     if not _populated(slot.get("random_seeds")):
         gaps.append("random_seeds")
@@ -157,15 +226,21 @@ def gate_set_bound(gate: dict[str, Any]) -> bool:
     return seen == set(REQUIRED_GATE_IDS)
 
 
-def evaluate_pack(pack: Path = PACK) -> dict[str, Any]:
+def evaluate_pack(pack: Path = PACK, root: Path = ROOT) -> dict[str, Any]:
     r11 = load_json(pack / "r11.lineage.json")
     r13 = load_json(pack / "r13.lineage.json")
     r14 = load_json(pack / "r14.lineage.json")
     gates = load_json(pack / "frozen_gate_set.json")
     verdict_doc = load_json(pack / "verdict.json")
+    alex_bind_path = pack / "alex_external_bind.json"
+    alex_bind = load_json(alex_bind_path) if alex_bind_path.is_file() else None
+    academy = inspect_academy_files(root)
 
     for slot in (r11, r13, r14):
         assert_not_alias(slot)
+
+    if academy["present_in_checkout"] and academy["prefix_match"] is False:
+        raise CertError("Academy files are present but sha256 prefixes do not match the filed bind")
 
     r11_exact = slot_exact(r11)
     r13_exact = slot_exact(r13)
@@ -189,6 +264,14 @@ def evaluate_pack(pack: Path = PACK) -> dict[str, Any]:
         )
     if gates.get("execute_holdout") is True:
         reasons.append("gate set execute_holdout=true is illegal in this lane")
+    if alex_bind is not None and not academy["present_in_checkout"]:
+        compare_legal = False
+        reasons.append(
+            "Academy/research store files are not in this checkout; refuse-closed until EXACT artifacts are attached"
+        )
+    if alex_bind and alex_bind.get("exact_reproduction_established") is True:
+        compare_legal = False
+        reasons.append("alex_external_bind.json must not claim EXACT while hashes remain prefixes")
 
     if compare_legal:
         status = "COMPARE_READY"
@@ -217,6 +300,8 @@ def evaluate_pack(pack: Path = PACK) -> dict[str, Any]:
         },
         "reasons": reasons,
         "packet_verdict": verdict_doc.get("verdict"),
+        "academy_store": academy,
+        "alex_external_bind_present": alex_bind is not None,
         "dimensions_requested": [
             row.get("id") for row in (gates.get("dimensions") or []) if isinstance(row, dict)
         ],

@@ -8,6 +8,7 @@
 
 Machine twin: [`data/ops/nfl-r11-r13-independent-20260920/verdict.json`](../../data/ops/nfl-r11-r13-independent-20260920/verdict.json)  
 Ops receipt: [`data/ops/nfl-r11-r13-independent-20260920.md`](../../data/ops/nfl-r11-r13-independent-20260920.md)  
+Alex bind: [`data/ops/nfl-r11-r13-independent-20260920/alex_external_bind.json`](../../data/ops/nfl-r11-r13-independent-20260920/alex_external_bind.json)  
 Cert runner (prepare-only): [`scripts/nfl/prepare_r11_r14_cert.py`](../../scripts/nfl/prepare_r11_r14_cert.py)
 
 This packet does **not** edit `nfl_simulator.py`, retune coefficients, rematerialize, bind Fair Lines, or treat any near-miss artifact as frozen R11 / prior R13 / candidate R14.
@@ -18,37 +19,64 @@ A concurrent draft search exists as PR 576 (`cursor/nfl-r11-r13-lineage-7c4b`). 
 
 ## Verdict
 
-| Slot                                               | Status                      | Bind allowed |
-| -------------------------------------------------- | --------------------------- | ------------ |
-| Frozen R11 source                                  | **UNBOUND**                 | no           |
-| Prior R13 experiment                               | **UNBOUND**                 | no           |
-| Candidate R14                                      | **UNBOUND**                 | no           |
-| Frozen gate set (key-3 / key-7 / OT / MAE / total) | **UNBOUND_DIMENSIONS_ONLY** | no compare   |
+| Slot                                               | Status                           | Bind allowed |
+| -------------------------------------------------- | -------------------------------- | ------------ |
+| Frozen R11 source                                  | **PARTIAL_EXTERNAL**             | no           |
+| Prior R13 experiment                               | **PARTIAL_EXTERNAL** (discarded) | no           |
+| Candidate R14                                      | **UNBOUND**                      | no           |
+| Frozen gate set (key-3 / key-7 / OT / MAE / total) | **UNBOUND_DIMENSIONS_ONLY**      | no compare   |
 
-**R11 / R13 / R14 are labels that do not exist in this repo.** They were not found as filenames, commits, tags, worktrees, Linear issues, Notion pages, Gmail threads (except the concurrent PR 576 notices), Google Drive titles, or X posts. Reconstructing a lineage from nearby NFL artifacts would require inventing a binding. The instruction is fail-closed, so this lane stops.
+Alex filed an external provenance bind from the Academy / research store. Recoverable **labels and hash prefixes** are recorded below. Unrecovered fields stay null. Truncated hashes are **not** completed. The lane stays fail-closed until EXACT artifacts are checked in or attached.
+
+---
+
+## Alex external bind (documentation only)
+
+Filed store paths (not in this git checkout):
+
+| Store path                                                                     | sha256                 | Present here |
+| ------------------------------------------------------------------------------ | ---------------------- | ------------ |
+| `permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.md`   | prefix `bb6ebda9` only | **no**       |
+| `permanent-engine/docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.json` | prefix `d1dfc752` only | **no**       |
+
+Searched: `/workspace/permanent-engine`, repo filenames, Google Drive titles, Gmail. Missing. Full sha256 was not invented.
+
+### Recoverable labels (not EXACT)
+
+| Slot | Artifact                         | Engine | Engine hash       | Runner hash       | Other                                                              |
+| ---- | -------------------------------- | ------ | ----------------- | ----------------- | ------------------------------------------------------------------ |
+| R11  | `pe_clock_play_v3.3`             | V33    | prefix `6f98bb19` | prefix `5abf5e69` | seed **20260917**; packets / pbp_clock / calib **named, unhashed** |
+| R13  | `pe_clock_play_v3.5` (discarded) | V35    | prefix `4db68127` | prefix `35700d8b` | gate / STOP / KEY7 / ENDGAME packets **named, unhashed**           |
+
+R13 KEY7 is a packet name, not a numeric key-7 threshold.
+
+### Still UNRECOVERABLE (keep fail-closed)
+
+- git SHAs for the R11 / R13 labels
+- Mac / Drive absolute paths
+- `freeze/CLOCK_PLAY_R11` and `CLOCK_PLAY_R13` directories
+- original argv
+- full sha256 (prefixes only)
+- numeric key-3 / key-7 / OT / MAE / total metrics
+
+`nfl_simulator.py` and personnel-r11 grouping rates remain **explicit non-aliases**.
 
 ---
 
 ## Requested lineage fields
 
-For each of R11 and R13, the following were required. All remain null / empty.
-
-| Field                                    | R11                                                                      | R13       |
-| ---------------------------------------- | ------------------------------------------------------------------------ | --------- |
-| git commit                               | not found                                                                | not found |
-| git branch                               | not found                                                                | not found |
-| worktree                                 | not found                                                                | not found |
-| simulator source files                   | not found                                                                | not found |
-| experiment runner                        | not found                                                                | not found |
-| config / parameter set                   | not found                                                                | not found |
-| data inputs + hashes                     | not found                                                                | not found |
-| random seed(s)                           | not found                                                                | not found |
-| command used                             | not found                                                                | not found |
-| generated calibration artifacts          | not found                                                                | not found |
-| key-3 / key-7 / OT / MAE / total metrics | not found                                                                | not found |
-| uncommitted or external dependency       | **likely** — label exists only outside this checkout if it exists at all | same      |
-
-Checkout at search: `kosedge/kosedge` `deploy-vercel` `4aeab78f2011ac593c708f24acc01bf5117f9728`. Only worktree: `/workspace`. Self-hosted Cursor workers: none connected. `/Volumes/KosEdgeData` is not mounted. Google Calendar search returned an internal error (no events recovered). Slack search is not available in this tool set.
+| Field                                    | R11                                       | R13                                                |
+| ---------------------------------------- | ----------------------------------------- | -------------------------------------------------- |
+| git commit / branch / worktree           | **UNRECOVERABLE**                         | **UNRECOVERABLE**                                  |
+| simulator source files                   | not in this checkout                      | not in this checkout                               |
+| experiment runner                        | hash prefix `5abf5e69` only; path missing | hash prefix `35700d8b` only; path missing          |
+| config / parameter set                   | not found                                 | not found                                          |
+| data inputs + hashes                     | pbp_clock named; hashes missing           | not found                                          |
+| random seed(s)                           | **20260917**                              | not found                                          |
+| command used (original argv)             | **UNRECOVERABLE**                         | **UNRECOVERABLE**                                  |
+| generated calibration artifacts          | named packets/calib; paths/hashes missing | named gate/STOP/KEY7/ENDGAME; paths/hashes missing |
+| key-3 / key-7 / OT / MAE / total metrics | not found                                 | not found                                          |
+| uncommitted or external dependency       | Academy store not attached                | same                                               |
 
 ---
 
@@ -56,23 +84,14 @@ Checkout at search: `kosedge/kosedge` `deploy-vercel` `4aeab78f2011ac593c708f24a
 
 These exist in-repo and must **not** be treated as R11 / R13 / R14:
 
-1. **`pe_drive_poss_v1`** sha `b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b`  
-   Fair Lines PRODUCTION-CERT war-room practice SHA. Status: **REJECTED_PRACTICE_SHA** / Alex NO CLEAR / “all five gates FAIL”.  
-   Missing from that packet: git SHA of the simulator that produced it, runner path, config, data hashes, seeds, command, and the five numeric metrics. The phrase “five gates” is not mapped to key-3 / key-7 / OT / MAE / total in any filed artifact.
-
-2. **`pe_drive_poss_v2`** — diagnostic STOP. Not frozen. Not R13. Not R14.
-
-3. **Live packaged-EPA SHA `153b6a884a8e`** — historical OOS diagnostic (`MODEL_SIGNAL_WEAK`). July-31 multi-season freeze is already marked **UNREPRODUCIBLE** in that packet. Different experiment.
-
-4. **Market-risk register R11** — `book_ledger` ≠ market ledger. Odds infra, not a sim round.
-
-5. **Personnel `r11` / `r13` rates** — 11-personnel / 13-personnel grouping rates in `personnel_efficiency.py`. Unrelated.
-
-6. **WR11 / WR13 / WR14** — fantasy rank notes from 2026-08-13. Unrelated.
-
-7. **Current `nfl_simulator.py`** (`DEFAULT_NFL_MODEL_VERSION = nfl-v1.5-matchup-sim`) — checked-in simulator, not labeled R11/R13/R14. Binding it would invent a lineage.
-
-8. **`docs/NFL_ENTERPRISE_GATES.md`** ATS / CLV / MAE floors — product betting gates, not an R11 frozen gate set.
+1. **`pe_drive_poss_v1`** sha `b5ee9d80494bbc13b989174af0676afb1831a4cb11e678f2f243ac469b92d36b` — rejected war-room practice SHA. Different artifact family from `pe_clock_play_v3.3`.
+2. **`pe_drive_poss_v2`** — diagnostic STOP. Not R13/R14.
+3. **Live packaged-EPA SHA `153b6a884a8e`** — historical OOS diagnostic (`MODEL_SIGNAL_WEAK`).
+4. **Market-risk register R11** — odds infra, not a sim round.
+5. **Personnel `r11` / `r13` rates** — 11-personnel / 13-personnel grouping rates in `personnel_efficiency.py`. **Explicit non-alias.**
+6. **WR11 / WR13 / WR14** — fantasy rank notes.
+7. **Current `nfl_simulator.py`** (`DEFAULT_NFL_MODEL_VERSION = nfl-v1.5-matchup-sim`) — **explicit non-alias.** Binding it would invent a lineage.
+8. **`docs/NFL_ENTERPRISE_GATES.md`** — product ATS/CLV/MAE floors, not this gate set.
 
 ---
 
@@ -88,32 +107,33 @@ python3 scripts/nfl/prepare_r11_r14_cert.py
 
 What it does:
 
-- Loads the three lineage slots + requested gate-set dimensions
-- Requires every lineage field to be present and `status=EXACT` before a compare is legal
-- Prints **FAIL_CLOSED** while slots are UNBOUND
-- Hard-refuses `--execute-holdout` (no held-out data path)
+- Loads lineage slots + requested gate-set dimensions + `alex_external_bind.json`
+- If Academy files appear under `permanent-engine/docs/ops/`, hashes them and checks the filed **prefixes** (does not invent full sha256)
+- Requires every lineage field to be present, `status=EXACT`, and `bind_allowed=true` before a compare is legal
+- Hash **prefixes** and PARTIAL_EXTERNAL slots do **not** satisfy EXACT
+- Prints **FAIL_CLOSED** while slots are not EXACT
+- Hard-refuses `--execute-holdout`
 
 What it does **not** do:
 
 - Import or call `nfl_simulator.py` or any scoring equation
-- Invent thresholds for key-3 / key-7 / OT / MAE / total
+- Invent thresholds or complete truncated hashes
 - Bind Fair Lines / PLAY / Kelly
 - Rematerialize or write production artifacts
 
-A compare of frozen R11 vs candidate R14 becomes legal only after someone files complete EXACT lineage JSON (same schema) **and** a BOUND gate set with sourced thresholds. That filing is outside this lane.
+A compare of frozen R11 vs candidate R14 becomes legal only after complete EXACT lineage JSON **and** a BOUND gate set with sourced thresholds are checked in or attached. That filing is outside this lane.
 
 ---
 
 ## How to unstick (human / war-room, not this agent)
 
-To flip R11 from UNBOUND to EXACT, drop a completed `r11.lineage.json` that names:
+Attach or check in the Academy files with **full** sha256, plus:
 
-- commit + branch + worktree
-- simulator files + runner + config
-- input paths **and** hashes
-- seeds + exact command
-- calibration artifact paths
-- the five metrics
-- any external/uncommitted dependency, called out
+- git commit + branch + worktree for each label
+- runner path (not prefix-only)
+- input paths **and** full hashes
+- original argv
+- CLOCK_PLAY freeze dirs or a stated replacement
+- the five numeric metrics and sourced gate thresholds
 
-Same for R13 and for an R14 candidate. Until then, certification stays fail-closed.
+Until then, certification stays fail-closed.

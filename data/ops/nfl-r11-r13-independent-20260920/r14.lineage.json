@@ -27,10 +27,11 @@
     "total": null
   },
   "uncommitted_or_external_dependencies": [
-    "No R14 candidate source, runner, config, seeds, hashes, or metrics were filed. This lane does not invent or bind a candidate."
+    "No R14 candidate source, runner, config, seeds, hashes, or metrics were filed. This lane does not invent or bind a candidate.",
+    "Alex bind covers R11/R13 labels only. No R14 behavior edits."
   ],
   "evidence": [
-    "Independent search 2026-09-20. No R14 experiment label in repo, Linear, Notion, Gmail, Drive, or X."
+    "Independent search 2026-09-20 plus Alex external bind. No R14 experiment label in repo or Academy paths present here."
   ],
   "notes": "No R14 behavior edits were made. Do not treat current nfl_simulator.py (nfl-v1.5-matchup-sim) as R14."
 }

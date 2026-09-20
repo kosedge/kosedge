@@ -1,13 +1,14 @@
 {
   "packet_id": "nfl-r11-r13-independent-20260920",
-  "as_of": "2026-09-20T14:45:00Z",
+  "as_of": "2026-09-20T14:50:00Z",
   "agent": "cursor-cloud NFL R11/R13 provenance + cert runner",
   "lane": "provenance_reproducibility_only",
   "checkout": {
     "repo": "kosedge/kosedge",
-    "branch": "deploy-vercel",
-    "commit": "4aeab78f2011ac593c708f24acc01bf5117f9728",
-    "working_tree": "clean_at_search"
+    "branch": "cursor/nfl-r11-r13-lineage-8b13",
+    "base": "deploy-vercel",
+    "commit": "5e7b2c10cd4bb20a472f8cb655a5987d6696a34a",
+    "working_tree": "research_packet_only"
   },
   "verdict": "FAIL_CLOSED",
   "exact_reproduction_established": false,
@@ -15,8 +16,8 @@
   "holdout_executed": false,
   "deploy_push_merge_promotion": false,
   "slots": {
-    "R11": "UNBOUND",
-    "R13": "UNBOUND",
+    "R11": "PARTIAL_EXTERNAL",
+    "R13": "PARTIAL_EXTERNAL",
     "R14": "UNBOUND",
     "gate_set": "UNBOUND_DIMENSIONS_ONLY"
   },
@@ -25,6 +26,12 @@
     "R13": false,
     "R14": false,
     "gate_set": false
+  },
+  "alex_external_bind": {
+    "file": "alex_external_bind.json",
+    "store_present_in_checkout": false,
+    "prefixes_recorded": true,
+    "full_hashes_invented": false
   },
   "cert_runner": "scripts/nfl/prepare_r11_r14_cert.py",
   "docs": "docs/ops/NFL_R11_R13_INDEPENDENT_PROVENANCE_2026-09-20.md",
