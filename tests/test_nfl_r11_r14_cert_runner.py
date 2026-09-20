@@ -256,9 +256,8 @@ class TestNflR11R14CertRunner(unittest.TestCase):
             self.assertIn("label (expected R11)", report["gaps"]["R11"])
 
     def test_incomplete_exact_status_still_fail_closed(self) -> None:
-        slot = _load("r11.lineage.json")
-        slot["status"] = "EXACT"
-        slot["bind_allowed"] = True
+        slot = _exact_slot("R11")
+        slot["git"]["commit"] = None
         with tempfile.TemporaryDirectory() as tmp:
             path = Path(tmp)
             _write_pack(
