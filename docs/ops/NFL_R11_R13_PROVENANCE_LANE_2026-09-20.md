@@ -16,12 +16,12 @@ This packet does **not** edit `nfl_simulator.py`, retune coefficients, remateria
 
 ## Verdict
 
-| Slot | Status | Bind allowed |
-| ---- | ------ | ------------ |
-| Frozen R11 source | **UNBOUND** | no |
-| Prior R13 experiment | **UNBOUND** | no |
-| Candidate R14 | **UNBOUND** | no |
-| Frozen gate set (key-3 / key-7 / OT / MAE / total) | **UNBOUND_DIMENSIONS_ONLY** | no compare |
+| Slot                                               | Status                      | Bind allowed |
+| -------------------------------------------------- | --------------------------- | ------------ |
+| Frozen R11 source                                  | **UNBOUND**                 | no           |
+| Prior R13 experiment                               | **UNBOUND**                 | no           |
+| Candidate R14                                      | **UNBOUND**                 | no           |
+| Frozen gate set (key-3 / key-7 / OT / MAE / total) | **UNBOUND_DIMENSIONS_ONLY** | no compare   |
 
 **R11 / R13 / R14 are labels that do not exist in this repo.** They were not found as filenames, commits, tags, worktrees, Linear issues, Notion pages, Gmail threads, or Google Drive titles. Reconstructing a lineage from nearby NFL artifacts would require inventing a binding. The instruction is fail-closed, so this lane stops.
 
@@ -31,20 +31,20 @@ This packet does **not** edit `nfl_simulator.py`, retune coefficients, remateria
 
 For each of R11 and R13, the following were required. All remain null / empty.
 
-| Field | R11 | R13 |
-| ----- | --- | --- |
-| git commit | not found | not found |
-| git branch | not found | not found |
-| worktree | not found | not found |
-| simulator source files | not found | not found |
-| experiment runner | not found | not found |
-| config / parameter set | not found | not found |
-| data inputs + hashes | not found | not found |
-| random seed(s) | not found | not found |
-| command used | not found | not found |
-| generated calibration artifacts | not found | not found |
-| key-3 / key-7 / OT / MAE / total metrics | not found | not found |
-| uncommitted or external dependency | **likely** — label exists only outside this checkout if it exists at all | same |
+| Field                                    | R11                                                                      | R13       |
+| ---------------------------------------- | ------------------------------------------------------------------------ | --------- |
+| git commit                               | not found                                                                | not found |
+| git branch                               | not found                                                                | not found |
+| worktree                                 | not found                                                                | not found |
+| simulator source files                   | not found                                                                | not found |
+| experiment runner                        | not found                                                                | not found |
+| config / parameter set                   | not found                                                                | not found |
+| data inputs + hashes                     | not found                                                                | not found |
+| random seed(s)                           | not found                                                                | not found |
+| command used                             | not found                                                                | not found |
+| generated calibration artifacts          | not found                                                                | not found |
+| key-3 / key-7 / OT / MAE / total metrics | not found                                                                | not found |
+| uncommitted or external dependency       | **likely** — label exists only outside this checkout if it exists at all | same      |
 
 Self-hosted Cursor workers were not connected. `/Volumes/KosEdgeData` (cited elsewhere for Mac warehouse work) is not mounted here.
 
