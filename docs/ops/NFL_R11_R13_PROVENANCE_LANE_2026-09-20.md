@@ -94,7 +94,7 @@ What it does **not** do:
 - Bind Fair Lines / PLAY / Kelly
 - Rematerialize or write production artifacts
 
-A compare of frozen R11 vs candidate R14 becomes legal only after someone files complete EXACT lineage JSON (same schema) **and** a BOUND gate set with sourced thresholds. That filing is outside this lane.
+A compare of frozen R11 vs candidate R14 becomes legal only after someone files complete EXACT lineage JSON for **R11, R13, and R14** (same schema) **and** a BOUND gate set with sourced thresholds. That filing is outside this lane.
 
 ---
 

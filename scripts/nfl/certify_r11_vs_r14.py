@@ -5,7 +5,7 @@ Default mode is prepare-only. It never imports the NFL simulator, never
 scores games, and never reads held-out outcomes.
 
 Compare is legal only when:
-  * R11 and R14 lineage slots are status=EXACT and bind_allowed=true
+  * R11, R13, and R14 lineage slots are status=EXACT and bind_allowed=true
   * every required lineage field is populated
   * the frozen gate set is BOUND with sourced thresholds
 
@@ -77,6 +77,11 @@ def _populated(value: Any) -> bool:
     return True
 
 
+def _numeric_value_supplied(values: dict[str, Any], key: str) -> bool:
+    """Only an absent or null numeric field is missing; zero is valid."""
+    return key in values and values[key] is not None
+
+
 def lineage_gaps(slot: dict[str, Any]) -> list[str]:
     gaps: list[str] = []
     for field in REQUIRED_LINEAGE_FIELDS:
@@ -105,7 +110,7 @@ def lineage_gaps(slot: dict[str, Any]) -> list[str]:
         gaps.append("calibration_artifacts")
     metrics = slot.get("metrics") if isinstance(slot.get("metrics"), dict) else {}
     for key in REQUIRED_METRICS:
-        if not _populated(metrics.get(key)):
+        if not _numeric_value_supplied(metrics, key):
             gaps.append(f"metrics.{key}")
     return gaps
 
@@ -154,7 +159,7 @@ def gate_set_bound(gate: dict[str, Any]) -> bool:
         seen.add(str(dim_id))
         if row.get("requested") is not True:
             return False
-        if not _populated(row.get("threshold")):
+        if not _numeric_value_supplied(row, "threshold"):
             return False
         if not _populated(row.get("threshold_source")):
             return False
@@ -176,15 +181,12 @@ def evaluate_pack(pack: Path = PACK) -> dict[str, Any]:
     r14_exact = slot_exact(r14)
     gates_ok = gate_set_bound(gates)
 
-    compare_legal = r11_exact and r14_exact and gates_ok
+    compare_legal = r11_exact and r13_exact and r14_exact and gates_ok
     reasons: list[str] = []
     if not r11_exact:
         reasons.append("R11 lineage is not EXACT: " + ", ".join(lineage_gaps(r11) or ["status/bind"]))
     if not r13_exact:
-        reasons.append(
-            "R13 lineage is not EXACT (informational): "
-            + ", ".join(lineage_gaps(r13) or ["status/bind"])
-        )
+        reasons.append("R13 lineage is not EXACT: " + ", ".join(lineage_gaps(r13) or ["status/bind"]))
     if not r14_exact:
         reasons.append("R14 lineage is not EXACT: " + ", ".join(lineage_gaps(r14) or ["status/bind"]))
     if not gates_ok:
