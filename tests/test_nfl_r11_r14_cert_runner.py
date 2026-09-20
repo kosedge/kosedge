@@ -13,6 +13,7 @@ sys.path.insert(0, str(ROOT / "scripts" / "nfl"))
 
 from certify_r11_vs_r14 import (  # noqa: E402
     PACK,
+    CertError,
     evaluate_pack,
     gate_set_bound,
     lineage_gaps,
@@ -119,6 +120,12 @@ class TestNflR11R14CertRunner(unittest.TestCase):
         self.assertEqual(ids, ["key_3", "key_7", "ot", "mae", "total"])
         self.assertTrue(all(row["threshold"] is None for row in gates["dimensions"]))
 
+    def test_bound_gates_require_finite_numeric_thresholds(self) -> None:
+        gates = _bound_gates()
+        self.assertTrue(gate_set_bound(gates))
+        gates["dimensions"][0]["threshold"] = False
+        self.assertFalse(gate_set_bound(gates))
+
     def test_evaluate_pack_fail_closed(self) -> None:
         report = evaluate_pack()
         self.assertEqual(report["status"], "FAIL_CLOSED")
@@ -161,6 +168,23 @@ class TestNflR11R14CertRunner(unittest.TestCase):
 
         slot["metrics"]["key_3"] = None
         self.assertIn("metrics.key_3", lineage_gaps(slot))
+
+        slot["metrics"]["key_3"] = False
+        self.assertIn(
+            "metrics.key_3 (must be finite number)",
+            lineage_gaps(slot),
+        )
+
+    def test_exact_lineage_rejects_malformed_required_fields(self) -> None:
+        slot = _exact_slot("R11")
+        slot["git"]["commit"] = True
+        slot["evidence"] = []
+        slot["notes"] = ""
+        gaps = lineage_gaps(slot, expected_label="R11")
+        self.assertIn("git.commit", gaps)
+        self.assertIn("evidence", gaps)
+        self.assertIn("notes", gaps)
+        self.assertFalse(slot_exact(slot, expected_label="R11"))
 
     def test_compare_ready_only_when_exact_and_bound(self) -> None:
         bound_gates = _bound_gates()
@@ -257,42 +281,30 @@ class TestNflR11R14CertRunner(unittest.TestCase):
             "pe_drive_poss_v1",
             "153b6a884a8e8a66336fcfc3fa9907742ae978c3",
         ):
-            slot = {
-                "label": "R11",
-                "status": "EXACT",
-                "bind_allowed": True,
-                "git": {"commit": alias, "branch": "x", "worktree": "y"},
-                "simulator_source_files": [alias],
-                "experiment_runner": alias,
-                "config_parameter_set": {"id": alias},
-                "data_inputs": {"paths": [alias], "hashes": {alias: "b" * 64}},
-                "random_seeds": [0],
-                "command_used": alias,
-                "calibration_artifacts": [alias],
-                "metrics": {
-                    "key_3": 1,
-                    "key_7": 1,
-                    "ot": 1,
-                    "mae": 1,
-                    "total": 1,
-                },
-                "uncommitted_or_external_dependencies": [],
-                "evidence": [alias],
-                "notes": "attempted alias",
-            }
+            slot = _exact_slot("R11")
+            slot["git"]["commit"] = alias
+            slot["simulator_source_files"] = [alias]
+            slot["experiment_runner"] = alias
+            slot["config_parameter_set"] = {"id": alias}
+            slot["data_inputs"] = {"paths": [alias], "hashes": {alias: "b" * 64}}
+            slot["command_used"] = alias
+            slot["calibration_artifacts"] = [alias]
+            slot["evidence"] = [alias]
+            slot["notes"] = "Do not alias this attempted alias"
             with tempfile.TemporaryDirectory() as tmp:
                 path = Path(tmp)
                 _write_pack(
                     path,
                     {
                         "r11.lineage.json": slot,
-                        "r13.lineage.json": _load("r13.lineage.json"),
-                        "r14.lineage.json": _load("r14.lineage.json"),
-                        "frozen_gate_set.json": _load("frozen_gate_set.json"),
+                        "r13.lineage.json": _exact_slot("R13"),
+                        "r14.lineage.json": _exact_slot("R14"),
+                        "frozen_gate_set.json": _bound_gates(),
                         "verdict.json": _load("verdict.json"),
                     },
                 )
-                self.assertEqual(main(["--pack", str(path)]), 2)
+                with self.assertRaises(CertError):
+                    evaluate_pack(path)
 
 
 if __name__ == "__main__":

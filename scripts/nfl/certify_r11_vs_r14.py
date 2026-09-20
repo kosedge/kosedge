@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 from typing import Any
@@ -68,19 +69,50 @@ def load_json(path: Path) -> dict[str, Any]:
     return data
 
 
-def _populated(value: Any) -> bool:
-    if value is None:
-        return False
-    if isinstance(value, str):
-        return bool(value.strip())
-    if isinstance(value, (list, dict, tuple, set)):
-        return len(value) > 0
-    return True
+def _nonempty_string(value: Any) -> bool:
+    return isinstance(value, str) and bool(value.strip())
+
+
+def _nonempty_string_list(value: Any, *, allow_empty: bool = False) -> bool:
+    return (
+        isinstance(value, list)
+        and (allow_empty or bool(value))
+        and all(_nonempty_string(item) for item in value)
+    )
+
+
+def _nonempty_string_map(value: Any) -> bool:
+    return (
+        isinstance(value, dict)
+        and bool(value)
+        and all(
+            _nonempty_string(key) and _nonempty_string(item)
+            for key, item in value.items()
+        )
+    )
+
+
+def _valid_seed_list(value: Any) -> bool:
+    return isinstance(value, list) and bool(value) and all(
+        (isinstance(seed, int) and not isinstance(seed, bool)) or _nonempty_string(seed)
+        for seed in value
+    )
 
 
 def _numeric_value_supplied(values: dict[str, Any], key: str) -> bool:
     """Only an absent or null numeric field is missing; zero is valid."""
     return key in values and values[key] is not None
+
+
+def _valid_numeric_value(values: dict[str, Any], key: str) -> bool:
+    if not _numeric_value_supplied(values, key):
+        return False
+    value = values[key]
+    return (
+        isinstance(value, (int, float))
+        and not isinstance(value, bool)
+        and math.isfinite(float(value))
+    )
 
 
 def lineage_gaps(
@@ -94,29 +126,42 @@ def lineage_gaps(
         gaps.append(f"label (expected {expected_label})")
     git = slot.get("git") if isinstance(slot.get("git"), dict) else {}
     for key in REQUIRED_GIT:
-        if not _populated(git.get(key)):
+        if not _nonempty_string(git.get(key)):
             gaps.append(f"git.{key}")
-    if not _populated(slot.get("simulator_source_files")):
+    if not _nonempty_string_list(slot.get("simulator_source_files")):
         gaps.append("simulator_source_files")
-    if not _populated(slot.get("experiment_runner")):
+    if not _nonempty_string(slot.get("experiment_runner")):
         gaps.append("experiment_runner")
-    if not _populated(slot.get("config_parameter_set")):
+    config = slot.get("config_parameter_set")
+    if not (
+        _nonempty_string(config) or (isinstance(config, dict) and bool(config))
+    ):
         gaps.append("config_parameter_set")
     inputs = slot.get("data_inputs") if isinstance(slot.get("data_inputs"), dict) else {}
-    if not _populated(inputs.get("paths")):
+    if not _nonempty_string_list(inputs.get("paths")):
         gaps.append("data_inputs.paths")
-    if not _populated(inputs.get("hashes")):
+    if not _nonempty_string_map(inputs.get("hashes")):
         gaps.append("data_inputs.hashes")
-    if not _populated(slot.get("random_seeds")):
+    if not _valid_seed_list(slot.get("random_seeds")):
         gaps.append("random_seeds")
-    if not _populated(slot.get("command_used")):
+    if not _nonempty_string(slot.get("command_used")):
         gaps.append("command_used")
-    if not _populated(slot.get("calibration_artifacts")):
+    if not _nonempty_string_list(slot.get("calibration_artifacts")):
         gaps.append("calibration_artifacts")
     metrics = slot.get("metrics") if isinstance(slot.get("metrics"), dict) else {}
     for key in REQUIRED_METRICS:
         if not _numeric_value_supplied(metrics, key):
             gaps.append(f"metrics.{key}")
+        elif not _valid_numeric_value(metrics, key):
+            gaps.append(f"metrics.{key} (must be finite number)")
+    if not _nonempty_string_list(
+        slot.get("uncommitted_or_external_dependencies"), allow_empty=True
+    ):
+        gaps.append("uncommitted_or_external_dependencies")
+    if not _nonempty_string_list(slot.get("evidence")):
+        gaps.append("evidence")
+    if not _nonempty_string(slot.get("notes")):
+        gaps.append("notes")
     return gaps
 
 
@@ -129,11 +174,9 @@ def assert_not_alias(slot: dict[str, Any]) -> None:
             and slot.get("bind_allowed") is True
         ):
             # EXACT bind that only restates a rejected/unrelated artifact is illegal.
-            notes = str(slot.get("notes") or "")
-            if "Do not alias" not in notes:
-                raise CertError(
-                    f"{slot.get('label')}: refusing to treat {alias} as an EXACT bind"
-                )
+            raise CertError(
+                f"{slot.get('label')}: refusing to treat {alias} as an EXACT bind"
+            )
 
 
 def slot_exact(slot: dict[str, Any], *, expected_label: str | None = None) -> bool:
@@ -149,10 +192,10 @@ def gate_set_bound(gate: dict[str, Any]) -> bool:
         return False
     if gate.get("execute_holdout") is True:
         return False
-    if not _populated(gate.get("thresholds_source")):
+    if not _nonempty_string(gate.get("thresholds_source")):
         return False
     dims = gate.get("dimensions")
-    if not isinstance(dims, list):
+    if not isinstance(dims, list) or len(dims) != len(REQUIRED_GATE_IDS):
         return False
     seen: set[str] = set()
     for row in dims:
@@ -164,9 +207,9 @@ def gate_set_bound(gate: dict[str, Any]) -> bool:
         seen.add(str(dim_id))
         if row.get("requested") is not True:
             return False
-        if not _numeric_value_supplied(row, "threshold"):
+        if not _valid_numeric_value(row, "threshold"):
             return False
-        if not _populated(row.get("threshold_source")):
+        if not _nonempty_string(row.get("threshold_source")):
             return False
     return seen == set(REQUIRED_GATE_IDS)
 

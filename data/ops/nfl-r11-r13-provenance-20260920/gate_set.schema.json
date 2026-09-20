@@ -33,7 +33,7 @@
             "enum": ["key_3", "key_7", "ot", "mae", "total"]
           },
           "requested": { "type": "boolean" },
-          "threshold": { "type": ["number", "object", "null"] },
+          "threshold": { "type": ["number", "null"] },
           "threshold_source": { "type": ["string", "null"] }
         }
       }

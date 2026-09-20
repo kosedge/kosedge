@@ -85,6 +85,8 @@ What it does:
 - Loads the three lineage slots + requested gate-set dimensions
 - Verifies each slot's declared label matches its R11 / R13 / R14 filename
 - Requires every lineage field to be present and `status=EXACT` before a compare is legal
+- Requires finite numeric metrics and thresholds; `0` remains a valid value
+- Rejects an EXACT slot containing any filed rejected alias; free-form notes cannot waive this
 - Prints **FAIL_CLOSED** while slots are UNBOUND
 - Hard-refuses `--execute-holdout` (no held-out data path)
 
