@@ -1,0 +1,233 @@
+[
+  {
+    "away_score_mean": 25.521484,
+    "case_id": "neutral-structural",
+    "event_counts": {
+      "field_goal_made": 2343,
+      "field_goal_missed": 540,
+      "fourth_down_decision": 8312,
+      "game_end": 512,
+      "game_start": 512,
+      "incomplete_pass": 10901,
+      "kickoff": 5030,
+      "overtime_start": 17,
+      "pat_try": 2527,
+      "possession_start": 13028,
+      "punt": 4877,
+      "quarter_start": 1536,
+      "scrimmage_play": 56894,
+      "timeout": 1023,
+      "touchdown": 2682,
+      "turnover": 1798,
+      "turnover_on_downs": 271,
+      "two_point_try": 155
+    },
+    "home_score_mean": 24.683594,
+    "inputs": {
+      "away": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.0,
+        "pace_factor": 1.0
+      },
+      "away_team": "SYN_AWAY",
+      "home": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.0,
+        "pace_factor": 1.0
+      },
+      "home_team": "SYN_HOME"
+    },
+    "margin_mean": -0.837891,
+    "play_count_mean": 151.410156,
+    "replicates": 512,
+    "result_reasons": {
+      "overtime_expired_tie": 3,
+      "overtime_expired_with_lead": 2,
+      "overtime_sudden_death_after_equal_possessions": 12,
+      "regulation_complete": 495
+    },
+    "state_invariants_ok": true,
+    "total_mean": 50.205078,
+    "total_p10": 35,
+    "total_p50": 51,
+    "total_p90": 65,
+    "transition_counts": {
+      "field_goal_to_kickoff": 2337,
+      "touchdown_to_try": 2682,
+      "try_to_kickoff": 2676
+    }
+  },
+  {
+    "away_score_mean": 21.402344,
+    "case_id": "home-offense-edge",
+    "event_counts": {
+      "field_goal_made": 2248,
+      "field_goal_missed": 546,
+      "fourth_down_decision": 8024,
+      "game_end": 512,
+      "game_start": 512,
+      "incomplete_pass": 10504,
+      "kickoff": 5064,
+      "overtime_start": 8,
+      "pat_try": 2644,
+      "possession_start": 12943,
+      "punt": 4679,
+      "quarter_start": 1536,
+      "scrimmage_play": 56997,
+      "timeout": 1008,
+      "touchdown": 2813,
+      "turnover": 1882,
+      "turnover_on_downs": 260,
+      "two_point_try": 169
+    },
+    "home_score_mean": 29.988281,
+    "inputs": {
+      "away": {
+        "defense_rating": 0.98,
+        "offense_rating": 0.96,
+        "pace_factor": 0.99
+      },
+      "away_team": "SYN_AWAY_B",
+      "home": {
+        "defense_rating": 1.02,
+        "offense_rating": 1.08,
+        "pace_factor": 1.01
+      },
+      "home_team": "SYN_HOME_B"
+    },
+    "margin_mean": 8.585938,
+    "play_count_mean": 150.447266,
+    "replicates": 512,
+    "result_reasons": {
+      "overtime_expired_tie": 2,
+      "overtime_expired_with_lead": 1,
+      "overtime_sudden_death_after_equal_possessions": 5,
+      "regulation_complete": 504
+    },
+    "state_invariants_ok": true,
+    "total_mean": 51.390625,
+    "total_p10": 36,
+    "total_p50": 51,
+    "total_p90": 67,
+    "transition_counts": {
+      "field_goal_to_kickoff": 2246,
+      "touchdown_to_try": 2813,
+      "try_to_kickoff": 2810
+    }
+  },
+  {
+    "away_score_mean": 27.912109,
+    "case_id": "away-defense-edge",
+    "event_counts": {
+      "field_goal_made": 2330,
+      "field_goal_missed": 561,
+      "fourth_down_decision": 8289,
+      "game_end": 512,
+      "game_start": 512,
+      "incomplete_pass": 10967,
+      "kickoff": 4977,
+      "overtime_start": 10,
+      "pat_try": 2509,
+      "possession_start": 13065,
+      "punt": 4817,
+      "quarter_start": 1536,
+      "scrimmage_play": 56304,
+      "timeout": 1029,
+      "touchdown": 2645,
+      "turnover": 1924,
+      "turnover_on_downs": 274,
+      "two_point_try": 136
+    },
+    "home_score_mean": 21.691406,
+    "inputs": {
+      "away": {
+        "defense_rating": 1.06,
+        "offense_rating": 1.02,
+        "pace_factor": 0.98
+      },
+      "away_team": "SYN_AWAY_C",
+      "home": {
+        "defense_rating": 0.97,
+        "offense_rating": 0.99,
+        "pace_factor": 1.01
+      },
+      "home_team": "SYN_HOME_C"
+    },
+    "margin_mean": -6.220703,
+    "play_count_mean": 150.53125,
+    "replicates": 512,
+    "result_reasons": {
+      "overtime_expired_tie": 2,
+      "overtime_sudden_death_after_equal_possessions": 8,
+      "regulation_complete": 502
+    },
+    "state_invariants_ok": true,
+    "total_mean": 49.603516,
+    "total_p10": 34,
+    "total_p50": 49,
+    "total_p90": 67,
+    "transition_counts": {
+      "field_goal_to_kickoff": 2326,
+      "touchdown_to_try": 2645,
+      "try_to_kickoff": 2641
+    }
+  },
+  {
+    "away_score_mean": 25.726562,
+    "case_id": "tempo-contrast",
+    "event_counts": {
+      "field_goal_made": 2408,
+      "field_goal_missed": 530,
+      "fourth_down_decision": 8140,
+      "game_end": 512,
+      "game_start": 512,
+      "incomplete_pass": 10672,
+      "kickoff": 5181,
+      "overtime_start": 16,
+      "pat_try": 2617,
+      "possession_start": 13050,
+      "punt": 4680,
+      "quarter_start": 1536,
+      "scrimmage_play": 57341,
+      "timeout": 1030,
+      "touchdown": 2767,
+      "turnover": 1887,
+      "turnover_on_downs": 260,
+      "two_point_try": 150
+    },
+    "home_score_mean": 26.017578,
+    "inputs": {
+      "away": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.01,
+        "pace_factor": 0.94
+      },
+      "away_team": "SYN_AWAY_D",
+      "home": {
+        "defense_rating": 1.0,
+        "offense_rating": 1.01,
+        "pace_factor": 1.08
+      },
+      "home_team": "SYN_HOME_D"
+    },
+    "margin_mean": 0.291016,
+    "play_count_mean": 151.736328,
+    "replicates": 512,
+    "result_reasons": {
+      "overtime_expired_tie": 3,
+      "overtime_expired_with_lead": 3,
+      "overtime_sudden_death_after_equal_possessions": 10,
+      "regulation_complete": 496
+    },
+    "state_invariants_ok": true,
+    "total_mean": 51.744141,
+    "total_p10": 36,
+    "total_p50": 51,
+    "total_p90": 68,
+    "transition_counts": {
+      "field_goal_to_kickoff": 2405,
+      "touchdown_to_try": 2767,
+      "try_to_kickoff": 2760
+    }
+  }
+]
