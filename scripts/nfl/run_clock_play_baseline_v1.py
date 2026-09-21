@@ -328,11 +328,15 @@ def run(
             "scripts/nfl/run_clock_play_baseline_v1.py "
             f"--config {config_path.as_posix()} "
             f"--inputs {inputs_path.as_posix()} "
-            f"--output-dir {output_dir.as_posix()} "
+            "--output-dir <ARTIFACT_OUTPUT_DIR> "
             f"--source-sha {source_sha}"
         ),
         "pythonpath": "services/model-service",
         "network_access": False,
+        "output_directory_contract": (
+            "Caller-selected artifact destination; excluded from canonical payload "
+            "so an independent replay is byte-identical."
+        ),
     }
     source_hashes = {
         relative_path: _sha256_file(ROOT / relative_path)
