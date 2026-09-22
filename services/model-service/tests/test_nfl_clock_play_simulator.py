@@ -106,6 +106,62 @@ def test_endgame_timeout_stops_clock_for_trailing_defense() -> None:
     assert simulator.state.event_counts["timeout"] == 1
 
 
+def test_late_timeout_preserves_timeout_when_deficit_is_multiple_possessions() -> None:
+    simulator = ClockPlaySimulator(_inputs(), seed=4, collect_events=True)
+    simulator.state = ClockPlayState(
+        quarter=4,
+        clock_seconds=80.0,
+        possession="home",
+        yardline=50,
+        down=2,
+        distance=7,
+        home_score=24,
+        away_score=0,
+        away_timeouts=2,
+    )
+    simulator._maybe_timeout_after_in_bounds_play("home")
+
+    assert simulator.state.away_timeouts == 2
+    assert simulator.state.event_counts["timeout"] == 0
+
+
+def test_conventional_short_fourth_down_is_not_masked_by_field_goal_range() -> None:
+    simulator = ClockPlaySimulator(_inputs(), seed=4)
+    simulator.state = ClockPlayState(
+        quarter=2,
+        clock_seconds=300.0,
+        possession="home",
+        yardline=65,
+        down=4,
+        distance=2,
+    )
+
+    assert simulator._fourth_down_decision("home") == "go"
+
+
+def test_tied_non_fourth_late_field_goal_state_is_reachable() -> None:
+    for seed in range(1, 50):
+        simulator = ClockPlaySimulator(_inputs(), seed=seed, collect_events=True)
+        simulator.state = ClockPlayState(
+            quarter=4,
+            clock_seconds=8.0,
+            possession="home",
+            yardline=80,
+            down=2,
+            distance=5,
+            home_score=17,
+            away_score=17,
+        )
+        simulator._resolve_scrimmage_play("home")
+
+        assert simulator.state.event_counts["late_tied_non_fourth_field_goal_attempt"] == 1
+        assert simulator.events[0]["event_type"] == "late_field_goal_decision"
+        if simulator.state.event_counts["late_tied_non_fourth_field_goal_made"]:
+            break
+    else:  # pragma: no cover - protects against an accidental zero make rate
+        raise AssertionError("No made late non-fourth field goal found in deterministic seed range")
+
+
 def test_overtime_probe_exercises_overtime_state_path() -> None:
     result = simulate_clock_play_overtime_probe(_inputs(), seed=55, collect_events=True)
 
