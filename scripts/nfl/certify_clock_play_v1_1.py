@@ -271,8 +271,6 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 and (
                     _is_one(payload.get("pass"))
                     or _is_one(payload.get("rush"))
-                    or _is_one(payload.get("field_goal_attempt"))
-                    or _is_one(payload.get("punt_attempt"))
                 )
             )
             if _is_one(payload.get("extra_point_attempt")):
