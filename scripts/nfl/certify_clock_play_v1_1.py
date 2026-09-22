@@ -266,6 +266,15 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 counts["q4_late_trailing_timeout"] += 1
 
             play_type = payload.get("play_type")
+            is_core_play = play_type in CORE_PLAY_TYPES or (
+                play_type == "no_play"
+                and (
+                    _is_one(payload.get("pass"))
+                    or _is_one(payload.get("rush"))
+                    or _is_one(payload.get("field_goal_attempt"))
+                    or _is_one(payload.get("punt_attempt"))
+                )
+            )
             if _is_one(payload.get("extra_point_attempt")):
                 counts["pat_try"] += 1
                 if payload.get("extra_point_result") == "good":
@@ -274,7 +283,7 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 counts["two_point_try"] += 1
                 if payload.get("two_point_conv_result") == "success":
                     counts["two_point_make"] += 1
-            if play_type not in CORE_PLAY_TYPES:
+            if not is_core_play:
                 continue
             pbp_rows += 1
             counts["play"] += 1
