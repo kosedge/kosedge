@@ -22,7 +22,9 @@ from src.services.nfl_clock_play_simulator import (  # noqa: E402
 )
 
 TRAIN_SEASONS = frozenset(range(2013, 2024))
-CORE_PLAY_TYPES = frozenset({"pass", "run", "field_goal", "punt"})
+CORE_PLAY_TYPES = frozenset(
+    {"pass", "run", "field_goal", "punt", "qb_kneel", "qb_spike"}
+)
 
 
 def _number(value: Any) -> float | None:
@@ -199,6 +201,8 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
     finals: dict[str, tuple[float, float]] = {}
     games: set[str] = set()
     overtime_games: set[str] = set()
+    teams: dict[str, tuple[str, str]] = {}
+    scores: dict[str, dict[str, float]] = {}
     pbp_rows = 0
 
     with pbp_path.open(encoding="utf-8") as handle:
@@ -216,35 +220,60 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
             if not game_id:
                 continue
             games.add(game_id)
+            home_team = str(payload.get("home_team") or "")
+            away_team = str(payload.get("away_team") or "")
+            if home_team and away_team:
+                teams[game_id] = (home_team, away_team)
+                scores.setdefault(game_id, {home_team: 0.0, away_team: 0.0})
             home_score = _number(payload.get("home_score"))
             away_score = _number(payload.get("away_score"))
             if home_score is not None and away_score is not None:
                 finals[game_id] = (home_score, away_score)
+
+            posteam = payload.get("posteam")
+            defteam = payload.get("defteam")
+            posteam_score_post = _number(payload.get("posteam_score_post"))
+            defteam_score_post = _number(payload.get("defteam_score_post"))
+            if isinstance(posteam, str) and posteam_score_post is not None:
+                scores.setdefault(game_id, {})[posteam] = posteam_score_post
+            if isinstance(defteam, str) and defteam_score_post is not None:
+                scores.setdefault(game_id, {})[defteam] = defteam_score_post
 
             quarter = _number(payload.get("qtr"))
             if quarter is not None and quarter > 4:
                 overtime_games.add(game_id)
             seconds = _number(payload.get("quarter_seconds_remaining"))
             timeout_team = payload.get("timeout_team")
-            posteam = payload.get("posteam")
-            defteam = payload.get("defteam")
-            posteam_score = _number(payload.get("posteam_score"))
-            defteam_score = _number(payload.get("defteam_score"))
+            game_teams = teams.get(game_id)
+            timeout_scores = scores.get(game_id, {})
+            timeout_opponent = (
+                game_teams[1]
+                if game_teams is not None and timeout_team == game_teams[0]
+                else game_teams[0]
+                if game_teams is not None and timeout_team == game_teams[1]
+                else None
+            )
             if (
                 _is_one(payload.get("timeout"))
                 and quarter == 4
                 and seconds is not None
                 and seconds <= 130
-                and posteam_score is not None
-                and defteam_score is not None
-                and (
-                    (timeout_team == posteam and posteam_score < defteam_score)
-                    or (timeout_team == defteam and defteam_score < posteam_score)
-                )
+                and isinstance(timeout_team, str)
+                and timeout_opponent is not None
+                and timeout_scores.get(timeout_team, 0.0)
+                < timeout_scores.get(timeout_opponent, 0.0)
             ):
                 counts["q4_late_trailing_timeout"] += 1
 
             play_type = payload.get("play_type")
+            if _is_one(payload.get("extra_point_attempt")):
+                counts["pat_try"] += 1
+                if payload.get("extra_point_result") == "good":
+                    counts["pat_make"] += 1
+            if _is_one(payload.get("two_point_attempt")):
+                counts["two_point_try"] += 1
+                if payload.get("two_point_conv_result") == "success":
+                    counts["two_point_make"] += 1
             if play_type not in CORE_PLAY_TYPES:
                 continue
             pbp_rows += 1
@@ -254,14 +283,6 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 drives.add((game_id, int(fixed_drive)))
             if _is_one(payload.get("touchdown")) and payload.get("td_team") == payload.get("posteam"):
                 counts["touchdown"] += 1
-            if _is_one(payload.get("extra_point_attempt")):
-                counts["pat_try"] += 1
-                if payload.get("extra_point_result") == "good":
-                    counts["pat_make"] += 1
-            if _is_one(payload.get("two_point_attempt")):
-                counts["two_point_try"] += 1
-                if payload.get("two_point_conv_result") == "success":
-                    counts["two_point_make"] += 1
             if play_type == "field_goal":
                 counts["field_goal_attempt"] += 1
                 if payload.get("field_goal_result") == "made":
@@ -293,10 +314,11 @@ def _historical_metrics(pbp_path: Path) -> tuple[dict[str, float], int, int]:
                 and payload.get("field_goal_result") == "made"
                 and quarter == 4
                 and seconds is not None
-                and 0 <= seconds <= 10
+                and 0 < seconds <= 10
                 and down in {1, 2, 3}
-                and posteam_score is not None
-                and posteam_score == defteam_score
+                and _number(payload.get("posteam_score")) is not None
+                and _number(payload.get("posteam_score"))
+                == _number(payload.get("defteam_score"))
             ):
                 counts["q4_tied_non_fourth_made_fg"] += 1
     counts["drive"] = len(drives)
